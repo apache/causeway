@@ -64,4 +64,11 @@ public class DisabledFacetImpl extends DisabledFacetAbstract {
         return !Strings.isNullOrEmpty(reason) ? reason : defaultReason;
     }
 
+    /**
+     * Not API... the reason as defined in subclass
+     */
+    public String getReason() {
+        return reason;
+    }
+
 }

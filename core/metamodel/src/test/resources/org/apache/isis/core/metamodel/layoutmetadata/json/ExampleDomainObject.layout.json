@@ -41,13 +41,22 @@
 			            describedAs: {
 			                value: "Whether this todo item has been completed"
 			            },
-                        cssClass: { value: "x-highlight" }
+                        cssClass: { value: "x-highlight" },
+                        disabled: {
+                            where: ANYWHERE,
+                            when: ALWAYS
+                        }
                     }
                 }
             },
             Misc: {
                 members: {
-                    versionSequence: {}
+                    versionSequence: {
+                        hidden: {
+                            where: ALL_TABLES,
+                            when: ALWAYS 
+                        }
+                    }
                 }
             }
         }

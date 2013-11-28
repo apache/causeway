@@ -30,10 +30,10 @@ import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
 
-public class RenderOrResolveAnnotationFacetFactory extends FacetFactoryAbstract 
+public class RenderOrResolveFacetFactory extends FacetFactoryAbstract 
         implements ContributeeMemberFacetFactory {
 
-    public RenderOrResolveAnnotationFacetFactory() {
+    public RenderOrResolveFacetFactory() {
         super(FeatureType.MEMBERS);
     }
 
@@ -69,10 +69,8 @@ public class RenderOrResolveAnnotationFacetFactory extends FacetFactoryAbstract
     }
 
     private static RenderFacet createFromRenderAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
-        RenderFacet renderFacet;
         final Render renderAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), Render.class);
-        renderFacet = renderAnnotation == null ? null : new RenderFacetAnnotation(processMethodContext.getFacetHolder(), renderAnnotation.value());
-        return renderFacet;
+        return renderAnnotation == null ? null : new RenderFacetAnnotation(processMethodContext.getFacetHolder(), renderAnnotation.value());
     }
 
     // @Render was originally called @Resolve, so look for that annotation instead.

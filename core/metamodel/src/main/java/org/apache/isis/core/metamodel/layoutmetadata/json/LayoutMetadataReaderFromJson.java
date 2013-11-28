@@ -26,6 +26,7 @@ import java.util.Set;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -36,16 +37,29 @@ import com.google.gson.GsonBuilder;
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Render.Type;
+import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.services.viewmodelsupport.ViewModelSupport.Memento;
 import org.apache.isis.core.commons.lang.ClassExtensions;
+import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
+import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
+import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
+import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 import org.apache.isis.core.metamodel.layoutmetadata.ActionRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.ColumnRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.CssClassFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.DescribedAsFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.DisabledFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.HiddenFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadata;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.MemberGroupRepr;
@@ -63,6 +77,11 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacetImpl;
+import org.apache.isis.core.progmodel.facets.members.disabled.annotation.DisabledFacetAnnotation;
+import org.apache.isis.core.progmodel.facets.members.disabled.annotation.DisabledFacetFromProperties;
 
 public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
 
@@ -168,6 +187,27 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             final PagedFacetRepr paged = memberRepr.paged;
             if(paged != null) {
                 props.setProperty("member." + memberName + ".paged.value", ""+paged.value);
+            }
+            final DisabledFacetRepr disabled = memberRepr.disabled;
+            if(disabled != null) {
+                // same default as in Disabled.when()
+                final When disabledWhen = disabled.when!=null?disabled.when: When.ALWAYS;
+                props.setProperty("member." + memberName + ".disabled.when", disabledWhen.toString());
+                // same default as in Disabled.where()
+                final Where disabledWhere = disabled.where!=null?disabled.where: Where.ANYWHERE;
+                props.setProperty("member." + memberName + ".disabled.where", disabledWhere.toString());
+                // same default as in Disabled.reason()
+                final String disabledReason = disabled.reason!=null?disabled.reason: "";
+                props.setProperty("member." + memberName + ".disabled.reason", disabledReason);
+            }
+            final HiddenFacetRepr hidden = memberRepr.hidden;
+            if(hidden != null) {
+                // same default as in Hidden.when()
+                final When hiddenWhen = hidden.when!=null?hidden.when: When.ALWAYS;
+                props.setProperty("member." + memberName + ".hidden.when", hiddenWhen.toString());
+                // same default as in Hidden.where()
+                final Where hiddenWhere = hidden.where!=null?hidden.where: Where.ANYWHERE;
+                props.setProperty("member." + memberName + ".hidden.where", hiddenWhere.toString());
             }
             final RenderFacetRepr render = memberRepr.render;
             if(render != null) {
@@ -308,7 +348,28 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
     }
 
     private static ActionRepr newActionRepr(ObjectSpecification objectSpec, ObjectAction action) {
-        return new ActionRepr();
+        ActionRepr actionRepr = new ActionRepr();
+        
+        CssClassFacet cssClassFacet = action.getFacet(CssClassFacet.class);
+        if(cssClassFacet != null && !cssClassFacet.isNoop()) {
+            CssClassFacetRepr cssClassFacetRepr = new CssClassFacetRepr();
+            cssClassFacetRepr.value = cssClassFacet.value();
+            actionRepr.cssClass = cssClassFacetRepr;
+        }
+        DescribedAsFacet describedAsFacet = action.getFacet(DescribedAsFacet.class);
+        if(describedAsFacet != null && !describedAsFacet.isNoop() && !Strings.isNullOrEmpty(describedAsFacet.value())) {
+            DescribedAsFacetRepr describedAsFacetRepr = new DescribedAsFacetRepr();
+            describedAsFacetRepr.value = describedAsFacet.value();
+            actionRepr.describedAs = describedAsFacetRepr;
+        }
+        NamedFacet namedFacet = action.getFacet(NamedFacet.class);
+        if(namedFacet != null && !namedFacet.isNoop()) {
+            NamedFacetRepr namedFacetRepr = new NamedFacetRepr();
+            namedFacetRepr.value = namedFacet.value();
+            actionRepr.named = namedFacetRepr;
+        }
+        
+        return actionRepr;
     }
 
     private static void updateCollectionColumnRepr(ObjectSpecification objectSpec, ColumnRepr columnRepr, Set<String> actionIdsOfAssociations) {
@@ -323,7 +384,68 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
 
     private static MemberRepr newMemberRepr(ObjectSpecification objectSpec, ObjectAssociation assoc, Set<String> actionIdsForAssociations) {
         final MemberRepr memberRepr = new MemberRepr();
-        
+
+        CssClassFacet cssClassFacet = assoc.getFacet(CssClassFacet.class);
+        if(cssClassFacet != null && !cssClassFacet.isNoop()) {
+            CssClassFacetRepr cssClassFacetRepr = new CssClassFacetRepr();
+            cssClassFacetRepr.value = cssClassFacet.value();
+            memberRepr.cssClass = cssClassFacetRepr;
+        }
+        DescribedAsFacet describedAsFacet = assoc.getFacet(DescribedAsFacet.class);
+        if(describedAsFacet != null && !describedAsFacet.isNoop() && !Strings.isNullOrEmpty(describedAsFacet.value())) {
+            DescribedAsFacetRepr describedAsFacetRepr = new DescribedAsFacetRepr();
+            describedAsFacetRepr.value = describedAsFacet.value();
+            memberRepr.describedAs = describedAsFacetRepr;
+        }
+        NamedFacet namedFacet = assoc.getFacet(NamedFacet.class);
+        if(namedFacet != null && !namedFacet.isNoop()) {
+            NamedFacetRepr namedFacetRepr = new NamedFacetRepr();
+            namedFacetRepr.value = namedFacet.value();
+            memberRepr.named = namedFacetRepr;
+        }
+        DisabledFacet disabledFacet = assoc.getFacet(DisabledFacet.class);
+        if(disabledFacet != null && !disabledFacet.isNoop()) {
+            DisabledFacetRepr disabledFacetRepr = new DisabledFacetRepr();
+            if(disabledFacet instanceof DisabledFacetImpl) {
+                DisabledFacetImpl disabledFacetImpl = (DisabledFacetImpl) disabledFacet;
+                disabledFacetRepr.reason = Strings.emptyToNull(disabledFacetImpl.getReason());
+            }
+            disabledFacetRepr.when = whenAlwaysToNull(disabledFacet.when());
+            disabledFacetRepr.where = whereAnywhereToNull(disabledFacet.where());
+            memberRepr.disabled = disabledFacetRepr;
+        }
+        HiddenFacet hiddenFacet = assoc.getFacet(HiddenFacet.class);
+        if(hiddenFacet != null && !hiddenFacet.isNoop()) {
+            HiddenFacetRepr hiddenFacetRepr = new HiddenFacetRepr();
+            hiddenFacetRepr.when = whenAlwaysToNull(hiddenFacet.when());
+            hiddenFacetRepr.where = whereAnywhereToNull(hiddenFacet.where());
+            memberRepr.hidden = hiddenFacetRepr;
+        }
+        MultiLineFacet multiLineFacet = assoc.getFacet(MultiLineFacet.class);
+        if(multiLineFacet != null && !multiLineFacet.isNoop()) {
+            MultiLineFacetRepr multiLineFacetRepr = new MultiLineFacetRepr();
+            multiLineFacetRepr.numberOfLines = multiLineFacet.numberOfLines();
+            memberRepr.multiLine = multiLineFacetRepr;
+        }
+        PagedFacet pagedFacet = assoc.getFacet(PagedFacet.class);
+        if(pagedFacet != null && !pagedFacet.isNoop()) {
+            PagedFacetRepr pagedFacetRepr = new PagedFacetRepr();
+            pagedFacetRepr.value = pagedFacet.value();
+            memberRepr.paged = pagedFacetRepr;
+        }
+        RenderFacet renderFacet = assoc.getFacet(RenderFacet.class);
+        if(renderFacet != null && !renderFacet.isNoop()) {
+            RenderFacetRepr renderFacetRepr = new RenderFacetRepr();
+            renderFacetRepr.value = renderFacet.value();
+            memberRepr.render = renderFacetRepr;
+        }
+        TypicalLengthFacet typicalLengthFacet = assoc.getFacet(TypicalLengthFacet.class);
+        if(typicalLengthFacet != null && !typicalLengthFacet.isNoop()) {
+            TypicalLengthFacetRepr typicalLengthFacetRepr = new TypicalLengthFacetRepr();
+            typicalLengthFacetRepr.value = typicalLengthFacet.value();
+            memberRepr.typicalLength = typicalLengthFacetRepr;
+        }
+
         final List<ObjectAction> actions = objectSpec.getObjectActions(
                 ActionType.USER, Contributed.INCLUDED, ObjectActions.memberOrderOf(assoc));
         if(!actions.isEmpty()) {
@@ -338,6 +460,14 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             }
         }
         return memberRepr;
+    }
+
+    private static Where whereAnywhereToNull(Where where) {
+        return where != Where.ANYWHERE? where: null;
+    }
+
+    private static When whenAlwaysToNull(When when) {
+        return when != When.ALWAYS? when: null;
     }
 
     private static void sortByMemberOrderFacet(final List<ObjectAction> actions) {
@@ -359,32 +489,24 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
     }
 
     
-    @SuppressWarnings({ "unchecked", "deprecation" })
     private static List<ObjectAssociation> propertiesOf(final ObjectSpecification objSpec) {
-        return objSpec.getAssociations(Contributed.EXCLUDED, 
-                Filters.and(ObjectAssociation.Filters.PROPERTIES, 
-                            ObjectAssociation.Filters.VISIBLE_AT_LEAST_SOMETIMES));
+        return objSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES);
     }
-    @SuppressWarnings({ "unchecked", "deprecation" })
     private static List<ObjectAssociation> collectionsOf(final ObjectSpecification objSpec) {
-        return objSpec.getAssociations(Contributed.EXCLUDED, 
-                Filters.and(ObjectAssociation.Filters.COLLECTIONS, 
-                            ObjectAssociation.Filters.VISIBLE_AT_LEAST_SOMETIMES));
+        return objSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.COLLECTIONS);
     }
     private static List<ObjectAction> actionsOf(final ObjectSpecification objSpec, final Set<String> excludedActionIds) {
-        return objSpec.getObjectActions(ActionType.ALL, Contributed.INCLUDED, staticallyVisibleExcluding(excludedActionIds));
+        return objSpec.getObjectActions(ActionType.ALL, Contributed.INCLUDED, excluding(excludedActionIds));
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation" })
-    private static Filter<ObjectAction> staticallyVisibleExcluding(final Set<String> excludedActionIds) {
-        return Filters.and(
-                ObjectAction.Filters.VISIBLE_AT_LEAST_SOMETIMES, 
-                new Filter<ObjectAction>(){
+    @SuppressWarnings({ "deprecation" })
+    private static Filter<ObjectAction> excluding(final Set<String> excludedActionIds) {
+        return new Filter<ObjectAction>(){
                     @Override
                     public boolean accept(ObjectAction t) {
                         return !excludedActionIds.contains(t.getId());
                     }
-                });
+                };
     }
 
     @Override

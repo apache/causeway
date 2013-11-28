@@ -28,7 +28,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.core.integtestsupport.legacy.sample.domain.Country;
-import org.apache.isis.core.progmodel.facets.members.hidden.annotation.HiddenFacetForMemberAnnotation;
+import org.apache.isis.core.progmodel.facets.members.hidden.annotation.HiddenFacetOnMemberAnnotation;
 import org.apache.isis.core.progmodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.members.hidden.method.HideForContextFacetViaMethod;
 
@@ -162,7 +162,7 @@ public class MemberHiddenTest extends AbstractTest {
             custJsWO.setAlwaysHiddenValue("Dick");
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetOnMemberAnnotation.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Always Hidden Value"));
         }
     }
@@ -173,7 +173,7 @@ public class MemberHiddenTest extends AbstractTest {
             custJsWO.setAlwaysHiddenValue(null);
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetOnMemberAnnotation.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Always Hidden Value"));
         }
     }
@@ -184,7 +184,7 @@ public class MemberHiddenTest extends AbstractTest {
             custJsWO.getAlwaysHiddenValue();
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetOnMemberAnnotation.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Always Hidden Value"));
         }
     }
@@ -197,7 +197,7 @@ public class MemberHiddenTest extends AbstractTest {
                 custJsWO.setAlwaysHiddenAssociation(value);
                 fail("Should have thrown exception");
             } catch (final HiddenException ex) {
-                assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
+                assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetOnMemberAnnotation.class));
                 assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Always Hidden Association"));
             }
         }
@@ -209,7 +209,7 @@ public class MemberHiddenTest extends AbstractTest {
             custJsWO.getAlwaysHiddenAssociation();
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetOnMemberAnnotation.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Always Hidden Association"));
         }
     }
@@ -220,7 +220,7 @@ public class MemberHiddenTest extends AbstractTest {
             custJsWO.addToAlwaysHiddenCollection(countryUsaDO);
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetOnMemberAnnotation.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Always Hidden Collection"));
         }
     }
@@ -232,7 +232,7 @@ public class MemberHiddenTest extends AbstractTest {
             custJsWO.removeFromAlwaysHiddenCollection(countryUsaDO);
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetOnMemberAnnotation.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Always Hidden Collection"));
         }
     }
@@ -243,7 +243,7 @@ public class MemberHiddenTest extends AbstractTest {
             custJsWO.getAlwaysHiddenCollection();
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetOnMemberAnnotation.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Always Hidden Collection"));
         }
     }
@@ -254,7 +254,7 @@ public class MemberHiddenTest extends AbstractTest {
             custJsWO.alwaysHiddenAction();
             fail("Should have thrown exception");
         } catch (final HiddenException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetForMemberAnnotation.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(HiddenFacetOnMemberAnnotation.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Always Hidden Action"));
         }
     }

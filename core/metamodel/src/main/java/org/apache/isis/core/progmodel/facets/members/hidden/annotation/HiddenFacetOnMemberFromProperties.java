@@ -19,15 +19,35 @@
 
 package org.apache.isis.core.progmodel.facets.members.hidden.annotation;
 
+import java.util.Properties;
+
+import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.members.hidden.HiddenFacetImpl;
 
-public class HiddenFacetForMemberAnnotation extends HiddenFacetImpl {
+public class HiddenFacetOnMemberFromProperties extends HiddenFacetImpl {
 
-    public HiddenFacetForMemberAnnotation(final When when, Where where, final FacetHolder holder) {
+    public HiddenFacetOnMemberFromProperties(final When when, Where where, final FacetHolder holder) {
         super(when, where, holder);
+    }
+
+    public HiddenFacetOnMemberFromProperties(Properties properties, FacetHolder holder) {
+        super(hiddenWhenFrom(properties), hiddenWhereFrom(properties), holder);
+    }
+
+    private static When hiddenWhenFrom(Properties properties) {
+        String value = properties.getProperty("when");
+        // same default as in Hidden.when()
+        return value != null? When.valueOf(value): When.ALWAYS;
+    }
+
+    private static Where hiddenWhereFrom(Properties properties) {
+        String value = properties.getProperty("where");
+        // same default as in Hidden.where()
+        return value != null? Where.valueOf(value): Where.ANYWHERE;
     }
 
 }

@@ -52,18 +52,18 @@ import org.apache.isis.core.progmodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.cssclass.CssClassOnMemberFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.describedas.annotation.DescribedAsOnMemberFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.describedas.staticmethod.DescribedAsFacetViaDescriptionMethodFacetFactory;
-import org.apache.isis.core.progmodel.facets.members.disabled.annotation.DisabledAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.disabled.annotation.DisabledFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.disabled.forsession.DisabledFacetViaDisableForSessionMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.disabled.method.DisabledFacetViaDisableMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.disabled.staticmethod.DisabledFacetViaProtectMethodFacetFactory;
-import org.apache.isis.core.progmodel.facets.members.hidden.annotation.HiddenAnnotationForMemberFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.hidden.annotation.HiddenForMemberFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.hidden.forsession.HiddenFacetViaHideForSessionMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.hidden.method.HiddenFacetViaHideMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.hidden.staticmethod.HiddenFacetViaAlwaysHideMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.named.annotation.NamedOnMemberFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFacetViaNameMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetFactory;
-import org.apache.isis.core.progmodel.facets.members.resolve.RenderOrResolveAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.resolve.RenderOrResolveFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.aggregated.annotation.AggregatedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.autocomplete.annotation.AutoCompleteAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.bookmarkable.annotation.BookmarkableAnnotationFacetFactory;
@@ -289,7 +289,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(HiddenFacetViaHideForSessionMethodFacetFactory.class);
         addFactory(HiddenFacetViaAlwaysHideMethodFacetFactory.class);
         addFactory(HiddenFacetViaHideMethodFacetFactory.class);
-        addFactory(RenderOrResolveAnnotationFacetFactory.class);
+        addFactory(RenderOrResolveFacetFactory.class);
 
         // objects
         addFactory(ObjectSpecIdAnnotationFacetFactory.class);
@@ -330,7 +330,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(DescribedAsOnMemberFacetFactory.class);
         addFactory(DescribedAsAnnotationOnParameterFacetFactory.class);
 
-        addFactory(DisabledAnnotationFacetFactory.class);
+        addFactory(DisabledFacetFactory.class);
         addFactory(EncodableAnnotationFacetFactory.class);
         addFactory(ExplorationAnnotationFacetFactory.class);
         addFactory(PrototypeAnnotationFacetFactory.class);
@@ -341,7 +341,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(HiddenAnnotationForTypeFacetFactory.class);
         // must come after the TitleAnnotationFacetFactory, because can act as an override
-        addFactory(HiddenAnnotationForMemberFacetFactory.class);
+        addFactory(HiddenForMemberFacetFactory.class);
         addFactory(CssClassAnnotationForTypeFacetFactory.class);
         addFactory(CssClassOnMemberFacetFactory.class);
 

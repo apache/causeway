@@ -248,7 +248,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private Category category;
 
     @javax.jdo.annotations.Column(allowsNull="false")
-    @Disabled(reason="Use action to update both category and subcategory")
     public Category getCategory() {
         return category;
     }
@@ -262,7 +261,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private Subcategory subcategory;
 
     @javax.jdo.annotations.Column(allowsNull="false")
-    @Disabled(reason="Use action to update both category and subcategory")
     public Subcategory getSubcategory() {
         return subcategory;
     }
@@ -278,7 +276,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private String ownedBy;
 
     @javax.jdo.annotations.Column(allowsNull="false")
-    @Hidden
     public String getOwnedBy() {
         return ownedBy;
     }
@@ -379,7 +376,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private String notes;
 
     @javax.jdo.annotations.Column(allowsNull="true", length=400)
-    @Hidden(where=Where.ALL_TABLES)
     public String getNotes() {
         return notes;
     }
@@ -396,7 +392,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @javax.jdo.annotations.Persistent(defaultFetchGroup="false")
     @javax.jdo.annotations.Column(allowsNull="true")
-    @Hidden(where=Where.STANDALONE_TABLES)
     public Blob getAttachment() {
         return attachment;
     }
@@ -409,8 +404,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // Version (derived property)
     // //////////////////////////////////////
 
-    @Hidden(where=Where.ALL_TABLES)
-    @Disabled
     public Long getVersionSequence() {
         if(!(this instanceof PersistenceCapable)) {
             return null;
@@ -452,7 +445,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private SortedSet<ToDoItem> dependencies = new TreeSet<ToDoItem>();
 
     @SortedBy(DependenciesComparator.class)
-    @Disabled
     public SortedSet<ToDoItem> getDependencies() {
         return dependencies;
     }

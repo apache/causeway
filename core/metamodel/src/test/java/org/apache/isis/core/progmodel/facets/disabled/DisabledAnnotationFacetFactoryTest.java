@@ -33,17 +33,17 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacetAbstract;
-import org.apache.isis.core.progmodel.facets.members.disabled.annotation.DisabledAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.disabled.annotation.DisabledFacetFactory;
 
 public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private DisabledAnnotationFacetFactory facetFactory;
+    private DisabledFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new DisabledAnnotationFacetFactory();
+        facetFactory = new DisabledFacetFactory();
     }
 
     @Override

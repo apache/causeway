@@ -30,17 +30,17 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.members.hidden.HiddenFacetAbstract;
-import org.apache.isis.core.progmodel.facets.members.hidden.annotation.HiddenAnnotationForMemberFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.hidden.annotation.HiddenForMemberFacetFactory;
 
 public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private HiddenAnnotationForMemberFacetFactory facetFactory;
+    private HiddenForMemberFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new HiddenAnnotationForMemberFacetFactory();
+        facetFactory = new HiddenForMemberFacetFactory();
     }
 
     @Override

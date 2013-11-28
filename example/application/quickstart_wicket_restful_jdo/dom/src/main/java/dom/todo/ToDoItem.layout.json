@@ -24,8 +24,15 @@
                     description: {
                         typicalLength: { value: 50 }
                     },
-                    category: {},
+                    category: {
+                        disabled: {
+                            reason: "Use action to update both category and subcategory"
+                        }
+                    },
                     subcategory: {
+                        disabled: {
+                            reason: "Use action to update both category and subcategory"
+                        },
                         actions: {
                             updateCategory: {
                                 named: {
@@ -34,6 +41,9 @@
                             },
                             analyseCategory: {}
                         }
+                    },
+                    ownedBy: {
+                        hidden: {}
                     },
                     complete: {
                         actions: {
@@ -57,7 +67,13 @@
             Misc: {
                 members: {
                     versionSequence: {
-                        named: { value: "Version" }
+                        named: { 
+                            value: "Version" 
+                        },
+                        disabled: {},
+                        hidden: {
+                            where: ALL_TABLES
+                        }
                     }
                 }
             }
@@ -89,9 +105,16 @@
                     notes: {
                         multiLine: {
                             numberOfLines: 5
+                        },
+                        hidden: {
+                            where: ALL_TABLES
                         }
                     },
-                    attachment: {}
+                    attachment: {
+                        hidden: {
+                            where: STANDALONE_TABLES
+                        }
+                    }
                 }
             }
         }
@@ -103,6 +126,7 @@
         span: 6,
         collections: {
             dependencies: {
+                disabled: {},
                 actions: {
                     add:{},
                     remove: {
@@ -117,6 +141,7 @@
                 }
             },
             similarTo: {
+                disabled: {},
                 paged: {
                     value: 3
                 },
