@@ -17,33 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.spec.feature;
+package org.apache.isis.core.progmodel.facets.value.url;
 
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
-/**
- * @deprecated
- */
-@Deprecated
-public final class ObjectActions {
+public interface URLValueFacet extends Facet {
+    java.net.URL urlValue(ObjectAdapter object);
 
-    private ObjectActions() {
-    }
-
-    /**
-     * @deprecated - use {@link ObjectAction.Utils#nameFor(ObjectAction)}
-     */
-    @Deprecated
-    public static String nameFor(final ObjectAction action) {
-        return ObjectAction.Utils.nameFor(action);
-    }
-
-    /**
-     * @deprecated - use {@link ObjectAction.Filters#memberOrderOf(ObjectAssociation)}
-     */
-    @Deprecated
-    public static Filter<ObjectAction> memberOrderOf(ObjectAssociation association) {
-        return ObjectAction.Filters.memberOrderOf(association);
-    }
+    ObjectAdapter createValue(java.net.URL value);
 
 }

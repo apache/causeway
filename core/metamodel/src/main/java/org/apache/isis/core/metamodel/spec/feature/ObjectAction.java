@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.List;
 
+import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
@@ -33,6 +35,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetFilters;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.AccessContext;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
@@ -175,10 +179,34 @@ public interface ObjectAction extends ObjectMember {
 
 
     // //////////////////////////////////////////////////////
+    // Utils
+    // //////////////////////////////////////////////////////
+
+    public static final class Utils {
+
+        private Utils() {
+        }
+
+        public static String nameFor(final ObjectAction noAction) {
+            final String actionName = noAction.getName();
+            if (actionName != null) {
+                return actionName;
+            }
+            final NamedFacet namedFacet = noAction.getFacet(NamedFacet.class);
+            if (namedFacet != null) {
+                return namedFacet.value();
+            }
+            return "(no name)";
+        }
+    }
+
+
+    // //////////////////////////////////////////////////////
     // Filters
     // //////////////////////////////////////////////////////
 
-    public static class Filters {
+    
+    public static final class Filters {
         
         private Filters(){}
         
@@ -236,5 +264,25 @@ public interface ObjectAction extends ObjectMember {
                 }};
         }
         
+        public static Filter<ObjectAction> memberOrderOf(ObjectAssociation association) {
+            final String assocName = association.getName();
+            final String assocId = association.getId();
+            return new Filter<ObjectAction>() {
+        
+                @Override
+                public boolean accept(ObjectAction t) {
+                    final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
+                    if(memberOrderFacet == null) {
+                        return false; 
+                    }
+                    final String memberOrderName = memberOrderFacet.name();
+                    if(Strings.isNullOrEmpty(memberOrderName)) {
+                        return false;
+                    }
+                    return memberOrderName.equalsIgnoreCase(assocName) || memberOrderName.equalsIgnoreCase(assocId);
+                }
+            };
+        }
+
     }
 }

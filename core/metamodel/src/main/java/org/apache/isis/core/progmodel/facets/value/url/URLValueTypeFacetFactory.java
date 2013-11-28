@@ -17,33 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.spec.feature;
+package org.apache.isis.core.progmodel.facets.value.url;
 
-import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 
-/**
- * @deprecated
- */
-@Deprecated
-public final class ObjectActions {
+public class URLValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<java.net.URL> {
 
-    private ObjectActions() {
+    public URLValueTypeFacetFactory() {
+        super();
     }
 
-    /**
-     * @deprecated - use {@link ObjectAction.Utils#nameFor(ObjectAction)}
-     */
-    @Deprecated
-    public static String nameFor(final ObjectAction action) {
-        return ObjectAction.Utils.nameFor(action);
-    }
+    @Override
+    public void process(final ProcessClassContext processClassContext) {
+        final Class<?> type = processClassContext.getCls();
+        final FacetHolder holder = processClassContext.getFacetHolder();
 
-    /**
-     * @deprecated - use {@link ObjectAction.Filters#memberOrderOf(ObjectAssociation)}
-     */
-    @Deprecated
-    public static Filter<ObjectAction> memberOrderOf(ObjectAssociation association) {
-        return ObjectAction.Filters.memberOrderOf(association);
+        if (type != java.net.URL.class) {
+            return;
+        }
+        addFacets(new URLValueSemanticsProvider(holder, getConfiguration(), getContext()));
     }
 
 }

@@ -62,7 +62,7 @@ public final class EntityActionUtil {
         
         @SuppressWarnings("unchecked")
         final List<ObjectAction> userActions = adapterSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED,
-                Filters.and(ObjectActions.memberOrderOf(association), EntityActionUtil.dynamicallyVisibleFor(adapter)));
+                Filters.and(ObjectAction.Filters.memberOrderOf(association), EntityActionUtil.dynamicallyVisibleFor(adapter)));
         Collections.sort(userActions, new Comparator<ObjectAction>() {
 
             @Override

@@ -20,8 +20,10 @@
 package org.apache.isis.viewer.wicket.ui.components.value;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.resource.StringResourceStream;
@@ -61,6 +63,12 @@ public class StandaloneValuePanel extends PanelAbstract<ValueModel> {
                     new ResourceRequestHandler(new ByteArrayResource(blob.getMimeType().toString(), blob.getBytes(), blob.getName()), null);
             getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
             label = "Downloading: " + blob.getName();
+        } else if(value instanceof java.net.URL) {
+            java.net.URL url = (java.net.URL) value;
+            label = "Downloading: " + objectAdapter.titleString(null);
+            IRequestHandler handler = 
+                    new RedirectRequestHandler(url.toString());
+            getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
         } else {
             label = objectAdapter.titleString(null);
         }

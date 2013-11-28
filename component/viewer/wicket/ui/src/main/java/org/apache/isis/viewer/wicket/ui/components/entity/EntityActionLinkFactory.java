@@ -21,8 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.entity;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
@@ -31,6 +33,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -55,6 +58,7 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
 
     private static final long serialVersionUID = 1L;
 
+    @SuppressWarnings("unused")
     private final EntityModel entityModel;
 
     public EntityActionLinkFactory(final EntityModel entityModel) {
@@ -67,7 +71,7 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
 
         final AbstractLink link = createLink(adapterMemento, action, linkId, adapter);
         //action
-        final String label = ObjectActions.nameFor(action);
+        final String label = ObjectAction.Utils.nameFor(action);
 
         // check visibility and whether enabled
         final AuthenticationSession session = getAuthenticationSession();
@@ -82,6 +86,9 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
         if(disabledReasonIfAny != null) {
             link.setEnabled(false);
         }
+
+        // special case handling if this action is returning a URL
+        Util.addTargetBlankIfActionReturnsUrl(link, action);
 
         final boolean blobOrClob = CssMenuItem.returnsBlobOrClob(action);
         final boolean prototype = CssMenuItem.isExplorationOrPrototype(action);

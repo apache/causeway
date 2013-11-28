@@ -447,7 +447,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         }
 
         final List<ObjectAction> actions = objectSpec.getObjectActions(
-                ActionType.USER, Contributed.INCLUDED, ObjectActions.memberOrderOf(assoc));
+                ActionType.USER, Contributed.INCLUDED, ObjectAction.Filters.memberOrderOf(assoc));
         if(!actions.isEmpty()) {
             memberRepr.actions = Maps.newLinkedHashMap();
             

@@ -209,6 +209,7 @@ import org.apache.isis.core.progmodel.facets.value.time.TimeValueTypeFacetFactor
 import org.apache.isis.core.progmodel.facets.value.timesql.JavaSqlTimeValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.timestamp.TimeStampValueTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.timestampsql.JavaSqlTimeStampValueTypeFacetFactory;
+import org.apache.isis.core.progmodel.facets.value.url.URLValueTypeFacetFactory;
 
 public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
@@ -438,6 +439,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(JavaUtilDateValueTypeFacetFactory.class);
         addFactory(JavaSqlTimeStampValueTypeFacetFactory.class);
         addFactory(StringValueTypeFacetFactory.class);
+        addFactory(URLValueTypeFacetFactory.class);
 
         addFactory(JavaAwtImageValueTypeFacetFactory.class);
         

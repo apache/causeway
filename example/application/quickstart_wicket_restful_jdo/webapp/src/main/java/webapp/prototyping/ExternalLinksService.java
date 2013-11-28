@@ -16,27 +16,28 @@
  */
 package webapp.prototyping;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.Prototype;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.metamodel.services.devutils.DeveloperUtilitiesServiceDefault;
 
-/**
- * These overrides are simply to 'move' the action underneath the 
- * {@link ToDoItemsFixturesService fixtures} menu.
- */
-public class DeveloperUtilities extends DeveloperUtilitiesServiceDefault {
+public class ExternalLinksService {
 
-    @MemberOrder(name="Prototyping", sequence="90")
-    @Override
-    public Clob downloadMetaModel() {
-        return super.downloadMetaModel();
+    @Prototype
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(name="Prototyping", sequence="93")
+    public URL openIsisDocumentation() throws MalformedURLException {
+        return new URL("http://isis.apache.org/documentation.html");
     }
-    
-    @MemberOrder(name="Prototyping", sequence="92")
-    @Override
-    public Blob downloadLayouts() {
-        return super.downloadLayouts();
+
+    @Prototype
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(name="Prototyping", sequence="94")
+    public URL openSourceCodeOnGithub() throws MalformedURLException {
+        return new URL("https://github.com/apache/isis/tree/master/example/application/quickstart_wicket_restful_jdo/dom/src/main/java/dom/todo");
     }
 
 }

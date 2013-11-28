@@ -21,6 +21,11 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
 import java.io.Serializable;
 
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.model.Model;
+
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -31,5 +36,16 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 public interface CssMenuLinkFactory extends Serializable {
 
     LinkAndLabel newLink(ObjectAdapterMemento adapter, ObjectAction noAction, String linkId);
+
+    public static class Util {
+        private Util() {}
+        public static void addTargetBlankIfActionReturnsUrl(AbstractLink link, ObjectAction action) {
+            final ObjectSpecification returnType = action.getReturnType();
+            if(returnType != null && "java.net.URL".equals(returnType.getFullIdentifier())) {
+                link.add(new AttributeAppender("target", Model.of("_blank")));
+            }
+        }
+    }
+
 
 }

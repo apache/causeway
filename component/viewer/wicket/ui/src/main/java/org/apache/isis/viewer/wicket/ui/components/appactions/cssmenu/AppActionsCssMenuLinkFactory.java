@@ -26,7 +26,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -48,7 +47,10 @@ class AppActionsCssMenuLinkFactory implements CssMenuLinkFactory {
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
 
         final AbstractLink link = Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
-        final String actionLabel = ObjectActions.nameFor(action);
+        final String actionLabel = ObjectAction.Utils.nameFor(action);
+        
+        // special case handling if this action is returning a URL
+        Util.addTargetBlankIfActionReturnsUrl(link, action);
 
         final boolean blobOrClob = CssMenuItem.returnsBlobOrClob(action);
         final boolean prototype = CssMenuItem.isExplorationOrPrototype(action);
