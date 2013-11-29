@@ -36,8 +36,8 @@ public class ExternalLinksService {
     @Prototype
     @ActionSemantics(Of.SAFE)
     @MemberOrder(name="Prototyping", sequence="94")
-    public URL openSourceCodeOnGithub() throws MalformedURLException {
-        return new URL("https://github.com/apache/isis/tree/master/example/application/quickstart_wicket_restful_jdo/dom/src/main/java/dom/todo");
+    public URL openProjectOnGithub() throws MalformedURLException {
+        return new URL("https://github.com/apache/isis/tree/master/example/application/quickstart_wicket_restful_jdo/");
     }
 
 }

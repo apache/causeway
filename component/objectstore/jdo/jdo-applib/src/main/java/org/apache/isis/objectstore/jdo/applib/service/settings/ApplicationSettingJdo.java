@@ -20,7 +20,6 @@
 package org.apache.isis.objectstore.jdo.applib.service.settings;
 
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.Persistent;
 
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.services.settings.ApplicationSetting;

@@ -166,7 +166,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     private static List<ObjectAdapterMemento> asMementoList(final ObjectAdapter collectionAsAdapter) {
         final Iterable<Object> iterable = EntityCollectionModel.asIterable(collectionAsAdapter);
         return Lists.newArrayList(
-                Iterables.transform(iterable, MementoFunctions.fromPojo(getAdapterManagerStatic())));
+                Iterables.transform(iterable, ObjectAdapterMemento.Functions.fromPojo(getAdapterManagerStatic())));
     }
 
     /**

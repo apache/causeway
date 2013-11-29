@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * Abstracts out the creation of the links within the CSS menu.
@@ -43,6 +44,7 @@ public interface CssMenuLinkFactory extends Serializable {
             final ObjectSpecification returnType = action.getReturnType();
             if(returnType != null && "java.net.URL".equals(returnType.getFullIdentifier())) {
                 link.add(new AttributeAppender("target", Model.of("_blank")));
+                link.add(new CssClassAppender("noVeil"));
             }
         }
     }

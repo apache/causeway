@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.progmodel.facets.collections.typeof;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -43,8 +44,6 @@ public class TypeOfAnnotationForCollectionsFacetFactory extends FacetFactoryAbst
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final TypeOf annotation = Annotations.getAnnotation(processMethodContext.getMethod(), TypeOf.class);
-
         final Class<?> methodReturnType = processMethodContext.getMethod().getReturnType();
         if (!collectionTypeRegistry.isCollectionType(methodReturnType) && !collectionTypeRegistry.isArrayType(methodReturnType)) {
             return;
@@ -57,6 +56,8 @@ public class TypeOfAnnotationForCollectionsFacetFactory extends FacetFactoryAbst
             return;
         }
 
+        Method method = processMethodContext.getMethod();
+        final TypeOf annotation = Annotations.getAnnotation(method, TypeOf.class);
         if (annotation != null) {
             FacetUtil.addFacet(new TypeOfFacetAnnotationForCollection(annotation.value(), processMethodContext.getFacetHolder(), getSpecificationLoader()));
             return;

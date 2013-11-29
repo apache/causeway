@@ -24,9 +24,12 @@ import java.util.List;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.AbstractService;
+import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.TypeOf;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.settings.ApplicationSetting;
 import org.apache.isis.applib.services.settings.ApplicationSettingsService;
@@ -41,6 +44,7 @@ import org.apache.isis.applib.services.settings.SettingType;
 @Named("Application Settings")
 public class ApplicationSettingsServiceJdo extends AbstractService implements ApplicationSettingsServiceRW {
 
+    @ActionSemantics(Of.SAFE)
     @Override
     public ApplicationSetting find(@Named("Key") String key) {
         return firstMatch(
@@ -51,8 +55,9 @@ public class ApplicationSettingsServiceJdo extends AbstractService implements Ap
 
     // //////////////////////////////////////
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence="1")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public List<ApplicationSetting> listAll() {
         return (List)allMatches(
                 new QueryDefault<ApplicationSettingJdo>(ApplicationSettingJdo.class, 
@@ -61,40 +66,40 @@ public class ApplicationSettingsServiceJdo extends AbstractService implements Ap
 
     // //////////////////////////////////////
 
-    @Override
     @MemberOrder(sequence="10")
+    @Override
     public ApplicationSetting newString(
             @Named("Key") String key, 
             @Named("Description") @Optional String description, 
             @Named("Value") String value) {
         return newSetting(key, description, SettingType.STRING, value);
     }
-    @Override
     @MemberOrder(sequence="11")
+    @Override
     public ApplicationSettingJdo newInt(
             @Named("Key") String key, 
             @Named("Description") @Optional String description, 
             @Named("Value") Integer value) {
         return newSetting(key, description, SettingType.INT, value.toString());
     }
-    @Override
     @MemberOrder(sequence="12")
+    @Override
     public ApplicationSettingJdo newLong(
             @Named("Key") String key, 
             @Named("Description") @Optional String description, 
             @Named("Value") Long value) {
         return newSetting(key, description, SettingType.LONG, value.toString());
     }
-    @Override
     @MemberOrder(sequence="13")
+    @Override
     public ApplicationSettingJdo newLocalDate(
             @Named("Key") String key, 
             @Named("Description") @Optional String description, 
             @Named("Value") LocalDate value) {
         return newSetting(key, description, SettingType.LOCAL_DATE, value.toString(SettingAbstract.DATE_FORMATTER));
     }
-    @Override
     @MemberOrder(sequence="14")
+    @Override
     public ApplicationSettingJdo newBoolean(
             @Named("Key") String key, 
             @Named("Description") @Optional String description, 

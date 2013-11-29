@@ -19,6 +19,8 @@
 package dom.todo;
 
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -43,14 +45,18 @@ import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext;
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.RegEx;
@@ -706,5 +712,13 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 //    public void setLocation(Location location) {
 //        this.location = location;
 //    }
+
     
+    @Prototype
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(name="Prototyping", sequence="94")
+    public URL openSourceCodeOnGithub() throws MalformedURLException {
+        return new URL("https://github.com/apache/isis/tree/master/example/application/quickstart_wicket_restful_jdo/dom/src/main/java/dom/todo/ToDoItem.java");
+    }
+
 }
