@@ -22,25 +22,38 @@ import java.util.List;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.objectstore.jdo.applib.AuditService;
+import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.audit.AuditingService2;
 
 @Named("Auditing")
-public class AuditingServiceJdo extends AbstractFactoryAndRepository  implements AuditService {
+public class AuditingServiceJdo extends AbstractFactoryAndRepository implements AuditingService2 {
     
     @ActionSemantics(Of.SAFE)
     public List<AuditEntry> list() {
         return allInstances(AuditEntry.class);
     }
-    
-    @Hidden
+
+    /**
+     * This method will never be called by Isis because the service implements, instead, {@link AuditingService2}.
+     * 
+     * @deprecated
+     */
+    @Deprecated
+    @Programmatic
     public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue) {
+        audit(user, currentTimestampEpoch, objectType, identifier, null, preValue, postValue);
+    }
+
+    @Programmatic
+    @Override
+    public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String propertyId, String preValue, String postValue) {
         AuditEntry auditEntry = newTransientInstance(AuditEntry.class);
         auditEntry.setTimestampEpoch(currentTimestampEpoch);
         auditEntry.setUser(user);
         auditEntry.setObjectType(objectType);
+        auditEntry.setPropertyId(propertyId);
         auditEntry.setIdentifier(identifier);
         auditEntry.setPreValue(preValue);
         auditEntry.setPostValue(postValue);

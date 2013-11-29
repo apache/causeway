@@ -35,9 +35,11 @@ import org.apache.isis.applib.value.DateTime;
 @Immutable
 public class AuditEntry implements BookmarkHolder {
 
-    // {{ TimestampUtc (property)
+    // //////////////////////////////////////
+
     private Long timestampEpoch;
 
+    @javax.jdo.annotations.Column(allowsNull="false")
     @Hidden
     public Long getTimestampEpoch() {
         return timestampEpoch;
@@ -46,20 +48,21 @@ public class AuditEntry implements BookmarkHolder {
     public void setTimestampEpoch(final Long timestampEpoch) {
         this.timestampEpoch = timestampEpoch;
     }
-    // }}
-    
-    // {{ Timestamp (property)
+
+    // //////////////////////////////////////
+
     @Title(sequence="1")
     @MemberOrder(sequence = "1")
     public DateTime getTimestamp() {
         return timestampEpoch != null? new DateTime(timestampEpoch): null;
     }
 
-    // }}
-    
-    // {{ User (property)
+    // //////////////////////////////////////
+
     private String user;
 
+    @javax.jdo.annotations.Column(allowsNull="false")
+    @Title(sequence="2", prepend=",")
     @MemberOrder(sequence = "2")
     public String getUser() {
         return user;
@@ -68,12 +71,13 @@ public class AuditEntry implements BookmarkHolder {
     public void setUser(final String user) {
         this.user = user;
     }
-    // }}
+    
+    // //////////////////////////////////////
 
-    // {{ ObjectType (property)
     private String objectType;
 
-    @Title(sequence="3", prepend=":")
+    @javax.jdo.annotations.Column(allowsNull="false")
+    @Title(sequence="3", prepend=" ")
     @MemberOrder(sequence = "3")
     public String getObjectType() {
         return objectType;
@@ -82,11 +86,13 @@ public class AuditEntry implements BookmarkHolder {
     public void setObjectType(final String objectType) {
         this.objectType = objectType;
     }
-    // }}
+    
+    // //////////////////////////////////////
 
-    // {{ Identifier (property)
     private String identifier;
 
+    @javax.jdo.annotations.Column(allowsNull="false")
+    @Title(sequence="4", prepend=":")
     @MemberOrder(sequence = "4")
     public String getIdentifier() {
         return identifier;
@@ -95,11 +101,28 @@ public class AuditEntry implements BookmarkHolder {
     public void setIdentifier(final String identifier) {
         this.identifier = identifier;
     }
-    // }}
     
-    // {{ PreValue (property)
+    // //////////////////////////////////////
+    
+    private String propertyId;
+    
+    @javax.jdo.annotations.Column(allowsNull="true")
+    @Title(sequence="5", prepend=", ")
+    @MemberOrder(sequence = "5")
+    public String getPropertyId() {
+        return propertyId;
+    }
+    
+    public void setPropertyId(final String propertyId) {
+        this.propertyId = propertyId;
+    }
+    
+    
+    // //////////////////////////////////////
+
     private String preValue;
 
+    @javax.jdo.annotations.Column(allowsNull="true")
     @MemberOrder(sequence = "5")
     public String getPreValue() {
         return preValue;
@@ -108,11 +131,12 @@ public class AuditEntry implements BookmarkHolder {
     public void setPreValue(final String preValue) {
         this.preValue = preValue;
     }
-    // }}
+    
+    // //////////////////////////////////////
 
-    // {{ PostValue (property)
     private String postValue;
 
+    @javax.jdo.annotations.Column(allowsNull="true")
     @MemberOrder(sequence = "6")
     public String getPostValue() {
         return postValue;
@@ -121,13 +145,12 @@ public class AuditEntry implements BookmarkHolder {
     public void setPostValue(final String postValue) {
         this.postValue = postValue;
     }
-    // }}
+    
+    // //////////////////////////////////////
 
-    // {{ bookmark (action)
     @Override
     @Programmatic
     public Bookmark bookmark() {
         return new Bookmark(getObjectType(), getIdentifier());
     }
-    // }}
 }
