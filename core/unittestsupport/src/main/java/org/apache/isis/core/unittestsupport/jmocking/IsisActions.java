@@ -18,7 +18,9 @@
  */
 package org.apache.isis.core.unittestsupport.jmocking;
 
+import org.hamcrest.Description;
 import org.jmock.api.Action;
+import org.jmock.api.Invocation;
 
 public final class IsisActions {
     
@@ -35,6 +37,22 @@ public final class IsisActions {
 
     public static Action returnArgument(final int i) {
         return JMockActions.returnArgument(i);
+    }
+
+    public static Action returnNewTransientInstance() {
+        return new Action(){
+    
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("new transient instance");
+            }
+    
+            @Override
+            public Object invoke(Invocation invocation) throws Throwable {
+                Class<?> cls = (Class<?>) invocation.getParameter(0);
+                return cls.newInstance();
+            }
+        };
     }
 
 
