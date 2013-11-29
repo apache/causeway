@@ -19,23 +19,43 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 
 /**
- * Enumerates the different types of pages that can be rendered.
- * 
- * <p>
- * Is used by {@link PageClassRegistry} to lookup the concrete page to render
- * different types of pages. This allows the large-scale structure of page
- * layout (eg headers, footers) to be altered.
+ * Represents the result of invoking a <tt>void</tt> action.
  */
-public enum PageType {
-    SIGN_IN, 
-    HOME, 
-    ABOUT, 
-    ENTITY, 
-    ACTION_PROMPT,
-    STANDALONE_COLLECTION,
-    VALUE,
-    VOID_RETURN;
+public class VoidModel extends ModelAbstract<Void> {
+
+    private static final long serialVersionUID = 1L;
+
+    public VoidModel() {
+    }
+
+    @Override
+    protected Void load() {
+        return null;
+    }
+
+
+    // //////////////////////////////////////
+
+    private ActionModel actionModelHint;
+    /**
+     * The {@link ActionModel model} of the {@link ObjectAction action} 
+     * that generated this {@link VoidModel}.
+     * 
+     * @see #setActionHint(ActionModel)
+     */
+    public ActionModel getActionModelHint() {
+        return actionModelHint;
+    }
+    /**
+     * Called by action.
+     * 
+     * @see #getActionModelHint()
+     */
+    public void setActionHint(ActionModel actionModelHint) {
+        this.actionModelHint = actionModelHint;
+    }
 }

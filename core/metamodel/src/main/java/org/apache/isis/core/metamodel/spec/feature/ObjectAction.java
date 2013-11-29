@@ -187,12 +187,12 @@ public interface ObjectAction extends ObjectMember {
         private Utils() {
         }
 
-        public static String nameFor(final ObjectAction noAction) {
-            final String actionName = noAction.getName();
+        public static String nameFor(final ObjectAction objAction) {
+            final String actionName = objAction.getName();
             if (actionName != null) {
                 return actionName;
             }
-            final NamedFacet namedFacet = noAction.getFacet(NamedFacet.class);
+            final NamedFacet namedFacet = objAction.getFacet(NamedFacet.class);
             if (namedFacet != null) {
                 return namedFacet.value();
             }

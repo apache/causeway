@@ -53,7 +53,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilde
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.pages.action.ActionPromptPage;
+import org.apache.isis.viewer.wicket.ui.pages.actionprompt.ActionPromptPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**

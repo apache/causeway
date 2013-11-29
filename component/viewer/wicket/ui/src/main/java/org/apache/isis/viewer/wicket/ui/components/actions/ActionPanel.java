@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,17 +29,25 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.handler.resource.ResourceRequestHandler;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.request.http.handler.RedirectRequestHandler;
+import org.apache.wicket.request.resource.ByteArrayResource;
+import org.apache.wicket.request.resource.ContentDisposition;
+import org.apache.wicket.util.resource.StringResourceStream;
 
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
@@ -51,11 +58,13 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
+import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
+import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
+import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -73,20 +82,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
     private static final long serialVersionUID = 1L;
 
-    
-    /**
-     * The various component types, one of which will be rendered.
-     * 
-     * @see #hideAllBut(ComponentType)
-     */
-    private static final List<ComponentType> COMPONENT_TYPES = Arrays.asList(
-            ComponentType.PARAMETERS, 
-            ComponentType.ENTITY_LINK, 
-            ComponentType.ENTITY, 
-            ComponentType.VALUE, 
-            ComponentType.EMPTY_COLLECTION, 
-            ComponentType.VOID_RETURN);
-
     private static final String ID_ACTION_NAME = "actionName";
 
     public ActionPanel(final String id, final ActionModel actionModel) {
@@ -96,7 +91,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
     }
 
     private void buildGui(final ActionModel actionModel) {
-        if (actionModel.getActionMode() == ActionModel.Mode.PARAMETERS) {
+        if (actionModel.hasParameters()) {
             buildGuiForParameters(actionModel);
         } else {
             executeActionAndProcessResults(null);
@@ -114,7 +109,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         try {
             targetAdapter = getActionModel().getTargetAdapter();
             
-            hideAllBut(ComponentType.PARAMETERS, ComponentType.ENTITY_ICON_AND_TITLE);
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
 
@@ -308,81 +302,38 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         }
     }
 
-
-    private ApplicationException getApplicationExceptionIfAny(Exception ex) {
-        Iterable<ApplicationException> appEx = Iterables.filter(Throwables.getCausalChain(ex), ApplicationException.class);
-        Iterator<ApplicationException> iterator = appEx.iterator();
-        return iterator.hasNext() ? iterator.next() : null;
-    }
-
-
     enum ResultType {
         OBJECT {
             @Override
             public void addResults(final ActionPanel actionPanel, final ObjectAdapter resultAdapter) {
                 final ObjectAdapter actualAdapter = determineActualAdapter(resultAdapter, actionPanel);
-
-                //actionPanel.set
-                addResultsAccordingToSingleResultsMode(actionPanel, actualAdapter, null);
+                redirectToEntityPage(actionPanel, actualAdapter, null);
             }
 
             @Override
             public void addResults(ActionPanel actionPanel, ObjectAdapter targetAdapter, ConcurrencyException ex) {
-                addResultsAccordingToSingleResultsMode(actionPanel, targetAdapter, ex);
+                redirectToEntityPage(actionPanel, targetAdapter, ex);
             }
 
-            private ObjectAdapter determineActualAdapter(final ObjectAdapter resultAdapter, final PersistenceSessionProvider psa) {
-                ObjectAdapter actualAdapter;
-                if (resultAdapter.getSpecification().isNotCollection()) {
-                    actualAdapter = resultAdapter;
-                } else {
-                    // will only be a single element
-                    final List<Object> pojoList = asList(resultAdapter);
-                    final Object pojo = pojoList.get(0);
-                    actualAdapter = adapterFor(pojo, psa);
-                }
-                return actualAdapter;
-            }
-
-            private void addResultsAccordingToSingleResultsMode(final ActionPanel panel, final ObjectAdapter actualAdapter, ConcurrencyException exIfAny) {
+            private void redirectToEntityPage(final ActionPanel panel, final ObjectAdapter actualAdapter, ConcurrencyException exIfAny) {
                 panel.permanentlyHide(ID_ACTION_NAME);
-                final ActionModel actionModel = panel.getActionModel();
-                final ActionModel.SingleResultsMode singleResultsMode = actionModel.getSingleResultsMode();
 
-                if (singleResultsMode == ActionModel.SingleResultsMode.REDIRECT) {
-
-                    // force any changes in state etc to happen now prior to the redirect;
-                    // this should cause our page mementos (eg EntityModel) to hold the correct state.  I hope.
-                    panel.getTransactionManager().flushTransaction();
-                    
-                    // build page, also propagate any concurrency exception that might have occurred already
-                    final EntityPage entityPage = new EntityPage(actualAdapter, exIfAny);
-                    
-                    // "redirect-after-post"
-                    panel.setResponsePage(entityPage);
-                    
-                } else if (singleResultsMode == ActionModel.SingleResultsMode.INLINE) {
-                    final ComponentType componentType = ComponentType.ENTITY;
-                    panel.hideAllBut(componentType);
-                    panel.addOrReplace(componentType, new EntityModel(actualAdapter));
-                } else {
-                    final ComponentType componentType = ComponentType.ENTITY_LINK;
-                    panel.hideAllBut(componentType);
-                    panel.addOrReplace(componentType, new EntityModel(actualAdapter));
-                }
+                // force any changes in state etc to happen now prior to the redirect;
+                // this should cause our page mementos (eg EntityModel) to hold the correct state.  I hope.
+                panel.getTransactionManager().flushTransaction();
+                
+                // build page, also propagate any concurrency exception that might have occurred already
+                final EntityPage entityPage = new EntityPage(actualAdapter, exIfAny);
+                
+                // "redirect-after-post"
+                panel.setResponsePage(entityPage);
             }
 
-            private ObjectAdapter adapterFor(final Object pojo, final PersistenceSessionProvider psa) {
-                return psa.getPersistenceSession().getAdapterManager().adapterFor(pojo);
-            }
         },
         COLLECTION {
             @Override
             public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
                 
-                // cargo cult ... copied from OBJECT type
-                panel.getTransactionManager().flushTransaction();
-
                 final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter);
                 collectionModel.setActionHint(panel.getActionModel());
                 
@@ -391,31 +342,56 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 // "redirect-after-post"
                 panel.setResponsePage(standaloneCollectionPage);
             }
-
-        },
-        EMPTY {
-            @Override
-            public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
-                panel.permanentlyHide(ID_ACTION_NAME);
-                panel.hideAllBut(ComponentType.EMPTY_COLLECTION);
-                final ActionModel actionModel = panel.getActionModel();
-                panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.EMPTY_COLLECTION, actionModel);
-            }
         },
         VALUE {
             @Override
             public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
-                panel.permanentlyHide(ID_ACTION_NAME);
-                panel.hideAllBut(ComponentType.VALUE);
-                panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.VALUE, new ValueModel(resultAdapter));
+                ValueModel valueModel = new ValueModel(resultAdapter);
+                valueModel.setActionHint(panel.getActionModel());
+                final ValuePage valuePage = new ValuePage(valueModel);
+                panel.setResponsePage(valuePage);
+            }
+        },
+        VALUE_CLOB {
+            @Override
+            public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
+                final Object value = resultAdapter.getObject();
+                final Clob clob = (Clob) value;
+                ResourceStreamRequestHandler handler = 
+                    new ResourceStreamRequestHandler(new StringResourceStream(clob.getChars(), clob.getMimeType().toString()), clob.getName());
+                handler.setContentDisposition(ContentDisposition.ATTACHMENT);
+                panel.getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+            }
+        },
+        VALUE_BLOB {
+            @Override
+            public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
+                final Object value = resultAdapter.getObject();
+                final Blob blob = (Blob) value;
+                ResourceRequestHandler handler = 
+                        new ResourceRequestHandler(new ByteArrayResource(blob.getMimeType().toString(), blob.getBytes(), blob.getName()), null);
+                panel.getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+            }
+        },
+        VALUE_URL {
+            @Override
+            public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
+                final Object value = resultAdapter.getObject();
+                java.net.URL url = (java.net.URL) value;
+                IRequestHandler handler = new RedirectRequestHandler(url.toString());
+                panel.getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
             }
         },
         VOID {
             @Override
             public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
-                panel.permanentlyHide(ID_ACTION_NAME);
-                panel.hideAllBut(ComponentType.VOID_RETURN);
-                panel.getComponentFactoryRegistry().addOrReplaceComponent(panel, ComponentType.VOID_RETURN, null);
+                
+                final VoidModel voidModel = new VoidModel();
+                voidModel.setActionHint(panel.getActionModel());
+                
+                final VoidReturnPage voidReturnPage = new VoidReturnPage(voidModel);
+                
+                panel.setResponsePage(voidReturnPage);
             }
         };
 
@@ -435,6 +411,18 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             final ObjectSpecification resultSpec = resultAdapter.getSpecification();
             if (resultSpec.isNotCollection()) {
                 if (resultSpec.getFacet(ValueFacet.class) != null) {
+                    
+                    final Object value = resultAdapter.getObject();
+                    if(value instanceof Clob) {
+                        return ResultType.VALUE_CLOB;
+                    } 
+                    if(value instanceof Blob) {
+                        return ResultType.VALUE_BLOB;
+                    } 
+                    if(value instanceof java.net.URL) {
+                        return ResultType.VALUE_URL;
+                    } 
+                    // else
                     return ResultType.VALUE;
                 } else {
                     return ResultType.OBJECT;
@@ -442,8 +430,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             } else {
                 final List<Object> pojoList = asList(resultAdapter);
                 switch (pojoList.size()) {
-                case 0:
-                    return ResultType.EMPTY;
                 case 1:
                     return ResultType.OBJECT;
                 default:
@@ -451,20 +437,32 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 }
             }
         }
-
-        @SuppressWarnings("unchecked")
-        private static List<Object> asList(final ObjectAdapter resultAdapter) {
-            return (List<Object>) resultAdapter.getObject();
-        }
+    }
+    
+    private static ApplicationException getApplicationExceptionIfAny(Exception ex) {
+        Iterable<ApplicationException> appEx = Iterables.filter(Throwables.getCausalChain(ex), ApplicationException.class);
+        Iterator<ApplicationException> iterator = appEx.iterator();
+        return iterator.hasNext() ? iterator.next() : null;
     }
 
-    private void hideAllBut(final ComponentType... visibleComponentTypes) {
-        final List<ComponentType> visibleComponentTypeList = Arrays.asList(visibleComponentTypes);
-        for (final ComponentType componentType : COMPONENT_TYPES) {
-            if (!visibleComponentTypeList.contains(componentType)) {
-                permanentlyHide(componentType);
-            }
+    private static ObjectAdapter determineActualAdapter(final ObjectAdapter resultAdapter, final PersistenceSessionProvider psa) {
+        ObjectAdapter actualAdapter;
+        if (resultAdapter.getSpecification().isNotCollection()) {
+            actualAdapter = resultAdapter;
+        } else {
+            // will only be a single element
+            final List<Object> pojoList = asList(resultAdapter);
+            final Object pojo = pojoList.get(0);
+            actualAdapter = adapterFor(pojo, psa);
         }
+        return actualAdapter;
+    }
+    private static ObjectAdapter adapterFor(final Object pojo, final PersistenceSessionProvider psa) {
+        return psa.getPersistenceSession().getAdapterManager().adapterFor(pojo);
+    }
+    @SuppressWarnings("unchecked")
+    private static List<Object> asList(final ObjectAdapter resultAdapter) {
+        return (List<Object>) resultAdapter.getObject();
     }
 
 

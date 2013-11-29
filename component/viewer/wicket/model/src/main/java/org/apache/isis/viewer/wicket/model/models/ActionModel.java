@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.Maps;
 
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.Identifier;
@@ -66,35 +67,27 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
      * Whether we are obtaining arguments (eg in a dialog), or displaying the
      * results
      */
-    public enum Mode {
-        PARAMETERS, RESULTS
+    private enum Mode {
+        PARAMETERS, 
+        RESULTS
     }
 
-    /**
-     * How to handle results when only a single result is returned
-     */
-    public enum SingleResultsMode {
-        /**
-         * Render a simple link, using "entityLink"
-         */
-        LINK,
-        /**
-         * Render the object directly, using "entity"
-         */
-        INLINE,
-        /**
-         * Redirect to <tt>EntityPage</tt>.
-         */
-        REDIRECT
-    }
 
     
     //////////////////////////////////////////////////
     // Factory methods
     //////////////////////////////////////////////////
 
-    public static ActionModel create(final ObjectAdapterMemento targetAdapter, final ActionMemento action, final Mode mode, final SingleResultsMode singleResultsMode) {
-        return new ActionModel(targetAdapter, action, mode, singleResultsMode);
+    /**
+     * @param objectAdapter
+     * @param action
+     * @return
+     */
+    public static IModel<?> create(ObjectAdapter objectAdapter, ObjectAction action) {
+        final ObjectAdapterMemento serviceMemento = ObjectAdapterMemento.Functions.fromAdapter().apply(objectAdapter);
+        final ActionMemento homePageActionMemento = ObjectAdapterMemento.Functions.fromAction().apply(action);
+        final Mode mode = action.getParameterCount() > 0? Mode.PARAMETERS : Mode.RESULTS;
+        return (IModel<?>) new ActionModel(serviceMemento, homePageActionMemento, mode);
     }
 
     public static ActionModel createForPersistent(final PageParameters pageParameters) {
@@ -107,11 +100,9 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
      * see {@link #ActionModel(PageParameters)}
      */
     public static PageParameters createPageParameters(
-            final ObjectAdapter adapter, final ObjectAction objectAction, final SingleResultsMode singleResultsMode, final ConcurrencyChecking concurrencyChecking) {
+            final ObjectAdapter adapter, final ObjectAction objectAction, final ConcurrencyChecking concurrencyChecking) {
         
         final PageParameters pageParameters = new PageParameters();
-        
-        PageParameterNames.ACTION_SINGLE_RESULTS_MODE.addEnumTo(pageParameters, singleResultsMode);
         
         final String oidStr = concurrencyChecking == ConcurrencyChecking.CHECK?
                 adapter.getOid().enString(getOidMarshaller()):
@@ -182,7 +173,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         final ObjectAdapter adapter = getTargetAdapter();
         final ObjectAction objectAction = getActionMemento().getAction();
         final PageParameters pageParameters = createPageParameters(
-                adapter, objectAction, SingleResultsMode.INLINE, ConcurrencyChecking.NO_CHECK);
+                adapter, objectAction, ConcurrencyChecking.NO_CHECK);
 
         // capture argument values
         final ObjectAdapter[] argumentsAsArray = getArgumentsAsArray();
@@ -251,7 +242,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     private final ObjectAdapterMemento targetAdapterMemento;
     private final ActionMemento actionMemento;
     private Mode actionMode;
-    private final SingleResultsMode singleResultsMode;
+
 
     /**
      * Lazily populated in {@link #getArgumentModel(ActionParameterMemento)}
@@ -260,7 +251,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     private ActionExecutor executor;
 
     private ActionModel(final PageParameters pageParameters) {
-        this(newObjectAdapterMementoFrom(pageParameters), newActionMementoFrom(pageParameters), actionModeFrom(pageParameters), PageParameterNames.ACTION_SINGLE_RESULTS_MODE.getEnumFrom(pageParameters, SingleResultsMode.class));
+        this(newObjectAdapterMementoFrom(pageParameters), newActionMementoFrom(pageParameters), actionModeFrom(pageParameters));
 
         setArgumentsIfPossible(pageParameters);
         setContextArgumentIfPossible(pageParameters);
@@ -298,11 +289,10 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     }
 
 
-    private ActionModel(final ObjectAdapterMemento adapterMemento, final ActionMemento actionMemento, final Mode actionMode, final SingleResultsMode singleResultsMode) {
+    private ActionModel(final ObjectAdapterMemento adapterMemento, final ActionMemento actionMemento, final Mode actionMode) {
         this.targetAdapterMemento = adapterMemento;
         this.actionMemento = actionMemento;
         this.actionMode = actionMode;
-        this.singleResultsMode = singleResultsMode;
     }
 
     private void setArgumentsIfPossible(final PageParameters pageParameters) {
@@ -315,6 +305,10 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             String encoded = args.get(paramNum);
             setArgument(paramNum, parameterTypes.get(paramNum), encoded);
         }
+    }
+
+    public boolean hasParameters() {
+        return actionMode == ActionModel.Mode.PARAMETERS;
     }
 
     private boolean setContextArgumentIfPossible(final PageParameters pageParameters) {
@@ -404,10 +398,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return actionMemento.getConcurrencyChecking();
     }
 
-    public Mode getActionMode() {
-        return actionMode;
-    }
-
     public ActionMemento getActionMemento() {
         return actionMemento;
     }
@@ -468,10 +458,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         this.executor = executor;
     }
 
-    public SingleResultsMode getSingleResultsMode() {
-        return singleResultsMode;
-    }
-
     public void reset() {
         this.actionMode = determineMode(actionMemento.getAction());
     }
@@ -501,6 +487,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     private static OidMarshaller getOidMarshaller() {
         return IsisContext.getOidMarshaller();
     }
+
+
 
 
 }

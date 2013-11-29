@@ -36,7 +36,7 @@ public class ActionPanelFactory extends ComponentFactoryAbstract {
     private static final long serialVersionUID = 1L;
 
     public ActionPanelFactory() {
-        super(ComponentType.ACTION, ActionPanel.class);
+        super(ComponentType.ACTION_PROMPT, ActionPanel.class);
     }
 
     @Override

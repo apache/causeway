@@ -17,14 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.pages.standalonecollection;
+package org.apache.isis.viewer.wicket.ui.pages.value;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
@@ -32,25 +33,38 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
  * Web page representing an action invocation.
  */
 @AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
-public class StandaloneCollectionPage extends PageAbstract {
+public class ValuePage extends PageAbstract {
 
     private static final long serialVersionUID = 1L;
 
+    private static final String ID_ACTION_NAME = "actionName";
+    
     /**
      * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
      */
-    public StandaloneCollectionPage(final EntityCollectionModel model) {
-        super(new PageParameters(), ApplicationActions.INCLUDE, actionNameFrom(model), ComponentType.STANDALONE_COLLECTION);
-        addChildComponents(model);
-
-        addBookmarkedPages();
+    public ValuePage(final ValueModel valueModel) {
+        this(valueModel, actionNameFrom(valueModel));
+        
     }
 
-    private static String actionNameFrom(final EntityCollectionModel model) {
-        ActionModel actionModel = model.getActionModelHint();
+    
+    private ValuePage(ValueModel valueModel, String actionName) {
+        super(new PageParameters(), ApplicationActions.INCLUDE, actionName, ComponentType.VALUE);
+        
+        addOrReplace(new Label(ID_ACTION_NAME, actionName));
+
+        addChildComponents(valueModel);
+
+        addBookmarkedPages();
+        
+    }
+
+    private static String actionNameFrom(final ValueModel valueModel) {
+        ActionModel actionModel = valueModel.getActionModelHint();
         if(actionModel != null) {
             return actionModel.getActionMemento().getAction().getName();
         }
         return "Results"; // fallback, probably not required because hint should always exist on the model. 
     }
+
 }

@@ -24,15 +24,19 @@
       lang="en">
 	<wicket:head>
 		<wicket:link>
-			<link href="HomePage.css" rel="stylesheet" type="text/css"/>
+			<link href="ValuePage.css" rel="stylesheet" type="text/css"/>
 		</wicket:link>
 	</wicket:head>
 	<body>
 		<wicket:extend>
-			<div class="homePage">
-                <div wicket:id="bookmarks"/>
-				<div wicket:id="welcome"/>
-                <div wicket:id="actionPrompt"/>
+			<div class="valuePage">
+				<div wicket:id="bookmarks"/>
+				<div class="myBlockContainer">
+                    <div class="iconAndTitle panel actionPanelHeaderNew">
+                         <p wicket:id="actionName" class="actionName">[action name]</p>
+                    </div>
+				    <div wicket:id="value"/>
+                </div>
 			</div>
 		</wicket:extend>
 	</body>

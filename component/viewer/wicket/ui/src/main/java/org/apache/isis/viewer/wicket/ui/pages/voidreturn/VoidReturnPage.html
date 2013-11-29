@@ -24,14 +24,19 @@
       lang="en">
 	<wicket:head>
 		<wicket:link>
-			<link href="ActionPage.css" rel="stylesheet" type="text/css"/>
+			<link href="VoidReturnPage.css" rel="stylesheet" type="text/css"/>
 		</wicket:link>
 	</wicket:head>
 	<body>
 		<wicket:extend>
-			<div class="actionPage">
+			<div class="voidReturnPage">
 				<div wicket:id="bookmarks"/>
-				<div wicket:id="action"/>
+                <div class="myBlockContainer">
+                    <div class="iconAndTitle panel actionPanelHeaderNew">
+                         <p wicket:id="actionName" class="actionName">[action name]</p>
+                    </div>
+    				<div wicket:id="voidReturn"/>
+                </div>
 			</div>
 		</wicket:extend>
 	</body>

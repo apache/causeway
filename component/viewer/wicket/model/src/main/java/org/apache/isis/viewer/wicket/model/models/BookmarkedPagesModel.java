@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.base.Objects;
@@ -28,6 +29,7 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
@@ -43,7 +45,14 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
     
     public void bookmarkPage(final BookmarkableModel<?> bookmarkableModel) {
 
+        // hack: remove any garbage that might've got stored in 'rootNodes'
+        cleanUpGarbage(rootNodes);
+        
         final PageParameters candidatePP = bookmarkableModel.getPageParameters();
+        if(!holdsOid(candidatePP)) {
+            // ignore
+            return;
+        }
 
         boolean foundInGraph = false;
         for (BookmarkTreeNode eachNode : rootNodes) {
@@ -58,7 +67,6 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
             Collections.sort(rootNodes, COMPARATOR);
             current = candidatePP;
         }
-
         return;
     }
 
@@ -75,6 +83,26 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
         return Objects.equal(current, pageParameters);
     }
 
+    private static void cleanUpGarbage(List<BookmarkTreeNode> rootNodes) {
+        final Iterator<BookmarkTreeNode> iter = rootNodes.iterator();
+        while(iter.hasNext()) {
+            BookmarkTreeNode node = iter.next();
+            PageParameters pp = node.getPageParameters();
+            if(!holdsOid(pp)) {
+                iter.remove();
+            }
+        }
+    }
+
+    private static boolean holdsOid(PageParameters pp) {
+        try {
+            RootOid oidFrom = oidFrom(pp);
+            return oidFrom != null;
+        } catch(Exception ex) {
+            return false;
+        }
+    }
+    
     public static RootOid oidFrom(final PageParameters pageParameters) {
         String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
         if(oidStr == null) {

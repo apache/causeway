@@ -17,14 +17,13 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.pages.standalonecollection;
+package org.apache.isis.viewer.wicket.ui.pages.actionprompt;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
@@ -32,25 +31,36 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
  * Web page representing an action invocation.
  */
 @AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
-public class StandaloneCollectionPage extends PageAbstract {
+public class ActionPromptPage extends PageAbstract {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
      */
-    public StandaloneCollectionPage(final EntityCollectionModel model) {
-        super(new PageParameters(), ApplicationActions.INCLUDE, actionNameFrom(model), ComponentType.STANDALONE_COLLECTION);
+    public ActionPromptPage(final ActionModel model) {
+        super(new PageParameters(), ApplicationActions.INCLUDE, model.getActionMemento().getAction().getName(), ComponentType.ACTION_PROMPT);
         addChildComponents(model);
 
+        if(model.isBookmarkable()) {
+            bookmarkPage(model);
+        }
         addBookmarkedPages();
     }
 
-    private static String actionNameFrom(final EntityCollectionModel model) {
-        ActionModel actionModel = model.getActionModelHint();
-        if(actionModel != null) {
-            return actionModel.getActionMemento().getAction().getName();
-        }
-        return "Results"; // fallback, probably not required because hint should always exist on the model. 
+    public ActionPromptPage(final PageParameters pageParameters) {
+        this(pageParameters, buildModel(pageParameters));
+    }
+    
+    public ActionPromptPage(final PageParameters pageParameters, final ActionModel model) {
+        super(pageParameters, ApplicationActions.INCLUDE, model.getActionMemento().getAction().getName(), ComponentType.ACTION_PROMPT);
+        addChildComponents(model);
+        
+        // no need to bookmark because the ActionPanel will have done so for us
+        addBookmarkedPages();
+    }
+    
+    private static ActionModel buildModel(final PageParameters pageParameters) {
+        return ActionModel.createForPersistent(pageParameters);
     }
 }

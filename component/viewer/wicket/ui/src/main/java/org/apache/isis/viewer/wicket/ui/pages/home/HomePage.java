@@ -30,12 +30,7 @@ import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionModel.Mode;
-import org.apache.isis.viewer.wicket.model.models.ActionModel.SingleResultsMode;
-import org.apache.isis.viewer.wicket.model.util.MementoFunctions;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -61,13 +56,10 @@ public class HomePage extends PageAbstract {
         final HomePageTuple homePageTuple = lookupHomePageAction();
         if(homePageTuple != null) {
             Components.permanentlyHide(this, ComponentType.WELCOME); 
-            final ObjectAdapterMemento serviceMemento = ObjectAdapterMemento.Functions.fromAdapter().apply(homePageTuple.serviceAdapter);
-            ActionMemento homePageActionMemento = ObjectAdapterMemento.Functions.fromAction().apply(homePageTuple.action);
-            Mode mode = homePageTuple.action.getParameterCount() > 0? Mode.PARAMETERS : Mode.RESULTS;
-            final IModel<?> actionModel = ActionModel.create(serviceMemento, homePageActionMemento, mode, SingleResultsMode.INLINE);
-            getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ACTION, actionModel);
+            final IModel<?> actionModel = ActionModel.create(homePageTuple.serviceAdapter, homePageTuple.action);
+            getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ACTION_PROMPT, actionModel);
         } else {
-            Components.permanentlyHide(this, ComponentType.ACTION);
+            Components.permanentlyHide(this, ComponentType.ACTION_PROMPT);
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.WELCOME, null);
         }
     }

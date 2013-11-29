@@ -99,20 +99,9 @@ public enum ComponentType {
      */
     ACTION_INFO,
     /**
-     * Used for two different (but related) types of components:
-     * <ul>
-     * <li>For a menu panel, to display list of available actions ('find
-     * using').</li>
-     * <li>The parameters or results of an action; the model indicates which to
-     * display.</li>
-     * </ul>
-     * 
-     * <p>
-     * If showing results, then provides a level of indirection around another
-     * view (eg {@link #ACTION_PARAMETERS}, {@link #ENTITY} or
-     * {@link #COLLECTION_NAME_AND_CONTENTS}).
+     * Used to display the parameters of an action.
      */
-    ACTION,
+    ACTION_PROMPT,
     /**
      * Top-level component for rendering a standalone collection (ie as returned by
      * an action).

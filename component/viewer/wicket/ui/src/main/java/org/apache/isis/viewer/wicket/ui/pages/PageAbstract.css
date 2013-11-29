@@ -612,20 +612,20 @@ div.scalarPanel {
 
 /********************* Select2 component styling *****************************/
 
-.actionPage .select2-container,
-.entityPage .select2-container {
+.actionPromptPage .select2-container,
+.entityPage       .select2-container {
 	width: 200px;
 }
 
-.actionPage .select2-container .select2-choice,
-.entityPage .select2-container .select2-choice {
+.actionPromptPage .select2-container .select2-choice,
+.entityPage       .select2-container .select2-choice {
     padding: 4px;
 }
 
 
 
-.actionPage .select2-container .select2-choice,
-.entityPage .select2-container .select2-choice {
+.actionPromptPage .select2-container .select2-choice,
+.entityPage       .select2-container .select2-choice {
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -637,49 +637,49 @@ div.scalarPanel {
 	border-top:1px solid #CCCBC7;
 }
 
-.actionPage .select2-container .select2-choice span,
-.entityPage .select2-container .select2-choice span {
+.actionPromptPage .select2-container .select2-choice span,
+.entityPage       .select2-container .select2-choice span {
     font-size:13px;
 }
 
-.actionPage .select2-container.select2-drop-above .select2-choice,
-.entityPage .select2-container.select2-drop-above .select2-choice {
+.actionPromptPage .select2-container.select2-drop-above .select2-choice,
+.entityPage       .select2-container.select2-drop-above .select2-choice {
     -webkit-border-radius:0px;
     -moz-border-radius:0px;
     border-radius:0px;
 }
 
-.actionPage .select2-drop,
-.entityPage .select2-drop {
+.actionPromptPage .select2-drop,
+.entityPage       .select2-drop {
     -webkit-border-radius:0px;
     -moz-border-radius:0px;
     border-radius:0px;
 }
 
-.actionPage .select2-drop.select2-drop-above,
-.entityPage .select2-drop.select2-drop-above {
+.actionPromptPage .select2-drop.select2-drop-above,
+.entityPage       .select2-drop.select2-drop-above {
     -webkit-border-radius:0px;
     -moz-border-radius:0px;
     border-radius:0px;
 }
 
-.actionPage .select2-container .select2-choice div,
-.entityPage .select2-container .select2-choice div {
+.actionPromptPage .select2-container .select2-choice div,
+.entityPage       .select2-container .select2-choice div {
     -webkit-border-radius:0px;
     -moz-border-radius:0px;
     border-radius:0px;
     background: #EBEBE4;
 }
 
-.actionPage .select2-container.select2-container-disabled .select2-choice,
-.entityPage .select2-container.select2-container-disabled .select2-choice {
+.actionPromptPage .select2-container.select2-container-disabled .select2-choice,
+.entityPage       .select2-container.select2-container-disabled .select2-choice {
 	background-color:#F0EFEA;
 	border:1px solid #F0EFEA;
 	border-top:1px solid #CCCBC7;
 }
 
-.actionPage .select2-container a,
-.entityPage .select2-container a {
+.actionPromptPage .select2-container a,
+.entityPage       .select2-container a {
 	font-weight: normal;
 }
 

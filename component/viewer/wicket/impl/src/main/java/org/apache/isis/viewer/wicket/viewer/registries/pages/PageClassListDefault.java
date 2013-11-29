@@ -27,11 +27,13 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistrySpi;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
-import org.apache.isis.viewer.wicket.ui.pages.action.ActionPromptPage;
+import org.apache.isis.viewer.wicket.ui.pages.actionprompt.ActionPromptPage;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
+import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
+import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
 /**
  * Default implementation of {@link PageClassList}, specifying the default pages
@@ -48,6 +50,8 @@ public class PageClassListDefault implements PageClassList {
         pageRegistry.registerPage(PageType.HOME, getHomePageClass());
         pageRegistry.registerPage(PageType.ACTION_PROMPT, getActionPromptPageClass());
         pageRegistry.registerPage(PageType.STANDALONE_COLLECTION, getStandaloneCollectionPageClass());
+        pageRegistry.registerPage(PageType.VALUE, getValuePageClass());
+        pageRegistry.registerPage(PageType.VOID_RETURN, getVoidReturnPageClass());
     }
 
     /**
@@ -70,7 +74,21 @@ public class PageClassListDefault implements PageClassList {
     protected Class<? extends Page> getStandaloneCollectionPageClass() {
         return StandaloneCollectionPage.class;
     }
+    
+    /**
+     * For subclassing if required.
+     */
+    protected Class<? extends Page> getValuePageClass() {
+        return ValuePage.class;
+    }
 
+    /**
+     * For subclassing if required.
+     */
+    protected Class<? extends Page> getVoidReturnPageClass() {
+        return VoidReturnPage.class;
+    }
+    
     /**
      * For subclassing if required.
      */

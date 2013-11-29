@@ -21,10 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
@@ -33,16 +30,12 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionModel.SingleResultsMode;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -51,7 +44,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.pages.action.ActionPromptPage;
+import org.apache.isis.viewer.wicket.ui.pages.actionprompt.ActionPromptPage;
 import org.apache.isis.viewer.wicket.ui.util.Links;
 
 public final class EntityActionLinkFactory implements CssMenuLinkFactory {
@@ -69,8 +62,7 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
     public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId) {
         final ObjectAdapter adapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
 
-        final AbstractLink link = createLink(adapterMemento, action, linkId, adapter);
-        //action
+        final AbstractLink link = createLinkToPersistent(adapterMemento, action, linkId, adapter);
         final String label = ObjectAction.Utils.nameFor(action);
 
         // check visibility and whether enabled
@@ -97,13 +89,12 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
         return new LinkAndLabel(link, label, disabledReasonIfAny, blobOrClob, prototype, actionIdentifier, cssClass);
     }
 
-    private AbstractLink createLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId, final ObjectAdapter adapter) {
+    private AbstractLink createLinkToPersistent(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId, final ObjectAdapter adapter) {
         final Boolean persistent = adapter.representsPersistent();
-        if (persistent) {
-            return createLinkForPersistent(linkId, adapterMemento, action);
-        } else {
-            return createLinkForTransient(linkId, adapterMemento, action);
-        }
+        if (!persistent) {
+            throw new IllegalArgumentException("Object '" + adapter.titleString(null) + "' is not persistent.");
+        } 
+        return createLinkForPersistent(linkId, adapterMemento, action);
     }
 
     /**
@@ -121,27 +112,11 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
         // use the action semantics to determine whether invoking this action will require a concurrency check or not
         // if it's "safe", then we'll just continue without any checking. 
         final ConcurrencyChecking concurrencyChecking = ConcurrencyChecking.concurrencyCheckingFor(action.getSemantics());
-        final PageParameters pageParameters = ActionModel.createPageParameters(adapter, action, ActionModel.SingleResultsMode.REDIRECT, concurrencyChecking);
+        final PageParameters pageParameters = ActionModel.createPageParameters(adapter, action, concurrencyChecking);
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION_PROMPT);
         return Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
     }
 
-    private Link<?> createLinkForTransient(final String linkId, final ObjectAdapterMemento adapterMemento, final ObjectAction action) {
-        final ActionMemento actionMemento = new ActionMemento(action);
-        final ActionModel.Mode actionMode = ActionModel.determineMode(action);
-        return new Link<String>(linkId) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onClick() {
-                // TODO: seems like can't use REDIRECT, since won't
-                // let multiple setResponsePage() calls once
-                // committed to redirecting (I'm guessing)
-                final ActionModel actionModel = ActionModel.create(adapterMemento, actionMemento, actionMode, SingleResultsMode.INLINE);
-                setResponsePage(new ActionPromptPage(actionModel));
-            }
-        };
-    }
 
     // ///////////////////////////////////////////////////////////////////
     // Dependencies (from IsisContext)

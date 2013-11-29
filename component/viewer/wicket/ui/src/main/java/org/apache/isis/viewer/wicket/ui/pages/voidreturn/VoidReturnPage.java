@@ -17,13 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.pages.action;
+package org.apache.isis.viewer.wicket.ui.pages.voidreturn;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
@@ -31,38 +33,35 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
  * Web page representing an action invocation.
  */
 @AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
-public class ActionPromptPage extends PageAbstract {
+public class VoidReturnPage extends PageAbstract {
 
     private static final long serialVersionUID = 1L;
+
+    private static final String ID_ACTION_NAME = "actionName";
 
     /**
      * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
      */
-    public ActionPromptPage(final ActionModel model) {
-        super(new PageParameters(), ApplicationActions.INCLUDE, model.getActionMemento().getAction().getName(), ComponentType.ACTION);
-        addChildComponents(model);
-
-        if(model.isBookmarkable()) {
-            bookmarkPage(model);
-        }
-        addBookmarkedPages();
+    public VoidReturnPage(final VoidModel model) {
+        this(model, actionNameFrom(model));
     }
 
-    public ActionPromptPage(final PageParameters pageParameters) {
-        this(pageParameters, buildModel(pageParameters));
-    }
-    
-    public ActionPromptPage(final PageParameters pageParameters, final ActionModel model) {
-        super(pageParameters, ApplicationActions.INCLUDE, model.getActionMemento().getAction().getName(), ComponentType.ACTION);
-        addChildComponents(model);
+    private VoidReturnPage(final VoidModel model, final String actionName) {
+        super(new PageParameters(), ApplicationActions.INCLUDE, actionName, ComponentType.VOID_RETURN);
+
+        addOrReplace(new Label(ID_ACTION_NAME, actionName));
         
-        // no need to bookmark because the ActionPanel will have done so for us
+        addChildComponents(model);
+
         addBookmarkedPages();
     }
-
-
     
-    private static ActionModel buildModel(final PageParameters pageParameters) {
-        return ActionModel.createForPersistent(pageParameters);
+    private static String actionNameFrom(final VoidModel model) {
+        ActionModel actionModel = model.getActionModelHint();
+        if(actionModel != null) {
+            return actionModel.getActionMemento().getAction().getName();
+        }
+        return "Results"; // fallback, probably not required because hint should always exist on the model. 
     }
+
 }

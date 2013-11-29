@@ -20,16 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.value;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.handler.resource.ResourceRequestHandler;
-import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.request.http.handler.RedirectRequestHandler;
-import org.apache.wicket.request.resource.ByteArrayResource;
-import org.apache.wicket.request.resource.ContentDisposition;
-import org.apache.wicket.util.resource.StringResourceStream;
 
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
@@ -47,31 +38,8 @@ public class StandaloneValuePanel extends PanelAbstract<ValueModel> {
     public StandaloneValuePanel(final String id, final ValueModel valueModel) {
         super(id, valueModel);
         final ObjectAdapter objectAdapter = getModel().getObject();
-        final Object value = objectAdapter.getObject();
-        final String label;
-        
-        if(value instanceof Clob) {
-            final Clob clob = (Clob) value;
-            ResourceStreamRequestHandler handler = 
-                new ResourceStreamRequestHandler(new StringResourceStream(clob.getChars(), clob.getMimeType().toString()), clob.getName());
-            handler.setContentDisposition(ContentDisposition.ATTACHMENT);
-            getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
-            label = "Downloading: " + clob.getName();
-        } else if(value instanceof Blob) {
-            final Blob blob = (Blob) value;
-            ResourceRequestHandler handler = 
-                    new ResourceRequestHandler(new ByteArrayResource(blob.getMimeType().toString(), blob.getBytes(), blob.getName()), null);
-            getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
-            label = "Downloading: " + blob.getName();
-        } else if(value instanceof java.net.URL) {
-            java.net.URL url = (java.net.URL) value;
-            label = "Downloading: " + objectAdapter.titleString(null);
-            IRequestHandler handler = 
-                    new RedirectRequestHandler(url.toString());
-            getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
-        } else {
-            label = objectAdapter.titleString(null);
-        }
+
+        final String label = objectAdapter.titleString(null);
         add(new Label(ID_STANDALONE_VALUE, label));
     }
 

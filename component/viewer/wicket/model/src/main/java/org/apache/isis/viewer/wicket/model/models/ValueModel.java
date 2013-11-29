@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
 /**
@@ -39,6 +40,27 @@ public class ValueModel extends ModelAbstract<ObjectAdapter> {
     @Override
     protected ObjectAdapter load() {
         return adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+    }
+
+    // //////////////////////////////////////
+
+    private ActionModel actionModelHint;
+    /**
+     * The {@link ActionModel model} of the {@link ObjectAction action} 
+     * that generated this {@link ValueModel}.
+     * 
+     * @see #setActionHint(ActionModel)
+     */
+    public ActionModel getActionModelHint() {
+        return actionModelHint;
+    }
+    /**
+     * Called by action.
+     * 
+     * @see #getActionModelHint()
+     */
+    public void setActionHint(ActionModel actionModelHint) {
+        this.actionModelHint = actionModelHint;
     }
 
 }
