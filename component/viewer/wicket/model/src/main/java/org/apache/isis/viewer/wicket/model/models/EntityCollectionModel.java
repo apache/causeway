@@ -157,8 +157,15 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         final List<ObjectAdapterMemento> mementoList = asMementoList(collectionAsAdapter);
 
         final ObjectSpecification elementSpec = collectionAsAdapter.getElementSpecification();
-        final Class<?> elementType = elementSpec.getCorrespondingClass();
-        int pageSize = pageSize(elementSpec.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_STANDALONE);
+        
+        final Class<?> elementType;
+        int pageSize = PAGE_SIZE_DEFAULT_FOR_STANDALONE;
+        if (elementSpec != null) {
+            elementType = elementSpec.getCorrespondingClass();
+            pageSize = pageSize(elementSpec.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_STANDALONE);
+        } else {
+            elementType = Object.class;
+        }
         
         return new EntityCollectionModel(elementType, mementoList, pageSize);
     }

@@ -30,7 +30,7 @@ import org.junit.Test;
 
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.pages.action.ActionPage;
+import org.apache.isis.viewer.wicket.ui.pages.action.ActionPromptPage;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
 
@@ -48,20 +48,20 @@ public class PageClassListDefault_RegistrationAndCaching {
 
     @Test
     public void cachesPageByPageType() {
-        final Class<? extends Page> pageClass = registryImpl.getPageClass(PageType.ACTION);
+        final Class<? extends Page> pageClass = registryImpl.getPageClass(PageType.ACTION_PROMPT);
         assertThat(pageClass, is(not(nullValue())));
     }
 
     @Test
     public void canRegisterNewPageType() {
-        class TestingActionPage extends ActionPage {
+        class TestingActionPage extends ActionPromptPage {
             TestingActionPage() {
                 super((ActionModel) null);
             }
         }
-        registryImpl.registerPage(PageType.ACTION, TestingActionPage.class);
+        registryImpl.registerPage(PageType.ACTION_PROMPT, TestingActionPage.class);
 
-        final Class<? extends Page> pageClass = registryImpl.getPageClass(PageType.ACTION);
+        final Class<? extends Page> pageClass = registryImpl.getPageClass(PageType.ACTION_PROMPT);
         assertThat(pageClass.equals(TestingActionPage.class), is(true));
     }
 

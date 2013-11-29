@@ -44,7 +44,7 @@ class AppActionsCssMenuLinkFactory implements CssMenuLinkFactory {
     public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId) {
         final PageParameters pageParameters = ActionModel.createPageParameters(adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK), action, ActionModel.SingleResultsMode.REDIRECT, ConcurrencyChecking.NO_CHECK);
 
-        final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
+        final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION_PROMPT);
 
         final AbstractLink link = Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
         final String actionLabel = ObjectAction.Utils.nameFor(action);

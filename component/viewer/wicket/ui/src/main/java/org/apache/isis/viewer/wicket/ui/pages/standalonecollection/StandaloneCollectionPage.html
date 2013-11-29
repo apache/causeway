@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
   or more contributor license agreements.  See the NOTICE file
@@ -17,32 +18,21 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"  
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
       xml:lang="en"  
       lang="en">
-	<head></head>
+	<wicket:head>
+		<wicket:link>
+			<link href="StandaloneCollectionPage.css" rel="stylesheet" type="text/css"/>
+		</wicket:link>
+	</wicket:head>
 	<body>
-		<wicket:panel>
-			<div class="actionPanel actionComponentType myBlockContainer">
-				<div class="iconAndTitle panel actionPanelHeaderNew">
-			         <span wicket:id="entityIconAndTitle">[icon and title]</span>
-			         <p wicket:id="actionName" class="actionName">[action name]</p>
-                </div>
-				<span wicket:id="parameters">
-				</span>
-				<span wicket:id="entityLink">
-				</span>
-				<span wicket:id="entity">
-				</span>
-				<span wicket:id="emptyCollection">
-				</span>
-				<span wicket:id="value">
-				</span>
-				<span wicket:id="voidReturn">
-				</span>
+		<wicket:extend>
+			<div class="standaloneCollectionPage">
+				<div wicket:id="bookmarks"/>
+				<div wicket:id="standaloneCollection"/>
 			</div>
-		</wicket:panel>
+		</wicket:extend>
 	</body>
 </html>

@@ -62,7 +62,7 @@ public class BookmarkTreeNode implements Serializable {
             this.title = bookmarkableModel.getTitle();
         }
         public PageType getPageType() {
-            return bookmarkableModel instanceof EntityModel ? PageType.ENTITY : PageType.ACTION;
+            return bookmarkableModel instanceof EntityModel ? PageType.ENTITY : PageType.ACTION_PROMPT;
         }
 
         public String getTitle() {

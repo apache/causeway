@@ -73,6 +73,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.ShortPanelF
 import org.apache.isis.viewer.wicket.ui.components.scalars.reference.ReferencePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.StringPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.value.ValuePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.standalonecollection.StandaloneCollectionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.unknown.UnknownModelPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.value.StandaloneValuePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
@@ -247,6 +248,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
     protected void addComponentFactoriesForAction(final ComponentFactoryList componentFactories) {
         componentFactories.add(new ActionPanelFactory());
+        componentFactories.add(new StandaloneCollectionPanelFactory());
     }
 
     protected void addComponentFactoriesForActionLink(final ComponentFactoryList componentFactories) {

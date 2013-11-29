@@ -27,10 +27,11 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistrySpi;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
-import org.apache.isis.viewer.wicket.ui.pages.action.ActionPage;
+import org.apache.isis.viewer.wicket.ui.pages.action.ActionPromptPage;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
+import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 
 /**
  * Default implementation of {@link PageClassList}, specifying the default pages
@@ -45,14 +46,15 @@ public class PageClassListDefault implements PageClassList {
         pageRegistry.registerPage(PageType.ABOUT, getAboutPageClass());
         pageRegistry.registerPage(PageType.ENTITY, getEntityPageClass());
         pageRegistry.registerPage(PageType.HOME, getHomePageClass());
-        pageRegistry.registerPage(PageType.ACTION, getActionPageClass());
+        pageRegistry.registerPage(PageType.ACTION_PROMPT, getActionPromptPageClass());
+        pageRegistry.registerPage(PageType.STANDALONE_COLLECTION, getStandaloneCollectionPageClass());
     }
 
     /**
      * For subclassing if required.
      */
-    protected Class<? extends Page> getActionPageClass() {
-        return ActionPage.class;
+    protected Class<? extends Page> getActionPromptPageClass() {
+        return ActionPromptPage.class;
     }
 
     /**
@@ -60,6 +62,13 @@ public class PageClassListDefault implements PageClassList {
      */
     protected Class<? extends Page> getEntityPageClass() {
         return EntityPage.class;
+    }
+
+    /**
+     * For subclassing if required.
+     */
+    protected Class<? extends Page> getStandaloneCollectionPageClass() {
+        return StandaloneCollectionPage.class;
     }
 
     /**

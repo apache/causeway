@@ -51,7 +51,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.pages.action.ActionPage;
+import org.apache.isis.viewer.wicket.ui.pages.action.ActionPromptPage;
 import org.apache.isis.viewer.wicket.ui.util.Links;
 
 public final class EntityActionLinkFactory implements CssMenuLinkFactory {
@@ -107,8 +107,8 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
     }
 
     /**
-     * Creates a link to the {@link ActionPage} (ie the {@link PageClassRegistry registered page} for 
-     * {@link PageType#ACTION action}s) with the appropriate {@link PageParameters} to either render the action's
+     * Creates a link to the {@link ActionPromptPage} (ie the {@link PageClassRegistry registered page} for 
+     * {@link PageType#ACTION_PROMPT action}s) with the appropriate {@link PageParameters} to either render the action's
      * parameter form (if it takes arguments) or to invoke the action directly.
      * 
      * <p>
@@ -122,7 +122,7 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
         // if it's "safe", then we'll just continue without any checking. 
         final ConcurrencyChecking concurrencyChecking = ConcurrencyChecking.concurrencyCheckingFor(action.getSemantics());
         final PageParameters pageParameters = ActionModel.createPageParameters(adapter, action, ActionModel.SingleResultsMode.REDIRECT, concurrencyChecking);
-        final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
+        final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION_PROMPT);
         return Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
     }
 
@@ -138,7 +138,7 @@ public final class EntityActionLinkFactory implements CssMenuLinkFactory {
                 // let multiple setResponsePage() calls once
                 // committed to redirecting (I'm guessing)
                 final ActionModel actionModel = ActionModel.create(adapterMemento, actionMemento, actionMode, SingleResultsMode.INLINE);
-                setResponsePage(new ActionPage(actionModel));
+                setResponsePage(new ActionPromptPage(actionModel));
             }
         };
     }

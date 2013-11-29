@@ -256,7 +256,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
             // prettier URLs
             mountPage("/entity/${objectOid}/", PageType.ENTITY);
-            mountPage("/action/${objectOid}/${actionOwningSpec}/${actionId}/${actionType}/${actionSingleResultsMode}/#{actionArgs}", PageType.ACTION);
+            mountPage("/action/${objectOid}/${actionOwningSpec}/${actionId}/${actionType}/${actionSingleResultsMode}/#{actionArgs}", PageType.ACTION_PROMPT);
             
         } catch(RuntimeException ex) {
             // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.

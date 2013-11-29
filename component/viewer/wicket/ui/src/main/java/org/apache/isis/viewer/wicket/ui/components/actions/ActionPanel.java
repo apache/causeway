@@ -55,6 +55,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -84,8 +85,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             ComponentType.ENTITY, 
             ComponentType.VALUE, 
             ComponentType.EMPTY_COLLECTION, 
-            ComponentType.VOID_RETURN, 
-            ComponentType.COLLECTION_CONTENTS);
+            ComponentType.VOID_RETURN);
 
     private static final String ID_ACTION_NAME = "actionName";
 
@@ -355,12 +355,10 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                     // this should cause our page mementos (eg EntityModel) to hold the correct state.  I hope.
                     panel.getTransactionManager().flushTransaction();
                     
-                    // build page, also propogate any concurrency exception that might have occurred already
+                    // build page, also propagate any concurrency exception that might have occurred already
                     final EntityPage entityPage = new EntityPage(actualAdapter, exIfAny);
                     
                     // "redirect-after-post"
-                    
-                    // panel.setRedirect(true); // no longer required, http://mail-archives.apache.org/mod_mbox/wicket-users/201103.mbox/%3CAANLkTin3NmEBaMY9CF8diXA+wTMamQPc2O+tWvG_HCiW@mail.gmail.com%3E
                     panel.setResponsePage(entityPage);
                     
                 } else if (singleResultsMode == ActionModel.SingleResultsMode.INLINE) {
@@ -381,20 +379,19 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         COLLECTION {
             @Override
             public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
-                ObjectAction action = panel.getActionModel().getActionMemento().getAction();
-                panel.addOrReplace(new Label(ActionPanel.ID_ACTION_NAME, Model.of(action.getName())));
                 
-                panel.hideAllBut(ComponentType.COLLECTION_CONTENTS);
-                addOrReplaceCollectionResultsPanel(panel, resultAdapter);
-            }
+                // cargo cult ... copied from OBJECT type
+                panel.getTransactionManager().flushTransaction();
 
-            private void addOrReplaceCollectionResultsPanel(final ActionPanel panel, final ObjectAdapter resultAdapter) {
                 final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter);
                 collectionModel.setActionHint(panel.getActionModel());
-                final ComponentFactoryRegistry componentFactoryRegistry = panel.getComponentFactoryRegistry();
-                componentFactoryRegistry.addOrReplaceComponent(panel, ComponentType.COLLECTION_CONTENTS, collectionModel);
-
+                
+                final StandaloneCollectionPage standaloneCollectionPage = new StandaloneCollectionPage(collectionModel);
+                
+                // "redirect-after-post"
+                panel.setResponsePage(standaloneCollectionPage);
             }
+
         },
         EMPTY {
             @Override
@@ -468,10 +465,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 permanentlyHide(componentType);
             }
         }
-    }
-
-    private void hideAll() {
-        hideAllBut();
     }
 
 

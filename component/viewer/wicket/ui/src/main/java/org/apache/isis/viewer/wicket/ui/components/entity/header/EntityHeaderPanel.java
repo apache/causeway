@@ -53,7 +53,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilde
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.pages.action.ActionPage;
+import org.apache.isis.viewer.wicket.ui.pages.action.ActionPromptPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -138,7 +138,7 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
         topLevelActions.addAll(userActions);
     }
     
-    private Filter<ObjectAction> memberOrderNameNotAssociation(final ObjectSpecification adapterSpec) {
+    private static Filter<ObjectAction> memberOrderNameNotAssociation(final ObjectSpecification adapterSpec) {
 
         final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.INCLUDED);
         final List<String> associationNames = Lists.transform(associations, Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toName()));
@@ -165,7 +165,7 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
 
     @Override
     public void onClick(final ActionModel actionModel) {
-        setResponsePage(new ActionPage(actionModel));
+        setResponsePage(new ActionPromptPage(actionModel));
     }
 
     

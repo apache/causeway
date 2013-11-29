@@ -69,7 +69,7 @@ public class ActionLinkPanel extends PanelAbstract<ActionModel> {
     private WebMarkupContainer addOrReplaceLinkWrapper(final ActionModel actionModel) {
 
         final PageParameters pageParameters = actionModel.getPageParameters();
-        final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
+        final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION_PROMPT);
         final AbstractLink link = newLink(ID_ACTION_LINK, pageClass, pageParameters);
         
         label = new Label(ID_ACTION_TITLE, determineTitle());

@@ -114,6 +114,11 @@ public enum ComponentType {
      */
     ACTION,
     /**
+     * Top-level component for rendering a standalone collection (ie as returned by
+     * an action).
+     */
+    STANDALONE_COLLECTION,
+    /**
      * Bookmarked link to invoke an action
      */
     ACTION_LINK,

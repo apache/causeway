@@ -31,14 +31,14 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
  * Web page representing an action invocation.
  */
 @AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")
-public class ActionPage extends PageAbstract {
+public class ActionPromptPage extends PageAbstract {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
      */
-    public ActionPage(final ActionModel model) {
+    public ActionPromptPage(final ActionModel model) {
         super(new PageParameters(), ApplicationActions.INCLUDE, model.getActionMemento().getAction().getName(), ComponentType.ACTION);
         addChildComponents(model);
 
@@ -48,11 +48,11 @@ public class ActionPage extends PageAbstract {
         addBookmarkedPages();
     }
 
-    public ActionPage(final PageParameters pageParameters) {
+    public ActionPromptPage(final PageParameters pageParameters) {
         this(pageParameters, buildModel(pageParameters));
     }
     
-    public ActionPage(final PageParameters pageParameters, final ActionModel model) {
+    public ActionPromptPage(final PageParameters pageParameters, final ActionModel model) {
         super(pageParameters, ApplicationActions.INCLUDE, model.getActionMemento().getAction().getName(), ComponentType.ACTION);
         addChildComponents(model);
         
