@@ -27,7 +27,9 @@ import com.google.common.collect.Iterables;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceRequestHandler;
@@ -94,7 +96,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         if (actionModel.hasParameters()) {
             buildGuiForParameters(actionModel);
         } else {
-            executeActionAndProcessResults(null);
+            executeActionAndProcessResults(null, null);
         }
     }
 
@@ -145,7 +147,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
      * @param feedbackForm - for feedback messages.
      */
     @Override
-    public void executeActionAndProcessResults(MarkupContainer feedbackForm) {
+    public void executeActionAndProcessResults(AjaxRequestTarget target, Form<?> feedbackForm) {
 
         permanentlyHide(ComponentType.ENTITY_ICON_AND_TITLE);
 
@@ -156,7 +158,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 targetAdapter = getModel().getTargetAdapter();
 
                 // no concurrency exception, so continue...
-                clearArgs = executeActionOnTargetAndProcessResults(targetAdapter, feedbackForm);
+                clearArgs = executeActionOnTargetAndProcessResults(targetAdapter, target, feedbackForm);
 
             } catch (ConcurrencyException ex) {
 
@@ -182,15 +184,16 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
     }
 
     /**
+     * @param target 
      * @return whether to clear args or not (they aren't if there was a validation exception)
      */
-    private boolean executeActionOnTargetAndProcessResults(ObjectAdapter targetAdapter, MarkupContainer feedbackForm) {
+    private boolean executeActionOnTargetAndProcessResults(ObjectAdapter targetAdapter, AjaxRequestTarget target, Form<?> feedbackForm) {
 
         // validate the action parameters (if any)
         final ActionModel actionModel = getActionModel();
         final String invalidReasonIfAny = actionModel.getReasonInvalidIfAny();
         if (invalidReasonIfAny != null) {
-            feedbackForm.error(invalidReasonIfAny);
+            raiseWarning(target, feedbackForm, invalidReasonIfAny);
             return false;
         } 
         // the object store could raise an exception (eg uniqueness constraint)
@@ -210,13 +213,11 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 bookmarkPage(actionModel);
             }
 
-            //return true;
-            // change in policy: never clear args (need them, even after successful execution, for bulk actions).
             return false;
 
         } catch (RuntimeException ex) {
 
-            String message = recognizeException(ex, feedbackForm);
+            String message = recognizeException(ex, target, feedbackForm);
             
             if (message != null) {
                 // no need to add to message broker, should already have been added...
@@ -237,7 +238,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         }
     }
 
-    private String recognizeException(RuntimeException ex, Component feedbackComponent) {
+    private String recognizeException(RuntimeException ex, AjaxRequestTarget target, Form<?> feedbackForm) {
         
         // REVIEW: this code is similar to stuff in EntityPropertiesForm, perhaps move up to superclass?
         // REVIEW: similar code also in WebRequestCycleForIsis; combine?
@@ -249,10 +250,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         if(recognizedErrorIfAny != null) {
 
             // recognized
-            if(feedbackComponent != null) {
-                feedbackComponent.error(recognizedErrorIfAny);
-            }
-            getMessageBroker().addWarning(recognizedErrorIfAny);
+            raiseWarning(target, feedbackForm, recognizedErrorIfAny);
 
             getTransactionManager().getTransaction().clearAbortCause();
             
@@ -261,6 +259,15 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
         }
         return recognizedErrorIfAny;
+    }
+
+    public void raiseWarning(AjaxRequestTarget target, Form<?> feedbackForm, String error) {
+        if(target != null && feedbackForm != null) {
+            target.add(feedbackForm);
+            feedbackForm.error(error);
+        } else {
+            getMessageBroker().addWarning(error);
+        }
     }
 
     /**

@@ -25,7 +25,8 @@ import org.jmock.Mockery;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
 
 public final class SystemFixtures {
 
@@ -35,10 +36,16 @@ public final class SystemFixtures {
         this.context = context;
     }
 
-    public <T> void newLink(final CssMenuLinkFactory mockLinkBuilder, final String linkId, final ObjectAdapterMemento adapterMemento, final ObjectAction noAction, final Link<T> returns) {
+    public <T> void newLink(
+            final ActionLinkFactory mockLinkBuilder, 
+            final String linkId, 
+            final ObjectAdapterMemento adapterMemento,
+            final ObjectAction noAction, 
+            final ActionPromptModalWindowProvider actionPromptModalWindowProvider,
+            final Link<T> returns) {
         context.checking(new Expectations() {
             {
-                allowing(mockLinkBuilder).newLink(adapterMemento, noAction, linkId);
+                allowing(mockLinkBuilder).newLink(adapterMemento, noAction, linkId, actionPromptModalWindowProvider);
                 will(returnValue(returns));
             }
         });

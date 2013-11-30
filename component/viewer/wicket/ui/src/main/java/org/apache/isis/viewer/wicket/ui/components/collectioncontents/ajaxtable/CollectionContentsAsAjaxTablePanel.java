@@ -29,6 +29,7 @@ import com.google.inject.Inject;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -52,6 +53,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbstract;
@@ -59,15 +61,16 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterTitleColumn;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
-public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider {
+public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider, ActionPromptModalWindowProvider {
 
     private static final Predicate<ObjectAction> BULK = Filters.asPredicate(ObjectAction.Filters.bulk());
 
@@ -75,6 +78,7 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
 
     private static final String ID_TABLE = "table";
     private static final String ID_ENTITY_ACTIONS = "entityActions";
+    private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
 
     private DataTable<ObjectAdapter,String> dataTable;
 
@@ -98,7 +102,8 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         final SortableDataProvider<ObjectAdapter,String> dataProvider = new CollectionContentsSortableDataProvider(model);
         dataTable = new IsisAjaxFallbackDataTable<ObjectAdapter,String>(ID_TABLE, columns, dataProvider, model.getPageSize());
 
-        buildEntityActionsGui(bulkActions);
+        addActionPromptModalWindow();
+        buildEntityActionsGui(bulkActions, this);
 
         addOrReplace(dataTable);
     }
@@ -137,7 +142,9 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         }));
     }
 
-    private void buildEntityActionsGui(List<ObjectAction> bulkActions) {
+    private void buildEntityActionsGui(
+            final List<ObjectAction> bulkActions, 
+            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
         final EntityCollectionModel model = getModel();
         
         if(bulkActions.isEmpty() || model.isParented()) {
@@ -146,11 +153,11 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         }
         
         if(!bulkActions.isEmpty()) {
-            final CssMenuLinkFactory linkFactory = new BulkActionsLinkFactory(model, dataTable);
+            final ActionLinkFactory linkFactory = new BulkActionsLinkFactory(model, dataTable);
 
             final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(null, getServiceAdapters(), bulkActions, linkFactory);
             // TODO: i18n
-            final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
+            final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions", actionPromptModalWindowProvider);
 
             this.addOrReplace(cssMenuPanel);
         } else {
@@ -266,6 +273,23 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         return model.getCount();
     }
 
+    
+    // ///////////////////////////////////////////////////////////////////
+    // ActionPromptModalWindowProvider
+    // ///////////////////////////////////////////////////////////////////
+    
+    private ModalWindow actionPromptModalWindow;
+    public ModalWindow getActionPromptModalWindow() {
+        return PageAbstract.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
+    }
+    
+    private void addActionPromptModalWindow() {
+        this.actionPromptModalWindow = PageAbstract.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW); 
+        addOrReplace(actionPromptModalWindow);
+    }
+
+
+    // //////////////////////////////////////
 
     @Inject
     private WicketViewerSettings settings;

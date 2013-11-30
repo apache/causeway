@@ -33,6 +33,7 @@ import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem.Builder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel.Style;
 
@@ -54,35 +55,40 @@ public class CssMenuBuilder {
     
     private final List<ObjectAction> actions;
 
-    private final CssMenuLinkFactory cssMenuLinkFactory;
+    private final ActionLinkFactory cssMenuLinkFactory;
     
-    public CssMenuBuilder(final ObjectAdapterMemento adapterMemento, final List<ObjectAdapter> serviceAdapters, final List<ObjectAction> actions, final CssMenuLinkFactory cssMenuLinkFactory) {
+    public CssMenuBuilder(final ObjectAdapterMemento adapterMemento, final List<ObjectAdapter> serviceAdapters, final List<ObjectAction> actions, final ActionLinkFactory cssMenuLinkFactory) {
         this.adapterMemento = adapterMemento; // may be null
         this.serviceAdapters = serviceAdapters;
         this.actions = actions;
         this.cssMenuLinkFactory = cssMenuLinkFactory;
     }
 
-    public CssMenuBuilder(final List<ObjectAction> actions, final CssMenuLinkFactory cssMenuLinkFactory) {
+    public CssMenuBuilder(final List<ObjectAction> actions, final ActionLinkFactory cssMenuLinkFactory) {
         this(null, null, actions, cssMenuLinkFactory);
     }
 
 
-    public CssMenuPanel buildPanel(final String wicketId, final String rootName) {
+    public CssMenuPanel buildPanel(
+            final String wicketId, final String rootName, 
+            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
         final CssMenuItem findUsing = CssMenuItem.newMenuItem(rootName).build();
-        addMenuItems(findUsing, actions);
+        addMenuItems(findUsing, actions, actionPromptModalWindowProvider);
         final CssMenuPanel cssMenuPanel = new CssMenuPanel(wicketId, Style.SMALL, Collections.singletonList(findUsing));
         return cssMenuPanel;
     }
 
-    private void addMenuItems(final CssMenuItem parent, final List<ObjectAction> actions) {
-        addMenuItemsForActionsOfType(parent, actions, ActionType.USER);
+    private void addMenuItems(
+            final CssMenuItem parent, 
+            final List<ObjectAction> actions, 
+            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+        addMenuItemsForActionsOfType(parent, actions, ActionType.USER, actionPromptModalWindowProvider);
         if ( isExploring() || isPrototyping()) {
-            addMenuItemsForActionsOfType(parent, actions, ActionType.EXPLORATION);
-            addMenuItemsForActionsOfType(parent, actions, ActionType.PROTOTYPE);
+            addMenuItemsForActionsOfType(parent, actions, ActionType.EXPLORATION, actionPromptModalWindowProvider);
+            addMenuItemsForActionsOfType(parent, actions, ActionType.PROTOTYPE, actionPromptModalWindowProvider);
         }
         if (isDebugMode()) {
-            addMenuItemsForActionsOfType(parent, actions, ActionType.DEBUG);
+            addMenuItemsForActionsOfType(parent, actions, ActionType.DEBUG, actionPromptModalWindowProvider);
         }
     }
 
@@ -103,18 +109,28 @@ public class CssMenuBuilder {
         return true;
     }
 
-    private void addMenuItemsForActionsOfType(final CssMenuItem parent, final List<ObjectAction> actions, final ActionType type) {
+    private void addMenuItemsForActionsOfType(
+            final CssMenuItem parent, 
+            final List<ObjectAction> actions, 
+            final ActionType type, 
+            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
         final Collection<ObjectAction> filterActionsOfType = Collections2.filter(actions, Filters.asPredicate(ObjectAction.Filters.ofType(type)));
         for (final ObjectAction action : filterActionsOfType) {
-            addMenuItem(parent, action);
+            addMenuItem(parent, action, actionPromptModalWindowProvider);
         }
     }
 
-    private void addMenuItem(final CssMenuItem parent, final ObjectAction action) {
-        addMenuItemForAction(parent, action);
+    private void addMenuItem(
+            final CssMenuItem parent, 
+            final ObjectAction action, 
+            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+        addMenuItemForAction(parent, action, actionPromptModalWindowProvider);
     }
 
-    private void addMenuItemForAction(final CssMenuItem parent, final ObjectAction action) {
+    private void addMenuItemForAction(
+            final CssMenuItem parent, 
+            final ObjectAction action, 
+            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
         
         final NotContributedFacet notContributed = action.getFacet(NotContributedFacet.class);
         if (notContributed != null && notContributed.toActions()) {
@@ -127,13 +143,13 @@ public class CssMenuBuilder {
         final ObjectAdapterMemento targetAdapterMemento = adapterMemento; // determineAdapterFor(action);
         if(targetAdapterMemento != null) {
             // against an entity or a service (if a contributed action)
-            subMenuItemBuilder = parent.newSubMenuItem(targetAdapterMemento, action, cssMenuLinkFactory);
+            subMenuItemBuilder = parent.newSubMenuItem(targetAdapterMemento, action, cssMenuLinkFactory, actionPromptModalWindowProvider);
         } else {
             if (action.containsDoOpFacet(BulkFacet.class)) {
                 // ignore fact have no target action; 
                 // we expect that the link factory is able to handle this
                 // (ie will iterate through all objects from a list and invoke in bulk)
-                subMenuItemBuilder = parent.newSubMenuItem(action, cssMenuLinkFactory);
+                subMenuItemBuilder = parent.newSubMenuItem(action, cssMenuLinkFactory, actionPromptModalWindowProvider);
             }
         }
         

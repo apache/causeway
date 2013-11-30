@@ -22,6 +22,8 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.Serializable;
 
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.Form;
 
 /**
  * Decouples the {@link ActionModel}, which needs to delegate the actual
@@ -29,6 +31,6 @@ import org.apache.wicket.MarkupContainer;
  */
 public interface ActionExecutor extends Serializable {
 
-    void executeActionAndProcessResults(MarkupContainer paramForm);
+    void executeActionAndProcessResults(AjaxRequestTarget target, Form<?> feedbackForm);
 
 }

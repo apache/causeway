@@ -25,7 +25,9 @@ import java.util.List;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.Session;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -44,9 +46,10 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityActionLinkFactory;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
 
 public final class EntityActionUtil {
@@ -55,7 +58,10 @@ public final class EntityActionUtil {
 
     private final static MemberOrderFacetComparator memberOrderFacetComparator = new MemberOrderFacetComparator(false);
     
-    public static List<LinkAndLabel> entityActions(EntityModel entityModel, ObjectAssociation association) {
+    public static List<LinkAndLabel> entityActions(
+            final EntityModel entityModel, 
+            final ObjectAssociation association, 
+            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
         final ObjectSpecification adapterSpec = entityModel.getTypeOfSpecification();
         final ObjectAdapter adapter = entityModel.load(ConcurrencyChecking.NO_CHECK);
         final ObjectAdapterMemento adapterMemento = entityModel.getObjectAdapterMemento();
@@ -72,13 +78,13 @@ public final class EntityActionUtil {
                 return memberOrderFacetComparator.compare(m1, m2);
             }});
         
-        final CssMenuLinkFactory linkFactory = new EntityActionLinkFactory(entityModel);
+        final ActionLinkFactory linkFactory = new EntityActionLinkFactory(entityModel);
     
         return Lists.transform(userActions, new Function<ObjectAction, LinkAndLabel>(){
     
             @Override
             public LinkAndLabel apply(ObjectAction objectAction) {
-                return linkFactory.newLink(adapterMemento, objectAction, LinksSelectorPanelAbstract.ID_ADDITIONAL_LINK);
+                return linkFactory.newLink(adapterMemento, objectAction, LinksSelectorPanelAbstract.ID_ADDITIONAL_LINK, actionPromptModalWindowProvider);
             }});
     }
 

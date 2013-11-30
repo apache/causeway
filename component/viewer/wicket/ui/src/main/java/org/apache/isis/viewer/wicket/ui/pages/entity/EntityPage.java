@@ -19,13 +19,26 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.entity;
 
+import java.util.List;
+
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -40,6 +53,7 @@ public class EntityPage extends PageAbstract {
     
     private final EntityModel model;
 
+
     /**
      * Called reflectively, in support of 
      * {@link BookmarkablePageLink bookmarkable} links.
@@ -49,12 +63,7 @@ public class EntityPage extends PageAbstract {
     }
     
     private EntityPage(final PageParameters pageParameters, final EntityModel entityModel) {
-        super(pageParameters, ApplicationActions.INCLUDE, entityModel.getObject().titleString(null), ComponentType.ENTITY);
-        this.model = entityModel;
-        addChildComponents(model);
-        
-        bookmarkPage(model);
-        addBookmarkedPages();
+        this(pageParameters, entityModel, entityModel.getObject().titleString(null));
     }
 
     public EntityPage(final ObjectAdapter adapter) {
@@ -66,15 +75,49 @@ public class EntityPage extends PageAbstract {
      * (eg from an action invocation) is show.
      */
     public EntityPage(ObjectAdapter adapter, ConcurrencyException exIfAny) {
-        super(new PageParameters(), ApplicationActions.INCLUDE, adapter.titleString(null), ComponentType.ENTITY);
-        this.model = new EntityModel(adapter);
+        this(new PageParameters(), newEntityModel(adapter, exIfAny));
+    }
+
+    private static EntityModel newEntityModel(ObjectAdapter adapter, ConcurrencyException exIfAny) {
+        EntityModel model = new EntityModel(adapter);
         model.setException(exIfAny);
+        return model;
+    }
+
+    private EntityPage(PageParameters pageParameters, EntityModel entityModel, String titleString) {
+        super(pageParameters, ApplicationActions.INCLUDE, titleString, ComponentType.ENTITY);
+        this.model = entityModel;
         addChildComponents(model);
+        
+        final ObjectAndAction objectAndAction =lookupHomePageAction();
+        final ActionModel actionModel = ActionModel.create(objectAndAction.objectAdapter, objectAndAction.action);
         
         bookmarkPage(model);
         addBookmarkedPages();
     }
 
+    private static class ObjectAndAction {
+        ObjectAndAction(final ObjectAdapter serviceAdapter, final ObjectAction objectAction) {
+            this.objectAdapter = serviceAdapter;
+            action = objectAction;
+        }
+        ObjectAdapter objectAdapter;
+        ObjectAction action;
+    }
+    
+    private ObjectAndAction lookupHomePageAction() {
+        List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
+        for (ObjectAdapter serviceAdapter : serviceAdapters) {
+            final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
+            List<ObjectAction> objectActions = serviceSpec.getObjectActions(Contributed.EXCLUDED);
+            for (ObjectAction objectAction : objectActions) {
+                if(objectAction.containsFacet(HomePageFacet.class)) {
+                    return new ObjectAndAction(serviceAdapter, objectAction);
+                }
+            }
+        }
+        return null;
+    }
 
 
     /**

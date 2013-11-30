@@ -38,10 +38,9 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -242,7 +241,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         if(scalarModel.getKind() == ScalarModel.Kind.PROPERTY) {
             final ObjectAdapterMemento parentMemento = scalarModel.getParentObjectAdapterMemento();
             final EntityModel parentEntityModel = new EntityModel(parentMemento);
-            entityActions = EntityActionUtil.entityActions(parentEntityModel, scalarModel.getPropertyMemento().getProperty());
+            final ActionPromptModalWindowProvider provider = ActionPromptModalWindowProvider.Util.getFrom(this);
+            entityActions = EntityActionUtil.entityActions(parentEntityModel, scalarModel.getPropertyMemento().getProperty(), provider);
         } else {
             entityActions = null;
         }

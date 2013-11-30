@@ -21,7 +21,11 @@ package org.apache.isis.viewer.wicket.ui.pages.home;
 
 import java.util.List;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -45,7 +49,7 @@ public class HomePage extends PageAbstract {
 
     public HomePage() {
         super(new PageParameters(), ApplicationActions.INCLUDE, null);
-
+        
         addChildComponents(null);
         buildGui();
 
@@ -53,10 +57,10 @@ public class HomePage extends PageAbstract {
     }
 
     private void buildGui() {
-        final HomePageTuple homePageTuple = lookupHomePageAction();
-        if(homePageTuple != null) {
+        final ObjectAndAction objectAndAction = lookupHomePageAction();
+        if(objectAndAction != null) {
             Components.permanentlyHide(this, ComponentType.WELCOME); 
-            final IModel<?> actionModel = ActionModel.create(homePageTuple.serviceAdapter, homePageTuple.action);
+            final IModel<?> actionModel = ActionModel.create(objectAndAction.objectAdapter, objectAndAction.action);
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ACTION_PROMPT, actionModel);
         } else {
             Components.permanentlyHide(this, ComponentType.ACTION_PROMPT);
@@ -64,23 +68,23 @@ public class HomePage extends PageAbstract {
         }
     }
 
-    private static class HomePageTuple {
-        HomePageTuple(ObjectAdapter serviceAdapter, ObjectAction objectAction) {
-            this.serviceAdapter = serviceAdapter;
+    private static class ObjectAndAction {
+        ObjectAndAction(final ObjectAdapter serviceAdapter, final ObjectAction objectAction) {
+            this.objectAdapter = serviceAdapter;
             action = objectAction;
         }
-        ObjectAdapter serviceAdapter;
+        ObjectAdapter objectAdapter;
         ObjectAction action;
     }
     
-    private HomePageTuple lookupHomePageAction() {
+    private ObjectAndAction lookupHomePageAction() {
         List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
         for (ObjectAdapter serviceAdapter : serviceAdapters) {
             final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
             List<ObjectAction> objectActions = serviceSpec.getObjectActions(Contributed.EXCLUDED);
             for (ObjectAction objectAction : objectActions) {
                 if(objectAction.containsFacet(HomePageFacet.class)) {
-                    return new HomePageTuple(serviceAdapter, objectAction);
+                    return new ObjectAndAction(serviceAdapter, objectAction);
                 }
             }
         }

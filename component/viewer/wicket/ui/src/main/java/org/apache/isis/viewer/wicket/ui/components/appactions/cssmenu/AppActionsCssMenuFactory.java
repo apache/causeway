@@ -39,13 +39,14 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem.Builder;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 
 /**
@@ -55,9 +56,8 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
 
     private final static long serialVersionUID = 1L;
-    
-    private final static CssMenuLinkFactory cssMenuLinkFactory = new AppActionsCssMenuLinkFactory();
 
+    
     static class LogicalServiceAction {
         private final String serviceName;
         private final ObjectAdapter serviceAdapter;
@@ -75,6 +75,8 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
             return serviceName + " ~ " + objectAction.getIdentifier().toFullIdentityString();
         }
     }
+
+    private final static ActionLinkFactory cssMenuLinkFactory = new AppActionsCssMenuLinkFactory();
 
     public AppActionsCssMenuFactory() {
         super(ComponentType.APPLICATION_ACTIONS, CssMenuPanel.class);
@@ -110,13 +112,17 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
         // prune any service names that have no service actions
         serviceNamesInOrder.retainAll(serviceActionsByName.keySet());
         
-        return buildMenuItems(serviceNamesInOrder, serviceActionsByName);
+        return buildMenuItems(serviceNamesInOrder, serviceActionsByName, appActionsModel.getActionPromptModalWindowProvider());
     }
 
     /**
      * Builds a hierarchy of {@link CssMenuItem}s, following the provided map of {@link LogicalServiceAction}s (keyed by their service Name).
      */
-    private List<CssMenuItem> buildMenuItems(final List<String> serviceNamesInOrder, final Map<String, List<LogicalServiceAction>> serviceActionsByName) {
+    private List<CssMenuItem> buildMenuItems(
+            final List<String> serviceNamesInOrder, 
+            final Map<String, List<LogicalServiceAction>> serviceActionsByName, 
+            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+        
         final List<CssMenuItem> menuItems = Lists.newArrayList();
         for (String serviceName : serviceNamesInOrder) {
             final CssMenuItem serviceMenuItem = CssMenuItem.newMenuItem(serviceName).build();
@@ -129,7 +135,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
                 }
                 final ObjectAdapterMemento serviceAdapterMemento = logicalServiceAction.serviceAdapterMemento;
                 final ObjectAction objectAction = logicalServiceAction.objectAction;
-                final Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, objectAction, cssMenuLinkFactory);
+                final Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, objectAction, cssMenuLinkFactory, actionPromptModalWindowProvider);
                 if (subMenuItemBuilder == null) {
                     // not visible
                     continue;

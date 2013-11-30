@@ -52,6 +52,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -259,11 +260,16 @@ public class CssMenuItem implements Serializable {
     /**
      * Creates a {@link Builder} for a submenu item invoking an action on the provided
      * {@link ObjectAdapterMemento target adapter}.
+     * @param page 
      * 
      * @return the builder, else <tt>null</tt> if the action is not visible for
      *         the current user.
      */
-    public Builder newSubMenuItem(final ObjectAdapterMemento targetAdapterMemento, final ObjectAction objectAction, final CssMenuLinkFactory cssMenuLinkFactory) {
+    public Builder newSubMenuItem(
+            final ObjectAdapterMemento targetAdapterMemento, 
+            final ObjectAction objectAction, 
+            final ActionLinkFactory cssMenuLinkFactory, 
+            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
 
         // check visibility
         final AuthenticationSession session = getAuthenticationSession();
@@ -274,7 +280,7 @@ public class CssMenuItem implements Serializable {
         }
 
         // build the link
-        final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(targetAdapterMemento, objectAction, PageAbstract.ID_MENU_LINK);
+        final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(targetAdapterMemento, objectAction, PageAbstract.ID_MENU_LINK, actionPromptModalWindowProvider);
         if(linkAndLabel==null) {
             // can only get a null if invisible, so this should not happen given guard above
             return null;
@@ -338,11 +344,12 @@ public class CssMenuItem implements Serializable {
     }
 
     /**
-     * Creates a {@link Builder} for a submenu item where the provided {@link CssMenuLinkFactory} is able to provide the target adapter. 
+     * Creates a {@link Builder} for a submenu item where the provided {@link ActionLinkFactory} is able to provide the target adapter. 
+     * @param page 
      */
-    public Builder newSubMenuItem(final ObjectAction objectAction, final CssMenuLinkFactory cssMenuLinkFactory) {
+    public Builder newSubMenuItem(final ObjectAction objectAction, final ActionLinkFactory cssMenuLinkFactory, final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
 
-        final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(null, objectAction, PageAbstract.ID_MENU_LINK);
+        final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(null, objectAction, PageAbstract.ID_MENU_LINK, actionPromptModalWindowProvider);
 
         final AbstractLink link = linkAndLabel.getLink();
         final String actionLabel = linkAndLabel.getLabel();

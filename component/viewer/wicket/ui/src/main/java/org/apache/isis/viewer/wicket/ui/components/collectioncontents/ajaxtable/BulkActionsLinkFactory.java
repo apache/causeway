@@ -47,14 +47,15 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.util.MementoFunctions;
 import org.apache.isis.viewer.wicket.model.util.ObjectAdapterFunctions;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 
-final class BulkActionsLinkFactory implements CssMenuLinkFactory {
+final class BulkActionsLinkFactory implements ActionLinkFactory {
     
     private static final long serialVersionUID = 1L;
     private final EntityCollectionModel model;
@@ -68,7 +69,12 @@ final class BulkActionsLinkFactory implements CssMenuLinkFactory {
     }
 
     @Override
-    public LinkAndLabel newLink(final ObjectAdapterMemento serviceAdapterMemento, final ObjectAction objectAction, final String linkId) {
+    public LinkAndLabel newLink(
+            final ObjectAdapterMemento serviceAdapterMemento, 
+            final ObjectAction objectAction, 
+            final String linkId, 
+            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+        
         final ActionMemento actionMemento = new ActionMemento(objectAction);
         final AbstractLink link = new Link<Object>(linkId) {
             

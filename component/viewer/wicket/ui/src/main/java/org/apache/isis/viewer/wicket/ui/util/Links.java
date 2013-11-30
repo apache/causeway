@@ -50,7 +50,8 @@ public final class Links {
       };
     }
 
-    public static <T extends Page> AbstractLink newBookmarkablePageLink(final String linkId, final PageParameters pageParameters, final Class<T> pageClass) {
+    public static <T extends Page> AbstractLink newBookmarkablePageLink(
+            final String linkId, final PageParameters pageParameters, final Class<T> pageClass) {
         return new BookmarkablePageLink<T>(linkId, pageClass, pageParameters);
     }
 

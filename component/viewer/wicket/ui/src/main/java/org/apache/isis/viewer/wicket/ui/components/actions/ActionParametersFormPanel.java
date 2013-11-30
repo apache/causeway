@@ -32,6 +32,7 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -57,6 +58,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -70,6 +72,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_OK_BUTTON = "okButton";
+    private static final String ID_CANCEL_BUTTON = "cancelButton";
     private static final String ID_ACTION_PARAMETERS = "parameters";
 
     private final ActionExecutor actionExecutor;
@@ -107,7 +110,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             FormFeedbackPanel formFeedback = new FormFeedbackPanel(ID_FEEDBACK);
             formFeedback.setEscapeModelStrings(false);
             addOrReplace(formFeedback);
-            addOkButton();
+            addButtons();
         }
 
         private ActionModel getActionModel() {
@@ -151,16 +154,30 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
         }
 
 
-        private void addOkButton() {
-            Button okButton = new Button(ID_OK_BUTTON) {
+        private void addButtons() {
+            AjaxButton okButton = new AjaxButton(ID_OK_BUTTON) {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    actionExecutor.executeActionAndProcessResults(target, form);
+                };
+            };
+            add(okButton);
+            Button cancelButton = new Button(ID_CANCEL_BUTTON) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
                 public void onSubmit() {
-                    actionExecutor.executeActionAndProcessResults(ActionParameterForm.this);
+                    // no-op works fine for prompt modal dialog, but need to do something else if modal dialog disabled
                 };
             };
-            add(okButton);
+            add(cancelButton);
+            
+            // TODO: hide cancel button if dialogs disabled, as not yet implemented.
+            if(!PageAbstract.isActionPromptModalDialogEnabled()) {
+                cancelButton.setVisible(false);
+            }
         }
 
 

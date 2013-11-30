@@ -521,18 +521,11 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // (a) has different semantics and (b) is in any case automatically ignored
     // by the framework
     public ToDoItem duplicate(
-            @Named("Description") 
-            String description,
-            @Named("Category")
-            ToDoItem.Category category, 
-            @Named("Subcategory")
-            ToDoItem.Subcategory subcategory, 
-            @Named("Due by") 
-            @Optional
-            LocalDate dueBy,
-            @Named("Cost") 
-            @Optional
-            BigDecimal cost) {
+            final @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") @Named("Description") String description, 
+            final @Named("Category") Category category,
+            final @Named("Subcategory") Subcategory subcategory,
+            final @Optional @Named("Due by") LocalDate dueBy,
+            final @Optional @Named("Cost") BigDecimal cost) {
         return toDoItems.newToDo(description, category, subcategory, dueBy, cost);
     }
     public String default0Duplicate() {
@@ -546,6 +539,16 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     }
     public LocalDate default3Duplicate() {
         return getDueBy();
+    }
+    public List<Subcategory> choices2Duplicate(
+            final String description, final Category category) {
+        return toDoItems.choices2NewToDo(description, category);
+    }
+    public String validateDuplicate(
+            final String description, 
+            final Category category, final Subcategory subcategory, 
+            final LocalDate dueBy, final BigDecimal cost) {
+        return toDoItems.validateNewToDo(description, category, subcategory, dueBy, cost);
     }
 
     // //////////////////////////////////////

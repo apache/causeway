@@ -83,11 +83,11 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
      * @param action
      * @return
      */
-    public static IModel<?> create(ObjectAdapter objectAdapter, ObjectAction action) {
+    public static ActionModel create(ObjectAdapter objectAdapter, ObjectAction action) {
         final ObjectAdapterMemento serviceMemento = ObjectAdapterMemento.Functions.fromAdapter().apply(objectAdapter);
         final ActionMemento homePageActionMemento = ObjectAdapterMemento.Functions.fromAction().apply(action);
         final Mode mode = action.getParameterCount() > 0? Mode.PARAMETERS : Mode.RESULTS;
-        return (IModel<?>) new ActionModel(serviceMemento, homePageActionMemento, mode);
+        return new ActionModel(serviceMemento, homePageActionMemento, mode);
     }
 
     public static ActionModel createForPersistent(final PageParameters pageParameters) {

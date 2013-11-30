@@ -30,10 +30,19 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 public class ApplicationActionsModel extends ModelAbstract<List<ObjectAdapter>> {
 
     private static final long serialVersionUID = 1L;
+    private ActionPromptModalWindowProvider actionPromptModalWindowProvider;
 
     @Override
     protected List<ObjectAdapter> load() {
         return getServiceAdapters();
+    }
+
+    public void setActionPromptModalWindowProvider(ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+        this.actionPromptModalWindowProvider = actionPromptModalWindowProvider;
+    }
+    
+    public ActionPromptModalWindowProvider getActionPromptModalWindowProvider() {
+        return actionPromptModalWindowProvider;
     }
 
 }

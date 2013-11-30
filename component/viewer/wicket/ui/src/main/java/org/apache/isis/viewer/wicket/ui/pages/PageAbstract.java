@@ -28,7 +28,11 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -56,6 +60,8 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
@@ -72,7 +78,8 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 /**
  * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
  */
-public abstract class PageAbstract extends WebPage {
+public abstract class PageAbstract extends WebPage implements ActionPromptModalWindowProvider {
+
 
     private static Logger LOG = LoggerFactory.getLogger(PageAbstract.class);
 
@@ -82,6 +89,8 @@ public abstract class PageAbstract extends WebPage {
     private static final String ID_HOME_PAGE_LINK = "homePageLink";
     private static final String ID_APPLICATION_NAME = "applicationName";
     private static final String ID_USER_NAME = "userName";
+    
+    private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     
     private static final String ID_PAGE_TITLE = "pageTitle";
     
@@ -135,13 +144,14 @@ public abstract class PageAbstract extends WebPage {
     
     public PageAbstract(final PageParameters pageParameters, ApplicationActions applicationActions, final String title, final ComponentType... childComponentIds) {
         try {
-            addApplicationActionsComponent(applicationActions);
+            addApplicationActions(applicationActions);
             this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
             this.pageParameters = pageParameters;
             addHomePageLinkAndApplicationName();
             addUserName();
             addLogoutLink();
             addAboutLink();
+            
             add(new Label(ID_PAGE_TITLE, title != null? title: applicationName));
             
             // ensure that all collected JavaScript contributions are loaded at the page footer
@@ -257,12 +267,15 @@ public abstract class PageAbstract extends WebPage {
         return pageParameters;
     }
 
-    private void addApplicationActionsComponent(final ApplicationActions applicationActions) {
+    private void addApplicationActions(final ApplicationActions applicationActions) {
         if(applicationActions == ApplicationActions.INCLUDE) {
-        final ApplicationActionsModel model = new ApplicationActionsModel();
+            addActionPromptModalWindow();
+            final ApplicationActionsModel model = new ApplicationActionsModel();
+            model.setActionPromptModalWindowProvider(this);
             addComponent(ComponentType.APPLICATION_ACTIONS, model);
         } else {
             Components.permanentlyHide(this, ComponentType.APPLICATION_ACTIONS);
+            Components.permanentlyHide(this, ID_ACTION_PROMPT_MODAL_WINDOW);
         }
     }
 
@@ -309,6 +322,44 @@ public abstract class PageAbstract extends WebPage {
 
 
 
+    // ///////////////////////////////////////////////////////////////////
+    // ActionPromptModalWindowProvider
+    // ///////////////////////////////////////////////////////////////////
+    
+    private ModalWindow actionPromptModalWindow;
+    public ModalWindow getActionPromptModalWindow() {
+        return PageAbstract.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
+    }
+
+    private void addActionPromptModalWindow() {
+        this.actionPromptModalWindow = PageAbstract.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW); 
+        addOrReplace(actionPromptModalWindow);
+    }
+
+    // TODO: tidy-up
+    public static ModalWindow newModalWindow(String id) {
+        ModalWindow actionPromptModalWindow = new ModalWindow(id);
+        //actionPromptModalWindow.setResizable(false);
+        actionPromptModalWindow.setAutoSize(true);
+        actionPromptModalWindow.setCssClassName("w_isis");
+        return actionPromptModalWindow;
+    }
+
+    public static ModalWindow getActionPromptModalWindowIfEnabled(ModalWindow modalWindow) {
+        boolean enable = isActionPromptModalDialogEnabled();
+        if(!enable) {
+            // no-op
+            return null;
+        }
+        return modalWindow;
+    }
+
+    public static boolean isActionPromptModalDialogEnabled() {
+        return IsisContext.getConfiguration().getBoolean("isis.viewer.wicket.enableModalDialogs", false);
+    }
+    
+
+    
     // ///////////////////////////////////////////////////////////////////
     // Convenience
     // ///////////////////////////////////////////////////////////////////

@@ -683,6 +683,58 @@ div.scalarPanel {
 	font-weight: normal;
 }
 
+/******** fix for select2 on ModalWindow ********/
+/* http://osdir.com/ml/users-wicket.apache.org/2013-09/msg00165.html */
+
+.select2-drop,
+.select2-drop {
+	z-index: 30001
+}
+
+.select2-drop-mask,
+.select2-drop-mask {
+    z-index: 30000
+}
+
+
+/******** action prompt modal dialog ********/
+
+.wicket-modal .w_content_container {
+  background-color: #E4E4DB;
+  border-radius:4px;
+  -moz-border-radius:4px;
+  -webkit-border-radius:4px;
+}
+
+.actionPanel .myBlockContainer {
+    margin:20px;
+    width: 600px;
+    min-height: 200px;
+}
+
+.wicket-modal .w_caption {
+	display: none;
+}
+
+div.wicket-modal div.w_content_2 {
+	padding-top: 0em;
+  padding-right: 20px;
+  background-color: #E4E4DB;
+  border-radius:4px;
+  -moz-border-radius:4px;
+  -webkit-border-radius:4px;
+}
+
+div.wicket-modal div.w_content_3 {
+	border: 0px;
+}
+
+div.wicket-modal div.w_content {
+  border-radius:4px;
+  -moz-border-radius:4px;
+  -webkit-border-radius:4px;
+}
+
 /******** FORM STYLES ********/
 
 form input[type=text][disabled] {
