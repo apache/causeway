@@ -25,7 +25,6 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.List;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;

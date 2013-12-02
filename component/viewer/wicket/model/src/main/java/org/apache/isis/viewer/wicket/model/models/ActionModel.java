@@ -467,7 +467,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
     public void clearArguments() {
         for (ScalarModel argumentModel : arguments.values()) {
-            argumentModel.setObject((ObjectAdapter)null);
+            argumentModel.reset();
         }
         this.actionMode = determineMode(actionMemento.getAction());
     }

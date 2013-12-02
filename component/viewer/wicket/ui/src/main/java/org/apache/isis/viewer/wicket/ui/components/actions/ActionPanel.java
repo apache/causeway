@@ -127,7 +127,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             ResultType.OBJECT.addResults(this, targetAdapter, ex);
 
             getMessageBroker().addWarning(ex.getMessage());
-
         }
     }
 

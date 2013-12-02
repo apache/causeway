@@ -175,6 +175,13 @@ colors
 	cursor:pointer;
 }
 
+.edit:focus,
+.ok:focus,
+.okButton:focus {
+	background-color: #40C0CB;
+	font-style: italic;
+}
+
 .cancel {
 	display:inline-block;
 	background-color:#E4E4DB;
@@ -185,6 +192,10 @@ colors
 	padding:5px 10px;
 	border-radius:4px;
 	cursor:pointer;	
+}
+
+.cancel:focus {
+    font-style: italic;
 }
 
 

@@ -92,6 +92,8 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                     actionPrompt.setPanel(actionPromptPanel, target);
                     actionPrompt.show(target);
+                    
+                    target.focusComponent(actionPromptPanel);
 
                 }
             };

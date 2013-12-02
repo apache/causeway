@@ -45,9 +45,6 @@ $(document).ready(function() {
     $('.buttons .ok:not(.noVeil)').click(isisShowVeil);
     $('.cssSubMenuItemsPanel .cssSubMenuItem a:not(.noVeil)').click(isisShowVeil);
 
-    
-    $('.first-field input').focus();
-    
     $('div.collectionContentsAsAjaxTablePanel > table.contents > tbody > tr.reloaded-after-concurrency-exception') 
         .livequery(function(){
             x=$(this);

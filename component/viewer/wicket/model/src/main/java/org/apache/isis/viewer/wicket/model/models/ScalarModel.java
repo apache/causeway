@@ -220,6 +220,13 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 return facet != null? facet.getScale(): null;
             }
 
+            @Override
+            public void reset(ScalarModel scalarModel) {
+                final OneToOneAssociation property = scalarModel.propertyMemento.getProperty();
+                final ObjectAdapter associatedAdapter = property.get(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK));
+
+                scalarModel.setObject(associatedAdapter);
+            }
         },
         PARAMETER {
             @Override
@@ -356,6 +363,13 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 final BigDecimalValueFacet facet = actionParameter.getFacet(BigDecimalValueFacet.class);
                 return facet != null? facet.getScale(): null;
             }
+
+            @Override
+            public void reset(ScalarModel scalarModel) {
+                final ObjectActionParameter actionParameter = scalarModel.parameterMemento.getActionParameter();
+                final ObjectAdapter defaultAdapter = actionParameter.getDefault(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
+                scalarModel.setObject(defaultAdapter);
+            }
         };
 
         private static List<ObjectAdapter> choicesAsList(final ObjectAdapter[] choices) {
@@ -404,6 +418,8 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         public abstract Integer getLength(ScalarModel scalarModel);
         public abstract Integer getScale(ScalarModel scalarModel);
 
+        public abstract void reset(ScalarModel scalarModel);
+
     }
 
     private final Kind kind;
@@ -431,11 +447,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         this.parentObjectAdapterMemento = parentObjectAdapterMemento;
         this.parameterMemento = apm;
 
-        final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
-        // REVIEW: is no checking ok here?
-        final ObjectAdapter defaultAdapter = actionParameter.getDefault(parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
-        setObject(defaultAdapter);
-
+        reset();
         setMode(Mode.EDIT);
     }
 
@@ -449,10 +461,15 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         this.parentObjectAdapterMemento = parentObjectAdapterMemento;
         this.propertyMemento = pm;
 
+        reset();
         setObject(parentObjectAdapterMemento);
         setMode(Mode.VIEW);
     }
 
+    public void reset() {
+        kind.reset(this);
+    }
+    
     public ObjectAdapterMemento getParentObjectAdapterMemento() {
         return parentObjectAdapterMemento;
     }
