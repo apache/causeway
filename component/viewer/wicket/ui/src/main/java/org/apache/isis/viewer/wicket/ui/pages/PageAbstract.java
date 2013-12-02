@@ -61,7 +61,8 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
+import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
@@ -69,6 +70,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
@@ -78,7 +80,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 /**
  * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
  */
-public abstract class PageAbstract extends WebPage implements ActionPromptModalWindowProvider {
+public abstract class PageAbstract extends WebPage implements ActionPromptProvider {
 
 
     private static Logger LOG = LoggerFactory.getLogger(PageAbstract.class);
@@ -326,38 +328,15 @@ public abstract class PageAbstract extends WebPage implements ActionPromptModalW
     // ActionPromptModalWindowProvider
     // ///////////////////////////////////////////////////////////////////
     
-    private ModalWindow actionPromptModalWindow;
-    public ModalWindow getActionPromptModalWindow() {
-        return PageAbstract.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
+    private ActionPromptModalWindow actionPromptModalWindow;
+    public ActionPrompt getActionPrompt() {
+        return ActionPromptModalWindow.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
     }
 
     private void addActionPromptModalWindow() {
-        this.actionPromptModalWindow = PageAbstract.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW); 
+        this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW); 
         addOrReplace(actionPromptModalWindow);
     }
-
-    // TODO: tidy-up
-    public static ModalWindow newModalWindow(String id) {
-        ModalWindow actionPromptModalWindow = new ModalWindow(id);
-        //actionPromptModalWindow.setResizable(false);
-        actionPromptModalWindow.setAutoSize(true);
-        actionPromptModalWindow.setCssClassName("w_isis");
-        return actionPromptModalWindow;
-    }
-
-    public static ModalWindow getActionPromptModalWindowIfEnabled(ModalWindow modalWindow) {
-        boolean enable = isActionPromptModalDialogEnabled();
-        if(!enable) {
-            // no-op
-            return null;
-        }
-        return modalWindow;
-    }
-
-    public static boolean isActionPromptModalDialogEnabled() {
-        return IsisContext.getConfiguration().getBoolean("isis.viewer.wicket.enableModalDialogs", false);
-    }
-    
 
     
     // ///////////////////////////////////////////////////////////////////

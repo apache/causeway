@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactoryAbstract;
 
 class AppActionsCssMenuLinkFactory extends ActionLinkFactoryAbstract {
@@ -36,7 +36,7 @@ class AppActionsCssMenuLinkFactory extends ActionLinkFactoryAbstract {
     @Override
     public LinkAndLabel newLink(
             final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId, 
-            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+            final ActionPromptProvider actionPromptModalWindowProvider) {
         
         ObjectAdapter objectAdapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
 

@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 
@@ -31,6 +30,6 @@ import org.apache.wicket.markup.html.form.Form;
  */
 public interface ActionExecutor extends Serializable {
 
-    void executeActionAndProcessResults(AjaxRequestTarget target, Form<?> feedbackForm);
+    boolean executeActionAndProcessResults(AjaxRequestTarget target, Form<?> feedbackForm);
 
 }

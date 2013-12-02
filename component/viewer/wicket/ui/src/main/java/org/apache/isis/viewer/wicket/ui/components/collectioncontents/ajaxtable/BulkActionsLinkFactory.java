@@ -47,7 +47,7 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.util.MementoFunctions;
 import org.apache.isis.viewer.wicket.model.util.ObjectAdapterFunctions;
@@ -73,7 +73,7 @@ final class BulkActionsLinkFactory implements ActionLinkFactory {
             final ObjectAdapterMemento serviceAdapterMemento, 
             final ObjectAction objectAction, 
             final String linkId, 
-            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+            final ActionPromptProvider actionPromptModalWindowProvider) {
         
         final ActionMemento actionMemento = new ActionMemento(objectAction);
         final AbstractLink link = new Link<Object>(linkId) {

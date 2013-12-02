@@ -45,7 +45,7 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -111,7 +111,7 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
 
             if(!topLevelActions.isEmpty()) {
                 final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(adapterMemento, getServiceAdapters(), topLevelActions, linkFactory);
-                final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions", ActionPromptModalWindowProvider.Util.getFrom(this));
+                final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions", ActionPromptProvider.Util.getFrom(this));
 
                 this.addOrReplace(cssMenuPanel);
             } else {

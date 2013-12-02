@@ -33,7 +33,7 @@ import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem.Builder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel.Style;
 
@@ -71,7 +71,7 @@ public class CssMenuBuilder {
 
     public CssMenuPanel buildPanel(
             final String wicketId, final String rootName, 
-            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+            final ActionPromptProvider actionPromptModalWindowProvider) {
         final CssMenuItem findUsing = CssMenuItem.newMenuItem(rootName).build();
         addMenuItems(findUsing, actions, actionPromptModalWindowProvider);
         final CssMenuPanel cssMenuPanel = new CssMenuPanel(wicketId, Style.SMALL, Collections.singletonList(findUsing));
@@ -81,7 +81,7 @@ public class CssMenuBuilder {
     private void addMenuItems(
             final CssMenuItem parent, 
             final List<ObjectAction> actions, 
-            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+            final ActionPromptProvider actionPromptModalWindowProvider) {
         addMenuItemsForActionsOfType(parent, actions, ActionType.USER, actionPromptModalWindowProvider);
         if ( isExploring() || isPrototyping()) {
             addMenuItemsForActionsOfType(parent, actions, ActionType.EXPLORATION, actionPromptModalWindowProvider);
@@ -113,7 +113,7 @@ public class CssMenuBuilder {
             final CssMenuItem parent, 
             final List<ObjectAction> actions, 
             final ActionType type, 
-            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+            final ActionPromptProvider actionPromptModalWindowProvider) {
         final Collection<ObjectAction> filterActionsOfType = Collections2.filter(actions, Filters.asPredicate(ObjectAction.Filters.ofType(type)));
         for (final ObjectAction action : filterActionsOfType) {
             addMenuItem(parent, action, actionPromptModalWindowProvider);
@@ -123,14 +123,14 @@ public class CssMenuBuilder {
     private void addMenuItem(
             final CssMenuItem parent, 
             final ObjectAction action, 
-            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+            final ActionPromptProvider actionPromptModalWindowProvider) {
         addMenuItemForAction(parent, action, actionPromptModalWindowProvider);
     }
 
     private void addMenuItemForAction(
             final CssMenuItem parent, 
             final ObjectAction action, 
-            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+            final ActionPromptProvider actionPromptModalWindowProvider) {
         
         final NotContributedFacet notContributed = action.getFacet(NotContributedFacet.class);
         if (notContributed != null && notContributed.toActions()) {

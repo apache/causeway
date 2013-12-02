@@ -25,40 +25,36 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionExecutor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.util.MementoFunctions;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel.ResultType;
+import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -76,6 +72,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
     private static final String ID_ACTION_PARAMETERS = "parameters";
 
     private final ActionExecutor actionExecutor;
+    private final ActionPrompt actionPromptIfAny;
 
     public ActionParametersFormPanel(final String id, final ActionModel model) {
         super(id, model);
@@ -83,6 +80,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
         Ensure.ensureThatArg(model.getExecutor(), is(not(nullValue())));
 
         this.actionExecutor = model.getExecutor();
+        this.actionPromptIfAny = model.getActionPrompt();
         buildGui();
     }
 
@@ -160,29 +158,72 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
 
                 @Override
                 public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    actionExecutor.executeActionAndProcessResults(target, form);
+                    boolean succeeded = actionExecutor.executeActionAndProcessResults(target, form);
+                    if(succeeded) {
+                        // the Wicket ajax callbacks will have just started to hide the veil
+                        // we now show it once more, so that a veil continues to be shown until the
+                        // new page is rendered.
+                        target.appendJavaScript("isisShowVeil();\n");
+                    } else {
+                        if (actionPromptIfAny != null) {
+                            
+                            final StringBuilder builder = new StringBuilder();
+
+                            // ensure any jGrowl errors are shown
+                            // (normally would be flushed when traverse to next page).
+                            String errorMessagesIfAny = JGrowlUtil.asJGrowlCalls(IsisContext.getMessageBroker());
+                            builder.append(errorMessagesIfAny);
+                            
+                            // resize, to show any feedback messages.
+                            builder.append("Wicket.Window.get().autoSizeWindow();\n");
+
+                            // append the JS to the response. 
+                            String buf = builder.toString();
+                            target.appendJavaScript(buf);
+                            target.add(form);
+                        }
+                    }
                 };
+
+                /**
+                 * On validation error
+                 */
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    super.onError(target, form);
+                    if(actionPromptIfAny != null) {
+                        // resize, to show any feedback messages.
+                        target.appendJavaScript("Wicket.Window.get().autoSizeWindow();");
+                    }
+                    target.add(form);
+                }
             };
+            okButton.add(new JGrowlBehaviour());
             add(okButton);
-            Button cancelButton = new Button(ID_CANCEL_BUTTON) {
+            
+            AjaxButton cancelButton = new AjaxButton(ID_CANCEL_BUTTON) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
-                public void onSubmit() {
-                    // no-op works fine for prompt modal dialog, but need to do something else if modal dialog disabled
+                public void onSubmit(final AjaxRequestTarget target, Form<?> form) {
+                    if(actionPromptIfAny != null) {
+                        getActionModel().clearArguments();
+                        actionPromptIfAny.close(target);
+                    }
                 };
             };
+            // so can submit with invalid content (eg mandatory params missing)
+            cancelButton.setDefaultFormProcessing(false);
             add(cancelButton);
             
             // TODO: hide cancel button if dialogs disabled, as not yet implemented.
-            if(!PageAbstract.isActionPromptModalDialogEnabled()) {
+            if(ActionPromptModalWindow.isActionPromptModalDialogDisabled()) {
                 cancelButton.setVisible(false);
             }
         }
 
-
         private List<ActionParameterMemento> buildParameterMementos(final List<ObjectActionParameter> parameters) {
-            final List<ActionParameterMemento> parameterMementoList = Lists.transform(parameters, MementoFunctions.fromActionParameter());
+            final List<ActionParameterMemento> parameterMementoList = Lists.transform(parameters, ObjectAdapterMemento.Functions.fromActionParameter());
             // we copy into a new array list otherwise we get lazy evaluation =
             // reference to a non-serializable object
             return Lists.newArrayList(parameterMementoList);

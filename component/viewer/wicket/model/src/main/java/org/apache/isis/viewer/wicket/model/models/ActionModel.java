@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.Maps;
 
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.Identifier;
@@ -250,6 +249,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     private Map<Integer, ScalarModel> arguments = Maps.newHashMap();
     private ActionExecutor executor;
 
+
     private ActionModel(final PageParameters pageParameters) {
         this(newObjectAdapterMementoFrom(pageParameters), newActionMementoFrom(pageParameters), actionModeFrom(pageParameters));
 
@@ -408,6 +408,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         // from getObject()/reExecute
         detach(); // force re-execute
         
+        // TODO: think we need another field to determine if args have been populated.
         final ObjectAdapter results = executeAction();
         this.actionMode = Mode.RESULTS;
         
@@ -450,6 +451,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return arguments;
     }
 
+
+    
     public ActionExecutor getExecutor() {
         return executor;
     }
@@ -466,6 +469,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         for (ScalarModel argumentModel : arguments.values()) {
             argumentModel.setObject((ObjectAdapter)null);
         }
+        this.actionMode = determineMode(actionMemento.getAction());
     }
 
     /**
@@ -479,7 +483,19 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return bookmarkPolicy.value() == BookmarkPolicy.AS_ROOT && safeSemantics;
     }
 
+    
+    // //////////////////////////////////////
 
+    private ActionPrompt actionPrompt;
+
+    public void setActionPrompt(ActionPrompt actionPrompt) {
+        this.actionPrompt = actionPrompt;
+    }
+
+    public ActionPrompt getActionPrompt() {
+        return actionPrompt;
+    }
+    
     //////////////////////////////////////////////////
     // Dependencies (from context)
     //////////////////////////////////////////////////
@@ -487,8 +503,5 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     private static OidMarshaller getOidMarshaller() {
         return IsisContext.getOidMarshaller();
     }
-
-
-
 
 }

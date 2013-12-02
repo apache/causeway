@@ -686,12 +686,10 @@ div.scalarPanel {
 /******** fix for select2 on ModalWindow ********/
 /* http://osdir.com/ml/users-wicket.apache.org/2013-09/msg00165.html */
 
-.select2-drop,
-.select2-drop {
+div.select2-drop {
 	z-index: 30001
 }
 
-.select2-drop-mask,
 .select2-drop-mask {
     z-index: 30000
 }
@@ -699,15 +697,18 @@ div.scalarPanel {
 
 /******** action prompt modal dialog ********/
 
+
 .wicket-modal .w_content_container {
   background-color: #E4E4DB;
-  border-radius:4px;
-  -moz-border-radius:4px;
-  -webkit-border-radius:4px;
+}
+
+.actionPanel {
+    width: 680px;
 }
 
 .actionPanel .myBlockContainer {
     margin:20px;
+    padding: 20px;
     width: 600px;
     min-height: 200px;
 }
@@ -716,20 +717,17 @@ div.scalarPanel {
 	display: none;
 }
 
-div.wicket-modal div.w_content_2 {
-	padding-top: 0em;
-  padding-right: 20px;
-  background-color: #E4E4DB;
-  border-radius:4px;
-  -moz-border-radius:4px;
-  -webkit-border-radius:4px;
-}
-
 div.wicket-modal div.w_content_3 {
 	border: 0px;
 }
 
-div.wicket-modal div.w_content {
+div.wicket-modal div.w_content_3,
+div.wicket-modal div.w_content_2,
+div.wicket-modal div.w_content_1,
+div.wicket-modal div.w_content,
+.wicket-modal .w_content_container,
+.w_isis,
+.actionPanel {
   border-radius:4px;
   -moz-border-radius:4px;
   -webkit-border-radius:4px;
@@ -854,18 +852,29 @@ div#jGrowl div.jGrowl-closer {
 
 
 
+/* ModalWindow tweaks */
+
+div.wicket-mask-dark {  
+    filter: alpha(opacity=40);
+    opacity: 0.4; 
+}
+
+
 /* veil */
 
 #veil {
-    display: none;
+    z-index: 40000; 
+    background-image: none; 
+	background-color: black;
+	
+	display: none;
 	position:absolute;
 	top:0;
 	left:0;
-	z-index=99999;
 	height: 100%;
 	width: 100%;
-	background: rgb(210, 240, 243) transparent;
-	background-color:rgba(210, 240, 243,0.5);
+	opacity: 0.4;
+    filter: alpha(opacity=40);
 }
 
 #veil div.imgHolder {
@@ -876,7 +885,7 @@ div#jGrowl div.jGrowl-closer {
     margin-left: auto;
     margin-right: auto;
     display: block;
-    margin-top: 7em;
+    margin-top: 3em;
 } 
 
 

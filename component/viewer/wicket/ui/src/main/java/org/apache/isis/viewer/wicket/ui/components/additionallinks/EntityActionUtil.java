@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
@@ -61,7 +61,7 @@ public final class EntityActionUtil {
     public static List<LinkAndLabel> entityActions(
             final EntityModel entityModel, 
             final ObjectAssociation association, 
-            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+            final ActionPromptProvider actionPromptModalWindowProvider) {
         final ObjectSpecification adapterSpec = entityModel.getTypeOfSpecification();
         final ObjectAdapter adapter = entityModel.load(ConcurrencyChecking.NO_CHECK);
         final ObjectAdapterMemento adapterMemento = entityModel.getObjectAdapterMemento();

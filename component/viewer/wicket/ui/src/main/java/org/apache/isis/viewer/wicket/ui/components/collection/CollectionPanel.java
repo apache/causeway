@@ -30,10 +30,11 @@ import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -43,7 +44,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * Panel for rendering entity collection; analogous to (any concrete subclass
  * of) {@link ScalarPanelAbstract}.
  */
-public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implements ActionPromptModalWindowProvider {
+public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implements ActionPromptProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -123,13 +124,13 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
     // ActionPromptModalWindowProvider
     // ///////////////////////////////////////////////////////////////////
     
-    private ModalWindow actionPromptModalWindow;
-    public ModalWindow getActionPromptModalWindow() {
-        return PageAbstract.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
+    private ActionPromptModalWindow actionPromptModalWindow;
+    public ActionPromptModalWindow getActionPrompt() {
+        return ActionPromptModalWindow.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
     }
     
     private void addActionPromptModalWindow() {
-        this.actionPromptModalWindow = PageAbstract.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW); 
+        this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW); 
         addOrReplace(actionPromptModalWindow);
     }
 

@@ -227,6 +227,8 @@ public class ToDoItems {
         //
         
         container.persist(toDoItem);
+        container.flush();
+        container.informUser("new todo item created!");
         return toDoItem;
     }
     
@@ -239,7 +241,6 @@ public class ToDoItems {
     }
 
     
-    
     // //////////////////////////////////////
     // Injected Services
     // //////////////////////////////////////
@@ -249,6 +250,5 @@ public class ToDoItems {
 
     @javax.inject.Inject
     private ClockService clockService;
-
 
 }

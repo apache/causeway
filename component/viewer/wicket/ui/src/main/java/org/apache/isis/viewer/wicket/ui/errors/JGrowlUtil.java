@@ -41,8 +41,8 @@ public class JGrowlUtil {
         return buf.toString();
     }
 
-    private static void addJGrowlCall(final String msg2, final String cssClassSuffix, boolean sticky, final StringBuilder buf) {
-        final String msg = msg2.replaceAll("\"", "\'");
+    public static void addJGrowlCall(final String origMsg, final String cssClassSuffix, boolean sticky, final StringBuilder buf) {
+        final String msg = origMsg.replaceAll("\"", "\'");
         buf.append("$.jGrowl(\"").append(msg).append('\"');
         buf.append(", {");
         buf.append("theme: \"jgrowl-").append(cssClassSuffix).append("\"");
@@ -50,7 +50,7 @@ public class JGrowlUtil {
             buf.append(", sticky: true");
         }
         buf.append("}");
-        buf.append(");");
+        buf.append(");\n");
     }
 
 

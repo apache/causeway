@@ -265,9 +265,9 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         }
     }
 
-    private void mountPage(final String mountPath, final PageType entity) {
-        final Class<? extends Page> entityPageClass = this.pageClassRegistry.getPageClass(entity);
-        mount(new MountedMapper(mountPath, entityPageClass));
+    private void mountPage(final String mountPath, final PageType pageType) {
+        final Class<? extends Page> pageClass = this.pageClassRegistry.getPageClass(pageType);
+        mount(new MountedMapper(mountPath, pageClass));
     }
 
     private void buildCssBundle() {

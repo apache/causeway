@@ -24,9 +24,9 @@ import java.io.Serializable;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 
 public interface ActionLinkFactory extends Serializable {
 
-    LinkAndLabel newLink(ObjectAdapterMemento adapter, ObjectAction noAction, String linkId, ActionPromptModalWindowProvider actionPromptModalWindowProvider);
+    LinkAndLabel newLink(ObjectAdapterMemento adapter, ObjectAction noAction, String linkId, ActionPromptProvider actionPromptModalWindowProvider);
 }

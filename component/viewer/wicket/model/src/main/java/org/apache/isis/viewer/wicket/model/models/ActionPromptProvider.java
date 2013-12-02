@@ -18,21 +18,20 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 
-public interface ActionPromptModalWindowProvider {
+public interface ActionPromptProvider {
 
     public static class Util{
 
-        public static ActionPromptModalWindowProvider getFrom(Component component) {
+        public static ActionPromptProvider getFrom(Component component) {
             final Page page = component.getPage();
-            if(page instanceof ActionPromptModalWindowProvider) {
-                final ActionPromptModalWindowProvider provider = (ActionPromptModalWindowProvider) page;
+            if(page instanceof ActionPromptProvider) {
+                final ActionPromptProvider provider = (ActionPromptProvider) page;
                 return provider;
             } 
             // else
             return null;
         }}
 
-    public ModalWindow getActionPromptModalWindow();
+    public ActionPrompt getActionPrompt();
 }

@@ -17,16 +17,36 @@
  *  under the License.
  */
 $(document).ready(function() {
-    var showVeil = function() {
-        $('#veil').show(); 
-    };
+
+    isisShowVeil = function() {
+        $("#veil").stop().show();
+    }
+    isisFadeInVeil = function() {
+        $("#veil").fadeIn(750);
+    }
+    isisHideVeil = function() {
+        $("#veil").stop().hide();
+    }
+
+    /* for modal dialogs */
+    Wicket.Event.subscribe(
+            '/ajax/call/beforeSend', function(attributes, jqXHR, settings) {
+                isisFadeInVeil();
+            });
+    Wicket.Event.subscribe(
+            '/ajax/call/complete', function(attributes, jqXHR, settings) {
+                isisHideVeil();
+            });
     
-    $('.buttons .okButton:not(.noVeil)').click(showVeil);
-    $('.buttons .ok:not(.noVeil)').click(showVeil);
-    $('.cssSubMenuItemsPanel .cssSubMenuItem a:not(.noVeil)').click(showVeil);
+
+    
+    /* only seem to work in non-modal situation */
+    $('.buttons .okButton:not(.noVeil)').click(isisShowVeil);
+    $('.buttons .ok:not(.noVeil)').click(isisShowVeil);
+    $('.cssSubMenuItemsPanel .cssSubMenuItem a:not(.noVeil)').click(isisShowVeil);
+
     
     $('.first-field input').focus();
-    
     
     $('div.collectionContentsAsAjaxTablePanel > table.contents > tbody > tr.reloaded-after-concurrency-exception') 
         .livequery(function(){

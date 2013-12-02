@@ -19,30 +19,23 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.List;
+import java.io.Serializable;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 
 /**
- * Backing model for actions of application services menu bar (typically, as
- * displayed along the top or side of the page).
+ * Decouples the {@link ActionModel} from its (modal window) prompt.
  */
-public class ApplicationActionsModel extends ModelAbstract<List<ObjectAdapter>> {
+public interface ActionPrompt extends Serializable {
 
-    private static final long serialVersionUID = 1L;
-    private ActionPromptProvider actionPromptModalWindowProvider;
-
-    @Override
-    protected List<ObjectAdapter> load() {
-        return getServiceAdapters();
-    }
-
-    public void setActionPromptModalWindowProvider(ActionPromptProvider actionPromptModalWindowProvider) {
-        this.actionPromptModalWindowProvider = actionPromptModalWindowProvider;
-    }
+    void setPanel(Component component, AjaxRequestTarget target);
     
-    public ActionPromptProvider getActionPromptModalWindowProvider() {
-        return actionPromptModalWindowProvider;
-    }
+    void show(AjaxRequestTarget target);
+    
+    String getContentId();
+
+    void close(AjaxRequestTarget target);
+
 
 }

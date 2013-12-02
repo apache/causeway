@@ -36,11 +36,14 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
+import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
+import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -60,7 +63,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
     
     /**
      * Either creates a link for the action be rendered in a {@link ModalWindow}, or (if none can be
-     * {@link ActionPromptModalWindowProvider#getActionPromptModalWindow() provided}, or creates a link to 
+     * {@link ActionPromptProvider#getActionPrompt() provided}, or creates a link to 
      * the {@link ActionPromptPage} (ie the {@link PageClassRegistry registered page} for 
      * {@link PageType#ACTION_PROMPT action}s).
      * 
@@ -71,27 +74,25 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
     protected AbstractLink newLink(
             final String linkId, 
             final ObjectAdapter objectAdapter, final ObjectAction action, 
-            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+            final ActionPromptProvider actionPromptProvider) {
         
-        final ModalWindow modalWindow = actionPromptModalWindowProvider.getActionPromptModalWindow();
-        if(modalWindow != null) {
+        final ActionPrompt actionPrompt = actionPromptProvider.getActionPrompt();
+        if(actionPrompt != null) {
             final ActionModel actionModel = ActionModel.create(objectAdapter, action);
+            actionModel.setActionPrompt(actionPrompt);
             AjaxLink<Object> link = new AjaxLink<Object>(linkId) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
                 public void onClick(AjaxRequestTarget target) {
 
-                    final Component actionPromptPanel = 
-                            getComponentFactoryRegistry().createComponent(
-                                    ComponentType.ACTION_PROMPT, modalWindow.getContentId(), actionModel);
+                    final ActionPanel actionPromptPanel = 
+                            (ActionPanel) getComponentFactoryRegistry().createComponent(
+                            ComponentType.ACTION_PROMPT, actionPrompt.getContentId(), actionModel);
 
-                    modalWindow.setTitle(actionModel.getTitle());
-                    modalWindow.setContent(actionPromptPanel);
+                    actionPrompt.setPanel(actionPromptPanel, target);
+                    actionPrompt.show(target);
 
-                    // http://stackoverflow.com/questions/8013364/how-to-defeat-browser-dialog-popup-when-calling-wicket-setresponsepage-from-mo/8679946#8679946
-                    target.prependJavaScript("Wicket.Window.unloadConfirmation = false;");
-                    modalWindow.show(target);
                 }
             };
             link.add(new CssClassAppender("noVeil"));

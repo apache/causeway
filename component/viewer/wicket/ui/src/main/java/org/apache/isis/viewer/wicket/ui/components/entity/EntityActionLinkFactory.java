@@ -34,7 +34,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactoryAbstract;
@@ -53,7 +53,7 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
     }
 
     @Override
-    public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId, final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+    public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId, final ActionPromptProvider actionPromptModalWindowProvider) {
         final ObjectAdapter adapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
         
         final Boolean persistent = adapter.representsPersistent();

@@ -52,7 +52,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -269,7 +269,7 @@ public class CssMenuItem implements Serializable {
             final ObjectAdapterMemento targetAdapterMemento, 
             final ObjectAction objectAction, 
             final ActionLinkFactory cssMenuLinkFactory, 
-            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+            final ActionPromptProvider actionPromptModalWindowProvider) {
 
         // check visibility
         final AuthenticationSession session = getAuthenticationSession();
@@ -347,7 +347,7 @@ public class CssMenuItem implements Serializable {
      * Creates a {@link Builder} for a submenu item where the provided {@link ActionLinkFactory} is able to provide the target adapter. 
      * @param page 
      */
-    public Builder newSubMenuItem(final ObjectAction objectAction, final ActionLinkFactory cssMenuLinkFactory, final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+    public Builder newSubMenuItem(final ObjectAction objectAction, final ActionLinkFactory cssMenuLinkFactory, final ActionPromptProvider actionPromptModalWindowProvider) {
 
         final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(null, objectAction, PageAbstract.ID_MENU_LINK, actionPromptModalWindowProvider);
 

@@ -25,8 +25,6 @@ import java.util.List;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -145,41 +143,34 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
     
     /**
      * @param feedbackForm - for feedback messages.
+     * @return 
      */
     @Override
-    public void executeActionAndProcessResults(AjaxRequestTarget target, Form<?> feedbackForm) {
+    public boolean executeActionAndProcessResults(AjaxRequestTarget target, Form<?> feedbackForm) {
 
         permanentlyHide(ComponentType.ENTITY_ICON_AND_TITLE);
 
         ObjectAdapter targetAdapter = null;
-        boolean clearArgs = true;
         try {
-            try {
+            targetAdapter = getModel().getTargetAdapter();
+
+            // no concurrency exception, so continue...
+            return executeActionOnTargetAndProcessResults(targetAdapter, target, feedbackForm);
+
+        } catch (ConcurrencyException ex) {
+
+            // second attempt should succeed, because the Oid would have
+            // been updated in the attempt
+            if (targetAdapter == null) {
                 targetAdapter = getModel().getTargetAdapter();
-
-                // no concurrency exception, so continue...
-                clearArgs = executeActionOnTargetAndProcessResults(targetAdapter, target, feedbackForm);
-
-            } catch (ConcurrencyException ex) {
-
-                // second attempt should succeed, because the Oid would have
-                // been updated in the attempt
-                if (targetAdapter == null) {
-                    targetAdapter = getModel().getTargetAdapter();
-                }
-
-                
-                // forward onto the target page with the concurrency exception
-                ResultType.OBJECT.addResults(this, targetAdapter, ex);
-
-                getMessageBroker().addWarning(ex.getMessage());
-                return;
             }
-        } finally {
-            if(clearArgs) {
-                getActionModel().clearArguments();
-            }
+
             
+            // forward onto the target page with the concurrency exception
+            ResultType.OBJECT.addResults(this, targetAdapter, ex);
+
+            getMessageBroker().addWarning(ex.getMessage());
+            return false;
         }
     }
 
@@ -187,11 +178,15 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
      * @param target 
      * @return whether to clear args or not (they aren't if there was a validation exception)
      */
-    private boolean executeActionOnTargetAndProcessResults(ObjectAdapter targetAdapter, AjaxRequestTarget target, Form<?> feedbackForm) {
+    private boolean executeActionOnTargetAndProcessResults(
+            final ObjectAdapter targetAdapter, 
+            final AjaxRequestTarget target, final Form<?> feedbackForm) {
 
-        // validate the action parameters (if any)
         final ActionModel actionModel = getActionModel();
+        
+        // validate the action parameters (if any)
         final String invalidReasonIfAny = actionModel.getReasonInvalidIfAny();
+        
         if (invalidReasonIfAny != null) {
             raiseWarning(target, feedbackForm, invalidReasonIfAny);
             return false;
@@ -213,7 +208,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 bookmarkPage(actionModel);
             }
 
-            return false;
+            return true;
 
         } catch (RuntimeException ex) {
 
@@ -229,7 +224,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                     final ResultType resultType = ResultType.determineFor(null);
                     resultType.addResults(this, null);
                 }
-                
+
                 return false;
             }
             
@@ -256,7 +251,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             
             // there's no need to abort the transaction, it will have already been done
             // (in IsisTransactionManager#executeWithinTransaction(...)).
-
         }
         return recognizedErrorIfAny;
     }

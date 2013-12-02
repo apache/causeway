@@ -53,8 +53,9 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbstract;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterPropertyColumn;
@@ -63,14 +64,13 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
-public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider, ActionPromptModalWindowProvider {
+public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider, ActionPromptProvider {
 
     private static final Predicate<ObjectAction> BULK = Filters.asPredicate(ObjectAction.Filters.bulk());
 
@@ -144,7 +144,7 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
 
     private void buildEntityActionsGui(
             final List<ObjectAction> bulkActions, 
-            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+            final ActionPromptProvider actionPromptModalWindowProvider) {
         final EntityCollectionModel model = getModel();
         
         if(bulkActions.isEmpty() || model.isParented()) {
@@ -278,13 +278,13 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     // ActionPromptModalWindowProvider
     // ///////////////////////////////////////////////////////////////////
     
-    private ModalWindow actionPromptModalWindow;
-    public ModalWindow getActionPromptModalWindow() {
-        return PageAbstract.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
+    private ActionPromptModalWindow actionPromptModalWindow;
+    public ActionPromptModalWindow getActionPrompt() {
+        return ActionPromptModalWindow.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
     }
     
     private void addActionPromptModalWindow() {
-        this.actionPromptModalWindow = PageAbstract.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW); 
+        this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW); 
         addOrReplace(actionPromptModalWindow);
     }
 

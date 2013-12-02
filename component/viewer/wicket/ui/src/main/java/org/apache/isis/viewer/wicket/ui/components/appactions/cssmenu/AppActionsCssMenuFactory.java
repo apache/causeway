@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptModalWindowProvider;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -121,7 +121,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
     private List<CssMenuItem> buildMenuItems(
             final List<String> serviceNamesInOrder, 
             final Map<String, List<LogicalServiceAction>> serviceActionsByName, 
-            final ActionPromptModalWindowProvider actionPromptModalWindowProvider) {
+            final ActionPromptProvider actionPromptModalWindowProvider) {
         
         final List<CssMenuItem> menuItems = Lists.newArrayList();
         for (String serviceName : serviceNamesInOrder) {
