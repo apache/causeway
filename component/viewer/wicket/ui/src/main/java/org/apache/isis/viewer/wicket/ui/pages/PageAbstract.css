@@ -622,11 +622,18 @@ div.scalarPanel {
 
 
 /********************* Select2 component styling *****************************/
-
+/*
 .actionPromptPage .select2-container,
 .entityPage       .select2-container {
 	width: 200px;
+TODO: removed the page class selector because the modal window doesn't honour the width setting 
 }
+*/
+.select2-container {
+	width: 200px;
+}
+
+
 
 .actionPromptPage .select2-container .select2-choice,
 .entityPage       .select2-container .select2-choice {
