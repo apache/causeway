@@ -49,7 +49,7 @@ Integration of maps on the object page:
 
 #### Wicked Charts integration
 
-An action that returns a [WickedChart](wicked-charts.googlecode.com).
+An action that returns a [WickedChart](http://wicked-charts.googlecode.com).
 
 ![](https://raw.github.com/danhaywood/isis-wicket-wickedcharts/master/images/screenshot-2.png)
 
