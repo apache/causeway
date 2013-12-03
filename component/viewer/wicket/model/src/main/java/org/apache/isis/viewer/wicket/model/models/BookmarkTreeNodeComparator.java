@@ -43,8 +43,8 @@ final class BookmarkTreeNodeComparator implements Comparator<BookmarkTreeNode> {
             return pageTypeComparison;
         }
         
-        final RootOid oid1 = oidOf(o1.getPageParameters());
-        final RootOid oid2 = oidOf(o2.getPageParameters());
+        final RootOid oid1 = o1.getOidNoVer();
+        final RootOid oid2 = o2.getOidNoVer();
         
         // sort by entity type
         final String className1 = classNameOf(oid1);

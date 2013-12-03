@@ -119,8 +119,6 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
             protected void populateItem(ListItem<BookmarkTreeNode> item) {
                 final BookmarkTreeNode node = item.getModelObject();
                 try {
-                    final PageParameters pageParameters = node.getPageParameters();
-
                     final PageType pageType = node.getPageType();
                     final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(pageType);
 
@@ -145,10 +143,12 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                     }
                     item.add(clearBookmarkLink);
                     
+                    PageParameters pageParameters = new PageParameters();
+                    PageParameterNames.OBJECT_OID.addStringTo(pageParameters, node.getOidNoVerStr());
                     final AbstractLink link = Links.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK, pageParameters, pageClass);
 
-                    final RootOid oid = BookmarkedPagesModel.oidFrom(pageParameters);
                     ObjectSpecification objectSpec = null;
+                    RootOid oid = node.getOidNoVer();
                     if(oid != null) {
                         ObjectSpecId objectSpecId = oid.getObjectSpecId();
                         objectSpec = getSpecificationLoader().lookupBySpecId(objectSpecId);

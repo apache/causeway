@@ -30,8 +30,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
 
 public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkTreeNode>> {
@@ -49,7 +47,8 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
         cleanUpGarbage(rootNodes);
         
         final PageParameters candidatePP = bookmarkableModel.getPageParameters();
-        if(!holdsOid(candidatePP)) {
+        RootOid oid = BookmarkTreeNode.oidFrom(candidatePP);
+        if(oid == null) {
             // ignore
             return;
         }
@@ -63,7 +62,8 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
         }
 
         if(!foundInGraph && bookmarkableModel.hasAsRootPolicy()) {
-            rootNodes.add(BookmarkTreeNode.newRoot(bookmarkableModel));
+            BookmarkTreeNode rootNode = BookmarkTreeNode.newRoot(bookmarkableModel);
+            rootNodes.add(rootNode);
             Collections.sort(rootNodes, COMPARATOR);
             current = candidatePP;
         }
@@ -87,28 +87,11 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
         final Iterator<BookmarkTreeNode> iter = rootNodes.iterator();
         while(iter.hasNext()) {
             BookmarkTreeNode node = iter.next();
-            PageParameters pp = node.getPageParameters();
-            if(!holdsOid(pp)) {
+            // think this is redundant...
+            if(node.getOidNoVer() == null) {
                 iter.remove();
             }
         }
-    }
-
-    private static boolean holdsOid(PageParameters pp) {
-        try {
-            RootOid oidFrom = oidFrom(pp);
-            return oidFrom != null;
-        } catch(Exception ex) {
-            return false;
-        }
-    }
-    
-    public static RootOid oidFrom(final PageParameters pageParameters) {
-        String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-        if(oidStr == null) {
-            return null;
-        }
-        return IsisContext.getOidMarshaller().unmarshal(oidStr, RootOid.class);
     }
 
     public void clear() {

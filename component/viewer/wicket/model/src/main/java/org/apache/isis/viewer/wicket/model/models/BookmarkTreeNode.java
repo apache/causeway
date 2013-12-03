@@ -40,29 +40,45 @@ public class BookmarkTreeNode implements Serializable {
     
         private static final long serialVersionUID = 1L;
         
-        public static final Function<? super BookmarkTreeNode, ? extends PageParameters> AS_PAGE_PARAMETERS = new Function<BookmarkTreeNode, PageParameters>() {
-            public PageParameters apply(BookmarkTreeNode node) {
-                return node.getPageParameters();
-            }
-        };
+//        public static final Function<? super BookmarkTreeNode, ? extends PageParameters> AS_PAGE_PARAMETERS = new Function<BookmarkTreeNode, PageParameters>() {
+//            public PageParameters apply(BookmarkTreeNode node) {
+//                return node.getPageParameters();
+//            }
+//        };
         private final List<BookmarkTreeNode> children = Lists.newArrayList();
         private final int depth;
 
-        private final BookmarkableModel<?> bookmarkableModel;
-
-        private String title;
+        //private final PageParameters pageParameters;
+        private final RootOid oidNoVer;
+        private final String oidNoVerStr;
+        private final PageType pageType;
         
-        public static BookmarkTreeNode newRoot(BookmarkableModel<?> bookmarkableModel) {
+        private String title;
+
+
+        public static BookmarkTreeNode newRoot(
+                BookmarkableModel<?> bookmarkableModel) {
             return new BookmarkTreeNode(bookmarkableModel, 0);
         }
 
-        private BookmarkTreeNode(BookmarkableModel<?> bookmarkableModel, int depth) {
-            this.bookmarkableModel = bookmarkableModel;
-            this.depth = depth;
+        private BookmarkTreeNode(
+                final BookmarkableModel<?> bookmarkableModel, 
+                final int depth) {
+            PageParameters pageParameters = bookmarkableModel.getPageParameters();
+            RootOid oid = oidFrom(pageParameters);
+            this.oidNoVerStr = IsisContext.getOidMarshaller().marshalNoVersion(oid);
+            this.oidNoVer = IsisContext.getOidMarshaller().unmarshal(oidNoVerStr, RootOid.class); 
             this.title = bookmarkableModel.getTitle();
+            this.pageType = bookmarkableModel instanceof EntityModel ? PageType.ENTITY : PageType.ACTION_PROMPT;
+            this.depth = depth;
         }
-        public PageType getPageType() {
-            return bookmarkableModel instanceof EntityModel ? PageType.ENTITY : PageType.ACTION_PROMPT;
+
+        public RootOid getOidNoVer() {
+            return oidNoVer;
+        }
+
+        public String getOidNoVerStr() {
+            return oidNoVerStr;
         }
 
         public String getTitle() {
@@ -72,11 +88,14 @@ public class BookmarkTreeNode implements Serializable {
             this.title = title;
         }
 
-
-        public PageParameters getPageParameters() {
-            //return pageParameters;
-            return bookmarkableModel.getPageParameters();
+        public PageType getPageType() {
+            return pageType;
         }
+
+
+//        public PageParameters getPageParameters() {
+//            return pageParameters;
+//        }
         public List<BookmarkTreeNode> getChildren() {
             return children;
         }
@@ -106,9 +125,8 @@ public class BookmarkTreeNode implements Serializable {
          */
         public boolean matchAndUpdateTitle(BookmarkableModel<?> candidateBookmarkableModel) {
 
-            boolean inGraph = false;
-
-            inGraph = this.getPageParameters().equals(candidateBookmarkableModel.getPageParameters());
+            final String candidateOidStr = oidStrFrom(candidateBookmarkableModel);
+            boolean inGraph = Objects.equal(this.oidNoVerStr, candidateOidStr);
             if(inGraph) {
                 this.setTitle(candidateBookmarkableModel.getTitle());
             }
@@ -125,6 +143,7 @@ public class BookmarkTreeNode implements Serializable {
             }
             return inGraph;
         }
+
 
 
         private boolean addToGraphIfParented(BookmarkableModel<?> candidateBookmarkableModel) {
@@ -145,8 +164,7 @@ public class BookmarkTreeNode implements Serializable {
                         continue;
                     } 
                     final String possibleParentOidStr = possibleParentOid.enStringNoVersion(IsisContext.getOidMarshaller());
-                    final String thisOidStr = PageParameterNames.OBJECT_OID.getStringFrom(this.getPageParameters());
-                    if(Objects.equal(thisOidStr, possibleParentOidStr)) {
+                    if(Objects.equal(this.oidNoVerStr, possibleParentOidStr)) {
                         this.addChild(candidateBookmarkableModel);
                         whetherAdded = true;
                     }
@@ -165,5 +183,27 @@ public class BookmarkTreeNode implements Serializable {
         public int getDepth() {
             return depth;
         }
+
+        
+        // //////////////////////////////////////
+
+        public static RootOid oidFrom(final PageParameters pageParameters) {
+            String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
+            if(oidStr == null) {
+                return null;
+            }
+            try {
+                return IsisContext.getOidMarshaller().unmarshal(oidStr, RootOid.class);
+            } catch(Exception ex) {
+                return null;
+            }
+        }
+
+        public static String oidStrFrom(BookmarkableModel<?> candidateBookmarkableModel) {
+            final RootOid oid = oidFrom(candidateBookmarkableModel.getPageParameters());
+            return oid != null? IsisContext.getOidMarshaller().marshalNoVersion(oid): null;
+        }
+
+
 
     }

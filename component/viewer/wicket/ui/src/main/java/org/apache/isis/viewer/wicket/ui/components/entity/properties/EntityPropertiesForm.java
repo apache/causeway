@@ -341,6 +341,9 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                 if(preValidationErrorIfAny != null) {
                     feedbackOrNotifyAnyRecognizedError(preValidationErrorIfAny, form);
                     // skip validation, because would relate to old values
+                    
+                    final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject(), null);
+                    EntityPropertiesForm.this.setResponsePage(entityPage);
                 } else {
                     // run Wicket's validation
                     super.validate();
@@ -457,6 +460,8 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         editButton.setOutputMarkupPlaceholderTag(true);
         cancelButton.setOutputMarkupPlaceholderTag(true);
         
+        // flush any JGrowl messages (typically concurrency exceptions) if they are added.
+        okButton.add(new JGrowlBehaviour());
         editButton.add(new JGrowlBehaviour());
         cancelButton.add(new JGrowlBehaviour());
     }
