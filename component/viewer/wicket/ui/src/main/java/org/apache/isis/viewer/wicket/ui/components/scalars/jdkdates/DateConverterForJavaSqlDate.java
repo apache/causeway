@@ -23,6 +23,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.wicket.util.convert.ConversionException;
+
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 
 
@@ -38,12 +40,17 @@ public class DateConverterForJavaSqlDate extends DateConverterForJavaAbstract<ja
     }
 
     @Override
-    protected java.sql.Date doConvertToObject(String value, Locale locale) {
+    protected java.sql.Date doConvertToObject(String value, Locale locale) throws ConversionException {
+        final Date date = convert(value);
+        final java.util.Date adjustedDate = addDays(date, 0-adjustBy);
+        return new java.sql.Date(adjustedDate.getTime());
+    }
+
+    private java.util.Date convert(String value) {
         try {
-            final java.util.Date parsedJavaUtilDate = addDays(newSimpleDateFormatUsingDatePattern().parse(value), 0-adjustBy);
-            return new java.sql.Date(parsedJavaUtilDate.getTime());
+            return newSimpleDateFormatUsingDatePattern().parse(value);
         } catch (ParseException e) {
-            return null;
+            throw new ConversionException("Cannot convert into a date", e);
         }
     }
 

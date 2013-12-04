@@ -34,9 +34,4 @@ public class CharacterPanel extends ScalarPanelTextFieldParseableAbstract {
         super(id, ID_SCALAR_VALUE, scalarModel);
     }
 
-    @Override
-    protected void addSemantics() {
-        super.addSemantics();
-    }
-
 }

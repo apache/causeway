@@ -23,6 +23,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.wicket.util.convert.ConversionException;
+
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 
 
@@ -38,21 +40,27 @@ public class DateConverterForJavaUtilDate extends DateConverterForJavaAbstract<j
     
 
     @Override
-    protected java.util.Date doConvertToObject(String value, Locale locale) {
+    protected java.util.Date doConvertToObject(String value, Locale locale) throws ConversionException {
+        final Date date = convert(value);
+        final Date adjustedDate = addDays(date, 0-adjustBy);
+        return adjustedDate;
+    }
+    private java.util.Date convert(String valueStr) {
         try {
-            return addDays(newSimpleDateFormatUsingDateTimePattern().parse(value), 0-adjustBy);
-        } catch (ParseException e) {
+            return newSimpleDateFormatUsingDateTimePattern().parse(valueStr);
+        } catch (ParseException ex) {
             try {
-                return addDays(newSimpleDateFormatUsingDatePattern().parse(value), 0-adjustBy);
-            } catch (ParseException ex) {
-                return null;
+                return newSimpleDateFormatUsingDatePattern().parse(valueStr);
+            } catch (ParseException ex2) {
+                throw new ConversionException("Value cannot be converted as a date/time", ex);
             }
         }
     }
 
     @Override
-    protected String doConvertToString(java.util.Date value, Locale locale) {
-        return newSimpleDateFormatUsingDateTimePattern().format(addDays(value, adjustBy));
+    protected String doConvertToString(java.util.Date value, Locale locale) throws ConversionException {
+        final Date adjustedDate = addDays(value, adjustBy);
+        return newSimpleDateFormatUsingDateTimePattern().format(adjustedDate);
     }
 
     private static Date addDays(java.util.Date value, final int days) {

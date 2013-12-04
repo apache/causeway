@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jodatime;
 
 import java.util.Locale;
 
+import org.apache.wicket.util.convert.ConversionException;
 import org.joda.time.DateTime;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -38,14 +39,19 @@ public class DateConverterForJodaDateTime extends DateConverterForJodaAbstract<D
     
 
     @Override
-    protected DateTime doConvertToObject(String value, Locale locale) {
+    protected DateTime doConvertToObject(String value, Locale locale) throws ConversionException {
+        final DateTime parsedDateTime = convert(value);
+        return parsedDateTime.minusDays(adjustBy);
+    }
+
+    private DateTime convert(String value) throws ConversionException {
         try {
-            return getFormatterForDateTimePattern().parseDateTime(value).minusDays(adjustBy);
+            return getFormatterForDateTimePattern().parseDateTime(value);
         } catch(IllegalArgumentException ex) {
             try {
-                return getFormatterForDatePattern().parseDateTime(value).minusDays(adjustBy);
+                return getFormatterForDatePattern().parseDateTime(value);
             } catch(IllegalArgumentException ex2) {
-                return null;
+                throw new ConversionException("Cannot convert into a date/time", ex2);
             }
         }
     }

@@ -19,7 +19,11 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
 
+import java.math.BigDecimal;
+
 import org.apache.wicket.Component;
+import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.convert.converter.BigDecimalConverter;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -32,13 +36,15 @@ public class JavaMathBigDecimalPanelFactory extends ComponentFactoryScalarAbstra
 
     private static final long serialVersionUID = 1L;
 
+    private final IConverter<BigDecimal> threadSafeConverter = new BigDecimalConverter();
+    
     public JavaMathBigDecimalPanelFactory() {
         super(JavaMathBigDecimalPanel.class, java.math.BigDecimal.class);
     }
 
     @Override
     public Component createComponent(final String id, final ScalarModel scalarModel) {
-        return new JavaMathBigDecimalPanel(id, scalarModel);
+        return new JavaMathBigDecimalPanel(id, scalarModel, threadSafeConverter);
     }
 
 }

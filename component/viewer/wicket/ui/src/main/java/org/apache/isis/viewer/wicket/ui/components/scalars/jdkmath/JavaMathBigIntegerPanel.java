@@ -30,6 +30,7 @@ import org.apache.wicket.util.convert.converter.AbstractIntegerConverter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigIntegerPanelFactory.BigIntegerConverter;
 
 /**
  * Panel for rendering scalars of type {@link BigInteger}.
@@ -61,26 +62,10 @@ public class JavaMathBigIntegerPanel extends ScalarPanelTextFieldNumeric<BigInte
         return new TextField<BigInteger>(ID_SCALAR_VALUE, new TextFieldValueModel<BigInteger>(this), BigInteger.class) {
             private static final long serialVersionUID = 1L;
 
-//            @Override
-//            public IConverter getConverter(Class<?> type) {
-//                return type == BigInteger.class? CONVERTER: super.getConverter(type);
-//            }
-            
+            @SuppressWarnings("unchecked")
             @Override
             public <C> IConverter<C> getConverter(Class<C> type) {
-                @SuppressWarnings("unchecked")
-                final IConverter<C> converter = (IConverter<C>) new AbstractIntegerConverter<BigInteger>() {
-                    private static final long serialVersionUID = 1L;
-                    @Override
-                    public BigInteger convertToObject(String value, Locale locale) {
-                        return new BigInteger(value);
-                    }
-                    @Override
-                    protected Class<BigInteger> getTargetType() {
-                        return BigInteger.class;
-                    }
-                };
-                return type == BigInteger.class? converter: super.getConverter(type);
+                return (IConverter<C>) (type == BigInteger.class? BigIntegerConverter.INSTANCE: super.getConverter(type));
             }
         };
     }

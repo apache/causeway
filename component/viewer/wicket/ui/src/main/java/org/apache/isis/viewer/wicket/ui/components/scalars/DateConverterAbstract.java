@@ -20,6 +20,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.util.Locale;
 
+import org.apache.wicket.util.convert.ConversionException;
+
 
 public abstract class DateConverterAbstract<T> implements DateConverter<T> {
     
@@ -61,7 +63,7 @@ public abstract class DateConverterAbstract<T> implements DateConverter<T> {
     }
     
     @Override
-    public T convertToObject(String value, Locale locale) {
+    public T convertToObject(String value, Locale locale) throws ConversionException {
         return value != null? doConvertToObject(value, locale): null;
     }
     @Override
@@ -69,6 +71,6 @@ public abstract class DateConverterAbstract<T> implements DateConverter<T> {
         return value != null? doConvertToString(value, locale): null;
     }
 
-    protected abstract T doConvertToObject(String value, Locale locale);
+    protected abstract T doConvertToObject(String value, Locale locale) throws ConversionException;
     protected abstract String doConvertToString(T value, Locale locale);
 }
