@@ -48,8 +48,10 @@ import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext;
 import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.Decimal;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Mask;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Named;
@@ -358,7 +360,8 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.cost = cost!=null?cost.setScale(2):null;
     }
     
-    public ToDoItem updateCost(@Named("New cost") @Optional final BigDecimal cost) {
+    public ToDoItem updateCost(
+            final @Named("New cost") @Decimal(scale=2) @Optional BigDecimal cost) {
         LOG.debug("%s: cost updated: %s -> %s", this.container.titleOf(this), getCost(), cost);
         setCost(cost);
         return this;

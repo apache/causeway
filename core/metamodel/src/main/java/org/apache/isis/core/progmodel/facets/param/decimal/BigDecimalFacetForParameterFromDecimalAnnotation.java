@@ -16,32 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
+package org.apache.isis.core.progmodel.facets.param.decimal;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
 
+public class BigDecimalFacetForParameterFromDecimalAnnotation extends FacetAbstract implements BigDecimalValueFacet {
 
-public class BigDecimalFacetFallback extends FacetAbstract implements BigDecimalValueFacet {
+    private final Integer length;
+    private final Integer scale;
 
     public static Class<? extends Facet> type() {
         return BigDecimalValueFacet.class;
     }
 
-    public BigDecimalFacetFallback(final FacetHolder holder) {
-        super(BigDecimalFacetFallback.type(), holder, Derivation.NOT_DERIVED);
+    public BigDecimalFacetForParameterFromDecimalAnnotation(final FacetHolder holder, final Integer length, final Integer scale) {
+        super(BigDecimalFacetForParameterFromDecimalAnnotation.type(), holder, Derivation.NOT_DERIVED);
+        this.length = length;
+        this.scale = scale;
     }
 
     @Override
     public Integer getLength() {
-        return BigDecimalValueSemanticsProvider.DEFAULT_LENGTH;
+        return length;
     }
 
     @Override
     public Integer getScale() {
-        return BigDecimalValueSemanticsProvider.DEFAULT_SCALE;
+        return scale;
     }
 }

@@ -26,9 +26,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Provides a mask that a value entry should conform to
+ * Provides a mask that a value entry should conform to.
  * 
- * A mask to apply to string attributes.
+ * <p>
+ * <b>NOTE</b>: this annotation has not been implemented in the Wicket viewer.
+ * Since the Wicket viewer is the only currently released viewer, this annotation
+ * has been marked as deprecated to flag up this fact.
  * 
  * <p>
  * The characters that can be used are shown in the following table (adapted
@@ -191,7 +194,9 @@ import java.lang.annotation.Target;
  * </tr>
  * </table>
  * 
+ * @deprecated - not supported by the Wicket viewer
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)

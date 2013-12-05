@@ -44,6 +44,9 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
     private static final int TYPICAL_LENGTH = 10;
     private static final BigDecimal DEFAULT_VALUE = new BigDecimal(0);
 
+    public static final int DEFAULT_LENGTH = 18;
+    public static final int DEFAULT_SCALE = 2;
+
     private final NumberFormat format;
 
     /**
@@ -69,12 +72,12 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
     
     @Override
     public Integer getLength() {
-        return 18;
+        return DEFAULT_LENGTH;
     }
 
     @Override
     public Integer getScale() {
-        return 2;
+        return DEFAULT_SCALE;
     }
 
     // //////////////////////////////////////////////////////////////////

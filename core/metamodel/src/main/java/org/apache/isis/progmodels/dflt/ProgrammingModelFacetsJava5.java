@@ -132,6 +132,7 @@ import org.apache.isis.core.progmodel.facets.param.autocomplete.ActionParameterA
 import org.apache.isis.core.progmodel.facets.param.choices.enums.ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.method.ActionChoicesFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.methodnum.ActionParameterChoicesFacetFactory;
+import org.apache.isis.core.progmodel.facets.param.decimal.BigDecimalForParameterDerivedFromDecimalAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.defaults.fromtype.ParameterDefaultDerivedFromTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.describedas.annotation.DescribedAsAnnotationOnParameterFacetFactory;
@@ -150,6 +151,7 @@ import org.apache.isis.core.progmodel.facets.properties.accessor.PropertyAccesso
 import org.apache.isis.core.progmodel.facets.properties.autocomplete.PropertyAutoCompleteFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.choices.enums.PropertyChoicesFacetDerivedFromChoicesFacetFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.choices.method.PropertyChoicesFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.decimal.BigDecimalForPropertyDerivedFromDecimalAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.defaults.fromtype.PropertyDefaultDerivedFromTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.defaults.method.PropertyDefaultFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.disabled.fromimmutable.DisabledFacetForPropertyDerivedFromImmutableTypeFacetFactory;
@@ -330,6 +332,9 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(DescribedAsAnnotationOnTypeFacetFactory.class);
         addFactory(DescribedAsOnMemberFacetFactory.class);
         addFactory(DescribedAsAnnotationOnParameterFacetFactory.class);
+        
+        addFactory(BigDecimalForParameterDerivedFromDecimalAnnotationFacetFactory.class);
+        addFactory(BigDecimalForPropertyDerivedFromDecimalAnnotationFacetFactory.class);
 
         addFactory(DisabledFacetFactory.class);
         addFactory(EncodableAnnotationFacetFactory.class);

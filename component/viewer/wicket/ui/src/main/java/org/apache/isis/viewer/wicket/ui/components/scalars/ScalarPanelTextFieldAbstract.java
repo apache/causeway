@@ -131,14 +131,8 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
     protected void addStandardSemantics() {
-         setRequiredIfSpecified();
+         textField.setRequired(getModel().isRequired());
          setTextFieldSizeAndMaxLengthIfSpecified(textField);
-    }
-
-    private void setRequiredIfSpecified() {
-        final ScalarModel scalarModel = getModel();
-        final boolean required = scalarModel.isRequired();
-        textField.setRequired(required);
     }
 
     protected void setTextFieldSizeAndMaxLengthIfSpecified(AbstractTextComponent<T> textField) {

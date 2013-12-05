@@ -16,12 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
+package org.apache.isis.core.progmodel.facets.properties.decimal;
 
 import java.math.BigDecimal;
 
-import javax.jdo.annotations.Column;
-
+import org.apache.isis.applib.annotation.Decimal;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -30,20 +29,19 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
 
-
-public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetFactoryAbstract {
+public class BigDecimalForPropertyDerivedFromDecimalAnnotationFacetFactory extends FacetFactoryAbstract {
 
     private static final int DEFAULT_LENGTH = BigDecimalValueSemanticsProvider.DEFAULT_LENGTH;
     private static final int DEFAULT_SCALE = BigDecimalValueSemanticsProvider.DEFAULT_SCALE;
 
-    public BigDecimalDerivedFromJdoColumnAnnotationFacetFactory() {
+    public BigDecimalForPropertyDerivedFromDecimalAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final Column annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Column.class);
+        final Decimal annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Decimal.class);
 
         if(BigDecimal.class != processMethodContext.getMethod().getReturnType()) {
             return;
@@ -52,19 +50,14 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
         final FacetedMethod holder = processMethodContext.getFacetHolder();
         
         if (annotation == null) {
-            facet = new BigDecimalFacetFallback(holder);
-        } else {
-            facet = new BigDecimalFacetDerivedFromJdoColumn(
-                            holder, 
-                            valueElseDefault(annotation.length(), DEFAULT_LENGTH), 
-                            valueElseDefault(annotation.scale(), DEFAULT_SCALE));
+            return;
         }
+        facet = new BigDecimalFacetForPropertyFromDecimalAnnotation(holder, valueElseDefault(annotation.length(), DEFAULT_LENGTH), valueElseDefault(annotation.scale(), DEFAULT_SCALE));
         FacetUtil.addFacet(facet);
     }
 
-    private final static Integer valueElseDefault(final int value, final int defaultValue) {
+    Integer valueElseDefault(final int value, final int defaultValue) {
         return value != -1? value: defaultValue;
     }
-
     
 }

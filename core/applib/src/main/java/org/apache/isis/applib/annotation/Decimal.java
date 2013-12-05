@@ -26,14 +26,20 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The maximum entry length of a field.
+ * The length and scale for a decimal value.
  * 
  * <p>
- * Can also be specified for types that are annotated as <tt>@Value</tt> types.
+ * If using the JDO object store, then the <tt>@Column</tt> annotation should usually be used to indicate
+ * length (precision) and scale of properties.  However, the <tt>@Column</tt> annotation is not, of course, valid for 
+ * action parameters.  This annotation is therefore of use for action parameters whose value is intended to be
+ * compatible with JDO-annotated properties.  If the <tt>@Column</tt> and {@link Decimal} annotations are both
+ * present on a property, then they must be compatible (and Isis' metamodel validator will flag up any 
+ * incompatibility). 
  */
 @Inherited
-@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER })
+@Target({ ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MaxLength {
-    int value();
+public @interface Decimal {
+    int length() default -1;
+    int scale() default -1;
 }
