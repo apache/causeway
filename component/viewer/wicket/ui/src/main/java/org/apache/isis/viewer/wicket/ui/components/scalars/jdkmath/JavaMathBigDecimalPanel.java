@@ -20,11 +20,8 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
 
 import java.math.BigDecimal;
-import java.util.Locale;
 
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
@@ -36,69 +33,16 @@ public class JavaMathBigDecimalPanel extends ScalarPanelTextFieldNumeric<BigDeci
 
     private static final long serialVersionUID = 1L;
     
-    private final IConverter<BigDecimal> threadSafeConverter;
+    private final BigDecimalConverterWithScale converter;
 
-    public JavaMathBigDecimalPanel(final String id, final ScalarModel scalarModel, final IConverter<BigDecimal> threadSafeConverter) {
+    public JavaMathBigDecimalPanel(final String id, final ScalarModel scalarModel, final BigDecimalConverterWithScale converter) {
         super(id, scalarModel, BigDecimal.class);
-        this.threadSafeConverter = threadSafeConverter;
+        this.converter = converter;
     }
  
     protected TextField<BigDecimal> createTextField(final String id) {
         final ScalarModel model = getModel();
-        return new BigDecimalTextField(id, newTextFieldValueModel(), cls, model, threadSafeConverter);
-    }
-    
-    static final class BigDecimalTextField extends TextField<BigDecimal> {
-        
-        private static final long serialVersionUID = 1L;
-        
-        private final ScalarModel scalarModel;
-        private final IConverter<BigDecimal> threadSafeConverter;
-
-        BigDecimalTextField(
-                final String id, final IModel<BigDecimal> model, final Class<BigDecimal> type, 
-                final ScalarModel scalarModel, 
-                final IConverter<BigDecimal> threadSafeConverter) {
-            super(id, model, type);
-            this.scalarModel = scalarModel;
-            this.threadSafeConverter = threadSafeConverter;
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public <C> IConverter<C> getConverter(Class<C> type) {
-            final Integer scale = scalarModel.getScale();
-            if (type != BigDecimal.class) {
-                return super.getConverter(type);
-            } 
-            if (scale == null) {
-                return (IConverter<C>) threadSafeConverter;
-            } 
-            return (IConverter<C>) new ConverterWithScale(scale, threadSafeConverter);
-        }
-    }
-    
-    static final class ConverterWithScale implements IConverter<BigDecimal> {
-        private static final long serialVersionUID = 1L;
-        
-        private final Integer scale;
-        private final IConverter<BigDecimal> converter;
-
-        ConverterWithScale(Integer scale, IConverter<BigDecimal> threadSafeConverter) {
-            this.scale = scale;
-            this.converter = threadSafeConverter;
-        }
-
-        @Override
-        public BigDecimal convertToObject(String valueStr, Locale locale) {
-            final BigDecimal bd = converter.convertToObject(valueStr, locale);
-            return bd != null ? bd.setScale(this.scale) : null; 
-        }
-
-        @Override
-        public String convertToString(BigDecimal value, Locale locale) {
-            return converter.convertToString(value, locale);
-        }
+        return new BigDecimalTextField(id, newTextFieldValueModel(), cls, model, converter);
     }
 }
 

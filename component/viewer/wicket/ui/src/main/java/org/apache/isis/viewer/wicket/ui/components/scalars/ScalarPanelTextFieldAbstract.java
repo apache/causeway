@@ -108,8 +108,8 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
      * Optional hook method
      */
     protected void addSemantics() {
-        // we don't call textField.setType(), since in most cases NO does the
-        // parsing, not wicket
+        // we don't call textField.setType(), since we want more control 
+        // over the parsing (using custom subclasses of TextField etc)
     }
 
 

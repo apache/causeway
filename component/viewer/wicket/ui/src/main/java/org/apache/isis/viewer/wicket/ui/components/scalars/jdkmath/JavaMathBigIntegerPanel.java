@@ -20,12 +20,10 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
 
 import java.math.BigInteger;
-import java.util.Locale;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.AbstractIntegerConverter;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
@@ -40,19 +38,6 @@ public class JavaMathBigIntegerPanel extends ScalarPanelTextFieldNumeric<BigInte
     private static final long serialVersionUID = 1L;
     private static final String ID_SCALAR_VALUE = "scalarValue";
     
-    @SuppressWarnings({ "rawtypes", "unused" })
-    private static final IConverter CONVERTER = new AbstractIntegerConverter() {
-        private static final long serialVersionUID = 1L;
-        @Override
-        public Object convertToObject(String value, Locale locale) {
-            return new BigInteger(value);
-        }
-        @Override
-        protected Class<?> getTargetType() {
-            return BigInteger.class;
-        }
-    };
-
     public JavaMathBigIntegerPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, BigInteger.class);
     }

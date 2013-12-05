@@ -20,10 +20,11 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
 
 import java.math.BigDecimal;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.BigDecimalConverter;
+import org.apache.wicket.util.convert.converter.AbstractNumberConverter;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -36,7 +37,6 @@ public class JavaMathBigDecimalPanelFactory extends ComponentFactoryScalarAbstra
 
     private static final long serialVersionUID = 1L;
 
-    private final IConverter<BigDecimal> threadSafeConverter = new BigDecimalConverter();
     
     public JavaMathBigDecimalPanelFactory() {
         super(JavaMathBigDecimalPanel.class, java.math.BigDecimal.class);
@@ -44,7 +44,27 @@ public class JavaMathBigDecimalPanelFactory extends ComponentFactoryScalarAbstra
 
     @Override
     public Component createComponent(final String id, final ScalarModel scalarModel) {
-        return new JavaMathBigDecimalPanel(id, scalarModel, threadSafeConverter);
+        BigDecimalConverterWithScale converter = getConverter(scalarModel);
+        return new JavaMathBigDecimalPanel(id, scalarModel, converter);
+    }
+
+    
+    // //////////////////////////////////////
+    
+    private final BigDecimalConverterWithScale converterForNullScale = new BigDecimalConverterWithScale(null);
+    private final Map<Integer, BigDecimalConverterWithScale> converterByScale = new ConcurrentHashMap<Integer, BigDecimalConverterWithScale>();
+
+    private BigDecimalConverterWithScale getConverter(final ScalarModel scalarModel) {
+        final Integer scale = scalarModel.getScale();
+        if(scale == null) {
+            return converterForNullScale;
+        } 
+        BigDecimalConverterWithScale bigDecimalConverter = converterByScale.get(scale);
+        if(bigDecimalConverter == null) {
+            bigDecimalConverter = new BigDecimalConverterWithScale(scale);
+            converterByScale.put(scale, bigDecimalConverter);
+        }
+        return bigDecimalConverter;
     }
 
 }
