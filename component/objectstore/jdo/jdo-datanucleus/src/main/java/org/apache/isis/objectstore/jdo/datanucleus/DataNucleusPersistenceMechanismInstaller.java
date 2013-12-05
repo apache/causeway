@@ -174,7 +174,7 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
             LOG.info("did *not* find JNDI datasource; will use JDBC");
             
             putIfNotPresent(props, "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
-            putIfNotPresent(props, "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test;hsqldb.sqllog=3");
+            putIfNotPresent(props, "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
             putIfNotPresent(props, "javax.jdo.option.ConnectionUserName", "sa");        
             putIfNotPresent(props, "javax.jdo.option.ConnectionPassword", "");
         }

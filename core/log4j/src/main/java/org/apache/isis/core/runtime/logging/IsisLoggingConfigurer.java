@@ -26,11 +26,23 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
 import org.apache.log4j.PatternLayout;
 
 public class IsisLoggingConfigurer {
 
+    private final Level rootLoggerLevelIfFallback;
+    
     private boolean loggingSetup;
+
+    public IsisLoggingConfigurer() {
+        this(org.apache.log4j.Level.WARN);
+    }
+
+    public IsisLoggingConfigurer(Level rootLoggerLevelIfFallback) {
+        this.rootLoggerLevelIfFallback = rootLoggerLevelIfFallback;
+    }
+
 
     /**
      * As per {@link #configureLogging(String)}.
@@ -65,7 +77,7 @@ public class IsisLoggingConfigurer {
      * {@link Level#WARN warning}, a typical {@link PatternLayout} and logging
      * to the {@link ConsoleAppender console}.
      */
-    private static void configureLogging(final String configDirectory) {
+    private void configureLogging(final String configDirectory) {
         final Properties properties = new Properties();
         final String path = configDirectory + "/" + LoggingConstants.LOGGING_CONFIG_FILE;
         FileInputStream inStream = null;
@@ -109,11 +121,11 @@ public class IsisLoggingConfigurer {
         }
     }
 
-    private static void configureFallbackLogging() {
+    private void configureFallbackLogging() {
         final org.apache.log4j.Layout layout = new org.apache.log4j.PatternLayout("%-5r [%-25.25c{1} %-10.10t %-5.5p]  %m%n");
         final org.apache.log4j.Appender appender = new org.apache.log4j.ConsoleAppender(layout);
         org.apache.log4j.BasicConfigurator.configure(appender);
-        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.WARN);
+        org.apache.log4j.Logger.getRootLogger().setLevel(rootLoggerLevelIfFallback);
         org.apache.log4j.Logger.getLogger("ui").setLevel(org.apache.log4j.Level.OFF);
     }
 

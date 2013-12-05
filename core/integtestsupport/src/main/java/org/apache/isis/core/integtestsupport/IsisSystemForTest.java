@@ -50,6 +50,7 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
+import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -254,9 +255,12 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     ////////////////////////////////////////////////////////////
-    // logging
+    // level
     ////////////////////////////////////////////////////////////
 
+    /**
+     * The level to use for the root logger if fallback (ie a <tt>logging.properties</tt> file cannot be found).
+     */
     public org.apache.log4j.Level getLevel() {
         return level;
     }
@@ -283,7 +287,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     private void setUpSystem(FireListeners fireListeners) throws Exception {
-        org.apache.log4j.Logger.getRootLogger().setLevel(getLevel());
+        
 
         boolean firstTime = isisSystem == null;
         if(fireListeners.shouldFire()) {
@@ -291,6 +295,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
         
         if(firstTime) {
+            IsisLoggingConfigurer isisLoggingConfigurer = new IsisLoggingConfigurer(getLevel());
+            isisLoggingConfigurer.configureLogging(".", new String[]{});
+
             isisSystem = createIsisSystem(services);
             isisSystem.init();
             IsisContext.closeSession();
