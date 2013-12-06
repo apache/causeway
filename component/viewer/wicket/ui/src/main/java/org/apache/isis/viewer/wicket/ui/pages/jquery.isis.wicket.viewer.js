@@ -21,12 +21,17 @@ $(document).ready(function() {
     var timeoutId;
     
     isisShowVeil = function() {
+        if(timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+        }
         $("#veil").stop().show();
     }
     isisFadeInVeil = function(attributes, jqxhr, settings) {
         /*
         $("#veil").fadeIn(750);
         */
+        // use timeouts because JQuery's delay(...) cannot be stopped. 
         var activeEl = attributes.currentTarget.activeElement;
         timeoutId = setTimeout(function() {
             $("#veil").fadeIn(750);
@@ -37,9 +42,8 @@ $(document).ready(function() {
         if(timeoutId) {
             clearTimeout(timeoutId);
             timeoutId = null;
-        } else {
-            $("#veil").stop().hide();
         }
+        $("#veil").stop().hide();
     }
 
     /* for modal dialogs */
