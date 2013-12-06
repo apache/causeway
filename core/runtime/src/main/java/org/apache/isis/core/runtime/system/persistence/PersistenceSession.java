@@ -892,7 +892,8 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
 
     @Override
     public void destroyObject(final ObjectAdapter adapter) {
-        if (adapter.getSpecification().isParented()) {
+        ObjectSpecification spec = adapter.getSpecification();
+        if (spec.isParented()) {
             return;
         }
         if (LOG.isDebugEnabled()) {

@@ -185,7 +185,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         if (persistentObject == null) {
             throw new IllegalArgumentException("Must specify a reference for disposing an object");
         }
-        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(persistentObject);
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(persistentObject);
         if (!isPersistent(persistentObject)) {
             throw new RepositoryException("Object not persistent: " + adapter);
         }
