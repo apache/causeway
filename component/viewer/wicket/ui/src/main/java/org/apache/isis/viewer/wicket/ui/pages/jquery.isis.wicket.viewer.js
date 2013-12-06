@@ -18,24 +18,38 @@
  */
 $(document).ready(function() {
 
+    var timeoutId;
+    
     isisShowVeil = function() {
         $("#veil").stop().show();
     }
-    isisFadeInVeil = function() {
+    isisFadeInVeil = function(attributes, jqxhr, settings) {
+        /*
         $("#veil").fadeIn(750);
+        */
+        var activeEl = attributes.currentTarget.activeElement;
+        timeoutId = setTimeout(function() {
+            $("#veil").fadeIn(750);
+        }, 250);
+        
     }
-    isisHideVeil = function() {
-        $("#veil").stop().hide();
+    isisHideVeil = function(attributes, jqXHR, settings) {
+        if(timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+        } else {
+            $("#veil").stop().hide();
+        }
     }
 
     /* for modal dialogs */
     Wicket.Event.subscribe(
             '/ajax/call/beforeSend', function(attributes, jqXHR, settings) {
-                isisFadeInVeil();
+                isisFadeInVeil(attributes, jqXHR, settings);
             });
     Wicket.Event.subscribe(
             '/ajax/call/complete', function(attributes, jqXHR, settings) {
-                isisHideVeil();
+                isisHideVeil(attributes, jqXHR, settings);
             });
     
 

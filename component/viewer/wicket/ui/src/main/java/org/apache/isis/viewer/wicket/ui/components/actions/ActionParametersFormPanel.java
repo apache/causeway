@@ -263,7 +263,16 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                 getAuthenticationSession().getMessageBroker().addWarning(ex.getMessage());
                 return;
             }
-            
+            target.add(this);
         }
+        
+        @Override
+        public void onError(AjaxRequestTarget target, ScalarModelProvider provider) {
+            if(provider instanceof Component) {
+                // ensure that any feedback error associated with the providing component is shown.
+                target.add((Component)provider); 
+            }
+        }
+
     }
 }

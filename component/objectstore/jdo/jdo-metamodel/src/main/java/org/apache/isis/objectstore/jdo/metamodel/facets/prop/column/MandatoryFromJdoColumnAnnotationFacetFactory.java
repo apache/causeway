@@ -135,48 +135,52 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                         return;
                     }
                     
-                    MandatoryFacet facet = association.getFacet(MandatoryFacet.class);
+                    validateMandatoryFacet(association, validationFailures);
+                }
+            }
 
-                    MandatoryFacet underlying = (MandatoryFacet) facet.getUnderlyingFacet();
-                    if(underlying == null) {
-                        continue;
+            private void validateMandatoryFacet(ObjectAssociation association, ValidationFailures validationFailures) {
+                MandatoryFacet facet = association.getFacet(MandatoryFacet.class);
+
+                MandatoryFacet underlying = (MandatoryFacet) facet.getUnderlyingFacet();
+                if(underlying == null) {
+                    return;
+                } 
+                
+                if(facet instanceof MandatoryFacetDerivedFromJdoColumn) {
+
+                    if(association.isNotPersisted()) {
+                        validationFailures.add("%s: @javax.jdo.annotations.Column found on non-persisted property; please remove)", association.getIdentifier().toClassAndNameIdentityString());
+                        return;
                     }
 
-                    if(facet instanceof MandatoryFacetDerivedFromJdoColumn) {
-
-                        if(association.isNotPersisted()) {
-                            validationFailures.add("%s: @javax.jdo.annotations.Column found on non-persisted property; please remove)", association.getIdentifier().toClassAndNameIdentityString());
-                            continue;
-                        }
-
-                        if(underlying.isInvertedSemantics() == facet.isInvertedSemantics()) {
-                            continue;
-                        }
-                        
-                        if(underlying.isInvertedSemantics()) {
-                            // ie @Optional
-                            validationFailures.add("%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowNulls=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
-                        } else {
-                            validationFailures.add("%s: incompatible Isis' default of required/optional properties vs JDO; add @javax.jdo.annotations.Column(allowNulls=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
-                        }
+                    if(underlying.isInvertedSemantics() == facet.isInvertedSemantics()) {
+                        return;
                     }
                     
-                    if(facet instanceof MandatoryFacetInferredFromAbsenceOfJdoColumn) {
-                        
-                        if(association.isNotPersisted()) {
-                            // nothing to do.
-                            continue;
-                        }
+                    if(underlying.isInvertedSemantics()) {
+                        // ie @Optional
+                        validationFailures.add("%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowNulls=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
+                    } else {
+                        validationFailures.add("%s: incompatible Isis' default of required/optional properties vs JDO; add @javax.jdo.annotations.Column(allowNulls=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
+                    }
+                }
+                
+                if(facet instanceof MandatoryFacetInferredFromAbsenceOfJdoColumn) {
+                    
+                    if(association.isNotPersisted()) {
+                        // nothing to do.
+                        return;
+                    }
 
-                        if(underlying.isInvertedSemantics() == facet.isInvertedSemantics()) {
-                            continue;
-                        }
-                        if(underlying.isInvertedSemantics()) {
-                            // ie @Optional
-                            validationFailures.add("%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowNulls=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
-                        } else {
-                            validationFailures.add("%s: incompatible default handling of required/optional properties between Isis and JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
-                        }
+                    if(underlying.isInvertedSemantics() == facet.isInvertedSemantics()) {
+                        return;
+                    }
+                    if(underlying.isInvertedSemantics()) {
+                        // ie @Optional
+                        validationFailures.add("%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowNulls=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
+                    } else {
+                        validationFailures.add("%s: incompatible default handling of required/optional properties between Isis and JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
                     }
                 }
             }

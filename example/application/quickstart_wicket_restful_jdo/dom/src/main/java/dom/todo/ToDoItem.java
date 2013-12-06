@@ -41,17 +41,14 @@ import com.google.common.collect.Ordering;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.Decimal;
 import org.apache.isis.applib.annotation.Disabled;
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.Mask;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Named;
@@ -64,7 +61,6 @@ import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.applib.annotation.TypicalLength;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
@@ -351,6 +347,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private BigDecimal cost;
 
     @javax.jdo.annotations.Column(allowsNull="true", scale=2)
+    @javax.validation.constraints.Digits(integer=10, fraction=2)
     @Disabled(reason="Update using action")
     public BigDecimal getCost() {
         return cost;
@@ -361,8 +358,18 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     }
     
     public ToDoItem updateCost(
-            final @Named("New cost") @Decimal(scale=2) @Optional BigDecimal cost) {
-        LOG.debug("%s: cost updated: %s -> %s", this.container.titleOf(this), getCost(), cost);
+            @Named("New cost") 
+            @javax.validation.constraints.Digits(integer=10, fraction=2) 
+            @Optional 
+            final BigDecimal cost) {
+        LOG.debug("%s: cost updated: %s -> %s", container.titleOf(this), getCost(), cost);
+        
+        // just to simulate a long-running action
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+        }
+        
         setCost(cost);
         return this;
     }

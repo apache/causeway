@@ -22,27 +22,26 @@ package org.apache.isis.core.progmodel.facets.propparam.decimal;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
-import org.apache.isis.applib.annotation.Decimal;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.param.decimal.BigDecimalFacetForParameterFromDecimalAnnotation;
-import org.apache.isis.core.progmodel.facets.param.decimal.BigDecimalForParameterDerivedFromDecimalAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.param.javaxvaldigits.BigDecimalFacetForParameterFromJavaxValidationDigitsAnnotation;
+import org.apache.isis.core.progmodel.facets.param.javaxvaldigits.BigDecimalForParameterDerivedFromJavaxValidationAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.typicallen.annotation.TypicalLengthAnnotationOnParameterFacetFactory;
-import org.apache.isis.core.progmodel.facets.properties.decimal.BigDecimalFacetForPropertyFromDecimalAnnotation;
-import org.apache.isis.core.progmodel.facets.properties.decimal.BigDecimalForPropertyDerivedFromDecimalAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.javaxvaldigits.BigDecimalFacetForPropertyFromJavaxValidationDigitsAnnotation;
+import org.apache.isis.core.progmodel.facets.properties.javaxvaldigits.BigDecimalForPropertyDerivedFromJavaxValidationDigitsFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
 
-public class BigDecimalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class JavaxValidationDigitsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    public void testDecimalAnnotationPickedUpOnProperty() {
-        final BigDecimalForPropertyDerivedFromDecimalAnnotationFacetFactory facetFactory = new BigDecimalForPropertyDerivedFromDecimalAnnotationFacetFactory();
+    public void testAnnotationPickedUpOnProperty() {
+        final BigDecimalForPropertyDerivedFromJavaxValidationDigitsFacetFactory facetFactory = new BigDecimalForPropertyDerivedFromJavaxValidationDigitsFacetFactory();
 
         class Order {
             @SuppressWarnings("unused")
-            @Decimal(length=14, scale=4)
+            @javax.validation.constraints.Digits(integer=14, fraction=4)
             public BigDecimal getCost() {
                 return null;
             }
@@ -53,18 +52,20 @@ public class BigDecimalAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
 
         final Facet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof BigDecimalFacetForPropertyFromDecimalAnnotation);
-        final BigDecimalFacetForPropertyFromDecimalAnnotation annotation = (BigDecimalFacetForPropertyFromDecimalAnnotation) facet;
-        assertEquals(new Integer(14), annotation.getLength());
+        assertTrue(facet instanceof BigDecimalFacetForPropertyFromJavaxValidationDigitsAnnotation);
+        final BigDecimalFacetForPropertyFromJavaxValidationDigitsAnnotation annotation = (BigDecimalFacetForPropertyFromJavaxValidationDigitsAnnotation) facet;
+        assertEquals(new Integer(18), annotation.getLength());
         assertEquals(new Integer(4), annotation.getScale());
     }
 
-    public void testDecimalAnnotationPickedUpOnActionParameter() {
-        final BigDecimalForParameterDerivedFromDecimalAnnotationFacetFactory facetFactory = new BigDecimalForParameterDerivedFromDecimalAnnotationFacetFactory();
+    public void testAnnotationPickedUpOnActionParameter() {
+        final BigDecimalForParameterDerivedFromJavaxValidationAnnotationFacetFactory facetFactory = new BigDecimalForParameterDerivedFromJavaxValidationAnnotationFacetFactory();
 
         class Order {
             @SuppressWarnings("unused")
-            public void updateCost(@Decimal(length=14,scale=4) final BigDecimal cost) {
+            public void updateCost(
+                    @javax.validation.constraints.Digits(integer=14, fraction=4) 
+                    final BigDecimal cost) {
             }
         }
         final Method method = findMethod(Order.class, "updateCost", new Class[] { BigDecimal.class });
@@ -73,9 +74,9 @@ public class BigDecimalAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
 
         final Facet facet = facetedMethodParameter.getFacet(BigDecimalValueFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof BigDecimalFacetForParameterFromDecimalAnnotation);
-        final BigDecimalFacetForParameterFromDecimalAnnotation annotation = (BigDecimalFacetForParameterFromDecimalAnnotation) facet;
-        assertEquals(new Integer(14), annotation.getLength());
+        assertTrue(facet instanceof BigDecimalFacetForParameterFromJavaxValidationDigitsAnnotation);
+        final BigDecimalFacetForParameterFromJavaxValidationDigitsAnnotation annotation = (BigDecimalFacetForParameterFromJavaxValidationDigitsAnnotation) facet;
+        assertEquals(new Integer(18), annotation.getLength());
         assertEquals(new Integer(4), annotation.getScale());
     }
 

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
+      xml:lang="en"  
+      lang="en">
+	<head>
+		<title wicket:id="pageTitle"></title>
+		<wicket:link>
+			<link href="../cssreset.css" rel="stylesheet" type="text/css"/>
+			<link href="MmvErrorPage.css" rel="stylesheet" />
+			<link href="../PageAbstract.css" rel="stylesheet" />
+		</wicket:link>
+	</head>
+	<body>
+		<div id="container">
+        
+			<div class="headerContainer">
+				<div id="header">
+					<h1>
+                        <span wicket:id="applicationName" class="applicationName">[application name]</span>
+                    </h1>
+				</div>
+				<div class="clear"/>
+			</div>
+
+            <div id="body">
+                <div class="validationErrorsPanel">
+                    <div class="errorInfo clear">
+                        <span class="mainMessage">The application failed to start due to a number of metamodel validation errors.</span>
+                        <div class="errorDetail">
+                            <ul>
+                                <li wicket:id="error">
+                                    <span wicket:id="errorMessage">[error message]</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"/>
+            </div>
+
+	    </div>
+	</body>
+</html>

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.progmodel.facets.properties.decimal;
+package org.apache.isis.core.progmodel.facets.properties.javaxvaldigits;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -24,17 +24,17 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
 
 
-public class BigDecimalFacetForPropertyFromDecimalAnnotation extends FacetAbstract implements BigDecimalValueFacet {
+public class BigDecimalFacetForPropertyFromJavaxValidationDigitsAnnotation extends FacetAbstract implements BigDecimalValueFacet {
 
-    private final Integer length;
-    private final Integer scale;
+    private final int length;
+    private final int scale;
 
     public static Class<? extends Facet> type() {
         return BigDecimalValueFacet.class;
     }
 
-    public BigDecimalFacetForPropertyFromDecimalAnnotation(final FacetHolder holder, final Integer length, final Integer scale) {
-        super(BigDecimalFacetForPropertyFromDecimalAnnotation.type(), holder, Derivation.NOT_DERIVED);
+    public BigDecimalFacetForPropertyFromJavaxValidationDigitsAnnotation(final FacetHolder holder, final Integer length, final Integer scale) {
+        super(BigDecimalFacetForPropertyFromJavaxValidationDigitsAnnotation.type(), holder, Derivation.NOT_DERIVED);
         this.length = length;
         this.scale = scale;
     }

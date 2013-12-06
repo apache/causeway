@@ -24,4 +24,6 @@ public interface ScalarModelSubscriber {
 
     void onUpdate(AjaxRequestTarget target, ScalarModelProvider provider);
 
+    void onError(AjaxRequestTarget target, ScalarModelProvider provider);
+
 }

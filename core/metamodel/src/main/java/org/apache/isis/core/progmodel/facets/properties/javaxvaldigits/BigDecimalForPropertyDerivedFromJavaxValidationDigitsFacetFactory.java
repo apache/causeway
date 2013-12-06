@@ -16,48 +16,44 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.progmodel.facets.properties.decimal;
+package org.apache.isis.core.progmodel.facets.properties.javaxvaldigits;
 
 import java.math.BigDecimal;
 
-import org.apache.isis.applib.annotation.Decimal;
+import javax.validation.constraints.Digits;
+
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
 
-public class BigDecimalForPropertyDerivedFromDecimalAnnotationFacetFactory extends FacetFactoryAbstract {
+public class BigDecimalForPropertyDerivedFromJavaxValidationDigitsFacetFactory extends FacetFactoryAbstract {
 
-    private static final int DEFAULT_LENGTH = BigDecimalValueSemanticsProvider.DEFAULT_LENGTH;
-    private static final int DEFAULT_SCALE = BigDecimalValueSemanticsProvider.DEFAULT_SCALE;
-
-    public BigDecimalForPropertyDerivedFromDecimalAnnotationFacetFactory() {
+    public BigDecimalForPropertyDerivedFromJavaxValidationDigitsFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final Decimal annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Decimal.class);
-
-        if(BigDecimal.class != processMethodContext.getMethod().getReturnType()) {
+        if (BigDecimal.class != processMethodContext.getMethod().getReturnType()) {
             return;
-        } 
-        final BigDecimalValueFacet facet;
-        final FacetedMethod holder = processMethodContext.getFacetHolder();
-        
+        }
+
+        final Digits annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Digits.class);
         if (annotation == null) {
             return;
         }
-        facet = new BigDecimalFacetForPropertyFromDecimalAnnotation(holder, valueElseDefault(annotation.length(), DEFAULT_LENGTH), valueElseDefault(annotation.scale(), DEFAULT_SCALE));
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacet(create(processMethodContext, annotation));
     }
 
-    Integer valueElseDefault(final int value, final int defaultValue) {
-        return value != -1? value: defaultValue;
-    }
-    
+    private BigDecimalValueFacet create(final ProcessMethodContext processMethodContext, final Digits annotation) {
+        final FacetedMethod holder = processMethodContext.getFacetHolder();
+        final int length = annotation.integer() + annotation.fraction();
+        final int scale = annotation.fraction();
+        return new BigDecimalFacetForPropertyFromJavaxValidationDigitsAnnotation(holder, length, scale);
+    }    
+
 }

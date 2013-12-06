@@ -23,8 +23,30 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 
 public interface BigDecimalValueFacet extends Facet {
 
+    /**
+     * Maximum length of digits for this decimal.
+     * 
+     * <p>
+     * For example:
+     * <ul>
+     * <li><tt>12345.789</tt> has a length of 8 (and a {@link #getScale() scale} of 3)</li>
+     * <li><tt>12345</tt> has a length of 5 (and {@link #getScale() scale} of 0)</li>
+     * <li><tt>12345.0</tt> has a length of 6 (and {@link #getScale() scale} of 1)</li>
+     * </ul>
+     */
     Integer getLength();
     
+    /**
+     * The number of digits to the right of the decimal place (fractional part) for this decimal.
+     * 
+     * <p>
+     * For example:
+     * <ul>
+     * <li><tt>12345.789</tt> has scale of 3 (and a {@link #getLength() length} of 8)</li>
+     * <li><tt>12345</tt> has a scale of 0 (and a {@link #getLength() length} of 5)</li>
+     * <li><tt>12345.0</tt> has a scale of 1 (and a {@link #getLength() length} of 6)</li>
+     * </ul>
+     */
     Integer getScale();
 
 }

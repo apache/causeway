@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +29,9 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 
 import com.google.common.base.Function;
+import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
@@ -68,6 +71,7 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderCl
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -197,6 +201,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     private boolean determiningDeploymentType;
     private DeploymentTypeWicketAbstract deploymentType;
 
+    private final List<String> validationErrors = Lists.newArrayList();
+
 
     // /////////////////////////////////////////////////
     // constructor, init
@@ -259,10 +265,49 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             mountPage("/action/${objectOid}/${actionOwningSpec}/${actionId}/${actionType}/#{actionArgs}", PageType.ACTION_PROMPT);
             
         } catch(RuntimeException ex) {
-            // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.
-            LOG.error("Failed to initialize", ex);
-            throw ex;
+            List<MetaModelInvalidException> mmies = Lists.newArrayList(
+                    Iterables.filter(Throwables.getCausalChain(ex), MetaModelInvalidException.class));
+            if(!mmies.isEmpty()) {
+                final MetaModelInvalidException mmie = mmies.get(0);
+                log("");
+                logBanner();
+                log("");
+                validationErrors.addAll(mmie.getValidationErrors());
+                for (String validationError : validationErrors) {
+                    logError(validationError);
+                }
+                log("");
+                log("Please inspect the above messages and correct your domain model.");
+                log("");
+                logBanner();
+                log("");
+            } else {
+                // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.
+                LOG.error("Failed to initialize", ex);
+                throw ex;
+            }
         }
+    }
+
+    /**
+     * The validation errors, if any, that occurred on {@link #init() startup}.
+     */
+    public List<String> getValidationErrors() {
+        return validationErrors;
+    }
+    
+    private void logError(String validationError) {
+        log(validationError);
+    }
+
+    private static void logBanner() {
+        String msg = "################################################ ISIS METAMODEL VALIDATION ERRORS ################################################################";
+        log(msg);
+    }
+
+    private static void log(String msg) {
+        System.err.println(msg);
+        LOG.error(msg);
     }
 
     private void mountPage(final String mountPath, final PageType pageType) {
@@ -324,6 +369,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
                            Collections.<CssResourceReference>emptyList();
                 }
              };
+
 
     private Set<CssResourceReference> cssResourceReferencesForAllComponents() {
         Collection<ComponentFactory> componentFactories = getComponentFactoryRegistry().listComponentFactories();

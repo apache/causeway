@@ -79,6 +79,7 @@ class BigDecimalConverterWithScale extends BigDecimalConverter {
     
     @Override
     public BigDecimal convertToObject(String valueStr, Locale locale) throws ConversionException {
+
         DecimalFormat numberFormat = (DecimalFormat) getNumberFormat(locale);
         char groupingSeparator = numberFormat.getDecimalFormatSymbols().getGroupingSeparator();
         

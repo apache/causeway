@@ -201,6 +201,15 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
                         subscriber.onUpdate(target, ScalarPanelAbstract.this);
                     }
                 }
+                
+                @Override
+                protected void onError(AjaxRequestTarget target, RuntimeException e) {
+                    super.onError(target, e);
+                    for (ScalarModelSubscriber subscriber : subscribers) {
+                        subscriber.onError(target, ScalarPanelAbstract.this);
+                    }
+
+                }
             });
         }
     }

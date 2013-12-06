@@ -19,24 +19,29 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
-import java.util.Collections;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.protocol.http.PageExpiredException;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -45,6 +50,8 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
+import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
+import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
 /**
  * Isis-specific implementation of the Wicket's {@link WebRequestCycle},
@@ -105,7 +112,10 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                         return;
                     }
                 }
-                throw new RestartResponseException(errorPageProviderFor(ex), RedirectPolicy.ALWAYS_REDIRECT);
+                
+                // shouldn't return null given that we're in a session ...
+                PageProvider errorPageProvider = errorPageProviderFor(ex);
+                throw new RestartResponseException(errorPageProvider, RedirectPolicy.ALWAYS_REDIRECT);
             }
         }
     }
@@ -129,18 +139,40 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
     @Override
     public IRequestHandler onException(RequestCycle cycle, Exception ex) {
-        return new RenderPageRequestHandler(errorPageProviderFor(ex), RedirectPolicy.ALWAYS_REDIRECT);
+        PageProvider errorPageProvider = errorPageProviderFor(ex);
+        // avoid infinite redirect loops
+        RedirectPolicy redirectPolicy = ex instanceof PageExpiredException? RedirectPolicy.NEVER_REDIRECT: RedirectPolicy.ALWAYS_REDIRECT;
+        return errorPageProvider != null 
+                ? new RenderPageRequestHandler(errorPageProvider, redirectPolicy)
+                : null;
     }
 
     protected PageProvider errorPageProviderFor(Exception ex) {
-        return new PageProvider(errorPageFor(ex));
+        IRequestablePage errorPage = errorPageFor(ex);
+        return errorPage != null? new PageProvider(errorPage): null;
     }
 
+    // special case handling for PageExpiredException, otherwise infinite loop
+    private final static ExceptionRecognizerForType pageExpiredExceptionRecognizer = 
+            new ExceptionRecognizerForType(PageExpiredException.class, new Function<String,String>(){
+                @Override
+                public String apply(String input) {
+                    return "Requested page is no longer available. Please navigate back to the home page or select an object from the bookmark bar.";
+                }
+            });
+
     protected IRequestablePage errorPageFor(Exception ex) {
-        List<ExceptionRecognizer> exceptionRecognizers = Collections.emptyList();
+        List<ExceptionRecognizer> exceptionRecognizers = Lists.newArrayList();
+        exceptionRecognizers.add(pageExpiredExceptionRecognizer);
+
         if(inIsisSession()) {
-            exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
+            exceptionRecognizers.addAll(getServicesInjector().lookupServices(ExceptionRecognizer.class));
         } else {
+            List<String> validationErrors = IsisWicketApplication.get().getValidationErrors();
+            if(!validationErrors.isEmpty()) {
+                return new MmvErrorPage(Model.ofList(validationErrors));
+            }
+            // not sure whether this can ever happen now...
             LOG.warn("Unable to obtain exceptionRecognizers (no session), will be treated as unrecognized exception");
         }
         String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);

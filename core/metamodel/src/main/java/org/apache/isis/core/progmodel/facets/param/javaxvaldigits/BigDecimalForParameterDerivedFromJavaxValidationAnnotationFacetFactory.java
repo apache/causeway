@@ -16,26 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.progmodel.facets.param.decimal;
+package org.apache.isis.core.progmodel.facets.param.javaxvaldigits;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 
-import org.apache.isis.applib.annotation.Decimal;
+import javax.validation.constraints.Digits;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
 
-public class BigDecimalForParameterDerivedFromDecimalAnnotationFacetFactory extends FacetFactoryAbstract {
+public class BigDecimalForParameterDerivedFromJavaxValidationAnnotationFacetFactory extends FacetFactoryAbstract {
 
-    private static final int DEFAULT_LENGTH = BigDecimalValueSemanticsProvider.DEFAULT_LENGTH;
-    private static final int DEFAULT_SCALE = BigDecimalValueSemanticsProvider.DEFAULT_SCALE;
-
-    public BigDecimalForParameterDerivedFromDecimalAnnotationFacetFactory() {
+    public BigDecimalForParameterDerivedFromJavaxValidationAnnotationFacetFactory() {
         super(FeatureType.PARAMETERS_ONLY);
     }
 
@@ -45,26 +43,25 @@ public class BigDecimalForParameterDerivedFromDecimalAnnotationFacetFactory exte
         final Method method = processParameterContext.getMethod();
         final int paramNum = processParameterContext.getParamNum();
         
+        if(BigDecimal.class != method.getParameterTypes()[paramNum]) {
+            return;
+        }
         final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(method)[paramNum];
 
         for (final Annotation parameterAnnotation : parameterAnnotations) {
-            if (parameterAnnotation instanceof Decimal) {
-                FacetUtil.addFacet(create((Decimal) parameterAnnotation, processParameterContext.getFacetHolder()));
+            if (parameterAnnotation instanceof Digits) {
+                Digits digitsAnnotation = (Digits) parameterAnnotation;
+                FacetUtil.addFacet(create(digitsAnnotation, processParameterContext.getFacetHolder()));
                 return;
             }
         }
     }
 
-    private BigDecimalValueFacet create(final Decimal annotation, final FacetHolder holder) {
+    private BigDecimalValueFacet create(final Digits annotation, final FacetHolder holder) {
+        final int length = annotation.integer() + annotation.fraction();
+        final int scale = annotation.fraction();
         return annotation == null ? null : 
-            new BigDecimalFacetForParameterFromDecimalAnnotation(
-                    holder, 
-                    valueElseDefault(annotation.length(), DEFAULT_LENGTH), 
-                    valueElseDefault(annotation.scale(), DEFAULT_SCALE));
-    }
-
-    private static Integer valueElseDefault(final int value, final int defaultValue) {
-        return value != -1? value: defaultValue;
+            new BigDecimalFacetForParameterFromJavaxValidationDigitsAnnotation(holder, length, scale);
     }
     
 }
