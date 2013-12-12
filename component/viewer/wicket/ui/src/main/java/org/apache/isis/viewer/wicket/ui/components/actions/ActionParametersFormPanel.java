@@ -84,7 +84,11 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
     }
 
     private void buildGui() {
-        add(new ActionParameterForm("inputForm", getModel()));
+        ActionModel model = getModel();
+        // in case previously used, eg prompt displayed then cancelled
+        model.clearArguments();
+        
+        add(new ActionParameterForm("inputForm", model));
     }
 
     class ActionParameterForm extends Form<ObjectAdapter> implements ScalarModelSubscriber  {
@@ -206,7 +210,6 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                 @Override
                 public void onSubmit(final AjaxRequestTarget target, Form<?> form) {
                     if(actionPromptIfAny != null) {
-                        getActionModel().clearArguments();
                         actionPromptIfAny.close(target);
                     }
                 };
