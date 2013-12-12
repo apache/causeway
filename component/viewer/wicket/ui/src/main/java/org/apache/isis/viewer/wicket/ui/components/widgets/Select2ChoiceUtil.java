@@ -25,11 +25,14 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 public final class Select2ChoiceUtil  {
-    
+
     private Select2ChoiceUtil(){}
 
     // a guesstimate to convert a single character into 'em' units
     private static final double CHAR_TO_EM_MULTIPLIER = 0.8;
+    
+    // a further fudge, add some additional characters prior to multiplication.
+    private static final int ADDITIONAL_CHARS = 3;
     
     public static Select2Choice<ObjectAdapterMemento> newSelect2Choice(String id, final IModel<ObjectAdapterMemento> modelObject, ScalarModel scalarModel) {
         Select2Choice<ObjectAdapterMemento> select2Choice = new Select2Choice<ObjectAdapterMemento>(id, modelObject);
@@ -39,7 +42,7 @@ public final class Select2ChoiceUtil  {
     }
 
     private static String asCssStyleWidth(int numChars) {
-        return "width: " + ((numChars+2) * CHAR_TO_EM_MULTIPLIER) + "em;";
+        return "width: " + ((numChars+ADDITIONAL_CHARS) * CHAR_TO_EM_MULTIPLIER) + "em;";
     }
 
 }
