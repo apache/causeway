@@ -32,6 +32,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.swing.event.ChangeListener;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
@@ -456,12 +458,18 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
-    protected void publishedChangedObjectsIfRequired(final String currentUser, final long currentTimestampEpoch) {
+    /**
+     * @return the adapters that were published (if any were).
+     */
+    protected List<ObjectAdapter> publishedChangedObjectsIfRequired(final String currentUser, final long currentTimestampEpoch) {
         if(publishingService == null) {
-            return;
+            return Collections.emptyList();
         }
         
-        for (final ObjectAdapter enlistedAdapter : changeKindByEnlistedAdapter.keySet()) {
+        // take a copy of enlisted adapters ... the JDO implementation of the PublishingService 
+        // creates further entities which would be enlisted; taking copy of the keys avoids ConcurrentModificationException
+        List<ObjectAdapter> enlistedAdapters = Lists.newArrayList(changeKindByEnlistedAdapter.keySet());
+        for (final ObjectAdapter enlistedAdapter : enlistedAdapters) {
             final ChangeKind changeKind = changeKindByEnlistedAdapter.get(enlistedAdapter);
             final PublishedObjectFacet publishedObjectFacet = enlistedAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
             if(publishedObjectFacet == null) {
@@ -477,6 +485,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         
             publishingService.publishObject(payloadFactory, metadata, enlistedAdapter, changeKind, objectStringifier());
         }
+        return enlistedAdapters;
     }
 
     private static EventType eventTypeFor(ChangeKind changeKind) {
