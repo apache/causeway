@@ -52,7 +52,7 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
     @NotContributed(As.ASSOCIATION)
     public Object lookup(final BookmarkHolder bookmarkHolder) {
         Bookmark bookmark = bookmarkHolder.bookmark();
-        return lookup(bookmark);
+        return bookmark != null? lookup(bookmark): null;
     }
 
     /**
