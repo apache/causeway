@@ -27,9 +27,10 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
+import org.apache.isis.viewer.wicket.ui.components.collection.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionModel> {
+public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,5 +51,10 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         componentFactoryRegistry.addOrReplaceComponent(this, ComponentType.COLLECTION_CONTENTS, entityCollectionModel);
     }
 
+    @Override
+    public Integer getCount() {
+        final EntityCollectionModel model = getModel();
+        return model.getCount();
+    }
 
 }

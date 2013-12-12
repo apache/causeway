@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.ui.components.collection.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -47,7 +48,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * collection of entity}s rendered using as a table of summary values with a
  * chart alongside.
  */
-public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionModel> {
+public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider {
 
     private static final String ID_MAX = "max";
 
@@ -185,6 +186,12 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
     @Override
     protected void onModelChanged() {
         buildGui();
+    }
+
+    @Override
+    public Integer getCount() {
+        final EntityCollectionModel model = getModel();
+        return model.getCount();
     }
 
 }
