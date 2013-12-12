@@ -18,30 +18,27 @@
  */
 $(document).ready(function() {
 
-    var timeoutId;
+    var isisVeilTimeoutId;
     
     isisShowVeil = function() {
-        if(timeoutId) {
-            clearTimeout(timeoutId);
-            timeoutId = null;
+        if(isisVeilTimeoutId) {
+            clearTimeout(isisVeilTimeoutId);
+            isisVeilTimeoutId = null;
         }
         $("#veil").stop().show();
     }
     isisFadeInVeil = function(attributes, jqxhr, settings) {
-        /*
-        $("#veil").fadeIn(750);
-        */
         // use timeouts because JQuery's delay(...) cannot be stopped. 
         var activeEl = attributes.currentTarget.activeElement;
-        timeoutId = setTimeout(function() {
+        isisVeilTimeoutId = setTimeout(function() {
             $("#veil").fadeIn(750);
         }, 250);
         
     }
     isisHideVeil = function(attributes, jqXHR, settings) {
-        if(timeoutId) {
-            clearTimeout(timeoutId);
-            timeoutId = null;
+        if(isisVeilTimeoutId) {
+            clearTimeout(isisVeilTimeoutId);
+            isisVeilTimeoutId = null;
         }
         $("#veil").stop().hide();
     }

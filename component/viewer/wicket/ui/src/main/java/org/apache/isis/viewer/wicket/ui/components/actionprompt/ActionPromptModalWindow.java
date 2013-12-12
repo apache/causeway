@@ -17,8 +17,11 @@
 package org.apache.isis.viewer.wicket.ui.components.actionprompt;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -55,6 +58,35 @@ public class ActionPromptModalWindow extends ModalWindow implements ActionPrompt
     public ActionPromptModalWindow(String id) {
         super(id);
         setMaskType(MaskType.SEMI_TRANSPARENT);
+        add(new CloseOnEscapeKeyBehavior(this));
+    }
+
+    private static class CloseOnEscapeKeyBehavior extends AbstractDefaultAjaxBehavior {
+        private static final long serialVersionUID = 1L;
+        private final ModalWindow modal;
+        public CloseOnEscapeKeyBehavior(ModalWindow modal) {
+            this.modal = modal;
+        }    
+        @Override
+        protected void respond(AjaxRequestTarget target) {
+            if(modal.isShown()) {
+                modal.close(target);
+            }
+        }    
+        @Override
+        public void renderHead(Component component, IHeaderResponse response) {
+            String javaScript = "" +
+                "$(document).ready(function() {\n" +
+                "  $(document).bind('keyup', function(evt) {\n" +
+                "    if (evt.keyCode == 27) {\n" +
+                getCallbackScript() + "\n" +
+                "        evt.preventDefault();\n" +
+                "    }\n" +
+                "  });\n" +
+                "});";
+            String id ="closeModal";
+            response.render(JavaScriptHeaderItem.forScript(javaScript, id));
+        }
     }
     
     @Override
