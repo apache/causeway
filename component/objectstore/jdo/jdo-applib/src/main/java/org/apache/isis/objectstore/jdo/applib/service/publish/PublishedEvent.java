@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventType;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.APPLICATION)
@@ -82,7 +83,7 @@ public class PublishedEvent {
 
     private String id;
 
-    @javax.jdo.annotations.Column(length=32)
+    @javax.jdo.annotations.Column(length=40)
     @javax.jdo.annotations.PrimaryKey
     @MemberOrder(sequence = "2")
     public String getId() {
@@ -99,8 +100,16 @@ public class PublishedEvent {
 
     /**
      * Programmatic because information also available in the {@link #getId() id}.
+     * 
+     * <p>
+     * Length of 42 because 36 chars (UUID) + 1 character + 5 chars for sequence number (allowing up to 99,999 events 
+     * per Isis xactn).
+     * 
+     * <p>
+     * @see EventMetadata#getId()
+     * @see https://issues.apache.org/jira/browse/ISIS-632
      */
-    @javax.jdo.annotations.Column(length=32)
+    @javax.jdo.annotations.Column(length=42)
     @Programmatic
     public String getTransactionId() {
         return transactionId;
