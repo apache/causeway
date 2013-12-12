@@ -31,14 +31,20 @@ import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProvider
 
 public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemanticsProviderAndFacetAbstract<T> implements EnumFacet {
 
-    private static final int TYPICAL_LENGTH = 8;
-
+    private static Class<? extends Facet> type() {
+        return EnumFacet.class;
+    }
+    
     private static <T> T defaultFor(final Class<T> adaptedClass) {
         return adaptedClass.getEnumConstants()[0];
     }
 
-    private static Class<? extends Facet> type() {
-        return EnumFacet.class;
+    private static <T extends Enum<T>> int typicalLengthFor(final Class<T> adaptedClass) {
+        int max = Integer.MIN_VALUE;
+        for(T e: adaptedClass.getEnumConstants()) {
+            max = Math.max(max, e.name().length());
+        }
+        return max;
     }
     
     /**
@@ -49,8 +55,9 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
     }
 
     public EnumValueSemanticsProvider(final FacetHolder holder, final Class<T> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultFor(adaptedClass), configuration, context);
+        super(type(), holder, adaptedClass, typicalLengthFor(adaptedClass), Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultFor(adaptedClass), configuration, context);
     }
+
 
     @Override
     protected T doParse(final Object context, final String entry) {

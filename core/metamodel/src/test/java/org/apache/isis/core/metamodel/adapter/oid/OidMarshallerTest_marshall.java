@@ -26,7 +26,7 @@ import org.junit.Test;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
-public class OidMarshallerTest_marshal {
+public class OidMarshallerTest_marshall {
 
     private OidMarshaller oidMarshaller;
     
@@ -64,7 +64,7 @@ public class OidMarshallerTest_marshal {
         final ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
         final RootOidDefault oid = RootOidDefault.create(objectSpecId,  "123", 90807L, "joebloggs@foo.bar");
         final String marshal = oidMarshaller.marshal(oid);
-        assertThat(marshal, equalTo("CUS:123^90807:joebloggs%40foo.bar:"));
+        assertThat(marshal, equalTo("CUS:123^90807:joebloggs@foo.bar:"));
     }
 
     @Test

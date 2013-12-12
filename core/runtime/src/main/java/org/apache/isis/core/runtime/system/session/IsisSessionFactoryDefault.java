@@ -48,6 +48,7 @@ import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
@@ -127,17 +128,12 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     }
 
     /**
-     * Validate domain services lifecycle events.
+     * Validate domain service Ids are unique, and that the {@link PostConstruct} method, if present, must either 
+     * take no arguments or take a {@link Map} object), and that the {@link PreDestroy} method, if present, must take 
+     * no arguments.
      * 
      * <p>
-     * Specifically:
-     * <ul>
-     * <li>All {@link PostConstruct} methods must either take no arguments or take a {@link Properties} object.</li>
-     * <li>All {@link PreDestroy} methods must take no arguments.</li>
-     * </ul>
-     * 
-     * <p>
-     * If this isn't the case, then we fail fast.
+     * TODO: there seems to be some duplication/overlap with {@link ServiceInitializer}.
      */
     private void validateServices(List<Object> serviceList) {
         for (Object service : serviceList) {

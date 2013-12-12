@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -39,11 +40,13 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
+import org.apache.isis.core.progmodel.facets.value.string.StringValueSemanticsProvider;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -219,6 +222,14 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 final BigDecimalValueFacet facet = property.getFacet(BigDecimalValueFacet.class);
                 return facet != null? facet.getScale(): null;
             }
+            
+            @Override
+            public int getTypicalLength(ScalarModel scalarModel) {
+                final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
+                final OneToOneAssociation property = propertyMemento.getProperty();
+                final TypicalLengthFacet facet = property.getFacet(TypicalLengthFacet.class);
+                return facet != null? facet.value() : StringValueSemanticsProvider.TYPICAL_LENGTH;
+            }
 
             @Override
             public void reset(ScalarModel scalarModel) {
@@ -363,6 +374,14 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 final BigDecimalValueFacet facet = actionParameter.getFacet(BigDecimalValueFacet.class);
                 return facet != null? facet.getScale(): null;
             }
+            
+            @Override
+            public int getTypicalLength(ScalarModel scalarModel) {
+                final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
+                final TypicalLengthFacet facet = actionParameter.getFacet(TypicalLengthFacet.class);
+                return facet != null? facet.value() : StringValueSemanticsProvider.TYPICAL_LENGTH;
+            }
 
             @Override
             public void reset(ScalarModel scalarModel) {
@@ -418,7 +437,10 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         public abstract Integer getLength(ScalarModel scalarModel);
         public abstract Integer getScale(ScalarModel scalarModel);
 
+        public abstract int getTypicalLength(ScalarModel scalarModel);
+        
         public abstract void reset(ScalarModel scalarModel);
+
 
     }
 
@@ -609,12 +631,26 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         return kind.getAutoComplete(this, searchTerm);
     }
 
+    /**
+     * for {@link BigDecimal}s only.
+     * 
+     * @see #getScale()
+     */
+    public int getLength() {
+        return kind.getLength(this);
+    }
+
+    /**
+     * for {@link BigDecimal}s only.
+     * 
+     * @see #getLength()
+     */
     public Integer getScale() {
         return kind.getScale(this);
     }
 
-    public int getLength() {
-        return kind.getLength(this);
+    public int getTypicalLength() {
+        return kind.getTypicalLength(this);
     }
 
     /**
@@ -683,5 +719,6 @@ public class ScalarModel extends EntityModel implements LinksProvider {
     public ObjectAdapter[] getActionArgsHint() {
         return actionArgsHint;
     }
+
 
 }

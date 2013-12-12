@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.vaynberg.wicket.select2.ChoiceProvider;
@@ -27,6 +28,7 @@ import com.vaynberg.wicket.select2.Select2Choice;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
@@ -40,12 +42,17 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.Select2ChoiceUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements ScalarModelWithPending {
 
+
     private static final long serialVersionUID = 1L;
 
+    // a guesstimate to convert a single character into 'em' units
+    private static final double CHAR_TO_EM_MULTIPLIER = 0.8;
+    
     private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
@@ -69,7 +76,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         
         // same pattern as in EntityLinkSelect2Panel
         if(select2Field == null) {
-            select2Field = new Select2Choice<ObjectAdapterMemento>(ID_VALUE_ID, modelObject);
+            select2Field = Select2ChoiceUtil.newSelect2Choice(ID_VALUE_ID, modelObject, getScalarModel());
             setChoices(actionArgsHint);
             addStandardSemantics();
         } else {

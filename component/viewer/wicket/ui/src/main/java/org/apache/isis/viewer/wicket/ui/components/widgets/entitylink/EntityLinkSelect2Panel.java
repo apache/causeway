@@ -51,6 +51,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionInvokeHandler;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersFormPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.Select2ChoiceUtil;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
@@ -65,7 +66,6 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     private static final String ID_AUTO_COMPLETE = "autoComplete";
 
     private static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
-    //private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
 
     private static final String ID_ENTITY_CLEAR_LINK = "entityClearLink";
     
@@ -189,7 +189,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         final IModel<ObjectAdapterMemento> model = ScalarModelWithPending.Util.createModel(getScalarModel().asScalarModelWithPending());       
 
         if(select2Field == null) {
-            select2Field = new Select2Choice<ObjectAdapterMemento>(ID_AUTO_COMPLETE, model);
+            select2Field = Select2ChoiceUtil.newSelect2Choice(ID_AUTO_COMPLETE, model, getScalarModel());
             setProviderAndCurrAndPending(select2Field, getScalarModel().getActionArgsHint());
             if(!getScalarModel().hasChoices()) {
                 final Settings settings = select2Field.getSettings();

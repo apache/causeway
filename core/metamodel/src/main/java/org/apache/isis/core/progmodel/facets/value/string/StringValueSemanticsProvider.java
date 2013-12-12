@@ -35,7 +35,7 @@ public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacet
         return StringValueFacet.class;
     }
 
-    private static final int TYPICAL_LENGTH = 25;
+    public static final int TYPICAL_LENGTH = 25;
     private static final String DEFAULT_VALUE = null; // no default
 
     /**

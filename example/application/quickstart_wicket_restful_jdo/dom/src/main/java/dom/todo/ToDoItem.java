@@ -470,7 +470,9 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     }
 
     @PublishedAction
-    public ToDoItem add(final ToDoItem toDoItem) {
+    public ToDoItem add(
+            @TypicalLength(20)
+            final ToDoItem toDoItem) {
         getDependencies().add(toDoItem);
         return this;
     }
@@ -498,7 +500,9 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         return null;
     }
 
-    public ToDoItem remove(final ToDoItem toDoItem) {
+    public ToDoItem remove(
+            @TypicalLength(20)
+            final ToDoItem toDoItem) {
         getDependencies().remove(toDoItem);
         return this;
     }

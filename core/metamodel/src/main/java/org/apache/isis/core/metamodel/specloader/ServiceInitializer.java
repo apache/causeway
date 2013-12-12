@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.MethodExtensions;
-import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 
 public class ServiceInitializer {
 

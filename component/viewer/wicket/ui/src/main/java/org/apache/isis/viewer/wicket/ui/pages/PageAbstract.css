@@ -622,17 +622,6 @@ div.scalarPanel {
 
 
 /********************* Select2 component styling *****************************/
-/*
-.actionPromptPage .select2-container,
-.entityPage       .select2-container {
-	width: 200px;
-TODO: removed the page class selector because the modal window doesn't honour the width setting 
-}
-*/
-.select2-container {
-	width: 200px;
-}
-
 
 
 .actionPromptPage .select2-container .select2-choice,
@@ -755,7 +744,7 @@ div.wicket-modal div.w_content,
 
 form input[type=text][disabled] {
 	border-radius:4px;
-	-moz-borer-radius:4px;
+	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
 	padding:6px;
 	background-color:#F0EFEA;
@@ -765,7 +754,7 @@ form input[type=text][disabled] {
 
 form input[type=text] {
 	border-radius:4px;
-	-moz-borer-radius:4px;
+	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
 	padding:6px;
 	background-color:#FFFFFF;
