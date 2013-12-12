@@ -28,7 +28,6 @@ import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Immutable;
-import org.apache.isis.applib.annotation.Mandatory;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.NotPersisted;
@@ -55,7 +54,7 @@ public class PublishedEvent {
 
     private String title;
 
-    @javax.jdo.annotations.Column(allowsNull="false", length=50)
+    @javax.jdo.annotations.Column(allowsNull="false", length=255)
     @Title
     @Hidden
     public String getTitle() {
@@ -83,7 +82,17 @@ public class PublishedEvent {
 
     private String id;
 
-    @javax.jdo.annotations.Column(length=40)
+    /**
+     * Programmatic because information also available in the {@link #getId() id}.
+     * 
+     * <p>
+     * Length of 47 because 36 chars (UUID) + 1 character + 10 chars for sequence number (an int) 
+     * 
+     * <p>
+     * @see EventMetadata#getId()
+     * @see https://issues.apache.org/jira/browse/ISIS-632
+     */
+    @javax.jdo.annotations.Column(length=47)
     @javax.jdo.annotations.PrimaryKey
     @MemberOrder(sequence = "2")
     public String getId() {
@@ -99,17 +108,9 @@ public class PublishedEvent {
     private String transactionId;
 
     /**
-     * Programmatic because information also available in the {@link #getId() id}.
-     * 
-     * <p>
-     * Length of 42 because 36 chars (UUID) + 1 character + 5 chars for sequence number (allowing up to 99,999 events 
-     * per Isis xactn).
-     * 
-     * <p>
-     * @see EventMetadata#getId()
-     * @see https://issues.apache.org/jira/browse/ISIS-632
+     * Hidden (<tt>@Programmatic</tt>) because information also available in the {@link #getId() id}.
      */
-    @javax.jdo.annotations.Column(length=42)
+    @javax.jdo.annotations.Column(length=36)
     @Programmatic
     public String getTransactionId() {
         return transactionId;
@@ -124,7 +125,9 @@ public class PublishedEvent {
     private int sequence;
 
     /**
-     * Programmatic because information also available in the {@link #getId() id}.
+     * Hidden (<tt>@Programmatic</tt>) because information also available in the {@link #getId() id}.
+     * 
+     * @see #getId()
      */
     @Programmatic
     public int getSequence() {
