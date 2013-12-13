@@ -19,13 +19,13 @@
 
 package org.apache.isis.core.progmodel.facets.value.datejodalocal;
 
-import java.text.SimpleDateFormat;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -55,18 +55,18 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
      * <p>
      * REVIEW: This seems only to have any effect if 'propertyType' is set to 'date'.
      * 
-     * @see #setPatternOverride(String)
+     * @see #setTitlePatternOverride(String)
      * @deprecated - because 'propertyType' parameter is never used
      */
     @Deprecated
     public static void setFormat(final String propertyType, final String pattern) {
-        setPatternOverride(pattern);
+        setTitlePatternOverride(pattern);
     }
     /**
      * A replacement for {@link #setFormat(String, String)}.
      */
-    public static void setPatternOverride(final String pattern) {
-        OVERRIDE_PATTERN.set(pattern);
+    public static void setTitlePatternOverride(final String pattern) {
+        OVERRIDE_TITLE_PATTERN.set(pattern);
     }
     
     /**
@@ -80,9 +80,9 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
      * 
      * <p>
      * A pre-determined list of values is available, specifically 'iso_encoding', 'iso' and 'medium' (see 
-     * {@link #NAMED_FORMATTERS}).  Alternatively,  can also specify a mask, eg <tt>dd-MMM-yyyy</tt>.
+     * {@link #NAMED_TITLE_FORMATTERS}).  Alternatively,  can also specify a mask, eg <tt>dd-MMM-yyyy</tt>.
      * 
-     * @see #NAMED_FORMATTERS  
+     * @see #NAMED_TITLE_FORMATTERS  
      */
     public final static String CFG_FORMAT_KEY = ConfigurationConstants.ROOT + "value.format.date";
     
@@ -91,19 +91,32 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
      * Keys represent the values which can be configured, and which are used for the rendering of dates.
      * 
      */
-    private static Map<String, DateTimeFormatter> NAMED_FORMATTERS = Maps.newHashMap();
+    private static Map<String, DateTimeFormatter> NAMED_TITLE_FORMATTERS = Maps.newHashMap();
     static {
-        NAMED_FORMATTERS.put("iso_encoding", DateTimeFormat.forPattern("yyyyMMdd"));
-        NAMED_FORMATTERS.put("iso", DateTimeFormat.forPattern("yyyy-MM-dd"));
-        NAMED_FORMATTERS.put("medium", DateTimeFormat.forStyle("M-"));
+        NAMED_TITLE_FORMATTERS.put("iso_encoding", DateTimeFormat.forPattern("yyyyMMdd"));
+        NAMED_TITLE_FORMATTERS.put("iso", DateTimeFormat.forPattern("yyyy-MM-dd"));
+        NAMED_TITLE_FORMATTERS.put("long", DateTimeFormat.forStyle("L-"));
+        NAMED_TITLE_FORMATTERS.put("medium", DateTimeFormat.forStyle("M-"));
+        NAMED_TITLE_FORMATTERS.put("short", DateTimeFormat.forStyle("S-"));
     }
     
-    private final static ThreadLocal<String> OVERRIDE_PATTERN = new ThreadLocal<String>() {
+    private final static ThreadLocal<String> OVERRIDE_TITLE_PATTERN = new ThreadLocal<String>() {
         @Override
         protected String initialValue() {
             return null;
         }
     };
+
+    
+    private final static List<DateTimeFormatter> PARSE_FORMATTERS = Lists.newArrayList();
+    static {
+        PARSE_FORMATTERS.add(DateTimeFormat.forStyle("L-"));
+        PARSE_FORMATTERS.add(DateTimeFormat.forStyle("M-"));
+        PARSE_FORMATTERS.add(DateTimeFormat.forStyle("S-"));
+        PARSE_FORMATTERS.add(DateTimeFormat.forPattern("yyyy-MM-dd"));
+        PARSE_FORMATTERS.add(DateTimeFormat.forPattern("yyyyMMdd"));
+    }
+    
 
 
     public static Class<? extends Facet> type() {
@@ -115,8 +128,9 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     private static final LocalDate DEFAULT_VALUE = null;
 
 
-    private final DateTimeFormatter encodingFormatter;
-    protected DateTimeFormatter titleStringFormatter;
+    private final DateTimeFormatter encodingFormatter = DateTimeFormat.forPattern("yyyyMMdd");
+    
+    private DateTimeFormatter titleStringFormatter;
     private String titleStringFormatNameOrPattern;
 
     
@@ -139,15 +153,13 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
             final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(type(), holder, LocalDate.class, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
 
-        encodingFormatter = DateTimeFormat.forPattern("yyyyMMdd");
-        
         String configuredNameOrPattern = getConfiguration().getString(CFG_FORMAT_KEY, "medium").toLowerCase().trim();
         updateTitleStringFormatter(configuredNameOrPattern);
     }
 
 
     private void updateTitleStringFormatter(String titleStringFormatNameOrPattern) {
-        titleStringFormatter = NAMED_FORMATTERS.get(titleStringFormatNameOrPattern);
+        titleStringFormatter = NAMED_TITLE_FORMATTERS.get(titleStringFormatNameOrPattern);
         if (titleStringFormatter == null) {
             titleStringFormatter = DateTimeFormat.forPattern(titleStringFormatNameOrPattern);
         }
@@ -161,24 +173,23 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
 
     @Override
     protected LocalDate doParse(final Object context, final String entry, final Localization localization) {
-        
-        updateTitleStringFormatterIfOverridden();
 
-        final String dateString = entry.trim();
-        final String str = dateString.toLowerCase();
-        if (str.equals("today") || str.equals("now")) {
-            return now();
-        } else if (dateString.startsWith("+")) {
-            return relativeDate(context == null ? now() : context, dateString, true);
-        } else if (dateString.startsWith("-")) {
-            return relativeDate(context == null ? now() : context, dateString, false);
+        updateTitleStringFormatterIfOverridden();
+        
+        LocalDate contextDate = (LocalDate) context;
+
+        final String dateString = entry.trim().toUpperCase();
+        if (dateString.startsWith("+") && contextDate != null) {
+            return JodaLocalDateUtil.relativeDate(contextDate, dateString, true);
+        } else if (dateString.startsWith("-")  && contextDate != null) {
+            return JodaLocalDateUtil.relativeDate(contextDate, dateString, false);
         } else {
-            return parseDate(dateString, context == null ? now() : context, localization);
+            return parseDate(dateString, contextDate, localization);
         }
     }
 
     private void updateTitleStringFormatterIfOverridden() {
-        final String overridePattern = OVERRIDE_PATTERN.get();
+        final String overridePattern = OVERRIDE_TITLE_PATTERN.get();
         if (overridePattern == null || 
             titleStringFormatNameOrPattern.equals(overridePattern)) {
             return;
@@ -188,78 +199,10 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
         updateTitleStringFormatter(overridePattern);
     }
 
-    private LocalDate parseDate(final String dateString, final Object original, final Localization localization) {
-        List<DateTimeFormatter> elements = formatsToTry(localization);
-        LocalDate parsedDate = parseDate(dateString, elements.iterator());
-        return setDate(parsedDate);
+    private LocalDate parseDate(final String dateStr, final Object original, final Localization localization) {
+        return JodaLocalDateUtil.parseDate(dateStr, localization, PARSE_FORMATTERS);
     }
-
-    private LocalDate parseDate(final String dateString, final Iterator<DateTimeFormatter> iterator) {
-        final DateTimeFormatter format = iterator.next();
-        try {
-            return format.parseLocalDate(dateString);
-        } catch (final IllegalArgumentException e) {
-            if (iterator.hasNext()) {
-                return parseDate(dateString, iterator);
-            } else {
-                throw new TextEntryParseException("Not recognised as a date: " + dateString);
-            }
-        }
-    }
-
-    private LocalDate relativeDate(final Object object, final String str, final boolean add) {
-        if (str.equals("")) {
-            return now();
-        }
-
-        try {
-            LocalDate date = (LocalDate) object;
-            final StringTokenizer st = new StringTokenizer(str.substring(1), " ");
-            while (st.hasMoreTokens()) {
-                final String token = st.nextToken();
-                date = relativeDate2(date, token, add);
-            }
-            return date;
-        } catch (final Exception e) {
-            return now();
-        }
-    }
-
-    private LocalDate relativeDate2(final LocalDate original, String str, final boolean add) {
-        int hours = 0;
-        int minutes = 0;
-        int days = 0;
-        int months = 0;
-        int years = 0;
-
-        if (str.endsWith("H")) {
-            str = str.substring(0, str.length() - 1);
-            hours = Integer.valueOf(str).intValue();
-        } else if (str.endsWith("M")) {
-            str = str.substring(0, str.length() - 1);
-            minutes = Integer.valueOf(str).intValue();
-        } else if (str.endsWith("w")) {
-            str = str.substring(0, str.length() - 1);
-            days = 7 * Integer.valueOf(str).intValue();
-        } else if (str.endsWith("y")) {
-            str = str.substring(0, str.length() - 1);
-            years = Integer.valueOf(str).intValue();
-        } else if (str.endsWith("m")) {
-            str = str.substring(0, str.length() - 1);
-            months = Integer.valueOf(str).intValue();
-        } else if (str.endsWith("d")) {
-            str = str.substring(0, str.length() - 1);
-            days = Integer.valueOf(str).intValue();
-        } else {
-            days = Integer.valueOf(str).intValue();
-        }
-
-        if (add) {
-            return add(original, years, months, days, hours, minutes);
-        } else {
-            return add(original, -years, -months, -days, -hours, -minutes);
-        }
-    }
+    
 
     // ///////////////////////////////////////////////////////////////////////////
     // TitleProvider
@@ -270,23 +213,20 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
         if (value == null) {
             return null;
         }
-        final LocalDate date = dateValue(value);
+        final LocalDate date = (LocalDate) value;
         DateTimeFormatter f = titleStringFormatter;
         if (localization != null) {
-            f = format(localization);
+            f = titleStringFormatter.withLocale(localization.getLocale());
         }
-        return titleString(f, date);
+        return JodaLocalDateUtil.titleString(f, date);
     }
 
     @Override
     public String titleStringWithMask(final Object value, final String usingMask) {
-        final LocalDate date = dateValue(value);
-        return titleString(new SimpleDateFormat(usingMask), date);
+        final LocalDate date = (LocalDate) value;
+        return JodaLocalDateUtil.titleString(DateTimeFormat.forPattern(usingMask), date);
     }
 
-    private String titleString(final DateTimeFormatter formatter, final LocalDate date) {
-        return date == null ? "" : formatter.print(date);
-    }
 
     // //////////////////////////////////////////////////////////////////
     // EncoderDecoder
@@ -294,7 +234,7 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
 
     @Override
     protected String doEncode(final Object object) {
-        final LocalDate date = dateValue(object);
+        final LocalDate date = (LocalDate) object;
         return encode(date);
     }
 
@@ -330,72 +270,11 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     }
 
 
-    // //////////////////////////////////////////////////////////////////
-    // temporal-specific stuff
-    // //////////////////////////////////////////////////////////////////
-
-    protected boolean isEmpty() {
-        return false;
-    }
-
-
-
-    
-    // //////////////////////////////////////////////////////////////////
-    // temporal-specific stuff
-    // //////////////////////////////////////////////////////////////////
-
-    protected DateTimeFormatter format(final Localization localization) {
-        return DateTimeFormat.forStyle("M-").withLocale(localization.getLocale());
-    }
-
-    protected List<DateTimeFormatter> formatsToTry(Localization localization) {
-        List<DateTimeFormatter> formats = Lists.newArrayList();
-        
-        formats.add(withLocale(DateTimeFormat.forStyle("L-"), localization));
-        formats.add(withLocale(DateTimeFormat.forStyle("M-"), localization));
-        formats.add(withLocale(DateTimeFormat.forStyle("S-"), localization));
-        formats.add(withLocale(DateTimeFormat.forPattern("yyyy-MM-dd"), localization));
-        formats.add(withLocale(DateTimeFormat.forPattern("yyyyMMdd"), localization));
-
-        return formats;
-    }
-
-
-    private static DateTimeFormatter withLocale(DateTimeFormatter formatter, Localization localization) {
-        if(localization != null) {
-            Locale locale2 = localization.getLocale();
-            formatter.withLocale(locale2);
-        }
-        return formatter;
-    }
-
-    // //////////////////////////////////////
-
-    protected LocalDate add(final LocalDate original, final int years, final int months, final int days, final int hours, final int minutes) {
-        if(hours != 0 || minutes != 0) {
-            throw new IllegalArgumentException("cannot add non-zero hours or minutes to a LocalDate");
-        }
-        return original.plusYears(years).plusMonths(months).plusDays(days);
-    }
-
-    protected LocalDate now() {
-        return new LocalDate();
-    }
-
-    protected LocalDate dateValue(final Object value) {
-        return (LocalDate) value;
-    }
-
-    protected LocalDate setDate(final LocalDate date) {
-        return date;
-    }
-
     // //////////////////////////////////////
     
     @Override
     public String toString() {
-        return "DateValueSemanticsProvider: " + titleStringFormatter;
+        return "JodaLocalDateValueSemanticsProvider: " + titleStringFormatter;
     }
 
 }
