@@ -34,6 +34,7 @@ import com.google.inject.Injector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
 
@@ -78,6 +79,9 @@ final class WebServerBootstrapper implements IsisBootstrapper {
         // TODO get and use the address
 
         jettyServer = new Server(port);
+        Connector[] connectors = jettyServer.getConnectors();
+        Connector connector = connectors[0];
+        connector.setHeaderBufferSize(8192);
         final WebAppContext context = new WebAppContext(SRC_MAIN_WEBAPP, webappContextPath);
 
         copyConfigurationPrimersIntoServletContext(context);
