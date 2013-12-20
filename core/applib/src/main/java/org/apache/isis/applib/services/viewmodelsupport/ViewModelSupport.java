@@ -16,6 +16,8 @@
  */
 package org.apache.isis.applib.services.viewmodelsupport;
 
+import java.util.Set;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 public interface ViewModelSupport {
@@ -30,6 +32,8 @@ public interface ViewModelSupport {
 
         @Programmatic
         public String asString();
+
+        public Set<String> keySet();
     }
     
     /**

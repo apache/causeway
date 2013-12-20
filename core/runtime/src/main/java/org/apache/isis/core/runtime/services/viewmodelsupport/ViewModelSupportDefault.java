@@ -17,7 +17,13 @@
 package org.apache.isis.core.runtime.services.viewmodelsupport;
 
 import java.nio.charset.Charset;
+import java.util.List;
+import java.util.Set;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.google.common.io.BaseEncoding;
 
 import org.dom4j.Document;
@@ -58,6 +64,20 @@ public class ViewModelSupportDefault implements ViewModelSupport {
         public String asString() {
             final String xmlStr = Dom4jUtil.asString(doc);
             return BaseEncoding.base64Url().encode(xmlStr.getBytes(Charset.forName("UTF-8")));
+        }
+
+        private static final Function<Element, String> ELEMENT_NAME = new Function<Element, String>(){
+            @Override
+            public String apply(final Element input) {
+                return input.getName();
+            }
+        };
+
+        @Override
+        public Set<String> keySet() {
+            Element element = doc.getRootElement();
+            List<Element> elements = element.elements();
+            return Sets.newLinkedHashSet(Iterables.transform(elements, ELEMENT_NAME));
         }
     }
     
