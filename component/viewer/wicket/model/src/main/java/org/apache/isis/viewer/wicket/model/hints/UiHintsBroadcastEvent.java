@@ -2,16 +2,13 @@ package org.apache.isis.viewer.wicket.model.hints;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-public class UiHintsBroadcastEvent
-{
-    private final AjaxRequestTarget target;
-    
-    public UiHintsBroadcastEvent(AjaxRequestTarget target) {
-        this.target = target;
-    }
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
-    public AjaxRequestTarget getTarget() {
-        return target;
+public class UiHintsBroadcastEvent extends UiHintsEventAbstract {
+    
+    public UiHintsBroadcastEvent(UiHintsEventAbstract ev) {
+        super(ev.getUiHintContainer(), ev.getTarget());
     }
+    
 }
 

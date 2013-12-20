@@ -41,7 +41,7 @@ public class IsisAjaxPagingNavigationLink extends AjaxPagingNavigationLink {
         final UiHintContainer uiHintContainer = getUiHintContainer();
         if(uiHintContainer != null) {
             uiHintContainer.setHint(component, "pageNumber", ""+pageable.getCurrentPage());
-            send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(target));
+            send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(uiHintContainer, target));
         }
     }
     

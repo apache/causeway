@@ -78,6 +78,8 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     private static final String ID_TABLE = "table";
     private static final String ID_ENTITY_ACTIONS = "entityActions";
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
+    
+    private static final String UIHINT_PAGE_NUMBER = "pageNumber";
 
     private static final Predicate<ObjectAction> BULK = Filters.asPredicate(ObjectAction.Filters.bulk());
     
@@ -85,11 +87,8 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
 
     public CollectionContentsAsAjaxTablePanel(final String id, final EntityCollectionModel model) {
         super(id, model);
-    }
-
-    @Override
-    protected void onInitialize() {
-        super.onInitialize();
+        // build eagerly rather than onInitialize...
+        // want to ensure that set sorting hints prior to pageNumber hint
         buildGui();
     }
 
@@ -119,17 +118,20 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         if(uiHintContainer == null) {
             return;
         }
-        final String pageNumber = uiHintContainer.getHint(dataTable, "pageNumber");
-        if(pageNumber != null) {
+        final String pageNumberStr = uiHintContainer.getHint(dataTable, UIHINT_PAGE_NUMBER);
+        if(pageNumberStr != null) {
             try {
-                long parseLong = Long.parseLong(pageNumber);
-                dataTable.setCurrentPage(parseLong);
+                long pageNumber = Long.parseLong(pageNumberStr);
+                if(pageNumber >= 0) {
+                    // dataTable is clever enough to deal with too-large numbers
+                    dataTable.setCurrentPage(pageNumber);
+                }
             } catch(Exception ex) {
                 // ignore.
             }
         }
         final long currentPage = dataTable.getCurrentPage();
-        uiHintContainer.setHint(dataTable, "pageNumber", ""+currentPage);
+        uiHintContainer.setHint(dataTable, UIHINT_PAGE_NUMBER, ""+currentPage);
     }
 
     private void addToggleboxColumnIfRequired(final List<IColumn<ObjectAdapter,String>> columns, List<ObjectAction> bulkActions) {

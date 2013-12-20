@@ -53,7 +53,7 @@ public class IsisAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBorder<
         if(uiHintContainer != null) {
             String hintKey = sortOrderName();
             uiHintContainer.setHint(dataTable, hintKey, sortProperty.toString());
-            send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(target));
+            send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(uiHintContainer, target));
         }
     }
 

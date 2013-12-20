@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
 import java.net.ResponseCache;
+import java.util.Set;
 
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
@@ -111,25 +112,31 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     private WebMarkupContainer addOrReplaceLinkWrapper(final EntityModel entityModel) {
         final ObjectAdapter adapter = entityModel.getObject();
 
-        final PageParameters pageParameters = entityModel.getPageParameters();
-        
-        final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
-        
         final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);
-        final AbstractLink link = createIconAndTitle(adapter, pageParameters, pageClass);
+        
+        final AbstractLink link = createIconAndTitle(adapter);
         entityLinkWrapper.addOrReplace(link);
         
         return entityLinkWrapper;
     }
 
-    private AbstractLink createIconAndTitle(final ObjectAdapter adapter, final PageParameters pageParameters, final Class<? extends Page> pageClass) {
-        final AbstractLink link = Links.newBookmarkablePageLinkWithHints(ID_ENTITY_LINK, pageParameters, pageClass);
+    private AbstractLink createIconAndTitle(final ObjectAdapter adapter) {
+        final AbstractLink link = createLinkWrapper();
         
         link.addOrReplace(this.label = newLabel(ID_ENTITY_TITLE));
         link.addOrReplace(this.image = newImage(ID_ENTITY_ICON, adapter));
         
-        link.add(new AttributeModifier("title", adapter.getSpecification().getSingularName()));
+        String entityTypeName = adapter.getSpecification().getSingularName();
+        link.add(new AttributeModifier("title", entityTypeName));
+        
         return link;
+    }
+
+    private AbstractLink createLinkWrapper() {
+        final PageParameters pageParameters = getModel().getPageParametersWithoutUiHints();
+        
+        final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
+        return Links.newBookmarkablePageLink(ID_ENTITY_LINK, pageParameters, pageClass);
     }
 
     protected Label newLabel(final String id) {
@@ -187,21 +194,6 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     }
 
     
-    // ///////////////////////////////////////////////////////////////////
-    // UI Hints
-    // ///////////////////////////////////////////////////////////////////
-    
-    /* (non-Javadoc)
-     * @see org.apache.wicket.Component#onEvent(org.apache.wicket.event.IEvent)
-     */
-    @Override
-    public void onEvent(IEvent<?> event) {
-        if(event.getPayload() instanceof UiHintsBroadcastEvent) {
-            UiHintsBroadcastEvent ev = (UiHintsBroadcastEvent) event.getPayload();
-            buildGui();
-            ev.getTarget().add(this);
-        }
-    }
     
     // ///////////////////////////////////////////////////////////////////
     // Convenience

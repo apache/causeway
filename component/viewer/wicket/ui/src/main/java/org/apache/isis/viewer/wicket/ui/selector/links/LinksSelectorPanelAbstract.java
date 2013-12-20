@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.selector.links;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +73,8 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
     private static final String ID_VIEW_LINK = "viewLink";
     private static final String ID_VIEW_ITEM = "viewItem";
     private static final String ID_VIEW_TITLE = "viewTitle";
+    
+    private static final String UIHINT_VIEW = "view";
 
     private final ComponentType componentType;
     private final String underlyingIdPrefix;
@@ -184,10 +187,10 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             LinksSelectorPanelAbstract<T> linksSelectorPanel = LinksSelectorPanelAbstract.this;
-                            UiHintContainer hintContainer = linksSelectorPanel.getUiHintContainer();
-                            if(hintContainer != null) {
-                                hintContainer.setHint(LinksSelectorPanelAbstract.this, "view", ""+underlyingViewNum);
-                                send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(target));
+                            UiHintContainer uiHintContainer = linksSelectorPanel.getUiHintContainer();
+                            if(uiHintContainer != null) {
+                                uiHintContainer.setHint(LinksSelectorPanelAbstract.this, UIHINT_VIEW, ""+underlyingViewNum);
+                                send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(uiHintContainer, target));
                             }
                             
                             final T dummyModel = dummyOf(model);
@@ -262,15 +265,22 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
     protected int determineView(final List<ComponentFactory> componentFactories, final IModel<?> model) {
         UiHintContainer hintContainer = getUiHintContainer();
         if(hintContainer != null) {
-            String hintValue = hintContainer.getHint(this, "view");
-            if(hintValue != null) {
-                return Integer.parseInt(hintValue);
+            String viewStr = hintContainer.getHint(this, UIHINT_VIEW);
+            if(viewStr != null) {
+                try {
+                    int view = Integer.parseInt(viewStr);
+                    if(view >= 0 && view < componentFactories.size()) {
+                        return view;
+                    }
+                } catch(NumberFormatException ex) {
+                    // ignore
+                }
             }
         }
 
         int initialFactory = determineInitialFactory(componentFactories, model);
         if(hintContainer != null) {
-            hintContainer.setHint(this, "view", ""+initialFactory);
+            hintContainer.setHint(this, UIHINT_VIEW, ""+initialFactory);
         }
         return initialFactory;
     }

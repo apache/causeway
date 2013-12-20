@@ -193,6 +193,10 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         return pageParameters;
     }
 
+    public PageParameters getPageParametersWithoutUiHints() {
+        return createPageParameters(getObject());
+    }
+
 
     static interface HintPageParameterSerializer {
         public void hintsToPageParameters(Map<String,String> hints, PageParameters pageParameters);
@@ -240,11 +244,11 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
                 memento.set(safeKey, value);
             }
             String serializedHints = memento.asString();
-            PageParameterNames.HINTS.addStringTo(pageParameters, serializedHints);
+            PageParameterNames.ANCHOR.addStringTo(pageParameters, serializedHints);
         }
 
         public void pageParametersToHints(final PageParameters pageParameters, Map<String,String> hints) {
-            String hintsStr = PageParameterNames.HINTS.getStringFrom(pageParameters);
+            String hintsStr = PageParameterNames.ANCHOR.getStringFrom(pageParameters);
             if(hintsStr != null) {
                 try {
                     Memento memento = new ViewModelSupportDefault().parse(hintsStr);

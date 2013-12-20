@@ -72,6 +72,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardLink;
+import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardPanel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
@@ -262,7 +263,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     private void addCopyLink() {
-        AjaxLink<ObjectAdapter> zClipCopyLink = new ZeroClipboardLink(ID_COPY_LINK, ".entityHeaderPanel a.entityUrlSource");
+        ZeroClipboardPanel zClipCopyLink = new ZeroClipboardPanel(ID_COPY_LINK);
         addOrReplace(zClipCopyLink);
     }
     
@@ -365,7 +366,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         Object payload = event.getPayload();
         if(payload instanceof UiHintsSetEvent) {
             UiHintsSetEvent setEv = (UiHintsSetEvent)payload;
-            UiHintsBroadcastEvent broadcastEv = new UiHintsBroadcastEvent(setEv.getTarget());
+            UiHintsBroadcastEvent broadcastEv = new UiHintsBroadcastEvent(setEv);
             send(this, Broadcast.BREADTH, broadcastEv);
         }
     }

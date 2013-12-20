@@ -59,12 +59,12 @@ public final class Links {
         return new BookmarkablePageLink<T>(linkId, pageClass, pageParameters);
     }
 
-    public static <T extends Page> AbstractLink newBookmarkablePageLinkWithHints(
+    public static <T extends Page> AbstractLink newBookmarkablePageLinkWithAnchor(
             final String linkId, final PageParameters pageParameters, final Class<T> pageClass) {
 
-        final String hints = PageParameterNames.HINTS.getStringFrom(pageParameters);
+        final String hints = PageParameterNames.ANCHOR.getStringFrom(pageParameters);
         if(hints != null) {
-            PageParameterNames.HINTS.removeFrom(pageParameters);
+            PageParameterNames.ANCHOR.removeFrom(pageParameters);
             return new BookmarkablePageLink<T>(linkId, pageClass, pageParameters) {
                 private static final long serialVersionUID = 1L;
 

@@ -43,7 +43,7 @@ public enum PageParameterNames {
     /**
      * Hints for the rendering of an entity.
      */
-    HINTS,
+    ANCHOR,
     
     /**
      * Owning type of an action.

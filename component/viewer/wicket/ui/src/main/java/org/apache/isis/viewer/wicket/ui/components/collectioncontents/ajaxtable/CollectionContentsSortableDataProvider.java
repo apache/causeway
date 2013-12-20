@@ -31,6 +31,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -80,13 +81,18 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
         final ObjectSpecification elementSpec = model.getTypeOfSpecification();
         
         final String sortPropertyId = sort.getProperty();
-        final ObjectAssociation sortProperty = elementSpec.getAssociation(sortPropertyId);
-        if(sortProperty == null) {
+        try {
+            final ObjectAssociation sortProperty = elementSpec.getAssociation(sortPropertyId);
+            if(sortProperty == null) {
+                return adapters;
+            }
+            
+            Ordering<ObjectAdapter> ordering = orderingBy(sortProperty, sort.isAscending());
+            return ordering.sortedCopy(adapters);
+        } catch(ObjectSpecificationException ex) {
+            // eg invalid propertyId
             return adapters;
         }
-
-        Ordering<ObjectAdapter> ordering = orderingBy(sortProperty, sort.isAscending());
-        return ordering.sortedCopy(adapters);
     }
 
     public static Ordering<ObjectAdapter> orderingBy(final ObjectAssociation sortProperty, final boolean ascending) {
