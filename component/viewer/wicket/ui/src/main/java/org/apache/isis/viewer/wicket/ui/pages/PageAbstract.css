@@ -103,6 +103,7 @@ colors
 }
 .headerContainer {
 	background: url("images/bg_header_brown.png") left top repeat;
+	height: 100px;
 }
 
 .headerContainer .links>span:first-child {
@@ -122,12 +123,44 @@ colors
 }
 
 #secondaryMenu {
-	width: 25%;
+    width: 25%;
+}
+
+#tertiaryMenu {
+    width: 8%;
+}
+#tertiaryMenu .imgLinks {
+	line-height: 30px;
+	font-size: 3em;
+	margin-right:20px;
+}
+
+#tertiaryMenu .imgLinks a {
+    background-image: url("copy-26.png"); 
+    background-position: right;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+#tertiaryMenu  a.copyLink:hover,
+#tertiaryMenu  a.copyLink.hover {
+    cursor: pointer;
+}
+
+#tertiaryMenu  a.copyLink:active,
+#tertiaryMenu  a.copyLink.active {
+    cursor: pointer;
+}
+
+
+#secondaryMenu,
+#tertiaryMenu {
 	display: inline-block;
 	float: right;
 	text-align: right;
     margin-right: 5px;
 }
+
 #header h1 {
 	margin: 10px 10px 10px 0px;
 	font-size: xx-large;
@@ -222,6 +255,8 @@ colors
     padding-left: 10px;
     height:40px;
     margin-left: 10px;
+    width: 73%;
+    float: left;
 }
 
 #applicationActions .menuh {
@@ -230,112 +265,112 @@ colors
 	z-index:501;
 }
 
-	#applicationActions .menuh ul.cssMenuItems {
-		line-height:30px;
-	}
-	
-	#applicationActions .cssMenuPanel .menuh a:link, 
-	#applicationActions .cssMenuPanel .menuh a:visited, 
-	#applicationActions .cssMenuPanel .menuh a:active, 
-	#applicationActions .cssMenuPanel .menuh p {
-		background-color: transparent;
-    	color: #FFFFFF;
-    	text-decoration: none;
-    	text-transform:uppercase;
-    	font-size:0.9em;
-    	font-weight:bold;
-	}
-	
-    #applicationActions .cssMenuPanel .menuh a.prototype span {
-	    color: #CCCC00;
-	    font-style: italic;
-	}
-	
-	
-	#applicationActions .cssMenuPanel .menuh li a:link, 
-	#applicationActions .cssMenuPanel .menuh li a:visited, 
-	#applicationActions .cssMenuPanel .menuh li a:active, 
-	#applicationActions .cssMenuPanel .menuh li p {
-		border-radius:4px 4px 0px 0px;
-    	-moz-border-radius:4px 4px 0px 0px;
-    	-webkit-border-radius:4px 4px 0px 0px;
-	}
-	
-	#applicationActions .cssMenuPanel .menuh li li a:link, 
-	#applicationActions .cssMenuPanel .menuh li li a:visited, 
-	#applicationActions .cssMenuPanel .menuh li li a:active, 
-	#applicationActions .cssMenuPanel .menuh li li p {
-		border-radius:0px;
-    	-moz-border-radius:0px;
-    	-webkit-border-radius:0px;
-		background-color: #20B5C2;
-	}
-	
-	#applicationActions .cssMenuPanel .menuh li li:last-child a:link, 
-	#applicationActions .cssMenuPanel .menuh li li:last-child a:visited, 
-	#applicationActions .cssMenuPanel .menuh li li:last-child a:active, 
-	#applicationActions .cssMenuPanel .menuh li li:last-child p {
-		border-radius:0px 0px 4px 4px;
-		-webkit-border-radius:0px 0px 4px 4px;
-		-moz-border-radius:0px 0px 4px 4px;
-		background-color: #20B5C2;
-	}
-	
-	#applicationActions .cssMenuPanel .menuh li li:first-child a:link, 
-	#applicationActions .cssMenuPanel .menuh li li:first-child a:visited, 
-	#applicationActions .cssMenuPanel .menuh li li:first-child a:active, 
-	#applicationActions .cssMenuPanel .menuh li li:first-child p {
-		border-radius:0px 4px 0px 0px;
-		-webkit-border-radius:0px 4px 0px 0px;
-		-moz-border-radius:0px 4px 0px 0px;
-		background-color: #20B5C2;
-	}
-	
-	#applicationActions .cssMenuPanel .menuh li li:first-child:last-child a:link, 
-	#applicationActions .cssMenuPanel .menuh li li:first-child:last-child a:visited, 
-	#applicationActions .cssMenuPanel .menuh li li:first-child:last-child a:active, 
-	#applicationActions .cssMenuPanel .menuh li li:first-child:last-child p {
-		border-radius:0px 4px 4px 4px;
-		-webkit-border-radius:0px 4px 4px 4px;
-		-moz-border-radius:0px 4px 4px 4px;
-		background-color: #20B5C2;
-	}
-	
-	
-	#applicationActions .menuh a, 
-	#applicationActions .menuh p {
-	    border: 0px solid #00477F;
-	    padding: 0px 1em 0px 1em;
-	    background-image:none !important;
-	}
+#applicationActions .menuh ul.cssMenuItems {
+	line-height:30px;
+}
 
-	#applicationActions .cssMenuPanel .menuh li:hover a, 
-	#applicationActions .cssMenuPanel .menuh li:hover p {
-		color: #FFFFFF;
-		background-color: #20B5C2;
-	}
-	
-	#applicationActions .cssMenuPanel .menuh a:hover, 
-	#applicationActions .cssMenuPanel .menuh p:hover {
-		color: #FFFFFF;
-		background-color: #20B5C2;
-	}
-	
-	#applicationActions .cssMenuPanel .menuh li li a:hover, 
-	#applicationActions .cssMenuPanel .menuh li li p:hover {
-		color: #FFFFFF;
-		background-color: #40C0CB !important;
-	}
-	
-	#applicationActions ul.cssSubMenuItemsPanel {
-		min-width:220px;
-	}
-	
-    #applicationActions ul.cssSubMenuItemsPanel li.cssSubMenuItem p.disabled {
-        color: lightgray;
-        /*background-color: #F0EFEA;*/
-        
-    } 
+#applicationActions .cssMenuPanel .menuh a:link, 
+#applicationActions .cssMenuPanel .menuh a:visited, 
+#applicationActions .cssMenuPanel .menuh a:active, 
+#applicationActions .cssMenuPanel .menuh p {
+	background-color: transparent;
+   	color: #FFFFFF;
+   	text-decoration: none;
+   	text-transform:uppercase;
+   	font-size:0.9em;
+   	font-weight:bold;
+}
+
+   #applicationActions .cssMenuPanel .menuh a.prototype span {
+    color: #CCCC00;
+    font-style: italic;
+}
+
+
+#applicationActions .cssMenuPanel .menuh li a:link, 
+#applicationActions .cssMenuPanel .menuh li a:visited, 
+#applicationActions .cssMenuPanel .menuh li a:active, 
+#applicationActions .cssMenuPanel .menuh li p {
+	border-radius:4px 4px 0px 0px;
+   	-moz-border-radius:4px 4px 0px 0px;
+   	-webkit-border-radius:4px 4px 0px 0px;
+}
+
+#applicationActions .cssMenuPanel .menuh li li a:link, 
+#applicationActions .cssMenuPanel .menuh li li a:visited, 
+#applicationActions .cssMenuPanel .menuh li li a:active, 
+#applicationActions .cssMenuPanel .menuh li li p {
+	border-radius:0px;
+   	-moz-border-radius:0px;
+   	-webkit-border-radius:0px;
+	background-color: #20B5C2;
+}
+
+#applicationActions .cssMenuPanel .menuh li li:last-child a:link, 
+#applicationActions .cssMenuPanel .menuh li li:last-child a:visited, 
+#applicationActions .cssMenuPanel .menuh li li:last-child a:active, 
+#applicationActions .cssMenuPanel .menuh li li:last-child p {
+	border-radius:0px 0px 4px 4px;
+	-webkit-border-radius:0px 0px 4px 4px;
+	-moz-border-radius:0px 0px 4px 4px;
+	background-color: #20B5C2;
+}
+
+#applicationActions .cssMenuPanel .menuh li li:first-child a:link, 
+#applicationActions .cssMenuPanel .menuh li li:first-child a:visited, 
+#applicationActions .cssMenuPanel .menuh li li:first-child a:active, 
+#applicationActions .cssMenuPanel .menuh li li:first-child p {
+	border-radius:0px 4px 0px 0px;
+	-webkit-border-radius:0px 4px 0px 0px;
+	-moz-border-radius:0px 4px 0px 0px;
+	background-color: #20B5C2;
+}
+
+#applicationActions .cssMenuPanel .menuh li li:first-child:last-child a:link, 
+#applicationActions .cssMenuPanel .menuh li li:first-child:last-child a:visited, 
+#applicationActions .cssMenuPanel .menuh li li:first-child:last-child a:active, 
+#applicationActions .cssMenuPanel .menuh li li:first-child:last-child p {
+	border-radius:0px 4px 4px 4px;
+	-webkit-border-radius:0px 4px 4px 4px;
+	-moz-border-radius:0px 4px 4px 4px;
+	background-color: #20B5C2;
+}
+
+
+#applicationActions .menuh a, 
+#applicationActions .menuh p {
+    border: 0px solid #00477F;
+    padding: 0px 1em 0px 1em;
+    background-image:none !important;
+}
+
+#applicationActions .cssMenuPanel .menuh li:hover a, 
+#applicationActions .cssMenuPanel .menuh li:hover p {
+	color: #FFFFFF;
+	background-color: #20B5C2;
+}
+
+#applicationActions .cssMenuPanel .menuh a:hover, 
+#applicationActions .cssMenuPanel .menuh p:hover {
+	color: #FFFFFF;
+	background-color: #20B5C2;
+}
+
+#applicationActions .cssMenuPanel .menuh li li a:hover, 
+#applicationActions .cssMenuPanel .menuh li li p:hover {
+	color: #FFFFFF;
+	background-color: #40C0CB !important;
+}
+
+#applicationActions ul.cssSubMenuItemsPanel {
+	min-width:220px;
+}
+
+   #applicationActions ul.cssSubMenuItemsPanel li.cssSubMenuItem p.disabled {
+       color: lightgray;
+       /*background-color: #F0EFEA;*/
+       
+   } 
 
 
 /**************** ELEMENTS **************/
@@ -917,3 +952,17 @@ div.wicket-mask-dark {
 }
 
 
+
+/*
+.copyLink {
+	font-family: arial, helvetica, sans-serif;
+	
+	background-color: transparent;
+	color: #FFFFFF;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-size: 0.9em;
+	font-weight: bold;
+	float:right;
+}
+*/

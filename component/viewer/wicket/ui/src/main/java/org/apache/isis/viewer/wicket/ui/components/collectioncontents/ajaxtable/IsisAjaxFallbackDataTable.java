@@ -35,23 +35,34 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Generics;
 
-public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S>
-{
+import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
+
+public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> implements UiHintPathSignificant {
     private static final long serialVersionUID = 1L;
+    private final ISortableDataProvider<T, S> dataProvider;
 
     public IsisAjaxFallbackDataTable(final String id, final List<? extends IColumn<T, S>> columns,
         final ISortableDataProvider<T, S> dataProvider, final int rowsPerPage)
     {
         super(id, columns, dataProvider, rowsPerPage);
+        this.dataProvider = dataProvider;
         setOutputMarkupId(true);
         setVersioned(false);
-        addTopToolbar(new IsisAjaxFallbackHeadersToolbar<S>(this, dataProvider));
-        addBottomToolbar(new AjaxNavigationToolbar(this));
-        addBottomToolbar(new NoRecordsToolbar(this));
-        //setItemReuseStrategy(new ReuseIfModelsEqualStrategy());
         setItemReuseStrategy(new PreserveModelReuseStrategy());
     }
 
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        buildGui();
+    }
+    
+    private void buildGui() {
+        addTopToolbar(new IsisAjaxFallbackHeadersToolbar<S>(this, this.dataProvider));
+        addBottomToolbar(new IsisAjaxNavigationToolbar(this));
+        addBottomToolbar(new NoRecordsToolbar(this));
+    }
+    
     @Override
     protected Item<T> newRowItem(final String id, final int index, final IModel<T> model)
     {
@@ -122,4 +133,6 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S>
         }
 
     }
+
+    
 }

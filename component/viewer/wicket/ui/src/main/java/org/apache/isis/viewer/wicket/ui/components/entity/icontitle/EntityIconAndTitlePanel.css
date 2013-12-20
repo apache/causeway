@@ -17,3 +17,20 @@
  *  under the License.
  */
 
+.entityIconAndTitlePanel a.zclip-copy {
+    background-image: url("../org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel/copy-26.png"); 
+    background-position: right;
+    background-repeat: no-repeat;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.entityIconAndTitlePanel a.zclip-copy:hover,
+.entityIconAndTitlePanel a.zclip-copy.hover {
+	cursor: pointer;
+}
+
+.entityIconAndTitlePanel a.zclip-copy:active,
+.entityIconAndTitlePanel a.zclip-copy.active {
+    /* not required */
+}

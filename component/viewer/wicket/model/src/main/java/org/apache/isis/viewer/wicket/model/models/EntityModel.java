@@ -21,13 +21,20 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Set;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.PrependingStringBuffer;
+import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.services.viewmodelsupport.ViewModelSupport.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -41,7 +48,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.runtime.services.viewmodelsupport.ViewModelSupportDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
@@ -53,7 +63,7 @@ import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
  * So that the model is {@link Serializable}, the {@link ObjectAdapter} is
  * stored as a {@link ObjectAdapterMemento}.
  */
-public class EntityModel extends BookmarkableModel<ObjectAdapter> {
+public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiHintContainer {
 
     private static final long serialVersionUID = 1L;
     
@@ -79,8 +89,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         } else {
             // don't do anything; instead the page should be redirected back to
             // an EntityPage so that the underlying EntityModel that contains
-            // the
-            // memento for the transient ObjectAdapter can be accessed.
+            // the memento for the transient ObjectAdapter can be accessed.
         }
         return pageParameters;
     }
@@ -139,6 +148,8 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
      */
     private ConcurrencyException concurrencyException;
 
+    private final HintPageParameterSerializer hintPageParameterSerializer = new HintPageParameterSerializerDirect();
+
     // //////////////////////////////////////////////////////////
     // constructors
     // //////////////////////////////////////////////////////////
@@ -149,8 +160,8 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
     public EntityModel(final PageParameters pageParameters) {
         this(ObjectAdapterMemento.createPersistent(rootOidFrom(pageParameters)));
+        hintPageParameterSerializer.pageParametersToHints(pageParameters, this.hints);
     }
-
     public EntityModel(final ObjectAdapter adapter) {
         this(ObjectAdapterMemento.createOrNull(adapter));
         setObject(adapter);
@@ -158,7 +169,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
     public EntityModel(final ObjectAdapterMemento adapterMemento) {
         this.adapterMemento = adapterMemento;
-        pendingModel = new PendingModel(this);
+        this.pendingModel = new PendingModel(this);
     }
 
     private static String oidStr(final PageParameters pageParameters) {
@@ -174,10 +185,85 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     // BookmarkableModel
     //////////////////////////////////////////////////
 
+    
     @Override
     public PageParameters getPageParameters() {
-        return createPageParameters(getObject());
+        PageParameters pageParameters = createPageParameters(getObject());
+        hintPageParameterSerializer.hintsToPageParameters(hints, pageParameters);
+        return pageParameters;
     }
+
+
+    static interface HintPageParameterSerializer {
+        public void hintsToPageParameters(Map<String,String> hints, PageParameters pageParameters);
+        public void pageParametersToHints(final PageParameters pageParameters, Map<String,String> hints);
+    }
+    
+    static class HintPageParameterSerializerDirect implements HintPageParameterSerializer, Serializable {
+
+        private static final long serialVersionUID = 1L;
+
+        public void hintsToPageParameters(Map<String,String> hints, PageParameters pageParameters) {
+            Set<String> hintKeys = hints.keySet();
+            for (String key : hintKeys) {
+                String value = hints.get(key);
+                pageParameters.add("hint-" + key, value);
+            }
+        }
+
+        @Override
+        public void pageParametersToHints(final PageParameters pageParameters, Map<String,String> hints) {
+            Set<String> namedKeys = pageParameters.getNamedKeys();
+            for (String namedKey : namedKeys) {
+                if(namedKey.startsWith("hint-")) {
+                    String value = pageParameters.get(namedKey).toString(null);
+                    String key = namedKey.substring(5);
+                    hints.put(key, value); // may replace
+                }
+            }
+        }
+    }
+    
+    static class HintPageParameterSerializerUsingViewModelSupport implements HintPageParameterSerializer, Serializable {
+        private static final long serialVersionUID = 1L;
+
+        public void hintsToPageParameters(Map<String,String> hints, PageParameters pageParameters) {
+            if(hints.isEmpty()) {
+                return;
+            }
+            ViewModelSupportDefault vms = new ViewModelSupportDefault();
+            Memento memento = vms.create();
+            Set<String> hintKeys = hints.keySet();
+            for (String key : hintKeys) {
+                String safeKey = key.replace(':', '_');
+                Serializable value = hints.get(key);
+                memento.set(safeKey, value);
+            }
+            String serializedHints = memento.asString();
+            PageParameterNames.HINTS.addStringTo(pageParameters, serializedHints);
+        }
+
+        public void pageParametersToHints(final PageParameters pageParameters, Map<String,String> hints) {
+            String hintsStr = PageParameterNames.HINTS.getStringFrom(pageParameters);
+            if(hintsStr != null) {
+                try {
+                    Memento memento = new ViewModelSupportDefault().parse(hintsStr);
+                    Set<String> keys = memento.keySet();
+                    for (String safeKey : keys) {
+                        String value = memento.get(safeKey, String.class);
+                        String key = safeKey.replace('_', ':');
+                        hints.put(key, value);
+                    }
+                } catch(RuntimeException ex) {
+                    // fail gracefully, ie ignore.
+                    System.err.println(ex);
+                }
+            }
+        }
+    }
+    
+
+
 
     @Override
     public String getTitle() {
@@ -386,6 +472,60 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     }
 
     
+    
+    // //////////////////////////////////////////////////////////
+    // Hint support
+    // //////////////////////////////////////////////////////////
+    
+    private final Map<String, String> hints = Maps.newTreeMap();
+    
+    public String getHint(final Component component, final String key) {
+        if(component == null) {
+            return null;
+        }
+        String hintKey = hintKey(component, key);
+        String value = hints.get(hintKey);
+        System.err.println("GET " + hintKey + "=" + value) ;
+        return value;
+    }
+    
+    @Override
+    public void setHint(Component component, String key, String value) {
+        if(component == null) {
+            return;
+        }
+        String hintKey = hintKey(component, key);
+        System.err.println("PUT " + hintKey + "=" + value) ;
+        hints.put(hintKey, value);
+    }
+
+    
+    private static String hintKey(Component component, String key) {
+        return hintPathFor(component) + "-" + key;
+    }
+
+    private static String hintPathFor(Component component)
+    {
+        return Strings.afterFirstPathComponent(fullHintPathFor(component), Component.PATH_SEPARATOR);
+    }
+
+    private static String fullHintPathFor(Component component)
+    {
+        final PrependingStringBuffer buffer = new PrependingStringBuffer(32);
+        for (Component c = component; c != null; c = c.getParent())
+        {
+            if(c instanceof UiHintPathSignificant) {
+                if (buffer.length() > 0)
+                {
+                    buffer.prepend(Component.PATH_SEPARATOR);
+                }
+                buffer.prepend(c.getId());
+            }
+        }
+        return buffer.toString();
+    }
+
+    
     // //////////////////////////////////////////////////////////
     // concurrency exceptions
     // //////////////////////////////////////////////////////////
@@ -562,6 +702,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
+
 
 
 

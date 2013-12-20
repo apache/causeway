@@ -19,28 +19,48 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
+import java.net.ResponseCache;
+
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.Page;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.hints.UiHintsBroadcastEvent;
+import org.apache.isis.viewer.wicket.model.hints.UiHintsSetEvent;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityActionLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardLink;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.Links;
 
 /**
@@ -49,7 +69,6 @@ import org.apache.isis.viewer.wicket.ui.util.Links;
  */
 public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
 
-
     private static final long serialVersionUID = 1L;
 
     private static final String ID_ENTITY_LINK_WRAPPER = "entityLinkWrapper";
@@ -57,8 +76,9 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     private static final String ID_ENTITY_TITLE = "entityTitle";
     private static final String ID_ENTITY_ICON = "entityImage";
 
-
+    @SuppressWarnings("unused")
     private Label label;
+    @SuppressWarnings("unused")
     private Image image;
 
     public EntityIconAndTitlePanel(final String id, final EntityModel entityModel) {
@@ -80,6 +100,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
 
     private void buildGui() {
         addOrReplaceLinkWrapper();
+        setOutputMarkupId(true);
     }
 
     private void addOrReplaceLinkWrapper() {
@@ -90,23 +111,25 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     private WebMarkupContainer addOrReplaceLinkWrapper(final EntityModel entityModel) {
         final ObjectAdapter adapter = entityModel.getObject();
 
-        final PageParameters pageParameters = EntityModel.createPageParameters(adapter);
+        final PageParameters pageParameters = entityModel.getPageParameters();
+        
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
         
-        final AbstractLink link = newLink(ID_ENTITY_LINK, pageClass, pageParameters);
+        final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);
+        final AbstractLink link = createIconAndTitle(adapter, pageParameters, pageClass);
+        entityLinkWrapper.addOrReplace(link);
+        
+        return entityLinkWrapper;
+    }
+
+    private AbstractLink createIconAndTitle(final ObjectAdapter adapter, final PageParameters pageParameters, final Class<? extends Page> pageClass) {
+        final AbstractLink link = Links.newBookmarkablePageLinkWithHints(ID_ENTITY_LINK, pageParameters, pageClass);
         
         link.addOrReplace(this.label = newLabel(ID_ENTITY_TITLE));
         link.addOrReplace(this.image = newImage(ID_ENTITY_ICON, adapter));
         
         link.add(new AttributeModifier("title", adapter.getSpecification().getSingularName()));
-        
-        final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);
-        entityLinkWrapper.addOrReplace(link);
-        return entityLinkWrapper;
-    }
-
-    protected AbstractLink newLink(final String linkId, final Class<? extends Page> pageClass, final PageParameters pageParameters) {
-        return Links.newBookmarkablePageLink(linkId, pageParameters, pageClass);
+        return link;
     }
 
     protected Label newLabel(final String id) {
@@ -137,10 +160,9 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     }
 
     protected Image newImage(final String id, final ObjectAdapter adapter) {
-        Image image;
         final ResourceReference imageResource = imageCache.resourceReferenceFor(adapter);
          
-        image = new Image(id, imageResource) {
+        final Image image = new Image(id, imageResource) {
             private static final long serialVersionUID = 1L;
             @Override
             protected boolean shouldAddAntiCacheParameter() {
@@ -164,6 +186,22 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
         return maxLength <= 3 ? "" : str.substring(0, maxLength - 3) + "...";
     }
 
+    
+    // ///////////////////////////////////////////////////////////////////
+    // UI Hints
+    // ///////////////////////////////////////////////////////////////////
+    
+    /* (non-Javadoc)
+     * @see org.apache.wicket.Component#onEvent(org.apache.wicket.event.IEvent)
+     */
+    @Override
+    public void onEvent(IEvent<?> event) {
+        if(event.getPayload() instanceof UiHintsBroadcastEvent) {
+            UiHintsBroadcastEvent ev = (UiHintsBroadcastEvent) event.getPayload();
+            buildGui();
+            ev.getTarget().add(this);
+        }
+    }
     
     // ///////////////////////////////////////////////////////////////////
     // Convenience

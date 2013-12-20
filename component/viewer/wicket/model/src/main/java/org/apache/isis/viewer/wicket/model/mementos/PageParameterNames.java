@@ -41,6 +41,11 @@ public enum PageParameterNames {
     OBJECT_OID,
     
     /**
+     * Hints for the rendering of an entity.
+     */
+    HINTS,
+    
+    /**
      * Owning type of an action.
      * 
      * <p>
@@ -123,6 +128,13 @@ public enum PageParameterNames {
 
     public void addEnumTo(final PageParameters pageParameters, final Enum<?> someEnum) {
         addStringTo(pageParameters, someEnum.name());
+    }
+
+    /**
+     * @param pageParameters
+     */
+    public void removeFrom(PageParameters pageParameters) {
+        pageParameters.remove(this.toString());
     }
 
 

@@ -32,6 +32,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -42,6 +43,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
+import org.apache.isis.viewer.wicket.model.hints.UiHintsSetEvent;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -53,7 +57,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
-public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends PanelAbstract<T> {
+public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends PanelAbstract<T> implements UiHintPathSignificant {
 
     private static final long serialVersionUID = 1L;
 
@@ -70,6 +74,7 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
     private static final String ID_VIEW_TITLE = "viewTitle";
 
     private final ComponentType componentType;
+    private final String underlyingIdPrefix;
     
     private ComponentFactory selectedComponentFactory;
     protected Component selectedComponent;
@@ -81,13 +86,21 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
      */
     protected WebMarkupContainer additionalLinks;
 
+
     public LinksSelectorPanelAbstract(final String id, final String underlyingIdPrefix, final T model, final ComponentFactory factory) {
         super(id, model);
-
-        componentType = factory.getComponentType();
-
-        addAdditionalLinks(model);
-        addUnderlyingViews(underlyingIdPrefix, model, factory);
+        this.underlyingIdPrefix = underlyingIdPrefix;
+        this.componentType = factory.getComponentType();
+    }
+    
+    /**
+     * Build UI only after added to parent.
+     */
+    public void onInitialize() {
+        super.onInitialize();
+        ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactoryElseFailFast(getComponentType(), getModel());
+        addAdditionalLinks(getModel());
+        addUnderlyingViews(underlyingIdPrefix, getModel(), componentFactory);
     }
 
     protected void addAdditionalLinks(final T model) {
@@ -111,11 +124,11 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
         additionalLinks = new AdditionalLinksPanel(ID_ADDITIONAL_LINKS, links);
         markupContainer.addOrReplace(additionalLinks);
     }
-
+    
     private void addUnderlyingViews(final String underlyingIdPrefix, final T model, final ComponentFactory factory) {
         final List<ComponentFactory> componentFactories = findOtherComponentFactories(model, factory);
 
-        final int selected = determineInitialFactory(componentFactories, model);
+        final int selected = determineView(componentFactories, model);
 
         final LinksSelectorPanelAbstract<T> selectorPanel = LinksSelectorPanelAbstract.this;
         
@@ -170,6 +183,12 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                         private static final long serialVersionUID = 1L;
                         @Override
                         public void onClick(AjaxRequestTarget target) {
+                            LinksSelectorPanelAbstract<T> linksSelectorPanel = LinksSelectorPanelAbstract.this;
+                            UiHintContainer hintContainer = linksSelectorPanel.getUiHintContainer();
+                            if(hintContainer != null) {
+                                hintContainer.setHint(LinksSelectorPanelAbstract.this, "view", ""+underlyingViewNum);
+                                send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(target));
+                            }
                             
                             final T dummyModel = dummyOf(model);
                             for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
@@ -181,6 +200,7 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                                 applyCssVisibility(component, isSelected);
                                 component.setDefaultModel(isSelected? model: dummyModel);
                             }
+                            
                             selectorPanel.selectedComponentFactory = componentFactory;
                             selectorPanel.selectedComponent = underlyingViews[underlyingViewNum];
                             selectorPanel.onSelect(target);
@@ -216,6 +236,8 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
         }
     }
 
+
+
     /**
      * Overrideable hook.
      */
@@ -237,6 +259,23 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
         component.add(modifier);
     }
 
+    protected int determineView(final List<ComponentFactory> componentFactories, final IModel<?> model) {
+        UiHintContainer hintContainer = getUiHintContainer();
+        if(hintContainer != null) {
+            String hintValue = hintContainer.getHint(this, "view");
+            if(hintValue != null) {
+                return Integer.parseInt(hintValue);
+            }
+        }
+
+        int initialFactory = determineInitialFactory(componentFactories, model);
+        if(hintContainer != null) {
+            hintContainer.setHint(this, "view", ""+initialFactory);
+        }
+        return initialFactory;
+    }
+
+
     protected abstract int determineInitialFactory(final List<ComponentFactory> componentFactories, final IModel<?> model);
 
     private List<ComponentFactory> findOtherComponentFactories(final T model, final ComponentFactory ignoreFactory) {
@@ -254,10 +293,12 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
         return otherFactories;
     }
 
+    
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
         PanelUtil.renderHead(response, LinksSelectorPanelAbstract.class);
     }
+
 
 }

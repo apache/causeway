@@ -28,24 +28,23 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.apache.wicket.Application;
-import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.apache.wicket.markup.head.filter.FilteredHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.slf4j.Logger;
@@ -55,12 +54,13 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.hints.UiHintsBroadcastEvent;
+import org.apache.isis.viewer.wicket.model.hints.UiHintsSetEvent;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
@@ -71,6 +71,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
+import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardLink;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
@@ -99,12 +100,19 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     public static final String ID_MENU_LINK = "menuLink";
     public static final String ID_LOGOUT_LINK = "logoutLink";
     public static final String ID_ABOUT_LINK = "aboutLink";
+    private static final String ID_COPY_LINK = "copyLink";
+
 
     private static final JavaScriptResourceReference JQUERY_JGROWL_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.jgrowl.js");
     /**
      * @see https://github.com/brandonaaron/livequery
      */
     private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
+    /**
+     * @see https://github.com/patricklodder/jquery-zclip
+     * @see http://steamdev.com/zclip/
+     */
+    private static final JavaScriptResourceReference JQUERY_ZCLIP_JS = new JavaScriptResourceReference(ZeroClipboardLink.class, "jquery.zclip.js");
     private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
     
     //private static final JavaScriptResourceReference BOOTSTRAP_JS = new JavaScriptResourceReference(PageAbstract.class, "bootstrap/js/bootstrap.min.js");
@@ -153,6 +161,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             addUserName();
             addLogoutLink();
             addAboutLink();
+            addCopyLink();
             
             add(new Label(ID_PAGE_TITLE, title != null? title: applicationName));
             
@@ -199,6 +208,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
+        response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_ZCLIP_JS));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_ISIS_WICKET_VIEWER_JS));
         
         final String feedbackMsg = JGrowlUtil.asJGrowlCalls(getMessageBroker());
@@ -251,6 +261,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         });
     }
 
+    private void addCopyLink() {
+        AjaxLink<ObjectAdapter> zClipCopyLink = new ZeroClipboardLink(ID_COPY_LINK, ".entityHeaderPanel a.entityUrlSource");
+        addOrReplace(zClipCopyLink);
+    }
+    
 
     /**
      * As provided in the {@link #PageAbstract(ComponentType) constructor}.
@@ -340,6 +355,23 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     
     // ///////////////////////////////////////////////////////////////////
+    // UI Hint
+    // ///////////////////////////////////////////////////////////////////
+
+    /**
+     * Propogate any received events down to all child components.
+     */
+    public void onEvent(org.apache.wicket.event.IEvent<?> event) {
+        Object payload = event.getPayload();
+        if(payload instanceof UiHintsSetEvent) {
+            UiHintsSetEvent setEv = (UiHintsSetEvent)payload;
+            UiHintsBroadcastEvent broadcastEv = new UiHintsBroadcastEvent(setEv.getTarget());
+            send(this, Broadcast.BREADTH, broadcastEv);
+        }
+    }
+    
+
+    // ///////////////////////////////////////////////////////////////////
     // Convenience
     // ///////////////////////////////////////////////////////////////////
 
@@ -371,5 +403,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     protected MessageBroker getMessageBroker() {
         return IsisContext.getMessageBroker();
     }
+
+
 
 }

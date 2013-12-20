@@ -77,11 +77,15 @@
 * Twitter Bootstrap, licensed under ASL v2 [2]
 * JGrowl (JQuery plugin), licensed under MIT license [3]
 * LiveQuery (JQuery plugin), licensed under MIT license [4]
+* ZClip (JQuery plugin), licensed under MIT license [5]
+* ZeroClipboard library, licensed under MIT license [6]
 
 [1] http://jquery.org/license/
 [2] http://getbootstrap.com/2.3.2/
 [3] https://github.com/stanlemon/jGrowl/blob/master/jquery.jgrowl.js
-[4] https://github.com/brandonaaron/livequery#license</license.additional-notes>        
+[4] https://github.com/brandonaaron/livequery#license
+[5] http://www.steamdev.com/zclip/
+[6] https://github.com/zeroclipboard/ZeroClipboard</license.additional-notes>        
     </properties>
 
     <scm>

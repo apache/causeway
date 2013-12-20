@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.Persistor;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -78,6 +79,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
         super(id, model);
         this.componentType = ComponentType.lookup(id);
     }
+
 
     /**
      * Will be null if created using {@link #PanelAbstract(String, IModel)}.
@@ -138,6 +140,14 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
         PanelUtil.renderHead(response, this.getClass());
     }
 
+    
+    // ///////////////////////////////////////////////////////////////////
+    // Hint support
+    // ///////////////////////////////////////////////////////////////////
+
+    public UiHintContainer getUiHintContainer() {
+        return UiHintContainer.Util.hintContainerOf(this);
+    }
 
 
     // ///////////////////////////////////////////////////////////////////

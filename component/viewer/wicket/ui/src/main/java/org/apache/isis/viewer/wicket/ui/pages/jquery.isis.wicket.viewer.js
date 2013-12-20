@@ -68,6 +68,16 @@ $(document).ready(function() {
             }); 
         }); 
     
+    
+    
+//    $('a#zclip-copy').zclip({
+//        path:'/wicket/wicket/resource/org.apache.isis.viewer.wicket.ui.pages.PageAbstract/ZeroClipboard.swf',
+//        copy:$('a#zclip-source').attr("href")
+//    });
+//
+//    $('a#zclip-copy').zclip('show');
+
+    
 });
 
 /**

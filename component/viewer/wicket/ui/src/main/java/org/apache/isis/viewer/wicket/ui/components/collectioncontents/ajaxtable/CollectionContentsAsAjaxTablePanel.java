@@ -29,7 +29,6 @@ import com.google.inject.Inject;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -51,6 +50,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
@@ -61,8 +62,8 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterPropertyColumn;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterTitleColumn;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -70,9 +71,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
-public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider, ActionPromptProvider {
-
-    private static final Predicate<ObjectAction> BULK = Filters.asPredicate(ObjectAction.Filters.bulk());
+public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider, ActionPromptProvider, UiHintPathSignificant {
 
     private static final long serialVersionUID = 1L;
 
@@ -80,11 +79,17 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     private static final String ID_ENTITY_ACTIONS = "entityActions";
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
 
+    private static final Predicate<ObjectAction> BULK = Filters.asPredicate(ObjectAction.Filters.bulk());
+    
     private DataTable<ObjectAdapter,String> dataTable;
 
     public CollectionContentsAsAjaxTablePanel(final String id, final EntityCollectionModel model) {
         super(id, model);
+    }
 
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
         buildGui();
     }
 
@@ -101,13 +106,32 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
 
         final SortableDataProvider<ObjectAdapter,String> dataProvider = new CollectionContentsSortableDataProvider(model);
         dataTable = new IsisAjaxFallbackDataTable<ObjectAdapter,String>(ID_TABLE, columns, dataProvider, model.getPageSize());
-
+        
         addActionPromptModalWindow();
         buildEntityActionsGui(bulkActions, this);
 
         addOrReplace(dataTable);
+        configureHintsFor(dataTable);
     }
-    
+
+    private void configureHintsFor(DataTable<ObjectAdapter, String> dataTable) {
+        UiHintContainer uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) {
+            return;
+        }
+        final String pageNumber = uiHintContainer.getHint(dataTable, "pageNumber");
+        if(pageNumber != null) {
+            try {
+                long parseLong = Long.parseLong(pageNumber);
+                dataTable.setCurrentPage(parseLong);
+            } catch(Exception ex) {
+                // ignore.
+            }
+        }
+        final long currentPage = dataTable.getCurrentPage();
+        uiHintContainer.setHint(dataTable, "pageNumber", ""+currentPage);
+    }
+
     private void addToggleboxColumnIfRequired(final List<IColumn<ObjectAdapter,String>> columns, List<ObjectAction> bulkActions) {
         final EntityCollectionModel entityCollectionModel = getModel();
         if(bulkActions.isEmpty() || entityCollectionModel.isParented()) {
@@ -193,23 +217,6 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     }
 
     
-    public boolean isExploring() {
-        return IsisContext.getDeploymentType().isExploring();
-    }
-    public boolean isPrototyping() {
-        return IsisContext.getDeploymentType().isPrototyping();
-    }
-
-    /**
-     * Protected so can be overridden in testing if required.
-     */
-    protected boolean isDebugMode() {
-        // TODO: need to figure out how to switch into debug mode;
-        // probably call a Debug toggle page, and stuff into
-        // Session.getMetaData()
-        return true;
-    }
-
 
     private void addTitleColumn(final List<IColumn<ObjectAdapter,String>> columns, ObjectAdapterMemento parentAdapterMementoIfAny, int maxTitleParented, int maxTitleStandalone) {
         int maxTitleLength = getModel().isParented()? maxTitleParented: maxTitleStandalone;
@@ -286,6 +293,26 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     private void addActionPromptModalWindow() {
         this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW); 
         addOrReplace(actionPromptModalWindow);
+    }
+
+
+    // //////////////////////////////////////
+    
+    public boolean isExploring() {
+        return IsisContext.getDeploymentType().isExploring();
+    }
+    public boolean isPrototyping() {
+        return IsisContext.getDeploymentType().isPrototyping();
+    }
+
+    /**
+     * Protected so can be overridden in testing if required.
+     */
+    protected boolean isDebugMode() {
+        // TODO: need to figure out how to switch into debug mode;
+        // probably call a Debug toggle page, and stuff into
+        // Session.getMetaData()
+        return true;
     }
 
 

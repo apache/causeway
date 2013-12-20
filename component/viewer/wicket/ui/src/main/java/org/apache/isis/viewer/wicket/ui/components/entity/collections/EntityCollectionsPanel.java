@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPathSignificantWebMarkupContainer;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -89,7 +90,7 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
 
         for (final ObjectAssociation association : associations) {
 
-            final WebMarkupContainer collectionRvContainer = new WebMarkupContainer(collectionRv.newChildId());
+            final WebMarkupContainer collectionRvContainer = new UiHintPathSignificantWebMarkupContainer(collectionRv.newChildId());
             collectionRv.add(collectionRvContainer);
             
             addCollectionToForm(entityModel, association, collectionRvContainer);

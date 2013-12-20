@@ -30,6 +30,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -37,7 +38,6 @@ import org.apache.isis.viewer.wicket.ui.components.collection.CollectionCountPro
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.entity.collections.EntityCollectionsPanel;
 import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
 
 /**
@@ -62,6 +62,7 @@ public class CollectionContentsLinksSelectorPanel extends LinksSelectorPanelAbst
         return model.asDummy();
     }
 
+    
     /**
      * return the index of {@link CollectionContentsAsUnresolvedPanelFactory unresolved panel} if present and not eager loading;
      * else the index of {@link CollectionContentsAsAjaxTablePanelFactory ajax table} if present,
@@ -133,6 +134,10 @@ public class CollectionContentsLinksSelectorPanel extends LinksSelectorPanelAbst
      * Yeah, agreed, it's a little bit hacky doing it this way, because it bakes
      * in knowledge that this component is created, somehow, by a parent {@link CollectionPanel}.
      * Perhaps it could be refactored to use a more general purpose observer pattern?
+     * 
+     * <p>
+     * In fact, I've since discovered that Wicket has an event bus, which is used by the 
+     * {@link UiHintContainer hinting mechanism}.  So this ought to be relatively easy to do.
      */
     protected void onSelect(AjaxRequestTarget target) {
         super.onSelect(target);

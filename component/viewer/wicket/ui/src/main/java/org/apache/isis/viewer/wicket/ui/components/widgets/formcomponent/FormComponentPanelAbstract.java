@@ -34,6 +34,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.Persistor;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -107,6 +108,27 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
      */
     public void permanentlyHide(final MarkupContainer container, final String... ids) {
         Components.permanentlyHide(container, ids);
+    }
+
+    
+    // ///////////////////////////////////////////////////////////////////
+    // Hint support
+    // ///////////////////////////////////////////////////////////////////
+
+    public UiHintContainer getHintContainer() {
+        return hintContainerOf(this);
+    }
+
+    private UiHintContainer hintContainerOf(Component component) {
+        if(component == null) {
+            return null;
+        }
+        IModel<?> model = component.getDefaultModel();
+        if(model instanceof UiHintContainer) {
+            return (UiHintContainer) model;
+        }
+        // otherwise, go up the UI component hierarchy
+        return hintContainerOf(getParent()); 
     }
 
     // ///////////////////////////////////////////////////////////////////

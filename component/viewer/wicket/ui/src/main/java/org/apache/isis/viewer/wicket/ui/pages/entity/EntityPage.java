@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -87,7 +88,12 @@ public class EntityPage extends PageAbstract {
     private EntityPage(PageParameters pageParameters, EntityModel entityModel, String titleString) {
         super(pageParameters, ApplicationActions.INCLUDE, titleString, ComponentType.ENTITY);
         this.model = entityModel;
-        addChildComponents(model);
+        //try {
+        //    UiHintContainer.CURRENT.set(entityModel);
+            addChildComponents(model);
+        //} finally {
+        //    UiHintContainer.CURRENT.set(null);
+        //}
         
         final ObjectAndAction objectAndAction =lookupHomePageAction();
         final ActionModel actionModel = ActionModel.create(objectAndAction.objectAdapter, objectAndAction.action);

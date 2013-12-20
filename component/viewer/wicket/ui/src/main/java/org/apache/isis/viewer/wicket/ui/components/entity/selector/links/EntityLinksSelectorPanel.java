@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -52,6 +53,12 @@ public class EntityLinksSelectorPanel extends LinksSelectorPanelAbstract<EntityM
     @Override
     protected int determineInitialFactory(List<ComponentFactory> componentFactories, IModel<?> model) {
         return 0;
+    }
+
+    @Override
+    public UiHintContainer getUiHintContainer() {
+        // disables hinting by this component
+        return null;
     }
 
 }

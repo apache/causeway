@@ -131,20 +131,10 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
 
                 item.add(header);
                 item.setRenderBodyOnly(true);
+                Component label = new Label("label");
                 
-                Component label;
-                //Component checkBox;
-                //if(column instanceof ObjectAdapterToggleboxColumn) {
-                    label = new Label("label");
-                //    checkBox = column.getHeader("checkbox");
-                //    label.setVisible(false);
-                //} else {
-                    label = column.getHeader("label");
-                //    checkBox = new CheckBox("checkbox");
-                //    checkBox.setVisible(false);
-                // }
+                label = column.getHeader("label");
                 header.add(label);
-                //header.add(checkBox);
             }
         };
         add(headers);

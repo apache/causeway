@@ -61,4 +61,5 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
         add(new JarManifestPanel(ID_MANIFEST_ATTRIBUTES, jarManifestModel));
     }
 
+
 }

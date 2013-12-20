@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
@@ -37,7 +36,6 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -46,13 +44,14 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  */
 public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implements ActionPromptProvider {
 
+
     private static final long serialVersionUID = 1L;
 
     private static final String ID_COLLECTION = "collection";
     private static final String ID_FEEDBACK = "feedback";
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
 
-    private final Component collectionContents;
+    private Component collectionContents;
 
     private String collectionName;
     private Label label;
@@ -77,7 +76,15 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
         
         List<LinkAndLabel> entityActions = EntityActionUtil.entityActions(entityModel, otma, this);
         collectionModel.addEntityActions(entityActions);
+    }
+    
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        buildGui();
+    }
 
+    private void buildGui() {
         final WebMarkupContainer markupContainer = new WebMarkupContainer(ID_COLLECTION);
         collectionContents = getComponentFactoryRegistry().addOrReplaceComponent(markupContainer, ComponentType.COLLECTION_CONTENTS, getModel());
 

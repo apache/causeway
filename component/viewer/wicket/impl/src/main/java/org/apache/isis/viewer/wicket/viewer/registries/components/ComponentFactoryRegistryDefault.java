@@ -36,6 +36,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -100,6 +101,7 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
     // Public API
     // ///////////////////////////////////////////////////////
 
+    
     @Override
     public Component addOrReplaceComponent(final MarkupContainer markupContainer, final ComponentType componentType, final IModel<?> model) {
         final Component component = createComponent(componentType, model);

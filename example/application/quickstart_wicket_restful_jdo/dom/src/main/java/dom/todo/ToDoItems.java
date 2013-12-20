@@ -228,7 +228,7 @@ public class ToDoItems {
         
         container.persist(toDoItem);
         container.flush();
-        container.informUser("new todo item created!");
+
         return toDoItem;
     }
     
