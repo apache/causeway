@@ -17,7 +17,6 @@
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
 import org.apache.wicket.ajax.attributes.IAjaxCallListener;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackHeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
@@ -25,7 +24,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.hints.UiHintsSetEvent;
 
 
 /**
@@ -35,10 +33,12 @@ public class IsisAjaxFallbackHeadersToolbar<S> extends IsisAjaxHeadersToolbar<S>
 {
     private static final long serialVersionUID = 1L;
     private final ISortStateLocator<S> stateLocator;
+    private IsisAjaxFallbackDataTable<?, S> table;
 
-    public IsisAjaxFallbackHeadersToolbar(final DataTable<?, S> table, final ISortStateLocator<S> stateLocator)
+    public IsisAjaxFallbackHeadersToolbar(final IsisAjaxFallbackDataTable<?, S> table, final ISortStateLocator<S> stateLocator)
     {
         super(table, stateLocator);
+        this.table = table;
         table.setOutputMarkupId(true);
         this.stateLocator = stateLocator;
     }
@@ -46,30 +46,15 @@ public class IsisAjaxFallbackHeadersToolbar<S> extends IsisAjaxHeadersToolbar<S>
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        final UiHintContainer uiHintContainer = getUiHintContainer();
-        if(uiHintContainer != null) {
-            for (SortOrder sortOrder : SortOrder.values()) {
-                String property = uiHintContainer.getHint(getTable(), sortOrder.name());
-                if(property != null) {
-                    // bit hacky... how know this is safe?
-                    S propertyS = (S) property;
-                    stateLocator.getSortState().setPropertySortOrder(propertyS, sortOrder);
-                }
-            }
-        }
-    }
-    
-    public UiHintContainer getUiHintContainer() {
-        return UiHintContainer.Util.hintContainerOf(getTable());
     }
 
-
+    // //////////////////////////////////////
 
     @Override
     protected WebMarkupContainer newSortableHeader(final String borderId, final S property,
         final ISortStateLocator<S> locator)
     {
-        return new IsisAjaxFallbackOrderByBorder<S>(borderId, getTable(), property, locator, getAjaxCallListener());
+        return new IsisAjaxFallbackOrderByBorder<S>(borderId, table, property, locator, getAjaxCallListener());
     }
 
     /**
@@ -81,4 +66,26 @@ public class IsisAjaxFallbackHeadersToolbar<S> extends IsisAjaxHeadersToolbar<S>
     {
         return null;
     }
+    
+    // //////////////////////////////////////
+
+    void honourSortOrderHints() {
+        final UiHintContainer uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) {
+            return;
+        } 
+        for (SortOrder sortOrder : SortOrder.values()) {
+            String property = uiHintContainer.getHint(table, sortOrder.name());
+            if(property != null) {
+                // bit hacky... how know this cast is safe?
+                S propertyS = (S) property;
+                stateLocator.getSortState().setPropertySortOrder(propertyS, sortOrder);
+            }
+        }
+    }
+    
+    public UiHintContainer getUiHintContainer() {
+        return UiHintContainer.Util.hintContainerOf(table);
+    }
+
 }

@@ -79,16 +79,17 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     private static final String ID_ENTITY_ACTIONS = "entityActions";
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     
-    private static final String UIHINT_PAGE_NUMBER = "pageNumber";
-
     private static final Predicate<ObjectAction> BULK = Filters.asPredicate(ObjectAction.Filters.bulk());
     
-    private DataTable<ObjectAdapter,String> dataTable;
+    private IsisAjaxFallbackDataTable<ObjectAdapter,String> dataTable;
 
     public CollectionContentsAsAjaxTablePanel(final String id, final EntityCollectionModel model) {
         super(id, model);
-        // build eagerly rather than onInitialize...
-        // want to ensure that set sorting hints prior to pageNumber hint
+    }
+    
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
         buildGui();
     }
 
@@ -110,28 +111,7 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         buildEntityActionsGui(bulkActions, this);
 
         addOrReplace(dataTable);
-        configureHintsFor(dataTable);
-    }
-
-    private void configureHintsFor(DataTable<ObjectAdapter, String> dataTable) {
-        UiHintContainer uiHintContainer = getUiHintContainer();
-        if(uiHintContainer == null) {
-            return;
-        }
-        final String pageNumberStr = uiHintContainer.getHint(dataTable, UIHINT_PAGE_NUMBER);
-        if(pageNumberStr != null) {
-            try {
-                long pageNumber = Long.parseLong(pageNumberStr);
-                if(pageNumber >= 0) {
-                    // dataTable is clever enough to deal with too-large numbers
-                    dataTable.setCurrentPage(pageNumber);
-                }
-            } catch(Exception ex) {
-                // ignore.
-            }
-        }
-        final long currentPage = dataTable.getCurrentPage();
-        uiHintContainer.setHint(dataTable, UIHINT_PAGE_NUMBER, ""+currentPage);
+        dataTable.honourHints();
     }
 
     private void addToggleboxColumnIfRequired(final List<IColumn<ObjectAdapter,String>> columns, List<ObjectAction> bulkActions) {
@@ -228,6 +208,11 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     private void addPropertyColumnsIfRequired(final List<IColumn<ObjectAdapter,String>> columns) {
         final ObjectSpecification typeOfSpec = getModel().getTypeOfSpecification();
 
+        final Where whereContext = 
+                getModel().isParented()
+                    ? Where.PARENTED_TABLES
+                    : Where.STANDALONE_TABLES;
+        
         final ObjectSpecification parentSpecIfAny = 
                 getModel().isParented() 
                     ? getModel().getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK).getSpecification() 
@@ -236,8 +221,9 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         @SuppressWarnings("unchecked")
         final Filter<ObjectAssociation> filter = Filters.and(
                 ObjectAssociation.Filters.PROPERTIES, 
-                ObjectAssociation.Filters.staticallyVisible(getModel().isParented()? Where.PARENTED_TABLES: Where.STANDALONE_TABLES),
+                ObjectAssociation.Filters.staticallyVisible(whereContext),
                 associationDoesNotReferenceParent(parentSpecIfAny));
+        
         final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(Contributed.INCLUDED, filter);
         for (final ObjectAssociation property : propertyList) {
             final ColumnAbstract<ObjectAdapter> nopc = createObjectAdapterPropertyColumn(property);

@@ -57,6 +57,15 @@ public class CollectionContentsLinksSelectorPanel extends LinksSelectorPanelAbst
         super(id, ComponentType.COLLECTION_CONTENTS.toString(), model, factory);
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract#onInitialize()
+     */
+    @Override
+    public void onInitialize() {
+        super.onInitialize();
+        applyCssVisibility(additionalLinks, selectedComponent instanceof CollectionCountProvider);
+    }
+    
     @Override
     protected EntityCollectionModel dummyOf(EntityCollectionModel model) {
         return model.asDummy();
@@ -145,9 +154,12 @@ public class CollectionContentsLinksSelectorPanel extends LinksSelectorPanelAbst
         while(component != null) {
             if(component instanceof CollectionPanel) {
                 CollectionPanel collectionPanel = (CollectionPanel) component;
-                final boolean expanded = collectionPanel.onSelect(target);
+                boolean hasCount = collectionPanel.hasCount();
+                if(hasCount) {
+                    collectionPanel.updateLabel(target);
+                }
                 if(additionalLinks != null) {
-                    applyCssVisibility(additionalLinks, expanded);
+                    applyCssVisibility(additionalLinks, hasCount);
                 }
                 return;
             }

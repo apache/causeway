@@ -22,7 +22,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
@@ -35,11 +38,19 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Generics;
 
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
+import org.apache.isis.viewer.wicket.model.hints.UiHintsSetEvent;
 
 public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> implements UiHintPathSignificant {
+    
     private static final long serialVersionUID = 1L;
+    
+    static final String UIHINT_PAGE_NUMBER = "pageNumber";
+
     private final ISortableDataProvider<T, S> dataProvider;
+
+    private IsisAjaxFallbackHeadersToolbar<S> headersToolbar;
 
     public IsisAjaxFallbackDataTable(final String id, final List<? extends IColumn<T, S>> columns,
         final ISortableDataProvider<T, S> dataProvider, final int rowsPerPage)
@@ -58,7 +69,8 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> implements 
     }
     
     private void buildGui() {
-        addTopToolbar(new IsisAjaxFallbackHeadersToolbar<S>(this, this.dataProvider));
+        headersToolbar = new IsisAjaxFallbackHeadersToolbar<S>(this, this.dataProvider);
+        addTopToolbar(headersToolbar);
         addBottomToolbar(new IsisAjaxNavigationToolbar(this));
         addBottomToolbar(new NoRecordsToolbar(this));
     }
@@ -113,14 +125,8 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> implements 
                     final IModel<T> model = newModels.next();
                     final Item<T> oldItem = modelToItem.get(model);
 
-                    final IModel<T> model2;
-                    if (oldItem == null) {
-                        model2 = model;
-                    } else {
-                        model2 = oldItem.getModel();
-                    }
-                    return factory.newItem(index++, 
-                            model2);
+                    final IModel<T> model2 = oldItem != null ? oldItem.getModel() : model;
+                    return factory.newItem(index++, model2);
                 }
 
                 @Override
@@ -132,6 +138,62 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> implements 
             };
         }
 
+    }
+
+    public void honourHints() {
+        UiHintContainer uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) {
+            return;
+        }
+        
+        headersToolbar.honourSortOrderHints();
+        
+        honourPageNumberHint(uiHintContainer);
+    }
+
+    private void honourPageNumberHint(final UiHintContainer uiHintContainer) {
+        final String pageNumberStr = uiHintContainer.getHint(this, UIHINT_PAGE_NUMBER);
+        if(pageNumberStr != null) {
+            try {
+                long pageNumber = Long.parseLong(pageNumberStr);
+                if(pageNumber >= 0) {
+                    // dataTable is clever enough to deal with too-large numbers
+                    this.setCurrentPage(pageNumber);
+                }
+            } catch(Exception ex) {
+                // ignore.
+            }
+        }
+        uiHintContainer.setHint(this, UIHINT_PAGE_NUMBER, ""+getCurrentPage());
+        // don't broadcast (no AjaxRequestTarget, still configuring initial setup)
+    }
+
+    public void setPageNumberHintAndBroadcast(AjaxRequestTarget target) {
+        final UiHintContainer uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) {
+            return;
+        } 
+        uiHintContainer.setHint(this, IsisAjaxFallbackDataTable.UIHINT_PAGE_NUMBER, ""+getCurrentPage());
+        send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(uiHintContainer, target));
+    }
+
+    public void setSortOrderHintAndBroadcast(SortOrder order, String property, AjaxRequestTarget target) {
+        final UiHintContainer uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) {
+            return;
+        }
+
+        // first clear all SortOrder hints...
+        for (SortOrder eachSortOrder : SortOrder.values()) {
+            uiHintContainer.clearHint(this, eachSortOrder.name());
+        }
+        // .. then set this one
+        uiHintContainer.setHint(this, order.name(), property);
+        send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(uiHintContainer, target));
+    }
+
+    private UiHintContainer getUiHintContainer() {
+        return UiHintContainer.Util.hintContainerOf(this);
     }
 
     

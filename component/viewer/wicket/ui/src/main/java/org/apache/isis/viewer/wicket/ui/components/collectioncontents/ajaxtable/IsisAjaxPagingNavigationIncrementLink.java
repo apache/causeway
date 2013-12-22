@@ -28,21 +28,20 @@ import org.apache.isis.viewer.wicket.model.hints.UiHintsSetEvent;
 public class IsisAjaxPagingNavigationIncrementLink extends AjaxPagingNavigationIncrementLink {
 
     private static final long serialVersionUID = 1L;
+    
+    private final IsisAjaxFallbackDataTable<?, ?> dataTable;
     private final Component component;
 
     public IsisAjaxPagingNavigationIncrementLink(String id, IPageable pageable, int increment) {
         super(id, pageable, increment);
+        dataTable = (IsisAjaxFallbackDataTable<?, ?>) pageable;
         component = pageable instanceof Component ? (Component) pageable : null;
     }
 
     @Override
     public void onClick(AjaxRequestTarget target) {
         super.onClick(target);
-        final UiHintContainer uiHintContainer = getUiHintContainer();
-        if(uiHintContainer != null) {
-            uiHintContainer.setHint(component, "pageNumber", ""+pageable.getCurrentPage());
-            send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(uiHintContainer, target));
-        }
+        dataTable.setPageNumberHintAndBroadcast(target);
     }
     
     public UiHintContainer getUiHintContainer() {

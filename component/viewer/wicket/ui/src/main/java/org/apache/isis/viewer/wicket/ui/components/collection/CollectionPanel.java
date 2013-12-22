@@ -99,17 +99,20 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
     	return this.label;
     }
 
+    public void updateLabel(AjaxRequestTarget target) {
+        target.add(label);
+    }
+
     /**
      * Returns true if a collection count is available from the rendered component 
      * (ie an eagerly rendered/expanded view).
      */
-    public boolean onSelect(AjaxRequestTarget target) {
+    public boolean hasCount() {
         if(label == null) {
             return false;
         }
         final Integer count = getCount();
         label.setDefaultModelObject(labelTextFor(count));
-        target.add(label);
         return count != null;
     }
 

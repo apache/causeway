@@ -25,6 +25,8 @@ public interface UiHintContainer {
     
     void setHint(Component component, String key, String value);
 
+    void clearHint(Component component, String key);
+
     public static class Util {
         private Util(){}
         public static UiHintContainer hintContainerOf(Component component) {

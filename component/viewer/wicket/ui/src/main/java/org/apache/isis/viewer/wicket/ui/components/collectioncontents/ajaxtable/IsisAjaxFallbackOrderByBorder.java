@@ -33,11 +33,11 @@ public class IsisAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBorder<
     private static final long serialVersionUID = 1L;
     
     private final T sortProperty;
-    private final DataTable<?, ?> dataTable;
+    private final IsisAjaxFallbackDataTable<?, ?> dataTable;
 
     private final ISortStateLocator<T> stateLocator;
     
-    public IsisAjaxFallbackOrderByBorder(String id, DataTable<?, ?> dataTable, T sortProperty, ISortStateLocator<T> stateLocator, IAjaxCallListener ajaxCallListener) {
+    public IsisAjaxFallbackOrderByBorder(String id, IsisAjaxFallbackDataTable<?, ?> dataTable, T sortProperty, ISortStateLocator<T> stateLocator, IAjaxCallListener ajaxCallListener) {
         super(id, sortProperty, stateLocator, ajaxCallListener);
         this.dataTable = dataTable;
         this.stateLocator = stateLocator;
@@ -50,25 +50,23 @@ public class IsisAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBorder<
         target.add(dataTable);
 
         final UiHintContainer uiHintContainer = getUiHintContainer();
-        if(uiHintContainer != null) {
-            String hintKey = sortOrderName();
-            uiHintContainer.setHint(dataTable, hintKey, sortProperty.toString());
-            send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(uiHintContainer, target));
+        if(uiHintContainer == null) {
+            return;
         }
-    }
-
-    private String sortOrderName() {
+        
         final ISortState<T> state = stateLocator.getSortState();
         final SortOrder order = state.getPropertySortOrder(sortProperty);
-        return order.name();
+        
+        dataTable.setSortOrderHintAndBroadcast(order, sortProperty.toString(), target);
+        dataTable.setPageNumberHintAndBroadcast(target);
     }
 
     @Override
     protected void onSortChanged()
     {
         super.onSortChanged();
-        dataTable.setCurrentPage(0);
-        
+        // UI hint & event broadcast in onAjaxClick
+        dataTable.setCurrentPage(0); 
     }
     
     public UiHintContainer getUiHintContainer() {

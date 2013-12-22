@@ -19,30 +19,26 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationLink;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.hints.UiHintsSetEvent;
 
 public class IsisAjaxPagingNavigationLink extends AjaxPagingNavigationLink {
 
     private static final long serialVersionUID = 1L;
+    private final IsisAjaxFallbackDataTable<?, ?> dataTable;
     private final Component component;
 
     public IsisAjaxPagingNavigationLink(String id, IPageable pageable, long pageNumber) {
         super(id, pageable, pageNumber);
+        dataTable = (IsisAjaxFallbackDataTable<?, ?>) pageable;
         component = pageable instanceof Component ? (Component) pageable : null;
     }
 
     @Override
     public void onClick(AjaxRequestTarget target) {
         super.onClick(target);
-        final UiHintContainer uiHintContainer = getUiHintContainer();
-        if(uiHintContainer != null) {
-            uiHintContainer.setHint(component, "pageNumber", ""+pageable.getCurrentPage());
-            send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(uiHintContainer, target));
-        }
+        dataTable.setPageNumberHintAndBroadcast(target);
     }
     
     public UiHintContainer getUiHintContainer() {

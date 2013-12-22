@@ -52,6 +52,7 @@ import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
+import org.apache.isis.viewer.wicket.ui.components.collection.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -131,7 +132,7 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
     private void addUnderlyingViews(final String underlyingIdPrefix, final T model, final ComponentFactory factory) {
         final List<ComponentFactory> componentFactories = findOtherComponentFactories(model, factory);
 
-        final int selected = determineView(componentFactories, model);
+        final int selected = honourViewHintElseDefault(componentFactories, model);
 
         final LinksSelectorPanelAbstract<T> selectorPanel = LinksSelectorPanelAbstract.this;
         
@@ -187,11 +188,7 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             LinksSelectorPanelAbstract<T> linksSelectorPanel = LinksSelectorPanelAbstract.this;
-                            UiHintContainer uiHintContainer = linksSelectorPanel.getUiHintContainer();
-                            if(uiHintContainer != null) {
-                                uiHintContainer.setHint(LinksSelectorPanelAbstract.this, UIHINT_VIEW, ""+underlyingViewNum);
-                                send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(uiHintContainer, target));
-                            }
+                            linksSelectorPanel.setViewHintAndBroadcast(underlyingViewNum, target);
                             
                             final T dummyModel = dummyOf(model);
                             for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
@@ -241,6 +238,15 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
 
 
 
+    protected void setViewHintAndBroadcast(int viewNum, AjaxRequestTarget target) {
+        final UiHintContainer uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) {
+            return;
+        }
+        uiHintContainer.setHint(LinksSelectorPanelAbstract.this, UIHINT_VIEW, ""+viewNum);
+        send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(uiHintContainer, target));
+    }
+
     /**
      * Overrideable hook.
      */
@@ -254,6 +260,9 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
     protected abstract T dummyOf(T model);
 
     protected static void applyCssVisibility(final Component component, final boolean visible) {
+        if(component == null) {
+            return;
+        }
         final AttributeModifier modifier =  
                 visible 
                     ? new AttributeModifier("class", String.valueOf(component.getMarkupAttributes().get("class")).replaceFirst(INVISIBLE_CLASS, "")) 
@@ -262,8 +271,9 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
         component.add(modifier);
     }
 
-    protected int determineView(final List<ComponentFactory> componentFactories, final IModel<?> model) {
-        UiHintContainer hintContainer = getUiHintContainer();
+    protected int honourViewHintElseDefault(final List<ComponentFactory> componentFactories, final IModel<?> model) {
+        // honour hints ...
+        final UiHintContainer hintContainer = getUiHintContainer();
         if(hintContainer != null) {
             String viewStr = hintContainer.getHint(this, UIHINT_VIEW);
             if(viewStr != null) {
@@ -278,9 +288,11 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
             }
         }
 
+        // ... else default
         int initialFactory = determineInitialFactory(componentFactories, model);
         if(hintContainer != null) {
             hintContainer.setHint(this, UIHINT_VIEW, ""+initialFactory);
+            // don't broadcast (no AjaxRequestTarget, still configuring initial setup)
         }
         return initialFactory;
     }

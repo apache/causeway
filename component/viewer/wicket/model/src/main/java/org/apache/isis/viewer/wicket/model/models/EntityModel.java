@@ -499,8 +499,22 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
             return;
         }
         String hintKey = hintKey(component, key);
-        System.err.println("PUT " + hintKey + "=" + value) ;
-        hints.put(hintKey, value);
+        if(value != null) {
+            System.err.println("PUT " + hintKey + "=" + value) ;
+            hints.put(hintKey, value);
+        } else {
+            clearHint(component, hintKey);
+        }
+    }
+
+    @Override
+    public void clearHint(Component component, String key) {
+        if(component == null) {
+            return;
+        }
+        String hintKey = hintKey(component, key);
+        System.err.println("CLEAR " + hintKey) ;
+        hints.remove(hintKey);
     }
 
     
