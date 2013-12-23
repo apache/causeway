@@ -317,7 +317,6 @@ public class ObjectAdapterMemento implements Serializable {
         return objectSpecId;
     }
 
-
     /**
      * Analogous to {@link List#contains(Object)}, but does not perform
      * {@link ConcurrencyChecking concurrency checking} of the OID.

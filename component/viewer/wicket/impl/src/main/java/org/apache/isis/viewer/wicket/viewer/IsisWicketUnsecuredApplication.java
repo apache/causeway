@@ -75,7 +75,7 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjec
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
 
-public class IsisWicketUnsecuredApplication extends WebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider, BookmarkedPagesModelProvider {
+public class IsisWicketUnsecuredApplication extends WebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -312,11 +312,6 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
             final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
             cast.setAuthenticationSessionProvider(this);
         }
-    }
-
-    @Override
-    public BookmarkedPagesModel getBookmarkedPagesModel() {
-        return bookmarkedPagesModel;
     }
 
 }

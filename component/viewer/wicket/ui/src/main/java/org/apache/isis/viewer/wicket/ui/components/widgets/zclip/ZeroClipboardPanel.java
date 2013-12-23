@@ -31,8 +31,6 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
 import org.apache.isis.viewer.wicket.ui.util.Links;
 
 public class ZeroClipboardPanel extends PanelAbstract<IModel<Void>> {
@@ -52,6 +50,9 @@ public class ZeroClipboardPanel extends PanelAbstract<IModel<Void>> {
     @Override
     protected void onInitialize() {
         super.onInitialize();
+        
+
+        
         if(copyLink == null) {
             copyLink = new ZeroClipboardLink(ID_COPY_LINK, "#subscribingLink");
             addOrReplace(copyLink);

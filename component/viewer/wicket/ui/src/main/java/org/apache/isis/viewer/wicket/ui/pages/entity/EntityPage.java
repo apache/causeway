@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.ui.pages.entity;
 import java.util.List;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -42,6 +43,8 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
 /**
@@ -88,18 +91,18 @@ public class EntityPage extends PageAbstract {
     private EntityPage(PageParameters pageParameters, EntityModel entityModel, String titleString) {
         super(pageParameters, ApplicationActions.INCLUDE, titleString, ComponentType.ENTITY);
         this.model = entityModel;
-        //try {
-        //    UiHintContainer.CURRENT.set(entityModel);
-            addChildComponents(model);
-        //} finally {
-        //    UiHintContainer.CURRENT.set(null);
-        //}
+        addChildComponents(model);
         
         final ObjectAndAction objectAndAction =lookupHomePageAction();
         final ActionModel actionModel = ActionModel.create(objectAndAction.objectAdapter, objectAndAction.action);
         
         bookmarkPage(model);
         addBookmarkedPages();
+        
+        final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
+        final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
+        
+        breadcrumbModel.visited(entityModel);
     }
 
     private static class ObjectAndAction {

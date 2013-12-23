@@ -71,6 +71,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardLink;
 import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardPanel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
@@ -102,6 +103,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     public static final String ID_LOGOUT_LINK = "logoutLink";
     public static final String ID_ABOUT_LINK = "aboutLink";
     private static final String ID_COPY_LINK = "copyLink";
+    private static final String ID_BREADCRUMBS = "breadcrumbs";
 
 
     private static final JavaScriptResourceReference JQUERY_JGROWL_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.jgrowl.js");
@@ -155,6 +157,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     
     public PageAbstract(final PageParameters pageParameters, ApplicationActions applicationActions, final String title, final ComponentType... childComponentIds) {
         try {
+            // for breadcrumbs support
+            getSession().bind();
+            
             addApplicationActions(applicationActions);
             this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
             this.pageParameters = pageParameters;
@@ -162,6 +167,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             addUserName();
             addLogoutLink();
             addAboutLink();
+            addBreadcrumbs();
             addCopyLink();
             
             add(new Label(ID_PAGE_TITLE, title != null? title: applicationName));
@@ -187,8 +193,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
         }
     }
-    
-
 
     protected ExceptionModel recognizeException(Exception ex) {
         List<ExceptionRecognizer> exceptionRecognizers;
@@ -226,7 +230,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         }
     }
 
-
     private void addHomePageLinkAndApplicationName() {
         // this is a bit hacky, but it'll do...
         ExternalLink homePageLink = new ExternalLink(ID_HOME_PAGE_LINK, "/wicket/");
@@ -262,6 +265,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         });
     }
 
+    private void addBreadcrumbs() {
+        BreadcrumbPanel breadcrumbPanel = new BreadcrumbPanel(ID_BREADCRUMBS);
+        addOrReplace(breadcrumbPanel);
+    }
+    
     private void addCopyLink() {
         ZeroClipboardPanel zClipCopyLink = new ZeroClipboardPanel(ID_COPY_LINK);
         addOrReplace(zClipCopyLink);
@@ -334,8 +342,8 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     private BookmarkedPagesModel getBookmarkedPagesModel() {
-        BookmarkedPagesModelProvider application = (BookmarkedPagesModelProvider) getApplication();
-        return application.getBookmarkedPagesModel();
+        BookmarkedPagesModelProvider session = (BookmarkedPagesModelProvider) getSession();
+        return session.getBookmarkedPagesModel();
     }
 
 

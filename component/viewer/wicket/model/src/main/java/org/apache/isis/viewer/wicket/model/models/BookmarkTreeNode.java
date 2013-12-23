@@ -30,6 +30,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -40,15 +41,9 @@ public class BookmarkTreeNode implements Serializable {
     
         private static final long serialVersionUID = 1L;
         
-//        public static final Function<? super BookmarkTreeNode, ? extends PageParameters> AS_PAGE_PARAMETERS = new Function<BookmarkTreeNode, PageParameters>() {
-//            public PageParameters apply(BookmarkTreeNode node) {
-//                return node.getPageParameters();
-//            }
-//        };
         private final List<BookmarkTreeNode> children = Lists.newArrayList();
         private final int depth;
 
-        //private final PageParameters pageParameters;
         private final RootOid oidNoVer;
         private final String oidNoVerStr;
         private final PageType pageType;
@@ -66,8 +61,8 @@ public class BookmarkTreeNode implements Serializable {
                 final int depth) {
             PageParameters pageParameters = bookmarkableModel.getPageParameters();
             RootOid oid = oidFrom(pageParameters);
-            this.oidNoVerStr = IsisContext.getOidMarshaller().marshalNoVersion(oid);
-            this.oidNoVer = IsisContext.getOidMarshaller().unmarshal(oidNoVerStr, RootOid.class); 
+            this.oidNoVerStr = getOidMarshaller().marshalNoVersion(oid);
+            this.oidNoVer = getOidMarshaller().unmarshal(oidNoVerStr, RootOid.class); 
             this.title = bookmarkableModel.getTitle();
             this.pageType = bookmarkableModel instanceof EntityModel ? PageType.ENTITY : PageType.ACTION_PROMPT;
             this.depth = depth;
@@ -92,10 +87,6 @@ public class BookmarkTreeNode implements Serializable {
             return pageType;
         }
 
-
-//        public PageParameters getPageParameters() {
-//            return pageParameters;
-//        }
         public List<BookmarkTreeNode> getChildren() {
             return children;
         }
@@ -144,8 +135,6 @@ public class BookmarkTreeNode implements Serializable {
             return inGraph;
         }
 
-
-
         private boolean addToGraphIfParented(BookmarkableModel<?> candidateBookmarkableModel) {
             
             boolean whetherAdded = false;
@@ -163,7 +152,7 @@ public class BookmarkTreeNode implements Serializable {
                     if(possibleParentOid == null) {
                         continue;
                     } 
-                    final String possibleParentOidStr = possibleParentOid.enStringNoVersion(IsisContext.getOidMarshaller());
+                    final String possibleParentOidStr = possibleParentOid.enStringNoVersion(getOidMarshaller());
                     if(Objects.equal(this.oidNoVerStr, possibleParentOidStr)) {
                         this.addChild(candidateBookmarkableModel);
                         whetherAdded = true;
@@ -193,7 +182,7 @@ public class BookmarkTreeNode implements Serializable {
                 return null;
             }
             try {
-                return IsisContext.getOidMarshaller().unmarshal(oidStr, RootOid.class);
+                return getOidMarshaller().unmarshal(oidStr, RootOid.class);
             } catch(Exception ex) {
                 return null;
             }
@@ -201,7 +190,14 @@ public class BookmarkTreeNode implements Serializable {
 
         public static String oidStrFrom(BookmarkableModel<?> candidateBookmarkableModel) {
             final RootOid oid = oidFrom(candidateBookmarkableModel.getPageParameters());
-            return oid != null? IsisContext.getOidMarshaller().marshalNoVersion(oid): null;
+            return oid != null? getOidMarshaller().marshalNoVersion(oid): null;
+        }
+
+
+        // //////////////////////////////////////
+
+        protected static OidMarshaller getOidMarshaller() {
+            return IsisContext.getOidMarshaller();
         }
 
 

@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
-import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -54,10 +53,8 @@ import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
-import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
-import org.apache.wicket.util.resource.IResourceStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,14 +89,12 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
 import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityPropertiesForm;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItemPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssSubMenuItemsPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardLink;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
@@ -151,7 +146,7 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleFo
  * changed.)</li>
  * </ul>
  */
-public class IsisWicketApplication extends AuthenticatedWebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider, BookmarkedPagesModelProvider {
+public class IsisWicketApplication extends AuthenticatedWebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider {
 
     private static final long serialVersionUID = 1L;
     
@@ -200,7 +195,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     @Inject
     private IsisSystem system;
 
-    private BookmarkedPagesModel bookmarkedPagesModel;
 
     private boolean determiningDeploymentType;
     private DeploymentTypeWicketAbstract deploymentType;
@@ -244,8 +238,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             
             final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
             this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(deploymentType, configuration));
-    
-            this.bookmarkedPagesModel = new BookmarkedPagesModel();
     
             initWicketComponentInjection(injector);
 
@@ -601,16 +593,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     @Override
     public AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
-    }
-
-
-    // /////////////////////////////////////////////////
-    // Breadcrumbs support
-    // /////////////////////////////////////////////////
-
-    @Override
-    public BookmarkedPagesModel getBookmarkedPagesModel() {
-        return bookmarkedPagesModel;
     }
 
 

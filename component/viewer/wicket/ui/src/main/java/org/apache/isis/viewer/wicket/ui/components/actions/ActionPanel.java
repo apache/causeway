@@ -135,7 +135,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
     }
 
     private BookmarkedPagesModel getBookmarkedPagesModel() {
-        BookmarkedPagesModelProvider application = (BookmarkedPagesModelProvider) getApplication();
+        BookmarkedPagesModelProvider application = (BookmarkedPagesModelProvider) getSession();
         return application.getBookmarkedPagesModel();
     }
 

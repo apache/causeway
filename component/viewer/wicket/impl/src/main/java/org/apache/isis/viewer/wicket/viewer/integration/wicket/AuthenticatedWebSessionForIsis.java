@@ -40,6 +40,10 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
+import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 
 /**
  * Viewer-specific implementation of {@link AuthenticatedWebSession}, which
@@ -47,7 +51,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
  * also tracks threadusage (so that multiple concurrent requests are all
  * associated with the same session).
  */
-public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession implements AuthenticationSessionProvider {
+public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession implements AuthenticationSessionProvider, BreadcrumbModelProvider, BookmarkedPagesModelProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -57,6 +61,9 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         return (AuthenticatedWebSessionForIsis) Session.get();
     }
 
+    private final BookmarkedPagesModel bookmarkedPagesModel = new BookmarkedPagesModel();
+    private final BreadcrumbModel breadcrumbModel = new BreadcrumbModel();
+    
     private AuthenticationSession authenticationSession;
 
     public AuthenticatedWebSessionForIsis(final Request request) {
@@ -94,6 +101,22 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         return (WebClientInfo) super.getClientInfo();
     }
 
+    
+    // /////////////////////////////////////////////////
+    // Breadcrumbs and Bookmarks support
+    // /////////////////////////////////////////////////
+
+    @Override
+    public BreadcrumbModel getBreadcrumbModel() {
+        return breadcrumbModel;
+    }
+
+    @Override
+    public BookmarkedPagesModel getBookmarkedPagesModel() {
+        return bookmarkedPagesModel;
+    }
+
+
     // /////////////////////////////////////////////////
     // Dependencies
     // /////////////////////////////////////////////////
@@ -113,6 +136,6 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
             cast.setAuthenticationSessionProvider(this);
         }
     }
-    
+
     
 }

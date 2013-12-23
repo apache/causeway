@@ -127,19 +127,18 @@ colors
 }
 
 #tertiaryMenu {
-    width: 8%;
+    width: 4%;
+    float: right;
+    padding-right: 20px;
+}
+#breadcrumbsMenu {
+    width: 10%;
+    float: right;
 }
 #tertiaryMenu .imgLinks {
 	line-height: 30px;
 	font-size: 3em;
 	margin-right:20px;
-}
-
-#tertiaryMenu .imgLinks a {
-    background-image: url("copy-26.png"); 
-    background-position: right;
-    background-repeat: no-repeat;
-    cursor: pointer;
 }
 
 #tertiaryMenu  a.copyLink:hover,
@@ -159,6 +158,11 @@ colors
 	float: right;
 	text-align: right;
     margin-right: 5px;
+}
+
+#tertiaryMenu a {
+	font-size:3em;
+	line-height: 30px;
 }
 
 #header h1 {
@@ -954,3 +958,14 @@ div.wicket-mask-dark {
 
 
 
+/**
+zero clipboard
+(for some reason - perhaps to do with Flash - this CSS doesn't seem to 
+ do anything if within the ZeroClipboard.css)
+*/
+.zeroClipboardPanel a {
+    background-image: url("copy-26.png"); 
+    background-position: right;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
