@@ -348,11 +348,7 @@ public class FrameworkSynchronizer {
     // make sure the entity is known to Isis and is a root
     // TODO: will probably need to handle aggregated entities at some point...
     void ensureRootObject(final PersistenceCapable pojo) {
-        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
-        if(adapter == null) {
-            throw new IsisException(MessageFormat.format("Object not yet known to Isis: {0}", pojo));
-        }
-        final Oid oid = adapter.getOid();
+        final Oid oid = getAdapterManager().adapterFor(pojo).getOid();
         if (!(oid instanceof RootOid)) {
             throw new IsisException(MessageFormat.format("Not a RootOid: oid={0}, for {1}", oid, pojo));
         }
