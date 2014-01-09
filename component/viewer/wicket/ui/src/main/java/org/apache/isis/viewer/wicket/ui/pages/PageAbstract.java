@@ -169,7 +169,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             addAboutLink();
             addBreadcrumbs();
             addCopyLink();
-            
+
             add(new Label(ID_PAGE_TITLE, title != null? title: applicationName));
             
             // ensure that all collected JavaScript contributions are loaded at the page footer
@@ -193,6 +193,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
         }
     }
+
 
     protected ExceptionModel recognizeException(Exception ex) {
         List<ExceptionRecognizer> exceptionRecognizers;

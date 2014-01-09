@@ -19,28 +19,15 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.entity;
 
-import java.util.List;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.Session;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
-import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.hints.UiHintsBroadcastEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -90,44 +77,22 @@ public class EntityPage extends PageAbstract {
 
     private EntityPage(PageParameters pageParameters, EntityModel entityModel, String titleString) {
         super(pageParameters, ApplicationActions.INCLUDE, titleString, ComponentType.ENTITY);
+        
         this.model = entityModel;
         addChildComponents(model);
         
-//        final ObjectAndAction objectAndAction =lookupHomePageAction();
-//        final ActionModel actionModel = ActionModel.create(objectAndAction.objectAdapter, objectAndAction.action);
-        
         bookmarkPage(model);
         addBookmarkedPages();
-        
+
+        // breadcrumbs
         final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
         final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
         
         breadcrumbModel.visited(entityModel);
+
+        // ensure the copy link holds this page.
+        send(this, Broadcast.BREADTH, new UiHintsBroadcastEvent(entityModel));
     }
-
-//    private static class ObjectAndAction {
-//        ObjectAndAction(final ObjectAdapter serviceAdapter, final ObjectAction objectAction) {
-//            this.objectAdapter = serviceAdapter;
-//            action = objectAction;
-//        }
-//        ObjectAdapter objectAdapter;
-//        ObjectAction action;
-//    }
-    
-//    private ObjectAndAction lookupHomePageAction() {
-//        List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-//        for (ObjectAdapter serviceAdapter : serviceAdapters) {
-//            final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
-//            List<ObjectAction> objectActions = serviceSpec.getObjectActions(Contributed.EXCLUDED);
-//            for (ObjectAction objectAction : objectActions) {
-//                if(objectAction.containsFacet(HomePageFacet.class)) {
-//                    return new ObjectAndAction(serviceAdapter, objectAction);
-//                }
-//            }
-//        }
-//        return null;
-//    }
-
 
     /**
      * A rather crude way of intercepting the redirect-and-post strategy.

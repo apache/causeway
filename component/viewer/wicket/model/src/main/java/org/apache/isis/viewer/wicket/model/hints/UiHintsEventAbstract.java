@@ -17,6 +17,12 @@ public abstract class UiHintsEventAbstract {
     public UiHintContainer getUiHintContainer() {
         return uiHintContainer;
     }
+    /**
+     * The {@link AjaxRequestTarget target}, if any, that caused this event to be generated.
+     * 
+     * <p>
+     * Typically populated, but not always...
+     */
     public AjaxRequestTarget getTarget() {
         return target;
     }

@@ -82,11 +82,9 @@ public final class ZeroClipboardLink extends AjaxLink<ObjectAdapter> {
         super.renderHead(response);
 
         final StringBuilder buf = new StringBuilder();
-        //buf.append("var url = " + quote(baseUrl) + "+" + jQueryLinkSelector() + ".attr(\"href\");");
         
         buf.append(jQuerySelectorOf("#"+getMarkupId()) + ".zclip({");
         buf.append("    path:'" + zeroClipboardSwfUrl + "'");
-        //buf.append("   ,copy: url");
         buf.append("   ,copy: function(){ return " + quote(baseUrl) + "+" + jQueryLinkSelector() + ".attr(\"href\"); }");
         buf.append("});");
         buf.append(jQuerySelectorOf("#"+getMarkupId()) + ".zclip('show')");
