@@ -21,9 +21,6 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-
 public abstract class BookmarkableModel<T> extends ModelAbstract<T>  {
 
     private static final long serialVersionUID = 1L;
@@ -44,10 +41,6 @@ public abstract class BookmarkableModel<T> extends ModelAbstract<T>  {
     
     public abstract boolean hasAsRootPolicy();
     
-    public abstract boolean hasAsChildPolicy();
-
     public abstract String getTitle();
-
-    
 
 }

@@ -38,8 +38,9 @@ import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Ordering;
 
-import org.joda.time.LocalDate;
+import dom.todo.ToDoItem.Category;
 
+import org.joda.time.LocalDate;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
@@ -610,18 +611,15 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
             };
         }
 
-        public static Predicate<ToDoItem> thoseNotYetComplete() {
-            return com.google.common.base.Predicates.not(thoseComplete());
-        }
-
-        public static Predicate<ToDoItem> thoseComplete() {
+		public static Predicate<ToDoItem> thoseCompleted(
+				final boolean completed) {
             return new Predicate<ToDoItem>() {
                 @Override
                 public boolean apply(final ToDoItem t) {
-                    return t.isComplete();
+                    return Objects.equal(t.isComplete(), completed);
                 }
             };
-        }
+		}
 
         public static Predicate<ToDoItem> thoseWithSimilarDescription(final String description) {
             return new Predicate<ToDoItem>() {
@@ -674,6 +672,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
                     thoseCategorised(category), 
                     thoseSubcategorised(subcategory)); 
         }
+
     }
     
     // //////////////////////////////////////

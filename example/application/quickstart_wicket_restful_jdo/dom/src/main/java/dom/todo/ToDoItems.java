@@ -24,13 +24,14 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.base.Objects;
+import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
 import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItem.Subcategory;
 
 import org.joda.time.LocalDate;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
@@ -62,7 +63,7 @@ public class ToDoItems {
     // //////////////////////////////////////
     // NotYetComplete (action)
     // //////////////////////////////////////
-    
+
     @Bookmarkable
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
@@ -76,30 +77,19 @@ public class ToDoItems {
 
     @Programmatic
     public List<ToDoItem> notYetCompleteNoUi() {
-        final List<ToDoItem> items;
-        if(false) {
-            // the naive implementation ...
-            items = container.allMatches(ToDoItem.class, 
-                    Predicates.and(
-                        ToDoItem.Predicates.thoseOwnedBy(currentUserName()), 
-                        ToDoItem.Predicates.thoseNotYetComplete()));
-        } else {
-            // the JDO implementation ...
-            items = container.allMatches(
-                    new QueryDefault<ToDoItem>(ToDoItem.class, 
-                            "todo_notYetComplete", 
-                            "ownedBy", currentUserName()));
-        }
-        return items;
+        return container.allMatches(
+                new QueryDefault<ToDoItem>(ToDoItem.class, 
+                        "todo_notYetComplete", 
+                        "ownedBy", currentUserName()));
     }
 
-    
+
     // //////////////////////////////////////
     // Complete (action)
     // //////////////////////////////////////
     
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "2")
+    @MemberOrder(sequence = "3")
     public List<ToDoItem> complete() {
         final List<ToDoItem> items = completeNoUi();
         if(items.isEmpty()) {
@@ -110,21 +100,50 @@ public class ToDoItems {
 
     @Programmatic
     public List<ToDoItem> completeNoUi() {
-        final List<ToDoItem> items;
-        if(false) {
-            // the naive implementation ...
-            items = container.allMatches(ToDoItem.class, 
-                    Predicates.and(
-                        ToDoItem.Predicates.thoseOwnedBy(currentUserName()), 
-                        ToDoItem.Predicates.thoseComplete()));
-        } else {
-            // the JDO implementation ...
-            items = container.allMatches(
-                    new QueryDefault<ToDoItem>(ToDoItem.class, 
-                            "todo_complete", 
-                            "ownedBy", currentUserName()));
-        }
-        return items;
+        return container.allMatches(
+            new QueryDefault<ToDoItem>(ToDoItem.class, 
+                    "todo_complete", 
+                    "ownedBy", currentUserName()));
+    }
+
+
+    // //////////////////////////////////////
+    // categorized (action)
+    // //////////////////////////////////////
+
+	@SuppressWarnings("unchecked")
+	@Bookmarkable
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence = "30")
+    public List<ToDoItem> categorized(
+    		@Named("Category") final Category category,
+    		@Named("Subcategory") final Subcategory subcategory,
+    		@Named("Completed?") final boolean completed) {
+    	// a naive implementation
+        return container.allMatches(ToDoItem.class, 
+                Predicates.and(
+                    ToDoItem.Predicates.thoseOwnedBy(currentUserName()), 
+                    ToDoItem.Predicates.thoseCompleted(completed),
+                    ToDoItem.Predicates.thoseCategorised(category, subcategory)));
+    }
+    public Category default0Categorized() {
+        return Category.Professional;
+    }
+    public Subcategory default1Categorized() {
+        return default0Categorized().subcategories().get(0);
+    }
+    public boolean default2Categorized() {
+    	return false;
+    }
+    public List<Subcategory> choices1Categorized(
+            final Category category) {
+        return Subcategory.listFor(category);
+    }
+    public String validateCategorized(
+            final Category category, 
+            final Subcategory subcategory, 
+            final boolean completed) {
+        return Subcategory.validate(category, subcategory);
     }
 
 
@@ -132,7 +151,7 @@ public class ToDoItems {
     // NewToDo (action)
     // //////////////////////////////////////
 
-    @MemberOrder(sequence = "3")
+    @MemberOrder(sequence = "40")
     public ToDoItem newToDo(
             final @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") @Named("Description") String description, 
             final @Named("Category") Category category,
@@ -167,7 +186,7 @@ public class ToDoItems {
     // //////////////////////////////////////
 
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "4")
+    @MemberOrder(sequence = "50")
     public List<ToDoItem> allToDos() {
         final String currentUser = currentUserName();
         final List<ToDoItem> items = container.allMatches(ToDoItem.class, ToDoItem.Predicates.thoseOwnedBy(currentUser));

@@ -55,7 +55,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
 
         boolean foundInGraph = false;
         for (BookmarkTreeNode eachNode : rootNodes) {
-            if(eachNode.matchAndUpdateTitle(bookmarkableModel)) {
+            if(eachNode.matches(bookmarkableModel)) {
                 current = candidatePP;
                 foundInGraph = true;
             }

@@ -25,10 +25,10 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -206,11 +206,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return true;
     }
 
-    @Override
-    public boolean hasAsChildPolicy() {
-        return false;
-    }
-    
     //////////////////////////////////////////////////
     // helpers
     //////////////////////////////////////////////////
@@ -350,7 +345,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             return encodeable.toEncodedString(adapter);
         }
         
-        return adapter.getOid().enString(getOidMarshaller());
+        return adapter.getOid().enStringNoVersion(getOidMarshaller());
     }
 
     private ObjectAdapter decodeArg(ObjectSpecification objSpec, String encoded) {
@@ -381,7 +376,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
 
     public ScalarModel getArgumentModel(final ActionParameterMemento apm) {
-        ScalarModel scalarModel = arguments.get(apm.getNumber());
+        int i = apm.getNumber();
+		ScalarModel scalarModel = arguments.get(i);
         if (scalarModel == null) {
             scalarModel = new ScalarModel(targetAdapterMemento, apm);
             final int number = scalarModel.getParameterMemento().getNumber();
@@ -414,8 +410,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         
         return results;
     }
-
-    
     
     private ObjectAdapter executeAction() {
         final ObjectAdapter targetAdapter = getTargetAdapter();
@@ -442,6 +436,10 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     }
 
     public ObjectAdapter[] getArgumentsAsArray() {
+    	if(this.arguments.size() < this.getActionMemento().getAction().getParameterCount()) {
+    		primeArgumentModels();
+    	}
+    	
         final ObjectAction objectAction = getActionMemento().getAction();
         final ObjectAdapter[] arguments = new ObjectAdapter[objectAction.getParameterCount()];
         for (int i = 0; i < arguments.length; i++) {
@@ -450,8 +448,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         }
         return arguments;
     }
-
-
     
     public ActionExecutor getExecutor() {
         return executor;
@@ -485,7 +481,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
     
     // //////////////////////////////////////
-
+    
     private ActionPrompt actionPrompt;
 
     public void setActionPrompt(ActionPrompt actionPrompt) {
@@ -495,7 +491,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     public ActionPrompt getActionPrompt() {
         return actionPrompt;
     }
-    
+
+
     //////////////////////////////////////////////////
     // Dependencies (from context)
     //////////////////////////////////////////////////
@@ -503,5 +500,26 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     private static OidMarshaller getOidMarshaller() {
         return IsisContext.getOidMarshaller();
     }
+
+	public List<ActionParameterMemento> primeArgumentModels() {
+        final ObjectAction objectAction = getActionMemento().getAction();
+
+        final List<ObjectActionParameter> parameters = objectAction.getParameters();
+        final List<ActionParameterMemento> mementos = buildParameterMementos(parameters);
+        for (final ActionParameterMemento apm : mementos) {
+            getArgumentModel(apm);
+        }
+		
+        return mementos;
+	}
+
+    
+    private static List<ActionParameterMemento> buildParameterMementos(final List<ObjectActionParameter> parameters) {
+        final List<ActionParameterMemento> parameterMementoList = Lists.transform(parameters, ObjectAdapterMemento.Functions.fromActionParameter());
+        // we copy into a new array list otherwise we get lazy evaluation =
+        // reference to a non-serializable object
+        return Lists.newArrayList(parameterMementoList);
+    }
+
 
 }

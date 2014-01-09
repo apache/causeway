@@ -18,6 +18,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs;
 
 import java.util.Collection;
 
+import com.google.common.base.Strings;
 import com.vaynberg.wicket.select2.Response;
 import com.vaynberg.wicket.select2.Select2Choice;
 import com.vaynberg.wicket.select2.Settings;
@@ -75,7 +76,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
         
         final Settings settings = breadcrumbChoice.getSettings();
         settings.setMinimumInputLength(0);
-        settings.setWidth("90%");
+        settings.setWidth("100%");
         
         breadcrumbChoice.setProvider(new TextChoiceProvider<EntityModel>() {
 

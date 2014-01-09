@@ -120,20 +120,13 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
 
         private void addParameters() {
             final ActionModel actionModel = getActionModel();
-            final ObjectAction objectAction = actionModel.getActionMemento().getAction();
-            
-            final List<ObjectActionParameter> parameters = objectAction.getParameters();
-            
-            final List<ActionParameterMemento> mementos = buildParameterMementos(parameters);
-            for (final ActionParameterMemento apm1 : mementos) {
-                actionModel.getArgumentModel(apm1);
-            }
+            List<ActionParameterMemento> parameterMementos = actionModel.primeArgumentModels();
             
             final RepeatingView rv = new RepeatingView(ID_ACTION_PARAMETERS);
             add(rv);
             
             paramPanels.clear();
-            for (final ActionParameterMemento apm : mementos) {
+            for (final ActionParameterMemento apm : parameterMementos) {
                 final WebMarkupContainer container = new WebMarkupContainer(rv.newChildId());
                 rv.add(container);
 
@@ -224,13 +217,6 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             }
         }
 
-        private List<ActionParameterMemento> buildParameterMementos(final List<ObjectActionParameter> parameters) {
-            final List<ActionParameterMemento> parameterMementoList = Lists.transform(parameters, ObjectAdapterMemento.Functions.fromActionParameter());
-            // we copy into a new array list otherwise we get lazy evaluation =
-            // reference to a non-serializable object
-            return Lists.newArrayList(parameterMementoList);
-        }
-
         @Override
         public void onUpdate(AjaxRequestTarget target, ScalarModelProvider provider) {
 
@@ -278,4 +264,5 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
         }
 
     }
+
 }

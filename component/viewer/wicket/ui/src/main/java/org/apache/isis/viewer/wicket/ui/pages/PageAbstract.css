@@ -127,12 +127,12 @@ colors
 }
 
 #tertiaryMenu {
-    width: 4%;
+    width: 3%;
     float: right;
     padding-right: 20px;
 }
 #breadcrumbsMenu {
-    width: 10%;
+    width: 18%;
     float: right;
 }
 #tertiaryMenu .imgLinks {

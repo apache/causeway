@@ -32,7 +32,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.PrependingStringBuffer;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
-
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.services.viewmodelsupport.ViewModelSupport.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -489,7 +488,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         }
         String hintKey = hintKey(component, key);
         String value = hints.get(hintKey);
-        System.err.println("GET " + hintKey + "=" + value) ;
         return value;
     }
     
@@ -500,7 +498,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         }
         String hintKey = hintKey(component, key);
         if(value != null) {
-            System.err.println("PUT " + hintKey + "=" + value) ;
             hints.put(hintKey, value);
         } else {
             clearHint(component, hintKey);
@@ -513,7 +510,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
             return;
         }
         String hintKey = hintKey(component, key);
-        System.err.println("CLEAR " + hintKey) ;
         hints.remove(hintKey);
     }
 
@@ -705,8 +701,10 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         } else if (!adapterMemento.equals(other.adapterMemento))
             return false;
         return true;
+
     }
     
+
     // //////////////////////////////////////////////////////////
     // Dependencies (from context)
     // //////////////////////////////////////////////////////////
@@ -714,8 +712,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     protected static OidMarshaller getOidMarshaller() {
 		return IsisContext.getOidMarshaller();
 	}
-
-
 
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();

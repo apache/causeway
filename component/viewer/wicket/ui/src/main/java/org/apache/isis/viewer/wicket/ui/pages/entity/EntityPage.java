@@ -93,8 +93,8 @@ public class EntityPage extends PageAbstract {
         this.model = entityModel;
         addChildComponents(model);
         
-        final ObjectAndAction objectAndAction =lookupHomePageAction();
-        final ActionModel actionModel = ActionModel.create(objectAndAction.objectAdapter, objectAndAction.action);
+//        final ObjectAndAction objectAndAction =lookupHomePageAction();
+//        final ActionModel actionModel = ActionModel.create(objectAndAction.objectAdapter, objectAndAction.action);
         
         bookmarkPage(model);
         addBookmarkedPages();
@@ -105,28 +105,28 @@ public class EntityPage extends PageAbstract {
         breadcrumbModel.visited(entityModel);
     }
 
-    private static class ObjectAndAction {
-        ObjectAndAction(final ObjectAdapter serviceAdapter, final ObjectAction objectAction) {
-            this.objectAdapter = serviceAdapter;
-            action = objectAction;
-        }
-        ObjectAdapter objectAdapter;
-        ObjectAction action;
-    }
+//    private static class ObjectAndAction {
+//        ObjectAndAction(final ObjectAdapter serviceAdapter, final ObjectAction objectAction) {
+//            this.objectAdapter = serviceAdapter;
+//            action = objectAction;
+//        }
+//        ObjectAdapter objectAdapter;
+//        ObjectAction action;
+//    }
     
-    private ObjectAndAction lookupHomePageAction() {
-        List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-        for (ObjectAdapter serviceAdapter : serviceAdapters) {
-            final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
-            List<ObjectAction> objectActions = serviceSpec.getObjectActions(Contributed.EXCLUDED);
-            for (ObjectAction objectAction : objectActions) {
-                if(objectAction.containsFacet(HomePageFacet.class)) {
-                    return new ObjectAndAction(serviceAdapter, objectAction);
-                }
-            }
-        }
-        return null;
-    }
+//    private ObjectAndAction lookupHomePageAction() {
+//        List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
+//        for (ObjectAdapter serviceAdapter : serviceAdapters) {
+//            final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
+//            List<ObjectAction> objectActions = serviceSpec.getObjectActions(Contributed.EXCLUDED);
+//            for (ObjectAction objectAction : objectActions) {
+//                if(objectAction.containsFacet(HomePageFacet.class)) {
+//                    return new ObjectAndAction(serviceAdapter, objectAction);
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
 
     /**

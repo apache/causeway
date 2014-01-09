@@ -256,9 +256,14 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
                 }
             });
 
-            // prettier URLs
+            // 
+            // map entity and action to provide prettier URLs
+            //
+            // nb: action mount cannot contain {actionArgs}, because the default 
+            // parameters encoder doesn't seem to be able to handle multiple args
+            //
             mountPage("/entity/${objectOid}", PageType.ENTITY);
-            mountPage("/action/${objectOid}/${actionOwningSpec}/${actionId}/${actionType}/~{actionArgs}", PageType.ACTION_PROMPT);
+            mountPage("/action/${objectOid}/${actionOwningSpec}/${actionId}/${actionType}", PageType.ACTION_PROMPT);
             
             SharedResources sharedResources = getSharedResources();
             ZeroClipboardLink.addSharedResourceTo(sharedResources);
