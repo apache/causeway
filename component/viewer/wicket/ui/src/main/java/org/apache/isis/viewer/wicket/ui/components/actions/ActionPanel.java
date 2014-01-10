@@ -19,11 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
@@ -462,7 +464,10 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
     }
     @SuppressWarnings("unchecked")
     private static List<Object> asList(final ObjectAdapter resultAdapter) {
-        return (List<Object>) resultAdapter.getObject();
+        final Collection<Object> coll = (Collection<Object>) resultAdapter.getObject();
+        return coll instanceof List
+                ? (List<Object>)coll
+                : Lists.<Object>newArrayList(coll);
     }
 
 
