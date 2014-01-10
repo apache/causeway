@@ -37,40 +37,15 @@
     <!-- used in Site generation for relative references. -->
     <url>http://isis.apache.org/${relativeUrl}</url>
 
-
 	<build>
 		<plugins>
             <plugin>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>datanucleus-maven-plugin</artifactId>
-                <version>3.3.0-release</version>
-                <dependencies>
-                    <dependency>
-                        <!-- 
-                        Force the enhancer to use the same version of core 
-                        that's used by the JDO objectstore
-                        -->
-                        <groupId>org.datanucleus</groupId>
-                        <artifactId>datanucleus-core</artifactId>
-                        <version>${datanucleus-core.version}</version>
-                    </dependency>
-                    <dependency>
-                        <!-- 
-                        Force the enhancer to use the same version of jdo-api
-                        that's used by the JDO objectstore
-                        -->
-                        <groupId>javax.jdo</groupId>
-                        <artifactId>jdo-api</artifactId>
-                        <version>${jdo-api.version}</version>
-                    </dependency>
-                </dependencies>
+                <version>${datanucleus-maven-plugin.version}</version>
                 <configuration>
                 	<fork>false</fork>
                     <verbose>true</verbose>
-                    <!-- 
-                    <log4jConfiguration>${basedir}/log4j.properties</log4jConfiguration>
-                    <props>${basedir}/datanucleus.properties</props>
-                    -->
                 </configuration>
                 <executions>
                     <execution>
@@ -138,41 +113,22 @@
             <artifactId>isis-core-applib</artifactId>
         </dependency>
 
-		<!-- DataNucleus (horrid, but needed to run the enhancer)-->
-        <dependency>
-            <groupId>javax.jdo</groupId>
-            <artifactId>jdo-api</artifactId>
-            <exclusions>
-              <exclusion>
-                <!-- use geronimo-jta_1.1_spec instead -->
-                <groupId>javax.transaction</groupId>
-                <artifactId>jta</artifactId>
-              </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-core</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-jodatime</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-api-jdo</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.geronimo.specs</groupId>
-          <artifactId>geronimo-jta_1.1_spec</artifactId>
-        </dependency>
-        
         <dependency>
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
         </dependency>
         
+		<!-- DataNucleus (jdo-api, and for enhancer) -->
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-accessplatform-jdo-rdbms</artifactId>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-jodatime</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

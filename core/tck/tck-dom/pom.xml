@@ -42,7 +42,7 @@
                     <plugin>
                         <groupId>org.datanucleus</groupId>
                         <artifactId>datanucleus-maven-plugin</artifactId>
-                        <version>3.2.0-release</version>
+                        <version>${datanucleus-maven-plugin.version}</version>
                         <configuration>
                             <fork>false</fork>
                             <verbose>true</verbose>
@@ -95,24 +95,6 @@
                     </plugins>
                 </pluginManagement>
             </build>
-			<dependencies>
-		        <dependency>
-		            <groupId>org.datanucleus</groupId>
-		            <artifactId>datanucleus-core</artifactId>
-		            <version>3.1.2</version>
-		            <scope>runtime</scope>
-		        </dependency>
-		        <dependency>
-		            <groupId>org.datanucleus</groupId>
-		            <artifactId>datanucleus-enhancer</artifactId>
-		            <version>3.1.1</version>
-		        </dependency>
-		        <dependency>
-		            <groupId>org.datanucleus</groupId>
-		            <artifactId>datanucleus-api-jdo</artifactId>
-		            <version>3.1.2</version>
-		        </dependency>
-			</dependencies>
         </profile>
     </profiles>
 
@@ -121,24 +103,18 @@
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-applib</artifactId>
 		</dependency>
-        
-        <!-- necessary, since we have JDO annotations in the code -->
-       <dependency>
-            <groupId>javax.jdo</groupId>
-            <artifactId>jdo-api</artifactId>
-            <version>3.0.1</version>
-            <exclusions>
-              <exclusion>
-                <!-- use geronimo-jta_1.1_spec instead -->
-                <groupId>javax.transaction</groupId>
-                <artifactId>jta</artifactId>
-              </exclusion>
-            </exclusions>
+
+        <!-- DataNucleus -->
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-accessplatform-jdo-rdbms</artifactId>
+            <type>pom</type>
         </dependency>
         <dependency>
-          <groupId>org.apache.geronimo.specs</groupId>
-          <artifactId>geronimo-jta_1.1_spec</artifactId>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-jodatime</artifactId>
         </dependency>
+
     </dependencies>
     
 </project>

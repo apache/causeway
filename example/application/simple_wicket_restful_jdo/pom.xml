@@ -37,8 +37,8 @@
         <isis-security-shiro.version>1.4.0-SNAPSHOT</isis-security-shiro.version>
 
         <!-- must be consistent with the versions defined by the JDO Objectstore -->
-        <datanucleus-core.version>3.2.7</datanucleus-core.version>
-        <jdo-api.version>3.0.1</jdo-api.version>
+        <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
+        <datanucleus-maven-plugin.version>3.3.2</datanucleus-maven-plugin.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

@@ -77,6 +77,9 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         final String pkOtoaId = pkOtoa.getId();
         final String filter = pkOtoaId + "==" + map.get(pkOtoaId);
         final Query jdoQuery = getPersistenceManager().newQuery(cls, filter);
+
+        // http://www.datanucleus.org/servlet/jira/browse/NUCCORE-1103
+        jdoQuery.addExtension("datanucleus.multivaluedFetch", "none");
         
         if (LOG.isDebugEnabled()) {
             LOG.debug("query: " + queryName + ", filter: " + filter);
@@ -95,6 +98,10 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         final PersistenceManager persistenceManager = getJdoObjectStore().getPersistenceManager();
         final Class<?> cls = objectSpec.getCorrespondingClass();
         final Query jdoQuery = persistenceManager.newNamedQuery(cls, queryName);
+        
+        // http://www.datanucleus.org/servlet/jira/browse/NUCCORE-1103
+        jdoQuery.addExtension("datanucleus.multivaluedFetch", "none");
+        
         if(persistenceQuery.hasRange()) {
             jdoQuery.setRange(persistenceQuery.getStart(), persistenceQuery.getEnd());
         }

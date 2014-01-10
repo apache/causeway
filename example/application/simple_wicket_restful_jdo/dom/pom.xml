@@ -50,21 +50,7 @@
             <plugin>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>datanucleus-maven-plugin</artifactId>
-                <version>3.2.0-release</version>
-                <dependencies>
-                    <dependency>
-                        <!-- Force the enhancer to use the same version of core as the JDO objectstore -->
-                        <groupId>org.datanucleus</groupId>
-                        <artifactId>datanucleus-core</artifactId>
-                        <version>${datanucleus-core.version}</version>
-                    </dependency>
-                    <dependency>
-                        <!-- Force the enhancer to use the same version of jdo-api as the JDO objectstore -->
-                        <groupId>javax.jdo</groupId>
-                        <artifactId>jdo-api</artifactId>
-                        <version>${jdo-api.version}</version>
-                    </dependency>
-                </dependencies>
+                <version>${datanucleus-maven-plugin.version}</version>
                 <configuration>
                 	<fork>false</fork>
                     <log4jConfiguration>${basedir}/log4j.properties</log4jConfiguration>

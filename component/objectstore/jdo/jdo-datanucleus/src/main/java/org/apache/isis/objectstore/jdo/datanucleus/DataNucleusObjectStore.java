@@ -555,10 +555,8 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
             return false;
         }
 
-        final Query query = QueryUtil.createQuery(getPersistenceManager(), "o", "select o.id", specification, null);
+        final Query jdoQuery = QueryUtil.createQuery(getPersistenceManager(), "o", "select o.id", specification, null);
         throw new NotYetImplementedException();
-        //query.set.setMaxResults(1);
-        //return !query.getResultList().isEmpty();
     }
 
     // ///////////////////////////////////////////////////////////////////////

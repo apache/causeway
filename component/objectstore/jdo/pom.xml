@@ -29,12 +29,13 @@
 	<packaging>pom</packaging>
 
 	<properties>
-        <datanucleus-core.version>3.2.7</datanucleus-core.version>
-        <jdo-api.version>3.0.1</jdo-api.version>
-        <datanucleus-rdbms.version>3.2.6</datanucleus-rdbms.version>
-        <datanucleus-api-jdo.version>3.2.4</datanucleus-api-jdo.version>
+        <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
         <datanucleus-jodatime.version>3.2.1</datanucleus-jodatime.version>
-        
+        <datanucleus-maven-plugin.version>3.3.2</datanucleus-maven-plugin.version>
+
+        <!-- ensure compatible with version aggregated in datanucleus-accessplatform-jdo-rdbms -->
+        <jdo-api.version>3.1-rc1</jdo-api.version>
+
 		<siteBaseDir>.</siteBaseDir>
 		<relativeUrl />
         
@@ -141,39 +142,18 @@
 
 
 			<!-- DataNucleus -->
-	       <dependency>
-	            <groupId>javax.jdo</groupId>
-	            <artifactId>jdo-api</artifactId>
-	            <version>3.0.1</version>
-	            <exclusions>
-	            	<!-- use geronimo-jta_1.1_spec instead -->
-	            	<exclusion>
-	            		<groupId>javax.transaction</groupId>
-	            		<artifactId>jta</artifactId>
-	            	</exclusion>
-	            </exclusions>
-	        </dependency>
-
             <dependency>
                 <groupId>org.datanucleus</groupId>
-                <artifactId>datanucleus-core</artifactId>
-                <version>${datanucleus-core.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.datanucleus</groupId>
-                <artifactId>datanucleus-api-jdo</artifactId>
-                <version>${datanucleus-api-jdo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.datanucleus</groupId>
-                <artifactId>datanucleus-rdbms</artifactId>
-                <version>${datanucleus-rdbms.version}</version>
+                <artifactId>datanucleus-accessplatform-jdo-rdbms</artifactId>
+                <version>${datanucleus-accessplatform-jdo-rdbms.version}</version>
+                <type>pom</type>
             </dependency>
 	        <dependency>
 	            <groupId>org.datanucleus</groupId>
 	            <artifactId>datanucleus-jodatime</artifactId>
                 <version>${datanucleus-jodatime.version}</version>
 	        </dependency>
+            
 		</dependencies>
 	</dependencyManagement>
 </project>

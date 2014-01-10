@@ -42,6 +42,15 @@
 			<groupId>org.apache.isis.objectstore</groupId>
 			<artifactId>isis-objectstore-jdo-applib</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-accessplatform-jdo-rdbms</artifactId>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-jodatime</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>

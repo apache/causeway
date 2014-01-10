@@ -49,7 +49,12 @@ public final class QueryUtil {
             LOG.debug("creating query: " + queryString);
         }
 
-        return persistenceManager.newQuery(queryString);
+        final Query jdoQuery = persistenceManager.newQuery(queryString);
+        
+        // http://www.datanucleus.org/servlet/jira/browse/NUCCORE-1103
+        jdoQuery.addExtension("datanucleus.multivaluedFetch", "none");
+
+        return jdoQuery;
     }
 
     private static StringBuilder appendSelect(

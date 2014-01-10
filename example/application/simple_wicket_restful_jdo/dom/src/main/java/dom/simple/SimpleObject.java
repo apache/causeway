@@ -23,6 +23,7 @@ import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Bookmarkable;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -53,6 +54,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     public void setName(final String name) {
         this.name = name;
     }
+
 
 
     // //////////////////////////////////////

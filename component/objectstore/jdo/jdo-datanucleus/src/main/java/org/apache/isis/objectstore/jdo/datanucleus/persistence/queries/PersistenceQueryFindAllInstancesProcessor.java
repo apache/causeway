@@ -44,13 +44,16 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
         final ObjectSpecification specification = persistenceQuery.getSpecification();
         
         Class<?> cls = specification.getCorrespondingClass();
-        final Query query = getPersistenceManager().newQuery(cls);
+        final Query jdoQuery = getPersistenceManager().newQuery(cls);
+        
+        // http://www.datanucleus.org/servlet/jira/browse/NUCCORE-1103
+        jdoQuery.addExtension("datanucleus.multivaluedFetch", "none");
         
         if (LOG.isDebugEnabled()) {
             LOG.debug("allInstances(): class=" + specification.getFullIdentifier());
         }
         
-        final List<?> pojos = (List<?>) query.execute();
+        final List<?> pojos = (List<?>) jdoQuery.execute();
         return loadAdapters(specification, pojos);
     }
 }
