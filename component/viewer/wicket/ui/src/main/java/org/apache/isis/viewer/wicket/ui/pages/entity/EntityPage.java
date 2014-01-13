@@ -79,7 +79,7 @@ public class EntityPage extends PageAbstract {
         super(pageParameters, ApplicationActions.INCLUDE, titleString, ComponentType.ENTITY);
         
         this.model = entityModel;
-        addChildComponents(model);
+        addChildComponents(themeDiv, model);
         
         bookmarkPage(model);
         addBookmarkedPages();

@@ -40,7 +40,7 @@ public class ActionPromptPage extends PageAbstract {
      */
     public ActionPromptPage(final ActionModel model) {
         super(new PageParameters(), ApplicationActions.INCLUDE, model.getActionMemento().getAction().getName(), ComponentType.ACTION_PROMPT);
-        addChildComponents(model);
+        addChildComponents(themeDiv, model);
 
         if(model.isBookmarkable()) {
             bookmarkPage(model);
@@ -54,7 +54,7 @@ public class ActionPromptPage extends PageAbstract {
     
     public ActionPromptPage(final PageParameters pageParameters, final ActionModel model) {
         super(pageParameters, ApplicationActions.INCLUDE, model.getActionMemento().getAction().getName(), ComponentType.ACTION_PROMPT);
-        addChildComponents(model);
+        addChildComponents(themeDiv, model);
         
         // no need to bookmark because the ActionPanel will have done so for us
         addBookmarkedPages();

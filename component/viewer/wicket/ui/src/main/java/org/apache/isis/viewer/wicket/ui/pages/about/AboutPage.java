@@ -34,7 +34,7 @@ public class AboutPage extends PageAbstract {
     public AboutPage() {
         super(new PageParameters(), ApplicationActions.INCLUDE, null, ComponentType.ABOUT);
         addBookmarkedPages();
-        addChildComponents(null);
+        addChildComponents(themeDiv, null);
     }
 
 }

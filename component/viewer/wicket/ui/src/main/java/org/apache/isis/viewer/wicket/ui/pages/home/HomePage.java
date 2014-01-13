@@ -50,7 +50,7 @@ public class HomePage extends PageAbstract {
     public HomePage() {
         super(new PageParameters(), ApplicationActions.INCLUDE, null);
         
-        addChildComponents(null);
+        addChildComponents(themeDiv, null);
         buildGui();
 
         addBookmarkedPages();
@@ -59,12 +59,12 @@ public class HomePage extends PageAbstract {
     private void buildGui() {
         final ObjectAndAction objectAndAction = lookupHomePageAction();
         if(objectAndAction != null) {
-            Components.permanentlyHide(this, ComponentType.WELCOME); 
+            Components.permanentlyHide(themeDiv, ComponentType.WELCOME); 
             final IModel<?> actionModel = ActionModel.create(objectAndAction.objectAdapter, objectAndAction.action);
-            getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ACTION_PROMPT, actionModel);
+            getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, ComponentType.ACTION_PROMPT, actionModel);
         } else {
-            Components.permanentlyHide(this, ComponentType.ACTION_PROMPT);
-            getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.WELCOME, null);
+            Components.permanentlyHide(themeDiv, ComponentType.ACTION_PROMPT);
+            getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, ComponentType.WELCOME, null);
         }
     }
 

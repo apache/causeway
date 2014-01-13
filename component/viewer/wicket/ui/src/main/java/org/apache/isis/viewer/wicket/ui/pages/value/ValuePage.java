@@ -51,9 +51,9 @@ public class ValuePage extends PageAbstract {
     private ValuePage(ValueModel valueModel, String actionName) {
         super(new PageParameters(), ApplicationActions.INCLUDE, actionName, ComponentType.VALUE);
         
-        addOrReplace(new Label(ID_ACTION_NAME, actionName));
+        themeDiv.addOrReplace(new Label(ID_ACTION_NAME, actionName));
 
-        addChildComponents(valueModel);
+        addChildComponents(themeDiv, valueModel);
 
         addBookmarkedPages();
         

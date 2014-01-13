@@ -41,7 +41,7 @@ public class StandaloneCollectionPage extends PageAbstract {
      */
     public StandaloneCollectionPage(final EntityCollectionModel model) {
         super(new PageParameters(), ApplicationActions.INCLUDE, actionNameFrom(model), ComponentType.STANDALONE_COLLECTION);
-        addChildComponents(model);
+        addChildComponents(themeDiv, model);
 
         addBookmarkedPages();
     }

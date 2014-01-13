@@ -28,23 +28,22 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.slf4j.Logger;
@@ -54,7 +53,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -79,6 +78,7 @@ import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
@@ -86,10 +86,12 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 public abstract class PageAbstract extends WebPage implements ActionPromptProvider {
 
 
+
     private static Logger LOG = LoggerFactory.getLogger(PageAbstract.class);
 
     private static final long serialVersionUID = 1L;
     
+    private static final String ID_THEME = "theme";
     private static final String ID_BOOKMARKED_PAGES = "bookmarks";
     private static final String ID_HOME_PAGE_LINK = "homePageLink";
     private static final String ID_APPLICATION_NAME = "applicationName";
@@ -160,9 +162,18 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             // for breadcrumbs support
             getSession().bind();
             
-            addApplicationActions(applicationActions);
+            add(new Label(ID_PAGE_TITLE, title != null? title: applicationName));
+            
+            themeDiv = new WebMarkupContainer(ID_THEME);
+            add(themeDiv);
+            if(applicationName != null) {
+                themeDiv.add(new CssClassAppender(asCssStyle(applicationName)));
+            }
+            
+            addApplicationActions(themeDiv, applicationActions);
             this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
             this.pageParameters = pageParameters;
+
             addHomePageLinkAndApplicationName();
             addUserName();
             addLogoutLink();
@@ -170,8 +181,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             addBreadcrumbs();
             addCopyLink();
 
-            add(new Label(ID_PAGE_TITLE, title != null? title: applicationName));
-            
             // ensure that all collected JavaScript contributions are loaded at the page footer
             add(new HeaderResponseContainer("footerJS", "footerJS"));
             
@@ -192,6 +201,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
             throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
         }
+    }
+
+
+    private static String asCssStyle(final String str) {
+        return StringExtensions.asLowerDashed(str);
     }
 
 
@@ -235,16 +249,16 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         // this is a bit hacky, but it'll do...
         ExternalLink homePageLink = new ExternalLink(ID_HOME_PAGE_LINK, "/wicket/");
         homePageLink.setContextRelative(true);
-        add(homePageLink);
+        themeDiv.add(homePageLink);
         homePageLink.add(new Label(ID_APPLICATION_NAME, applicationName));
     }
     
     private void addUserName() {
-        add(new Label(ID_USER_NAME, getAuthenticationSession().getUserName()));
+        themeDiv.add(new Label(ID_USER_NAME, getAuthenticationSession().getUserName()));
     }
 
     private void addLogoutLink() {
-        add(new Link<Object>(ID_LOGOUT_LINK) {
+        themeDiv.add(new Link<Object>(ID_LOGOUT_LINK) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -256,7 +270,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     private void addAboutLink() {
-        add(new Link<Object>(ID_ABOUT_LINK) {
+        themeDiv.add(new Link<Object>(ID_ABOUT_LINK) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -268,12 +282,12 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     private void addBreadcrumbs() {
         BreadcrumbPanel breadcrumbPanel = new BreadcrumbPanel(ID_BREADCRUMBS);
-        addOrReplace(breadcrumbPanel);
+        themeDiv.addOrReplace(breadcrumbPanel);
     }
     
     private void addCopyLink() {
         ZeroClipboardPanel zClipCopyLink = new ZeroClipboardPanel(ID_COPY_LINK);
-        addOrReplace(zClipCopyLink);
+        themeDiv.addOrReplace(zClipCopyLink);
     }
     
 
@@ -294,15 +308,15 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         return pageParameters;
     }
 
-    private void addApplicationActions(final ApplicationActions applicationActions) {
+    private void addApplicationActions(MarkupContainer container, final ApplicationActions applicationActions) {
         if(applicationActions == ApplicationActions.INCLUDE) {
             addActionPromptModalWindow();
             final ApplicationActionsModel model = new ApplicationActionsModel();
             model.setActionPromptModalWindowProvider(this);
-            addComponent(ComponentType.APPLICATION_ACTIONS, model);
+            addComponent(container, ComponentType.APPLICATION_ACTIONS, model);
         } else {
-            Components.permanentlyHide(this, ComponentType.APPLICATION_ACTIONS);
-            Components.permanentlyHide(this, ID_ACTION_PROMPT_MODAL_WINDOW);
+            Components.permanentlyHide(container, ComponentType.APPLICATION_ACTIONS);
+            Components.permanentlyHide(container, ID_ACTION_PROMPT_MODAL_WINDOW);
         }
     }
 
@@ -316,14 +330,14 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
      *            - used to find the best matching {@link ComponentFactory} to
      *            render the model.
      */
-    protected void addChildComponents(final IModel<?> model) {
+    protected void addChildComponents(MarkupContainer container, final IModel<?> model) {
         for (final ComponentType componentType : getChildModelTypes()) {
-            addComponent(componentType, model);
+            addComponent(container, componentType, model);
         }
     }
 
-    private void addComponent(final ComponentType componentType, final IModel<?> model) {
-        getComponentFactoryRegistry().addOrReplaceComponent(this, componentType, model);
+    private void addComponent(MarkupContainer container, final ComponentType componentType, final IModel<?> model) {
+        getComponentFactoryRegistry().addOrReplaceComponent(container, componentType, model);
     }
 
 
@@ -335,7 +349,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
      * Convenience for subclasses
      */
     protected void addBookmarkedPages() {
-        getComponentFactoryRegistry().addOrReplaceComponent(this, ID_BOOKMARKED_PAGES, ComponentType.BOOKMARKED_PAGES, getBookmarkedPagesModel());
+        getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, ID_BOOKMARKED_PAGES, ComponentType.BOOKMARKED_PAGES, getBookmarkedPagesModel());
     }
 
     protected void bookmarkPage(BookmarkableModel<?> model) {
@@ -354,13 +368,15 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     // ///////////////////////////////////////////////////////////////////
     
     private ActionPromptModalWindow actionPromptModalWindow;
+
+    protected MarkupContainer themeDiv;
     public ActionPrompt getActionPrompt() {
         return ActionPromptModalWindow.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
     }
 
     private void addActionPromptModalWindow() {
-        this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW); 
-        addOrReplace(actionPromptModalWindow);
+        actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW); 
+        themeDiv.addOrReplace(actionPromptModalWindow);
     }
 
     

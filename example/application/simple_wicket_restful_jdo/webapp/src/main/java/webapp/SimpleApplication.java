@@ -112,21 +112,21 @@ public class SimpleApplication extends IsisWicketApplication {
     protected Module newIsisWicketModule() {
         final Module isisDefaults = super.newIsisWicketModule();
         
-        final Module quickstartOverrides = new AbstractModule() {
+        final Module simpleOverrides = new AbstractModule() {
             @Override
             protected void configure() {
                 bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarForSimpleApp.class);
                 
-                bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Quick Start App");
+                bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Simple App");
                 bind(String.class).annotatedWith(Names.named("applicationCss")).toInstance("css/application.css");
                 bind(String.class).annotatedWith(Names.named("applicationJs")).toInstance("scripts/application.js");
                 bind(String.class).annotatedWith(Names.named("welcomeMessage")).toInstance(readLines("welcome.html"));
-                bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("QuickStart");
+                bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("Simple App");
                 bind(InputStream.class).annotatedWith(Names.named("metaInfManifest")).toProvider(Providers.of(getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")));
             }
         };
 
-        return Modules.override(isisDefaults).with(quickstartOverrides);
+        return Modules.override(isisDefaults).with(simpleOverrides);
     }
 
     private static String readLines(final String resourceName) {

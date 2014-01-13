@@ -74,6 +74,9 @@ public class SimpleObjects {
         container.persistIfNotAlready(obj);
         return obj;
     }
+    
+    
+    public void foo(){}
 
     
     // //////////////////////////////////////

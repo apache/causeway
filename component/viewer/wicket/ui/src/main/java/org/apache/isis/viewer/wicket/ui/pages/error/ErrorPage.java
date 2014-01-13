@@ -42,7 +42,7 @@ public class ErrorPage extends PageAbstract {
         
         addBookmarkedPages();
 
-        add(new ExceptionStackTracePanel(ID_EXCEPTION_STACK_TRACE, exceptionModel));
+        themeDiv.add(new ExceptionStackTracePanel(ID_EXCEPTION_STACK_TRACE, exceptionModel));
     }
 
 }
