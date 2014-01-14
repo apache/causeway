@@ -19,21 +19,30 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.apache.wicket.Application;
-import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.markup.html.link.PopupSettings;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.resource.IResourceStream;
 
+import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
@@ -42,10 +51,10 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.pages.actionprompt.ActionPromptPage;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Links;
 
@@ -80,24 +89,36 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         if(actionPrompt != null) {
             final ActionModel actionModel = ActionModel.create(objectAdapter, action);
             actionModel.setActionPrompt(actionPrompt);
-            AjaxLink<Object> link = new AjaxLink<Object>(linkId) {
-                private static final long serialVersionUID = 1L;
+            
+            final AjaxDeferredBehaviour ajaxDeferredBehaviour = determineDeferredBehaviour(action, actionModel);
 
+            final AbstractLink link = new AjaxLink<Object>(linkId) {
+                private static final long serialVersionUID = 1L;
+                
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-
-                    final ActionPanel actionPromptPanel = 
-                            (ActionPanel) getComponentFactoryRegistry().createComponent(
-                            ComponentType.ACTION_PROMPT, actionPrompt.getContentId(), actionModel);
-
-                    actionPrompt.setPanel(actionPromptPanel, target);
-                    actionPrompt.show(target);
                     
-                    target.focusComponent(actionPromptPanel);
-
+                    if(ajaxDeferredBehaviour != null) {
+                        ajaxDeferredBehaviour.initiate(target);
+                    } else {
+                        final ActionPanel actionPromptPanel = 
+                                (ActionPanel) getComponentFactoryRegistry().createComponent(
+                                        ComponentType.ACTION_PROMPT, actionPrompt.getContentId(), actionModel);
+                        
+                        actionPrompt.setPanel(actionPromptPanel, target);
+                        actionPrompt.show(target);
+                        
+                        target.focusComponent(actionPromptPanel);
+                    }
                 }
             };
+
+            if(ajaxDeferredBehaviour != null) {
+                link.add(ajaxDeferredBehaviour);
+            }
+
             link.add(new CssClassAppender("noVeil"));
+
             return link;
             
         } else {
@@ -115,6 +136,68 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             }
 
             return link;
+        }
+    }
+
+    private static AjaxDeferredBehaviour determineDeferredBehaviour(final ObjectAction action, final ActionModel actionModel) {
+        if(isNoArgReturnTypeRedirect(action)) {
+            return new AjaxDeferredBehaviour() {
+                
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                protected IRequestHandler getRequestHandler() {
+                    ObjectAdapter resultAdapter = executeActionHandlingApplicationExceptions(actionModel);
+                    final Object value = resultAdapter.getObject();
+                    return ActionModel.redirectHandler(value);
+                }
+            };
+        } 
+        if(isNoArgReturnTypeDownload(action)) {
+            return new AjaxDeferredBehaviour() {
+                
+                private static final long serialVersionUID = 1L;
+   
+                @Override
+                protected IRequestHandler getRequestHandler() {
+                    ObjectAdapter resultAdapter = executeActionHandlingApplicationExceptions(actionModel);
+                    final Object value = resultAdapter.getObject();
+                    return ActionModel.downloadHandler(value);
+                }
+            };
+        } 
+        return null;
+    }
+
+    private static boolean isNoArgReturnTypeRedirect(final ObjectAction action) {
+        return action.getParameterCount() == 0 &&
+               action.getReturnType() != null && 
+               action.getReturnType().getCorrespondingClass() == java.net.URL.class;
+    }
+
+    private static boolean isNoArgReturnTypeDownload(final ObjectAction action) {
+        return action.getParameterCount() == 0 && action.getReturnType() != null && 
+                (action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Blob.class ||
+                action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Clob.class);
+    }
+    
+    // adapted from similar code in ActionPanel :-(
+    private static ObjectAdapter executeActionHandlingApplicationExceptions(final ActionModel actionModel) {
+        try {
+            ObjectAdapter resultAdapter = actionModel.getObject();
+            return resultAdapter;
+
+        } catch (RuntimeException ex) {
+            
+            // see if is an application-defined exception
+            final ApplicationException appEx = ActionModel.getApplicationExceptionIfAny(ex);
+            if (appEx != null) {
+                IsisContext.getMessageBroker().setApplicationError(appEx.getMessage());
+                return null;
+            } 
+
+            // not handled, so propagate
+            throw ex;
         }
     }
 

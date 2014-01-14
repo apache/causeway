@@ -32,6 +32,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.resource.ResourceRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
@@ -181,7 +182,8 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
      */
     private boolean executeActionOnTargetAndProcessResults(
             final ObjectAdapter targetAdapter, 
-            final AjaxRequestTarget target, final Form<?> feedbackForm) {
+            final AjaxRequestTarget target, 
+            final Form<?> feedbackForm) {
 
         final ActionModel actionModel = getActionModel();
         
@@ -286,7 +288,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         } catch (RuntimeException ex) {
             
             // see if is an application-defined exception
-            final ApplicationException appEx = getApplicationExceptionIfAny(ex);
+            final ApplicationException appEx = ActionModel.getApplicationExceptionIfAny(ex);
             if (appEx != null) {
                 getMessageBroker().setApplicationError(appEx.getMessage());
 
@@ -358,31 +360,30 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             @Override
             public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
                 final Object value = resultAdapter.getObject();
-                final Clob clob = (Clob) value;
-                ResourceStreamRequestHandler handler = 
-                    new ResourceStreamRequestHandler(new StringResourceStream(clob.getChars(), clob.getMimeType().toString()), clob.getName());
-                handler.setContentDisposition(ContentDisposition.ATTACHMENT);
-                panel.getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+                RequestCycle requestCycle = panel.getRequestCycle();
+                IRequestHandler handler = ActionModel.downloadHandler(value);
+                requestCycle.scheduleRequestHandlerAfterCurrent(handler);
             }
         },
         VALUE_BLOB {
             @Override
             public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
                 final Object value = resultAdapter.getObject();
-                final Blob blob = (Blob) value;
-                ResourceRequestHandler handler = 
-                        new ResourceRequestHandler(new ByteArrayResource(blob.getMimeType().toString(), blob.getBytes(), blob.getName()), null);
-                panel.getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+                RequestCycle requestCycle = panel.getRequestCycle();
+                IRequestHandler handler = ActionModel.downloadHandler(value);
+                requestCycle.scheduleRequestHandlerAfterCurrent(handler);
             }
+
         },
         VALUE_URL {
             @Override
             public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
                 final Object value = resultAdapter.getObject();
-                java.net.URL url = (java.net.URL) value;
-                IRequestHandler handler = new RedirectRequestHandler(url.toString());
-                panel.getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+                IRequestHandler handler = ActionModel.redirectHandler(value);
+                RequestCycle requestCycle = panel.getRequestCycle();
+                requestCycle.scheduleRequestHandlerAfterCurrent(handler);
             }
+
         },
         VOID {
             @Override
@@ -439,12 +440,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 }
             }
         }
-    }
-    
-    private static ApplicationException getApplicationExceptionIfAny(Exception ex) {
-        Iterable<ApplicationException> appEx = Iterables.filter(Throwables.getCausalChain(ex), ApplicationException.class);
-        Iterator<ApplicationException> iterator = appEx.iterator();
-        return iterator.hasNext() ? iterator.next() : null;
     }
 
     private static ObjectAdapter determineActualAdapter(final ObjectAdapter resultAdapter, final PersistenceSessionProvider psa) {

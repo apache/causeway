@@ -76,8 +76,6 @@ public class SimpleObjects {
     }
     
     
-    public void foo(){}
-
     
     // //////////////////////////////////////
     // Injected services

@@ -19,19 +19,33 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.base.Throwables;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.handler.resource.ResourceRequestHandler;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.ByteArrayResource;
+import org.apache.wicket.request.resource.ContentDisposition;
+import org.apache.wicket.util.resource.StringResourceStream;
+
+import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -57,7 +71,6 @@ import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
  * {@link Mode#RESULTS results} once invoked.
  */
 public class ActionModel extends BookmarkableModel<ObjectAdapter> {
-
     private static final long serialVersionUID = 1L;
     
     private static final String NULL_ARG = "$nullArg$";
@@ -492,6 +505,65 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return actionPrompt;
     }
 
+    // //////////////////////////////////////
+    
+    public static ApplicationException getApplicationExceptionIfAny(Exception ex) {
+        Iterable<ApplicationException> appEx = Iterables.filter(Throwables.getCausalChain(ex), ApplicationException.class);
+        Iterator<ApplicationException> iterator = appEx.iterator();
+        return iterator.hasNext() ? iterator.next() : null;
+    }
+
+    public static IRequestHandler redirectHandler(final Object value) {
+        if(value instanceof java.net.URL) {
+            java.net.URL url = (java.net.URL) value;
+            return new RedirectRequestHandler(url.toString());
+        }
+        return null;
+    }
+
+    public static IRequestHandler downloadHandler(final Object value) {
+        if(value instanceof Clob) {
+            return downloadHandler((Clob)value);
+        }
+        if(value instanceof Blob) {
+            return downloadHandler((Blob)value);
+        }
+        return null;
+    }
+    
+    private static IRequestHandler downloadHandler(final Blob blob) {
+        ResourceRequestHandler handler = 
+            new ResourceRequestHandler(new ByteArrayResource(blob.getMimeType().toString(), blob.getBytes(), blob.getName()), null);
+        return handler;
+    }
+    private static IRequestHandler downloadHandler(final Clob clob) {
+        ResourceStreamRequestHandler handler = 
+            new ResourceStreamRequestHandler(new StringResourceStream(clob.getChars(), clob.getMimeType().toString()), clob.getName());
+        handler.setContentDisposition(ContentDisposition.ATTACHMENT);
+        return handler;
+    }
+
+    // //////////////////////////////////////
+    
+    public List<ActionParameterMemento> primeArgumentModels() {
+        final ObjectAction objectAction = getActionMemento().getAction();
+
+        final List<ObjectActionParameter> parameters = objectAction.getParameters();
+        final List<ActionParameterMemento> mementos = buildParameterMementos(parameters);
+        for (final ActionParameterMemento apm : mementos) {
+            getArgumentModel(apm);
+        }
+        
+        return mementos;
+    }
+
+    
+    private static List<ActionParameterMemento> buildParameterMementos(final List<ObjectActionParameter> parameters) {
+        final List<ActionParameterMemento> parameterMementoList = Lists.transform(parameters, ObjectAdapterMemento.Functions.fromActionParameter());
+        // we copy into a new array list otherwise we get lazy evaluation =
+        // reference to a non-serializable object
+        return Lists.newArrayList(parameterMementoList);
+    }
 
     //////////////////////////////////////////////////
     // Dependencies (from context)
@@ -501,25 +573,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return IsisContext.getOidMarshaller();
     }
 
-	public List<ActionParameterMemento> primeArgumentModels() {
-        final ObjectAction objectAction = getActionMemento().getAction();
-
-        final List<ObjectActionParameter> parameters = objectAction.getParameters();
-        final List<ActionParameterMemento> mementos = buildParameterMementos(parameters);
-        for (final ActionParameterMemento apm : mementos) {
-            getArgumentModel(apm);
-        }
-		
-        return mementos;
-	}
-
-    
-    private static List<ActionParameterMemento> buildParameterMementos(final List<ObjectActionParameter> parameters) {
-        final List<ActionParameterMemento> parameterMementoList = Lists.transform(parameters, ObjectAdapterMemento.Functions.fromActionParameter());
-        // we copy into a new array list otherwise we get lazy evaluation =
-        // reference to a non-serializable object
-        return Lists.newArrayList(parameterMementoList);
-    }
 
 
 }

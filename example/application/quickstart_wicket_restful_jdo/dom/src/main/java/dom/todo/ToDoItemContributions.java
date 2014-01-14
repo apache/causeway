@@ -107,6 +107,9 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     @NotContributed(As.ASSOCIATION)
     public ToDoItem next(final ToDoItem item) {
         final Integer priority = priority(item);
+        if(priority == null) {
+            return item;
+        }
         int priorityOfNext = priority != null ? priority + 1 : 0;
         return itemWithPriorityElse(priorityOfNext, item);
     }
@@ -117,6 +120,9 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     @NotContributed(As.ASSOCIATION)
     public ToDoItem previous(final ToDoItem item) {
         final Integer priority = priority(item);
+        if(priority == null) {
+            return item;
+        }
         int priorityOfPrevious = priority != null? priority - 1 : 0;
         return itemWithPriorityElse(priorityOfPrevious, item);
     }
