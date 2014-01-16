@@ -74,6 +74,10 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         lifecycleListener = new IsisLifecycleListener(synchronizer);
     }
     
+    public PersistenceManagerFactory getPersistenceManagerFactory() {
+        return persistenceManagerFactory;
+    }
+
     private void createSchema(final Map<String, String> props, final Set<String> classesToBePersisted) {
         final JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory)persistenceManagerFactory;
         final NucleusContext nucleusContext = jdopmf.getNucleusContext();
@@ -152,6 +156,7 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     public void resumeListener() {
         lifecycleListener.setSuspended(false);
     }
+
 
 
 }

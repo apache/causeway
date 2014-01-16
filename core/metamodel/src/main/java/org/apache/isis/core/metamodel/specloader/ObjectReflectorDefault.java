@@ -342,7 +342,11 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     @Override
     public void invalidateCacheFor(Object domainObject) {
-        final Class<? extends Object> cls = domainObject.getClass();
+        invalidateCache(domainObject.getClass());
+    }
+
+    @Override
+    public void invalidateCache(final Class<?> cls) {
         final Class<?> substitutedType = getClassSubstitutor().getClass(cls);
         
         ObjectSpecification spec = loadSpecification(substitutedType);
@@ -355,7 +359,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     }
 
     private void recache(final ObjectSpecification newSpec) {
-        getCache().recache(newSpec.getSpecId(), newSpec);
+        getCache().recache(newSpec);
     }
 
     
@@ -393,7 +397,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             return null;
         }
         if(getCache().isInitialized() && getCache().getByObjectType(spec.getSpecId()) == null) {
-            getCache().recache(spec.getSpecId(), spec);
+            getCache().recache(spec);
         }
         return spec;
     }

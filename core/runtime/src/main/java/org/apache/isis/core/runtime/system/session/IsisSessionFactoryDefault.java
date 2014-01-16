@@ -75,6 +75,7 @@ import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
  */
 public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
+    @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(IsisSessionFactoryDefault.class);
     
     private final DeploymentType deploymentType;

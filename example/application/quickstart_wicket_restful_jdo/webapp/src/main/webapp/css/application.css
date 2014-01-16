@@ -50,6 +50,13 @@ example: uncomment to hide the sliding bookmark panel
 }
 */
 
+/*
+example: uncomment to hide the text for the 'notes' field
+div.ToDoItem-notes span.scalarValue {
+    display: none;
+}
+*/
+
 
 .entityActions .cssMenuPanel .menuh li.x-caution a,
 li.x-caution a {
@@ -58,8 +65,6 @@ li.x-caution a {
 .entityCombined .entityActions .cssMenuPanel .menuh li.x-caution a:hover {
     background-color:#20B5C2;
 }	
-
-/*.entityActions .cssMenuPanel .menuh a:hover*/
 
 .entityActions .cssMenuPanel .menuh li.x-highlight a,
 li.x-highlight a {

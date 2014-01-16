@@ -49,4 +49,6 @@ public interface SpecificationLoaderSpi extends ApplicationScopedComponent, Debu
     void validateSpecifications(ValidationFailures validationFailures);
 
     void invalidateCacheFor(Object domainObject);
+    
+    void invalidateCache(Class<?> domainClass);
 }

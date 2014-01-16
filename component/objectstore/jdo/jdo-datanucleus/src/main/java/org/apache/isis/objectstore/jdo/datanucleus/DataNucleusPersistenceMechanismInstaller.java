@@ -23,6 +23,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
+import javax.jdo.PersistenceManagerFactory;
+
 import com.google.common.collect.Sets;
 
 import org.slf4j.Logger;
@@ -246,9 +248,13 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         return new DataNucleusPojoRecreator();
     }
 
-
-
     
+    ////////////////////////////////////////////////////////////////////////
+
+    public PersistenceManagerFactory getPersistenceManagerFactory() {
+        return this.applicationComponents.getPersistenceManagerFactory();
+    }
+
     ////////////////////////////////////////////////////////////////////////
     // Dependencies
     ////////////////////////////////////////////////////////////////////////
@@ -256,5 +262,7 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
+
+
 
 }

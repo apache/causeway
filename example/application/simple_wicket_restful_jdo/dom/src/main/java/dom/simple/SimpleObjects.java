@@ -74,9 +74,7 @@ public class SimpleObjects {
         container.persistIfNotAlready(obj);
         return obj;
     }
-    
-    
-    
+
     // //////////////////////////////////////
     // Injected services
     // //////////////////////////////////////

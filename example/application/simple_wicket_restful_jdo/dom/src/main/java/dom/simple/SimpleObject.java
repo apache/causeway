@@ -18,13 +18,16 @@
  */
 package dom.simple;
 
+import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
+import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.util.ObjectContracts;
 
@@ -45,6 +48,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     
     private String name;
 
+    @Named("whatever")
     @javax.jdo.annotations.Column(allowsNull="false")
     @Title
     public String getName() {

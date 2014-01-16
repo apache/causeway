@@ -76,11 +76,10 @@ class SpecificationCacheDefault {
 
     /**
      * 
-     * @param specId
      * @param spec
      */
-    public void recache(ObjectSpecId specId, ObjectSpecification spec) {
-        specById.put(specId, spec);
+    public void recache(ObjectSpecification spec) {
+        specById.put(spec.getSpecId(), spec);
     }
     
     boolean isInitialized() {
