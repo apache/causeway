@@ -93,7 +93,21 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         syncWithInput();
     }
 
+    /**
+     * Necessary because {@link FormComponentPanel} overrides this as <tt>true</tt>, whereas we want to
+     * report on the state of the underlying {@link Select2Choice}.
+     */
+    @Override
+    public boolean checkRequired() {
+        return select2Field.checkRequired();
+    }
 
+    @Override
+    public boolean isRequired() {
+        return super.isRequired();
+    }
+
+    
     /**
      * Must be called after {@link #setEnabled(boolean)} to ensure that the
      * <tt>findUsing</tt> button, and the <tt>entityClearLink</tt> are 
@@ -189,6 +203,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         final IModel<ObjectAdapterMemento> model = ScalarModelWithPending.Util.createModel(getScalarModel().asScalarModelWithPending());       
 
         if(select2Field == null) {
+            setRequired(getScalarModel().isRequired());
             select2Field = Select2ChoiceUtil.newSelect2Choice(ID_AUTO_COMPLETE, model, getScalarModel());
             setProviderAndCurrAndPending(select2Field, getScalarModel().getActionArgsHint());
             if(!getScalarModel().hasChoices()) {
@@ -329,7 +344,8 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         if(this.select2Field != null) {
             select2Field.getModel().setObject(selectedAdapterMemento);
         }
-        renderSamePage();
+        // not sure why this was here, at any rate it trips up when performing validation with modal dialogs.
+        // renderSamePage();
     }
 
     public void onNoResults() {

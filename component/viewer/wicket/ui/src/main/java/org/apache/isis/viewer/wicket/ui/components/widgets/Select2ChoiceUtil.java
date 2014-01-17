@@ -36,8 +36,9 @@ public final class Select2ChoiceUtil  {
     
     public static Select2Choice<ObjectAdapterMemento> newSelect2Choice(String id, final IModel<ObjectAdapterMemento> modelObject, ScalarModel scalarModel) {
         Select2Choice<ObjectAdapterMemento> select2Choice = new Select2Choice<ObjectAdapterMemento>(id, modelObject);
-        int typicalLength = scalarModel.getTypicalLength(); 
+        int typicalLength = scalarModel.getTypicalLength();
         select2Choice.add(new AttributeAppender("style", asCssStyleWidth(typicalLength)));
+        select2Choice.setRequired(scalarModel.isRequired());
         return select2Choice;
     }
 
