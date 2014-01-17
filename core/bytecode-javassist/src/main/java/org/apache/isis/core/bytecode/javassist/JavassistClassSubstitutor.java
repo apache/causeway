@@ -19,27 +19,12 @@
 
 package org.apache.isis.core.bytecode.javassist;
 
-import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
 
+/**
+ * @deprecated - moved to core
+ */
+@Deprecated
 public class JavassistClassSubstitutor extends ClassSubstitutorAbstract {
-
-    public JavassistClassSubstitutor() {
-        ignore("javassist.util.proxy.ProxyObject");
-        ignore("javassist.util.proxy.MethodHandler");
-    }
-
-    /**
-     * If {@link JavassistEnhanced} then return superclass, else as per
-     * {@link ClassSubstitutorAbstract#getClass(Class) superclass'}
-     * implementation.
-     */
-    @Override
-    public Class<?> getClass(final Class<?> cls) {
-        if (ClassUtil.directlyImplements(cls, JavassistEnhanced.class)) {
-            return getClass(cls.getSuperclass());
-        }
-        return super.getClass(cls);
-    }
 
 }

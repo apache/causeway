@@ -32,15 +32,13 @@ import java.util.TreeSet;
 import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
-import javax.jdo.spi.PersistenceCapable;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Ordering;
 
-import dom.todo.ToDoItem.Category;
-
 import org.joda.time.LocalDate;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
@@ -48,7 +46,9 @@ import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.Bulk.AppliesTo;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext;
+import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
@@ -63,6 +63,7 @@ import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
@@ -311,18 +312,21 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public ToDoItem completed() {
         setComplete(true);
         
-        // demonstrating the use of ... 
-        final InteractionContext ctxt = InteractionContext.current.get();
+        //
+        // remainder of method just demonstrates the use of the Bulk.InteractionContext service 
+        //
         @SuppressWarnings("unused")
-        List<Object> allObjects = ctxt.getDomainObjects();
+        final List<Object> allObjects = bulkInteractionContext.getDomainObjects();
         
         LOG.debug("completed: "
-                + ctxt.getIndex() +
-                " [" + ctxt.getSize() + "]"
-                + (ctxt.isFirst() ? " (first)" : "")
-                + (ctxt.isLast() ? " (last)" : ""));
+                + bulkInteractionContext.getIndex() +
+                " [" + bulkInteractionContext.getSize() + "]"
+                + (bulkInteractionContext.isFirst() ? " (first)" : "")
+                + (bulkInteractionContext.isLast() ? " (last)" : ""));
 
-        return this;
+        // if invoked as a regular action, return this object;
+        // otherwise (if invoked as bulk), return null (so go back to the list)
+        return bulkInteractionContext.getInvokedAs() == InvokedAs.REGULAR? this: null;
     }
     // disable action dependent on state of object
     public String disableCompleted() {
@@ -422,16 +426,16 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // //////////////////////////////////////
 
     public Long getVersionSequence() {
-        if(!(this instanceof PersistenceCapable)) {
+        if(!(this instanceof javax.jdo.spi.PersistenceCapable)) {
             return null;
         } 
-        PersistenceCapable persistenceCapable = (PersistenceCapable) this;
+        javax.jdo.spi.PersistenceCapable persistenceCapable = (javax.jdo.spi.PersistenceCapable) this;
         final Long version = (Long) JDOHelper.getVersion(persistenceCapable);
         return version;
     }
     // hide property (imperatively, based on state of object)
     public boolean hideVersionSequence() {
-        return !(this instanceof PersistenceCapable);
+        return !(this instanceof javax.jdo.spi.PersistenceCapable);
     }
 
     // //////////////////////////////////////
@@ -579,6 +583,27 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         return toDoItems.notYetComplete(); 
     }
 
+    
+    // //////////////////////////////////////
+    // totalCost
+    // //////////////////////////////////////
+
+    @Bulk(AppliesTo.BULK_ONLY)
+    public BigDecimal totalCost() {
+        BigDecimal total = (BigDecimal) scratchpad.get("runningTotal");
+        if(getCost() != null) {
+            total = total != null ? total.add(getCost()) : getCost();
+            scratchpad.put("runningTotal", total);
+        }
+        return total.setScale(2);
+    }
+
+    private Scratchpad scratchpad;
+    public void injectScratchpad(Scratchpad scratchpad) {
+        this.scratchpad = scratchpad;
+    }
+    
+    
     // //////////////////////////////////////
     // Programmatic Helpers
     // //////////////////////////////////////
@@ -711,6 +736,12 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     @SuppressWarnings("unused")
     private ClockService clockService;
     
+    @javax.inject.Inject
+    Bulk.InteractionContext bulkInteractionContext;
+    public void injectBulkInteractionContext(Bulk.InteractionContext bulkInteractionContext) {
+        this.bulkInteractionContext = bulkInteractionContext;
+    }
+
     // //////////////////////////////////////
     // Extensions
     // //////////////////////////////////////

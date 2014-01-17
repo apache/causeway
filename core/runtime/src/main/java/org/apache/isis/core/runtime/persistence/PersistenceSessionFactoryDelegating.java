@@ -188,14 +188,6 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     public ServicesInjectorSpi getServicesInjector() {
         return servicesInjector;
     }
-    
-    public DomainObjectContainer getContainer() {
-        return container;
-    }
-    
-    public List<Object> getServiceList() {
-        return serviceList;
-    }
 
     // //////////////////////////////////////////////////////
     // MetaModelAdjuster impl
@@ -245,11 +237,6 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
 
     public void setContainer(DomainObjectContainer container) {
         this.container = container;
-    }
-    
-    @Override
-    public List<Object> getServices() {
-        return serviceList;
     }
 
     @Override

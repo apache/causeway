@@ -68,10 +68,6 @@ public interface PersistenceSessionFactory extends ClassSubstitutorFactory, Meta
     public void setContainer(DomainObjectContainer container);
     public void setServices(List<Object> servicesList);
 
-    public List<Object> getServices();
-
-
-
 
 
 }

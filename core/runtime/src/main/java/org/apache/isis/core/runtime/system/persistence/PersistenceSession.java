@@ -36,6 +36,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.ViewModel;
+import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.Bulk.InteractionContext;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
@@ -86,6 +88,7 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPatt
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
+import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.EnlistedObjectDirtying;
@@ -242,11 +245,8 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         if (LOG.isDebugEnabled()) {
             LOG.debug("closing " + this);
         }
-        
-        // a bit of a hack
-        if(eventBusService != null) {
-            eventBusService.close();
-        }
+
+        closeServices();
 
         try {
             objectStore.close();
@@ -269,6 +269,23 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         setState(State.CLOSED);
     }
 
+    private void closeServices() {
+        for (final Object service : servicesInjector.getRegisteredServices()) {
+            if(service instanceof RequestScopedService) {
+                ((RequestScopedService)service).__isis_endRequest();
+            }
+        }
+        
+        // a bit of a hack
+        if(bulkInteractionContext != null) {
+            Bulk.InteractionContext.current.set(null);
+        }
+        // a bit of a hack
+        if(eventBusService != null) {
+            eventBusService.close();
+        }
+    }
+
     /**
      * Creates (or recreates following a {@link #testReset()})
      * {@link ObjectAdapter adapters} for the {@link #serviceList}.
@@ -276,6 +293,10 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     private void createServiceAdapters() {
         getTransactionManager().startTransaction();
         for (final Object service : servicesInjector.getRegisteredServices()) {
+            if(service instanceof RequestScopedService) {
+                ((RequestScopedService)service).__isis_startRequest();
+            }
+            
             final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(service.getClass());
             serviceSpecification.markAsService();
             final RootOid existingOid = getOidForService(serviceSpecification);
@@ -302,6 +323,11 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
                 eventBusService = (EventBusServiceDefault) object;
                 EventBusServiceDefault ebs = eventBusService;
                 ebs.open();
+            }
+
+            if(service instanceof Bulk.InteractionContext) {
+                bulkInteractionContext = (Bulk.InteractionContext) service;
+                Bulk.InteractionContext.current.set(bulkInteractionContext);
             }
 
         }
@@ -983,6 +1009,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     private Map<Oid, Oid> persistentByTransient = Maps.newHashMap();
 
     private EventBusServiceDefault eventBusService;
+    private Bulk.InteractionContext bulkInteractionContext;
 
     /**
      * Callback from the {@link PersistAlgorithm} (or equivalent; some object

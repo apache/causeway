@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.bytecode.identity;
+package org.apache.isis.core.runtime.bytecode.dflt;
 
 import java.lang.reflect.Modifier;
 

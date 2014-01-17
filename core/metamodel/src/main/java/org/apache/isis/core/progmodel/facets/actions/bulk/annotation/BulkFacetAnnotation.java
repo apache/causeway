@@ -19,13 +19,14 @@
 
 package org.apache.isis.core.progmodel.facets.actions.bulk.annotation;
 
+import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacetAbstract;
 
 public class BulkFacetAnnotation extends BulkFacetAbstract {
 
-    public BulkFacetAnnotation(final FacetHolder holder) {
-        super(holder);
+    public BulkFacetAnnotation(Bulk.AppliesTo value, final FacetHolder holder) {
+        super(value, holder);
     }
 
 }

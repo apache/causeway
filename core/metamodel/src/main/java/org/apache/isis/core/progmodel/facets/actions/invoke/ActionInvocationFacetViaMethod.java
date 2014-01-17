@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext;
+import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -97,19 +98,15 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
             final Object object = unwrap(inObject);
             
             final Object result;
-            
             final BulkFacet bulkFacet = getFacetHolder().getFacet(BulkFacet.class);
-            if(bulkFacet != null && Bulk.InteractionContext.current.get() == null) {
-                // make sure that the Bulk interaction context is set if not already
-                try {
-                    Bulk.InteractionContext.current.set(new InteractionContext(object));
-                    result = method.invoke(object, executionParameters);
-                } finally {
-                    Bulk.InteractionContext.current.set(null);
+            if(bulkFacet != null) {
+                Bulk.InteractionContext bulkInteractionContext = Bulk.InteractionContext.current.get();
+                if (bulkInteractionContext != null && bulkInteractionContext.getInvokedAs() == null) {
+                    bulkInteractionContext.setInvokedAs(InvokedAs.REGULAR);
+                    bulkInteractionContext.setDomainObjects(Collections.singletonList(object));
                 }
-            } else {
-                result = method.invoke(object, executionParameters);
             }
+            result = method.invoke(object, executionParameters);
             
             if (LOG.isDebugEnabled()) {
                 LOG.debug(" action result " + result);

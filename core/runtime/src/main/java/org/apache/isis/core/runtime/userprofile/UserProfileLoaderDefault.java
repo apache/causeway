@@ -21,6 +21,11 @@ package org.apache.isis.core.runtime.userprofile;
 
 import java.util.List;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +34,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
@@ -180,11 +186,13 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebuggableWi
         final UserProfile profile = new UserProfile();
         profile.newPerspective(DEFAULT_PERSPECTIVE_NAME + (IsisContext.getDeploymentType().isExploring() ? EXPLORATION : ""));
 
-        final List<Object> services = getServices();
-        if (services.size() == 0 && mode == Mode.STRICT) {
-            throw new IsisException("No known services");
+        final List<Object> singletonServices = Lists.newArrayList(Iterables.filter(
+                        getServices(), 
+                        Predicates.not(RequestScopedService.Predicates.instanceOf())));
+        if (singletonServices.size() == 0 && mode == Mode.STRICT) {
+            throw new IsisException("No known (singleton) services");
         }
-        for (final Object service : services) {
+        for (final Object service : singletonServices) {
             profile.getPerspective().addToServices(service);
         }
         LOG.debug("creating exploration UserProfile for " + userName);

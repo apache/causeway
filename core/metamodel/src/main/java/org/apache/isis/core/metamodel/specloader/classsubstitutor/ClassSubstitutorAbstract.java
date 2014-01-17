@@ -24,6 +24,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.core.commons.lang.ClassUtil;
 
 public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
 
@@ -85,6 +86,9 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
         final Class<?> superclass = cls.getSuperclass();
         if(superclass != null && superclass.isEnum()) {
             return superclass;
+        }
+        if (ClassUtil.directlyImplements(cls, JavassistEnhanced.class)) {
+            return getClass(cls.getSuperclass());
         }
         return cls;
     }

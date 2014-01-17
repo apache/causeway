@@ -19,55 +19,32 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-
-import com.google.common.base.Throwables;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.handler.resource.ResourceRequestHandler;
-import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.request.http.handler.RedirectRequestHandler;
-import org.apache.wicket.request.resource.ByteArrayResource;
-import org.apache.wicket.request.resource.ContentDisposition;
-import org.apache.wicket.util.resource.StringResourceStream;
 
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.model.models.ActionExecutor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ValueModel;
-import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseHandlingStrategy;
+import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
+import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
-import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
-import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -85,7 +62,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_ACTION_NAME = "actionName";
+    static final String ID_ACTION_NAME = "actionName";
 
     public ActionPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
@@ -101,7 +78,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         }
     }
 
-    private ActionModel getActionModel() {
+    ActionModel getActionModel() {
         return super.getModel();
     }
 
@@ -127,7 +104,8 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             }
             
             // forward onto the target page with the concurrency exception
-            ResultType.OBJECT.addResults(this, targetAdapter, ex);
+            ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, ex);
+            ActionResultResponseHandlingStrategy.determineFor(resultResponse).handleResults(this, resultResponse);
 
             getMessageBroker().addWarning(ex.getMessage());
         }
@@ -167,9 +145,9 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 targetAdapter = getModel().getTargetAdapter();
             }
 
-            
             // forward onto the target page with the concurrency exception
-            ResultType.OBJECT.addResults(this, targetAdapter, ex);
+            ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, ex);
+            ActionResultResponseHandlingStrategy.determineFor(resultResponse).handleResults(this, resultResponse);
 
             getMessageBroker().addWarning(ex.getMessage());
             return false;
@@ -204,8 +182,9 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             // will be thrown here
             getTransactionManager().flushTransaction();
             
-            final ResultType resultType = ResultType.determineFor(resultAdapter);
-            resultType.addResults(this, resultAdapter);
+            ActionResultResponse resultResponse = ActionResultResponseType.determineAndInterpretResult(this.getActionModel(), resultAdapter);
+            final ActionResultResponseHandlingStrategy resultType = ActionResultResponseHandlingStrategy.determineFor(resultResponse);
+            resultType.handleResults(this, resultResponse);
 
             if (actionModel.isBookmarkable()) {
                 bookmarkPage(actionModel);
@@ -224,8 +203,8 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                     // forward on instead to void page
                     // (otherwise, we'll have rendered an action parameters page 
                     // and so we'll be staying on that page)
-                    final ResultType resultType = ResultType.determineFor(null);
-                    resultType.addResults(this, null);
+                    final ActionResultResponseHandlingStrategy resultType = ActionResultResponseHandlingStrategy.determineFor(null);
+                    resultType.handleResults(this, null);
                 }
 
                 return false;
@@ -304,165 +283,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             // not handled, so propagate
             throw ex;
         }
-    }
-
-    enum ResultType {
-        OBJECT {
-            @Override
-            public void addResults(final ActionPanel actionPanel, final ObjectAdapter resultAdapter) {
-                final ObjectAdapter actualAdapter = determineActualAdapter(resultAdapter, actionPanel);
-                redirectToEntityPage(actionPanel, actualAdapter, null);
-            }
-
-            @Override
-            public void addResults(ActionPanel actionPanel, ObjectAdapter targetAdapter, ConcurrencyException ex) {
-                redirectToEntityPage(actionPanel, targetAdapter, ex);
-            }
-
-            private void redirectToEntityPage(final ActionPanel panel, final ObjectAdapter actualAdapter, ConcurrencyException exIfAny) {
-                panel.permanentlyHide(ID_ACTION_NAME);
-
-                // force any changes in state etc to happen now prior to the redirect;
-                // this should cause our page mementos (eg EntityModel) to hold the correct state.  I hope.
-                panel.getTransactionManager().flushTransaction();
-                
-                // build page, also propagate any concurrency exception that might have occurred already
-                final EntityPage entityPage = new EntityPage(actualAdapter, exIfAny);
-                
-                // "redirect-after-post"
-                panel.setResponsePage(entityPage);
-            }
-
-        },
-        COLLECTION {
-            @Override
-            public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
-                
-                final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter);
-                collectionModel.setActionHint(panel.getActionModel());
-                
-                final StandaloneCollectionPage standaloneCollectionPage = new StandaloneCollectionPage(collectionModel);
-                
-                // "redirect-after-post"
-                panel.setResponsePage(standaloneCollectionPage);
-            }
-        },
-        VALUE {
-            @Override
-            public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
-                ValueModel valueModel = new ValueModel(resultAdapter);
-                valueModel.setActionHint(panel.getActionModel());
-                final ValuePage valuePage = new ValuePage(valueModel);
-                panel.setResponsePage(valuePage);
-            }
-        },
-        VALUE_CLOB {
-            @Override
-            public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
-                final Object value = resultAdapter.getObject();
-                RequestCycle requestCycle = panel.getRequestCycle();
-                IRequestHandler handler = ActionModel.downloadHandler(value);
-                requestCycle.scheduleRequestHandlerAfterCurrent(handler);
-            }
-        },
-        VALUE_BLOB {
-            @Override
-            public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
-                final Object value = resultAdapter.getObject();
-                RequestCycle requestCycle = panel.getRequestCycle();
-                IRequestHandler handler = ActionModel.downloadHandler(value);
-                requestCycle.scheduleRequestHandlerAfterCurrent(handler);
-            }
-
-        },
-        VALUE_URL {
-            @Override
-            public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
-                final Object value = resultAdapter.getObject();
-                IRequestHandler handler = ActionModel.redirectHandler(value);
-                RequestCycle requestCycle = panel.getRequestCycle();
-                requestCycle.scheduleRequestHandlerAfterCurrent(handler);
-            }
-
-        },
-        VOID {
-            @Override
-            public void addResults(final ActionPanel panel, final ObjectAdapter resultAdapter) {
-                
-                final VoidModel voidModel = new VoidModel();
-                voidModel.setActionHint(panel.getActionModel());
-                
-                final VoidReturnPage voidReturnPage = new VoidReturnPage(voidModel);
-                
-                panel.setResponsePage(voidReturnPage);
-            }
-        };
-
-        public abstract void addResults(ActionPanel panel, ObjectAdapter resultAdapter);
-
-        /**
-         * Only overridden for ResultType.OBJECT
-         */
-        public void addResults(ActionPanel actionPanel, ObjectAdapter targetAdapter, ConcurrencyException ex) {
-            throw new UnsupportedOperationException("Cannot render concurrency exception for any result type other than OBJECT");
-        }
-
-        static ResultType determineFor(final ObjectAdapter resultAdapter) {
-            if(resultAdapter == null) {
-                return ResultType.VOID;
-            }
-            final ObjectSpecification resultSpec = resultAdapter.getSpecification();
-            if (resultSpec.isNotCollection()) {
-                if (resultSpec.getFacet(ValueFacet.class) != null) {
-                    
-                    final Object value = resultAdapter.getObject();
-                    if(value instanceof Clob) {
-                        return ResultType.VALUE_CLOB;
-                    } 
-                    if(value instanceof Blob) {
-                        return ResultType.VALUE_BLOB;
-                    } 
-                    if(value instanceof java.net.URL) {
-                        return ResultType.VALUE_URL;
-                    } 
-                    // else
-                    return ResultType.VALUE;
-                } else {
-                    return ResultType.OBJECT;
-                }
-            } else {
-                final List<Object> pojoList = asList(resultAdapter);
-                switch (pojoList.size()) {
-                case 1:
-                    return ResultType.OBJECT;
-                default:
-                    return ResultType.COLLECTION;
-                }
-            }
-        }
-    }
-
-    private static ObjectAdapter determineActualAdapter(final ObjectAdapter resultAdapter, final PersistenceSessionProvider psa) {
-        ObjectAdapter actualAdapter;
-        if (resultAdapter.getSpecification().isNotCollection()) {
-            actualAdapter = resultAdapter;
-        } else {
-            // will only be a single element
-            final List<Object> pojoList = asList(resultAdapter);
-            final Object pojo = pojoList.get(0);
-            actualAdapter = adapterFor(pojo, psa);
-        }
-        return actualAdapter;
-    }
-    private static ObjectAdapter adapterFor(final Object pojo, final PersistenceSessionProvider psa) {
-        return psa.getPersistenceSession().getAdapterManager().adapterFor(pojo);
-    }
-    @SuppressWarnings("unchecked")
-    private static List<Object> asList(final ObjectAdapter resultAdapter) {
-        final Collection<Object> coll = (Collection<Object>) resultAdapter.getObject();
-        return coll instanceof List
-                ? (List<Object>)coll
-                : Lists.<Object>newArrayList(coll);
     }
 
 

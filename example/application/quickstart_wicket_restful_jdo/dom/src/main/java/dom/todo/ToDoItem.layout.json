@@ -153,6 +153,7 @@
     }
     ],
     actions: {
+        totalCost: {},
         delete: {
             cssClass: { value: "x-caution" }
         },

@@ -25,9 +25,7 @@ import java.util.List;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
-import org.apache.wicket.Page;
 import org.apache.wicket.Session;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -42,7 +40,6 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActions;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -66,9 +63,12 @@ public final class EntityActionUtil {
         final ObjectAdapter adapter = entityModel.load(ConcurrencyChecking.NO_CHECK);
         final ObjectAdapterMemento adapterMemento = entityModel.getObjectAdapterMemento();
         
-        @SuppressWarnings("unchecked")
-        final List<ObjectAction> userActions = adapterSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED,
-                Filters.and(ObjectAction.Filters.memberOrderOf(association), EntityActionUtil.dynamicallyVisibleFor(adapter)));
+        @SuppressWarnings({ "unchecked", "deprecation" })
+        Filter<ObjectAction> filter = Filters.and(
+                ObjectAction.Filters.memberOrderOf(association), 
+                EntityActionUtil.dynamicallyVisibleFor(adapter),
+                ObjectAction.Filters.notBulkOnly());
+        final List<ObjectAction> userActions = adapterSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED, filter);
         Collections.sort(userActions, new Comparator<ObjectAction>() {
 
             @Override

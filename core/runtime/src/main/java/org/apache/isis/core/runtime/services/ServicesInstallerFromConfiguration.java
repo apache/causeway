@@ -26,6 +26,8 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.enterprise.context.RequestScoped;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -51,10 +53,17 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
 
     private static final char DELIMITER = '#';
 
-    public ServicesInstallerFromConfiguration() {
-        super(ServicesInstaller.TYPE, "configuration");
-    }
+    private final ServiceInstantiator serviceInstantiator;
 
+    public ServicesInstallerFromConfiguration() {
+        this(new ServiceInstantiator());
+    }
+    
+    ServicesInstallerFromConfiguration(final ServiceInstantiator serviceInstantiator) {
+        super(ServicesInstaller.TYPE, "configuration");
+        this.serviceInstantiator = serviceInstantiator;
+    }
+    
     @Override
     public List<Object> getServices(final DeploymentType deploymentType) {
 
@@ -114,13 +123,9 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
             }
 
             LOG.info("creating service " + serviceName + (order!=Integer.MAX_VALUE?" at position " + order: "" ));
-            Object service;
-            if (serviceName.indexOf(DELIMITER) == -1) {
-                service = createService(servicePrefix + serviceName);
-            } else {
-                service = createSimpleRepository(servicePrefix, serviceName);
-            }
-            
+            Object service = serviceName.indexOf(DELIMITER) == -1 
+                    ? createService(servicePrefix + serviceName) 
+                    : createSimpleRepository(servicePrefix, serviceName);
             list.add(service);
         }
         for (Integer position : positionedServices.keySet()) {
@@ -157,8 +162,8 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
     }
 
     private Object createService(final String className) {
-        final Class<?> loadedClass = loadClass(className);
-        return createInstance(loadedClass);
+        final Class<?> cls = loadClass(className);
+        return serviceInstantiator.createInstance(cls);
     }
 
     private static String servicePrefix(final String servicePrefix) {
@@ -175,18 +180,6 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
             return Thread.currentThread().getContextClassLoader().loadClass(className);
         } catch (final ClassNotFoundException ex) {
             throw new InitialisationException(String.format("Cannot find class '%s' for service", className));
-        }
-    }
-
-    private static <T> T createInstance(final Class<T> serviceType) {
-        try {
-            return serviceType.newInstance();
-        } catch (final NoClassDefFoundError e) {
-            throw new InstanceCreationClassException("Class found '" + serviceType + "', but is missing a dependent class", e);
-        } catch (final InstantiationException e) {
-            throw new InstanceCreationException("Could not instantiate an object of class '" + serviceType.getName() + "'; " + e.getMessage());
-        } catch (final IllegalAccessException e) {
-            throw new InstanceCreationException("Could not access the class '" + serviceType.getName() + "'; " + e.getMessage());
         }
     }
 

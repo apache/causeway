@@ -23,7 +23,10 @@ package org.apache.isis.core.bytecode.javassist;
 /**
  * Marker interface that we make entities implement so easy to spot in the
  * {@link JavassistClassSubstitutor}.
+ * 
+ * @deprecated - moved into core
  */
-public interface JavassistEnhanced {
+@Deprecated
+public interface JavassistEnhanced extends org.apache.isis.core.metamodel.specloader.classsubstitutor.JavassistEnhanced{
 
 }

@@ -48,6 +48,9 @@ import services.ClockService;
 @Named("ToDos")
 public class ToDoItems {
 
+    public ToDoItems() {
+    }
+    
     // //////////////////////////////////////
     // Identification in the UI
     // //////////////////////////////////////

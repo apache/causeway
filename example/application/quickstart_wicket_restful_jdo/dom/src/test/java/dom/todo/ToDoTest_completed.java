@@ -19,10 +19,13 @@ package dom.todo;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
+import java.util.Collections;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 
 public class ToDoTest_completed {
 
@@ -32,6 +35,9 @@ public class ToDoTest_completed {
     public void setUp() throws Exception {
         toDoItem = new ToDoItem();
         toDoItem.setComplete(false);
+        
+        Bulk.InteractionContext interactionContext = Bulk.InteractionContext.regularAction(toDoItem);
+        toDoItem.bulkInteractionContext = interactionContext;
     }
     
     @Test
@@ -40,12 +46,7 @@ public class ToDoTest_completed {
         assertThat(toDoItem.disableCompleted(), is(nullValue()));
         
         // when
-        Bulk.InteractionContext.with(new Runnable() {
-            @Override
-            public void run() {
-                toDoItem.completed();
-            }
-        }, toDoItem);
+        toDoItem.completed();
         
         // then
         assertThat(toDoItem.isComplete(), is(true));

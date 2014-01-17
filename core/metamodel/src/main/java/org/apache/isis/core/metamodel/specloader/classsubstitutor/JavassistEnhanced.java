@@ -17,20 +17,12 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.actions.bulk;
-
-import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.core.metamodel.facets.SingleValueFacet;
+package org.apache.isis.core.metamodel.specloader.classsubstitutor;
 
 /**
- * Indicates that the action (entity or service) can also be used as a bulk
- * action against collections of objects.
- * 
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
- * action method using <tt>@Bulk</tt>.
+ * Marker interface for entities/services that have been enhanced with
+ * javassist.
  */
-public interface BulkFacet extends SingleValueFacet<Bulk.AppliesTo> {
+public interface JavassistEnhanced {
 
-    public Bulk.AppliesTo value();
 }

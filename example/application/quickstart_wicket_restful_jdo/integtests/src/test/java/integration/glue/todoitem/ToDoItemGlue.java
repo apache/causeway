@@ -19,6 +19,7 @@ package integration.glue.todoitem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Predicate;
@@ -36,6 +37,7 @@ import org.jmock.Expectations;
 import org.junit.Assert;
 
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.Bulk.InteractionContext;
 import org.apache.isis.core.specsupport.scenarios.InMemoryDB;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
 
@@ -74,17 +76,15 @@ public class ToDoItemGlue extends CukeGlueAbstract {
     public void mark_it_as_complete() throws Throwable {
         final ToDoItem toDoItem = getVar(null, "toDoItem", ToDoItem.class);
         if(supportsMocks()) {
-            Bulk.InteractionContext.with(new Runnable(){
-                @Override
-                public void run() {
-                    toDoItem.completed();
+            final Bulk.InteractionContext bulkInteractionContext = service(Bulk.InteractionContext.class);
+            checking(new Expectations() {
+                {
+                    allowing(bulkInteractionContext);
                 }
-            }, toDoItem);
-        } else {
-            // can just call directly; 
-            // framework will take care of setting the Bulk.InteractionContext.
-            wrap(toDoItem).completed();
+            });
+            toDoItem.injectBulkInteractionContext(bulkInteractionContext);
         }
+        wrap(toDoItem).completed();
     }
     
     @Then("^the item is no longer listed as incomplete$")

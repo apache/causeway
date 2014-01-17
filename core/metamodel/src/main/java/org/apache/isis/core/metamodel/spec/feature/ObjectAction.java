@@ -24,6 +24,7 @@ import java.util.List;
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -150,7 +151,8 @@ public interface ObjectAction extends ObjectMember {
      * 
      * @return
      */
-    List<ObjectActionParameter> getParameters(Filter<ObjectActionParameter> filter);
+    List<ObjectActionParameter> getParameters(
+            @SuppressWarnings("deprecation") Filter<ObjectActionParameter> filter);
 
     /**
      * Returns the parameter with provided id.
@@ -210,6 +212,7 @@ public interface ObjectAction extends ObjectMember {
         
         private Filters(){}
         
+        @SuppressWarnings("deprecation")
         public static final Filter<ObjectAction> VISIBLE_AT_LEAST_SOMETIMES = new Filter<ObjectAction>() {
             @Override
             public boolean accept(final ObjectAction action) {
@@ -218,6 +221,7 @@ public interface ObjectAction extends ObjectMember {
             }
         };
 
+        @SuppressWarnings("deprecation")
         public static Filter<ObjectAction> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target, final Where where) {
             return new Filter<ObjectAction>() {
                 @Override
@@ -228,6 +232,7 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
+        @SuppressWarnings("deprecation")
         public static Filter<ObjectAction> withId(final String actionId) {
             return new Filter<ObjectAction>(){
                 @Override
@@ -237,6 +242,7 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
+        @SuppressWarnings("deprecation")
         public static Filter<ObjectAction> withNoValidationRules() {
             return new Filter<ObjectAction>(){
                 @Override
@@ -246,6 +252,7 @@ public interface ObjectAction extends ObjectMember {
                 }};
         }
 
+        @SuppressWarnings("deprecation")
         public static Filter<ObjectAction> ofType(final ActionType type) {
             return new Filter<ObjectAction>(){
                 @Override
@@ -255,6 +262,7 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
+        @SuppressWarnings("deprecation")
         public static Filter<ObjectAction> bulk() {
             return new Filter<ObjectAction>(){
 
@@ -264,6 +272,19 @@ public interface ObjectAction extends ObjectMember {
                 }};
         }
         
+        @SuppressWarnings("deprecation")
+        public static Filter<ObjectAction> notBulkOnly() {
+            return new Filter<ObjectAction>(){
+
+                @Override
+                public boolean accept(ObjectAction t) {
+                    BulkFacet facet = t.getFacet(BulkFacet.class);
+                    return facet == null || facet.value() != Bulk.AppliesTo.BULK_ONLY;
+                }};
+        }
+
+
+        @SuppressWarnings("deprecation")
         public static Filter<ObjectAction> memberOrderOf(ObjectAssociation association) {
             final String assocName = association.getName();
             final String assocId = association.getId();

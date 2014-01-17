@@ -79,6 +79,7 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     private static final String ID_ENTITY_ACTIONS = "entityActions";
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     
+    @SuppressWarnings("deprecation")
     private static final Predicate<ObjectAction> BULK = Filters.asPredicate(ObjectAction.Filters.bulk());
     
     private IsisAjaxFallbackDataTable<ObjectAdapter,String> dataTable;

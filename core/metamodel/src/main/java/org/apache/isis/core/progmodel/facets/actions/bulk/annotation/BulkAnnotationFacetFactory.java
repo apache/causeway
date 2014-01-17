@@ -47,7 +47,7 @@ public class BulkAnnotationFacetFactory extends FacetFactoryAbstract {
     }
 
     private BulkFacet create(final Bulk annotation, final FacetHolder holder) {
-        return annotation == null ? null : new BulkFacetAnnotation(holder);
+        return annotation == null ? null : new BulkFacetAnnotation(annotation.value(), holder);
     }
 
 }

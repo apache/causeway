@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,9 +33,11 @@ import org.apache.wicket.Session;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext;
+import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.MessageBroker;
@@ -49,11 +52,15 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.MementoFunctions;
 import org.apache.isis.viewer.wicket.model.util.ObjectAdapterFunctions;
+import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
+import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 final class BulkActionsLinkFactory implements ActionLinkFactory {
     
@@ -94,21 +101,25 @@ final class BulkActionsLinkFactory implements ActionLinkFactory {
                     
                     final List<Object> domainObjects = Lists.newArrayList(Iterables.transform(toggledAdapters, ObjectAdapter.Functions.getObject()));
                     
-                    try {
-                        final Bulk.InteractionContext interactionContext = new Bulk.InteractionContext(domainObjects);
-                        Bulk.InteractionContext.current.set(interactionContext);
-                        int i=0;
-                        for(final ObjectAdapter adapter : toggledAdapters) {
-        
-                            int numParameters = objectAction.getParameterCount();
-                            if(numParameters != 0) {
-                                return;
-                            }
-                            interactionContext.setIndex(i++);
-                            objectAction.execute(adapter, new ObjectAdapter[]{});
+                    
+                    final Bulk.InteractionContext bulkInteractionContext = Bulk.InteractionContext.current.get();
+                    if (bulkInteractionContext != null) {
+                        bulkInteractionContext.setInvokedAs(InvokedAs.BULK);
+                        bulkInteractionContext.setDomainObjects(domainObjects);
+                    }
+
+                    ObjectAdapter lastReturnedAdapter = null;
+                    int i=0;
+                    for(final ObjectAdapter adapter : toggledAdapters) {
+    
+                        int numParameters = objectAction.getParameterCount();
+                        if(numParameters != 0) {
+                            return;
                         }
-                    } finally {
-                        Bulk.InteractionContext.current.set(null);
+                        if (bulkInteractionContext != null) {
+                            bulkInteractionContext.setIndex(i++);
+                        }
+                        lastReturnedAdapter = objectAction.execute(adapter, new ObjectAdapter[]{});
                     }
                     
                     model.clearToggleMementosList();
@@ -118,6 +129,14 @@ final class BulkActionsLinkFactory implements ActionLinkFactory {
                         model.setObjectList(resultAdapter);
                     } else {
                         model.setObject(persistentAdaptersWithin(model.getObject()));
+                    }
+                    
+                    if(lastReturnedAdapter != null) {
+                        final ActionResultResponse resultResponse = 
+                                ActionResultResponseType.determineAndInterpretResult(actionModelHint, lastReturnedAdapter);
+                        if(resultResponse.isToPage()) {
+                            setResponsePage(resultResponse.getToPage());
+                        }
                     }
 
                 } catch(final ConcurrencyException ex) {

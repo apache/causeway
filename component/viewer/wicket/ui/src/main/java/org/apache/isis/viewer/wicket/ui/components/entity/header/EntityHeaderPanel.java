@@ -30,6 +30,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 
+import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
@@ -41,6 +42,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -135,12 +137,16 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
 
     private void addTopLevelActions(final ObjectAdapter adapter, ActionType actionType, final List<ObjectAction> topLevelActions) {
         final ObjectSpecification adapterSpec = adapter.getSpecification();
-        @SuppressWarnings("unchecked")
-        final List<ObjectAction> userActions = adapterSpec.getObjectActions(actionType, Contributed.INCLUDED, 
-                Filters.and(memberOrderNameNotAssociation(adapterSpec), dynamicallyVisibleFor(adapter)));
+        @SuppressWarnings({ "unchecked", "deprecation" })
+        Filter<ObjectAction> filter = Filters.and(
+                memberOrderNameNotAssociation(adapterSpec), 
+                dynamicallyVisibleFor(adapter), 
+                ObjectAction.Filters.notBulkOnly());
+        final List<ObjectAction> userActions = adapterSpec.getObjectActions(actionType, Contributed.INCLUDED, filter);
         topLevelActions.addAll(userActions);
     }
     
+    @SuppressWarnings("deprecation")
     private static Filter<ObjectAction> memberOrderNameNotAssociation(final ObjectSpecification adapterSpec) {
 
         final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.INCLUDED);
@@ -162,6 +168,7 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
     }
     
 
+    @SuppressWarnings("deprecation")
     protected Filter<ObjectAction> dynamicallyVisibleFor(final ObjectAdapter adapter) {
         return ObjectAction.Filters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.ANYWHERE);
     }

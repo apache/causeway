@@ -1261,9 +1261,9 @@ ${license.additional-notes}
                 <version>2.2.2</version>
             </dependency>
             <dependency>
-                <groupId>javassist</groupId>
+                <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
-                <version>3.12.1.GA</version>
+                <version>3.18.1-GA</version>
             </dependency>
 
             <!-- XML libraries -->
@@ -1499,6 +1499,12 @@ ${license.additional-notes}
                 <groupId>javax.validation</groupId>
                 <artifactId>validation-api</artifactId>
                 <version>1.1.0.Final</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-jcdi_1.0_spec</artifactId>
+                <version>1.0</version>
             </dependency>
 
            <dependency>

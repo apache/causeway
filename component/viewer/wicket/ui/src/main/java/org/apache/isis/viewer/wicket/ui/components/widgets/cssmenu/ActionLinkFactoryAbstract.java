@@ -184,8 +184,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
     // adapted from similar code in ActionPanel :-(
     private static ObjectAdapter executeActionHandlingApplicationExceptions(final ActionModel actionModel) {
         try {
-            ObjectAdapter resultAdapter = actionModel.getObject();
-            return resultAdapter;
+            return actionModel.getObject();
 
         } catch (RuntimeException ex) {
             

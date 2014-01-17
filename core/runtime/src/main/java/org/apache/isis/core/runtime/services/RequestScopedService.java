@@ -17,20 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.actions.bulk;
+package org.apache.isis.core.runtime.services;
 
-import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.core.metamodel.facets.SingleValueFacet;
+import com.google.common.base.Predicate;
 
-/**
- * Indicates that the action (entity or service) can also be used as a bulk
- * action against collections of objects.
- * 
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
- * action method using <tt>@Bulk</tt>.
- */
-public interface BulkFacet extends SingleValueFacet<Bulk.AppliesTo> {
 
-    public Bulk.AppliesTo value();
+public interface RequestScopedService {
+
+    public static final class Predicates {
+        private Predicates(){}
+        public static Predicate<Object> instanceOf() {
+            return new Predicate<Object>(){
+                @Override
+                public boolean apply(Object input) {
+                    return input instanceof RequestScopedService;
+                }
+            };
+        }
+    };
+
+    public void __isis_startRequest();
+    
+    public void __isis_endRequest();
+
 }
