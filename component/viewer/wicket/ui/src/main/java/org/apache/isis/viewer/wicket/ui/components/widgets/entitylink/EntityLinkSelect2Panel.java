@@ -99,7 +99,10 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
      */
     @Override
     public boolean checkRequired() {
-        return select2Field.checkRequired();
+        if(select2Field != null) {
+            return select2Field.checkRequired();
+        }
+        return super.checkRequired();
     }
 
     @Override
