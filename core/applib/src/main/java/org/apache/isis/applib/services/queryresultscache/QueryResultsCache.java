@@ -24,21 +24,35 @@ import javax.enterprise.context.RequestScoped;
 
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.services.queryresultscache.QueryResultsCache.CacheKey;
-import org.apache.isis.applib.services.queryresultscache.QueryResultsCache.CacheValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.apache.isis.applib.annotation.Programmatic;
 
 @RequestScoped
 public class QueryResultsCache {
 
-    static class CacheKey {
+    private static final Logger LOG = LoggerFactory.getLogger(QueryResultsCache.class);
+
+    public static class Key {
         private final Class<?> callingClass;
         private final String methodName;
         private final Object[] keys;
         
-        public CacheKey(Class<?> callingClass, String methodName, Object... keys) {
+        public Key(Class<?> callingClass, String methodName, Object... keys) {
             this.callingClass = callingClass;
             this.methodName = methodName;
             this.keys = keys;
+        }
+        
+        public Class<?> getCallingClass() {
+            return callingClass;
+        }
+        public String getMethodName() {
+            return methodName;
+        }
+        public Object[] getKeys() {
+            return keys;
         }
         
         @Override
@@ -49,7 +63,7 @@ public class QueryResultsCache {
                 return false;
             if (getClass() != obj.getClass())
                 return false;
-            CacheKey other = (CacheKey) obj;
+            Key other = (Key) obj;
             if (callingClass == null) {
                 if (other.callingClass != null)
                     return false;
@@ -74,32 +88,81 @@ public class QueryResultsCache {
             result = prime * result + ((methodName == null) ? 0 : methodName.hashCode());
             return result;
         }
-    }
-    
-    public static class CacheValue {
-        public CacheValue(Object object) {
-            this.object = object;
-        }
-        Object object;
-    }
-    
-    private final Map<CacheKey, CacheValue> cache = Maps.newHashMap();
 
+        @Override
+        public String toString() {
+            return callingClass.getName() + "#" + methodName  + Arrays.toString(keys);
+        }
+    }
+    
+    public static class Value<T> {
+        public Value(T result) {
+            this.result = result;
+        }
+        private T result;
+        public T getResult() {
+            return result;
+        }
+    }
+    
+    // //////////////////////////////////////
+
+    
+    private final Map<Key, Value<?>> cache = Maps.newHashMap();
+
+    @Programmatic
+    public <T> T execute(final Callable<T> callable, final Class<?> callingClass, final String methodName, final Object... keys) {
+        final Key cacheKey = new Key(callingClass, methodName, keys);
+        return execute(callable, cacheKey);
+    }
+
+    @Programmatic
     @SuppressWarnings("unchecked")
-    public <T> T execute(Callable<T> callable, Class<?> callingClass, String methodName, Object... keys) {
+    public <T> T execute(final Callable<T> callable, final Key cacheKey) {
         try {
-            final CacheKey ck = new CacheKey(callingClass, methodName, keys);
-            final CacheValue cv = cache.get(ck);
-            if(cv != null) { 
-                return (T) cv.object;
+            final Value<?> cacheValue = cache.get(cacheKey);
+            logHitOrMiss(cacheKey, cacheValue);
+            if(cacheValue != null) { 
+                return (T) cacheValue.getResult();
             }
             // cache miss, so get the result, and cache
             T result = callable.call();
-            cache.put(ck, new CacheValue(result));
+            put(cacheKey, result);
             return result;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+    @Programmatic
+    public <T> QueryResultsCache.Value<T> get(final Class<?> callingClass, final String methodName, final Object... keys) {
+        return get(new Key(callingClass, methodName, keys));
+    }
+    
+    @Programmatic
+    @SuppressWarnings("unchecked")
+    public <T> QueryResultsCache.Value<T> get(final QueryResultsCache.Key cacheKey) {
+        Value<T> value = (Value<T>) cache.get(cacheKey);
+        logHitOrMiss(cacheKey, value);
+        return value;
+    }
+
+    @Programmatic
+    public <T> void put(final Key cacheKey, final T result) {
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("PUT: " + cacheKey);
+        }
+        cache.put(cacheKey, new Value<T>(result));
+    }
+
+    private static void logHitOrMiss(final Key cacheKey, final Value<?> cacheValue) {
+        if(!LOG.isDebugEnabled()) { 
+            return; 
+        } 
+        String hitOrMiss = cacheValue != null ? "HIT" : "MISS";
+        LOG.debug( hitOrMiss + ": " + cacheKey.toString());
+    }
+
+
 
 }
