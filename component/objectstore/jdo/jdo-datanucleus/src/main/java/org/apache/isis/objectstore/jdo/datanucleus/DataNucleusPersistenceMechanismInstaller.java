@@ -112,7 +112,10 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     }
 
     private void createDataNucleusApplicationComponentsIfRequired(IsisConfiguration configuration) {
-        if(applicationComponents != null) {
+        // this is, perhaps doing more work than necessary...
+        // maybe retain the applicationComponents and just tell it to discard its PMF?
+        // (doubt will make much different in terms of the amount of time to process, though)
+        if(applicationComponents != null && !applicationComponents.isStale()) {
             return;
         }
         
@@ -248,7 +251,6 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         return new DataNucleusPojoRecreator();
     }
 
-    
     ////////////////////////////////////////////////////////////////////////
 
     public PersistenceManagerFactory getPersistenceManagerFactory() {
@@ -262,7 +264,5 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
-
-
 
 }

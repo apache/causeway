@@ -588,6 +588,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // totalCost
     // //////////////////////////////////////
 
+    @ActionSemantics(Of.SAFE)
     @Bulk(AppliesTo.BULK_ONLY)
     public BigDecimal totalCost() {
         BigDecimal total = (BigDecimal) scratchpad.get("runningTotal");

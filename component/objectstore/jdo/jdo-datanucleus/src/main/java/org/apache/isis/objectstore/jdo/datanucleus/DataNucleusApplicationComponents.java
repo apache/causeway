@@ -18,7 +18,6 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -32,6 +31,7 @@ import com.google.common.collect.Maps;
 
 import org.datanucleus.NucleusContext;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+import org.datanucleus.metadata.MetaDataManager;
 import org.datanucleus.store.schema.SchemaAwareStoreManager;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
@@ -44,20 +44,63 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoQueryFac
 
 public class DataNucleusApplicationComponents implements ApplicationScopedComponent {
 
-    private final PersistenceManagerFactory persistenceManagerFactory;
-    private final Map<String, JdoNamedQuery> namedQueryByName;
-    
-    private final IsisLifecycleListener lifecycleListener;
-    private final FrameworkSynchronizer synchronizer;
 
+    ///////////////////////////////////////////////////////////////////////////
+    // JRebel support
+    ///////////////////////////////////////////////////////////////////////////
+
+    private static DataNucleusApplicationComponents instance;
+    
+    /**
+     * For JRebel plugin
+     */
+    public static MetaDataManager getMetaDataManager() {
+        return instance != null
+                ? ((JDOPersistenceManagerFactory)instance.persistenceManagerFactory).getNucleusContext().getMetaDataManager() 
+                : null;
+    }
+
+    public static void markAsStale() {
+        if(instance != null) {
+            instance.stale = true;
+        }
+    }
+
+    private boolean stale = false;
+    public boolean isStale() {
+        return stale;
+    }
 
     ///////////////////////////////////////////////////////////////////////////
     //
     ///////////////////////////////////////////////////////////////////////////
+    
+    private final Set<String> persistableClassNameSet;
+    private final Map<String, String> props;
+    
+    private final IsisLifecycleListener lifecycleListener;
+    private final FrameworkSynchronizer synchronizer;
+    
+    private Map<String, JdoNamedQuery> namedQueryByName;
+    private PersistenceManagerFactory persistenceManagerFactory;
 
     public DataNucleusApplicationComponents(
             final Map<String, String> props, 
             final Set<String> persistableClassNameSet) {
+    
+        this.props = props;
+        this.persistableClassNameSet = persistableClassNameSet;
+
+        this.synchronizer = new FrameworkSynchronizer();
+        this.lifecycleListener = new IsisLifecycleListener(synchronizer);
+
+        init(props, persistableClassNameSet);
+        
+        // for JRebel plugin
+        instance = this;
+    }
+
+    private void init(final Map<String, String> props, final Set<String> persistableClassNameSet) {
         final String persistableClassNames = Joiner.on(',').join(persistableClassNameSet);
         
         props.put("datanucleus.autoStartClassNames", persistableClassNames);
@@ -68,10 +111,8 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
             createSchema(props, persistableClassNameSet);
         }
 
-        namedQueryByName = Collections.unmodifiableMap(catalogNamedQueries(persistableClassNameSet));
+        namedQueryByName = catalogNamedQueries(persistableClassNameSet);
 
-        synchronizer = new FrameworkSynchronizer();
-        lifecycleListener = new IsisLifecycleListener(synchronizer);
     }
     
     public PersistenceManagerFactory getPersistenceManagerFactory() {
@@ -156,7 +197,5 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     public void resumeListener() {
         lifecycleListener.setSuspended(false);
     }
-
-
 
 }

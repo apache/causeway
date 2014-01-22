@@ -57,7 +57,17 @@
         </pluginRepository>
     </pluginRepositories>
 
-	<modules>
+    <repositories>
+        <repository>
+            <id>datanucleus-nightly</id>
+            <url>http://www.datanucleus.org/downloads/maven2-nightly/</url>
+            <snapshots>
+              <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <modules>
 		<module>jdo-applib</module>
 		<module>jdo-metamodel</module>
 		<module>jdo-datanucleus</module>
