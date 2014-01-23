@@ -50,6 +50,7 @@ import org.apache.isis.applib.annotation.Bulk.AppliesTo;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Named;
@@ -63,6 +64,8 @@ import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.security.RoleMemento;
+import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
@@ -604,7 +607,20 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.scratchpad = scratchpad;
     }
     
+
     
+    // //////////////////////////////////////
+    // OpenSourceCodeOnGithub (action)
+    // //////////////////////////////////////
+    
+    @Prototype
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence="94")
+    public URL openSourceCodeOnGithub() throws MalformedURLException {
+        return new URL("https://github.com/apache/isis/tree/master/example/application/quickstart_wicket_restful_jdo/dom/src/main/java/dom/todo/ToDoItem.java");
+    }
+
+
     // //////////////////////////////////////
     // Programmatic Helpers
     // //////////////////////////////////////
@@ -762,12 +778,5 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 //        this.location = location;
 //    }
 
-    
-    @Prototype
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(name="Prototyping", sequence="94")
-    public URL openSourceCodeOnGithub() throws MalformedURLException {
-        return new URL("https://github.com/apache/isis/tree/master/example/application/quickstart_wicket_restful_jdo/dom/src/main/java/dom/todo/ToDoItem.java");
-    }
 
 }

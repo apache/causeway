@@ -39,3 +39,5 @@ pom.xml.versionsBackup
 JArchitectOut/
 
 core/integtestsupport/fixture-data
+
+rebel.xml
