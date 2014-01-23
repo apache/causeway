@@ -20,24 +20,39 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.MemberOrder;
 
 public class ExternalLinksService {
 
+    public static enum ExternalLink {
+        ISIS_DOCUMENTATION("Apache Isis docs", "http://isis.apache.org/documentation.html"),
+        PROJECT_ON_GITHUB("Project source code on Github", "https://github.com/apache/isis/tree/master/example/application/quickstart_wicket_restful_jdo/");
+        
+        private final String title;
+        private final String url;
+        
+        private ExternalLink(final String title, final String url) {
+            this.title = title;
+            this.url = url;
+        }
+        
+        public URL open() throws MalformedURLException {
+            return new URL(url);
+        }
+        
+        public String toString() {
+            return title;
+        }
+    }
+    
     @Prototype
     @ActionSemantics(Of.SAFE)
     @MemberOrder(name="Prototyping", sequence="93")
-    public URL openIsisDocumentation() throws MalformedURLException {
-        return new URL("http://isis.apache.org/documentation.html");
-    }
-
-    @Prototype
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(name="Prototyping", sequence="94")
-    public URL openProjectOnGithub() throws MalformedURLException {
-        return new URL("https://github.com/apache/isis/tree/master/example/application/quickstart_wicket_restful_jdo/");
+    public URL goToDocs(@Named("Link") ExternalLink link) throws MalformedURLException {
+        return link.open();
     }
 
 }
