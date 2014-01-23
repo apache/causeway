@@ -160,6 +160,9 @@ public class ProgrammableReflector implements SpecificationLoaderSpi, Applicatio
     public void invalidateCache(Class<?> domainClass) {
     }
 
-
+    @Override
+    public boolean isInitialized() {
+        return false;
+    }
 
 }

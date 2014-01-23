@@ -54,6 +54,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorSet;
 import org.apache.isis.core.metamodel.facets.object.bounded.ChoicesFacetUtils;
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
@@ -183,6 +184,8 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
     private final ServiceInitializer serviceInitializer = new ServiceInitializer();
 
+    private boolean initialized = false;
+
 
     // /////////////////////////////////////////////////////////////
     // Constructor
@@ -242,6 +245,13 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         validationFailures.assertNone();
         
         cacheBySpecId();
+        
+        initialized = true;
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return initialized;
     }
 
     /**
@@ -335,6 +345,8 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     public void shutdown() {
         LOG.info("shutting down " + this);
 
+        initialized = false;
+        
         getCache().clear();
         facetDecoratorSet.shutdown();
     }
@@ -347,13 +359,27 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     @Override
     public void invalidateCache(final Class<?> cls) {
+        
+        if(!getCache().isInitialized()) {
+            // could be called by JRebel plugin, before we are up-and-running
+            // just ignore.
+            return;
+        }
         final Class<?> substitutedType = getClassSubstitutor().getClass(cls);
+        
+        if(substitutedType.isAnonymousClass()) {
+            // JRebel plugin might call us... just ignore 'em.
+            return;
+        }
         
         ObjectSpecification spec = loadSpecification(substitutedType);
         while(spec != null) {
             final Class<?> type = spec.getCorrespondingClass();
             getCache().remove(type.getName());
-            recache(spec);
+            if(spec.containsDoOpFacet(ObjectSpecIdFacet.class)) {
+                // umm.  Some specs do not have an ObjectSpecIdFacet...
+                recache(spec);
+            }
             spec = spec.superclass(); 
         }
     }
@@ -396,8 +422,15 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         if(spec == null) {
             return null;
         }
-        if(getCache().isInitialized() && getCache().getByObjectType(spec.getSpecId()) == null) {
-            getCache().recache(spec);
+        if(getCache().isInitialized()) {
+            // umm.  It turns out that anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
+            // don't have an ObjectSpecId; hence the guard.
+            if(spec.containsDoOpFacet(ObjectSpecIdFacet.class)) {
+                ObjectSpecId specId = spec.getSpecId();
+                if (getCache().getByObjectType(specId) == null) {
+                    getCache().recache(spec);
+                }
+            }
         }
         return spec;
     }
@@ -721,6 +754,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             validationFailures.add("Cannot have two entities with same object type (@ObjectType facet or equivalent) Value; " + "both %s and %s are annotated with value of ''%s''.", existingSpec.getFullIdentifier(), objSpec.getFullIdentifier(), objectSpecId);
         }
     }
+
 
 
 }

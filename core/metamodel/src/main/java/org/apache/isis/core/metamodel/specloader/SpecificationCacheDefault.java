@@ -25,6 +25,7 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
+import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -69,16 +70,25 @@ class SpecificationCacheDefault {
     public ObjectSpecification remove(String typeName) {
         ObjectSpecification removed = specByClassName.remove(typeName);
         if(removed != null) {
-            specById.remove(removed.getSpecId());
+            if(removed.containsDoOpFacet(ObjectSpecIdFacet.class)) {
+                // umm.  It turns out that anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
+                // don't have an ObjectSpecId; hence the guard.
+                ObjectSpecId specId = removed.getSpecId();
+                specById.remove(specId);
+            }
         }
         return removed;
     }
 
     /**
-     * 
      * @param spec
      */
     public void recache(ObjectSpecification spec) {
+        if(!isInitialized()) {
+            // JRebel plugin might call this before we are actually up and running;
+            // just ignore.
+            return;
+        }
         specById.put(spec.getSpecId(), spec);
     }
     

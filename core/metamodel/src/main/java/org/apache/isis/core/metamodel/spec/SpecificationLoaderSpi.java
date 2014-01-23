@@ -51,4 +51,6 @@ public interface SpecificationLoaderSpi extends ApplicationScopedComponent, Debu
     void invalidateCacheFor(Object domainObject);
     
     void invalidateCache(Class<?> domainClass);
+    
+    boolean isInitialized();
 }
