@@ -166,7 +166,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
     /**
      * This method has protected visibility to allow for custom implementations
      * in the future that might obtain the list of roles for a principal from
-     * somewherte other than Shiro's {@link RealmSecurityManager}.
+     * somewhere other than Shiro's {@link RealmSecurityManager}.
      */
     protected List<String> getRoles(final AuthenticationToken token) {
         final List<String> roles = Lists.newArrayList();
@@ -178,7 +178,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         
         final Collection<Realm> realms = securityManager.getRealms();
         for (final Realm realm : realms) {
-            if(realm.supports(token)) {
+            if(!realm.supports(token)) {
                 continue;
             }
             final AuthenticationInfo authenticationInfo = realm.getAuthenticationInfo(token);
