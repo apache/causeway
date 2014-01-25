@@ -56,6 +56,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisTimePa
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisTimeStampPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlTimePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlTimestampPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaUtilDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigDecimalPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigIntegerPanelFactory;
@@ -200,6 +201,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         // work-in-progress
         // componentFactories.add(new JavaAwtImagePanelFactory()); 
         componentFactories.add(new JavaUtilDatePanelFactory());
+        componentFactories.add(new JavaSqlTimestampPanelFactory());
         componentFactories.add(new JavaSqlDatePanelFactory());
         componentFactories.add(new JavaSqlTimePanelFactory());
 

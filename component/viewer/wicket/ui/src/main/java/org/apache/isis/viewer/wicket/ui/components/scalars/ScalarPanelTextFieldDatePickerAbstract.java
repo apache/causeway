@@ -86,12 +86,23 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
         
         textField.setEnabled(false);
         
+        
+        // adding an amount because seemed to truncate in tables in certain circumstances
+        final int lengthAdjust = 
+                getLengthAdjustHint() != null ? getLengthAdjustHint() : 1; 
         final String dateTimePattern = converter.getDateTimePattern(getLocale());
-        final int length = dateTimePattern.length() + 1; // adding 1 because seemed to truncate in tables in certain circumstances
+        final int length = dateTimePattern.length() + lengthAdjust; 
         textField.add(new AttributeModifier("size", Model.of("" + length)));
         
         addOrReplace(textField);
         return textField;
+    }
+    
+    /**
+     * Optional override for subclasses to explicitly indicate desired amount to adjust compact form of textField
+     */
+    protected Integer getLengthAdjustHint() {
+        return null;
     }
 
     private void addObjectAdapterValidator() {
