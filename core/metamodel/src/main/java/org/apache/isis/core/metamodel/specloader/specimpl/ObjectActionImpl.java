@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
@@ -51,7 +50,6 @@ import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFace
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-import org.apache.isis.core.metamodel.facets.object.bounded.ChoicesFacetUtils;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
@@ -340,9 +338,8 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         if(LOG.isDebugEnabled()) {
             LOG.debug("execute action " + target + "." + getId());
         }
-        //final ObjectAdapter[] params = realParameters(target, arguments);
         final ActionInvocationFacet facet = getFacet(ActionInvocationFacet.class);
-        return facet.invoke(target, arguments);
+        return facet.invoke(this, target, arguments);
     }
 
     protected ActionInvocationFacet getActionInvocationFacet() {

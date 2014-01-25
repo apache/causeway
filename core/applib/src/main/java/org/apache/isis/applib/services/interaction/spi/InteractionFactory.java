@@ -14,30 +14,27 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package webapp.prototyping;
+package org.apache.isis.applib.services.interaction.spi;
 
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.metamodel.services.devutils.DeveloperUtilitiesServiceDefault;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.interaction.Interaction;
 
 /**
- * These overrides are simply to 'move' the action underneath the 
- * {@link ToDoItemsFixturesService fixtures} menu.
+ * Intended for service to implement, providing a different implementation of
+ * {@link Interaction}.
+ * 
+ * <p>
+ * The default implementation (provided automatically by the framework) will
+ * instantiate an in-memory implementation of {@link Interaction}.  However, other
+ * services (eg as provided by the JDO objectstore) might provide a persistable 
+ * {@link Interaction} object.
  */
-public class DeveloperUtilities extends DeveloperUtilitiesServiceDefault {
+public interface InteractionFactory {
 
-    @MemberOrder(name="Prototyping", sequence="90.1")
-    @Override
-    public Clob downloadMetaModel() {
-        return super.downloadMetaModel();
-    }
+    @Programmatic
+    Interaction start();
     
-    @MemberOrder(name="Prototyping", sequence="90.2")
-    @Override
-    public Blob downloadLayouts() {
-        return super.downloadLayouts();
-    }
-
+    @Programmatic
+    void complete(final Interaction interaction);
+    
 }
-

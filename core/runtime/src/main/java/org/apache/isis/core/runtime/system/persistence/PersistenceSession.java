@@ -28,6 +28,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -35,12 +36,15 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.Bulk.InteractionContext;
+import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
+import org.apache.isis.applib.services.interaction.Interaction;
+import org.apache.isis.applib.services.interaction.InteractionContext;
+import org.apache.isis.applib.services.interaction.InteractionDefault;
+import org.apache.isis.applib.services.interaction.spi.InteractionFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -186,7 +190,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     }
 
     // ///////////////////////////////////////////////////////////////////////////
-    // open, close
+    // open
     // ///////////////////////////////////////////////////////////////////////////
 
     /**
@@ -225,10 +229,117 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
 
         objectStore.open();
 
-        createServiceAdapters();
+        initServices();
 
         setState(State.OPEN);
     }
+
+    
+    private void initServices() {
+
+        final List<Object> registeredServices = servicesInjector.getRegisteredServices();
+        
+        startRequestOnRequestScopedServices(registeredServices);
+
+        startInteractionIfConfigured();
+        
+        createServiceAdapters(registeredServices);
+        
+        initOtherApplibServicesIfConfigured(registeredServices);
+    }
+
+    /**
+     * Creates (or recreates following a {@link #testReset()})
+     * {@link ObjectAdapter adapters} for the {@link #serviceList}.
+     */
+    private void createServiceAdapters(final List<Object> registeredServices) {
+        getTransactionManager().startTransaction();
+        for (final Object service : registeredServices) {
+            final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(service.getClass());
+            serviceSpecification.markAsService();
+            final RootOid existingOid = getOidForService(serviceSpecification);
+            ObjectAdapter serviceAdapter;
+            if (existingOid == null) {
+                serviceAdapter = getAdapterManager().adapterFor(service);
+            } else {
+                serviceAdapter = mapRecreatedPojo(existingOid, service);
+            }
+
+            if (serviceAdapter.getOid().isTransient()) {
+                adapterManager.remapAsPersistent(serviceAdapter, null);
+            }
+
+            serviceAdapter.markAsResolvedIfPossible();
+            if (existingOid == null) {
+                final RootOid persistentOid = (RootOid) serviceAdapter.getOid();
+                registerService(persistentOid);
+            }
+        }
+        getTransactionManager().endTransaction();
+    }
+
+    private void initOtherApplibServicesIfConfigured(final List<Object> registeredServices) {
+        
+        final EventBusServiceDefault ebsd = getServiceOrNull(EventBusServiceDefault.class);
+        if(ebsd != null) {
+            ebsd.open();
+        }
+        
+        final Bulk.InteractionContext bic = getServiceOrNull(Bulk.InteractionContext.class);
+        if(bic != null) {
+            Bulk.InteractionContext.current.set(bic);
+        }
+        
+    }
+
+    private void startRequestOnRequestScopedServices(final List<Object> registeredServices) {
+        for (final Object service : registeredServices) {
+            if(service instanceof RequestScopedService) {
+                ((RequestScopedService)service).__isis_startRequest();
+            }
+        }
+    }
+
+    private void startInteractionIfConfigured() {
+        final InteractionContext ic = getServiceOrNull(InteractionContext.class);
+        if(ic == null) {
+            return;
+        } 
+        final InteractionFactory interactionFactory = getServiceOrNull(InteractionFactory.class);
+        final Interaction interaction = interactionFactory != null ? interactionFactory.start() : new InteractionDefault();
+        ic.setInteraction(interaction);
+
+        if(interaction.getGuid() == null) {
+            interaction.setGuid(UUID.randomUUID().toString());
+        }
+        if(interaction.getStartedAt() == null) {
+            //interaction.setStartedAt(Clock.getTimeAsDateTime());
+            interaction.setStartedAt(new java.sql.Timestamp(new java.util.Date().getTime()));
+        }
+        if(interaction.getUser() == null) {
+            interaction.setUser(getAuthenticationSession().getUserName());
+        }
+        
+        // the remaining 3 properties are set further down the call-stack, if an action is actually performed
+        // interaction.getActionIdentifier()
+        // interaction.getDescription()
+        // interaction.getArguments()
+        // interaction.getTarget()
+    }
+
+
+
+    /**
+     * @return - the service, or <tt>null</tt> if no service registered of specified type.
+     */
+    public <T> T getServiceOrNull(Class<T> serviceType) {
+        return servicesInjector.lookupService(serviceType);
+    }
+
+    // ///////////////////////////////////////////////////////////////////////////
+    // close
+    // ///////////////////////////////////////////////////////////////////////////
+
 
     /**
      * Calls {@link #doClose()}, then closes all components.
@@ -270,82 +381,56 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     }
 
     private void closeServices() {
+
+        closeOtherApplibServicesIfConfigured();
+
+        completeInteractionIfConfigured();
+
+        endRequestOnRequestScopeServices();
+    }
+
+    private void closeOtherApplibServicesIfConfigured() {
+        Bulk.InteractionContext bic = getServiceOrNull(Bulk.InteractionContext.class);
+        if(bic != null) {
+            Bulk.InteractionContext.current.set(null);
+        }
+        EventBusServiceDefault ebs = getServiceOrNull(EventBusServiceDefault.class);
+        if(ebs != null) {
+            ebs.close();
+        }
+    }
+
+    private void completeInteractionIfConfigured() {
+        final InteractionContext interactionContext = getServiceOrNull(InteractionContext.class);
+        if(interactionContext != null) {
+            final InteractionFactory interactionFactory = getServiceOrNull(InteractionFactory.class);
+            if(interactionFactory != null) {
+                final Interaction interaction = interactionContext.getInteraction();
+                interactionFactory.complete(interaction);
+            }
+        }
+    }
+
+    private void endRequestOnRequestScopeServices() {
         for (final Object service : servicesInjector.getRegisteredServices()) {
             if(service instanceof RequestScopedService) {
                 ((RequestScopedService)service).__isis_endRequest();
             }
         }
-        
-        // a bit of a hack
-        if(bulkInteractionContext != null) {
-            Bulk.InteractionContext.current.set(null);
-        }
-        // a bit of a hack
-        if(eventBusService != null) {
-            eventBusService.close();
-        }
-    }
-
-    /**
-     * Creates (or recreates following a {@link #testReset()})
-     * {@link ObjectAdapter adapters} for the {@link #serviceList}.
-     */
-    private void createServiceAdapters() {
-        getTransactionManager().startTransaction();
-        for (final Object service : servicesInjector.getRegisteredServices()) {
-            if(service instanceof RequestScopedService) {
-                ((RequestScopedService)service).__isis_startRequest();
-            }
-            
-            final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(service.getClass());
-            serviceSpecification.markAsService();
-            final RootOid existingOid = getOidForService(serviceSpecification);
-            ObjectAdapter serviceAdapter;
-            if (existingOid == null) {
-                serviceAdapter = getAdapterManager().adapterFor(service);
-            } else {
-                serviceAdapter = mapRecreatedPojo(existingOid, service);
-            }
-
-            if (serviceAdapter.getOid().isTransient()) {
-                adapterManager.remapAsPersistent(serviceAdapter, null);
-            }
-
-            serviceAdapter.markAsResolvedIfPossible();
-            if (existingOid == null) {
-                final RootOid persistentOid = (RootOid) serviceAdapter.getOid();
-                registerService(persistentOid);
-            }
-            
-            // a bit of a hack
-            final Object object = serviceAdapter.getObject();
-            if(object instanceof EventBusServiceDefault) {
-                eventBusService = (EventBusServiceDefault) object;
-                EventBusServiceDefault ebs = eventBusService;
-                ebs.open();
-            }
-
-            if(service instanceof Bulk.InteractionContext) {
-                bulkInteractionContext = (Bulk.InteractionContext) service;
-                Bulk.InteractionContext.current.set(bulkInteractionContext);
-            }
-
-        }
-        getTransactionManager().endTransaction();
-    }
-
-    private State getState() {
-        return state;
-    }
-
-    private void setState(final State state) {
-        this.state = state;
     }
 
     // ///////////////////////////////////////////////////////////////////////////
     // State Management
     // ///////////////////////////////////////////////////////////////////////////
 
+    private State getState() {
+        return state;
+    }
+    
+    private void setState(final State state) {
+        this.state = state;
+    }
+    
     protected void ensureNotOpened() {
         if (getState() != State.NOT_INITIALIZED) {
             throw new IllegalStateException("Persistence session has already been initialized");
@@ -1007,9 +1092,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     // ///////////////////////////////////////////////////////////////////////////
 
     private Map<Oid, Oid> persistentByTransient = Maps.newHashMap();
-
-    private EventBusServiceDefault eventBusService;
-    private Bulk.InteractionContext bulkInteractionContext;
 
     /**
      * Callback from the {@link PersistAlgorithm} (or equivalent; some object

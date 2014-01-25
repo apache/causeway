@@ -306,8 +306,8 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         }
 
         List<Object> matchingServices = Lists.newArrayList();
-        addMatchingTo(serviceClass, services, matchingServices);
-        addMatchingTo(serviceClass, singletonListFor(container), matchingServices);
+        addAssignableTo(serviceClass, services, matchingServices);
+        addAssignableTo(serviceClass, singletonListFor(container), matchingServices);
         
         servicesByType.put(serviceClass, matchingServices);
     }
@@ -316,7 +316,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         return obj!=null? Collections.singletonList(obj): Collections.emptyList();
     }
 
-    private static void addMatchingTo(Class<?> type, List<Object> candidates, List<Object> filteredServicesAndContainer) {
+    private static void addAssignableTo(Class<?> type, List<Object> candidates, List<Object> filteredServicesAndContainer) {
         Iterable<Object> filteredServices = Iterables.filter(candidates, ofType(type));
         filteredServicesAndContainer.addAll(Lists.newArrayList(filteredServices));
     }

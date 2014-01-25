@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 /**
  * Represents the mechanism by which the action should be invoked.
@@ -37,7 +38,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  */
 public interface ActionInvocationFacet extends Facet {
 
+    @Deprecated
     public ObjectAdapter invoke(ObjectAdapter target, ObjectAdapter[] parameters);
+
+    public ObjectAdapter invoke(ObjectAction owningAction, ObjectAdapter target, ObjectAdapter[] arguments);
 
     public ObjectSpecification getReturnType();
 
@@ -76,5 +80,6 @@ public interface ActionInvocationFacet extends Facet {
     }
     
     public static ThreadLocal<CurrentInvocation> currentInvocation = new ThreadLocal<CurrentInvocation>();
+
 
 }

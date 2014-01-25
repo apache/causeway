@@ -16,28 +16,39 @@
  */
 package webapp.prototyping;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.metamodel.services.devutils.DeveloperUtilitiesServiceDefault;
+import org.apache.isis.applib.annotation.Prototype;
+import org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionJdo;
+import org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionServiceJdo;
 
 /**
  * These overrides are simply to 'move' the action underneath the 
  * {@link ToDoItemsFixturesService fixtures} menu.
  */
-public class DeveloperUtilities extends DeveloperUtilitiesServiceDefault {
+public class Interactions extends InteractionServiceJdo {
 
-    @MemberOrder(name="Prototyping", sequence="90.1")
+    @MemberOrder(name="Prototyping", sequence="94.1")
+    @Prototype
     @Override
-    public Clob downloadMetaModel() {
-        return super.downloadMetaModel();
+    public List<InteractionJdo> currentInteractions() {
+        return super.currentInteractions();
     }
     
-    @MemberOrder(name="Prototyping", sequence="90.2")
+    @MemberOrder(name="Prototyping", sequence="94.2")
+    @Prototype
     @Override
-    public Blob downloadLayouts() {
-        return super.downloadLayouts();
+    public List<InteractionJdo> completedInteractions() {
+        return super.completedInteractions();
     }
 
+    @MemberOrder(name="Prototyping", sequence="94.3")
+    @Prototype
+    @Override
+    public InteractionJdo findByGuid(String guid) {
+        return super.findByGuid(guid);
+    }
+    
 }
 

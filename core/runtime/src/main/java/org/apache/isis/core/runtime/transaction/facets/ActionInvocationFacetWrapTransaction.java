@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -46,6 +47,17 @@ public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetA
     public ActionInvocationFacetWrapTransaction(final ActionInvocationFacet underlyingFacet) {
         super(underlyingFacet.getFacetHolder());
         this.underlyingFacet = underlyingFacet;
+    }
+
+    @Override
+    public ObjectAdapter invoke(final ObjectAction owningAction, final ObjectAdapter targetAdapter, final ObjectAdapter[] parameterAdapters) {
+        final ObjectAdapter result = getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
+            @Override
+            public ObjectAdapter execute() {
+                return underlyingFacet.invoke(owningAction, targetAdapter, parameterAdapters);
+            }
+        });
+        return result;
     }
 
     @Override
@@ -85,5 +97,6 @@ public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetA
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
+
 
 }

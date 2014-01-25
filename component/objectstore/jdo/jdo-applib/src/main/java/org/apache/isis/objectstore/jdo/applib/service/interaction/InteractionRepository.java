@@ -14,30 +14,22 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package webapp.prototyping;
+package org.apache.isis.objectstore.jdo.applib.service.interaction;
 
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.metamodel.services.devutils.DeveloperUtilitiesServiceDefault;
+import java.util.List;
 
-/**
- * These overrides are simply to 'move' the action underneath the 
- * {@link ToDoItemsFixturesService fixtures} menu.
- */
-public class DeveloperUtilities extends DeveloperUtilitiesServiceDefault {
+import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
 
-    @MemberOrder(name="Prototyping", sequence="90.1")
-    @Override
-    public Clob downloadMetaModel() {
-        return super.downloadMetaModel();
-    }
+
+public interface InteractionRepository {
+
+    @ActionSemantics(Of.SAFE)
+    InteractionJdo findByGuid(final String guid);
     
-    @MemberOrder(name="Prototyping", sequence="90.2")
-    @Override
-    public Blob downloadLayouts() {
-        return super.downloadLayouts();
-    }
-
+    @ActionSemantics(Of.SAFE)
+    List<InteractionJdo> currentInteractions();
+    
+    @ActionSemantics(Of.SAFE)
+    List<InteractionJdo> completedInteractions();
 }
-

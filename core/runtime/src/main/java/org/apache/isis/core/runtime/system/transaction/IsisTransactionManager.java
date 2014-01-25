@@ -36,6 +36,8 @@ import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.services.audit.AuditingService;
+import org.apache.isis.applib.services.interaction.Interaction;
+import org.apache.isis.applib.services.interaction.InteractionContext;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
 import org.apache.isis.applib.services.publish.EventPayloadForObjectChanged;
@@ -277,6 +279,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
             createTransaction();
             transactionLevel = 0;
+
             transactionalResource.startTransaction();
         }
 
@@ -286,6 +289,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
             LOG.debug("startTransaction: level " + (transactionLevel - 1) + "->" + (transactionLevel) + (noneInProgress ? " (no transaction in progress or was previously completed; transaction created)" : ""));
         }
     }
+
 
     public synchronized boolean flushTransaction() {
 

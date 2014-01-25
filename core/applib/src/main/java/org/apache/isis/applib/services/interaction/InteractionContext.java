@@ -14,30 +14,37 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package webapp.prototyping;
+package org.apache.isis.applib.services.interaction;
 
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.metamodel.services.devutils.DeveloperUtilitiesServiceDefault;
+import javax.enterprise.context.RequestScoped;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * These overrides are simply to 'move' the action underneath the 
- * {@link ToDoItemsFixturesService fixtures} menu.
+ * Register this as a service in order to access context information about any {@link Interaction}.
  */
-public class DeveloperUtilities extends DeveloperUtilitiesServiceDefault {
+@RequestScoped
+public class InteractionContext {
 
-    @MemberOrder(name="Prototyping", sequence="90.1")
-    @Override
-    public Clob downloadMetaModel() {
-        return super.downloadMetaModel();
+    @SuppressWarnings("unused")
+    private static final Logger LOG = LoggerFactory.getLogger(InteractionContext.class);
+
+    private Interaction interaction;
+
+    @Programmatic
+    public Interaction getInteraction() {
+        return interaction;
     }
     
-    @MemberOrder(name="Prototyping", sequence="90.2")
-    @Override
-    public Blob downloadLayouts() {
-        return super.downloadLayouts();
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     * @param interaction
+     */
+    public void setInteraction(Interaction interaction) {
+        this.interaction = interaction;
     }
 
 }
-

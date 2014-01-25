@@ -33,6 +33,8 @@ import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFace
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacetInferred;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -45,7 +47,7 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstra
  * and {@link DebugFacet}. In addition a {@link NamedFacet} is inferred from the
  * name (taking into account the above well-known prefixes).
  */
-public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware {
+public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware, ServicesInjectorAware {
 
     private static final String EXPLORATION_PREFIX = "Exploration";
     private static final String DEBUG_PREFIX = "Debug";
@@ -53,6 +55,7 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
     private static final String[] PREFIXES = { EXPLORATION_PREFIX, DEBUG_PREFIX };
 
     private AdapterManager adapterManager;
+    private ServicesInjector servicesInjector;
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -96,7 +99,7 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
             final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
             final FacetHolder holder = processMethodContext.getFacetHolder();
 
-            FacetUtil.addFacet(new ActionInvocationFacetViaMethod(actionMethod, typeSpec, returnSpec, holder, getAdapterManager()));
+            FacetUtil.addFacet(new ActionInvocationFacetViaMethod(actionMethod, typeSpec, returnSpec, holder, getAdapterManager(), getServicesInjector()));
         } finally {
             processMethodContext.removeMethod(actionMethod);
         }
@@ -158,4 +161,12 @@ public class ActionInvocationFacetFactory extends MethodPrefixBasedFacetFactoryA
         return adapterManager;
     }
 
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
+    }
+
+    private ServicesInjector getServicesInjector() {
+        return servicesInjector;
+    }
 }

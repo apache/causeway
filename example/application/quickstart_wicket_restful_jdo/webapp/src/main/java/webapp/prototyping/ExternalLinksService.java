@@ -50,7 +50,7 @@ public class ExternalLinksService {
     
     @Prototype
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(name="Prototyping", sequence="93")
+    @MemberOrder(name="Prototyping", sequence="91.1")
     public URL goToDocs(@Named("Link") ExternalLink link) throws MalformedURLException {
         return link.open();
     }

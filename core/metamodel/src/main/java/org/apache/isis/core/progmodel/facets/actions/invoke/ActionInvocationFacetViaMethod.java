@@ -24,23 +24,33 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.Bulk.InteractionContext;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.interaction.Interaction;
+import org.apache.isis.applib.services.interaction.InteractionContext;
+import org.apache.isis.applib.services.interaction.spi.InteractionFactory;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
 import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
 
@@ -54,14 +64,22 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     private final ObjectSpecification returnType;
 
     private final AdapterManager adapterManager;
+    private final ServicesInjector servicesInjector;
 
-    public ActionInvocationFacetViaMethod(final Method method, final ObjectSpecification onType, final ObjectSpecification returnType, final FacetHolder holder, final AdapterManager adapterManager) {
+    public ActionInvocationFacetViaMethod(
+            final Method method, 
+            final ObjectSpecification onType, 
+            final ObjectSpecification returnType, 
+            final FacetHolder holder, 
+            final AdapterManager adapterManager, 
+            final ServicesInjector servicesInjector) {
         super(holder);
         this.method = method;
         this.paramCount = method.getParameterTypes().length;
         this.onType = onType;
         this.returnType = returnType;
         this.adapterManager = adapterManager;
+        this.servicesInjector = servicesInjector;
     }
 
     /**
@@ -84,30 +102,67 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     }
 
     @Override
-    public ObjectAdapter invoke(final ObjectAdapter inObject, final ObjectAdapter[] parameters) {
-        if (parameters.length != paramCount) {
-            LOG.error(method + " requires " + paramCount + " parameters, not " + parameters.length);
+    public ObjectAdapter invoke(final ObjectAdapter target, final ObjectAdapter[] parameters) {
+        return invoke(null, target, parameters);
+    }
+
+    @Override
+    public ObjectAdapter invoke(ObjectAction owningAction, ObjectAdapter target, ObjectAdapter[] arguments) {
+        if (arguments.length != paramCount) {
+            LOG.error(method + " requires " + paramCount + " parameters, not " + arguments.length);
         }
 
+        final Bulk.InteractionContext bulkInteractionContext = getServicesInjector().lookupService(Bulk.InteractionContext.class);
+        final InteractionContext interactionContext = getServicesInjector().lookupService(InteractionContext.class);
+        final BookmarkService bookmarkService = getServicesInjector().lookupService(BookmarkService.class);
+
         try {
-            final Object[] executionParameters = new Object[parameters.length];
-            for (int i = 0; i < parameters.length; i++) {
-                executionParameters[i] = unwrap(parameters[i]);
+            final Object[] executionParameters = new Object[arguments.length];
+            for (int i = 0; i < arguments.length; i++) {
+                executionParameters[i] = unwrap(arguments[i]);
             }
 
-            final Object object = unwrap(inObject);
+            final Object object = unwrap(target);
             
-            final Object result;
             final BulkFacet bulkFacet = getFacetHolder().getFacet(BulkFacet.class);
-            if(bulkFacet != null) {
-                Bulk.InteractionContext bulkInteractionContext = Bulk.InteractionContext.current.get();
-                if (bulkInteractionContext != null && bulkInteractionContext.getInvokedAs() == null) {
-                    bulkInteractionContext.setInvokedAs(InvokedAs.REGULAR);
-                    bulkInteractionContext.setDomainObjects(Collections.singletonList(object));
+            if (bulkFacet != null && 
+                bulkInteractionContext != null &&
+                bulkInteractionContext.getInvokedAs() == null) {
+                bulkInteractionContext.setInvokedAs(InvokedAs.REGULAR);
+                bulkInteractionContext.setDomainObjects(Collections.singletonList(object));
+            }
+            
+            if(interactionContext != null) {
+                Interaction interaction = interactionContext.getInteraction();
+                if(owningAction != null) {
+
+                    final String actionIdentifier = owningAction.getIdentifier().toClassAndNameIdentityString();
+                    interaction.setActionIdentifier(actionIdentifier);
+                    
+                    String targetTitle = target.titleString(null);
+                    String actionName = owningAction.getName();
+                    interaction.setTargetClass(targetTitle);
+                    interaction.setTargetAction(actionName);
+                    
+                    final StringBuilder argsBuf = new StringBuilder();
+                    List<ObjectActionParameter> parameters = owningAction.getParameters();
+                    if(parameters.size() == arguments.length) {
+                        // should be the case
+                        int i=0;
+                        for (ObjectActionParameter param : parameters) {
+                            appendParamArg(argsBuf, param, arguments[i++]);
+                        }
+                    }
+                    interaction.setArguments(argsBuf.toString());
+                }
+                if(bookmarkService != null) {
+                    final Bookmark bookmark = bookmarkService.bookmarkFor(target.getObject());
+                    interaction.setTarget(bookmark);
                 }
             }
-            result = method.invoke(object, executionParameters);
             
+            final Object result = method.invoke(object, executionParameters);
+
             if (LOG.isDebugEnabled()) {
                 LOG.debug(" action result " + result);
             }
@@ -122,7 +177,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
             PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
             ActionInvocationFacet.currentInvocation.set(
                     publishedActionFacet != null
-                        ? new CurrentInvocation(inObject, getIdentified(), parameters, resultAdapter)
+                        ? new CurrentInvocation(target, getIdentified(), arguments, resultAdapter)
                         :null);
             
             return resultAdapter;
@@ -139,6 +194,11 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
         } catch (final IllegalAccessException e) {
             throw new ReflectiveActionException("Illegal access of " + method, e);
         }
+    }
+
+    private void appendParamArg(final StringBuilder buf, ObjectActionParameter param, ObjectAdapter objectAdapter) {
+        String titleOf = objectAdapter != null? objectAdapter.titleString(null): "null";
+        buf.append(param.getName()).append(": ").append(titleOf).append("\n");
     }
 
     private static Object unwrap(final ObjectAdapter adapter) {
@@ -168,4 +228,9 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
         return adapterManager;
     }
 
+    private ServicesInjector getServicesInjector() {
+        return servicesInjector;
+    }
+
+    
 }
