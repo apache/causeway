@@ -37,7 +37,9 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventType;
 
-@javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.APPLICATION)
+@javax.jdo.annotations.PersistenceCapable(
+        identityType=IdentityType.APPLICATION,
+        table="IsisPublishedEvent")
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
             name="publishedevent_of_state", language="JDOQL",  
