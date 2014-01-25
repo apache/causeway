@@ -36,7 +36,7 @@ import org.apache.isis.core.progmodel.facets.value.ValueSemanticsProviderAbstrac
 public abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
     private static final Object DEFAULT_VALUE = null; // no default
-    private static final int TYPICAL_LENGTH = 12;
+    private static final int TYPICAL_LENGTH = 20;
 
     protected static void initFormats(final Map<String, DateFormat> formats) {
         formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd'T'HHmmssSSS")); 
