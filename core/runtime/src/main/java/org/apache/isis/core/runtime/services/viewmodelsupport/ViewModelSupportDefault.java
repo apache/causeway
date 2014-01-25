@@ -22,7 +22,6 @@ import java.util.Set;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.io.BaseEncoding;
 
@@ -54,6 +53,9 @@ public class ViewModelSupportDefault implements ViewModelSupport {
             return this;
         }
 
+        /**
+         * 
+         */
         @Override
         public <T> T get(String name, Class<T> cls) {
             final Element el = doc.getRootElement();

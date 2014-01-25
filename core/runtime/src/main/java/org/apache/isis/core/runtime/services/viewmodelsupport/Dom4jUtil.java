@@ -30,50 +30,41 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.joda.time.LocalDate;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.exceptions.IsisException;
 
 class Dom4jUtil {
     
+    
     private Dom4jUtil(){}
+    
+    private final static String NULL_MARKER = "$$_isis_null_value_$$";
 
     static void addChild(final Element el, final String name, final Object value) {
-        if(value != null) {
-            el.addElement(name).setText(value.toString());
-        }
+        el.addElement(name).setText(encodeForNulls(value));
     }
 
-    @SuppressWarnings("unchecked")
+    static boolean isSupportedClass(final Class<?> cls) {
+        return Parseable.isSupported(cls);
+    }
+
+    /**
+     * @param el
+     * @param name
+     * @param cls - see {@link Parseable}
+     * @return
+     */
     static <T> T getChild(final Element el, final String name, final Class<T> cls) {
+        Parseable.assertSupported(cls);
         final Element child = el.element(name);
         if(child == null) { 
             return null;
         }
-        final String str = child.getText();
-        if (cls == String.class) {
-            return (T) str;
-        } else if (cls == Boolean.class) {
-            return (T) new Boolean(str);
-        } else if(cls == Byte.class) {
-            return (T) new Byte(str);
-        }else if(cls == Short.class) {
-            return (T) new Short(str);
-        }else if(cls == Integer.class) {
-            return (T) new Integer(str);
-        }else  if(cls == Long.class) {
-            return (T) new Long(str);
-        }else if(cls == Float.class) {
-            return (T) new Float(str);
-        }else if(cls == Double.class) {
-            return (T) new Double(str);
-        }else if(cls == BigDecimal.class) {
-            return (T) new BigDecimal(str);
-        }else if(cls == BigInteger.class) {
-            return (T) new BigInteger(str);
-        }else if(cls == LocalDate.class) { 
-            return (T) new LocalDate(str);
-        }else {
-            throw new IllegalArgumentException("unsupported class '" + cls + "'");
+        final String str = decodeForNulls(child.getText());
+        if(str == null) {
+            return null;
         }
+        return Parseable.parse(str, cls);
     }
 
     static Document parse(final String xmlStr) {
@@ -107,4 +98,135 @@ class Dom4jUtil {
         }
     }
 
+    private static String encodeForNulls(final Object value) {
+        return value != null ? value.toString() : NULL_MARKER;
+    }
+    private static String decodeForNulls(final String valueStr) {
+        return NULL_MARKER.equals(valueStr)? null: valueStr;
+    }
+
+    // //////////////////////////////////////
+
+    static enum Parseable {
+        STRING(String.class) {
+            @SuppressWarnings("unchecked")
+            public <T> T parseStr(String str) {
+                return (T) str;
+            }
+        },
+        BOOLEAN(Boolean.class) {
+            @SuppressWarnings("unchecked")
+            @Override
+            public <T> T parseStr(String str) {
+                return (T) new Boolean(str);
+            }
+        },
+        BYTE(Byte.class) {
+            @SuppressWarnings("unchecked")
+            @Override
+            public <T> T parseStr(String str) {
+                return (T) new Byte(str);
+            }
+        },
+        SHORT(Short.class) {
+
+            @SuppressWarnings("unchecked")
+            @Override
+            <T> T parseStr(String str) {
+                return (T) new Short(str);
+            }
+        },
+        INTEGER(Integer.class) {
+            @SuppressWarnings("unchecked")
+            @Override
+            <T> T parseStr(String str) {
+                return (T) new Integer(str);
+            }
+        },
+        LONG(Long.class) {
+            @SuppressWarnings("unchecked")
+            @Override
+            <T> T parseStr(String str) {
+                return (T) new Long(str);
+            }
+        },
+        FLOAT(Float.class) {
+            @SuppressWarnings("unchecked")
+            @Override
+            <T> T parseStr(String str) {
+                return (T) new Float(str);
+            }
+        },
+        DOUBLE(Double.class) {
+            @SuppressWarnings("unchecked")
+            @Override
+            <T> T parseStr(String str) {
+                return (T) new Double(str);
+            }
+        },
+        BIG_DECIMAL(BigDecimal.class) {
+            @SuppressWarnings("unchecked")
+            @Override
+            <T> T parseStr(String str) {
+                return (T) new BigDecimal(str);
+            }
+        },
+        BIG_INTEGER(BigInteger.class) {
+            @SuppressWarnings("unchecked")
+            @Override
+            <T> T parseStr(String str) {
+                return (T) new BigInteger(str);
+            }
+        },
+        LOCAL_DATE(LocalDate.class) {
+            @SuppressWarnings("unchecked")
+            @Override
+            <T> T parseStr(String str) {
+                return (T) new LocalDate(str);
+            } 
+        },
+        BOOKMARK(Bookmark.class) {
+            @SuppressWarnings("unchecked")
+            @Override
+            <T> T parseStr(String str) {
+                return (T) new Bookmark(str);
+            } 
+        };
+        private final Class<?> cls;
+        private Parseable(Class<?> cls) {
+            this.cls = cls;
+        }
+        public Class<?> getCls() {
+            return cls;
+        }
+        abstract <T> T parseStr(String str);
+        
+        // //////////////////////////////////////
+
+        static <T> T parse(final String str, final Class<?> cls) {
+            assertSupported(cls);
+            for (Parseable sc : values()) {
+                if(sc.getCls().isAssignableFrom(cls)) {
+                    return sc.parseStr(str);
+                }
+            }
+            return null;
+        }
+
+        static boolean isSupported(final Class<?> cls) {
+            for (Parseable sc : values()) {
+                if(sc.getCls().isAssignableFrom(cls)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        static void assertSupported(final Class<?> cls) {
+            if(!isSupported(cls)) {
+                throw new IllegalArgumentException("Parsing string to type " + cls.getName() + " is not supported");
+            }
+        }
+        
+    }
 }

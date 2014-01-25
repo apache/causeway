@@ -16,7 +16,7 @@
  */
 package org.apache.isis.core.runtime.services.viewmodelsupport;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.math.BigDecimal;
@@ -26,6 +26,7 @@ import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.viewmodelsupport.ViewModelSupport.Memento;
 
 public class ViewModelSupportDefaultTest {
@@ -54,6 +55,9 @@ public class ViewModelSupportDefaultTest {
         memento.set("someBigDecimal", new BigDecimal("123456789012345678901234567890.123456789"));
         memento.set("someLocalDate", new LocalDate(2013,9,3));
         
+        memento.set("someBookmark", new Bookmark("CUS", "12345"));
+        memento.set("someNullValue", null);
+        
         final String str = memento.asString();
         
         final Memento memento2 = viewModelSupport.parse(str);
@@ -70,5 +74,11 @@ public class ViewModelSupportDefaultTest {
         assertThat(memento2.get("someBigInteger", BigInteger.class), is(new BigInteger("123456789012345678901234567890")));
         assertThat(memento2.get("someBigDecimal", BigDecimal.class), is(new BigDecimal("123456789012345678901234567890.123456789")));
         assertThat(memento2.get("someLocalDate", LocalDate.class), is(new LocalDate(2013,9,3)));
+        assertThat(memento2.get("someBookmark", Bookmark.class), is(new Bookmark("CUS", "12345")));
+        
+        // a nullValue can be grabbed as any type, will always succeed
+        assertThat(memento2.get("someNullValue", Integer.class), is(nullValue()));
+        assertThat(memento2.get("someNullValue", Bookmark.class), is(nullValue()));
+        assertThat(memento2.get("someNullValue", LocalDate.class), is(nullValue()));
     }
 }
