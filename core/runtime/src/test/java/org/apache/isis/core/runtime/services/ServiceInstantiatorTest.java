@@ -30,9 +30,9 @@ import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.services.viewmodelsupport.ViewModelSupport.Memento;
+import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
-import org.apache.isis.core.runtime.services.viewmodelsupport.ViewModelSupportDefault;
+import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 
 public class ServiceInstantiatorTest {
 

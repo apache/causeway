@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.runtime.services.viewmodelsupport;
+package org.apache.isis.core.runtime.services.memento;
 
 import java.io.IOException;
 import java.io.StringReader;

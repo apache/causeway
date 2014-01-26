@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.runtime.services.viewmodelsupport;
+package org.apache.isis.core.runtime.services.memento;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -27,20 +27,21 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.viewmodelsupport.ViewModelSupport.Memento;
+import org.apache.isis.applib.services.memento.MementoService.Memento;
+import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 
-public class ViewModelSupportDefaultTest {
+public class MementoServiceDefaultTest {
 
-    private ViewModelSupportDefault viewModelSupport;
+    private MementoServiceDefault mementoService;
     
     @Before
     public void setUp() throws Exception {
-        viewModelSupport = new ViewModelSupportDefault();
+        mementoService = new MementoServiceDefault();
     }
     
     @Test
     public void roundtrip() {
-        final Memento memento = viewModelSupport.create();
+        final Memento memento = mementoService.create();
         
         memento.set("someString", "a string");
         memento.set("someByte", (byte)123);
@@ -60,7 +61,7 @@ public class ViewModelSupportDefaultTest {
         
         final String str = memento.asString();
         
-        final Memento memento2 = viewModelSupport.parse(str);
+        final Memento memento2 = mementoService.parse(str);
         
         assertThat(memento2.get("someString", String.class), is("a string"));
         assertThat(memento2.get("someByte", Byte.class), is((byte)123));

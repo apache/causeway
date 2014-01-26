@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.runtime.services.viewmodelsupport;
+package org.apache.isis.core.runtime.services.memento;
 
 import java.nio.charset.Charset;
 import java.util.List;
@@ -29,9 +29,9 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import org.apache.isis.applib.services.viewmodelsupport.ViewModelSupport;
+import org.apache.isis.applib.services.memento.MementoService;
 
-public class ViewModelSupportDefault implements ViewModelSupport {
+public class MementoServiceDefault implements MementoService {
 
     static class MementoDefault implements Memento {
 
@@ -78,6 +78,7 @@ public class ViewModelSupportDefault implements ViewModelSupport {
         @Override
         public Set<String> keySet() {
             Element element = doc.getRootElement();
+            @SuppressWarnings("unchecked")
             List<Element> elements = element.elements();
             return Sets.newLinkedHashSet(Iterables.transform(elements, ELEMENT_NAME));
         }

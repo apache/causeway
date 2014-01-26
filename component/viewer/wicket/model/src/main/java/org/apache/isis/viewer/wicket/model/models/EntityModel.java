@@ -32,8 +32,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.PrependingStringBuffer;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
+
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.services.viewmodelsupport.ViewModelSupport.Memento;
+import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -47,7 +48,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.services.viewmodelsupport.ViewModelSupportDefault;
+import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
@@ -234,7 +235,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
             if(hints.isEmpty()) {
                 return;
             }
-            ViewModelSupportDefault vms = new ViewModelSupportDefault();
+            MementoServiceDefault vms = new MementoServiceDefault();
             Memento memento = vms.create();
             Set<String> hintKeys = hints.keySet();
             for (String key : hintKeys) {
@@ -250,7 +251,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
             String hintsStr = PageParameterNames.ANCHOR.getStringFrom(pageParameters);
             if(hintsStr != null) {
                 try {
-                    Memento memento = new ViewModelSupportDefault().parse(hintsStr);
+                    Memento memento = new MementoServiceDefault().parse(hintsStr);
                     Set<String> keys = memento.keySet();
                     for (String safeKey : keys) {
                         String value = memento.get(safeKey, String.class);
