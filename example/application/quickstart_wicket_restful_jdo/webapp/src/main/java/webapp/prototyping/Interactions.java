@@ -17,6 +17,7 @@
 package webapp.prototyping;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Prototype;
@@ -46,7 +47,7 @@ public class Interactions extends InteractionServiceJdo {
     @MemberOrder(name="Prototyping", sequence="94.3")
     @Prototype
     @Override
-    public InteractionJdo findByGuid(String guid) {
+    public InteractionJdo findByGuid(UUID guid) {
         return super.findByGuid(guid);
     }
     

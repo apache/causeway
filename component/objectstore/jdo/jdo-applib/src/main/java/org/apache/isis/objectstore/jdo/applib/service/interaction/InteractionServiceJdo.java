@@ -17,6 +17,7 @@
 package org.apache.isis.objectstore.jdo.applib.service.interaction;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -41,32 +42,44 @@ public class InteractionServiceJdo extends AbstractService implements Interactio
 
     @Programmatic
     @Override
-    public Interaction start() {
-        return newTransientInstance(InteractionJdo.class);
+    public Interaction create() {
+        InteractionJdo interaction = newTransientInstance(InteractionJdo.class);
+        return interaction;
     }
 
     @Programmatic
     @Override
-    public void complete(Interaction interaction) {
+    public void startTransaction(Interaction interaction, UUID transactionId) {
+        if(interaction instanceof InteractionJdo) {
+            // should be the case, since this service created the object in the #create() method
+            final InteractionJdo interactionJdo = (InteractionJdo) interaction;
+            interactionJdo.setTransactionId(transactionId.toString());
+        }
+    }
+
+    @Programmatic
+    @Override
+    public void complete(final Interaction interaction) {
         if(interaction.getActionIdentifier() == null) {
             // discard, no action occurred
             return;
         }
         if(interaction instanceof InteractionJdo) {
-            // should be the case, since this service created the object in the #start() method
-            InteractionJdo interactionJdo = (InteractionJdo) interaction;
-            interactionJdo.setCompletedAt(new java.sql.Timestamp(new java.util.Date().getTime()));
+            // should be the case, since this service created the object in the #create() method
+            final InteractionJdo interactionJdo = (InteractionJdo) interaction;
+            
+            interactionJdo.setCompletedAt(Clock.getTimeAsJavaSqlTimestamp());
             persistIfNotAlready(interaction);
         }
     }
 
     @Override
-    public InteractionJdo findByGuid(String guid) {
+    public InteractionJdo findByGuid(UUID guid) {
         persistCurrentInteractionIfRequired();
         return firstMatch(
                 new QueryDefault<InteractionJdo>(InteractionJdo.class, 
                         "findByGuid", 
-                        "guid", guid));
+                        "guid", guid.toString()));
     }
 
     private void persistCurrentInteractionIfRequired() {
@@ -100,5 +113,5 @@ public class InteractionServiceJdo extends AbstractService implements Interactio
     
     @Inject
     private InteractionContext interactionContext;
-    
+
 }

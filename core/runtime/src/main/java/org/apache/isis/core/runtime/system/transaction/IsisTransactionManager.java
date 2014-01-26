@@ -277,10 +277,12 @@ public class IsisTransactionManager implements SessionScopedComponent {
         if (getTransaction() == null || getTransaction().getState().isComplete()) {
             noneInProgress = true;
 
-            createTransaction();
+            IsisTransaction isisTransaction = createTransaction();
             transactionLevel = 0;
 
             transactionalResource.startTransaction();
+            
+            persistenceSession.startInteractionIfConfigured(isisTransaction.getGuid());
         }
 
         transactionLevel++;

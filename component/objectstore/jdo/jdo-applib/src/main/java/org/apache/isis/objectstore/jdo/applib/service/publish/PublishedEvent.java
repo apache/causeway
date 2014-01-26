@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.Transactional;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventType;
 
@@ -46,7 +47,7 @@ import org.apache.isis.applib.services.publish.EventType;
             value="SELECT FROM org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEvent WHERE state == :state ORDER BY timestamp")
 })
 @Immutable
-public class PublishedEvent {
+public class PublishedEvent implements Transactional {
 
     public static enum State {
         QUEUED, PROCESSED
@@ -114,10 +115,12 @@ public class PublishedEvent {
      */
     @javax.jdo.annotations.Column(length=36)
     @Programmatic
+    @Override
     public String getTransactionId() {
         return transactionId;
     }
 
+    @Override
     public void setTransactionId(final String transactionId) {
         this.transactionId = transactionId;
     }

@@ -19,6 +19,7 @@ package org.apache.isis.objectstore.jdo.applib.service.interaction;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.jdo.annotations.IdentityType;
@@ -40,6 +41,7 @@ import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.services.Transactional;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -74,7 +76,7 @@ import org.apache.isis.applib.util.ObjectContracts;
         left={"Target","Notes"}, 
         right={"Identifiers","Timings"})
 @Named("Interaction")
-public class InteractionJdo implements Interaction {
+public class InteractionJdo implements Interaction, Transactional {
 
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(InteractionJdo.class);
@@ -310,25 +312,44 @@ public class InteractionJdo implements Interaction {
     // transactionId (property)
     // //////////////////////////////////////
 
-    private String guid;
+    
+    // //////////////////////////////////////
+    
+    private String transactionId;
 
+    /**
+     * The unique identifier (a GUID) of the transaction in which this interaction occurred.
+     * 
+     * <p>
+     * Note that this is the same as the Isis transaction guid as found in the JDO applib's
+     * <tt>PublishedEvent</tt>.
+     */
     @javax.jdo.annotations.PrimaryKey
     @javax.jdo.annotations.Column(allowsNull="false", length=36)
     @TypicalLength(36)
     @MemberOrder(name="Identifiers",sequence = "20")
-    public String getGuid() {
-        return guid;
+    @Disabled
+    @Override
+    public String getTransactionId() {
+        return transactionId;
     }
 
-    public void setGuid(final String guid) {
-        this.guid = guid;
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     * 
+     * <p>
+     * Implementation notes: copied over from the Isis transaction when the interaction is persisted.
+     */
+    @Override
+    public void setTransactionId(final String transactionId) {
+        this.transactionId = transactionId;
     }
 
     // //////////////////////////////////////
 
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "startedAt,user,actionIdentifier,target,completedAt,duration,guid");
+        return ObjectContracts.toString(this, "startedAt,user,actionIdentifier,target,completedAt,duration,transactionId");
     }
 
     // //////////////////////////////////////

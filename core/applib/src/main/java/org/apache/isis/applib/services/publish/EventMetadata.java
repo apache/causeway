@@ -38,7 +38,13 @@ public class EventMetadata {
     private final String title;
     private final EventType eventType;
     
-    public EventMetadata(UUID transactionId, int sequence, EventType eventType, String user, long timestamp, String title) {
+    public EventMetadata(
+            final UUID transactionId, 
+            final int sequence, 
+            final EventType eventType, 
+            final String user, 
+            final long timestamp, 
+            final String title) {
         this.transactionId = transactionId;
         this.sequence = sequence;
         this.user = user;

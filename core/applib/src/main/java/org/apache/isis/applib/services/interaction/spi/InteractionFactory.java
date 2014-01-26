@@ -16,6 +16,8 @@
  */
 package org.apache.isis.applib.services.interaction.spi;
 
+import java.util.UUID;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.interaction.Interaction;
 
@@ -32,7 +34,10 @@ import org.apache.isis.applib.services.interaction.Interaction;
 public interface InteractionFactory {
 
     @Programmatic
-    Interaction start();
+    Interaction create();
+    
+    @Programmatic
+    void startTransaction(Interaction interaction, UUID transactionId);
     
     @Programmatic
     void complete(final Interaction interaction);

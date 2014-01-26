@@ -241,7 +241,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         
         startRequestOnRequestScopedServices(registeredServices);
 
-        startInteractionIfConfigured();
+        createInteractionIfConfigured();
         
         createServiceAdapters(registeredServices);
         
@@ -300,33 +300,46 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         }
     }
 
-    private void startInteractionIfConfigured() {
+    private void createInteractionIfConfigured() {
         final InteractionContext ic = getServiceOrNull(InteractionContext.class);
         if(ic == null) {
             return;
         } 
         final InteractionFactory interactionFactory = getServiceOrNull(InteractionFactory.class);
-        final Interaction interaction = interactionFactory != null ? interactionFactory.start() : new InteractionDefault();
+        final Interaction interaction = interactionFactory != null ? interactionFactory.create() : new InteractionDefault();
         ic.setInteraction(interaction);
 
-        if(interaction.getGuid() == null) {
-            interaction.setGuid(UUID.randomUUID().toString());
-        }
         if(interaction.getStartedAt() == null) {
-            //interaction.setStartedAt(Clock.getTimeAsDateTime());
-            interaction.setStartedAt(new java.sql.Timestamp(new java.util.Date().getTime()));
+            interaction.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
         }
         if(interaction.getUser() == null) {
             interaction.setUser(getAuthenticationSession().getUserName());
         }
         
-        // the remaining 3 properties are set further down the call-stack, if an action is actually performed
+        // the remaining properties are set further down the call-stack, if an action is actually performed
         // interaction.getActionIdentifier()
-        // interaction.getDescription()
-        // interaction.getArguments()
+        // interaction.getTargetClass()
+        // interaction.getTargetAction()
         // interaction.getTarget()
+        // interaction.getArguments()
     }
 
+
+    /**
+     * Called by IsisTransactionManager on start
+     */
+    public void startInteractionIfConfigured(final UUID transactionId) {
+        final InteractionContext interactionContext = getServiceOrNull(InteractionContext.class);
+        if(interactionContext == null) {
+            return;
+        } 
+        final InteractionFactory interactionFactory = getServiceOrNull(InteractionFactory.class);
+        if(interactionFactory == null) {
+            return;
+        } 
+        final Interaction interaction = interactionContext.getInteraction();
+        interactionFactory.startTransaction(interaction, transactionId);
+    }
 
 
     /**
@@ -406,11 +419,12 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
             final InteractionFactory interactionFactory = getServiceOrNull(InteractionFactory.class);
             if(interactionFactory != null) {
                 final Interaction interaction = interactionContext.getInteraction();
+                UUID guid = getTransactionManager().getTransaction().getGuid();
                 interactionFactory.complete(interaction);
             }
         }
     }
-
+    
     private void endRequestOnRequestScopeServices() {
         for (final Object service : servicesInjector.getRegisteredServices()) {
             if(service instanceof RequestScopedService) {

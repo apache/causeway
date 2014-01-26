@@ -24,6 +24,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.Collections;
+import java.util.UUID;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -96,7 +97,7 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
     @Test
     public void endTransactionDecrementsTransactionLevel() throws Exception {
         // setup
-        context.ignoring(mockObjectStore);
+        context.ignoring(mockObjectStore, mockPersistenceSession);
         transactionManager.startTransaction();
         transactionManager.startTransaction();
 
@@ -109,11 +110,17 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
     public void endTransactionCommitsTransactionWhenLevelDecrementsDownToZero() throws Exception {
         // setup
         context.ignoring(mockObjectStore);
-        transactionManager.startTransaction();
-
         context.checking(new Expectations() {
             {
-                one(mockPersistenceSession).objectChangedAllDirty();
+                oneOf(mockPersistenceSession).startInteractionIfConfigured(with(any(UUID.class)));
+            }
+        });
+        transactionManager.startTransaction();
+
+        
+        context.checking(new Expectations() {
+            {
+                oneOf(mockPersistenceSession).objectChangedAllDirty();
             }
         });
         assertThat(transactionManager.getTransactionLevel(), is(1));

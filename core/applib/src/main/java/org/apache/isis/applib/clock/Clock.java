@@ -19,6 +19,7 @@
 
 package org.apache.isis.applib.clock;
 
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -132,6 +133,10 @@ public abstract class Clock {
         }
     }
 
+    public static Timestamp getTimeAsJavaSqlTimestamp() {
+        return new java.sql.Timestamp(getTimeAsDateTime().getMillis());
+    }
+
     /**
      * Allows subclasses to remove their implementation.
      * 
@@ -165,6 +170,7 @@ public abstract class Clock {
      * {@link System#currentTimeMillis()}.
      */
     protected abstract long time();
+
 
 }
 

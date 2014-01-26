@@ -57,25 +57,6 @@ public interface Interaction {
      */
     public abstract void setStartedAt(Timestamp startedAt);
     
-    // //////////////////////////////////////
-    
-    /**
-     * The unique identifier (a GUID) for this interaction occurred.
-     * 
-     * <p>
-     * Note that this is <i>not</i> the same as the Isis transaction guid, as found in the JDO applib's
-     * <tt>PublishedEvent</tt>.  In general there could be several transactions within a single interaction.
-     */
-    @Disabled
-    public abstract String getGuid();
-
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     * 
-     * <p>
-     * Implementation notes: set when the Isis transaction is started.
-     */
-    public abstract void setGuid(String guid);
     
     // //////////////////////////////////////
     

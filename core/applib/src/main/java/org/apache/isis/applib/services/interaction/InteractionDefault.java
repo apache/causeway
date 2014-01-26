@@ -119,18 +119,6 @@ public class InteractionDefault implements Interaction {
         this.user = user;
     }
 
-    // //////////////////////////////////////
-
-    private String guid;
-    public String getGuid() {
-        return guid;
-    }
-
-    @Override
-    public void setGuid(String guid) {
-        this.guid = guid;
-    }
-
 
     // //////////////////////////////////////
 

@@ -17,6 +17,7 @@
 package org.apache.isis.objectstore.jdo.applib.service.interaction;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
@@ -25,7 +26,7 @@ import org.apache.isis.applib.annotation.ActionSemantics.Of;
 public interface InteractionRepository {
 
     @ActionSemantics(Of.SAFE)
-    InteractionJdo findByGuid(final String guid);
+    InteractionJdo findByGuid(final UUID guid);
     
     @ActionSemantics(Of.SAFE)
     List<InteractionJdo> currentInteractions();
