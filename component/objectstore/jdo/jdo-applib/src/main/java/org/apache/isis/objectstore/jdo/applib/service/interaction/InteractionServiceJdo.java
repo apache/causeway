@@ -74,12 +74,12 @@ public class InteractionServiceJdo extends AbstractService implements Interactio
     }
 
     @Override
-    public InteractionJdo findByGuid(UUID guid) {
+    public InteractionJdo findByTransactionId(final UUID transactionId) {
         persistCurrentInteractionIfRequired();
         return firstMatch(
                 new QueryDefault<InteractionJdo>(InteractionJdo.class, 
-                        "findByGuid", 
-                        "guid", guid.toString()));
+                        "findByTransactionId", 
+                        "transactionId", transactionId.toString()));
     }
 
     private void persistCurrentInteractionIfRequired() {

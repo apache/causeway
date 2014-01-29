@@ -55,10 +55,10 @@ import org.apache.isis.applib.util.ObjectContracts;
         table="IsisInteraction")
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
-            name="findByGuid", language="JDOQL",  
+            name="findByTransactionId", language="JDOQL",  
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionJdo "
-                    + "WHERE guid == :guid"),
+                    + "WHERE transactionId == :transactionId"),
     @javax.jdo.annotations.Query(
             name="findCurrent", language="JDOQL",  
             value="SELECT "
@@ -234,6 +234,7 @@ public class InteractionJdo implements Interaction, HasTransactionId {
     @javax.jdo.annotations.Persistent
     @javax.jdo.annotations.Column(allowsNull="true")
     @MemberOrder(name="Timings", sequence = "4")
+    @Disabled
     public Timestamp getCompletedAt() {
         return completedAt;
     }

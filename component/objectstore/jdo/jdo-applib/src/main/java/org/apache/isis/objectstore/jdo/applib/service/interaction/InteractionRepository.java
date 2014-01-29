@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.ActionSemantics.Of;
 public interface InteractionRepository {
 
     @ActionSemantics(Of.SAFE)
-    InteractionJdo findByGuid(final UUID guid);
+    InteractionJdo findByTransactionId(final UUID transactionId);
     
     @ActionSemantics(Of.SAFE)
     List<InteractionJdo> currentInteractions();

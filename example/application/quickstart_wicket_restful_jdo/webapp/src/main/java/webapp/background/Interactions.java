@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionJdo;
 import org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionServiceJdo;
@@ -46,8 +45,8 @@ public class Interactions extends InteractionServiceJdo {
     @MemberOrder(name="Background Tasks", sequence="10.3")
     @Prototype
     @Override
-    public InteractionJdo findByGuid(UUID guid) {
-        return super.findByGuid(guid);
+    public InteractionJdo findByTransactionId(UUID transactionId) {
+        return super.findByTransactionId(transactionId);
     }
     
 }
