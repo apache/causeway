@@ -14,37 +14,36 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package webapp.prototyping;
+package webapp.background;
 
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionJdo;
 import org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionServiceJdo;
 
 /**
  * These overrides are simply to 'move' the action underneath the 
- * {@link ToDoItemsFixturesService fixtures} menu.
+ * {@link BackgroundTasks} menu.
  */
 public class Interactions extends InteractionServiceJdo {
 
-    @MemberOrder(name="Prototyping", sequence="94.1")
-    @Prototype
+    @MemberOrder(name="Background Tasks", sequence="10.1")
     @Override
     public List<InteractionJdo> currentInteractions() {
         return super.currentInteractions();
     }
     
-    @MemberOrder(name="Prototyping", sequence="94.2")
-    @Prototype
+    @MemberOrder(name="Background Tasks", sequence="10.2")
     @Override
     public List<InteractionJdo> completedInteractions() {
         return super.completedInteractions();
     }
 
-    @MemberOrder(name="Prototyping", sequence="94.3")
+    @MemberOrder(name="Background Tasks", sequence="10.3")
     @Prototype
     @Override
     public InteractionJdo findByGuid(UUID guid) {

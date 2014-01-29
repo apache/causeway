@@ -41,6 +41,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
@@ -59,17 +61,18 @@ public final class EntityActionUtil {
             final EntityModel entityModel, 
             final ObjectAssociation association, 
             final ActionPromptProvider actionPromptModalWindowProvider) {
-        final ObjectSpecification adapterSpec = entityModel.getTypeOfSpecification();
-        final ObjectAdapter adapter = entityModel.load(ConcurrencyChecking.NO_CHECK);
-        final ObjectAdapterMemento adapterMemento = entityModel.getObjectAdapterMemento();
         
-        @SuppressWarnings({ "unchecked", "deprecation" })
-        Filter<ObjectAction> filter = Filters.and(
-                ObjectAction.Filters.memberOrderOf(association), 
-                EntityActionUtil.dynamicallyVisibleFor(adapter),
-                ObjectAction.Filters.notBulkOnly());
-        final List<ObjectAction> userActions = adapterSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED, filter);
-        Collections.sort(userActions, new Comparator<ObjectAction>() {
+        
+        
+        final List<ObjectAction> associatedActions = Lists.newArrayList();
+
+        addActions(ActionType.USER, entityModel, association, associatedActions);
+        if(getDeploymentType().isPrototyping()) {
+            addActions(ActionType.EXPLORATION, entityModel, association, associatedActions);
+            addActions(ActionType.PROTOTYPE, entityModel, association, associatedActions);
+        }
+        
+        Collections.sort(associatedActions, new Comparator<ObjectAction>() {
 
             @Override
             public int compare(ObjectAction o1, ObjectAction o2) {
@@ -80,12 +83,31 @@ public final class EntityActionUtil {
         
         final ActionLinkFactory linkFactory = new EntityActionLinkFactory(entityModel);
     
-        return Lists.transform(userActions, new Function<ObjectAction, LinkAndLabel>(){
+        final ObjectAdapterMemento adapterMemento = entityModel.getObjectAdapterMemento();
+        return Lists.transform(associatedActions, new Function<ObjectAction, LinkAndLabel>(){
     
             @Override
             public LinkAndLabel apply(ObjectAction objectAction) {
                 return linkFactory.newLink(adapterMemento, objectAction, LinksSelectorPanelAbstract.ID_ADDITIONAL_LINK, actionPromptModalWindowProvider);
             }});
+    }
+
+    protected static DeploymentType getDeploymentType() {
+        return IsisContext.getDeploymentType();
+    }
+
+    protected static List<ObjectAction> addActions(ActionType type, final EntityModel entityModel, final ObjectAssociation association, final List<ObjectAction> associatedActions) {
+        final ObjectSpecification adapterSpec = entityModel.getTypeOfSpecification();
+        final ObjectAdapter adapter = entityModel.load(ConcurrencyChecking.NO_CHECK);
+        
+        @SuppressWarnings({ "unchecked", "deprecation" })
+        Filter<ObjectAction> filter = Filters.and(
+                ObjectAction.Filters.memberOrderOf(association), 
+                EntityActionUtil.dynamicallyVisibleFor(adapter),
+                ObjectAction.Filters.notBulkOnly());
+        final List<ObjectAction> userActions = adapterSpec.getObjectActions(type, Contributed.INCLUDED, filter);
+        associatedActions.addAll(userActions);
+        return userActions;
     }
 
     private static Filter<ObjectAction> dynamicallyVisibleFor(final ObjectAdapter adapter) {

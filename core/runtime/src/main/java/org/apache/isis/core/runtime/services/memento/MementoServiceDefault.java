@@ -29,21 +29,24 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.memento.MementoService;
 
 public class MementoServiceDefault implements MementoService {
 
     static class MementoDefault implements Memento {
 
-        private Document doc;
+        private final boolean noEncoding;
+        private final Document doc;
 
-        MementoDefault(Document doc) {
-            this.doc = doc;
-        }
-        
-        MementoDefault() {
-            this(DocumentHelper.createDocument());
+        MementoDefault(boolean noEncoding) {
+            this(DocumentHelper.createDocument(), noEncoding);
             doc.addElement("memento");
+        }
+
+        MementoDefault(Document doc, boolean noEncoding) {
+            this.doc = doc;
+            this.noEncoding = noEncoding;
         }
         
         @Override
@@ -53,9 +56,6 @@ public class MementoServiceDefault implements MementoService {
             return this;
         }
 
-        /**
-         * 
-         */
         @Override
         public <T> T get(String name, Class<T> cls) {
             final Element el = doc.getRootElement();
@@ -65,7 +65,11 @@ public class MementoServiceDefault implements MementoService {
         @Override
         public String asString() {
             final String xmlStr = Dom4jUtil.asString(doc);
-            return BaseEncoding.base64Url().encode(xmlStr.getBytes(Charset.forName("UTF-8")));
+            return encode(xmlStr);
+        }
+
+        protected String encode(final String xmlStr) {
+            return noEncoding ? xmlStr : base64UrlEncode(xmlStr);
         }
 
         private static final Function<Element, String> ELEMENT_NAME = new Function<Element, String>(){
@@ -83,18 +87,60 @@ public class MementoServiceDefault implements MementoService {
             return Sets.newLinkedHashSet(Iterables.transform(elements, ELEMENT_NAME));
         }
     }
+
+    // //////////////////////////////////////
+
+    private boolean noEncoding;
     
+    public MementoServiceDefault() {
+        this.noEncoding = false;
+    }
+
+    /**
+     * Not public API.
+     */
+    @Programmatic
+    public MementoServiceDefault withNoEncoding() {
+        this.noEncoding = true;
+        return this;
+    }
+    
+    // //////////////////////////////////////
+
     @Override
     public Memento create() {
-        return new MementoDefault();
+        return new MementoDefault(noEncoding);
+    }
+
+    
+    @Override
+    public Memento parse(String str) {
+        String xmlStr;
+        if (noEncoding) {
+            xmlStr = str;
+        } else {
+            xmlStr = base64UrlDecode(str);
+        }
+        final Document doc = Dom4jUtil.parse(xmlStr);
+        return new MementoDefault(doc, noEncoding);
     }
 
     @Override
-    public Memento parse(String str) {
-        final byte[] bytes = BaseEncoding.base64Url().decode(str);
-        String xmlStr = new String(bytes, Charset.forName("UTF-8"));
-        final Document doc = Dom4jUtil.parse(xmlStr);
-        return new MementoDefault(doc);
+    public boolean canSet(final Object input) {
+        return input != null ? Dom4jUtil.isSupportedClass(input.getClass()) : true;
     }
 
+    // //////////////////////////////////////
+
+    private static String base64UrlDecode(String str) {
+        final byte[] bytes = BaseEncoding.base64Url().decode(str);
+        return new String(bytes, Charset.forName("UTF-8"));
+    }
+    
+    private static String base64UrlEncode(final String xmlStr) {
+        byte[] bytes = xmlStr.getBytes(Charset.forName("UTF-8"));
+        return BaseEncoding.base64Url().encode(bytes);
+    }
+
+    
 }

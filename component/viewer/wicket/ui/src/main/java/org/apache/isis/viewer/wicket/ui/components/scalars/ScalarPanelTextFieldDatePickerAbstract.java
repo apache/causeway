@@ -127,13 +127,13 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
 
     
     protected String getDatePattern() {
-        return getSettings().getDatePattern();
+        return converter.getDatePattern(getLocale());
     }
     protected String getDateTimePattern() {
-        return getSettings().getDateTimePattern();
+        return converter.getDateTimePattern(getLocale());
     }
     protected String getDatePickerPattern() {
-        return getSettings().getDatePickerPattern();
+        return converter.getDatePickerPattern(getLocale());
     }
     
     @Inject

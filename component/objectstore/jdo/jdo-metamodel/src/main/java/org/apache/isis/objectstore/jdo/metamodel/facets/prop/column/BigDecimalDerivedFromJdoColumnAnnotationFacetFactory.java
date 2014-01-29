@@ -66,27 +66,34 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
         
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
-        // obtain the existing facet's length and scale, to use as defaults if none are specified on the @Column
-        // this will mean a metamodel validation exception will only be fired later (see #refineMetaModelValidator)
-        // if there was an *explicit* value defined on the @Column annotation that is incompatible with existing.
-        Integer existingLength = null;
-        Integer existingScale = null;
         BigDecimalValueFacet existingFacet = (BigDecimalValueFacet) holder.getFacet(BigDecimalValueFacet.class);
-        if(existingFacet != null && !existingFacet.isNoop()) {
-            existingLength = existingFacet.getLength();
-            existingScale = existingFacet.getScale();
+
+        final Column jdoColumnAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), Column.class);
+
+        if (jdoColumnAnnotation == null) {
+            if(existingFacet != null && !existingFacet.isNoop()) {
+                // do nothing
+            } else {
+                final BigDecimalValueFacet facet = new BigDecimalFacetFallback(holder);
+                FacetUtil.addFacet(facet);
+            }
+        } else {
+            
+            // obtain the existing facet's length and scale, to use as defaults if none are specified on the @Column
+            // this will mean a metamodel validation exception will only be fired later (see #refineMetaModelValidator)
+            // if there was an *explicit* value defined on the @Column annotation that is incompatible with existing.
+            Integer existingLength = null;
+            Integer existingScale = null;
+            if(existingFacet != null && !existingFacet.isNoop()) {
+                existingLength = existingFacet.getLength();
+                existingScale = existingFacet.getScale();
+            }
+            
+            Integer length = valueElseDefaults(jdoColumnAnnotation.length(), existingLength, DEFAULT_LENGTH);
+            Integer scale = valueElseDefaults(jdoColumnAnnotation.scale(), existingScale, DEFAULT_SCALE);
+            final BigDecimalValueFacet facet = new BigDecimalFacetDerivedFromJdoColumn(holder, length, scale);
+            FacetUtil.addFacet(facet);
         }
-        final Column annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Column.class);
-        final BigDecimalValueFacet facet = annotation == null 
-                ? new BigDecimalFacetFallback(holder) 
-                : new BigDecimalFacetDerivedFromJdoColumn(
-                        holder, 
-                        valueElseDefaults(annotation.length(), existingLength, DEFAULT_LENGTH), 
-                        valueElseDefaults(annotation.scale(), existingScale, DEFAULT_SCALE));
-                
-        // any existing BigDecimalValueFacets, eg from the @javax.validation.constraints.Digits annotation, will be
-        // chained to this facet as the 'underlying'.  We check they are compatible in the #refineMetaModelValidator, below.
-        FacetUtil.addFacet(facet);
     }
 
     private final static Integer valueElseDefaults(final int value, final Integer underlying, int defaultVal) {

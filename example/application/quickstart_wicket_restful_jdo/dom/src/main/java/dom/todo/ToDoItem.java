@@ -65,6 +65,7 @@ import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.interaction.Interaction;
 import org.apache.isis.applib.services.interaction.InteractionContext;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
@@ -609,6 +610,29 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     }
     
 
+    // //////////////////////////////////////
+    // totalCost
+    // //////////////////////////////////////
+    
+    @ActionSemantics(Of.IDEMPOTENT)
+    @Prototype
+    public ToDoItem completeInBackground() {
+        backgroundService.execute(this).slowCompleted(5000);
+        container.informUser("Task '" + getDescription() + "' scheduled for completion");
+        return this;
+    }
+    
+    
+    @Hidden
+    public void slowCompleted(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+        }
+        completed();
+        container.informUser("Completed " + this.getDescription() + "!");
+    }
+
     
     // //////////////////////////////////////
     // OpenSourceCodeOnGithub (action)
@@ -763,6 +787,9 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     @javax.inject.Inject
     private InteractionContext interactionContext;
     
+
+    @javax.inject.Inject
+    private BackgroundService backgroundService;
 
     // //////////////////////////////////////
     // Extensions

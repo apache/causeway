@@ -54,6 +54,9 @@
                                 },
                                 cssClass: { value: "x-highlight" }
                             },
+                            completeInBackground: {
+                                named: { value: "Schedule" }
+                            },
                             notYetCompleted: {
                                 named: { value: "Not done" }
                             }

@@ -75,6 +75,14 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
     }
 
     /**
+     * The pattern used for rendering and parsing timestamps.
+     */
+    @Override
+    public String getTimestampPattern() {
+        return getConfiguration().getString("isis.viewer.wicket.timestampPattern", "yyyy-MM-dd HH:mm:ss.SSS");
+    }
+    
+    /**
      * The pattern used for rendering dates chosen by the {@link TextFieldWithDatePicker}.
      * 
      * <p>

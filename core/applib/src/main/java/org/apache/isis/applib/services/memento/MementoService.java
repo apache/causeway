@@ -19,6 +19,7 @@ package org.apache.isis.applib.services.memento;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 
 public interface MementoService {
 
@@ -29,7 +30,7 @@ public interface MementoService {
 
         @Programmatic
         public <T> T get(String name, Class<T> cls);
-
+        
         @Programmatic
         public String asString();
 
@@ -55,5 +56,18 @@ public interface MementoService {
      */
     @Programmatic
     public Memento parse(final String str);
+
+    /**
+     * Whether the value can be provided &quot;as-is&quot; as an argument to {@link Memento#set(String, Object)},
+     * or whether it must be converted in some way.
+     * 
+     * <p>
+     * The intention here is that a {@link Memento} implementation should be able to accept most/all common value types
+     * (int, String, Date, BigDecimal etc), but will require entities to be converted into a serializable format,
+     * specifically, as a {@link Bookmark}.
+     */
+    @Programmatic
+    public boolean canSet(Object input);
+
 
 }

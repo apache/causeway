@@ -14,19 +14,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.objectstore.jdo.applib.service.interaction;
+package org.apache.isis.objectstore.jdo.applib.service.background;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
-import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.jdo.annotations.IdentityType;
-import javax.validation.constraints.Digits;
 
-import org.joda.time.DateTime;
-import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,56 +40,46 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.interaction.Interaction;
+import org.apache.isis.applib.services.interaction.spi.InteractionFactory;
 import org.apache.isis.applib.util.ObjectContracts;
 
 
 @javax.jdo.annotations.PersistenceCapable(
-        identityType=IdentityType.APPLICATION, 
-        table="IsisInteraction")
-@javax.jdo.annotations.Queries( {
-    @javax.jdo.annotations.Query(
-            name="findByGuid", language="JDOQL",  
-            value="SELECT "
-                    + "FROM org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionJdo "
-                    + "WHERE guid == :guid"),
-    @javax.jdo.annotations.Query(
-            name="findCurrent", language="JDOQL",  
-            value="SELECT "
-                    + "FROM org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionJdo "
-                    + "WHERE completedAt == null "
-                    + "ORDER BY startedAt DESC"),
-    @javax.jdo.annotations.Query(
-            name="findCompleted", language="JDOQL",  
-            value="SELECT "
-                    + "FROM org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionJdo "
-                    + "WHERE completedAt != null "
-                    + "ORDER BY startedAt DESC")
-})
+        identityType=IdentityType.DATASTORE, 
+        table="IsisBackgroundTask")
+@javax.jdo.annotations.DatastoreIdentity(
+        strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
+         column="id")
+@Named("Background Task")
 @MemberGroupLayout(
         columnSpans={6,0,6}, 
-        left={"Target","Notes"}, 
+        left={"Target"},
         right={"Identifiers","Timings"})
-@Named("Interaction")
-public class InteractionJdo implements Interaction, HasTransactionId {
+public class BackgroundTaskJdo implements HasTransactionId {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(InteractionJdo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BackgroundTaskJdo.class);
 
     
-    // //////////////////////////////////////
-    // actionIdentifier (property)
     // //////////////////////////////////////
 
     private String actionIdentifier;
     
+    /**
+     * The identifier of the action that this background task will/has run.
+     * 
+     * <p>
+     * This information is also available within the {@link #getMemento()}, but is redundantly stored here also
+     * to enable analytics.
+     */
     @javax.jdo.annotations.Column(allowsNull="false", length=255)
     @Title(sequence="1")
     @TypicalLength(60)
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Identifiers",sequence = "11")
+    @Disabled
     public String getActionIdentifier() {
         return actionIdentifier;
     }
@@ -102,74 +88,52 @@ public class InteractionJdo implements Interaction, HasTransactionId {
         this.actionIdentifier = actionIdentifier;
     }
 
+    
+    
     // //////////////////////////////////////
-    // targetClass (property)
+    // user (property)
     // //////////////////////////////////////
 
-    private String targetClass;
+    private String user;
 
+    /**
+     * The user that invoked the initial interaction that gave rise to this background task, and also the credentials
+     * with which the task will/has run.
+     */
     @javax.jdo.annotations.Column(allowsNull="false", length=50)
-    @TypicalLength(30)
-    @MemberOrder(name="Target", sequence = "1")
-    @Named("Class")
-    public String getTargetClass() {
-        return targetClass;
+    @Title(sequence="2", prepend=", ")
+    @MemberOrder(name="Identifiers", sequence = "5")
+    @Disabled
+    public String getUser() {
+        return user;
     }
 
-    public void setTargetClass(final String targetClass) {
-        this.targetClass = targetClass;
+    public void setUser(final String user) {
+        this.user = user;
     }
 
 
-    // //////////////////////////////////////
-    // targetAction (property)
-    // //////////////////////////////////////
-    
-    private String targetAction;
-    
-    @javax.jdo.annotations.Column(allowsNull="false", length=50)
-    @TypicalLength(30)
-    @MemberOrder(name="Target", sequence = "2")
-    @Named("Action")
-    public String getTargetAction() {
-        return targetAction;
-    }
-    
-    public void setTargetAction(final String targetAction) {
-        this.targetAction = targetAction;
-    }
-    
-    
-    // //////////////////////////////////////
-    // targetObject (derived property)
-    // //////////////////////////////////////
 
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(name="Target", sequence="3")
-    @Named("Object")
-    public Object getTargetObject() {
-        return bookmarkService.lookup(getTarget());
-    }
-    
 
     // //////////////////////////////////////
-    // arguments (property)
+    // memento (property)
     // //////////////////////////////////////
     
-    private String arguments;
+    private String memento;
     
-    @javax.jdo.annotations.Column(allowsNull="false", length=255)
-    @MultiLine(numberOfLines=6)
+    @javax.jdo.annotations.Column(allowsNull="false", length=1024)
+    @MultiLine(numberOfLines=20)
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Target",sequence = "4")
     @Disabled
-    public String getArguments() {
-        return arguments;
+    public String getMemento() {
+        return memento;
     }
     
-    public void setArguments(final String arguments) {
-        this.arguments = arguments;
+    public void setMemento(final String memento) {
+        this.memento = memento;
     }
+    
     
     
     // //////////////////////////////////////
@@ -177,13 +141,11 @@ public class InteractionJdo implements Interaction, HasTransactionId {
     // //////////////////////////////////////
 
     @Programmatic
-    @Override
     public Bookmark getTarget() {
         return new Bookmark(getTargetStr());
     }
     
     @Programmatic
-    @Override
     public void setTarget(Bookmark target) {
         setTargetStr(target.toString());
     }
@@ -199,24 +161,64 @@ public class InteractionJdo implements Interaction, HasTransactionId {
         this.targetStr = targetStr;
     }
 
+
+    
     // //////////////////////////////////////
-    // startedAt (property)
+    // targetObject (derived property)
     // //////////////////////////////////////
 
-    private Timestamp startedAt;
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(name="Target", sequence="3")
+    @Named("Object")
+    public Object getTargetObject() {
+        return bookmarkService.lookup(getTarget());
+    }
 
+
+    // //////////////////////////////////////
+    // createdAt (property)
+    // //////////////////////////////////////
+
+    private Timestamp createdAt;
+
+    /**
+     * The date/time at which this background task was created.
+     */
     @javax.jdo.annotations.Persistent
     @javax.jdo.annotations.Column(allowsNull="false")
     @MemberOrder(name="Timings", sequence = "3")
+    @Disabled
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(final Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+
+    // //////////////////////////////////////
+    // startedAt (property)
+    // //////////////////////////////////////
+    
+    private Timestamp startedAt;
+    
+    /**
+     * The date/time at which this background task started.
+     */
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(allowsNull="true")
+    @MemberOrder(name="Timings", sequence = "3")
+    @Disabled
     public Timestamp getStartedAt() {
         return startedAt;
     }
-
+    
     public void setStartedAt(final Timestamp startedAt) {
         this.startedAt = startedAt;
     }
-
-
+    
+    
     // //////////////////////////////////////
     // completedAt (property)
     // //////////////////////////////////////
@@ -224,16 +226,12 @@ public class InteractionJdo implements Interaction, HasTransactionId {
     private Timestamp completedAt;
 
     /**
-     * The date/time at which this interaction completed.
-     * 
-     * <p>
-     * Not part of the applib API, because the default implementation is not persistent
-     * and so cannot be queried "after the fact".  This JDO-specific class is persistent,
-     * and so we can gather this information.
+     * The date/time at which this background task completed.
      */
     @javax.jdo.annotations.Persistent
     @javax.jdo.annotations.Column(allowsNull="true")
     @MemberOrder(name="Timings", sequence = "4")
+    @Disabled
     public Timestamp getCompletedAt() {
         return completedAt;
     }
@@ -242,50 +240,6 @@ public class InteractionJdo implements Interaction, HasTransactionId {
         this.completedAt = completed;
     }
 
-
-    // //////////////////////////////////////
-    // user (property)
-    // //////////////////////////////////////
-
-    private String user;
-
-    @javax.jdo.annotations.Column(allowsNull="false", length=50)
-    @Title(sequence="2", prepend=", ")
-    @MemberOrder(name="Identifiers", sequence = "5")
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(final String user) {
-        this.user = user;
-    }
-
-
-    // //////////////////////////////////////
-    // notes (property)
-    // //////////////////////////////////////
-
-    private String notes;
-
-    /**
-     * Provides the ability for the end-user to annotate a (potentially long-running)
-     * interaction.
-     * 
-     * <p>
-     * Not part of the applib API, because the default implementation is not persistent
-     * and so there's no object that can be accessed to be annotated.
-     */
-    @javax.jdo.annotations.Column(allowsNull="true", length=255)
-    @MultiLine(numberOfLines=10)
-    @Hidden(where=Where.ALL_TABLES)
-    @MemberOrder(name="Notes", sequence = "6")
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(final String notes) {
-        this.notes = notes;
-    }
 
 
     // //////////////////////////////////////
@@ -315,15 +269,14 @@ public class InteractionJdo implements Interaction, HasTransactionId {
     // //////////////////////////////////////
 
     
-    // //////////////////////////////////////
-    
     private String transactionId;
 
     /**
-     * The unique identifier (a GUID) of the transaction in which this interaction occurred.
+     * The unique identifier (a GUID) of the transaction of the {@link Interaction} that gave rise to this
+     * background task (if known, and if the interaction is itself persisted by way of a suitable implementation of
+     * {@link InteractionFactory}).
      */
-    @javax.jdo.annotations.PrimaryKey
-    @javax.jdo.annotations.Column(allowsNull="false", length=36)
+    @javax.jdo.annotations.Column(allowsNull="true", length=36)
     @TypicalLength(36)
     @MemberOrder(name="Identifiers",sequence = "20")
     @Disabled
@@ -332,12 +285,6 @@ public class InteractionJdo implements Interaction, HasTransactionId {
         return transactionId;
     }
 
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     * 
-     * <p>
-     * Implementation notes: copied over from the Isis transaction when the interaction is persisted.
-     */
     @Override
     public void setTransactionId(final String transactionId) {
         this.transactionId = transactionId;
@@ -347,8 +294,9 @@ public class InteractionJdo implements Interaction, HasTransactionId {
 
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "startedAt,user,actionIdentifier,target,completedAt,duration,transactionId");
+        return ObjectContracts.toString(this, "actionIdentifier,user,createdAt,startedAt,completedAt,duration,transactionId");
     }
+
 
     // //////////////////////////////////////
     

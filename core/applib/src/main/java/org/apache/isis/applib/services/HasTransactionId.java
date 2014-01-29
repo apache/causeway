@@ -27,7 +27,7 @@ package org.apache.isis.applib.services;
  * persistent information.  They may then use contributed actions/collections to render such aggregated
  * information back to the user.
  */
-public interface Transactional {
+public interface HasTransactionId {
 
     /**
      * The unique identifier (a GUID) of the transaction in which this interaction occurred.

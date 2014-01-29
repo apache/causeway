@@ -114,21 +114,21 @@ class Dom4jUtil {
                 return (T) str;
             }
         },
-        BOOLEAN(Boolean.class) {
+        BOOLEAN(Boolean.class, boolean.class) {
             @SuppressWarnings("unchecked")
             @Override
             public <T> T parseStr(String str) {
                 return (T) new Boolean(str);
             }
         },
-        BYTE(Byte.class) {
+        BYTE(Byte.class, byte.class) {
             @SuppressWarnings("unchecked")
             @Override
             public <T> T parseStr(String str) {
                 return (T) new Byte(str);
             }
         },
-        SHORT(Short.class) {
+        SHORT(Short.class, short.class) {
 
             @SuppressWarnings("unchecked")
             @Override
@@ -136,28 +136,28 @@ class Dom4jUtil {
                 return (T) new Short(str);
             }
         },
-        INTEGER(Integer.class) {
+        INTEGER(Integer.class, int.class) {
             @SuppressWarnings("unchecked")
             @Override
             <T> T parseStr(String str) {
                 return (T) new Integer(str);
             }
         },
-        LONG(Long.class) {
+        LONG(Long.class, long.class) {
             @SuppressWarnings("unchecked")
             @Override
             <T> T parseStr(String str) {
                 return (T) new Long(str);
             }
         },
-        FLOAT(Float.class) {
+        FLOAT(Float.class, float.class) {
             @SuppressWarnings("unchecked")
             @Override
             <T> T parseStr(String str) {
                 return (T) new Float(str);
             }
         },
-        DOUBLE(Double.class) {
+        DOUBLE(Double.class, double.class) {
             @SuppressWarnings("unchecked")
             @Override
             <T> T parseStr(String str) {
@@ -192,12 +192,12 @@ class Dom4jUtil {
                 return (T) new Bookmark(str);
             } 
         };
-        private final Class<?> cls;
-        private Parseable(Class<?> cls) {
-            this.cls = cls;
+        private final Class<?>[] classes;
+        private Parseable(Class<?>... classes) {
+            this.classes = classes;
         }
-        public Class<?> getCls() {
-            return cls;
+        public Class<?>[] getClasses() {
+            return classes;
         }
         abstract <T> T parseStr(String str);
         
@@ -206,8 +206,12 @@ class Dom4jUtil {
         static <T> T parse(final String str, final Class<?> cls) {
             assertSupported(cls);
             for (Parseable sc : values()) {
-                if(sc.getCls().isAssignableFrom(cls)) {
-                    return sc.parseStr(str);
+                for (Class<?> eachCls: sc.getClasses()) {
+                    if(eachCls.isAssignableFrom(cls)) {
+                        if(!eachCls.isPrimitive() || str != null) {
+                            return sc.parseStr(str);
+                        }
+                    }
                 }
             }
             return null;
@@ -215,8 +219,10 @@ class Dom4jUtil {
 
         static boolean isSupported(final Class<?> cls) {
             for (Parseable sc : values()) {
-                if(sc.getCls().isAssignableFrom(cls)) {
-                    return true;
+                for (Class<?> eachCls: sc.getClasses()) {
+                    if(eachCls.isAssignableFrom(cls)) {
+                        return true;
+                    }
                 }
             }
             return false;

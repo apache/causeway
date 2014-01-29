@@ -27,18 +27,18 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldD
 /**
  * Panel for rendering scalars of type {@link java.util.Date}.
  */
-public class JavaSqlTimestampPanel extends ScalarPanelTextFieldDatePickerAbstract<java.util.Date> {
+public class JavaSqlTimestampPanel extends ScalarPanelTextFieldDatePickerAbstract<java.sql.Timestamp> {
 
     private static final long serialVersionUID = 1L;
 
     public JavaSqlTimestampPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, java.util.Date.class);
-        init(new DateConverterForJavaUtilDate(getSettings(), getAdjustBy()));
+        super(id, scalarModel, java.sql.Timestamp.class);
+        init(new DateConverterForJavaSqlTimestamp(getSettings(), getAdjustBy()));
     }
 
     @Override
     protected Integer getLengthAdjustHint() {
-        return +5;
+        return +3;
     }
 
 }

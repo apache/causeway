@@ -28,6 +28,7 @@ public interface WicketViewerSettings {
 
     public String getDatePattern();
     public String getDateTimePattern();
+    public String getTimestampPattern();
     public String getDatePickerPattern();
 
 
