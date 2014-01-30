@@ -1,5 +1,7 @@
 package org.apache.isis.applib.services.background;
 
+import java.util.UUID;
+
 
 /**
  * Execute a {@link ActionInvocationMemento memento-ized} action as a
@@ -16,5 +18,5 @@ public interface BackgroundTaskService {
      * @param actionInvocationMemento
      * @param transactionId - if any.
      */
-    void execute(ActionInvocationMemento actionInvocationMemento, String transactionId);
+    void execute(ActionInvocationMemento actionInvocationMemento, UUID transactionId);
 }

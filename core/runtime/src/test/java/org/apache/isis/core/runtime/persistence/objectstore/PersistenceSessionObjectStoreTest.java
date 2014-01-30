@@ -30,7 +30,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.applib.services.audit.AuditingService;
+import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -96,7 +96,7 @@ public class PersistenceSessionObjectStoreTest {
     @Mock
     private PersistAlgorithm mockPersistAlgorithm;
     @Mock
-    private AuditingService mockAuditingService;
+    private AuditingService3 mockAuditingService3;
     @Mock
     private PublishingServiceWithDefaultPayloadFactories mockPublishingService;
 
@@ -137,7 +137,7 @@ public class PersistenceSessionObjectStoreTest {
 
         context.ignoring(mockRuntimeContext);
         context.ignoring(mockConfiguration);
-        context.ignoring(mockAuditingService);
+        context.ignoring(mockAuditingService3);
 
         isisMetaModel = new IsisMetaModel(mockRuntimeContext, new ProgrammingModelFacetsJava5(), new CustomerRepository());
         isisMetaModel.init();

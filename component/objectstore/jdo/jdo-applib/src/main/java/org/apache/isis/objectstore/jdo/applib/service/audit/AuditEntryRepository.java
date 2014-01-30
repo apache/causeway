@@ -16,23 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.applib;
+package org.apache.isis.objectstore.jdo.applib.service.audit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
+import java.util.UUID;
 
-import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.query.QueryDefault;
 
-
-@SuppressWarnings("deprecation")
-public class AuditServiceLogging implements AuditService {
-
-    private final static Logger LOG = LoggerFactory.getLogger(AuditServiceLogging.class);
+public class AuditEntryRepository extends AbstractFactoryAndRepository {
     
-    @Hidden
-    public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue) {
-        String auditMessage = objectType + ":" + identifier + " by " + user + ": " + preValue + " -> " + postValue;
-        LOG.info(auditMessage);
+    @Programmatic
+    public List<AuditEntryJdo> listAll() {
+        return allInstances(AuditEntryJdo.class);
     }
+    
+    @Programmatic
+    public List<AuditEntryJdo> findByTransactionId(final UUID transactionId) {
+        return allMatches(
+                new QueryDefault<AuditEntryJdo>(AuditEntryJdo.class, 
+                        "findByTransactionId", 
+                        "transactionId", transactionId));
+    }
+
 
 }

@@ -29,7 +29,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.applib.services.audit.AuditingService;
+import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -71,7 +71,7 @@ public class IsisTransactionTest {
     @Mock
     private UpdateNotifier mockUpdateNotifier;
     @Mock
-    private AuditingService mockAuditingService;
+    private AuditingService3 mockAuditingService3;
     @Mock
     private PublishingServiceWithDefaultPayloadFactories mockPublishingService;
 
@@ -158,7 +158,7 @@ public class IsisTransactionTest {
     public void setUp() throws Exception {
         org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
-        context.ignoring(mockAuditingService);
+        context.ignoring(mockAuditingService3);
         
         context.checking(new Expectations(){{
             allowing(mockTransactionManager).getAuthenticationSession();
@@ -170,7 +170,7 @@ public class IsisTransactionTest {
             will(returnValue("sven"));
         }});
         
-        transaction = new IsisTransaction(mockTransactionManager, mockMessageBroker, mockUpdateNotifier, mockObjectStore, mockAuditingService, mockPublishingService);
+        transaction = new IsisTransaction(mockTransactionManager, mockMessageBroker, mockUpdateNotifier, mockObjectStore, mockAuditingService3, mockPublishingService);
         
         transientAdapter1 = PojoAdapterBuilder.create().with(Persistence.TRANSIENT).withIdentifier("1").build();
         transientAdapter2 = PojoAdapterBuilder.create().with(Persistence.TRANSIENT).withIdentifier("2").build();

@@ -16,18 +16,14 @@
  */
 package org.apache.isis.objectstore.jdo.applib.service.background;
 
-import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AbstractService;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundTaskService;
@@ -40,7 +36,7 @@ public class BackgroundTaskServiceJdo extends AbstractService implements Backgro
 
     @Programmatic
     @Override
-    public void execute(final ActionInvocationMemento aim, final String transactionId) {
+    public void execute(final ActionInvocationMemento aim, final UUID transactionId) {
         final BackgroundTaskJdo backgroundTask = newTransientInstance(BackgroundTaskJdo.class);
 
         backgroundTask.setActionIdentifier(aim.getActionId());
@@ -52,13 +48,5 @@ public class BackgroundTaskServiceJdo extends AbstractService implements Backgro
         backgroundTask.setTransactionId(transactionId);
         persist(backgroundTask);
     }
-
-    @Bookmarkable
-    @ActionSemantics(Of.SAFE)
-    @Prototype
-    public List<BackgroundTaskJdo> allTasks() {
-        return allInstances(BackgroundTaskJdo.class);
-    }
-    
 
 }

@@ -16,34 +16,32 @@
  */
 package org.apache.isis.objectstore.jdo.applib.service.interaction;
 
-import java.util.List;
 import java.util.UUID;
-
-import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AbstractService;
-import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.interaction.Interaction;
-import org.apache.isis.applib.services.interaction.InteractionContext;
 import org.apache.isis.applib.services.interaction.spi.InteractionFactory;
 
-@Named("Interactions")
-public class InteractionServiceJdo extends AbstractService implements InteractionFactory, InteractionRepository {
+public class InteractionServiceJdo extends AbstractService implements InteractionFactory {
 
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(InteractionServiceJdo.class);
 
+    /**
+     * Creates an {@link InteractionJdo}, initializing its 
+     * {@link Interaction#setNature(Interaction.Nature) nature} to be
+     * {@link Interaction.Nature#RENDERING rendering}.
+     */
     @Programmatic
     @Override
     public Interaction create() {
         InteractionJdo interaction = newTransientInstance(InteractionJdo.class);
+        interaction.setNature(Interaction.Nature.RENDERING);
         return interaction;
     }
 
@@ -52,66 +50,37 @@ public class InteractionServiceJdo extends AbstractService implements Interactio
     public void startTransaction(Interaction interaction, UUID transactionId) {
         if(interaction instanceof InteractionJdo) {
             // should be the case, since this service created the object in the #create() method
-            final InteractionJdo interactionJdo = (InteractionJdo) interaction;
-            interactionJdo.setTransactionId(transactionId.toString());
+            InteractionJdo interactionJdo = (InteractionJdo) interaction;
+            if(interactionJdo.getTransactionId() == null) {
+                interactionJdo.setTransactionId(transactionId);
+            }
         }
     }
 
     @Programmatic
     @Override
     public void complete(final Interaction interaction) {
-        if(interaction.getActionIdentifier() == null) {
-            // discard, no action occurred
+        InteractionJdo interactionJdo = asPersistableInteractionJdo(interaction);
+        if(interactionJdo == null) {
             return;
         }
-        if(interaction instanceof InteractionJdo) {
-            // should be the case, since this service created the object in the #create() method
-            final InteractionJdo interactionJdo = (InteractionJdo) interaction;
             
-            interactionJdo.setCompletedAt(Clock.getTimeAsJavaSqlTimestamp());
-            persistIfNotAlready(interaction);
-        }
+        interactionJdo.setCompletedAt(Clock.getTimeAsJavaSqlTimestamp());
+        
+        persistIfNotAlready(interactionJdo);
     }
 
-    @Override
-    public InteractionJdo findByTransactionId(final UUID transactionId) {
-        persistCurrentInteractionIfRequired();
-        return firstMatch(
-                new QueryDefault<InteractionJdo>(InteractionJdo.class, 
-                        "findByTransactionId", 
-                        "transactionId", transactionId.toString()));
-    }
-
-    private void persistCurrentInteractionIfRequired() {
-        if(interactionContext != null) {
-            // expect to be the case, given that this service has been configured
-            Interaction interaction = interactionContext.getInteraction();
+    /**
+     * Not API, factored out from {@link InteractionRepository}.
+     */
+    InteractionJdo asPersistableInteractionJdo(final Interaction interaction) {
+        if(interaction.getNature() == Interaction.Nature.ACTION_INVOCATION) {
             if(interaction instanceof InteractionJdo) {
-                // should be the case, since this service created the object in the #start() method
-                persistIfNotAlready(interaction);
+                // should be the case, since this service created the object in the #create() method
+                return (InteractionJdo)interaction;
             }
         }
+        // else, don't care
+        return null;
     }
-
-    @Bookmarkable
-    @Override
-    public List<InteractionJdo> currentInteractions() {
-        persistCurrentInteractionIfRequired();
-        return allMatches(
-                new QueryDefault<InteractionJdo>(InteractionJdo.class, 
-                        "findCurrent"));
-    }
-    
-    @Bookmarkable
-    @Override
-    public List<InteractionJdo> completedInteractions() {
-        persistCurrentInteractionIfRequired();
-        return allMatches(
-                new QueryDefault<InteractionJdo>(InteractionJdo.class, 
-                        "findCompleted"));
-    }
-    
-    @Inject
-    private InteractionContext interactionContext;
-
 }

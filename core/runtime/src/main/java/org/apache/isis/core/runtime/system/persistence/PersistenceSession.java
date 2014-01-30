@@ -96,6 +96,7 @@ import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.EnlistedObjectDirtying;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturnAbstract;
@@ -419,12 +420,12 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
             final InteractionFactory interactionFactory = getServiceOrNull(InteractionFactory.class);
             if(interactionFactory != null) {
                 final Interaction interaction = interactionContext.getInteraction();
-                UUID guid = getTransactionManager().getTransaction().getGuid();
+                final IsisTransaction transaction = getTransactionManager().getTransaction();
                 interactionFactory.complete(interaction);
             }
         }
     }
-    
+
     private void endRequestOnRequestScopeServices() {
         for (final Object service : servicesInjector.getRegisteredServices()) {
             if(service instanceof RequestScopedService) {

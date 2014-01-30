@@ -35,9 +35,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
-import org.apache.isis.applib.services.audit.AuditingService;
-import org.apache.isis.applib.services.interaction.Interaction;
-import org.apache.isis.applib.services.interaction.InteractionContext;
+import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
 import org.apache.isis.applib.services.publish.EventPayloadForObjectChanged;
@@ -68,7 +66,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
     /**
      * Could be null.
      */
-    private final AuditingService auditingService;
+    private final AuditingService3 auditingService3;
     /**
      * Could be null.
      */
@@ -92,7 +90,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         this.persistenceSession = persistenceSession;
         this.transactionalResource = transactionalResource;
         
-        this.auditingService = (AuditingService) servicesInjectorSpi.lookupService(AuditingService.class);
+        this.auditingService3 = (AuditingService3) servicesInjectorSpi.lookupService(AuditingService3.class);
         this.publishingService = getPublishingServiceIfAny(servicesInjectorSpi);
     }
     
@@ -263,7 +261,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         ensureThatArg(messageBroker, is(not(nullValue())));
         ensureThatArg(updateNotifier, is(not(nullValue())));
 
-        return new IsisTransaction(this, messageBroker, updateNotifier, transactionalResource, auditingService, publishingService);
+        return new IsisTransaction(this, messageBroker, updateNotifier, transactionalResource, auditingService3, publishingService);
     }
     
 

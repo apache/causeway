@@ -19,6 +19,7 @@ package org.apache.isis.objectstore.jdo.applib.service.background;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.jdo.annotations.IdentityType;
@@ -52,6 +53,13 @@ import org.apache.isis.applib.util.ObjectContracts;
 @javax.jdo.annotations.DatastoreIdentity(
         strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
          column="id")
+@javax.jdo.annotations.Queries( {
+    @javax.jdo.annotations.Query(
+            name="findByTransactionId", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.background.BackgroundTaskJdo "
+                    + "WHERE transactionId == :transactionId")
+})
 @Named("Background Task")
 @MemberGroupLayout(
         columnSpans={6,0,6}, 
@@ -269,7 +277,7 @@ public class BackgroundTaskJdo implements HasTransactionId {
     // //////////////////////////////////////
 
     
-    private String transactionId;
+    private UUID transactionId;
 
     /**
      * The unique identifier (a GUID) of the transaction of the {@link Interaction} that gave rise to this
@@ -281,12 +289,12 @@ public class BackgroundTaskJdo implements HasTransactionId {
     @MemberOrder(name="Identifiers",sequence = "20")
     @Disabled
     @Override
-    public String getTransactionId() {
+    public UUID getTransactionId() {
         return transactionId;
     }
 
     @Override
-    public void setTransactionId(final String transactionId) {
+    public void setTransactionId(final UUID transactionId) {
         this.transactionId = transactionId;
     }
 

@@ -18,22 +18,24 @@
  */
 package org.apache.isis.applib.services.audit;
 
-import org.apache.isis.applib.annotation.Hidden;
+import java.sql.Timestamp;
+
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 
 /**
  * Will be called whenever an object has changed its state.
  */
-public interface AuditingService2 extends AuditingService {
+public interface AuditingService3 {
     
-    @Hidden
-    public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String propertyId, String preValue, String postValue);
+    @Programmatic
+    public void audit(java.sql.Timestamp timestamp, String user, Bookmark target, String propertyId, String preValue, String postValue);
     
-    
-    public static class Stderr extends AuditingService.Stderr implements AuditingService2 {
+    public static class Stderr implements AuditingService3 {
 
-        @Hidden
-        public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String propertyId, String preValue, String postValue) {
-            String auditMessage = objectType + ":" + identifier + " by " + user + ", " + propertyId +": " + preValue + " -> " + postValue;
+        @Override
+        public void audit(Timestamp timestamp, String user, Bookmark target, String propertyId, String preValue, String postValue) {
+            String auditMessage = target.toString() + " by " + user + ", " + propertyId +": " + preValue + " -> " + postValue;
             System.err.println(auditMessage);
         }
     }

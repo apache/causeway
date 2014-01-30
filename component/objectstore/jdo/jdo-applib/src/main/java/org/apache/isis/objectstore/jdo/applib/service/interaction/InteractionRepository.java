@@ -19,18 +19,54 @@ package org.apache.isis.objectstore.jdo.applib.service.interaction;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.services.interaction.Interaction;
+import org.apache.isis.applib.services.interaction.InteractionContext;
 
 
-public interface InteractionRepository {
+public class InteractionRepository extends AbstractFactoryAndRepository {
 
-    @ActionSemantics(Of.SAFE)
-    InteractionJdo findByTransactionId(final UUID transactionId);
+    @Programmatic
+    public InteractionJdo findByTransactionId(final UUID transactionId) {
+        persistCurrentInteractionIfRequired();
+        return firstMatch(
+                new QueryDefault<InteractionJdo>(InteractionJdo.class, 
+                        "findByTransactionId", 
+                        "transactionId", transactionId.toString()));
+    }
+
+    private void persistCurrentInteractionIfRequired() {
+        if(interactionContext != null && interactionService != null) {
+            Interaction interaction = interactionContext.getInteraction();
+            final InteractionJdo interactionJdo = interactionService.asPersistableInteractionJdo(interaction);
+            persistIfNotAlready(interactionJdo);
+        }
+    }
+
     
-    @ActionSemantics(Of.SAFE)
-    List<InteractionJdo> currentInteractions();
+    @Programmatic
+    public List<InteractionJdo> findCurrent() {
+        persistCurrentInteractionIfRequired();
+        return allMatches(
+                new QueryDefault<InteractionJdo>(InteractionJdo.class, "findCurrent"));
+    }
     
-    @ActionSemantics(Of.SAFE)
-    List<InteractionJdo> completedInteractions();
+    @Programmatic
+    public List<InteractionJdo> findCompleted() {
+        persistCurrentInteractionIfRequired();
+        return allMatches(
+                new QueryDefault<InteractionJdo>(InteractionJdo.class, "findCompleted"));
+    }
+
+    // //////////////////////////////////////
+
+    
+    @javax.inject.Inject
+    private InteractionServiceJdo interactionService;
+    
+    @javax.inject.Inject
+    private InteractionContext interactionContext;
+
 }

@@ -25,13 +25,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.services.audit.AuditingService;
+import org.apache.isis.applib.services.audit.AuditingService3;
 
 /**
  * Indicates that the entity should be audited.
  * 
  * <p>
- * Requires that an implementation of the {@link AuditingService} is registered with the framework.
+ * Requires that an implementation of the {@link AuditingService3} is registered with the framework.
  * 
  * <p>
  * Check that the configured object store supports the annotation.  For example, the

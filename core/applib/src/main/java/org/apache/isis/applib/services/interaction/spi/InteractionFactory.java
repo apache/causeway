@@ -36,8 +36,18 @@ public interface InteractionFactory {
     @Programmatic
     Interaction create();
     
+    /**
+     * Although the transactionId is also provided via {@link InteractionOutcome} in the
+     * {@link #complete(Interaction)} callback, it is passed in here as well
+     * so that an implementation can ensure that the {@link Interaction} is fully populated in order
+     * to persist if required.
+     * 
+     * <p>
+     * One case where this may be supported (for example, by the <tt>InteractionServiceJdo</tt> implementation)
+     * is to flush still-running {@link Interaction}s to the database on-demand.
+     */
     @Programmatic
-    void startTransaction(Interaction interaction, UUID transactionId);
+    void startTransaction(final Interaction interaction, final UUID transactionId);
     
     @Programmatic
     void complete(final Interaction interaction);

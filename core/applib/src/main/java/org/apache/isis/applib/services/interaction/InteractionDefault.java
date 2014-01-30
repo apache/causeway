@@ -18,12 +18,16 @@ package org.apache.isis.applib.services.interaction;
 
 import java.sql.Timestamp;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.interaction.spi.InteractionFactory;
 import org.apache.isis.applib.util.ObjectContracts;
 
 public class InteractionDefault implements Interaction {
 
+    public InteractionDefault() {
+        setNature(Interaction.Nature.RENDERING);
+    }
+    
     // //////////////////////////////////////
     // actionIdentifier (property)
     // //////////////////////////////////////
@@ -108,6 +112,8 @@ public class InteractionDefault implements Interaction {
     }
 
     // //////////////////////////////////////
+    // user (property)
+    // //////////////////////////////////////
 
     private String user;
     public String getUser() {
@@ -121,10 +127,64 @@ public class InteractionDefault implements Interaction {
 
 
     // //////////////////////////////////////
+    // nature (property)
+    // //////////////////////////////////////
+
+    private Nature nature;
+
+    @Override
+    public Nature getNature() {
+        return nature;
+    }
+
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     * 
+     * <p>
+     * Implementation notes: populated by the viewer as hint to {@link InteractionFactory} implementation.
+     */
+    @Override
+    public void setNature(Nature nature) {
+        this.nature = nature;
+    }
+
+    // //////////////////////////////////////
+    // result (property)
+    // //////////////////////////////////////
+    
+    private Bookmark result;
+    
+    @Override
+    public Bookmark getResult() {
+        return result;
+    }
+    @Override
+    public void setResult(final Bookmark result) {
+        this.result = result;
+    }
+
+
+    // //////////////////////////////////////
+    // exceptionStackTrace (property)
+    // //////////////////////////////////////
+
+    private String exceptionStackTrace;
+    
+    @Override
+    public String getException() {
+        return exceptionStackTrace;
+    }
+    @Override
+    public void setException(final String exceptionStackTrace) {
+        this.exceptionStackTrace = exceptionStackTrace;
+    }
+    
+    // //////////////////////////////////////
 
     @Override
     public String toString() {
         return ObjectContracts.toString(this, "startedAt,user,actionIdentifier,target,guid");
     }
+    
     
 }

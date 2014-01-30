@@ -14,32 +14,34 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package webapp.background;
+package org.apache.isis.objectstore.jdo.applib.service.audit;
 
 import java.util.List;
 
-import dom.todo.ToDoItem;
-
+import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.Prototype;
-import org.apache.isis.applib.services.background.BackgroundService;
-import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundTaskJdo;
-import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundTaskServiceJdo;
+import org.apache.isis.applib.annotation.NotContributed;
+import org.apache.isis.applib.annotation.NotContributed.As;
+import org.apache.isis.applib.annotation.Render.Type;
+import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.applib.services.HasTransactionId;
 
-/**
- * Defines a new top-level menu
- */
-@Named("Background Tasks")
-public class BackgroundTasks extends BackgroundTaskServiceJdo {
 
-    @MemberOrder(sequence="20")
-    @Override
-    public List<BackgroundTaskJdo> allTasks() {
-        return super.allTasks();
+public class AuditEntryContributions extends AbstractFactoryAndRepository {
+
+    @ActionSemantics(Of.SAFE)
+    @NotInServiceMenu
+    @NotContributed(As.ACTION)
+    @Render(Type.EAGERLY)
+    public List<AuditEntryJdo> auditEntries(final HasTransactionId hasTransactionId) {
+        return auditEntryRepository.findByTransactionId(hasTransactionId.getTransactionId());
     }
     
-}
+    // //////////////////////////////////////
 
+    @javax.inject.Inject
+    private AuditEntryRepository auditEntryRepository;
+
+}

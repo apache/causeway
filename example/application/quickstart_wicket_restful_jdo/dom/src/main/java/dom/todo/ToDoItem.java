@@ -39,6 +39,7 @@ import com.google.common.collect.Ordering;
 
 import org.joda.time.LocalDate;
 
+import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
@@ -50,7 +51,6 @@ import org.apache.isis.applib.annotation.Bulk.AppliesTo;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
@@ -63,10 +63,7 @@ import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.security.RoleMemento;
-import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.background.BackgroundService;
-import org.apache.isis.applib.services.interaction.Interaction;
 import org.apache.isis.applib.services.interaction.InteractionContext;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -640,11 +637,36 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     
     @Prototype
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence="94")
     public URL openSourceCodeOnGithub() throws MalformedURLException {
         return new URL("https://github.com/apache/isis/tree/master/example/application/quickstart_wicket_restful_jdo/dom/src/main/java/dom/todo/ToDoItem.java");
     }
 
+
+    // //////////////////////////////////////
+    // Throw exception
+    // //////////////////////////////////////
+    
+    static enum DemoExceptionType {
+        APPLICATION_EXCEPTION(ApplicationException.class),
+        RUNTIME_EXCEPTION(RuntimeException.class);
+        private final Class<? extends Exception> type;
+        private DemoExceptionType(Class<? extends Exception> type) {
+            this.type = type;
+        }
+        @Override
+        public String toString() {
+            return type.getName();
+        }
+    }
+    
+    @Prototype
+    @ActionSemantics(Of.SAFE)
+    public void demoException(final @Named("Type") DemoExceptionType type) {
+        if(type == DemoExceptionType.RUNTIME_EXCEPTION)
+            throw new RuntimeException("Demo throwing runtime exception");
+        else
+            throw new ApplicationException("Demo throwing application exception");
+    }
 
     // //////////////////////////////////////
     // Programmatic Helpers

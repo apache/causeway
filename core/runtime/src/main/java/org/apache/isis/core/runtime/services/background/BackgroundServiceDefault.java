@@ -7,6 +7,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.MethodHandler;
@@ -171,7 +172,7 @@ public class BackgroundServiceDefault implements BackgroundService {
                         new ActionInvocationMemento(mementoService, interaction.getUser(), 
                                 actionId, domainObjectBookmark, argTypes, argObjs);
 
-                final String transactionId = 
+                final UUID transactionId = 
                         interaction instanceof HasTransactionId 
                         ? ((HasTransactionId) interaction).getTransactionId() 
                                 : null;

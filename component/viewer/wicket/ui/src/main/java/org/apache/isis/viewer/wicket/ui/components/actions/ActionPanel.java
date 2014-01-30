@@ -21,17 +21,26 @@ package org.apache.isis.viewer.wicket.ui.components.actions;
 
 import java.util.List;
 
+import com.google.common.base.Throwables;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.applib.services.interaction.Interaction;
+import org.apache.isis.applib.services.interaction.InteractionContext;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -163,6 +172,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             final AjaxRequestTarget target, 
             final Form<?> feedbackForm) {
 
+        
         final ActionModel actionModel = getActionModel();
         
         // validate the action parameters (if any)
@@ -171,7 +181,18 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         if (invalidReasonIfAny != null) {
             raiseWarning(target, feedbackForm, invalidReasonIfAny);
             return false;
-        } 
+        }
+        
+        final InteractionContext interactionContext = getServicesInjector().lookupService(InteractionContext.class);
+        final Interaction interaction;
+        if (interactionContext != null) {
+            interaction = interactionContext.getInteraction();
+            interaction.setNature(Interaction.Nature.ACTION_INVOCATION);
+        } else {
+            interaction = null;
+        }
+        
+        
         // the object store could raise an exception (eg uniqueness constraint)
         // so we handle it here.
         try {
@@ -183,8 +204,9 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             getTransactionManager().flushTransaction();
             
             ActionResultResponse resultResponse = ActionResultResponseType.determineAndInterpretResult(this.getActionModel(), resultAdapter);
-            final ActionResultResponseHandlingStrategy resultType = ActionResultResponseHandlingStrategy.determineFor(resultResponse);
-            resultType.handleResults(this, resultResponse);
+            final ActionResultResponseHandlingStrategy responseHandlingStrategy = 
+                    ActionResultResponseHandlingStrategy.determineFor(resultResponse);
+            responseHandlingStrategy.handleResults(this, resultResponse);
 
             if (actionModel.isBookmarkable()) {
                 bookmarkPage(actionModel);
@@ -210,10 +232,15 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                 return false;
             }
             
-            // not handled, so propagate
+            // not handled, so capture and propagate
+            if(interaction != null) {
+                interaction.setException(Throwables.getStackTraceAsString(ex));
+            }
+
             throw ex;
         }
     }
+
 
     private String recognizeException(RuntimeException ex, AjaxRequestTarget target, Form<?> feedbackForm) {
         

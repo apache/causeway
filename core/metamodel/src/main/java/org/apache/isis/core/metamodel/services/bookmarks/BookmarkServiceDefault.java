@@ -77,6 +77,9 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
     
     @Hidden
     public Object lookup(final Bookmark bookmark) {
+        if(bookmark == null) {
+            return null;
+        }
         return domainObjectServices.lookup(bookmark);
     }
 

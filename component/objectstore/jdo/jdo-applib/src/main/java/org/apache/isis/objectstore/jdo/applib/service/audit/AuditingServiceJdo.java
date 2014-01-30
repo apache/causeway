@@ -18,46 +18,38 @@
  */
 package org.apache.isis.objectstore.jdo.applib.service.audit;
 
-import java.util.List;
-
 import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.audit.AuditingService2;
+import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.audit.AuditingService3;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.interaction.Interaction;
+import org.apache.isis.applib.services.interaction.InteractionContext;
 
-@Named("Auditing")
-public class AuditingServiceJdo extends AbstractFactoryAndRepository implements AuditingService2 {
-    
-    @ActionSemantics(Of.SAFE)
-    public List<AuditEntry> list() {
-        return allInstances(AuditEntry.class);
-    }
-
-    /**
-     * This method will never be called by Isis because the service implements, instead, {@link AuditingService2}.
-     * 
-     * @deprecated
-     */
-    @Deprecated
-    @Programmatic
-    public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue) {
-        audit(user, currentTimestampEpoch, objectType, identifier, null, preValue, postValue);
-    }
+public class AuditingServiceJdo extends AbstractFactoryAndRepository implements AuditingService3 {
 
     @Programmatic
-    @Override
-    public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String propertyId, String preValue, String postValue) {
-        AuditEntry auditEntry = newTransientInstance(AuditEntry.class);
-        auditEntry.setTimestampEpoch(currentTimestampEpoch);
+    public void audit(java.sql.Timestamp timestamp, String user, Bookmark target, String propertyId, String preValue, String postValue) {
+        AuditEntryJdo auditEntry = newTransientInstance(AuditEntryJdo.class);
+        auditEntry.setTimestamp(timestamp);
         auditEntry.setUser(user);
-        auditEntry.setObjectType(objectType);
+        Interaction interaction = this.interactionContext.getInteraction();
+        if(interaction instanceof HasTransactionId) {
+            HasTransactionId hasTransactionId = (HasTransactionId) interaction;
+            auditEntry.setTransactionId(hasTransactionId.getTransactionId());
+        }
+        auditEntry.setTarget(target);
         auditEntry.setPropertyId(propertyId);
-        auditEntry.setIdentifier(identifier);
         auditEntry.setPreValue(preValue);
         auditEntry.setPostValue(postValue);
-        persist(auditEntry);
+        persistIfNotAlready(auditEntry);
     }
 
+    
+    // //////////////////////////////////////
+
+    
+    @javax.inject.Inject
+    private InteractionContext interactionContext;
+    
 }

@@ -23,11 +23,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.identity.ByteIdentity;
 import javax.jdo.identity.IntIdentity;
 import javax.jdo.identity.LongIdentity;
+import javax.jdo.identity.ObjectIdentity;
 import javax.jdo.identity.StringIdentity;
 
 import org.datanucleus.identity.OID;
@@ -63,6 +65,15 @@ public final class JdoObjectIdSerializer {
         if(jdoOid instanceof javax.jdo.identity.LongIdentity) {
             return "l" + SEPARATOR + jdoOid; 
         }
+        if(jdoOid instanceof javax.jdo.identity.ObjectIdentity) {
+            javax.jdo.identity.ObjectIdentity id = (ObjectIdentity) jdoOid;
+            Object keyAsObject = id.getKeyAsObject();
+            // UUID support
+            if(keyAsObject instanceof UUID) {
+                UUID uuid = (UUID) keyAsObject;
+                return "u" + SEPARATOR + uuid.toString(); 
+            }
+        }
         if(jdoOid instanceof OID) {
             OID dnOid = (OID) jdoOid;
             Object keyValue = dnOid.getKeyValue();
@@ -96,51 +107,57 @@ public final class JdoObjectIdSerializer {
     public static Object toJdoObjectId(RootOid oid) {
 
         String idStr = oid.getIdentifier();
-        final int colonIdx = idStr.indexOf(SEPARATOR);
-        final String keyStr = idStr.substring(colonIdx+1);
+        final int separatorIdx = idStr.indexOf(SEPARATOR);
         
-        final String firstPart = idStr.substring(0, colonIdx);
+        final String distinguisher = idStr.substring(0, separatorIdx);
+        final String keyStr = idStr.substring(separatorIdx+1);
 
         final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(oid.getObjectSpecId());
-        JdoPersistenceCapableFacet facet = spec.getFacet(JdoPersistenceCapableFacet.class);
-        if(facet != null && facet.getIdentityType() == IdentityType.APPLICATION) {
+        final JdoPersistenceCapableFacet jdoPcFacet = spec.getFacet(JdoPersistenceCapableFacet.class);
 
-            if("s".equals(firstPart)) {
+        if(isApplicationIdentity(jdoPcFacet)) {
+
+            if("s".equals(distinguisher)) {
                 return keyStr;
             }
-            if("i".equals(firstPart)) {
+            if("i".equals(distinguisher)) {
                 return Integer.parseInt(keyStr);
             }
-            if("l".equals(firstPart)) {
+            if("l".equals(distinguisher)) {
                 return Long.parseLong(keyStr);
             }
-            if("b".equals(firstPart)) {
+            if("b".equals(distinguisher)) {
                 return Byte.parseByte(keyStr);
+            }
+            if("u".equals(distinguisher)) {
+                return UUID.fromString(keyStr);
             }
             
         } else {
 
-            if("s".equals(firstPart)) {
+            if("s".equals(distinguisher)) {
                 return new StringIdentity(objectTypeClassFor(oid), keyStr);
             }
-            if("i".equals(firstPart)) {
+            if("i".equals(distinguisher)) {
                 return new IntIdentity(objectTypeClassFor(oid), keyStr);
             }
-            if("l".equals(firstPart)) {
+            if("l".equals(distinguisher)) {
                 return new LongIdentity(objectTypeClassFor(oid), keyStr);
             }
-            if("b".equals(firstPart)) {
+            if("b".equals(distinguisher)) {
                 return new ByteIdentity(objectTypeClassFor(oid), keyStr);
             }
-
+            if("u".equals(distinguisher)) {
+                return new ObjectIdentity(objectTypeClassFor(oid), UUID.fromString(keyStr));
+            }
         }
         
 
-        if(dnPrefixes.contains(firstPart)) {
+        if(dnPrefixes.contains(distinguisher)) {
 			return keyStr + "[OID]" + spec.getFullIdentifier(); 
         }
         
-        final String clsName = firstPart;
+        final String clsName = distinguisher;
         try {
             final Class<?> cls = Thread.currentThread().getContextClassLoader().loadClass(clsName);
             final Constructor<?> cons = cls.getConstructor(String.class);
@@ -161,6 +178,10 @@ public final class JdoObjectIdSerializer {
         } catch (NoSuchMethodException e) {
             throw new JdoObjectIdSerializer.Exception(e);
         }
+    }
+
+    protected static boolean isApplicationIdentity(final JdoPersistenceCapableFacet jdoPcFacet) {
+        return jdoPcFacet != null && jdoPcFacet.getIdentityType() == IdentityType.APPLICATION;
     }
 
 	private static Class<?> objectTypeClassFor(RootOid oid) {

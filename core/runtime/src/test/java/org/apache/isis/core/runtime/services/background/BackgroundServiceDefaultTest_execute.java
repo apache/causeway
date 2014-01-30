@@ -20,6 +20,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Method;
+import java.util.UUID;
 
 import com.google.common.base.Objects;
 
@@ -60,15 +61,15 @@ public class BackgroundServiceDefaultTest_execute {
 
     static class InteractionWithTransactionId extends InteractionDefault implements HasTransactionId {
 
-        private String transactionId;
+        private UUID transactionId;
         
         @Override
-        public String getTransactionId() {
+        public UUID getTransactionId() {
             return transactionId;
         }
 
         @Override
-        public void setTransactionId(String transactionId) {
+        public void setTransactionId(UUID transactionId) {
             this.transactionId = transactionId;
         }
     }
@@ -85,7 +86,7 @@ public class BackgroundServiceDefaultTest_execute {
     private InteractionContext mockInteractionContext;
 
     private InteractionWithTransactionId interactionWithTransactionId;
-    private String transactionId = "1231231231";
+    private UUID transactionId = UUID.fromString("1231231231");
     
     @Mock
     private BackgroundTaskService mockBackgroundTaskService;

@@ -20,6 +20,8 @@
 package org.apache.isis.objectstore.jdo.applib.service.publish;
 
 
+import java.util.UUID;
+
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.applib.DomainObjectContainer;
@@ -33,6 +35,7 @@ import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.publish.EventMetadata;
@@ -43,8 +46,16 @@ import org.apache.isis.applib.services.publish.EventType;
         table="IsisPublishedEvent")
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
-            name="publishedevent_of_state", language="JDOQL",  
-            value="SELECT FROM org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEvent WHERE state == :state ORDER BY timestamp")
+            name="findByStateOrderByTimestamp", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEvent "
+                    + "WHERE state == :state ORDER BY timestamp"),
+    @javax.jdo.annotations.Query(
+            name="findByTransactionId", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEvent "
+                    + "WHERE transactionId == :transactionId")
+            
 })
 @Immutable
 public class PublishedEvent implements HasTransactionId {
@@ -97,6 +108,7 @@ public class PublishedEvent implements HasTransactionId {
      */
     @javax.jdo.annotations.Column(length=47)
     @javax.jdo.annotations.PrimaryKey
+    @TypicalLength(47)
     @MemberOrder(sequence = "2")
     public String getId() {
         return id;
@@ -108,7 +120,7 @@ public class PublishedEvent implements HasTransactionId {
     
     // //////////////////////////////////////
 
-    private String transactionId;
+    private UUID transactionId;
 
     /**
      * Hidden (<tt>@Programmatic</tt>) because information also available in the {@link #getId() id}.
@@ -116,12 +128,12 @@ public class PublishedEvent implements HasTransactionId {
     @javax.jdo.annotations.Column(length=36)
     @Programmatic
     @Override
-    public String getTransactionId() {
+    public UUID getTransactionId() {
         return transactionId;
     }
 
     @Override
-    public void setTransactionId(final String transactionId) {
+    public void setTransactionId(final UUID transactionId) {
         this.transactionId = transactionId;
     }
     

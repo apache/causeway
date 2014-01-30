@@ -26,6 +26,7 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.interaction.spi.InteractionFactory;
 
 public interface Interaction {
 
@@ -145,4 +146,67 @@ public interface Interaction {
      */
     public void setArguments(final String arguments);
 
+    // //////////////////////////////////////
+    
+    /**
+     * The nature of this interaction, for example whether as the result of an 
+     * {@link #ACTION_INVOCATION explicit action invocation} on the part of the user, or merely as
+     * a side-effect of {@link #RENDERING re-rendering} an entity, eg for a viewer (such as the
+     * Wicket viewer) that uses the <a href="http://en.wikipedia.org/wiki/Post/Redirect/Get">post/redirect/get</a>
+     * to avoid duplicate submissions.
+     * 
+     * <p>
+     * The Isis implementations uses this field as to a hint as to whether to populate the interaction's
+     * {@link Interaction#setActionIdentifier(String) action identifier} and related properties.  The expectation 
+     * is that implementations of {@link InteractionFactory} will only persist interactions that were explicitly started
+     * by the user.
+     */
+    public static enum Nature {
+        /**
+         * Indicates that the {@link Interaction} has occurred as the result of an explicit action invocation
+         * on the part of the user.
+         */
+        ACTION_INVOCATION,
+        RENDERING
+    }
+
+    public Nature getNature();
+    
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     */
+    public void setNature(final Nature nature);
+
+    
+    // //////////////////////////////////////
+
+    @Disabled
+    public String getException();
+
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     */
+    public void setException(String stackTrace);
+    
+    // //////////////////////////////////////
+
+    
+    /**
+     * A {@link Bookmark} to the object returned by the action.
+     * 
+     * <p>
+     * If the action returned either a domain entity or a simple value (and did not throw an
+     * exception) then this object is provided here.  
+     * 
+     * <p>
+     * For <tt>void</tt> methods and for actions returning collections, the value
+     * will be <tt>null</tt>.
+     */
+    public Bookmark getResult();
+    
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     */
+    public void setResult(Bookmark resultBookmark);
+    
 }    

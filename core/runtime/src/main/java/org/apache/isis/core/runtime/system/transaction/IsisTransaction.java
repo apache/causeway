@@ -32,8 +32,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.swing.event.ChangeListener;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
@@ -47,8 +45,8 @@ import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.services.audit.AuditingService;
-import org.apache.isis.applib.services.audit.AuditingService2;
+import org.apache.isis.applib.services.audit.AuditingService3;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.services.publish.ObjectStringifier;
@@ -188,14 +186,9 @@ public class IsisTransaction implements TransactionScopedComponent {
     private IsisException abortCause;
 
     /**
-     * could be null if none has been registered
+     * could be null if none has been registered.
      */
-    private final AuditingService auditingService;
-    /**
-     * could be null if none has been registered, or if the service provided does not
-     * implement the {@link AuditingService2} sub-interface.
-     */
-    private final AuditingService2 auditingService2;
+    private final AuditingService3 auditingService3;
     /**
      * could be null if none has been registered
      */
@@ -208,7 +201,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private int eventSequence;
 
-    public IsisTransaction(final IsisTransactionManager transactionManager, final org.apache.isis.core.commons.authentication.MessageBroker messageBroker, final UpdateNotifier updateNotifier, final TransactionalResource objectStore, final AuditingService auditingService, PublishingServiceWithDefaultPayloadFactories publishingService) {
+    public IsisTransaction(final IsisTransactionManager transactionManager, final org.apache.isis.core.commons.authentication.MessageBroker messageBroker, final UpdateNotifier updateNotifier, final TransactionalResource objectStore, final AuditingService3 auditingService3, PublishingServiceWithDefaultPayloadFactories publishingService) {
         
         ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
         ensureThatArg(messageBroker, is(not(nullValue())), "message broker is required");
@@ -217,8 +210,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.transactionManager = transactionManager;
         this.messageBroker = messageBroker;
         this.updateNotifier = updateNotifier;
-        this.auditingService = auditingService;
-        this.auditingService2 = (AuditingService2) (auditingService instanceof AuditingService2? auditingService: null);
+        this.auditingService3 = auditingService3;
         this.publishingService = publishingService;
 
         this.guid = UUID.randomUUID();
@@ -416,18 +408,17 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     protected void doAudit(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
-        if(auditingService == null) {
+        if(auditingService3 == null) {
             return;
         }
         
         // else
         final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
-        final long currentTimestampEpoch = currentTimestamp();
+        final java.sql.Timestamp currentTime = Clock.getTimeAsJavaSqlTimestamp();
         for (Entry<AdapterAndProperty, PreAndPostValues> auditEntry : changedObjectProperties) {
-            auditChangedProperty(currentUser, currentTimestampEpoch, auditEntry);
+            auditChangedProperty(currentTime, currentUser, auditEntry);
         }
     }
-
 
     protected void publishActionIfRequired(final String currentUser, final long currentTimestampEpoch) {
 
@@ -529,10 +520,6 @@ public class IsisTransaction implements TransactionScopedComponent {
         return objectStringifier;
     }
 
-    private static long currentTimestamp() {
-        return Clock.getTime();
-    }
-
     private EventMetadata newEventMetadata(EventType eventType, final String currentUser, final long currentTimestampEpoch, String title) {
         return new EventMetadata(getGuid(), nextEventSequence(), eventType, currentUser, currentTimestampEpoch, title);
     }
@@ -541,7 +528,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         return eventSequence++;
     }
     
-    private void auditChangedProperty(final String currentUser, final long currentTimestampEpoch, final Entry<AdapterAndProperty, PreAndPostValues> auditEntry) {
+    public void auditChangedProperty(final java.sql.Timestamp timestamp, final String user, final Entry<AdapterAndProperty, PreAndPostValues> auditEntry) {
         final AdapterAndProperty aap = auditEntry.getKey();
         final ObjectAdapter adapter = aap.getAdapter();
         if(!adapter.getSpecification().containsFacet(AuditableFacet.class)) {
@@ -554,11 +541,10 @@ public class IsisTransaction implements TransactionScopedComponent {
         final String preValue = asString(papv.getPre());
         final String postValue = asString(papv.getPost());
         final String propertyId = aap.getProperty().getId();
-        if(auditingService2 != null) {
-            auditingService2.audit(currentUser, currentTimestampEpoch, objectType, identifier, propertyId, preValue, postValue);
-        } else {
-            auditingService.audit(currentUser, currentTimestampEpoch, objectType, identifier, preValue, postValue);
-        }
+
+        final Bookmark target = new Bookmark(objectType, identifier);
+
+        auditingService3.audit(timestamp, user, target, propertyId, preValue, postValue);
     }
 
     private static String asString(Object object) {
@@ -597,7 +583,7 @@ public class IsisTransaction implements TransactionScopedComponent {
             doAudit(getChangedObjectProperties());
             
             final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
-            final long endTimestamp = currentTimestamp();
+            final long endTimestamp = Clock.getTime();
             
             publishActionIfRequired(currentUser, endTimestamp);
             doFlush();

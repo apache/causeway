@@ -16,6 +16,8 @@
  */
 package org.apache.isis.applib.services;
 
+import java.util.UUID;
+
 
 /**
  * Mix-in interface for objects (usually created by service implementations) that are be persistable, 
@@ -36,8 +38,8 @@ public interface HasTransactionId {
      * Note that this is the same as the Isis transaction guid as found in the JDO applib's
      * <tt>PublishedEvent</tt>.
      */
-    public String getTransactionId();
+    public UUID getTransactionId();
 
-    public void setTransactionId(final String transactionId);
+    public void setTransactionId(final UUID transactionId);
 
 }    
