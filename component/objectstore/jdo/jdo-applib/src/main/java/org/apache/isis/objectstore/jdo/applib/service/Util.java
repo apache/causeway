@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.objectstore.jdo.applib.service.interaction;
+package org.apache.isis.objectstore.jdo.applib.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -24,7 +24,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.interaction.Interaction;
+import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
 
 public class Util {
 

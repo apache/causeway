@@ -44,7 +44,7 @@ import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
-import org.apache.isis.objectstore.jdo.applib.service.interaction.Util;
+import org.apache.isis.objectstore.jdo.applib.service.Util;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.APPLICATION,

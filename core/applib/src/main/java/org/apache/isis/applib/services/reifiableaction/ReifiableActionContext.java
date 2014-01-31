@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.interaction;
+package org.apache.isis.applib.services.reifiableaction;
 
 import javax.enterprise.context.RequestScoped;
 
@@ -24,27 +24,27 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * Register this as a service in order to access context information about any {@link Interaction}.
+ * Register this as a service in order to access context information about any {@link ReifiableAction}.
  */
 @RequestScoped
-public class InteractionContext {
+public class ReifiableActionContext {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(InteractionContext.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ReifiableActionContext.class);
 
-    private Interaction interaction;
+    private ReifiableAction reifiableAction;
 
     @Programmatic
-    public Interaction getInteraction() {
-        return interaction;
+    public ReifiableAction getReifiableAction() {
+        return reifiableAction;
     }
     
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      * @param interaction
      */
-    public void setInteraction(Interaction interaction) {
-        this.interaction = interaction;
+    public void setReifiableAction(ReifiableAction interaction) {
+        this.reifiableAction = interaction;
     }
 
 }

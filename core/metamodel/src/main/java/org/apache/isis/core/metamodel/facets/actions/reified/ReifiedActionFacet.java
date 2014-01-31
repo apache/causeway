@@ -17,27 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.services.interaction;
+package org.apache.isis.core.metamodel.facets.actions.reified;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
-import org.junit.Test;
-
-import org.apache.isis.applib.services.reifiableaction.ReifiableActionDefault;
-
-public class InteractionDefaultTest_next {
-
-    @Test
-    public void test() {
-        ReifiableActionDefault interaction = new ReifiableActionDefault();
-        assertThat(interaction.next("foo"), is(0));
-        assertThat(interaction.next("foo"), is(1));
-        assertThat(interaction.next("bar"), is(0));
-        assertThat(interaction.next("bar"), is(1));
-        assertThat(interaction.next("foo"), is(2));
-        assertThat(interaction.next("bar"), is(2));
-        assertThat(interaction.next("bar"), is(3));
-    }
+/**
+ * Indicates that details of the action should be reified as a persistent
+ * {@link ReifiableAction}, if possible.
+ * 
+ * <p>
+ * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * action method using <tt>@PersistedInteraction</tt>.
+ */
+public interface ReifiedActionFacet extends Facet {
 
 }

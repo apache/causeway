@@ -14,42 +14,42 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.interaction.spi;
+package org.apache.isis.applib.services.reifiableaction.spi;
 
 import java.util.UUID;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.interaction.Interaction;
+import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
 
 /**
  * Intended for service to implement, providing a different implementation of
- * {@link Interaction}.
+ * {@link ReifiableAction}.
  * 
  * <p>
  * The default implementation (provided automatically by the framework) will
- * instantiate an in-memory implementation of {@link Interaction}.  However, other
+ * instantiate an in-memory implementation of {@link ReifiableAction}.  However, other
  * services (eg as provided by the JDO objectstore) might provide a persistable 
- * {@link Interaction} object.
+ * {@link ReifiableAction} object.
  */
-public interface InteractionService {
+public interface ReifiableActionService {
 
     @Programmatic
-    Interaction create();
+    ReifiableAction create();
     
     /**
-     * Although the transactionId is also provided via {@link InteractionOutcome} in the
-     * {@link #complete(Interaction)} callback, it is passed in here as well
-     * so that an implementation can ensure that the {@link Interaction} is fully populated in order
+     * Although the transactionId is also provided in the
+     * {@link #complete(ReifiableAction)} callback, it is passed in here as well
+     * so that an implementation can ensure that the {@link ReifiableAction} is fully populated in order
      * to persist if required.
      * 
      * <p>
-     * One case where this may be supported (for example, by the <tt>InteractionServiceJdo</tt> implementation)
-     * is to flush still-running {@link Interaction}s to the database on-demand.
+     * One case where this may be supported (for example, by the <tt>ReifiableActionServiceJdo</tt> implementation)
+     * is to flush still-running {@link ReifiableAction}s to the database on-demand.
      */
     @Programmatic
-    void startTransaction(final Interaction interaction, final UUID transactionId);
+    void startTransaction(final ReifiableAction reifiableAction, final UUID transactionId);
     
     @Programmatic
-    void complete(final Interaction interaction);
+    void complete(final ReifiableAction reifiableAction);
     
 }

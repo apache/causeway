@@ -30,8 +30,8 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.interaction.Interaction;
-import org.apache.isis.applib.services.interaction.InteractionContext;
+import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
+import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
+import org.apache.isis.core.metamodel.facets.actions.reified.ReifiedActionFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
@@ -112,8 +113,8 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
         }
 
         final Bulk.InteractionContext bulkInteractionContext = getServicesInjector().lookupService(Bulk.InteractionContext.class);
-        final InteractionContext interactionContext = getServicesInjector().lookupService(InteractionContext.class);
-        final Interaction interaction = interactionContext != null ? interactionContext.getInteraction() : null;
+        final ReifiableActionContext reifiableActionContext = getServicesInjector().lookupService(ReifiableActionContext.class);
+        final ReifiableAction reifiableAction = reifiableActionContext != null ? reifiableActionContext.getReifiableAction() : null;
         
         try {
             final Object[] executionParameters = new Object[arguments.length];
@@ -127,20 +128,22 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
             if (bulkFacet != null && 
                 bulkInteractionContext != null &&
                 bulkInteractionContext.getInvokedAs() == null) {
+                
                 bulkInteractionContext.setInvokedAs(InvokedAs.REGULAR);
                 bulkInteractionContext.setDomainObjects(Collections.singletonList(object));
             }
-            
-            if(interaction != null) {
-                if(interaction.getNature() == Interaction.Nature.ACTION_INVOCATION && owningAction != null) {
+
+
+            if(reifiableAction != null) {
+                if(reifiableAction.getNature() == ReifiableAction.Nature.USER_INITIATED && owningAction != null) {
 
                     final String actionIdentifier = owningAction.getIdentifier().toClassAndNameIdentityString();
-                    interaction.setActionIdentifier(actionIdentifier);
+                    reifiableAction.setActionIdentifier(actionIdentifier);
                     
                     String targetClassName = StringExtensions.asNaturalName2(targetAdapter.getSpecification().getSingularName());
                     String actionName = owningAction.getName();
-                    interaction.setTargetClass(targetClassName);
-                    interaction.setTargetAction(actionName);
+                    reifiableAction.setTargetClass(targetClassName);
+                    reifiableAction.setTargetAction(actionName);
                     
                     final StringBuilder argsBuf = new StringBuilder();
                     List<ObjectActionParameter> parameters = owningAction.getParameters();
@@ -151,11 +154,14 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                             appendParamArg(argsBuf, param, arguments[i++]);
                         }
                     }
-                    interaction.setArguments(argsBuf.toString());
+                    reifiableAction.setArguments(argsBuf.toString());
+
+                    final boolean reifiable = getFacetHolder().containsDoOpFacet(ReifiedActionFacet.class);
+                    reifiableAction.setReify(reifiable);
                 }
                 
                 final Bookmark bookmark = bookmarkFor(targetAdapter);
-                interaction.setTarget(bookmark);
+                reifiableAction.setTarget(bookmark);
             }
             
             final Object result = method.invoke(object, executionParameters);
@@ -174,10 +180,10 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
             resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
 
             
-            if(interaction != null) {
+            if(reifiableAction != null) {
                 if(!resultAdapter.getSpecification().containsDoOpFacet(ViewModelFacet.class)) {
                     final Bookmark bookmark = bookmarkFor(resultAdapter);
-                    interaction.setResult(bookmark);
+                    reifiableAction.setResult(bookmark);
                 }
             }
             

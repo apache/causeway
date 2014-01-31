@@ -24,7 +24,6 @@ import javax.enterprise.context.RequestScoped;
 
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.annotation.Bulk.InteractionContext;
 import org.apache.isis.applib.annotation.Programmatic;
 
 @RequestScoped
@@ -53,11 +52,6 @@ public class Scratchpad {
     
     /**
      * Clear any user data.
-     * 
-     * <p>
-     * Note that a new instance of {@link InteractionContext} is created for
-     * any given bulk action, and so it isn't required for the user data to be
-     * cleared down.
      */
     @Programmatic
     public void clear() {

@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundTaskService;
+import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
 
 @Named("Background Tasks")
 public class BackgroundTaskServiceJdo extends AbstractService implements BackgroundTaskService {
@@ -36,7 +37,11 @@ public class BackgroundTaskServiceJdo extends AbstractService implements Backgro
 
     @Programmatic
     @Override
-    public void execute(final ActionInvocationMemento aim, final UUID transactionId, final int sequence) {
+    public void execute(final ActionInvocationMemento aim, final ReifiableAction reifiableAction) {
+        
+        final UUID transactionId = reifiableAction.getTransactionId();
+        Integer sequence = reifiableAction.next("backgroundTaskServiceSequence");
+
         final BackgroundTaskJdo backgroundTask = newTransientInstance(BackgroundTaskJdo.class);
 
         backgroundTask.setActionIdentifier(aim.getActionId());
@@ -44,9 +49,11 @@ public class BackgroundTaskServiceJdo extends AbstractService implements Backgro
         backgroundTask.setMemento(aim.asMementoString());
         backgroundTask.setUser(aim.getUser());
         backgroundTask.setTargetStr(aim.getTarget().toString());
-
         backgroundTask.setTransactionId(transactionId);
         backgroundTask.setSequence(sequence);
+        
+        reifiableAction.setReify(true);
+        
         persist(backgroundTask);
     }
 

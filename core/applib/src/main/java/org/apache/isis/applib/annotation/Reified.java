@@ -17,27 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.services.interaction;
+package org.apache.isis.applib.annotation;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import org.junit.Test;
+import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
+import org.apache.isis.applib.services.reifiableaction.spi.ReifiableActionService;
 
-import org.apache.isis.applib.services.reifiableaction.ReifiableActionDefault;
-
-public class InteractionDefaultTest_next {
-
-    @Test
-    public void test() {
-        ReifiableActionDefault interaction = new ReifiableActionDefault();
-        assertThat(interaction.next("foo"), is(0));
-        assertThat(interaction.next("foo"), is(1));
-        assertThat(interaction.next("bar"), is(0));
-        assertThat(interaction.next("bar"), is(1));
-        assertThat(interaction.next("foo"), is(2));
-        assertThat(interaction.next("bar"), is(2));
-        assertThat(interaction.next("bar"), is(3));
-    }
+/**
+ * Indicates that an action invocation should be reified as a persisted {@link ReifiableAction},
+ * (if supported by the configured {@link ReifiableActionService}).
+ */
+@Inherited
+@Target({ ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Reified {
 
 }

@@ -49,11 +49,11 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.interaction.Interaction;
-import org.apache.isis.applib.services.interaction.InteractionContext;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.services.publish.ObjectStringifier;
+import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
+import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -191,7 +191,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     /**
      * the 'owning' interaction, if configured.
      */
-    private final Interaction interaction;
+    private final ReifiableAction reifiableAction;
 
     /**
      * could be null if none has been registered.
@@ -203,11 +203,11 @@ public class IsisTransaction implements TransactionScopedComponent {
     private final PublishingServiceWithDefaultPayloadFactories publishingService;
 
     /**
-     * Will be that of the {@link #interaction} if not <tt>null</tt>, otherwise will be randomly created.
+     * Will be that of the {@link #reifiableAction} if not <tt>null</tt>, otherwise will be randomly created.
      */
     private final UUID transactionId;
     /**
-     * Only used if {@link #interaction} is <tt>null</tt>; generates sequence within the {@link #transactionId}
+     * Only used if {@link #reifiableAction} is <tt>null</tt>; generates sequence within the {@link #transactionId}
      */
     private int publishedEventSequence;
     
@@ -220,7 +220,7 @@ public class IsisTransaction implements TransactionScopedComponent {
             final org.apache.isis.core.commons.authentication.MessageBroker messageBroker, 
             final UpdateNotifier updateNotifier, 
             final TransactionalResource objectStore, 
-            final InteractionContext interactionContext, 
+            final ReifiableActionContext reifiableActionContext, 
             final AuditingService3 auditingService3, 
             final PublishingServiceWithDefaultPayloadFactories publishingService) {
         
@@ -237,15 +237,15 @@ public class IsisTransaction implements TransactionScopedComponent {
         // determine whether this xactn is taking place in the context of an
         // existing interaction in which a previous xactn has already occurred.
         // if so, reuse that transactionId.
-        UUID previousTransactionIdWithinSameInteraction = null;
-        if(interactionContext != null) {
-            interaction = interactionContext.getInteraction();
-            previousTransactionIdWithinSameInteraction = interaction.getTransactionId();
+        UUID previousTransactionId = null;
+        if(reifiableActionContext != null) {
+            reifiableAction = reifiableActionContext.getReifiableAction();
+            previousTransactionId = reifiableAction.getTransactionId();
         } else {
-            interaction = null;
+            reifiableAction = null;
         }
-        this.transactionId = previousTransactionIdWithinSameInteraction != null
-            ? previousTransactionIdWithinSameInteraction
+        this.transactionId = previousTransactionId != null
+            ? previousTransactionId
             : UUID.randomUUID();
         
         this.state = State.IN_PROGRESS;
@@ -561,8 +561,8 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     private int nextEventSequence() {
-        if(interaction != null) {
-            return interaction.next("publishedEvent");
+        if(reifiableAction != null) {
+            return reifiableAction.next("publishedEvent");
         } else {
             return publishedEventSequence++;
         }

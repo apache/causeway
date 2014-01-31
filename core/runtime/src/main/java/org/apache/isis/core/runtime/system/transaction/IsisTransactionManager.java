@@ -36,12 +36,12 @@ import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.services.audit.AuditingService3;
-import org.apache.isis.applib.services.interaction.InteractionContext;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
 import org.apache.isis.applib.services.publish.EventPayloadForObjectChanged;
 import org.apache.isis.applib.services.publish.EventSerializer;
 import org.apache.isis.applib.services.publish.PublishingService;
+import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -67,7 +67,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
     /**
      * Could be null if not configured as a domain service.
      */
-    private final InteractionContext interactionContext;
+    private final ReifiableActionContext reifiableActionContext;
     /**
      * Could be null if not configured as a domain service.
      */
@@ -95,7 +95,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         this.persistenceSession = persistenceSession;
         this.transactionalResource = transactionalResource;
         
-        this.interactionContext = servicesInjectorSpi.lookupService(InteractionContext.class);
+        this.reifiableActionContext = servicesInjectorSpi.lookupService(ReifiableActionContext.class);
         this.auditingService3 = servicesInjectorSpi.lookupService(AuditingService3.class);
         this.publishingService = getPublishingServiceIfAny(servicesInjectorSpi);
     }
@@ -270,7 +270,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         ensureThatArg(messageBroker, is(not(nullValue())));
         ensureThatArg(updateNotifier, is(not(nullValue())));
 
-        return new IsisTransaction(this, messageBroker, updateNotifier, transactionalResource, interactionContext, auditingService3, publishingService);
+        return new IsisTransaction(this, messageBroker, updateNotifier, transactionalResource, reifiableActionContext, auditingService3, publishingService);
     }
     
 

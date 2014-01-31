@@ -33,8 +33,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
-import org.apache.isis.applib.services.interaction.Interaction;
-import org.apache.isis.applib.services.interaction.InteractionContext;
+import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
+import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -183,11 +183,11 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             return false;
         }
         
-        final InteractionContext interactionContext = getServicesInjector().lookupService(InteractionContext.class);
-        final Interaction interaction;
+        final ReifiableActionContext interactionContext = getServicesInjector().lookupService(ReifiableActionContext.class);
+        final ReifiableAction interaction;
         if (interactionContext != null) {
-            interaction = interactionContext.getInteraction();
-            interaction.setNature(Interaction.Nature.ACTION_INVOCATION);
+            interaction = interactionContext.getReifiableAction();
+            interaction.setNature(ReifiableAction.Nature.USER_INITIATED);
         } else {
             interaction = null;
         }

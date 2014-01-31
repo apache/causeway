@@ -25,8 +25,8 @@ import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.background.BackgroundTaskService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.interaction.Interaction;
-import org.apache.isis.applib.services.interaction.InteractionContext;
+import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
+import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
@@ -63,7 +63,7 @@ public class BackgroundServiceDefault implements BackgroundService {
     private void ensureDependenciesInjected() {
         Ensure.ensureThatState(this.bookmarkService, is(not(nullValue())), "bookmark service required");
         Ensure.ensureThatState(this.backgroundTaskService, is(not(nullValue())), "background task service required");
-        Ensure.ensureThatState(this.interactionContext, is(not(nullValue())), "interaction context service required");
+        Ensure.ensureThatState(this.reifiableActionContext, is(not(nullValue())), "reifiable action context service required");
     }
 
 
@@ -166,15 +166,14 @@ public class BackgroundServiceDefault implements BackgroundService {
                     }
                 }
 
-                final Interaction interaction = interactionContext.getInteraction();
+                final ReifiableAction reifiableAction = reifiableActionContext.getReifiableAction();
                 
                 final ActionInvocationMemento aim = 
-                        new ActionInvocationMemento(mementoService, interaction.getUser(), 
+                        new ActionInvocationMemento(mementoService, reifiableAction.getUser(), 
                                 actionId, domainObjectBookmark, argTypes, argObjs);
 
-                final UUID transactionId = interaction.getTransactionId();
-                Integer sequence = interaction.next("backgroundTaskServiceSequence");
-                backgroundTaskService.execute(aim, transactionId, sequence);
+               
+                backgroundTaskService.execute(aim, reifiableAction);
                 
                 return null;
             }
@@ -199,12 +198,12 @@ public class BackgroundServiceDefault implements BackgroundService {
         this.backgroundTaskService = backgroundTaskService;
     }
 
-    private InteractionContext interactionContext;
+    private ReifiableActionContext reifiableActionContext;
     /**
      * Mandatory service.
      */
-    public void injectInteractionContext(InteractionContext interactionContext) {
-        this.interactionContext = interactionContext;
+    public void injectReifiableActionContext(ReifiableActionContext reifiableActionContext) {
+        this.reifiableActionContext = reifiableActionContext;
     }
     
 

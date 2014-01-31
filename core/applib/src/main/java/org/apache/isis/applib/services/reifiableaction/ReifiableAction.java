@@ -14,22 +14,25 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.interaction;
+package org.apache.isis.applib.services.reifiableaction;
 
 import java.sql.Timestamp;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Reified;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.background.BackgroundTaskService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.interaction.spi.InteractionService;
+import org.apache.isis.applib.services.reifiableaction.spi.ReifiableActionService;
 
-public interface Interaction extends HasTransactionId {
+public interface ReifiableAction extends HasTransactionId {
 
     /**
-     * The user that initiated the interaction.
+     * The user that initiated the action.
      */
     @Disabled
     public abstract String getUser();
@@ -44,7 +47,7 @@ public interface Interaction extends HasTransactionId {
     // //////////////////////////////////////
 
     /**
-     * The date/time at which the interaction started.
+     * The date/time at which the action was invoked.
      */
     @Disabled
     public abstract Timestamp getTimestamp();
@@ -61,7 +64,7 @@ public interface Interaction extends HasTransactionId {
     
 
     /**
-     * {@link Bookmark} of the target object (entity or service) on which this interaction was performed.
+     * {@link Bookmark} of the target object (entity or service) on which this action was performed.
      * 
      * <p>
      * Will only be populated if a {@link BookmarkService} has been configured.
@@ -79,8 +82,7 @@ public interface Interaction extends HasTransactionId {
     // //////////////////////////////////////
 
     /**
-     * If this interaction is an action invocation (as opposed to updating an object),
-     * then holds a string representation of that action, equivalent to
+     * Holds a string representation of the invoked action, equivalent to
      * {@link Identifier#toClassAndNameIdentityString()}.
      * 
      * <p>
@@ -93,7 +95,7 @@ public interface Interaction extends HasTransactionId {
      * <b>NOT API</b>: intended to be called only by the framework.
      * 
      * <p>
-     * Implementation notes: set when the action is invoked (in the ActionInvocationFacet).
+     * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</tt>).
      */
     public abstract void setActionIdentifier(String actionIdentifier);
     
@@ -109,7 +111,7 @@ public interface Interaction extends HasTransactionId {
      * <b>NOT API</b>: intended to be called only by the framework.
      * 
      * <p>
-     * Implementation notes: set when the action is invoked (in the ActionInvocationFacet).
+     * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</t>).
      */
     public abstract void setTargetClass(String targetClass);
 
@@ -125,14 +127,14 @@ public interface Interaction extends HasTransactionId {
      * <b>NOT API</b>: intended to be called only by the framework.
      * 
      * <p>
-     * Implementation notes: set when the action is invoked (in the ActionInvocationFacet).
+     * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</tt>).
      */
     public abstract void setTargetAction(String targetAction);
     
     // //////////////////////////////////////
     
     /**
-     * A human-friendly description of the arguments passed to this interaction (action invocation).
+     * A human-friendly description of the arguments with which the action was invoked.
      */
     public String getArguments();
     
@@ -146,28 +148,28 @@ public interface Interaction extends HasTransactionId {
 
     // //////////////////////////////////////
     
+    public static enum Nature {
+        /**
+         * Indicates that the {@link UserAction} has occurred as the result of an explicit action invocation
+         * on the part of the user.
+         */
+        USER_INITIATED,
+        INDIRECT
+    }
+
     /**
-     * The nature of this interaction, for example whether as the result of an 
-     * {@link #ACTION_INVOCATION explicit action invocation} on the part of the user, or merely as
-     * a side-effect of {@link #RENDERING re-rendering} an entity, eg for a viewer (such as the
+     * The nature of this action, for example whether it was
+     * {@link #USER_INITIATED user initiated} on the part of the user, or merely as
+     * a {@link #INDIRECT indirect} side-effect, eg the re-rendering of an entity in a viewer (such as the
      * Wicket viewer) that uses the <a href="http://en.wikipedia.org/wiki/Post/Redirect/Get">post/redirect/get</a>
      * to avoid duplicate submissions.
      * 
      * <p>
      * The Isis implementations uses this field as to a hint as to whether to populate the interaction's
-     * {@link Interaction#setActionIdentifier(String) action identifier} and related properties.  The expectation 
-     * is that implementations of {@link InteractionService} will only persist interactions that were explicitly started
+     * {@link ReifiableAction#setActionIdentifier(String) action identifier} and related properties.  The expectation 
+     * is that implementations of {@link ReifiableActionService} will only persist interactions that were explicitly started
      * by the user.
      */
-    public static enum Nature {
-        /**
-         * Indicates that the {@link Interaction} has occurred as the result of an explicit action invocation
-         * on the part of the user.
-         */
-        ACTION_INVOCATION,
-        RENDERING
-    }
-
     public Nature getNature();
     
     /**
@@ -212,6 +214,25 @@ public interface Interaction extends HasTransactionId {
 
     
     /**
+     * Hint that this {@link ReifiableAction} should be persisted.
+     * 
+     * <p>
+     * This is most commonly done if the action being invoked has been explicitly annotated to be reified, eg
+     * using the {@link Reified} annotation.  But it might also happen as a hint from another domain service.
+     * For example, a {@link BackgroundTaskService} implementations that creates persisted background tasks ought to be
+     * associated (via the {@link ReifiableAction#getTransactionId() transactionId}) to a persisted
+     * {@link ReifiableAction}.  The app can then provide a mechanism for the end-user to query for their
+     * running background actions from this original {@link ReifiableAction}.
+     * 
+     * <p>
+     * <b>NOT API</b>: intended to be called only by the framework.  
+     */
+    @Programmatic
+    public void setReify(boolean reifyHint);
+    
+    // //////////////////////////////////////
+    
+    /**
      * Generates numbers in a named sequence
      * 
      * <p>
@@ -219,6 +240,6 @@ public interface Interaction extends HasTransactionId {
      * persisted entities are uniquely identified by a ({@link #getTransactionId() transactionId}, <tt>sequence</tt>)
      * tuple.
      */
+    @Programmatic
     public int next(final String sequenceName);
-    
 }    

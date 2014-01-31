@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.interaction;
+package org.apache.isis.applib.services.reifiableaction;
 
 import java.sql.Timestamp;
 import java.util.Map;
@@ -23,15 +23,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.interaction.spi.InteractionService;
+import org.apache.isis.applib.services.reifiableaction.spi.ReifiableActionService;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public class InteractionDefault implements Interaction {
+public class ReifiableActionDefault implements ReifiableAction {
 
-    public InteractionDefault() {
-        setNature(Interaction.Nature.RENDERING);
+    public ReifiableActionDefault() {
+        setNature(ReifiableAction.Nature.INDIRECT);
     }
     
     // //////////////////////////////////////
@@ -147,7 +146,7 @@ public class InteractionDefault implements Interaction {
      * <b>NOT API</b>: intended to be called only by the framework.
      * 
      * <p>
-     * Implementation notes: populated by the viewer as hint to {@link InteractionService} implementation.
+     * Implementation notes: populated by the viewer as hint to {@link ReifiableActionService} implementation.
      */
     @Override
     public void setNature(Nature nature) {
@@ -211,7 +210,6 @@ public class InteractionDefault implements Interaction {
 
     private final Map<String, AtomicInteger> sequenceByName = Maps.newHashMap();
 
-    @Programmatic
     @Override
     public int next(String sequenceName) {
         AtomicInteger next = sequenceByName.get(sequenceName);
@@ -222,6 +220,13 @@ public class InteractionDefault implements Interaction {
             next.incrementAndGet();
         }
         return next.get();
+    }
+
+    
+    // //////////////////////////////////////
+    
+    public void setReify(boolean reifyHint) {
+        // no-op
     }
     
     

@@ -37,9 +37,9 @@ import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundTaskService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.interaction.Interaction;
-import org.apache.isis.applib.services.interaction.InteractionContext;
-import org.apache.isis.applib.services.interaction.InteractionDefault;
+import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
+import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
+import org.apache.isis.applib.services.reifiableaction.ReifiableActionDefault;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -64,11 +64,10 @@ public class BackgroundServiceDefaultTest_execute {
     private Identifier actionIdentifier;
     
     @Mock
-    private InteractionContext mockInteractionContext;
+    private ReifiableActionContext mockReifiableActionContext;
 
-    private Interaction interaction;
-    private UUID transactionId = UUID.fromString("1231231231");
-    private int sequence = 2;
+    private ReifiableAction reifiableAction;
+    private UUID transactionId = UUID.randomUUID();
     
     @Mock
     private BackgroundTaskService mockBackgroundTaskService;
@@ -105,12 +104,13 @@ public class BackgroundServiceDefaultTest_execute {
             }
         };
         backgroundService.injectBookmarkService(mockBookmarkService);
-        backgroundService.injectInteractionContext(mockInteractionContext);
+        backgroundService.injectReifiableActionContext(mockReifiableActionContext);
         backgroundService.injectBackgroundTaskService(mockBackgroundTaskService);
 
-        interaction = new InteractionDefault();
-        interaction.setTransactionId(transactionId);
-        interaction.setUser("fbloggs");
+        reifiableAction = new ReifiableActionDefault();
+        reifiableAction.setTransactionId(transactionId);
+        reifiableAction.setUser("fbloggs");
+        reifiableAction.setTransactionId(transactionId);
         
         context.checking(new Expectations() {
             {
@@ -120,8 +120,8 @@ public class BackgroundServiceDefaultTest_execute {
                 allowing(mockSpec).getFullIdentifier();
                 will(returnValue(Customer.class.getName()));
                 
-                allowing(mockInteractionContext).getInteraction();
-                will(returnValue(interaction));
+                allowing(mockReifiableActionContext).getReifiableAction();
+                will(returnValue(reifiableAction));
             }
         });
         customer = new Customer();
@@ -150,8 +150,7 @@ public class BackgroundServiceDefaultTest_execute {
                 
                 oneOf(mockBackgroundTaskService).execute(
                         with(x()), 
-                        with(equalTo(transactionId)),
-                        with(equalTo(sequence)));
+                        with(equalTo(reifiableAction)));
             }
 
             protected Matcher<ActionInvocationMemento> x() {

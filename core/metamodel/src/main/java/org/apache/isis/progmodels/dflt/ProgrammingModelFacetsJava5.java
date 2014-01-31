@@ -33,6 +33,7 @@ import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.annotation
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.method.NotInServiceMenuMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.prototype.annotation.PrototypeAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.publish.PublishedActionAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.reified.annotation.ReifiedActionAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.semantics.ActionSemanticsAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.semantics.ActionSemanticsFallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.semantics.IdempotentAnnotationFacetFactory;
@@ -345,6 +346,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(NotInServiceMenuAnnotationFacetFactory.class);
         addFactory(NotInServiceMenuMethodFacetFactory.class);
         addFactory(BulkAnnotationFacetFactory.class);
+        addFactory(ReifiedActionAnnotationFacetFactory.class);
 
         addFactory(HiddenAnnotationForTypeFacetFactory.class);
         // must come after the TitleAnnotationFacetFactory, because can act as an override

@@ -17,25 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.objectstore.jdo.applib.service.interaction;
+package org.apache.isis.core.progmodel.facets.actions.reified.annotation;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.progmodel.facets.actions.reified.ReifiedActionFacetAbstract;
 
-import org.junit.Test;
+public class ReifiedActionFacetAnnotation extends ReifiedActionFacetAbstract {
 
-public class InteractionJdoTest_next {
-
-    @Test
-    public void test() {
-        InteractionJdo interaction = new InteractionJdo();
-        assertThat(interaction.next("foo"), is(0));
-        assertThat(interaction.next("foo"), is(1));
-        assertThat(interaction.next("bar"), is(0));
-        assertThat(interaction.next("bar"), is(1));
-        assertThat(interaction.next("foo"), is(2));
-        assertThat(interaction.next("bar"), is(2));
-        assertThat(interaction.next("bar"), is(3));
+    public ReifiedActionFacetAnnotation(final FacetHolder holder) {
+        super(holder);
     }
 
 }

@@ -30,10 +30,10 @@ import org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditingServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundTaskJdo;
 import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundTaskServiceJdoRepository;
-import org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionJdo;
-import org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishingServiceJdoRepository;
+import org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo;
+import org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionServiceJdoRepository;
 
 public class Admin extends AbstractService {
 
@@ -41,7 +41,7 @@ public class Admin extends AbstractService {
     @MemberOrder(sequence="10.1")
     @ActionSemantics(Of.SAFE)
     @Prototype
-    public InteractionJdo lookup(final @Named("Transaction Id") UUID transactionId) {
+    public ReifiableActionJdo lookup(final @Named("Transaction Id") UUID transactionId) {
         return interactionRepository.findByTransactionId(transactionId);
     }
     public boolean hideLookup() {
@@ -51,7 +51,7 @@ public class Admin extends AbstractService {
     @ActionSemantics(Of.SAFE)
     @Bookmarkable
     @MemberOrder(sequence="10.2")
-    public List<InteractionJdo> currentlyRunning() {
+    public List<ReifiableActionJdo> currentlyRunning() {
         return interactionRepository.findCurrent();
     }
     public boolean hideCurrentlyRunning() {
@@ -60,7 +60,7 @@ public class Admin extends AbstractService {
     
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence="10.3")
-    public List<InteractionJdo> previouslyRan() {
+    public List<ReifiableActionJdo> previouslyRan() {
         return interactionRepository.findCompleted();
     }
     public boolean hidePreviouslyRan() {
@@ -125,7 +125,7 @@ public class Admin extends AbstractService {
     // //////////////////////////////////////
 
     @javax.inject.Inject
-    private InteractionServiceJdoRepository interactionRepository;
+    private ReifiableActionServiceJdoRepository interactionRepository;
     
     @javax.inject.Inject
     private BackgroundTaskServiceJdoRepository backgroundTaskRepository;

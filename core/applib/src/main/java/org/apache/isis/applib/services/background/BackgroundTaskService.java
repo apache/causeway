@@ -1,6 +1,6 @@
 package org.apache.isis.applib.services.background;
 
-import java.util.UUID;
+import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
 
 
 /**
@@ -14,5 +14,5 @@ import java.util.UUID;
  */
 public interface BackgroundTaskService {
 
-    void execute(final ActionInvocationMemento actionInvocationMemento, final UUID transactionId, final int sequence);
+    void execute(final ActionInvocationMemento aim, final ReifiableAction reifiableAction);
 }

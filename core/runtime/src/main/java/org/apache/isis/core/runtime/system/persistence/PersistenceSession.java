@@ -41,10 +41,10 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
-import org.apache.isis.applib.services.interaction.Interaction;
-import org.apache.isis.applib.services.interaction.InteractionContext;
-import org.apache.isis.applib.services.interaction.InteractionDefault;
-import org.apache.isis.applib.services.interaction.spi.InteractionService;
+import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
+import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
+import org.apache.isis.applib.services.reifiableaction.ReifiableActionDefault;
+import org.apache.isis.applib.services.reifiableaction.spi.ReifiableActionService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -302,13 +302,13 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     }
 
     private void createInteractionIfConfigured() {
-        final InteractionContext ic = getServiceOrNull(InteractionContext.class);
+        final ReifiableActionContext ic = getServiceOrNull(ReifiableActionContext.class);
         if(ic == null) {
             return;
         } 
-        final InteractionService interactionFactory = getServiceOrNull(InteractionService.class);
-        final Interaction interaction = interactionFactory != null ? interactionFactory.create() : new InteractionDefault();
-        ic.setInteraction(interaction);
+        final ReifiableActionService interactionFactory = getServiceOrNull(ReifiableActionService.class);
+        final ReifiableAction interaction = interactionFactory != null ? interactionFactory.create() : new ReifiableActionDefault();
+        ic.setReifiableAction(interaction);
 
         if(interaction.getTimestamp() == null) {
             interaction.setTimestamp(Clock.getTimeAsJavaSqlTimestamp());
@@ -330,16 +330,16 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
      * Called by IsisTransactionManager on start
      */
     public void startInteractionIfConfigured(final UUID transactionId) {
-        final InteractionContext interactionContext = getServiceOrNull(InteractionContext.class);
-        if(interactionContext == null) {
+        final ReifiableActionContext reifiableActionContext = getServiceOrNull(ReifiableActionContext.class);
+        if(reifiableActionContext == null) {
             return;
         } 
-        final InteractionService interactionFactory = getServiceOrNull(InteractionService.class);
-        if(interactionFactory == null) {
+        final ReifiableActionService reifiableActionService = getServiceOrNull(ReifiableActionService.class);
+        if(reifiableActionService == null) {
             return;
         } 
-        final Interaction interaction = interactionContext.getInteraction();
-        interactionFactory.startTransaction(interaction, transactionId);
+        final ReifiableAction reifiableAction = reifiableActionContext.getReifiableAction();
+        reifiableActionService.startTransaction(reifiableAction, transactionId);
     }
 
 
@@ -415,11 +415,11 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     }
 
     private void completeInteractionIfConfigured() {
-        final InteractionContext interactionContext = getServiceOrNull(InteractionContext.class);
-        if(interactionContext != null) {
-            final InteractionService interactionFactory = getServiceOrNull(InteractionService.class);
+        final ReifiableActionContext reifiableActionContext = getServiceOrNull(ReifiableActionContext.class);
+        if(reifiableActionContext != null) {
+            final ReifiableActionService interactionFactory = getServiceOrNull(ReifiableActionService.class);
             if(interactionFactory != null) {
-                final Interaction interaction = interactionContext.getInteraction();
+                final ReifiableAction interaction = reifiableActionContext.getReifiableAction();
                 interactionFactory.complete(interaction);
             }
         }

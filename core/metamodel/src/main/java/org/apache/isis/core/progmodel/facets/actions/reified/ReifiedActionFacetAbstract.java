@@ -17,27 +17,21 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.services.interaction;
+package org.apache.isis.core.progmodel.facets.actions.reified;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.reified.ReifiedActionFacet;
 
-import org.junit.Test;
+public abstract class ReifiedActionFacetAbstract extends MarkerFacetAbstract implements ReifiedActionFacet {
 
-import org.apache.isis.applib.services.reifiableaction.ReifiableActionDefault;
+    public static Class<? extends Facet> type() {
+        return ReifiedActionFacet.class;
+    }
 
-public class InteractionDefaultTest_next {
-
-    @Test
-    public void test() {
-        ReifiableActionDefault interaction = new ReifiableActionDefault();
-        assertThat(interaction.next("foo"), is(0));
-        assertThat(interaction.next("foo"), is(1));
-        assertThat(interaction.next("bar"), is(0));
-        assertThat(interaction.next("bar"), is(1));
-        assertThat(interaction.next("foo"), is(2));
-        assertThat(interaction.next("bar"), is(2));
-        assertThat(interaction.next("bar"), is(3));
+    public ReifiedActionFacetAbstract(final FacetHolder holder) {
+        super(type(), holder);
     }
 
 }

@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.objectstore.jdo.applib.service.interaction;
+package org.apache.isis.objectstore.jdo.applib.service.reifiableaction;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -43,47 +43,47 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.interaction.Interaction;
-import org.apache.isis.applib.services.interaction.spi.InteractionService;
+import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
+import org.apache.isis.applib.services.reifiableaction.spi.ReifiableActionService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
+import org.apache.isis.objectstore.jdo.applib.service.Util;
 
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.APPLICATION, 
-        table="IsisInteraction")
+        table="IsisReifiableAction")
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
             name="findByTransactionId", language="JDOQL",  
             value="SELECT "
-                    + "FROM org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionJdo "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
                     + "WHERE transactionId == :transactionId"),
     @javax.jdo.annotations.Query(
             name="findCurrent", language="JDOQL",  
             value="SELECT "
-                    + "FROM org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionJdo "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
                     + "WHERE completedAt == null "
                     + "ORDER BY timestamp DESC"),
     @javax.jdo.annotations.Query(
             name="findCompleted", language="JDOQL",  
             value="SELECT "
-                    + "FROM org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionJdo "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
                     + "WHERE completedAt != null "
                     + "ORDER BY timestamp DESC")
 })
-@ObjectType("IsisInteration")
+@ObjectType("IsisReifiableAction")
 @MemberGroupLayout(
         columnSpans={6,0,6}, 
         left={"Identifiers","Target","Notes"},
         right={"Detail","Timings","Results"})
 @Named("Interaction")
-public class InteractionJdo implements Interaction {
+public class ReifiableActionJdo implements ReifiableAction {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(InteractionJdo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ReifiableActionJdo.class);
 
 
     // //////////////////////////////////////
@@ -94,7 +94,7 @@ public class InteractionJdo implements Interaction {
     private UUID transactionId;
 
     /**
-     * The unique identifier (a GUID) of the transaction in which this interaction occurred.
+     * The unique identifier (a GUID) of the transaction in which this action occurred.
      */
     @javax.jdo.annotations.PrimaryKey
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.TRANSACTION_ID)
@@ -110,7 +110,7 @@ public class InteractionJdo implements Interaction {
      * <b>NOT API</b>: intended to be called only by the framework.
      * 
      * <p>
-     * Implementation notes: copied over from the Isis transaction when the interaction is persisted.
+     * Implementation notes: copied over from the Isis transaction when the action is persisted.
      */
     @Override
     public void setTransactionId(final UUID transactionId) {
@@ -394,7 +394,7 @@ public class InteractionJdo implements Interaction {
      * <b>NOT API</b>: intended to be called only by the framework.
      * 
      * <p>
-     * Implementation notes: populated by the viewer as hint to {@link InteractionService} implementation.
+     * Implementation notes: populated by the viewer as hint to {@link ReifiableActionService} implementation.
      */
     @Override
     public void setNature(Nature nature) {
@@ -507,6 +507,8 @@ public class InteractionJdo implements Interaction {
 
     private final Map<String, AtomicInteger> sequenceByName = Maps.newHashMap();
 
+
+
     @Programmatic
     @Override
     public int next(String sequenceName) {
@@ -518,6 +520,23 @@ public class InteractionJdo implements Interaction {
             next.incrementAndGet();
         }
         return next.get();
+    }
+
+    // //////////////////////////////////////
+    // reifyIfPossible (SPI impl)
+    // //////////////////////////////////////
+    
+    private boolean reify;
+
+    @Programmatic
+    public boolean isReify() {
+        return reify;
+    }
+    
+    @Programmatic
+    @Override
+    public void setReify(boolean reify) {
+        this.reify = reify;
     }
 
     // //////////////////////////////////////
@@ -538,4 +557,6 @@ public class InteractionJdo implements Interaction {
     
     @javax.inject.Inject
     private DomainObjectContainer container;
+
+
 }
