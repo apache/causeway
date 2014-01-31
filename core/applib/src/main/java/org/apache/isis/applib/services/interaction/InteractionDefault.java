@@ -17,9 +17,15 @@
 package org.apache.isis.applib.services.interaction;
 
 import java.sql.Timestamp;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import com.google.common.collect.Maps;
+
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.interaction.spi.InteractionFactory;
+import org.apache.isis.applib.services.interaction.spi.InteractionService;
 import org.apache.isis.applib.util.ObjectContracts;
 
 public class InteractionDefault implements Interaction {
@@ -102,12 +108,12 @@ public class InteractionDefault implements Interaction {
     // //////////////////////////////////////
 
     private Timestamp startedAt;
-    public Timestamp getStartedAt() {
+    public Timestamp getTimestamp() {
         return startedAt;
     }
 
     @Override
-    public void setStartedAt(Timestamp startedAt) {
+    public void setTimestamp(Timestamp startedAt) {
         this.startedAt = startedAt;
     }
 
@@ -141,7 +147,7 @@ public class InteractionDefault implements Interaction {
      * <b>NOT API</b>: intended to be called only by the framework.
      * 
      * <p>
-     * Implementation notes: populated by the viewer as hint to {@link InteractionFactory} implementation.
+     * Implementation notes: populated by the viewer as hint to {@link InteractionService} implementation.
      */
     @Override
     public void setNature(Nature nature) {
@@ -184,6 +190,38 @@ public class InteractionDefault implements Interaction {
     @Override
     public String toString() {
         return ObjectContracts.toString(this, "startedAt,user,actionIdentifier,target,guid");
+    }
+    
+    
+    // //////////////////////////////////////
+    
+    private UUID transactionId;
+    
+    @Override
+    public UUID getTransactionId() {
+        return transactionId;
+    }
+    @Override
+    public void setTransactionId(UUID transactionId) {
+        this.transactionId = transactionId;
+    }
+    
+    
+    // //////////////////////////////////////
+
+    private final Map<String, AtomicInteger> sequenceByName = Maps.newHashMap();
+
+    @Programmatic
+    @Override
+    public int next(String sequenceName) {
+        AtomicInteger next = sequenceByName.get(sequenceName);
+        if(next == null) {
+            next = new AtomicInteger(0);
+            sequenceByName.put(sequenceName, next);
+        } else {
+            next.incrementAndGet();
+        }
+        return next.get();
     }
     
     

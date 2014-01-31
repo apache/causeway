@@ -36,16 +36,17 @@ public class BackgroundTaskServiceJdo extends AbstractService implements Backgro
 
     @Programmatic
     @Override
-    public void execute(final ActionInvocationMemento aim, final UUID transactionId) {
+    public void execute(final ActionInvocationMemento aim, final UUID transactionId, final int sequence) {
         final BackgroundTaskJdo backgroundTask = newTransientInstance(BackgroundTaskJdo.class);
 
         backgroundTask.setActionIdentifier(aim.getActionId());
-        backgroundTask.setCreatedAt(Clock.getTimeAsJavaSqlTimestamp());
+        backgroundTask.setTimestamp(Clock.getTimeAsJavaSqlTimestamp());
         backgroundTask.setMemento(aim.asMementoString());
         backgroundTask.setUser(aim.getUser());
         backgroundTask.setTargetStr(aim.getTarget().toString());
 
         backgroundTask.setTransactionId(transactionId);
+        backgroundTask.setSequence(sequence);
         persist(backgroundTask);
     }
 

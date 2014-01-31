@@ -27,13 +27,13 @@ import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo;
-import org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryRepository;
+import org.apache.isis.objectstore.jdo.applib.service.audit.AuditingServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundTaskJdo;
-import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundTaskRepository;
+import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundTaskServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionJdo;
-import org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionRepository;
-import org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEvent;
-import org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventRepository;
+import org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionServiceJdoRepository;
+import org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo;
+import org.apache.isis.objectstore.jdo.applib.service.publish.PublishingServiceJdoRepository;
 
 public class Admin extends AbstractService {
 
@@ -96,20 +96,20 @@ public class Admin extends AbstractService {
 
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence="40.1")
-    public List<PublishedEvent> listQueuedEvents() {
+    public List<PublishedEventJdo> allQueuedEvents() {
         return publishedEventRepository.findQueued();
     }
-    public boolean hideListQueuedEvents() {
+    public boolean hideAllQueuedEvents() {
         return publishedEventRepository == null;
     }
 
     @ActionSemantics(Of.SAFE)
     @Prototype
     @MemberOrder(sequence="40.2")
-    public List<PublishedEvent> listProcessedEvents() {
+    public List<PublishedEventJdo> allProcessedEvents() {
         return publishedEventRepository.findProcessed();
     }
-    public boolean hideListProcessedEvents() {
+    public boolean hideAllProcessedEvents() {
         return publishedEventRepository == null;
     }
 
@@ -125,16 +125,16 @@ public class Admin extends AbstractService {
     // //////////////////////////////////////
 
     @javax.inject.Inject
-    private InteractionRepository interactionRepository;
+    private InteractionServiceJdoRepository interactionRepository;
     
     @javax.inject.Inject
-    private BackgroundTaskRepository backgroundTaskRepository;
+    private BackgroundTaskServiceJdoRepository backgroundTaskRepository;
     
     @javax.inject.Inject
-    private AuditEntryRepository auditEntryRepository;
+    private AuditingServiceJdoRepository auditEntryRepository;
     
     @javax.inject.Inject
-    private PublishedEventRepository publishedEventRepository;
+    private PublishingServiceJdoRepository publishedEventRepository;
     
 }
 

@@ -17,42 +17,42 @@
 package org.apache.isis.objectstore.jdo.applib.service.background;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.NotPersistent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.interaction.Interaction;
-import org.apache.isis.applib.services.interaction.spi.InteractionFactory;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
+import org.apache.isis.objectstore.jdo.applib.service.interaction.Util;
 
 
 @javax.jdo.annotations.PersistenceCapable(
-        identityType=IdentityType.DATASTORE, 
-        table="IsisBackgroundTask")
-@javax.jdo.annotations.DatastoreIdentity(
-        strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
-         column="id")
+        identityType=IdentityType.APPLICATION, 
+        table="IsisBackgroundTask",
+        objectIdClass=BackgroundTaskJdoPK.class)
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
             name="findByTransactionId", language="JDOQL",  
@@ -60,17 +60,165 @@ import org.apache.isis.applib.util.ObjectContracts;
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.background.BackgroundTaskJdo "
                     + "WHERE transactionId == :transactionId")
 })
+@ObjectType("IsisBackgroundTask")
 @Named("Background Task")
 @MemberGroupLayout(
         columnSpans={6,0,6}, 
-        left={"Target"},
-        right={"Identifiers","Timings"})
+        left={"Identifiers","Timings"},
+        right={"Detail"})
+@Immutable
 public class BackgroundTaskJdo implements HasTransactionId {
 
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(BackgroundTaskJdo.class);
 
+
+    // //////////////////////////////////////
+    // transactionId (property)
+    // //////////////////////////////////////
+
     
+    private UUID transactionId;
+
+    /**
+     * The unique identifier (a GUID) of the transaction in which this background task was persisted.
+     * 
+     * <p>
+     * The combination of ({@link #getTransactionId() transactionId}, {@link #getSequence() sequence}) makes up the
+     * primary key.
+     */
+    @javax.jdo.annotations.PrimaryKey
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.TRANSACTION_ID)
+    @TypicalLength(36)
+    @Hidden(where=Where.PARENTED_TABLES)
+    @MemberOrder(name="Identifiers",sequence = "10")
+    @Override
+    public UUID getTransactionId() {
+        return transactionId;
+    }
+
+    @Override
+    public void setTransactionId(final UUID transactionId) {
+        this.transactionId = transactionId;
+    }
+
+
+    // //////////////////////////////////////
+    // sequence (property)
+    // //////////////////////////////////////
+
+    private int sequence;
+
+    /**
+     * The 0-based additional identifier of a published event within the given {@link #getTransactionId() transaction}.
+     * 
+     * <p>
+     * The combination of ({@link #getTransactionId() transactionId}, {@link #getSequence() sequence}) makes up the
+     * primary key.
+     */
+    @javax.jdo.annotations.PrimaryKey
+    @MemberOrder(name="Identifiers", sequence = "20")
+    public int getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(final int sequence) {
+        this.sequence = sequence;
+    }
+
+
+    // //////////////////////////////////////
+    // user (property)
+    // //////////////////////////////////////
+
+    private String user;
+
+    /**
+     * The user that invoked the initial interaction that gave rise to this background task, and also the credentials
+     * with which the task will/has run.
+     */
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.USER_NAME)
+    @Title(sequence="2", prepend=", ")
+    @MemberOrder(name="Identifiers", sequence = "30")
+    @Hidden(where=Where.PARENTED_TABLES)
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(final String user) {
+        this.user = user;
+    }
+
+
+    
+    // //////////////////////////////////////
+    // timestamp (property)
+    // //////////////////////////////////////
+
+    private Timestamp timestamp;
+
+    /**
+     * The date/time at which this background task was created.
+     */
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(allowsNull="false")
+    @MemberOrder(name="Identifiers", sequence = "40")
+    @Hidden(where=Where.PARENTED_TABLES)
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(final Timestamp createdAt) {
+        this.timestamp = createdAt;
+    }
+
+
+
+
+    // //////////////////////////////////////
+    // target (property)
+    // openTargetObject (action)
+    // //////////////////////////////////////
+
+    @Programmatic
+    public Bookmark getTarget() {
+        return Util.bookmarkFor(getTargetStr());
+    }
+    
+    @Programmatic
+    public void setTarget(Bookmark target) {
+        setTargetStr(Util.asString(target));
+    }
+
+    // //////////////////////////////////////
+    
+    private String targetStr;
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.BOOKMARK, name="target")
+    @Named("Target")
+    @MemberOrder(name="Detail", sequence="10")
+    public String getTargetStr() {
+        return targetStr;
+    }
+
+    public void setTargetStr(final String targetStr) {
+        this.targetStr = targetStr;
+    }
+
+    // //////////////////////////////////////
+
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(name="TargetStr", sequence="1")
+    @Named("Open")
+    public Object openTargetObject() {
+        return Util.lookupBookmark(getTarget(), bookmarkService, container);
+    }
+    public boolean hideOpenTargetObject() {
+        return getTarget() == null;
+    }
+
+    
+    // //////////////////////////////////////
+    // actionIdentifier (property)
     // //////////////////////////////////////
 
     private String actionIdentifier;
@@ -82,45 +230,17 @@ public class BackgroundTaskJdo implements HasTransactionId {
      * This information is also available within the {@link #getMemento()}, but is redundantly stored here also
      * to enable analytics.
      */
-    @javax.jdo.annotations.Column(allowsNull="false", length=255)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.ACTION_IDENTIFIER)
     @Title(sequence="1")
     @TypicalLength(60)
-    @Hidden(where=Where.ALL_TABLES)
-    @MemberOrder(name="Identifiers",sequence = "11")
-    @Disabled
+    @MemberOrder(name="Detail",sequence = "20")
     public String getActionIdentifier() {
         return actionIdentifier;
     }
 
     public void setActionIdentifier(final String actionIdentifier) {
-        this.actionIdentifier = actionIdentifier;
+        this.actionIdentifier = Util.abbreviated(actionIdentifier, JdoColumnLength.ACTION_IDENTIFIER);
     }
-
-    
-    
-    // //////////////////////////////////////
-    // user (property)
-    // //////////////////////////////////////
-
-    private String user;
-
-    /**
-     * The user that invoked the initial interaction that gave rise to this background task, and also the credentials
-     * with which the task will/has run.
-     */
-    @javax.jdo.annotations.Column(allowsNull="false", length=50)
-    @Title(sequence="2", prepend=", ")
-    @MemberOrder(name="Identifiers", sequence = "5")
-    @Disabled
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(final String user) {
-        this.user = user;
-    }
-
-
 
 
     // //////////////////////////////////////
@@ -129,79 +249,16 @@ public class BackgroundTaskJdo implements HasTransactionId {
     
     private String memento;
     
-    @javax.jdo.annotations.Column(allowsNull="false", length=1024)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.BackgroundTask.MEMENTO)
     @MultiLine(numberOfLines=20)
     @Hidden(where=Where.ALL_TABLES)
-    @MemberOrder(name="Target",sequence = "4")
-    @Disabled
+    @MemberOrder(name="Detail",sequence = "30")
     public String getMemento() {
         return memento;
     }
     
     public void setMemento(final String memento) {
         this.memento = memento;
-    }
-    
-    
-    
-    // //////////////////////////////////////
-    // target (property)
-    // //////////////////////////////////////
-
-    @Programmatic
-    public Bookmark getTarget() {
-        return new Bookmark(getTargetStr());
-    }
-    
-    @Programmatic
-    public void setTarget(Bookmark target) {
-        setTargetStr(target.toString());
-    }
-
-    private String targetStr;
-    @javax.jdo.annotations.Column(allowsNull="false", length=255, name="target")
-    @Hidden
-    public String getTargetStr() {
-        return targetStr;
-    }
-
-    public void setTargetStr(final String targetStr) {
-        this.targetStr = targetStr;
-    }
-
-
-    
-    // //////////////////////////////////////
-    // targetObject (derived property)
-    // //////////////////////////////////////
-
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(name="Target", sequence="3")
-    @Named("Object")
-    public Object getTargetObject() {
-        return bookmarkService.lookup(getTarget());
-    }
-
-
-    // //////////////////////////////////////
-    // createdAt (property)
-    // //////////////////////////////////////
-
-    private Timestamp createdAt;
-
-    /**
-     * The date/time at which this background task was created.
-     */
-    @javax.jdo.annotations.Persistent
-    @javax.jdo.annotations.Column(allowsNull="false")
-    @MemberOrder(name="Timings", sequence = "3")
-    @Disabled
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(final Timestamp createdAt) {
-        this.createdAt = createdAt;
     }
 
 
@@ -217,7 +274,6 @@ public class BackgroundTaskJdo implements HasTransactionId {
     @javax.jdo.annotations.Persistent
     @javax.jdo.annotations.Column(allowsNull="true")
     @MemberOrder(name="Timings", sequence = "3")
-    @Disabled
     public Timestamp getStartedAt() {
         return startedAt;
     }
@@ -239,7 +295,6 @@ public class BackgroundTaskJdo implements HasTransactionId {
     @javax.jdo.annotations.Persistent
     @javax.jdo.annotations.Column(allowsNull="true")
     @MemberOrder(name="Timings", sequence = "4")
-    @Disabled
     public Timestamp getCompletedAt() {
         return completedAt;
     }
@@ -264,45 +319,29 @@ public class BackgroundTaskJdo implements HasTransactionId {
     @Named("Duration")
     @MemberOrder(name="Timings", sequence = "7")
     public BigDecimal getDuration() {
-        if(getCompletedAt() == null) {
-            return null;
-        }
-        long millis = getCompletedAt().getTime() - getStartedAt().getTime();
-        return new BigDecimal(millis).divide(new BigDecimal(1000)).setScale(3, RoundingMode.HALF_EVEN);
+        return Util.durationBetween(getStartedAt(), getCompletedAt());
     }
 
 
-    // //////////////////////////////////////
-    // transactionId (property)
-    // //////////////////////////////////////
 
+    // //////////////////////////////////////
+    // complete (derived property)
+    // //////////////////////////////////////
     
-    private UUID transactionId;
 
-    /**
-     * The unique identifier (a GUID) of the transaction of the {@link Interaction} that gave rise to this
-     * background task (if known, and if the interaction is itself persisted by way of a suitable implementation of
-     * {@link InteractionFactory}).
-     */
-    @javax.jdo.annotations.Column(allowsNull="true", length=36)
-    @TypicalLength(36)
-    @MemberOrder(name="Identifiers",sequence = "20")
-    @Disabled
-    @Override
-    public UUID getTransactionId() {
-        return transactionId;
+    @javax.jdo.annotations.NotPersistent
+    @MemberOrder(name="Timings", sequence = "8")
+    public boolean isComplete() {
+        return getCompletedAt() != null;
     }
 
-    @Override
-    public void setTransactionId(final UUID transactionId) {
-        this.transactionId = transactionId;
-    }
-
+    // //////////////////////////////////////
+    // toString
     // //////////////////////////////////////
 
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "actionIdentifier,user,createdAt,startedAt,completedAt,duration,transactionId");
+        return ObjectContracts.toString(this, "actionIdentifier,user,timestamp,startedAt,completedAt,duration,transactionId");
     }
 
 
@@ -310,5 +349,8 @@ public class BackgroundTaskJdo implements HasTransactionId {
     
     @Inject
     private BookmarkService bookmarkService;
+
+    @javax.inject.Inject
+    private DomainObjectContainer container;
 
 }

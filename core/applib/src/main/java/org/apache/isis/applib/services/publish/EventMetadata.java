@@ -19,6 +19,7 @@
 
 package org.apache.isis.applib.services.publish;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 /**
@@ -34,10 +35,14 @@ public class EventMetadata {
     private final UUID transactionId;
     private final int sequence;
     private final String user;
-    private final long timestamp;
+    private final java.sql.Timestamp javaSqlTimestamp;
     private final String title;
     private final EventType eventType;
     
+    /**
+     * @deprecated - use {@link #EventMetadata(UUID, int, EventType, String, Timestamp, String)}
+     */
+    @Deprecated
     public EventMetadata(
             final UUID transactionId, 
             final int sequence, 
@@ -45,10 +50,20 @@ public class EventMetadata {
             final String user, 
             final long timestamp, 
             final String title) {
+        this(transactionId, sequence, eventType, user, new java.sql.Timestamp(timestamp), title);
+    }
+    
+    public EventMetadata(
+            final UUID transactionId, 
+            final int sequence, 
+            final EventType eventType, 
+            final String user, 
+            final java.sql.Timestamp javaSqlTimestamp, 
+            final String title) {
         this.transactionId = transactionId;
         this.sequence = sequence;
         this.user = user;
-        this.timestamp = timestamp;
+        this.javaSqlTimestamp = javaSqlTimestamp;
         this.title = title;
         this.eventType = eventType;
     }
@@ -81,12 +96,19 @@ public class EventMetadata {
     public String getUser() {
         return user;
     }
+    
+    public Timestamp getJavaSqlTimestamp() {
+        return javaSqlTimestamp;
+    }
+
     /**
      * The timestamp, in milliseconds, since an epoch time.
-     * @return
+     * 
+     * @deprecated - use {@link #getJavaSqlTimestamp()}
      */
+    @Deprecated
     public long getTimestamp() {
-        return timestamp;
+        return getJavaSqlTimestamp().getTime();
     }
     
     /**
@@ -112,5 +134,6 @@ public class EventMetadata {
     public String toString() {
         return getId();
     }
+
 
 }

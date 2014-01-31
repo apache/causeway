@@ -14,9 +14,5 @@ import java.util.UUID;
  */
 public interface BackgroundTaskService {
 
-    /**
-     * @param actionInvocationMemento
-     * @param transactionId - if any.
-     */
-    void execute(ActionInvocationMemento actionInvocationMemento, UUID transactionId);
+    void execute(final ActionInvocationMemento actionInvocationMemento, final UUID transactionId, final int sequence);
 }

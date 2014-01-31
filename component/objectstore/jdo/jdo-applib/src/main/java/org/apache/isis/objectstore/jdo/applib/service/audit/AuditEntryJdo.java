@@ -23,6 +23,8 @@ import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Index;
+import javax.jdo.annotations.Indices;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
@@ -33,14 +35,16 @@ import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.interaction.Interaction;
 import org.apache.isis.applib.util.TitleBuffer;
+import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
+import org.apache.isis.objectstore.jdo.applib.service.interaction.Util;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.DATASTORE,
@@ -52,12 +56,21 @@ import org.apache.isis.applib.util.TitleBuffer;
     @javax.jdo.annotations.Query(
             name="findByTransactionId", language="JDOQL",  
             value="SELECT "
-                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntry "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
                     + "WHERE transactionId == :transactionId")
+})
+@Indices({
+    @Index(name="IsisAuditEntry_ak", unique="true", 
+            columns={
+                @javax.jdo.annotations.Column(name="transactionId"),
+                @javax.jdo.annotations.Column(name="target"),
+                @javax.jdo.annotations.Column(name="propertyId")
+                })
 })
 @Immutable
 @Named("Audit Entry")
-@MemberGroupLayout(left={"When/Who","Target","Values"})
+@ObjectType("IsisAuditEntry")
+@MemberGroupLayout(left={"Identifiers","Target","Detail"})
 public class AuditEntryJdo implements HasTransactionId {
 
     
@@ -70,33 +83,21 @@ public class AuditEntryJdo implements HasTransactionId {
         return buf.toString();
     }
     
-    
-    // //////////////////////////////////////
-
-    private Timestamp timestamp;
-
-    @javax.jdo.annotations.Column(allowsNull="false")
-    @MemberOrder(name="When/Who",sequence = "1")
-    public Timestamp getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(final Timestamp timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    
     // //////////////////////////////////////
     
     private UUID transactionId;
 
     /**
-     * The unique identifier (a GUID) of the transaction of the {@link Interaction} that gave rise to this
-     * audit entry.
+     * The unique identifier (a GUID) of the transaction in which this audit entry was persisted.
+     * 
+     * <p>
+     * The combination of ({@link #getTransactionId() transactionId}, {@link #getTargetStr() target}, {@link #getPropertyId() propertyId} ) makes up the
+     * (non-enforced) alternative key.
      */
-    @javax.jdo.annotations.Column(allowsNull="true", length=36)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.TRANSACTION_ID)
     @TypicalLength(36)
-    @MemberOrder(name="When/Who",sequence = "20")
+    @MemberOrder(name="Identifiers",sequence = "10")
+    @Hidden(where=Where.PARENTED_TABLES)
     @Disabled
     @Override
     public UUID getTransactionId() {
@@ -108,129 +109,142 @@ public class AuditEntryJdo implements HasTransactionId {
         this.transactionId = transactionId;
     }
 
+
+    // //////////////////////////////////////
+    // user (property)
     // //////////////////////////////////////
 
-    
     private String user;
 
-    @javax.jdo.annotations.Column(allowsNull="false", length=50)
-    @MemberOrder(name="When/Who",sequence = "2")
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.USER_NAME)
+    @Hidden(where=Where.PARENTED_TABLES)
+    @MemberOrder(name="Identifiers",sequence = "20")
     public String getUser() {
         return user;
     }
 
     public void setUser(final String user) {
-        this.user = abbreviated(user, 50);
+        this.user = user;
     }
     
+
+    // //////////////////////////////////////
+    // timestamp (property)
+    // //////////////////////////////////////
+
+    private Timestamp timestamp;
+
+    @javax.jdo.annotations.Column(allowsNull="false")
+    @Hidden(where=Where.PARENTED_TABLES)
+    @MemberOrder(name="Identifiers",sequence = "30")
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(final Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
     
+
+
     // //////////////////////////////////////
     // target (property)
+    // openTargetObject (action)
     // //////////////////////////////////////
 
     @Programmatic
     public Bookmark getTarget() {
-        return new Bookmark(getTargetStr());
+        return Util.bookmarkFor(getTargetStr());
     }
     
     @Programmatic
     public void setTarget(Bookmark target) {
-        setTargetStr(target.toString());
+        setTargetStr(Util.asString(target));
     }
 
+    // //////////////////////////////////////
+    
     private String targetStr;
 
-    @javax.jdo.annotations.Column(allowsNull="false", length=255, name="target")
-    @Named("Target Bookmark")
-    @Hidden(where=Where.ALL_TABLES)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.BOOKMARK, name="target")
+    @Named("Target")
+    //@Hidden(where=Where.OBJECT_FORMS)
     @MemberOrder(name="Target", sequence="3")
     public String getTargetStr() {
         return targetStr;
     }
 
     public void setTargetStr(final String targetStr) {
-        this.targetStr = abbreviated(targetStr, 255);
+        this.targetStr = targetStr;
     }
 
     
-    // //////////////////////////////////////
-    // openTargetObject (action)
     // //////////////////////////////////////
 
     @ActionSemantics(Of.SAFE)
     @MemberOrder(name="TargetStr", sequence="1")
     @Named("Open")
     public Object openTargetObject() {
-        return lookupBookmark(getTarget());
+        return Util.lookupBookmark(getTarget(), bookmarkService, container);
     }
     public boolean hideOpenTargetObject() {
-        return getTargetStr() == null;
+        return getTarget() == null;
     }
     
 
     // //////////////////////////////////////
+    // propertyId (property)
+    // //////////////////////////////////////
     
     private String propertyId;
     
-    @javax.jdo.annotations.Column(allowsNull="true", length=50)
+    @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.AuditEntry.PROPERTY_ID)
     @MemberOrder(name="Target",sequence = "5")
     public String getPropertyId() {
         return propertyId;
     }
     
     public void setPropertyId(final String propertyId) {
-        this.propertyId = abbreviated(propertyId,50);
+        this.propertyId = Util.abbreviated(propertyId, JdoColumnLength.AuditEntry.PROPERTY_ID);
     }
     
     
     // //////////////////////////////////////
+    // preValue (property)
+    // //////////////////////////////////////
 
     private String preValue;
 
-    @javax.jdo.annotations.Column(allowsNull="true", length=255)
-    @MemberOrder(name="Values",sequence = "6")
+    @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.AuditEntry.PROPERTY_VALUE)
+    @MemberOrder(name="Detail",sequence = "6")
     public String getPreValue() {
         return preValue;
     }
 
     public void setPreValue(final String preValue) {
-        this.preValue = abbreviated(preValue,255);
+        this.preValue = Util.abbreviated(preValue, JdoColumnLength.AuditEntry.PROPERTY_VALUE);
     }
     
+    
+    // //////////////////////////////////////
+    // postValue (property)
     // //////////////////////////////////////
 
     private String postValue;
 
-    @javax.jdo.annotations.Column(allowsNull="true", length=255)
-    @MemberOrder(name="Values",sequence = "7")
+    @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.AuditEntry.PROPERTY_VALUE)
+    @MemberOrder(name="Detail",sequence = "7")
     public String getPostValue() {
         return postValue;
     }
 
     public void setPostValue(final String postValue) {
-        this.postValue = abbreviated(postValue, 255);
+        this.postValue = Util.abbreviated(postValue, JdoColumnLength.AuditEntry.PROPERTY_VALUE);
     }
     
     // //////////////////////////////////////
-
-    private Object lookupBookmark(Bookmark bookmark) {
-        try {
-        return bookmarkService != null
-                ? bookmarkService.lookup(bookmark)
-                : null;
-        } catch(RuntimeException ex) {
-            if(ex.getClass().getName().contains("ObjectNotFoundException")) {
-                container.warnUser("Object not found - has it since been deleted?");
-                return null;
-            } 
-            throw ex;
-        }
-    }
-
-    private static String abbreviated(final String str, final int maxLength) {
-        return str != null? (str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "..."): null;
-    }
-    
+    // Injected services
     // //////////////////////////////////////
 
 

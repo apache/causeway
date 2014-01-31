@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.audit;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -29,12 +30,15 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 public interface AuditingService3 {
     
     @Programmatic
-    public void audit(java.sql.Timestamp timestamp, String user, Bookmark target, String propertyId, String preValue, String postValue);
+    public void audit(
+            final UUID transactionId, final Bookmark target, final String propertyId, 
+            final String preValue, final String postValue, 
+            final String user, final java.sql.Timestamp timestamp);
     
     public static class Stderr implements AuditingService3 {
 
         @Override
-        public void audit(Timestamp timestamp, String user, Bookmark target, String propertyId, String preValue, String postValue) {
+        public void audit(UUID transactionId, Bookmark target, String propertyId, String preValue, String postValue, String user, Timestamp timestamp) {
             String auditMessage = target.toString() + " by " + user + ", " + propertyId +": " + preValue + " -> " + postValue;
             System.err.println(auditMessage);
         }

@@ -32,28 +32,28 @@ import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.HasTransactionId;
 
-public class PublishedEventRepository extends AbstractFactoryAndRepository {
+public class PublishingServiceJdoRepository extends AbstractFactoryAndRepository {
 
     @Programmatic
-    public List<PublishedEvent> findQueued() {
+    public List<PublishedEventJdo> findQueued() {
         return allMatches(
-                new QueryDefault<PublishedEvent>(PublishedEvent.class, 
+                new QueryDefault<PublishedEventJdo>(PublishedEventJdo.class, 
                         "findByStateOrderByTimestamp", 
-                        "state", PublishedEvent.State.QUEUED));
+                        "state", PublishedEventJdo.State.QUEUED));
     }
 
     @Programmatic
-    public List<PublishedEvent> findProcessed() {
+    public List<PublishedEventJdo> findProcessed() {
         return allMatches(
-                new QueryDefault<PublishedEvent>(PublishedEvent.class, 
+                new QueryDefault<PublishedEventJdo>(PublishedEventJdo.class, 
                         "findByStateOrderByTimestamp", 
-                        "state", PublishedEvent.State.PROCESSED));
+                        "state", PublishedEventJdo.State.PROCESSED));
     }
 
     @Programmatic
-    public List<PublishedEvent> findByTransactionId(final UUID transactionId) {
+    public List<PublishedEventJdo> findByTransactionId(final UUID transactionId) {
         return allMatches(
-                new QueryDefault<PublishedEvent>(PublishedEvent.class, 
+                new QueryDefault<PublishedEventJdo>(PublishedEventJdo.class, 
                         "findByTransactionId", 
                         "transactionId", transactionId));
     }
@@ -62,8 +62,8 @@ public class PublishedEventRepository extends AbstractFactoryAndRepository {
     public void purgeProcessed() {
         // REVIEW: this is not particularly performant.
         // much better would be to go direct to the JDO API.
-        List<PublishedEvent> processedEvents = findProcessed();
-        for (PublishedEvent publishedEvent : processedEvents) {
+        List<PublishedEventJdo> processedEvents = findProcessed();
+        for (PublishedEventJdo publishedEvent : processedEvents) {
             publishedEvent.delete();
         }
     }

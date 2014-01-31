@@ -25,9 +25,9 @@ import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.interaction.Interaction;
-import org.apache.isis.applib.services.interaction.spi.InteractionFactory;
+import org.apache.isis.applib.services.interaction.spi.InteractionService;
 
-public class InteractionServiceJdo extends AbstractService implements InteractionFactory {
+public class InteractionServiceJdo extends AbstractService implements InteractionService {
 
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(InteractionServiceJdo.class);
@@ -47,13 +47,17 @@ public class InteractionServiceJdo extends AbstractService implements Interactio
 
     @Programmatic
     @Override
-    public void startTransaction(Interaction interaction, UUID transactionId) {
+    public void startTransaction(final Interaction interaction, final UUID transactionId) {
         if(interaction instanceof InteractionJdo) {
             // should be the case, since this service created the object in the #create() method
-            InteractionJdo interactionJdo = (InteractionJdo) interaction;
-            if(interactionJdo.getTransactionId() == null) {
-                interactionJdo.setTransactionId(transactionId);
+            final InteractionJdo interactionJdo = (InteractionJdo) interaction;
+            final UUID currentTransactionId = interactionJdo.getTransactionId();
+            if(currentTransactionId != null && !currentTransactionId.equals(transactionId)) {
+                // the logic in IsisTransaction means that any subsequent transactions within a given interaction
+                // should reuse the xactnId of the first transaction created within that interaction.
+                throw new IllegalStateException("Attempting to set a different transactionId on interaction");
             }
+            interactionJdo.setTransactionId(transactionId);
         }
     }
 
@@ -71,7 +75,7 @@ public class InteractionServiceJdo extends AbstractService implements Interactio
     }
 
     /**
-     * Not API, factored out from {@link InteractionRepository}.
+     * Not API, factored out from {@link InteractionServiceJdoRepository}.
      */
     InteractionJdo asPersistableInteractionJdo(final Interaction interaction) {
         if(interaction.getNature() == Interaction.Nature.ACTION_INVOCATION) {

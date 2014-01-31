@@ -18,18 +18,17 @@ package org.apache.isis.objectstore.jdo.applib.service.audit;
 
 import java.util.List;
 
-import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.NotContributed.As;
-import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.services.HasTransactionId;
 
-
-public class AuditEntryContributions extends AbstractFactoryAndRepository {
+public class AuditingServiceJdoContributions extends AbstractService {
 
     @ActionSemantics(Of.SAFE)
     @NotInServiceMenu
@@ -42,6 +41,6 @@ public class AuditEntryContributions extends AbstractFactoryAndRepository {
     // //////////////////////////////////////
 
     @javax.inject.Inject
-    private AuditEntryRepository auditEntryRepository;
+    private AuditingServiceJdoRepository auditEntryRepository;
 
 }

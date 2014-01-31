@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.objectstore.jdo.applib.service.background;
+package org.apache.isis.objectstore.jdo.applib.service.publish;
 
 import java.util.List;
 
@@ -24,23 +24,24 @@ import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.NotContributed.As;
-import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Render.Type;
+import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.services.HasTransactionId;
 
 
-public class BackgroundTaskContributions extends AbstractFactoryAndRepository {
+public class PublishingServiceJdoContributions extends AbstractFactoryAndRepository {
 
     @ActionSemantics(Of.SAFE)
     @NotInServiceMenu
     @NotContributed(As.ACTION)
     @Render(Type.EAGERLY)
-    public List<BackgroundTaskJdo> backgroundTasks(final HasTransactionId hasTransactionId) {
-        return backgroundTaskRepository.findByTransactionId(hasTransactionId.getTransactionId());
+    public List<PublishedEventJdo> publishedEvents(final HasTransactionId hasTransactionId) {
+        return publishedEventRepository.findByTransactionId(hasTransactionId.getTransactionId());
     }
-
+    
     // //////////////////////////////////////
 
     @javax.inject.Inject
-    private BackgroundTaskRepository backgroundTaskRepository;
+    private PublishingServiceJdoRepository publishedEventRepository;
+
 }

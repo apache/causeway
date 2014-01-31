@@ -61,9 +61,9 @@ public class BackgroundServiceDefault implements BackgroundService {
     }
     
     private void ensureDependenciesInjected() {
-        Ensure.ensureThatState(this.bookmarkService, is(not(nullValue())));
-        Ensure.ensureThatState(this.backgroundTaskService, is(not(nullValue())));
-        Ensure.ensureThatState(this.interactionContext, is(not(nullValue())));
+        Ensure.ensureThatState(this.bookmarkService, is(not(nullValue())), "bookmark service required");
+        Ensure.ensureThatState(this.backgroundTaskService, is(not(nullValue())), "background task service required");
+        Ensure.ensureThatState(this.interactionContext, is(not(nullValue())), "interaction context service required");
     }
 
 
@@ -172,11 +172,9 @@ public class BackgroundServiceDefault implements BackgroundService {
                         new ActionInvocationMemento(mementoService, interaction.getUser(), 
                                 actionId, domainObjectBookmark, argTypes, argObjs);
 
-                final UUID transactionId = 
-                        interaction instanceof HasTransactionId 
-                        ? ((HasTransactionId) interaction).getTransactionId() 
-                                : null;
-                backgroundTaskService.execute(aim, transactionId);
+                final UUID transactionId = interaction.getTransactionId();
+                Integer sequence = interaction.next("backgroundTaskServiceSequence");
+                backgroundTaskService.execute(aim, transactionId, sequence);
                 
                 return null;
             }

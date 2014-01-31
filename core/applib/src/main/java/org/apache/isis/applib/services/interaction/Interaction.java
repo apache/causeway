@@ -18,17 +18,15 @@ package org.apache.isis.applib.services.interaction;
 
 import java.sql.Timestamp;
 
-import org.joda.time.DateTime;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.interaction.spi.InteractionFactory;
+import org.apache.isis.applib.services.interaction.spi.InteractionService;
 
-public interface Interaction {
+public interface Interaction extends HasTransactionId {
 
     /**
      * The user that initiated the interaction.
@@ -49,14 +47,14 @@ public interface Interaction {
      * The date/time at which the interaction started.
      */
     @Disabled
-    public abstract Timestamp getStartedAt();
+    public abstract Timestamp getTimestamp();
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      * 
      * <p>
      * Implementation notes: set when the Isis PersistenceSession is opened.  Uses the applib {@link Clock}.
      */
-    public abstract void setStartedAt(Timestamp startedAt);
+    public abstract void setTimestamp(Timestamp startedAt);
     
     
     // //////////////////////////////////////
@@ -158,7 +156,7 @@ public interface Interaction {
      * <p>
      * The Isis implementations uses this field as to a hint as to whether to populate the interaction's
      * {@link Interaction#setActionIdentifier(String) action identifier} and related properties.  The expectation 
-     * is that implementations of {@link InteractionFactory} will only persist interactions that were explicitly started
+     * is that implementations of {@link InteractionService} will only persist interactions that were explicitly started
      * by the user.
      */
     public static enum Nature {
@@ -208,5 +206,19 @@ public interface Interaction {
      * <b>NOT API</b>: intended to be called only by the framework.
      */
     public void setResult(Bookmark resultBookmark);
+
+    
+    // //////////////////////////////////////
+
+    
+    /**
+     * Generates numbers in a named sequence
+     * 
+     * <p>
+     * Used to support <tt>BackgroundTaskServiceJdo</tt> and <tt>PublishingServiceJdo</tt> implementations whose
+     * persisted entities are uniquely identified by a ({@link #getTransactionId() transactionId}, <tt>sequence</tt>)
+     * tuple.
+     */
+    public int next(final String sequenceName);
     
 }    

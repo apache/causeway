@@ -26,7 +26,7 @@ import org.apache.isis.applib.services.interaction.Interaction;
 import org.apache.isis.applib.services.interaction.InteractionContext;
 
 
-public class InteractionRepository extends AbstractFactoryAndRepository {
+public class InteractionServiceJdoRepository extends AbstractFactoryAndRepository {
 
     @Programmatic
     public InteractionJdo findByTransactionId(final UUID transactionId) {

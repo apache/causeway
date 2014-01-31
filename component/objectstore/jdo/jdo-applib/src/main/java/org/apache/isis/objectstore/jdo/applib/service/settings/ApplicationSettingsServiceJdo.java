@@ -29,7 +29,6 @@ import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
-import org.apache.isis.applib.annotation.TypeOf;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.settings.ApplicationSetting;
 import org.apache.isis.applib.services.settings.ApplicationSettingsService;

@@ -36,6 +36,7 @@ import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.services.audit.AuditingService3;
+import org.apache.isis.applib.services.interaction.InteractionContext;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
 import org.apache.isis.applib.services.publish.EventPayloadForObjectChanged;
@@ -64,11 +65,15 @@ public class IsisTransactionManager implements SessionScopedComponent {
     private int transactionLevel;
     
     /**
-     * Could be null.
+     * Could be null if not configured as a domain service.
+     */
+    private final InteractionContext interactionContext;
+    /**
+     * Could be null if not configured as a domain service.
      */
     private final AuditingService3 auditingService3;
     /**
-     * Could be null.
+     * Could be null if not configured as a domain service.
      */
     private final PublishingServiceWithDefaultPayloadFactories publishingService;
 
@@ -90,7 +95,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
         this.persistenceSession = persistenceSession;
         this.transactionalResource = transactionalResource;
         
-        this.auditingService3 = (AuditingService3) servicesInjectorSpi.lookupService(AuditingService3.class);
+        this.interactionContext = servicesInjectorSpi.lookupService(InteractionContext.class);
+        this.auditingService3 = servicesInjectorSpi.lookupService(AuditingService3.class);
         this.publishingService = getPublishingServiceIfAny(servicesInjectorSpi);
     }
     
@@ -257,11 +263,14 @@ public class IsisTransactionManager implements SessionScopedComponent {
      * @see #createMessageBroker()
      * @see #createUpdateNotifier()
      */
-    private IsisTransaction createTransaction(final org.apache.isis.core.commons.authentication.MessageBroker messageBroker, final UpdateNotifier updateNotifier, TransactionalResource transactionalResource) {
+    private IsisTransaction createTransaction(
+            final org.apache.isis.core.commons.authentication.MessageBroker messageBroker, 
+            final UpdateNotifier updateNotifier, 
+            final TransactionalResource transactionalResource) {
         ensureThatArg(messageBroker, is(not(nullValue())));
         ensureThatArg(updateNotifier, is(not(nullValue())));
 
-        return new IsisTransaction(this, messageBroker, updateNotifier, transactionalResource, auditingService3, publishingService);
+        return new IsisTransaction(this, messageBroker, updateNotifier, transactionalResource, interactionContext, auditingService3, publishingService);
     }
     
 
@@ -280,7 +289,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
             transactionalResource.startTransaction();
             
-            persistenceSession.startInteractionIfConfigured(isisTransaction.getGuid());
+            persistenceSession.startInteractionIfConfigured(isisTransaction.getTransactionId());
         }
 
         transactionLevel++;

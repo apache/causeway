@@ -25,7 +25,7 @@ import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
 
-public class AuditEntryRepository extends AbstractFactoryAndRepository {
+public class AuditingServiceJdoRepository extends AbstractFactoryAndRepository {
     
     @Programmatic
     public List<AuditEntryJdo> listAll() {

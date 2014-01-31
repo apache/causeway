@@ -21,19 +21,18 @@ package org.apache.isis.objectstore.jdo.applib.service.settings;
 
 
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.services.settings.SettingType;
 import org.apache.isis.applib.services.settings.UserSetting;
+import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType = IdentityType.APPLICATION, 
-        objectIdClass=UserSettingPrimaryKey.class,
-        table="UserSetting")
+        objectIdClass=UserSettingJdoPK.class,
+        table="IsisUserSetting")
 @javax.jdo.annotations.Queries({ 
     @javax.jdo.annotations.Query(
             name = "findByUserAndKey", language = "JDOQL", 
@@ -61,7 +60,7 @@ public class UserSettingJdo extends SettingAbstractJdo implements UserSetting {
     
     private String user;
 
-    @javax.jdo.annotations.Column(length=50)
+    @javax.jdo.annotations.Column(length=JdoColumnLength.USER_NAME)
     @javax.jdo.annotations.PrimaryKey
     @Title(sequence="5", append=": ")
     @MemberOrder(sequence = "5")
@@ -75,7 +74,7 @@ public class UserSettingJdo extends SettingAbstractJdo implements UserSetting {
 
     // //////////////////////////////////////
 
-    @javax.jdo.annotations.Column(length=128)
+    @javax.jdo.annotations.Column(length=JdoColumnLength.SettingAbstract.SETTING_KEY)
     @javax.jdo.annotations.PrimaryKey
     @Title(sequence="10")
     @Override
@@ -89,7 +88,7 @@ public class UserSettingJdo extends SettingAbstractJdo implements UserSetting {
 
     // //////////////////////////////////////
 
-    @javax.jdo.annotations.Column(length=254)
+    @javax.jdo.annotations.Column(length=JdoColumnLength.DESCRIPTION)
     @javax.jdo.annotations.Persistent
     @Override
     public String getDescription() {
@@ -102,7 +101,7 @@ public class UserSettingJdo extends SettingAbstractJdo implements UserSetting {
     
     // //////////////////////////////////////
 
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.SettingAbstract.VALUE_RAW)
     @javax.jdo.annotations.Persistent
     @Title(prepend=" = ", sequence="30")
     @Override
@@ -116,7 +115,7 @@ public class UserSettingJdo extends SettingAbstractJdo implements UserSetting {
     
     // //////////////////////////////////////
 
-    @javax.jdo.annotations.Column(allowsNull="false", length=20)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.SettingAbstract.SETTING_TYPE)
     @javax.jdo.annotations.Persistent
     @Override
     public SettingType getType() {
@@ -126,6 +125,5 @@ public class UserSettingJdo extends SettingAbstractJdo implements UserSetting {
     public void setType(SettingType type) {
         super.setType(type);
     }
-
 
 }

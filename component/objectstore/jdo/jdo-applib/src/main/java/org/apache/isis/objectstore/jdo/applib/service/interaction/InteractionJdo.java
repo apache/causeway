@@ -17,11 +17,14 @@
 package org.apache.isis.objectstore.jdo.applib.service.interaction;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.Timestamp;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.jdo.annotations.IdentityType;
+
+import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +38,7 @@ import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.TypicalLength;
@@ -43,8 +47,9 @@ import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.interaction.Interaction;
-import org.apache.isis.applib.services.interaction.spi.InteractionFactory;
+import org.apache.isis.applib.services.interaction.spi.InteractionService;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
 
 
 @javax.jdo.annotations.PersistenceCapable(
@@ -61,43 +66,98 @@ import org.apache.isis.applib.util.ObjectContracts;
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionJdo "
                     + "WHERE completedAt == null "
-                    + "ORDER BY startedAt DESC"),
+                    + "ORDER BY timestamp DESC"),
     @javax.jdo.annotations.Query(
             name="findCompleted", language="JDOQL",  
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.interaction.InteractionJdo "
                     + "WHERE completedAt != null "
-                    + "ORDER BY startedAt DESC")
+                    + "ORDER BY timestamp DESC")
 })
+@ObjectType("IsisInteration")
 @MemberGroupLayout(
         columnSpans={6,0,6}, 
-        left={"Target","Notes"}, 
-        right={"Identifiers","Timings","Results"})
+        left={"Identifiers","Target","Notes"},
+        right={"Detail","Timings","Results"})
 @Named("Interaction")
-public class InteractionJdo implements Interaction, HasTransactionId {
+public class InteractionJdo implements Interaction {
 
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(InteractionJdo.class);
 
-    
+
     // //////////////////////////////////////
-    // actionIdentifier (property)
+    // transactionId (property)
     // //////////////////////////////////////
 
-    private String actionIdentifier;
-    
-    @javax.jdo.annotations.Column(allowsNull="false", length=255)
-    @Title(sequence="1")
-    @TypicalLength(60)
-    @Hidden(where=Where.ALL_TABLES)
-    @MemberOrder(name="Identifiers",sequence = "11")
-    public String getActionIdentifier() {
-        return actionIdentifier;
+        
+    private UUID transactionId;
+
+    /**
+     * The unique identifier (a GUID) of the transaction in which this interaction occurred.
+     */
+    @javax.jdo.annotations.PrimaryKey
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.TRANSACTION_ID)
+    @TypicalLength(JdoColumnLength.TRANSACTION_ID)
+    @MemberOrder(name="Identifiers",sequence = "10")
+    @Disabled
+    @Override
+    public UUID getTransactionId() {
+        return transactionId;
     }
 
-    public void setActionIdentifier(final String actionIdentifier) {
-        this.actionIdentifier = abbreviated(actionIdentifier, 255);
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     * 
+     * <p>
+     * Implementation notes: copied over from the Isis transaction when the interaction is persisted.
+     */
+    @Override
+    public void setTransactionId(final UUID transactionId) {
+        this.transactionId = transactionId;
     }
+
+    // //////////////////////////////////////
+    // user (property)
+    // //////////////////////////////////////
+
+    private String user;
+
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.USER_NAME)
+    @Title(sequence="2", prepend=", ")
+    @MemberOrder(name="Identifiers", sequence = "20")
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(final String user) {
+        this.user = user;
+    }
+
+
+
+    // //////////////////////////////////////
+    // timestamp (property)
+    // //////////////////////////////////////
+
+    private Timestamp timestamp;
+
+    /**
+     * The date/time at which this interaction started.
+     */
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(allowsNull="false")
+    @MemberOrder(name="Timings", sequence = "30")
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(final Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    
+    
 
     // //////////////////////////////////////
     // targetClass (property)
@@ -105,19 +165,17 @@ public class InteractionJdo implements Interaction, HasTransactionId {
 
     private String targetClass;
 
-    @javax.jdo.annotations.Column(allowsNull="false", length=50)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.Interaction.TARGET_CLASS)
     @TypicalLength(30)
-    @MemberOrder(name="Target", sequence = "1")
+    @MemberOrder(name="Target", sequence = "10")
     @Named("Class")
     public String getTargetClass() {
         return targetClass;
     }
 
     public void setTargetClass(final String targetClass) {
-        this.targetClass = abbreviated(targetClass, 50);
+        this.targetClass = Util.abbreviated(targetClass, JdoColumnLength.Interaction.TARGET_CLASS);
     }
-
-
 
 
     // //////////////////////////////////////
@@ -126,63 +184,85 @@ public class InteractionJdo implements Interaction, HasTransactionId {
     
     private String targetAction;
     
-    @javax.jdo.annotations.Column(allowsNull="false", length=50)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.Interaction.TARGET_ACTION)
     @TypicalLength(30)
-    @MemberOrder(name="Target", sequence = "2")
+    @MemberOrder(name="Target", sequence = "20")
     @Named("Action")
     public String getTargetAction() {
         return targetAction;
     }
     
     public void setTargetAction(final String targetAction) {
-        this.targetAction = abbreviated(targetAction, 50);
+        this.targetAction = Util.abbreviated(targetAction, JdoColumnLength.Interaction.TARGET_ACTION);
     }
     
 
     // //////////////////////////////////////
     // target (property)
+    // openTargetObject (action)
     // //////////////////////////////////////
 
     @Programmatic
     @Override
     public Bookmark getTarget() {
-        return new Bookmark(getTargetStr());
+        return Util.bookmarkFor(getTargetStr());
     }
     
     @Programmatic
     @Override
     public void setTarget(Bookmark target) {
-        setTargetStr(target.toString());
+        setTargetStr(Util.asString(target));
     }
 
+    // //////////////////////////////////////
+    
     private String targetStr;
-    @javax.jdo.annotations.Column(allowsNull="false", length=255, name="target")
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.BOOKMARK, name="target")
     @Named("Target Bookmark")
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Target", sequence="3")
+    @Disabled
     public String getTargetStr() {
         return targetStr;
     }
 
     public void setTargetStr(final String targetStr) {
-        this.targetStr = abbreviated(targetStr, 255);
+        this.targetStr = targetStr;
     }
 
-    
-    // //////////////////////////////////////
-    // openTargetObject (action)
     // //////////////////////////////////////
 
     @ActionSemantics(Of.SAFE)
     @MemberOrder(name="TargetStr", sequence="1")
     @Named("Open")
     public Object openTargetObject() {
-        return lookupBookmark(getTarget());
+        return Util.lookupBookmark(getTarget(), bookmarkService, container);
     }
     public boolean hideOpenTargetObject() {
-        return getTargetStr() == null;
+        return getTarget() == null;
     }
+
     
+    // //////////////////////////////////////
+    // actionIdentifier (property)
+    // //////////////////////////////////////
+
+    private String actionIdentifier;
+    
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.ACTION_IDENTIFIER)
+    @Title(sequence="1")
+    @TypicalLength(60)
+    @Hidden(where=Where.ALL_TABLES)
+    @MemberOrder(name="Detail",sequence = "1")
+    public String getActionIdentifier() {
+        return actionIdentifier;
+    }
+
+    public void setActionIdentifier(final String actionIdentifier) {
+        this.actionIdentifier = Util.abbreviated(actionIdentifier, JdoColumnLength.ACTION_IDENTIFIER);
+    }
+
+
 
     // //////////////////////////////////////
     // arguments (property)
@@ -190,37 +270,36 @@ public class InteractionJdo implements Interaction, HasTransactionId {
     
     private String arguments;
     
-    @javax.jdo.annotations.Column(allowsNull="false", length=1024)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.Interaction.ARGUMENTS)
     @MultiLine(numberOfLines=6)
     @Hidden(where=Where.ALL_TABLES)
-    @MemberOrder(name="Target",sequence = "4")
+    @MemberOrder(name="Detail",sequence = "4")
     @Disabled
     public String getArguments() {
         return arguments;
     }
     
     public void setArguments(final String arguments) {
-        this.arguments = abbreviated(arguments, 1024);
+        this.arguments = Util.abbreviated(arguments, JdoColumnLength.Interaction.ARGUMENTS);
     }
 
-    // //////////////////////////////////////
-    // startedAt (property)
-    // //////////////////////////////////////
 
-    private Timestamp startedAt;
-
-    @javax.jdo.annotations.Persistent
-    @javax.jdo.annotations.Column(allowsNull="false")
+    // //////////////////////////////////////
+    // startedAt (derived property)
+    // //////////////////////////////////////
+    
+    /**
+     * The date/time at which this interaction started.
+     */
+    @javax.jdo.annotations.NotPersistent
     @MemberOrder(name="Timings", sequence = "3")
+    @Disabled
     public Timestamp getStartedAt() {
-        return startedAt;
+        return getTimestamp();
     }
-
-    public void setStartedAt(final Timestamp startedAt) {
-        this.startedAt = startedAt;
-    }
-
-
+    
+    
+    
     // //////////////////////////////////////
     // completedAt (property)
     // //////////////////////////////////////
@@ -249,21 +328,22 @@ public class InteractionJdo implements Interaction, HasTransactionId {
 
 
     // //////////////////////////////////////
-    // user (property)
+    // duration (derived property)
     // //////////////////////////////////////
 
-    private String user;
-
-    @javax.jdo.annotations.Column(allowsNull="false", length=50)
-    @Title(sequence="2", prepend=", ")
-    @MemberOrder(name="Identifiers", sequence = "5")
-    public String getUser() {
-        return user;
+    /**
+     * The number of seconds (to 3 decimal places) that this interaction lasted.
+     * 
+     * <p>
+     * Populated only if it has {@link #getCompletedAt() completed}.
+     */
+    @javax.validation.constraints.Digits(integer=5, fraction=3)
+    @Named("Duration")
+    @MemberOrder(name="Timings", sequence = "7")
+    public BigDecimal getDuration() {
+        return Util.durationBetween(getStartedAt(), getCompletedAt());
     }
 
-    public void setUser(final String user) {
-        this.user = abbreviated(user,50);
-    }
 
 
     // //////////////////////////////////////
@@ -280,7 +360,7 @@ public class InteractionJdo implements Interaction, HasTransactionId {
      * Not part of the applib API, because the default implementation is not persistent
      * and so there's no object that can be accessed to be annotated.
      */
-    @javax.jdo.annotations.Column(allowsNull="true", length=1024)
+    @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.Interaction.NOTES)
     @MultiLine(numberOfLines=10)
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Notes", sequence = "6")
@@ -289,62 +369,9 @@ public class InteractionJdo implements Interaction, HasTransactionId {
     }
 
     public void setNotes(final String notes) {
-        this.notes = abbreviated(notes, 1024);
+        this.notes = notes;
     }
 
-
-    // //////////////////////////////////////
-    // duration (derived property)
-    // //////////////////////////////////////
-
-    /**
-     * The number of seconds (to 3 decimal places) that this interaction lasted.
-     * 
-     * <p>
-     * Populated only if it has {@link #getCompletedAt() completed}.
-     */
-    @javax.validation.constraints.Digits(integer=5, fraction=3)
-    @Named("Duration")
-    @MemberOrder(name="Timings", sequence = "7")
-    public BigDecimal getDuration() {
-        if(getCompletedAt() == null) {
-            return null;
-        }
-        long millis = getCompletedAt().getTime() - getStartedAt().getTime();
-        return new BigDecimal(millis).divide(new BigDecimal(1000)).setScale(3, RoundingMode.HALF_EVEN);
-    }
-
-
-    // //////////////////////////////////////
-    // transactionId (property)
-    // //////////////////////////////////////
-
-        
-    private UUID transactionId;
-
-    /**
-     * The unique identifier (a GUID) of the transaction in which this interaction occurred.
-     */
-    @javax.jdo.annotations.PrimaryKey
-    @javax.jdo.annotations.Column(allowsNull="false", length=36)
-    @TypicalLength(36)
-    @MemberOrder(name="Identifiers",sequence = "20")
-    @Disabled
-    @Override
-    public UUID getTransactionId() {
-        return transactionId;
-    }
-
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     * 
-     * <p>
-     * Implementation notes: copied over from the Isis transaction when the interaction is persisted.
-     */
-    @Override
-    public void setTransactionId(final UUID transactionId) {
-        this.transactionId = transactionId;
-    }
 
     // //////////////////////////////////////
     // nature (property)
@@ -352,6 +379,10 @@ public class InteractionJdo implements Interaction, HasTransactionId {
 
     private Nature nature;
 
+    /**
+     * Not persisted, used as a hint that an action was invoked explicitly by the user
+     * (rather than as a side-effect, eg of rendering an object due to get-after-post).
+     */
     @javax.jdo.annotations.NotPersistent
     @Programmatic
     @Override
@@ -363,7 +394,7 @@ public class InteractionJdo implements Interaction, HasTransactionId {
      * <b>NOT API</b>: intended to be called only by the framework.
      * 
      * <p>
-     * Implementation notes: populated by the viewer as hint to {@link InteractionFactory} implementation.
+     * Implementation notes: populated by the viewer as hint to {@link InteractionService} implementation.
      */
     @Override
     public void setNature(Nature nature) {
@@ -373,53 +404,55 @@ public class InteractionJdo implements Interaction, HasTransactionId {
     
     // //////////////////////////////////////
     // result (property)
+    // openResultObject (action)
     // //////////////////////////////////////
 
     @Programmatic
     @Override
     public Bookmark getResult() {
-        return getResultStr() != null? new Bookmark(getResultStr()): null;
+        return Util.bookmarkFor(getResultStr());
     }
-    
+
     @Programmatic
     @Override
     public void setResult(Bookmark result) {
-        setResultStr(result != null? result.toString(): null);
+        setResultStr(Util.asString(result));
     }
 
+    // //////////////////////////////////////
+    
     private String resultStr;
-    @javax.jdo.annotations.Column(allowsNull="true", length=255, name="result")
+
+    @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.BOOKMARK, name="result")
     @Hidden(where=Where.ALL_TABLES)
     @Named("Result Bookmark")
     @MemberOrder(name="Results", sequence="25")
+    @Disabled
     public String getResultStr() {
         return resultStr;
     }
 
     public void setResultStr(final String resultStr) {
-        this.resultStr = abbreviated(resultStr,255);
+        this.resultStr = resultStr;
     }
 
-    
-    // //////////////////////////////////////
-    // openResultObject (action)
     // //////////////////////////////////////
 
     @ActionSemantics(Of.SAFE)
     @MemberOrder(name="ResultStr", sequence="1")
     @Named("Open")
     public Object openResultObject() {
-        Bookmark bookmark = getResult();
-        return lookupBookmark(bookmark);
+        return Util.lookupBookmark(getResult(), bookmarkService, container);
     }
     public boolean hideOpenResultObject() {
-        return getResultStr() == null;
+        return getResult() == null;
     }
-
 
 
     // //////////////////////////////////////
     // exception (property)
+    // causedException (derived property)
+    // showException (associated action)
     // //////////////////////////////////////
 
     private String exception;
@@ -433,7 +466,7 @@ public class InteractionJdo implements Interaction, HasTransactionId {
      * Not part of the applib API, because the default implementation is not persistent
      * and so there's no object that can be accessed to be annotated.
      */
-    @javax.jdo.annotations.Column(allowsNull="true", length=2000)
+    @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.Interaction.EXCEPTION)
     @Hidden
     @Override
     public String getException() {
@@ -442,13 +475,10 @@ public class InteractionJdo implements Interaction, HasTransactionId {
 
     @Override
     public void setException(final String exception) {
-        this.exception = abbreviated(exception, 2000);
+        this.exception = Util.abbreviated(exception, JdoColumnLength.Interaction.EXCEPTION);
     }
     
     
-    // //////////////////////////////////////
-    // causedException (derived property)
-    // showException (associated action)
     // //////////////////////////////////////
     
     @javax.jdo.annotations.NotPersistent
@@ -458,6 +488,9 @@ public class InteractionJdo implements Interaction, HasTransactionId {
         return getException() != null;
     }
 
+    
+    // //////////////////////////////////////
+    
     @ActionSemantics(Of.SAFE)
     @MemberOrder(name="causedException", sequence = "1")
     public String showException() {
@@ -467,6 +500,28 @@ public class InteractionJdo implements Interaction, HasTransactionId {
         return !isCausedException();
     }
 
+
+    // //////////////////////////////////////
+    // next(...) impl
+    // //////////////////////////////////////
+
+    private final Map<String, AtomicInteger> sequenceByName = Maps.newHashMap();
+
+    @Programmatic
+    @Override
+    public int next(String sequenceName) {
+        AtomicInteger next = sequenceByName.get(sequenceName);
+        if(next == null) {
+            next = new AtomicInteger(0);
+            sequenceByName.put(sequenceName, next);
+        } else {
+            next.incrementAndGet();
+        }
+        return next.get();
+    }
+
+    // //////////////////////////////////////
+    // toString
     // //////////////////////////////////////
 
 
@@ -475,26 +530,7 @@ public class InteractionJdo implements Interaction, HasTransactionId {
         return ObjectContracts.toString(this, "startedAt,user,actionIdentifier,target,completedAt,duration,transactionId");
     }
 
-    // //////////////////////////////////////
-
-    private Object lookupBookmark(Bookmark bookmark) {
-        try {
-        return bookmarkService != null
-                ? bookmarkService.lookup(bookmark)
-                : null;
-        } catch(RuntimeException ex) {
-            if(ex.getClass().getName().contains("ObjectNotFoundException")) {
-                container.warnUser("Object not found - has it since been deleted?");
-                return null;
-            } 
-            throw ex;
-        }
-    }
-
-    private static String abbreviated(final String str, final int maxLength) {
-        return str != null? (str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "..."): null;
-    }
-
+    
     // //////////////////////////////////////
     
     @javax.inject.Inject

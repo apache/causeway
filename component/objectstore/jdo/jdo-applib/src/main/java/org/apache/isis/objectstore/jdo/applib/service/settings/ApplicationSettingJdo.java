@@ -24,10 +24,11 @@ import javax.jdo.annotations.IdentityType;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.services.settings.ApplicationSetting;
 import org.apache.isis.applib.services.settings.SettingType;
+import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType = IdentityType.APPLICATION,
-        table="ApplicationSetting")
+        table="IsisApplicationSetting")
 @javax.jdo.annotations.Queries({ 
      @javax.jdo.annotations.Query(
              name = "findByKey", language = "JDOQL", 
@@ -43,7 +44,8 @@ import org.apache.isis.applib.services.settings.SettingType;
 @Named("Application Setting")
 public class ApplicationSettingJdo extends SettingAbstractJdo implements ApplicationSetting {
 
-    @javax.jdo.annotations.Column(length=128)
+
+    @javax.jdo.annotations.Column(length=JdoColumnLength.SettingAbstract.SETTING_KEY)
     @javax.jdo.annotations.PrimaryKey
     public String getKey() {
         return super.getKey();
@@ -55,7 +57,7 @@ public class ApplicationSettingJdo extends SettingAbstractJdo implements Applica
 
     // //////////////////////////////////////
 
-    @javax.jdo.annotations.Column(length=254)
+    @javax.jdo.annotations.Column(length=JdoColumnLength.DESCRIPTION)
     @javax.jdo.annotations.Persistent
     @Override
     public String getDescription() {
@@ -68,7 +70,7 @@ public class ApplicationSettingJdo extends SettingAbstractJdo implements Applica
     
     // //////////////////////////////////////
 
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.SettingAbstract.VALUE_RAW)
     @javax.jdo.annotations.Persistent
     @Override
     public String getValueRaw() {
@@ -81,7 +83,7 @@ public class ApplicationSettingJdo extends SettingAbstractJdo implements Applica
     
     // //////////////////////////////////////
 
-    @javax.jdo.annotations.Column(allowsNull="false", length=20)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.SettingAbstract.SETTING_TYPE)
     @javax.jdo.annotations.Persistent
     @Override
     public SettingType getType() {

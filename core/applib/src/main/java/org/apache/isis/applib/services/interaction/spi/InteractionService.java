@@ -31,7 +31,7 @@ import org.apache.isis.applib.services.interaction.Interaction;
  * services (eg as provided by the JDO objectstore) might provide a persistable 
  * {@link Interaction} object.
  */
-public interface InteractionFactory {
+public interface InteractionService {
 
     @Programmatic
     Interaction create();

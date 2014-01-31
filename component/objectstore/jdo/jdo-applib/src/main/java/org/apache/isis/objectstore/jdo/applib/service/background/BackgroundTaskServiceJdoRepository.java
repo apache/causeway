@@ -26,10 +26,10 @@ import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
 
-public class BackgroundTaskRepository extends AbstractFactoryAndRepository {
+public class BackgroundTaskServiceJdoRepository extends AbstractFactoryAndRepository {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(BackgroundTaskRepository.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BackgroundTaskServiceJdoRepository.class);
 
     @Programmatic
     public List<BackgroundTaskJdo> listAll() {

@@ -44,7 +44,7 @@ import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.applib.services.interaction.Interaction;
 import org.apache.isis.applib.services.interaction.InteractionContext;
 import org.apache.isis.applib.services.interaction.InteractionDefault;
-import org.apache.isis.applib.services.interaction.spi.InteractionFactory;
+import org.apache.isis.applib.services.interaction.spi.InteractionService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -306,12 +306,12 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         if(ic == null) {
             return;
         } 
-        final InteractionFactory interactionFactory = getServiceOrNull(InteractionFactory.class);
+        final InteractionService interactionFactory = getServiceOrNull(InteractionService.class);
         final Interaction interaction = interactionFactory != null ? interactionFactory.create() : new InteractionDefault();
         ic.setInteraction(interaction);
 
-        if(interaction.getStartedAt() == null) {
-            interaction.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
+        if(interaction.getTimestamp() == null) {
+            interaction.setTimestamp(Clock.getTimeAsJavaSqlTimestamp());
         }
         if(interaction.getUser() == null) {
             interaction.setUser(getAuthenticationSession().getUserName());
@@ -334,7 +334,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         if(interactionContext == null) {
             return;
         } 
-        final InteractionFactory interactionFactory = getServiceOrNull(InteractionFactory.class);
+        final InteractionService interactionFactory = getServiceOrNull(InteractionService.class);
         if(interactionFactory == null) {
             return;
         } 
@@ -417,10 +417,9 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     private void completeInteractionIfConfigured() {
         final InteractionContext interactionContext = getServiceOrNull(InteractionContext.class);
         if(interactionContext != null) {
-            final InteractionFactory interactionFactory = getServiceOrNull(InteractionFactory.class);
+            final InteractionService interactionFactory = getServiceOrNull(InteractionService.class);
             if(interactionFactory != null) {
                 final Interaction interaction = interactionContext.getInteraction();
-                final IsisTransaction transaction = getTransactionManager().getTransaction();
                 interactionFactory.complete(interaction);
             }
         }

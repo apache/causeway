@@ -123,15 +123,39 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
             }
 
             LOG.info("creating service " + serviceName + (order!=Integer.MAX_VALUE?" at position " + order: "" ));
-            Object service = serviceName.indexOf(DELIMITER) == -1 
-                    ? createService(servicePrefix + serviceName) 
-                    : createSimpleRepository(servicePrefix, serviceName);
-            list.add(service);
+            Object service = instantiateService(servicePrefix, serviceName);
+            if(service != null) {
+                list.add(service);
+            }
         }
         for (Integer position : positionedServices.keySet()) {
             final List<Object> list = positionedServices.get(position);
             serviceList.addAll(list);
         }
+    }
+
+    private Object instantiateService(final String servicePrefix, String serviceName) {
+        final int pos = serviceName.indexOf(DELIMITER);
+        if( pos == 0) {
+            // a commented out line, in other words...
+            return null;
+        }
+        if (pos != -1) {
+            final String type = serviceName.substring(0, pos);
+            if ("repository".equals(type)) {
+                final String className = servicePrefix + serviceName.substring(pos + 1);
+                
+                final Class<?> underlying = loadClass(className);
+                return new SimpleRepository(underlying);
+            } else {
+                // disregard, assume the stuff after the delimiter (#) was a comment
+                final Class<?> cls = loadClass(type);
+                return serviceInstantiator.createInstance(cls);
+            }
+        } 
+        
+        final Class<?> cls = loadClass(servicePrefix + serviceName);
+        return serviceInstantiator.createInstance(cls);
     }
 
     private void appendObjectFixtureService(final IsisConfiguration configuration, final String root, List<Object> serviceList) {
@@ -141,29 +165,6 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
                 serviceList.add(new ObjectFixtureService());
             }
         }
-    }
-
-    /**
-     * In the format <tt>xxx#aaa.bbb.ccc.DddEee</tt> where <tt>xxx</tt> is the
-     * name of the repository, and <tt>aaa.bbb.ccc.DddEee</tt> is the fully
-     * qualified class name.
-     * 
-     */
-    private Object createSimpleRepository(final String prefix, final String name) {
-        final int pos = name.indexOf(DELIMITER);
-        final String type = name.substring(0, pos);
-        if (!"repository".equals(type)) {
-            throw new InitialisationException(String.format("Unknown service type '%s'", type));
-        }
-        final String className = prefix + name.substring(pos + 1);
-
-        final Class<?> underlying = loadClass(className);
-        return new SimpleRepository(underlying);
-    }
-
-    private Object createService(final String className) {
-        final Class<?> cls = loadClass(className);
-        return serviceInstantiator.createInstance(cls);
     }
 
     private static String servicePrefix(final String servicePrefix) {

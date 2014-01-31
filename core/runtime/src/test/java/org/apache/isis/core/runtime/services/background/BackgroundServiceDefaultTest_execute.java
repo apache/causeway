@@ -16,8 +16,7 @@
  */
 package org.apache.isis.core.runtime.services.background;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 import java.lang.reflect.Method;
 import java.util.UUID;
@@ -34,20 +33,17 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundTaskService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.interaction.Interaction;
 import org.apache.isis.applib.services.interaction.InteractionContext;
 import org.apache.isis.applib.services.interaction.InteractionDefault;
-import org.apache.isis.applib.services.memento.MementoService;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -59,21 +55,6 @@ public class BackgroundServiceDefaultTest_execute {
     @Mock
     private BookmarkService mockBookmarkService;
 
-    static class InteractionWithTransactionId extends InteractionDefault implements HasTransactionId {
-
-        private UUID transactionId;
-        
-        @Override
-        public UUID getTransactionId() {
-            return transactionId;
-        }
-
-        @Override
-        public void setTransactionId(UUID transactionId) {
-            this.transactionId = transactionId;
-        }
-    }
-    
     @Mock
     private SpecificationLoaderSpi mockSpecificationLoaderSpi;
     @Mock
@@ -85,8 +66,9 @@ public class BackgroundServiceDefaultTest_execute {
     @Mock
     private InteractionContext mockInteractionContext;
 
-    private InteractionWithTransactionId interactionWithTransactionId;
+    private Interaction interaction;
     private UUID transactionId = UUID.fromString("1231231231");
+    private int sequence = 2;
     
     @Mock
     private BackgroundTaskService mockBackgroundTaskService;
@@ -126,9 +108,9 @@ public class BackgroundServiceDefaultTest_execute {
         backgroundService.injectInteractionContext(mockInteractionContext);
         backgroundService.injectBackgroundTaskService(mockBackgroundTaskService);
 
-        interactionWithTransactionId = new InteractionWithTransactionId();
-        interactionWithTransactionId.setTransactionId(transactionId);
-        interactionWithTransactionId.setUser("fbloggs");
+        interaction = new InteractionDefault();
+        interaction.setTransactionId(transactionId);
+        interaction.setUser("fbloggs");
         
         context.checking(new Expectations() {
             {
@@ -139,7 +121,7 @@ public class BackgroundServiceDefaultTest_execute {
                 will(returnValue(Customer.class.getName()));
                 
                 allowing(mockInteractionContext).getInteraction();
-                will(returnValue(interactionWithTransactionId));
+                will(returnValue(interaction));
             }
         });
         customer = new Customer();
@@ -168,7 +150,8 @@ public class BackgroundServiceDefaultTest_execute {
                 
                 oneOf(mockBackgroundTaskService).execute(
                         with(x()), 
-                        with(equalTo(transactionId)));
+                        with(equalTo(transactionId)),
+                        with(equalTo(sequence)));
             }
 
             protected Matcher<ActionInvocationMemento> x() {

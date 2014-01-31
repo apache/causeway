@@ -35,15 +35,14 @@ public class PublishingServiceJdo extends AbstractService implements PublishingS
 
     @Override
     @Programmatic
-    public void publish(EventMetadata metadata, EventPayload payload) {
+    public void publish(final EventMetadata metadata, final EventPayload payload) {
         final String serializedEvent = eventSerializer.serialize(metadata, payload).toString();
-        final PublishedEvent publishedEvent = newTransientInstance(PublishedEvent.class);
+        final PublishedEventJdo publishedEvent = newTransientInstance(PublishedEventJdo.class);
         publishedEvent.setSerializedForm(serializedEvent);
-        publishedEvent.setId(metadata.getId());
         publishedEvent.setTransactionId(metadata.getTransactionId());
         publishedEvent.setSequence(metadata.getSequence());
         publishedEvent.setEventType(metadata.getEventType());
-        publishedEvent.setTimestamp(metadata.getTimestamp());
+        publishedEvent.setTimestamp(metadata.getJavaSqlTimestamp());
         publishedEvent.setUser(metadata.getUser());
         publishedEvent.setTitle(metadata.getTitle());
         persist(publishedEvent);
@@ -52,6 +51,7 @@ public class PublishingServiceJdo extends AbstractService implements PublishingS
     // //////////////////////////////////////
 
     private EventSerializer eventSerializer;
+    
     @Override
     public void setEventSerializer(EventSerializer eventSerializer) {
         this.eventSerializer = eventSerializer;

@@ -21,7 +21,11 @@ package org.apache.isis.core.metamodel.facets.actions.invoke;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
+import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.interaction.InteractionContext;
+import org.apache.isis.applib.services.interaction.spi.InteractionService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -53,11 +57,15 @@ public interface ActionInvocationFacet extends Facet {
         private final List<ObjectAdapter> parameters;
         private final ObjectAdapter result;
 
-        public CurrentInvocation(ObjectAdapter target, IdentifiedHolder action, ObjectAdapter[] parameters, ObjectAdapter result) {
+        public CurrentInvocation(
+                final ObjectAdapter target, final IdentifiedHolder action, final ObjectAdapter[] parameters, 
+                final ObjectAdapter result) {
             this(target, action, Arrays.asList(parameters), result);
         }
 
-        public CurrentInvocation(ObjectAdapter target, IdentifiedHolder action, List<ObjectAdapter> parameters, ObjectAdapter result) {
+        public CurrentInvocation(
+                final ObjectAdapter target, final IdentifiedHolder action, final List<ObjectAdapter> parameters, 
+                final ObjectAdapter result) {
             this.target = target;
             this.action = action;
             this.parameters = parameters;
@@ -79,6 +87,11 @@ public interface ActionInvocationFacet extends Facet {
         }
     }
     
+    /**
+     * TODO...
+     * @deprecated - should instead use the InteractionContext request.
+     */
+    @Deprecated
     public static ThreadLocal<CurrentInvocation> currentInvocation = new ThreadLocal<CurrentInvocation>();
 
 

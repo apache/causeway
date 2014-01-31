@@ -25,6 +25,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -45,8 +46,11 @@ import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.interaction.Interaction;
+import org.apache.isis.applib.services.interaction.InteractionContext;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.services.publish.ObjectStringifier;
@@ -183,7 +187,11 @@ public class IsisTransaction implements TransactionScopedComponent {
     private final IsisTransactionManager transactionManager;
     private final org.apache.isis.core.commons.authentication.MessageBroker messageBroker;
     private final UpdateNotifier updateNotifier;
-    private IsisException abortCause;
+
+    /**
+     * the 'owning' interaction, if configured.
+     */
+    private final Interaction interaction;
 
     /**
      * could be null if none has been registered.
@@ -194,14 +202,27 @@ public class IsisTransaction implements TransactionScopedComponent {
      */
     private final PublishingServiceWithDefaultPayloadFactories publishingService;
 
+    /**
+     * Will be that of the {@link #interaction} if not <tt>null</tt>, otherwise will be randomly created.
+     */
+    private final UUID transactionId;
+    /**
+     * Only used if {@link #interaction} is <tt>null</tt>; generates sequence within the {@link #transactionId}
+     */
+    private int publishedEventSequence;
+    
     private State state;
+    private IsisException abortCause;
 
-    private final UUID guid;
 
-
-    private int eventSequence;
-
-    public IsisTransaction(final IsisTransactionManager transactionManager, final org.apache.isis.core.commons.authentication.MessageBroker messageBroker, final UpdateNotifier updateNotifier, final TransactionalResource objectStore, final AuditingService3 auditingService3, PublishingServiceWithDefaultPayloadFactories publishingService) {
+    public IsisTransaction(
+            final IsisTransactionManager transactionManager, 
+            final org.apache.isis.core.commons.authentication.MessageBroker messageBroker, 
+            final UpdateNotifier updateNotifier, 
+            final TransactionalResource objectStore, 
+            final InteractionContext interactionContext, 
+            final AuditingService3 auditingService3, 
+            final PublishingServiceWithDefaultPayloadFactories publishingService) {
         
         ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
         ensureThatArg(messageBroker, is(not(nullValue())), "message broker is required");
@@ -213,9 +234,20 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.auditingService3 = auditingService3;
         this.publishingService = publishingService;
 
-        this.guid = UUID.randomUUID();
-        this.eventSequence = 0;
-
+        // determine whether this xactn is taking place in the context of an
+        // existing interaction in which a previous xactn has already occurred.
+        // if so, reuse that transactionId.
+        UUID previousTransactionIdWithinSameInteraction = null;
+        if(interactionContext != null) {
+            interaction = interactionContext.getInteraction();
+            previousTransactionIdWithinSameInteraction = interaction.getTransactionId();
+        } else {
+            interaction = null;
+        }
+        this.transactionId = previousTransactionIdWithinSameInteraction != null
+            ? previousTransactionIdWithinSameInteraction
+            : UUID.randomUUID();
+        
         this.state = State.IN_PROGRESS;
 
         this.objectStore = objectStore;
@@ -228,8 +260,8 @@ public class IsisTransaction implements TransactionScopedComponent {
     // GUID
     // ////////////////////////////////////////////////////////////////
 
-    public final UUID getGuid() {
-        return guid;
+    public final UUID getTransactionId() {
+        return transactionId;
     }
     
     
@@ -420,7 +452,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
-    protected void publishActionIfRequired(final String currentUser, final long currentTimestampEpoch) {
+    protected void publishActionIfRequired(final String currentUser, final java.sql.Timestamp timestamp) {
 
         if(publishingService == null) {
             return;
@@ -441,7 +473,7 @@ public class IsisTransaction implements TransactionScopedComponent {
             final String oidStr = getOidMarshaller().marshal(adapterOid);
             final String title = oidStr + ": " + currentInvocation.getAction().getIdentifier().toNameParmsIdentityString();
             
-            final EventMetadata metadata = newEventMetadata(EventType.ACTION_INVOCATION, currentUser, currentTimestampEpoch, title);
+            final EventMetadata metadata = newEventMetadata(EventType.ACTION_INVOCATION, currentUser, timestamp, title);
             publishingService.publishAction(payloadFactory, metadata, currentInvocation, objectStringifier());
         } finally {
             // ensures that cannot publish this action more than once
@@ -452,7 +484,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     /**
      * @return the adapters that were published (if any were).
      */
-    protected List<ObjectAdapter> publishedChangedObjectsIfRequired(final String currentUser, final long currentTimestampEpoch) {
+    protected List<ObjectAdapter> publishedChangedObjectsIfRequired(final String currentUser, final java.sql.Timestamp timestamp) {
         if(publishingService == null) {
             return Collections.emptyList();
         }
@@ -472,7 +504,8 @@ public class IsisTransaction implements TransactionScopedComponent {
             final String oidStr = getOidMarshaller().marshal(adapterOid);
             final String title = oidStr;
         
-            final EventMetadata metadata = newEventMetadata(eventTypeFor(changeKind), currentUser, currentTimestampEpoch, title);
+            final EventType eventTypeFor = eventTypeFor(changeKind);
+            final EventMetadata metadata = newEventMetadata(eventTypeFor, currentUser, timestamp, title);
         
             publishingService.publishObject(payloadFactory, metadata, enlistedAdapter, changeKind, objectStringifier());
         }
@@ -520,15 +553,24 @@ public class IsisTransaction implements TransactionScopedComponent {
         return objectStringifier;
     }
 
-    private EventMetadata newEventMetadata(EventType eventType, final String currentUser, final long currentTimestampEpoch, String title) {
-        return new EventMetadata(getGuid(), nextEventSequence(), eventType, currentUser, currentTimestampEpoch, title);
+    private EventMetadata newEventMetadata(
+            final EventType eventType, final String currentUser, final java.sql.Timestamp timestampEpoch, final String title) {
+        int nextEventSequence = nextEventSequence();
+        return new EventMetadata(
+                getTransactionId(), nextEventSequence, eventType, currentUser, timestampEpoch, title);
     }
 
     private int nextEventSequence() {
-        return eventSequence++;
+        if(interaction != null) {
+            return interaction.next("publishedEvent");
+        } else {
+            return publishedEventSequence++;
+        }
+            
     }
-    
-    public void auditChangedProperty(final java.sql.Timestamp timestamp, final String user, final Entry<AdapterAndProperty, PreAndPostValues> auditEntry) {
+
+    public void auditChangedProperty(
+            final java.sql.Timestamp timestamp, final String user, final Entry<AdapterAndProperty, PreAndPostValues> auditEntry) {
         final AdapterAndProperty aap = auditEntry.getKey();
         final ObjectAdapter adapter = aap.getAdapter();
         if(!adapter.getSpecification().containsFacet(AuditableFacet.class)) {
@@ -544,7 +586,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
         final Bookmark target = new Bookmark(objectType, identifier);
 
-        auditingService3.audit(timestamp, user, target, propertyId, preValue, postValue);
+        auditingService3.audit(getTransactionId(), target, propertyId, preValue, postValue, user, timestamp);
     }
 
     private static String asString(Object object) {
@@ -583,7 +625,7 @@ public class IsisTransaction implements TransactionScopedComponent {
             doAudit(getChangedObjectProperties());
             
             final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
-            final long endTimestamp = Clock.getTime();
+            final Timestamp endTimestamp = Clock.getTimeAsJavaSqlTimestamp();
             
             publishActionIfRequired(currentUser, endTimestamp);
             doFlush();
@@ -871,6 +913,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     private final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties = Maps.newLinkedHashMap();
 
     private ObjectStringifier objectStringifier;
+
 
 
 
