@@ -19,20 +19,27 @@
 
 package org.apache.isis.core.progmodel.facets.actions.invoke;
 
+import java.awt.Desktop.Action;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
+import org.apache.isis.applib.services.background.ActionInvocationMemento;
+import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.memento.MementoService;
 import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
 import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
-import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -50,7 +57,6 @@ import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
 import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
 
@@ -134,34 +140,32 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
             }
 
 
-            if(reifiableAction != null) {
-                if(reifiableAction.getNature() == ReifiableAction.Nature.USER_INITIATED && owningAction != null) {
+            if(reifiableAction != null && reifiableAction.getNature() == ReifiableAction.Nature.USER_INITIATED && owningAction != null) {
 
-                    final String actionIdentifier = owningAction.getIdentifier().toClassAndNameIdentityString();
-                    reifiableAction.setActionIdentifier(actionIdentifier);
-                    
-                    String targetClassName = StringExtensions.asNaturalName2(targetAdapter.getSpecification().getSingularName());
-                    String actionName = owningAction.getName();
-                    reifiableAction.setTargetClass(targetClassName);
-                    reifiableAction.setTargetAction(actionName);
-                    
-                    final StringBuilder argsBuf = new StringBuilder();
-                    List<ObjectActionParameter> parameters = owningAction.getParameters();
-                    if(parameters.size() == arguments.length) {
-                        // should be the case
-                        int i=0;
-                        for (ObjectActionParameter param : parameters) {
-                            appendParamArg(argsBuf, param, arguments[i++]);
-                        }
-                    }
-                    reifiableAction.setArguments(argsBuf.toString());
-
-                    final boolean reifiable = getFacetHolder().containsDoOpFacet(ReifiedActionFacet.class);
-                    reifiableAction.setReify(reifiable);
-                }
+                reifiableAction.setActionIdentifier(ReifiableActionUtil.actionIdentifierFor(owningAction));
+                reifiableAction.setTargetClass(ReifiableActionUtil.targetClassNameFor(targetAdapter));
+                reifiableAction.setTargetAction(ReifiableActionUtil.targetActionNameFor(owningAction));
+                reifiableAction.setArguments(ReifiableActionUtil.argDescriptionFor(owningAction, arguments));
                 
-                final Bookmark bookmark = bookmarkFor(targetAdapter);
-                reifiableAction.setTarget(bookmark);
+                final Bookmark targetBookmark = ReifiableActionUtil.bookmarkFor(targetAdapter);
+                reifiableAction.setTarget(targetBookmark);
+                
+                
+                final BackgroundService backgroundService = getServicesInjector().lookupService(BackgroundService.class);
+                if(backgroundService != null) {
+                    final Object targetObject = unwrap(targetAdapter);
+                    final Object[] args = ReifiableActionUtil.objectsFor(arguments);
+                    ActionInvocationMemento aim = backgroundService.asActionInvocationMemento(method, targetObject, args);
+
+                    if(aim != null) {
+                        reifiableAction.setMemento(aim.asMementoString());
+                    } else {
+                        throw new IsisException("Unable to build memento for action " + owningAction.getIdentifier().toClassAndNameIdentityString());
+                    }
+                }
+
+                final boolean reifiable = getFacetHolder().containsDoOpFacet(ReifiedActionFacet.class);
+                reifiableAction.setReify(reifiable);
             }
             
             final Object result = method.invoke(object, executionParameters);
@@ -182,7 +186,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
             
             if(reifiableAction != null) {
                 if(!resultAdapter.getSpecification().containsDoOpFacet(ViewModelFacet.class)) {
-                    final Bookmark bookmark = bookmarkFor(resultAdapter);
+                    final Bookmark bookmark = ReifiableActionUtil.bookmarkFor(resultAdapter);
                     reifiableAction.setResult(bookmark);
                 }
             }
@@ -207,21 +211,6 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
         } catch (final IllegalAccessException e) {
             throw new ReflectiveActionException("Illegal access of " + method, e);
         }
-    }
-    
-
-    private static Bookmark bookmarkFor(final ObjectAdapter resultAdapter) {
-        final Oid oid = resultAdapter.getOid();
-        if(!(oid instanceof RootOid)) {
-            return null;
-        } 
-        final RootOid rootOid = (RootOid) oid;
-        return rootOid.asBookmark();
-    }
-
-    private void appendParamArg(final StringBuilder buf, ObjectActionParameter param, ObjectAdapter objectAdapter) {
-        String titleOf = objectAdapter != null? objectAdapter.titleString(null): "null";
-        buf.append(param.getName()).append(": ").append(titleOf).append("\n");
     }
 
     private static Object unwrap(final ObjectAdapter adapter) {

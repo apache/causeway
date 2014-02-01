@@ -30,7 +30,9 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -44,6 +46,9 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
+import org.apache.isis.applib.services.reifiableaction.ReifiableAction.Nature;
+import org.apache.isis.applib.services.reifiableaction.spi.ReifiableActionService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
 import org.apache.isis.objectstore.jdo.applib.service.Util;
@@ -174,6 +179,76 @@ public class BackgroundTaskJdo implements HasTransactionId {
 
 
 
+    // //////////////////////////////////////
+    // nature (property)
+    // //////////////////////////////////////
+
+    private Nature nature;
+
+    /**
+     * Whether the action was invoked explicitly by the user, or scheduled as a background
+     * task, or as for some other reason, eg a side-effect of rendering an object due to 
+     * get-after-post).
+     */
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.ReifiableAction.NATURE)
+    @TypicalLength(30)
+    @MemberOrder(name="Identifiers", sequence = "10")
+    public Nature getNature() {
+        return nature;
+    }
+    
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     * 
+     * <p>
+     * Implementation notes: populated by the viewer as hint to {@link ReifiableActionService} implementation.
+     */
+    public void setNature(Nature nature) {
+        this.nature = nature;
+    }
+    
+
+
+    // //////////////////////////////////////
+    // targetClass (property)
+    // //////////////////////////////////////
+
+    private String targetClass;
+
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.ReifiableAction.TARGET_CLASS)
+    @TypicalLength(30)
+    @MemberOrder(name="Target", sequence = "10")
+    @Named("Class")
+    public String getTargetClass() {
+        return targetClass;
+    }
+
+    public void setTargetClass(final String targetClass) {
+        this.targetClass = Util.abbreviated(targetClass, JdoColumnLength.ReifiableAction.TARGET_CLASS);
+    }
+
+
+    // //////////////////////////////////////
+    // targetAction (property)
+    // //////////////////////////////////////
+    
+    private String targetAction;
+    
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.ReifiableAction.TARGET_ACTION)
+    @TypicalLength(30)
+    @MemberOrder(name="Target", sequence = "20")
+    @Named("Action")
+    public String getTargetAction() {
+        return targetAction;
+    }
+    
+    public void setTargetAction(final String targetAction) {
+        this.targetAction = Util.abbreviated(targetAction, JdoColumnLength.ReifiableAction.TARGET_ACTION);
+    }
+    
+
+    
+
 
     // //////////////////////////////////////
     // target (property)
@@ -241,6 +316,28 @@ public class BackgroundTaskJdo implements HasTransactionId {
     public void setActionIdentifier(final String actionIdentifier) {
         this.actionIdentifier = Util.abbreviated(actionIdentifier, JdoColumnLength.ACTION_IDENTIFIER);
     }
+
+
+    
+    // //////////////////////////////////////
+    // arguments (property)
+    // //////////////////////////////////////
+    
+    private String arguments;
+    
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.ReifiableAction.ARGUMENTS)
+    @MultiLine(numberOfLines=6)
+    @Hidden(where=Where.ALL_TABLES)
+    @MemberOrder(name="Detail",sequence = "4")
+    @Disabled
+    public String getArguments() {
+        return arguments;
+    }
+    
+    public void setArguments(final String arguments) {
+        this.arguments = Util.abbreviated(arguments, JdoColumnLength.ReifiableAction.ARGUMENTS);
+    }
+
 
 
     // //////////////////////////////////////
@@ -335,6 +432,7 @@ public class BackgroundTaskJdo implements HasTransactionId {
         return getCompletedAt() != null;
     }
 
+    
     // //////////////////////////////////////
     // toString
     // //////////////////////////////////////

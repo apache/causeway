@@ -449,7 +449,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private void catalogueActions(final Map<Method, ObjectMember> membersByMethod) {
-        final List<ObjectAction> userActions = getObjectActions(ActionType.USER, Contributed.INCLUDED, Filters.<ObjectAction>any());
+        final List<ObjectAction> userActions = getObjectActions(Contributed.INCLUDED);
         for (int i = 0; i < userActions.size(); i++) {
             final ObjectAction userAction = userActions.get(i);
             final List<Facet> facets = userAction.getFacets(ImperativeFacet.FILTER);

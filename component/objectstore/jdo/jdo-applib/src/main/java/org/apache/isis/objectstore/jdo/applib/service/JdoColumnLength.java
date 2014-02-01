@@ -39,14 +39,14 @@ public final class JdoColumnLength {
         public static final int VALUE_RAW = 255;
     }
 
-    public static final class Interaction {
-        private Interaction() {
+    public static final class ReifiableAction {
+        private ReifiableAction() {
         }
         public final static int TARGET_CLASS = 50;
         public final static int TARGET_ACTION = 50;
         public final static int ARGUMENTS = 1024;
-        public final static int NOTES = 1024;
         public final static int EXCEPTION = 2000;
+        public static final int NATURE = 20;
     }
 
     public static final class BackgroundTask {

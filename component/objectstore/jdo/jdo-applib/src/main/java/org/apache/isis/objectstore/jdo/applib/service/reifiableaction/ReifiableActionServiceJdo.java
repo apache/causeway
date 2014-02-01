@@ -35,13 +35,13 @@ public class ReifiableActionServiceJdo extends AbstractService implements Reifia
     /**
      * Creates an {@link ReifiableActionJdo}, initializing its 
      * {@link ReifiableAction#setNature(ReifiableAction.Nature) nature} to be
-     * {@link ReifiableAction.Nature#INDIRECT rendering}.
+     * {@link ReifiableAction.Nature#OTHER rendering}.
      */
     @Programmatic
     @Override
     public ReifiableAction create() {
         ReifiableActionJdo reifiableAction = newTransientInstance(ReifiableActionJdo.class);
-        reifiableAction.setNature(ReifiableAction.Nature.INDIRECT);
+        reifiableAction.setNature(ReifiableAction.Nature.OTHER);
         return reifiableAction;
     }
 
@@ -90,4 +90,8 @@ public class ReifiableActionServiceJdo extends AbstractService implements Reifia
         } 
         return reifiableActionJdo;
     }
+    
+    
+    
+    
 }

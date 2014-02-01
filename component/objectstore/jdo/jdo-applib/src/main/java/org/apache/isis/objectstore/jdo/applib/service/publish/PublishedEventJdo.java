@@ -63,8 +63,7 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
                     + "WHERE transactionId == :transactionId")
 })
 @MemberGroupLayout(
-        //columnSpans={5,0,7},
-        left={"Identifiers","Detail"})
+        left={"Identifiers","Target","Detail"})
 @Immutable
 @ObjectType("IsisPublishedEvent")
 public class PublishedEventJdo implements HasTransactionId {
@@ -73,6 +72,47 @@ public class PublishedEventJdo implements HasTransactionId {
         QUEUED, PROCESSED
     }
     
+
+    // //////////////////////////////////////
+    // user (property)
+    // //////////////////////////////////////
+
+    private String user;
+    
+    @javax.jdo.annotations.Column(allowsNull="false", length=50)
+    @MemberOrder(name="Identifiers", sequence = "10")
+    @Hidden(where=Where.PARENTED_TABLES)
+    public String getUser() {
+        return user;
+    }
+    
+    public void setUser(final String user) {
+        this.user = user;
+    }
+    
+
+    // //////////////////////////////////////
+    // timestamp (property)
+    // //////////////////////////////////////
+
+    private java.sql.Timestamp timestamp;
+
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(allowsNull="false")
+    @MemberOrder(name="Identifiers", sequence = "20")
+    @Hidden(where=Where.PARENTED_TABLES)
+    public java.sql.Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(final java.sql.Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+    
+
+
+    // //////////////////////////////////////
+    // transactionId
     // //////////////////////////////////////
 
     private UUID transactionId;
@@ -86,7 +126,7 @@ public class PublishedEventJdo implements HasTransactionId {
      */
     @javax.jdo.annotations.PrimaryKey
     @javax.jdo.annotations.Column(allowsNull="false",length=JdoColumnLength.TRANSACTION_ID)
-    @MemberOrder(name="Identifiers", sequence = "10")
+    @MemberOrder(name="Identifiers", sequence = "30")
     @Hidden(where=Where.PARENTED_TABLES)
     @Override
     public UUID getTransactionId() {
@@ -113,50 +153,13 @@ public class PublishedEventJdo implements HasTransactionId {
      * primary key.
      */
     @javax.jdo.annotations.PrimaryKey
-    @MemberOrder(name="Identifiers", sequence = "20")
+    @MemberOrder(name="Identifiers", sequence = "40")
     public int getSequence() {
         return sequence;
     }
 
     public void setSequence(final int sequence) {
         this.sequence = sequence;
-    }
-    
-
-    // //////////////////////////////////////
-    // user (property)
-    // //////////////////////////////////////
-
-    private String user;
-    
-    @javax.jdo.annotations.Column(allowsNull="false", length=50)
-    @MemberOrder(name="Identifiers", sequence = "30")
-    @Hidden(where=Where.PARENTED_TABLES)
-    public String getUser() {
-        return user;
-    }
-    
-    public void setUser(final String user) {
-        this.user = user;
-    }
-    
-
-    // //////////////////////////////////////
-    // timestamp (property)
-    // //////////////////////////////////////
-
-    private java.sql.Timestamp timestamp;
-
-    @javax.jdo.annotations.Persistent
-    @javax.jdo.annotations.Column(allowsNull="false")
-    @MemberOrder(name="Identifiers", sequence = "40")
-    @Hidden(where=Where.PARENTED_TABLES)
-    public java.sql.Timestamp getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(final java.sql.Timestamp timestamp) {
-        this.timestamp = timestamp;
     }
     
 
@@ -168,8 +171,8 @@ public class PublishedEventJdo implements HasTransactionId {
 
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.PublishedEvent.TITLE)
     @Title
-    @MemberOrder(name="Detail", sequence = "10")
-    @Named("Target")
+    @MemberOrder(name="Target", sequence = "10")
+    @Named("Object")
     public String getTitle() {
         return title;
     }

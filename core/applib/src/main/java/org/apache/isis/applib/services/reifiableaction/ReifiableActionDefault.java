@@ -30,7 +30,7 @@ import org.apache.isis.applib.util.ObjectContracts;
 public class ReifiableActionDefault implements ReifiableAction {
 
     public ReifiableActionDefault() {
-        setNature(ReifiableAction.Nature.INDIRECT);
+        setNature(ReifiableAction.Nature.OTHER);
     }
     
     // //////////////////////////////////////
@@ -88,6 +88,23 @@ public class ReifiableActionDefault implements ReifiableAction {
         this.arguments = arguments;
     }
     
+    
+    // //////////////////////////////////////
+    // memento (property)
+    // //////////////////////////////////////
+    
+    private String memento;
+    
+    @Override
+    public String getMemento() {
+        return memento;
+    }
+    @Override
+    public void setMemento(String memento) {
+        this.memento = memento;
+    }
+    
+
     // //////////////////////////////////////
     // target (property)
     // //////////////////////////////////////
@@ -225,9 +242,28 @@ public class ReifiableActionDefault implements ReifiableAction {
     
     // //////////////////////////////////////
     
-    public void setReify(boolean reifyHint) {
-        // no-op
+    private boolean reify;
+    
+    public boolean isReify() {
+        return reify;
+    }
+    
+    public void setReify(boolean reify) {
+        this.reify = reify;
     }
     
     
+    // //////////////////////////////////////
+    
+    private int sequence;
+    
+    @Override
+    public int getSequence() {
+        return sequence;
+    }
+    
+    @Override
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
+    }
 }

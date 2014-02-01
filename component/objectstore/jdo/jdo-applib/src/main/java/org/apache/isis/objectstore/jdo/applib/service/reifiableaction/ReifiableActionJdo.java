@@ -32,8 +32,8 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
@@ -54,7 +54,8 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.APPLICATION, 
-        table="IsisReifiableAction")
+        table="IsisReifiableAction",
+        objectIdClass=ReifiableActionJdoPK.class)
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
             name="findByTransactionId", language="JDOQL",  
@@ -79,43 +80,13 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
         columnSpans={6,0,6}, 
         left={"Identifiers","Target","Notes"},
         right={"Detail","Timings","Results"})
-@Named("Interaction")
+@Named("Reifiable Action")
+@Immutable
 public class ReifiableActionJdo implements ReifiableAction {
 
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(ReifiableActionJdo.class);
 
-
-    // //////////////////////////////////////
-    // transactionId (property)
-    // //////////////////////////////////////
-
-        
-    private UUID transactionId;
-
-    /**
-     * The unique identifier (a GUID) of the transaction in which this action occurred.
-     */
-    @javax.jdo.annotations.PrimaryKey
-    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.TRANSACTION_ID)
-    @TypicalLength(JdoColumnLength.TRANSACTION_ID)
-    @MemberOrder(name="Identifiers",sequence = "10")
-    @Disabled
-    @Override
-    public UUID getTransactionId() {
-        return transactionId;
-    }
-
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     * 
-     * <p>
-     * Implementation notes: copied over from the Isis transaction when the action is persisted.
-     */
-    @Override
-    public void setTransactionId(final UUID transactionId) {
-        this.transactionId = transactionId;
-    }
 
     // //////////////////////////////////////
     // user (property)
@@ -125,7 +96,7 @@ public class ReifiableActionJdo implements ReifiableAction {
 
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.USER_NAME)
     @Title(sequence="2", prepend=", ")
-    @MemberOrder(name="Identifiers", sequence = "20")
+    @MemberOrder(name="Identifiers", sequence = "10")
     public String getUser() {
         return user;
     }
@@ -147,7 +118,7 @@ public class ReifiableActionJdo implements ReifiableAction {
      */
     @javax.jdo.annotations.Persistent
     @javax.jdo.annotations.Column(allowsNull="false")
-    @MemberOrder(name="Timings", sequence = "30")
+    @MemberOrder(name="Identifiers", sequence = "20")
     public Timestamp getTimestamp() {
         return timestamp;
     }
@@ -158,6 +129,99 @@ public class ReifiableActionJdo implements ReifiableAction {
 
     
     
+    // //////////////////////////////////////
+    // nature (property)
+    // //////////////////////////////////////
+
+    private Nature nature;
+
+    /**
+     * Whether the action was invoked explicitly by the user, or scheduled as a background
+     * task, or as for some other reason, eg a side-effect of rendering an object due to 
+     * get-after-post).
+     */
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.ReifiableAction.NATURE)
+    @TypicalLength(30)
+    @MemberOrder(name="Identifiers", sequence = "30")
+    @Override
+    public Nature getNature() {
+        return nature;
+    }
+    
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     * 
+     * <p>
+     * Implementation notes: populated by the viewer as hint to {@link ReifiableActionService} implementation.
+     */
+    @Override
+    public void setNature(Nature nature) {
+        this.nature = nature;
+    }
+
+
+    // //////////////////////////////////////
+    // transactionId (property)
+    // //////////////////////////////////////
+
+        
+    private UUID transactionId;
+
+    /**
+     * The unique identifier (a GUID) of the transaction in which this action occurred.
+     */
+    @javax.jdo.annotations.PrimaryKey
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.TRANSACTION_ID)
+    @TypicalLength(JdoColumnLength.TRANSACTION_ID)
+    @MemberOrder(name="Identifiers",sequence = "40")
+    @Override
+    public UUID getTransactionId() {
+        return transactionId;
+    }
+
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     * 
+     * <p>
+     * Implementation notes: copied over from the Isis transaction when the action is persisted.
+     */
+    @Override
+    public void setTransactionId(final UUID transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    
+    // //////////////////////////////////////
+    // sequence (property)
+    // //////////////////////////////////////
+
+    private int sequence;
+
+    /**
+     * The 0-based additional identifier of a published event within the given {@link #getTransactionId() transaction}.
+     * 
+     * <p>
+     * The combination of ({@link #getTransactionId() transactionId}, {@link #getSequence() sequence}) makes up the
+     * primary key.
+     * 
+     * <p>
+     * For {@link Nature#USER_INITIATED user-initiated} actions, this will always be <tt>0</tt>
+     */
+    @javax.jdo.annotations.PrimaryKey
+    @MemberOrder(name="Identifiers", sequence = "50")
+    public int getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(final int sequence) {
+        this.sequence = sequence;
+    }
+    
+    public boolean hideSequence() {
+        return Nature.USER_INITIATED.equals(getNature());
+    }
+
+
 
     // //////////////////////////////////////
     // targetClass (property)
@@ -165,7 +229,7 @@ public class ReifiableActionJdo implements ReifiableAction {
 
     private String targetClass;
 
-    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.Interaction.TARGET_CLASS)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.ReifiableAction.TARGET_CLASS)
     @TypicalLength(30)
     @MemberOrder(name="Target", sequence = "10")
     @Named("Class")
@@ -174,7 +238,7 @@ public class ReifiableActionJdo implements ReifiableAction {
     }
 
     public void setTargetClass(final String targetClass) {
-        this.targetClass = Util.abbreviated(targetClass, JdoColumnLength.Interaction.TARGET_CLASS);
+        this.targetClass = Util.abbreviated(targetClass, JdoColumnLength.ReifiableAction.TARGET_CLASS);
     }
 
 
@@ -184,7 +248,7 @@ public class ReifiableActionJdo implements ReifiableAction {
     
     private String targetAction;
     
-    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.Interaction.TARGET_ACTION)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.ReifiableAction.TARGET_ACTION)
     @TypicalLength(30)
     @MemberOrder(name="Target", sequence = "20")
     @Named("Action")
@@ -193,7 +257,7 @@ public class ReifiableActionJdo implements ReifiableAction {
     }
     
     public void setTargetAction(final String targetAction) {
-        this.targetAction = Util.abbreviated(targetAction, JdoColumnLength.Interaction.TARGET_ACTION);
+        this.targetAction = Util.abbreviated(targetAction, JdoColumnLength.ReifiableAction.TARGET_ACTION);
     }
     
 
@@ -218,10 +282,9 @@ public class ReifiableActionJdo implements ReifiableAction {
     
     private String targetStr;
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.BOOKMARK, name="target")
-    @Named("Target Bookmark")
     @Hidden(where=Where.ALL_TABLES)
-    @MemberOrder(name="Target", sequence="3")
-    @Disabled
+    @MemberOrder(name="Target", sequence="30")
+    @Named("Object")
     public String getTargetStr() {
         return targetStr;
     }
@@ -242,7 +305,27 @@ public class ReifiableActionJdo implements ReifiableAction {
         return getTarget() == null;
     }
 
+
+    // //////////////////////////////////////
+    // arguments (property)
+    // //////////////////////////////////////
     
+    private String arguments;
+    
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.ReifiableAction.ARGUMENTS)
+    @MultiLine(numberOfLines=6)
+    @Hidden(where=Where.ALL_TABLES)
+    @MemberOrder(name="Target",sequence = "40")
+    public String getArguments() {
+        return arguments;
+    }
+    
+    public void setArguments(final String arguments) {
+        this.arguments = Util.abbreviated(arguments, JdoColumnLength.ReifiableAction.ARGUMENTS);
+    }
+
+    
+
     // //////////////////////////////////////
     // actionIdentifier (property)
     // //////////////////////////////////////
@@ -265,23 +348,23 @@ public class ReifiableActionJdo implements ReifiableAction {
 
 
     // //////////////////////////////////////
-    // arguments (property)
+    // memento (property)
     // //////////////////////////////////////
     
-    private String arguments;
+    private String memento;
     
-    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.Interaction.ARGUMENTS)
-    @MultiLine(numberOfLines=6)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.BackgroundTask.MEMENTO)
+    @MultiLine(numberOfLines=10)
     @Hidden(where=Where.ALL_TABLES)
-    @MemberOrder(name="Detail",sequence = "4")
-    @Disabled
-    public String getArguments() {
-        return arguments;
+    @MemberOrder(name="Detail",sequence = "30")
+    public String getMemento() {
+        return memento;
     }
     
-    public void setArguments(final String arguments) {
-        this.arguments = Util.abbreviated(arguments, JdoColumnLength.Interaction.ARGUMENTS);
+    public void setMemento(final String memento) {
+        this.memento = memento;
     }
+
 
 
     // //////////////////////////////////////
@@ -293,7 +376,6 @@ public class ReifiableActionJdo implements ReifiableAction {
      */
     @javax.jdo.annotations.NotPersistent
     @MemberOrder(name="Timings", sequence = "3")
-    @Disabled
     public Timestamp getStartedAt() {
         return getTimestamp();
     }
@@ -317,7 +399,6 @@ public class ReifiableActionJdo implements ReifiableAction {
     @javax.jdo.annotations.Persistent
     @javax.jdo.annotations.Column(allowsNull="true")
     @MemberOrder(name="Timings", sequence = "4")
-    @Disabled
     public Timestamp getCompletedAt() {
         return completedAt;
     }
@@ -347,60 +428,18 @@ public class ReifiableActionJdo implements ReifiableAction {
 
 
     // //////////////////////////////////////
-    // notes (property)
+    // complete (derived property)
     // //////////////////////////////////////
-
-    private String notes;
-
-    /**
-     * Provides the ability for the end-user to annotate a (potentially long-running)
-     * interaction.
-     * 
-     * <p>
-     * Not part of the applib API, because the default implementation is not persistent
-     * and so there's no object that can be accessed to be annotated.
-     */
-    @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.Interaction.NOTES)
-    @MultiLine(numberOfLines=10)
-    @Hidden(where=Where.ALL_TABLES)
-    @MemberOrder(name="Notes", sequence = "6")
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(final String notes) {
-        this.notes = notes;
-    }
-
-
-    // //////////////////////////////////////
-    // nature (property)
-    // //////////////////////////////////////
-
-    private Nature nature;
-
-    /**
-     * Not persisted, used as a hint that an action was invoked explicitly by the user
-     * (rather than as a side-effect, eg of rendering an object due to get-after-post).
-     */
-    @javax.jdo.annotations.NotPersistent
-    @Programmatic
-    @Override
-    public Nature getNature() {
-        return nature;
-    }
     
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     * 
-     * <p>
-     * Implementation notes: populated by the viewer as hint to {@link ReifiableActionService} implementation.
-     */
-    @Override
-    public void setNature(Nature nature) {
-        this.nature = nature;
+
+    @javax.jdo.annotations.NotPersistent
+    @MemberOrder(name="Timings", sequence = "8")
+    @Hidden(where=Where.OBJECT_FORMS)
+    public boolean isComplete() {
+        return getCompletedAt() != null;
     }
 
+    
     
     // //////////////////////////////////////
     // result (property)
@@ -427,7 +466,6 @@ public class ReifiableActionJdo implements ReifiableAction {
     @Hidden(where=Where.ALL_TABLES)
     @Named("Result Bookmark")
     @MemberOrder(name="Results", sequence="25")
-    @Disabled
     public String getResultStr() {
         return resultStr;
     }
@@ -466,7 +504,7 @@ public class ReifiableActionJdo implements ReifiableAction {
      * Not part of the applib API, because the default implementation is not persistent
      * and so there's no object that can be accessed to be annotated.
      */
-    @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.Interaction.EXCEPTION)
+    @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.ReifiableAction.EXCEPTION)
     @Hidden
     @Override
     public String getException() {
@@ -475,7 +513,7 @@ public class ReifiableActionJdo implements ReifiableAction {
 
     @Override
     public void setException(final String exception) {
-        this.exception = Util.abbreviated(exception, JdoColumnLength.Interaction.EXCEPTION);
+        this.exception = Util.abbreviated(exception, JdoColumnLength.ReifiableAction.EXCEPTION);
     }
     
     

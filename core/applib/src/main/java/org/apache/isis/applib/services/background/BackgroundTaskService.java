@@ -1,5 +1,7 @@
 package org.apache.isis.applib.services.background;
 
+import java.lang.reflect.Method;
+
 import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
 
 
@@ -14,5 +16,8 @@ import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
  */
 public interface BackgroundTaskService {
 
-    void execute(final ActionInvocationMemento aim, final ReifiableAction reifiableAction);
+    void schedule(
+            final ActionInvocationMemento aim, 
+            final ReifiableAction reifiableAction, 
+            final String targetClassName, final String targetActionName, final String targetArgs);
 }

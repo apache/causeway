@@ -83,32 +83,6 @@ public class AuditEntryJdo implements HasTransactionId {
         return buf.toString();
     }
     
-    // //////////////////////////////////////
-    
-    private UUID transactionId;
-
-    /**
-     * The unique identifier (a GUID) of the transaction in which this audit entry was persisted.
-     * 
-     * <p>
-     * The combination of ({@link #getTransactionId() transactionId}, {@link #getTargetStr() target}, {@link #getPropertyId() propertyId} ) makes up the
-     * (non-enforced) alternative key.
-     */
-    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.TRANSACTION_ID)
-    @TypicalLength(36)
-    @MemberOrder(name="Identifiers",sequence = "10")
-    @Hidden(where=Where.PARENTED_TABLES)
-    @Disabled
-    @Override
-    public UUID getTransactionId() {
-        return transactionId;
-    }
-
-    @Override
-    public void setTransactionId(final UUID transactionId) {
-        this.transactionId = transactionId;
-    }
-
 
     // //////////////////////////////////////
     // user (property)
@@ -118,7 +92,7 @@ public class AuditEntryJdo implements HasTransactionId {
 
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.USER_NAME)
     @Hidden(where=Where.PARENTED_TABLES)
-    @MemberOrder(name="Identifiers",sequence = "20")
+    @MemberOrder(name="Identifiers",sequence = "10")
     public String getUser() {
         return user;
     }
@@ -136,7 +110,7 @@ public class AuditEntryJdo implements HasTransactionId {
 
     @javax.jdo.annotations.Column(allowsNull="false")
     @Hidden(where=Where.PARENTED_TABLES)
-    @MemberOrder(name="Identifiers",sequence = "30")
+    @MemberOrder(name="Identifiers",sequence = "20")
     public Timestamp getTimestamp() {
         return timestamp;
     }
@@ -146,6 +120,35 @@ public class AuditEntryJdo implements HasTransactionId {
     }
 
     
+
+
+    // //////////////////////////////////////
+    // transactionId (property)
+    // //////////////////////////////////////
+    
+    private UUID transactionId;
+
+    /**
+     * The unique identifier (a GUID) of the transaction in which this audit entry was persisted.
+     * 
+     * <p>
+     * The combination of ({@link #getTransactionId() transactionId}, {@link #getTargetStr() target}, {@link #getPropertyId() propertyId} ) makes up the
+     * (non-enforced) alternative key.
+     */
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.TRANSACTION_ID)
+    @TypicalLength(36)
+    @MemberOrder(name="Identifiers",sequence = "30")
+    @Hidden(where=Where.PARENTED_TABLES)
+    @Disabled
+    @Override
+    public UUID getTransactionId() {
+        return transactionId;
+    }
+
+    @Override
+    public void setTransactionId(final UUID transactionId) {
+        this.transactionId = transactionId;
+    }
 
 
     // //////////////////////////////////////
@@ -168,8 +171,7 @@ public class AuditEntryJdo implements HasTransactionId {
     private String targetStr;
 
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.BOOKMARK, name="target")
-    @Named("Target")
-    //@Hidden(where=Where.OBJECT_FORMS)
+    @Named("Object")
     @MemberOrder(name="Target", sequence="3")
     public String getTargetStr() {
         return targetStr;

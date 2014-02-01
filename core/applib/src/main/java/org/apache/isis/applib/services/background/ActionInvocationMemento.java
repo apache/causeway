@@ -28,14 +28,18 @@ public class ActionInvocationMemento {
 
     private final Memento memento;
 
-    public ActionInvocationMemento(final MementoService mementoService, String user, final String actionId, final Bookmark target, List<Class<?>> argTypes, List<Object> args) {
+    public ActionInvocationMemento(
+            final MementoService mementoService, 
+            final String actionId, 
+            final Bookmark target, List<Class<?>> argTypes,
+            final List<Object> args) {
+        
         if(argTypes.size() != args.size()) {
             throw new IllegalArgumentException("argTypes and args must be same size");
         }
         
         this.memento = mementoService.create();
         memento.set("actionId", actionId);
-        memento.set("user", user);
         memento.set("target", target);
         memento.set("numArgs", args.size());
         
@@ -60,8 +64,12 @@ public class ActionInvocationMemento {
         return memento.get("actionId", String.class);
     }
     
-    public String getUser() {
-        return memento.get("user", String.class);
+    public String getTargetClassName() {
+        return memento.get("targetClassName", String.class);
+    }
+    
+    public String getTargetActionName() {
+        return memento.get("targetActionName", String.class);
     }
     
     public Bookmark getTarget() {

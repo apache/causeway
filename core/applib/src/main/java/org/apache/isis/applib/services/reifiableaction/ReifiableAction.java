@@ -20,16 +20,39 @@ import java.sql.Timestamp;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Reified;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.background.BackgroundTaskService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.reifiableaction.spi.ReifiableActionService;
 
 public interface ReifiableAction extends HasTransactionId {
+
+    
+    // //////////////////////////////////////
+
+    /**
+     * The 0-based additional identifier of an action within the given {@link #getTransactionId() transaction}.
+     * 
+     * <p>
+     * The combination of ({@link #getTransactionId() transactionId}, {@link #getSequence() sequence}) makes up the
+     * primary key.
+     * 
+     * <p>
+     * For {@link Nature#USER_INITIATED user-initiated} actions, this will always take the value <tt>0</tt>.
+     */
+    public int getSequence();
+
+    public void setSequence(final int sequence);
+
+
+    // //////////////////////////////////////
 
     /**
      * The user that initiated the action.
@@ -142,27 +165,51 @@ public interface ReifiableAction extends HasTransactionId {
      * <b>NOT API</b>: intended to be called only by the framework.
      * 
      * <p>
-     * Implementation notes: set when the action is invoked (in the ActionInvocationFacet).
+     * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</tt>).
      */
     public void setArguments(final String arguments);
+
+    
+    // //////////////////////////////////////
+
+    /**
+     * A formal (XML or similar) specification of the action to invoke/being invoked.
+     */
+    public String getMemento();
+    
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     * 
+     * <p>
+     * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</tt>).
+     */
+    public void setMemento(final String memento);
 
     // //////////////////////////////////////
     
     public static enum Nature {
         /**
-         * Indicates that the {@link UserAction} has occurred as the result of an explicit action invocation
+         * Action has occurred as the result of an explicit action invocation
          * on the part of the user.
          */
         USER_INITIATED,
-        INDIRECT
+        /**
+         * Action is run by virtue of being previously scheduled as a background through
+         * the {@link BackgroundService} and {@link BackgroundTaskService}.
+         */
+        BACKGROUND,
+        /**
+         * Indicates that the action has been run for some other reason.
+         */
+        OTHER
     }
 
     /**
      * The nature of this action, for example whether it was
      * {@link #USER_INITIATED user initiated} on the part of the user, or merely as
-     * a {@link #INDIRECT indirect} side-effect, eg the re-rendering of an entity in a viewer (such as the
+     * a {@link #OTHER other} (typically indirect) side-effect, eg the re-rendering of an entity in a viewer (such as the
      * Wicket viewer) that uses the <a href="http://en.wikipedia.org/wiki/Post/Redirect/Get">post/redirect/get</a>
-     * to avoid duplicate submissions.
+     * to avoid duplicate submissions, or the action nominated as the {@link HomePage} action.
      * 
      * <p>
      * The Isis implementations uses this field as to a hint as to whether to populate the interaction's
