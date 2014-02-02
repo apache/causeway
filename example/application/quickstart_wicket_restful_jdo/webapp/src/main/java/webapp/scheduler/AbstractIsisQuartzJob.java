@@ -16,8 +16,6 @@
  */
 package webapp.scheduler;
 
-import java.util.List;
-
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 
@@ -27,15 +25,44 @@ import org.quartz.JobExecutionException;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
+import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
-public abstract class AbstractIsisJob implements Job {
+public class AbstractIsisQuartzJob implements Job {
 
+    public static enum ConcurrentInstancesPolicy {
+        /**
+         * Only a single instance of this job is allowed to run.  
+         * 
+         * <p>
+         * That is, if the job is invoked again before a previous instance has completed, then silently skips.
+         */
+        SINGLE_INSTANCE_ONLY,
+        /**
+         * Multiple instances of this job are allowed to run concurrently.
+         * 
+         * <p>
+         * That is, it is not required for the previous instance of this job to have completed before this one starts.
+         */
+        MULTIPLE_INSTANCES
+    }
+    
+    private final AbstractIsisSessionTemplate isisRunnable;
+
+    private final ConcurrentInstancesPolicy concurrentInstancesPolicy;
     private boolean executing;
+
+    public AbstractIsisQuartzJob(AbstractIsisSessionTemplate isisRunnable) {
+        this(isisRunnable, ConcurrentInstancesPolicy.SINGLE_INSTANCE_ONLY);
+    }
+    public AbstractIsisQuartzJob(AbstractIsisSessionTemplate isisRunnable, ConcurrentInstancesPolicy concurrentInstancesPolicy) {
+        this.isisRunnable = isisRunnable;
+        this.concurrentInstancesPolicy = concurrentInstancesPolicy;
+    }
+
+    // //////////////////////////////////////
 
     /**
      * Sets up an {@link IsisSession} then delegates to the {@link #doExecute(JobExecutionContext) hook}. 
@@ -43,37 +70,14 @@ public abstract class AbstractIsisJob implements Job {
     public void execute(final JobExecutionContext context) throws JobExecutionException {
         final AuthenticationSession authSession = newAuthSession(context);
         try {
-            if(executing) {
+            if(concurrentInstancesPolicy == ConcurrentInstancesPolicy.SINGLE_INSTANCE_ONLY && executing) {
                 return;
             }
             executing = true;
 
-            IsisContext.openSession(authSession);
-            PersistenceSession persistenceSession = IsisContext.getPersistenceSession();
-            persistenceSession.getServicesInjector().injectServicesInto(this);
-            IsisTransactionManager transactionManager = persistenceSession.getTransactionManager();
-            transactionManager.executeWithinTransaction(new TransactionalClosure() {
-                
-                @Override
-                public void preExecute() {
-                }
-                
-                @Override
-                public void execute() {
-                    doExecute(context);
-                }
-                
-                @Override
-                public void onSuccess() {
-                }
-                
-                @Override
-                public void onFailure() {
-                }
-            });
+            isisRunnable.execute(authSession, context);
         } finally {
             executing = false;
-            IsisContext.closeSession();
         }
     }
 
@@ -85,35 +89,7 @@ public abstract class AbstractIsisJob implements Job {
         return new SimpleSession(user, roles);
     }
 
-    
-    /**
-     * Mandatory hook.
-     */
-    protected abstract void doExecute(JobExecutionContext context);
-
-    /**
-     * Helper method for benefit of subclasses
-     */
-    protected String getKey(JobExecutionContext context, String key) {
+    String getKey(JobExecutionContext context, String key) {
         return context.getMergedJobDataMap().getString(key);
     }
-
-    /**
-     * Helper method for benefit of subclasses
-     */
-    protected <T> T getService(Class<T> cls) {
-        List<Object> services = IsisContext.getServices();
-        for (Object service : services) {
-            if(cls.isAssignableFrom(service.getClass())) {
-                return asT(service);
-            }
-        }
-        throw new IllegalArgumentException("No service of type '" + cls.getName() + "' was found");
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T> T asT(Object service) {
-        return (T) service;
-    }
-
 }

@@ -54,10 +54,10 @@ public class BackgroundActionServiceJdoRepository extends AbstractFactoryAndRepo
     }
 
     @Programmatic
-    public List<ReifiableActionJdo> findBackgroundActionsToStart() {
+    public List<ReifiableActionJdo> findBackgroundActionsNotYetStarted() {
         return allMatches(
                 new QueryDefault<ReifiableActionJdo>(ReifiableActionJdo.class, 
-                        "findBackgroundActionsToStart"));
+                        "findBackgroundActionsNotYetStarted"));
     }
     
 }

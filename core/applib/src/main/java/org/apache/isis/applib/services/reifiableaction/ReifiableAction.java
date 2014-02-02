@@ -233,6 +233,24 @@ public interface ReifiableAction extends HasTransactionId {
      */
     public abstract void setStartedAt(Timestamp startedAt);
     
+    
+    // //////////////////////////////////////
+
+    
+    /**
+     * The date/time at which this action completed.
+     */
+    @Disabled
+    public abstract Timestamp getCompletedAt();
+    
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     * 
+     * <p>
+     * Implementation notes: set when the Isis PersistenceSession is opened.  Uses the applib {@link Clock}.
+     */
+    public abstract void setCompletedAt(Timestamp completedAt);
+
 
     // //////////////////////////////////////
 

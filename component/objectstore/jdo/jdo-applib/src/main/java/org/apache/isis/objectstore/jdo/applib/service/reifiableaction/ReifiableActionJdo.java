@@ -62,7 +62,7 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
                     + "WHERE transactionId == :transactionId "
-                    + "&& nature == 'USER_INVOCATION'"),
+                    + "&& nature == 'USER_INITIATED'"),
     @javax.jdo.annotations.Query(
             name="findBackgroundActionByTransactionId", language="JDOQL",  
             value="SELECT "
@@ -76,7 +76,7 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
                     + "WHERE parent == :parent "
                     + "&& nature == 'BACKGROUND'"),
     @javax.jdo.annotations.Query(
-            name="findBackgroundActionsToStart", language="JDOQL",  
+            name="findBackgroundActionsNotYetStarted", language="JDOQL",  
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
                     + "WHERE nature == 'BACKGROUND' "
@@ -94,7 +94,7 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
                     + "WHERE completedAt != null "
-                    + "&& nature == 'USER_INVOCATION' "
+                    + "&& nature == 'USER_INITIATED' "
                     + "ORDER BY timestamp DESC")
 })
 @ObjectType("IsisReifiableAction")
@@ -411,19 +411,16 @@ public class ReifiableActionJdo implements ReifiableAction {
 
     /**
      * The date/time at which this interaction completed.
-     * 
-     * <p>
-     * Not part of the applib API, because the default implementation is not persistent
-     * and so cannot be queried "after the fact".  This JDO-specific class is persistent,
-     * and so we can gather this information.
      */
     @javax.jdo.annotations.Persistent
     @javax.jdo.annotations.Column(allowsNull="true")
     @MemberOrder(name="Timings", sequence = "4")
+    @Override
     public Timestamp getCompletedAt() {
         return completedAt;
     }
 
+    @Override
     public void setCompletedAt(final Timestamp completed) {
         this.completedAt = completed;
     }

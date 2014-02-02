@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.common.collect.Maps;
 
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.reifiableaction.spi.ReifiableActionService;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -147,6 +148,23 @@ public class ReifiableActionDefault implements ReifiableAction {
     @Override
     public void setStartedAt(Timestamp startedAt) {
         this.startedAt = startedAt;
+    }
+
+    
+    // //////////////////////////////////////
+    // completedAt (property)
+    // //////////////////////////////////////
+    
+    private Timestamp completedAt;
+
+    @Override
+    public Timestamp getCompletedAt() {
+        return completedAt;
+    }
+
+    @Override
+    public void setCompletedAt(final Timestamp completed) {
+        this.completedAt = completed;
     }
 
     // //////////////////////////////////////

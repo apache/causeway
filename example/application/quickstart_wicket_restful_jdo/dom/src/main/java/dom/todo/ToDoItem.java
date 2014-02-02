@@ -617,7 +617,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     @ActionSemantics(Of.IDEMPOTENT)
     @Prototype
     public ToDoItem completeInBackground() {
-        backgroundService.execute(this).slowCompleted(5000);
+        backgroundService.execute(this).slowCompleted(2000);
         container.informUser("Task '" + getDescription() + "' scheduled for completion");
         return this;
     }
