@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.Reified;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.background.BackgroundService;
-import org.apache.isis.applib.services.background.BackgroundTaskService;
+import org.apache.isis.applib.services.background.BackgroundActionService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.reifiableaction.spi.ReifiableActionService;
@@ -35,24 +35,6 @@ import org.apache.isis.applib.services.reifiableaction.spi.ReifiableActionServic
 public interface ReifiableAction extends HasTransactionId {
 
     
-    // //////////////////////////////////////
-
-    /**
-     * The 0-based additional identifier of an action within the given {@link #getTransactionId() transaction}.
-     * 
-     * <p>
-     * The combination of ({@link #getTransactionId() transactionId}, {@link #getSequence() sequence}) makes up the
-     * primary key.
-     * 
-     * <p>
-     * For {@link Nature#USER_INITIATED user-initiated} actions, this will always take the value <tt>0</tt>.
-     */
-    @Disabled
-    public int getSequence();
-
-    public void setSequence(final int sequence);
-
-
     // //////////////////////////////////////
 
     /**
@@ -256,7 +238,7 @@ public interface ReifiableAction extends HasTransactionId {
 
 
     /**
-     * For actions created through the {@link BackgroundService} and {@link BackgroundTaskService},
+     * For actions created through the {@link BackgroundService} and {@link BackgroundActionService},
      * captures the parent action.
      */
     @Optional
@@ -313,7 +295,7 @@ public interface ReifiableAction extends HasTransactionId {
      * <p>
      * This is most commonly done if the action being invoked has been explicitly annotated to be reified, eg
      * using the {@link Reified} annotation.  But it might also happen as a hint from another domain service.
-     * For example, a {@link BackgroundTaskService} implementations that creates persisted background tasks ought to be
+     * For example, a {@link BackgroundActionService} implementations that creates persisted background tasks ought to be
      * associated (via the {@link ReifiableAction#getTransactionId() transactionId}) to a persisted
      * {@link ReifiableAction}.  The app can then provide a mechanism for the end-user to query for their
      * running background actions from this original {@link ReifiableAction}.

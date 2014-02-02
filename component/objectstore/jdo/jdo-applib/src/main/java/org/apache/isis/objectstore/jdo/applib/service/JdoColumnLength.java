@@ -45,7 +45,7 @@ public final class JdoColumnLength {
         public final static int TARGET_CLASS = 50;
         public final static int TARGET_ACTION = 50;
         public final static int ARGUMENTS = 1024;
-        public final static int EXCEPTION = 2000;
+        public final static int EXCEPTION = 16000;
         public static final int NATURE = 20;
     }
 

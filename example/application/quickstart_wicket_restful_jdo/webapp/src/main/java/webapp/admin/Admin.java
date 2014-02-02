@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditingServiceJdoRepository;
-import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundTaskServiceJdoRepository;
+import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundActionServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishingServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo;
@@ -127,7 +127,7 @@ public class Admin extends AbstractService {
     private ReifiableActionServiceJdoRepository interactionRepository;
     
     @javax.inject.Inject
-    private BackgroundTaskServiceJdoRepository backgroundTaskRepository;
+    private BackgroundActionServiceJdoRepository backgroundTaskRepository;
     
     @javax.inject.Inject
     private AuditingServiceJdoRepository auditEntryRepository;

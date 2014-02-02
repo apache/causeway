@@ -16,32 +16,49 @@
  */
 package org.apache.isis.objectstore.jdo.applib.service.background;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Render.Type;
-import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
 import org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo;
 
 
-public class BackgroundTaskServiceJdoContributions extends AbstractFactoryAndRepository {
+public class BackgroundActionServiceJdoContributions extends AbstractFactoryAndRepository {
 
     @ActionSemantics(Of.SAFE)
     @NotInServiceMenu
     @NotContributed(As.ACTION)
     @Render(Type.EAGERLY)
-    public List<ReifiableActionJdo> backgroundTasks(final ReifiableActionJdo parent) {
-        return backgroundTaskRepository.findByParent(parent);
+    public List<ReifiableActionJdo> backgroundActions(final ReifiableActionJdo parent) {
+        return backgroundActionRepository.findByParent(parent);
     }
 
+    @ActionSemantics(Of.SAFE)
+    @NotInServiceMenu
+    @NotContributed(As.ACTION)
+    @Render(Type.EAGERLY)
+    public List<ReifiableActionJdo> siblingActions(final ReifiableActionJdo siblingAction) {
+        final ReifiableAction parent = siblingAction.getParent();
+        if(parent == null || !(parent instanceof ReifiableActionJdo)) {
+            return Collections.emptyList();
+        }
+        final ReifiableActionJdo parentJdo = (ReifiableActionJdo) parent;
+        final List<ReifiableActionJdo> siblingActions = backgroundActionRepository.findByParent(parentJdo);
+        siblingActions.remove(siblingAction);
+        return siblingActions;
+    }
+    
     // //////////////////////////////////////
 
     @javax.inject.Inject
-    private BackgroundTaskServiceJdoRepository backgroundTaskRepository;
+    private BackgroundActionServiceJdoRepository backgroundActionRepository;
+    
 }

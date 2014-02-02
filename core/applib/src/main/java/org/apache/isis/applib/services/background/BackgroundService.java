@@ -32,4 +32,7 @@ public interface BackgroundService {
     @Programmatic
     ActionInvocationMemento asActionInvocationMemento(Method m, Object domainObject, Object[] args);
 
+    @Programmatic
+    ActionInvocationMemento newActionInvocationMemento(String memento);
+
 }

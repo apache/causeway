@@ -1,7 +1,5 @@
 package org.apache.isis.applib.services.background;
 
-import java.lang.reflect.Method;
-
 import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
 
 
@@ -14,7 +12,7 @@ import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
  * implementation, <tt>BackgroundServiceDefault</tt> (in core-runtime) can
  * delegate to different implementations of this service.
  */
-public interface BackgroundTaskService {
+public interface BackgroundActionService {
 
     void schedule(
             final ActionInvocationMemento aim, 

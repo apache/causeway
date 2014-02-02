@@ -5,10 +5,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.MethodHandler;
@@ -17,14 +15,12 @@ import javassist.util.proxy.ProxyObject;
 
 import javax.annotation.PostConstruct;
 
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
+import org.apache.isis.applib.services.background.BackgroundActionService;
 import org.apache.isis.applib.services.background.BackgroundService;
-import org.apache.isis.applib.services.background.BackgroundTaskService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
@@ -32,7 +28,6 @@ import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
-import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -67,9 +62,9 @@ public class BackgroundServiceDefault implements BackgroundService {
     }
     
     private void ensureDependenciesInjected() {
-        Ensure.ensureThatState(this.bookmarkService, is(not(nullValue())), "bookmark service required");
-        Ensure.ensureThatState(this.backgroundTaskService, is(not(nullValue())), "background task service required");
-        Ensure.ensureThatState(this.reifiableActionContext, is(not(nullValue())), "reifiable action context service required");
+        Ensure.ensureThatState(this.bookmarkService, is(not(nullValue())), "BookmarkService domain service must be configured");
+        Ensure.ensureThatState(this.backgroundActionService, is(not(nullValue())), "BackgroundActionService domain service must be configured");
+        Ensure.ensureThatState(this.reifiableActionContext, is(not(nullValue())), "ReifiableActionContext domain service must be configured");
     }
 
 
@@ -176,7 +171,7 @@ public class BackgroundServiceDefault implements BackgroundService {
                                 argTypes,
                                 argObjs);
                
-                backgroundTaskService.schedule(aim, reifiableAction, targetClassName, targetActionName, targetArgs);
+                backgroundActionService.schedule(aim, reifiableAction, targetClassName, targetActionName, targetArgs);
                 
                 return null;
             }
@@ -220,8 +215,12 @@ public class BackgroundServiceDefault implements BackgroundService {
         return aim;
     }
 
-    
-    
+
+    @Override
+    public ActionInvocationMemento newActionInvocationMemento(String mementoStr) {
+        return new ActionInvocationMemento(mementoService, mementoStr);
+    }
+
     // //////////////////////////////////////
 
     private BookmarkService bookmarkService;
@@ -232,12 +231,12 @@ public class BackgroundServiceDefault implements BackgroundService {
         this.bookmarkService = bookmarkService;
     }
     
-    private BackgroundTaskService backgroundTaskService;
+    private BackgroundActionService backgroundActionService;
     /**
      * Mandatory service.
      */
-    public void injectBackgroundTaskService(BackgroundTaskService backgroundTaskService) {
-        this.backgroundTaskService = backgroundTaskService;
+    public void injectBackgroundActionService(BackgroundActionService backgroundActionService) {
+        this.backgroundActionService = backgroundActionService;
     }
 
     private ReifiableActionContext reifiableActionContext;
@@ -259,6 +258,7 @@ public class BackgroundServiceDefault implements BackgroundService {
     protected AdapterManager getAdapterManager() {
         return IsisContext.getPersistenceSession().getAdapterManager();
     }
+
 
 
 }

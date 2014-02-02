@@ -15,8 +15,8 @@ import org.apache.isis.applib.services.memento.MementoService.Memento;
  * 
  * <p>
  * Provided as a mechanism by which implementations of {@link BackgroundService} can 
- * hand-off work to the {@link BackgroundTaskService} through 
- * {@link BackgroundTaskService#execute(ActionInvocationMemento)}.   This is used by the
+ * hand-off work to the {@link BackgroundActionService} through 
+ * {@link BackgroundActionService#execute(ActionInvocationMemento)}.   This is used by the
  * default implementation of <tt>BackgroundServiceDefault</tt> in Isis' core-runtime.
  * 
  * <p>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job-scheduling-data
+	xmlns="http://www.quartz-scheduler.org/xml/JobSchedulingData"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.quartz-scheduler.org/xml/JobSchedulingData 
+http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
+	version="1.8">
+
+	<schedule>
+		<job>
+			<name>BackgroundActionExecutionJob</name>
+			<group>Isis</group>
+			<description>Poll and execute any background actions persisted by the BackgroundActionServiceJdo domain service</description>
+			<job-class>webapp.scheduler.BackgroundActionExecutionJob</job-class>
+			<job-data-map>
+				<entry>
+					<key>webapp.scheduler.user</key>
+					<value>scheduler_user</value>
+				</entry>
+				<entry>
+					<key>webapp.scheduler.roles</key>
+					<value>admin_role</value>
+				</entry>
+			</job-data-map>
+		</job>
+
+		<!--
+		cron format: 
+		http://quartz-scheduler.org/documentation/quartz-2.x/tutorials/tutorial-lesson-06
+	 	-->
+		<trigger>
+			<cron>
+				<name>BackgroundActionExecutionJobEveryTenSeconds</name>
+				<job-name>BackgroundActionExecutionJob</job-name>
+				<job-group>Isis</job-group>
+				<cron-expression>0/10 * * * * ?</cron-expression>
+			</cron>
+		</trigger>
+
+	</schedule>
+</job-scheduling-data>

@@ -27,10 +27,10 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo;
 
-public class BackgroundTaskServiceJdoRepository extends AbstractFactoryAndRepository {
+public class BackgroundActionServiceJdoRepository extends AbstractFactoryAndRepository {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(BackgroundTaskServiceJdoRepository.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BackgroundActionServiceJdoRepository.class);
 
     @Programmatic
     public List<ReifiableActionJdo> listAll() {
@@ -41,7 +41,7 @@ public class BackgroundTaskServiceJdoRepository extends AbstractFactoryAndReposi
     public List<ReifiableActionJdo> findByTransactionId(final UUID transactionId) {
         return allMatches(
                 new QueryDefault<ReifiableActionJdo>(ReifiableActionJdo.class, 
-                        "findBackgroundTasksByTransactionId", 
+                        "findBackgroundActionByTransactionId", 
                         "transactionId", transactionId));
     }
 
@@ -49,8 +49,15 @@ public class BackgroundTaskServiceJdoRepository extends AbstractFactoryAndReposi
     public List<ReifiableActionJdo> findByParent(ReifiableActionJdo parent) {
         return allMatches(
                 new QueryDefault<ReifiableActionJdo>(ReifiableActionJdo.class, 
-                        "findBackgroundTasksByParent", 
+                        "findBackgroundActionsByParent", 
                         "parent", parent));
     }
 
+    @Programmatic
+    public List<ReifiableActionJdo> findBackgroundActionsToStart() {
+        return allMatches(
+                new QueryDefault<ReifiableActionJdo>(ReifiableActionJdo.class, 
+                        "findBackgroundActionsToStart"));
+    }
+    
 }

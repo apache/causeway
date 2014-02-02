@@ -23,8 +23,6 @@ import java.util.UUID;
 
 import javax.jdo.annotations.IdentityType;
 
-import org.datanucleus.management.jmx.ManagementManager;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
@@ -73,6 +71,7 @@ public class PublishedEventJdo implements HasTransactionId {
     }
     
 
+    
     // //////////////////////////////////////
     // user (property)
     // //////////////////////////////////////

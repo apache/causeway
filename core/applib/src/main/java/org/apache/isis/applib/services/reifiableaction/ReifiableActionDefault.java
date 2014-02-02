@@ -287,19 +287,4 @@ public class ReifiableActionDefault implements ReifiableAction {
     }
     
     
-    // //////////////////////////////////////
-    
-    private int sequence;
-    
-    @Override
-    public int getSequence() {
-        return sequence;
-    }
-    
-    @Override
-    public void setSequence(int sequence) {
-        this.sequence = sequence;
-    }
-    
-
 }

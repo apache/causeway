@@ -46,7 +46,6 @@ import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.publish.EventMetadata;
@@ -189,7 +188,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     private final UpdateNotifier updateNotifier;
 
     /**
-     * the 'owning' interaction, if configured.
+     * the 'owning' reifiable action, (if service configured).
      */
     private final ReifiableAction reifiableAction;
 
@@ -206,14 +205,9 @@ public class IsisTransaction implements TransactionScopedComponent {
      * Will be that of the {@link #reifiableAction} if not <tt>null</tt>, otherwise will be randomly created.
      */
     private final UUID transactionId;
-    /**
-     * Only used if {@link #reifiableAction} is <tt>null</tt>; generates sequence within the {@link #transactionId}
-     */
-    private int publishedEventSequence;
-    
+        
     private State state;
     private IsisException abortCause;
-
 
     public IsisTransaction(
             final IsisTransactionManager transactionManager, 
@@ -231,11 +225,12 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.transactionManager = transactionManager;
         this.messageBroker = messageBroker;
         this.updateNotifier = updateNotifier;
+        
         this.auditingService3 = auditingService3;
         this.publishingService = publishingService;
 
         // determine whether this xactn is taking place in the context of an
-        // existing interaction in which a previous xactn has already occurred.
+        // existing reifiable action in which a previous xactn has already occurred.
         // if so, reuse that transactionId.
         UUID previousTransactionId = null;
         if(reifiableActionContext != null) {
@@ -561,12 +556,10 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     private int nextEventSequence() {
-        if(reifiableAction != null) {
-            return reifiableAction.next("publishedEvent");
-        } else {
-            return publishedEventSequence++;
-        }
-            
+        if(reifiableAction == null) {
+            throw new IllegalStateException("ReifiableActionContext service is required to support Publishing.");
+        } 
+        return reifiableAction.next("publishedEvent");
     }
 
     public void auditChangedProperty(

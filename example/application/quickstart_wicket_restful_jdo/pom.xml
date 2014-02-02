@@ -40,6 +40,8 @@
         <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
         <datanucleus-maven-plugin.version>3.3.2</datanucleus-maven-plugin.version>
         
+        <quartz-scheduler.version>2.2.1</quartz-scheduler.version>
+        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -332,6 +334,20 @@
                 <version>${project.version}</version>
             </dependency>
 
+
+
+            <!-- quartz scheduler integration -->
+
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>${quartz-scheduler.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz-jobs</artifactId>
+                <version>${quartz-scheduler.version}</version>
+            </dependency>
 
             <!-- 3rd party extensions -->
 

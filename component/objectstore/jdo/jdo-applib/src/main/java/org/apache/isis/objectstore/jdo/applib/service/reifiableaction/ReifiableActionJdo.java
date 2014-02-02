@@ -22,9 +22,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.NotPersistent;
 
 import com.google.common.collect.Maps;
 
@@ -56,8 +55,7 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.APPLICATION, 
-        table="IsisReifiableAction",
-        objectIdClass=ReifiableActionJdoPK.class)
+        table="IsisReifiableAction")
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
             name="findByTransactionId", language="JDOQL",  
@@ -66,11 +64,25 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
                     + "WHERE transactionId == :transactionId "
                     + "&& nature == 'USER_INVOCATION'"),
     @javax.jdo.annotations.Query(
-            name="findBackgroundTasksByParent", language="JDOQL",  
+            name="findBackgroundActionByTransactionId", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
+                    + "WHERE transactionId == :transactionId "
+                    + "&& nature == 'BACKGROUND'"),
+    @javax.jdo.annotations.Query(
+            name="findBackgroundActionsByParent", language="JDOQL",  
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
                     + "WHERE parent == :parent "
                     + "&& nature == 'BACKGROUND'"),
+    @javax.jdo.annotations.Query(
+            name="findBackgroundActionsToStart", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
+                    + "WHERE nature == 'BACKGROUND' "
+                    + "&& startedAt == null "
+                    + "ORDER BY timestamp ASC "
+                    ),
     @javax.jdo.annotations.Query(
             name="findCurrent", language="JDOQL",  
             value="SELECT "
@@ -82,6 +94,7 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
                     + "WHERE completedAt != null "
+                    + "&& nature == 'USER_INVOCATION' "
                     + "ORDER BY timestamp DESC")
 })
 @ObjectType("IsisReifiableAction")
@@ -179,11 +192,10 @@ public class ReifiableActionJdo implements ReifiableAction {
     private ReifiableAction parent;
     
     @Override
-    @javax.jdo.annotations.Persistent(columns={
-            @javax.jdo.annotations.Column(name="parentSequence", allowsNull="true"),
-            @javax.jdo.annotations.Column(name="parentTransactionId", allowsNull="true")
-    })
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(name="parentTransactionId", allowsNull="true")
     @Hidden(where=Where.PARENTED_TABLES)
+    @MemberOrder(name="Identifiers",sequence = "40")
     public ReifiableAction getParent() {
         return parent;
     }
@@ -207,7 +219,7 @@ public class ReifiableActionJdo implements ReifiableAction {
     @javax.jdo.annotations.PrimaryKey
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.TRANSACTION_ID)
     @TypicalLength(JdoColumnLength.TRANSACTION_ID)
-    @MemberOrder(name="Identifiers",sequence = "40")
+    @MemberOrder(name="Identifiers",sequence = "50")
     @Override
     public UUID getTransactionId() {
         return transactionId;
@@ -225,38 +237,6 @@ public class ReifiableActionJdo implements ReifiableAction {
     }
 
     
-    // //////////////////////////////////////
-    // sequence (property)
-    // //////////////////////////////////////
-
-    private int sequence;
-
-    /**
-     * The 0-based additional identifier of a published event within the given {@link #getTransactionId() transaction}.
-     * 
-     * <p>
-     * The combination of ({@link #getTransactionId() transactionId}, {@link #getSequence() sequence}) makes up the
-     * primary key.
-     * 
-     * <p>
-     * For {@link Nature#USER_INITIATED user-initiated} actions, this will always be <tt>0</tt>
-     */
-    @javax.jdo.annotations.PrimaryKey
-    @MemberOrder(name="Identifiers", sequence = "50")
-    public int getSequence() {
-        return sequence;
-    }
-
-    public void setSequence(final int sequence) {
-        this.sequence = sequence;
-    }
-    
-    public boolean hideSequence() {
-        return Nature.USER_INITIATED.equals(getNature());
-    }
-
-
-
     // //////////////////////////////////////
     // targetClass (property)
     // //////////////////////////////////////
@@ -607,6 +587,7 @@ public class ReifiableActionJdo implements ReifiableAction {
     
     private boolean reify;
 
+    @NotPersistent
     @Programmatic
     public boolean isReify() {
         return reify;

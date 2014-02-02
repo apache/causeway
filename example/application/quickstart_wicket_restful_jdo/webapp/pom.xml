@@ -266,6 +266,17 @@
         </dependency>
 
 
+        <!-- quartz scheduler integration -->
+
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz-jobs</artifactId>
+        </dependency>
+
         <!-- 3rd party dependency -->
         <!-- 
         GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3

@@ -26,16 +26,16 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
-import org.apache.isis.applib.services.background.BackgroundTaskService;
+import org.apache.isis.applib.services.background.BackgroundActionService;
 import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
 import org.apache.isis.applib.services.reifiableaction.ReifiableAction.Nature;
 import org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo;
 
-@Named("Background Tasks")
-public class BackgroundTaskServiceJdo extends AbstractService implements BackgroundTaskService {
+@Named("Background Actions")
+public class BackgroundActionServiceJdo extends AbstractService implements BackgroundActionService {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(BackgroundTaskServiceJdo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BackgroundActionServiceJdo.class);
     
     @Programmatic
     @Override
@@ -47,7 +47,6 @@ public class BackgroundTaskServiceJdo extends AbstractService implements Backgro
             final String targetArgs) {
         
         final UUID transactionId = UUID.randomUUID();
-        final Integer sequence = 0;
         final String user = parentAction.getUser();
 
         final ReifiableActionJdo backgroundAction = newTransientInstance(ReifiableActionJdo.class);
@@ -55,7 +54,6 @@ public class BackgroundTaskServiceJdo extends AbstractService implements Backgro
         backgroundAction.setParent(parentAction);
         
         backgroundAction.setTransactionId(transactionId);
-        backgroundAction.setSequence(sequence);
 
         backgroundAction.setUser(user);
         backgroundAction.setTimestamp(Clock.getTimeAsJavaSqlTimestamp());

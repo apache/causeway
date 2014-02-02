@@ -242,7 +242,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         
         startRequestOnRequestScopedServices(registeredServices);
 
-        createReifiableAactionIfConfigured();
+        createReifiableActionIfConfigured();
         
         createServiceAdapters(registeredServices);
         
@@ -301,7 +301,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         }
     }
 
-    private void createReifiableAactionIfConfigured() {
+    private void createReifiableActionIfConfigured() {
         final ReifiableActionContext reifiableActionContext = getServiceOrNull(ReifiableActionContext.class);
         if(reifiableActionContext == null) {
             return;
