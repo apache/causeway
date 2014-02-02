@@ -120,16 +120,32 @@ public class ReifiableActionDefault implements ReifiableAction {
 
 
     // //////////////////////////////////////
-    // startedAt (property)
+    // timestamp (property)
     // //////////////////////////////////////
 
-    private Timestamp startedAt;
+    private Timestamp timestamp;
     public Timestamp getTimestamp() {
-        return startedAt;
+        return timestamp;
     }
 
     @Override
     public void setTimestamp(Timestamp startedAt) {
+        this.timestamp = startedAt;
+    }
+
+    
+    // //////////////////////////////////////
+    // startedAt (property)
+    // //////////////////////////////////////
+    
+    
+    private Timestamp startedAt;
+    @Override
+    public Timestamp getStartedAt() {
+        return startedAt;
+    }
+    @Override
+    public void setStartedAt(Timestamp startedAt) {
         this.startedAt = startedAt;
     }
 
@@ -170,6 +186,24 @@ public class ReifiableActionDefault implements ReifiableAction {
         this.nature = nature;
     }
 
+    
+    // //////////////////////////////////////
+    // parent (property)
+    // //////////////////////////////////////
+
+    private ReifiableAction parent;
+    
+    @Override
+    public ReifiableAction getParent() {
+        return parent;
+    }
+
+    @Override
+    public void setParent(ReifiableAction parent) {
+        this.parent = parent;
+    }
+
+    
     // //////////////////////////////////////
     // result (property)
     // //////////////////////////////////////
@@ -266,4 +300,6 @@ public class ReifiableActionDefault implements ReifiableAction {
     public void setSequence(int sequence) {
         this.sequence = sequence;
     }
+    
+
 }

@@ -242,7 +242,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         
         startRequestOnRequestScopedServices(registeredServices);
 
-        createInteractionIfConfigured();
+        createReifiableAactionIfConfigured();
         
         createServiceAdapters(registeredServices);
         
@@ -301,28 +301,26 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         }
     }
 
-    private void createInteractionIfConfigured() {
-        final ReifiableActionContext ic = getServiceOrNull(ReifiableActionContext.class);
-        if(ic == null) {
+    private void createReifiableAactionIfConfigured() {
+        final ReifiableActionContext reifiableActionContext = getServiceOrNull(ReifiableActionContext.class);
+        if(reifiableActionContext == null) {
             return;
         } 
-        final ReifiableActionService interactionFactory = getServiceOrNull(ReifiableActionService.class);
-        final ReifiableAction interaction = interactionFactory != null ? interactionFactory.create() : new ReifiableActionDefault();
-        ic.setReifiableAction(interaction);
+        final ReifiableActionService reifiableActionService = getServiceOrNull(ReifiableActionService.class);
+        final ReifiableAction reifiableAction = 
+                reifiableActionService != null 
+                    ? reifiableActionService.create() 
+                    : new ReifiableActionDefault();
+        reifiableActionContext.setReifiableAction(reifiableAction);
 
-        if(interaction.getTimestamp() == null) {
-            interaction.setTimestamp(Clock.getTimeAsJavaSqlTimestamp());
+        if(reifiableAction.getTimestamp() == null) {
+            reifiableAction.setTimestamp(Clock.getTimeAsJavaSqlTimestamp());
         }
-        if(interaction.getUser() == null) {
-            interaction.setUser(getAuthenticationSession().getUserName());
+        if(reifiableAction.getUser() == null) {
+            reifiableAction.setUser(getAuthenticationSession().getUserName());
         }
         
         // the remaining properties are set further down the call-stack, if an action is actually performed
-        // interaction.getActionIdentifier()
-        // interaction.getTargetClass()
-        // interaction.getTargetAction()
-        // interaction.getTarget()
-        // interaction.getArguments()
     }
 
 

@@ -16,7 +16,6 @@
  */
 package org.apache.isis.objectstore.jdo.applib.service.background;
 
-import java.lang.reflect.Method;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -30,6 +29,7 @@ import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundTaskService;
 import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
 import org.apache.isis.applib.services.reifiableaction.ReifiableAction.Nature;
+import org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo;
 
 @Named("Background Tasks")
 public class BackgroundTaskServiceJdo extends AbstractService implements BackgroundTaskService {
@@ -37,48 +37,42 @@ public class BackgroundTaskServiceJdo extends AbstractService implements Backgro
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(BackgroundTaskServiceJdo.class);
     
-    private final String sequenceName;
-
-    public BackgroundTaskServiceJdo(){
-        sequenceName = this.getClass().getName()+"-sequence";
-    }
-    
     @Programmatic
     @Override
     public void schedule(
             final ActionInvocationMemento aim, 
-            final ReifiableAction reifiableAction, 
+            final ReifiableAction parentAction, 
             final String targetClassName, 
             final String targetActionName, 
             final String targetArgs) {
         
-        final UUID transactionId = reifiableAction.getTransactionId();
-        final Integer sequence = reifiableAction.next(sequenceName);
-        final String user = reifiableAction.getUser();
+        final UUID transactionId = UUID.randomUUID();
+        final Integer sequence = 0;
+        final String user = parentAction.getUser();
 
-        final BackgroundTaskJdo backgroundTask = newTransientInstance(BackgroundTaskJdo.class);
+        final ReifiableActionJdo backgroundAction = newTransientInstance(ReifiableActionJdo.class);
 
-        backgroundTask.setTransactionId(transactionId);
-        backgroundTask.setSequence(sequence);
-
-        backgroundTask.setUser(user);
-        backgroundTask.setTimestamp(Clock.getTimeAsJavaSqlTimestamp());
-
-        backgroundTask.setNature(Nature.BACKGROUND);
-
-        backgroundTask.setTargetClass(targetClassName);
-        backgroundTask.setTargetAction(targetActionName);
-        backgroundTask.setTargetStr(aim.getTarget().toString());
-        backgroundTask.setActionIdentifier(aim.getActionId());
-
-        backgroundTask.setArguments(targetArgs);
-        backgroundTask.setMemento(aim.asMementoString());
+        backgroundAction.setParent(parentAction);
         
-        reifiableAction.setReify(true);
+        backgroundAction.setTransactionId(transactionId);
+        backgroundAction.setSequence(sequence);
+
+        backgroundAction.setUser(user);
+        backgroundAction.setTimestamp(Clock.getTimeAsJavaSqlTimestamp());
+
+        backgroundAction.setNature(Nature.BACKGROUND);
+
+        backgroundAction.setTargetClass(targetClassName);
+        backgroundAction.setTargetAction(targetActionName);
+        backgroundAction.setTargetStr(aim.getTarget().toString());
+        backgroundAction.setActionIdentifier(aim.getActionId());
+
+        backgroundAction.setArguments(targetArgs);
+        backgroundAction.setMemento(aim.asMementoString());
         
-        persist(backgroundTask);
+        parentAction.setReify(true);
+        
+        persist(backgroundAction);
     }
-
-
 
 }

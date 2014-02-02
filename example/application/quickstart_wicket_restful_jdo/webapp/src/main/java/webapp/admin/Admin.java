@@ -21,14 +21,13 @@ import java.util.UUID;
 
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bookmarkable;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Prototype;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditingServiceJdoRepository;
-import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundTaskJdo;
 import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundTaskServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishingServiceJdoRepository;
@@ -73,7 +72,7 @@ public class Admin extends AbstractService {
     @ActionSemantics(Of.SAFE)
     @Prototype
     @MemberOrder(sequence="20")
-    public List<BackgroundTaskJdo> allTasks() {
+    public List<ReifiableActionJdo> allTasks() {
         return backgroundTaskRepository.listAll();
     }
     public boolean hideAllTasks() {

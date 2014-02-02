@@ -21,9 +21,9 @@ import java.sql.Timestamp;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.HomePage;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Reified;
+import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Reified;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.background.BackgroundService;
@@ -47,6 +47,7 @@ public interface ReifiableAction extends HasTransactionId {
      * <p>
      * For {@link Nature#USER_INITIATED user-initiated} actions, this will always take the value <tt>0</tt>.
      */
+    @Disabled
     public int getSequence();
 
     public void setSequence(final int sequence);
@@ -70,7 +71,7 @@ public interface ReifiableAction extends HasTransactionId {
     // //////////////////////////////////////
 
     /**
-     * The date/time at which the action was invoked.
+     * The date/time at which this action was created.
      */
     @Disabled
     public abstract Timestamp getTimestamp();
@@ -84,8 +85,8 @@ public interface ReifiableAction extends HasTransactionId {
     
     
     // //////////////////////////////////////
-    
 
+    
     /**
      * {@link Bookmark} of the target object (entity or service) on which this action was performed.
      * 
@@ -159,6 +160,7 @@ public interface ReifiableAction extends HasTransactionId {
     /**
      * A human-friendly description of the arguments with which the action was invoked.
      */
+    @Disabled
     public String getArguments();
     
     /**
@@ -175,6 +177,7 @@ public interface ReifiableAction extends HasTransactionId {
     /**
      * A formal (XML or similar) specification of the action to invoke/being invoked.
      */
+    @Disabled
     public String getMemento();
     
     /**
@@ -217,6 +220,7 @@ public interface ReifiableAction extends HasTransactionId {
      * is that implementations of {@link ReifiableActionService} will only persist interactions that were explicitly started
      * by the user.
      */
+    @Disabled
     public Nature getNature();
     
     /**
@@ -227,7 +231,48 @@ public interface ReifiableAction extends HasTransactionId {
     
     // //////////////////////////////////////
 
+    /**
+     * The date/time at which this action started.
+     * 
+     * <p>
+     * For {@link Nature#USER_INITIATED user-initiated} actions, this will always be
+     * populated and have the same value as the {@link #getTimestamp() timestamp}; for
+     * {@link Nature#BACKGROUND background} actions, this will be populated only when the
+     * action is executed by a background execution process.
+     */
     @Disabled
+    public abstract Timestamp getStartedAt();
+    
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     * 
+     * <p>
+     * Implementation notes: set when the Isis PersistenceSession is opened.  Uses the applib {@link Clock}.
+     */
+    public abstract void setStartedAt(Timestamp startedAt);
+    
+
+    // //////////////////////////////////////
+
+
+    /**
+     * For actions created through the {@link BackgroundService} and {@link BackgroundTaskService},
+     * captures the parent action.
+     */
+    @Optional
+    @Disabled
+    public ReifiableAction getParent();
+
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     */
+    public void setParent(final ReifiableAction parent);
+
+    
+    // //////////////////////////////////////
+
+    @Disabled
+    @Optional
     public String getException();
 
     /**
@@ -249,6 +294,8 @@ public interface ReifiableAction extends HasTransactionId {
      * For <tt>void</tt> methods and for actions returning collections, the value
      * will be <tt>null</tt>.
      */
+    @Disabled
+    @Optional
     public Bookmark getResult();
     
     /**

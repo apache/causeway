@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo;
 
 
 public class BackgroundTaskServiceJdoContributions extends AbstractFactoryAndRepository {
@@ -35,8 +36,8 @@ public class BackgroundTaskServiceJdoContributions extends AbstractFactoryAndRep
     @NotInServiceMenu
     @NotContributed(As.ACTION)
     @Render(Type.EAGERLY)
-    public List<BackgroundTaskJdo> backgroundTasks(final HasTransactionId hasTransactionId) {
-        return backgroundTaskRepository.findByTransactionId(hasTransactionId.getTransactionId());
+    public List<ReifiableActionJdo> backgroundTasks(final ReifiableActionJdo parent) {
+        return backgroundTaskRepository.findByParent(parent);
     }
 
     // //////////////////////////////////////

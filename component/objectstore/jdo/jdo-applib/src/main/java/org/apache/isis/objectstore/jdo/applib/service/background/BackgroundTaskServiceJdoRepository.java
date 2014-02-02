@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo;
 
 public class BackgroundTaskServiceJdoRepository extends AbstractFactoryAndRepository {
 
@@ -32,16 +33,24 @@ public class BackgroundTaskServiceJdoRepository extends AbstractFactoryAndReposi
     private static final Logger LOG = LoggerFactory.getLogger(BackgroundTaskServiceJdoRepository.class);
 
     @Programmatic
-    public List<BackgroundTaskJdo> listAll() {
-        return allInstances(BackgroundTaskJdo.class);
+    public List<ReifiableActionJdo> listAll() {
+        return allInstances(ReifiableActionJdo.class);
     }
 
     @Programmatic
-    public List<BackgroundTaskJdo> findByTransactionId(final UUID transactionId) {
+    public List<ReifiableActionJdo> findByTransactionId(final UUID transactionId) {
         return allMatches(
-                new QueryDefault<BackgroundTaskJdo>(BackgroundTaskJdo.class, 
-                        "findByTransactionId", 
+                new QueryDefault<ReifiableActionJdo>(ReifiableActionJdo.class, 
+                        "findBackgroundTasksByTransactionId", 
                         "transactionId", transactionId));
+    }
+
+    @Programmatic
+    public List<ReifiableActionJdo> findByParent(ReifiableActionJdo parent) {
+        return allMatches(
+                new QueryDefault<ReifiableActionJdo>(ReifiableActionJdo.class, 
+                        "findBackgroundTasksByParent", 
+                        "parent", parent));
     }
 
 }

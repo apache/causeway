@@ -142,6 +142,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
 
             if(reifiableAction != null && reifiableAction.getNature() == ReifiableAction.Nature.USER_INITIATED && owningAction != null) {
 
+                reifiableAction.setStartedAt(reifiableAction.getTimestamp());
                 reifiableAction.setActionIdentifier(ReifiableActionUtil.actionIdentifierFor(owningAction));
                 reifiableAction.setTargetClass(ReifiableActionUtil.targetClassNameFor(targetAdapter));
                 reifiableAction.setTargetAction(ReifiableActionUtil.targetActionNameFor(owningAction));

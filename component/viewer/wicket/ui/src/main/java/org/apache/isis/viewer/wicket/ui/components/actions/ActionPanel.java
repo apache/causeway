@@ -183,13 +183,13 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             return false;
         }
         
-        final ReifiableActionContext interactionContext = getServicesInjector().lookupService(ReifiableActionContext.class);
-        final ReifiableAction interaction;
-        if (interactionContext != null) {
-            interaction = interactionContext.getReifiableAction();
-            interaction.setNature(ReifiableAction.Nature.USER_INITIATED);
+        final ReifiableActionContext reifiableActionContext = getServicesInjector().lookupService(ReifiableActionContext.class);
+        final ReifiableAction reifiableAction;
+        if (reifiableActionContext != null) {
+            reifiableAction = reifiableActionContext.getReifiableAction();
+            reifiableAction.setNature(ReifiableAction.Nature.USER_INITIATED);
         } else {
-            interaction = null;
+            reifiableAction = null;
         }
         
         
@@ -233,8 +233,8 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             }
             
             // not handled, so capture and propagate
-            if(interaction != null) {
-                interaction.setException(Throwables.getStackTraceAsString(ex));
+            if(reifiableAction != null) {
+                reifiableAction.setException(Throwables.getStackTraceAsString(ex));
             }
 
             throw ex;

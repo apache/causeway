@@ -22,7 +22,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Persistent;
 
 import com.google.common.collect.Maps;
 
@@ -61,7 +63,14 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
             name="findByTransactionId", language="JDOQL",  
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
-                    + "WHERE transactionId == :transactionId"),
+                    + "WHERE transactionId == :transactionId "
+                    + "&& nature == 'USER_INVOCATION'"),
+    @javax.jdo.annotations.Query(
+            name="findBackgroundTasksByParent", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
+                    + "WHERE parent == :parent "
+                    + "&& nature == 'BACKGROUND'"),
     @javax.jdo.annotations.Query(
             name="findCurrent", language="JDOQL",  
             value="SELECT "
@@ -114,7 +123,7 @@ public class ReifiableActionJdo implements ReifiableAction {
     private Timestamp timestamp;
 
     /**
-     * The date/time at which this interaction started.
+     * The date/time at which this action was created.
      */
     @javax.jdo.annotations.Persistent
     @javax.jdo.annotations.Column(allowsNull="false")
@@ -122,7 +131,10 @@ public class ReifiableActionJdo implements ReifiableAction {
     public Timestamp getTimestamp() {
         return timestamp;
     }
-
+    
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     */
     public void setTimestamp(final Timestamp timestamp) {
         this.timestamp = timestamp;
     }
@@ -160,6 +172,28 @@ public class ReifiableActionJdo implements ReifiableAction {
     }
 
 
+    // //////////////////////////////////////
+    // parent (property)
+    // //////////////////////////////////////
+
+    private ReifiableAction parent;
+    
+    @Override
+    @javax.jdo.annotations.Persistent(columns={
+            @javax.jdo.annotations.Column(name="parentSequence", allowsNull="true"),
+            @javax.jdo.annotations.Column(name="parentTransactionId", allowsNull="true")
+    })
+    @Hidden(where=Where.PARENTED_TABLES)
+    public ReifiableAction getParent() {
+        return parent;
+    }
+
+    @Override
+    public void setParent(ReifiableAction parent) {
+        this.parent = parent;
+    }
+
+    
     // //////////////////////////////////////
     // transactionId (property)
     // //////////////////////////////////////
@@ -371,13 +405,20 @@ public class ReifiableActionJdo implements ReifiableAction {
     // startedAt (derived property)
     // //////////////////////////////////////
     
-    /**
-     * The date/time at which this interaction started.
-     */
-    @javax.jdo.annotations.NotPersistent
+    private Timestamp startedAt;
+
+    @javax.jdo.annotations.Persistent
+    @javax.jdo.annotations.Column(allowsNull="true")
     @MemberOrder(name="Timings", sequence = "3")
     public Timestamp getStartedAt() {
-        return getTimestamp();
+        return startedAt;
+    }
+
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     */
+    public void setStartedAt(final Timestamp startedAt) {
+        this.startedAt = startedAt;
     }
     
     
@@ -595,6 +636,8 @@ public class ReifiableActionJdo implements ReifiableAction {
     
     @javax.inject.Inject
     private DomainObjectContainer container;
+
+    
 
 
 }

@@ -50,14 +50,14 @@ public class ReifiableActionServiceJdo extends AbstractService implements Reifia
     public void startTransaction(final ReifiableAction reifiableAction, final UUID transactionId) {
         if(reifiableAction instanceof ReifiableActionJdo) {
             // should be the case, since this service created the object in the #create() method
-            final ReifiableActionJdo interactionJdo = (ReifiableActionJdo) reifiableAction;
-            final UUID currentTransactionId = interactionJdo.getTransactionId();
+            final ReifiableActionJdo reifiableActionJdo = (ReifiableActionJdo) reifiableAction;
+            final UUID currentTransactionId = reifiableActionJdo.getTransactionId();
             if(currentTransactionId != null && !currentTransactionId.equals(transactionId)) {
                 // the logic in IsisTransaction means that any subsequent transactions within a given reifiable action
                 // should reuse the xactnId of the first transaction created within that interaction.
                 throw new IllegalStateException("Attempting to set a different transactionId on reifiable action");
             }
-            interactionJdo.setTransactionId(transactionId);
+            reifiableActionJdo.setTransactionId(transactionId);
         }
     }
 
