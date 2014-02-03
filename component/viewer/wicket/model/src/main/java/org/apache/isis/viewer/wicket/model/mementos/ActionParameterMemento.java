@@ -41,12 +41,19 @@ public class ActionParameterMemento implements Serializable {
     private transient ObjectActionParameter actionParameter;
 
     public ActionParameterMemento(final ActionMemento actionMemento, final int number) {
-        this.actionMemento = actionMemento;
-        this.number = number;
+        this(actionMemento, number, actionParameterFor(actionMemento, number));
     }
 
     public ActionParameterMemento(final ObjectActionParameter actionParameter) {
-        this(new ActionMemento(actionParameter.getAction()), actionParameter.getNumber());
+        this(new ActionMemento(actionParameter.getAction()), actionParameter.getNumber(), actionParameter);
+    }
+
+    private ActionParameterMemento(
+            final ActionMemento actionMemento, 
+            final int number, 
+            final ObjectActionParameter actionParameter) {
+        this.actionMemento = actionMemento;
+        this.number = number;
         this.actionParameter = actionParameter;
     }
 
@@ -60,10 +67,14 @@ public class ActionParameterMemento implements Serializable {
 
     public ObjectActionParameter getActionParameter() {
         if (actionParameter == null) {
-            final ObjectAction action = actionMemento.getAction();
-            this.actionParameter = action.getParameters().get(number);
+            this.actionParameter = actionParameterFor(actionMemento, number);
         }
         return actionParameter;
+    }
+
+    private static ObjectActionParameter actionParameterFor(ActionMemento actionMemento, int number) {
+        final ObjectAction action = actionMemento.getAction();
+        return action.getParameters().get(number);
     }
 
     /**

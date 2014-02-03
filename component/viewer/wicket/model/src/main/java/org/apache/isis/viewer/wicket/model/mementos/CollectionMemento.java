@@ -44,12 +44,16 @@ public class CollectionMemento implements Serializable {
     private transient OneToManyAssociation collection;
 
     public CollectionMemento(final ObjectSpecId owningType, final String id) {
-        this.owningType = owningType;
-        this.id = id;
+        this(owningType, id, collectionFor(owningType, id));
     }
 
     public CollectionMemento(final OneToManyAssociation collection) {
-        this(owningSpecFor(collection).getSpecId(), collection.getIdentifier().toNameIdentityString());
+        this(owningSpecFor(collection).getSpecId(), collection.getIdentifier().toNameIdentityString(), collection);
+    }
+
+    private CollectionMemento(final ObjectSpecId owningType, final String id, final OneToManyAssociation collection) {
+        this.owningType = owningType;
+        this.id = id;
         this.collection = collection;
     }
 
@@ -74,9 +78,13 @@ public class CollectionMemento implements Serializable {
 
     public OneToManyAssociation getCollection() {
         if (collection == null) {
-            collection = (OneToManyAssociation) SpecUtils.getSpecificationFor(owningType).getAssociation(id);
+            collection = collectionFor(owningType, id);
         }
         return collection;
+    }
+
+    private static OneToManyAssociation collectionFor(ObjectSpecId owningType, String id) {
+        return (OneToManyAssociation) SpecUtils.getSpecificationFor(owningType).getAssociation(id);
     }
 
 }

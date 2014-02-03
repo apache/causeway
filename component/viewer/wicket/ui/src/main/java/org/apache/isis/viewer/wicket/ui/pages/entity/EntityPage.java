@@ -27,6 +27,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.hints.UiHintsBroadcastEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -43,7 +45,6 @@ public class EntityPage extends PageAbstract {
     private static final long serialVersionUID = 1L;
     
     private final EntityModel model;
-
 
     /**
      * Called reflectively, in support of 
@@ -77,6 +78,14 @@ public class EntityPage extends PageAbstract {
 
     private EntityPage(PageParameters pageParameters, EntityModel entityModel, String titleString) {
         super(pageParameters, ApplicationActions.INCLUDE, titleString, ComponentType.ENTITY);
+
+        // this is a work-around for JRebel integration...
+        // ... even though the IsisJRebelPlugin calls invalidateCache, it seems that there is 
+        // some caching elsewhere in the Wicket viewer meaning that stale metadata is referenced.
+        // doing an additional call here seems to be sufficient, though not exactly sure why... :-(
+        if(!getDeploymentType().isProduction()) {
+            getSpecificationLoader().invalidateCacheFor(entityModel.getObject().getObject());
+        }
         
         this.model = entityModel;
         addChildComponents(themeDiv, model);
@@ -105,6 +114,10 @@ public class EntityPage extends PageAbstract {
     protected void onBeforeRender() {
         this.model.load(ConcurrencyChecking.NO_CHECK);
         super.onBeforeRender();
+    }
+
+    private DeploymentType getDeploymentType() {
+        return IsisContext.getDeploymentType();
     }
 
 }

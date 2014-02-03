@@ -35,41 +35,37 @@ public class PropertyMemento implements Serializable {
         return IsisContext.getSpecificationLoader().loadSpecification(association.getIdentifier().toClassIdentityString());
     }
 
-    private final ObjectSpecId owningType;
+    private final ObjectSpecId owningSpecId;
     private final String identifier;
+    private final ObjectSpecId specId;
 
-    /**
-     * Lazily loaded as required.
-     */
-    private ObjectSpecId type;
+//    private transient OneToOneAssociation property;
 
-    private transient OneToOneAssociation property;
-
-    public PropertyMemento(final ObjectSpecId owningType, final String name) {
-        this(owningType, name, null);
+    public PropertyMemento(final ObjectSpecId owningType, final String identifier) {
+        this(owningType, identifier, null);
     }
 
-    public PropertyMemento(final ObjectSpecId owningType, final String name, final ObjectSpecId type) {
-        this.owningType = owningType;
-        this.identifier = name;
-        this.type = type;
+    public PropertyMemento(final ObjectSpecId owningType, final String identifier, final ObjectSpecId type) {
+        this(owningType, identifier, type, propertyFor(owningType, identifier));
     }
 
     public PropertyMemento(final OneToOneAssociation property) {
-        this(owningSpecFor(property).getSpecId(), property.getIdentifier().toNameIdentityString(), property.getSpecification().getSpecId());
-        this.property = property;
+        this(owningSpecFor(property).getSpecId(), property.getIdentifier().toNameIdentityString(), property.getSpecification().getSpecId(), property);
+    }
+    
+    private PropertyMemento(final ObjectSpecId owningSpecId, final String name, final ObjectSpecId specId, final OneToOneAssociation property) {
+        this.owningSpecId = owningSpecId;
+        this.identifier = name;
+        this.specId = specId;
+//        this.property = property;
     }
 
     public ObjectSpecId getOwningType() {
-        return owningType;
+        return owningSpecId;
     }
 
     public ObjectSpecId getType() {
-        if (type == null) {
-            // lazy load if need be
-            type = getProperty().getSpecification().getSpecId();
-        }
-        return type;
+        return specId;
     }
 
     public String getIdentifier() {
@@ -77,10 +73,15 @@ public class PropertyMemento implements Serializable {
     }
 
     public OneToOneAssociation getProperty() {
-        if (property == null) {
-            property = (OneToOneAssociation) SpecUtils.getSpecificationFor(owningType).getAssociation(identifier);
-        }
-        return property;
+//        if (property == null) {
+//            property = propertyFor(owningSpecId, identifier);
+//        }
+//        return property;
+        return propertyFor(owningSpecId, identifier);
+    }
+
+    private static OneToOneAssociation propertyFor(ObjectSpecId owningType, String identifier) {
+        return (OneToOneAssociation) SpecUtils.getSpecificationFor(owningType).getAssociation(identifier);
     }
 
     /**

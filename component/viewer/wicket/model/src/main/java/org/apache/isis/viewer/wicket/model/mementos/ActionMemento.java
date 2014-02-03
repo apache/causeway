@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 /**
@@ -42,17 +43,25 @@ public class ActionMemento implements Serializable {
     private transient ObjectAction action;
 
     public ActionMemento(final ObjectAction action) {
-        this(action.getOnType().getSpecId(), action.getType(), action.getIdentifier().toNameParmsIdentityString());
-        this.action = action;
+        this(action.getOnType().getSpecId(), action.getType(), action.getIdentifier().toNameParmsIdentityString(), action);
     }
 
     public ActionMemento(final ObjectSpecId owningType, final ActionType actionType, final String nameParmsId) {
-        this.owningType = owningType;
-        this.actionType = actionType;
-        this.nameParmsId = nameParmsId;
-        this.actionSemantics = getAction().getSemantics();
+        this(owningType, actionType, nameParmsId, actionFor(owningType, actionType, nameParmsId));
     }
 
+    private ActionMemento(
+            final ObjectSpecId owningSpecId, 
+            final ActionType actionType, 
+            final String nameParmsId, 
+            final ObjectAction action) {
+        this.owningType = owningSpecId;
+        this.actionType = actionType;
+        this.nameParmsId = nameParmsId;
+        this.action = action;
+        this.actionSemantics = action.getSemantics();
+    }
+    
     public ObjectSpecId getOwningType() {
         return owningType;
     }
@@ -71,10 +80,14 @@ public class ActionMemento implements Serializable {
 
     public ObjectAction getAction() {
         if (action == null) {
-            action = SpecUtils.getSpecificationFor(owningType).getObjectAction(this.actionType, nameParmsId);
+            action = actionFor(owningType, actionType, nameParmsId);
         }
         return action;
     }
 
+    private static ObjectAction actionFor(ObjectSpecId owningType, ActionType actionType, String nameParmsId) {
+        final ObjectSpecification objectSpec = SpecUtils.getSpecificationFor(owningType);
+        return objectSpec.getObjectAction(actionType, nameParmsId);
+    }
 
 }
