@@ -96,7 +96,7 @@ public class SimpleEntity extends BaseEntity {
     // {{ NotPersisted: int  (nb: throws exception if called)
     @NotPersisted
     public int getNotPersisted() {
-        throw new org.apache.isis.applib.ApplicationException("unexpected call");
+        throw new org.apache.isis.applib.NonRecoverableException("unexpected call");
     }
     // }}
 

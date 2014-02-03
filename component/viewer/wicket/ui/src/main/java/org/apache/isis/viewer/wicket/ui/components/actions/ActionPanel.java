@@ -28,7 +28,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
@@ -274,11 +274,11 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
     }
 
     /**
-     * Executes the action, handling any {@link ApplicationException}s that
+     * Executes the action, handling any {@link RecoverableException}s that
      * might be encountered.
      * 
      * <p>
-     * If an {@link ApplicationException} is encountered, then the application error will be
+     * If an {@link RecoverableException} is encountered, then the application error will be
      * {@link MessageBroker#setApplicationError(String) set} so that a suitable message can be 
      * rendered higher up the call stack.
      * 
@@ -292,9 +292,13 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             return resultAdapter;
 
         } catch (RuntimeException ex) {
+
+            // TODO: some duplication between this code and ActionLinkFactoryAbstract
             
             // see if is an application-defined exception
-            final ApplicationException appEx = ActionModel.getApplicationExceptionIfAny(ex);
+            // if so, is converted to an application error,
+            // equivalent to calling DomainObjectContainer#raiseError(...)
+            final RecoverableException appEx = ActionModel.getApplicationExceptionIfAny(ex);
             if (appEx != null) {
                 getMessageBroker().setApplicationError(appEx.getMessage());
 

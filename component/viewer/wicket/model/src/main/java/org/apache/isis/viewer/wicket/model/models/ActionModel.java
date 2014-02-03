@@ -40,7 +40,7 @@ import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.resource.StringResourceStream;
 
-import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -507,9 +507,9 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
     // //////////////////////////////////////
     
-    public static ApplicationException getApplicationExceptionIfAny(Exception ex) {
-        Iterable<ApplicationException> appEx = Iterables.filter(Throwables.getCausalChain(ex), ApplicationException.class);
-        Iterator<ApplicationException> iterator = appEx.iterator();
+    public static RecoverableException getApplicationExceptionIfAny(Exception ex) {
+        Iterable<RecoverableException> appEx = Iterables.filter(Throwables.getCausalChain(ex), RecoverableException.class);
+        Iterator<RecoverableException> iterator = appEx.iterator();
         return iterator.hasNext() ? iterator.next() : null;
     }
 

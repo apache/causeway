@@ -355,4 +355,15 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     public LocalizationProvider getLocalizationProvider() {
         return localizationProvider;
     }
+
+    
+    // ///////////////////////////////////////////
+    // getTransactionState
+    // ///////////////////////////////////////////
+    
+    @Override
+    public TransactionState getTransactionState() {
+        throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+    }
+
 }

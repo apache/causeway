@@ -21,7 +21,7 @@ package org.apache.isis.core.runtime.persistence.internal;
 
 import java.util.List;
 
-import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -60,6 +60,8 @@ import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerR
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.MessageBroker;
 import org.apache.isis.core.runtime.system.transaction.UpdateNotifier;
@@ -238,7 +240,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
             @Override
             public void raiseError(final String message) {
-                throw new ApplicationException(message);
+                throw new RecoverableException(message);
             }
 
             @Override
@@ -396,6 +398,14 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
         return IsisContext.getMessageBroker();
     }
 
-
+    @Override
+    public TransactionState getTransactionState() {
+        final IsisTransaction transaction = getTransactionManager().getTransaction();
+        if(transaction == null) {
+            return TransactionState.NONE;
+        }
+        IsisTransaction.State state = transaction.getState();
+        return state.getRuntimeContextState();
+    }
 
 }

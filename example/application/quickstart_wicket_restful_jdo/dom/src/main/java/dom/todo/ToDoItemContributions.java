@@ -57,7 +57,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     @NotContributed(As.ACTION)
     @Hidden(where=Where.ALL_TABLES)
     @Disabled(reason="Relative priority, derived from due date")
-    public Integer priority(final ToDoItem toDoItem) {
+    public Integer relativePriority(final ToDoItem toDoItem) {
         if(toDoItem.isComplete()) {
             return null;
         }
@@ -106,7 +106,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     @ActionSemantics(Of.SAFE)
     @NotContributed(As.ASSOCIATION)
     public ToDoItem next(final ToDoItem item) {
-        final Integer priority = priority(item);
+        final Integer priority = relativePriority(item);
         if(priority == null) {
             return item;
         }
@@ -119,7 +119,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     @ActionSemantics(Of.SAFE)
     @NotContributed(As.ASSOCIATION)
     public ToDoItem previous(final ToDoItem item) {
-        final Integer priority = priority(item);
+        final Integer priority = relativePriority(item);
         if(priority == null) {
             return item;
         }

@@ -40,6 +40,8 @@ import com.google.common.collect.Ordering;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
@@ -277,7 +279,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.subcategory = subcategory;
     }
 
-    
+
     // //////////////////////////////////////
     // OwnedBy (property)
     // //////////////////////////////////////
@@ -650,25 +652,30 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // //////////////////////////////////////
     
     static enum DemoExceptionType {
-        APPLICATION_EXCEPTION(ApplicationException.class),
-        RUNTIME_EXCEPTION(RuntimeException.class);
-        private final Class<? extends Exception> type;
-        private DemoExceptionType(Class<? extends Exception> type) {
-            this.type = type;
-        }
-        @Override
-        public String toString() {
-            return type.getName();
-        }
+        RecoverableException,
+        RecoverableExceptionAutoEscalated,
+        NonRecoverableException;
     }
     
     @Prototype
     @ActionSemantics(Of.SAFE)
     public void demoException(final @Named("Type") DemoExceptionType type) {
-        if(type == DemoExceptionType.RUNTIME_EXCEPTION)
-            throw new RuntimeException("Demo throwing runtime exception");
-        else
-            throw new ApplicationException("Demo throwing application exception");
+        switch(type) {
+        case NonRecoverableException:
+            throw new NonRecoverableException("Demo throwing " + type.name());
+        case RecoverableException:
+            throw new RecoverableException("Demo throwing " + type.name());
+        case RecoverableExceptionAutoEscalated:
+            try {
+                // this will trigger an exception (because subcategory cannot be null), causing the xactn to be aborted
+                setSubcategory(null);
+                container.flush();
+            } catch(Exception e) {
+                // it's a programming mistake to throw only a recoverable exception here, because of the xactn's state.
+                // the framework should instead auto-escalate this to a non-recoverable exception
+                throw new RecoverableException("Demo throwing " + type.name(), e);
+            }
+        }
     }
 
     // //////////////////////////////////////

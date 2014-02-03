@@ -85,9 +85,9 @@
     {
         span: 6,
         memberGroups: {
-            Detail: {
+            Priority: {
                 members: {
-                    priority: {
+                     relativePriority: {
                         actions: {
                             previous: {},
                             next: {}
@@ -95,7 +95,11 @@
                     },
                     dueBy: {
                         cssClass: { value: "x-key" }
-                    },
+                    }
+                }
+            },
+            Other: {
+                members: {
                     cost: {
                         actions: {
                             updateCost:{

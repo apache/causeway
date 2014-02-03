@@ -24,7 +24,7 @@ package org.apache.isis.core.commons.exceptions;
  * 
  * <p>
  * The viewer is expected to render the message within the application in a
- * user-friendly fashion.
+ * user-friendly fashion, for example as a growl-like notification.
  */
 public class IsisApplicationException extends IsisException {
 

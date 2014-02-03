@@ -25,7 +25,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.FatalException;
+import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.NonRecoverableException;
 
 class IoUtils {
 
@@ -44,8 +46,8 @@ class IoUtils {
             final byte[] utf8Bytes = toZip.getBytes(Charset.forName("UTF-8"));
             zos.write(utf8Bytes);
             zos.flush();
-        } catch (IOException e) {
-            throw new ApplicationException(e);
+        } catch (final IOException ex) {
+            throw new FatalException(ex);
         } finally {
             closeSafely(zos);
         }
@@ -72,7 +74,7 @@ class IoUtils {
             }
             return null;
         } catch(IOException ex) {
-            throw new ApplicationException(ex);
+            throw new NonRecoverableException(ex);
         } finally {
             IoUtils.closeSafely(zis);
         }

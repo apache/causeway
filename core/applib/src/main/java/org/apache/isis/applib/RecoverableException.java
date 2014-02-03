@@ -36,26 +36,26 @@ package org.apache.isis.applib;
  * throw this exception, the exception will be promoted to a fatal exception.
  * 
  * <p>
- * Note that this exception has identical semantics to {@link RecoverableException}, and can be considered a
- * synonym.
+ * Note that this exception has identical semantics to {@link ApplicationException} (of which it is the immediate
+ * superclass), and can be considered a synonym.
  * 
- * @see RecoverableException
+ * @see ApplicationException
  * @see NonRecoverableException
  * @see FatalException
  */
-public class ApplicationException extends RecoverableException {
+public class RecoverableException extends RuntimeException {
     
     private static final long serialVersionUID = 1L;
 
-    public ApplicationException(final String msg) {
+    public RecoverableException(final String msg) {
         super(msg);
     }
 
-    public ApplicationException(final Throwable cause) {
+    public RecoverableException(final Throwable cause) {
         super(cause);
     }
 
-    public ApplicationException(final String msg, final Throwable cause) {
+    public RecoverableException(final String msg, final Throwable cause) {
         super(msg, cause);
     }
 

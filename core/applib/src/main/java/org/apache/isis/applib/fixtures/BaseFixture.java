@@ -19,7 +19,7 @@
 package org.apache.isis.applib.fixtures;
 
 import org.apache.isis.applib.AbstractContainedObject;
-import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.clock.Clock;
 
 abstract class BaseFixture extends AbstractContainedObject implements InstallableFixture {
@@ -31,7 +31,7 @@ abstract class BaseFixture extends AbstractContainedObject implements Installabl
         this.fixtureType = fixtureType;
         try {
             clock = FixtureClock.initialize();
-        } catch (final ApplicationException ex) {
+        } catch (final RecoverableException ex) {
             clock = null;
             System.err.println(ex.getMessage());
             System.err.println("calls to change date or time will be ignored");

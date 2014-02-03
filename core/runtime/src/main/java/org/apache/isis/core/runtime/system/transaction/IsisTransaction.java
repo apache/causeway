@@ -70,6 +70,7 @@ import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFace
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.PublishedObjectFacet;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext.TransactionState;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
@@ -95,6 +96,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
  */
 public class IsisTransaction implements TransactionScopedComponent {
 
+
     public static enum State {
         /**
          * Started, still in progress.
@@ -104,7 +106,7 @@ public class IsisTransaction implements TransactionScopedComponent {
          * {@link IsisTransaction#commit() commit} or
          * {@link IsisTransaction#abort() abort}.
          */
-        IN_PROGRESS,
+        IN_PROGRESS(TransactionState.IN_PROGRESS),
         /**
          * Started, but has hit an exception.
          * 
@@ -117,7 +119,7 @@ public class IsisTransaction implements TransactionScopedComponent {
          * <p>
          * Similar to <tt>setRollbackOnly</tt> in EJBs.
          */
-        MUST_ABORT,
+        MUST_ABORT(TransactionState.MUST_ABORT),
         /**
          * Completed, having successfully committed.
          * 
@@ -127,7 +129,7 @@ public class IsisTransaction implements TransactionScopedComponent {
          * {@link IsisTransaction#commit() commit} (will throw
          * {@link IllegalStateException}).
          */
-        COMMITTED,
+        COMMITTED(TransactionState.COMMITTED),
         /**
          * Completed, having aborted.
          * 
@@ -137,9 +139,14 @@ public class IsisTransaction implements TransactionScopedComponent {
          * {@link IsisTransaction#abort() abort} (will throw
          * {@link IllegalStateException}).
          */
-        ABORTED;
+        ABORTED(TransactionState.ABORTED);
 
-        private State(){}
+        public final TransactionState transactionState;
+        
+        private State(TransactionState transactionState){
+            this.transactionState = transactionState;
+        }
+
 
         /**
          * Whether it is valid to {@link IsisTransaction#flush() flush} this
@@ -175,6 +182,10 @@ public class IsisTransaction implements TransactionScopedComponent {
 
         public boolean mustAbort() {
             return this == MUST_ABORT;
+        }
+
+        public TransactionState getRuntimeContextState() {
+            return transactionState;
         }
     }
 

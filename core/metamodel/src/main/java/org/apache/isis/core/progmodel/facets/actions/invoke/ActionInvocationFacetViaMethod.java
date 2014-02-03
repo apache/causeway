@@ -30,6 +30,8 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
@@ -54,6 +56,7 @@ import org.apache.isis.core.metamodel.facets.actions.reified.ReifiedActionFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -71,12 +74,14 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
 
     private final AdapterManager adapterManager;
     private final ServicesInjector servicesInjector;
-
+    private final RuntimeContext runtimeContext;
+    
     public ActionInvocationFacetViaMethod(
             final Method method, 
             final ObjectSpecification onType, 
             final ObjectSpecification returnType, 
             final FacetHolder holder, 
+            final RuntimeContext runtimeContext, 
             final AdapterManager adapterManager, 
             final ServicesInjector servicesInjector) {
         super(holder);
@@ -84,6 +89,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
         this.paramCount = method.getParameterTypes().length;
         this.onType = onType;
         this.returnType = returnType;
+        this.runtimeContext = runtimeContext;
         this.adapterManager = adapterManager;
         this.servicesInjector = servicesInjector;
     }
@@ -203,12 +209,22 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
         } catch (final IllegalArgumentException e) {
             throw e;
         } catch (final InvocationTargetException e) {
-            if (e.getTargetException() instanceof IllegalStateException) {
-                throw new ReflectiveActionException("IllegalStateException thrown while executing " + method + " " + e.getTargetException().getMessage(), e.getTargetException());
-            } else {
-                ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
-                return null;
+            final Throwable targetException = e.getTargetException();
+            if (targetException instanceof IllegalStateException) {
+                throw new ReflectiveActionException("IllegalStateException thrown while executing " + method + " " + targetException.getMessage(), targetException);
+            } 
+            if(targetException instanceof RecoverableException) {
+                if (!runtimeContext.getTransactionState().canCommit()) {
+                    // something severe has happened to the underlying transaction;
+                    // so escalate this exception to be non-recoverable
+                    final Throwable targetExceptionCause = targetException.getCause();
+                    Throwable nonRecoverableCause = targetExceptionCause != null? targetExceptionCause: targetException;
+                    throw new NonRecoverableException(nonRecoverableCause);
+                }
             }
+
+            ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
+            return null;
         } catch (final IllegalAccessException e) {
             throw new ReflectiveActionException("Illegal access of " + method, e);
         }

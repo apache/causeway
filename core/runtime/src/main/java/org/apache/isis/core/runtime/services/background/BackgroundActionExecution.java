@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.progmodel.facets.actions.invoke.ReifiableActionUtil;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
 
@@ -93,9 +94,9 @@ public abstract class BackgroundActionExecution extends AbstractIsisSessionTempl
             }
             
             final ObjectAdapter[] argAdapters = argAdaptersFor(aim);
-            ObjectAdapter resultAdapter = objectAction.execute(targetAdapter, argAdapters);
+            final ObjectAdapter resultAdapter = objectAction.execute(targetAdapter, argAdapters);
             if(resultAdapter != null) {
-                Bookmark resultBookmark = bookmarkService.bookmarkFor(resultAdapter.getObject());
+                Bookmark resultBookmark = ReifiableActionUtil.bookmarkFor(resultAdapter);
                 backgroundAction.setResult(resultBookmark);
             }
 

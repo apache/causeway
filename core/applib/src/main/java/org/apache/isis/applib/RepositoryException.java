@@ -21,31 +21,29 @@ package org.apache.isis.applib;
 
 /**
  * Indicates that a repository method has failed.
+ * 
+ * <p>
+ * This exception is intended to represent an unexpected and non-recoverable condition (eg a syntax error in some
+ * JDOQL query syntax or similar), and so is a subclass of {@link NonRecoverableException}.
+ * Throwing this exception will therefore result in (some sort of) error page being displayed
+ * to the user.
+ * 
+ * @see NonRecoverableException
+ * @see RecoverableException
  */
-public class RepositoryException extends RuntimeException {
+public class RepositoryException extends NonRecoverableException {
+    
     private static final long serialVersionUID = 1L;
-    private Throwable cause;
-
-    public RepositoryException() {
-        super();
-    }
 
     public RepositoryException(final String msg) {
         super(msg);
     }
 
     public RepositoryException(final Throwable cause) {
-        this(cause.getMessage());
-        this.cause = cause;
+        super(cause);
     }
 
     public RepositoryException(final String msg, final Throwable cause) {
-        this(msg);
-        this.cause = cause;
-    }
-
-    @Override
-    public Throwable getCause() {
-        return cause;
+        super(msg, cause);
     }
 }

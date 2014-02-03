@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 
@@ -48,7 +48,7 @@ public final class ThrowableExtensions {
 
     public static void throwWithinIsisException(final InvocationTargetException e, final String error) {
         final Throwable targetException = e.getTargetException();
-        if (targetException instanceof ApplicationException) {
+        if (targetException instanceof RecoverableException) {
             // an application exception from the domain code is re-thrown as an
             // IsisException with same semantics
             throw new IsisApplicationException(targetException);

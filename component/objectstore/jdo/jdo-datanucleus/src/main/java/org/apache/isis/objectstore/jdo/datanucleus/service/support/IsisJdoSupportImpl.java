@@ -35,7 +35,8 @@ import javax.jdo.datastore.JDOConnection;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.FatalException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -170,8 +171,8 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
                         return null;
                     }
                 });
-            } catch (Exception e) {
-                throw new ApplicationException(e);
+            } catch (final Exception ex) {
+                throw new FatalException(ex);
             }
         }
     }

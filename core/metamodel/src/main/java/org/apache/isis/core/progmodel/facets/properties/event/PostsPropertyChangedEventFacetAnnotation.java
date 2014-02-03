@@ -25,7 +25,8 @@ import java.util.List;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.FatalException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -110,7 +111,7 @@ public class PostsPropertyChangedEventFacetAnnotation extends PostsPropertyChang
             
             eventBusService.post(event);
         } catch (Exception e) {
-            throw new ApplicationException(e);
+            throw new FatalException(e);
         }
     }
 

@@ -35,7 +35,7 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.resource.IResourceStream;
 
-import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -187,9 +187,13 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             return actionModel.getObject();
 
         } catch (RuntimeException ex) {
-            
+
+            // TODO: some duplication between this code and ActionPanel
+
             // see if is an application-defined exception
-            final ApplicationException appEx = ActionModel.getApplicationExceptionIfAny(ex);
+            // if so, is converted to an application error,
+            // equivalent to calling DomainObjectContainer#raiseError(...)
+            final RecoverableException appEx = ActionModel.getApplicationExceptionIfAny(ex);
             if (appEx != null) {
                 IsisContext.getMessageBroker().setApplicationError(appEx.getMessage());
                 return null;

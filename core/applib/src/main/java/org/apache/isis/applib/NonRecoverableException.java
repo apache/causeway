@@ -20,30 +20,33 @@
 package org.apache.isis.applib;
 
 /**
- * Indicates that the persistence of an object failed.
+ * Indicates that an unexpected, non-recoverable (fatal) exception has occurred within
+ * the application logic.
  * 
  * <p>
- * This exception is intended to represent an unexpected and non-recoverable condition (eg a unique/primary key/
- * foreign key constaint has been violated), and so is a subclass of {@link NonRecoverableException}.
- * Throwing this exception will therefore result in (some sort of) error page being displayed
- * to the user.
+ * Throwing this exception will (dependent on the viewer) result in some sort of an error page being displayed to the user.
  * 
- * @see NonRecoverableException
+ * <p>
+ * Note that this exception has identical semantics to {@link FatalException} (of which it is the immediate
+ * superclass) and can be considered a synonym.
+ * 
  * @see RecoverableException
+ * @see ApplicationException
+ * @see FatalException
  */
-public class PersistFailedException extends NonRecoverableException {
+public class NonRecoverableException extends RuntimeException {
     
     private static final long serialVersionUID = 1L;
-    
-    public PersistFailedException(final String msg) {
+
+    public NonRecoverableException(final String msg) {
         super(msg);
     }
 
-    public PersistFailedException(final Throwable cause) {
+    public NonRecoverableException(final Throwable cause) {
         super(cause);
     }
 
-    public PersistFailedException(final String msg, final Throwable cause) {
+    public NonRecoverableException(final String msg, final Throwable cause) {
         super(msg, cause);
     }
 

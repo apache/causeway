@@ -87,7 +87,7 @@ public class ReferencingEntity extends BaseEntity {
     // {{ NotPersisted
     @NotPersisted
     public SimpleEntity getNotPersisted() {
-        throw new org.apache.isis.applib.ApplicationException("unexpected call");
+        throw new org.apache.isis.applib.NonRecoverableException("unexpected call");
     }
     // }}
 

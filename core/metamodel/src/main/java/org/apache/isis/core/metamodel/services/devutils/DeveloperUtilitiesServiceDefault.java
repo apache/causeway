@@ -35,7 +35,8 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.FatalException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.devutils.DeveloperUtilitiesService;
 import org.apache.isis.applib.value.Blob;
@@ -187,8 +188,8 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
             }
             writer.close();
             return new Blob("layouts.zip", mimeTypeApplicationZip, baos.toByteArray());
-        } catch (IOException e) {
-            throw new ApplicationException("Unable to create zip of layouts", e);
+        } catch (final IOException ex) {
+            throw new FatalException("Unable to create zip of layouts", ex);
         }
     }
 

@@ -29,7 +29,8 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.FatalException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.Defaults;
 import org.apache.isis.applib.fixtures.FixtureClock;
 
@@ -129,7 +130,7 @@ public abstract class Clock {
 
     private static void ensureReplaceable() {
         if (!isReplaceable && instance != null) {
-            throw new ApplicationException("Clock already set up");
+            throw new RecoverableException("Clock already set up");
         }
     }
 
