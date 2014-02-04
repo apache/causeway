@@ -48,11 +48,11 @@ import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.services.publish.ObjectStringifier;
-import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
-import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -199,9 +199,9 @@ public class IsisTransaction implements TransactionScopedComponent {
     private final UpdateNotifier updateNotifier;
 
     /**
-     * the 'owning' reifiable action, (if service configured).
+     * the 'owning' command, (if service configured).
      */
-    private final ReifiableAction reifiableAction;
+    private final Command command;
 
     /**
      * could be null if none has been registered.
@@ -213,7 +213,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     private final PublishingServiceWithDefaultPayloadFactories publishingService;
 
     /**
-     * Will be that of the {@link #reifiableAction} if not <tt>null</tt>, otherwise will be randomly created.
+     * Will be that of the {@link #command} if not <tt>null</tt>, otherwise will be randomly created.
      */
     private final UUID transactionId;
         
@@ -225,7 +225,7 @@ public class IsisTransaction implements TransactionScopedComponent {
             final org.apache.isis.core.commons.authentication.MessageBroker messageBroker, 
             final UpdateNotifier updateNotifier, 
             final TransactionalResource objectStore, 
-            final ReifiableActionContext reifiableActionContext, 
+            final CommandContext commandContext, 
             final AuditingService3 auditingService3, 
             final PublishingServiceWithDefaultPayloadFactories publishingService) {
         
@@ -241,14 +241,14 @@ public class IsisTransaction implements TransactionScopedComponent {
         this.publishingService = publishingService;
 
         // determine whether this xactn is taking place in the context of an
-        // existing reifiable action in which a previous xactn has already occurred.
+        // existing command in which a previous xactn has already occurred.
         // if so, reuse that transactionId.
         UUID previousTransactionId = null;
-        if(reifiableActionContext != null) {
-            reifiableAction = reifiableActionContext.getReifiableAction();
-            previousTransactionId = reifiableAction.getTransactionId();
+        if(commandContext != null) {
+            command = commandContext.getCommand();
+            previousTransactionId = command.getTransactionId();
         } else {
-            reifiableAction = null;
+            command = null;
         }
         this.transactionId = previousTransactionId != null
             ? previousTransactionId
@@ -567,10 +567,10 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     private int nextEventSequence() {
-        if(reifiableAction == null) {
-            throw new IllegalStateException("ReifiableActionContext service is required to support Publishing.");
+        if(command == null) {
+            throw new IllegalStateException("CommandContext service is required to support Publishing.");
         } 
-        return reifiableAction.next("publishedEvent");
+        return command.next("publishedEvent");
     }
 
     public void auditChangedProperty(

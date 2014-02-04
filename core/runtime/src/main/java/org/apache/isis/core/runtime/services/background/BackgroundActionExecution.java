@@ -25,20 +25,20 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
-import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.progmodel.facets.actions.invoke.ReifiableActionUtil;
+import org.apache.isis.core.progmodel.facets.actions.invoke.CommandUtil;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
 
 /**
- * Intended to be used as a base class for executing queued up {@link ReifiableAction background action}s.
+ * Intended to be used as a base class for executing queued up {@link Command background action}s.
  * 
  * <p>
  * This implementation uses the {@link #findBackgroundActionsToExecute() hook method} so that it is
@@ -57,8 +57,8 @@ public abstract class BackgroundActionExecution extends AbstractIsisSessionTempl
 
     
     protected void doExecute(Object context) {
-        final List<? extends ReifiableAction> findBackgroundActionsToExecute = findBackgroundActionsToExecute(); 
-        for (final ReifiableAction backgroundAction : findBackgroundActionsToExecute) {
+        final List<? extends Command> findBackgroundActionsToExecute = findBackgroundActionsToExecute(); 
+        for (final Command backgroundAction : findBackgroundActionsToExecute) {
             execute(backgroundAction);
         }
     }
@@ -66,14 +66,14 @@ public abstract class BackgroundActionExecution extends AbstractIsisSessionTempl
     /**
      * Mandatory hook method
      */
-    protected abstract List<? extends ReifiableAction> findBackgroundActionsToExecute();
+    protected abstract List<? extends Command> findBackgroundActionsToExecute();
 
     // //////////////////////////////////////
 
     
-    private void execute(final ReifiableAction backgroundAction) {
+    private void execute(final Command backgroundAction) {
         try {
-            reifiableActionContext.setReifiableAction(backgroundAction);
+            commandContext.setCommand(backgroundAction);
 
             backgroundAction.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
             
@@ -96,7 +96,7 @@ public abstract class BackgroundActionExecution extends AbstractIsisSessionTempl
             final ObjectAdapter[] argAdapters = argAdaptersFor(aim);
             final ObjectAdapter resultAdapter = objectAction.execute(targetAdapter, argAdapters);
             if(resultAdapter != null) {
-                Bookmark resultBookmark = ReifiableActionUtil.bookmarkFor(resultAdapter);
+                Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
                 backgroundAction.setResult(resultBookmark);
             }
 
@@ -149,5 +149,5 @@ public abstract class BackgroundActionExecution extends AbstractIsisSessionTempl
     private BookmarkService bookmarkService;
 
     @javax.inject.Inject
-    private ReifiableActionContext reifiableActionContext;
+    private CommandContext commandContext;
 }

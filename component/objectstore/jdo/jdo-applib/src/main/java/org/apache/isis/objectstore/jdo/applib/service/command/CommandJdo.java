@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.objectstore.jdo.applib.service.reifiableaction;
+package org.apache.isis.objectstore.jdo.applib.service.command;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -46,8 +46,8 @@ import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
-import org.apache.isis.applib.services.reifiableaction.spi.ReifiableActionService;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
 import org.apache.isis.objectstore.jdo.applib.service.Util;
@@ -55,30 +55,30 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.APPLICATION, 
-        table="IsisReifiableAction")
+        table="IsisCommand")
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
             name="findByTransactionId", language="JDOQL",  
             value="SELECT "
-                    + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo "
                     + "WHERE transactionId == :transactionId "
                     + "&& nature == 'USER_INITIATED'"),
     @javax.jdo.annotations.Query(
             name="findBackgroundActionByTransactionId", language="JDOQL",  
             value="SELECT "
-                    + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo "
                     + "WHERE transactionId == :transactionId "
                     + "&& nature == 'BACKGROUND'"),
     @javax.jdo.annotations.Query(
             name="findBackgroundActionsByParent", language="JDOQL",  
             value="SELECT "
-                    + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo "
                     + "WHERE parent == :parent "
                     + "&& nature == 'BACKGROUND'"),
     @javax.jdo.annotations.Query(
             name="findBackgroundActionsNotYetStarted", language="JDOQL",  
             value="SELECT "
-                    + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo "
                     + "WHERE nature == 'BACKGROUND' "
                     + "&& startedAt == null "
                     + "ORDER BY timestamp ASC "
@@ -86,28 +86,28 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
     @javax.jdo.annotations.Query(
             name="findCurrent", language="JDOQL",  
             value="SELECT "
-                    + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo "
                     + "WHERE completedAt == null "
                     + "ORDER BY timestamp DESC"),
     @javax.jdo.annotations.Query(
             name="findCompleted", language="JDOQL",  
             value="SELECT "
-                    + "FROM org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo "
                     + "WHERE completedAt != null "
                     + "&& nature == 'USER_INITIATED' "
                     + "ORDER BY timestamp DESC")
 })
-@ObjectType("IsisReifiableAction")
+@ObjectType("IsisCommand")
 @MemberGroupLayout(
         columnSpans={6,0,6}, 
         left={"Identifiers","Target","Notes"},
         right={"Detail","Timings","Results"})
-@Named("Reifiable Action")
+@Named("Command")
 @Immutable
-public class ReifiableActionJdo implements ReifiableAction {
+public class CommandJdo implements Command {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(ReifiableActionJdo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CommandJdo.class);
 
 
     // //////////////////////////////////////
@@ -165,7 +165,7 @@ public class ReifiableActionJdo implements ReifiableAction {
      * task, or as for some other reason, eg a side-effect of rendering an object due to 
      * get-after-post).
      */
-    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.ReifiableAction.NATURE)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.Command.NATURE)
     @TypicalLength(30)
     @MemberOrder(name="Identifiers", sequence = "30")
     @Override
@@ -177,7 +177,7 @@ public class ReifiableActionJdo implements ReifiableAction {
      * <b>NOT API</b>: intended to be called only by the framework.
      * 
      * <p>
-     * Implementation notes: populated by the viewer as hint to {@link ReifiableActionService} implementation.
+     * Implementation notes: populated by the viewer as hint to {@link CommandService} implementation.
      */
     @Override
     public void setNature(Nature nature) {
@@ -189,19 +189,19 @@ public class ReifiableActionJdo implements ReifiableAction {
     // parent (property)
     // //////////////////////////////////////
 
-    private ReifiableAction parent;
+    private Command parent;
     
     @Override
     @javax.jdo.annotations.Persistent
     @javax.jdo.annotations.Column(name="parentTransactionId", allowsNull="true")
     @Hidden(where=Where.PARENTED_TABLES)
     @MemberOrder(name="Identifiers",sequence = "40")
-    public ReifiableAction getParent() {
+    public Command getParent() {
         return parent;
     }
 
     @Override
-    public void setParent(ReifiableAction parent) {
+    public void setParent(Command parent) {
         this.parent = parent;
     }
 
@@ -243,7 +243,7 @@ public class ReifiableActionJdo implements ReifiableAction {
 
     private String targetClass;
 
-    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.ReifiableAction.TARGET_CLASS)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.Command.TARGET_CLASS)
     @TypicalLength(30)
     @MemberOrder(name="Target", sequence = "10")
     @Named("Class")
@@ -252,7 +252,7 @@ public class ReifiableActionJdo implements ReifiableAction {
     }
 
     public void setTargetClass(final String targetClass) {
-        this.targetClass = Util.abbreviated(targetClass, JdoColumnLength.ReifiableAction.TARGET_CLASS);
+        this.targetClass = Util.abbreviated(targetClass, JdoColumnLength.Command.TARGET_CLASS);
     }
 
 
@@ -262,7 +262,7 @@ public class ReifiableActionJdo implements ReifiableAction {
     
     private String targetAction;
     
-    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.ReifiableAction.TARGET_ACTION)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.Command.TARGET_ACTION)
     @TypicalLength(30)
     @MemberOrder(name="Target", sequence = "20")
     @Named("Action")
@@ -271,7 +271,7 @@ public class ReifiableActionJdo implements ReifiableAction {
     }
     
     public void setTargetAction(final String targetAction) {
-        this.targetAction = Util.abbreviated(targetAction, JdoColumnLength.ReifiableAction.TARGET_ACTION);
+        this.targetAction = Util.abbreviated(targetAction, JdoColumnLength.Command.TARGET_ACTION);
     }
     
 
@@ -326,7 +326,7 @@ public class ReifiableActionJdo implements ReifiableAction {
     
     private String arguments;
     
-    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.ReifiableAction.ARGUMENTS)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.Command.ARGUMENTS)
     @MultiLine(numberOfLines=6)
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Target",sequence = "40")
@@ -335,7 +335,7 @@ public class ReifiableActionJdo implements ReifiableAction {
     }
     
     public void setArguments(final String arguments) {
-        this.arguments = Util.abbreviated(arguments, JdoColumnLength.ReifiableAction.ARGUMENTS);
+        this.arguments = Util.abbreviated(arguments, JdoColumnLength.Command.ARGUMENTS);
     }
 
     
@@ -522,7 +522,7 @@ public class ReifiableActionJdo implements ReifiableAction {
      * Not part of the applib API, because the default implementation is not persistent
      * and so there's no object that can be accessed to be annotated.
      */
-    @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.ReifiableAction.EXCEPTION)
+    @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.Command.EXCEPTION)
     @Hidden
     @Override
     public String getException() {
@@ -531,7 +531,7 @@ public class ReifiableActionJdo implements ReifiableAction {
 
     @Override
     public void setException(final String exception) {
-        this.exception = Util.abbreviated(exception, JdoColumnLength.ReifiableAction.EXCEPTION);
+        this.exception = Util.abbreviated(exception, JdoColumnLength.Command.EXCEPTION);
     }
     
     
@@ -579,21 +579,21 @@ public class ReifiableActionJdo implements ReifiableAction {
     }
 
     // //////////////////////////////////////
-    // reifyIfPossible (SPI impl)
+    // setPersistHint (SPI impl)
     // //////////////////////////////////////
     
-    private boolean reify;
+    private boolean persistHint;
 
     @NotPersistent
     @Programmatic
-    public boolean isReify() {
-        return reify;
+    public boolean isPersistHint() {
+        return persistHint;
     }
     
     @Programmatic
     @Override
-    public void setReify(boolean reify) {
-        this.reify = reify;
+    public void setPersistHint(boolean persistHint) {
+        this.persistHint = persistHint;
     }
 
     // //////////////////////////////////////

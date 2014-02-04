@@ -41,10 +41,10 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
-import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
-import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
-import org.apache.isis.applib.services.reifiableaction.ReifiableActionDefault;
-import org.apache.isis.applib.services.reifiableaction.spi.ReifiableActionService;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.command.CommandDefault;
+import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -242,7 +242,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         
         startRequestOnRequestScopedServices(registeredServices);
 
-        createReifiableActionIfConfigured();
+        createCommandIfConfigured();
         
         createServiceAdapters(registeredServices);
         
@@ -301,23 +301,23 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         }
     }
 
-    private void createReifiableActionIfConfigured() {
-        final ReifiableActionContext reifiableActionContext = getServiceOrNull(ReifiableActionContext.class);
-        if(reifiableActionContext == null) {
+    private void createCommandIfConfigured() {
+        final CommandContext commandContext = getServiceOrNull(CommandContext.class);
+        if(commandContext == null) {
             return;
         } 
-        final ReifiableActionService reifiableActionService = getServiceOrNull(ReifiableActionService.class);
-        final ReifiableAction reifiableAction = 
-                reifiableActionService != null 
-                    ? reifiableActionService.create() 
-                    : new ReifiableActionDefault();
-        reifiableActionContext.setReifiableAction(reifiableAction);
+        final CommandService commandService = getServiceOrNull(CommandService.class);
+        final Command command = 
+                commandService != null 
+                    ? commandService.create() 
+                    : new CommandDefault();
+        commandContext.setCommand(command);
 
-        if(reifiableAction.getTimestamp() == null) {
-            reifiableAction.setTimestamp(Clock.getTimeAsJavaSqlTimestamp());
+        if(command.getTimestamp() == null) {
+            command.setTimestamp(Clock.getTimeAsJavaSqlTimestamp());
         }
-        if(reifiableAction.getUser() == null) {
-            reifiableAction.setUser(getAuthenticationSession().getUserName());
+        if(command.getUser() == null) {
+            command.setUser(getAuthenticationSession().getUserName());
         }
         
         // the remaining properties are set further down the call-stack, if an action is actually performed
@@ -327,17 +327,17 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     /**
      * Called by IsisTransactionManager on start
      */
-    public void startInteractionIfConfigured(final UUID transactionId) {
-        final ReifiableActionContext reifiableActionContext = getServiceOrNull(ReifiableActionContext.class);
-        if(reifiableActionContext == null) {
+    public void startTransactionOnCommandIfConfigured(final UUID transactionId) {
+        final CommandContext commandContext = getServiceOrNull(CommandContext.class);
+        if(commandContext == null) {
             return;
         } 
-        final ReifiableActionService reifiableActionService = getServiceOrNull(ReifiableActionService.class);
-        if(reifiableActionService == null) {
+        final CommandService commandService = getServiceOrNull(CommandService.class);
+        if(commandService == null) {
             return;
         } 
-        final ReifiableAction reifiableAction = reifiableActionContext.getReifiableAction();
-        reifiableActionService.startTransaction(reifiableAction, transactionId);
+        final Command command = commandContext.getCommand();
+        commandService.startTransaction(command, transactionId);
     }
 
 
@@ -396,7 +396,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
 
         closeOtherApplibServicesIfConfigured();
 
-        completeInteractionIfConfigured();
+        completeCommandIfConfigured();
 
         endRequestOnRequestScopeServices();
     }
@@ -412,13 +412,13 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         }
     }
 
-    private void completeInteractionIfConfigured() {
-        final ReifiableActionContext reifiableActionContext = getServiceOrNull(ReifiableActionContext.class);
-        if(reifiableActionContext != null) {
-            final ReifiableActionService interactionFactory = getServiceOrNull(ReifiableActionService.class);
-            if(interactionFactory != null) {
-                final ReifiableAction interaction = reifiableActionContext.getReifiableAction();
-                interactionFactory.complete(interaction);
+    private void completeCommandIfConfigured() {
+        final CommandContext commandContext = getServiceOrNull(CommandContext.class);
+        if(commandContext != null) {
+            final CommandService commandService = getServiceOrNull(CommandService.class);
+            if(commandService != null) {
+                final Command command = commandContext.getCommand();
+                commandService.complete(command);
             }
         }
     }

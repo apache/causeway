@@ -17,35 +17,35 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.actions.reified.annotation;
+package org.apache.isis.core.progmodel.facets.actions.command.annotation;
 
-import org.apache.isis.applib.annotation.Reified;
+import org.apache.isis.applib.annotation.Command;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.reified.ReifiedActionFacet;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 
 /**
- * {@link ReifiableFacet} can also be installed via a naming convention, see
+ * {@link CommandFacet} can also be installed via a naming convention, see
  * {@link ActionInvocationFacetFactory}.
  */
-public class ReifiedActionAnnotationFacetFactory extends FacetFactoryAbstract {
+public class CommandAnnotationFacetFactory extends FacetFactoryAbstract {
 
-    public ReifiedActionAnnotationFacetFactory() {
+    public CommandAnnotationFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final Reified annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Reified.class);
+        final Command annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Command.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 
-    private ReifiedActionFacet create(final Reified annotation, final FacetHolder holder) {
-        return annotation == null ? null : new ReifiedActionFacetAnnotation(holder);
+    private CommandFacet create(final Command annotation, final FacetHolder holder) {
+        return annotation == null ? null : new CommandFacetAnnotation(holder);
     }
 
 }

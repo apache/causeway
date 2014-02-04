@@ -39,8 +39,8 @@ public final class JdoColumnLength {
         public static final int VALUE_RAW = 255;
     }
 
-    public static final class ReifiableAction {
-        private ReifiableAction() {
+    public static final class Command {
+        private Command() {
         }
         public final static int TARGET_CLASS = 50;
         public final static int TARGET_ACTION = 50;

@@ -17,19 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.reified;
+package org.apache.isis.objectstore.jdo.applib.service.command;
 
-import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-/**
- * Indicates that details of the action should be reified as a persistent
- * {@link ReifiableAction}, if possible.
- * 
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
- * action method using <tt>@PersistedInteraction</tt>.
- */
-public interface ReifiedActionFacet extends Facet {
+import org.junit.Test;
+
+import org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo;
+
+public class CommandJdoTest_next {
+
+    @Test
+    public void test() {
+        CommandJdo raj = new CommandJdo();
+        assertThat(raj.next("foo"), is(0));
+        assertThat(raj.next("foo"), is(1));
+        assertThat(raj.next("bar"), is(0));
+        assertThat(raj.next("bar"), is(1));
+        assertThat(raj.next("foo"), is(2));
+        assertThat(raj.next("bar"), is(2));
+        assertThat(raj.next("bar"), is(3));
+    }
 
 }

@@ -14,42 +14,42 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.reifiableaction.spi;
+package org.apache.isis.applib.services.command.spi;
 
 import java.util.UUID;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
+import org.apache.isis.applib.services.command.Command;
 
 /**
  * Intended for service to implement, providing a different implementation of
- * {@link ReifiableAction}.
+ * {@link Command}.
  * 
  * <p>
  * The default implementation (provided automatically by the framework) will
- * instantiate an in-memory implementation of {@link ReifiableAction}.  However, other
+ * instantiate an in-memory implementation of {@link Command}.  However, other
  * services (eg as provided by the JDO objectstore) might provide a persistable 
- * {@link ReifiableAction} object.
+ * {@link Command} object.
  */
-public interface ReifiableActionService {
+public interface CommandService {
 
     @Programmatic
-    ReifiableAction create();
+    Command create();
     
     /**
      * Although the transactionId is also provided in the
-     * {@link #complete(ReifiableAction)} callback, it is passed in here as well
-     * so that an implementation can ensure that the {@link ReifiableAction} is fully populated in order
+     * {@link #complete(Command)} callback, it is passed in here as well
+     * so that an implementation can ensure that the {@link Command} is fully populated in order
      * to persist if required.
      * 
      * <p>
-     * One case where this may be supported (for example, by the <tt>ReifiableActionServiceJdo</tt> implementation)
-     * is to flush still-running {@link ReifiableAction}s to the database on-demand.
+     * One case where this may be supported (for example, by the <tt>CommandServiceJdo</tt> implementation)
+     * is to flush still-running {@link Command}s to the database on-demand.
      */
     @Programmatic
-    void startTransaction(final ReifiableAction reifiableAction, final UUID transactionId);
+    void startTransaction(final Command command, final UUID transactionId);
     
     @Programmatic
-    void complete(final ReifiableAction reifiableAction);
+    void complete(final Command command);
     
 }

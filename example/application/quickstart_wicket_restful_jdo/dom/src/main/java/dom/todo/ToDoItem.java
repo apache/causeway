@@ -62,12 +62,12 @@ import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.RegEx;
-import org.apache.isis.applib.annotation.Reified;
+import org.apache.isis.applib.annotation.Command;
 import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.BackgroundService;
-import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
@@ -312,7 +312,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.complete = complete;
     }
 
-    @Reified
+    @Command
     @PublishedAction
     @Bulk
     public ToDoItem completed() {
@@ -339,7 +339,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         return isComplete() ? "Already completed" : null;
     }
 
-    @Reified
+    @Command
     @PublishedAction
     @Bulk
     public ToDoItem notYetCompleted() {
@@ -817,8 +817,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     
     @SuppressWarnings("unused")
     @javax.inject.Inject
-    private ReifiableActionContext reifiableActionContext;
-    
+    private CommandContext commandContext;
 
     @javax.inject.Inject
     private BackgroundService backgroundService;

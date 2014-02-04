@@ -23,6 +23,7 @@ import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableAn
 import org.apache.isis.core.metamodel.facets.object.audit.markerifc.AuditableMarkerInterfaceFacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.progmodel.facets.actions.bulk.annotation.BulkAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.command.annotation.CommandAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.debug.annotation.DebugAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.defaults.method.ActionDefaultsFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.exploration.annotation.ExplorationAnnotationFacetFactory;
@@ -33,7 +34,6 @@ import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.annotation
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.method.NotInServiceMenuMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.prototype.annotation.PrototypeAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.publish.PublishedActionAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.actions.reified.annotation.ReifiedActionAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.semantics.ActionSemanticsAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.semantics.ActionSemanticsFallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.semantics.IdempotentAnnotationFacetFactory;
@@ -346,7 +346,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(NotInServiceMenuAnnotationFacetFactory.class);
         addFactory(NotInServiceMenuMethodFacetFactory.class);
         addFactory(BulkAnnotationFacetFactory.class);
-        addFactory(ReifiedActionAnnotationFacetFactory.class);
+        addFactory(CommandAnnotationFacetFactory.class);
 
         addFactory(HiddenAnnotationForTypeFacetFactory.class);
         // must come after the TitleAnnotationFacetFactory, because can act as an override

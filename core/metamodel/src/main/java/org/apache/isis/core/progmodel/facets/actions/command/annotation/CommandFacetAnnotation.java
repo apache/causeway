@@ -17,21 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.actions.reified;
+package org.apache.isis.core.progmodel.facets.actions.command.annotation;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
-import org.apache.isis.core.metamodel.facets.actions.reified.ReifiedActionFacet;
+import org.apache.isis.core.progmodel.facets.actions.command.CommandFacetAbstract;
 
-public abstract class ReifiedActionFacetAbstract extends MarkerFacetAbstract implements ReifiedActionFacet {
+public class CommandFacetAnnotation extends CommandFacetAbstract {
 
-    public static Class<? extends Facet> type() {
-        return ReifiedActionFacet.class;
-    }
-
-    public ReifiedActionFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
+    public CommandFacetAnnotation(final FacetHolder holder) {
+        super(holder);
     }
 
 }

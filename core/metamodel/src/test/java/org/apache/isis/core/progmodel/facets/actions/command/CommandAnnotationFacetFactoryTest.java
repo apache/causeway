@@ -17,27 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.actions.reified;
+package org.apache.isis.core.progmodel.facets.actions.command;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.annotation.Reified;
+import org.apache.isis.applib.annotation.Command;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.actions.reified.ReifiedActionFacet;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.actions.reified.ReifiedActionFacetAbstract;
-import org.apache.isis.core.progmodel.facets.actions.reified.annotation.ReifiedActionAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.command.CommandFacetAbstract;
+import org.apache.isis.core.progmodel.facets.actions.command.annotation.CommandAnnotationFacetFactory;
 
-public class ReifiedActionAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class CommandAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private ReifiedActionAnnotationFacetFactory facetFactory;
+    private CommandAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ReifiedActionAnnotationFacetFactory();
+        facetFactory = new CommandAnnotationFacetFactory();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ReifiedActionAnnotationFacetFactoryTest extends AbstractFacetFactor
 
     public void testExplorationAnnotationPickedUp() {
         class Customer {
-            @Reified
+            @Command
             public void someAction() {
             }
         }
@@ -56,9 +56,9 @@ public class ReifiedActionAnnotationFacetFactoryTest extends AbstractFacetFactor
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(ReifiedActionFacet.class);
+        final Facet facet = facetedMethod.getFacet(CommandFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ReifiedActionFacetAbstract);
+        assertTrue(facet instanceof CommandFacetAbstract);
 
         assertNoMethodsRemoved();
     }

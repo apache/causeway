@@ -18,7 +18,7 @@ package webapp.scheduler;
 
 import java.util.List;
 
-import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.core.runtime.services.background.BackgroundActionExecution;
 import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundActionServiceJdoRepository;
 
@@ -33,7 +33,7 @@ public class BackgroundActionExecutionQuartzJob extends AbstractIsisQuartzJob {
     public final static class BackgroundActionExecutionFromBackgroundActionServicesJdo extends BackgroundActionExecution {
 
         @Override
-        protected List<? extends ReifiableAction> findBackgroundActionsToExecute() {
+        protected List<? extends Command> findBackgroundActionsToExecute() {
             return backgroundActionRepository.findBackgroundActionsNotYetStarted(); 
         }
         

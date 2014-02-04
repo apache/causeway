@@ -24,7 +24,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
+import org.apache.isis.applib.services.command.Command;
 
 public class Util {
 

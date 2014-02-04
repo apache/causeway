@@ -38,9 +38,9 @@ import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.memento.MementoService;
-import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
-import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -49,10 +49,10 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
-import org.apache.isis.core.metamodel.facets.actions.reified.ReifiedActionFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
@@ -125,8 +125,8 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
         }
 
         final Bulk.InteractionContext bulkInteractionContext = getServicesInjector().lookupService(Bulk.InteractionContext.class);
-        final ReifiableActionContext reifiableActionContext = getServicesInjector().lookupService(ReifiableActionContext.class);
-        final ReifiableAction reifiableAction = reifiableActionContext != null ? reifiableActionContext.getReifiableAction() : null;
+        final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
+        final Command command = commandContext != null ? commandContext.getCommand() : null;
         
         try {
             final Object[] executionParameters = new Object[arguments.length];
@@ -146,33 +146,33 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
             }
 
 
-            if(reifiableAction != null && reifiableAction.getNature() == ReifiableAction.Nature.USER_INITIATED && owningAction != null) {
+            if(command != null && command.getNature() == Command.Nature.USER_INITIATED && owningAction != null) {
 
-                reifiableAction.setStartedAt(reifiableAction.getTimestamp());
-                reifiableAction.setActionIdentifier(ReifiableActionUtil.actionIdentifierFor(owningAction));
-                reifiableAction.setTargetClass(ReifiableActionUtil.targetClassNameFor(targetAdapter));
-                reifiableAction.setTargetAction(ReifiableActionUtil.targetActionNameFor(owningAction));
-                reifiableAction.setArguments(ReifiableActionUtil.argDescriptionFor(owningAction, arguments));
+                command.setStartedAt(command.getTimestamp());
+                command.setActionIdentifier(CommandUtil.actionIdentifierFor(owningAction));
+                command.setTargetClass(CommandUtil.targetClassNameFor(targetAdapter));
+                command.setTargetAction(CommandUtil.targetActionNameFor(owningAction));
+                command.setArguments(CommandUtil.argDescriptionFor(owningAction, arguments));
                 
-                final Bookmark targetBookmark = ReifiableActionUtil.bookmarkFor(targetAdapter);
-                reifiableAction.setTarget(targetBookmark);
+                final Bookmark targetBookmark = CommandUtil.bookmarkFor(targetAdapter);
+                command.setTarget(targetBookmark);
                 
                 
                 final BackgroundService backgroundService = getServicesInjector().lookupService(BackgroundService.class);
                 if(backgroundService != null) {
                     final Object targetObject = unwrap(targetAdapter);
-                    final Object[] args = ReifiableActionUtil.objectsFor(arguments);
+                    final Object[] args = CommandUtil.objectsFor(arguments);
                     ActionInvocationMemento aim = backgroundService.asActionInvocationMemento(method, targetObject, args);
 
                     if(aim != null) {
-                        reifiableAction.setMemento(aim.asMementoString());
+                        command.setMemento(aim.asMementoString());
                     } else {
                         throw new IsisException("Unable to build memento for action " + owningAction.getIdentifier().toClassAndNameIdentityString());
                     }
                 }
 
-                final boolean reifiable = getFacetHolder().containsDoOpFacet(ReifiedActionFacet.class);
-                reifiableAction.setReify(reifiable);
+                final boolean hasCommandFacet = getFacetHolder().containsDoOpFacet(CommandFacet.class);
+                command.setPersistHint(hasCommandFacet);
             }
             
             final Object result = method.invoke(object, executionParameters);
@@ -191,10 +191,10 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
             resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
 
             
-            if(reifiableAction != null) {
+            if(command != null) {
                 if(!resultAdapter.getSpecification().containsDoOpFacet(ViewModelFacet.class)) {
-                    final Bookmark bookmark = ReifiableActionUtil.bookmarkFor(resultAdapter);
-                    reifiableAction.setResult(bookmark);
+                    final Bookmark bookmark = CommandUtil.bookmarkFor(resultAdapter);
+                    command.setResult(bookmark);
                 }
             }
             

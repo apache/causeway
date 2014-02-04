@@ -17,24 +17,21 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.annotation;
+package org.apache.isis.core.progmodel.facets.actions.command;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 
-import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
-import org.apache.isis.applib.services.reifiableaction.spi.ReifiableActionService;
+public abstract class CommandFacetAbstract extends MarkerFacetAbstract implements CommandFacet {
 
-/**
- * Indicates that an action invocation should be reified as a persisted {@link ReifiableAction},
- * (if supported by the configured {@link ReifiableActionService}).
- */
-@Inherited
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Reified {
+    public static Class<? extends Facet> type() {
+        return CommandFacet.class;
+    }
+
+    public CommandFacetAbstract(final FacetHolder holder) {
+        super(type(), holder);
+    }
 
 }

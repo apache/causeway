@@ -112,7 +112,7 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
         context.ignoring(mockObjectStore);
         context.checking(new Expectations() {
             {
-                oneOf(mockPersistenceSession).startInteractionIfConfigured(with(any(UUID.class)));
+                oneOf(mockPersistenceSession).startTransactionOnCommandIfConfigured(with(any(UUID.class)));
             }
         });
         transactionManager.startTransaction();

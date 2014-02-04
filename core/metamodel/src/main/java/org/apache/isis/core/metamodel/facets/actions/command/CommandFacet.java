@@ -17,15 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.actions.reified.annotation;
+package org.apache.isis.core.metamodel.facets.actions.command;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.actions.reified.ReifiedActionFacetAbstract;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
-public class ReifiedActionFacetAnnotation extends ReifiedActionFacetAbstract {
-
-    public ReifiedActionFacetAnnotation(final FacetHolder holder) {
-        super(holder);
-    }
+/**
+ * Indicates that details of the action should be available as a
+ * {@link Command} object, if possible.
+ * 
+ * <p>
+ * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * action method using <tt>@Command</tt>.
+ */
+public interface CommandFacet extends Facet {
 
 }

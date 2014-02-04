@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.reifiableaction;
+package org.apache.isis.applib.services.command;
 
 import java.sql.Timestamp;
 
@@ -23,16 +23,15 @@ import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Reified;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.HasTransactionId;
-import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.background.BackgroundActionService;
+import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.reifiableaction.spi.ReifiableActionService;
+import org.apache.isis.applib.services.command.spi.CommandService;
 
-public interface ReifiableAction extends HasTransactionId {
+public interface Command extends HasTransactionId {
 
     
     // //////////////////////////////////////
@@ -198,8 +197,8 @@ public interface ReifiableAction extends HasTransactionId {
      * 
      * <p>
      * The Isis implementations uses this field as to a hint as to whether to populate the interaction's
-     * {@link ReifiableAction#setActionIdentifier(String) action identifier} and related properties.  The expectation 
-     * is that implementations of {@link ReifiableActionService} will only persist interactions that were explicitly started
+     * {@link Command#setActionIdentifier(String) action identifier} and related properties.  The expectation 
+     * is that implementations of {@link CommandService} will only persist interactions that were explicitly started
      * by the user.
      */
     @Disabled
@@ -261,12 +260,12 @@ public interface ReifiableAction extends HasTransactionId {
      */
     @Optional
     @Disabled
-    public ReifiableAction getParent();
+    public Command getParent();
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
-    public void setParent(final ReifiableAction parent);
+    public void setParent(final Command parent);
 
     
     // //////////////////////////////////////
@@ -308,21 +307,21 @@ public interface ReifiableAction extends HasTransactionId {
 
     
     /**
-     * Hint that this {@link ReifiableAction} should be persisted.
+     * Hint that this {@link Command} should be persisted.
      * 
      * <p>
      * This is most commonly done if the action being invoked has been explicitly annotated to be reified, eg
-     * using the {@link Reified} annotation.  But it might also happen as a hint from another domain service.
+     * using the {@link Command} annotation.  But it might also happen as a hint from another domain service.
      * For example, a {@link BackgroundActionService} implementations that creates persisted background tasks ought to be
-     * associated (via the {@link ReifiableAction#getTransactionId() transactionId}) to a persisted
-     * {@link ReifiableAction}.  The app can then provide a mechanism for the end-user to query for their
-     * running background actions from this original {@link ReifiableAction}.
+     * associated (via the {@link Command#getTransactionId() transactionId}) to a persisted
+     * {@link Command}.  The app can then provide a mechanism for the end-user to query for their
+     * running background actions from this original {@link Command}.
      * 
      * <p>
      * <b>NOT API</b>: intended to be called only by the framework.  
      */
     @Programmatic
-    public void setReify(boolean reifyHint);
+    public void setPersistHint(boolean persistHint);
     
     // //////////////////////////////////////
     

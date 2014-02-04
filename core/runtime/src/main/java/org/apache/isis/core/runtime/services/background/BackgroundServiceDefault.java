@@ -39,8 +39,8 @@ import org.apache.isis.applib.services.background.BackgroundActionService;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
-import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
@@ -52,7 +52,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.JavassistEnhanced;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.progmodel.facets.actions.invoke.ReifiableActionUtil;
+import org.apache.isis.core.progmodel.facets.actions.invoke.CommandUtil;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
@@ -80,7 +80,7 @@ public class BackgroundServiceDefault implements BackgroundService {
     private void ensureDependenciesInjected() {
         Ensure.ensureThatState(this.bookmarkService, is(not(nullValue())), "BookmarkService domain service must be configured");
         Ensure.ensureThatState(this.backgroundActionService, is(not(nullValue())), "BackgroundActionService domain service must be configured");
-        Ensure.ensureThatState(this.reifiableActionContext, is(not(nullValue())), "ReifiableActionContext domain service must be configured");
+        Ensure.ensureThatState(this.commandContext, is(not(nullValue())), "CommandContext domain service must be configured");
     }
 
 
@@ -167,18 +167,18 @@ public class BackgroundServiceDefault implements BackgroundService {
 
                 final ObjectAction action = (ObjectAction) member;
 
-                final String actionIdentifier = ReifiableActionUtil.actionIdentifierFor(action);
-                final String targetClassName = ReifiableActionUtil.targetClassNameFor(targetAdapter);
-                final String targetActionName = ReifiableActionUtil.targetActionNameFor(action);
-                final String targetArgs = ReifiableActionUtil.argDescriptionFor(action, adaptersFor(args));
+                final String actionIdentifier = CommandUtil.actionIdentifierFor(action);
+                final String targetClassName = CommandUtil.targetClassNameFor(targetAdapter);
+                final String targetActionName = CommandUtil.targetActionNameFor(action);
+                final String targetArgs = CommandUtil.argDescriptionFor(action, adaptersFor(args));
                 
                 final Bookmark domainObjectBookmark = bookmarkService.bookmarkFor(domainObject);
 
                 final List<Class<?>> argTypes = Lists.newArrayList();
                 final List<Object> argObjs = Lists.newArrayList();
-                ReifiableActionUtil.buildMementoArgLists(mementoService, bookmarkService, proxiedMethod, args, argTypes, argObjs);
+                CommandUtil.buildMementoArgLists(mementoService, bookmarkService, proxiedMethod, args, argTypes, argObjs);
 
-                final ReifiableAction reifiableAction = reifiableActionContext.getReifiableAction();
+                final Command command = commandContext.getCommand();
                 
                 final ActionInvocationMemento aim = 
                         new ActionInvocationMemento(mementoService, 
@@ -187,14 +187,14 @@ public class BackgroundServiceDefault implements BackgroundService {
                                 argTypes,
                                 argObjs);
                
-                backgroundActionService.schedule(aim, reifiableAction, targetClassName, targetActionName, targetArgs);
+                backgroundActionService.schedule(aim, command, targetClassName, targetActionName, targetArgs);
                 
                 return null;
             }
 
             ObjectAdapter[] adaptersFor(final Object[] args) {
                 final AdapterManager adapterManager = getAdapterManager();
-                return ReifiableActionUtil.adaptersFor(args, adapterManager);
+                return CommandUtil.adaptersFor(args, adapterManager);
             }
 
         };
@@ -213,13 +213,13 @@ public class BackgroundServiceDefault implements BackgroundService {
         }
 
         final ObjectAction action = (ObjectAction) member;
-        final String actionIdentifier = ReifiableActionUtil.actionIdentifierFor(action);
+        final String actionIdentifier = CommandUtil.actionIdentifierFor(action);
         
         final Bookmark domainObjectBookmark = bookmarkService.bookmarkFor(domainObject);
 
         final List<Class<?>> argTypes = Lists.newArrayList();
         final List<Object> argObjs = Lists.newArrayList();
-        ReifiableActionUtil.buildMementoArgLists(mementoService, bookmarkService, method, args, argTypes, argObjs);
+        CommandUtil.buildMementoArgLists(mementoService, bookmarkService, method, args, argTypes, argObjs);
 
         final ActionInvocationMemento aim = 
                 new ActionInvocationMemento(mementoService, 
@@ -254,16 +254,16 @@ public class BackgroundServiceDefault implements BackgroundService {
     /**
      * Mandatory service.
      */
-    public void injectBackgroundActionService(BackgroundActionService backgroundActionService) {
+    public void injectBackgroundActionService(final BackgroundActionService backgroundActionService) {
         this.backgroundActionService = backgroundActionService;
     }
 
-    private ReifiableActionContext reifiableActionContext;
+    private CommandContext commandContext;
     /**
      * Mandatory service.
      */
-    public void injectReifiableActionContext(ReifiableActionContext reifiableActionContext) {
-        this.reifiableActionContext = reifiableActionContext;
+    public void injectCommandContext(final CommandContext commandContext) {
+        this.commandContext = commandContext;
     }
     
 

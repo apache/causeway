@@ -27,8 +27,8 @@ import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Render.Type;
-import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
-import org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo;
 
 
 public class BackgroundActionServiceJdoContributions extends AbstractFactoryAndRepository {
@@ -37,7 +37,7 @@ public class BackgroundActionServiceJdoContributions extends AbstractFactoryAndR
     @NotInServiceMenu
     @NotContributed(As.ACTION)
     @Render(Type.EAGERLY)
-    public List<ReifiableActionJdo> backgroundActions(final ReifiableActionJdo parent) {
+    public List<CommandJdo> backgroundActions(final CommandJdo parent) {
         return backgroundActionRepository.findByParent(parent);
     }
 
@@ -45,13 +45,13 @@ public class BackgroundActionServiceJdoContributions extends AbstractFactoryAndR
     @NotInServiceMenu
     @NotContributed(As.ACTION)
     @Render(Type.EAGERLY)
-    public List<ReifiableActionJdo> siblingActions(final ReifiableActionJdo siblingAction) {
-        final ReifiableAction parent = siblingAction.getParent();
-        if(parent == null || !(parent instanceof ReifiableActionJdo)) {
+    public List<CommandJdo> siblingActions(final CommandJdo siblingAction) {
+        final Command parent = siblingAction.getParent();
+        if(parent == null || !(parent instanceof CommandJdo)) {
             return Collections.emptyList();
         }
-        final ReifiableActionJdo parentJdo = (ReifiableActionJdo) parent;
-        final List<ReifiableActionJdo> siblingActions = backgroundActionRepository.findByParent(parentJdo);
+        final CommandJdo parentJdo = (CommandJdo) parent;
+        final List<CommandJdo> siblingActions = backgroundActionRepository.findByParent(parentJdo);
         siblingActions.remove(siblingAction);
         return siblingActions;
     }

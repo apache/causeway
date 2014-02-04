@@ -41,10 +41,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 /**
  * Factoring out the commonality between {@link ActionInvocationFacetViaMethod} and <tt>BackgroundServiceDefault</tt>.
  */
-public class ReifiableActionUtil {
+public class CommandUtil {
 
-    
-    private ReifiableActionUtil(){}
+    private CommandUtil(){}
 
     public static String targetActionNameFor(ObjectAction owningAction) {
         return owningAction.getName();
@@ -65,7 +64,7 @@ public class ReifiableActionUtil {
             // should be the case
             int i=0;
             for (ObjectActionParameter param : parameters) {
-                ReifiableActionUtil.appendParamArg(argsBuf, param, arguments[i++]);
+                CommandUtil.appendParamArg(argsBuf, param, arguments[i++]);
             }
         }
         String argsStr = argsBuf.toString();

@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.isis.applib.services.HasTransactionId;
-import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
-import org.apache.isis.applib.services.reifiableaction.spi.ReifiableActionService;
+import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -89,7 +89,7 @@ public interface ActionInvocationFacet extends Facet {
     
     /**
      * TODO...
-     * @deprecated - should instead use the {@link ReifiableActionContext} request.
+     * @deprecated - should instead use the {@link CommandContext} request.
      */
     @Deprecated
     public static ThreadLocal<CurrentInvocation> currentInvocation = new ThreadLocal<CurrentInvocation>();

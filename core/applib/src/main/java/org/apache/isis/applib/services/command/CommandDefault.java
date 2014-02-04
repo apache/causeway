@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.reifiableaction;
+package org.apache.isis.applib.services.command;
 
 import java.sql.Timestamp;
 import java.util.Map;
@@ -25,13 +25,13 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.reifiableaction.spi.ReifiableActionService;
+import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public class ReifiableActionDefault implements ReifiableAction {
+public class CommandDefault implements Command {
 
-    public ReifiableActionDefault() {
-        setNature(ReifiableAction.Nature.OTHER);
+    public CommandDefault() {
+        setNature(Command.Nature.OTHER);
     }
     
     // //////////////////////////////////////
@@ -197,7 +197,7 @@ public class ReifiableActionDefault implements ReifiableAction {
      * <b>NOT API</b>: intended to be called only by the framework.
      * 
      * <p>
-     * Implementation notes: populated by the viewer as hint to {@link ReifiableActionService} implementation.
+     * Implementation notes: populated by the viewer as hint to {@link CommandService} implementation.
      */
     @Override
     public void setNature(Nature nature) {
@@ -209,15 +209,15 @@ public class ReifiableActionDefault implements ReifiableAction {
     // parent (property)
     // //////////////////////////////////////
 
-    private ReifiableAction parent;
+    private Command parent;
     
     @Override
-    public ReifiableAction getParent() {
+    public Command getParent() {
         return parent;
     }
 
     @Override
-    public void setParent(ReifiableAction parent) {
+    public void setParent(Command parent) {
         this.parent = parent;
     }
 
@@ -294,14 +294,14 @@ public class ReifiableActionDefault implements ReifiableAction {
     
     // //////////////////////////////////////
     
-    private boolean reify;
+    private boolean persistHint;
     
-    public boolean isReify() {
-        return reify;
+    public boolean isPersistHint() {
+        return persistHint;
     }
     
-    public void setReify(boolean reify) {
-        this.reify = reify;
+    public void setPersistHint(boolean persistHint) {
+        this.persistHint = persistHint;
     }
     
     

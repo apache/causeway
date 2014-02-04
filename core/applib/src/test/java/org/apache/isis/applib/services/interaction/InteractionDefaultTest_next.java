@@ -24,13 +24,13 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import org.apache.isis.applib.services.reifiableaction.ReifiableActionDefault;
+import org.apache.isis.applib.services.command.CommandDefault;
 
 public class InteractionDefaultTest_next {
 
     @Test
     public void test() {
-        ReifiableActionDefault interaction = new ReifiableActionDefault();
+        CommandDefault interaction = new CommandDefault();
         assertThat(interaction.next("foo"), is(0));
         assertThat(interaction.next("foo"), is(1));
         assertThat(interaction.next("bar"), is(0));

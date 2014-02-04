@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.reifiableaction;
+package org.apache.isis.applib.services.command;
 
 import javax.enterprise.context.RequestScoped;
 
@@ -24,27 +24,26 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * Register this as a service in order to access context information about any {@link ReifiableAction}.
+ * Register this as a service in order to access context information about any {@link Command}.
  */
 @RequestScoped
-public class ReifiableActionContext {
+public class CommandContext {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(ReifiableActionContext.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CommandContext.class);
 
-    private ReifiableAction reifiableAction;
+    private Command command;
 
     @Programmatic
-    public ReifiableAction getReifiableAction() {
-        return reifiableAction;
+    public Command getCommand() {
+        return command;
     }
     
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
-     * @param interaction
      */
-    public void setReifiableAction(ReifiableAction interaction) {
-        this.reifiableAction = interaction;
+    public void setCommand(Command command) {
+        this.command = command;
     }
 
 }

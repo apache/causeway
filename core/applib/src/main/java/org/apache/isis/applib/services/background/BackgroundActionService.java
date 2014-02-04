@@ -16,7 +16,7 @@
  */
 package org.apache.isis.applib.services.background;
 
-import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
+import org.apache.isis.applib.services.command.Command;
 
 
 /**
@@ -32,6 +32,6 @@ public interface BackgroundActionService {
 
     void schedule(
             final ActionInvocationMemento aim, 
-            final ReifiableAction reifiableAction, 
+            final Command command, 
             final String targetClassName, final String targetActionName, final String targetArgs);
 }

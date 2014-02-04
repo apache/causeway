@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
-import org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo;
+import org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo;
 
 public class BackgroundActionServiceJdoRepository extends AbstractFactoryAndRepository {
 
@@ -33,30 +33,30 @@ public class BackgroundActionServiceJdoRepository extends AbstractFactoryAndRepo
     private static final Logger LOG = LoggerFactory.getLogger(BackgroundActionServiceJdoRepository.class);
 
     @Programmatic
-    public List<ReifiableActionJdo> listAll() {
-        return allInstances(ReifiableActionJdo.class);
+    public List<CommandJdo> listAll() {
+        return allInstances(CommandJdo.class);
     }
 
     @Programmatic
-    public List<ReifiableActionJdo> findByTransactionId(final UUID transactionId) {
+    public List<CommandJdo> findByTransactionId(final UUID transactionId) {
         return allMatches(
-                new QueryDefault<ReifiableActionJdo>(ReifiableActionJdo.class, 
+                new QueryDefault<CommandJdo>(CommandJdo.class, 
                         "findBackgroundActionByTransactionId", 
                         "transactionId", transactionId));
     }
 
     @Programmatic
-    public List<ReifiableActionJdo> findByParent(ReifiableActionJdo parent) {
+    public List<CommandJdo> findByParent(CommandJdo parent) {
         return allMatches(
-                new QueryDefault<ReifiableActionJdo>(ReifiableActionJdo.class, 
+                new QueryDefault<CommandJdo>(CommandJdo.class, 
                         "findBackgroundActionsByParent", 
                         "parent", parent));
     }
 
     @Programmatic
-    public List<ReifiableActionJdo> findBackgroundActionsNotYetStarted() {
+    public List<CommandJdo> findBackgroundActionsNotYetStarted() {
         return allMatches(
-                new QueryDefault<ReifiableActionJdo>(ReifiableActionJdo.class, 
+                new QueryDefault<CommandJdo>(CommandJdo.class, 
                         "findBackgroundActionsNotYetStarted"));
     }
     

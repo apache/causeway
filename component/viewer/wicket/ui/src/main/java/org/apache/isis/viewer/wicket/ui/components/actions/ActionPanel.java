@@ -31,10 +31,10 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
-import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
-import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -183,13 +183,13 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             return false;
         }
         
-        final ReifiableActionContext reifiableActionContext = getServicesInjector().lookupService(ReifiableActionContext.class);
-        final ReifiableAction reifiableAction;
-        if (reifiableActionContext != null) {
-            reifiableAction = reifiableActionContext.getReifiableAction();
-            reifiableAction.setNature(ReifiableAction.Nature.USER_INITIATED);
+        final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
+        final Command command;
+        if (commandContext != null) {
+            command = commandContext.getCommand();
+            command.setNature(Command.Nature.USER_INITIATED);
         } else {
-            reifiableAction = null;
+            command = null;
         }
         
         
@@ -233,8 +233,8 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             }
             
             // not handled, so capture and propagate
-            if(reifiableAction != null) {
-                reifiableAction.setException(Throwables.getStackTraceAsString(ex));
+            if(command != null) {
+                command.setException(Throwables.getStackTraceAsString(ex));
             }
 
             throw ex;

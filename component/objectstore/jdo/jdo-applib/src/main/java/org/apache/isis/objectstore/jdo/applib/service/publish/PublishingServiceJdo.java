@@ -19,24 +19,17 @@
 
 package org.apache.isis.objectstore.jdo.applib.service.publish;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-
-import org.hamcrest.Matcher;
 
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventSerializer;
 import org.apache.isis.applib.services.publish.PublishingService;
-import org.apache.isis.applib.services.reifiableaction.ReifiableActionContext;
 
 /**
  * An implementation of {@link PublishingService} that persists events as
@@ -54,8 +47,8 @@ public class PublishingServiceJdo extends AbstractService implements PublishingS
     // //////////////////////////////////////
     
     private void ensureDependenciesInjected() {
-        if(this.reifiableActionContext == null) {
-            throw new IllegalStateException(this.getClassName() + " requires ReifiableAactionContext service to be configured");
+        if(this.commandContext == null) {
+            throw new IllegalStateException(this.getClassName() + " requires CommandContext service to be configured");
         }
         if(this.eventSerializer == null) {
             throw new IllegalStateException(this.getClassName() + " requires EventSerializer service to be configured");
@@ -89,5 +82,5 @@ public class PublishingServiceJdo extends AbstractService implements PublishingS
 
     
     @javax.inject.Inject
-    private ReifiableActionContext reifiableActionContext;
+    private CommandContext commandContext;
 }

@@ -29,10 +29,10 @@ import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditingServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundActionServiceJdoRepository;
+import org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo;
+import org.apache.isis.objectstore.jdo.applib.service.command.CommandServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishingServiceJdoRepository;
-import org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo;
-import org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionServiceJdoRepository;
 
 public class Admin extends AbstractService {
 
@@ -40,7 +40,7 @@ public class Admin extends AbstractService {
     @MemberOrder(sequence="10.1")
     @ActionSemantics(Of.SAFE)
     @Prototype
-    public ReifiableActionJdo lookup(final @Named("Transaction Id") UUID transactionId) {
+    public CommandJdo lookup(final @Named("Transaction Id") UUID transactionId) {
         return interactionRepository.findByTransactionId(transactionId);
     }
     public boolean hideLookup() {
@@ -50,7 +50,7 @@ public class Admin extends AbstractService {
     @ActionSemantics(Of.SAFE)
     @Bookmarkable
     @MemberOrder(sequence="10.2")
-    public List<ReifiableActionJdo> currentlyRunning() {
+    public List<CommandJdo> currentlyRunning() {
         return interactionRepository.findCurrent();
     }
     public boolean hideCurrentlyRunning() {
@@ -59,7 +59,7 @@ public class Admin extends AbstractService {
     
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence="10.3")
-    public List<ReifiableActionJdo> previouslyRan() {
+    public List<CommandJdo> previouslyRan() {
         return interactionRepository.findCompleted();
     }
     public boolean hidePreviouslyRan() {
@@ -72,7 +72,7 @@ public class Admin extends AbstractService {
     @ActionSemantics(Of.SAFE)
     @Prototype
     @MemberOrder(sequence="20")
-    public List<ReifiableActionJdo> allTasks() {
+    public List<CommandJdo> allTasks() {
         return backgroundTaskRepository.listAll();
     }
     public boolean hideAllTasks() {
@@ -124,7 +124,7 @@ public class Admin extends AbstractService {
     // //////////////////////////////////////
 
     @javax.inject.Inject
-    private ReifiableActionServiceJdoRepository interactionRepository;
+    private CommandServiceJdoRepository interactionRepository;
     
     @javax.inject.Inject
     private BackgroundActionServiceJdoRepository backgroundTaskRepository;

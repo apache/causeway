@@ -27,9 +27,9 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundActionService;
-import org.apache.isis.applib.services.reifiableaction.ReifiableAction;
-import org.apache.isis.applib.services.reifiableaction.ReifiableAction.Nature;
-import org.apache.isis.objectstore.jdo.applib.service.reifiableaction.ReifiableActionJdo;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.Command.Nature;
+import org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo;
 
 @Named("Background Actions")
 public class BackgroundActionServiceJdo extends AbstractService implements BackgroundActionService {
@@ -41,7 +41,7 @@ public class BackgroundActionServiceJdo extends AbstractService implements Backg
     @Override
     public void schedule(
             final ActionInvocationMemento aim, 
-            final ReifiableAction parentAction, 
+            final Command parentAction, 
             final String targetClassName, 
             final String targetActionName, 
             final String targetArgs) {
@@ -49,7 +49,7 @@ public class BackgroundActionServiceJdo extends AbstractService implements Backg
         final UUID transactionId = UUID.randomUUID();
         final String user = parentAction.getUser();
 
-        final ReifiableActionJdo backgroundAction = newTransientInstance(ReifiableActionJdo.class);
+        final CommandJdo backgroundAction = newTransientInstance(CommandJdo.class);
 
         backgroundAction.setParent(parentAction);
         
@@ -68,7 +68,7 @@ public class BackgroundActionServiceJdo extends AbstractService implements Backg
         backgroundAction.setArguments(targetArgs);
         backgroundAction.setMemento(aim.asMementoString());
         
-        parentAction.setReify(true);
+        parentAction.setPersistHint(true);
         
         persist(backgroundAction);
     }
