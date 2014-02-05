@@ -22,9 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AbstractService;
+import org.apache.isis.applib.annotation.Command.ExecuteIn;
+import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.spi.CommandService;
 
 public class CommandServiceJdo extends AbstractService implements CommandService {
@@ -34,14 +37,15 @@ public class CommandServiceJdo extends AbstractService implements CommandService
 
     /**
      * Creates an {@link CommandJdo}, initializing its 
-     * {@link Command#setNature(Command.Nature) nature} to be
-     * {@link Command.Nature#OTHER rendering}.
+     * {@link Command#setExecuteIn(Command.ExecuteIn) nature} to be
+     * {@link Command.ExecuteIn#OTHER rendering}.
      */
     @Programmatic
     @Override
     public Command create() {
         CommandJdo command = newTransientInstance(CommandJdo.class);
-        command.setNature(Command.Nature.OTHER);
+        command.setExecutor(Executor.OTHER);
+        command.setPersistence(Persistence.IF_HINTED);
         return command;
     }
 
@@ -64,7 +68,7 @@ public class CommandServiceJdo extends AbstractService implements CommandService
     @Programmatic
     @Override
     public void complete(final Command command) {
-        CommandJdo commandJdo = asUserInitiatedCommandJdo(command);
+        final CommandJdo commandJdo = asUserInitiatedCommandJdo(command);
         if(commandJdo == null) {
             return;
         }
@@ -73,25 +77,32 @@ public class CommandServiceJdo extends AbstractService implements CommandService
         persistIfNotAlready(commandJdo);
     }
 
+    @Override
+    public boolean persistIfPossible(Command command) {
+        if(!(command instanceof CommandJdo)) {
+            // ought not to be the case, since this service created the object in the #create() method
+            return false;
+        }
+        final CommandJdo commandJdo = (CommandJdo)command;
+        persistIfNotAlready(commandJdo);
+        return true;
+    }
+    
+    
     /**
-     * Not API, factored out from {@link CommandServiceJdoRepository}.
+     * Not API, also used by {@link CommandServiceJdoRepository}.
      */
     CommandJdo asUserInitiatedCommandJdo(final Command command) {
         if(!(command instanceof CommandJdo)) {
             // ought not to be the case, since this service created the object in the #create() method
             return null;
         }
-        if(command.getNature() != Command.Nature.USER_INITIATED) {
+        if(command.getExecuteIn() != ExecuteIn.FOREGROUND) {
             return null;
         } 
         final CommandJdo commandJdo = (CommandJdo) command;
-        if(!commandJdo.isPersistHint()) {
-            return null;
-        } 
-        return commandJdo;
+        return commandJdo.shouldPersist()? commandJdo: null;
     }
-    
-    
-    
+
     
 }

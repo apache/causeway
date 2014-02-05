@@ -27,10 +27,10 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo;
 
-public class BackgroundActionServiceJdoRepository extends AbstractFactoryAndRepository {
+public class BackgroundCommandServiceJdoRepository extends AbstractFactoryAndRepository {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(BackgroundActionServiceJdoRepository.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BackgroundCommandServiceJdoRepository.class);
 
     @Programmatic
     public List<CommandJdo> listAll() {
@@ -41,7 +41,7 @@ public class BackgroundActionServiceJdoRepository extends AbstractFactoryAndRepo
     public List<CommandJdo> findByTransactionId(final UUID transactionId) {
         return allMatches(
                 new QueryDefault<CommandJdo>(CommandJdo.class, 
-                        "findBackgroundActionByTransactionId", 
+                        "findBackgroundCommandByTransactionId", 
                         "transactionId", transactionId));
     }
 
@@ -49,15 +49,15 @@ public class BackgroundActionServiceJdoRepository extends AbstractFactoryAndRepo
     public List<CommandJdo> findByParent(CommandJdo parent) {
         return allMatches(
                 new QueryDefault<CommandJdo>(CommandJdo.class, 
-                        "findBackgroundActionsByParent", 
+                        "findBackgroundCommandsByParent", 
                         "parent", parent));
     }
 
     @Programmatic
-    public List<CommandJdo> findBackgroundActionsNotYetStarted() {
+    public List<CommandJdo> findBackgroundCommandsNotYetStarted() {
         return allMatches(
                 new QueryDefault<CommandJdo>(CommandJdo.class, 
-                        "findBackgroundActionsNotYetStarted"));
+                        "findBackgroundCommandsNotYetStarted"));
     }
     
 }

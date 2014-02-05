@@ -19,13 +19,19 @@
 
 package org.apache.isis.core.progmodel.facets.actions.command.annotation;
 
+import org.apache.isis.applib.annotation.Command.ExecuteIn;
+import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.actions.command.CommandFacetAbstract;
 
 public class CommandFacetAnnotation extends CommandFacetAbstract {
 
-    public CommandFacetAnnotation(final FacetHolder holder) {
-        super(holder);
+    public CommandFacetAnnotation(
+            final Persistence persistence, 
+            final ExecuteIn executeIn,
+            final FacetHolder holder) {
+        super(persistence, executeIn, holder);
     }
+
 
 }

@@ -23,7 +23,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Command.ExecuteIn;
+import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -31,7 +32,7 @@ import org.apache.isis.applib.util.ObjectContracts;
 public class CommandDefault implements Command {
 
     public CommandDefault() {
-        setNature(Command.Nature.OTHER);
+        setExecutor(Executor.OTHER);
     }
     
     // //////////////////////////////////////
@@ -39,11 +40,11 @@ public class CommandDefault implements Command {
     // //////////////////////////////////////
 
     private String actionIdentifier;
-    public String getActionIdentifier() {
+    public String getMemberIdentifier() {
         return actionIdentifier;
     }
     @Override
-    public void setActionIdentifier(String actionIdentifier) {
+    public void setMemberIdentifier(String actionIdentifier) {
         this.actionIdentifier = actionIdentifier;
     }
 
@@ -181,27 +182,42 @@ public class CommandDefault implements Command {
         this.user = user;
     }
 
-
     // //////////////////////////////////////
-    // nature (property)
+    // executor (property)
     // //////////////////////////////////////
 
-    private Nature nature;
-
+    private Executor executor;
+    
     @Override
-    public Nature getNature() {
-        return nature;
+    public Executor getExecutor() {
+        return executor;
     }
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
-     * 
-     * <p>
-     * Implementation notes: populated by the viewer as hint to {@link CommandService} implementation.
      */
     @Override
-    public void setNature(Nature nature) {
-        this.nature = nature;
+    public void setExecutor(Executor nature) {
+        this.executor = nature;
+    }
+
+    // //////////////////////////////////////
+    // executionType (property)
+    // //////////////////////////////////////
+
+    private ExecuteIn executionType;
+
+    @Override
+    public ExecuteIn getExecuteIn() {
+        return executionType;
+    }
+
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     */
+    @Override
+    public void setExecuteIn(ExecuteIn executionType) {
+        this.executionType = executionType;
     }
 
     
@@ -254,13 +270,7 @@ public class CommandDefault implements Command {
     }
     
     // //////////////////////////////////////
-
-    @Override
-    public String toString() {
-        return ObjectContracts.toString(this, "startedAt,user,actionIdentifier,target,guid");
-    }
-    
-    
+    // transactionId (property)
     // //////////////////////////////////////
     
     private UUID transactionId;
@@ -274,7 +284,41 @@ public class CommandDefault implements Command {
         this.transactionId = transactionId;
     }
     
+
     
+    // //////////////////////////////////////
+    // persistence
+    // //////////////////////////////////////
+
+    private Persistence persistence;
+    
+    @Override
+    public Persistence getPersistence() {
+        return persistence;
+    }
+    
+    @Override
+    public void setPersistence(Persistence persistence) {
+        this.persistence = persistence; 
+    }
+
+    // //////////////////////////////////////
+    // persistHint
+    // //////////////////////////////////////
+    
+    private boolean persistHint;
+    
+    public boolean isPersistHint() {
+        return persistHint;
+    }
+    
+    public void setPersistHint(boolean persistHint) {
+        this.persistHint = persistHint;
+    }
+
+
+    // //////////////////////////////////////
+    // next
     // //////////////////////////////////////
 
     private final Map<String, AtomicInteger> sequenceByName = Maps.newHashMap();
@@ -292,17 +336,16 @@ public class CommandDefault implements Command {
     }
 
     
+
     // //////////////////////////////////////
-    
-    private boolean persistHint;
-    
-    public boolean isPersistHint() {
-        return persistHint;
-    }
-    
-    public void setPersistHint(boolean persistHint) {
-        this.persistHint = persistHint;
+    // toString
+    // //////////////////////////////////////
+
+    @Override
+    public String toString() {
+        return ObjectContracts.toString(this, "startedAt,user,actionIdentifier,target,guid");
     }
     
     
+
 }

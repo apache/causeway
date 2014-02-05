@@ -27,6 +27,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
@@ -41,14 +42,14 @@ import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
  * Intended to be used as a base class for executing queued up {@link Command background action}s.
  * 
  * <p>
- * This implementation uses the {@link #findBackgroundActionsToExecute() hook method} so that it is
+ * This implementation uses the {@link #findBackgroundCommandsToExecute() hook method} so that it is
  * independent of the location where the actions have actually been persisted to.
  */
-public abstract class BackgroundActionExecution extends AbstractIsisSessionTemplate {
+public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemplate {
 
     private final MementoServiceDefault mementoService;
 
-    public BackgroundActionExecution() {
+    public BackgroundCommandExecution() {
         // same as configured by BackgroundServiceDefault
         mementoService = new MementoServiceDefault().withNoEncoding();
     }
@@ -57,27 +58,28 @@ public abstract class BackgroundActionExecution extends AbstractIsisSessionTempl
 
     
     protected void doExecute(Object context) {
-        final List<? extends Command> findBackgroundActionsToExecute = findBackgroundActionsToExecute(); 
-        for (final Command backgroundAction : findBackgroundActionsToExecute) {
-            execute(backgroundAction);
+        final List<? extends Command> commands = findBackgroundCommandsToExecute(); 
+        for (final Command command : commands) {
+            execute(command);
         }
     }
 
     /**
      * Mandatory hook method
      */
-    protected abstract List<? extends Command> findBackgroundActionsToExecute();
+    protected abstract List<? extends Command> findBackgroundCommandsToExecute();
 
     // //////////////////////////////////////
 
     
-    private void execute(final Command backgroundAction) {
+    private void execute(final Command command) {
         try {
-            commandContext.setCommand(backgroundAction);
+            commandContext.setCommand(command);
 
-            backgroundAction.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
+            command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
+            command.setExecutor(Executor.BACKGROUND);
             
-            final String memento = backgroundAction.getMemento();
+            final String memento = command.getMemento();
             final ActionInvocationMemento aim = new ActionInvocationMemento(mementoService, memento);
             
             final String actionId = aim.getActionId();
@@ -97,13 +99,13 @@ public abstract class BackgroundActionExecution extends AbstractIsisSessionTempl
             final ObjectAdapter resultAdapter = objectAction.execute(targetAdapter, argAdapters);
             if(resultAdapter != null) {
                 Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                backgroundAction.setResult(resultBookmark);
+                command.setResult(resultBookmark);
             }
 
         } catch (Exception e) {
-            backgroundAction.setException(Throwables.getStackTraceAsString(e));
+            command.setException(Throwables.getStackTraceAsString(e));
         } finally {
-            backgroundAction.setCompletedAt(Clock.getTimeAsJavaSqlTimestamp());
+            command.setCompletedAt(Clock.getTimeAsJavaSqlTimestamp());
         }
     }
 

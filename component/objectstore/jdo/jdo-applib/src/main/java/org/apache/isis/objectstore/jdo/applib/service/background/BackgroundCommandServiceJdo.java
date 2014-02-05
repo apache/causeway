@@ -18,59 +18,63 @@ package org.apache.isis.objectstore.jdo.applib.service.background;
 
 import java.util.UUID;
 
+import javax.validation.executable.ExecutableType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AbstractService;
+import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
-import org.apache.isis.applib.services.background.BackgroundActionService;
+import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.Command.Nature;
+import org.apache.isis.applib.services.command.Command.Executor;
+import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo;
 
-@Named("Background Actions")
-public class BackgroundActionServiceJdo extends AbstractService implements BackgroundActionService {
+@Named("Background Commands")
+public class BackgroundCommandServiceJdo extends AbstractService implements BackgroundCommandService {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(BackgroundActionServiceJdo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BackgroundCommandServiceJdo.class);
     
     @Programmatic
     @Override
     public void schedule(
             final ActionInvocationMemento aim, 
-            final Command parentAction, 
+            final Command parentCommand, 
             final String targetClassName, 
             final String targetActionName, 
             final String targetArgs) {
         
         final UUID transactionId = UUID.randomUUID();
-        final String user = parentAction.getUser();
+        final String user = parentCommand.getUser();
 
-        final CommandJdo backgroundAction = newTransientInstance(CommandJdo.class);
+        final CommandJdo backgroundCommand = newTransientInstance(CommandJdo.class);
 
-        backgroundAction.setParent(parentAction);
+        backgroundCommand.setParent(parentCommand);
         
-        backgroundAction.setTransactionId(transactionId);
+        backgroundCommand.setTransactionId(transactionId);
 
-        backgroundAction.setUser(user);
-        backgroundAction.setTimestamp(Clock.getTimeAsJavaSqlTimestamp());
+        backgroundCommand.setUser(user);
+        backgroundCommand.setTimestamp(Clock.getTimeAsJavaSqlTimestamp());
 
-        backgroundAction.setNature(Nature.BACKGROUND);
+        backgroundCommand.setExecuteIn(ExecuteIn.BACKGROUND);
 
-        backgroundAction.setTargetClass(targetClassName);
-        backgroundAction.setTargetAction(targetActionName);
-        backgroundAction.setTargetStr(aim.getTarget().toString());
-        backgroundAction.setActionIdentifier(aim.getActionId());
+        backgroundCommand.setTargetClass(targetClassName);
+        backgroundCommand.setTargetAction(targetActionName);
+        backgroundCommand.setTargetStr(aim.getTarget().toString());
+        backgroundCommand.setMemberIdentifier(aim.getActionId());
 
-        backgroundAction.setArguments(targetArgs);
-        backgroundAction.setMemento(aim.asMementoString());
+        backgroundCommand.setArguments(targetArgs);
+        backgroundCommand.setMemento(aim.asMementoString());
         
-        parentAction.setPersistHint(true);
+        parentCommand.setPersistHint(true);
         
-        persist(backgroundAction);
+        persist(backgroundCommand);
     }
 
 }

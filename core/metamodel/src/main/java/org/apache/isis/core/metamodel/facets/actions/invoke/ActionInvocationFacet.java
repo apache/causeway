@@ -21,11 +21,9 @@ package org.apache.isis.core.metamodel.facets.actions.invoke;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
-import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -52,6 +50,9 @@ public interface ActionInvocationFacet extends Facet {
     public ObjectSpecification getOnType();
 
     public static class CurrentInvocation {
+
+        private final Command command;
+        
         private final ObjectAdapter target;
         private final IdentifiedHolder action;
         private final List<ObjectAdapter> parameters;
@@ -59,31 +60,51 @@ public interface ActionInvocationFacet extends Facet {
 
         public CurrentInvocation(
                 final ObjectAdapter target, final IdentifiedHolder action, final ObjectAdapter[] parameters, 
-                final ObjectAdapter result) {
-            this(target, action, Arrays.asList(parameters), result);
+                final ObjectAdapter result, 
+                final Command command) {
+            this(target, action, Arrays.asList(parameters), result, command);
         }
 
         public CurrentInvocation(
                 final ObjectAdapter target, final IdentifiedHolder action, final List<ObjectAdapter> parameters, 
-                final ObjectAdapter result) {
+                final ObjectAdapter result, 
+                final Command command) {
             this.target = target;
             this.action = action;
             this.parameters = parameters;
             this.result = result;
+            this.command = command;
         }
-        
+
+        /**
+         * deprecated since part of {@link #getCommand()}
+         */
+        @Deprecated
         public ObjectAdapter getTarget() {
             return target;
         }
+        /**
+         * deprecated since part of {@link #getCommand()}
+         */
+        @Deprecated
         public IdentifiedHolder getAction() {
             return action;
         }
+
         public List<ObjectAdapter> getParameters() {
             return parameters;
         }
         
+        /**
+         * deprecated since part of {@link #getCommand()}
+         */
+        @Deprecated
         public ObjectAdapter getResult() {
             return result;
+        }
+        
+        public Command getCommand() {
+            return command;
         }
     }
     

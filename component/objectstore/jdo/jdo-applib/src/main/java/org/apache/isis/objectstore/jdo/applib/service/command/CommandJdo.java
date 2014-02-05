@@ -33,6 +33,9 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.Command.ExecuteIn;
+import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.MemberGroupLayout;
@@ -47,8 +50,9 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.spi.CommandService;
+import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
 import org.apache.isis.objectstore.jdo.applib.service.Util;
 
@@ -61,25 +65,24 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
             name="findByTransactionId", language="JDOQL",  
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo "
-                    + "WHERE transactionId == :transactionId "
-                    + "&& nature == 'USER_INITIATED'"),
+                    + "WHERE transactionId == :transactionId "),
     @javax.jdo.annotations.Query(
-            name="findBackgroundActionByTransactionId", language="JDOQL",  
+            name="findBackgroundCommandByTransactionId", language="JDOQL",  
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo "
                     + "WHERE transactionId == :transactionId "
-                    + "&& nature == 'BACKGROUND'"),
+                    + "&& executeIn == 'BACKGROUND'"),
     @javax.jdo.annotations.Query(
-            name="findBackgroundActionsByParent", language="JDOQL",  
+            name="findBackgroundCommandsByParent", language="JDOQL",  
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo "
                     + "WHERE parent == :parent "
-                    + "&& nature == 'BACKGROUND'"),
+                    + "&& executeIn == 'BACKGROUND'"),
     @javax.jdo.annotations.Query(
-            name="findBackgroundActionsNotYetStarted", language="JDOQL",  
+            name="findBackgroundCommandsNotYetStarted", language="JDOQL",  
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo "
-                    + "WHERE nature == 'BACKGROUND' "
+                    + "WHERE executeIn == 'BACKGROUND' "
                     + "&& startedAt == null "
                     + "ORDER BY timestamp ASC "
                     ),
@@ -94,7 +97,7 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo "
                     + "WHERE completedAt != null "
-                    + "&& nature == 'USER_INITIATED' "
+                    + "&& executeIn == 'FOREGROUND' "
                     + "ORDER BY timestamp DESC")
 })
 @ObjectType("IsisCommand")
@@ -111,13 +114,25 @@ public class CommandJdo implements Command {
 
 
     // //////////////////////////////////////
+    // Identification
+    // //////////////////////////////////////
+
+    public String title() {
+        final TitleBuffer buf = new TitleBuffer();
+        buf.append(getTargetStr());
+        buf.append(" ").append(getMemberIdentifier());
+        return buf.toString();
+    }
+
+
+
+    // //////////////////////////////////////
     // user (property)
     // //////////////////////////////////////
 
     private String user;
 
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.USER_NAME)
-    @Title(sequence="2", prepend=", ")
     @MemberOrder(name="Identifiers", sequence = "10")
     public String getUser() {
         return user;
@@ -153,35 +168,48 @@ public class CommandJdo implements Command {
     }
 
     
-    
     // //////////////////////////////////////
-    // nature (property)
+    // executor (property)
+    // //////////////////////////////////////
+    
+    private Executor executor;
+    
+    @Programmatic
+    @javax.jdo.annotations.NotPersistent
+    @Override
+    public Executor getExecutor() {
+        return executor;
+    }
+
+    @Override
+    public void setExecutor(Executor nature) {
+        this.executor = nature;
+    }
+
+    // //////////////////////////////////////
+    // executeIn (property)
     // //////////////////////////////////////
 
-    private Nature nature;
+    private ExecuteIn executeIn;
 
     /**
      * Whether the action was invoked explicitly by the user, or scheduled as a background
      * task, or as for some other reason, eg a side-effect of rendering an object due to 
      * get-after-post).
      */
-    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.Command.NATURE)
-    @TypicalLength(30)
-    @MemberOrder(name="Identifiers", sequence = "30")
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.Command.EXECUTE_IN)
+    @MemberOrder(name="Identifiers", sequence = "32")
     @Override
-    public Nature getNature() {
-        return nature;
+    public ExecuteIn getExecuteIn() {
+        return executeIn;
     }
     
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
-     * 
-     * <p>
-     * Implementation notes: populated by the viewer as hint to {@link CommandService} implementation.
      */
     @Override
-    public void setNature(Nature nature) {
-        this.nature = nature;
+    public void setExecuteIn(ExecuteIn nature) {
+        this.executeIn = nature;
     }
 
 
@@ -243,7 +271,7 @@ public class CommandJdo implements Command {
 
     private String targetClass;
 
-    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.Command.TARGET_CLASS)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.TARGET_CLASS)
     @TypicalLength(30)
     @MemberOrder(name="Target", sequence = "10")
     @Named("Class")
@@ -252,7 +280,7 @@ public class CommandJdo implements Command {
     }
 
     public void setTargetClass(final String targetClass) {
-        this.targetClass = Util.abbreviated(targetClass, JdoColumnLength.Command.TARGET_CLASS);
+        this.targetClass = Util.abbreviated(targetClass, JdoColumnLength.TARGET_CLASS);
     }
 
 
@@ -262,7 +290,7 @@ public class CommandJdo implements Command {
     
     private String targetAction;
     
-    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.Command.TARGET_ACTION)
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.TARGET_ACTION)
     @TypicalLength(30)
     @MemberOrder(name="Target", sequence = "20")
     @Named("Action")
@@ -271,7 +299,7 @@ public class CommandJdo implements Command {
     }
     
     public void setTargetAction(final String targetAction) {
-        this.targetAction = Util.abbreviated(targetAction, JdoColumnLength.Command.TARGET_ACTION);
+        this.targetAction = Util.abbreviated(targetAction, JdoColumnLength.TARGET_ACTION);
     }
     
 
@@ -309,6 +337,7 @@ public class CommandJdo implements Command {
 
     // //////////////////////////////////////
 
+    @Bulk
     @ActionSemantics(Of.SAFE)
     @MemberOrder(name="TargetStr", sequence="1")
     @Named("Open")
@@ -327,7 +356,7 @@ public class CommandJdo implements Command {
     private String arguments;
     
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.Command.ARGUMENTS)
-    @MultiLine(numberOfLines=6)
+    @MultiLine(numberOfLines=7)
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Target",sequence = "40")
     public String getArguments() {
@@ -341,22 +370,21 @@ public class CommandJdo implements Command {
     
 
     // //////////////////////////////////////
-    // actionIdentifier (property)
+    // memberIdentifier (property)
     // //////////////////////////////////////
 
-    private String actionIdentifier;
+    private String memberIdentifier;
     
-    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.ACTION_IDENTIFIER)
-    @Title(sequence="1")
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.MEMBER_IDENTIFIER)
     @TypicalLength(60)
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Detail",sequence = "1")
-    public String getActionIdentifier() {
-        return actionIdentifier;
+    public String getMemberIdentifier() {
+        return memberIdentifier;
     }
 
-    public void setActionIdentifier(final String actionIdentifier) {
-        this.actionIdentifier = Util.abbreviated(actionIdentifier, JdoColumnLength.ACTION_IDENTIFIER);
+    public void setMemberIdentifier(final String memberIdentifier) {
+        this.memberIdentifier = Util.abbreviated(memberIdentifier, JdoColumnLength.MEMBER_IDENTIFIER);
     }
 
 
@@ -368,7 +396,7 @@ public class CommandJdo implements Command {
     private String memento;
     
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.BackgroundTask.MEMENTO)
-    @MultiLine(numberOfLines=10)
+    @MultiLine(numberOfLines=9)
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Detail",sequence = "30")
     public String getMemento() {
@@ -460,10 +488,33 @@ public class CommandJdo implements Command {
     
     
     // //////////////////////////////////////
+    // state (derived property)
+    // //////////////////////////////////////
+
+    @javax.jdo.annotations.NotPersistent
+    @MemberOrder(name="Results",sequence = "10")
+    @Hidden(where=Where.OBJECT_FORMS)
+    @Named("Result")
+    public String getResultSummary() {
+        if(getCompletedAt() == null) {
+            return "";
+        }
+        if(getException() != null) {
+            return "EXCEPTION";
+        } 
+        if(getResultStr() != null) {
+            return "OK";
+        } else {
+            return "OK (VOID)";
+        }
+    }
+
+    
+    // //////////////////////////////////////
     // result (property)
     // openResultObject (action)
     // //////////////////////////////////////
-
+    
     @Programmatic
     @Override
     public Bookmark getResult() {
@@ -578,6 +629,26 @@ public class CommandJdo implements Command {
         return next.get();
     }
 
+    
+    // //////////////////////////////////////
+    // persistence (programmatic)
+    // //////////////////////////////////////
+
+    private Persistence persistence;
+    
+    @javax.jdo.annotations.NotPersistent
+    @Programmatic
+    @Override
+    public Persistence getPersistence() {
+        return persistence;
+    }
+
+    @Override
+    public void setPersistence(Persistence persistence) {
+        this.persistence = persistence;
+    }
+
+
     // //////////////////////////////////////
     // setPersistHint (SPI impl)
     // //////////////////////////////////////
@@ -596,26 +667,42 @@ public class CommandJdo implements Command {
         this.persistHint = persistHint;
     }
 
+    
+    // //////////////////////////////////////
+    
+    @Programmatic
+    boolean shouldPersist() {
+        if(Persistence.PERSISTED == getPersistence()) {
+            return true;
+        }
+        if(Persistence.IF_HINTED == getPersistence()) {
+            return isPersistHint();
+        }
+        return false;
+    }
+
+
+
     // //////////////////////////////////////
     // toString
     // //////////////////////////////////////
 
-
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "startedAt,user,actionIdentifier,target,completedAt,duration,transactionId");
+        return ObjectContracts.toString(this, "targetStr,memberIdentifier,user,startedAt,completedAt,duration,transactionId");
     }
 
     
+    
+    // //////////////////////////////////////
+    // dependencies
     // //////////////////////////////////////
     
+
     @javax.inject.Inject
     private BookmarkService bookmarkService;
     
     @javax.inject.Inject
     private DomainObjectContainer container;
-
-    
-
 
 }

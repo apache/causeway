@@ -54,8 +54,9 @@
                                 },
                                 cssClass: { value: "x-highlight" }
                             },
-                            completeInBackground: {
-                                named: { value: "Schedule" }
+                            scheduleExplicitly: {
+                            },
+                            scheduleImplicitly: {
                             },
                             notYetCompleted: {
                                 named: { value: "Not done" }

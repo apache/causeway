@@ -24,6 +24,7 @@ import java.util.UUID;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bulk;
@@ -36,11 +37,14 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.publish.EventType;
+import org.apache.isis.applib.util.ObjectContracts;
+import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
 import org.apache.isis.objectstore.jdo.applib.service.Util;
 
@@ -61,7 +65,9 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
                     + "WHERE transactionId == :transactionId")
 })
 @MemberGroupLayout(
-        left={"Identifiers","Target","Detail"})
+        columnSpans={6,0,6},
+        left={"Identifiers","Target"},
+        right={"Detail","State"})
 @Immutable
 @ObjectType("IsisPublishedEvent")
 public class PublishedEventJdo implements HasTransactionId {
@@ -70,6 +76,21 @@ public class PublishedEventJdo implements HasTransactionId {
         QUEUED, PROCESSED
     }
     
+
+    // //////////////////////////////////////
+    // Identification
+    // //////////////////////////////////////
+
+    public String title() {
+        final TitleBuffer buf = new TitleBuffer();
+        buf.append(getEventType().name()).append(" ").append(getTargetStr());
+        if(getEventType()==EventType.ACTION_INVOCATION) {
+            buf.append(" ").append(getMemberIdentifier());
+        }
+        buf.append(",").append(getState());
+        return buf.toString();
+    }
+
 
     
     // //////////////////////////////////////
@@ -168,10 +189,17 @@ public class PublishedEventJdo implements HasTransactionId {
 
     private String title;
 
+    /**
+     * Consists of the full oidStr (with version info etc), concatenated 
+     * (if an {@link EventType#ACTION_INVOCATION}) with the name/parms of the action.
+     * 
+     * <p>
+     * @deprecated - the oid of the target is also available (without the version info) through {@link #getTarget()}, and
+     *               the action identifier is available through {@link #getMemberIdentifier()}.
+     */
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.PublishedEvent.TITLE)
-    @Title
-    @MemberOrder(name="Target", sequence = "10")
-    @Named("Object")
+    @Hidden
+    @Deprecated
     public String getTitle() {
         return title;
     }
@@ -180,24 +208,7 @@ public class PublishedEventJdo implements HasTransactionId {
         this.title = title;
     }
     
-    // //////////////////////////////////////
-
     
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(name="Title", sequence="1")
-    @Named("Open")
-    public Object openTitleObject() {
-        String title2 = getTitle();
-        int indexOf = title2.indexOf("^");
-        if(indexOf != -1) {
-            title2 = title2.substring(0, indexOf);
-        }
-        return Util.lookupBookmark(Util.bookmarkFor(title2), bookmarkService, container);
-    }
-    public boolean hideOpenTitleObject() {
-        return getTitle() == null;
-    }
-
     // //////////////////////////////////////
     // eventType (property)
     // //////////////////////////////////////
@@ -205,7 +216,7 @@ public class PublishedEventJdo implements HasTransactionId {
     private EventType eventType;
 
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.PublishedEvent.EVENT_TYPE)
-    @MemberOrder(name="Detail",sequence = "20")
+    @MemberOrder(name="Identifiers",sequence = "50")
     public EventType getEventType() {
         return eventType;
     }
@@ -216,13 +227,131 @@ public class PublishedEventJdo implements HasTransactionId {
     
 
     // //////////////////////////////////////
+    // targetClass (property)
+    // //////////////////////////////////////
+
+    private String targetClass;
+
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.TARGET_CLASS)
+    @TypicalLength(30)
+    @MemberOrder(name="Target", sequence = "10")
+    @Named("Class")
+    public String getTargetClass() {
+        return targetClass;
+    }
+
+    public void setTargetClass(final String targetClass) {
+        this.targetClass = Util.abbreviated(targetClass, JdoColumnLength.TARGET_CLASS);
+    }
+
+
+    // //////////////////////////////////////
+    // targetAction (property)
+    // //////////////////////////////////////
+    
+    private String targetAction;
+    
+    /**
+     * Only populated for {@link EventType#ACTION_INVOCATION}
+     */
+    @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.TARGET_ACTION)
+    @TypicalLength(30)
+    @MemberOrder(name="Target", sequence = "20")
+    @Named("Action")
+    public String getTargetAction() {
+        return targetAction;
+    }
+    
+    public void setTargetAction(final String targetAction) {
+        this.targetAction = Util.abbreviated(targetAction, JdoColumnLength.TARGET_ACTION);
+    }
+    
+
+    // //////////////////////////////////////
+    // target (property)
+    // openTargetObject (action)
+    // //////////////////////////////////////
+
+    @Programmatic
+    public Bookmark getTarget() {
+        return Util.bookmarkFor(getTargetStr());
+    }
+    
+    @Programmatic
+    public void setTarget(Bookmark target) {
+        setTargetStr(Util.asString(target));
+    }
+
+    // //////////////////////////////////////
+    
+    private String targetStr;
+    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.BOOKMARK, name="target")
+//    @Hidden(where=Where.ALL_TABLES)
+    @MemberOrder(name="Target", sequence="30")
+    @Named("Object")
+    public String getTargetStr() {
+        return targetStr;
+    }
+
+    public void setTargetStr(final String targetStr) {
+        this.targetStr = targetStr;
+    }
+
+    // //////////////////////////////////////
+
+    @Bulk
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(name="TargetStr", sequence="1")
+    @Named("Open")
+    public Object openTargetObject() {
+        return Util.lookupBookmark(getTarget(), bookmarkService, container);
+    }
+    public boolean hideOpenTargetObject() {
+        return getTarget() == null;
+    }
+
+
+    // //////////////////////////////////////
+    // memberIdentifier (property)
+    // //////////////////////////////////////
+
+    private String memberIdentifier;
+    
+    /**
+     * Holds a string representation of the invoked action, equivalent to
+     * {@link Identifier#toClassAndNameIdentityString()}.
+     * 
+     * <p>
+     * Only populated for {@link EventType#ACTION_INVOCATION}, 
+     * returns <tt>null</tt> otherwise.
+     * 
+     * <p>
+     * This property is called 'memberIdentifier' rather than 'actionIdentifier' for
+     * consistency with other services (such as auditing and publishing) that may act on
+     * properties rather than simply just actions.
+     */
+    @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.MEMBER_IDENTIFIER)
+    @TypicalLength(60)
+    @Hidden(where=Where.ALL_TABLES)
+    @MemberOrder(name="Detail",sequence = "20")
+    public String getMemberIdentifier() {
+        return memberIdentifier;
+    }
+
+    public void setMemberIdentifier(final String actionIdentifier) {
+        this.memberIdentifier = Util.abbreviated(actionIdentifier, JdoColumnLength.MEMBER_IDENTIFIER);
+    }
+
+
+
+    // //////////////////////////////////////
     // state (property)
     // //////////////////////////////////////
 
     private State state;
 
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.PublishedEvent.STATE)
-    @MemberOrder(name="Detail", sequence = "30")
+    @MemberOrder(name="State", sequence = "30")
     public State getState() {
         return state;
     }
@@ -243,7 +372,7 @@ public class PublishedEventJdo implements HasTransactionId {
 
     @javax.jdo.annotations.NotPersistent
     @NotPersisted
-    @MultiLine(numberOfLines=20)
+    @MultiLine(numberOfLines=14)
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Detail", sequence = "40")
     public String getSerializedForm() {
@@ -301,6 +430,19 @@ public class PublishedEventJdo implements HasTransactionId {
     }
     
 
+    
+    // //////////////////////////////////////
+    // toString
+    // //////////////////////////////////////
+
+    @Override
+    public String toString() {
+        return ObjectContracts.toString(this, "targetStr,timestamp,user,eventType,memberIdentifier,state");
+    }
+
+
+    // //////////////////////////////////////
+    // dependencies
     // //////////////////////////////////////
 
     @javax.inject.Inject

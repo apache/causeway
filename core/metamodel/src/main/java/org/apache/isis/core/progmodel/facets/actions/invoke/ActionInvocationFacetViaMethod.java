@@ -19,13 +19,10 @@
 
 package org.apache.isis.core.progmodel.facets.actions.invoke;
 
-import java.awt.Desktop.Action;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,19 +31,20 @@ import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
+import org.apache.isis.applib.annotation.Command.ExecuteIn;
+import org.apache.isis.applib.annotation.Command.Persistence;
+import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.applib.services.memento.MementoService;
+import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
@@ -68,7 +66,6 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     private final static Logger LOG = LoggerFactory.getLogger(ActionInvocationFacetViaMethod.class);
 
     private final Method method;
-    private final int paramCount;
     private final ObjectSpecification onType;
     private final ObjectSpecification returnType;
 
@@ -86,7 +83,6 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
             final ServicesInjector servicesInjector) {
         super(holder);
         this.method = method;
-        this.paramCount = method.getParameterTypes().length;
         this.onType = onType;
         this.returnType = returnType;
         this.runtimeContext = runtimeContext;
@@ -119,15 +115,15 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     }
 
     @Override
-    public ObjectAdapter invoke(ObjectAction owningAction, ObjectAdapter targetAdapter, ObjectAdapter[] arguments) {
-        if (arguments.length != paramCount) {
-            LOG.error(method + " requires " + paramCount + " parameters, not " + arguments.length);
-        }
+    public ObjectAdapter invoke(
+            final ObjectAction owningAction, 
+            final ObjectAdapter targetAdapter, 
+            final ObjectAdapter[] arguments) {
 
         final Bulk.InteractionContext bulkInteractionContext = getServicesInjector().lookupService(Bulk.InteractionContext.class);
         final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
         final Command command = commandContext != null ? commandContext.getCommand() : null;
-        
+
         try {
             final Object[] executionParameters = new Object[arguments.length];
             for (int i = 0; i < arguments.length; i++) {
@@ -145,11 +141,9 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                 bulkInteractionContext.setDomainObjects(Collections.singletonList(object));
             }
 
+            if(command != null && command.getExecutor() == Executor.USER && owningAction != null) {
 
-            if(command != null && command.getNature() == Command.Nature.USER_INITIATED && owningAction != null) {
-
-                command.setStartedAt(command.getTimestamp());
-                command.setActionIdentifier(CommandUtil.actionIdentifierFor(owningAction));
+                command.setMemberIdentifier(CommandUtil.actionIdentifierFor(owningAction));
                 command.setTargetClass(CommandUtil.targetClassNameFor(targetAdapter));
                 command.setTargetAction(CommandUtil.targetActionNameFor(owningAction));
                 command.setArguments(CommandUtil.argDescriptionFor(owningAction, arguments));
@@ -157,7 +151,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                 final Bookmark targetBookmark = CommandUtil.bookmarkFor(targetAdapter);
                 command.setTarget(targetBookmark);
                 
-                
+                // the background service is used here merely as a means to capture an invocation memento
                 final BackgroundService backgroundService = getServicesInjector().lookupService(BackgroundService.class);
                 if(backgroundService != null) {
                     final Object targetObject = unwrap(targetAdapter);
@@ -167,44 +161,79 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                     if(aim != null) {
                         command.setMemento(aim.asMementoString());
                     } else {
-                        throw new IsisException("Unable to build memento for action " + owningAction.getIdentifier().toClassAndNameIdentityString());
+                        throw new IsisException(
+                            "Unable to build memento for action " + 
+                            owningAction.getIdentifier().toClassAndNameIdentityString());
                     }
                 }
 
-                final boolean hasCommandFacet = getFacetHolder().containsDoOpFacet(CommandFacet.class);
-                command.setPersistHint(hasCommandFacet);
-            }
-            
-            final Object result = method.invoke(object, executionParameters);
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(" action result " + result);
-            }
-            if (result == null) {
-                return null;
-            }
-
-            final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
-
-            // copy over TypeOfFacet if required
-            final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
-            resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
-
-            
-            if(command != null) {
-                if(!resultAdapter.getSpecification().containsDoOpFacet(ViewModelFacet.class)) {
-                    final Bookmark bookmark = CommandUtil.bookmarkFor(resultAdapter);
-                    command.setResult(bookmark);
+                // copy over the command execution 'context' (if available)
+                final CommandFacet commandFacet = getFacetHolder().getFacet(CommandFacet.class);
+                if(commandFacet != null) {
+                    command.setExecuteIn(commandFacet.executeIn());
+                    command.setPersistence(commandFacet.persistence());
+                } else {
+                    // if no facet, assume do want to execute right now, but only persist (eventually) if hinted.
+                    command.setExecuteIn(ExecuteIn.FOREGROUND);
+                    command.setPersistence(Persistence.IF_HINTED);
                 }
             }
             
-            PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
-            ActionInvocationFacet.currentInvocation.set(
-                    publishedActionFacet != null
-                        ? new CurrentInvocation(targetAdapter, getIdentified(), arguments, resultAdapter)
-                        :null);
             
-            return resultAdapter;
+            if( command != null && 
+                command.getExecutor() == Executor.USER && 
+                command.getExecuteIn() == ExecuteIn.BACKGROUND) {
+                
+                // persist command so can be this command can be in the 'background'
+                final CommandService commandService = getServicesInjector().lookupService(CommandService.class);
+                if(commandService.persistIfPossible(command)) {
+                    // force persistence, then return the command itself.
+                    final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(command);
+                    return resultAdapter;
+                } else {
+                    throw new IsisException(
+                            "Unable to schedule action '"
+                            + owningAction.getIdentifier().toClassAndNameIdentityString() + "' to run in background: "
+                            + "CommandService does not support persistent commands " );
+                }
+            } else {
+                
+                // otherwise, go ahead and execute action in the 'foreground'
+
+                if(command != null) {
+                    command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
+                }
+                
+                final Object result = method.invoke(object, executionParameters);
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(" action result " + result);
+                }
+                if (result == null) {
+                    return null;
+                }
+
+                final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
+
+                // copy over TypeOfFacet if required
+                final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
+                resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
+
+                if(command != null) {
+                    if(!resultAdapter.getSpecification().containsDoOpFacet(ViewModelFacet.class)) {
+                        final Bookmark bookmark = CommandUtil.bookmarkFor(resultAdapter);
+                        command.setResult(bookmark);
+                    }
+                }
+                
+                final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
+                ActionInvocationFacet.currentInvocation.set(
+                        publishedActionFacet != null
+                            ? new CurrentInvocation(targetAdapter, getIdentified(), arguments, resultAdapter, command)
+                            :null);
+                
+                return resultAdapter;
+            }
 
         } catch (final IllegalArgumentException e) {
             throw e;

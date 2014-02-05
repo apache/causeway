@@ -19,13 +19,15 @@ package org.apache.isis.applib.services.command;
 import java.sql.Timestamp;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Command.ExecuteIn;
+import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.HasTransactionId;
-import org.apache.isis.applib.services.background.BackgroundActionService;
+import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -34,6 +36,8 @@ import org.apache.isis.applib.services.command.spi.CommandService;
 public interface Command extends HasTransactionId {
 
     
+    // //////////////////////////////////////
+    // user (property)
     // //////////////////////////////////////
 
     /**
@@ -50,6 +54,8 @@ public interface Command extends HasTransactionId {
     public abstract void setUser(String user);
 
     // //////////////////////////////////////
+    // timestamp (property)
+    // //////////////////////////////////////
 
     /**
      * The date/time at which this action was created.
@@ -65,6 +71,8 @@ public interface Command extends HasTransactionId {
     public abstract void setTimestamp(Timestamp startedAt);
     
     
+    // //////////////////////////////////////
+    // target (property)
     // //////////////////////////////////////
 
     
@@ -84,6 +92,9 @@ public interface Command extends HasTransactionId {
      */
     public abstract void setTarget(Bookmark target);
     
+    
+    // //////////////////////////////////////
+    // memberIdentifier (property)
     // //////////////////////////////////////
 
     /**
@@ -91,10 +102,12 @@ public interface Command extends HasTransactionId {
      * {@link Identifier#toClassAndNameIdentityString()}.
      * 
      * <p>
-     * Returns <tt>null</tt> otherwise.
+     * This property is called 'memberIdentifier' rather than 'actionIdentifier' for
+     * consistency with other services (such as auditing and publishing) that may act on
+     * properties rather than simply just actions.
      */
     @Disabled
-    public abstract String getActionIdentifier();
+    public abstract String getMemberIdentifier();
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
@@ -102,8 +115,10 @@ public interface Command extends HasTransactionId {
      * <p>
      * Implementation notes: set when the action is invoked (in the <tt>ActionInvocationFacet</tt>).
      */
-    public abstract void setActionIdentifier(String actionIdentifier);
+    public abstract void setMemberIdentifier(String actionIdentifier);
     
+    // //////////////////////////////////////
+    // targetClass (property)
     // //////////////////////////////////////
 
     /**
@@ -121,6 +136,8 @@ public interface Command extends HasTransactionId {
     public abstract void setTargetClass(String targetClass);
 
     // //////////////////////////////////////
+    // targetAction (property)
+    // //////////////////////////////////////
     
     /**
      * The human-friendly name of the action invoked on the target object.
@@ -136,6 +153,8 @@ public interface Command extends HasTransactionId {
      */
     public abstract void setTargetAction(String targetAction);
     
+    // //////////////////////////////////////
+    // arguments (property)
     // //////////////////////////////////////
     
     /**
@@ -154,6 +173,8 @@ public interface Command extends HasTransactionId {
 
     
     // //////////////////////////////////////
+    // memento (property)
+    // //////////////////////////////////////
 
     /**
      * A formal (XML or similar) specification of the action to invoke/being invoked.
@@ -169,56 +190,89 @@ public interface Command extends HasTransactionId {
      */
     public void setMemento(final String memento);
 
+
+    // //////////////////////////////////////
+    // executeIn (property)
     // //////////////////////////////////////
     
-    public static enum Nature {
+    /**
+     * The mechanism by which this command is to be executed, either synchronously &quot;in the 
+     * {@link ExecuteIn#FOREGROUND foreground}&quot; or is to be executed asynchronously &quot;in the 
+     * {@link ExecuteIn#BACKGROUND background}&quot; through the {@link BackgroundCommandService}.
+     */
+    @Disabled
+    public ExecuteIn getExecuteIn();
+    
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     */
+    public void setExecuteIn(final ExecuteIn executeIn);
+
+    
+
+    
+    // //////////////////////////////////////
+    // executor (property)
+    // //////////////////////////////////////
+    
+    
+    public static enum Executor {
         /**
-         * Action has occurred as the result of an explicit action invocation
-         * on the part of the user.
+         * Command being executed by the end-user.
          */
-        USER_INITIATED,
+        USER,
         /**
-         * Action is run by virtue of being previously scheduled as a background through
-         * the {@link BackgroundService} and {@link BackgroundTaskService}.
+         * Command being executed by a background execution service.
          */
         BACKGROUND,
         /**
-         * Indicates that the action has been run for some other reason.
+         * Command being executed for some other reason, eg as result of redirect-after-post, or the homePage action.
          */
         OTHER
     }
 
     /**
-     * The nature of this action, for example whether it was
-     * {@link #USER_INITIATED user initiated} on the part of the user, or merely as
-     * a {@link #OTHER other} (typically indirect) side-effect, eg the re-rendering of an entity in a viewer (such as the
-     * Wicket viewer) that uses the <a href="http://en.wikipedia.org/wiki/Post/Redirect/Get">post/redirect/get</a>
-     * to avoid duplicate submissions, or the action nominated as the {@link HomePage} action.
+     * The (current) executor of this command.
      * 
      * <p>
-     * The Isis implementations uses this field as to a hint as to whether to populate the interaction's
-     * {@link Command#setActionIdentifier(String) action identifier} and related properties.  The expectation 
-     * is that implementations of {@link CommandService} will only persist interactions that were explicitly started
-     * by the user.
+     * Note that (even for implementations of {@link BackgroundCommandService} that persist {@link Command}s), this
+     * property is never (likely to be) persisted, because it is always updated to indicate how the command is
+     * currently being executed.
+     * 
+     * <p>
+     * If the {@link #getExecutor() executor} matches the required {@link #getExecuteIn() execution policy}, then the
+     * command actually is executed.  The combinations are:
+     * <ul>
+     * <li>executor = USER, executeIn = FOREGROUND, then execute</li>
+     * <li>executor = USER, executeIn = BACKGROUND, then persist and return persisted command as a placeholder for the result</li>
+     * <li>executor = BACKGROUND, executeIn = FOREGROUND, then ignore</li>
+     * <li>executor = BACKGROUND, executeIn = BACKGROUND, then execute, update the command with result</li>
+     * </ul>
+     * 
      */
     @Disabled
-    public Nature getNature();
+    public Executor getExecutor();
+
     
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
-    public void setNature(final Nature nature);
-
+    public void setExecutor(final Executor executor);
     
+    
+
+
+    // //////////////////////////////////////
+    // startedAt (property)
     // //////////////////////////////////////
 
     /**
-     * The date/time at which this action started.
+     * The date/time at  which this action started.
      * 
      * <p>
-     * For {@link Nature#USER_INITIATED user-initiated} actions, this will always be
+     * For {@link ExecuteIn#FOREGROUND user-initiated} actions, this will always be
      * populated and have the same value as the {@link #getTimestamp() timestamp}; for
-     * {@link Nature#BACKGROUND background} actions, this will be populated only when the
+     * {@link ExecuteIn#BACKGROUND background} actions, this will be populated only when the
      * action is executed by a background execution process.
      */
     @Disabled
@@ -233,6 +287,8 @@ public interface Command extends HasTransactionId {
     public abstract void setStartedAt(Timestamp startedAt);
     
     
+    // //////////////////////////////////////
+    // completedAt (property)
     // //////////////////////////////////////
 
     
@@ -252,10 +308,12 @@ public interface Command extends HasTransactionId {
 
 
     // //////////////////////////////////////
+    // parent (property)
+    // //////////////////////////////////////
 
 
     /**
-     * For actions created through the {@link BackgroundService} and {@link BackgroundActionService},
+     * For actions created through the {@link BackgroundService} and {@link BackgroundCommandService},
      * captures the parent action.
      */
     @Optional
@@ -269,6 +327,8 @@ public interface Command extends HasTransactionId {
 
     
     // //////////////////////////////////////
+    // exception (property)
+    // //////////////////////////////////////
 
     @Disabled
     @Optional
@@ -279,6 +339,8 @@ public interface Command extends HasTransactionId {
      */
     public void setException(String stackTrace);
     
+    // //////////////////////////////////////
+    // result (property)
     // //////////////////////////////////////
 
     
@@ -304,27 +366,66 @@ public interface Command extends HasTransactionId {
 
     
     // //////////////////////////////////////
+    // persistence (programmatic)
+    // //////////////////////////////////////
+    
+    /**
+     * Whether this command should ultimately be persisted (if the configured {@link BackgroundCommandService} supports
+     * it) or not.
+     * 
+     * <p>
+     * If the action being executed has been annotated with the {@link org.apache.isis.applib.annotation.Command} 
+     * annotation, then (unless its {@link org.apache.isis.applib.annotation.Command#persistence() persistence} 
+     * attribute has been set to a different value than its default of {@link Persistence#PERSISTED}), the 
+     * {@link Command} object will be persisted.
+     * 
+     * <p>
+     * However, it is possible to prevent the {@link Command} object from ever being persisted by setting the
+     * {@link org.apache.isis.applib.annotation.Command#persistence() persistence} attribute to 
+     * {@link Persistence#NOT_PERSISTED}, or it can be set to {@link Persistence#IF_HINTED}, meaning it is dependent
+     * on whether {@link #setPersistHint(boolean) a hint has been set} by some other means.  
+     *
+     * <p>
+     * For example, a {@link BackgroundCommandService} implementation that creates persisted background commands ought 
+     * associate them (via its {@link Command#getParent() parent}) to an original persisted
+     * {@link Command}.  The hinting mechanism allows the service to suggest that the parent command be persisted so
+     * that the app can then provide a mechanism to find all child background commands for that original parent command.
+     */
+    @Disabled
+    public Persistence getPersistence();
+    
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     */
+    public void setPersistence(final Persistence persistence);
+    
+
+    // //////////////////////////////////////
+    // persistHint (programmatic)
+    // //////////////////////////////////////
 
     
     /**
-     * Hint that this {@link Command} should be persisted.
-     * 
-     * <p>
-     * This is most commonly done if the action being invoked has been explicitly annotated to be reified, eg
-     * using the {@link Command} annotation.  But it might also happen as a hint from another domain service.
-     * For example, a {@link BackgroundActionService} implementations that creates persisted background tasks ought to be
-     * associated (via the {@link Command#getTransactionId() transactionId}) to a persisted
-     * {@link Command}.  The app can then provide a mechanism for the end-user to query for their
-     * running background actions from this original {@link Command}.
+     * Whether that this {@link Command} should be persisted, if possible.
+     */
+    @Programmatic
+    public boolean isPersistHint();
+    
+    /**
+     * Hint that this {@link Command} should be persisted, if possible.
      * 
      * <p>
      * <b>NOT API</b>: intended to be called only by the framework.  
+     * 
+     * @see #getPersistence()
      */
     @Programmatic
     public void setPersistHint(boolean persistHint);
     
     // //////////////////////////////////////
-    
+    // next (programmatic)
+    // //////////////////////////////////////
+
     /**
      * Generates numbers in a named sequence
      * 

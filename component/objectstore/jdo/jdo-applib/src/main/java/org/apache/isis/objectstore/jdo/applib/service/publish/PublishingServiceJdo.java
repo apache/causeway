@@ -25,6 +25,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventPayload;
@@ -68,6 +69,12 @@ public class PublishingServiceJdo extends AbstractService implements PublishingS
         publishedEvent.setTimestamp(metadata.getJavaSqlTimestamp());
         publishedEvent.setUser(metadata.getUser());
         publishedEvent.setTitle(metadata.getTitle());
+        
+        publishedEvent.setTargetClass(metadata.getTargetClass());
+        publishedEvent.setTarget(metadata.getTarget());
+        publishedEvent.setTargetAction(metadata.getTargetAction());
+        publishedEvent.setMemberIdentifier(metadata.getActionIdentifier());
+        
         persist(publishedEvent);
     }
 

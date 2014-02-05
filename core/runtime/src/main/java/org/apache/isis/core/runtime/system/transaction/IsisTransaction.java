@@ -42,6 +42,7 @@ import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
@@ -64,6 +65,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet.CurrentInvocation;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
@@ -73,6 +75,7 @@ import org.apache.isis.core.metamodel.facets.object.publish.PublishedObjectFacet
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext.TransactionState;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.progmodel.facets.actions.invoke.CommandUtil;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -469,7 +472,8 @@ public class IsisTransaction implements TransactionScopedComponent {
             if(currentInvocation == null) {
                 return;
             } 
-            final PublishedActionFacet publishedActionFacet = currentInvocation.getAction().getFacet(PublishedActionFacet.class);
+            IdentifiedHolder action = currentInvocation.getAction();
+            final PublishedActionFacet publishedActionFacet = action.getFacet(PublishedActionFacet.class);
             if(publishedActionFacet == null) {
                 return;
             } 
@@ -477,9 +481,16 @@ public class IsisTransaction implements TransactionScopedComponent {
             
             final RootOid adapterOid = (RootOid) currentInvocation.getTarget().getOid();
             final String oidStr = getOidMarshaller().marshal(adapterOid);
-            final String title = oidStr + ": " + currentInvocation.getAction().getIdentifier().toNameParmsIdentityString();
+            final Identifier actionIdentifier = action.getIdentifier();
+            final String title = oidStr + ": " + actionIdentifier.toNameParmsIdentityString();
             
-            final EventMetadata metadata = newEventMetadata(EventType.ACTION_INVOCATION, currentUser, timestamp, title);
+            final Command command = currentInvocation.getCommand();
+            final String targetClass = command.getTargetClass();
+            final String targetAction = command.getTargetAction();
+            final Bookmark target = command.getTarget();
+            final String memberIdentifier = command.getMemberIdentifier();
+            
+            final EventMetadata metadata = newEventMetadata(EventType.ACTION_INVOCATION, currentUser, timestamp, title, targetClass, targetAction, target, memberIdentifier);
             publishingService.publishAction(payloadFactory, metadata, currentInvocation, objectStringifier());
         } finally {
             // ensures that cannot publish this action more than once
@@ -506,12 +517,16 @@ public class IsisTransaction implements TransactionScopedComponent {
             }
             final PublishedObject.PayloadFactory payloadFactory = publishedObjectFacet.value();
         
-            final RootOid adapterOid = (RootOid) enlistedAdapter.getOid();
-            final String oidStr = getOidMarshaller().marshal(adapterOid);
+            final RootOid enlistedAdapterOid = (RootOid) enlistedAdapter.getOid();
+            final String oidStr = getOidMarshaller().marshal(enlistedAdapterOid);
             final String title = oidStr;
         
             final EventType eventTypeFor = eventTypeFor(changeKind);
-            final EventMetadata metadata = newEventMetadata(eventTypeFor, currentUser, timestamp, title);
+            
+            final String enlistedAdapterClass = CommandUtil.targetClassNameFor(enlistedAdapter);
+            final Bookmark enlistedTarget = enlistedAdapterOid.asBookmark();
+            
+            final EventMetadata metadata = newEventMetadata(eventTypeFor, currentUser, timestamp, title, enlistedAdapterClass, null, enlistedTarget, null);
         
             publishingService.publishObject(payloadFactory, metadata, enlistedAdapter, changeKind, objectStringifier());
         }
@@ -559,11 +574,11 @@ public class IsisTransaction implements TransactionScopedComponent {
         return objectStringifier;
     }
 
-    private EventMetadata newEventMetadata(
-            final EventType eventType, final String currentUser, final java.sql.Timestamp timestampEpoch, final String title) {
+    private EventMetadata newEventMetadata(final EventType eventType, final String currentUser, final java.sql.Timestamp timestampEpoch, final String title, String targetClass, String targetAction, Bookmark target, String memberIdentifier) {
         int nextEventSequence = nextEventSequence();
         return new EventMetadata(
-                getTransactionId(), nextEventSequence, eventType, currentUser, timestampEpoch, title);
+                getTransactionId(), nextEventSequence, eventType, currentUser, timestampEpoch, title, 
+                targetClass, targetAction, target, memberIdentifier);
     }
 
     private int nextEventSequence() {
@@ -586,11 +601,15 @@ public class IsisTransaction implements TransactionScopedComponent {
         final PreAndPostValues papv = auditEntry.getValue();
         final String preValue = asString(papv.getPre());
         final String postValue = asString(papv.getPost());
-        final String propertyId = aap.getProperty().getId();
+        
+        final ObjectAssociation property = aap.getProperty();
+        final String memberId = property.getIdentifier().toClassAndNameIdentityString();
+        final String propertyId = property.getId();
 
+        final String targetClass = CommandUtil.targetClassNameFor(adapter);
         final Bookmark target = new Bookmark(objectType, identifier);
 
-        auditingService3.audit(getTransactionId(), target, propertyId, preValue, postValue, user, timestamp);
+        auditingService3.audit(getTransactionId(), targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
     }
 
     private static String asString(Object object) {

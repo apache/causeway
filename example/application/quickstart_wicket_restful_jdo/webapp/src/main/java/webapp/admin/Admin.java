@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditingServiceJdoRepository;
-import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundActionServiceJdoRepository;
+import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundCommandServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo;
 import org.apache.isis.objectstore.jdo.applib.service.command.CommandServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo;
@@ -36,47 +36,50 @@ import org.apache.isis.objectstore.jdo.applib.service.publish.PublishingServiceJ
 
 public class Admin extends AbstractService {
 
-
     @MemberOrder(sequence="10.1")
     @ActionSemantics(Of.SAFE)
     @Prototype
-    public CommandJdo lookup(final @Named("Transaction Id") UUID transactionId) {
-        return interactionRepository.findByTransactionId(transactionId);
+    public CommandJdo lookupCommand(
+            final @Named("Transaction Id") UUID transactionId) {
+        return commandServiceRepository.findByTransactionId(transactionId);
     }
-    public boolean hideLookup() {
-        return interactionRepository == null;
+    public boolean hideLookupCommand() {
+        return commandServiceRepository == null;
     }
+    
+    // //////////////////////////////////////
     
     @ActionSemantics(Of.SAFE)
     @Bookmarkable
     @MemberOrder(sequence="10.2")
-    public List<CommandJdo> currentlyRunning() {
-        return interactionRepository.findCurrent();
+    public List<CommandJdo> commandsCurrentlyRunning() {
+        return commandServiceRepository.findCurrent();
     }
-    public boolean hideCurrentlyRunning() {
-        return interactionRepository == null;
+    public boolean hideCommandsCurrentlyRunning() {
+        return commandServiceRepository == null;
     }
+    
+    // //////////////////////////////////////
     
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence="10.3")
-    public List<CommandJdo> previouslyRan() {
-        return interactionRepository.findCompleted();
+    public List<CommandJdo> commandsPreviouslyRan() {
+        return commandServiceRepository.findCompleted();
     }
-    public boolean hidePreviouslyRan() {
-        return interactionRepository == null;
+    public boolean hideCommandsPreviouslyRan() {
+        return commandServiceRepository == null;
     }
 
-    
     // //////////////////////////////////////
 
     @ActionSemantics(Of.SAFE)
     @Prototype
     @MemberOrder(sequence="20")
-    public List<CommandJdo> allTasks() {
-        return backgroundTaskRepository.listAll();
+    public List<CommandJdo> allCommands() {
+        return backgroundCommandServiceRepository.listAll();
     }
-    public boolean hideAllTasks() {
-        return backgroundTaskRepository == null;
+    public boolean hideAllCommands() {
+        return backgroundCommandServiceRepository == null;
     }
 
     // //////////////////////////////////////
@@ -85,10 +88,10 @@ public class Admin extends AbstractService {
     @Prototype
     @MemberOrder(sequence="30")
     public List<AuditEntryJdo> allAuditEntries() {
-        return auditEntryRepository.listAll();
+        return auditingServiceRepository.listAll();
     }
     public boolean hideAllAuditEntries() {
-        return auditEntryRepository == null;
+        return auditingServiceRepository == null;
     }
     
     // //////////////////////////////////////
@@ -96,44 +99,44 @@ public class Admin extends AbstractService {
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence="40.1")
     public List<PublishedEventJdo> allQueuedEvents() {
-        return publishedEventRepository.findQueued();
+        return publishingServiceRepository.findQueued();
     }
     public boolean hideAllQueuedEvents() {
-        return publishedEventRepository == null;
+        return publishingServiceRepository == null;
     }
 
     @ActionSemantics(Of.SAFE)
     @Prototype
     @MemberOrder(sequence="40.2")
     public List<PublishedEventJdo> allProcessedEvents() {
-        return publishedEventRepository.findProcessed();
+        return publishingServiceRepository.findProcessed();
     }
     public boolean hideAllProcessedEvents() {
-        return publishedEventRepository == null;
+        return publishingServiceRepository == null;
     }
 
     @ActionSemantics(Of.IDEMPOTENT)
     @MemberOrder(sequence="40.3")
     public void purgeProcessedEvents() {
-        publishedEventRepository.purgeProcessed();
+        publishingServiceRepository.purgeProcessed();
     }
     public boolean hidePurgeProcessedEvents() {
-        return publishedEventRepository == null;
+        return publishingServiceRepository == null;
     }
 
     // //////////////////////////////////////
 
     @javax.inject.Inject
-    private CommandServiceJdoRepository interactionRepository;
+    private CommandServiceJdoRepository commandServiceRepository;
     
     @javax.inject.Inject
-    private BackgroundActionServiceJdoRepository backgroundTaskRepository;
+    private BackgroundCommandServiceJdoRepository backgroundCommandServiceRepository;
     
     @javax.inject.Inject
-    private AuditingServiceJdoRepository auditEntryRepository;
+    private AuditingServiceJdoRepository auditingServiceRepository;
     
     @javax.inject.Inject
-    private PublishingServiceJdoRepository publishedEventRepository;
+    private PublishingServiceJdoRepository publishingServiceRepository;
     
 }
 

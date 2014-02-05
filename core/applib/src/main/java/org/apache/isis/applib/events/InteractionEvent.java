@@ -123,7 +123,7 @@ public abstract class InteractionEvent extends EventObject {
      * otherwise disallowed.
      * 
      * <p>
-     * Intended to be {@link #setReason(String) set} as a result of consulting
+     * Intended to be {@link #setExecuteIn(String) set} as a result of consulting
      * one of the facets.
      * 
      * @return

@@ -35,7 +35,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
-import org.apache.isis.applib.services.background.BackgroundActionService;
+import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -79,7 +79,7 @@ public class BackgroundServiceDefault implements BackgroundService {
     
     private void ensureDependenciesInjected() {
         Ensure.ensureThatState(this.bookmarkService, is(not(nullValue())), "BookmarkService domain service must be configured");
-        Ensure.ensureThatState(this.backgroundActionService, is(not(nullValue())), "BackgroundActionService domain service must be configured");
+        Ensure.ensureThatState(this.backgroundCommandService, is(not(nullValue())), "BackgroundCommandService domain service must be configured");
         Ensure.ensureThatState(this.commandContext, is(not(nullValue())), "CommandContext domain service must be configured");
     }
 
@@ -187,7 +187,7 @@ public class BackgroundServiceDefault implements BackgroundService {
                                 argTypes,
                                 argObjs);
                
-                backgroundActionService.schedule(aim, command, targetClassName, targetActionName, targetArgs);
+                backgroundCommandService.schedule(aim, command, targetClassName, targetActionName, targetArgs);
                 
                 return null;
             }
@@ -250,12 +250,12 @@ public class BackgroundServiceDefault implements BackgroundService {
         this.bookmarkService = bookmarkService;
     }
     
-    private BackgroundActionService backgroundActionService;
+    private BackgroundCommandService backgroundCommandService;
     /**
      * Mandatory service.
      */
-    public void injectBackgroundActionService(final BackgroundActionService backgroundActionService) {
-        this.backgroundActionService = backgroundActionService;
+    public void injectBackgroundCommandService(final BackgroundCommandService backgroundCommandService) {
+        this.backgroundCommandService = backgroundCommandService;
     }
 
     private CommandContext commandContext;

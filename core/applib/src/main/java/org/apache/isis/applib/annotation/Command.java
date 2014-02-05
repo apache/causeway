@@ -25,15 +25,68 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.services.command.spi.CommandService;
+import org.apache.isis.applib.services.background.BackgroundCommandService;
 
 /**
- * Indicates that an action invocation should be persisted as a {@link Command},
- * (if persistable commands are supported by the configured {@link CommandService}).
+ * Indicates how the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
+ * (request-scoped) {@link org.apache.isis.applib.services.command.CommandContext command context} service should be
+ * used.
+ * 
  */
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Command {
+
+    public static enum Persistence {
+        /**
+         * The {@link org.apache.isis.applib.services.command.Command Command} object should be persisted.
+         */
+        PERSISTED,
+        /**
+         * The {@link org.apache.isis.applib.services.command.Command Command} object should only be persisted if
+         * another service, such as the {@link BackgroundCommandService}, hints that it should.
+         */
+        IF_HINTED,
+        /**
+         * {@link org.apache.isis.applib.services.command.Command Command} object should not be persisted (even if
+         * another service, such as the {@link BackgroundCommandService}, hints that it should).
+         */
+        NOT_PERSISTED
+    }
+    
+    /**
+     * How the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
+     * {@link org.apache.isis.applib.services.command.CommandContext CommandContext} domain service should be persisted.
+     */
+    Persistence persistence() default Persistence.PERSISTED;
+
+    
+    // //////////////////////////////////////
+
+    
+    public static enum ExecuteIn {
+        /**
+         * Execute synchronously in the &quot;foreground&quot;, wait for the results.
+         */
+        FOREGROUND,
+        /**
+         * Execute &quot;asynchronously&quot; through the {@link BackgroundCommandService}, returning (if possible) the
+         * persisted {@link org.apache.isis.applib.services.command.Command command} object as a placeholder to the
+         * result.
+         */
+        BACKGROUND
+    }
+
+
+    /**
+     * How the command/action should be executed.
+     * 
+     * <p>
+     * If the corresponding {@link org.apache.isis.applib.services.command.Command Command} object is persisted, 
+     * then its {@link org.apache.isis.applib.services.command.Command#getExecuteIn() invocationType} property 
+     * will be set to this value.
+     */
+    ExecuteIn executeIn() default ExecuteIn.FOREGROUND;
 
 }

@@ -28,7 +28,7 @@ import org.apache.isis.applib.services.command.Command;
  * implementation, <tt>BackgroundServiceDefault</tt> (in core-runtime) can
  * delegate to different implementations of this service.
  */
-public interface BackgroundActionService {
+public interface BackgroundCommandService {
 
     void schedule(
             final ActionInvocationMemento aim, 

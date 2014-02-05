@@ -8,10 +8,10 @@ http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
 
 	<schedule>
 		<job>
-			<name>BackgroundActionExecutionJob</name>
+			<name>BackgroundCommandExecutionJob</name>
 			<group>Isis</group>
 			<description>Poll and execute any background actions persisted by the BackgroundActionServiceJdo domain service</description>
-			<job-class>webapp.scheduler.BackgroundActionExecutionQuartzJob</job-class>
+			<job-class>webapp.scheduler.BackgroundCommandExecutionQuartzJob</job-class>
 			<job-data-map>
 				<entry>
 					<key>webapp.scheduler.user</key>
@@ -30,8 +30,8 @@ http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
 	 	-->
 		<trigger>
 			<cron>
-				<name>BackgroundActionExecutionJobEveryTenSeconds</name>
-				<job-name>BackgroundActionExecutionJob</job-name>
+				<name>BackgroundCommandExecutionJobEveryTenSeconds</name>
+				<job-name>BackgroundCommandExecutionJob</job-name>
 				<job-group>Isis</job-group>
 				<cron-expression>0/10 * * * * ?</cron-expression>
 			</cron>

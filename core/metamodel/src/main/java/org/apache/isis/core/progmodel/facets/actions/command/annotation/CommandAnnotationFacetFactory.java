@@ -45,7 +45,9 @@ public class CommandAnnotationFacetFactory extends FacetFactoryAbstract {
     }
 
     private CommandFacet create(final Command annotation, final FacetHolder holder) {
-        return annotation == null ? null : new CommandFacetAnnotation(holder);
+        return annotation == null 
+                ? null 
+                : new CommandFacetAnnotation(annotation.persistence(), annotation.executeIn(), holder);
     }
 
 }

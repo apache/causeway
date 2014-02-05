@@ -22,6 +22,9 @@ package org.apache.isis.applib.services.publish;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+
 /**
  * Standard metadata about an event to be published.
  * 
@@ -38,9 +41,13 @@ public class EventMetadata {
     private final java.sql.Timestamp javaSqlTimestamp;
     private final String title;
     private final EventType eventType;
+    private final String targetClass;
+    private final String targetAction;
+    private final Bookmark target;
+    private final String actionIdentifier;
     
     /**
-     * @deprecated - use {@link #EventMetadata(UUID, int, EventType, String, Timestamp, String)}
+     * @deprecated - no longer called by the framework.
      */
     @Deprecated
     public EventMetadata(
@@ -50,7 +57,7 @@ public class EventMetadata {
             final String user, 
             final long timestamp, 
             final String title) {
-        this(transactionId, sequence, eventType, user, new java.sql.Timestamp(timestamp), title);
+        this(transactionId, sequence, eventType, user, new java.sql.Timestamp(timestamp), title, null, null, null, null);
     }
     
     public EventMetadata(
@@ -59,13 +66,21 @@ public class EventMetadata {
             final EventType eventType, 
             final String user, 
             final java.sql.Timestamp javaSqlTimestamp, 
-            final String title) {
+            final String title, 
+            final String targetClass, 
+            final String targetAction, 
+            final Bookmark target, 
+            final String actionIdentifier) {
         this.transactionId = transactionId;
         this.sequence = sequence;
         this.user = user;
         this.javaSqlTimestamp = javaSqlTimestamp;
         this.title = title;
         this.eventType = eventType;
+        this.targetClass = targetClass;
+        this.targetAction = targetAction;
+        this.target = target;
+        this.actionIdentifier = actionIdentifier;
     }
     
     /**
@@ -120,7 +135,8 @@ public class EventMetadata {
     }
     
     /**
-     * A user-friendly title for this event.
+     * A title for this event, consisting of the oidStr and (for {@link EventType#ACTION_INVOCATION}) also an
+     * identifier of the action.
      */
     public String getTitle() {
         return title;
@@ -129,6 +145,37 @@ public class EventMetadata {
     public EventType getEventType() {
         return eventType;
     }
+
+    /**
+     * User-friendly class name.
+     */
+    public String getTargetClass() {
+        return targetClass;
+    }
+    
+    public Bookmark getTarget() {
+        return target;
+    }
+
+    /**
+     * User-friendly action name (populated only for {@link EventType#ACTION_INVOCATION}s).
+     */
+    public String getTargetAction() {
+        return targetAction;
+    }
+    
+    /**
+     * Formal action identifier, corresponding to {@link Identifier#toClassAndNameIdentityString()}).
+     * 
+     * <p>
+     * Populated only  for for {@link EventType#ACTION_INVOCATION}s.
+     */
+    public String getActionIdentifier() {
+        return actionIdentifier;
+    }
+
+    // //////////////////////////////////////
+
     
     @Override
     public String toString() {

@@ -29,9 +29,11 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
@@ -171,7 +173,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             final ObjectAdapter targetAdapter, 
             final AjaxRequestTarget target, 
             final Form<?> feedbackForm) {
-
         
         final ActionModel actionModel = getActionModel();
         
@@ -187,7 +188,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         final Command command;
         if (commandContext != null) {
             command = commandContext.getCommand();
-            command.setNature(Command.Nature.USER_INITIATED);
+            command.setExecutor(Executor.USER);
         } else {
             command = null;
         }

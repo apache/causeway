@@ -31,34 +31,35 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo;
 
 
-public class BackgroundActionServiceJdoContributions extends AbstractFactoryAndRepository {
+public class BackgroundCommandServiceJdoContributions extends AbstractFactoryAndRepository {
 
     @ActionSemantics(Of.SAFE)
     @NotInServiceMenu
     @NotContributed(As.ACTION)
     @Render(Type.EAGERLY)
-    public List<CommandJdo> backgroundActions(final CommandJdo parent) {
-        return backgroundActionRepository.findByParent(parent);
+    public List<CommandJdo> childCommands(final CommandJdo parent) {
+        return backgroundCommandRepository.findByParent(parent);
     }
 
     @ActionSemantics(Of.SAFE)
     @NotInServiceMenu
     @NotContributed(As.ACTION)
     @Render(Type.EAGERLY)
-    public List<CommandJdo> siblingActions(final CommandJdo siblingAction) {
-        final Command parent = siblingAction.getParent();
+    public List<CommandJdo> siblingCommands(final CommandJdo siblingCommand) {
+        final Command parent = siblingCommand.getParent();
         if(parent == null || !(parent instanceof CommandJdo)) {
             return Collections.emptyList();
         }
         final CommandJdo parentJdo = (CommandJdo) parent;
-        final List<CommandJdo> siblingActions = backgroundActionRepository.findByParent(parentJdo);
-        siblingActions.remove(siblingAction);
-        return siblingActions;
+        final List<CommandJdo> siblingCommands = backgroundCommandRepository.findByParent(parentJdo);
+        siblingCommands.remove(siblingCommand);
+        return siblingCommands;
     }
-    
+
+
     // //////////////////////////////////////
 
     @javax.inject.Inject
-    private BackgroundActionServiceJdoRepository backgroundActionRepository;
+    private BackgroundCommandServiceJdoRepository backgroundCommandRepository;
     
 }

@@ -51,6 +51,7 @@ import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.AppliesTo;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
+import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MinLength;
@@ -613,20 +614,32 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     
 
     // //////////////////////////////////////
-    // totalCost
+    // scheduleExplicitly
+    // scheduleImplicitly
     // //////////////////////////////////////
     
     @ActionSemantics(Of.IDEMPOTENT)
     @Prototype
-    public ToDoItem completeInBackground() {
-        backgroundService.execute(this).slowCompleted(2000);
+    public ToDoItem scheduleExplicitly() {
+        backgroundService.execute(this).completeSlowly(2000);
         container.informUser("Task '" + getDescription() + "' scheduled for completion");
         return this;
     }
     
+    // //////////////////////////////////////
+
+    @ActionSemantics(Of.IDEMPOTENT)
+    @Command(executeIn=ExecuteIn.BACKGROUND)
+    @Prototype
+    public ToDoItem scheduleImplicitly() {
+        completeSlowly(3000);
+        return this;
+    }
+    
+    // //////////////////////////////////////
     
     @Hidden
-    public void slowCompleted(int millis) {
+    public void completeSlowly(int millis) {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
@@ -634,7 +647,8 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         setComplete(true);
         container.informUser("Completed " + this.getDescription() + "!");
     }
-
+    
+    
     
     // //////////////////////////////////////
     // OpenSourceCodeOnGithub (action)

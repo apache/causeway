@@ -29,17 +29,26 @@ public class AuditingServiceJdo extends AbstractFactoryAndRepository implements 
 
     @Programmatic
     public void audit(
-            final UUID transactionId, final Bookmark target, final String propertyId, 
+            final UUID transactionId, String targetClass, final Bookmark target, 
+            String memberIdentifier, final String propertyId, 
             final String preValue, final String postValue, 
             final String user, final java.sql.Timestamp timestamp) {
-        AuditEntryJdo auditEntry = newTransientInstance(AuditEntryJdo.class);
+        
+        final AuditEntryJdo auditEntry = newTransientInstance(AuditEntryJdo.class);
+        
         auditEntry.setTimestamp(timestamp);
         auditEntry.setUser(user);
         auditEntry.setTransactionId(transactionId);
+
+        auditEntry.setTargetClass(targetClass);
         auditEntry.setTarget(target);
+        
+        auditEntry.setMemberIdentifier(memberIdentifier);
         auditEntry.setPropertyId(propertyId);
+        
         auditEntry.setPreValue(preValue);
         auditEntry.setPostValue(postValue);
+        
         persistIfNotAlready(auditEntry);
     }
 

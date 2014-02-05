@@ -1,9 +1,9 @@
 /*
- *
- *  Copyright 2012-2014 Eurocommercial Properties NV
- *
- *
- *  Licensed under the Apache License, Version 2.0 (the
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
  *  "License"); you may not use this file except in compliance
  *  with the License.  You may obtain a copy of the License at
  *
@@ -26,8 +26,10 @@ public final class JdoColumnLength {
     public final static int TRANSACTION_ID = 36;
     // ie OID str
     public final static int BOOKMARK = 255; 
-    public static final int ACTION_IDENTIFIER = 255;
+    public static final int MEMBER_IDENTIFIER = 255;
     public static final int USER_NAME = 50;
+    public final static int TARGET_CLASS = 50;
+    public final static int TARGET_ACTION = 50;
     
     public static final int DESCRIPTION = 254;
 
@@ -42,11 +44,9 @@ public final class JdoColumnLength {
     public static final class Command {
         private Command() {
         }
-        public final static int TARGET_CLASS = 50;
-        public final static int TARGET_ACTION = 50;
         public final static int ARGUMENTS = 1024;
         public final static int EXCEPTION = 16000;
-        public static final int NATURE = 20;
+        public static final int EXECUTE_IN = 10;
     }
 
     public static final class BackgroundTask {

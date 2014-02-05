@@ -27,6 +27,7 @@ import javax.jdo.annotations.Index;
 import javax.jdo.annotations.Indices;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Disabled;
@@ -42,6 +43,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
 import org.apache.isis.objectstore.jdo.applib.service.Util;
@@ -70,7 +72,10 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
 @Immutable
 @Named("Audit Entry")
 @ObjectType("IsisAuditEntry")
-@MemberGroupLayout(left={"Identifiers","Target","Detail"})
+@MemberGroupLayout(
+        columnSpans={6,0,6},
+        left={"Identifiers","Target"},
+        right={"Detail"})
 public class AuditEntryJdo implements HasTransactionId {
 
     
@@ -79,7 +84,8 @@ public class AuditEntryJdo implements HasTransactionId {
         buf.append(
         new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(getTimestamp()));
         buf.append(",", getUser());
-        buf.append(":", getPropertyId());
+        buf.append(":", getTargetStr());
+        buf.append(" ", getMemberIdentifier());
         return buf.toString();
     }
     
@@ -152,6 +158,25 @@ public class AuditEntryJdo implements HasTransactionId {
 
 
     // //////////////////////////////////////
+    // targetClass (property)
+    // //////////////////////////////////////
+
+    private String targetClass;
+
+    @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.TARGET_CLASS)
+    @TypicalLength(30)
+    @MemberOrder(name="Target", sequence = "10")
+    @Named("Class")
+    public String getTargetClass() {
+        return targetClass;
+    }
+
+    public void setTargetClass(final String targetClass) {
+        this.targetClass = Util.abbreviated(targetClass, JdoColumnLength.TARGET_CLASS);
+    }
+
+
+    // //////////////////////////////////////
     // target (property)
     // openTargetObject (action)
     // //////////////////////////////////////
@@ -172,7 +197,7 @@ public class AuditEntryJdo implements HasTransactionId {
 
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.BOOKMARK, name="target")
     @Named("Object")
-    @MemberOrder(name="Target", sequence="3")
+    @MemberOrder(name="Target", sequence="30")
     public String getTargetStr() {
         return targetStr;
     }
@@ -196,13 +221,40 @@ public class AuditEntryJdo implements HasTransactionId {
     
 
     // //////////////////////////////////////
+    // memberIdentifier (property)
+    // //////////////////////////////////////
+
+    private String memberIdentifier;
+
+    /**
+     * This is the fully-qualified class and property Id, as per
+     * {@link Identifier#toClassAndNameIdentityString()}.
+     */
+    @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.MEMBER_IDENTIFIER)
+    @TypicalLength(60)
+    @Hidden(where=Where.ALL_TABLES)
+    @MemberOrder(name="Detail",sequence = "1")
+    public String getMemberIdentifier() {
+        return memberIdentifier;
+    }
+
+    public void setMemberIdentifier(final String memberIdentifier) {
+        this.memberIdentifier = Util.abbreviated(memberIdentifier, JdoColumnLength.MEMBER_IDENTIFIER);
+    }
+
+
+
+    // //////////////////////////////////////
     // propertyId (property)
     // //////////////////////////////////////
     
     private String propertyId;
-    
+
+    /**
+     * This is the property name (without the class).
+     */
     @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.AuditEntry.PROPERTY_ID)
-    @MemberOrder(name="Target",sequence = "5")
+    @MemberOrder(name="Target",sequence = "20")
     public String getPropertyId() {
         return propertyId;
     }
@@ -244,6 +296,18 @@ public class AuditEntryJdo implements HasTransactionId {
     public void setPostValue(final String postValue) {
         this.postValue = Util.abbreviated(postValue, JdoColumnLength.AuditEntry.PROPERTY_VALUE);
     }
+    
+    
+    
+    // //////////////////////////////////////
+    // toString
+    // //////////////////////////////////////
+
+    @Override
+    public String toString() {
+        return ObjectContracts.toString(this, "timestamp,user,targetStr,memberIdentifier");
+    }
+
     
     // //////////////////////////////////////
     // Injected services

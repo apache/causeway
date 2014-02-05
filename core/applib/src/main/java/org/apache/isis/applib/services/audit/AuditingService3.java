@@ -31,15 +31,21 @@ public interface AuditingService3 {
     
     @Programmatic
     public void audit(
-            final UUID transactionId, final Bookmark target, final String propertyId, 
+            final UUID transactionId, String targetClassName, final Bookmark target, 
+            String memberIdentifier, final String propertyName, 
             final String preValue, final String postValue, 
             final String user, final java.sql.Timestamp timestamp);
+    
     
     public static class Stderr implements AuditingService3 {
 
         @Override
-        public void audit(UUID transactionId, Bookmark target, String propertyId, String preValue, String postValue, String user, Timestamp timestamp) {
-            String auditMessage = target.toString() + " by " + user + ", " + propertyId +": " + preValue + " -> " + postValue;
+        public void audit(
+                final UUID transactionId, final String targetClassName, final Bookmark target, 
+                final String memberId, final String propertyName, 
+                final String preValue, final String postValue, 
+                final String user, final Timestamp timestamp) {
+            String auditMessage = target.toString() + " by " + user + ", " + propertyName +": " + preValue + " -> " + postValue;
             System.err.println(auditMessage);
         }
     }

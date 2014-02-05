@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.progmodel.facets.actions.command;
 
+import org.apache.isis.applib.annotation.Command.ExecuteIn;
+import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
@@ -30,8 +32,24 @@ public abstract class CommandFacetAbstract extends MarkerFacetAbstract implement
         return CommandFacet.class;
     }
 
-    public CommandFacetAbstract(final FacetHolder holder) {
+    private final Persistence persistence;
+    private final ExecuteIn executeIn;
+
+    public CommandFacetAbstract(
+            final Persistence persistence, final ExecuteIn executeIn, final FacetHolder holder) {
         super(type(), holder);
+        this.persistence = persistence;
+        this.executeIn = executeIn;
+    }
+
+    @Override
+    public Persistence persistence() {
+        return this.persistence;
+    }
+
+    @Override
+    public ExecuteIn executeIn() {
+        return executeIn;
     }
 
 }
