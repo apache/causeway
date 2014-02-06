@@ -96,10 +96,10 @@ public class QueryResultsCache {
     }
     
     public static class Value<T> {
+        private T result;
         public Value(T result) {
             this.result = result;
         }
-        private T result;
         public T getResult() {
             return result;
         }
@@ -135,13 +135,13 @@ public class QueryResultsCache {
     }
 
     @Programmatic
-    public <T> QueryResultsCache.Value<T> get(final Class<?> callingClass, final String methodName, final Object... keys) {
+    public <T> Value<T> get(final Class<?> callingClass, final String methodName, final Object... keys) {
         return get(new Key(callingClass, methodName, keys));
     }
     
     @Programmatic
     @SuppressWarnings("unchecked")
-    public <T> QueryResultsCache.Value<T> get(final QueryResultsCache.Key cacheKey) {
+    public <T> Value<T> get(final Key cacheKey) {
         Value<T> value = (Value<T>) cache.get(cacheKey);
         logHitOrMiss(cacheKey, value);
         return value;
@@ -162,7 +162,4 @@ public class QueryResultsCache {
         String hitOrMiss = cacheValue != null ? "HIT" : "MISS";
         LOG.debug( hitOrMiss + ": " + cacheKey.toString());
     }
-
-
-
 }
