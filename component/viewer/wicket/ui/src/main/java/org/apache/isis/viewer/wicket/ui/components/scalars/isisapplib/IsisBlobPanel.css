@@ -22,8 +22,6 @@
 .isisBlobPanel .scalarValue span.clearTitle {
     margin-right: 10px;
     margin-bottom:10px;
-    float:left;
-    display:block;
     border: 0px;
     padding:5px 10px;
     border-radius:4px;
@@ -34,6 +32,20 @@
     font-style:normal !important;
     text-transform: uppercase;
     font-size: 0.9em;
+    font-weight: bold;
+}
+
+.isisBlobPanel .scalarValue span.uploadTitle,
+.isisBlobPanel .scalarValue span.downloadTitle {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    float:left;
+    display:block;
+}
+
+.isisBlobPanel .scalarValue span.clearTitle {
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .isisBlobPanel .scalarValue a span.downloadTitle,
@@ -59,12 +71,8 @@
 	line-height: 30px;
 }
 
-.isisBlobPanel .scalarValue span.uploadTitle,
-.isisBlobPanel .scalarValue span.downloadTitle,
-.isisBlobPanel .scalarValue span.clearTitle {
-    padding-top: 0px;
-    padding-bottom: 0px;
-    font-weight: bold;
+.isisBlobPanel .fileName {
+    /*display: block;*/
 }
 
 

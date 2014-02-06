@@ -26,22 +26,13 @@
                     <img class="scalarImage" width="200px" wicket:id="scalarImage"></img>
 	      			<span class="scalarValue">
                     
-                        <a class="clear" wicket:id="scalarIfRegularClear"><span class="clearTitle">Clear</span></a>
-
                         <span class="uploadFile">
-
-                            <!-- from: http://stackoverflow.com/questions/3226167/how-to-style-input-file-with-css3-javascript -->
-                            <span wicket:id="scalarIfRegularUpload" class="uploadTitle"
-                            onclick="$('#file-upload').removeClass('hidden').click().addClass('hidden')">Upload</span>
-                            <!-- 
-			      			<input type="file" name="scalarValue" id="scalarValue" xxxwicket:id="scalarValue" 
-                                   onchange="$('#file').text($(this).val());"   />
-                             -->
-                            <input type="file" name="scalarValue" id="file-upload" wicket:id="scalarValue" 
-                                   class="hidden"  />
+                            <input type="file" name="scalarValue" id="file-upload" wicket:id="scalarValue" />
                         </span>
-                        
+                        <a wicket:id="scalarIfRegularClear"><span class="clearTitle">Clear</span></a>
+
 	                    <a class="download" wicket:id="scalarIfRegularDownload"><span class="downloadTitle">Download</span></a>
+                        <span class="fileName" wicket:id="fileName"></span>                        
 	      			</span>
 	                <span wicket:id="feedback"></span>
                     <span wicket:id="additionalLinks"/>
