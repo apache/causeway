@@ -16,3 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+
+.valueChoicesSelect2Panel .choicesPlaceholder {
+    display: block;
+    height: 30px;
+}

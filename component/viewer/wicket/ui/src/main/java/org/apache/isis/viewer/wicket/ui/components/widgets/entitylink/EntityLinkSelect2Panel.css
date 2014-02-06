@@ -37,3 +37,7 @@ div.entityLinkSelect2Panel > div {
 	font-size: smaller;
 }
 
+.entityLinkSelect2Panel .autoCompletePlaceholder {
+    display: block;
+    height: 30px;
+}
