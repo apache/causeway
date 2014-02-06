@@ -161,6 +161,9 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
     @Override
     public ObjectAdapter adapterFor(final Object pojo) {
 
+        if(pojo == null) {
+            return null;
+        }
         final ObjectAdapter existingOrValueAdapter = existingOrValueAdapter(pojo);
         if(existingOrValueAdapter != null) {
             return existingOrValueAdapter;

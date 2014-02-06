@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.memento.Memento;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.viewer.wicket.model.util.OidMatchers;
 
 public class ObjectAdapterMemento implements Serializable {
 
@@ -223,7 +222,7 @@ public class ObjectAdapterMemento implements Serializable {
     private Memento transientMemento;
 
     private ObjectAdapterMemento(final RootOid rootOid) {
-        Ensure.ensureThatArg(rootOid, OidMatchers.isPersistent());
+        Ensure.ensureThatArg(rootOid, Oid.Matchers.isPersistent());
         this.persistentOidStr = rootOid.enString(getOidMarshaller());
         this.objectSpecId = rootOid.getObjectSpecId();
         this.type = Type.PERSISTENT;
@@ -326,6 +325,9 @@ public class ObjectAdapterMemento implements Serializable {
         // ignoring the concurrency checking
         final ObjectAdapter currAdapter = getObjectAdapter(ConcurrencyChecking.NO_CHECK);
         for (ObjectAdapterMemento each : list) {
+            if(each == null) {
+                continue;
+            }
             final ObjectAdapter otherAdapter = each.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
             if(currAdapter == otherAdapter) {
                 return true;

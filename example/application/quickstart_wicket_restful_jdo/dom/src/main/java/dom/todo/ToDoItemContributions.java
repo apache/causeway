@@ -41,6 +41,7 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.query.QueryDefault;
 
@@ -177,7 +178,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     public ToDoItem updateCategory(
             final ToDoItem item, 
             final @Named("Category") Category category,
-            final @Named("Subcategory") Subcategory subcategory) {
+            final @Optional @Named("Subcategory") Subcategory subcategory) {
         item.setCategory(category);
         item.setSubcategory(subcategory);
         return item;

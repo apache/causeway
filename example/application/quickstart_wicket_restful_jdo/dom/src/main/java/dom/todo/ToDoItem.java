@@ -205,17 +205,17 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         Professional {
             @Override
             public List<Subcategory> subcategories() {
-                return Arrays.asList(Subcategory.OpenSource, Subcategory.Consulting, Subcategory.Education);
+                return Arrays.asList(null, Subcategory.OpenSource, Subcategory.Consulting, Subcategory.Education);
             }
         }, Domestic {
             @Override
             public List<Subcategory> subcategories() {
-                return Arrays.asList(Subcategory.Shopping, Subcategory.Housework, Subcategory.Garden, Subcategory.Chores);
+                return Arrays.asList(null, Subcategory.Shopping, Subcategory.Housework, Subcategory.Garden, Subcategory.Chores);
             }
         }, Other {
             @Override
             public List<Subcategory> subcategories() {
-                return Arrays.asList(Subcategory.Other);
+                return Arrays.asList(null, Subcategory.Other);
             }
         };
         
@@ -272,7 +272,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     private Subcategory subcategory;
 
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @javax.jdo.annotations.Column(allowsNull="true")
     public Subcategory getSubcategory() {
         return subcategory;
     }

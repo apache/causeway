@@ -39,7 +39,7 @@ public final class ObjectToAdapterFunction implements Function<Object,ObjectAdap
 
     @Override
     public ObjectAdapter apply(final Object object) {
-        return getAdapterManager().adapterFor(object);
+        return object != null? getAdapterManager().adapterFor(object): null;
     }
 
     // //////////////////////////////////////////////////////////////////

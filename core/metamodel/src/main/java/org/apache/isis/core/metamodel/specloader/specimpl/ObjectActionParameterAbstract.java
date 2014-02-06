@@ -47,7 +47,6 @@ import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.object.bounded.ChoicesFacetUtils;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
@@ -313,7 +312,8 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             final Object[] choices = facet.getChoices(target, args);
             checkChoicesOrAutoCompleteType(getSpecificationLookup(), choices, getSpecification());
             for (final Object choice : choices) {
-                adapters.add(getAdapterMap().adapterFor(choice));
+                ObjectAdapter adapter = choice != null? getAdapterMap().adapterFor(choice) : null;
+                adapters.add(adapter);
             }
         }
         // now incorporated into above choices processing (BoundedFacet is no more)
@@ -374,6 +374,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     static void checkChoicesOrAutoCompleteType(final SpecificationLoader specificationLookup, final Object[] objects, final ObjectSpecification paramSpec) {
         for (final Object object : objects) {
 
+            if(object == null) {
+                continue;
+            }
+            
             // check type, but wrap first 
             // (eg we treat int.class and java.lang.Integer.class as compatible with each other)
             final Class<? extends Object> choiceClass = object.getClass();

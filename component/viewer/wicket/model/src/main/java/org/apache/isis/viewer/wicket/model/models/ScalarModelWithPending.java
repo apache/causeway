@@ -22,6 +22,7 @@ import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
@@ -70,15 +71,20 @@ public interface ScalarModelWithPending extends Serializable {
                         LOG.debug("setting to: " + adapterMemento!=null?adapterMemento.toString():null);
                     }
                     owner.setPending(adapterMemento);
-                    if (owner.getScalarModel() != null && owner.getPending() != null) {
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("setting to pending: " + owner.getPending().toString());
+                    if (owner.getScalarModel() != null) {
+                        if(adapterMemento == null) {
+                            owner.getScalarModel().setObject((ObjectAdapter)null);
+                        } else {
+                            if (owner.getPending() != null) {
+                                if (LOG.isDebugEnabled()) {
+                                    LOG.debug("setting to pending: " + owner.getPending().toString());
+                                }
+                                owner.getScalarModel().setObject(owner.getPending().getObjectAdapter(ConcurrencyChecking.NO_CHECK));
+                            }
                         }
-                        owner.getScalarModel().setObject(owner.getPending().getObjectAdapter(ConcurrencyChecking.NO_CHECK));
                     }
                 }
             };
         }
-
     }
 }

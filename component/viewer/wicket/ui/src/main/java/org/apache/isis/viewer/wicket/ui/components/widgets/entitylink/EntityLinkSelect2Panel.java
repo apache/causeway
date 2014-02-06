@@ -67,8 +67,6 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
 
     private static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
 
-    private static final String ID_ENTITY_CLEAR_LINK = "entityClearLink";
-    
     /**
      * This component may be null if there are no choices or autoComplete, or if in read-only mode.
      */
@@ -188,11 +186,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         final ObjectAdapter adapter = getPendingElseCurrentAdapter();
 
         syncLinkWithInput(adapter);
-
-        syncEntityClearLinksWithInput(adapter);
-
         doSyncWithInputIfAutoCompleteOrChoices();
-        
         syncVisibilityAndUsability();
     }
 
@@ -252,7 +246,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
 
     private ChoiceProvider<ObjectAdapterMemento> providerForObjectAutoComplete() {
         final EntityModel entityModel = getScalarModel();
-        return new ObjectAdapterMementoProviderAbstract() {
+        return new ObjectAdapterMementoProviderAbstract(getScalarModel()) {
 
             private static final long serialVersionUID = 1L;
 
@@ -269,7 +263,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
 
     private ChoiceProvider<ObjectAdapterMemento> providerForParamOrPropertyAutoComplete() {
         final EntityModel entityModel = getScalarModel();
-        return new ObjectAdapterMementoProviderAbstract() {
+        return new ObjectAdapterMementoProviderAbstract(getScalarModel()) {
             
             private static final long serialVersionUID = 1L;
             
@@ -281,7 +275,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
                     autoCompleteChoices.addAll(scalarModel.getAutoComplete(term));
                 }
                 // take a copy otherwise is only lazily evaluated
-                return Lists.newArrayList(Lists.transform(autoCompleteChoices, MementoFunctions.fromAdapter()));
+                return Lists.newArrayList(Lists.transform(autoCompleteChoices, ObjectAdapterMemento.Functions.fromAdapter()));
             }
             
         };
@@ -304,29 +298,6 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
         } else {
             permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
         }
-    }
-
-
-    private void syncEntityClearLinksWithInput(final ObjectAdapter adapter) {
-        if (adapter == null) {
-            permanentlyHide(ID_ENTITY_CLEAR_LINK);
-            return;
-        } 
-        
-        if(getScalarModel().isRequired()) {
-            permanentlyHide(ID_ENTITY_CLEAR_LINK);
-            return;
-        }
-        
-        entityClearLink = new Link<String>(ID_ENTITY_CLEAR_LINK) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onClick() {
-                onSelected((ObjectAdapterMemento)null);
-            }
-        };
-        addOrReplace(entityClearLink);
     }
 
 
@@ -438,7 +409,7 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     }
 
     private ObjectAdapterMementoProviderAbstract providerForChoices(final List<ObjectAdapterMemento> choiceMementos) {
-        return new ObjectAdapterMementoProviderAbstract() {
+        return new ObjectAdapterMementoProviderAbstract(getScalarModel()) {
             private static final long serialVersionUID = 1L;
             @Override
             protected List<ObjectAdapterMemento> obtainMementos(String unused) {
@@ -449,7 +420,12 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
 
     private void resetIfCurrentNotInChoices(final Select2Choice<ObjectAdapterMemento> select2Field, final List<ObjectAdapterMemento> choiceMementos) {
         final ObjectAdapterMemento curr = select2Field.getModelObject();
-        if(curr == null || !curr.containedIn(choiceMementos)) {
+        if(curr == null) {
+            select2Field.getModel().setObject(null);
+            getModel().setObject(null);
+            return;
+        }
+        if(!curr.containedIn(choiceMementos)) {
             if(!choiceMementos.isEmpty()) {
                 final ObjectAdapterMemento newAdapterMemento = choiceMementos.get(0);
                 select2Field.getModel().setObject(newAdapterMemento);

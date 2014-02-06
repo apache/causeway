@@ -21,32 +21,45 @@ import java.util.List;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import com.vaynberg.wicket.select2.TextChoiceProvider;
 
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 public abstract class ObjectAdapterMementoProviderAbstract extends TextChoiceProvider<ObjectAdapterMemento> {
-    private static final long serialVersionUID = 1L;
 
-    public ObjectAdapterMementoProviderAbstract(){}
+    private static final long serialVersionUID = 1L;
+    
+    private static final String NULL_PLACEHOLDER = "$$_isis_null_$$";
+    private static final String NULL_DISPLAY_TEXT = "";
+
+    private final ScalarModel scalarModel;
+
+    public ObjectAdapterMementoProviderAbstract(final ScalarModel scalarModel){
+        this.scalarModel = scalarModel;}
     
     @Override
     protected String getDisplayText(ObjectAdapterMemento choice) {
-        return choice.getObjectAdapter(ConcurrencyChecking.NO_CHECK).titleString(null);
+        return choice != null? choice.getObjectAdapter(ConcurrencyChecking.NO_CHECK).titleString(null) : NULL_DISPLAY_TEXT;
     }
 
     @Override
     protected Object getId(ObjectAdapterMemento choice) {
-        return choice.toString();
+        return choice != null? choice.toString(): NULL_PLACEHOLDER;
     }
 
     @Override
     public void query(String term, int page, com.vaynberg.wicket.select2.Response<ObjectAdapterMemento> response) {
         
-        List<ObjectAdapterMemento> mementos = obtainMementos(term);
+        final List<ObjectAdapterMemento> mementos = Lists.newArrayList(obtainMementos(term));
+        // if not mandatory, and the list doesn't contain null already, then add it in.
+        if(!scalarModel.isRequired() && !mementos.contains(null)) {
+            mementos.add(0, null);
+        }
         response.addAll(mementos);
     }
 
@@ -58,6 +71,9 @@ public abstract class ObjectAdapterMementoProviderAbstract extends TextChoicePro
 
             @Override
             public ObjectAdapterMemento apply(String input) {
+                if(NULL_PLACEHOLDER.equals(input)) {
+                    return null;
+                }
                 final RootOid oid = RootOidDefault.deString(input, ObjectAdapterMemento.getOidMarshaller());
                 return ObjectAdapterMemento.createPersistent(oid);
             }

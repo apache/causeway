@@ -35,7 +35,7 @@ public final class CollectionUtils {
         final Object[] optionArray = new Object[facet.size(collection)];
         int j = 0;
         for (final ObjectAdapter nextElement : facet.iterable(collection)) {
-            optionArray[j++] = nextElement.getObject();
+            optionArray[j++] = nextElement != null? nextElement.getObject(): null;
         }
         return optionArray;
     }
