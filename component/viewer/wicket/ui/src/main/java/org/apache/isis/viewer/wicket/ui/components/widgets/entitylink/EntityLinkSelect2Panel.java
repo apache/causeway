@@ -199,7 +199,10 @@ public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAda
     private void doSyncWithInputIfAutoCompleteOrChoices() {
         
         if(!isEditableWithEitherAutoCompleteOrChoices()) {
+            // this is horrid; adds a label to the id
+            // should instead be a 'temporary hide'
             permanentlyHide(ID_AUTO_COMPLETE);
+            select2Field = null; // this forces recreation next time around
             return;
         }
 
