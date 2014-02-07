@@ -124,7 +124,6 @@ public @interface Bulk {
 
         private InvokedAs invokedAs;
         private List<Object> domainObjects;
-        private int size;
 
         private int index;
 
@@ -149,7 +148,6 @@ public @interface Bulk {
         public InteractionContext(final InvokedAs invokedAs, final List<Object> domainObjects) {
             this.invokedAs = invokedAs;
             this.domainObjects = domainObjects;
-            this.size = domainObjects.size();
         }
 
         // //////////////////////////////////////

@@ -26,8 +26,6 @@ import org.quartz.JobExecutionException;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 
 public class AbstractIsisQuartzJob implements Job {

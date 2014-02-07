@@ -16,33 +16,13 @@
  */
 package webapp.scheduler;
 
-import java.util.List;
+import org.apache.isis.objectstore.jdo.service.BackgroundCommandExecutionFromBackgroundCommandServiceJdo;
 
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.core.runtime.services.background.BackgroundCommandExecution;
-import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundCommandServiceJdoRepository;
-import org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo;
 
 public class BackgroundCommandExecutionQuartzJob extends AbstractIsisQuartzJob {
 
     public BackgroundCommandExecutionQuartzJob() {
         super(new BackgroundCommandExecutionFromBackgroundCommandServiceJdo());   
-    }
-
-    // //////////////////////////////////////
-
-    public final static class BackgroundCommandExecutionFromBackgroundCommandServiceJdo extends BackgroundCommandExecution {
-
-        @Override
-        protected List<? extends Command> findBackgroundCommandsToExecute() {
-            final List<CommandJdo> commands = backgroundCommandRepository.findBackgroundCommandsNotYetStarted();
-            return commands; 
-        }
-        
-        // //////////////////////////////////////
-
-        @javax.inject.Inject
-        private BackgroundCommandServiceJdoRepository backgroundCommandRepository;
     }
 
 }
