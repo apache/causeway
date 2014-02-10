@@ -209,6 +209,12 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
             @Override
+            public Bookmark bookmarkFor(Class<?> cls, String identifier) {
+                return new DomainObjectContainerResolve().bookmarkFor(cls, identifier);
+            }
+
+
+            @Override
             public void resolve(final Object parent) {
                 new DomainObjectContainerResolve().resolve(parent);
             }

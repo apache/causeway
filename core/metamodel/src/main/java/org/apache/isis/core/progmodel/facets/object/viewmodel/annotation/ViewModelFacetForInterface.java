@@ -34,5 +34,11 @@ public class ViewModelFacetForInterface extends ViewModelFacetAbstract {
         final ViewModel viewModel = (ViewModel)pojo;
         viewModel.viewModelInit(memento);
     }
+    
+    @Override
+    public String memento(Object pojo) {
+        final ViewModel viewModel = (ViewModel)pojo;
+        return viewModel.viewModelMemento();
+    }
 
 }

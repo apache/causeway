@@ -19,18 +19,19 @@
 
 package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
-import org.apache.isis.core.metamodel.facets.MarkerFacet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * Indicates that this class is a view model, that is, any changes to its structure
- * will be backwards compatible.
+ * Indicates that this class is a view model.
  * 
  * <p>
  * In the standard Apache Isis Programming Model, typically corresponds to
  * applying the <tt>@ViewModel</tt> annotation at the class level.
  */
-public interface ViewModelFacet extends MarkerFacet {
+public interface ViewModelFacet extends Facet {
 
     void initialize(Object pojo, String memento);
+
+    String memento(Object pojo);
 
 }

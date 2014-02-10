@@ -208,6 +208,11 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
             @Override
+            public Bookmark bookmarkFor(Class<?> cls, String identifier) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
             public void resolve(final Object parent, final Object field) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }

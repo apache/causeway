@@ -18,9 +18,9 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.applib.annotation.Programmatic;
 
 @Named("Bookmarks")
 public interface BookmarkService {
@@ -28,10 +28,13 @@ public interface BookmarkService {
     @NotInServiceMenu
     Object lookup(BookmarkHolder bookmarkHolder);
 
-    @Hidden
+    @Programmatic
     Object lookup(Bookmark bookmarkHolder);
 
-    @Hidden
+    @Programmatic
     Bookmark bookmarkFor(Object domainObject);
+
+    @Programmatic
+    Bookmark bookmarkFor(Class<?> cls, String identifier);
     
 }

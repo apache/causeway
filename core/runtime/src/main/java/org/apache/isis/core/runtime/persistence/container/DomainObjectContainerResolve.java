@@ -26,6 +26,8 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
@@ -75,6 +77,12 @@ public class DomainObjectContainerResolve {
         return rootOid.asBookmark();
     }
 
+    public Bookmark bookmarkFor(final Class<?> cls, final String identifier) {
+        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(cls);
+        String objectType = objectSpec.getSpecId().asString();
+        return new Bookmark(objectType, identifier);
+    }
+
     public void resolve(final Object parent) {
         final ObjectAdapter adapter = adapterFor(parent);
         if (adapter.canTransitionToResolving()) {
@@ -107,6 +115,11 @@ public class DomainObjectContainerResolve {
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
+
+    protected SpecificationLoaderSpi getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
+
 
 
 }

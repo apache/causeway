@@ -83,17 +83,22 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
         return domainObjectServices.lookup(bookmark);
     }
 
+    @Override
+    @Hidden
+    public Bookmark bookmarkFor(final Object domainObject) {
+        return domainObjectServices.bookmarkFor(domainObject);
+    }
+
+    @Override
+    public Bookmark bookmarkFor(Class<?> cls, String identifier) {
+        return domainObjectServices.bookmarkFor(cls, identifier);
+    }
+
 
     @Override
     @Programmatic
     public void setDomainObjectServices(final DomainObjectServices domainObjectServices) {
         this.domainObjectServices = domainObjectServices;
-    }
-
-    @Override
-    @Hidden
-    public Bookmark bookmarkFor(final Object domainObject) {
-        return domainObjectServices.bookmarkFor(domainObject);
     }
 
 

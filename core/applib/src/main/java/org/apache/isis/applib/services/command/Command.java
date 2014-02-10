@@ -430,7 +430,7 @@ public interface Command extends HasTransactionId {
      * Generates numbers in a named sequence
      * 
      * <p>
-     * Used to support <tt>BackgroundTaskServiceJdo</tt> and <tt>PublishingServiceJdo</tt> implementations whose
+     * Used to support the <tt>PublishingServiceJdo</tt> implementation whose
      * persisted entities are uniquely identified by a ({@link #getTransactionId() transactionId}, <tt>sequence</tt>)
      * tuple.
      */
