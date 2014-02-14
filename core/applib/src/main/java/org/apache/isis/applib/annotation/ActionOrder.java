@@ -27,10 +27,13 @@ import java.lang.annotation.Target;
 
 /**
  * Indicates the order that actions should be grouped/displayed in.
+ * 
+ * @deprecated - use {@link MemberOrder} instead.
  */
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@Deprecated
 public @interface ActionOrder {
     String value();
 }

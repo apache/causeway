@@ -607,10 +607,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         return total.setScale(2);
     }
 
-    private Scratchpad scratchpad;
-    public void injectScratchpad(Scratchpad scratchpad) {
-        this.scratchpad = scratchpad;
-    }
     
 
     // //////////////////////////////////////
@@ -835,6 +831,11 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @javax.inject.Inject
     private BackgroundService backgroundService;
+
+    private Scratchpad scratchpad;
+    public void injectScratchpad(Scratchpad scratchpad) {
+        this.scratchpad = scratchpad;
+    }
 
     // //////////////////////////////////////
     // Extensions

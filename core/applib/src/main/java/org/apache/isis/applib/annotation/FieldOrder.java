@@ -27,10 +27,13 @@ import java.lang.annotation.Target;
 
 /**
  * Indicates the order that properties should be displayed in.
+ * 
+ * @deprecated - use {@link MemberOrder} instead.
  */
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@Deprecated
 public @interface FieldOrder {
     String value();
 }

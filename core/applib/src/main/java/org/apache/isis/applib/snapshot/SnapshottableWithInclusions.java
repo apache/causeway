@@ -21,9 +21,12 @@ package org.apache.isis.applib.snapshot;
 
 import java.util.List;
 
+import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
+
 /**
- * Optional subinterface of {@link Snapshottable}s, used by <tt>XmlSnapshot</tt>
- * to automatically include additional paths within the snapshot.
+ * Optional interface for domain objects with which an
+ * snapshot is to be created using the {@link XmlSnapshotService}, indicating
+ * paths to be {@link XmlSnapshotService.Snapshot#} automatically include additional paths within the snapshot.
  */
 public interface SnapshottableWithInclusions extends Snapshottable {
 
