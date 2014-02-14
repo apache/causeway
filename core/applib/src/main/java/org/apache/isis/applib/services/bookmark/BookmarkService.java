@@ -31,6 +31,12 @@ public interface BookmarkService {
     @Programmatic
     Object lookup(Bookmark bookmarkHolder);
 
+    /**
+     * As {@link #lookup(Bookmark)}, but downcasting to the specified type.
+     */
+    @Programmatic
+    <T> T lookup(Bookmark bookmarkHolder, Class<T> cls);
+
     @Programmatic
     Bookmark bookmarkFor(Object domainObject);
 

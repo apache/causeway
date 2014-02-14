@@ -76,6 +76,7 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
     }
     
     @Hidden
+    @Override
     public Object lookup(final Bookmark bookmark) {
         if(bookmark == null) {
             return null;
@@ -83,8 +84,15 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
         return domainObjectServices.lookup(bookmark);
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
     @Hidden
+    @Override
+    public <T> T lookup(final Bookmark bookmark, Class<T> cls) {
+        return (T) lookup(bookmark);
+    }
+
+    @Hidden
+    @Override
     public Bookmark bookmarkFor(final Object domainObject) {
         return domainObjectServices.bookmarkFor(domainObject);
     }
@@ -100,6 +108,7 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
     public void setDomainObjectServices(final DomainObjectServices domainObjectServices) {
         this.domainObjectServices = domainObjectServices;
     }
+
 
 
 }
