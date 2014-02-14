@@ -141,6 +141,18 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
     }
 
     // //////////////////////////////////////
+    
+    @Override
+    public void refreshServices() {
+        Collection<ObjectSpecification> specifications = Lists.newArrayList(specificationLoader.allSpecifications());
+        for (ObjectSpecification objectSpec : specifications) {
+            if(objectSpec.isService()){
+                specificationLoader.invalidateCache(objectSpec.getCorrespondingClass());
+            }
+        }
+    }
+
+    // //////////////////////////////////////
 
     @Override
     public Object refreshLayout(Object domainObject) {
@@ -214,5 +226,6 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
     public void setAdapterManager(AdapterManager adapterManager) {
         this.adapterManager = adapterManager;
     }
+
 
 }

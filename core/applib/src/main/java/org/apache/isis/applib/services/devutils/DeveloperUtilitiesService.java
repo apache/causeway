@@ -18,6 +18,7 @@ package org.apache.isis.applib.services.devutils;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
@@ -33,6 +34,7 @@ public interface DeveloperUtilitiesService {
     @Prototype
     public Clob downloadMetaModel();
 
+
     /**
      * Downloads a zip of the layout of all domain classes.
      */
@@ -42,6 +44,14 @@ public interface DeveloperUtilitiesService {
     public Blob downloadLayouts();
 
     /**
+     * Rebuilds the metamodel of all registered domain services.
+     */
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence="3")
+    @Prototype
+    public void refreshServices();
+
+    /**
      * Download the JSON layout of the domain object's type.
      */
     @NotInServiceMenu
@@ -49,7 +59,13 @@ public interface DeveloperUtilitiesService {
     @MemberOrder(sequence="2")
     @Prototype
     public Clob downloadLayout(Object domainObject);
-    
+
+    /**
+     * @deprecated - in prototype mode the Wicket viewer (at least) will automatically invalidate 
+     *               the Isis metamodel whenever the object is re-rendered.
+     */
+    @Deprecated
+    @Hidden
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence="99")
