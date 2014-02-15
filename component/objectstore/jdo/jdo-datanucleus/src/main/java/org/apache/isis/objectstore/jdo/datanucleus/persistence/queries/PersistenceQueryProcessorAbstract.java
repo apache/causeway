@@ -79,8 +79,15 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
         for (final Object pojo : pojos) {
         	// ought not to be necessary, however for some queries it seems that the 
         	// lifecycle listener is not called
-        	frameworkSynchronizer.postLoadProcessingFor((PersistenceCapable) pojo, CalledFrom.OS_QUERY);
-            ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+            ObjectAdapter adapter;
+            if(pojo instanceof PersistenceCapable) {
+                // an entity
+                frameworkSynchronizer.postLoadProcessingFor((PersistenceCapable) pojo, CalledFrom.OS_QUERY);
+                adapter = getAdapterManager().getAdapterFor(pojo);
+            } else {
+                // a value type
+                adapter = getAdapterManager().adapterFor(pojo);
+            }
             Assert.assertNotNull(adapter);
             adapters.add(adapter);
         }
