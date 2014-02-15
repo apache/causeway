@@ -39,5 +39,10 @@ public class DeveloperUtilities extends DeveloperUtilitiesServiceDefault {
         return super.downloadLayouts();
     }
 
+    @MemberOrder(name="Prototyping", sequence="90.3")
+    @Override
+    public void refreshServices() {
+        super.refreshServices();
+    }
 }
 
