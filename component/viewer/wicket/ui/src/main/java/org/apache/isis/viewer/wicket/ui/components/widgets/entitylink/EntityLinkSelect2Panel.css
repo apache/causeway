@@ -37,6 +37,10 @@ div.entityLinkSelect2Panel > div {
 	font-size: smaller;
 }
 
+.collectionContentsAsAjaxTablePanel .entityLinkSelect2Panel .autoCompletePlaceholder {
+    height: 0px;
+}
+
 .entityLinkSelect2Panel .autoCompletePlaceholder {
     display: block;
     height: 30px;
