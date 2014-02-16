@@ -67,7 +67,11 @@ public class EntityPage extends PageAbstract {
      * (eg from an action invocation) is show.
      */
     public EntityPage(ObjectAdapter adapter, ConcurrencyException exIfAny) {
-        this(new PageParameters(), newEntityModel(adapter, exIfAny));
+        this(newEntityModel(adapter, exIfAny));
+    }
+
+    private EntityPage(EntityModel entityModel) {
+        this(entityModel.getPageParameters(), entityModel);
     }
 
     private static EntityModel newEntityModel(ObjectAdapter adapter, ConcurrencyException exIfAny) {
