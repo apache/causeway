@@ -57,6 +57,8 @@
 	                    	 -->
 	                        <exclude>**/target/**</exclude>
 	                        <exclude>**/target-ide/**</exclude>
+	                        <exclude>**/xml/tmp/**</exclude>
+	                        <exclude>**/xml/xml/objects/services.xml</exclude>
 
 	                        <exclude>**/*.project</exclude>
 	                        <exclude>**/.classpath</exclude>

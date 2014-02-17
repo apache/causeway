@@ -41,7 +41,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 @Hidden
 public class RegisterEntities {
 
-
+    @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(RegisterEntities.class);
     
     private static final String LOCAL_KEY = "datanucleus.RegisterEntities.packagePrefix";

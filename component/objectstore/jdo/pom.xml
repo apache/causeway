@@ -85,7 +85,7 @@
 	                    	 -->
 	                        <exclude>**/target/**</exclude>
 	                        <exclude>**/target-ide/**</exclude>
-	                        <exclude>**/.log</exclude>
+	                        <exclude>**/*.log</exclude>
 
 	                        <exclude>**/*.project</exclude>
 	                        <exclude>**/.classpath</exclude>
