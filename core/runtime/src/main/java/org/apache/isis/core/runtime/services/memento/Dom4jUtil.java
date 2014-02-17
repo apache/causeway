@@ -25,7 +25,6 @@ import java.math.BigInteger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.joda.time.LocalDate;
@@ -34,7 +33,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.exceptions.IsisException;
 
 class Dom4jUtil {
-    
     
     private Dom4jUtil(){}
     
@@ -81,8 +79,12 @@ class Dom4jUtil {
         XMLWriter writer = null;
         final StringWriter sw = new StringWriter();
         try {
-            OutputFormat outputFormat = OutputFormat.createPrettyPrint();
-            writer = new XMLWriter(sw, outputFormat);
+            // previously this code used pretty print.
+            // however, that tripped up on strings with double spaces in them; the double space was normalized 
+            // to a single space!
+            // OutputFormat outputFormat = OutputFormat.createPrettyPrint();
+            // writer = new XMLWriter(sw, outputFormat);
+            writer = new XMLWriter(sw);
             writer.write(doc);
             return sw.toString();
         } catch (IOException e) {

@@ -36,7 +36,7 @@ public class MementoServiceDefaultTest {
     
     @Before
     public void setUp() throws Exception {
-        mementoService = new MementoServiceDefault();
+        mementoService = new MementoServiceDefault().withNoEncoding();
     }
     
     @Test
@@ -44,6 +44,7 @@ public class MementoServiceDefaultTest {
         final Memento memento = mementoService.create();
         
         memento.set("someString", "a string");
+        memento.set("someStringWithDoubleSpaces", "a  string");
         memento.set("someByte", (byte)123);
         memento.set("someShort", (short)12345);
         memento.set("someInt", 123456789);
@@ -64,6 +65,7 @@ public class MementoServiceDefaultTest {
         final Memento memento2 = mementoService.parse(str);
         
         assertThat(memento2.get("someString", String.class), is("a string"));
+        assertThat(memento2.get("someStringWithDoubleSpaces", String.class), is("a  string"));
         assertThat(memento2.get("someByte", Byte.class), is((byte)123));
         assertThat(memento2.get("someShort", Short.class), is((short)12345));
         assertThat(memento2.get("someInt", Integer.class), is(123456789));
