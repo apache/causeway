@@ -37,6 +37,10 @@
 
     <inceptionYear>2010</inceptionYear>
 
+    <prerequisites>
+        <maven>3.0.4</maven>
+    </prerequisites>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -49,13 +53,7 @@
 
         <!-- relative to core/pom.xml -->
         <coreBaseRelDir>.</coreBaseRelDir>
-
-        <!-- used by docbkx-maven-plugin for DocBook guide; 
-             override as required -->
-        <docbkxGuideTitle>Apache Isis Core</docbkxGuideTitle>
-        <docbkxGuideSubTitle>Architecture, APIs and Customization</docbkxGuideSubTitle>
-        <docbkxGuideName>isis-core</docbkxGuideName>
-
+        
         <testsToInclude>**/*Test_*.java</testsToInclude>
         <testsToExclude>**/*IntegrationTest.java</testsToExclude>
 
@@ -301,7 +299,7 @@
                 <plugin>
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.8</version>
+                    <version>0.10</version>
 	                <configuration>
 	                    <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
 	                    <excludeSubProjects>true</excludeSubProjects>
@@ -426,7 +424,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>2.4.3</version>
+                    <version>2.6</version>
                     <!-- goal:resources binds to phase:process-resources -->
                     <!-- goal:testResources binds to phase:process-test-resources -->
                 </plugin>
@@ -435,7 +433,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>2.3.1</version>
+                    <version>3.1</version>
                     <configuration>
                         <showDeprecation>false</showDeprecation>
                         <showWarnings>false</showWarnings>
@@ -451,7 +449,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.12</version>
+                    <version>2.16</version>
                     <configuration>
                     <!-- 
                         <includes>
@@ -474,7 +472,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-report-plugin</artifactId>
-                    <version>2.5</version>
+                    <version>2.16</version>
                     <!-- goal:report is a report so is configured in the 
                         reporting section; invokes phase:test before running itself -->
                 </plugin>
@@ -484,7 +482,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>cobertura-maven-plugin</artifactId>
-                    <version>2.4</version>
+                    <version>2.6</version>
                     <inherited>true</inherited>
                     <!-- goal:check binds to phase:verify (not currently 
                         configured, can be used to break build if code coverage < threshold) -->
@@ -497,7 +495,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>2.6</version>
+                    <version>2.11</version>
                     <!-- goal:check binds to phase:verify (not currently 
                         configured, can be used to break build if any violations) -->
                     <!-- goal:checkstyle is a report so is configured in 
@@ -508,7 +506,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-pmd-plugin</artifactId>
-                    <version>2.5</version>
+                    <version>3.0.1</version>
                     <!-- goal:check binds to phase:verify (not currently 
                         configured, can be used to break build if any violations) -->
                     <!-- goal:check-cpd binds to phase:verify (not currently 
@@ -555,7 +553,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.8</version>
+                    <version>2.9.1</version>
                     <inherited>true</inherited>
                     <configuration>
                         <debug>true</debug>
@@ -597,7 +595,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jxr-plugin</artifactId>
-                    <version>2.2</version>
+                    <version>2.4</version>
                     <!-- goal:jxr is a report so is configured in the reporting 
                         section -->
                 </plugin>
@@ -607,7 +605,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>2.1.2</version>
+                    <version>2.2.1</version>
                     <configuration>
                         <includePom>true</includePom>
                     </configuration>
@@ -632,7 +630,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.3.1</version>
+                    <version>2.4</version>
                     <!-- goal:jar binds to phase:package -->
                     <!-- goal:test-jar supposedly binds to phase:package, 
                         but seems to need this explicit binding. -->
@@ -652,10 +650,8 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
-                    <version>2.0.2</version>
+                    <version>2.4</version>
                     <configuration>
-                        <!-- This is broken in maven-war-plugin 2.0, but 
-                            works in 2.0.1+ -->
                         <warSourceExcludes>
                             WEB-INF/lib/*.jar
                         </warSourceExcludes>
@@ -669,118 +665,11 @@
                     <!-- goal:war binds to phase:package -->
                 </plugin>
 
-                <!-- PDF from DocBook (configured to build user guide and 
-                    developers guide): docbkx hosted at http://docbkx-tools.sourceforge.net/docbkx-maven-plugin -->
-                <plugin>
-                    <groupId>com.agilejava.docbkx</groupId>
-                    <artifactId>docbkx-maven-plugin</artifactId>
-                    <!-- <version>2.0.13</version> -->
-                    <version>2.0.14</version>
-                    <!-- doesn't seem to render the title page correctly? 
-                        <version>2.0.10</version> -->
-                    <configuration>
-                        <includes>**/guide/*.xml</includes>
-                        <xincludeSupported>true</xincludeSupported>
-                        <highlightSource>1</highlightSource>
-                    </configuration>
-
-                    <!-- goal:generate-html has not binding; explicitly bind 
-                        to phase:site -->
-                    <executions>
-                        <execution>
-                            <id>html-docs</id>
-                            <phase>site</phase>
-                            <goals>
-                                <goal>generate-html</goal>
-                            </goals>
-
-                            <configuration>
-                                <excludes>old-src</excludes>
-                                <chunkedOutput>true</chunkedOutput>
-                                <htmlStylesheet>screen.css</htmlStylesheet>
-                                <htmlCustomization>src/docbkx/style/html-cust.xsl</htmlCustomization>
-                                <sectionAutolabel>1</sectionAutolabel>
-                                <sectionLabelIncludesComponentLabel>1</sectionLabelIncludesComponentLabel>
-                                <highlightSource>1</highlightSource>
-
-                                <postProcess>
-                                    <copy todir="target/docbkx/html/guide" failonerror="false">
-                                        <fileset dir="src/docbkx/guide">
-                                            <include name="images/**/*" />
-                                        </fileset>
-                                        <fileset dir="src/docbkx/style">
-                                            <include name="*.css" />
-                                        </fileset>
-                                    </copy>
-                                    <copy todir="target/site/docbkx/html" failonerror="false">
-                                        <fileset dir="target/docbkx/html">
-                                            <include name="**/*" />
-                                        </fileset>
-                                    </copy>
-                                </postProcess>
-                            </configuration>
-                        </execution>
-
-                        <!-- goal:generate-pdf has not binding; explicitly 
-                            bind to phase:site -->
-                        <execution>
-                            <id>pdf-docs</id>
-                            <phase>site</phase>
-                            <goals>
-                                <goal>generate-pdf</goal>
-                            </goals>
-                            <configuration>
-                                <argLine>-Xmx1024m</argLine>
-                                <imgSrcPath>${basedir}/target/docbkx/pdf/</imgSrcPath>
-                                <foCustomization>src/docbkx/style/fop-cust.xsl</foCustomization>
-                                <highlightSource>1</highlightSource>
-                                <doubleSided>1</doubleSided>
-
-                                <preProcess>
-                                    <copy todir="${basedir}/target/docbkx/pdf">
-                                        <fileset dir="${basedir}/src/docbkx">
-                                            <include name="images/**/*" />
-                                        </fileset>
-                                    </copy>
-
-                                    <copy todir="${basedir}/target/docbkx/pdf" failonerror="false">
-                                        <fileset dir="${basedir}/src/docbkx/guide">
-                                            <include name="images/**/*" />
-                                        </fileset>
-                                    </copy>
-                                </preProcess>
-                                <postProcess>
-                                    <copy todir="target/site/docbkx/pdf" failonerror="false">
-                                        <fileset dir="target/docbkx/pdf">
-                                            <include name="**/*" />
-                                        </fileset>
-                                    </copy>
-                                </postProcess>
-                            </configuration>
-                        </execution>
-                    </executions>
-
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.docbook</groupId>
-                            <artifactId>docbook-xml</artifactId>
-                            <version>4.4</version>
-                            <scope>runtime</scope>
-                        </dependency>
-                        <dependency>
-                            <groupId>com.java</groupId>
-                            <artifactId>jimi</artifactId>
-                            <version>1.0</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
-
-
                 <!-- site (see also reporting and distributionManagement) -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.0-beta-3</version>
+                    <version>3.3</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.apache.maven.doxia</groupId>
@@ -820,7 +709,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>2.2</version>
+                    <version>2.7</version>
                     <!-- main configuration in reporting section (in inheriting 
                         modules) -->
                 </plugin>
@@ -830,6 +719,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
+                    <version>2.4.2</version>
                     <configuration>
                         <!-- overriddes the default ('clean verify') as workaround -->
                         <preparationGoals>clean install</preparationGoals>
@@ -853,7 +743,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.5</version>
+                    <version>2.8.1</version>
                     <!-- goal:deploy binds to phase:deploy -->
                 </plugin>
 
@@ -862,7 +752,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-archetype-plugin</artifactId>
-                    <version>2.0</version>
+                    <version>2.2</version>
                     <extensions>true</extensions>
                     <!-- no goals bind to any lifecycle phases; use mvn archetype:generate -->
                 </plugin>
@@ -872,7 +762,7 @@
                 <plugin>
                     <groupId>org.mortbay.jetty</groupId>
                     <artifactId>maven-jetty-plugin</artifactId>
-                    <version>6.1.25</version>
+                    <version>6.1.26</version>
                     <configuration>
                         <webAppConfig>
                             <contextPath>webapp</contextPath>
@@ -883,7 +773,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>1.2</version>
+                    <version>1.3.1</version>
                     <configuration>
                         <rules>
                             <requireMavenVersion>
@@ -914,6 +804,14 @@
                     </executions>
                 </plugin>
 
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>2.5</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.5.1</version>
+                </plugin>
 
             </plugins>
         </pluginManagement>
@@ -933,12 +831,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>com.agilejava.docbkx</groupId>
-                <artifactId>docbkx-maven-plugin</artifactId>
-                <inherited>false</inherited>
             </plugin>
 
             <plugin>

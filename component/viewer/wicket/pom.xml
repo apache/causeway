@@ -44,10 +44,6 @@
         <wicket-jquery-ui.version>6.11.0</wicket-jquery-ui.version>
         <wicketstuff.version>6.11.0</wicketstuff.version>
         <wicket-select2.version>2.2.2</wicket-select2.version>
-
-        <docbkxGuideTitle>Apache Isis Wicket Viewer</docbkxGuideTitle>
-        <docbkxGuideSubTitle>Customization, Configuration and Deployment Guide</docbkxGuideSubTitle>
-        <docbkxGuideName>isis-wicket-viewer</docbkxGuideName>
     </properties>
 
     <!-- used in Site generation for relative references. -->
@@ -67,7 +63,7 @@
                 <plugin>
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.8</version>
+                    <version>0.10</version>
 	                <configuration>
 	                    <excludes>
 	                    	<!-- 
@@ -89,13 +85,6 @@
 	            </plugin>
 			</plugins>
 		</pluginManagement>
-		<plugins>
-			<plugin>
-				<groupId>com.agilejava.docbkx</groupId>
-				<artifactId>docbkx-maven-plugin</artifactId>
-				<inherited>false</inherited>
-			</plugin>
-		</plugins>
 	</build>
 
     <dependencyManagement>

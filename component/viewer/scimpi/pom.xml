@@ -38,10 +38,6 @@
 	<properties>
         <siteBaseDir>.</siteBaseDir>
 		<relativeUrl/>
-
-		<docbkxGuideTitle>Apache Isis Scimpi</docbkxGuideTitle>
-        <docbkxGuideSubTitle>Configuration, Customization and Deployment Guide</docbkxGuideSubTitle>
-		<docbkxGuideName>isis-scimpi-viewer</docbkxGuideName>
     </properties>
 
     <!-- used in Site generation for relative references. -->
@@ -54,7 +50,7 @@
                 <plugin>
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.8</version>
+                    <version>0.10</version>
 	                <configuration>
 	                    <excludes>
 	                    	<!-- 
@@ -72,13 +68,6 @@
 	            </plugin>
 			</plugins>
 		</pluginManagement>
-		<plugins>
-            <plugin>
-                <groupId>com.agilejava.docbkx</groupId>
-                <artifactId>docbkx-maven-plugin</artifactId>
-				<inherited>false</inherited>
-            </plugin>
-		</plugins>
 	</build>
 
     <reporting>
@@ -86,7 +75,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>${maven-project-info-reports-plugin}</version>
                 <inherited>false</inherited>
                 <reportSets>
                     <reportSet>

@@ -39,10 +39,6 @@
         <relativeUrl/>
 
         <isis-progmodel-wrapper.version>1.0.0-SNAPSHOT</isis-progmodel-wrapper.version>
-
-        <docbkxGuideTitle>Apache Isis JUnit Support</docbkxGuideTitle>
-        <docbkxGuideSubTitle>Acceptance Testing using JUnit</docbkxGuideSubTitle>
-        <docbkxGuideName>isis-junit-support</docbkxGuideName>
     </properties>
 
     <!-- used in Site generation for relative references. -->
@@ -73,13 +69,6 @@
 	            </plugin>
 			</plugins>
 		</pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>com.agilejava.docbkx</groupId>
-                <artifactId>docbkx-maven-plugin</artifactId>
-                <inherited>false</inherited>
-            </plugin>
-        </plugins>
     </build>
 
 	<dependencyManagement>

@@ -37,24 +37,10 @@
 	<properties>
         <siteBaseDir>..</siteBaseDir>
 		<relativeUrl>applib/</relativeUrl>
-
-		<docbkxGuideTitle>Apache Isis Application Library</docbkxGuideTitle>
-        <docbkxGuideSubTitle>Developing domain driven applications using Apache Isis</docbkxGuideSubTitle>
-		<docbkxGuideName>isis-applib</docbkxGuideName>
 	</properties>
 
     <!-- used in Site generation for relative references. -->
     <url>http://isis.apache.org/${relativeUrl}</url>
-
-	<build>
-		<plugins>
-            <plugin>
-                <groupId>com.agilejava.docbkx</groupId>
-                <artifactId>docbkx-maven-plugin</artifactId>
-                <inherited>false</inherited>
-            </plugin>
-        </plugins>
-	</build>
 
 	<reporting>
 		<excludeDefaults>true</excludeDefaults>
@@ -62,7 +48,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>${maven-project-info-reports-plugin}</version>
 				<inherited>false</inherited>
                 <configuration>
                 	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>

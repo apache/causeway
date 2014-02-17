@@ -33,7 +33,10 @@ http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
 				<name>BackgroundCommandExecutionJobEveryTenSeconds</name>
 				<job-name>BackgroundCommandExecutionJob</job-name>
 				<job-group>Isis</job-group>
+                <!-- 
 				<cron-expression>0/10 * * * * ?</cron-expression>
+                 -->
+				<cron-expression>0 1 * * * ?</cron-expression>
 			</cron>
 		</trigger>
 

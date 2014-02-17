@@ -53,7 +53,7 @@
                 <plugin>
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
-                    <version>0.8</version>
+                    <version>0.10</version>
 	                <configuration>
 	                    <excludes>
 	                    	<!-- 
@@ -78,7 +78,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>${maven-project-info-reports-plugin}</version>
                 <inherited>false</inherited>
                 <configuration>
                 	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
