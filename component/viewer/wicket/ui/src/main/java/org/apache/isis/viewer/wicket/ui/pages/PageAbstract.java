@@ -264,7 +264,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             @Override
             public void onClick() {
                 getSession().invalidate();
-                throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
+                setResponsePage(WicketSignInPage.class);
             }
         });
     }
