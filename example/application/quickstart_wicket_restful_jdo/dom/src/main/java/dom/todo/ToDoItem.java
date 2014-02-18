@@ -125,7 +125,7 @@ import services.ClockService;
 @AutoComplete(repository=ToDoItems.class, action="autoComplete") // default unless overridden by autoCompleteNXxx() method
 //@Bounded - if there were a small number of instances only (overrides autoComplete functionality)
 @Bookmarkable
-public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
+public class ToDoItem implements Comparable<ToDoItem> {
 
     /**
      * It isn't common for entities to log, but they can if required.  
@@ -836,25 +836,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public void injectScratchpad(Scratchpad scratchpad) {
         this.scratchpad = scratchpad;
     }
-
-    // //////////////////////////////////////
-    // Extensions
-    // //////////////////////////////////////
-
-    
-// GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
-//
-//    @Persistent
-//    private Location location;
-//    
-//    @MemberOrder(name="Detail", sequence = "10")
-//    @Optional
-//    public Location getLocation() {
-//        return location;
-//    }
-//    public void setLocation(Location location) {
-//        this.location = location;
-//    }
 
 
 }

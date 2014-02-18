@@ -138,14 +138,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!--
-        GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3 
-        <dependency>
-            <groupId>com.danhaywood.isis.wicket</groupId>
-            <artifactId>danhaywood-isis-wicket-gmap3-applib</artifactId>
-        </dependency>
-         -->
-        
 	</dependencies>
     
 </project>

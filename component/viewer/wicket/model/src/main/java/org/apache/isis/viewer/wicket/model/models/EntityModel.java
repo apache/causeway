@@ -193,6 +193,11 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         return pageParameters;
     }
 
+    @Deprecated
+    public PageParameters asPageParameters() {
+        return getPageParameters();
+    }
+
     public PageParameters getPageParametersWithoutUiHints() {
         return createPageParameters(getObject());
     }
@@ -717,6 +722,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
+
 
 
 
