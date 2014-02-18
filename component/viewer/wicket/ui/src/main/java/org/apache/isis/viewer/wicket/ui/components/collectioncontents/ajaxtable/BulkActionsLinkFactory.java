@@ -18,25 +18,18 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.Bulk.InteractionContext;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -45,22 +38,18 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.util.MementoFunctions;
-import org.apache.isis.viewer.wicket.model.util.ObjectAdapterFunctions;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 final class BulkActionsLinkFactory implements ActionLinkFactory {
     
@@ -69,10 +58,15 @@ final class BulkActionsLinkFactory implements ActionLinkFactory {
     
     @SuppressWarnings("unused")
     private final DataTable<ObjectAdapter,String> dataTable;
+    private final ObjectAdapterToggleboxColumn toggleboxColumn;
 
-    BulkActionsLinkFactory(EntityCollectionModel model, DataTable<ObjectAdapter,String> dataTable) {
+    BulkActionsLinkFactory(
+            final EntityCollectionModel model, 
+            final DataTable<ObjectAdapter,String> dataTable, 
+            final ObjectAdapterToggleboxColumn toggleboxColumn) {
         this.model = model;
         this.dataTable = dataTable;
+        this.toggleboxColumn = toggleboxColumn;
     }
 
     @Override
@@ -123,6 +117,7 @@ final class BulkActionsLinkFactory implements ActionLinkFactory {
                     }
                     
                     model.clearToggleMementosList();
+                    toggleboxColumn.clearToggles();
                     final ActionModel actionModelHint = model.getActionModelHint();
                     if(actionModelHint != null) {
                         ObjectAdapter resultAdapter = actionModelHint.getObject();

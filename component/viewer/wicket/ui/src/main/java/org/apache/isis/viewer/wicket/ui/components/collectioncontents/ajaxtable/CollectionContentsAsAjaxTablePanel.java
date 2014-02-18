@@ -101,7 +101,7 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
 
         List<ObjectAction> bulkActions = determineBulkActions();
 
-        addToggleboxColumnIfRequired(columns, bulkActions);
+        ObjectAdapterToggleboxColumn toggleboxColumn = addToggleboxColumnIfRequired(columns, bulkActions);
         addTitleColumn(columns, model.getParentObjectAdapterMemento(), getSettings().getMaxTitleLengthInStandaloneTables(), getSettings().getMaxTitleLengthInStandaloneTables());
         addPropertyColumnsIfRequired(columns);
 
@@ -109,19 +109,19 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         dataTable = new IsisAjaxFallbackDataTable<ObjectAdapter,String>(ID_TABLE, columns, dataProvider, model.getPageSize());
         
         addActionPromptModalWindow();
-        buildEntityActionsGui(bulkActions, this);
+        buildEntityActionsGui(bulkActions, this, toggleboxColumn);
 
         addOrReplace(dataTable);
         dataTable.honourHints();
     }
 
-    private void addToggleboxColumnIfRequired(final List<IColumn<ObjectAdapter,String>> columns, List<ObjectAction> bulkActions) {
+    private ObjectAdapterToggleboxColumn addToggleboxColumnIfRequired(final List<IColumn<ObjectAdapter,String>> columns, List<ObjectAction> bulkActions) {
         final EntityCollectionModel entityCollectionModel = getModel();
         if(bulkActions.isEmpty() || entityCollectionModel.isParented()) {
-            return;
+            return null;
         }
         
-        columns.add(new ObjectAdapterToggleboxColumn(new SelectionHandler() {
+        ObjectAdapterToggleboxColumn toggleboxColumn = new ObjectAdapterToggleboxColumn(new SelectionHandler() {
             
             private static final long serialVersionUID = 1L;
 
@@ -146,12 +146,15 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
                 // perhaps something to tackle in a separate ticket....
                 ajaxRequestTarget.add(dataTable);
             }
-        }));
+        });
+        columns.add(toggleboxColumn);
+        return toggleboxColumn;
     }
 
     private void buildEntityActionsGui(
             final List<ObjectAction> bulkActions, 
-            final ActionPromptProvider actionPromptModalWindowProvider) {
+            final ActionPromptProvider actionPromptModalWindowProvider, 
+            final ObjectAdapterToggleboxColumn toggleboxColumn) {
         final EntityCollectionModel model = getModel();
         
         if(bulkActions.isEmpty() || model.isParented()) {
@@ -160,7 +163,7 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         }
         
         if(!bulkActions.isEmpty()) {
-            final ActionLinkFactory linkFactory = new BulkActionsLinkFactory(model, dataTable);
+            final ActionLinkFactory linkFactory = new BulkActionsLinkFactory(model, dataTable, toggleboxColumn);
 
             final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(null, getServiceAdapters(), bulkActions, linkFactory);
             // TODO: i18n

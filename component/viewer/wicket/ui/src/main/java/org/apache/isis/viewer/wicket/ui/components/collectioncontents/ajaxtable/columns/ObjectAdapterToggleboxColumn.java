@@ -105,5 +105,9 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
         cellItem.add(toggle);
     }
 
+    public void clearToggles() {
+        rowToggles.clear();
+    }
+
 
 }
