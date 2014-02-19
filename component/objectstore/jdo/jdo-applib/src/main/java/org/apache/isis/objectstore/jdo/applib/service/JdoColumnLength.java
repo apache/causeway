@@ -70,7 +70,7 @@ public final class JdoColumnLength {
         private PublishedEvent() {
         }
         
-        public static final int TITLE = 50;
+        public static final int TITLE = 255;
         public static final int EVENT_TYPE = 20;
         public static final int STATE = 20;
     }
