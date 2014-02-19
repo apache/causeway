@@ -97,7 +97,7 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
 
 
             List<ObjectAdapter> adapters = model.getObject();
-            Summary summary = new Summary(adapters, numberAssociation);
+            Summary summary = new Summary(propertyName, adapters, numberAssociation);
             addItem(item, ID_SUM, summary.getTotal());
             addItem(item, ID_AVG, summary.getAverage());
             addItem(item, ID_MIN, summary.getMin());
@@ -113,8 +113,14 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
         private final List<String> titles = Lists.newArrayList();
         private final List<BigDecimal> values = Lists.newArrayList();
         private BigDecimal average;
+        private String propertyName;
 
         public Summary(List<ObjectAdapter> adapters, ObjectAssociation numberAssociation) {
+            this(null, adapters, numberAssociation);
+        }
+
+        public Summary(String propertyName, List<ObjectAdapter> adapters, ObjectAssociation numberAssociation) {
+            this.propertyName = propertyName;
             int nonNullCount = 0;
             for (ObjectAdapter objectAdapter : adapters) {
                 titles.add(objectAdapter.titleString(null));
@@ -139,6 +145,9 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
             average = nonNullCount != 0 ? sum.divide(BigDecimal.valueOf(nonNullCount), 2, RoundingMode.HALF_UP) : null;
         }
         
+        public String getPropertyName() {
+            return propertyName;
+        }
         public BigDecimal getTotal() {
             return sum;
         }
@@ -147,13 +156,13 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
         }
         public BigDecimal getMax() {
             return max;
-        }public BigDecimal getMin() {
+        }
+        public BigDecimal getMin() {
             return min;
         }
         public List<String> getTitles() {
             return Collections.unmodifiableList(titles);
         }
-
         public List<BigDecimal> getValues() {
             return Collections.unmodifiableList(values);
         }
