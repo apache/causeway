@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -350,7 +351,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                     feedbackOrNotifyAnyRecognizedError(preValidationErrorIfAny, form);
                     // skip validation, because would relate to old values
                     
-                    final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject(), null);
+                    final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject(), null, new PageParameters());
                     EntityPropertiesForm.this.setResponsePage(entityPage);
                 } else {
                     // run Wicket's validation
@@ -404,9 +405,9 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
                 toViewMode(null);
                 
-                final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject(), null);
-                
                 // "redirect-after-post"
+                // (url is not preserved, but can't figure out way to do so and combine with redirect that completes)
+                final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject());
                 EntityPropertiesForm.this.setResponsePage(entityPage);
             }
 

@@ -67,7 +67,10 @@ public enum ActionResultResponseType {
         }
 
         private ActionResultResponse toEntityPage(final ActionModel model, final ObjectAdapter actualAdapter, ConcurrencyException exIfAny) {
-            return ActionResultResponse.toPage(this, new EntityPage(actualAdapter, exIfAny));
+            // this will not preserve the URL (because pageParameters are not copied over)
+            // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
+            final EntityPage entityPage = new EntityPage(actualAdapter, exIfAny);
+            return ActionResultResponse.toPage(this, entityPage);
         }
 
     },
