@@ -11,7 +11,7 @@ For help and support, join the [mailing lists](http://isis.apache.org/support.ht
 
 ## Screenshots
 
-Isis automatically generates the UI from the domain classes.  The following are taken from the [screenshots](http://isis.apache.org/getting-started/screenshots.html) page on the Isis website.  The corresponding domain classes from which this UI was built can be found [here](https://github.com/apache/isis/tree/master/example/application/quickstart_wicket_restful_jdo/dom/src/main/java/dom/todo).
+Isis automatically generates the UI from the domain classes.  The following are taken from the [screenshots](http://isis.apache.org/intro/elevator-pitch/isis-in-pictures.html) page on the Isis website.  The corresponding domain classes from which this UI was built can be found [here](https://github.com/apache/isis/tree/master/example/application/quickstart_wicket_restful_jdo/dom/src/main/java/dom/todo).
 
 A list of objects returned from a domain service action:
 
@@ -27,7 +27,7 @@ Invoking an action:
 
 The REST API for a domain object:
 
-![](http://isis.apache.org/images/screenshots/34-restful-entity.png)
+![](http://isis.apache.org/images/screenshots/screenshot-34-restful-entity.png)
 
 ## Extensions
 
