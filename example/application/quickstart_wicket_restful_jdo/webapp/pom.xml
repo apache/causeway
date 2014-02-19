@@ -267,7 +267,6 @@
 
 
         <!-- quartz scheduler integration -->
-
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
@@ -277,26 +276,6 @@
             <artifactId>quartz-jobs</artifactId>
         </dependency>
 
-        <!-- 3rd party dependency -->
-        <!-- 
-        WICKEDCHARTS: uncomment to use https://github.com/danhaywood/isis-wicket-wickedcharts
-        <dependency>
-            <groupId>com.danhaywood.isis.wicket</groupId>
-            <artifactId>danhaywood-isis-wicket-wickedcharts-scalarchart</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.danhaywood.isis.wicket</groupId>
-            <artifactId>danhaywood-isis-wicket-wickedcharts-summarycharts</artifactId>
-        </dependency>
-         -->
-        <!-- 
-        EXCEL: uncomment to use https://github.com/danhaywood/isis-wicket-excel
-        <dependency>
-            <groupId>com.danhaywood.isis.wicket</groupId>
-            <artifactId>danhaywood-isis-wicket-excel</artifactId>
-        </dependency>
-         -->
-         
     </dependencies>
 
 </project>
