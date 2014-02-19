@@ -78,6 +78,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     private Image wicketImage;
 
     private FileUploadField fileUploadField;
+    private Label fileNameLabel;
 
     protected enum InputFieldVisibility {
             VISIBLE, NOT_VISIBLE;
@@ -162,8 +163,10 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     @Override
     protected Component addComponentForCompact() {
         final MarkupContainer scalarIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
-        updateDownloadLink(ID_SCALAR_IF_COMPACT_DOWNLOAD, scalarIfCompact);
-        updateFileNameLabel(ID_FILE_NAME, scalarIfCompact);
+        MarkupContainer downloadLink = updateDownloadLink(ID_SCALAR_IF_COMPACT_DOWNLOAD, scalarIfCompact);
+        if(downloadLink != null) {
+            updateFileNameLabel("fileNameIfCompact", downloadLink);
+        }
         addOrReplace(scalarIfCompact);
         return scalarIfCompact;
     }
@@ -226,16 +229,13 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
         formComponent.get(ID_SCALAR_VALUE).setVisible(visibility == InputFieldVisibility.VISIBLE);
         
+        fileNameLabel = updateFileNameLabel(ID_FILE_NAME, formComponent);
+
         updateClearLink(visibility);
-    
-        Label fileNameLabel = updateFileNameLabel(ID_FILE_NAME, formComponent);
 
         // the visibility of download link is intentionally 'backwards';
         // if in edit mode then do NOT show
-        fileNameLabel.setVisible(visibility != InputFieldVisibility.VISIBLE);
-
         final MarkupContainer downloadLink = updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, formComponent);
-        // ditto the download link
         if (downloadLink != null) {
             downloadLink.setVisible(visibility == InputFieldVisibility.NOT_VISIBLE);
         }
@@ -246,10 +246,18 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     }
 
     private Label updateFileNameLabel(String idFileName, MarkupContainer formComponent) {
-        T blobOrClob = getBlobOrClobFromModel();
-        String fileName = blobOrClob != null? blobOrClob.getName(): "";
-        Label fileNameLabel = new Label(idFileName, Model.of(fileName));
+        class FileNameModel extends Model<String> {
+            private static final long serialVersionUID = 1L;
+            @Override
+            public String getObject() {
+                T blobOrClob = getBlobOrClobFromModel();
+                String fileName = blobOrClob != null? blobOrClob.getName(): "";
+                return fileName;
+            }
+        }
+        Label fileNameLabel = new Label(idFileName, new FileNameModel());
         formComponent.addOrReplace(fileNameLabel);
+        fileNameLabel.setOutputMarkupId(true);
         return fileNameLabel;
     }
 
@@ -266,6 +274,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
                 ScalarModel model = IsisBlobOrClobPanelAbstract.this.getModel();
                 model.setObject(null);
                 target.add(formComponent);
+                target.add(fileNameLabel);
             }
         };
         ajaxLink.setOutputMarkupId(true);
