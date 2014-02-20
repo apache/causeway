@@ -23,7 +23,6 @@ import java.util.Map;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -237,19 +236,19 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     }
 
     private void addPropertyToForm(final EntityModel entityModel,
-			final ObjectAssociation association,
-			final WebMarkupContainer container) {
-		final OneToOneAssociation otoa = (OneToOneAssociation) association;
-		final PropertyMemento pm = new PropertyMemento(otoa);
+            final ObjectAssociation association,
+            final WebMarkupContainer container) {
+        final OneToOneAssociation otoa = (OneToOneAssociation) association;
+        final PropertyMemento pm = new PropertyMemento(otoa);
 
-		final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
-		final Component component = getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
-		
-		if(!renderedFirstField) {
-		    component.add(new CssClassAppender("first-field"));
-		    renderedFirstField = true;
-		}
-	}
+        final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
+        final Component component = getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+        
+        if(!renderedFirstField) {
+            component.add(new CssClassAppender("first-field"));
+            renderedFirstField = true;
+        }
+    }
 
     private List<ObjectAssociation> visibleProperties(final ObjectAdapter adapter, final ObjectSpecification objSpec, Where where) {
         return objSpec.getAssociations(Contributed.INCLUDED, visiblePropertyFilter(adapter, where));
@@ -351,7 +350,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                     feedbackOrNotifyAnyRecognizedError(preValidationErrorIfAny, form);
                     // skip validation, because would relate to old values
                     
-                    final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject(), null, new PageParameters());
+                    final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject(), null);
                     EntityPropertiesForm.this.setResponsePage(entityPage);
                 } else {
                     // run Wicket's validation
@@ -405,9 +404,9 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
                 toViewMode(null);
                 
+                final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject(), null);
+                
                 // "redirect-after-post"
-                // (url is not preserved, but can't figure out way to do so and combine with redirect that completes)
-                final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject());
                 EntityPropertiesForm.this.setResponsePage(entityPage);
             }
 

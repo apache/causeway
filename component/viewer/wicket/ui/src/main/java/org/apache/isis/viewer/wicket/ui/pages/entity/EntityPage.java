@@ -51,11 +51,11 @@ public class EntityPage extends PageAbstract {
      * {@link BookmarkablePageLink bookmarkable} links.
      */
     public EntityPage(final PageParameters pageParameters) {
-        this(new EntityModel(pageParameters), pageParameters);
+        this(pageParameters, new EntityModel(pageParameters));
     }
     
-    private EntityPage(final EntityModel entityModel, final PageParameters pageParameters) {
-        this(entityModel, pageParameters, entityModel.getObject().titleString(null));
+    private EntityPage(final PageParameters pageParameters, final EntityModel entityModel) {
+        this(pageParameters, entityModel, entityModel.getObject().titleString(null));
     }
 
     public EntityPage(final ObjectAdapter adapter) {
@@ -67,21 +67,7 @@ public class EntityPage extends PageAbstract {
      * (eg from an action invocation) is show.
      */
     public EntityPage(ObjectAdapter adapter, ConcurrencyException exIfAny) {
-        this(newEntityModel(adapter, exIfAny));
-    }
-
-    public EntityPage(ObjectAdapter adapter, ConcurrencyException exIfAny, PageParameters pageParameters) {
-        this(newEntityModel(adapter, exIfAny), pageParameters);
-    }
-
-    private EntityPage(EntityModel entityModel) {
-        // using the pageParameters implied by the entityModel means that the URL is preserved on redirect-after-post
-        // however... the redirect seems to be swallowed in some cases, meaning that the page is not re-rendered at all
-        // therefore, reverting this change.
-        //this(entityModel, entityModel.getPageParameters());
-        
-        // using new PageParameters means that the page's URL will not be mounted, however it will at least re-render
-        this(entityModel, new PageParameters());
+        this(new PageParameters(), newEntityModel(adapter, exIfAny));
     }
 
     private static EntityModel newEntityModel(ObjectAdapter adapter, ConcurrencyException exIfAny) {
@@ -90,8 +76,8 @@ public class EntityPage extends PageAbstract {
         return model;
     }
 
-    private EntityPage(EntityModel entityModel, PageParameters pageParameters, String titleString) {
-        super(pageParameters != null? pageParameters: entityModel.getPageParameters(), ApplicationActions.INCLUDE, titleString, ComponentType.ENTITY);
+    private EntityPage(PageParameters pageParameters, EntityModel entityModel, String titleString) {
+        super(pageParameters, ApplicationActions.INCLUDE, titleString, ComponentType.ENTITY);
 
         // this is a work-around for JRebel integration...
         // ... even though the IsisJRebelPlugin calls invalidateCache, it seems that there is 
