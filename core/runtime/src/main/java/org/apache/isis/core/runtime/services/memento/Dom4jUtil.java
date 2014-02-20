@@ -112,85 +112,95 @@ class Dom4jUtil {
     static enum Parseable {
         STRING(String.class) {
             @SuppressWarnings("unchecked")
-            public <T> T parseStr(String str) {
+            public <T> T parseStr(String str, Class<T> cls) {
                 return (T) str;
             }
         },
         BOOLEAN(Boolean.class, boolean.class) {
             @SuppressWarnings("unchecked")
             @Override
-            public <T> T parseStr(String str) {
+            public <T> T parseStr(String str, Class<T> cls) {
                 return (T) new Boolean(str);
             }
         },
         BYTE(Byte.class, byte.class) {
             @SuppressWarnings("unchecked")
             @Override
-            public <T> T parseStr(String str) {
+            public <T> T parseStr(String str, Class<T> cls) {
                 return (T) new Byte(str);
             }
         },
         SHORT(Short.class, short.class) {
-
             @SuppressWarnings("unchecked")
             @Override
-            <T> T parseStr(String str) {
+            <T> T parseStr(String str, Class<T> cls) {
                 return (T) new Short(str);
             }
         },
         INTEGER(Integer.class, int.class) {
             @SuppressWarnings("unchecked")
             @Override
-            <T> T parseStr(String str) {
+            <T> T parseStr(String str, Class<T> cls) {
                 return (T) new Integer(str);
             }
         },
         LONG(Long.class, long.class) {
             @SuppressWarnings("unchecked")
             @Override
-            <T> T parseStr(String str) {
+            <T> T parseStr(String str, Class<T> cls) {
                 return (T) new Long(str);
             }
         },
         FLOAT(Float.class, float.class) {
             @SuppressWarnings("unchecked")
             @Override
-            <T> T parseStr(String str) {
+            <T> T parseStr(String str, Class<T> cls) {
                 return (T) new Float(str);
             }
         },
         DOUBLE(Double.class, double.class) {
             @SuppressWarnings("unchecked")
             @Override
-            <T> T parseStr(String str) {
+            <T> T parseStr(String str, Class<T> cls) {
                 return (T) new Double(str);
             }
         },
         BIG_DECIMAL(BigDecimal.class) {
             @SuppressWarnings("unchecked")
             @Override
-            <T> T parseStr(String str) {
+            <T> T parseStr(String str, Class<T> cls) {
                 return (T) new BigDecimal(str);
             }
         },
         BIG_INTEGER(BigInteger.class) {
             @SuppressWarnings("unchecked")
             @Override
-            <T> T parseStr(String str) {
+            <T> T parseStr(String str, Class<T> cls) {
                 return (T) new BigInteger(str);
             }
         },
         LOCAL_DATE(LocalDate.class) {
             @SuppressWarnings("unchecked")
             @Override
-            <T> T parseStr(String str) {
+            <T> T parseStr(String str, Class<T> cls) {
                 return (T) new LocalDate(str);
             } 
+        },
+        ENUM(Enum.class) {
+            @SuppressWarnings({ "unchecked", "rawtypes" })
+            @Override
+            <T> T parseStr(String str, Class<T> cls) {
+                Class rawCls = cls;
+                return (T) valueOf(str, rawCls);
+            } 
+            private <E extends Enum<E>> E valueOf(String name, Class<E> cls) {
+                return Enum.valueOf(cls, name);
+            }
         },
         BOOKMARK(Bookmark.class) {
             @SuppressWarnings("unchecked")
             @Override
-            <T> T parseStr(String str) {
+            <T> T parseStr(String str, Class<T> cls) {
                 return (T) new Bookmark(str);
             } 
         };
@@ -201,17 +211,18 @@ class Dom4jUtil {
         public Class<?>[] getClasses() {
             return classes;
         }
-        abstract <T> T parseStr(String str);
+        abstract <T> T parseStr(String str, Class<T> cls);
         
         // //////////////////////////////////////
 
+        @SuppressWarnings("unchecked")
         static <T> T parse(final String str, final Class<?> cls) {
             assertSupported(cls);
             for (Parseable sc : values()) {
                 for (Class<?> eachCls: sc.getClasses()) {
                     if(eachCls.isAssignableFrom(cls)) {
                         if(!eachCls.isPrimitive() || str != null) {
-                            return sc.parseStr(str);
+                            return (T) sc.parseStr(str, cls);
                         }
                     }
                 }

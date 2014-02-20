@@ -39,6 +39,10 @@ public class MementoServiceDefaultTest {
         mementoService = new MementoServiceDefault().withNoEncoding();
     }
     
+    static enum DOW {
+        Mon,Tue,Wed,Thu,Fri
+    }
+    
     @Test
     public void roundtrip() {
         final Memento memento = mementoService.create();
@@ -59,6 +63,8 @@ public class MementoServiceDefaultTest {
         
         memento.set("someBookmark", new Bookmark("CUS", "12345"));
         memento.set("someNullValue", null);
+        
+        memento.set("someEnum", DOW.Wed);
         
         final String str = memento.asString();
         
@@ -83,5 +89,8 @@ public class MementoServiceDefaultTest {
         assertThat(memento2.get("someNullValue", Integer.class), is(nullValue()));
         assertThat(memento2.get("someNullValue", Bookmark.class), is(nullValue()));
         assertThat(memento2.get("someNullValue", LocalDate.class), is(nullValue()));
+        
+        assertThat(memento2.get("someEnum", DOW.class), is(DOW.Wed));
+        
     }
 }
