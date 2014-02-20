@@ -52,7 +52,7 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
 
     /**
      * Returns the adapted domain object, the POJO, that this adapter represents
-     * with the NOF.
+     * with the framework.
      */
     Object getObject();
 
