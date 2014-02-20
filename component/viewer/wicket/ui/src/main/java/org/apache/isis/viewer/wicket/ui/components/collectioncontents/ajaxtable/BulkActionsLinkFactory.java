@@ -29,11 +29,14 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
 
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.MessageBroker;
+import org.apache.isis.core.commons.exceptions.IsisApplicationException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -137,30 +140,48 @@ final class BulkActionsLinkFactory implements ActionLinkFactory {
 
                 } catch(final ConcurrencyException ex) {
                     
-                    // resync with the objectstore
-                    final List<ObjectAdapterMemento> toggleMementosList = Lists.newArrayList(model.getToggleMementosList());
-                    for (ObjectAdapterMemento oam : toggleMementosList) {
-                        // just requesting the adapter will sync the OAM's version with the objectstore
-                        oam.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-                    }
-                    
-                    // discard any adapters that might have been deleted
-                    model.setObject(persistentAdaptersWithin(model.getObject()));
-                    
-                    // attempt to preserve the toggled adapters
-                    final List<ObjectAdapter> adapters = model.getObject();
-                    model.clearToggleMementosList();
-                    for (ObjectAdapterMemento oam : toggleMementosList) {
-                        final ObjectAdapter objectAdapter = oam.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-                        if(adapters.contains(objectAdapter)) {
-                            // in case it has been deleted...
-                            model.toggleSelectionOn(objectAdapter);
-                        }
-                    }
-                    
+                    recover();
                     // display a warning to the user so that they know that the action wasn't performed
                     getMessageBroker().addWarning(ex.getMessage());
                     return;
+
+                } catch(final RuntimeException ex) {
+                    
+                    final RecoverableException appEx = ActionModel.getApplicationExceptionIfAny(ex);
+                    if (appEx != null) {
+
+                        recover();
+                        
+                        getMessageBroker().setApplicationError(appEx.getMessage());
+                        
+                        // there's no need to abort the transaction, it will have already been done
+                        // (in IsisTransactionManager#executeWithinTransaction(...)). 
+                        return;
+                    } 
+                    throw ex;
+                }
+            }
+            
+            private void recover() {
+                // resync with the objectstore
+                final List<ObjectAdapterMemento> toggleMementosList = Lists.newArrayList(model.getToggleMementosList());
+                for (ObjectAdapterMemento oam : toggleMementosList) {
+                    // just requesting the adapter will sync the OAM's version with the objectstore
+                    oam.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                }
+                
+                // discard any adapters that might have been deleted
+                model.setObject(persistentAdaptersWithin(model.getObject()));
+                
+                // attempt to preserve the toggled adapters
+                final List<ObjectAdapter> adapters = model.getObject();
+                model.clearToggleMementosList();
+                for (ObjectAdapterMemento oam : toggleMementosList) {
+                    final ObjectAdapter objectAdapter = oam.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                    if(adapters.contains(objectAdapter)) {
+                        // in case it has been deleted...
+                        model.toggleSelectionOn(objectAdapter);
+                    }
                 }
             }
 
