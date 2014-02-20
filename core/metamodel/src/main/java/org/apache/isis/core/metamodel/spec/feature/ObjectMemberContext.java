@@ -18,6 +18,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -31,8 +32,16 @@ public class ObjectMemberContext {
     private final AdapterManager adapterManager;
     private final QuerySubmitter querySubmitter;
     private final CollectionTypeRegistry collectionTypeRegistry;
+    private final ServicesProvider servicesProvider;
 
-    public ObjectMemberContext(final DeploymentCategory deploymentCategory, final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLoader specificationLookup, final AdapterManager adapterManager, final QuerySubmitter querySubmitter, final CollectionTypeRegistry collectionTypeRegistry) {
+    public ObjectMemberContext(
+            final DeploymentCategory deploymentCategory, 
+            final AuthenticationSessionProvider authenticationSessionProvider, 
+            final SpecificationLoader specificationLookup, 
+            final AdapterManager adapterManager, 
+            final QuerySubmitter querySubmitter, 
+            final CollectionTypeRegistry collectionTypeRegistry,
+            final ServicesProvider servicesProvider) {
 
         this.deploymentCategory = deploymentCategory;
         this.authenticationSessionProvider = authenticationSessionProvider;
@@ -40,6 +49,7 @@ public class ObjectMemberContext {
         this.adapterManager = adapterManager;
         this.querySubmitter = querySubmitter;
         this.collectionTypeRegistry = collectionTypeRegistry;
+        this.servicesProvider = servicesProvider;
     }
 
     public DeploymentCategory getDeploymentCategory() {
@@ -58,6 +68,10 @@ public class ObjectMemberContext {
         return adapterManager;
     }
 
+    public ServicesProvider getServicesProvider() {
+        return servicesProvider;
+    }
+    
     public QuerySubmitter getQuerySubmitter() {
         return querySubmitter;
     }

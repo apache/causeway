@@ -353,6 +353,11 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             public List<ObjectAdapter> getServices() {
                 return Collections.emptyList();
             }
+
+            @Override
+            public <T> T lookupService(Class<T> cls) {
+                return null;
+            }
         };
     }
 

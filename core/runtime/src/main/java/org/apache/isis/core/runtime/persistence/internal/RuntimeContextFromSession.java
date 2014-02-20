@@ -179,6 +179,11 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             public List<ObjectAdapter> getServices() {
                 return getPersistenceSession().getServices();
             }
+
+            @Override
+            public <T> T lookupService(Class<T> cls) {
+                return getPersistenceSession().getServicesInjector().lookupService(cls);
+            }
         };
         this.domainObjectServices = new DomainObjectServicesAbstract() {
 

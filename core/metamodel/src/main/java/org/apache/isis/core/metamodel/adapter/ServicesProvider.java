@@ -31,4 +31,6 @@ public interface ServicesProvider extends Injectable {
      */
     List<ObjectAdapter> getServices();
 
+    <T> T lookupService(Class<T> cls);
+
 }

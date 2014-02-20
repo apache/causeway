@@ -504,7 +504,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         final SpecificationContext specContext = new SpecificationContext(getDeploymentCategory(), authenticationSessionProvider, servicesProvider, objectInstantiator, specificationLookup, facetProcessor);
 
         final AdapterManager adapterMap = getRuntimeContext().getAdapterManager();
-        final ObjectMemberContext objectMemberContext = new ObjectMemberContext(getDeploymentCategory(), authenticationSessionProvider, specificationLookup, adapterMap, getRuntimeContext().getQuerySubmitter(), collectionTypeRegistry);
+        final ObjectMemberContext objectMemberContext = new ObjectMemberContext(getDeploymentCategory(), authenticationSessionProvider, specificationLookup, adapterMap, getRuntimeContext().getQuerySubmitter(), collectionTypeRegistry, servicesProvider);
 
         // ... and create the specs
         if (FreeStandingList.class.isAssignableFrom(cls)) {
