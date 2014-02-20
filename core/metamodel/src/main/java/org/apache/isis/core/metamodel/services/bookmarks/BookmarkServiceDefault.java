@@ -81,7 +81,11 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
         if(bookmark == null) {
             return null;
         }
-        return domainObjectServices.lookup(bookmark);
+        try {
+            return domainObjectServices.lookup(bookmark);
+        } catch(org.apache.isis.core.runtime.persistence.ObjectNotFoundException ex) {
+            return null;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -94,6 +98,9 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
     @Hidden
     @Override
     public Bookmark bookmarkFor(final Object domainObject) {
+        if(domainObject == null) {
+            return null;
+        }
         return domainObjectServices.bookmarkFor(domainObject);
     }
 
