@@ -353,7 +353,7 @@ public class CssMenuItem implements Serializable {
 
         final AbstractLink link = linkAndLabel.getLink();
         final String actionLabel = linkAndLabel.getLabel();
-        Builder builder = this.newSubMenuItem(actionLabel).link(link).prototyping(linkAndLabel.isPrototype());
+        Builder builder = this.newSubMenuItem(actionLabel).link(link).prototyping(linkAndLabel.isPrototype()).returnsBlobOrClob(linkAndLabel.isBlobOrClob());
 
         CssClassFacet cssClassFacet = objectAction.getFacet(CssClassFacet.class);
         if (cssClassFacet != null) {

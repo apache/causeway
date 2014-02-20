@@ -19,6 +19,9 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +41,9 @@ import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.request.resource.ContentDisposition;
+import org.apache.wicket.util.resource.AbstractResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.resource.StringResourceStream;
 
 import org.apache.isis.applib.RecoverableException;
@@ -46,6 +52,7 @@ import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -523,22 +530,41 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
     public static IRequestHandler downloadHandler(final Object value) {
         if(value instanceof Clob) {
-            return downloadHandler((Clob)value);
+            Clob clob = (Clob)value;
+            return handlerFor(resourceStreamFor(clob), clob);
         }
         if(value instanceof Blob) {
-            return downloadHandler((Blob)value);
+            Blob blob = (Blob)value;
+            return handlerFor(resourceStreamFor(blob), blob);
         }
         return null;
     }
     
-    private static IRequestHandler downloadHandler(final Blob blob) {
-        ResourceRequestHandler handler = 
-            new ResourceRequestHandler(new ByteArrayResource(blob.getMimeType().toString(), blob.getBytes(), blob.getName()), null);
-        return handler;
+    private static IResourceStream resourceStreamFor(final Blob blob) {
+        IResourceStream byteArrayResource = new AbstractResourceStream() {
+            
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public InputStream getInputStream() throws ResourceStreamNotFoundException {
+                return new ByteArrayInputStream(blob.getBytes());
+            }
+            
+            @Override
+            public void close() throws IOException {
+            }
+        };
+        return byteArrayResource;
     }
-    private static IRequestHandler downloadHandler(final Clob clob) {
+
+    private static IResourceStream resourceStreamFor(final Clob clob) {
+        IResourceStream resourceStream = new StringResourceStream(clob.getChars(), clob.getMimeType().toString());
+        return resourceStream;
+    }
+
+    private static IRequestHandler handlerFor(IResourceStream resourceStream, final NamedWithMimeType namedWithMimeType) {
         ResourceStreamRequestHandler handler = 
-            new ResourceStreamRequestHandler(new StringResourceStream(clob.getChars(), clob.getMimeType().toString()), clob.getName());
+            new ResourceStreamRequestHandler(resourceStream, namedWithMimeType.getName());
         handler.setContentDisposition(ContentDisposition.ATTACHMENT);
         return handler;
     }

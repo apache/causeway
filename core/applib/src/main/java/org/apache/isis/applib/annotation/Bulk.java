@@ -67,7 +67,9 @@ public @interface Bulk {
 
         public static enum InvokedAs {
             BULK,
-            REGULAR
+            REGULAR;
+            public boolean isRegular() { return this == REGULAR; }
+            public boolean isBulk() { return this == BULK; }
         }
 
         /**

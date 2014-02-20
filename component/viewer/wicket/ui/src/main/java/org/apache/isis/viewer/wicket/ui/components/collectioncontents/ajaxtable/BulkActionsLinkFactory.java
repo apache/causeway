@@ -45,6 +45,7 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
+import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseHandlingStrategy;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
@@ -129,9 +130,9 @@ final class BulkActionsLinkFactory implements ActionLinkFactory {
                     if(lastReturnedAdapter != null) {
                         final ActionResultResponse resultResponse = 
                                 ActionResultResponseType.determineAndInterpretResult(actionModelHint, lastReturnedAdapter);
-                        if(resultResponse.isToPage()) {
-                            setResponsePage(resultResponse.getToPage());
-                        }
+                        final ActionResultResponseHandlingStrategy responseHandlingStrategy = 
+                                ActionResultResponseHandlingStrategy.determineFor(resultResponse);
+                        responseHandlingStrategy.handleResults(this, resultResponse);
                     }
 
                 } catch(final ConcurrencyException ex) {

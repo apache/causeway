@@ -28,13 +28,14 @@ import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetFilters;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
@@ -268,7 +269,23 @@ public interface ObjectAction extends ObjectMember {
 
                 @Override
                 public boolean accept(ObjectAction oa) {
-                    return oa.containsDoOpFacet(BulkFacet.class);
+                    if( !oa.containsDoOpFacet(BulkFacet.class)) {
+                        return false;
+                    }
+                    if (oa.getParameterCount() != 0) {
+                        return false;
+                    } 
+                    
+                    // currently don't support returning Blobs or Clobs
+                    // (because haven't figured out how to rerender the current page, but also to do a download)
+                    ObjectSpecification returnSpec = oa.getReturnType();
+                    if(returnSpec != null) {
+                        Class<?> returnType = returnSpec.getCorrespondingClass();
+                        if(returnType == Blob.class || returnType == Clob.class) {
+                            return false;
+                        }
+                    }
+                    return true;
                 }};
         }
         

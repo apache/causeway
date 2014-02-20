@@ -38,10 +38,6 @@ public class BulkAnnotationFacetFactory extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         Method method = processMethodContext.getMethod();
-        // can only annotate no-arg actions.
-        if(method.getParameterTypes().length != 0) {
-            return;
-        }
         final Bulk annotation = Annotations.getAnnotation(method, Bulk.class);
         FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
