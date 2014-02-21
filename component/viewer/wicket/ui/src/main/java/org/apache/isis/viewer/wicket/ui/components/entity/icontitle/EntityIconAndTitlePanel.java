@@ -123,11 +123,12 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     private AbstractLink createIconAndTitle(final ObjectAdapter adapter) {
         final AbstractLink link = createLinkWrapper();
         
-        link.addOrReplace(this.label = newLabel(ID_ENTITY_TITLE));
+        String title = determineTitle();
+        link.addOrReplace(this.label = newLabel(ID_ENTITY_TITLE, titleAbbreviated(title)));
         link.addOrReplace(this.image = newImage(ID_ENTITY_ICON, adapter));
         
         String entityTypeName = adapter.getSpecification().getSingularName();
-        link.add(new AttributeModifier("title", entityTypeName));
+        link.add(new AttributeModifier("title", entityTypeName + ": " + title));
         
         return link;
     }
@@ -139,21 +140,25 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
         return Links.newBookmarkablePageLink(ID_ENTITY_LINK, pageParameters, pageClass);
     }
 
-    protected Label newLabel(final String id) {
-        final String title = determineTitle();
+    private Label newLabel(final String id, final String title) {
         return new Label(id, title);
     }
 
-    protected String determineTitle() {
+    private String determineTitleAbbreviatedIfRequired() {
+        String titleString = determineTitle();
+        return titleAbbreviated(titleString);
+    }
+
+    private String titleAbbreviated(String titleString) {
+        int maxTitleLength = abbreviateTo(getModel(), titleString);
+        return abbreviated(titleString, maxTitleLength);
+    }
+
+    private String determineTitle() {
         EntityModel model = getModel();
         final ObjectAdapter adapter = model.getObject();
-         if (adapter != null) {
-            String titleString = adapter.titleString(getContextAdapterIfAny());
-            int maxTitleLength = abbreviateTo(model, titleString);
-            return abbreviated(titleString, maxTitleLength);
-        } else {
-            return "(no object)";
-        }
+        String titleString = adapter != null ? adapter.titleString(getContextAdapterIfAny()) : "(no object)";
+        return titleString;
     }
 
     private int abbreviateTo(EntityModel model, String titleString) {
