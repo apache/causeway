@@ -23,10 +23,12 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Locale;
 
 import com.google.common.io.Resources;
 
 import org.joda.time.LocalDate;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -36,41 +38,65 @@ public class XmlSnapshotServiceAbstractTest {
 
     private XmlSnapshotServiceAbstract xmlSnapshotService;
     private String xmlStr;
-
+    
     @Before
     public void setUp() throws Exception {
         URL resource = Resources.getResource(XmlSnapshotServiceAbstractTest.class, "XmlSnapshotServiceAbstractTest.xml");
         xmlStr = Resources.toString(resource, Charset.forName("UTF-8"));
         
         xmlSnapshotService = new XmlSnapshotServiceForUnitTesting();
+        
     }
 
+    
     @Test
     public void test() {
 
-        Document xmlDoc = xmlSnapshotService.asDocument(xmlStr);
-        Element rootEl = xmlDoc.getDocumentElement();
+        Locale locale = Locale.getDefault();
         
-        assertThat(
-                xmlSnapshotService.getChildElementValue(rootEl, "app:someString", String.class), is("OXF"));
-        assertThat(
-                xmlSnapshotService.getChildElementValue(rootEl, "app:someLocalDate", LocalDate.class), is(new LocalDate(2013,4,1)));
-        assertThat(
-                xmlSnapshotService.getChildElementValue(rootEl, "app:someBigDecimal", BigDecimal.class), is(new BigDecimal("123456789012345678901234567890.12345678")));
-        assertThat(
-                xmlSnapshotService.getChildElementValue(rootEl, "app:someBigInteger", BigInteger.class), is(new BigInteger("12345678901234567890123456789012345678")));
-        assertThat(
-                xmlSnapshotService.getChildElementValue(rootEl, "app:someInteger", Integer.class), is(new Integer(123456789)));
-        assertThat(
-                xmlSnapshotService.getChildElementValue(rootEl, "app:someLong", Long.class), is(new Long(1234567890123456789L)));
-        assertThat(
-                xmlSnapshotService.getChildElementValue(rootEl, "app:someShort", Short.class), is(new Short((short)12345)));
-        assertThat(
-                xmlSnapshotService.getChildElementValue(rootEl, "app:someByte", Byte.class), is(new Byte((byte)123)));
-        assertThat(
-                xmlSnapshotService.getChildElementValue(rootEl, "app:someBoolean", Boolean.class), is(Boolean.TRUE));
-        assertThat(
-                xmlSnapshotService.getChildElementValue(rootEl, "app:someBoolean2", Boolean.class), is(Boolean.FALSE));
+        Locale[] locales = new Locale[]{Locale.getDefault(), lookupLocale("en", "US"), lookupLocale("en", "GB"), lookupLocale("es", "ES")};
+        for (Locale eachLocal : locales) {
+            try {
+
+                Locale.setDefault(eachLocal);
+
+                Document xmlDoc = xmlSnapshotService.asDocument(xmlStr);
+                Element rootEl = xmlDoc.getDocumentElement();
+                
+                assertThat(
+                        xmlSnapshotService.getChildElementValue(rootEl, "app:someString", String.class), is("OXF"));
+                assertThat(
+                        xmlSnapshotService.getChildElementValue(rootEl, "app:someLocalDate", LocalDate.class), is(new LocalDate(2013,4,1)));
+                assertThat(
+                        xmlSnapshotService.getChildElementValue(rootEl, "app:someBigDecimal", BigDecimal.class), is(new BigDecimal("123456789012345678901234567890.12345678")));
+                assertThat(
+                        xmlSnapshotService.getChildElementValue(rootEl, "app:someBigInteger", BigInteger.class), is(new BigInteger("12345678901234567890123456789012345678")));
+                assertThat(
+                        xmlSnapshotService.getChildElementValue(rootEl, "app:someInteger", Integer.class), is(new Integer(123456789)));
+                assertThat(
+                        xmlSnapshotService.getChildElementValue(rootEl, "app:someLong", Long.class), is(new Long(1234567890123456789L)));
+                assertThat(
+                        xmlSnapshotService.getChildElementValue(rootEl, "app:someShort", Short.class), is(new Short((short)12345)));
+                assertThat(
+                        xmlSnapshotService.getChildElementValue(rootEl, "app:someByte", Byte.class), is(new Byte((byte)123)));
+                assertThat(
+                        xmlSnapshotService.getChildElementValue(rootEl, "app:someBoolean", Boolean.class), is(Boolean.TRUE));
+                assertThat(
+                        xmlSnapshotService.getChildElementValue(rootEl, "app:someBoolean2", Boolean.class), is(Boolean.FALSE));
+            } finally {
+                Locale.setDefault(locale);
+            }
+        }
+    }
+
+    private static Locale lookupLocale(String language, String country) {
+        Locale[] availableLocales = Locale.getAvailableLocales();
+        for (Locale locale : availableLocales) {
+            if(locale.getCountry().equals(country) && locale.getLanguage().equals(language)) {
+                return locale;
+            }
+        }
+        throw new IllegalArgumentException("no such locale:" + language + "_" + country);
     }
 
     
