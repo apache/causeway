@@ -38,10 +38,16 @@ div.entityLinkSelect2Panel > div {
 }
 
 .collectionContentsAsAjaxTablePanel .entityLinkSelect2Panel .autoCompletePlaceholder {
+    padding-top: 0px;
     height: 0px;
+}
+
+.collectionContentsAsAjaxTablePanel .entityLinkSelect2Panel .wrapper {
+    display:table-cell;
 }
 
 .entityLinkSelect2Panel .autoCompletePlaceholder {
     display: block;
-    height: 30px;
+    padding-top: 5px;
+    height: 25px;
 }

@@ -16,9 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+
+/*
 .entityCollectionsPanel fieldset {
 	border: 1px solid threedshadow;		
 }
+*/
  
 .entityCollectionsPanel fieldset legend {
 	position:absolute;
