@@ -144,11 +144,6 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
         return new Label(id, title);
     }
 
-    private String determineTitleAbbreviatedIfRequired() {
-        String titleString = determineTitle();
-        return titleAbbreviated(titleString);
-    }
-
     private String titleAbbreviated(String titleString) {
         int maxTitleLength = abbreviateTo(getModel(), titleString);
         return abbreviated(titleString, maxTitleLength);
