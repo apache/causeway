@@ -45,8 +45,10 @@ public class SaveObjectsTest extends AbstractTest {
         assertThat(getDomainObjectContainer().isPersistent(newCustomer), is(false));
         final Customer newCustomerVO = getWrapperFactory().wrap(newCustomer);
         newCustomerVO.setCustomerNumber(123);
+        newCustomerVO.setFirstNameMandatory("Joe");
         newCustomerVO.setLastName("Smith");
         newCustomerVO.setMandatoryAssociation(countryGbrDO);
+        newCustomerVO.setCountryOfBirthMandatory(countryGbrDO);
         newCustomerVO.setMandatoryValue("foo");
         newCustomerVO.setMaxLengthField("abc");
         newCustomerVO.setRegExCaseInsensitiveField("ABCd");
@@ -60,8 +62,10 @@ public class SaveObjectsTest extends AbstractTest {
     public void invokingSaveOnThroughProxyOnAlreadyPersistedObjectJustUpdatesIt() {
         // just to get into valid state
         custJsDO.setCustomerNumber(123);
+        custJsDO.setFirstNameMandatory("Joe");
         custJsDO.setLastName("Smith");
         custJsDO.setMandatoryAssociation(countryGbrDO);
+        custJsDO.setCountryOfBirthMandatory(countryGbrDO);
         custJsDO.setMandatoryValue("foo");
         custJsDO.setMaxLengthField("abc");
         custJsDO.setRegExCaseInsensitiveField("ABCd");
@@ -81,7 +85,9 @@ public class SaveObjectsTest extends AbstractTest {
 
         // just to get into valid state
         newCustomer.setCustomerNumber(123);
+        newCustomer.setFirstNameMandatory("Joe");
         newCustomer.setLastName("Smith");
+        newCustomer.setCountryOfBirthMandatory(countryGbrDO);
         newCustomer.setMandatoryAssociation(countryGbrDO);
         newCustomer.setMandatoryValue("foo");
         newCustomer.setMaxLengthField("abc");

@@ -171,6 +171,8 @@ public class ToDoItem implements Comparable<ToDoItem> {
         this.description = description;
     }
 
+
+    
     // //////////////////////////////////////
     // DueBy (property)
     // //////////////////////////////////////
@@ -686,6 +688,23 @@ public class ToDoItem implements Comparable<ToDoItem> {
                 throw new RecoverableException("Demo throwing " + type.name(), e);
             }
         }
+    }
+
+    
+    // //////////////////////////////////////
+    // Object-level validation
+    // //////////////////////////////////////
+
+    /**
+     * In a real app, if this were actually a rule, then we'd expect that
+     * invoking the {@link #completed() done} action would clear the {@link #getDueBy() dueBy}
+     * property (rather than require the user to have to clear manually).
+     */
+    public String validate() {
+        if(isComplete() && getDueBy() != null) {
+            return "Due by date must be set to null if item has been completed";
+        }
+        return null;
     }
 
     // //////////////////////////////////////

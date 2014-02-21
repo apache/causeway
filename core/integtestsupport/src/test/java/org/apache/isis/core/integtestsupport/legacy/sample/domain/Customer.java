@@ -49,9 +49,9 @@ public class Customer extends AbstractDomainObject {
         t.append(getFirstName()).append(getLastName());
         return t.toString();
     }
-
     // }}
 
+    
     // {{ FirstName
     private String firstName;
 
@@ -105,6 +105,65 @@ public class Customer extends AbstractDomainObject {
 
     // }}
 
+    
+
+    // {{ FirstNameMandatory
+    private String firstNameMandatory;
+
+    @DescribedAs("Given or christian name")
+    @TypicalLength(20)
+    @MaxLength(100)
+    public String getFirstNameMandatory() {
+        return this.firstNameMandatory;
+    }
+
+    public void setFirstNameMandatory(final String firstNameMandatory) {
+        this.firstNameMandatory = firstNameMandatory;
+    }
+
+    public boolean modifyFirstNameMandatoryCalled = false;
+
+    public void modifyFirstNameMandatory(final String firstNameMandatory) {
+        setFirstNameMandatory(firstNameMandatory);
+        this.modifyFirstNameMandatoryCalled = true;
+    }
+
+    public boolean clearFirstNameMandatoryCalled = false;
+
+    public void clearFirstNameMandatory() {
+        setFirstNameMandatory(null);
+        this.clearFirstNameMandatoryCalled = true;
+    }
+
+    public String validateFirstNameMandatory;
+    public String validateFirstNameMandatoryExpectedArg;
+
+    public String validateFirstNameMandatory(final String firstNameMandatory) {
+        if (validateFirstNameMandatoryExpectedArg != null && !validateFirstNameMandatoryExpectedArg.equals(firstNameMandatory)) {
+            return "argument provided by XAT framework was incorrect";
+        }
+        return validateFirstNameMandatory;
+    }
+
+    public String disableFirstNameMandatory;
+
+    public String disableFirstNameMandatory() {
+        return this.disableFirstNameMandatory;
+    }
+
+    public boolean hideFirstNameMandatory;
+
+    public boolean hideFirstNameMandatory() {
+        return this.hideFirstNameMandatory;
+    }
+
+    // }}
+
+    
+
+    
+    
+    
     // {{ CountryOfBirth
     private Country countryOfBirth;
 
@@ -151,6 +210,59 @@ public class Customer extends AbstractDomainObject {
 
     // }}
 
+    
+    
+    
+    // {{ CountryOfBirthMandatory
+    private Country countryOfBirthMandatory;
+
+    public Country getCountryOfBirthMandatory() {
+        return countryOfBirthMandatory;
+    }
+
+    public void setCountryOfBirthMandatory(final Country countryOfBirthMandatory) {
+        this.countryOfBirthMandatory = countryOfBirthMandatory;
+    }
+
+    public boolean modifyCountryOfBirthMandatoryCalled = false;
+
+    public void modifyCountryOfBirthMandatory(final Country countryOfBirthMandatory) {
+        setCountryOfBirthMandatory(countryOfBirthMandatory);
+        this.modifyCountryOfBirthMandatoryCalled = true;
+    }
+
+    public boolean clearCountryOfBirthMandatoryCalled = false;
+
+    public void clearCountryOfBirthMandatory() {
+        setCountryOfBirthMandatory(null);
+        this.clearCountryOfBirthMandatoryCalled = true;
+    }
+
+    public String validateCountryOfBirthMandatory;
+
+    public String validateCountryOfBirthMandatory(final Country countryOfBirthMandatory) {
+        return validateCountryOfBirthMandatory;
+    }
+
+    public String disableCountryOfBirthMandatory;
+
+    public String disableCountryOfBirthMandatory() {
+        return this.disableCountryOfBirthMandatory;
+    }
+
+    public boolean hideCountryOfBirthMandatory;
+
+    public boolean hideCountryOfBirthMandatory() {
+        return this.hideCountryOfBirthMandatory;
+    }
+
+    // }}
+
+    
+    
+    
+    
+    
     // {{ VisitedCountries
     private List<Country> visitedCountries = new ArrayList<Country>();
 

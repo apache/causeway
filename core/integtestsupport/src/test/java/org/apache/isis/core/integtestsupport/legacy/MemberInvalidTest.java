@@ -41,7 +41,7 @@ public class MemberInvalidTest extends AbstractTest {
 
     @Test
     public void whenValueInvalidImperativelyThenThrowsException() {
-        final String[] values = new String[] { "Dick", null };
+        final String[] values = new String[] { "Dick", "Harry" };
         for (final String value : values) {
             custJsDO.validateFirstNameExpectedArg = value;
             custJsDO.validateFirstName = "bad first name";
@@ -57,9 +57,40 @@ public class MemberInvalidTest extends AbstractTest {
     }
 
     @Test
+    public void whenValueNullThenDoesNotThrowException() {
+        final String[] values = new String[] { null };
+        for (final String value : values) {
+            custJsDO.validateFirstNameExpectedArg = value;
+            custJsDO.validateFirstName = "bad first name";
+            // should not trigger exception
+            custJsWO.setFirstName(value);
+        }
+    }
+
+    
+    @Test
+    public void whenValueInvalidImperativelyOnMandatoryThenThrowsException() {
+        final String[] values = new String[] { null };
+        for (final String value : values) {
+            custJsDO.validateFirstNameMandatoryExpectedArg = value;
+            custJsDO.validateFirstNameMandatory = "bad first name";
+            try {
+                custJsWO.setFirstNameMandatory(value);
+                fail("Should have thrown exception");
+            } catch (final InvalidException ex) {
+                assertThat(ex.getAdvisorClass(), classEqualTo(MandatoryFacetDefault.class));
+                assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("First Name Mandatory"));
+                assertThat(ex.getMessage(), Matchers.containsString("bad first name"));
+            }
+        }
+    }
+
+
+    
+    @Test
     public void whenAssociationInvalidImperativelyThenThrowsException() {
         custJsDO.validateCountryOfBirth = "bad country of birth";
-        final Country[] values = new Country[] { countryUsaDO, null };
+        final Country[] values = new Country[] { countryUsaDO };
         for (final Country value : values) {
             try {
                 custJsWO.setCountryOfBirth(value);
@@ -72,6 +103,34 @@ public class MemberInvalidTest extends AbstractTest {
         }
     }
 
+    @Test
+    public void whenAssociationNullOnOptionalThenDoesNotThrowException() {
+        final Country[] values = new Country[] { null };
+        for (final Country value : values) {
+            custJsDO.validateCountryOfBirth = "bad country of birth";
+            // should not throw exception
+            custJsWO.setCountryOfBirth(value);
+        }
+    }
+
+    @Test
+    public void whenAssociationNullOnMandatoryImperativelyThenThrowsException() {
+        custJsDO.validateCountryOfBirthMandatory = "bad country of birth";
+        final Country[] values = new Country[] { null };
+        for (final Country value : values) {
+            try {
+                custJsWO.setCountryOfBirthMandatory(value);
+                fail("Should have thrown exception");
+            } catch (final InvalidException ex) {
+                assertThat(ex.getAdvisorClass(), classEqualTo(MandatoryFacetDefault.class));
+                assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Country Of Birth Mandatory"));
+                assertThat(ex.getMessage(), Matchers.containsString("bad country of birth"));
+            }
+        }
+    }
+
+
+    
     @Test
     public void whenCollectionInvalidImperativelyThenAddToThrowsException() {
         custJsDO.validateAddToVisitedCountries = "bad country";

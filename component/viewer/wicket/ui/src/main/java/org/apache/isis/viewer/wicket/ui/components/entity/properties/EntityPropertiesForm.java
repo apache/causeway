@@ -378,6 +378,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                 if (invalidReasonIfAny != null) {
                     getForm().error(invalidReasonIfAny);
                     snapshotToRollbackToIfInvalid.recreateObject();
+                    toEditMode(null);
                     return;
                 }
                 
@@ -404,10 +405,18 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
                 toViewMode(null);
                 
-                final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject(), null);
-                
                 // "redirect-after-post"
+                //
+                // RequestCycle.get().getActiveRequestHandler() indicates this is handled by the ListenerInterfaceRequestHandler
+                // which renders page at end.
+                //
+                // it's necessary to zap the page parameters (so mapping is to just wicket/page?nn) 
+                // otherwise (what I think happens) is that the httpServletResponse.sendRedirect ends up being to the same URL,
+                // and this is rejected as invalid either by the browser or by the servlet container (perhaps only if running remotely).
+                //
+                final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject(), null);
                 EntityPropertiesForm.this.setResponsePage(entityPage);
+                
             }
 
         };

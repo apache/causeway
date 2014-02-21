@@ -20,9 +20,11 @@
 package org.apache.isis.core.progmodel.facets.properties.validate;
 
 import org.apache.isis.applib.events.ValidityEvent;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
@@ -42,6 +44,14 @@ public abstract class PropertyValidateFacetAbstract extends FacetAbstract implem
             return null;
         }
         final PropertyModifyContext propertyModifyContext = (PropertyModifyContext) context;
-        return invalidReason(propertyModifyContext.getTarget(), propertyModifyContext.getProposed());
+        ObjectAdapter proposed = propertyModifyContext.getProposed();
+        if(proposed == null) {
+            // skip validation if null value and optional property.
+            MandatoryFacet mandatoryFacet = getFacetHolder().getFacet(MandatoryFacet.class);
+            if(mandatoryFacet == null || mandatoryFacet.isNoop() || mandatoryFacet.isInvertedSemantics()) {
+                return null;
+            }
+        }
+        return invalidReason(propertyModifyContext.getTarget(), proposed);
     }
 }
