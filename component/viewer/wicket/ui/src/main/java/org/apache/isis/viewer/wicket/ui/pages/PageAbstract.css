@@ -969,3 +969,11 @@ zero clipboard
     background-repeat: no-repeat;
     cursor: pointer;
 }
+
+
+/**
+for some reason the containedToggleboxPanel.css is not being picked up...
+*/
+.containedToggleboxPanel .containedToggleboxPanelForm {
+    display: inline;
+}
