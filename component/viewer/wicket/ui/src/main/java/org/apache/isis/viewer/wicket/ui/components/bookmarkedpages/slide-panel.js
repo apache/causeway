@@ -46,13 +46,17 @@ $(document).ready(function(){
     
     $('body').keydown(function(e) {
         
-        // alt+]
-        if(e.which === 221 && e.altKey) {
+        // alt+[
+        if(e.which === 219 && e.altKey) {
             if($('#bookmarkedPagesSlidingDiv .content').is(":visible")) {
                 hideBookmarksQuickly();
             } else {
                 showBookmarks();
             }
+        }
+        
+        if(e.which === 27) {
+        	hideBookmarksQuickly();
         }
       });
 });

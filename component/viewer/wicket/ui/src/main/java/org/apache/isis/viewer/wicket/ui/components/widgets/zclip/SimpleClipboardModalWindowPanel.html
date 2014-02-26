@@ -20,12 +20,14 @@
 <html>
 	<body>
 		<wicket:panel>
-            <div class="zeroClipboardPanel">
-                <a wicket:id="copyLink" href="#" class="copyLink">
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                </a>
-                <a wicket:id="subscribingLink" id="subscribingLink" class="subscribingLink" href="#">&nbsp;</a>
-                <div wicket:id="simpleClipboardModalWindow"/>
+            <div class="simpleClipboardPanel">
+                <form wicket:id="form">
+                    <div class="inner">
+                        <p class="scalarName">Copy this URL:</p>
+                        <input wicket:id="textField" class="textField"/>
+                        <input type="submit" value="OK" class="ok"></input>
+                    </div>
+                </form>
             </div>
 		</wicket:panel>
 	</body>

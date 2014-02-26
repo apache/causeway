@@ -20,7 +20,11 @@ import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -39,9 +43,11 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
     
     private static final String ID_SUBSCRIBING_LINK = "subscribingLink";
     private static final String ID_COPY_LINK = "copyLink";
+    private static final String ID_SIMPLE_CLIPBOARD_MODAL_WINDOW = "simpleClipboardModalWindow";
 
     private AbstractLink subscribingLink;
     private AjaxLink<ObjectAdapter> copyLink;
+    private SimpleClipboardModalWindow simpleClipboardModalWindow;
 
     public ZeroClipboardPanel(String id) {
         super(id);
@@ -52,12 +58,65 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
         super.onInitialize();
 
         if(copyLink == null) {
-            copyLink = new ZeroClipboardLink(ID_COPY_LINK, "#subscribingLink");
+            copyLink = createLink(ID_COPY_LINK);
             addOrReplace(copyLink);
         }
         addSubscribingLink(null);
+        addSimpleClipboardModalWindow();
     }
 
+    private AjaxLink<ObjectAdapter> createLink(String linkId) {
+        
+        return newSimpleClipboardLink(linkId);
+        //return newZeroClipboardLink(linkId);
+    }
+
+    private ZeroClipboardLink newZeroClipboardLink(String linkId) {
+        return new ZeroClipboardLink(linkId, "#subscribingLink");
+    }
+
+    private AjaxLink<ObjectAdapter> newSimpleClipboardLink(String linkId) {
+        return new AjaxLink<ObjectAdapter>(linkId) {
+            private static final long serialVersionUID = 1L;
+            
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                
+                String contentId = simpleClipboardModalWindow.getContentId();
+                SimpleClipboardModalWindowPanel panel = new SimpleClipboardModalWindowPanel(contentId);
+                SimpleClipboardModalWindowForm form = new SimpleClipboardModalWindowForm("form");
+
+                final TextField<String> textField = new TextField<String>("textField", new LoadableDetachableModel<String>() {
+                    private static final long serialVersionUID = 1L;
+
+                    @SuppressWarnings({ "rawtypes", "unchecked" })
+                    @Override
+                    protected String load() {
+                        if(subscribingLink instanceof BookmarkablePageLink) {
+                            final BookmarkablePageLink<?> link = (BookmarkablePageLink<?>) subscribingLink;
+                            final Class pageClass = link.getPageClass();
+                            final PageParameters pageParameters = link.getPageParameters();
+                            final CharSequence urlFor = link.urlFor(pageClass, pageParameters);
+                            return getRequestCycle().getUrlRenderer().renderFullUrl(Url.parse(urlFor));
+                        } else {
+                            return "";
+                        }
+                    }
+                });
+                panel.add(form);
+                form.add(textField);
+                
+                textField.setOutputMarkupId(true);
+                
+                simpleClipboardModalWindow.setPanel(panel, target);
+                simpleClipboardModalWindow.show(target);
+                
+                target.focusComponent(textField);
+            }
+        };
+    }
+
+    
     private void addSubscribingLink(UiHintContainer uiHintContainer) {
         if(uiHintContainer == null && subscribingLink != null) {
             // ignore, since has already been primed
@@ -66,6 +125,11 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
         subscribingLink = createSubscribingLink(uiHintContainer);
         addOrReplace(subscribingLink);
         subscribingLink.setOutputMarkupId(true);
+    }
+
+    private void addSimpleClipboardModalWindow() {
+        simpleClipboardModalWindow = SimpleClipboardModalWindow.newModalWindow(ID_SIMPLE_CLIPBOARD_MODAL_WINDOW);
+        addOrReplace(simpleClipboardModalWindow);
     }
 
     private AbstractLink createSubscribingLink(UiHintContainer uiHintContainer) {

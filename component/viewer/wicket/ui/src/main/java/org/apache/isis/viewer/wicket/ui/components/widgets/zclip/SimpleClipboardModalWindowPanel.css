@@ -17,10 +17,15 @@
  *  under the License.
  */
 
-.zeroClipboardPanel .subscribingLink {
-	display: none;
+div.wicket-modal div.w_content_3,
+div.wicket-modal div.w_content_2,
+div.wicket-modal div.w_content_1,
+div.wicket-modal div.w_content,
+.wicket-modal .w_content_container,
+.w_isis_zclip,
+.simpleClipboardPanel form {
+  border-radius:4px;
+  -moz-border-radius:4px;
+  -webkit-border-radius:4px;
 }
 
-.zeroClipboardPanel a:hover {
-    text-decoration: none;
-}
