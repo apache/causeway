@@ -33,9 +33,5 @@ import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
  */
 public interface DisableForContextFacet extends Facet, DisablingInteractionAdvisor {
 
-    /**
-     * The reason this object is disabled, or <tt>null</tt> otherwise.
-     */
-    public String disabledReason(ObjectAdapter object);
 
 }

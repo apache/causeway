@@ -23,10 +23,12 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.progmodel.facets.members.disabled.DisableForContextFacetAbstract;
 
 public class DisableForContextFacetViaMethod extends DisableForContextFacetAbstract implements ImperativeFacet {
@@ -57,12 +59,16 @@ public class DisableForContextFacetViaMethod extends DisableForContextFacetAbstr
         return false;
     }
 
+    /**
+     * The reason this object is disabled, or <tt>null</tt> otherwise.
+     */
     @Override
-    public String disabledReason(final ObjectAdapter owningAdapter) {
-        if (owningAdapter == null) {
+    public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
+        final ObjectAdapter target = ic.getTarget();
+        if (target == null) {
             return null;
         }
-        return (String) AdapterInvokeUtils.invoke(method, owningAdapter);
+        return (String) AdapterInvokeUtils.invoke(method, target, ic.getContributeeAsMap());
     }
 
     @Override

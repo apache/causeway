@@ -19,6 +19,10 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
+import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -61,8 +65,10 @@ public abstract class InteractionContext<T extends InteractionEvent> {
     private final InteractionInvocationMethod invocation;
     private final AuthenticationSession session;
     private final ObjectAdapter target;
-    // TODO: need to pass this in, obtain from DeploymentCategoryProvider (as implemented by the runtime's DeploymentType)
     private final DeploymentCategory deploymentCategory;
+    
+    private int contributeeParam = -1; // no contributee
+    private ObjectAdapter contributee = null;
 
     public InteractionContext(final InteractionContextType interactionType, DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final Identifier identifier, final ObjectAdapter target) {
         this.interactionType = interactionType;
@@ -136,6 +142,23 @@ public abstract class InteractionContext<T extends InteractionEvent> {
         return target;
     }
 
+    // //////////////////////////////////////
+
+    public void putContributee(int contributeeParam, ObjectAdapter contributee) {
+        this.contributeeParam = contributeeParam;
+        this.contributee = contributee;
+    }
+    
+    public Map<Integer, ObjectAdapter> getContributeeAsMap() {
+        return contributee != null
+                ? ImmutableMap.<Integer, ObjectAdapter>of(contributeeParam, contributee)
+                : ImmutableMap.<Integer, ObjectAdapter>of();
+    }
+
+    // //////////////////////////////////////
+
+    
+    
     /**
      * Factory method to create corresponding {@link InteractionEvent}.
      * 

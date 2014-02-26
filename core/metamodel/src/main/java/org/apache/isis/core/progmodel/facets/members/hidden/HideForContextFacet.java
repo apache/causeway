@@ -33,6 +33,5 @@ import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
  */
 public interface HideForContextFacet extends Facet, HidingInteractionAdvisor {
 
-    public String hiddenReason(ObjectAdapter object);
 
 }

@@ -19,12 +19,9 @@
 
 package org.apache.isis.core.progmodel.facets.members.disabled;
 
-import org.apache.isis.applib.events.UsabilityEvent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
 public abstract class DisableForContextFacetAbstract extends FacetAbstract implements DisableForContextFacet {
 
@@ -36,10 +33,5 @@ public abstract class DisableForContextFacetAbstract extends FacetAbstract imple
         super(type(), holder, Derivation.NOT_DERIVED);
     }
 
-    @Override
-    public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
-        final ObjectAdapter target = ic.getTarget();
-        return disabledReason(target);
-    }
 
 }

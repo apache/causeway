@@ -19,8 +19,9 @@
 
 package org.apache.isis.core.progmodel.facets.members.hidden;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 public class HideForContextFacetNone extends HideForContextFacetAbstract {
 
@@ -32,10 +33,10 @@ public class HideForContextFacetNone extends HideForContextFacetAbstract {
      * Always returns <tt>null</tt>.
      */
     @Override
-    public String hiddenReason(final ObjectAdapter object) {
+    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
         return null;
     }
-
+    
     @Override
     public boolean isNoop() {
         return true;

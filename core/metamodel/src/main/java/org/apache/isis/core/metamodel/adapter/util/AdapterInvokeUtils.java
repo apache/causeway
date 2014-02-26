@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.adapter.util;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.Lists;
 
@@ -56,6 +57,21 @@ public final class AdapterInvokeUtils {
         return MethodExtensions.invoke(method, AdapterUtils.unwrap(adapter), AdapterUtils.unwrap(argumentAdapters));
     }
     
+    public static Object invoke(final Method method, final ObjectAdapter adapter, final Map<Integer, ObjectAdapter> argumentAdapters) {
+        return invoke(method, adapter, asArray(argumentAdapters, method.getParameterTypes().length));
+    }
+
+    private static ObjectAdapter[] asArray(Map<Integer, ObjectAdapter> argumentAdapters, int length) {
+        ObjectAdapter[] args = new ObjectAdapter[length];
+        for (final Map.Entry<Integer, ObjectAdapter> entry : argumentAdapters.entrySet()) {
+            final Integer paramNum = entry.getKey();
+            if(paramNum < length) {
+                args[paramNum] = entry.getValue();
+            }
+        }
+        return args;
+    }
+
     /**
      * Invokes the method, adjusting arguments as required to make them fit the method's parameters.
      * 

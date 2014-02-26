@@ -19,8 +19,10 @@
 
 package org.apache.isis.core.progmodel.facets.members.disabled;
 
+import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
 public class DisableForContextFacetNone extends DisableForContextFacetAbstract {
 
@@ -29,12 +31,16 @@ public class DisableForContextFacetNone extends DisableForContextFacetAbstract {
     }
 
     /**
+     * The reason this object is disabled, or <tt>null</tt> otherwise.
+     * 
+     * <p>
      * Always returns <tt>null</tt>.
      */
     @Override
-    public String disabledReason(final ObjectAdapter target) {
+    public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
         return null;
     }
+
 
     @Override
     public boolean isNoop() {

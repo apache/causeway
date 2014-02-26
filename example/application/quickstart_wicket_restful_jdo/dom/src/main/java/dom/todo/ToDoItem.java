@@ -39,10 +39,9 @@ import com.google.common.collect.Ordering;
 
 import org.joda.time.LocalDate;
 
-import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Audited;
@@ -51,6 +50,7 @@ import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.AppliesTo;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
+import org.apache.isis.applib.annotation.Command;
 import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
@@ -63,7 +63,6 @@ import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.RegEx;
-import org.apache.isis.applib.annotation.Command;
 import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.clock.Clock;
@@ -90,30 +89,30 @@ import services.ClockService;
 })
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
-            name = "todo_all", language = "JDOQL",
+            name = "findByOwnedBy", language = "JDOQL",
             value = "SELECT "
                     + "FROM dom.todo.ToDoItem "
                     + "WHERE ownedBy == :ownedBy"),
     @javax.jdo.annotations.Query(
-            name = "todo_notYetComplete", language = "JDOQL",
+            name = "findByOwnedByAndCompleteIsFalse", language = "JDOQL",
             value = "SELECT "
                     + "FROM dom.todo.ToDoItem "
                     + "WHERE ownedBy == :ownedBy "
                     + "   && complete == false"),
     @javax.jdo.annotations.Query(
-            name = "todo_complete", language = "JDOQL",
+            name = "findByOwnedByAndCompleteIsTrue", language = "JDOQL",
             value = "SELECT "
                     + "FROM dom.todo.ToDoItem "
                     + "WHERE ownedBy == :ownedBy "
                     + "&& complete == true"),
     @javax.jdo.annotations.Query(
-            name = "todo_similarTo", language = "JDOQL",
+            name = "findByOwnedByAndCategory", language = "JDOQL",
             value = "SELECT "
                     + "FROM dom.todo.ToDoItem "
                     + "WHERE ownedBy == :ownedBy "
                     + "&& category == :category"),
     @javax.jdo.annotations.Query(
-            name = "todo_autoComplete", language = "JDOQL",
+            name = "findByOwnedByAndDescriptionContains", language = "JDOQL",
             value = "SELECT "
                     + "FROM dom.todo.ToDoItem "
                     + "WHERE ownedBy == :ownedBy && "

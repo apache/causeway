@@ -19,11 +19,9 @@
 
 package org.apache.isis.core.progmodel.facets.members.hidden;
 
-import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 public abstract class HideForContextFacetAbstract extends FacetAbstract implements HideForContextFacet {
 
@@ -35,8 +33,5 @@ public abstract class HideForContextFacetAbstract extends FacetAbstract implemen
         super(type(), holder, Derivation.NOT_DERIVED);
     }
 
-    @Override
-    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
-        return hiddenReason(ic.getTarget());
-    }
+
 }

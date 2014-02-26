@@ -23,10 +23,12 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.progmodel.facets.members.hidden.HideForContextFacetAbstract;
 
 public class HideForContextFacetViaMethod extends HideForContextFacetAbstract implements ImperativeFacet {
@@ -58,11 +60,12 @@ public class HideForContextFacetViaMethod extends HideForContextFacetAbstract im
     }
 
     @Override
-    public String hiddenReason(final ObjectAdapter owningAdapter) {
-        if (owningAdapter == null) {
+    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
+        final ObjectAdapter target = ic.getTarget();
+        if (target == null) {
             return null;
         }
-        final Boolean isHidden = (Boolean) AdapterInvokeUtils.invoke(method, owningAdapter);
+        final Boolean isHidden = (Boolean) AdapterInvokeUtils.invoke(method, target, ic.getContributeeAsMap());
         return isHidden.booleanValue() ? "Hidden" : null;
     }
 
@@ -70,5 +73,6 @@ public class HideForContextFacetViaMethod extends HideForContextFacetAbstract im
     protected String toStringValues() {
         return "method=" + method;
     }
+
 
 }

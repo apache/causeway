@@ -19,6 +19,7 @@
 package dom.todo;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -44,6 +45,7 @@ import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 
 public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
@@ -55,23 +57,27 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     @DescribedAs("The relative priority of this item compared to others not yet complete (using 'due by' date)")
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
-    @NotContributed(As.ACTION)
+    @NotContributed(As.ACTION) // ie contributed as association
     @Hidden(where=Where.ALL_TABLES)
     @Disabled(reason="Relative priority, derived from due date")
     public Integer relativePriority(final ToDoItem toDoItem) {
-        if(toDoItem.isComplete()) {
-            return null;
-        }
+        return queryResultsCache.execute(new Callable<Integer>(){
+            @Override
+            public Integer call() throws Exception {
+                if(toDoItem.isComplete()) {
+                    return null;
+                }
 
-        // sort items, then locate this one
-        int i=1;
-        for (ToDoItem each : sortedNotYetComplete()) {
-            if(each == toDoItem) {
-                return i;
-            }
-            i++;
-        }
-        return null;
+                // sort items, then locate this one
+                int i=1;
+                for (ToDoItem each : sortedNotYetComplete()) {
+                    if(each == toDoItem) {
+                        return i;
+                    }
+                    i++;
+                }
+                return null;
+            }}, ToDoItemContributions.class, "relativePriority", toDoItem);
     }
 
 
@@ -105,7 +111,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     @DescribedAs("The next item not yet completed")
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
-    @NotContributed(As.ASSOCIATION)
+    @NotContributed(As.ASSOCIATION) // ie contributed as action
     public ToDoItem next(final ToDoItem item) {
         final Integer priority = relativePriority(item);
         if(priority == null) {
@@ -114,11 +120,22 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
         int priorityOfNext = priority != null ? priority + 1 : 0;
         return itemWithPriorityElse(priorityOfNext, item);
     }
+    public String disableNext(final ToDoItem toDoItem) {
+        if (toDoItem.isComplete()) {
+            return "Completed";
+        } 
+        if(next(toDoItem) == null) {
+            return "No next item";
+        }
+        return null;
+    }
+
+    // //////////////////////////////////////
     
     @DescribedAs("The previous item not yet completed")
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
-    @NotContributed(As.ASSOCIATION)
+    @NotContributed(As.ASSOCIATION) // ie contributed as action
     public ToDoItem previous(final ToDoItem item) {
         final Integer priority = relativePriority(item);
         if(priority == null) {
@@ -127,14 +144,32 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
         int priorityOfPrevious = priority != null? priority - 1 : 0;
         return itemWithPriorityElse(priorityOfPrevious, item);
     }
-
-
-    private ToDoItem itemWithPriorityElse(int idx, final ToDoItem itemElse) {
-        final List<ToDoItem> items = sortedNotYetComplete();
-        return idx>=0 && items.size()>=idx? items.get(idx-1): itemElse;
+    public String disablePrevious(final ToDoItem toDoItem) {
+        if (toDoItem.isComplete()) {
+            return "Completed";
+        }
+        if(previous(toDoItem) == null) {
+            return "No previous item";
+        }
+        return null;
     }
 
-    
+    // //////////////////////////////////////
+
+    /**
+     * @param priority : 1-based priority
+     */
+    private ToDoItem itemWithPriorityElse(int priority, final ToDoItem itemElse) {
+        if(priority < 1) {
+            return null;
+        }
+        final List<ToDoItem> items = sortedNotYetComplete();
+        if(priority > items.size()) {
+            return null;
+        }
+        return priority>=0 && items.size()>=priority? items.get(priority-1): itemElse;
+    }
+
     // //////////////////////////////////////
     // SimilarTo (contributed collection)
     // //////////////////////////////////////
@@ -143,18 +178,12 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     @ActionSemantics(Of.SAFE)
     @NotContributed(As.ACTION)
     public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
-        if(false) {
-            // the naive implementation ...
-            return allMatches(ToDoItem.class, ToDoItem.Predicates.thoseSimilarTo(toDoItem));
-        } else {
-            // the JDO implementation ...
-            final List<ToDoItem> similarToDoItems = allMatches(
-                    new QueryDefault<ToDoItem>(ToDoItem.class, 
-                            "todo_similarTo", 
-                            "ownedBy", currentUserName(), 
-                            "category", toDoItem.getCategory()));
-            return Lists.newArrayList(Iterables.filter(similarToDoItems, excluding(toDoItem)));
-        }
+        final List<ToDoItem> similarToDoItems = allMatches(
+                new QueryDefault<ToDoItem>(ToDoItem.class, 
+                        "findByOwnedByAndCategory", 
+                        "ownedBy", currentUserName(), 
+                        "category", toDoItem.getCategory()));
+        return Lists.newArrayList(Iterables.filter(similarToDoItems, excluding(toDoItem)));
     }
 
 
@@ -219,5 +248,8 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
     @javax.inject.Inject
     private ToDoItems toDoItems;
+    
+    @javax.inject.Inject
+    private QueryResultsCache queryResultsCache;
 
 }
