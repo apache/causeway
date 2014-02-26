@@ -71,7 +71,6 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardLink;
 import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardPanel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
@@ -113,11 +112,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
      * @see https://github.com/brandonaaron/livequery
      */
     private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
-    /**
-     * @see https://github.com/patricklodder/jquery-zclip
-     * @see http://steamdev.com/zclip/
-     */
-    private static final JavaScriptResourceReference JQUERY_ZCLIP_JS = new JavaScriptResourceReference(ZeroClipboardLink.class, "jquery.zclip.js");
     private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
     
     //private static final JavaScriptResourceReference BOOTSTRAP_JS = new JavaScriptResourceReference(PageAbstract.class, "bootstrap/js/bootstrap.min.js");
@@ -228,7 +222,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
-        response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_ZCLIP_JS));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_ISIS_WICKET_VIEWER_JS));
         
         final String feedbackMsg = JGrowlUtil.asJGrowlCalls(getMessageBroker());

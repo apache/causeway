@@ -81,7 +81,6 @@ import org.apache.isis.core.webapp.WebAppConstants;
 import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -93,8 +92,6 @@ import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityPrope
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItemPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssSubMenuItemsPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardLink;
-import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
@@ -265,9 +262,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             mountPage("/entity/${objectOid}", PageType.ENTITY);
             mountPage("/action/${objectOid}/${actionOwningSpec}/${actionId}/${actionType}", PageType.ACTION_PROMPT);
             
+            @SuppressWarnings("unused")
             SharedResources sharedResources = getSharedResources();
-            ZeroClipboardLink.addSharedResourceTo(sharedResources);
-            
             
         } catch(RuntimeException ex) {
             List<MetaModelInvalidException> mmies = Lists.newArrayList(

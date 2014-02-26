@@ -66,13 +66,7 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
     }
 
     private AjaxLink<ObjectAdapter> createLink(String linkId) {
-        
         return newSimpleClipboardLink(linkId);
-        //return newZeroClipboardLink(linkId);
-    }
-
-    private ZeroClipboardLink newZeroClipboardLink(String linkId) {
-        return new ZeroClipboardLink(linkId, "#subscribingLink");
     }
 
     private AjaxLink<ObjectAdapter> newSimpleClipboardLink(String linkId) {
