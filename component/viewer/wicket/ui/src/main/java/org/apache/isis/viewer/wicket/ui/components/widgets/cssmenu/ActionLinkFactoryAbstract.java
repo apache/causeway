@@ -106,6 +106,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                                         ComponentType.ACTION_PROMPT, actionPrompt.getContentId(), actionModel);
                         
                         actionPrompt.setPanel(actionPromptPanel, target);
+                        actionPromptPanel.setActionPrompt(actionPrompt);
                         actionPrompt.show(target);
                         
                         target.focusComponent(actionPromptPanel);
@@ -140,7 +141,12 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
     }
 
     private static AjaxDeferredBehaviour determineDeferredBehaviour(final ObjectAction action, final ActionModel actionModel) {
+        // TODO: should unify with ActionResultResponseType (as used in ActionPanel)
         if(isNoArgReturnTypeRedirect(action)) {
+            /**
+             * adapted from:
+             * @see https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
+             */
             return new AjaxDeferredBehaviour() {
                 
                 private static final long serialVersionUID = 1L;
@@ -154,6 +160,11 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             };
         } 
         if(isNoArgReturnTypeDownload(action)) {
+
+            /**
+             * adapted from:
+             * @see https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
+             */
             return new AjaxDeferredBehaviour() {
                 
                 private static final long serialVersionUID = 1L;
@@ -169,12 +180,14 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         return null;
     }
 
+    // TODO: should unify with ActionResultResponseType (as used in ActionPanel)
     private static boolean isNoArgReturnTypeRedirect(final ObjectAction action) {
         return action.getParameterCount() == 0 &&
                action.getReturnType() != null && 
                action.getReturnType().getCorrespondingClass() == java.net.URL.class;
     }
 
+    // TODO: should unify with ActionResultResponseType (as used in ActionPanel)
     private static boolean isNoArgReturnTypeDownload(final ObjectAction action) {
         return action.getParameterCount() == 0 && action.getReturnType() != null && 
                 (action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Blob.class ||

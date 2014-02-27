@@ -16,6 +16,9 @@
  */
 package org.apache.isis.viewer.wicket.ui.actionresponse;
 
+import java.net.URL;
+
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
 
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -26,33 +29,64 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
  * handler (eg a download).
  */
 public class ActionResultResponse {
-    private final ActionResultResponseType resultType;
+    
+    private final ActionResultResponseHandlingStrategy handlingStrategy;
     private final IRequestHandler handler;
     private final PageAbstract page;
-    public static ActionResultResponse withHandler(ActionResultResponseType resultType, IRequestHandler handler) {
-        return new ActionResultResponse(resultType, handler, null);
+    private AjaxRequestTarget target;
+    private URL url;
+    
+    public static ActionResultResponse withHandler(IRequestHandler handler) {
+        return new ActionResultResponse(
+                ActionResultResponseHandlingStrategy.SCHEDULE_HANDLER, handler, null, null, null);
     }
-    public static ActionResultResponse toPage(ActionResultResponseType resultType, PageAbstract page) {
-        return new ActionResultResponse(resultType, null, page);
+    public static ActionResultResponse toPage(PageAbstract page) {
+        return new ActionResultResponse(
+                ActionResultResponseHandlingStrategy.REDIRECT_TO_PAGE, null, page, null, null);
     }
-    private ActionResultResponse(ActionResultResponseType resultType, IRequestHandler handler, PageAbstract page) {
-        this.resultType = resultType;
+    public static ActionResultResponse openUrlInBrowser(final AjaxRequestTarget target, final URL url) {
+        return new ActionResultResponse(
+                ActionResultResponseHandlingStrategy.OPEN_URL_IN_BROWSER, null, null, target, url);
+    }
+    private ActionResultResponse(
+            final ActionResultResponseHandlingStrategy strategy, 
+            final IRequestHandler handler, 
+            final PageAbstract page, 
+            final AjaxRequestTarget target,
+            final URL url) {
+        handlingStrategy = strategy;
         this.handler = handler;
         this.page = page;
+        this.target = target;
+        this.url = url;
     }
-    public boolean isRedirect() {
-        return handler != null;
+
+    public ActionResultResponseHandlingStrategy getHandlingStrategy() {
+        return handlingStrategy;
     }
-    public boolean isToPage() {
-        return page != null;
-    }
+
+    /**
+     * Populated only if {@link #getHandlingStrategy() handling strategy} is {@link ActionResultResponseHandlingStrategy#SCHEDULE_HANDLER}
+     */
     public IRequestHandler getHandler() {
         return handler;
     }
+    /**
+     * Populated only if {@link #getHandlingStrategy() handling strategy} is {@link ActionResultResponseHandlingStrategy#REDIRECT_TO_PAGE}
+     */
     public PageAbstract getToPage() {
         return page;
     }
-    public ActionResultResponseType getResultType() {
-        return resultType;
+    /**
+     * Populated only if {@link #getHandlingStrategy() handling strategy} is {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_BROWSER}
+     */
+    public AjaxRequestTarget getTarget() {
+        return target;
+    }
+    /**
+     * Populated only if {@link #getHandlingStrategy() handling strategy} is {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_BROWSER}
+     */
+    public URL getUrl() {
+        return url;
     }
 }

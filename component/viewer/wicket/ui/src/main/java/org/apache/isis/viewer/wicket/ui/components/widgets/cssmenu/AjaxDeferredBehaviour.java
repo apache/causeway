@@ -22,10 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.request.http.handler.RedirectRequestHandler;
-import org.apache.wicket.request.resource.ContentDisposition;
-import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.request.Url;
 
 public abstract class AjaxDeferredBehaviour extends AbstractAjaxBehavior {
     private static final long serialVersionUID = 1L;
@@ -56,7 +53,8 @@ public abstract class AjaxDeferredBehaviour extends AbstractAjaxBehavior {
     }
 
     protected String javascriptFor(String url) {
-        return "setTimeout(\"window.location.href='" + url + "'\", 100);";
+        String fullUrl = getComponent().getRequestCycle().getUrlRenderer().renderFullUrl(Url.parse(url));
+        return "setTimeout(function(){isisOpenInNewTab('" + fullUrl + "')}, 100);";
     }
 
     @Override

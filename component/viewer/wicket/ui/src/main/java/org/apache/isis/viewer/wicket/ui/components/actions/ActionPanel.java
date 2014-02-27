@@ -42,6 +42,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.wicket.model.models.ActionExecutor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -69,11 +70,21 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
     static final String ID_ACTION_NAME = "actionName";
 
+    private ActionPrompt actionPrompt;
+
     public ActionPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
         actionModel.setExecutor(this);
         buildGui(actionModel);
     }
+
+    /**
+     * Sets the owning action prompt (modal window), if any.
+     */
+    public void setActionPrompt(ActionPrompt actionPrompt) {
+        this.actionPrompt = actionPrompt;
+    }
+
 
     private void buildGui(final ActionModel actionModel) {
         if (actionModel.hasParameters()) {
@@ -110,7 +121,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             
             // forward onto the target page with the concurrency exception
             ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, ex);
-            ActionResultResponseHandlingStrategy.determineFor(resultResponse).handleResults(this, resultResponse);
+            resultResponse.getHandlingStrategy().handleResults(this, resultResponse);
 
             getMessageBroker().addWarning(ex.getMessage());
         }
@@ -152,7 +163,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
             // forward onto the target page with the concurrency exception
             ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, ex);
-            ActionResultResponseHandlingStrategy.determineFor(resultResponse).handleResults(this, resultResponse);
+            resultResponse.getHandlingStrategy().handleResults(this, resultResponse);
 
             getMessageBroker().addWarning(ex.getMessage());
             return false;
@@ -198,13 +209,17 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             // will be thrown here
             getTransactionManager().flushTransaction();
             
-            ActionResultResponse resultResponse = ActionResultResponseType.determineAndInterpretResult(this.getActionModel(), resultAdapter);
-            final ActionResultResponseHandlingStrategy responseHandlingStrategy = 
-                    ActionResultResponseHandlingStrategy.determineFor(resultResponse);
-            responseHandlingStrategy.handleResults(this, resultResponse);
+            ActionResultResponse resultResponse = ActionResultResponseType.determineAndInterpretResult(this.getActionModel(), target, resultAdapter);
+            resultResponse.getHandlingStrategy().handleResults(this, resultResponse);
 
             if (actionModel.isBookmarkable()) {
                 bookmarkPage(actionModel);
+            }
+            
+            if(actionPrompt != null) {
+                actionPrompt.close(target);
+                // cos will be reused next time, so mustn't cache em.
+                actionModel.clearArguments();
             }
 
             return true;
@@ -220,8 +235,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
                     // forward on instead to void page
                     // (otherwise, we'll have rendered an action parameters page 
                     // and so we'll be staying on that page)
-                    final ActionResultResponseHandlingStrategy resultType = ActionResultResponseHandlingStrategy.determineFor(null);
-                    resultType.handleResults(this, null);
+                    ActionResultResponseHandlingStrategy.REDIRECT_TO_VOID.handleResults(this, null);
                 }
 
                 return false;

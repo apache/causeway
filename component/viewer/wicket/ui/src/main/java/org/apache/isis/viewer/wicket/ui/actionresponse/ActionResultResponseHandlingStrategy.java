@@ -16,12 +16,24 @@
  */
 package org.apache.isis.viewer.wicket.ui.actionresponse;
 
+import java.net.URL;
+
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.models.VoidModel;
+import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
 public enum ActionResultResponseHandlingStrategy {
+    REDIRECT_TO_VOID {
+        @Override
+        public void handleResults(Component component, ActionResultResponse resultResponse) {
+            component.setResponsePage(new VoidReturnPage(new VoidModel()));
+        }
+    },
     REDIRECT_TO_PAGE {
         @Override
         public void handleResults(final Component component, final ActionResultResponse resultResponse) {
@@ -40,15 +52,21 @@ public enum ActionResultResponseHandlingStrategy {
             RequestCycle requestCycle = component.getRequestCycle();
             requestCycle.scheduleRequestHandlerAfterCurrent(resultResponse.getHandler());
         }
+    },
+    OPEN_URL_IN_BROWSER {
+        @Override
+        public void handleResults(final Component component, final ActionResultResponse resultResponse) {
+            final AjaxRequestTarget target = resultResponse.getTarget();
+            final URL url = resultResponse.getUrl();
+            
+            String urlStr = url.toString();
+            urlStr = urlStr + (urlStr.contains("?") ? "&" : "?");
+            urlStr = urlStr + "antiCache=" + System.currentTimeMillis();
+
+            final String fullUrl = component.getRequestCycle().getUrlRenderer().renderFullUrl(Url.parse(urlStr));
+            target.appendJavaScript("setTimeout(function(){isisOpenInNewTab('" + fullUrl + "')}, 100);");
+        }
     };
 
     public abstract void handleResults(Component component, ActionResultResponse resultResponse);
-
-    public static ActionResultResponseHandlingStrategy determineFor(final ActionResultResponse resultResponse) {
-        if(resultResponse.isToPage()) {
-            return REDIRECT_TO_PAGE;
-        } else {
-            return SCHEDULE_HANDLER;
-        }
-    }
 }

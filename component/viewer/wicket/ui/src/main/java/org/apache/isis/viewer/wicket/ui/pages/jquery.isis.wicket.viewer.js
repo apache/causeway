@@ -42,6 +42,11 @@ $(document).ready(function() {
         }
         $("#veil").stop().hide();
     }
+    
+    isisOpenInNewTab = function(url){
+    	var win=window.open(url, '_blank'); 
+    	if(win) { win.focus(); }
+	}
 
     /* for modal dialogs */
     Wicket.Event.subscribe(

@@ -16,12 +16,16 @@
  */
 package org.apache.isis.viewer.wicket.ui.actionresponse;
 
+import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
@@ -42,7 +46,7 @@ import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 public enum ActionResultResponseType {
     OBJECT {
         @Override
-        public ActionResultResponse interpretResult(final ActionModel model, final ObjectAdapter resultAdapter) {
+        public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
             final ObjectAdapter actualAdapter = determineActualAdapter(resultAdapter);
             return toEntityPage(model, actualAdapter, null);
         }
@@ -51,81 +55,67 @@ public enum ActionResultResponseType {
         public ActionResultResponse interpretResult(final ActionModel model, ObjectAdapter targetAdapter, ConcurrencyException ex) {
             return toEntityPage(model, targetAdapter, ex);
         }
-
-        private ObjectAdapter determineActualAdapter(final ObjectAdapter resultAdapter) {
-            if (resultAdapter.getSpecification().isNotCollection()) {
-                return resultAdapter;
-            } else {
-                // will only be a single element
-                final List<Object> pojoList = asList(resultAdapter);
-                final Object pojo = pojoList.get(0);
-                return adapterFor(pojo);
-            }
-        }
-        private ObjectAdapter adapterFor(final Object pojo) {
-            return IsisContext.getPersistenceSession().getAdapterManager().adapterFor(pojo);
-        }
-
-        private ActionResultResponse toEntityPage(final ActionModel model, final ObjectAdapter actualAdapter, ConcurrencyException exIfAny) {
-            // this will not preserve the URL (because pageParameters are not copied over)
-            // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
-            final EntityPage entityPage = new EntityPage(actualAdapter, exIfAny);
-            return ActionResultResponse.toPage(this, entityPage);
-        }
-
     },
     COLLECTION {
         @Override
-        public ActionResultResponse interpretResult(final ActionModel actionModel, final ObjectAdapter resultAdapter) {
+        public ActionResultResponse interpretResult(final ActionModel actionModel, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
             final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter);
             collectionModel.setActionHint(actionModel);
-            return ActionResultResponse.toPage(this, new StandaloneCollectionPage(collectionModel));
+            return ActionResultResponse.toPage(new StandaloneCollectionPage(collectionModel));
         }
     },
     VALUE {
         @Override
-        public ActionResultResponse interpretResult(final ActionModel model, final ObjectAdapter resultAdapter) {
+        public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
             ValueModel valueModel = new ValueModel(resultAdapter);
             final ValuePage valuePage = new ValuePage(valueModel);
-            return ActionResultResponse.toPage(this, valuePage);
+            return ActionResultResponse.toPage(valuePage);
         }
     },
     VALUE_CLOB {
         @Override
-        public ActionResultResponse interpretResult(final ActionModel model, final ObjectAdapter resultAdapter) {
+        public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
             final Object value = resultAdapter.getObject();
             IRequestHandler handler = ActionModel.downloadHandler(value);
-            return ActionResultResponse.withHandler(this, handler);
+            return ActionResultResponse.withHandler(handler);
         }
     },
     VALUE_BLOB {
         @Override
-        public ActionResultResponse interpretResult(final ActionModel model, final ObjectAdapter resultAdapter) {
+        public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
             final Object value = resultAdapter.getObject();
             IRequestHandler handler = ActionModel.downloadHandler(value);
-            return ActionResultResponse.withHandler(this, handler);
+            return ActionResultResponse.withHandler(handler);
+        }
+    },
+    VALUE_URL_AJAX {
+        @Override
+        public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
+            final URL url = (URL)resultAdapter.getObject();
+            return ActionResultResponse.openUrlInBrowser(target, url);
         }
 
     },
-    VALUE_URL {
+    VALUE_URL_NOAJAX {
         @Override
-        public ActionResultResponse interpretResult(final ActionModel model, final ObjectAdapter resultAdapter) {
+        public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
+            // open URL server-side redirect
             final Object value = resultAdapter.getObject();
             IRequestHandler handler = ActionModel.redirectHandler(value);
-            return ActionResultResponse.withHandler(this, handler);
+            return ActionResultResponse.withHandler(handler);
         }
-
+        
     },
     VOID {
         @Override
-        public ActionResultResponse interpretResult(final ActionModel model, final ObjectAdapter resultAdapter) {
+        public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
             final VoidModel voidModel = new VoidModel();
             voidModel.setActionHint(model);
-            return ActionResultResponse.toPage(this, new VoidReturnPage(voidModel));
+            return ActionResultResponse.toPage(new VoidReturnPage(voidModel));
         }
     };
 
-    public abstract ActionResultResponse interpretResult(ActionModel model, ObjectAdapter resultAdapter);
+    public abstract ActionResultResponse interpretResult(ActionModel model, final AjaxRequestTarget target, ObjectAdapter resultAdapter);
 
     /**
      * Only overridden for {@link ActionResultResponseType#OBJECT object}
@@ -134,14 +124,41 @@ public enum ActionResultResponseType {
         throw new UnsupportedOperationException("Cannot render concurrency exception for any result type other than OBJECT");
     }
 
-    // //////////////////////////////////////
-
-    public static ActionResultResponse determineAndInterpretResult(final ActionModel model, ObjectAdapter resultAdapter) {
-        ActionResultResponseType arrt = determineFor(resultAdapter);
-        return arrt.interpretResult(model, resultAdapter);
+    private static ObjectAdapter determineActualAdapter(final ObjectAdapter resultAdapter) {
+        if (resultAdapter.getSpecification().isNotCollection()) {
+            return resultAdapter;
+        } else {
+            // will only be a single element
+            final List<Object> pojoList = asList(resultAdapter);
+            final Object pojo = pojoList.get(0);
+            return adapterFor(pojo);
+        }
+    }
+    private static ObjectAdapter adapterFor(final Object pojo) {
+        return IsisContext.getPersistenceSession().getAdapterManager().adapterFor(pojo);
     }
 
-    private static ActionResultResponseType determineFor(final ObjectAdapter resultAdapter) {
+    private static ActionResultResponse toEntityPage(final ActionModel model, final ObjectAdapter actualAdapter, ConcurrencyException exIfAny) {
+        // this will not preserve the URL (because pageParameters are not copied over)
+        // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
+        final EntityPage entityPage = new EntityPage(actualAdapter, exIfAny);
+        return ActionResultResponse.toPage(entityPage);
+    }
+
+
+    // //////////////////////////////////////
+
+    public static ActionResultResponse determineAndInterpretResult(
+            final ActionModel model, 
+            final AjaxRequestTarget target, 
+            final ObjectAdapter resultAdapter) {
+        ActionResultResponseType arrt = determineFor(resultAdapter, target);
+        return arrt.interpretResult(model, target, resultAdapter);
+    }
+
+    private static ActionResultResponseType determineFor(
+            final ObjectAdapter resultAdapter, 
+            final AjaxRequestTarget target) {
         if(resultAdapter == null) {
             return ActionResultResponseType.VOID;
         }
@@ -157,7 +174,7 @@ public enum ActionResultResponseType {
                     return ActionResultResponseType.VALUE_BLOB;
                 } 
                 if(value instanceof java.net.URL) {
-                    return ActionResultResponseType.VALUE_URL;
+                    return target != null? ActionResultResponseType.VALUE_URL_AJAX: ActionResultResponseType.VALUE_URL_NOAJAX;
                 } 
                 // else
                 return ActionResultResponseType.VALUE;

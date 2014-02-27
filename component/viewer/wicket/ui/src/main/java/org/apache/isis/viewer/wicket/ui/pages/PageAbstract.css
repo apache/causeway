@@ -576,6 +576,7 @@ tr.section td {
 table.contents td,
 table.contents th {
 	border-left: 1px solid #DDD;
+	border-right: 1px solid #DDD;
 }
 
 /*************** Styling Entity Forms and Parameters ********************/

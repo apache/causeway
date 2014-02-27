@@ -200,3 +200,11 @@
 .collectionContentsAsAjaxTablePanel label:hover {
 	cursor: default;
 }
+
+.collectionContentsAsAjaxTablePanel td div {
+    display: table-cell;
+}
+
+.collectionContentsAsAjaxTablePanel div input[type=text][disabled] {
+    padding: 0px;
+}
