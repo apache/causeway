@@ -29,6 +29,7 @@ import com.google.inject.name.Named;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
@@ -65,6 +66,7 @@ import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -75,7 +77,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardPa
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
-import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -83,8 +84,6 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * Convenience adapter for {@link WebPage}s built up using {@link ComponentType}s.
  */
 public abstract class PageAbstract extends WebPage implements ActionPromptProvider {
-
-
 
     private static Logger LOG = LoggerFactory.getLogger(PageAbstract.class);
 
@@ -146,6 +145,12 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     @Named("applicationJs")
     private String applicationJs;
 
+    /**
+     * {@link Inject}ed when {@link #init() initialized}.
+     */
+    @Inject
+    private PageClassRegistry pageClassRegistry;
+
     protected enum ApplicationActions {
         INCLUDE,
         EXCLUDE
@@ -193,8 +198,13 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             // for the WicketSignInPage to render
             EXCEPTION.set(exceptionModel);
 
-            throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
+            throw new RestartResponseAtInterceptPageException(getSignInPage());
         }
+    }
+
+
+    private Class<? extends Page> getSignInPage() {
+        return pageClassRegistry.getPageClass(PageType.SIGN_IN);
     }
 
 
@@ -257,7 +267,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             @Override
             public void onClick() {
                 getSession().invalidate();
-                setResponsePage(WicketSignInPage.class);
+                setResponsePage(getSignInPage());
             }
         });
     }
