@@ -21,6 +21,7 @@ import dom.todo.ToDoItemContributions;
 import dom.todo.ToDoItems;
 
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
@@ -60,7 +61,8 @@ public class ToDoSystemInitializer {
                     new ToDoItemContributions(),
                     new WrapperFactoryDefault(),
                     new IsisJdoSupportImpl(),
-                    new Bulk.InteractionContext()
+                    new Bulk.InteractionContext(),
+                    new QueryResultsCache()
                     );
         }
 
