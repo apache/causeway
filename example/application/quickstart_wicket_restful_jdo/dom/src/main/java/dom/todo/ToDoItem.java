@@ -128,7 +128,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
 
     /**
      * It isn't common for entities to log, but they can if required.  
-     * Isis uses the slf4j internally, and is the recommended API to use. 
+     * Isis uses slf4j API internally (with log4j as implementation), and is the recommended API to use. 
      */
     private final static org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(ToDoItem.class);
     
@@ -618,7 +618,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     @ActionSemantics(Of.IDEMPOTENT)
     @Prototype
     public ToDoItem scheduleExplicitly() {
-        backgroundService.execute(this).completeSlowly(2000);
+        backgroundService.execute(toDoItems).completeSlowly(this, 2000);
         container.informUser("Task '" + getDescription() + "' scheduled for completion");
         return this;
     }
@@ -629,20 +629,8 @@ public class ToDoItem implements Comparable<ToDoItem> {
     @Command(executeIn=ExecuteIn.BACKGROUND)
     @Prototype
     public ToDoItem scheduleImplicitly() {
-        completeSlowly(3000);
+        toDoItems.completeSlowly(this, 3000);
         return this;
-    }
-    
-    // //////////////////////////////////////
-    
-    @Hidden
-    public void completeSlowly(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-        }
-        setComplete(true);
-        container.informUser("Completed " + this.getDescription() + "!");
     }
     
     

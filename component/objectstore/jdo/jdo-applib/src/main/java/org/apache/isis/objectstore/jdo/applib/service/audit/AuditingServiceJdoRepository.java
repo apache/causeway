@@ -18,12 +18,17 @@
  */
 package org.apache.isis.objectstore.jdo.applib.service.audit;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
+import org.joda.time.LocalDate;
+
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 
 public class AuditingServiceJdoRepository extends AbstractFactoryAndRepository {
     
@@ -40,5 +45,44 @@ public class AuditingServiceJdoRepository extends AbstractFactoryAndRepository {
                         "transactionId", transactionId));
     }
 
+    @Programmatic
+    public List<AuditEntryJdo> findByTargetAndFromAndTo(
+            final Bookmark target, final LocalDate from, final LocalDate to) {
+        final String targetStr = target.toString();
+        final Timestamp fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        final Timestamp toTs = toTimestampStartOfDayWithOffset(to, 1);
+        
+        final Query<AuditEntryJdo> query;
+        if(from != null) {
+            if(to != null) {
+                query = new QueryDefault<AuditEntryJdo>(AuditEntryJdo.class, 
+                        "findByTargetAndTimestampBetween", 
+                        "targetStr", targetStr,
+                        "from", fromTs,
+                        "to", toTs);
+            } else {
+                query = new QueryDefault<AuditEntryJdo>(AuditEntryJdo.class, 
+                        "findByTargetAndTimestampAfter", 
+                        "targetStr", targetStr,
+                        "from", fromTs);
+            }
+        } else {
+            if(to != null) {
+                query = new QueryDefault<AuditEntryJdo>(AuditEntryJdo.class, 
+                        "findByTargetAndTimestampBefore", 
+                        "targetStr", targetStr,
+                        "to", toTs);
+            } else {
+                query = new QueryDefault<AuditEntryJdo>(AuditEntryJdo.class, 
+                        "findByTarget", 
+                        "targetStr", targetStr);
+            }
+        }
+        return allMatches(query);
+    }
+
+    private static Timestamp toTimestampStartOfDayWithOffset(final LocalDate from, int daysOffset) {
+        return new java.sql.Timestamp(from.toDateTimeAtStartOfDay().plusDays(daysOffset).getMillis());
+    }
 
 }

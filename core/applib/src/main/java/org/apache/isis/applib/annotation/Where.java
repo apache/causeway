@@ -41,6 +41,21 @@ import org.apache.isis.applib.util.Enums;
 public enum Where {
     /**
      * The member should be disabled/hidden everywhere.
+     * 
+     * <p>
+     * Synonym for {@link #ANYWHERE}.
+     */
+    EVERYWHERE {
+        @Override
+        public boolean includes(Where context) {
+            return true;
+        }
+    },
+    /**
+     * The member should be disabled/hidden everywhere.
+     * 
+     * <p>
+     * Synonym for {@link #EVERYWHERE}.
      */
     ANYWHERE {
         @Override
@@ -91,6 +106,18 @@ public enum Where {
         public boolean includes(Where context) {
             return context == this || context == PARENTED_TABLES || context == STANDALONE_TABLES;
         } 
+    },
+    /**
+     * The member should be disabled/hidden except when displayed as a column of a standalone table.
+     * 
+     * <p>
+     * This is the inverse of {@link #STANDALONE_TABLES}.
+     */
+    ALL_EXCEPT_STANDALONE_TABLES {
+        @Override
+        public boolean includes(Where context) {
+            return context != STANDALONE_TABLES;
+        }
     },
     /**
      * To act as an override if a member would normally be hidden as a result of some other convention.

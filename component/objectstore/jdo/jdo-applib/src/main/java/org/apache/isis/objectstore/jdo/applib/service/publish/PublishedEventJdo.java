@@ -45,6 +45,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
+import org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract;
 import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
 import org.apache.isis.objectstore.jdo.applib.service.Util;
 
@@ -70,12 +71,18 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
         right={"Detail","State"})
 @Immutable
 @ObjectType("IsisPublishedEvent")
-public class PublishedEventJdo implements HasTransactionId {
+public class PublishedEventJdo extends DomainChangeJdoAbstract implements HasTransactionId {
 
     public static enum State {
         QUEUED, PROCESSED
     }
-    
+
+    // //////////////////////////////////////
+
+    public PublishedEventJdo() {
+        super("PUBLISHED EVENT");
+    }
+
 
     // //////////////////////////////////////
     // Identification
@@ -92,7 +99,6 @@ public class PublishedEventJdo implements HasTransactionId {
     }
 
 
-    
     // //////////////////////////////////////
     // user (property)
     // //////////////////////////////////////
@@ -272,21 +278,9 @@ public class PublishedEventJdo implements HasTransactionId {
     // openTargetObject (action)
     // //////////////////////////////////////
 
-    @Programmatic
-    public Bookmark getTarget() {
-        return Util.bookmarkFor(getTargetStr());
-    }
-    
-    @Programmatic
-    public void setTarget(Bookmark target) {
-        setTargetStr(Util.asString(target));
-    }
-
-    // //////////////////////////////////////
     
     private String targetStr;
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.BOOKMARK, name="target")
-//    @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Target", sequence="30")
     @Named("Object")
     public String getTargetStr() {
@@ -295,19 +289,6 @@ public class PublishedEventJdo implements HasTransactionId {
 
     public void setTargetStr(final String targetStr) {
         this.targetStr = targetStr;
-    }
-
-    // //////////////////////////////////////
-
-    @Bulk
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(name="TargetStr", sequence="1")
-    @Named("Open")
-    public Object openTargetObject() {
-        return Util.lookupBookmark(getTarget(), bookmarkService, container);
-    }
-    public boolean hideOpenTargetObject() {
-        return getTarget() == null;
     }
 
 

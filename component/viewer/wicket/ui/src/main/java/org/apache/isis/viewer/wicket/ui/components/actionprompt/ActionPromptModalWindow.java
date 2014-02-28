@@ -109,7 +109,7 @@ public class ActionPromptModalWindow extends ModalWindow implements ActionPrompt
         // attempting to fix https://issues.apache.org/jira/browse/ISIS-544
         // unfortunately, doesn't seem to do anything
         // http://api.jqueryui.com/datepicker/#method-show
-        builder.append("$('.first-field input.hasDatepicker').datepicker('show');");
+        //builder.append("$('.first-field input.hasDatepicker').datepicker('show');");
         
         builder.append("Wicket.Window.get().autoSizeWindow();\n");
         

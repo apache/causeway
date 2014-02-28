@@ -38,21 +38,21 @@ import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Immutable;
+import org.apache.isis.applib.annotation.Mandatory;
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
+import org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract;
 import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
 import org.apache.isis.objectstore.jdo.applib.service.Util;
 
@@ -98,19 +98,52 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo "
                     + "WHERE completedAt != null "
                     + "&& executeIn == 'FOREGROUND' "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTargetAndTimestampBetween", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
+                    + "WHERE targetStr == :targetStr " 
+                    + "&& timestamp >= :from " 
+                    + "&& timestamp <= :to "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTargetAndTimestampAfter", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
+                    + "WHERE targetStr == :targetStr " 
+                    + "&& timestamp >= :from "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTargetAndTimestampBefore", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
+                    + "WHERE targetStr == :targetStr " 
+                    + "&& timestamp <= :to "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTarget", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
+                    + "WHERE targetStr == :targetStr " 
                     + "ORDER BY timestamp DESC")
 })
 @ObjectType("IsisCommand")
 @MemberGroupLayout(
-        columnSpans={6,0,6}, 
+        columnSpans={6,0,6,12}, 
         left={"Identifiers","Target","Notes"},
         right={"Detail","Timings","Results"})
 @Named("Command")
 @Immutable
-public class CommandJdo implements Command {
+public class CommandJdo extends DomainChangeJdoAbstract implements Command {
 
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(CommandJdo.class);
+
+    public CommandJdo() {
+        super("COMMAND");
+    }
+
 
 
     // //////////////////////////////////////
@@ -242,7 +275,7 @@ public class CommandJdo implements Command {
     private UUID transactionId;
 
     /**
-     * The unique identifier (a GUID) of the transaction in which this action occurred.
+     * The unique identifier (a GUID) of the transaction in which this command occurred.
      */
     @javax.jdo.annotations.PrimaryKey
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.TRANSACTION_ID)
@@ -257,7 +290,7 @@ public class CommandJdo implements Command {
      * <b>NOT API</b>: intended to be called only by the framework.
      * 
      * <p>
-     * Implementation notes: copied over from the Isis transaction when the action is persisted.
+     * Implementation notes: copied over from the Isis transaction when the command is persisted.
      */
     @Override
     public void setTransactionId(final UUID transactionId) {
@@ -291,6 +324,8 @@ public class CommandJdo implements Command {
     private String targetAction;
     
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.TARGET_ACTION)
+    @Mandatory
+    @Hidden(where=Where.NOWHERE)
     @TypicalLength(30)
     @MemberOrder(name="Target", sequence = "20")
     @Named("Action")
@@ -308,20 +343,6 @@ public class CommandJdo implements Command {
     // openTargetObject (action)
     // //////////////////////////////////////
 
-    @Programmatic
-    @Override
-    public Bookmark getTarget() {
-        return Util.bookmarkFor(getTargetStr());
-    }
-    
-    @Programmatic
-    @Override
-    public void setTarget(Bookmark target) {
-        setTargetStr(Util.asString(target));
-    }
-
-    // //////////////////////////////////////
-    
     private String targetStr;
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.BOOKMARK, name="target")
     @Hidden(where=Where.ALL_TABLES)
@@ -334,20 +355,6 @@ public class CommandJdo implements Command {
     public void setTargetStr(final String targetStr) {
         this.targetStr = targetStr;
     }
-
-    // //////////////////////////////////////
-
-    @Bulk
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(name="TargetStr", sequence="1")
-    @Named("Open")
-    public Object openTargetObject() {
-        return Util.lookupBookmark(getTarget(), bookmarkService, container);
-    }
-    public boolean hideOpenTargetObject() {
-        return getTarget() == null;
-    }
-
 
     // //////////////////////////////////////
     // arguments (property)

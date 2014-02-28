@@ -45,6 +45,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
+import org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract;
 import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
 import org.apache.isis.objectstore.jdo.applib.service.Util;
 
@@ -59,7 +60,35 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
             name="findByTransactionId", language="JDOQL",  
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
-                    + "WHERE transactionId == :transactionId")
+                    + "WHERE transactionId == :transactionId"),
+    @javax.jdo.annotations.Query(
+            name="findByTargetAndTimestampBetween", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
+                    + "WHERE targetStr == :targetStr " 
+                    + "&& timestamp >= :from " 
+                    + "&& timestamp <= :to "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTargetAndTimestampAfter", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
+                    + "WHERE targetStr == :targetStr " 
+                    + "&& timestamp >= :from "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTargetAndTimestampBefore", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
+                    + "WHERE targetStr == :targetStr " 
+                    + "&& timestamp <= :to "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTarget", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
+                    + "WHERE targetStr == :targetStr " 
+                    + "ORDER BY timestamp DESC")
 })
 @Indices({
     @Index(name="IsisAuditEntry_ak", unique="true", 
@@ -76,9 +105,16 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
         columnSpans={6,0,6},
         left={"Identifiers","Target"},
         right={"Detail"})
-public class AuditEntryJdo implements HasTransactionId {
+public class AuditEntryJdo extends DomainChangeJdoAbstract implements HasTransactionId {
 
-    
+    public AuditEntryJdo() {
+        super("AUDIT ENTRY");
+    }
+
+    // //////////////////////////////////////
+    // Identification
+    // //////////////////////////////////////
+
     public String title() {
         final TitleBuffer buf = new TitleBuffer();
         buf.append(
@@ -181,18 +217,6 @@ public class AuditEntryJdo implements HasTransactionId {
     // openTargetObject (action)
     // //////////////////////////////////////
 
-    @Programmatic
-    public Bookmark getTarget() {
-        return Util.bookmarkFor(getTargetStr());
-    }
-    
-    @Programmatic
-    public void setTarget(Bookmark target) {
-        setTargetStr(Util.asString(target));
-    }
-
-    // //////////////////////////////////////
-    
     private String targetStr;
 
     @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.BOOKMARK, name="target")
@@ -207,19 +231,6 @@ public class AuditEntryJdo implements HasTransactionId {
     }
 
     
-    // //////////////////////////////////////
-
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(name="TargetStr", sequence="1")
-    @Named("Open")
-    public Object openTargetObject() {
-        return Util.lookupBookmark(getTarget(), bookmarkService, container);
-    }
-    public boolean hideOpenTargetObject() {
-        return getTarget() == null;
-    }
-    
-
     // //////////////////////////////////////
     // memberIdentifier (property)
     // //////////////////////////////////////
@@ -243,7 +254,6 @@ public class AuditEntryJdo implements HasTransactionId {
     }
 
 
-
     // //////////////////////////////////////
     // propertyId (property)
     // //////////////////////////////////////
@@ -254,6 +264,7 @@ public class AuditEntryJdo implements HasTransactionId {
      * This is the property name (without the class).
      */
     @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.AuditEntry.PROPERTY_ID)
+    @Hidden(where=Where.NOWHERE)
     @MemberOrder(name="Target",sequence = "20")
     public String getPropertyId() {
         return propertyId;
@@ -271,6 +282,7 @@ public class AuditEntryJdo implements HasTransactionId {
     private String preValue;
 
     @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.AuditEntry.PROPERTY_VALUE)
+    @Hidden(where=Where.NOWHERE)
     @MemberOrder(name="Detail",sequence = "6")
     public String getPreValue() {
         return preValue;
@@ -288,6 +300,7 @@ public class AuditEntryJdo implements HasTransactionId {
     private String postValue;
 
     @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.AuditEntry.PROPERTY_VALUE)
+    @Hidden(where=Where.NOWHERE)
     @MemberOrder(name="Detail",sequence = "7")
     public String getPostValue() {
         return postValue;

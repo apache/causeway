@@ -253,9 +253,11 @@ public class IsisTransaction implements TransactionScopedComponent {
         } else {
             command = null;
         }
-        this.transactionId = previousTransactionId != null
-            ? previousTransactionId
-            : UUID.randomUUID();
+        if (previousTransactionId != null) {
+            this.transactionId = previousTransactionId;
+        } else {
+            this.transactionId = UUID.randomUUID();
+        }
         
         this.state = State.IN_PROGRESS;
 

@@ -25,11 +25,14 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.google.common.base.Ascii;
+import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.commons.lang.Closure;
+import org.apache.isis.core.commons.lang.IterableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -37,6 +40,7 @@ import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -112,7 +116,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
                     Collections.sort(objectList, comparator);
                 }
 
-                final Iterable<ObjectAdapter> adapterIterable = Iterables.transform(objectList, ObjectAdapterFunctions.fromPojo(getAdapterManagerStatic()));
+                final Iterable<ObjectAdapter> adapterIterable = Iterables.transform(objectList, ObjectAdapter.Functions.adapterForUsing(getAdapterManagerStatic()));
                 final List<ObjectAdapter> adapterList = Lists.newArrayList(adapterIterable);
 
                 return adapterList;
@@ -150,14 +154,54 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         public abstract int getCount(EntityCollectionModel entityCollectionModel);
     }
 
+    static class LowestCommonSuperclassClosure implements Closure<Class<?>>{
+        private Class<?> common;
+        @Override
+        public Class<?> execute(final Class<?> value) {
+            if(common == null) {
+                common = value;
+            } else {
+                Class<?> current = common;
+                while(!current.isAssignableFrom(value)) {
+                    current = current.getSuperclass();
+                }
+                common = current;
+            }
+            return common;
+        }
+        Class<?> getLowestCommonSuperclass() { 
+            return common; 
+        }
+    }
+
     /**
      * Factory.
      */
     public static EntityCollectionModel createStandalone(final ObjectAdapter collectionAsAdapter) {
-        final List<ObjectAdapterMemento> mementoList = asMementoList(collectionAsAdapter);
-
-        final ObjectSpecification elementSpec = collectionAsAdapter.getElementSpecification();
+        final Iterable<Object> pojos = EntityCollectionModel.asIterable(collectionAsAdapter);
         
+        final List<ObjectAdapterMemento> mementoList = 
+                Lists.newArrayList(Iterables.transform(pojos, ObjectAdapterMemento.Functions.fromPojo(getAdapterManagerStatic())));
+
+        
+        final ObjectSpecification elementSpec;
+        if(!Iterables.isEmpty(pojos)) {
+            // dynamically determine the spec of the elements
+            // (ie so a List<Object> can be rendered according to the runtime type of its elements, 
+            // rather than the compile-time type
+            final LowestCommonSuperclassClosure closure = new LowestCommonSuperclassClosure();
+            Function<Object, Class<?>> function = new Function<Object, Class<?>>(){
+                @Override
+                public Class<?> apply(Object obj) {
+                    return obj.getClass();
+                }
+            };
+            IterableExtensions.fold(Iterables.transform(pojos,  function), closure);
+            elementSpec = getSpecificationLoaderStatic().loadSpecification(closure.getLowestCommonSuperclass());
+        } else {
+            elementSpec = collectionAsAdapter.getElementSpecification();
+        }
+
         final Class<?> elementType;
         int pageSize = PAGE_SIZE_DEFAULT_FOR_STANDALONE;
         if (elementSpec != null) {
@@ -168,12 +212,6 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         }
         
         return new EntityCollectionModel(elementType, mementoList, pageSize);
-    }
-
-    private static List<ObjectAdapterMemento> asMementoList(final ObjectAdapter collectionAsAdapter) {
-        final Iterable<Object> iterable = EntityCollectionModel.asIterable(collectionAsAdapter);
-        return Lists.newArrayList(
-                Iterables.transform(iterable, ObjectAdapterMemento.Functions.fromPojo(getAdapterManagerStatic())));
     }
 
     /**
@@ -325,7 +363,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
 
     public ObjectSpecification getTypeOfSpecification() {
         if (typeOfSpec == null) {
-            typeOfSpec = IsisContext.getSpecificationLoader().loadSpecification(typeOf);
+            typeOfSpec = getSpecificationLoaderStatic().loadSpecification(typeOf);
         }
         return typeOfSpec;
     }
@@ -340,7 +378,9 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
      * Not API, but to refresh the model list.
      */
     public void setObjectList(ObjectAdapter resultAdapter) {
-        this.mementoList = asMementoList(resultAdapter);
+        final Iterable<Object> pojos = EntityCollectionModel.asIterable(resultAdapter);
+        this.mementoList = Lists.newArrayList(
+                Iterables.transform(pojos, ObjectAdapterMemento.Functions.fromPojo(getAdapterManagerStatic())));
     }
 
     /**
@@ -400,7 +440,8 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         return IsisContext.getPersistenceSession().getAdapterManager();
     }
 
-
-
+    private static SpecificationLoaderSpi getSpecificationLoaderStatic() {
+        return IsisContext.getSpecificationLoader();
+    }
 
 }

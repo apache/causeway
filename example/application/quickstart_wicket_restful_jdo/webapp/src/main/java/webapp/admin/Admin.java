@@ -36,22 +36,10 @@ import org.apache.isis.objectstore.jdo.applib.service.publish.PublishingServiceJ
 
 public class Admin extends AbstractService {
 
-    @MemberOrder(sequence="10.1")
-    @ActionSemantics(Of.SAFE)
-    @Prototype
-    public CommandJdo lookupCommand(
-            final @Named("Transaction Id") UUID transactionId) {
-        return commandServiceRepository.findByTransactionId(transactionId);
-    }
-    public boolean hideLookupCommand() {
-        return commandServiceRepository == null;
-    }
-    
-    // //////////////////////////////////////
     
     @ActionSemantics(Of.SAFE)
     @Bookmarkable
-    @MemberOrder(sequence="10.2")
+    @MemberOrder(sequence="10.1")
     public List<CommandJdo> commandsCurrentlyRunning() {
         return commandServiceRepository.findCurrent();
     }
@@ -62,7 +50,7 @@ public class Admin extends AbstractService {
     // //////////////////////////////////////
     
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence="10.3")
+    @MemberOrder(sequence="10.2")
     public List<CommandJdo> commandsPreviouslyRan() {
         return commandServiceRepository.findCompleted();
     }
@@ -70,6 +58,18 @@ public class Admin extends AbstractService {
         return commandServiceRepository == null;
     }
 
+    // //////////////////////////////////////
+
+    @MemberOrder(sequence="10.3")
+    @ActionSemantics(Of.SAFE)
+    public CommandJdo lookupCommand(
+            final @Named("Transaction Id") UUID transactionId) {
+        return commandServiceRepository.findByTransactionId(transactionId);
+    }
+    public boolean hideLookupCommand() {
+        return commandServiceRepository == null;
+    }
+    
     // //////////////////////////////////////
 
     @ActionSemantics(Of.SAFE)
@@ -93,9 +93,10 @@ public class Admin extends AbstractService {
     public boolean hideAllAuditEntries() {
         return auditingServiceRepository == null;
     }
-    
+
     // //////////////////////////////////////
 
+    
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence="40.1")
     public List<PublishedEventJdo> allQueuedEvents() {

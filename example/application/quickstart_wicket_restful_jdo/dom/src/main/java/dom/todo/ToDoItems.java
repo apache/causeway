@@ -32,6 +32,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bookmarkable;
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
@@ -212,6 +213,19 @@ public class ToDoItems {
                         "description", description));
     }
 
+    // //////////////////////////////////////
+    // completeSlowly
+    // //////////////////////////////////////
+
+    @Hidden
+    public void completeSlowly(ToDoItem toDoItem, int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+        }
+        toDoItem.setComplete(true);
+        container.informUser("Completed " + toDoItem.getDescription() + "!");
+    }
 
     // //////////////////////////////////////
     // Programmatic Helpers
@@ -252,5 +266,8 @@ public class ToDoItems {
 
     @javax.inject.Inject
     private ClockService clockService;
+
+    // //////////////////////////////////////
+
 
 }

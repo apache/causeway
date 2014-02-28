@@ -95,6 +95,12 @@ public class Bookmark implements Serializable {
         return true;
     }
 
+    /**
+     * The canonical form of the {@link Bookmark}, that is &quot;{@link #getObjectType() objectType}{@value #SEPARATOR}{@link #getIdentifier()}&quot;.
+     * 
+     * <p>
+     * This is parseable by the {@link #Bookmark(String) string constructor}.
+     */
     @Override
     public String toString() {
         return objectType + SEPARATOR + identifier;

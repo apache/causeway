@@ -19,7 +19,6 @@ package org.apache.isis.applib.util;
 import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,12 +30,10 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 
 
 public class ObjectContracts {
-    
 
     @SuppressWarnings("unchecked")
     public static <T> int compare(T p, T q, String propertyNames) {
@@ -47,6 +44,15 @@ public class ObjectContracts {
             chain = chain.compare(propertyValue, propertyValue2, clause.getDirection().getOrdering());
         }
         return chain.result();
+    }
+
+    public static <T> Comparator<T> compareBy(final String propertyNames){
+        return new Comparator<T>() {
+            @Override
+            public int compare(T p, T q) {
+                return ObjectContracts.compare(p, q, propertyNames);
+            }
+        };
     }
 
 
