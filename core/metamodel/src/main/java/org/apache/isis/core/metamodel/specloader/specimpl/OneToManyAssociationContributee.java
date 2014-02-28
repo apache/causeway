@@ -23,7 +23,10 @@ import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -35,7 +38,11 @@ import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacetAbstract;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetAbstract;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacet;
@@ -45,7 +52,7 @@ import org.apache.isis.core.progmodel.facets.members.resolve.RenderFacetAnnotati
 public class OneToManyAssociationContributee extends OneToManyAssociationImpl implements ContributeeMember {
 
     private final ObjectAdapter serviceAdapter;
-    private final ObjectAction objectAction;
+    private final ObjectAction serviceAction;
     
 
     /**
@@ -58,7 +65,11 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
 
     private static ObjectSpecification typeOfSpec(final ObjectActionImpl objectAction, ObjectMemberContext objectMemberContext) {
         final TypeOfFacet actionTypeOfFacet = objectAction.getFacet(TypeOfFacet.class);
-        return objectMemberContext.getSpecificationLookup().loadSpecification(actionTypeOfFacet.value());
+        SpecificationLoader specificationLookup = objectMemberContext.getSpecificationLookup();
+        // TODO: a bit of a hack; ought really to set up a fallback TypeOfFacetDefault which ensures that there is always
+        // a TypeOfFacet for any contributee associations created from contributed actions.
+        Class<? extends Object> cls = actionTypeOfFacet != null? actionTypeOfFacet.value(): Object.class;
+        return specificationLookup.loadSpecification(cls);
     }
     
     public OneToManyAssociationContributee(
@@ -68,7 +79,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
             final ObjectMemberContext objectMemberContext) {
         super(serviceAction.getFacetedMethod(), typeOfSpec(serviceAction, objectMemberContext), objectMemberContext);
         this.serviceAdapter = serviceAdapter;
-        this.objectAction = serviceAction;
+        this.serviceAction = serviceAction;
 
         // copy over facets from contributed to own.
         FacetUtil.copyFacets(serviceAction.getFacetedMethod(), facetHolder);
@@ -102,13 +113,28 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
 
     @Override
     public ObjectAdapter get(final ObjectAdapter ownerAdapter) {
-        return objectAction.execute(serviceAdapter, new ObjectAdapter[]{ownerAdapter});
+        return serviceAction.execute(serviceAdapter, new ObjectAdapter[]{ownerAdapter});
     }
 
     @Override
     public Identifier getIdentifier() {
         return identifier;
     }
+    
+    @Override
+    public Consent isVisible(final AuthenticationSession session, final ObjectAdapter contributee, Where where) {
+        final VisibilityContext<?> ic = serviceAction.createVisibleInteractionContext(session, InteractionInvocationMethod.BY_USER, serviceAdapter, where);
+        ic.putContributee(0, contributee); // by definition, the contributee will be the first arg of the service action
+        return InteractionUtils.isVisibleResult(this, ic).createConsent();
+    }
+
+    @Override
+    public Consent isUsable(final AuthenticationSession session, final ObjectAdapter contributee, Where where) {
+        final UsabilityContext<?> ic = serviceAction.createUsableInteractionContext(session, InteractionInvocationMethod.BY_USER, serviceAdapter, where);
+        ic.putContributee(0, contributee); // by definition, the contributee will be the first arg of the service action
+        return InteractionUtils.isUsableResult(this, ic).createConsent();
+    }
+
     
     // //////////////////////////////////////
     // FacetHolder
