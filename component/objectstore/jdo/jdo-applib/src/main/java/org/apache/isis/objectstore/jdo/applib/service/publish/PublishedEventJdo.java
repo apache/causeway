@@ -70,6 +70,7 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
         left={"Identifiers","Target"},
         right={"Detail","State"})
 @Immutable
+@Named("Published Event")
 @ObjectType("IsisPublishedEvent")
 public class PublishedEventJdo extends DomainChangeJdoAbstract implements HasTransactionId {
 

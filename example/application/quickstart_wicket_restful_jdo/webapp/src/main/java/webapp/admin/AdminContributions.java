@@ -35,13 +35,16 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditingServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo;
 import org.apache.isis.objectstore.jdo.applib.service.command.CommandServiceJdoRepository;
+import org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo;
 
 import services.ClockService;
 
@@ -72,8 +75,12 @@ public class AdminContributions extends AbstractService {
         Collections.sort(changes, DomainChangeJdoAbstract.compareByTimestampDescThenTypeDesc());
         return changes;
     }
+    /**
+     * Hide for implementations of {@link HasTransactionId} (in other words for {@link CommandJdo command}s, {@link AuditEntryJdo audit entries}
+     * and {@link PublishedEventJdo published event}s) and for {@link ViewModel}s.
+     */
     public boolean hideRecentChanges(final Object targetDomainObject, final LocalDate from, final LocalDate to) {
-        return targetDomainObject instanceof ViewModel || auditingServiceRepository == null || bookmarkService == null;
+        return targetDomainObject instanceof HasTransactionId || targetDomainObject instanceof ViewModel || auditingServiceRepository == null || bookmarkService == null;
     }
     public LocalDate default1RecentChanges() {
         return clockService.now().minusDays(7);
@@ -82,15 +89,6 @@ public class AdminContributions extends AbstractService {
         return clockService.now();
     }
 
-
-    @NotInServiceMenu
-    @NotContributed(As.ASSOCIATION) // ie contributed as action
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence="32")
-    @Bulk(AppliesTo.BULK_ONLY)
-    public List<? extends DomainChangeJdoAbstract> recentChanges(final Object targetDomainObject) {
-        return recentChanges(targetDomainObject, default1RecentChanges(), default2RecentChanges());
-    }
     
     // //////////////////////////////////////
 

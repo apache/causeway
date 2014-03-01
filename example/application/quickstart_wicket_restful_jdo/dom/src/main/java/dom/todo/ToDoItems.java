@@ -214,20 +214,6 @@ public class ToDoItems {
     }
 
     // //////////////////////////////////////
-    // completeSlowly
-    // //////////////////////////////////////
-
-    @Hidden
-    public void completeSlowly(ToDoItem toDoItem, int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-        }
-        toDoItem.setComplete(true);
-        container.informUser("Completed " + toDoItem.getDescription() + "!");
-    }
-
-    // //////////////////////////////////////
     // Programmatic Helpers
     // //////////////////////////////////////
 

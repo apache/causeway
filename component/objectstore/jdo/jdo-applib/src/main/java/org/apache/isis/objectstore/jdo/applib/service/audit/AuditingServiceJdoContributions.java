@@ -32,7 +32,7 @@ public class AuditingServiceJdoContributions extends AbstractService {
 
     @ActionSemantics(Of.SAFE)
     @NotInServiceMenu
-    @NotContributed(As.ACTION)
+    @NotContributed(As.ACTION) // ie contribute as collection
     @Render(Type.EAGERLY)
     public List<AuditEntryJdo> auditEntries(final HasTransactionId hasTransactionId) {
         return auditEntryRepository.findByTransactionId(hasTransactionId.getTransactionId());

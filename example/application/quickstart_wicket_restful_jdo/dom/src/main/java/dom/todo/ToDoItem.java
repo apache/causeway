@@ -355,6 +355,20 @@ public class ToDoItem implements Comparable<ToDoItem> {
     }
 
     // //////////////////////////////////////
+    // completeSlowly
+    // //////////////////////////////////////
+
+    @Hidden
+    public void completeSlowly(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+        }
+        setComplete(true);
+    }
+
+
+    // //////////////////////////////////////
     // Cost (property), UpdateCost (action)
     // //////////////////////////////////////
 
@@ -618,7 +632,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     @ActionSemantics(Of.IDEMPOTENT)
     @Prototype
     public ToDoItem scheduleExplicitly() {
-        backgroundService.execute(toDoItems).completeSlowly(this, 2000);
+        backgroundService.execute(this).completeSlowly(2000);
         container.informUser("Task '" + getDescription() + "' scheduled for completion");
         return this;
     }
@@ -629,7 +643,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     @Command(executeIn=ExecuteIn.BACKGROUND)
     @Prototype
     public ToDoItem scheduleImplicitly() {
-        toDoItems.completeSlowly(this, 3000);
+        completeSlowly(3000);
         return this;
     }
     

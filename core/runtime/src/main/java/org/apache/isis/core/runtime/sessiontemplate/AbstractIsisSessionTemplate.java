@@ -24,26 +24,21 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
 
 public abstract class AbstractIsisSessionTemplate {
 
+//    public static boolean enabled = true;
     /**
      * Sets up an {@link IsisSession} then passes along any calling framework's context. 
      */
     public void execute(final AuthenticationSession authSession, final Object context) {
+//        if(!enabled) return;
+//        enabled = false;
         try {
             IsisContext.openSession(authSession);
             PersistenceSession persistenceSession = getPersistenceSession();
             persistenceSession.getServicesInjector().injectServicesInto(this);
-            IsisTransactionManager transactionManager = getTransactionManager(persistenceSession);
-            transactionManager.executeWithinTransaction(new TransactionalClosureAbstract() {
-                @Override
-                public void execute() {
-                    doExecute(context);
-                }
-                
-            });
+            doExecute(context);
         } finally {
             IsisContext.closeSession();
         }
