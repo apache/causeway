@@ -128,14 +128,29 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
         return rootNodes.isEmpty();
     }
 
-
     public void remove(BookmarkTreeNode rootNode) {
         this.rootNodes.remove(rootNode);
     }
 
+    public void remove(EntityModel entityModel) {
+        BookmarkTreeNode rootNode = null;
+        for (BookmarkTreeNode eachNode : rootNodes) {
+            if(eachNode.getOidNoVerStr().equals((entityModel).getObjectAdapterMemento().toString())) {
+                rootNode = eachNode;
+            }
+        }
+        if(rootNode != null) {
+            rootNodes.remove(rootNode);
+        }
+    }
+    
+    // //////////////////////////////////////
+
+    
     protected IsisConfiguration getConfiguration() {
         return IsisContext.getConfiguration();
     }
+
 
     
 }

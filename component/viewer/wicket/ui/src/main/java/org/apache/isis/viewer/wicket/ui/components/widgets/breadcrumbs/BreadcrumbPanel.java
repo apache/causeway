@@ -17,6 +17,7 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import com.google.common.base.Strings;
 import com.vaynberg.wicket.select2.Response;
@@ -29,10 +30,14 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
@@ -68,6 +73,11 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                     final String oidStr = breadcrumbChoice.getInput();
                     final EntityModel selectedModel = breadcrumbModel.lookup(oidStr);
                     if(selectedModel == null) {
+                        final MessageBroker messageBroker = IsisContext.getAuthenticationSession().getMessageBroker();
+                        messageBroker.addWarning("Cannot find object");
+                        String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker);
+                        target.appendJavaScript(feedbackMsg);
+                        breadcrumbModel.remove(oidStr);
                         return;
                     }
                     setResponsePage(EntityPage.class, selectedModel.getPageParameters());
@@ -89,7 +99,12 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
 
             @Override
             protected Object getId(EntityModel choice) {
-                return PageParameterNames.OBJECT_OID.getStringFrom(choice.getPageParameters());
+                try {
+                    return PageParameterNames.OBJECT_OID.getStringFrom(choice.getPageParameters());
+                } catch(Exception ex) {
+                    breadcrumbModel.remove(choice);
+                    return null;
+                }
             }
 
             @Override

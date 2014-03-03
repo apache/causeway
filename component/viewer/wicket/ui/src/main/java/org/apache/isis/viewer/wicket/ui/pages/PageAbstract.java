@@ -66,6 +66,7 @@ import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -161,7 +162,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             // for breadcrumbs support
             getSession().bind();
             
-            add(new Label(ID_PAGE_TITLE, title != null? title: applicationName));
+            setTitle(title);
             
             themeDiv = new WebMarkupContainer(ID_THEME);
             add(themeDiv);
@@ -200,6 +201,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
             throw new RestartResponseAtInterceptPageException(getSignInPage());
         }
+    }
+
+
+    protected void setTitle(final String title) {
+        addOrReplace(new Label(ID_PAGE_TITLE, title != null? title: applicationName));
     }
 
 
@@ -357,6 +363,10 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     protected void bookmarkPage(BookmarkableModel<?> model) {
         getBookmarkedPagesModel().bookmarkPage(model);
+    }
+
+    protected void removeAnyBookmark(EntityModel model) {
+        getBookmarkedPagesModel().remove(model);
     }
 
     private BookmarkedPagesModel getBookmarkedPagesModel() {

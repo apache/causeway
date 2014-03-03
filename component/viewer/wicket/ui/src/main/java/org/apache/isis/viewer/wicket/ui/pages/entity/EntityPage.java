@@ -55,7 +55,7 @@ public class EntityPage extends PageAbstract {
     }
     
     private EntityPage(final PageParameters pageParameters, final EntityModel entityModel) {
-        this(pageParameters, entityModel, entityModel.getObject().titleString(null));
+        this(pageParameters, entityModel, null);
     }
 
     public EntityPage(final ObjectAdapter adapter) {
@@ -79,28 +79,55 @@ public class EntityPage extends PageAbstract {
     private EntityPage(PageParameters pageParameters, EntityModel entityModel, String titleString) {
         super(pageParameters, ApplicationActions.INCLUDE, titleString, ComponentType.ENTITY);
 
+        this.model = entityModel;
+
+
+        ObjectAdapter objectAdapter;
+        try {
+            // check object still exists
+            objectAdapter = entityModel.getObject();
+        } catch(RuntimeException ex) {
+            removeAnyBookmark(model);
+            removeAnyBreadcrumb(model);
+            throw ex;
+        }
+
+        
         // this is a work-around for JRebel integration...
         // ... even though the IsisJRebelPlugin calls invalidateCache, it seems that there is 
         // some caching elsewhere in the Wicket viewer meaning that stale metadata is referenced.
         // doing an additional call here seems to be sufficient, though not exactly sure why... :-(
         if(!getDeploymentType().isProduction()) {
-            getSpecificationLoader().invalidateCacheFor(entityModel.getObject().getObject());
+            getSpecificationLoader().invalidateCacheFor(objectAdapter.getObject());
+        }
+
+        if(titleString == null) {
+            String titleStr = objectAdapter.titleString(null);
+            setTitle(titleStr);
         }
         
-        this.model = entityModel;
         addChildComponents(themeDiv, model);
         
+        // bookmarks and breadcrumbs
         bookmarkPage(model);
-        addBookmarkedPages();
+        addBreadcrumb(entityModel);
 
-        // breadcrumbs
-        final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
-        final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
-        
-        breadcrumbModel.visited(entityModel);
+        addBookmarkedPages();
 
         // ensure the copy link holds this page.
         send(this, Broadcast.BREADTH, new UiHintsBroadcastEvent(entityModel));
+    }
+
+    private void addBreadcrumb(EntityModel entityModel) {
+        final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
+        final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
+        breadcrumbModel.visited(entityModel);
+    }
+
+    private void removeAnyBreadcrumb(EntityModel entityModel) {
+        final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
+        final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
+        breadcrumbModel.remove(entityModel);
     }
 
     /**

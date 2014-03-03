@@ -90,6 +90,20 @@ public class BreadcrumbModel implements Serializable {
         list.remove(model);
     }
 
+    public void remove(String oidStr) {
+        EntityModel removedModel = entityModelByOidStr.remove(oidStr);
+        if(removedModel != null) {
+            remove(removedModel);
+        }
+    }
+
+    public void remove(EntityModel entityModel) {
+        String oidStr = oidStrByEntityModel.get(entityModel);
+        if(oidStr != null) {
+            remove(oidStr, entityModel);
+        }
+    }
+
     public String titleFor(final EntityModel model) {
         return titleByEntityModel.get(model);
     }
