@@ -285,7 +285,7 @@ colors
    	font-weight:bold;
 }
 
-   #applicationActions .cssMenuPanel .menuh a.prototype span {
+#applicationActions .cssMenuPanel .menuh a.prototype span {
     color: #CCCC00;
     font-style: italic;
 }

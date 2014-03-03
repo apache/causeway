@@ -53,6 +53,7 @@ import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
 import org.slf4j.Logger;
@@ -92,6 +93,8 @@ import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityPrope
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItemPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssSubMenuItemsPanel;
+import org.apache.isis.viewer.wicket.ui.overlays.Overlays;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
@@ -149,6 +152,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     
     private static final Logger LOG = LoggerFactory.getLogger(IsisWicketApplication.class);
 
+    private static final String STRIP_WICKET_TAGS_KEY = "isis.viewer.wicket.stripWicketTags";
+    
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 
     /**
@@ -346,7 +351,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
      * Note that it doesn't really matter if we miss one or two; their CSS will simply be served up individually. 
      */
     private void addSpecialCasesToCssBundle(final Set<CssResourceReference> references) {
-        
+
         // abstract classes
         
         // ... though it turns out we cannot add this particular one to the bundle, because 
@@ -412,7 +417,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
      * tags if in {@link DeploymentType#isProduction() production} mode, but not to strip if in prototyping mode.
      */
     private boolean determineStripWicketTags(final DeploymentType deploymentType, IsisConfiguration configuration) {
-        final boolean strip = configuration.getBoolean("isis.viewer.wicket.stripWicketTags", deploymentType.isProduction());
+        final boolean strip = configuration.getBoolean(STRIP_WICKET_TAGS_KEY, deploymentType.isProduction());
         return strip;
     }
     

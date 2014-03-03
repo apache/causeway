@@ -54,6 +54,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -77,7 +78,9 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.Breadcrum
 import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardPanel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
+import org.apache.isis.viewer.wicket.ui.overlays.Overlays;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -89,7 +92,18 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static Logger LOG = LoggerFactory.getLogger(PageAbstract.class);
 
     private static final long serialVersionUID = 1L;
+
+    private static final JavaScriptResourceReference JQUERY_JGROWL_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.jgrowl.js");
+    private static final String REGULAR_CASE_KEY = "isis.viewer.wicket.regularCase";
+
+    /**
+     * @see https://github.com/brandonaaron/livequery
+     */
+    private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
+    private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
     
+    //private static final JavaScriptResourceReference BOOTSTRAP_JS = new JavaScriptResourceReference(PageAbstract.class, "bootstrap/js/bootstrap.min.js");
+
     private static final String ID_THEME = "theme";
     private static final String ID_BOOKMARKED_PAGES = "bookmarks";
     private static final String ID_HOME_PAGE_LINK = "homePageLink";
@@ -106,15 +120,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static final String ID_COPY_LINK = "copyLink";
     private static final String ID_BREADCRUMBS = "breadcrumbs";
 
-
-    private static final JavaScriptResourceReference JQUERY_JGROWL_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.jgrowl.js");
-    /**
-     * @see https://github.com/brandonaaron/livequery
-     */
-    private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
-    private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
-    
-    //private static final JavaScriptResourceReference BOOTSTRAP_JS = new JavaScriptResourceReference(PageAbstract.class, "bootstrap/js/bootstrap.min.js");
 
     /**
      * This is a bit hacky, but best way I've found to pass an exception over to the WicketSignInPage
@@ -232,6 +237,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     
+
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
@@ -246,6 +252,12 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             response.render(forScript);
         }
         
+        
+        // overlays
+        if(getConfiguration().getBoolean(REGULAR_CASE_KEY, false)) {
+            response.render(CssReferenceHeaderItem.forReference(PanelUtil.cssResourceReferenceFor(Overlays.class, "regular-case")));
+        }
+
         if(applicationCss != null) {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
         }
@@ -441,6 +453,10 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     
     protected MessageBroker getMessageBroker() {
         return IsisContext.getMessageBroker();
+    }
+    
+    protected IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
     }
 
 

@@ -172,8 +172,7 @@
 .groupedActions .cssMenuPanel .menuh a:link,
 .groupedActions .cssMenuPanel .menuh a:visited,
 .groupedActions .cssMenuPanel .menuh a:active,
-.groupedActions .cssMenuPanel .menuh p
-	{
+.groupedActions .cssMenuPanel .menuh p {
     background-color: #F0EFEA;
     color: #46423C;
     display: block;

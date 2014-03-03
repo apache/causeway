@@ -47,14 +47,18 @@ public final class PanelUtil {
     }
 
     public static CssResourceReference cssResourceReferenceFor(final Class<?> cls) {
-        final String url = cssFor(cls);
+        return cssResourceReferenceFor(cls, null);
+    }
+    
+    public static CssResourceReference cssResourceReferenceFor(final Class<?> cls, final String suffix) {
+        final String url = cssFor(cls, suffix);
         if(url == null) {
             return null;
         }
         return new CssResourceReference(cls, url);
     }
 
-    private static String cssFor(final Class<?> cls) {
+    private static String cssFor(final Class<?> cls, String suffix) {
         if(cls == null) {
             return null;
         }
@@ -62,6 +66,12 @@ public final class PanelUtil {
         if(Strings.isNullOrEmpty(simpleName)) {
             return null; // eg inner classes
         }
-        return simpleName + ".css";
+        String string;
+        if (suffix != null) {
+            string = ("-" + suffix);
+        } else {
+            string = "";
+        }
+        return simpleName + string + ".css";
     }
 }
