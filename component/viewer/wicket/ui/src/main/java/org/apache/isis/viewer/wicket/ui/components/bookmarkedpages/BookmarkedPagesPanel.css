@@ -124,9 +124,8 @@
 }
 
 .bookmarkedPagesPanel #bookmarkedPagesSlidingDiv .content {
-    width:290px;
+    width:490px;
     margin-left:30px;
-    
     display: none;
 }
 
