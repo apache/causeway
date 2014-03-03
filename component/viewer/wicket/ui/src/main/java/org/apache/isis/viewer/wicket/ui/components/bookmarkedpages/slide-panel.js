@@ -20,7 +20,7 @@ $(document).ready(function(){
  
     var showBookmarks = function(){
         $('#bookmarkedPagesSlidingDiv').stop().animate(
-            {width:"300px", opacity:0.95}, 100, 
+            {width:"500px", opacity:0.95}, 100, 
             function() {
                 $('.content').fadeIn('50');
             });

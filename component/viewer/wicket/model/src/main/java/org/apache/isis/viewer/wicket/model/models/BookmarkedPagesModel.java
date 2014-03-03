@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -28,17 +29,23 @@ import com.google.common.collect.Lists;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 
 public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkTreeNode>> {
 
-    private static final BookmarkTreeNodeComparator COMPARATOR = new BookmarkTreeNodeComparator();
 
     private static final long serialVersionUID = 1L;
+
+    private static final BookmarkTreeNodeComparator COMPARATOR = new BookmarkTreeNodeComparator();
+
+    private static final String MAX_SIZE_KEY = "isis.viewer.wicket.bookmarkedPages.maxSize";
+    private static final int MAX_SIZE_DEFAULT_VALUE = 15;
+
+    private final List<BookmarkTreeNode> rootNodes = Lists.newArrayList();
     
-    private List<BookmarkTreeNode> rootNodes = Lists.newArrayList();
     private transient PageParameters current;
     
     public void bookmarkPage(final BookmarkableModel<?> bookmarkableModel) {
@@ -53,27 +60,46 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
             return;
         }
 
-        boolean foundInGraph = false;
+        BookmarkTreeNode rootNode = null;
         for (BookmarkTreeNode eachNode : rootNodes) {
             if(eachNode.matches(bookmarkableModel)) {
+                rootNode = eachNode;
+            }
+        }
+        // MRU/LRU algorithm
+        if(rootNode != null) {
+            rootNodes.remove(rootNode);
+            rootNodes.add(0, rootNode);
+            current = candidatePP;
+        } else {
+            if (bookmarkableModel.hasAsRootPolicy()) {
+                rootNode = BookmarkTreeNode.newRoot(bookmarkableModel);
+                rootNodes.add(0, rootNode);
                 current = candidatePP;
-                foundInGraph = true;
             }
         }
 
-        if(!foundInGraph && bookmarkableModel.hasAsRootPolicy()) {
-            BookmarkTreeNode rootNode = BookmarkTreeNode.newRoot(bookmarkableModel);
-            rootNodes.add(rootNode);
-            Collections.sort(rootNodes, COMPARATOR);
-            current = candidatePP;
-        }
+        trim(rootNodes, getMaxSize());
         return;
+    }
+
+    private int getMaxSize() {
+        return getConfiguration().getInteger(MAX_SIZE_KEY, MAX_SIZE_DEFAULT_VALUE);
+    }
+
+    private static void trim(List<?> list, int requiredSize) {
+        int numToRetain = Math.min(list.size(), requiredSize);
+        list.retainAll(list.subList(0, numToRetain));
     }
 
     @Override
     protected List<BookmarkTreeNode> load() {
         List<BookmarkTreeNode> depthFirstGraph = Lists.newArrayList();
-        for (BookmarkTreeNode rootNode : rootNodes) {
+
+        List<BookmarkTreeNode> sortedNodes = Lists.newArrayList(rootNodes);
+        Collections.sort(sortedNodes, COMPARATOR);
+
+        for (BookmarkTreeNode rootNode : sortedNodes) {
             rootNode.appendGraphTo(depthFirstGraph);
         }
         return depthFirstGraph;
@@ -107,6 +133,9 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
         this.rootNodes.remove(rootNode);
     }
 
+    protected IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
+    }
 
-
+    
 }
