@@ -24,17 +24,11 @@ import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Url;
 
+import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseHandlingStrategy;
+
 public abstract class AjaxDeferredBehaviour extends AbstractAjaxBehavior {
     private static final long serialVersionUID = 1L;
-    private boolean addAntiCache;
 
-    public AjaxDeferredBehaviour() {
-        this(true);
-    }
-
-    public AjaxDeferredBehaviour(boolean addAntiCache) {
-        this.addAntiCache = addAntiCache;
-    }
 
     /**
      * Call this method to initiate the download.
@@ -42,10 +36,7 @@ public abstract class AjaxDeferredBehaviour extends AbstractAjaxBehavior {
     public void initiate(AjaxRequestTarget target) {
         String url = getCallbackUrl().toString();
 
-        if (addAntiCache) {
-            url = url + (url.contains("?") ? "&" : "?");
-            url = url + "antiCache=" + System.currentTimeMillis();
-        }
+        url = ActionResultResponseHandlingStrategy.expanded(url);
 
         // the timeout is needed to let Wicket release the channel
         String javascriptFor = javascriptFor(url);

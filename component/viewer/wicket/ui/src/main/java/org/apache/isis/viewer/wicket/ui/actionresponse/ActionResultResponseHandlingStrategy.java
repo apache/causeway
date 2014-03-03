@@ -59,14 +59,40 @@ public enum ActionResultResponseHandlingStrategy {
             final AjaxRequestTarget target = resultResponse.getTarget();
             final URL url = resultResponse.getUrl();
             
-            String urlStr = url.toString();
-            urlStr = urlStr + (urlStr.contains("?") ? "&" : "?");
-            urlStr = urlStr + "antiCache=" + System.currentTimeMillis();
+            RequestCycle requestCycle = component.getRequestCycle();
 
-            final String fullUrl = component.getRequestCycle().getUrlRenderer().renderFullUrl(Url.parse(urlStr));
+            final String fullUrl = expanded(requestCycle, url);
             target.appendJavaScript("setTimeout(function(){isisOpenInNewTab('" + fullUrl + "')}, 100);");
         }
+
     };
 
     public abstract void handleResults(Component component, ActionResultResponse resultResponse);
+
+    /**
+     * @see #expanded(String)
+     */
+    public static String expanded(RequestCycle requestCycle, final URL url) {
+        String urlStr = expanded(url);
+        return requestCycle.getUrlRenderer().renderFullUrl(Url.parse(urlStr));
+    }
+
+    /**
+     * @see #expanded(String)
+     */
+    public static String expanded(final URL url) {
+        return expanded(url.toString());
+    }
+
+    /**
+     * very simple templating support, the idea being that "antiCache=${currentTimeMillis}"
+     * will be replaced automatically.
+     */
+    public static String expanded(String urlStr) {
+        if(urlStr.contains("antiCache=${currentTimeMillis}")) {
+            urlStr = urlStr.replace("antiCache=${currentTimeMillis}", "antiCache="+System.currentTimeMillis());
+        }
+        return urlStr;
+    }
+
 }
