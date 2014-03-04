@@ -55,6 +55,7 @@ import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract;
 import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
 import org.apache.isis.objectstore.jdo.applib.service.Util;
+import org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract.ChangeType;
 
 
 @javax.jdo.annotations.PersistenceCapable(
@@ -126,6 +127,30 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
                     + "WHERE targetStr == :targetStr " 
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTimestampBetween", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
+                    + "WHERE timestamp >= :from " 
+                    + "&&    timestamp <= :to "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTimestampAfter", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
+                    + "WHERE timestamp >= :from "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTimestampBefore", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
+                    + "WHERE timestamp <= :to "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="find", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
                     + "ORDER BY timestamp DESC")
 })
 @ObjectType("IsisCommand")
@@ -141,7 +166,7 @@ public class CommandJdo extends DomainChangeJdoAbstract implements Command {
     private static final Logger LOG = LoggerFactory.getLogger(CommandJdo.class);
 
     public CommandJdo() {
-        super("COMMAND");
+        super(ChangeType.COMMAND);
     }
 
 

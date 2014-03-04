@@ -37,4 +37,16 @@ public interface CommandFacet extends Facet {
     public Persistence persistence();
     
     public ExecuteIn executeIn();
+    
+    /**
+     * Indicates that the action to which this {@link Facet} is
+     * attached should <i>not</i> be treated as an action.
+     * 
+     * <p>
+     * Exists to allow implementations that configure all actions to be treated as 
+     * commands, but which can then be disabled for selected actions (eg using 
+     * {@link org.apache.isis.applib.annotation.Command#disabled()}).
+     */
+    public boolean isDisabled();
+
 }

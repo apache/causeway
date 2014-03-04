@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.audit;
 
 
+import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.marker.Auditable;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
@@ -27,5 +28,15 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * Corresponds to annotating the class with the {@link Auditable} annotation.
  */
 public interface AuditableFacet extends Facet {
+
+    /**
+     * Indicates that the object to which this {@link Facet} is
+     * attached should <i>not</i> be treated as being audited.
+     * 
+     * <p>
+     * Exists to allow implementations that configure auditing for all objects, but which 
+     * can then be disabled for selected objects (eg using {@link Audited#disabled()} ).
+     */
+    public boolean isDisabled();
 
 }

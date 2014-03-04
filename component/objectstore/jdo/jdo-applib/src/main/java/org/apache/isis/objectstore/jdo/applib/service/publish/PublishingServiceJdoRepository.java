@@ -19,8 +19,11 @@
 
 package org.apache.isis.objectstore.jdo.applib.service.publish;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
+
+import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
@@ -29,8 +32,11 @@ import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.NotContributed.As;
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo;
 
 public class PublishingServiceJdoRepository extends AbstractFactoryAndRepository {
 
@@ -66,6 +72,83 @@ public class PublishingServiceJdoRepository extends AbstractFactoryAndRepository
         for (PublishedEventJdo publishedEvent : processedEvents) {
             publishedEvent.delete();
         }
+    }
+
+
+    @Programmatic
+    public List<PublishedEventJdo> findByTargetAndFromAndTo(
+            final Bookmark target, 
+            final LocalDate from, 
+            final LocalDate to) {
+        final String targetStr = target.toString();
+        final Timestamp fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        final Timestamp toTs = toTimestampStartOfDayWithOffset(to, 1);
+        
+        final Query<PublishedEventJdo> query;
+        if(from != null) {
+            if(to != null) {
+                query = new QueryDefault<PublishedEventJdo>(PublishedEventJdo.class, 
+                        "findByTargetAndTimestampBetween", 
+                        "targetStr", targetStr,
+                        "from", fromTs,
+                        "to", toTs);
+            } else {
+                query = new QueryDefault<PublishedEventJdo>(PublishedEventJdo.class, 
+                        "findByTargetAndTimestampAfter", 
+                        "targetStr", targetStr,
+                        "from", fromTs);
+            }
+        } else {
+            if(to != null) {
+                query = new QueryDefault<PublishedEventJdo>(PublishedEventJdo.class, 
+                        "findByTargetAndTimestampBefore", 
+                        "targetStr", targetStr,
+                        "to", toTs);
+            } else {
+                query = new QueryDefault<PublishedEventJdo>(PublishedEventJdo.class, 
+                        "findByTarget", 
+                        "targetStr", targetStr);
+            }
+        }
+        return allMatches(query);
+    }
+
+    @Programmatic
+    public List<PublishedEventJdo> findByFromAndTo(
+            final LocalDate from, 
+            final LocalDate to) {
+        final Timestamp fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        final Timestamp toTs = toTimestampStartOfDayWithOffset(to, 1);
+        
+        final Query<PublishedEventJdo> query;
+        if(from != null) {
+            if(to != null) {
+                query = new QueryDefault<PublishedEventJdo>(PublishedEventJdo.class, 
+                        "findByTimestampBetween", 
+                        "from", fromTs,
+                        "to", toTs);
+            } else {
+                query = new QueryDefault<PublishedEventJdo>(PublishedEventJdo.class, 
+                        "findByTimestampAfter", 
+                        "from", fromTs);
+            }
+        } else {
+            if(to != null) {
+                query = new QueryDefault<PublishedEventJdo>(PublishedEventJdo.class, 
+                        "findByTimestampBefore", 
+                        "to", toTs);
+            } else {
+                query = new QueryDefault<PublishedEventJdo>(PublishedEventJdo.class, 
+                        "find");
+            }
+        }
+        return allMatches(query);
+    }
+    
+    private static Timestamp toTimestampStartOfDayWithOffset(final LocalDate dt, int daysOffset) {
+        return dt!=null
+                ?new java.sql.Timestamp(dt.toDateTimeAtStartOfDay().plusDays(daysOffset).getMillis())
+                :null;
     }
 
 }

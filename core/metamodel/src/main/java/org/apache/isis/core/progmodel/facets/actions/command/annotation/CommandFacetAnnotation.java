@@ -29,8 +29,9 @@ public class CommandFacetAnnotation extends CommandFacetAbstract {
     public CommandFacetAnnotation(
             final Persistence persistence, 
             final ExecuteIn executeIn,
+            final Enablement enablement, 
             final FacetHolder holder) {
-        super(persistence, executeIn, holder);
+        super(persistence, executeIn, enablement, holder);
     }
 
 

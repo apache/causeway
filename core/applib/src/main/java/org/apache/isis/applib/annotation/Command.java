@@ -26,6 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.services.background.BackgroundCommandService;
+import org.apache.isis.applib.services.command.spi.CommandService;
 
 /**
  * Indicates how the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
@@ -40,16 +41,19 @@ public @interface Command {
 
     public static enum Persistence {
         /**
-         * The {@link org.apache.isis.applib.services.command.Command Command} object should be persisted.
+         * (If the configured {@link CommandService} supports it), indicates that the 
+         * {@link org.apache.isis.applib.services.command.Command Command} object should be persisted.
          */
         PERSISTED,
         /**
-         * The {@link org.apache.isis.applib.services.command.Command Command} object should only be persisted if
+         * (If the configured {@link CommandService} supports it), indicates that the 
+         * {@link org.apache.isis.applib.services.command.Command Command} object should only be persisted if
          * another service, such as the {@link BackgroundCommandService}, hints that it should.
          */
         IF_HINTED,
         /**
-         * {@link org.apache.isis.applib.services.command.Command Command} object should not be persisted (even if
+         * (Even if the configured {@link CommandService} supports it), indicates that the 
+         * {@link org.apache.isis.applib.services.command.Command Command} object should <i>not</i> be persisted (even if
          * another service, such as the {@link BackgroundCommandService}, hints that it should).
          */
         NOT_PERSISTED
@@ -88,5 +92,12 @@ public @interface Command {
      * will be set to this value.
      */
     ExecuteIn executeIn() default ExecuteIn.FOREGROUND;
+
+    
+    /**
+     * If set to <tt>true</tt>, acts as an override to <i>disable</i> command semantics for the action when it is 
+     * otherwise (eg through configuration) configured as the default.
+     */
+    boolean disabled() default false;
 
 }

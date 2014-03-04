@@ -22,18 +22,37 @@ package org.apache.isis.core.metamodel.facets.object.audit;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.progmodel.facets.actions.command.CommandFacetAbstract.Enablement;
 
 
 public abstract class AuditableFacetAbstract extends FacetAbstract implements
         AuditableFacet {
 
 
+
     public static Class<? extends Facet> type() {
         return AuditableFacet.class;
     }
 
-    public AuditableFacetAbstract(FacetHolder facetHolder) {
+    public enum Enablement {
+        DISABLED,
+        ENABLED;
+
+        public static Enablement ifDisabled(boolean disabled) {
+            return disabled ? DISABLED: ENABLED;
+        }
+    }
+
+    private final Enablement enablement;
+    
+    public AuditableFacetAbstract(final FacetHolder facetHolder, final Enablement enablement) {
         super(AuditableFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
+        this.enablement = enablement;
+    }
+
+    @Override
+    public boolean isDisabled() {
+        return this.enablement == Enablement.DISABLED;
     }
 
 }

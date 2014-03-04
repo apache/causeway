@@ -19,20 +19,24 @@ package webapp.admin;
 import java.util.List;
 import java.util.UUID;
 
+import org.joda.time.LocalDate;
+
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditingServiceJdoRepository;
-import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundCommandServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo;
 import org.apache.isis.objectstore.jdo.applib.service.command.CommandServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishingServiceJdoRepository;
+
+import services.ClockService;
 
 public class Admin extends AbstractService {
 
@@ -73,32 +77,47 @@ public class Admin extends AbstractService {
     // //////////////////////////////////////
 
     @ActionSemantics(Of.SAFE)
-    @Prototype
-    @MemberOrder(sequence="20")
-    public List<CommandJdo> allCommands() {
-        return backgroundCommandServiceRepository.listAll();
+    @MemberOrder(sequence="10.4")
+    public List<CommandJdo> findCommands(            
+            final @Optional @Named("From") LocalDate from,
+            final @Optional @Named("To") LocalDate to) {
+        return commandServiceRepository.findByFromAndTo(from, to);
     }
-    public boolean hideAllCommands() {
-        return backgroundCommandServiceRepository == null;
+    public boolean hideFindCommands() {
+        return commandServiceRepository == null;
     }
+    public LocalDate default0FindCommands() {
+        return clockService.now().minusDays(7);
+    }
+    public LocalDate default1FindCommands() {
+        return clockService.now();
+    }
+
 
     // //////////////////////////////////////
 
     @ActionSemantics(Of.SAFE)
-    @Prototype
-    @MemberOrder(sequence="30")
-    public List<AuditEntryJdo> allAuditEntries() {
-        return auditingServiceRepository.listAll();
+    @MemberOrder(sequence="20.1")
+    public List<AuditEntryJdo> findAuditEntries(            
+            final @Optional @Named("From") LocalDate from,
+            final @Optional @Named("To") LocalDate to) {
+        return auditingServiceRepository.findByFromAndTo(from, to);
     }
-    public boolean hideAllAuditEntries() {
+    public boolean hideFindAuditEntries() {
         return auditingServiceRepository == null;
+    }
+    public LocalDate default0FindAuditEntries() {
+        return clockService.now().minusDays(7);
+    }
+    public LocalDate default1FindAuditEntries() {
+        return clockService.now();
     }
 
     // //////////////////////////////////////
 
     
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence="40.1")
+    @MemberOrder(sequence="30.1")
     public List<PublishedEventJdo> allQueuedEvents() {
         return publishingServiceRepository.findQueued();
     }
@@ -108,7 +127,7 @@ public class Admin extends AbstractService {
 
     @ActionSemantics(Of.SAFE)
     @Prototype
-    @MemberOrder(sequence="40.2")
+    @MemberOrder(sequence="30.2")
     public List<PublishedEventJdo> allProcessedEvents() {
         return publishingServiceRepository.findProcessed();
     }
@@ -117,7 +136,7 @@ public class Admin extends AbstractService {
     }
 
     @ActionSemantics(Of.IDEMPOTENT)
-    @MemberOrder(sequence="40.3")
+    @MemberOrder(sequence="30.3")
     public void purgeProcessedEvents() {
         publishingServiceRepository.purgeProcessed();
     }
@@ -125,13 +144,28 @@ public class Admin extends AbstractService {
         return publishingServiceRepository == null;
     }
 
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence="30.4")
+    public List<PublishedEventJdo> findPublishedEvents(            
+            final @Optional @Named("From") LocalDate from,
+            final @Optional @Named("To") LocalDate to) {
+        return publishingServiceRepository.findByFromAndTo(from, to);
+    }
+    public boolean hideFindPublishedEvents() {
+        return publishingServiceRepository == null;
+    }
+    public LocalDate default0FindPublishedEvents() {
+        return clockService.now().minusDays(7);
+    }
+    public LocalDate default1FindPublishedEvents() {
+        return clockService.now();
+    }
+
+
     // //////////////////////////////////////
 
     @javax.inject.Inject
     private CommandServiceJdoRepository commandServiceRepository;
-    
-    @javax.inject.Inject
-    private BackgroundCommandServiceJdoRepository backgroundCommandServiceRepository;
     
     @javax.inject.Inject
     private AuditingServiceJdoRepository auditingServiceRepository;
@@ -139,5 +173,8 @@ public class Admin extends AbstractService {
     @javax.inject.Inject
     private PublishingServiceJdoRepository publishingServiceRepository;
     
+    @javax.inject.Inject
+    private ClockService clockService;
+
 }
 

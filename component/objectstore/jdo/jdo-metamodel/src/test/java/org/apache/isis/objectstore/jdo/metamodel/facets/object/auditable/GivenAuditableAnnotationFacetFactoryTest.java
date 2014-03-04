@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
-import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetAnnotation;
+import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetAuditedAnnotation;
 import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
@@ -71,7 +71,7 @@ public class GivenAuditableAnnotationFacetFactoryTest extends
 
         final Facet facet = facetHolder.getFacet(AuditableFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof AuditableFacetAnnotation);
+        assertTrue(facet instanceof AuditableFacetAuditedAnnotation);
     }
 
     public void testIfNoAuditableAnnotationThenNoFacet() {

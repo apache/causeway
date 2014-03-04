@@ -58,20 +58,30 @@ public abstract class DomainChangeJdoAbstract {
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(DomainChangeJdoAbstract.class);
 
-    private final String type;
-    public DomainChangeJdoAbstract(final String type) {
-        this.type = type;
+    public static enum ChangeType {
+        COMMAND,
+        AUDIT_ENTRY,
+        PUBLISHED_EVENT;
+        @Override
+        public String toString() {
+            return name().replace("_", " ");
+        }
+    }
+    public DomainChangeJdoAbstract(final ChangeType changeType) {
+        this.type = changeType;
     }
     
+    private final ChangeType type;
     /**
      * Distinguishes {@link CommandJdo command}s, {@link AuditEntryJdo audit entries} and {@link PublishedEventJdo published event}s
      * when these are shown mixed together in a (standalone) table.
      */
     @MemberOrder(name="Identifiers", sequence = "1")
     @Hidden(where = Where.ALL_EXCEPT_STANDALONE_TABLES)
-    public String getType() {
+    public ChangeType getType() {
         return type;
     }
+
 
     // //////////////////////////////////////
 
@@ -263,26 +273,25 @@ public abstract class DomainChangeJdoAbstract {
 
     // //////////////////////////////////////
 
-    public static Comparator<DomainChangeJdoAbstract> compareByTimestampDescThenTypeDesc(){
-        return ObjectContracts.compareBy("timestamp desc,type desc");
+    public static Comparator<DomainChangeJdoAbstract> compareByTimestampDescThenType(){
+        return ObjectContracts.compareBy("timestamp desc,type");
     }
 
-    public static Comparator<DomainChangeJdoAbstract> compareByTargetThenTimestampDescThenTypeDesc(){
-        return ObjectContracts.compareBy("targetStr,timestamp desc,type desc");
+    public static Comparator<DomainChangeJdoAbstract> compareByTargetThenTimestampDescThenType(){
+        return ObjectContracts.compareBy("targetStr,timestamp desc,type");
     }
     
-    public static Comparator<DomainChangeJdoAbstract> compareByTargetThenUserThenTimestampDescThenTypeDesc(){
-        return ObjectContracts.compareBy("targetStr,user,timestamp desc,type desc");
+    public static Comparator<DomainChangeJdoAbstract> compareByTargetThenUserThenTimestampDescThenType(){
+        return ObjectContracts.compareBy("targetStr,user,timestamp desc,type");
     }
     
-    public static Comparator<DomainChangeJdoAbstract> compareByUserThenTimestampDescThenTypeDesc(){
-        return ObjectContracts.compareBy("user,timestamp desc,type desc");
+    public static Comparator<DomainChangeJdoAbstract> compareByUserThenTimestampDescThenType(){
+        return ObjectContracts.compareBy("user,timestamp desc,type");
     }
     
-    public static Comparator<DomainChangeJdoAbstract> compareByUserThenTargetThenTimestampDescThenTypeDesc(){
-        return ObjectContracts.compareBy("user,targetStr,timestamp desc,type desc");
+    public static Comparator<DomainChangeJdoAbstract> compareByUserThenTargetThenTimestampDescThenType(){
+        return ObjectContracts.compareBy("user,targetStr,timestamp desc,type");
     }
-    
 
     // //////////////////////////////////////
     // dependencies

@@ -48,6 +48,7 @@ import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract;
 import org.apache.isis.objectstore.jdo.applib.service.JdoColumnLength;
 import org.apache.isis.objectstore.jdo.applib.service.Util;
+import org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract.ChangeType;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.APPLICATION,
@@ -58,12 +59,65 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
             name="findByStateOrderByTimestamp", language="JDOQL",  
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo "
-                    + "WHERE state == :state ORDER BY timestamp"),
+                    + "WHERE state == :state "
+                    + "ORDER BY timestamp"),
     @javax.jdo.annotations.Query(
             name="findByTransactionId", language="JDOQL",  
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo "
-                    + "WHERE transactionId == :transactionId")
+                    + "WHERE transactionId == :transactionId"),
+    @javax.jdo.annotations.Query(
+            name="findByTargetAndTimestampBetween", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo "
+                    + "WHERE targetStr == :targetStr " 
+                    + "&& timestamp >= :from " 
+                    + "&& timestamp <= :to "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTargetAndTimestampAfter", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo "
+                    + "WHERE targetStr == :targetStr " 
+                    + "&& timestamp >= :from "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTargetAndTimestampBefore", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo "
+                    + "WHERE targetStr == :targetStr " 
+                    + "&& timestamp <= :to "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTarget", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo "
+                    + "WHERE targetStr == :targetStr " 
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTimestampBetween", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo "
+                    + "WHERE timestamp >= :from " 
+                    + "&&    timestamp <= :to "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTimestampAfter", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo "
+                    + "WHERE timestamp >= :from "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTimestampBefore", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo "
+                    + "WHERE timestamp <= :to "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="find", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo "
+                    + "ORDER BY timestamp DESC")
 })
 @MemberGroupLayout(
         columnSpans={6,0,6},
@@ -81,7 +135,7 @@ public class PublishedEventJdo extends DomainChangeJdoAbstract implements HasTra
     // //////////////////////////////////////
 
     public PublishedEventJdo() {
-        super("PUBLISHED EVENT");
+        super(ChangeType.PUBLISHED_EVENT);
     }
 
 

@@ -23,8 +23,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class AuditableFacetImpl extends AuditableFacetAbstract {
 
-    public AuditableFacetImpl(FacetHolder facetHolder) {
-        super(facetHolder);
+    public AuditableFacetImpl(final FacetHolder facetHolder, final Enablement enablement) {
+        super(facetHolder, enablement);
     }
 
 }

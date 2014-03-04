@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
+import org.apache.isis.core.progmodel.facets.actions.command.CommandFacetAbstract.Enablement;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 
 /**
@@ -47,7 +48,7 @@ public class CommandAnnotationFacetFactory extends FacetFactoryAbstract {
     private CommandFacet create(final Command annotation, final FacetHolder holder) {
         return annotation == null 
                 ? null 
-                : new CommandFacetAnnotation(annotation.persistence(), annotation.executeIn(), holder);
+                : new CommandFacetAnnotation(annotation.persistence(), annotation.executeIn(), Enablement.isDisabled(annotation.disabled()), holder);
     }
 
 }

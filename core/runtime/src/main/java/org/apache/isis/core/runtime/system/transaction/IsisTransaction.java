@@ -594,7 +594,9 @@ public class IsisTransaction implements TransactionScopedComponent {
             final java.sql.Timestamp timestamp, final String user, final Entry<AdapterAndProperty, PreAndPostValues> auditEntry) {
         final AdapterAndProperty aap = auditEntry.getKey();
         final ObjectAdapter adapter = aap.getAdapter();
-        if(!adapter.getSpecification().containsFacet(AuditableFacet.class)) {
+        
+        final AuditableFacet auditableFacet = adapter.getSpecification().getFacet(AuditableFacet.class);
+        if(auditableFacet == null || auditableFacet.isDisabled()) {
             return;
         }
         final RootOid oid = (RootOid) adapter.getOid();

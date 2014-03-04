@@ -19,11 +19,13 @@
 
 package org.apache.isis.progmodels.dflt;
 
-import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFromAuditedAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.audit.configuration.AuditableFromConfigurationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.audit.markerifc.AuditableMarkerInterfaceFacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.progmodel.facets.actions.bulk.annotation.BulkAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.command.annotation.CommandAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.command.configuration.CommandFromConfigurationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.debug.annotation.DebugAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.defaults.method.ActionDefaultsFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.exploration.annotation.ExplorationAnnotationFacetFactory;
@@ -346,7 +348,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(NotInServiceMenuAnnotationFacetFactory.class);
         addFactory(NotInServiceMenuMethodFacetFactory.class);
         addFactory(BulkAnnotationFacetFactory.class);
-        addFactory(CommandAnnotationFacetFactory.class);
 
         addFactory(HiddenAnnotationForTypeFacetFactory.class);
         // must come after the TitleAnnotationFacetFactory, because can act as an override
@@ -478,9 +479,20 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // so we can dogfood the NO applib "value" types
         addFactory(ValueFacetFactory.class);
 
+
+        //
         // services
-        addFactory(AuditableAnnotationFacetFactory.class);
+        //
+        
+        addFactory(CommandAnnotationFacetFactory.class);
+        // will not trample over CommandFacet if already installed
+        // must be after ActionSemantics facet setup.
+        addFactory(CommandFromConfigurationFacetFactory.class);
+
+        addFactory(AuditableFromAuditedAnnotationFacetFactory.class);
         addFactory(AuditableMarkerInterfaceFacetFactory.class);
+        // will not trample over AuditableFacet if already installed
+        addFactory(AuditableFromConfigurationFacetFactory.class);
 
         addFactory(PublishedActionAnnotationFacetFactory.class);
         addFactory(PublishedObjectAnnotationFacetFactory.class);

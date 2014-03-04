@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @deprecated use the {@link org.apache.isis.applib.marker.Auditable the applib Auditable} annotation instead.
+ * @deprecated use the {@link org.apache.isis.applib.annotation.Audited the applib Audited} annotation instead.
  */
 @Deprecated
 @Inherited

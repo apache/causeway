@@ -32,14 +32,28 @@ public abstract class CommandFacetAbstract extends MarkerFacetAbstract implement
         return CommandFacet.class;
     }
 
+    public enum Enablement {
+        DISABLED,
+        ENABLED;
+
+        public static Enablement isDisabled(boolean disabled) {
+            return disabled ? DISABLED: ENABLED;
+        }
+    }
+
     private final Persistence persistence;
     private final ExecuteIn executeIn;
+    private final Enablement enablement;
 
     public CommandFacetAbstract(
-            final Persistence persistence, final ExecuteIn executeIn, final FacetHolder holder) {
+            final Persistence persistence, 
+            final ExecuteIn executeIn, 
+            final Enablement enablement, 
+            final FacetHolder holder) {
         super(type(), holder);
         this.persistence = persistence;
         this.executeIn = executeIn;
+        this.enablement = enablement;
     }
 
     @Override
@@ -50,6 +64,11 @@ public abstract class CommandFacetAbstract extends MarkerFacetAbstract implement
     @Override
     public ExecuteIn executeIn() {
         return executeIn;
+    }
+
+    @Override
+    public boolean isDisabled() {
+        return this.enablement == Enablement.DISABLED;
     }
 
 }

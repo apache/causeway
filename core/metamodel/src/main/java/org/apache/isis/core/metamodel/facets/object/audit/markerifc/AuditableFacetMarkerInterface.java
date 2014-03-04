@@ -26,8 +26,8 @@ import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetImpl;
 @Deprecated
 public class AuditableFacetMarkerInterface extends AuditableFacetImpl {
 
-    public AuditableFacetMarkerInterface(FacetHolder facetHolder) {
-        super(facetHolder);
+    public AuditableFacetMarkerInterface(final FacetHolder facetHolder) {
+        super(facetHolder, Enablement.ENABLED);
     }
 
 }

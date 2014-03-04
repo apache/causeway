@@ -16,17 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.audit.annotation;
 
+package org.apache.isis.core.progmodel.facets.actions.command.configuration;
 
+import org.apache.isis.applib.annotation.Command.ExecuteIn;
+import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetImpl;
+import org.apache.isis.core.progmodel.facets.actions.command.CommandFacetAbstract;
 
+public class CommandFacetFromConfiguration extends CommandFacetAbstract {
 
-public class AuditableFacetAnnotation extends AuditableFacetImpl {
-
-    public AuditableFacetAnnotation(FacetHolder facetHolder) {
-        super(facetHolder);
+    public CommandFacetFromConfiguration(
+            final Persistence persistence, 
+            final ExecuteIn executeIn,
+            final FacetHolder holder) {
+        super(persistence, executeIn, Enablement.ENABLED, holder);
     }
 
 }

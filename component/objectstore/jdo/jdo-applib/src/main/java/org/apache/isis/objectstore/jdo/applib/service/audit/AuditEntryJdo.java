@@ -88,6 +88,30 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
             value="SELECT "
                     + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
                     + "WHERE targetStr == :targetStr " 
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTimestampBetween", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
+                    + "WHERE timestamp >= :from " 
+                    + "&&    timestamp <= :to "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTimestampAfter", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
+                    + "WHERE timestamp >= :from "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="findByTimestampBefore", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
+                    + "WHERE timestamp <= :to "
+                    + "ORDER BY timestamp DESC"),
+    @javax.jdo.annotations.Query(
+            name="find", language="JDOQL",  
+            value="SELECT "
+                    + "FROM org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo "
                     + "ORDER BY timestamp DESC")
 })
 @Indices({
@@ -108,7 +132,7 @@ import org.apache.isis.objectstore.jdo.applib.service.Util;
 public class AuditEntryJdo extends DomainChangeJdoAbstract implements HasTransactionId {
 
     public AuditEntryJdo() {
-        super("AUDIT ENTRY");
+        super(ChangeType.AUDIT_ENTRY);
     }
 
     // //////////////////////////////////////

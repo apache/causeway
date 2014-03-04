@@ -27,6 +27,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -53,6 +54,9 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     protected MethodRemover mockMethodRemover;
     @Mock
     protected FacetHolder mockFacetHolder;
+
+    @Mock
+    protected IsisConfiguration mockConfiguration;
 
     protected FacetHolder facetHolderImpl;
 

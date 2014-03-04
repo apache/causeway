@@ -16,17 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable;
+package org.apache.isis.core.metamodel.facets.object.audit.configuration;
 
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetAuditedAnnotation;
+import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetImpl;
 
 
-@Deprecated
-public class AuditableFacetAnnotationInJdoApplib extends AuditableFacetAuditedAnnotation {
+public class AuditableFacetFromConfiguration extends AuditableFacetImpl {
 
-    public AuditableFacetAnnotationInJdoApplib(final FacetHolder facetHolder) {
+    public AuditableFacetFromConfiguration(final FacetHolder facetHolder) {
         super(facetHolder, Enablement.ENABLED);
     }
 

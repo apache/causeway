@@ -33,11 +33,6 @@ public class BackgroundCommandServiceJdoRepository extends AbstractFactoryAndRep
     private static final Logger LOG = LoggerFactory.getLogger(BackgroundCommandServiceJdoRepository.class);
 
     @Programmatic
-    public List<CommandJdo> listAll() {
-        return allInstances(CommandJdo.class);
-    }
-
-    @Programmatic
     public List<CommandJdo> findByTransactionId(final UUID transactionId) {
         return allMatches(
                 new QueryDefault<CommandJdo>(CommandJdo.class, 

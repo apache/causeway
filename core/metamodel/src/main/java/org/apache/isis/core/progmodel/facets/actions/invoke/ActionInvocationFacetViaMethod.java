@@ -169,7 +169,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
 
                 // copy over the command execution 'context' (if available)
                 final CommandFacet commandFacet = getFacetHolder().getFacet(CommandFacet.class);
-                if(commandFacet != null) {
+                if(commandFacet != null && !commandFacet.isDisabled()) {
                     command.setExecuteIn(commandFacet.executeIn());
                     command.setPersistence(commandFacet.persistence());
                 } else {

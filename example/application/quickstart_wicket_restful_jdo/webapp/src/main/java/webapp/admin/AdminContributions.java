@@ -45,6 +45,7 @@ import org.apache.isis.objectstore.jdo.applib.service.audit.AuditingServiceJdoRe
 import org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo;
 import org.apache.isis.objectstore.jdo.applib.service.command.CommandServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo;
+import org.apache.isis.objectstore.jdo.applib.service.publish.PublishingServiceJdoRepository;
 
 import services.ClockService;
 
@@ -71,8 +72,11 @@ public class AdminContributions extends AbstractService {
         if(commandServiceRepository != null) {
             changes.addAll(commandServiceRepository.findByTargetAndFromAndTo(targetBookmark, from, to));
         } 
+        if(publishingServiceRepository != null) {
+            changes.addAll(publishingServiceRepository.findByTargetAndFromAndTo(targetBookmark, from, to));
+        }
         changes.addAll(auditingServiceRepository.findByTargetAndFromAndTo(targetBookmark, from, to));
-        Collections.sort(changes, DomainChangeJdoAbstract.compareByTimestampDescThenTypeDesc());
+        Collections.sort(changes, DomainChangeJdoAbstract.compareByTimestampDescThenType());
         return changes;
     }
     /**
@@ -98,6 +102,9 @@ public class AdminContributions extends AbstractService {
     
     @javax.inject.Inject
     private AuditingServiceJdoRepository auditingServiceRepository;
+    
+    @javax.inject.Inject
+    private PublishingServiceJdoRepository publishingServiceRepository;
     
     @javax.inject.Inject
     private BookmarkService bookmarkService;

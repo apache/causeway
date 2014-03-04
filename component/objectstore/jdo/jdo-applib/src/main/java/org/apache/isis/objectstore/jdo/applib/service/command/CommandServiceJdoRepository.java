@@ -34,6 +34,38 @@ import org.apache.isis.applib.services.command.CommandContext;
 public class CommandServiceJdoRepository extends AbstractFactoryAndRepository {
 
     @Programmatic
+    public List<CommandJdo> findByFromAndTo(
+            final LocalDate from, final LocalDate to) {
+        final Timestamp fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        final Timestamp toTs = toTimestampStartOfDayWithOffset(to, 1);
+        
+        final Query<CommandJdo> query;
+        if(from != null) {
+            if(to != null) {
+                query = new QueryDefault<CommandJdo>(CommandJdo.class, 
+                        "findByTimestampBetween", 
+                        "from", fromTs,
+                        "to", toTs);
+            } else {
+                query = new QueryDefault<CommandJdo>(CommandJdo.class, 
+                        "findByTimestampAfter", 
+                        "from", fromTs);
+            }
+        } else {
+            if(to != null) {
+                query = new QueryDefault<CommandJdo>(CommandJdo.class, 
+                        "findByTimestampBefore", 
+                        "to", toTs);
+            } else {
+                query = new QueryDefault<CommandJdo>(CommandJdo.class, 
+                        "find");
+            }
+        }
+        return allMatches(query);
+    }
+
+
+    @Programmatic
     public CommandJdo findByTransactionId(final UUID transactionId) {
         persistCurrentCommandIfRequired();
         return firstMatch(
@@ -107,8 +139,10 @@ public class CommandServiceJdoRepository extends AbstractFactoryAndRepository {
         return allMatches(query);
     }
 
-    private static Timestamp toTimestampStartOfDayWithOffset(final LocalDate from, int daysOffset) {
-        return new java.sql.Timestamp(from.toDateTimeAtStartOfDay().plusDays(daysOffset).getMillis());
+    private static Timestamp toTimestampStartOfDayWithOffset(final LocalDate dt, int daysOffset) {
+        return dt!=null
+                ?new java.sql.Timestamp(dt.toDateTimeAtStartOfDay().plusDays(daysOffset).getMillis())
+                :null;
     }
 
     // //////////////////////////////////////
