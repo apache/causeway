@@ -32,6 +32,9 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.MessageBroker;
@@ -40,7 +43,9 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -105,6 +110,16 @@ final class BulkActionsLinkFactory implements ActionLinkFactory {
                         bulkInteractionContext.setInvokedAs(InvokedAs.BULK);
                         bulkInteractionContext.setDomainObjects(domainObjects);
                     }
+                    
+                    final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
+                    final Command command;
+                    if (commandContext != null) {
+                        command = commandContext.getCommand();
+                        command.setExecutor(Executor.USER);
+                    } else {
+                        command = null;
+                    }
+
 
                     ObjectAdapter lastReturnedAdapter = null;
                     int i=0;
@@ -213,6 +228,10 @@ final class BulkActionsLinkFactory implements ActionLinkFactory {
 
     protected MessageBroker getMessageBroker() {
         return getAuthenticationSession().getMessageBroker();
+    }
+
+    protected ServicesInjector getServicesInjector() {
+        return IsisContext.getPersistenceSession().getServicesInjector();
     }
 
 }
