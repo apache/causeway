@@ -30,7 +30,9 @@ hs_err_pid*.log
 *.war
 *.ear
 
+dependency-reduced-pom.xml
 pom.xml.tag
+pom.xml.next
 pom.xml.releaseBackup
 pom.xml.versionsBackup
 
