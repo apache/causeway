@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.services.devutils.DeveloperUtilitiesServic
 
 /**
  * These overrides are simply to 'move' the action underneath the 
- * {@link SimpleObjectsFixturesService fixtures} menu.
+ * {@link SimpleObjectsFixturesService prototyping} menu.
  */
 public class DeveloperUtilities extends DeveloperUtilitiesServiceDefault {
 
@@ -37,6 +37,12 @@ public class DeveloperUtilities extends DeveloperUtilitiesServiceDefault {
     @Override
     public Blob downloadLayouts() {
         return super.downloadLayouts();
+    }
+
+    @MemberOrder(name="Prototyping", sequence="94")
+    @Override
+    public void refreshServices() {
+        super.refreshServices();
     }
 }
 

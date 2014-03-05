@@ -27,18 +27,14 @@ import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.Bulk.AppliesTo;
-import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditingServiceJdoRepository;
@@ -46,8 +42,6 @@ import org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo;
 import org.apache.isis.objectstore.jdo.applib.service.command.CommandServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishingServiceJdoRepository;
-
-import services.ClockService;
 
 public class AdminContributions extends AbstractService {
 

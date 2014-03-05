@@ -29,14 +29,13 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Prototype;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditingServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo;
 import org.apache.isis.objectstore.jdo.applib.service.command.CommandServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishingServiceJdoRepository;
-
-import services.ClockService;
 
 public class Admin extends AbstractService {
 

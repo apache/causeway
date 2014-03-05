@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package services;
+package org.apache.isis.applib.services.clock;
 
 import org.joda.time.LocalDate;
 
@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 
 @Hidden
-public class ClockService {
+public class ClockServiceDefault implements ClockService {
     
     @Programmatic
     public LocalDate now() {

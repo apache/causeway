@@ -33,15 +33,13 @@ import dom.todo.ToDoItems;
 import org.joda.time.DateTime;
 
 import org.apache.isis.applib.AbstractViewModel;
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.util.ObjectContracts;
-
-import services.ClockService;
 
 @Named("By Date Range")
 @Bookmarkable

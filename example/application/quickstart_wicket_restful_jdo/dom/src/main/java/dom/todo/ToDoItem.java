@@ -67,13 +67,12 @@ import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.BackgroundService;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
-
-import services.ClockService;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(
