@@ -1,0 +1,177 @@
+/**
+ *  Licensed to the Apache Software Foundation (ASF) under one or more
+ *  contributor license agreements.  See the NOTICE file distributed with
+ *  this work for additional information regarding copyright ownership.
+ *  The ASF licenses this file to You under the Apache License, Version 2.0
+ *  (the "License"); you may not use this file except in compliance with
+ *  the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+{
+    columns: [
+    {
+        span: 6,
+        memberGroups: {
+            General: {
+                members: {
+                    description: {
+                        typicalLength: { value: 50 }
+                    },
+                    category: {
+                        disabled: {
+                            reason: "Use action to update both category and subcategory"
+                        }
+                    },
+                    subcategory: {
+                        disabled: {
+                            reason: "Use action to update both category and subcategory"
+                        },
+                        actions: {
+                            updateCategory: {
+                                named: {
+                                    value: "Update"
+                                }
+                            },
+                            analyseCategory: {}
+                        }
+                    },
+                    ownedBy: {
+                        hidden: {}
+                    },
+                    complete: {
+                        actions: {
+                            completed: {
+                                named: { value: "Done" },
+                                describedAs: {
+                                    value: "Mark this todo item as having been completed"
+                                },
+                                cssClass: { value: "x-highlight" }
+                            },
+                            scheduleExplicitly: {
+                            },
+                            scheduleImplicitly: {
+                            },
+                            notYetCompleted: {
+                                named: { value: "Not done" }
+                            }
+                        },
+                        describedAs: {
+                            value: "Whether this todo item has been completed"
+                        }
+                    }
+                }
+            },
+            Misc: {
+                members: {
+                    versionSequence: {
+                        named: { 
+                            value: "Version" 
+                        },
+                        disabled: {},
+                        hidden: {
+                            where: ALL_TABLES
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        span: 6,
+        memberGroups: {
+            Priority: {
+                members: {
+                     relativePriority: {
+                        actions: {
+                            previous: {},
+                            next: {}
+                        }
+                    },
+                    dueBy: {
+                        cssClass: { value: "x-key" }
+                    }
+                }
+            },
+            Other: {
+                members: {
+                    cost: {
+                        actions: {
+                            updateCost:{
+                                named: {
+                                    value: "Update"
+                                }
+                            }
+                        }
+                    },
+                    notes: {
+                        multiLine: {
+                            numberOfLines: 5
+                        },
+                        hidden: {
+                            where: ALL_TABLES
+                        }
+                    },
+                    attachment: {
+                        hidden: {
+                            where: STANDALONE_TABLES
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        span: 0
+    },
+    {
+        span: 6,
+        collections: {
+            dependencies: {
+                disabled: {},
+                actions: {
+                    add:{},
+                    remove: {
+                        cssClass: { value: "x-caution" }
+                    }
+                },
+                paged: {
+                    value: 5
+                },
+                render: {
+                    value: EAGERLY
+                }
+            },
+            similarTo: {
+                disabled: {},
+                paged: {
+                    value: 3
+                },
+                render: {
+                    value: LAZILY
+                }
+            }
+        }
+    }
+    ],
+    actions: {
+        totalCost: {},
+        delete: {
+            cssClass: { value: "x-caution" }
+        },
+        duplicate: {
+	        named: {
+	            value: "Clone"
+	        },
+            describedAs: {
+                value: "Create a new todo item from this one"
+            }
+        }
+    }
+}

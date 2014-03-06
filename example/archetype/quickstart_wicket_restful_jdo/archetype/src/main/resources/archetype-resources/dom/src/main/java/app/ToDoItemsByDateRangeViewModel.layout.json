@@ -1,0 +1,33 @@
+{
+  "columns": [
+    {
+      "span": 4,
+      "memberGroups": {
+        "General": {
+          "members": {
+            "dateRange": {},
+            "count": {}
+          }
+        }
+      }
+    },
+    {
+      "span": 0,
+      "memberGroups": {}
+    },
+    {
+      "span": 0,
+      "memberGroups": {}
+    },
+    {
+      "span": 8,
+      "collections": {
+        "itemsNotYetComplete": {}
+      }
+    }
+  ],
+  "actions": {
+    "downloadLayout": {},
+    "refreshLayout": {}
+  }
+}
