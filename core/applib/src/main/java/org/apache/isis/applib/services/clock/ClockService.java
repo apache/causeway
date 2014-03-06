@@ -16,15 +16,42 @@
  */
 package org.apache.isis.applib.services.clock;
 
+import java.sql.Timestamp;
+
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.clock.Clock;
 
 @Hidden
-public interface ClockService {
+public class ClockService {
     
     @Programmatic
-    public LocalDate now();
+    public LocalDate now() {
+        return Clock.getTimeAsLocalDate();
+    }
+
+    @Programmatic
+    public LocalDateTime nowAsLocalDateTime() {
+        return Clock.getTimeAsLocalDateTime();
+    }
+
+    @Programmatic
+    public DateTime nowAsDateTime() {
+        return Clock.getTimeAsDateTime();
+    }
+
+    @Programmatic
+    public Timestamp nowAsJavaSqlTimestamp() {
+        return Clock.getTimeAsJavaSqlTimestamp();
+    }
+
+    @Programmatic
+    public long nowAsMillis() {
+        return Clock.getTime();
+    }
 
 }
