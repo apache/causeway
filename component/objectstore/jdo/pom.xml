@@ -16,7 +16,7 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-        <version>1.4.0-SNAPSHOT</version>
+        <version>1.4.0</version>
 		<relativePath>../../../core/pom.xml</relativePath>
 	</parent>
 
@@ -87,6 +87,7 @@
 	                        <exclude>**/target-ide/**</exclude>
 	                        <exclude>**/*.log</exclude>
 
+                            <exclude>**/MANIFEST.MF</exclude>
 	                        <exclude>**/*.project</exclude>
 	                        <exclude>**/.classpath</exclude>
 	                        <exclude>**/.settings/**</exclude>
