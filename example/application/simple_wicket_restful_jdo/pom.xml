@@ -209,6 +209,7 @@
                             <exclude>**/*.launch</exclude>
                             <exclude>src/site/resources/ide/eclipse/**</exclude>
 
+                            <exclude>**/rebel.xml</exclude>
                             <exclude>**/*.gitignore</exclude>
                             <exclude>**/*.log</exclude>
                             <exclude>**/*.pdn</exclude>
