@@ -30,6 +30,7 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
 
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 import org.apache.isis.applib.services.command.Command;
@@ -138,7 +139,7 @@ final class BulkActionsLinkFactory implements ActionLinkFactory {
                     model.clearToggleMementosList();
                     toggleboxColumn.clearToggles();
                     final ActionModel actionModelHint = model.getActionModelHint();
-                    if(actionModelHint != null) {
+                    if(actionModelHint != null && actionModelHint.getActionMemento().getAction().getSemantics().isIdempotentInNature()) {
                         ObjectAdapter resultAdapter = actionModelHint.getObject();
                         model.setObjectList(resultAdapter);
                     } else {
