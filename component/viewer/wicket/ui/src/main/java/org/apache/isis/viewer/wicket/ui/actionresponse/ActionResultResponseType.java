@@ -60,7 +60,9 @@ public enum ActionResultResponseType {
         @Override
         public ActionResultResponse interpretResult(final ActionModel actionModel, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
             final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter);
-            collectionModel.setActionHint(actionModel);
+            // take a copy of the actionModel, because the original can get mutated (specifically: its arguments cleared)
+            final ActionModel actionModelCopy = actionModel.copy();
+            collectionModel.setActionHint(actionModelCopy);
             return ActionResultResponse.toPage(new StandaloneCollectionPage(collectionModel));
         }
     },
