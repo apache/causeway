@@ -35,8 +35,8 @@
 
 	<properties>
         <isis.version>1.4.0</isis.version>
-        <isis-objectstore-jdo.version>1.4.0</isis-objectstore-jdo.version>
-        <isis-viewer-wicket.version>1.4.0</isis-viewer-wicket.version>
+        <isis-objectstore-jdo.version>1.4.1</isis-objectstore-jdo.version>
+        <isis-viewer-wicket.version>1.4.1</isis-viewer-wicket.version>
         <isis-viewer-restfulobjects.version>2.2.0</isis-viewer-restfulobjects.version>
         <isis-security-shiro.version>1.4.0</isis-security-shiro.version>
 
