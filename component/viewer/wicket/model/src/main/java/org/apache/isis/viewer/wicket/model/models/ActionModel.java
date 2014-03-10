@@ -78,6 +78,7 @@ import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
  * {@link Mode#RESULTS results} once invoked.
  */
 public class ActionModel extends BookmarkableModel<ObjectAdapter> {
+    
     private static final long serialVersionUID = 1L;
     
     private static final String NULL_ARG = "$nullArg$";
@@ -261,7 +262,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     /**
      * Lazily populated in {@link #getArgumentModel(ActionParameterMemento)}
      */
-    private Map<Integer, ScalarModel> arguments = Maps.newHashMap();
+    private final Map<Integer, ScalarModel> arguments = Maps.newHashMap();
     private ActionExecutor executor;
 
 
@@ -308,6 +309,24 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         this.targetAdapterMemento = adapterMemento;
         this.actionMemento = actionMemento;
         this.actionMode = actionMode;
+    }
+
+    /**
+     * Copy constructor, as called by {@link #copy()}.
+     */
+    private ActionModel(ActionModel actionModel) {
+        this.targetAdapterMemento = actionModel.targetAdapterMemento;
+        this.actionMemento = actionModel.actionMemento;
+        this.actionMode = actionModel.actionMode;
+        this.actionPrompt = actionModel.actionPrompt;
+        
+        primeArgumentModels();
+        final Map<Integer, ScalarModel> argumentModelByIdx = actionModel.arguments;
+        for (Map.Entry<Integer,ScalarModel> argumentModel : argumentModelByIdx.entrySet()) {
+            setArgument(argumentModel.getKey(), argumentModel.getValue().getObject());
+        }
+
+        this.executor = actionModel.executor;
     }
 
     private void setArgumentsIfPossible(final PageParameters pageParameters) {
@@ -597,6 +616,10 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     
     private static OidMarshaller getOidMarshaller() {
         return IsisContext.getOidMarshaller();
+    }
+
+    public ActionModel copy() {
+        return new ActionModel(this);
     }
 
 

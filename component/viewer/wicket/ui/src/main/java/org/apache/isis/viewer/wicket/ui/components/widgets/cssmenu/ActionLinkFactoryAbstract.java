@@ -52,6 +52,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.AjaxDeferredBehaviour.OpenUrlStrategy;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.actionprompt.ActionPromptPage;
@@ -147,7 +148,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
              * adapted from:
              * @see https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
              */
-            return new AjaxDeferredBehaviour() {
+            return new AjaxDeferredBehaviour(OpenUrlStrategy.NEW_WINDOW) {
                 
                 private static final long serialVersionUID = 1L;
 
@@ -165,7 +166,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
              * adapted from:
              * @see https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
              */
-            return new AjaxDeferredBehaviour() {
+            return new AjaxDeferredBehaviour(OpenUrlStrategy.SAME_WINDOW) {
                 
                 private static final long serialVersionUID = 1L;
    

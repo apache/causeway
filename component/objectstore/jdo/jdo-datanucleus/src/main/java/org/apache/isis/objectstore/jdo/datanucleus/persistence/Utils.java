@@ -48,7 +48,7 @@ public class Utils {
     static Version getVersionIfAny(final PersistenceCapable pojo, final AuthenticationSession authenticationSession) {
         Object jdoVersion = pojo.jdoGetVersion();
         if(jdoVersion instanceof Long) {
-            return SerialNumberVersion.create((Long) jdoVersion, authenticationSession.getUserName(), new Date()); 
+            return SerialNumberVersion.create((Long) jdoVersion, authenticationSession.getUserName(), null); 
         } 
         return null;
     }
