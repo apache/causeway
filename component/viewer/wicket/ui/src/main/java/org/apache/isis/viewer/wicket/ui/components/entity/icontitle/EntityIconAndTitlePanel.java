@@ -32,6 +32,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -131,8 +132,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     private String determineTitle() {
         EntityModel model = getModel();
         final ObjectAdapter adapter = model.getObject();
-        String titleString = adapter != null ? adapter.titleString(getContextAdapterIfAny()) : "(no object)";
-        return titleString;
+        return adapter != null ? adapter.titleString(getContextAdapterIfAny()) : "(no object)";
     }
 
     private int abbreviateTo(EntityModel model, String titleString) {
