@@ -349,7 +349,9 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public ToDoItem notYetCompleted() {
         setComplete(false);
 
-        return this;
+        // if invoked as a regular action, return this object;
+        // otherwise (if invoked as bulk), return null (so go back to the list)
+        return bulkInteractionContext.getInvokedAs() == InvokedAs.REGULAR? this: null;
     }
     // disable action dependent on state of object
     public String disableNotYetCompleted() {

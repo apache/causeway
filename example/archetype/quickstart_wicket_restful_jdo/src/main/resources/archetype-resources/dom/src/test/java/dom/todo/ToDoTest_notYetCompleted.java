@@ -25,6 +25,8 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.annotation.Bulk;
+
 public class ToDoTest_notYetCompleted {
 
     private ToDoItem toDoItem;
@@ -33,6 +35,9 @@ public class ToDoTest_notYetCompleted {
     public void setUp() throws Exception {
         toDoItem = new ToDoItem();
         toDoItem.setComplete(true);
+
+        Bulk.InteractionContext interactionContext = Bulk.InteractionContext.regularAction(toDoItem);
+        toDoItem.injectBulkInteractionContext(interactionContext);
     }
     
     @Test
