@@ -20,10 +20,17 @@ package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
 import org.codehaus.jackson.JsonNode;
 
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+
 public class ObjectCollectionRepresentation extends AbstractObjectMemberRepresentation {
 
     public ObjectCollectionRepresentation(final JsonNode jsonNode) {
         super(jsonNode);
     }
+    
+    public JsonRepresentation getValue() {
+        return getArray("value").ensureArray();
+    }
+
 
 }

@@ -23,6 +23,7 @@ import java.net.URI;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ClientRequestFactory;
@@ -50,10 +51,23 @@ public class RestfulClient {
     private final ClientExecutor executor;
     private final ClientRequestFactory clientRequestFactory;
 
+    /**
+     * Using {@link ApacheHttpClient4Executor} and {@link DefaultHttpClient}.
+     */
     public RestfulClient(final URI baseUri) {
-        this(baseUri, new ApacheHttpClient4Executor(new DefaultHttpClient()));
+        this(baseUri, new DefaultHttpClient());
     }
 
+    /**
+     * Using {@link ApacheHttpClient4Executor} and specified {@link HttpClient}.
+     */
+    public RestfulClient(final URI baseUri, HttpClient client) {
+        this(baseUri, new ApacheHttpClient4Executor(client));
+    }
+
+    /**
+     * Using arbitrary {@link ClientExecutor} implementation.
+     */
     public RestfulClient(final URI baseUri, final ClientExecutor clientExecutor) {
         this.executor = clientExecutor;
         this.clientRequestFactory = new ClientRequestFactory(clientExecutor, baseUri);

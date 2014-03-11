@@ -120,8 +120,8 @@ public class ParentEntity extends BaseEntity {
         return this;
     }
 
-    public List<BidirWithSetChildEntity> choices0RemoveChild() {
-        return Arrays.asList(getChildren().toArray(new BidirWithSetChildEntity[0]));
+    public Set<ChildEntity> choices0RemoveChild() {
+        return getChildren();
     }
     // }}
 

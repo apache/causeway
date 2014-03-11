@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck;
 
+import org.apache.http.client.HttpClient;
+import org.jboss.resteasy.client.ClientExecutor;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
@@ -51,6 +53,22 @@ public class IsisWebServerRule implements MethodRule {
         if(client == null) {
             final WebServer webServer = getWebServer();
             client = new RestfulClient(webServer.getBase());
+        }
+        return client;
+    }
+    
+    public RestfulClient getClient(HttpClient httpClient) {
+        if(client == null) {
+            final WebServer webServer = getWebServer();
+            client = new RestfulClient(webServer.getBase(), httpClient);
+        }
+        return client;
+    }
+    
+    public RestfulClient getClient(ClientExecutor clientExecutor) {
+        if(client == null) {
+            final WebServer webServer = getWebServer();
+            client = new RestfulClient(webServer.getBase(), clientExecutor);
         }
         return client;
     }
