@@ -137,7 +137,7 @@ public class DeveloperUtilitiesServiceDefault implements DeveloperUtilitiesServi
 
     protected boolean isBuiltIn(ObjectSpecification spec) {
         final String className = spec.getFullIdentifier();
-        return className.startsWith("java") || className.startsWith("org.joda") || className.startsWith("org.apache.isis");
+        return className.startsWith("java") || className.startsWith("org.joda");
     }
 
     // //////////////////////////////////////
