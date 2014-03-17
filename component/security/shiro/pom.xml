@@ -29,7 +29,7 @@
 
 	<groupId>org.apache.isis.security</groupId>
 	<artifactId>isis-security-shiro</artifactId>
-    <version>1.5.0-SNAPSHOT</version>
+    <version>1.4.2-SNAPSHOT</version>
 
 	<name>Isis Shiro Security</name>
 
@@ -103,7 +103,7 @@
 			<dependency>
 			    <groupId>org.apache.isis.security</groupId>
 			    <artifactId>isis-security-shiro</artifactId>
-				<version>1.5.0-SNAPSHOT</version>
+				<version>1.4.2-SNAPSHOT</version>
 			</dependency>
     	</dependencies>
     </dependencyManagement>
@@ -124,14 +124,6 @@
 		    <type>test-jar</type>
 		    <scope>test</scope>
 		</dependency>
-
-<!-- 
-		<dependency>
-		  <groupId>commons-logging</groupId>
-		  <artifactId>commons-logging</artifactId>
-		  <scope>provided</scope>
-		</dependency>
--->
 		
 		<dependency>
 		  <groupId>org.slf4j</groupId>
