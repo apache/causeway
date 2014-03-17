@@ -45,7 +45,6 @@ public final class JdoColumnLength {
         private Command() {
         }
         public final static int ARGUMENTS = 1024;
-        public final static int EXCEPTION = 16000;
         public static final int EXECUTE_IN = 10;
     }
 

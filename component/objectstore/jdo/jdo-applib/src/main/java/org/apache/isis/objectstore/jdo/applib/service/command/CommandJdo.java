@@ -605,7 +605,7 @@ public class CommandJdo extends DomainChangeJdoAbstract implements Command {
      * Not part of the applib API, because the default implementation is not persistent
      * and so there's no object that can be accessed to be annotated.
      */
-    @javax.jdo.annotations.Column(allowsNull="true", length=JdoColumnLength.Command.EXCEPTION)
+    @javax.jdo.annotations.Column(allowsNull="true", jdbcType="CLOB")
     @Hidden
     @Override
     public String getException() {
@@ -614,7 +614,7 @@ public class CommandJdo extends DomainChangeJdoAbstract implements Command {
 
     @Override
     public void setException(final String exception) {
-        this.exception = Util.abbreviated(exception, JdoColumnLength.Command.EXCEPTION);
+        this.exception = exception;
     }
     
     
