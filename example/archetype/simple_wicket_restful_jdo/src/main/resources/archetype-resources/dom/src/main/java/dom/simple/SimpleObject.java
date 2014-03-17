@@ -21,12 +21,18 @@
  */
 package dom.simple;
 
+import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Bookmarkable;
+import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
+import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.util.ObjectContracts;
 
@@ -48,7 +54,8 @@ public class SimpleObject implements Comparable<SimpleObject> {
     private String name;
 
     @javax.jdo.annotations.Column(allowsNull="false")
-    @Title
+    @Title(sequence="1")
+    @MemberOrder(sequence="1")
     public String getName() {
         return name;
     }
@@ -56,7 +63,8 @@ public class SimpleObject implements Comparable<SimpleObject> {
     public void setName(final String name) {
         this.name = name;
     }
-
+    
+    
 
     // //////////////////////////////////////
     // compareTo
@@ -72,10 +80,9 @@ public class SimpleObject implements Comparable<SimpleObject> {
     // Injected
     // //////////////////////////////////////
 
+
+    @javax.inject.Inject
     @SuppressWarnings("unused")
     private DomainObjectContainer container;
-    public void injectDomainObjectContainer(final DomainObjectContainer container) {
-        this.container = container;
-    }
     
 }

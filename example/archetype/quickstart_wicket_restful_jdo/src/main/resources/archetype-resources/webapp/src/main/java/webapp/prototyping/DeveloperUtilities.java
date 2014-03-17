@@ -30,16 +30,22 @@ import org.apache.isis.core.metamodel.services.devutils.DeveloperUtilitiesServic
  */
 public class DeveloperUtilities extends DeveloperUtilitiesServiceDefault {
 
-    @MemberOrder(name="Prototyping", sequence="90")
+    @MemberOrder(name="Prototyping", sequence="90.1")
     @Override
     public Clob downloadMetaModel() {
         return super.downloadMetaModel();
     }
     
-    @MemberOrder(name="Prototyping", sequence="92")
+    @MemberOrder(name="Prototyping", sequence="90.2")
     @Override
     public Blob downloadLayouts() {
         return super.downloadLayouts();
+    }
+
+    @MemberOrder(name="Prototyping", sequence="90.3")
+    @Override
+    public void refreshServices() {
+        super.refreshServices();
     }
 }
 

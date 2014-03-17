@@ -91,20 +91,15 @@ public class ToDoItemsFixture extends AbstractFixture {
         return date.plusDays(i);
     }
 
-    
+
+    // //////////////////////////////////////
+    // Injected services
     // //////////////////////////////////////
 
-
+    @javax.inject.Inject
     private ToDoItems toDoItems;
 
-    public void setToDoItems(final ToDoItems toDoItems) {
-        this.toDoItems = toDoItems;
-    }
-
-    
+    @javax.inject.Inject
     private IsisJdoSupport isisJdoSupport;
-    public void injectIsisJdoSupport(IsisJdoSupport isisJdoSupport) {
-        this.isisJdoSupport = isisJdoSupport;
-    }
 
 }

@@ -65,7 +65,7 @@ public class ToDoItemContributionsTest_priority extends ToDoIntegTest {
     }
 
     private void assertPriority(final int n, final int priority) {
-        assertThat(toDoItemContributions.priority(notYetComplete.get(n)), is(Integer.valueOf(priority)));
+        assertThat(toDoItemContributions.relativePriority(notYetComplete.get(n)), is(Integer.valueOf(priority)));
     }
     
 }

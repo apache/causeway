@@ -21,26 +21,64 @@
         memberGroups: {
             General: {
                 members: {
-                    description: {},
+                    description: {
+                        typicalLength: { value: 50 }
+                    },
                     category: {
+                        disabled: {
+                            reason: "Use action to update both category and subcategory"
+                        }
                     },
                     subcategory: {
+                        disabled: {
+                            reason: "Use action to update both category and subcategory"
+                        },
                         actions: {
-                            updateCategory: {},
+                            updateCategory: {
+                                named: {
+                                    value: "Update"
+                                }
+                            },
                             analyseCategory: {}
                         }
                     },
+                    ownedBy: {
+                        hidden: {}
+                    },
                     complete: {
                         actions: {
-                            completed: {},
-                            notYetCompleted: {}
+                            completed: {
+                                named: { value: "Done" },
+                                describedAs: {
+                                    value: "Mark this todo item as having been completed"
+                                },
+                                cssClass: { value: "x-highlight" }
+                            },
+                            scheduleExplicitly: {
+                            },
+                            scheduleImplicitly: {
+                            },
+                            notYetCompleted: {
+                                named: { value: "Not done" }
+                            }
+                        },
+                        describedAs: {
+                            value: "Whether this todo item has been completed"
                         }
                     }
                 }
             },
             Misc: {
                 members: {
-                    versionSequence: {}
+                    versionSequence: {
+                        named: { 
+                            value: "Version" 
+                        },
+                        disabled: {},
+                        hidden: {
+                            where: ALL_TABLES
+                        }
+                    }
                 }
             }
         }
@@ -48,22 +86,43 @@
     {
         span: 6,
         memberGroups: {
-            Detail: {
+            Priority: {
                 members: {
-                    priority: {
+                     relativePriority: {
                         actions: {
                             previous: {},
                             next: {}
                         }
                     },
-                    dueBy: {},
+                    dueBy: {
+                        cssClass: { value: "x-key" }
+                    }
+                }
+            },
+            Other: {
+                members: {
                     cost: {
                         actions: {
-                            updateCost:{}
+                            updateCost:{
+                                named: {
+                                    value: "Update"
+                                }
+                            }
                         }
                     },
-                    notes: {},
-                    attachment: {}
+                    notes: {
+                        multiLine: {
+                            numberOfLines: 5
+                        },
+                        hidden: {
+                            where: ALL_TABLES
+                        }
+                    },
+                    attachment: {
+                        hidden: {
+                            where: STANDALONE_TABLES
+                        }
+                    }
                 }
             }
         }
@@ -75,18 +134,44 @@
         span: 6,
         collections: {
             dependencies: {
+                disabled: {},
                 actions: {
                     add:{},
-                    remove: {}
+                    remove: {
+                        cssClass: { value: "x-caution" }
+                    }
+                },
+                paged: {
+                    value: 5
+                },
+                render: {
+                    value: EAGERLY
                 }
             },
-            similarTo: {}
+            similarTo: {
+                disabled: {},
+                paged: {
+                    value: 3
+                },
+                render: {
+                    value: LAZILY
+                }
+            }
         }
     }
     ],
     actions: {
-        duplicate: {},
-        delete: {}
+        totalCost: {},
+        delete: {
+            cssClass: { value: "x-caution" }
+        },
+        duplicate: {
+	        named: {
+	            value: "Clone"
+	        },
+            describedAs: {
+                value: "Create a new todo item from this one"
+            }
+        }
     }
 }
- 

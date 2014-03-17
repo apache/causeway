@@ -21,14 +21,14 @@
  */
 package app;
 
-import org.apache.isis.applib.AbstractService;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.HomePage;
 
 @Hidden
-public class ToDoAppDashboardService extends AbstractService {
+public class ToDoAppDashboardService  {
 
     private static final String ID = "dashboard";
 
@@ -45,8 +45,15 @@ public class ToDoAppDashboardService extends AbstractService {
     @ActionSemantics(Of.SAFE)
     @HomePage
     public ToDoAppDashboard lookup() {
-        return newViewModelInstance(ToDoAppDashboard.class, ID);
+        return container.newViewModelInstance(ToDoAppDashboard.class, ID);
     }
 
+    
+    // //////////////////////////////////////
+    // Injected services
+    // //////////////////////////////////////
+
+    @javax.inject.Inject
+    private DomainObjectContainer container;
 
 }

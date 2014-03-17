@@ -22,6 +22,8 @@
 package dom.todo;
 
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,7 +35,6 @@ import java.util.TreeSet;
 import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
-import javax.jdo.spi.PersistenceCapable;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
@@ -42,33 +43,39 @@ import com.google.common.collect.Ordering;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.Bulk.InteractionContext;
-import org.apache.isis.applib.annotation.CssClass;
+import org.apache.isis.applib.annotation.Bulk.AppliesTo;
+import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
+import org.apache.isis.applib.annotation.Command;
+import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MinLength;
-import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.RegEx;
-import org.apache.isis.applib.annotation.Render;
-import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.SortedBy;
-import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.services.background.BackgroundService;
+import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
-
-import services.ClockService;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(
@@ -84,30 +91,30 @@ import services.ClockService;
 })
 @javax.jdo.annotations.Queries( {
     @javax.jdo.annotations.Query(
-            name = "todo_all", language = "JDOQL",
+            name = "findByOwnedBy", language = "JDOQL",
             value = "SELECT "
                     + "FROM dom.todo.ToDoItem "
                     + "WHERE ownedBy == :ownedBy"),
     @javax.jdo.annotations.Query(
-            name = "todo_notYetComplete", language = "JDOQL",
+            name = "findByOwnedByAndCompleteIsFalse", language = "JDOQL",
             value = "SELECT "
                     + "FROM dom.todo.ToDoItem "
                     + "WHERE ownedBy == :ownedBy "
                     + "   && complete == false"),
     @javax.jdo.annotations.Query(
-            name = "todo_complete", language = "JDOQL",
+            name = "findByOwnedByAndCompleteIsTrue", language = "JDOQL",
             value = "SELECT "
                     + "FROM dom.todo.ToDoItem "
                     + "WHERE ownedBy == :ownedBy "
                     + "&& complete == true"),
     @javax.jdo.annotations.Query(
-            name = "todo_similarTo", language = "JDOQL",
+            name = "findByOwnedByAndCategory", language = "JDOQL",
             value = "SELECT "
                     + "FROM dom.todo.ToDoItem "
                     + "WHERE ownedBy == :ownedBy "
                     + "&& category == :category"),
     @javax.jdo.annotations.Query(
-            name = "todo_autoComplete", language = "JDOQL",
+            name = "findByOwnedByAndDescriptionContains", language = "JDOQL",
             value = "SELECT "
                     + "FROM dom.todo.ToDoItem "
                     + "WHERE ownedBy == :ownedBy && "
@@ -119,11 +126,11 @@ import services.ClockService;
 @AutoComplete(repository=ToDoItems.class, action="autoComplete") // default unless overridden by autoCompleteNXxx() method
 //@Bounded - if there were a small number of instances only (overrides autoComplete functionality)
 @Bookmarkable
-public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
+public class ToDoItem implements Comparable<ToDoItem> {
 
     /**
      * It isn't common for entities to log, but they can if required.  
-     * Isis uses the slf4j internally, and is the recommended API to use. 
+     * Isis uses slf4j API internally (with log4j as implementation), and is the recommended API to use. 
      */
     private final static org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(ToDoItem.class);
     
@@ -154,8 +161,9 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     
     private String description;
 
-    @javax.jdo.annotations.Column(allowsNull="false", length=30)
+    @javax.jdo.annotations.Column(allowsNull="false", length=100)
     @RegEx(validation = "${symbol_escape}${symbol_escape}w[@&:${symbol_escape}${symbol_escape}-${symbol_escape}${symbol_escape},${symbol_escape}${symbol_escape}.${symbol_escape}${symbol_escape}+ ${symbol_escape}${symbol_escape}w]*") 
+    @TypicalLength(50)
     public String getDescription() {
         return description;
     }
@@ -164,6 +172,8 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.description = description;
     }
 
+
+    
     // //////////////////////////////////////
     // DueBy (property)
     // //////////////////////////////////////
@@ -172,7 +182,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private LocalDate dueBy;
 
     @javax.jdo.annotations.Column(allowsNull="true")
-    @CssClass("x-key")
     public LocalDate getDueBy() {
         return dueBy;
     }
@@ -199,17 +208,17 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         Professional {
             @Override
             public List<Subcategory> subcategories() {
-                return Arrays.asList(Subcategory.OpenSource, Subcategory.Consulting, Subcategory.Education);
+                return Arrays.asList(null, Subcategory.OpenSource, Subcategory.Consulting, Subcategory.Education);
             }
         }, Domestic {
             @Override
             public List<Subcategory> subcategories() {
-                return Arrays.asList(Subcategory.Shopping, Subcategory.Housework, Subcategory.Garden, Subcategory.Chores);
+                return Arrays.asList(null, Subcategory.Shopping, Subcategory.Housework, Subcategory.Garden, Subcategory.Chores);
             }
         }, Other {
             @Override
             public List<Subcategory> subcategories() {
-                return Arrays.asList(Subcategory.Other);
+                return Arrays.asList(null, Subcategory.Other);
             }
         };
         
@@ -254,7 +263,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private Category category;
 
     @javax.jdo.annotations.Column(allowsNull="false")
-    @Disabled(reason="Use action to update both category and subcategory")
     public Category getCategory() {
         return category;
     }
@@ -267,8 +275,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     private Subcategory subcategory;
 
-    @javax.jdo.annotations.Column(allowsNull="false")
-    @Disabled(reason="Use action to update both category and subcategory")
+    @javax.jdo.annotations.Column(allowsNull="true")
     public Subcategory getSubcategory() {
         return subcategory;
     }
@@ -276,7 +283,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.subcategory = subcategory;
     }
 
-    
+
     // //////////////////////////////////////
     // OwnedBy (property)
     // //////////////////////////////////////
@@ -284,7 +291,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private String ownedBy;
 
     @javax.jdo.annotations.Column(allowsNull="false")
-    @Hidden
     public String getOwnedBy() {
         return ownedBy;
     }
@@ -310,43 +316,61 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.complete = complete;
     }
 
-    @Named("Done")
+    @Command
     @PublishedAction
     @Bulk
-    @CssClass("x-highlight")
     public ToDoItem completed() {
         setComplete(true);
         
-        // demonstrating the use of ... 
-        final InteractionContext ctxt = InteractionContext.current.get();
+        //
+        // remainder of method just demonstrates the use of the Bulk.InteractionContext service 
+        //
         @SuppressWarnings("unused")
-        List<Object> allObjects = ctxt.getDomainObjects();
+        final List<Object> allObjects = bulkInteractionContext.getDomainObjects();
         
         LOG.debug("completed: "
-                + ctxt.getIndex() +
-                " [" + ctxt.getSize() + "]"
-                + (ctxt.isFirst() ? " (first)" : "")
-                + (ctxt.isLast() ? " (last)" : ""));
+                + bulkInteractionContext.getIndex() +
+                " [" + bulkInteractionContext.getSize() + "]"
+                + (bulkInteractionContext.isFirst() ? " (first)" : "")
+                + (bulkInteractionContext.isLast() ? " (last)" : ""));
 
-        return this;
+        // if invoked as a regular action, return this object;
+        // otherwise (if invoked as bulk), return null (so go back to the list)
+        return bulkInteractionContext.getInvokedAs() == InvokedAs.REGULAR? this: null;
     }
     // disable action dependent on state of object
     public String disableCompleted() {
         return isComplete() ? "Already completed" : null;
     }
 
-    @Named("Not done")
+    @Command
     @PublishedAction
     @Bulk
     public ToDoItem notYetCompleted() {
         setComplete(false);
 
-        return this;
+        // if invoked as a regular action, return this object;
+        // otherwise (if invoked as bulk), return null (so go back to the list)
+        return bulkInteractionContext.getInvokedAs() == InvokedAs.REGULAR? this: null;
     }
     // disable action dependent on state of object
     public String disableNotYetCompleted() {
         return !complete ? "Not yet completed" : null;
     }
+
+    // //////////////////////////////////////
+    // completeSlowly
+    // //////////////////////////////////////
+
+    @Hidden
+    public void completeSlowly(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+        }
+        setComplete(true);
+    }
+
 
     // //////////////////////////////////////
     // Cost (property), UpdateCost (action)
@@ -355,6 +379,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private BigDecimal cost;
 
     @javax.jdo.annotations.Column(allowsNull="true", scale=2)
+    @javax.validation.constraints.Digits(integer=10, fraction=2)
     @Disabled(reason="Update using action")
     public BigDecimal getCost() {
         return cost;
@@ -364,9 +389,19 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.cost = cost!=null?cost.setScale(2):null;
     }
     
-    @Named("Update")
-    public ToDoItem updateCost(@Named("New cost") @Optional final BigDecimal cost) {
-        LOG.debug("%s: cost updated: %s -> %s", this.container.titleOf(this), getCost(), cost);
+    public ToDoItem updateCost(
+            @Named("New cost") 
+            @javax.validation.constraints.Digits(integer=10, fraction=2) 
+            @Optional 
+            final BigDecimal cost) {
+        LOG.debug("%s: cost updated: %s -> %s", container.titleOf(this), getCost(), cost);
+        
+        // just to simulate a long-running action
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+        }
+        
         setCost(cost);
         return this;
     }
@@ -389,8 +424,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private String notes;
 
     @javax.jdo.annotations.Column(allowsNull="true", length=400)
-    @Hidden(where=Where.ALL_TABLES)
-    @MultiLine(numberOfLines=5)
     public String getNotes() {
         return notes;
     }
@@ -407,7 +440,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
 
     @javax.jdo.annotations.Persistent(defaultFetchGroup="false")
     @javax.jdo.annotations.Column(allowsNull="true")
-    @Hidden(where=Where.STANDALONE_TABLES)
     public Blob getAttachment() {
         return attachment;
     }
@@ -420,20 +452,17 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // Version (derived property)
     // //////////////////////////////////////
 
-    @Hidden(where=Where.ALL_TABLES)
-    @Disabled
-    @Named("Version")
     public Long getVersionSequence() {
-        if(!(this instanceof PersistenceCapable)) {
+        if(!(this instanceof javax.jdo.spi.PersistenceCapable)) {
             return null;
         } 
-        PersistenceCapable persistenceCapable = (PersistenceCapable) this;
+        javax.jdo.spi.PersistenceCapable persistenceCapable = (javax.jdo.spi.PersistenceCapable) this;
         final Long version = (Long) JDOHelper.getVersion(persistenceCapable);
         return version;
     }
     // hide property (imperatively, based on state of object)
     public boolean hideVersionSequence() {
-        return !(this instanceof PersistenceCapable);
+        return !(this instanceof javax.jdo.spi.PersistenceCapable);
     }
 
     // //////////////////////////////////////
@@ -464,8 +493,6 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     private SortedSet<ToDoItem> dependencies = new TreeSet<ToDoItem>();
 
     @SortedBy(DependenciesComparator.class)
-    @Disabled
-    @Render(Type.EAGERLY)
     public SortedSet<ToDoItem> getDependencies() {
         return dependencies;
     }
@@ -474,8 +501,11 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         this.dependencies = dependencies;
     }
 
+    
     @PublishedAction
-    public ToDoItem add(final ToDoItem toDoItem) {
+    public ToDoItem add(
+            @TypicalLength(20)
+            final ToDoItem toDoItem) {
         getDependencies().add(toDoItem);
         return this;
     }
@@ -503,8 +533,9 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
         return null;
     }
 
-    @CssClass("x-caution")
-    public ToDoItem remove(final ToDoItem toDoItem) {
+    public ToDoItem remove(
+            @TypicalLength(20)
+            final ToDoItem toDoItem) {
         getDependencies().remove(toDoItem);
         return this;
     }
@@ -532,24 +563,16 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // Clone (action)
     // //////////////////////////////////////
 
-    @Named("Clone")
     // the name of the action in the UI
     // nb: method is not called "clone()" is inherited by java.lang.Object and
     // (a) has different semantics and (b) is in any case automatically ignored
     // by the framework
     public ToDoItem duplicate(
-            @Named("Description") 
-            String description,
-            @Named("Category")
-            ToDoItem.Category category, 
-            @Named("Subcategory")
-            ToDoItem.Subcategory subcategory, 
-            @Named("Due by") 
-            @Optional
-            LocalDate dueBy,
-            @Named("Cost") 
-            @Optional
-            BigDecimal cost) {
+            final @RegEx(validation = "${symbol_escape}${symbol_escape}w[@&:${symbol_escape}${symbol_escape}-${symbol_escape}${symbol_escape},${symbol_escape}${symbol_escape}.${symbol_escape}${symbol_escape}+ ${symbol_escape}${symbol_escape}w]*") @Named("Description") String description, 
+            final @Named("Category") Category category,
+            final @Named("Subcategory") Subcategory subcategory,
+            final @Optional @Named("Due by") LocalDate dueBy,
+            final @Optional @Named("Cost") BigDecimal cost) {
         return toDoItems.newToDo(description, category, subcategory, dueBy, cost);
     }
     public String default0Duplicate() {
@@ -564,18 +587,129 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     public LocalDate default3Duplicate() {
         return getDueBy();
     }
+    public List<Subcategory> choices2Duplicate(
+            final String description, final Category category) {
+        return toDoItems.choices2NewToDo(description, category);
+    }
+    public String validateDuplicate(
+            final String description, 
+            final Category category, final Subcategory subcategory, 
+            final LocalDate dueBy, final BigDecimal cost) {
+        return toDoItems.validateNewToDo(description, category, subcategory, dueBy, cost);
+    }
 
     // //////////////////////////////////////
     // Delete (action)
     // //////////////////////////////////////
 
     @Bulk
-    @CssClass("x-caution")
     public List<ToDoItem> delete() {
         container.removeIfNotAlready(this);
         container.informUser("Deleted " + container.titleOf(this));
         // invalid to return 'this' (cannot render a deleted object)
         return toDoItems.notYetComplete(); 
+    }
+
+    
+    // //////////////////////////////////////
+    // totalCost
+    // //////////////////////////////////////
+
+    @ActionSemantics(Of.SAFE)
+    @Bulk(AppliesTo.BULK_ONLY)
+    public BigDecimal totalCost() {
+        BigDecimal total = (BigDecimal) scratchpad.get("runningTotal");
+        if(getCost() != null) {
+            total = total != null ? total.add(getCost()) : getCost();
+            scratchpad.put("runningTotal", total);
+        }
+        return total.setScale(2);
+    }
+
+    
+
+    // //////////////////////////////////////
+    // scheduleExplicitly
+    // scheduleImplicitly
+    // //////////////////////////////////////
+    
+    @ActionSemantics(Of.IDEMPOTENT)
+    @Prototype
+    public ToDoItem scheduleExplicitly() {
+        backgroundService.execute(this).completeSlowly(2000);
+        container.informUser("Task '" + getDescription() + "' scheduled for completion");
+        return this;
+    }
+    
+    // //////////////////////////////////////
+
+    @ActionSemantics(Of.IDEMPOTENT)
+    @Command(executeIn=ExecuteIn.BACKGROUND)
+    @Prototype
+    public ToDoItem scheduleImplicitly() {
+        completeSlowly(3000);
+        return this;
+    }
+    
+    
+    
+    // //////////////////////////////////////
+    // OpenSourceCodeOnGithub (action)
+    // //////////////////////////////////////
+    
+    @Prototype
+    @ActionSemantics(Of.SAFE)
+    public URL openSourceCodeOnGithub() throws MalformedURLException {
+        return new URL("https://github.com/apache/isis/tree/master/example/application/${parentArtifactId}/dom/src/main/java/dom/todo/ToDoItem.java");
+    }
+
+
+    // //////////////////////////////////////
+    // Throw exception
+    // //////////////////////////////////////
+    
+    static enum DemoExceptionType {
+        RecoverableException,
+        RecoverableExceptionAutoEscalated,
+        NonRecoverableException;
+    }
+    
+    @Prototype
+    @ActionSemantics(Of.SAFE)
+    public void demoException(final @Named("Type") DemoExceptionType type) {
+        switch(type) {
+        case NonRecoverableException:
+            throw new NonRecoverableException("Demo throwing " + type.name());
+        case RecoverableException:
+            throw new RecoverableException("Demo throwing " + type.name());
+        case RecoverableExceptionAutoEscalated:
+            try {
+                // this will trigger an exception (because subcategory cannot be null), causing the xactn to be aborted
+                setSubcategory(null);
+                container.flush();
+            } catch(Exception e) {
+                // it's a programming mistake to throw only a recoverable exception here, because of the xactn's state.
+                // the framework should instead auto-escalate this to a non-recoverable exception
+                throw new RecoverableException("Demo throwing " + type.name(), e);
+            }
+        }
+    }
+
+    
+    // //////////////////////////////////////
+    // Object-level validation
+    // //////////////////////////////////////
+
+    /**
+     * In a real app, if this were actually a rule, then we'd expect that
+     * invoking the {@link ${symbol_pound}completed() done} action would clear the {@link ${symbol_pound}getDueBy() dueBy}
+     * property (rather than require the user to have to clear manually).
+     */
+    public String validate() {
+        if(isComplete() && getDueBy() != null) {
+            return "Due by date must be set to null if item has been completed";
+        }
+        return null;
     }
 
     // //////////////////////////////////////
@@ -611,18 +745,15 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
             };
         }
 
-        public static Predicate<ToDoItem> thoseNotYetComplete() {
-            return com.google.common.base.Predicates.not(thoseComplete());
-        }
-
-        public static Predicate<ToDoItem> thoseComplete() {
+		public static Predicate<ToDoItem> thoseCompleted(
+				final boolean completed) {
             return new Predicate<ToDoItem>() {
                 @Override
                 public boolean apply(final ToDoItem t) {
-                    return t.isComplete();
+                    return Objects.equal(t.isComplete(), completed);
                 }
             };
-        }
+		}
 
         public static Predicate<ToDoItem> thoseWithSimilarDescription(final String description) {
             return new Predicate<ToDoItem>() {
@@ -675,6 +806,7 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
                     thoseCategorised(category), 
                     thoseSubcategorised(subcategory)); 
         }
+
     }
     
     // //////////////////////////////////////
@@ -702,40 +834,32 @@ public class ToDoItem implements Comparable<ToDoItem> /*, Locatable*/ { // GMAP3
     // Injected Services
     // //////////////////////////////////////
 
+    @javax.inject.Inject
     private DomainObjectContainer container;
 
-    public void injectDomainObjectContainer(final DomainObjectContainer container) {
-        this.container = container;
-    }
-
+    @javax.inject.Inject
     private ToDoItems toDoItems;
 
-    public void injectToDoItems(final ToDoItems toDoItems) {
-        this.toDoItems = toDoItems;
-    }
-
+    @javax.inject.Inject
+    @SuppressWarnings("unused")
     private ClockService clockService;
-    public void injectClockService(ClockService clockService) {
-        this.clockService = clockService;
+    
+    private Bulk.InteractionContext bulkInteractionContext;
+    public void injectBulkInteractionContext(Bulk.InteractionContext bulkInteractionContext) {
+        this.bulkInteractionContext = bulkInteractionContext;
     }
     
-    // //////////////////////////////////////
-    // Extensions
-    // //////////////////////////////////////
+    @SuppressWarnings("unused")
+    @javax.inject.Inject
+    private CommandContext commandContext;
 
-    
-// GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
-//
-//    @Persistent
-//    private Location location;
-//    
-//    @MemberOrder(name="Detail", sequence = "10")
-//    @Optional
-//    public Location getLocation() {
-//        return location;
-//    }
-//    public void setLocation(Location location) {
-//        this.location = location;
-//    }
+    @javax.inject.Inject
+    private BackgroundService backgroundService;
+
+    private Scratchpad scratchpad;
+    public void injectScratchpad(Scratchpad scratchpad) {
+        this.scratchpad = scratchpad;
+    }
+
 
 }

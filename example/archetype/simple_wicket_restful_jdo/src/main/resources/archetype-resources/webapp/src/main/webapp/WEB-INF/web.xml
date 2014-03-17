@@ -114,6 +114,10 @@
         <filter-name>ResourceCachingFilter</filter-name>
         <url-pattern>*.html</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>ResourceCachingFilter</filter-name>
+        <url-pattern>*.swf</url-pattern>
+    </filter-mapping>
     
     <servlet>
         <servlet-name>Resource</servlet-name>
@@ -142,6 +146,10 @@
     <servlet-mapping>
         <servlet-name>Resource</servlet-name>
         <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+        <url-pattern>*.swf</url-pattern>
     </servlet-mapping>
     
 

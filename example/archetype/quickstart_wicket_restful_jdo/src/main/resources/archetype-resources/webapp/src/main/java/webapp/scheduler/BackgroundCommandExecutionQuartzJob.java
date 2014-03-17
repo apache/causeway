@@ -17,20 +17,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package services;
+package webapp.scheduler;
 
-import org.joda.time.LocalDate;
+import org.apache.isis.objectstore.jdo.service.BackgroundCommandExecutionFromBackgroundCommandServiceJdo;
 
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.clock.Clock;
 
-@Hidden
-public class ClockService {
-    
-    @Programmatic
-    public LocalDate now() {
-        return Clock.getTimeAsLocalDate();
+public class BackgroundCommandExecutionQuartzJob extends AbstractIsisQuartzJob {
+
+    public BackgroundCommandExecutionQuartzJob() {
+        super(new BackgroundCommandExecutionFromBackgroundCommandServiceJdo());   
     }
 
 }

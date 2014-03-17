@@ -34,11 +34,11 @@
     </prerequisites>
 
 	<properties>
-        <isis.version>1.4.0-SNAPSHOT</isis.version>
-		<isis-objectstore-jdo.version>1.4.0-SNAPSHOT</isis-objectstore-jdo.version>
-		<isis-viewer-wicket.version>1.4.0-SNAPSHOT</isis-viewer-wicket.version>
-		<isis-viewer-restfulobjects.version>2.2.0-SNAPSHOT</isis-viewer-restfulobjects.version>
-		<isis-security-shiro.version>1.4.0-SNAPSHOT</isis-security-shiro.version>
+        <isis.version>1.4.0</isis.version>
+		<isis-objectstore-jdo.version>1.4.1</isis-objectstore-jdo.version>
+		<isis-viewer-wicket.version>1.4.1</isis-viewer-wicket.version>
+		<isis-viewer-restfulobjects.version>2.2.0</isis-viewer-restfulobjects.version>
+		<isis-security-shiro.version>1.4.0</isis-security-shiro.version>
 
         <!-- must be consistent with the versions defined by the JDO Objectstore -->
         <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
@@ -211,6 +211,7 @@
                             <exclude>**/*.launch</exclude>
                             <exclude>src/site/resources/ide/eclipse/**</exclude>
 
+                            <exclude>**/rebel.xml</exclude>
                             <exclude>**/*.gitignore</exclude>
                             <exclude>**/*.log</exclude>
                             <exclude>**/*.pdn</exclude>

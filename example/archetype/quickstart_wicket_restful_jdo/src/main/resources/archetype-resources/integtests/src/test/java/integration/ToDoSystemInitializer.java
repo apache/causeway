@@ -23,6 +23,8 @@ import app.ToDoItemAnalysis;
 import dom.todo.ToDoItemContributions;
 import dom.todo.ToDoItems;
 
+import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
@@ -30,7 +32,6 @@ import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.service.support.IsisJdoSupportImpl;
-import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
 /**
  * Holds an instance of an {@link IsisSystemForTest} as a {@link ThreadLocal} on the current thread,
@@ -62,8 +63,9 @@ public class ToDoSystemInitializer {
                     new ToDoItemAnalysis(),
                     new ToDoItemContributions(),
                     new WrapperFactoryDefault(),
-                    new RegisterEntities(),
-                    new IsisJdoSupportImpl()
+                    new IsisJdoSupportImpl(),
+                    new Bulk.InteractionContext(),
+                    new QueryResultsCache()
                     );
         }
 

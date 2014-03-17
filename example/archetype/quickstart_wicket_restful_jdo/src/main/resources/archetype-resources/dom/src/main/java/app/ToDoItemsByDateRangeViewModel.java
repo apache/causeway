@@ -41,9 +41,8 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.util.ObjectContracts;
-
-import services.ClockService;
 
 @Named("By Date Range")
 @Bookmarkable
@@ -152,15 +151,10 @@ public class ToDoItemsByDateRangeViewModel
     // injected services
     // //////////////////////////////////////
     
+    @javax.inject.Inject
     private ToDoItems toDoItems;
 
-    public void injectedToDoItems(final ToDoItems toDoItems) {
-        this.toDoItems = toDoItems;
-    }
-
+    @javax.inject.Inject
     private ClockService clockService;
-    public void injectClockService(ClockService clockService) {
-        this.clockService = clockService;
-    }
 
 }

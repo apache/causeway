@@ -22,7 +22,6 @@
 package dom.todo;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Predicates;
@@ -41,14 +40,15 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RegEx;
-import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.query.QueryDefault;
-
-import services.ClockService;
+import org.apache.isis.applib.services.clock.ClockService;
 
 @Named("ToDos")
 public class ToDoItems {
 
+    public ToDoItems() {
+    }
+    
     // //////////////////////////////////////
     // Identification in the UI
     // //////////////////////////////////////
@@ -64,7 +64,7 @@ public class ToDoItems {
     // //////////////////////////////////////
     // NotYetComplete (action)
     // //////////////////////////////////////
-    
+
     @Bookmarkable
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
@@ -78,30 +78,19 @@ public class ToDoItems {
 
     @Programmatic
     public List<ToDoItem> notYetCompleteNoUi() {
-        final List<ToDoItem> items;
-        if(false) {
-            // the naive implementation ...
-            items = container.allMatches(ToDoItem.class, 
-                    Predicates.and(
-                        ToDoItem.Predicates.thoseOwnedBy(currentUserName()), 
-                        ToDoItem.Predicates.thoseNotYetComplete()));
-        } else {
-            // the JDO implementation ...
-            items = container.allMatches(
-                    new QueryDefault<ToDoItem>(ToDoItem.class, 
-                            "todo_notYetComplete", 
-                            "ownedBy", currentUserName()));
-        }
-        return items;
+        return container.allMatches(
+                new QueryDefault<ToDoItem>(ToDoItem.class, 
+                        "findByOwnedByAndCompleteIsFalse", 
+                        "ownedBy", currentUserName()));
     }
 
-    
+
     // //////////////////////////////////////
     // Complete (action)
     // //////////////////////////////////////
     
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "2")
+    @MemberOrder(sequence = "3")
     public List<ToDoItem> complete() {
         final List<ToDoItem> items = completeNoUi();
         if(items.isEmpty()) {
@@ -112,21 +101,50 @@ public class ToDoItems {
 
     @Programmatic
     public List<ToDoItem> completeNoUi() {
-        final List<ToDoItem> items;
-        if(false) {
-            // the naive implementation ...
-            items = container.allMatches(ToDoItem.class, 
-                    Predicates.and(
-                        ToDoItem.Predicates.thoseOwnedBy(currentUserName()), 
-                        ToDoItem.Predicates.thoseComplete()));
-        } else {
-            // the JDO implementation ...
-            items = container.allMatches(
-                    new QueryDefault<ToDoItem>(ToDoItem.class, 
-                            "todo_complete", 
-                            "ownedBy", currentUserName()));
-        }
-        return items;
+        return container.allMatches(
+            new QueryDefault<ToDoItem>(ToDoItem.class, 
+                    "findByOwnedByAndCompleteIsTrue", 
+                    "ownedBy", currentUserName()));
+    }
+
+
+    // //////////////////////////////////////
+    // categorized (action)
+    // //////////////////////////////////////
+
+	@SuppressWarnings("unchecked")
+	@Bookmarkable
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence = "30")
+    public List<ToDoItem> categorized(
+    		@Named("Category") final Category category,
+    		@Named("Subcategory") final Subcategory subcategory,
+    		@Named("Completed?") final boolean completed) {
+    	// an example "naive" implementation (filtered in Java code, not DBMS)
+        return container.allMatches(ToDoItem.class, 
+                Predicates.and(
+                    ToDoItem.Predicates.thoseOwnedBy(currentUserName()), 
+                    ToDoItem.Predicates.thoseCompleted(completed),
+                    ToDoItem.Predicates.thoseCategorised(category, subcategory)));
+    }
+    public Category default0Categorized() {
+        return Category.Professional;
+    }
+    public Subcategory default1Categorized() {
+        return default0Categorized().subcategories().get(0);
+    }
+    public boolean default2Categorized() {
+    	return false;
+    }
+    public List<Subcategory> choices1Categorized(
+            final Category category) {
+        return Subcategory.listFor(category);
+    }
+    public String validateCategorized(
+            final Category category, 
+            final Subcategory subcategory, 
+            final boolean completed) {
+        return Subcategory.validate(category, subcategory);
     }
 
 
@@ -134,15 +152,14 @@ public class ToDoItems {
     // NewToDo (action)
     // //////////////////////////////////////
 
-    @MemberOrder(sequence = "3")
+    @MemberOrder(sequence = "40")
     public ToDoItem newToDo(
             final @RegEx(validation = "${symbol_escape}${symbol_escape}w[@&:${symbol_escape}${symbol_escape}-${symbol_escape}${symbol_escape},${symbol_escape}${symbol_escape}.${symbol_escape}${symbol_escape}+ ${symbol_escape}${symbol_escape}w]*") @Named("Description") String description, 
             final @Named("Category") Category category,
             final @Named("Subcategory") Subcategory subcategory,
             final @Optional @Named("Due by") LocalDate dueBy,
             final @Optional @Named("Cost") BigDecimal cost) {
-        final String ownedBy = currentUserName();
-        return newToDo(description, category, subcategory, ownedBy, dueBy, cost);
+        return newToDo(description, category, subcategory, currentUserName(), dueBy, cost);
     }
     public Category default1NewToDo() {
         return Category.Professional;
@@ -168,17 +185,21 @@ public class ToDoItems {
     // AllToDos (action)
     // //////////////////////////////////////
 
+    // findByOwnedBy
+    
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "4")
+    @MemberOrder(sequence = "50")
     public List<ToDoItem> allToDos() {
-        final String currentUser = currentUserName();
-        final List<ToDoItem> items = container.allMatches(ToDoItem.class, ToDoItem.Predicates.thoseOwnedBy(currentUser));
-        Collections.sort(items);
+        final List<ToDoItem> items = container.allMatches(
+                new QueryDefault<ToDoItem>(ToDoItem.class, 
+                        "findByOwnedBy", 
+                        "ownedBy", currentUserName()));
         if(items.isEmpty()) {
             container.warnUser("No to-do items found.");
         }
         return items;
     }
+
 
     // //////////////////////////////////////
     // AutoComplete
@@ -186,22 +207,12 @@ public class ToDoItems {
 
     @Programmatic // not part of metamodel
     public List<ToDoItem> autoComplete(final String description) {
-        if(false) {
-            // the naive implementation ...
-            return container.allMatches(ToDoItem.class, 
-                    Predicates.and(
-                        ToDoItem.Predicates.thoseOwnedBy(currentUserName()), 
-                        ToDoItem.Predicates.thoseWithSimilarDescription(description)));
-        } else {
-            // the JDO implementation ...
-            return container.allMatches(
-                    new QueryDefault<ToDoItem>(ToDoItem.class, 
-                            "todo_autoComplete", 
-                            "ownedBy", currentUserName(), 
-                            "description", description));
-        }
+        return container.allMatches(
+                new QueryDefault<ToDoItem>(ToDoItem.class, 
+                        "findByOwnedByAndDescriptionContains", 
+                        "ownedBy", currentUserName(), 
+                        "description", description));
     }
-
 
     // //////////////////////////////////////
     // Programmatic Helpers
@@ -222,20 +233,12 @@ public class ToDoItems {
         toDoItem.setDueBy(dueBy);
         toDoItem.setCost(cost);
 
-        // 
-        // GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3        
-        // toDoItem.setLocation(
-        //    new Location(51.5172+random(-0.05, +0.05), 0.1182 + random(-0.05, +0.05)));
-        //
-        
         container.persist(toDoItem);
+        container.flush();
+
         return toDoItem;
     }
     
-    private static double random(double from, double to) {
-        return Math.random() * (to-from) + from;
-    }
-
     private String currentUserName() {
         return container.getUser().getName();
     }
@@ -245,17 +248,13 @@ public class ToDoItems {
     // Injected Services
     // //////////////////////////////////////
 
-    
+    @javax.inject.Inject
     private DomainObjectContainer container;
 
-    public void injectDomainObjectContainer(final DomainObjectContainer container) {
-        this.container = container;
-    }
-
+    @javax.inject.Inject
     private ClockService clockService;
-    public void injectClockService(ClockService clockService) {
-        this.clockService = clockService;
-    }
+
+    // //////////////////////////////////////
 
 
 }

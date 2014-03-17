@@ -17,7 +17,7 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<archetype-descriptor xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0" name="quickstart_wicket_restful_jdo" xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<archetype-descriptor xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0" xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd" name="quickstart_wicket_restful_jdo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modules>
     <module id="${rootArtifactId}-dom" dir="dom" name="${rootArtifactId}-dom">
       <fileSets>
@@ -32,6 +32,12 @@
           <directory>src/main/java</directory>
           <includes>
             <include>**/*.json</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="true" encoding="UTF-8">
+          <directory>src/main/resources</directory>
+          <includes>
+            <include>**/*.xml</include>
           </includes>
         </fileSet>
         <fileSet encoding="UTF-8">
@@ -112,6 +118,8 @@
           <directory>src/main/resources</directory>
           <includes>
             <include>**/*.html</include>
+            <include>**/*.xml</include>
+            <include>**/*.properties</include>
           </includes>
         </fileSet>
         <fileSet encoding="UTF-8">
@@ -131,6 +139,12 @@
             <include>**/*.ini</include>
             <include>**/*.gif</include>
             <include>**/*.css</include>
+          </includes>
+        </fileSet>
+        <fileSet encoding="UTF-8">
+          <directory>src/main/resources</directory>
+          <includes>
+            <include>**/*.ini</include>
           </includes>
         </fileSet>
         <fileSet encoding="UTF-8">

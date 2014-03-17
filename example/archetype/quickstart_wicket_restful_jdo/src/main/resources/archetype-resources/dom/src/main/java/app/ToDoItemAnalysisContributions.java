@@ -23,16 +23,15 @@ package app;
 
 import dom.todo.ToDoItem;
 
-import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.NotContributed;
-import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.NotContributed;
+import org.apache.isis.applib.annotation.NotContributed.As;
+import org.apache.isis.applib.annotation.NotInServiceMenu;
 
 @Hidden
-public class ToDoItemAnalysisContributions extends AbstractFactoryAndRepository {
+public class ToDoItemAnalysisContributions {
 
 
     // //////////////////////////////////////
@@ -51,8 +50,6 @@ public class ToDoItemAnalysisContributions extends AbstractFactoryAndRepository 
     // injected services
     // //////////////////////////////////////
 
+    @javax.inject.Inject
     private ToDoItemAnalysis toDoAppAnalysis;
-    public void injectToDoAppAnalysis(ToDoItemAnalysis toDoAppAnalysis) {
-        this.toDoAppAnalysis = toDoAppAnalysis;
-    }
 }

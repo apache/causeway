@@ -80,15 +80,23 @@ public class ToDoItemTest_description extends ToDoIntegTest {
     public void onlyJustShortEnough() throws Exception {
         
         // when, then
-        toDoItem.setDescription("123456789012345678901234567890");
+        toDoItem.setDescription(characters(100));
     }
 
     @Test
     public void tooLong() throws Exception {
         
         // when, then
-        expectedExceptions.expectMessage("The value proposed exceeds the maximum length of 30");
-        toDoItem.setDescription("1234567890123456789012345678901");
+        expectedExceptions.expectMessage("The value proposed exceeds the maximum length of 100");
+        toDoItem.setDescription(characters(101));
+    }
+    
+    private static String characters(final int n) {
+        StringBuffer buf = new StringBuffer();
+        for(int i=0; i<n; i++) {
+            buf.append("a");
+        }
+        return buf.toString();
     }
 
 }

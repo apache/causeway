@@ -78,7 +78,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.5</version>
+                <version>1.8</version>
                   <executions>
                     <execution>
                       <phase>validate</phase>
@@ -259,41 +259,6 @@
           </exclusions>
         </dependency>
 
-
-        <!-- 3rd party dependency -->
-        <!-- 
-        GMAP3: uncomment to use https://github.com/danhaywood/isis-wicket-gmap3
-        <dependency>
-            <groupId>com.danhaywood.isis.wicket</groupId>
-            <artifactId>danhaywood-isis-wicket-gmap3-ui</artifactId>
-        </dependency>
-         -->
-        <!-- 
-        WICKEDCHARTS: uncomment to use https://github.com/danhaywood/isis-wicket-wickedcharts
-        <dependency>
-            <groupId>com.danhaywood.isis.wicket</groupId>
-            <artifactId>danhaywood-isis-wicket-wickedcharts-scalarchart</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.danhaywood.isis.wicket</groupId>
-            <artifactId>danhaywood-isis-wicket-wickedcharts-summarycharts</artifactId>
-        </dependency>
-         -->
-        <!-- 
-        EXCEL: uncomment to use https://github.com/danhaywood/isis-wicket-excel
-        <dependency>
-            <groupId>com.danhaywood.isis.wicket</groupId>
-            <artifactId>danhaywood-isis-wicket-excel</artifactId>
-        </dependency>
-         -->
-        <!-- 
-        FULLCALENDAR: uncomment to use https://github.com/danhaywood/isis-wicket-fullcalendar
-        <dependency>
-            <groupId>com.danhaywood.isis.wicket</groupId>
-            <artifactId>danhaywood-isis-wicket-fullcalendar</artifactId>
-        </dependency>
-         -->
-         
     </dependencies>
 
 </project>

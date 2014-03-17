@@ -83,11 +83,7 @@ public class ToDoAppDashboard extends AbstractViewModel {
     // injected services
     // //////////////////////////////////////
     
+    @javax.inject.Inject
     private ToDoItemAnalysis toDoItemAnalysis;
-    
-    public void injectToDoItemAnalysis(ToDoItemAnalysis toDoItemAnalysis) {
-        this.toDoItemAnalysis = toDoItemAnalysis;
-    }
-
 
 }

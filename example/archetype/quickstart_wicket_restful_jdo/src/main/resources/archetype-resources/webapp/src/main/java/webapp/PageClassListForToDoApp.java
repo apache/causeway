@@ -57,8 +57,8 @@ public class PageClassListForToDoApp extends PageClassListDefault {
      * More typically, override using custom {@link ComponentFactory}s.
      */
     @Override
-    protected Class<? extends Page> getActionPageClass() {
+    protected Class<? extends Page> getActionPromptPageClass() {
         // no override
-        return super.getActionPageClass();
+        return super.getActionPromptPageClass();
     }
 }

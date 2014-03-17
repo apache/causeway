@@ -43,21 +43,6 @@
 
   <supplement>
     <project>
-      <groupId>org.scannotation</groupId>
-      <artifactId>scannotation</artifactId>
-      <version>1.0.3</version>
-      <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>          
-        </license>
-      </licenses>
-    </project>
-  </supplement>
-    
-  <supplement>
-    <project>
       <groupId>net.jcip</groupId>
       <artifactId>jcip-annotations</artifactId>
       <version>1.0</version>
@@ -70,5 +55,44 @@
       </licenses>
     </project>
   </supplement>
+
+    <supplement>
+        <project>
+          <groupId>javax.transaction</groupId>
+          <artifactId>transaction-api</artifactId>
+          <version>1.1</version>
+          <name>Java Transaction API (JTA)</name>
+          <organization>
+            <name>Oracle Corp</name>
+            <url>http://www.oracle.com/</url>
+          </organization>
+          <licenses>
+            <license>
+              <name>Common Development and Distribution License (CDDL) v1.0</name>
+              <url>https://glassfish.java.net/public/CDDLv1.0.html</url>
+            </license>
+          </licenses>
+        </project>
+      </supplement>
+  
+    <supplement>
+        <project>
+          <groupId>org.datanucleus</groupId>
+          <artifactId>datanucleus-jdo-query</artifactId>
+          <version>3.0.2</version>
+          <name>DataNucleus JDO Query</name>
+          <organization>
+            <name>DataNucleus</name>
+            <url>http://www.datanucleus.org/</url>
+          </organization>
+          <licenses>
+            <license>
+                <name>The Apache Software License, Version 2.0</name>
+                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            </license>
+          </licenses>
+        </project>
+      </supplement>
+
  
 </supplementalDataModels>

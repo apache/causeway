@@ -17,20 +17,14 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package services;
+package webapp.scheduler;
 
-import org.joda.time.LocalDate;
 
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.clock.Clock;
+public final class SchedulerConstants {
 
-@Hidden
-public class ClockService {
+    private SchedulerConstants(){}
     
-    @Programmatic
-    public LocalDate now() {
-        return Clock.getTimeAsLocalDate();
-    }
-
+    public static final String USER_KEY = SchedulerConstants.class.getPackage().getName() + ".user";
+    public static final String ROLES_KEY = SchedulerConstants.class.getPackage().getName() + ".roles";
+    
 }

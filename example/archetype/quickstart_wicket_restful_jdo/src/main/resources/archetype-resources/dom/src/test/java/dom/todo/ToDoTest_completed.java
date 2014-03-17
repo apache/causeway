@@ -19,7 +19,9 @@
  */
 package dom.todo;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
@@ -35,6 +37,9 @@ public class ToDoTest_completed {
     public void setUp() throws Exception {
         toDoItem = new ToDoItem();
         toDoItem.setComplete(false);
+        
+        Bulk.InteractionContext interactionContext = Bulk.InteractionContext.regularAction(toDoItem);
+        toDoItem.injectBulkInteractionContext(interactionContext);
     }
     
     @Test
@@ -43,12 +48,7 @@ public class ToDoTest_completed {
         assertThat(toDoItem.disableCompleted(), is(nullValue()));
         
         // when
-        Bulk.InteractionContext.with(new Runnable() {
-            @Override
-            public void run() {
-                toDoItem.completed();
-            }
-        }, toDoItem);
+        toDoItem.completed();
         
         // then
         assertThat(toDoItem.isComplete(), is(true));
