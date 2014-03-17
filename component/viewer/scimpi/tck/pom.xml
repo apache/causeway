@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis-core-tck</artifactId>
-        <version>1.4.0-SNAPSHOT</version>
+        <version>1.4.0</version>
         <relativePath>../../../../core/tck/pom.xml</relativePath>
     </parent>
 
@@ -35,7 +35,7 @@
         <isis-viewer-scimpi.version>1.0.0-SNAPSHOT</isis-viewer-scimpi.version>
         <isis-objectstore-xml.version>1.0.0-SNAPSHOT</isis-objectstore-xml.version>
         <isis-profilestore-xml.version>1.0.0-SNAPSHOT</isis-profilestore-xml.version>
-        <isis-security-file.version>1.0.2-SNAPSHOT</isis-security-file.version>
+        <isis-security-file.version>1.4.0</isis-security-file.version>
 
         <siteBaseDir>..</siteBaseDir>
         <relativeUrl>scimpi-tck/</relativeUrl>
