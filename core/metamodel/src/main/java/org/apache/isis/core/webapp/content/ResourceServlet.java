@@ -53,8 +53,8 @@ public class ResourceServlet extends HttpServlet {
 
     private void processRequest(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         final String servletPath = StringExtensions.stripLeadingSlash(request.getServletPath());
-        if (LOG.isInfoEnabled()) {
-            LOG.info("request: " + servletPath);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("request: " + servletPath);
         }
 
         // try to load from filesystem
