@@ -23,6 +23,8 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import com.google.common.base.Strings;
+
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -38,12 +40,27 @@ import org.apache.isis.applib.services.publish.PublishingService;
  */
 public class PublishingServiceJdo extends AbstractService implements PublishingService {
 
+    private static final String SERIALIZED_FORM_LOCAL_KEY = "datanucleus.PublishingService.serializedForm";
+    private final static String SERIALIZED_FORM_KEY = "isis.persistor." + SERIALIZED_FORM_LOCAL_KEY;
+
+    static enum SerializedForm {
+        CLOB,
+        @Deprecated
+        ZIPPED;
+        static SerializedForm parse(final String value) {
+            return CLOB.toString().equalsIgnoreCase(value)? CLOB: ZIPPED;
+        }
+    }
     
+    private SerializedForm serializedForm;
+
     @Programmatic
     @PostConstruct
-    public void init(Map<String,String> props) {
+    public void init(Map<String,String> configuration) {
         ensureDependenciesInjected();
+        serializedForm = SerializedForm.parse(configuration.get(SERIALIZED_FORM_KEY));
     }
+
     
     // //////////////////////////////////////
     
@@ -62,7 +79,14 @@ public class PublishingServiceJdo extends AbstractService implements PublishingS
     public void publish(final EventMetadata metadata, final EventPayload payload) {
         final String serializedEvent = eventSerializer.serialize(metadata, payload).toString();
         final PublishedEventJdo publishedEvent = newTransientInstance(PublishedEventJdo.class);
-        publishedEvent.setSerializedForm(serializedEvent);
+
+        if(this.serializedForm == SerializedForm.ZIPPED) {
+            final byte[] zippedBytes = asZippedBytes(serializedEvent);
+            publishedEvent.setSerializedFormZipped(zippedBytes);
+        } else {
+            publishedEvent.setSerializedFormClob(serializedEvent);
+        }
+        
         publishedEvent.setTransactionId(metadata.getTransactionId());
         publishedEvent.setSequence(metadata.getSequence());
         publishedEvent.setEventType(metadata.getEventType());
@@ -78,6 +102,12 @@ public class PublishingServiceJdo extends AbstractService implements PublishingS
         persist(publishedEvent);
     }
 
+
+    static byte[] asZippedBytes(final String serializedEvent) {
+        return IoUtils.toUtf8ZippedBytes("serializedForm", serializedEvent);
+    }
+
+
     // //////////////////////////////////////
 
     private EventSerializer eventSerializer;
@@ -87,7 +117,11 @@ public class PublishingServiceJdo extends AbstractService implements PublishingS
         this.eventSerializer = eventSerializer;
     }
 
-    
+    static String fromZippedBytes(byte[] zipped) {
+        return IoUtils.fromUtf8ZippedBytes("serializedForm", zipped);
+    }
+
+
     @javax.inject.Inject
     private CommandContext commandContext;
 }

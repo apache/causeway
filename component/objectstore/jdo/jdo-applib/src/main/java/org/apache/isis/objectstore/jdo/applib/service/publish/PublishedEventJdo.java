@@ -412,30 +412,46 @@ public class PublishedEventJdo extends DomainChangeJdoAbstract implements HasTra
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Detail", sequence = "40")
     public String getSerializedForm() {
-        return IoUtils.fromUtf8ZippedBytes("serializedForm", getSerializedFormZipped());
+        byte[] zipped = getSerializedFormZipped();
+        if(zipped != null) {
+            return PublishingServiceJdo.fromZippedBytes(zipped);
+        } else {
+            return getSerializedFormClob();
+        }
     }
 
-    public void setSerializedForm(final String serializedForm) {
-        final byte[] zippedBytes = IoUtils.toUtf8ZippedBytes("serializedForm", serializedForm);
-        setSerializedFormZipped(zippedBytes);
-    }
 
     // //////////////////////////////////////
 
-    
-    @javax.jdo.annotations.Column
+    @Deprecated
+    @javax.jdo.annotations.Column(allowsNull="true")
     private byte[] serializedFormZipped;
 
+    @Deprecated
     @Programmatic // ignored by Isis
     public byte[] getSerializedFormZipped() {
         return serializedFormZipped;
     }
 
+    @Deprecated
     public void setSerializedFormZipped(final byte[] serializedFormZipped) {
         this.serializedFormZipped = serializedFormZipped;
     }
 
-    
+    // //////////////////////////////////////
+
+    private String serializedFormClob;
+
+    @Programmatic // ignored by Isis
+    @javax.jdo.annotations.Column(allowsNull="true", jdbcType="CLOB")
+    public String getSerializedFormClob() {
+        return serializedFormClob;
+    }
+
+    public void setSerializedFormClob(final String serializedFormClob) {
+        this.serializedFormClob = serializedFormClob;
+    }
+
 
     // //////////////////////////////////////
     // processed (action)
