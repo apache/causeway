@@ -94,7 +94,7 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
 
     public Label createLabel(final String id, final String collectionName) {
         this.collectionName = collectionName;
-        this.label = new Label(id, labelTextFor(getCount()));
+        this.label = new Label(id, collectionName);
     	label.setOutputMarkupId(true);
     	return this.label;
     }
@@ -112,7 +112,7 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
             return false;
         }
         final Integer count = getCount();
-        label.setDefaultModelObject(labelTextFor(count));
+        label.setDefaultModelObject(collectionName);
         return count != null;
     }
 
@@ -125,10 +125,6 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
         }
     }
 
-    private String labelTextFor(final Integer count) {
-        final String labelText = collectionName + (count != null? " (" + count + ")": " (+)");
-        return labelText;
-    }
     
     // ///////////////////////////////////////////////////////////////////
     // ActionPromptModalWindowProvider
