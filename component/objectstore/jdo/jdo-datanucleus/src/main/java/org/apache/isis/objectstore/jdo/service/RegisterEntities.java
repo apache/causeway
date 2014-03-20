@@ -25,6 +25,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.jdo.annotations.PersistenceCapable;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
@@ -44,18 +45,17 @@ public class RegisterEntities {
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(RegisterEntities.class);
     
-    private static final String LOCAL_KEY = "datanucleus.RegisterEntities.packagePrefix";
-    private final static String QUALIFIED_KEY = "isis.persistor." + LOCAL_KEY;
+    public final static String PACKAGE_PREFIX_KEY = "isis.persistor.datanucleus.RegisterEntities.packagePrefix";
+
+    // //////////////////////////////////////
 
     private String packagePrefixes;
-    
-
 
     @PostConstruct
     public void init(Map<String,String> configuration) {
-        packagePrefixes = configuration.get(QUALIFIED_KEY);
+        packagePrefixes = configuration.get(PACKAGE_PREFIX_KEY);
         if(Strings.isNullOrEmpty(packagePrefixes)) {
-            throw new IllegalStateException("Could not locate '" + QUALIFIED_KEY + "' key in property files - aborting");
+            throw new IllegalStateException("Could not locate '" + PACKAGE_PREFIX_KEY + "' key in property files - aborting");
         }
         
         registerAllPersistenceCapables();
@@ -67,7 +67,7 @@ public class RegisterEntities {
 
     private void registerAllPersistenceCapables() {
 
-        for (final String packagePrefix : Splitter.on(",").split(packagePrefixes)) {
+        for (final String packagePrefix : Iterables.transform(Splitter.on(",").split(packagePrefixes), trim())) {
             Reflections reflections = new Reflections(packagePrefix);
             
             Set<Class<?>> entityTypes = 
@@ -80,6 +80,15 @@ public class RegisterEntities {
                 getSpecificationLoader().loadSpecification(entityType);
             }
         }
+    }
+
+    private static Function<String,String> trim() {
+        return new Function<String,String>(){
+            @Override
+            public String apply(String input) {
+                return input.trim();
+            }
+        };
     }
 
     /**

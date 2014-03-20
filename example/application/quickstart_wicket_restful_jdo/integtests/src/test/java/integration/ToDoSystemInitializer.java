@@ -23,11 +23,10 @@ import dom.todo.ToDoItems;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
 import org.apache.isis.core.wrapper.WrapperFactoryDefault;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
+import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
 import org.apache.isis.objectstore.jdo.datanucleus.service.support.IsisJdoSupportImpl;
 
 /**
@@ -66,22 +65,12 @@ public class ToDoSystemInitializer {
                     );
         }
 
-        private IsisConfiguration testConfiguration() {
-            final IsisConfigurationDefault testConfiguration = new IsisConfigurationDefault();
-
-            testConfiguration.add("isis.persistor.datanucleus.RegisterEntities.packagePrefix", "dom");
-            testConfiguration.add("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
-            
-            testConfiguration.add("isis.persistor.datanucleus.impl.datanucleus.defaultInheritanceStrategy", "TABLE_PER_CLASS");
-            testConfiguration.add(DataNucleusObjectStore.INSTALL_FIXTURES_KEY , "true");
-            
-            testConfiguration.add("isis.persistor.datanucleus.impl.datanucleus.cache.level2.type","none");
-
-            testConfiguration.add("isis.persistor.datanucleus.impl.datanucleus.identifier.case", "PreserveCase");
-
+        private static IsisConfiguration testConfiguration() {
+            final IsisConfigurationForJdoIntegTests testConfiguration = new IsisConfigurationForJdoIntegTests();
+            testConfiguration.addRegisterEntitiesPackagePrefix("dom");
             return testConfiguration;
         }
 
     }
-
+    
 }

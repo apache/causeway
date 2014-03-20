@@ -96,11 +96,17 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
     static enum State {
         NOT_YET_OPEN, OPEN, CLOSED;
     }
+    
+    private static final String ROOT_KEY = ConfigurationConstants.ROOT + "persistor.datanucleus.";
+    /**
+     * Append regular <a href="http://www.datanucleus.org/products/accessplatform/persistence_properties.html">datanucleus properties</a> to this key
+     */
+    public static final String DATANUCLEUS_PROPERTIES_ROOT = ROOT_KEY + "impl.";
 
     /**
      * @see #isFixturesInstalled()
      */
-    public static final String INSTALL_FIXTURES_KEY = ConfigurationConstants.ROOT + "persistor.datanucleus.install-fixtures";
+    public static final String INSTALL_FIXTURES_KEY = ROOT_KEY + "install-fixtures";
     public static final boolean INSTALL_FIXTURES_DEFAULT = false;
 
     static enum TransactionMode {
