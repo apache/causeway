@@ -19,7 +19,9 @@
 package org.apache.isis.security.shiro;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -32,6 +34,7 @@ import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.authorization.IsisPermission;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.shiro.SecurityUtils;
@@ -48,6 +51,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 
 import com.google.common.collect.Lists;
@@ -88,7 +92,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
      * The {@link SecurityManager} is shared between both the {@link Authenticator} and the {@link Authorizor}
      * (if shiro is configured for both components).
      */
-    private static synchronized RealmSecurityManager getSecurityManager() {
+    protected synchronized RealmSecurityManager getSecurityManager() {
         SecurityManager securityManager;
         try {
             securityManager = SecurityUtils.getSecurityManager();
@@ -126,18 +130,18 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
         }
         final AuthenticationToken token = asAuthenticationToken(request);
         
-        Subject currentUser = SecurityUtils.getSubject();
-        if(currentUser.isAuthenticated()) {
+        final Subject currentSubject = SecurityUtils.getSubject();
+        if(currentSubject.isAuthenticated()) {
             // TODO: verify the code passed in that this session is still alive?
             
             // TODO: perhaps we should cache Isis' AuthenticationSession inside the Shiro Session, and
             // just retrieve it?
             
             // for now, just log them out.
-            currentUser.logout();
+            currentSubject.logout();
         }
         try {
-            currentUser.login(token);
+            currentSubject.login(token);
         } catch ( UnknownAccountException uae ) { 
             LOG.debug("Unable to authenticate", uae);
             return null;
@@ -155,7 +159,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
             return null;
         }
         
-        List<String> roles = getRoles(token);
+        List<String> roles = getRoles(currentSubject, token);
         // copy over any roles passed in
         // (this is used by the Wicket viewer, for example).s
         roles.addAll(request.getRoles());
@@ -168,7 +172,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
      * in the future that might obtain the list of roles for a principal from
      * somewhere other than Shiro's {@link RealmSecurityManager}.
      */
-    protected List<String> getRoles(final AuthenticationToken token) {
+    protected List<String> getRoles(final Subject subject, final AuthenticationToken token) {
         final List<String> roles = Lists.newArrayList();
 
         RealmSecurityManager securityManager = getSecurityManager();
@@ -176,9 +180,11 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
             return roles;
         }
         
+        final Set<String> realmNames = realmNamesOf(subject);
         final Collection<Realm> realms = securityManager.getRealms();
         for (final Realm realm : realms) {
-            if(!realm.supports(token)) {
+            // only obtain roles from those realm(s) that authenticated this subject
+            if(!realmNames.contains(realm.getName())) {
                 continue;
             }
             final AuthenticationInfo authenticationInfo = realm.getAuthenticationInfo(token);
@@ -191,6 +197,11 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
             }
         }
         return roles;
+    }
+
+    private static Set<String> realmNamesOf(final Subject subject) {
+        final PrincipalCollection principals = subject.getPrincipals();
+        return principals != null? principals.getRealmNames(): Collections.<String>emptySet();
     }
 
     private static AuthenticationToken asAuthenticationToken(final AuthenticationRequest request) {

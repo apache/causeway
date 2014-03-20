@@ -41,7 +41,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class ShiroAuthenticatorOrAuthorizorTest {
+public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
@@ -101,36 +101,6 @@ public class ShiroAuthenticatorOrAuthorizorTest {
 
         Identifier cancelOrderIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Order", "cancel");
         assertThat(authOrAuth.isVisibleInAnyRole(cancelOrderIdentifier), is(false));
-    }
-
-    @Test
-    public void vetoing() throws Exception {
-        Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
-        SecurityManager securityManager = factory.getInstance();
-        SecurityUtils.setSecurityManager(securityManager);
-
-        AuthenticationRequest ar = new AuthenticationRequestPassword("darkhelmet", "ludicrousspeed");
-        authOrAuth.authenticate(ar, null);
-
-        Identifier changeAddressIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeAddress", String.class, String.class);
-        assertThat(authOrAuth.isVisibleInAnyRole(changeAddressIdentifier), is(true));
-
-        Identifier removeCustomerIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "remove");
-        assertThat(authOrAuth.isVisibleInAnyRole(removeCustomerIdentifier), is(false));
-    }
-
-    
-    @Test
-    public void vetoingOverridden() throws Exception {
-        Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
-        SecurityManager securityManager = factory.getInstance();
-        SecurityUtils.setSecurityManager(securityManager);
-
-        AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");
-        authOrAuth.authenticate(ar, null);
-        
-        Identifier removeCustomerIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "remove");
-        assertThat(authOrAuth.isVisibleInAnyRole(removeCustomerIdentifier), is(true));
     }
 
 

@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
 
 /**
  * A rendering hint, instructing the viewer that the date should as one day prior to
- * the actualy stored date.
+ * the actually stored date.
  * 
  * <p>
  * This is intended to be used so that an exclusive end date of an interval
