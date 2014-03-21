@@ -67,8 +67,11 @@ import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.BackgroundService;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
@@ -331,6 +334,8 @@ public class ToDoItem implements Comparable<ToDoItem> {
                 + (bulkInteractionContext.isFirst() ? " (first)" : "")
                 + (bulkInteractionContext.isLast() ? " (last)" : ""));
 
+        eventBusService.post(new CompletedEvent(this));
+
         // if invoked as a regular action, return this object;
         // otherwise (if invoked as bulk), return null (so go back to the list)
         return bulkInteractionContext.getInvokedAs() == InvokedAs.REGULAR? this: null;
@@ -345,6 +350,8 @@ public class ToDoItem implements Comparable<ToDoItem> {
     @Bulk
     public ToDoItem notYetCompleted() {
         setComplete(false);
+
+        eventBusService.post(new NoLongerCompletedEvent(this));
 
         // if invoked as a regular action, return this object;
         // otherwise (if invoked as bulk), return null (so go back to the list)
@@ -601,8 +608,13 @@ public class ToDoItem implements Comparable<ToDoItem> {
 
     @Bulk
     public List<ToDoItem> delete() {
+        
         container.removeIfNotAlready(this);
+
         container.informUser("Deleted " + container.titleOf(this));
+        
+        eventBusService.post(new DeletedEvent(this));
+        
         // invalid to return 'this' (cannot render a deleted object)
         return toDoItems.notYetComplete(); 
     }
@@ -828,6 +840,45 @@ public class ToDoItem implements Comparable<ToDoItem> {
     }
 
     // //////////////////////////////////////
+    // Events
+    // //////////////////////////////////////
+
+    public static abstract class AbstractEvent {
+        private final String eventDescription;
+        private final ToDoItem toDoItem;
+        public AbstractEvent(String eventDescription, ToDoItem toDoItem) {
+            this.eventDescription = eventDescription;
+            this.toDoItem = toDoItem;
+        }
+        public String getEventDescription() {
+            return eventDescription;
+        }
+        public ToDoItem getToDoItem() {
+            return toDoItem;
+        }
+    }
+
+    public static class CompletedEvent extends AbstractEvent {
+
+        public CompletedEvent(ToDoItem toDoItem) {
+            super("completed", toDoItem);
+        }
+    }
+
+    public static class NoLongerCompletedEvent extends AbstractEvent {
+        public NoLongerCompletedEvent(ToDoItem toDoItem) {
+            super("no longer completed", toDoItem);
+        }
+    }
+    
+    public static class DeletedEvent extends AbstractEvent {
+        public DeletedEvent(ToDoItem toDoItem) {
+            super("deleted", toDoItem);
+        }
+    }
+    
+
+    // //////////////////////////////////////
     // Injected Services
     // //////////////////////////////////////
 
@@ -853,10 +904,9 @@ public class ToDoItem implements Comparable<ToDoItem> {
     @javax.inject.Inject
     private BackgroundService backgroundService;
 
+    @javax.inject.Inject
     private Scratchpad scratchpad;
-    public void injectScratchpad(Scratchpad scratchpad) {
-        this.scratchpad = scratchpad;
-    }
 
-
+    @javax.inject.Inject
+    private EventBusService eventBusService;
 }

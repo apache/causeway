@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.google.common.base.Predicates;
+import com.google.common.eventbus.Subscribe;
 
 import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItem.Subcategory;
@@ -39,6 +40,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.clock.ClockService;
+import org.apache.isis.applib.services.eventbus.EventBusService;
 
 @Named("ToDos")
 public class ToDoItems {
@@ -244,14 +246,11 @@ public class ToDoItems {
     // //////////////////////////////////////
     // Injected Services
     // //////////////////////////////////////
-
+    
     @javax.inject.Inject
     private DomainObjectContainer container;
 
     @javax.inject.Inject
     private ClockService clockService;
-
-    // //////////////////////////////////////
-
 
 }
