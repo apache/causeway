@@ -892,7 +892,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     @SuppressWarnings("unused")
     private ClockService clockService;
     
-    private Bulk.InteractionContext bulkInteractionContext;
+    Bulk.InteractionContext bulkInteractionContext;
     public void injectBulkInteractionContext(Bulk.InteractionContext bulkInteractionContext) {
         this.bulkInteractionContext = bulkInteractionContext;
     }
@@ -907,6 +907,9 @@ public class ToDoItem implements Comparable<ToDoItem> {
     @javax.inject.Inject
     private Scratchpad scratchpad;
 
-    @javax.inject.Inject
-    private EventBusService eventBusService;
+    EventBusService eventBusService;
+    public void injectEventBusService(EventBusService eventBusService) {
+        this.eventBusService = eventBusService;
+    }
+
 }

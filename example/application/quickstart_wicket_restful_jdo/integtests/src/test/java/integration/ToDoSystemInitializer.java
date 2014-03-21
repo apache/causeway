@@ -27,6 +27,7 @@ import org.apache.isis.core.integtestsupport.IsisSystemForTest;
 import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
+import org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo;
 import org.apache.isis.objectstore.jdo.datanucleus.service.support.IsisJdoSupportImpl;
 
 /**
@@ -61,6 +62,7 @@ public class ToDoSystemInitializer {
                     new WrapperFactoryDefault(),
                     new IsisJdoSupportImpl(),
                     new Bulk.InteractionContext(),
+                    new EventBusServiceJdo(),
                     new QueryResultsCache()
                     );
         }
