@@ -57,8 +57,8 @@ public class DataNucleusSimplePersistAlgorithm extends PersistAlgorithmAbstract 
         if (alreadyPersistedOrNotPersistable(adapter)) {
             return;
         }
-        if (LOG.isInfoEnabled()) {
-            LOG.info("persist " + adapter);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("persist " + adapter);
         }
         CallbackUtils.callCallback(adapter, PersistingCallbackFacet.class);
         // the callback might have caused the adapter to become persistent.
