@@ -79,4 +79,6 @@ public interface SpecificationLoader extends Injectable {
     boolean loaded(String fullyQualifiedClassName);
 
 
+    void invalidateCache(Class<?> domainClass);
+
 }

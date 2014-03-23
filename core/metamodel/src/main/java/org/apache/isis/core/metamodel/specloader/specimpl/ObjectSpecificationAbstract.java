@@ -88,6 +88,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.SpecificationContext;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -670,6 +672,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
 
+    private static ThreadLocal<Boolean> invalidatingCache = new ThreadLocal<Boolean>() {
+        protected Boolean initialValue() {
+            return Boolean.FALSE;
+        };
+    };
 
     /**
      * The association with the given {@link ObjectAssociation#getId() id}.
@@ -687,12 +694,41 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      */
     @Override
     public ObjectAssociation getAssociation(final String id) {
+        ObjectAssociation oa = getAssociationWithId(id);
+        if(oa != null) {
+            return oa;
+        }
+        if(!getDeploymentCategory().isProduction()) {
+            // automatically refresh if not in production
+            // (better support for jrebel)
+            
+            LOG.warn("Could not find association with id '" + id + "'; invalidating cache automatically");
+            if(!invalidatingCache.get()) {
+                // make sure don't go into an infinite loop, though.
+                try {
+                    invalidatingCache.set(true);
+                    getSpecificationLookup().invalidateCache(getCorrespondingClass());
+                } finally {
+                    invalidatingCache.set(false);
+                }
+            } else {
+                LOG.warn("... already invalidating cache earlier in stacktrace, so skipped this time");
+            }
+            oa = getAssociationWithId(id);
+            if(oa != null) {
+                return oa;
+            }
+        }
+        throw new ObjectSpecificationException("No association called '" + id + "' in '" + getSingularName() + "'");
+    }
+
+    private ObjectAssociation getAssociationWithId(final String id) {
         for (final ObjectAssociation objectAssociation : getAssociations(Contributed.INCLUDED)) {
             if (objectAssociation.getId().equals(id)) {
                 return objectAssociation;
             }
         }
-        throw new ObjectSpecificationException("No association called '" + id + "' in '" + getSingularName() + "'");
+        return null;
     }
 
     @Deprecated

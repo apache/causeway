@@ -31,8 +31,6 @@ public class SpecificationLoaderDelegator extends SpecificationLoaderAbstract {
         this.specificationLoaderDelegate = specificationLoaderDelegate;
     }
 
-    
-    
     @Override
     public ObjectSpecification loadSpecification(final Class<?> cls) {
         if (specificationLoaderDelegate == null) {
@@ -87,7 +85,11 @@ public class SpecificationLoaderDelegator extends SpecificationLoaderAbstract {
         return specificationLoaderDelegate.getServiceClasses();
     }
 
-    
+    @Override
+    public void invalidateCache(Class<?> domainClass) {
+        specificationLoaderDelegate.invalidateCache(domainClass);
+    }
+
     @Override
     public void injectInto(Object candidate) {
         super.injectInto(candidate);
@@ -95,10 +97,6 @@ public class SpecificationLoaderDelegator extends SpecificationLoaderAbstract {
             specificationLoaderDelegate.injectInto(candidate);
         }
     }
-
-
-
-
 
 
 

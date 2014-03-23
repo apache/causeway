@@ -141,6 +141,11 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
             public List<Class<?>> getServiceClasses() {
                 return specificationLoader.getServiceClasses();
             }
+
+            @Override
+            public void invalidateCache(Class<?> domainClass) {
+                specificationLoader.invalidateCache(domainClass);
+            }
         });
     }
 
