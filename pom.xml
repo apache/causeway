@@ -97,8 +97,6 @@
                 
                 <module>example/archetype/simple_wicket_restful_jdo</module>
                 <module>example/archetype/quickstart_wicket_restful_jdo</module>
-        
-                <module>tool/maven-plugin</module>
             </modules>
         </profile>
 

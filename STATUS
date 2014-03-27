@@ -16,7 +16,23 @@ Description
   (for contributors).  Significant contributions over a sustained period of time can 
   earn a contributor commit access to the codebase.
 
+
+
 TLP releases:
+
+  * isis-objectstore-jdo-1.4.1                     : 14 Mar 2014
+  * isis-viewer-wicket-1.4.1                       : 14 Mar 2014
+  * quickstart-wicket-restful_jdo-archetype-1.4.1  : 14 Mar 2014
+  * simple-wicket-restful_jdo-archetype-1.4.1      : 14 Mar 2014
+
+  * isis-1.4.0                                     : 11 Mar 2014
+  * isis-objectstore-jdo-1.4.0                     : 11 Mar 2014
+  * isis-security-file-1.4.0                       : 11 Mar 2014
+  * isis-security-shiro-1.4.0                      : 11 Mar 2014
+  * isis-viewer-restfulobjects-2.1.0               : 11 Mar 2014
+  * isis-viewer-wicket-1.4.0                       : 11 Mar 2014
+  * quickstart-wicket-restful_jdo-archetype-1.4.0  : 11 Mar 2014
+  * simple-wicket-restful_jdo-archetype-1.4.0      : 11 Mar 2014
 
   * isis-viewer-wicket-1.3.1                       : 07 Nov 2013
   * quickstart-wicket-restful_jdo-archetype-1.3.1  : 07 Nov 2013
