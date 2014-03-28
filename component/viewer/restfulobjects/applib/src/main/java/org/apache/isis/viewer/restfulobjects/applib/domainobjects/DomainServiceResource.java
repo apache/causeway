@@ -79,27 +79,7 @@ public interface DomainServiceResource {
     @Path("/{serviceId}")
     public Response postServiceNotAllowed(@PathParam("serviceId") final String serviceId);
 
-    // //////////////////////////////////////////////////////////
-    // domain service property
-    // //////////////////////////////////////////////////////////
 
-    @GET
-    @Path("/{serviceId}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR })
-    @ClientResponseType(entityType = String.class)
-    public Response propertyDetails(@PathParam("serviceId") final String serviceId, @PathParam("propertyId") final String propertyId);
-
-    // //////////////////////////////////////////////////////////
-    // domain service collection
-    // //////////////////////////////////////////////////////////
-
-    @GET
-    @Path("/{serviceId}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR })
-    @ClientResponseType(entityType = String.class)
-    public Response accessCollection(@PathParam("serviceId") final String serviceId, @PathParam("collectionId") final String collectionId);
-
-    
     // //////////////////////////////////////////////////////////
     // domain service action
     // //////////////////////////////////////////////////////////
@@ -109,6 +89,18 @@ public interface DomainServiceResource {
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
     public Response actionPrompt(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId);
+
+    @DELETE
+    @Path("/{serviceId}/actions/{actionId}")
+    public Response deleteActionPromptNotAllowed(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId);
+
+    @PUT
+    @Path("/{serviceId}/actions/{actionId}")
+    public Response putActionPromptNotAllowed(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId);
+
+    @POST
+    @Path("/{serviceId}/actions/{actionId}")
+    public Response postActionPromptNotAllowed(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId);
 
     // //////////////////////////////////////////////////////////
     // domain service action invoke

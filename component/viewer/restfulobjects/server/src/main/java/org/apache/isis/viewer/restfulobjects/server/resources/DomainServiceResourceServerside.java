@@ -116,35 +116,6 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to a service resource is not allowed.");
     }
 
-    // //////////////////////////////////////////////////////////
-    // domain service property
-    // //////////////////////////////////////////////////////////
-
-    @Override
-    @GET
-    @Path("/{serviceId}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response propertyDetails(@PathParam("serviceId") final String serviceId, @PathParam("propertyId") final String propertyId) {
-        init(RepresentationType.OBJECT_PROPERTY, Where.OBJECT_FORMS);
-
-        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
-
-        return helper.propertyDetails(propertyId, MemberMode.NOT_MUTATING, Caching.ONE_DAY, getResourceContext().getWhere());
-    }
-
-    @Override
-    @GET
-    @Path("/{serviceId}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response accessCollection(@PathParam("serviceId") final String serviceId, @PathParam("collectionId") String collectionId) {
-        init(RepresentationType.OBJECT_COLLECTION, Where.PARENTED_TABLES);
-
-        final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter);
-
-        return helper.collectionDetails(collectionId, MemberMode.NOT_MUTATING, Caching.NONE, getResourceContext().getWhere());
-    }
 
     // //////////////////////////////////////////////////////////
     // domain service action
@@ -161,6 +132,21 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
 
         return helper.actionPrompt(actionId, getResourceContext().getWhere());
+    }
+
+    @Override
+    public Response deleteActionPromptNotAllowed(@PathParam("serviceId") String serviceId, @PathParam("actionId") String actionId) {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting action prompt resource is not allowed.");
+    }
+
+    @Override
+    public Response putActionPromptNotAllowed(@PathParam("serviceId") String serviceId, @PathParam("actionId") String actionId) {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to an action prompt resource is not allowed.");
+    }
+
+    @Override
+    public Response postActionPromptNotAllowed(@PathParam("serviceId") String serviceId, @PathParam("actionId") String actionId) {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to an action prompt resource is not allowed.");
     }
 
     // //////////////////////////////////////////////////////////

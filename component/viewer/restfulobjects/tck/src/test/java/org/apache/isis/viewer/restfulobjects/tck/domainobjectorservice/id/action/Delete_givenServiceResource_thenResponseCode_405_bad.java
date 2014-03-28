@@ -30,43 +30,45 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.apache.isis.viewer.restfulobjects.tck.Util;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class Put_thenResponseCode_405_bad {
+public class Delete_givenServiceResource_thenResponseCode_405_bad {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
 
     protected RestfulClient client;
-    private DomainObjectResource domainObjectResource;
+    private DomainServiceResource serviceResource;
 
     @Before
     public void setUp() throws Exception {
         final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
-        domainObjectResource = client.getDomainObjectResource();
+        serviceResource = client.getDomainServiceResource();
     }
 
     @Test
-    public void representation() throws Exception {
+    public void followLink() throws Exception {
 
         // given
-        final Response actionPromptResp = domainObjectResource.actionPrompt("RTNE", "67", "contains");
+        final Response actionPromptResp = serviceResource.actionPrompt("ActionsEntities", "subListWithOptionalRange");
         final RestfulResponse<ObjectActionRepresentation> actionPromptJsonResp = RestfulResponse.ofT(actionPromptResp);
         final ObjectActionRepresentation actionPromptRepr = actionPromptJsonResp.getEntity();
         final LinkRepresentation selfLink = actionPromptRepr.getLinkWithRel(Rel.SELF);
-        final LinkRepresentation deleteLink = selfLink.withMethod(RestfulHttpMethod.PUT);
+        final LinkRepresentation deleteLink = selfLink.withMethod(RestfulHttpMethod.DELETE);
 
         // when
         final RestfulResponse<JsonRepresentation> restfulResponse = client.follow(deleteLink);
 
         // then
         assertThat(restfulResponse.getStatus(), is(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED));
-        assertThat(restfulResponse.getHeader(RestfulResponse.Header.WARNING), is("Putting to an action prompt resource is not allowed."));
+        assertThat(restfulResponse.getHeader(RestfulResponse.Header.WARNING), is("Deleting action prompt resource is not allowed."));
     }
 
 }
