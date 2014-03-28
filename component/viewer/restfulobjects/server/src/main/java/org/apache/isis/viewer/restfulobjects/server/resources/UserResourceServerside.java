@@ -26,7 +26,9 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.user.UserResource;
+import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
 
 public class UserResourceServerside extends ResourceAbstract implements UserResource {
 
@@ -39,6 +41,23 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
         renderer.includesSelf().with(getAuthenticationSession());
 
         return responseOfOk(renderer, Caching.ONE_HOUR).build();
+    }
+
+    @Override
+    public Response deleteUserNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting the user resource is not allowed.");
+
+    }
+
+    @Override
+    public Response putUserNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to the user resource is not allowed.");
+
+    }
+
+    @Override
+    public Response postUserNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to the user resource is not allowed.");
     }
 
 }

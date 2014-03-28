@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.tck.domainservice.root;
+package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId;
 
 import javax.ws.rs.core.Response;
 import org.junit.Before;
@@ -36,7 +36,7 @@ import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class Post_thenResponseCode_405_bad {
+public class Delete_thenResponseCode_405_bad {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -58,15 +58,15 @@ public class Post_thenResponseCode_405_bad {
         final Response serviceResp = domainServiceResource.service("ActionsEntities");
         final RestfulResponse<DomainObjectRepresentation> serviceJsonResp = RestfulResponse.ofT(serviceResp);
         final DomainObjectRepresentation serviceRepr = serviceJsonResp.getEntity();
-        final LinkRepresentation upLink = serviceRepr.getLinkWithRel(Rel.UP);
-        final LinkRepresentation postLink = upLink.withMethod(RestfulHttpMethod.POST);
+        final LinkRepresentation selfLink = serviceRepr.getLinkWithRel(Rel.SELF);
+        final LinkRepresentation deleteLink = selfLink.withMethod(RestfulHttpMethod.DELETE);
 
         // when
-        final RestfulResponse<JsonRepresentation> restfulResponse = client.follow(postLink);
+        final RestfulResponse<JsonRepresentation> restfulResponse = client.follow(deleteLink);
 
         // then
         assertThat(restfulResponse.getStatus(), is(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED));
-        assertThat(restfulResponse.getHeader(RestfulResponse.Header.WARNING), is("Posting to the services resource is not allowed."));
+        assertThat(restfulResponse.getHeader(RestfulResponse.Header.WARNING), is("Deleting a service resource is not allowed."));
     }
 
 }

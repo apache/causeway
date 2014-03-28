@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionResource;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
@@ -52,6 +53,21 @@ public class VersionResourceServerside extends ResourceAbstract implements Versi
         renderer.includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
+    }
+
+    @Override
+    public Response deleteVersionNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting the version resource is not allowed.");
+    }
+
+    @Override
+    public Response putVersionNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to the version resource is not allowed.");
+    }
+
+    @Override
+    public Response postVersionNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to the version resource is not allowed.");
     }
 
     private void fakeRuntimeExceptionIfXFail() {

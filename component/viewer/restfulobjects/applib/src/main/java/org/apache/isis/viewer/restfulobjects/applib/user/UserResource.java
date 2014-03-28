@@ -18,9 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.user;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -34,5 +32,14 @@ public interface UserResource {
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_USER })
     @ClientResponseType(entityType = String.class)
     public Response user();
+
+    @DELETE
+    public Response deleteUserNotAllowed();
+
+    @PUT
+    public Response putUserNotAllowed();
+
+    @POST
+    public Response postUserNotAllowed();
 
 }

@@ -103,7 +103,7 @@ public class Get_thenRepresentation_ok {
         
         
         assertThat(repr.getLinks(), isArray());
-        assertThat(repr.getLinks().size(), is(2));
+        assertThat(repr.getLinks().size(), is(3));
         
         // link to self (see above)
         // link to describedby

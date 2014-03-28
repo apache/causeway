@@ -45,6 +45,18 @@ public interface DomainServiceResource {
     @ClientResponseType(entityType = String.class)
     public Response services();
 
+    @DELETE
+    @Path("/")
+    public Response deleteServicesNotAllowed();
+
+    @PUT
+    @Path("/")
+    public Response putServicesNotAllowed();
+
+    @POST
+    @Path("/")
+    public Response postServicesNotAllowed();
+
     // //////////////////////////////////////////////////////////
     // domain service
     // //////////////////////////////////////////////////////////

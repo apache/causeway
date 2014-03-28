@@ -16,57 +16,56 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.tck.domainservice.root;
+package org.apache.isis.viewer.restfulobjects.tck.version;
 
 import javax.ws.rs.core.Response;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
+import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.version.VersionResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class Post_thenResponseCode_405_bad {
+public class Put_thenResponseCode_405_bad {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
 
-    protected RestfulClient client;
-    private DomainServiceResource domainServiceResource;
+    private RestfulClient client;
+    private VersionResource resource;
 
     @Before
     public void setUp() throws Exception {
-        final WebServer webServer = webServerRule.getWebServer();
-        client = new RestfulClient(webServer.getBase());
-        domainServiceResource = client.getDomainServiceResource();
+        client = webServerRule.getClient();
+        resource = client.getVersionResource();
     }
 
     @Test
-    public void followLink() throws Exception {
+    public void representation() throws Exception {
 
         // given
-        final Response serviceResp = domainServiceResource.service("ActionsEntities");
-        final RestfulResponse<DomainObjectRepresentation> serviceJsonResp = RestfulResponse.ofT(serviceResp);
-        final DomainObjectRepresentation serviceRepr = serviceJsonResp.getEntity();
-        final LinkRepresentation upLink = serviceRepr.getLinkWithRel(Rel.UP);
-        final LinkRepresentation postLink = upLink.withMethod(RestfulHttpMethod.POST);
+        final Response resp = resource.version();
+
+        final RestfulResponse<VersionRepresentation> jsonResp = RestfulResponse.ofT(resp);
+        final VersionRepresentation repr = jsonResp.getEntity();
+        final LinkRepresentation selfLink = repr.getLinkWithRel(Rel.SELF);
+        final LinkRepresentation putLink = selfLink.withMethod(RestfulHttpMethod.PUT);
 
         // when
-        final RestfulResponse<JsonRepresentation> restfulResponse = client.follow(postLink);
+        final RestfulResponse<JsonRepresentation> restfulResponse = client.follow(putLink);
 
         // then
         assertThat(restfulResponse.getStatus(), is(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED));
-        assertThat(restfulResponse.getHeader(RestfulResponse.Header.WARNING), is("Posting to the services resource is not allowed."));
+        assertThat(restfulResponse.getHeader(RestfulResponse.Header.WARNING), is("Putting to the version resource is not allowed."));
     }
 
 }

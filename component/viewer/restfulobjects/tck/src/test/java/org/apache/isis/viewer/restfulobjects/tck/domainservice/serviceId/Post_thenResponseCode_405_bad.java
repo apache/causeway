@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.tck.domainservice.root;
+package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId;
 
 import javax.ws.rs.core.Response;
 import org.junit.Before;
@@ -57,16 +57,16 @@ public class Post_thenResponseCode_405_bad {
         // given
         final Response serviceResp = domainServiceResource.service("ActionsEntities");
         final RestfulResponse<DomainObjectRepresentation> serviceJsonResp = RestfulResponse.ofT(serviceResp);
-        final DomainObjectRepresentation serviceRepr = serviceJsonResp.getEntity();
-        final LinkRepresentation upLink = serviceRepr.getLinkWithRel(Rel.UP);
-        final LinkRepresentation postLink = upLink.withMethod(RestfulHttpMethod.POST);
+        final DomainObjectRepresentation servicesRepr = serviceJsonResp.getEntity();
+        final LinkRepresentation selfLink = servicesRepr.getLinkWithRel(Rel.SELF);
+        final LinkRepresentation postLink = selfLink.withMethod(RestfulHttpMethod.POST);
 
         // when
         final RestfulResponse<JsonRepresentation> restfulResponse = client.follow(postLink);
 
         // then
         assertThat(restfulResponse.getStatus(), is(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED));
-        assertThat(restfulResponse.getHeader(RestfulResponse.Header.WARNING), is("Posting to the services resource is not allowed."));
+        assertThat(restfulResponse.getHeader(RestfulResponse.Header.WARNING), is("Posting to a service resource is not allowed."));
     }
 
 }

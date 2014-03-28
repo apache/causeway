@@ -18,9 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.homepage;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -34,6 +32,15 @@ public interface HomePageResource {
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     @ClientResponseType(entityType = String.class)
     public Response homePage();
+
+    @DELETE
+    public Response deleteHomePageNotAllowed();
+
+    @PUT
+    public Response putHomePageNotAllowed();
+
+    @POST
+    public Response postHomePageNotAllowed();
 
     /**
      * Not part of the RO spec; this resource always returns 401, and is

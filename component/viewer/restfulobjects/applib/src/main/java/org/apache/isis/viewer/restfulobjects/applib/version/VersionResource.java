@@ -18,9 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.version;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -34,5 +32,14 @@ public interface VersionResource {
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_VERSION })
     @ClientResponseType(entityType = String.class)
     public Response version();
+
+    @DELETE
+    public Response deleteVersionNotAllowed();
+
+    @PUT
+    public Response putVersionNotAllowed();
+
+    @POST
+    public Response postVersionNotAllowed();
 
 }

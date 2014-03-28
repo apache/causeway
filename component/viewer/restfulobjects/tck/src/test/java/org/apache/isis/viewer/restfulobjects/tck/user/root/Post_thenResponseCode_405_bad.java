@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.tck.domainservice.root;
+package org.apache.isis.viewer.restfulobjects.tck.user.root;
 
 import javax.ws.rs.core.Response;
 import org.junit.Before;
@@ -29,8 +29,8 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
+import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.user.UserResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -42,31 +42,31 @@ public class Post_thenResponseCode_405_bad {
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
 
     protected RestfulClient client;
-    private DomainServiceResource domainServiceResource;
+    private UserResource userResource;
 
     @Before
     public void setUp() throws Exception {
         final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
-        domainServiceResource = client.getDomainServiceResource();
+        userResource = client.getUserResource();
     }
 
     @Test
     public void followLink() throws Exception {
 
         // given
-        final Response serviceResp = domainServiceResource.service("ActionsEntities");
-        final RestfulResponse<DomainObjectRepresentation> serviceJsonResp = RestfulResponse.ofT(serviceResp);
-        final DomainObjectRepresentation serviceRepr = serviceJsonResp.getEntity();
-        final LinkRepresentation upLink = serviceRepr.getLinkWithRel(Rel.UP);
-        final LinkRepresentation postLink = upLink.withMethod(RestfulHttpMethod.POST);
+        final Response serviceResp = userResource.user();
+        final RestfulResponse<UserRepresentation> serviceJsonResp = RestfulResponse.ofT(serviceResp);
+        final UserRepresentation serviceRepr = serviceJsonResp.getEntity();
+        final LinkRepresentation selfLink = serviceRepr.getLinkWithRel(Rel.SELF);
+        final LinkRepresentation postLink = selfLink.withMethod(RestfulHttpMethod.POST);
 
         // when
         final RestfulResponse<JsonRepresentation> restfulResponse = client.follow(postLink);
 
         // then
         assertThat(restfulResponse.getStatus(), is(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED));
-        assertThat(restfulResponse.getHeader(RestfulResponse.Header.WARNING), is("Posting to the services resource is not allowed."));
+        assertThat(restfulResponse.getHeader(RestfulResponse.Header.WARNING), is("Posting to the user resource is not allowed."));
     }
 
 }

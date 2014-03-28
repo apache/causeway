@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
@@ -48,6 +49,21 @@ public class HomePageResourceServerside extends ResourceAbstract implements Home
         renderer.includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
+    }
+
+    @Override
+    public Response deleteHomePageNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting the home page resource is not allowed.");
+    }
+
+    @Override
+    public Response putHomePageNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to the home page resource is not allowed.");
+    }
+
+    @Override
+    public Response postHomePageNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to the home page resource is not allowed.");
     }
 
     @Override

@@ -65,6 +65,21 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
 
+    @Override
+    public Response deleteServicesNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting the services resource is not allowed.");
+    }
+
+    @Override
+    public Response putServicesNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to the services resource is not allowed.");
+    }
+
+    @Override
+    public Response postServicesNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to the services resource is not allowed.");
+    }
+
     // //////////////////////////////////////////////////////////
     // domain service
     // //////////////////////////////////////////////////////////

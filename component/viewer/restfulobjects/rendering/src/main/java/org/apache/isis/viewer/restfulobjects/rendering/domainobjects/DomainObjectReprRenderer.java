@@ -78,7 +78,11 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         public boolean includeDescribedBy() {
             return isRegular() || isPersistLinkArgs();
         }
-        
+
+        public boolean includeUp() {
+            return isRegular();
+        }
+
         public boolean checkVisibility() {
             return isRegular() || isUpdatePropertiesLinkArgs();
         }
@@ -117,6 +121,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     @Override
     public JsonRepresentation render() {
 
+        final boolean isService = objectAdapter.getSpecification().isService();
+
         if (!(mode.isArgs())) {
             
             // self, extensions.oid
@@ -132,7 +138,6 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             representation.mapPut("title", title);
             
             // serviceId or instance Id
-            final boolean isService = objectAdapter.getSpecification().isService();
             if (isService) {
                 representation.mapPut("serviceId", ServiceUtil.id(objectAdapter.getObject()));
             } else {
@@ -153,6 +158,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         if (mode.includeDescribedBy()) {
             addLinkToDescribedBy();
         }
+        if(isService && mode.includeUp()) {
+            addLinkToUp();
+        }
 
         if (!mode.isArgs()) {
             // update/persist
@@ -160,7 +168,6 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             addUpdatePropertiesLinkIfRequired();
 
             // extensions
-            final boolean isService = objectAdapter.getSpecification().isService();
             getExtensions().mapPut("isService", isService);
             getExtensions().mapPut("isPersistent", objectAdapter.representsPersistent());
         }
@@ -190,6 +197,11 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             renderer.with(objectAdapter.getSpecification());
             link.mapPut("value", renderer.render());
         }
+        getLinks().arrayAdd(link);
+    }
+
+    private void addLinkToUp() {
+        final JsonRepresentation link = LinkBuilder.newBuilder(rendererContext, Rel.UP.getName(), RepresentationType.LIST, "services").build();
         getLinks().arrayAdd(link);
     }
 

@@ -58,15 +58,15 @@ public class Put_thenResponseCode_405_bad {
         final Response serviceResp = domainServiceResource.service("ActionsEntities");
         final RestfulResponse<DomainObjectRepresentation> serviceJsonResp = RestfulResponse.ofT(serviceResp);
         final DomainObjectRepresentation serviceRepr = serviceJsonResp.getEntity();
-        final LinkRepresentation selfLink = serviceRepr.getLinkWithRel(Rel.SELF);
-        final LinkRepresentation postLink = selfLink.withMethod(RestfulHttpMethod.PUT);
+        final LinkRepresentation upLink = serviceRepr.getLinkWithRel(Rel.UP);
+        final LinkRepresentation postLink = upLink.withMethod(RestfulHttpMethod.PUT);
 
         // when
         final RestfulResponse<JsonRepresentation> restfulResponse = client.follow(postLink);
 
         // then
         assertThat(restfulResponse.getStatus(), is(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED));
-        assertThat(restfulResponse.getHeader(RestfulResponse.Header.WARNING), is("Putting to a service resource is not allowed."));
+        assertThat(restfulResponse.getHeader(RestfulResponse.Header.WARNING), is("Putting to the services resource is not allowed."));
     }
 
 }
