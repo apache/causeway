@@ -66,6 +66,10 @@ public interface DomainObjectResource {
     @Path("/{domainType}/{instanceId}")
     public Response deleteMethodNotSupported(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId);
 
+    @POST
+    @Path("/{domainType}/{instanceId}")
+    public Response postMethodNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId);
+
 
     // //////////////////////////////////////////////////////////
     // domain object property

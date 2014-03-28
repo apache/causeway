@@ -147,6 +147,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting objects is not supported.");
     }
 
+    @Override
+    public Response postMethodNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") String instanceId) {
+        throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to object resource is not allowed.");
+    }
+
     // //////////////////////////////////////////////////////////
     // domain object property
     // //////////////////////////////////////////////////////////
