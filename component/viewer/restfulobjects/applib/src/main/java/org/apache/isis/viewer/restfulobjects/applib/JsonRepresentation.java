@@ -1359,6 +1359,18 @@ public class JsonRepresentation {
 
     }
 
+    public JsonRepresentation mapPut(Iterable<Entry<String, JsonRepresentation>> entries) {
+        for (Entry<String, JsonRepresentation> entry : entries) {
+            mapPut(entry);
+        }
+        return this;
+    }
+
+    public JsonRepresentation mapPut(Entry<String, JsonRepresentation> entry) {
+        mapPut(entry.getKey(), entry.getValue());
+        return this;
+    }
+
     public JsonRepresentation mapPut(final String key, final BigDecimal value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");

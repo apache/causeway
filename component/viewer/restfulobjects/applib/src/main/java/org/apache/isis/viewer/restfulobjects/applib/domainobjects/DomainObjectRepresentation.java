@@ -18,6 +18,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
+import java.util.Map;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -63,7 +66,7 @@ public class DomainObjectRepresentation extends DomainRepresentation  {
     }
 
     public JsonRepresentation getProperties() {
-        return getRepresentation("members[memberType=property]").ensureArray();
+        return getMembersOfType("property");
     }
 
     public DomainObjectMemberRepresentation getCollection(final String id) {
@@ -71,25 +74,15 @@ public class DomainObjectRepresentation extends DomainRepresentation  {
     }
 
     public JsonRepresentation getCollections() {
-        return getRepresentation("members[memberType=collection]").ensureArray();
+        return getMembersOfType("collection");
     }
 
     public DomainObjectMemberRepresentation getAction(final String id) {
         return getMember(id, "action");
     }
 
-    private DomainObjectMemberRepresentation getMember(final String id, String memberType) {
-        // TODO: would be nice to use "members.%s[memberType=...]" instead
-        JsonRepresentation jsonRepr = getRepresentation("members.%s", id);
-        if(jsonRepr == null) {
-            return null;
-        }
-        DomainObjectMemberRepresentation member = jsonRepr.as(DomainObjectMemberRepresentation.class);
-        return member.getMemberType().equals(memberType) ? member : null;
-    }
-
     public JsonRepresentation getActions() {
-        return getRepresentation("members[memberType=action]");
+        return getMembersOfType("action");
     }
 
     /**
@@ -105,6 +98,35 @@ public class DomainObjectRepresentation extends DomainRepresentation  {
      */
     public String getOid() {
         return getString("extensions.oid");
+    }
+
+
+
+    private DomainObjectMemberRepresentation getMember(final String id, String memberType) {
+        // TODO: would be nice to use "members.%s[memberType=...]" instead
+        JsonRepresentation jsonRepr = getRepresentation("members.%s", id);
+        if(jsonRepr == null) {
+            return null;
+        }
+        DomainObjectMemberRepresentation member = jsonRepr.as(DomainObjectMemberRepresentation.class);
+        return member.getMemberType().equals(memberType) ? member : null;
+    }
+
+    private JsonRepresentation getMembersOfType(String memberTypeOf) {
+        final JsonRepresentation members = getRepresentation("members");
+        return JsonRepresentation.newMap().mapPut(
+                Iterables.filter(members.mapIterable(), havingMemberTypeOf(memberTypeOf)));
+    }
+
+    private static Predicate<Map.Entry<String, JsonRepresentation>> havingMemberTypeOf(final String memberTypeOf) {
+        return new Predicate<Map.Entry<String, JsonRepresentation>>() {
+            @Override
+            public boolean apply(Map.Entry<String, JsonRepresentation> input) {
+                final JsonRepresentation value = input.getValue();
+                final String memberType = value.getRepresentation("memberType").asString();
+                return memberTypeOf.equals(memberType);
+            }
+        };
     }
 
 

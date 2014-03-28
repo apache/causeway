@@ -18,6 +18,63 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid;
 
+import java.io.IOException;
+import javax.ws.rs.core.Response;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.apache.isis.core.webserver.WebServer;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
+import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 public class Get_givenHiddenMembers_thenRepresentation_ok_TODO {
+
+    @Rule
+    public IsisWebServerRule webServerRule = new IsisWebServerRule();
+
+    protected RestfulClient client;
+
+    private DomainObjectResource domainObjectResource;
+
+    @Before
+    public void setUp() throws Exception {
+        final WebServer webServer = webServerRule.getWebServer();
+        client = new RestfulClient(webServer.getBase());
+        domainObjectResource = client.getDomainObjectResource();
+
+    }
+
+    @Test
+    public void domainObjectWithHiddenMembers() throws Exception {
+
+        // given, when
+        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("BSRL","64");
+
+        // property ('invisibleProperty')
+        final JsonRepresentation properties = domainObjectRepr.getProperties();
+        final JsonRepresentation nameProperty = properties.getRepresentation("invisibleProperty");
+        assertThat(nameProperty, is(nullValue()));
+    }
+
+
+    private DomainObjectRepresentation givenDomainObjectRepresentationFor(final String domainType, String instanceId) throws JsonParseException, JsonMappingException, IOException {
+        final DomainObjectResource domainObjectResource = client.getDomainObjectResource();
+
+        final Response domainObjectResp = domainObjectResource.object(domainType, instanceId);
+        final RestfulResponse<DomainObjectRepresentation> domainObjectJsonResp = RestfulResponse.ofT(domainObjectResp);
+        assertThat(domainObjectJsonResp.getStatus().getFamily(), is(Response.Status.Family.SUCCESSFUL));
+
+        return domainObjectJsonResp.getEntity();
+    }
 
 }

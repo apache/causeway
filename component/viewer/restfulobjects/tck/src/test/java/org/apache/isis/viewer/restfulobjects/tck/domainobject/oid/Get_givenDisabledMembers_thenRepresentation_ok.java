@@ -43,7 +43,7 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRe
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 
-public class Get_givenDisabledMembers_thenRepresentation_ok_TODO {
+public class Get_givenDisabledMembers_thenRepresentation_ok {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -60,23 +60,19 @@ public class Get_givenDisabledMembers_thenRepresentation_ok_TODO {
         
     }
 
-    
-    @Ignore("TODO")
     @Test
     public void domainObjectWithDisabledMembers() throws Exception {
 
         // given, when
-        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("OID","xxx");
+        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("BSRL","64");
 
-        // property ('name')
+        // property ('visibleButNotEditableProperty')
         final JsonRepresentation properties = domainObjectRepr.getProperties();
-        final JsonRepresentation nameProperty = properties.getRepresentation("name");
-        assertThat(nameProperty.getString("disabledReason"), is(not(nullValue())));
+        final JsonRepresentation nameProperty = properties.getRepresentation("visibleButNotEditableProperty");
+        assertThat(nameProperty.getString("disabledReason"), is("Always disabled"));
     }
 
-    
 
-    
     private DomainObjectRepresentation givenDomainObjectRepresentationFor(final String domainType, String instanceId) throws JsonParseException, JsonMappingException, IOException {
         final DomainObjectResource domainObjectResource = client.getDomainObjectResource();
 
@@ -84,8 +80,7 @@ public class Get_givenDisabledMembers_thenRepresentation_ok_TODO {
         final RestfulResponse<DomainObjectRepresentation> domainObjectJsonResp = RestfulResponse.ofT(domainObjectResp);
         assertThat(domainObjectJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
 
-        final DomainObjectRepresentation domainObjectRepr = domainObjectJsonResp.getEntity();
-        return domainObjectRepr;
+        return domainObjectJsonResp.getEntity();
     }
 
     

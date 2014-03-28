@@ -18,21 +18,18 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
-import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import java.io.IOException;
-
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
-public class DomainObjectRepresentationTest {
+import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+
+public class DomainObjectRepresentationTest_getProperties {
 
     private DomainObjectRepresentation representation;
 
@@ -42,10 +39,14 @@ public class DomainObjectRepresentationTest {
     }
 
     @Test
-    public void xx() throws JsonParseException, JsonMappingException, IOException {
-        final JsonRepresentation flag = representation.getProperty("flag");
-        assertThat(flag, is(not(nullValue())));
-        assertThat(flag.getBoolean("value"), is(true));
+    public void getProperties() throws JsonParseException, JsonMappingException, IOException {
+        final JsonRepresentation properties = representation.getProperties();
+
+        final JsonRepresentation members = representation.getMembers();
+        assertThat(members.size(), is(12));
+
+        assertThat(properties.isMap(), is(true));
+        assertThat(properties.size(), is(10));
     }
 
 }
