@@ -55,6 +55,18 @@ public interface DomainServiceResource {
     @ClientResponseType(entityType = String.class)
     public Response service(@PathParam("serviceId") final String serviceId);
 
+    @DELETE
+    @Path("/{serviceId}")
+    public Response deleteServiceNotAllowed(@PathParam("serviceId") final String serviceId);
+
+    @PUT
+    @Path("/{serviceId}")
+    public Response putServiceNotAllowed(@PathParam("serviceId") final String serviceId);
+
+    @POST
+    @Path("/{serviceId}")
+    public Response postServiceNotAllowed(@PathParam("serviceId") final String serviceId);
+
     // //////////////////////////////////////////////////////////
     // domain service property
     // //////////////////////////////////////////////////////////
@@ -64,7 +76,6 @@ public interface DomainServiceResource {
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
     public Response propertyDetails(@PathParam("serviceId") final String serviceId, @PathParam("propertyId") final String propertyId);
-
 
     // //////////////////////////////////////////////////////////
     // domain service collection
@@ -117,4 +128,8 @@ public interface DomainServiceResource {
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
     public Response invokeAction(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream arguments);
+
+    @DELETE
+    @Path("/{serviceId}/actions/{actionId}/invoke")
+    public Response deleteInvokeActionNotAllowed(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId);
 }

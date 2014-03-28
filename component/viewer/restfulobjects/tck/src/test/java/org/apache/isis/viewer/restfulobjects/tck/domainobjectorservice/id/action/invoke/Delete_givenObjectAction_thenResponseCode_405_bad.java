@@ -16,8 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.tck.domainservice.root;
+package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.action.invoke;
 
-public class Put_thenResponseCode_205_bad_TODO {
+public class Delete_givenObjectAction_thenResponseCode_405_bad {
 
 }

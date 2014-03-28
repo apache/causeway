@@ -42,6 +42,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
@@ -220,6 +221,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         return helper.propertyDetails(propertyId, MemberMode.MUTATING, Caching.NONE, getResourceContext().getWhere());
     }
 
+    @Override
+    public Response postPropertyNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") String instanceId, @PathParam("propertyId") String propertyId) {
+        throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to a property resource is not allowed.");
+    }
+
     // //////////////////////////////////////////////////////////
     // domain object collection
     // //////////////////////////////////////////////////////////
@@ -341,6 +347,21 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         return helper.actionPrompt(actionId, getResourceContext().getWhere());
     }
 
+    @Override
+    public Response deleteActionPromptNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") String instanceId, @PathParam("actionId") String actionId) {
+        throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting action prompt resource is not allowed.");
+    }
+
+    @Override
+    public Response postActionPromptNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") String instanceId, @PathParam("actionId") String actionId) {
+        throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to an action prompt resource is not allowed.");
+    }
+
+    @Override
+    public Response putActionPromptNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") String instanceId, @PathParam("actionId") String actionId) {
+        throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to an action prompt resource is not allowed.");
+    }
+
     // //////////////////////////////////////////////////////////
     // domain object action invoke
     // //////////////////////////////////////////////////////////
@@ -390,6 +411,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
         return helper.invokeAction(actionId, arguments, getResourceContext().getWhere());
+    }
+
+    @Override
+    public Response deleteInvokeActionNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") String instanceId, @PathParam("actionId") String actionId) {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting an action invocation resource is not allowed.");
     }
 
 }

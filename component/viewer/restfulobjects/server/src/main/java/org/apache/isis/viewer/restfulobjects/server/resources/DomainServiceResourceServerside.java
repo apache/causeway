@@ -37,9 +37,11 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
+import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainResourceHelper.MemberMode;
 import org.apache.isis.viewer.restfulobjects.server.resources.ResourceAbstract.Caching;
 
@@ -82,6 +84,21 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
             .includesSelf();
 
         return responseOfOk(renderer, Caching.ONE_DAY).build();
+    }
+
+    @Override
+    public Response deleteServiceNotAllowed(@PathParam("serviceId") String serviceId) {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting a service resource is not allowed.");
+    }
+
+    @Override
+    public Response putServiceNotAllowed(@PathParam("serviceId") String serviceId) {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to a service resource is not allowed.");
+    }
+
+    @Override
+    public Response postServiceNotAllowed(@PathParam("serviceId") String serviceId) {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to a service resource is not allowed.");
     }
 
     // //////////////////////////////////////////////////////////
@@ -186,5 +203,9 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         return helper.invokeAction(actionId, arguments, getResourceContext().getWhere());
     }
 
+    @Override
+    public Response deleteInvokeActionNotAllowed(@PathParam("serviceId") String serviceId, @PathParam("actionId") String actionId) {
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting an action invocation resource is not allowed.");
+    }
 
 }

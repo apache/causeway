@@ -94,6 +94,11 @@ public interface DomainObjectResource {
     @ClientResponseType(entityType = String.class)
     public Response clearProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId);
 
+    @POST
+    @Path("/{domainType}/{instanceId}/properties/{propertyId}")
+    public Response postPropertyNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId);
+
+
     // //////////////////////////////////////////////////////////
     // domain object collection
     // //////////////////////////////////////////////////////////
@@ -133,6 +138,18 @@ public interface DomainObjectResource {
     @ClientResponseType(entityType = String.class)
     public Response actionPrompt(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId);
 
+    @DELETE
+    @Path("/{domainType}/{instanceId}/actions/{actionId}")
+    public Response deleteActionPromptNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId);
+
+    @PUT
+    @Path("/{domainType}/{instanceId}/actions/{actionId}")
+    public Response putActionPromptNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId);
+
+    @POST
+    @Path("/{domainType}/{instanceId}/actions/{actionId}")
+    public Response postActionPromptNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId);
+
     // //////////////////////////////////////////////////////////
     // domain object action invoke
     // //////////////////////////////////////////////////////////
@@ -156,5 +173,9 @@ public interface DomainObjectResource {
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
     @ClientResponseType(entityType = String.class)
     public Response invokeAction(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, final InputStream arguments);
+
+    @DELETE
+    @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
+    public Response deleteInvokeActionNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId);
 
 }
