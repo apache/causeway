@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis-core-tck</artifactId>
-        <version>1.4.0</version>
+        <version>1.4.2-SNAPSHOT</version>
         <relativePath>../../../../core/tck/pom.xml</relativePath>
     </parent>
 
@@ -35,7 +35,6 @@
 	<packaging>war</packaging>
 	
     <properties>
-        <maven.test.skip>true</maven.test.skip>
 
         <isis-viewer-restfulobjects.version>2.3.0-SNAPSHOT</isis-viewer-restfulobjects.version>
 
@@ -52,6 +51,20 @@
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>maven-jetty-plugin</artifactId>
             </plugin>
+            
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                   <includes>
+                       <include>**/*Test_*.java</include>
+                       <include>**/Get_*.java</include>
+                       <include>**/Delete_*.java</include>
+                       <include>**/Put_*.java</include>
+                       <include>**/Post_*.java</include>
+                   </includes>
+                </configuration>
+            </plugin>
+            
 		</plugins>
 	</build>
 

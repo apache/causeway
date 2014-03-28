@@ -120,6 +120,20 @@
         </profile>
 
         <profile>
+            <id>security-file</id>
+            <modules>
+                <module>component/security/file</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>security-shiro</id>
+            <modules>
+                <module>component/security/shiro</module>
+            </modules>
+        </profile>
+
+        <profile>
             <id>objectstore-jdo</id>
             <modules>
                 <module>component/objectstore/jdo</module>

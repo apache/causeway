@@ -76,7 +76,7 @@ public class ToDoItemContributionsTest_updateCategory extends ToDoIntegTest {
     public void categoryCannotBeNull() throws Exception {
         
         // when, then
-        expectedExceptions.expectMessage("Category is mandatory");
+        expectedExceptions.expectMessage("'Category' is mandatory");
         toDoItemContributions.updateCategory(toDoItem, null, Subcategory.Chores);
     }
 

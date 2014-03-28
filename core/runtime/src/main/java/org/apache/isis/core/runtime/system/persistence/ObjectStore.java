@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -147,7 +146,7 @@ public interface ObjectStore extends DebuggableWithTitle, SessionScopedComponent
      * 
      * <p>
      * If the persistence mechanism does not known of an object with the
-     * specified {@link TypedOid} then a {@link ObjectNotFoundException} should be
+     * specified {@link TypedOid} then a {@link org.apache.isis.core.runtime.persistence.ObjectNotFoundException} should be
      * thrown.
      * 
      * <p>
@@ -164,7 +163,7 @@ public interface ObjectStore extends DebuggableWithTitle, SessionScopedComponent
      * @return the requested {@link ObjectAdapter} that has the specified
      *         {@link TypedOid}.
      * 
-     * @throws ObjectNotFoundException
+     * @throws org.apache.isis.core.runtime.persistence.ObjectNotFoundException
      *             when no object corresponding to the oid can be found
      */
     ObjectAdapter loadInstanceAndAdapt(TypedOid oid);

@@ -346,6 +346,8 @@ public final class DomainResourceHelper {
         if (objectSpec.isEncodeable()) {
             try {
                 return JsonValueEncoder.asAdapter(objectSpec, argRepr);
+            }catch(IllegalArgumentException ex) {
+                throw ex;
             }catch(Exception ex) {
                 StringBuilder buf = new StringBuilder("Failed to parse representation ");
                 try {

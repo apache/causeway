@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid;
 
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasProfile;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 
 import javax.ws.rs.core.Response;
@@ -41,7 +42,7 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRe
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
 
-public class Get__thenResponseCode_andContentType_andContentLength_ok_TOCOMPLETE {
+public class Get_thenResponseCode_andContentType_andContentLength_ok_TOCOMPLETE {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
@@ -87,7 +88,7 @@ public class Get__thenResponseCode_andContentType_andContentLength_ok_TOCOMPLETE
         // then
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
         assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(RestfulMediaType.APPLICATION_JSON_OBJECT));
-        assertThat(restfulResponse.getHeader(Header.CONTENT_LENGTH), is(6382));
+        assertThat(restfulResponse.getHeader(Header.CONTENT_LENGTH), is(greaterThan(6000)));
     }
 
 }

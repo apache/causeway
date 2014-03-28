@@ -38,6 +38,8 @@ import javax.jdo.spi.PersistenceCapable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +60,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -486,13 +487,13 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
         final Object domainObject = adapter.getObject();
 		if (domainObject == null) {
 		    // REVIEW: is this possible?
-            throw new ObjectNotFoundException(adapter.getOid());
+            throw new PojoRefreshException(adapter.getOid());
         }
 
         try {
             getPersistenceManager().refresh(domainObject);
         } catch (final RuntimeException e) {
-            throw new ObjectNotFoundException(adapter.getOid(), e);
+            throw new PojoRefreshException(adapter.getOid(), e);
         }
 
         // possibly redundant because also called in the post-load event

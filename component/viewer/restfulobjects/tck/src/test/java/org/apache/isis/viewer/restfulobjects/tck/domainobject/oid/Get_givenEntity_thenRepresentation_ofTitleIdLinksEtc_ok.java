@@ -89,7 +89,7 @@ public class Get_givenEntity_thenRepresentation_ofTitleIdLinksEtc_ok {
                             .href(matches(".+\\/domain-types\\/PRMV"))
                             .httpMethod(RestfulHttpMethod.GET)
                             .type(RepresentationType.DOMAIN_TYPE.getMediaType()));
-        assertThat(domainObjectRepr.getLinkWithRel(Rel.MODIFY), 
+        assertThat(domainObjectRepr.getLinkWithRel(Rel.UPDATE),
                         isLink()
                             .href(matches(".+\\/objects\\/PRMV\\/\\d+"))
                             .httpMethod(RestfulHttpMethod.PUT)

@@ -16,49 +16,55 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.tck.user.root;
+package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.action.invoke;
 
-import static org.apache.isis.core.commons.matchers.IsisMatchers.greaterThan;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import javax.ws.rs.core.Response;
-
-import org.apache.isis.core.commons.matchers.IsisMatchers;
+import org.apache.isis.viewer.restfulobjects.applib.*;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
-import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.user.UserResource;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation.ResultType;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.apache.isis.viewer.restfulobjects.tck.Util;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class Get_thenResponseHeaders_ContentLength_ok {
-	@Rule
+import javax.ws.rs.core.Response;
+import java.io.IOException;
+
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasProfile;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+public class Get_givenViewModel_ok_TODO {
+
+    @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
 
     private RestfulClient client;
-    private UserResource resource;
+
+    private DomainServiceResource serviceResource;
 
     @Before
     public void setUp() throws Exception {
         client = webServerRule.getClient();
-        resource = client.getUserResource();
+
+        serviceResource = client.getDomainServiceResource();
     }
 
-
+    @Ignore
     @Test
-    public void ok() throws Exception {
+    public void usingClientFollow() throws Exception {
 
-        // given
-        final Response resp = resource.user();
-
-        // when
-        final RestfulResponse<UserRepresentation> restfulResponse = RestfulResponse.ofT(resp);
-
-        // then
-        assertThat(restfulResponse.getHeader(Header.CONTENT_LENGTH), is(greaterThan(100)));
     }
+
 }

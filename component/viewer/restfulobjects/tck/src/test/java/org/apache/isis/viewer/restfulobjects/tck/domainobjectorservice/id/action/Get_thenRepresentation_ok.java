@@ -93,11 +93,11 @@ public class Get_thenRepresentation_ok {
         final LinkRepresentation invokeLink = actionPromptRepr.getLinkWithRel(Rel.INVOKE);
         assertThat(invokeLink, isLink(client)
                                 .httpMethod(RestfulHttpMethod.GET)
-                                .href(endsWith("/services/ActionsEntities/actions/contains/invoke")));
+                                .href(endsWith("/objects/RTNE/67/actions/contains/invoke")));
 
         assertThat(invokeLink.getArguments(), is(not(nullValue())));
         assertThat(invokeLink.getArguments().isArray(), is(false));
-        assertThat(invokeLink.getArguments().size(), is(3));
+        assertThat(invokeLink.getArguments().size(), is(2));
 
      // described by link
         final LinkRepresentation describedByLink = actionPromptRepr.getLinkWithRel(Rel.DESCRIBEDBY);
@@ -107,6 +107,6 @@ public class Get_thenRepresentation_ok {
 
         assertThat(actionPromptRepr.getExtensions().getString("actionType"), is("user"));
         assertThat(actionPromptRepr.getExtensions().getString("actionSemantics"), is("safe"));
-        assertThat(actionPromptRepr.getArray("parameters").size(), is(3));
+        assertThat(actionPromptRepr.getMap("parameters").size(), is(2));
     }
 }

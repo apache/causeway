@@ -123,9 +123,9 @@ public class Get_givenMandatorySimpleArg_whenArgNullValue_bad {
         RestfulResponse<JsonRepresentation> restfulResponseOfError = restfulResponse.wraps(JsonRepresentation.class);
         JsonRepresentation repr = restfulResponseOfError.getEntity();
         
-        assertThat(repr.getString("from.invalidReason"), is("Mandatory"));
+        assertThat(repr.getString("from.invalidReason"), is("'from' is mandatory"));
         // TODO: really ought to be null, but ObjectActionImpl.isProposedArgumentSetValidResultSet also checks that each argument is valid
-        assertThat(repr.getString("x-ro-invalidReason"), is("Mandatory")); 
+        assertThat(repr.getString("x-ro-invalidReason"), is("'from' is mandatory"));
     }
 
 

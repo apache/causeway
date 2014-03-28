@@ -16,36 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.tck.any;
+package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.action.invoke;
 
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class NotAuthorized_TODO {
+public class Put_givenViewModel_then_ok_TODO {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
+
     private RestfulClient client;
+
+    private DomainServiceResource serviceResource;
 
     @Before
     public void setUp() throws Exception {
         client = webServerRule.getClient();
+
+        serviceResource = client.getDomainServiceResource();
     }
 
-    @Ignore("TODO")
+    @Ignore
     @Test
-    public void whenAuthenticated() throws Exception {
+    public void usingClientFollow() throws Exception {
 
-    }
-
-    @Ignore("TODO")
-    @Test
-    public void whenNotAuthenticated() throws Exception {
-     // should return 401 (13.5)
     }
 
 }

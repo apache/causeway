@@ -140,7 +140,12 @@ public interface AdapterManager extends Injectable {
 
     /**
      * As per {@link #adapterFor(TypedOid, ConcurrencyChecking)}, with
-     * {@value ConcurrencyChecking#NO_CHECK no checking}.
+     * {@value org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking#NO_CHECK no checking}.
+     *
+     * <p>
+     * This method  will <i>always</i> return an object, possibly indicating it is persistent; so make sure that you
+     * know that the oid does indeed represent an object you know exists.
+     * </p>
      */
     ObjectAdapter adapterFor(TypedOid oid);
     

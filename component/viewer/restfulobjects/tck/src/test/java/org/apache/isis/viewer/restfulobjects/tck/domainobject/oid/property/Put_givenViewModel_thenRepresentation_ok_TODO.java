@@ -16,23 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid.property;
 
-package org.apache.isis.core.runtime.persistence;
+public class Put_givenViewModel_thenRepresentation_ok_TODO {
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-
-/**
- * Indicates that the <tt>PojoRecreator</tt> was unable to instantiate a new pojo for the specified
- * {@link org.apache.isis.core.metamodel.adapter.oid.Oid}.
- */
-public class ObjectNotFoundException extends ObjectPersistenceException {
-    private static final long serialVersionUID = 1L;
-
-    public ObjectNotFoundException(final Oid oid) {
-        super("Object not found in store with oid " + oid);
-    }
-
-    public ObjectNotFoundException(final Oid oid, final Throwable cause) {
-        super("Object not found in store with oid " + oid, cause);
-    }
 }

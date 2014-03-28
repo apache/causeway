@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.core.runtime.persistence.PojoRecreationException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 
@@ -34,80 +35,59 @@ public final class OidUtils {
     private OidUtils() {
     }
 
-    public static String getDomainType(final RendererContext renderContext, final ObjectAdapter objectAdapter) {
-        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getDomainType(objectAdapter);
-    }
-
-    public static String getInstanceId(final RendererContext renderContext, final ObjectAdapter objectAdapter) {
-        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getInstanceId(renderContext, objectAdapter);
-    }
-
-    // REVIEW: it's a bit hokey to join these together just to split them out again.
-    public static String joinAsOid(final String domainType, final String instanceIdEncoded) {
+    /**
+     * @return {@code null} if not persistent and not a view model.
+     */
+    public static ObjectAdapter getObjectAdapterElseNull(final RendererContext resourceContext,
+                                                         final String domainType, final String instanceIdEncoded) {
         final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
-        return getOidMarshaller().joinAsOid(domainType, instanceIdUnencoded);
+        String oidStrUnencoded = getOidMarshaller().joinAsOid(domainType, instanceIdUnencoded);
+        return getObjectAdapter(resourceContext, oidStrUnencoded);
     }
 
     /**
-     * 
-     * @return {@code null} if not found.
+     * see {@link #getObjectAdapterElseNull(org.apache.isis.viewer.restfulobjects.rendering.RendererContext, String, String)}
      */
-    public static ObjectAdapter getObjectAdapterElseNull(final RendererContext resourceContext, final String domainType, final String instanceId) throws ObjectNotFoundException {
-        try {
-            return getObjectAdapterElseThrowNotFound(resourceContext, domainType, instanceId);
-        } catch(ObjectNotFoundException ex) {
-            return null;
-        }
+    public static ObjectAdapter getObjectAdapterElseNull(final RendererContext resourceContext, final String oidStrEncoded) {
+        String oidStrUnencoded = UrlDecoderUtils.urlDecode(oidStrEncoded);
+        return getObjectAdapter(resourceContext, oidStrUnencoded);
     }
 
-    /**
-     * 
-     * @throws {@link ObjectNotFoundException} if not found
-     */
-    public static ObjectAdapter getObjectAdapterElseThrowNotFound(final RendererContext resourceContext, final String domainType, final String instanceId) throws ObjectNotFoundException {
-        String oidStr = joinAsOid(domainType, instanceId);
-        
-        // REVIEW: this is all rather disgusting...
-        final ObjectSpecId specId = ObjectSpecId.of(domainType);
+    private static ObjectAdapter getObjectAdapter(RendererContext resourceContext, String oidStrUnencoded) {
+        RootOidDefault rootOid = RootOidDefault.deString(oidStrUnencoded, getOidMarshaller());
+        final ObjectSpecId specId = rootOid.getObjectSpecId();
+
         final ObjectSpecification spec = IsisContext.getSpecificationLoader().lookupBySpecId(specId);
-        if(spec.containsFacet(ViewModelFacet.class)) {
-            // TODO: use the static in OidMarshaller
-            oidStr = "*" + oidStr;
-        }
-
-        return getObjectAdapterForUnencodedElseThrowNotFound(resourceContext, oidStr);
-    }
-
-    /**
-     * 
-     * @return {@code null} if not found.
-     */
-    public static ObjectAdapter getObjectAdapterElseNull(final RendererContext resourceContext, final String oidEncodedStr) {
-        try {
-            return getObjectAdapterElseThrowNotFound(resourceContext, oidEncodedStr);
-        } catch(ObjectNotFoundException ex) {
+        if(spec == null) {
+            // eg "NONEXISTENT:123"
             return null;
         }
-    }
 
-    /**
-     * 
-     * @throws {@link ObjectNotFoundException} if not found
-     */
-    public static ObjectAdapter getObjectAdapterElseThrowNotFound(final RendererContext resourceContext, final String oidEncodedStr) {
-        final String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
-        return getObjectAdapterForUnencodedElseThrowNotFound(resourceContext, oidStr);
-    }
-
-    private static ObjectAdapter getObjectAdapterForUnencodedElseThrowNotFound(final RendererContext resourceContext, final String oidStr) {
-        final RootOid rootOid = RootOidDefault.deStringEncoded(oidStr, getOidMarshaller());
-        //return resourceContext.getPersistenceSession().loadObject(rootOid);
-        return resourceContext.getPersistenceSession().getAdapterManager().adapterFor(rootOid);
+        // TODO: the logic to figure out which PersistenceSession API to call should be pushed down into PersistenceSession itself.
+        if(spec.containsFacet(ViewModelFacet.class)) {
+            if(!rootOid.getIdentifier().startsWith(OidMarshaller.VIEWMODEL_INDICATOR)) {
+                // TODO: this bodge to ensure that the "*" (view model indicator) is probably not required; but leaving it in until have better test coverage
+                rootOid = RootOidDefault.create(rootOid.getObjectSpecId(), OidMarshaller.VIEWMODEL_INDICATOR + rootOid.getIdentifier());
+            }
+            try {
+                return resourceContext.getPersistenceSession().getAdapterManager().adapterFor(rootOid);
+            } catch(final ObjectNotFoundException ex) {
+                return null;
+            } catch(final PojoRecreationException ex) {
+                return null;
+            }
+        } else {
+            try {
+                ObjectAdapter objectAdapter = resourceContext.getPersistenceSession().loadObject(rootOid);
+                return objectAdapter.isTransient() ? null : objectAdapter;
+            } catch(final ObjectNotFoundException ex) {
+                return null;
+            }
+        }
     }
 
     private static OidMarshaller getOidMarshaller() {
 		return new OidMarshaller();
 	}
 
-    
 }

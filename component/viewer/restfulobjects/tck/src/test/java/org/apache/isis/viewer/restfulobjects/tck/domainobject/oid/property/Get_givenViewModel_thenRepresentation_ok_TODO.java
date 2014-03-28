@@ -16,50 +16,50 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.tck.version;
+package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid.property;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import javax.ws.rs.core.Response;
-
-import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.webserver.WebServer;
+import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
+import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
-import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.version.VersionResource;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectPropertyRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class Get_thenResponseHeaders_ContentLength_ok {
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status.Family;
+
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.*;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+
+public class Get_givenViewModel_thenRepresentation_ok_TODO {
+
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
 
-    private RestfulClient client;
-    private VersionResource resource;
+    protected RestfulClient client;
+    private DomainObjectResource domainObjectResource;
 
     @Before
     public void setUp() throws Exception {
         final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
-        
-        resource = client.getVersionResource();
+        domainObjectResource = client.getDomainObjectResource();
     }
-    
+
+
+    @Ignore("TODO")
     @Test
-    public void ok() throws Exception {
-    	// given
-        final Response resp = resource.version();
-
-        // when
-        final RestfulResponse<VersionRepresentation> restfulResponse = RestfulResponse.ofT(resp);
-
-        // then
-        assertThat(restfulResponse.getHeader(Header.CONTENT_LENGTH), is(IsisMatchers.greaterThan(100)));
+    public void representation() throws Exception {
     }
 }

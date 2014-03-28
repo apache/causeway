@@ -576,6 +576,11 @@ public final class JsonValueEncoder {
 
 
     public static ObjectAdapter asAdapter(final ObjectSpecification objectSpec, final JsonRepresentation argRepr) {
+        if(!argRepr.mapHas("value")) {
+            String reason = "No 'value' key";
+            argRepr.mapPut("invalidReason", reason);
+            throw new IllegalArgumentException(reason);
+        }
         if (objectSpec == null) {
             String reason = "ObjectSpec is null, cannot validate";
             argRepr.mapPut("invalidReason", reason);
@@ -588,11 +593,6 @@ public final class JsonValueEncoder {
             throw new IllegalArgumentException(reason);
         }
         
-        if(!argRepr.mapHas("value")) {
-            String reason = "No 'value' key";
-            argRepr.mapPut("invalidReason", reason);
-            throw new IllegalArgumentException(reason);
-        }
         final JsonRepresentation argValueRepr = argRepr.getRepresentation("value");
         if(argValueRepr == null) {
             return null;

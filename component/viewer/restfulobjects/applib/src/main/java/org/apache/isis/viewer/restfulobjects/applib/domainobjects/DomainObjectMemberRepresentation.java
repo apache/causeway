@@ -60,7 +60,7 @@ public class DomainObjectMemberRepresentation extends DomainRepresentation  {
      * Isis-specific extension; not part of the RO API;
      */
     public String getXIsisFormat() {
-        return getString("x-isis-format");
+        return getString("extensions.x-isis-format");
     }
 
 }

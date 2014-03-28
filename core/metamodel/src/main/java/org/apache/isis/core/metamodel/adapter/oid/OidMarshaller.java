@@ -82,7 +82,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 public class OidMarshaller {
 
 	private static final String TRANSIENT_INDICATOR = "!";
-    private static final String VIEWMODEL_INDICATOR = "*";
+    public static final String VIEWMODEL_INDICATOR = "*";
 	private static final String SEPARATOR = ":";
 	private static final String SEPARATOR_NESTING = "~";
 	private static final String SEPARATOR_COLLECTION = "$";

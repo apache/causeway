@@ -27,6 +27,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.Iterator;
 
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.core.runtime.persistence.PojoRecreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +64,6 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
@@ -308,7 +309,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
                 final Object pojo = pojoRecreator.recreatePojo(typedOid);
                 adapter = mapRecreatedPojo(typedOid, pojo);
             } catch(RuntimeException ex) {
-                throw new ObjectNotFoundException(typedOid, ex);
+                throw new PojoRecreationException(typedOid, ex);
             }
         }
 

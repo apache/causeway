@@ -26,6 +26,7 @@ import java.util.Vector;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +51,6 @@ import org.apache.isis.core.objectstore.commands.InMemorySaveObjectCommand;
 import org.apache.isis.core.objectstore.internal.ObjectStoreInstances;
 import org.apache.isis.core.objectstore.internal.ObjectStorePersistedObjects;
 import org.apache.isis.core.objectstore.internal.ObjectStorePersistedObjectsDefault;
-import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;

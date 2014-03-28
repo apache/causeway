@@ -16,50 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.tck.version;
+package org.apache.isis.viewer.restfulobjects.tck.any;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import javax.ws.rs.core.Response;
-
-import org.apache.isis.core.commons.matchers.IsisMatchers;
-import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
-import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.version.VersionResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class Get_thenResponseHeaders_ContentLength_ok {
+public class NotAuthorizedTest_TODO {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
-
     private RestfulClient client;
-    private VersionResource resource;
 
     @Before
     public void setUp() throws Exception {
-        final WebServer webServer = webServerRule.getWebServer();
-        client = new RestfulClient(webServer.getBase());
-        
-        resource = client.getVersionResource();
+        client = webServerRule.getClient();
     }
-    
+
+    @Ignore("TODO")
     @Test
-    public void ok() throws Exception {
-    	// given
-        final Response resp = resource.version();
+    public void whenAuthenticated() throws Exception {
 
-        // when
-        final RestfulResponse<VersionRepresentation> restfulResponse = RestfulResponse.ofT(resp);
-
-        // then
-        assertThat(restfulResponse.getHeader(Header.CONTENT_LENGTH), is(IsisMatchers.greaterThan(100)));
     }
+
+    @Ignore("TODO")
+    @Test
+    public void whenNotAuthenticated() throws Exception {
+     // should return 401 (13.5)
+    }
+
 }

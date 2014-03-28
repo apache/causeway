@@ -28,6 +28,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAware;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 
 public class BookmarkServiceDefault implements BookmarkService, DomainObjectServicesAware {
 
@@ -83,7 +84,7 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
         }
         try {
             return domainObjectServices.lookup(bookmark);
-        } catch(org.apache.isis.core.runtime.persistence.ObjectNotFoundException ex) {
+        } catch(ObjectNotFoundException ex) {
             return null;
         }
     }
