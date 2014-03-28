@@ -62,6 +62,11 @@ public interface DomainObjectResource {
     @ClientResponseType(entityType = String.class)
     public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, final InputStream arguments);
 
+    @DELETE
+    @Path("/{domainType}/{instanceId}")
+    public Response deleteMethodNotSupported(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId);
+
+
     // //////////////////////////////////////////////////////////
     // domain object property
     // //////////////////////////////////////////////////////////

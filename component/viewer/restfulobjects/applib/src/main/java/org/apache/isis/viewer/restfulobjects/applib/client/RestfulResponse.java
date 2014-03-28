@@ -263,7 +263,7 @@ public class RestfulResponse<T> {
         }
 
         public X parse(final String value) {
-            return parser.valueOf(value);
+            return value != null? parser.valueOf(value): null;
         }
 
         public String render(X message) {

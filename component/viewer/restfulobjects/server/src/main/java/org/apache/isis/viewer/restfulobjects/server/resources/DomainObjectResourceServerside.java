@@ -142,6 +142,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         return helper.objectRepresentation();
     }
 
+    @Override
+    public Response deleteMethodNotSupported(@PathParam("domainType") String domainType, @PathParam("instanceId") String instanceId) {
+        throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting objects is not supported.");
+    }
+
     // //////////////////////////////////////////////////////////
     // domain object property
     // //////////////////////////////////////////////////////////
