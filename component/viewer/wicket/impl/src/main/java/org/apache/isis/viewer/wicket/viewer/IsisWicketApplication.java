@@ -221,8 +221,15 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         try {
             super.init();
             
-            final String webInfDir = getServletContext().getRealPath("/WEB-INF");
-            loggingConfigurer.configureLogging(webInfDir, new String[0]);
+            String isisConfigDir = getServletContext().getInitParameter("isis.config.dir");
+            final String loggingPropertiesDir;
+            if(isisConfigDir != null) {
+                loggingPropertiesDir = isisConfigDir;
+            } else {
+                loggingPropertiesDir = getServletContext().getRealPath("/WEB-INF");
+            }
+
+            loggingConfigurer.configureLogging(loggingPropertiesDir, new String[0]);
     
             getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_RENDER);
     
