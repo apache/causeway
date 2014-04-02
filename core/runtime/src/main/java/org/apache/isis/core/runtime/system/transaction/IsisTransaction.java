@@ -603,8 +603,8 @@ public class IsisTransaction implements TransactionScopedComponent {
         final String objectType = oid.getObjectSpecId().asString();
         final String identifier = oid.getIdentifier();
         final PreAndPostValues papv = auditEntry.getValue();
-        final String preValue = asString(papv.getPre());
-        final String postValue = asString(papv.getPost());
+        final String preValue = papv.getPreString();
+        final String postValue = papv.getPostString();
         
         final ObjectAssociation property = aap.getProperty();
         final String memberId = property.getIdentifier().toClassAndNameIdentityString();
@@ -903,7 +903,20 @@ public class IsisTransaction implements TransactionScopedComponent {
             }};
             
         private final Object pre;
+        /**
+         * Eagerly calculated because it could be that the object referenced ends up being deleted by the time that the xactn completes.
+         */
+        private final String preString;
+
+        /**
+         * Updated in {@link #setPost(Object)} 
+         */
         private Object post;
+        /**
+         * Updated in {@link #setPost(Object)}, along with {@link #post}.
+         */
+        private String postString;
+
         
         public static PreAndPostValues pre(Object preValue) {
             return new PreAndPostValues(preValue, null);
@@ -912,17 +925,30 @@ public class IsisTransaction implements TransactionScopedComponent {
         private PreAndPostValues(Object pre, Object post) {
             this.pre = pre;
             this.post = post;
+            this.preString = asString(pre);
         }
+        /**
+         * The object that was referenced before this object was changed
+         * 
+         * <p>
+         * Note that this referenced object itself could end up being deleted in the course of the transaction; in which case use 
+         * {@link #getPreString()} which is the eagerly cached <tt>toString</tt> of said object. 
+         */
         public Object getPre() {
             return pre;
         }
-        
+        public String getPreString() {
+            return preString;
+        }
         public Object getPost() {
             return post;
         }
-        
+        public String getPostString() {
+            return postString;
+        }
         public void setPost(Object post) {
             this.post = post;
+            this.postString = asString(post);
         }
         
         @Override

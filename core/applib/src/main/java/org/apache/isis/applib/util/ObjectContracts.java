@@ -16,6 +16,7 @@
  */
 package org.apache.isis.applib.util;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.List;
@@ -201,14 +202,20 @@ class Clause {
         try {
             final Method getterMethod = obj.getClass().getMethod(getMethodName);
             return getterMethod.invoke(obj);
-        } catch (Exception e) {
+        } catch (NoSuchMethodException e) {
             final String isMethodName = "is" + methodNameSuffix;
             try {
                 final Method getterMethod = obj.getClass().getMethod(isMethodName);
                 return getterMethod.invoke(obj);
-            } catch (Exception ex) {
+            } catch (NoSuchMethodException ex) {
                 throw new IllegalArgumentException("No such method ' " + getMethodName + "' or '" + isMethodName + "'", e);
+            } catch (Exception e1) {
+                // some other reason; for example, a JDOUserException if the object has been deleted and interaction with its properties is not permitted.
+                throw new RuntimeException(e1);
             }
+        } catch (Exception e) {
+            // some other reason; for example, a JDOUserException if the object has been deleted and interaction with its properties is not permitted.
+            throw new RuntimeException(e);
         }
     }
     private static String upperFirst(final String str) {
