@@ -45,7 +45,7 @@ public class Get_whenQueryArg_xRoDomainModel_ok {
     public void setUp() throws Exception {
         final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
-        request = client.createRequest(RestfulHttpMethod.GET, "/objects/BSRL/64/collections/invisibleCollection");
+        request = client.createRequest(RestfulHttpMethod.GET, "/objects/BSRL/64/collections/visibleAndEditableCollection");
     }
 
     @Test

@@ -74,7 +74,7 @@ public class Get_thenRepresentation_ok {
         // then
         final ObjectPropertyRepresentation propertyRepr = idPropertyJsonResp.getEntity();
 
-        assertThat(propertyRepr.getString("memberType"), is("property"));
+        assertThat(propertyRepr.getString("objectMemberType"), is("property"));
 
         // self link
         final LinkRepresentation selfLink = propertyRepr.getLinkWithRel(Rel.SELF);

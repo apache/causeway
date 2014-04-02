@@ -79,7 +79,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         if (usability().isVetoed()) {
             return;
         }
-        final Map<String, MutatorSpec> mutators = memberType.getMutators();
+        final Map<String, MutatorSpec> mutators = objectMemberType.getMutators();
         
         final ActionSemantics.Of actionSemantics = objectMember.getSemantics();
         final String mutator = InvokeKeys.getKeyFor(actionSemantics);

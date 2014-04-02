@@ -19,7 +19,6 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -131,7 +130,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     }
 
     private void addMutatorLink(final String key) {
-        final Map<String, MutatorSpec> mutators = memberType.getMutators();
+        final Map<String, MutatorSpec> mutators = objectMemberType.getMutators();
         final MutatorSpec mutatorSpec = mutators.get(key);
         addLinkFor(mutatorSpec);
     }

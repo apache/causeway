@@ -33,15 +33,10 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpS
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageResource;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
 
-/**
- * Implementation note: it seems to be necessary to annotate the implementation
- * with {@link Path} rather than the interface (at least under RestEasy 1.0.2
- * and 1.1-RC2).
- */
 public class HomePageResourceServerside extends ResourceAbstract implements HomePageResource {
 
     @Override
-    @Produces({ RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     public Response homePage() {
         init(RepresentationType.HOME_PAGE, Where.NOWHERE);
 

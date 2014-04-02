@@ -131,6 +131,7 @@ public class BusRulesEntity extends AbstractDomainObject {
     // {{ InvisibleCollection (Collection)
     private List<BusRulesEntityChild> invisibleCollection = new ArrayList<BusRulesEntityChild>();
 
+    @Hidden
     @MemberOrder(sequence = "11")
     public List<BusRulesEntityChild> getInvisibleCollection() {
         return invisibleCollection;

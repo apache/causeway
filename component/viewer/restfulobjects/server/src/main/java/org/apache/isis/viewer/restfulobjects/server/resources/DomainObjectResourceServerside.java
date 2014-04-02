@@ -79,9 +79,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final ObjectAdapter objectAdapter = getResourceContext().getPersistenceSession().createTransientInstance(domainTypeSpec);
 
-        final JsonRepresentation propertiesList = objectRepr.getArrayEnsured("members[memberType=property]");
+        final JsonRepresentation propertiesList = objectRepr.getArrayEnsured("members[objectMemberType=property]");
         if (propertiesList == null) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not find properties list (no members[memberType=property]); got %s", objectRepr);
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not find properties list (no members[objectMemberType=property]); got %s", objectRepr);
         }
         if (!DomainResourceHelper.copyOverProperties(getResourceContext(), objectAdapter, propertiesList)) {
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, "Illegal property value");
@@ -160,7 +160,6 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Override
     @GET
     @Path("/{domainType}/{instanceId}/properties/{propertyId}")
-    @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response propertyDetails(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId) {
         init(RepresentationType.OBJECT_PROPERTY, Where.OBJECT_FORMS);

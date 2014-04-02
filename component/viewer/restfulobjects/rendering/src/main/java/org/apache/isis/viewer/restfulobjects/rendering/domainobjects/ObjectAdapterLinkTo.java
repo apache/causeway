@@ -38,5 +38,4 @@ public interface ObjectAdapterLinkTo {
     LinkBuilder memberBuilder(Rel rel, MemberType memberType, ObjectMember objectMember, String... parts);
 
     LinkBuilder memberBuilder(Rel rel, MemberType memberType, ObjectMember objectMember, RepresentationType representationType, String... parts);
-
 }

@@ -91,7 +91,7 @@ public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
             buf.append("/").append(part);
         }
         final String url = buf.toString();
-        return LinkBuilder.newBuilder(rendererContext, rel.getName(), representationType, url);
+        return LinkBuilder.newBuilder(rendererContext, rel.andParam(memberType.getName(), objectMember.getId()), representationType, url);
     }
 
 

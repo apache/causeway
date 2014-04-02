@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.action.invoke;
 
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasProfile;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasMediaTypeProfile;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -132,7 +132,7 @@ public class Get_givenRefArg_whenArgProvided_ok {
     }
 
     private void thenResponseIsScalarValueOf(RestfulResponse<ActionResultRepresentation> restfulResponse, boolean value) throws JsonParseException, JsonMappingException, IOException {
-        assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasProfile(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT));
+        assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasMediaTypeProfile(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT));
         ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();
         assertThat(actionResultRepr.getResultType(), is(ResultType.SCALAR_VALUE));
         JsonRepresentation resultRepr = actionResultRepr.getResult();

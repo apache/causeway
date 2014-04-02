@@ -64,9 +64,12 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     protected ObjectAdapterLinkTo linkTo;
 
     protected ObjectAdapter objectAdapter;
-    protected MemberType memberType;
-    protected T objectMember;
     protected Mode mode = Mode.INLINE; // unless we determine otherwise
+    /**
+     * Derived from {@link #objectMember} using {@link org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberType#determineFrom(org.apache.isis.core.metamodel.spec.feature.ObjectFeature)}
+     */
+    protected MemberType objectMemberType;
+    protected T objectMember;
 
     /**
      * Not for rendering, but is the key that the representation being rendered will be held under.
@@ -91,7 +94,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     public R with(final ObjectAndMember<T> objectAndMember) {
         this.objectAdapter = objectAndMember.getObjectAdapter();
         this.objectMember = objectAndMember.getMember();
-        this.memberType = MemberType.determineFrom(objectMember);
+        this.objectMemberType = MemberType.determineFrom(objectMember);
         usingLinkTo(new DomainObjectLinkTo());
 
         return cast(this);
@@ -177,7 +180,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     }
 
     private void addLinkToSelf() {
-        getLinks().arrayAdd(linkTo.memberBuilder(Rel.SELF, memberType, objectMember).build());
+        getLinks().arrayAdd(linkTo.memberBuilder(Rel.SELF, objectMemberType, objectMember).build());
     }
 
     private void addLinkToUp() {
@@ -195,8 +198,8 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
             return;
         }
         final JsonRepresentation arguments = mutatorArgs(mutatorSpec);
-        final RepresentationType representationType = memberType.getRepresentationType();
-        final JsonRepresentation mutatorLink = linkToForMutatorInvoke().memberBuilder(mutatorSpec.rel, memberType, objectMember, representationType, mutatorSpec.suffix).withHttpMethod(mutatorSpec.httpMethod).withArguments(arguments).build();
+        final RepresentationType representationType = objectMemberType.getRepresentationType();
+        final JsonRepresentation mutatorLink = linkToForMutatorInvoke().memberBuilder(mutatorSpec.rel, objectMemberType, objectMember, representationType, mutatorSpec.suffix).withHttpMethod(mutatorSpec.httpMethod).withArguments(arguments).build();
         getLinks().arrayAdd(mutatorLink);
     }
 
@@ -230,7 +233,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         if (!objectAdapter.representsPersistent()) {
             return;
         }
-        final JsonRepresentation link = linkTo.memberBuilder(Rel.DETAILS, memberType, objectMember).build();
+        final JsonRepresentation link = linkTo.memberBuilder(Rel.DETAILS, objectMemberType, objectMember).build();
         getLinks().arrayAdd(link);
 
         final LinkFollowSpecs membersLinkFollower = getLinkFollowSpecs();

@@ -20,7 +20,7 @@ package org.apache.isis.viewer.restfulobjects.tck.version;
 
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasParameter;
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasSubType;
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasType;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasMediaType;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -67,7 +67,7 @@ public class Get_thenResponseHeaders_ContentType_ok {
 
         // then
         final MediaType contentType = restfulResponse.getHeader(Header.CONTENT_TYPE);
-        assertThat(contentType, hasType("application"));
+        assertThat(contentType, hasMediaType("application"));
         assertThat(contentType, hasSubType("json"));
         assertThat(contentType, hasParameter("profile", "urn:org.restfulobjects:repr-types/version"));
         assertThat(contentType, is(RepresentationType.VERSION.getMediaType()));

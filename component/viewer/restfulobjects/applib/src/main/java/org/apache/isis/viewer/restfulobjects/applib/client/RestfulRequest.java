@@ -22,15 +22,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
+import com.google.common.collect.Maps;
+import org.jboss.resteasy.client.ClientRequest;
+import org.jboss.resteasy.client.core.BaseClientResponse;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
-import org.jboss.resteasy.client.core.BaseClientResponse;
-
-import com.google.common.collect.Maps;
 
 public final class RestfulRequest {
 
@@ -172,7 +170,8 @@ public final class RestfulRequest {
             if (!args.isEmpty()) {
                 clientRequestConfigurer.configureArgs(args);
             }
-            final Response response = clientRequestConfigurer.getClientRequest().execute();
+            final ClientRequest clientRequest = clientRequestConfigurer.getClientRequest();
+            final Response response = clientRequest.execute();
 
             // this is a bit hacky
             @SuppressWarnings("unchecked")

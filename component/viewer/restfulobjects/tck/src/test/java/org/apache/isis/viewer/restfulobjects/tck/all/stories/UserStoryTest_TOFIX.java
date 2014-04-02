@@ -67,7 +67,7 @@ public class UserStoryTest_TOFIX {
 
         // and when locate the AppLibValues repo's "newEntity" action and walk
         // to its details
-        walker.walk("values[memberType=action].details");
+        walker.walk("values[objectMemberType=action].details");
 
         // and when find the invoke body for the "newEntity" action and then
         // walk the action using the body

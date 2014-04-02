@@ -71,7 +71,7 @@ public class Get_thenRepresentation_ok {
         // then
         final ObjectActionRepresentation actionPromptRepr = actionPromptJsonResp.getEntity();
 
-        assertThat(actionPromptRepr.getString("memberType"), is("action"));
+        assertThat(actionPromptRepr.getString("objectMemberType"), is("action"));
 
         // self link
         final LinkRepresentation selfLink = actionPromptRepr.getLinkWithRel(Rel.SELF);

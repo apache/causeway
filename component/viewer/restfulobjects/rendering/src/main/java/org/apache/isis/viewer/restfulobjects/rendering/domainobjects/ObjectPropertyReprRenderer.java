@@ -18,9 +18,10 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
 import java.util.Map;
-
-import org.apache.isis.applib.annotation.Where;
+import com.google.common.collect.Lists;
+import org.codehaus.jackson.node.NullNode;
 import org.apache.isis.applib.annotation.Render.Type;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
@@ -34,9 +35,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.PropertyDescriptionReprRenderer;
-import org.codehaus.jackson.node.NullNode;
-
-import com.google.common.collect.Lists;
 
 public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAssociation> {
 
@@ -125,7 +123,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
         if (usability().isVetoed()) {
             return;
         }
-        final Map<String, MutatorSpec> mutators = memberType.getMutators();
+        final Map<String, MutatorSpec> mutators = objectMemberType.getMutators();
         for (final String mutator : mutators.keySet()) {
             final MutatorSpec mutatorSpec = mutators.get(mutator);
             addLinkFor(mutatorSpec);

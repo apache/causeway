@@ -486,7 +486,7 @@ public class RestfulMatchers {
 
     }
 
-    public static Matcher<MediaType> hasType(final String type) {
+    public static Matcher<MediaType> hasMediaType(final String type) {
         return new TypeSafeMatcher<MediaType>() {
 
             @Override
@@ -496,7 +496,8 @@ public class RestfulMatchers {
 
             @Override
             public boolean matchesSafely(final MediaType item) {
-                return Objects.equal(type, item.getType());
+                final String expectedType = item.getType();
+                return expectedType != null && type.contains(expectedType);
             }
         };
     }
@@ -562,7 +563,7 @@ public class RestfulMatchers {
         };
     }
 
-    public static Matcher<? super MediaType> hasProfile(final String expectedMediaTypeAndProfileStr) {
+    public static Matcher<? super MediaType> hasMediaTypeProfile(final String expectedMediaTypeAndProfileStr) {
         final MediaType expectedMediaType = Header.CONTENT_TYPE.parse(expectedMediaTypeAndProfileStr);
         final String expectedProfileIfAny = expectedMediaType.getParameters().get("profile");
         return new TypeSafeMatcher<MediaType>() {
@@ -580,6 +581,38 @@ public class RestfulMatchers {
                 }
                 String actualProfileIfAny = item.getParameters().get("profile");
                 return Objects.equal(expectedProfileIfAny, actualProfileIfAny);
+            }
+        };
+    }
+
+    public static Matcher<? super MediaType> hasMediaTypeXRoDomainType(final String expectedXRoDomainType) {
+        return new TypeSafeMatcher<MediaType>() {
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("is a media type with an 'x-ro-domain-type' parameter of '" +  expectedXRoDomainType + '"');
+            }
+
+            @Override
+            protected boolean matchesSafely(MediaType item) {
+                String actualXRoDomainTypeIfany = item.getParameters().get("x-ro-domain-type");
+                return actualXRoDomainTypeIfany != null && actualXRoDomainTypeIfany.contains(expectedXRoDomainType);
+            }
+        };
+    }
+
+    public static Matcher<? super MediaType> hasMediaTypeXRoElementType(final String expectedXRoElementTypeIfAny) {
+        return new TypeSafeMatcher<MediaType>() {
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("is a media type with an 'x-ro-element-type' parameter of '" +  expectedXRoElementTypeIfAny + '"');
+            }
+
+            @Override
+            protected boolean matchesSafely(MediaType item) {
+                String actualXRoElementTypeIfany = item.getParameters().get("x-ro-element-type");
+                return actualXRoElementTypeIfany != null && actualXRoElementTypeIfany.contains(expectedXRoElementTypeIfAny);
             }
         };
     }

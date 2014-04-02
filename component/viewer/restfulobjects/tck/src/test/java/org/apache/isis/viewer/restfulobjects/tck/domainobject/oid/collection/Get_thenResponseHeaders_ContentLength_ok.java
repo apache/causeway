@@ -52,10 +52,10 @@ public class Get_thenResponseHeaders_ContentLength_ok {
 
 
     @Test
-    public void propertyDetails() throws Exception {
+    public void collectionDetails() throws Exception {
 
         // when
-        final Response collectionResp = domainObjectResource.accessCollection("BSRL", "64", "invisibleCollection");
+        final Response collectionResp = domainObjectResource.accessCollection("BSRL", "64", "visibleAndEditableCollection");
         final RestfulResponse<ObjectPropertyRepresentation> collectionJsonResp = RestfulResponse.ofT(collectionResp);
         assertThat(collectionJsonResp.getHeader(Header.CONTENT_LENGTH), is(IsisMatchers.greaterThan(1000)));
 

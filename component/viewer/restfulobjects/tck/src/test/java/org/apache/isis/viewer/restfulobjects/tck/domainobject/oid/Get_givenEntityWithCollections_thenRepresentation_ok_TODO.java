@@ -18,18 +18,11 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import javax.ws.rs.core.Response;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
@@ -37,6 +30,9 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpS
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
 
 public class Get_givenEntityWithCollections_thenRepresentation_ok_TODO {
 
@@ -57,12 +53,11 @@ public class Get_givenEntityWithCollections_thenRepresentation_ok_TODO {
     }
 
 
-    @Ignore("TODO")
     @Test
     public void thenCollections() throws Exception {
 
         // when
-        final Response jaxrsResponse = domainObjectResource.object("PRMV","29");
+        final Response jaxrsResponse = domainObjectResource.object("PRMV","31");
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = RestfulResponse.ofT(jaxrsResponse);
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
 

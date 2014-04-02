@@ -39,5 +39,6 @@ public class Get_thenResponseHeaders_ContentType_ok_TODO {
         client = new RestfulClient(webServer.getBase());
     }
 
+    // TODO: should also assert on the x-ro-element-type, using RestfulMatchers#hasxRoElementType(...)
 
 }

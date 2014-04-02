@@ -82,27 +82,4 @@ public class Get_whenRequestHeaders_Accept_ok {
         assertThat(restfulResp.getStatus(), is(HttpStatusCode.OK));
     }
 
-    @Test
-    public void applicationJson_profileIncorrect_returns406() throws Exception {
-
-        request.withHeader(RestfulRequest.Header.ACCEPT, RepresentationType.USER.getMediaType());
-        final RestfulResponse<VersionRepresentation> restfulResponse = request.executeT();
-
-        assertThat(restfulResponse.getStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));
-    }
-
-    @Test
-    public void incorrectMediaType_returnsNotAcceptable() throws Exception {
-
-        // given
-        final ClientRequest clientRequest = client.getClientRequestFactory().createRelativeRequest("version");
-        clientRequest.accept(MediaType.APPLICATION_ATOM_XML_TYPE);
-
-        // when
-        final ClientResponse<?> resp = clientRequest.get();
-        final RestfulResponse<JsonRepresentation> restfulResp = RestfulResponse.of(resp);
-        
-        // then
-        assertThat(restfulResp.getStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));
-    }
 }

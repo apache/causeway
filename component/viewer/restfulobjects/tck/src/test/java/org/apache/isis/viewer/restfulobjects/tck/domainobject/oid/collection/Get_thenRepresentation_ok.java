@@ -65,20 +65,20 @@ public class Get_thenRepresentation_ok {
     public void representation() throws Exception {
 
         // when
-        final Response collectionResp = domainObjectResource.accessCollection("BSRL", "64", "invisibleCollection");
+        final Response collectionResp = domainObjectResource.accessCollection("BSRL", "64", "visibleAndEditableCollection");
         final RestfulResponse<ObjectCollectionRepresentation> collectionJsonResp = RestfulResponse.ofT(collectionResp);
         assertThat(collectionJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
 
         // then
         final ObjectCollectionRepresentation collectionRepr = collectionJsonResp.getEntity();
 
-        assertThat(collectionRepr.getString("memberType"), is("collection"));
+        assertThat(collectionRepr.getString("objectMemberType"), is("collection"));
 
         // self link
         final LinkRepresentation selfLink = collectionRepr.getLinkWithRel(Rel.SELF);
         assertThat(selfLink, isLink(client)
                                 .httpMethod(RestfulHttpMethod.GET)
-                                .href(endsWith("/objects/BSRL/64/collections/invisibleCollection"))
+                                .href(endsWith("/objects/BSRL/64/collections/visibleAndEditableCollection"))
                                 .returning(HttpStatusCode.OK));
 
         // up link
@@ -95,7 +95,7 @@ public class Get_thenRepresentation_ok {
         assertThat(addtoLink, isLink(client)
                                 .httpMethod(RestfulHttpMethod.POST)
                                 .type(RepresentationType.OBJECT_COLLECTION.getMediaType())
-                                .href(endsWith("/objects/BSRL/64/collections/invisibleCollection")));
+                                .href(endsWith("/objects/BSRL/64/collections/visibleAndEditableCollection")));
 
         assertThat(addtoLink.getArguments(), is(not(nullValue())));
         assertThat(addtoLink.getArguments().isArray(), is(false));
@@ -106,7 +106,7 @@ public class Get_thenRepresentation_ok {
         assertThat(removeFromLink, isLink(client)
                                 .httpMethod(RestfulHttpMethod.DELETE)
                                 .type(RepresentationType.OBJECT_COLLECTION.getMediaType())
-                                .href(endsWith("/objects/BSRL/64/collections/invisibleCollection")));
+                                .href(endsWith("/objects/BSRL/64/collections/visibleAndEditableCollection")));
 
         assertThat(removeFromLink.getArguments(), is(not(nullValue())));
         assertThat(removeFromLink.getArguments().isArray(), is(false));
