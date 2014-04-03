@@ -24,8 +24,8 @@ public final class JdoColumnLength {
     }
 
     public final static int TRANSACTION_ID = 36;
-    // ie OID str
-    public final static int BOOKMARK = 255; 
+    // ie OID str (based on the defacto limit of a request URL in web browsers such as IE8)
+    public final static int BOOKMARK = 2000; 
     public static final int MEMBER_IDENTIFIER = 255;
     public static final int USER_NAME = 50;
     public final static int TARGET_CLASS = 50;
