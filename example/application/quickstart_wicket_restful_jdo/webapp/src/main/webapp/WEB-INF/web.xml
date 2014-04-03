@@ -76,6 +76,21 @@
     </context-param>
 
 
+    <!-- 
+    for diagnostics
+    -->
+    <filter>
+        <filter-name>IsisLogOnExceptionFilter</filter-name>
+        <filter-class>org.apache.isis.core.webapp.diagnostics.IsisLogOnExceptionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>IsisLogOnExceptionFilter</filter-name>
+        <url-pattern>/wicket/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>IsisLogOnExceptionFilter</filter-name>
+        <url-pattern>/restful/*</url-pattern>
+    </filter-mapping>
 
 
     <!-- cache static resources for 1 day -->
