@@ -29,11 +29,18 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.PublishedAction;
+import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.command.spi.CommandService;
+import org.apache.isis.applib.services.publish.EventSerializer;
+import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -44,6 +51,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdap
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
+import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -74,13 +82,28 @@ public class IsisTransactionTest {
     @Mock
     private CommandContext mockCommandContext;
     @Mock
+    private CommandService mockCommandService;
+    @Mock
     private AuditingService3 mockAuditingService3;
     @Mock
-    private PublishingServiceWithDefaultPayloadFactories mockPublishingService;
+    private PublishingService mockPublishingService;
+    @Mock
+    private EventSerializer mockEventSerializer;
+    @Mock
+    private ServicesInjector mockServicesInjector;
+    @Mock
+    private PublishedObject.PayloadFactory mockPublishedObjectPayloadFactory;
+    @Mock
+    private PublishedAction.PayloadFactory mockPublishedActionPayloadFactory;
+    @Mock
+    private Bulk.InteractionContext mockBulkInteractionContext;
+    @Mock
+    private EventBusServiceDefault mockEventBusServiceDefault;
 
     private PersistenceCommand command;
     private PersistenceCommand command2;
     private PersistenceCommand command3;
+
 
     private CreateObjectCommand createCreateCommand(final ObjectAdapter object, final String name) {
         return new CreateObjectCommand() {
@@ -162,8 +185,44 @@ public class IsisTransactionTest {
         org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
         context.ignoring(mockCommandContext);
+        context.ignoring(mockCommandService);
         context.ignoring(mockAuditingService3);
-        
+        context.ignoring(mockEventBusServiceDefault);
+
+        context.checking(new Expectations(){{
+            allowing(mockServicesInjector).lookupService(CommandContext.class);
+            will(returnValue(mockCommandContext));
+
+            allowing(mockServicesInjector).lookupService(CommandService.class);
+            will(returnValue(mockCommandService));
+
+            allowing(mockServicesInjector).lookupService(AuditingService3.class);
+            will(returnValue(mockAuditingService3));
+
+            allowing(mockServicesInjector).lookupService(PublishingService.class);
+            will(returnValue(mockPublishingService));
+            
+            allowing(mockServicesInjector).lookupService(EventSerializer.class);
+            will(returnValue(mockEventSerializer));
+            
+            allowing(mockServicesInjector).lookupService(PublishedObject.PayloadFactory.class);
+            will(returnValue(mockPublishedObjectPayloadFactory));
+            
+            allowing(mockServicesInjector).lookupService(PublishedAction.PayloadFactory.class);
+            will(returnValue(mockPublishedActionPayloadFactory));
+            
+            allowing(mockServicesInjector).lookupService(Bulk.InteractionContext.class);
+            will(returnValue(mockBulkInteractionContext));
+            
+            allowing(mockServicesInjector).lookupService(EventBusServiceDefault.class);
+            will(returnValue(mockEventBusServiceDefault));
+            
+            allowing(mockServicesInjector).getRegisteredServices();
+            will(returnValue(Collections.emptyList())); // close enough...
+
+        }});
+
+
         context.checking(new Expectations(){{
             allowing(mockTransactionManager).getAuthenticationSession();
             will(returnValue(mockAuthenticationSession));
@@ -174,7 +233,7 @@ public class IsisTransactionTest {
             will(returnValue("sven"));
         }});
         
-        transaction = new IsisTransaction(mockTransactionManager, mockMessageBroker, mockUpdateNotifier, mockObjectStore, mockCommandContext, mockAuditingService3, mockPublishingService);
+        transaction = new IsisTransaction(mockTransactionManager, mockMessageBroker, mockUpdateNotifier, mockObjectStore, mockServicesInjector);
         
         transientAdapter1 = PojoAdapterBuilder.create().with(Persistence.TRANSIENT).withIdentifier("1").build();
         transientAdapter2 = PojoAdapterBuilder.create().with(Persistence.TRANSIENT).withIdentifier("2").build();
@@ -211,6 +270,8 @@ public class IsisTransactionTest {
                 oneOf(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command, command2)));
                 // second flush after publish
                 oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+                // and for command
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });
         
@@ -229,6 +290,8 @@ public class IsisTransactionTest {
             {
                 oneOf(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command)));
                 // second flush after publish
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+                // and for command
                 oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });
@@ -250,6 +313,8 @@ public class IsisTransactionTest {
                 oneOf(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command)));
                 // second flush after publish
                 oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+                // and for command
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });
         
@@ -269,6 +334,8 @@ public class IsisTransactionTest {
             {
                 oneOf(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command2, command3)));
                 // second flush after publish
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+                // and for command
                 oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });
@@ -291,6 +358,8 @@ public class IsisTransactionTest {
                 oneOf(mockObjectStore).execute(with(IsisMatchers.listContainingAll(command2)));
                 // second flush after publish
                 oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+                // and for command
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });
         
@@ -307,6 +376,8 @@ public class IsisTransactionTest {
             {
                 oneOf(mockObjectStore).execute(with(Collections.<PersistenceCommand>emptyList()));
                 // second flush after publish
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+                // and for command
                 oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });
@@ -336,6 +407,8 @@ public class IsisTransactionTest {
                 oneOf(mockObjectStore).execute(with(Collections.<PersistenceCommand>emptyList()));
                 // second flush after publish
                 oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+                // and for command
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });
 
@@ -350,6 +423,8 @@ public class IsisTransactionTest {
             {
                 oneOf(mockObjectStore).execute(with(Collections.<PersistenceCommand>emptyList()));
                 // second flush after publish
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+                // and for command
                 oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });

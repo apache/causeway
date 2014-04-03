@@ -154,10 +154,10 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
                 inSequence(transactionOrdering);
 
                 // flushed twice, once before publishing, once after
-                exactly(2).of(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+                exactly(3).of(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
                 inSequence(transactionOrdering);
 
-                one(mockObjectStore).endTransaction();
+                oneOf(mockObjectStore).endTransaction();
                 inSequence(transactionOrdering);
             }
         });

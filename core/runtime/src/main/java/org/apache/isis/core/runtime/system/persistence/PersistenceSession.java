@@ -368,9 +368,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         if (LOG.isDebugEnabled()) {
             LOG.debug("closing " + this);
         }
-
-        closeServices();
-
+        
         try {
             objectStore.close();
         } catch(RuntimeException ex) {
@@ -389,39 +387,11 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
             // ignore
         }
 
+        endRequestOnRequestScopeServices();
+        
         setState(State.CLOSED);
     }
 
-    private void closeServices() {
-
-        closeOtherApplibServicesIfConfigured();
-
-        completeCommandIfConfigured();
-
-        endRequestOnRequestScopeServices();
-    }
-
-    private void closeOtherApplibServicesIfConfigured() {
-        Bulk.InteractionContext bic = getServiceOrNull(Bulk.InteractionContext.class);
-        if(bic != null) {
-            Bulk.InteractionContext.current.set(null);
-        }
-        EventBusServiceDefault ebs = getServiceOrNull(EventBusServiceDefault.class);
-        if(ebs != null) {
-            ebs.close();
-        }
-    }
-
-    private void completeCommandIfConfigured() {
-        final CommandContext commandContext = getServiceOrNull(CommandContext.class);
-        if(commandContext != null) {
-            final CommandService commandService = getServiceOrNull(CommandService.class);
-            if(commandService != null) {
-                final Command command = commandContext.getCommand();
-                commandService.complete(command);
-            }
-        }
-    }
 
     private void endRequestOnRequestScopeServices() {
         for (final Object service : servicesInjector.getRegisteredServices()) {

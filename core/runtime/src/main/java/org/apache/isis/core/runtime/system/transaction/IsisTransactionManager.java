@@ -48,6 +48,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
@@ -64,19 +65,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
     private int transactionLevel;
     
-    /**
-     * Could be null if not configured as a domain service.
-     */
-    private final CommandContext commandContext;
-    /**
-     * Could be null if not configured as a domain service.
-     */
-    private final AuditingService3 auditingService3;
-    /**
-     * Could be null if not configured as a domain service.
-     */
-    private final PublishingServiceWithDefaultPayloadFactories publishingService;
-
     private IsisSession session;
 
     /**
@@ -86,18 +74,17 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
     private final TransactionalResource transactionalResource;
 
+    private final ServicesInjector servicesInjector;
+
 
     // ////////////////////////////////////////////////////////////////
     // constructor
     // ////////////////////////////////////////////////////////////////
 
-    public IsisTransactionManager(final PersistenceSession persistenceSession, final TransactionalResource transactionalResource, final ServicesInjectorSpi servicesInjectorSpi) {
+    public IsisTransactionManager(final PersistenceSession persistenceSession, final TransactionalResource transactionalResource, final ServicesInjector servicesInjector) {
         this.persistenceSession = persistenceSession;
         this.transactionalResource = transactionalResource;
-        
-        this.commandContext = servicesInjectorSpi.lookupService(CommandContext.class);
-        this.auditingService3 = servicesInjectorSpi.lookupService(AuditingService3.class);
-        this.publishingService = getPublishingServiceIfAny(servicesInjectorSpi);
+        this.servicesInjector = servicesInjector;
     }
     
     
@@ -270,7 +257,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         ensureThatArg(messageBroker, is(not(nullValue())));
         ensureThatArg(updateNotifier, is(not(nullValue())));
 
-        return new IsisTransaction(this, messageBroker, updateNotifier, transactionalResource, commandContext, auditingService3, publishingService);
+        return new IsisTransaction(this, messageBroker, updateNotifier, transactionalResource, servicesInjector);
     }
     
 
@@ -450,61 +437,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
     }
 
     
-    // ///////////////////////////////////////////
-    // Publishing service
-    // ///////////////////////////////////////////
-
-    public PublishingServiceWithDefaultPayloadFactories getPublishingServiceIfAny(ServicesInjectorSpi servicesInjectorSpi) {
-        final PublishingService publishingService = servicesInjectorSpi.lookupService(PublishingService.class);
-        if(publishingService == null) {
-            return null;
-        }
-
-        EventSerializer eventSerializer = servicesInjectorSpi.lookupService(EventSerializer.class);
-        if(eventSerializer == null) {
-            eventSerializer = newSimpleEventSerializer();
-        }
-
-        PublishedObject.PayloadFactory objectPayloadFactory = servicesInjectorSpi.lookupService(PublishedObject.PayloadFactory.class);
-        if(objectPayloadFactory == null) {
-            objectPayloadFactory = newDefaultObjectPayloadFactory();
-        }
-        
-        PublishedAction.PayloadFactory actionPayloadFactory = servicesInjectorSpi.lookupService(PublishedAction.PayloadFactory.class);
-        if(actionPayloadFactory == null) {
-            actionPayloadFactory = newDefaultActionPayloadFactory();
-        }
-        
-        return new PublishingServiceWithDefaultPayloadFactories(publishingService, objectPayloadFactory, actionPayloadFactory);
-    }
-
-    protected EventSerializer newSimpleEventSerializer() {
-        return new EventSerializer.Simple();
-    }
-
-
-    protected PublishedObject.PayloadFactory newDefaultObjectPayloadFactory() {
-        return new PublishedObject.PayloadFactory() {
-            @Override
-            public EventPayload payloadFor(final Object changedObject, ChangeKind changeKind) {
-                return new EventPayloadForObjectChanged<Object>(changedObject);
-            }
-        };
-    }
-
-    protected PublishedAction.PayloadFactory newDefaultActionPayloadFactory() {
-        return new PublishedAction.PayloadFactory(){
-            @Override
-            public EventPayload payloadFor(Identifier actionIdentifier, Object target, List<Object> arguments, Object result) {
-                return new EventPayloadForActionInvocation<Object>(
-                        actionIdentifier, 
-                        target, 
-                        arguments, 
-                        result);
-            }
-        };
-    }
-
 
     // //////////////////////////////////////////////////////////////
     // Hooks

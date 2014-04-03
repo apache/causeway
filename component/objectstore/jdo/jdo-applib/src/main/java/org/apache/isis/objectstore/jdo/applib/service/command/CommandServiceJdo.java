@@ -72,6 +72,12 @@ public class CommandServiceJdo extends AbstractService implements CommandService
         if(commandJdo == null) {
             return;
         }
+        if(commandJdo.getCompletedAt() != null) {
+            // already attempted to complete.
+            // chances are, we're here as the result of a redirect following a previous exception
+            // so just ignore.
+            return;
+        }
             
         commandJdo.setCompletedAt(Clock.getTimeAsJavaSqlTimestamp());
         persistIfNotAlready(commandJdo);

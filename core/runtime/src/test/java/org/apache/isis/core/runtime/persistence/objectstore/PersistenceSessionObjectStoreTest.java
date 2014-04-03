@@ -241,6 +241,10 @@ public class PersistenceSessionObjectStoreTest {
                 oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
                 inSequence(tran);
 
+                // third flush after commands
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+                inSequence(tran);
+
                 oneOf(mockObjectStore).endTransaction();
                 inSequence(tran);
             }
@@ -260,6 +264,7 @@ public class PersistenceSessionObjectStoreTest {
             {
                 oneOf(mockObjectStore).startTransaction();
                 inSequence(tran);
+
                 oneOf(mockPersistAlgorithm).makePersistent(transientAdapter, persistenceSession);
                 inSequence(tran);
                 oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
@@ -267,6 +272,10 @@ public class PersistenceSessionObjectStoreTest {
                 // second flush after publish
                 oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
                 inSequence(tran);
+                // third flush after commands
+                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+                inSequence(tran);
+
                 oneOf(mockObjectStore).endTransaction();
                 inSequence(tran);
             }

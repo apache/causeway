@@ -43,6 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
@@ -51,9 +52,15 @@ import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.publish.EventMetadata;
+import org.apache.isis.applib.services.publish.EventPayload;
+import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
+import org.apache.isis.applib.services.publish.EventPayloadForObjectChanged;
+import org.apache.isis.applib.services.publish.EventSerializer;
 import org.apache.isis.applib.services.publish.EventType;
 import org.apache.isis.applib.services.publish.ObjectStringifier;
+import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -73,6 +80,7 @@ import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publish.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext.TransactionState;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.progmodel.facets.actions.invoke.CommandUtil;
@@ -83,6 +91,8 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Persiste
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
+import org.apache.isis.core.runtime.services.RequestScopedService;
+import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 /**
@@ -201,11 +211,17 @@ public class IsisTransaction implements TransactionScopedComponent {
     private final org.apache.isis.core.commons.authentication.MessageBroker messageBroker;
     private final UpdateNotifier updateNotifier;
 
+    private final ServicesInjector servicesInjector;
+
     /**
      * the 'owning' command, (if service configured).
      */
     private final Command command;
 
+    /**
+     * Could be null if not configured as a domain service.
+     */
+    private final CommandContext commandContext;
     /**
      * could be null if none has been registered.
      */
@@ -223,25 +239,29 @@ public class IsisTransaction implements TransactionScopedComponent {
     private State state;
     private IsisException abortCause;
 
+
+
+
     public IsisTransaction(
             final IsisTransactionManager transactionManager, 
             final org.apache.isis.core.commons.authentication.MessageBroker messageBroker, 
             final UpdateNotifier updateNotifier, 
             final TransactionalResource objectStore, 
-            final CommandContext commandContext, 
-            final AuditingService3 auditingService3, 
-            final PublishingServiceWithDefaultPayloadFactories publishingService) {
+            final ServicesInjector servicesInjector) {
         
         ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
         ensureThatArg(messageBroker, is(not(nullValue())), "message broker is required");
         ensureThatArg(updateNotifier, is(not(nullValue())), "update notifier is required");
+        ensureThatArg(servicesInjector, is(not(nullValue())), "services injector is required");
 
         this.transactionManager = transactionManager;
         this.messageBroker = messageBroker;
         this.updateNotifier = updateNotifier;
+        this.servicesInjector = servicesInjector;
         
-        this.auditingService3 = auditingService3;
-        this.publishingService = publishingService;
+        this.commandContext = servicesInjector.lookupService(CommandContext.class);
+        this.auditingService3 = servicesInjector.lookupService(AuditingService3.class);
+        this.publishingService = getPublishingServiceIfAny(servicesInjector);
 
         // determine whether this xactn is taking place in the context of an
         // existing command in which a previous xactn has already occurred.
@@ -267,6 +287,63 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
+    
+    // ///////////////////////////////////////////
+    // Publishing service
+    // ///////////////////////////////////////////
+
+    private PublishingServiceWithDefaultPayloadFactories getPublishingServiceIfAny(ServicesInjector servicesInjector) {
+        final PublishingService publishingService = servicesInjector.lookupService(PublishingService.class);
+        if(publishingService == null) {
+            return null;
+        }
+
+        EventSerializer eventSerializer = servicesInjector.lookupService(EventSerializer.class);
+        if(eventSerializer == null) {
+            eventSerializer = newSimpleEventSerializer();
+        }
+
+        PublishedObject.PayloadFactory objectPayloadFactory = servicesInjector.lookupService(PublishedObject.PayloadFactory.class);
+        if(objectPayloadFactory == null) {
+            objectPayloadFactory = newDefaultObjectPayloadFactory();
+        }
+        
+        PublishedAction.PayloadFactory actionPayloadFactory = servicesInjector.lookupService(PublishedAction.PayloadFactory.class);
+        if(actionPayloadFactory == null) {
+            actionPayloadFactory = newDefaultActionPayloadFactory();
+        }
+        
+        return new PublishingServiceWithDefaultPayloadFactories(publishingService, objectPayloadFactory, actionPayloadFactory);
+    }
+    
+
+    protected EventSerializer newSimpleEventSerializer() {
+        return new EventSerializer.Simple();
+    }
+
+
+    protected PublishedObject.PayloadFactory newDefaultObjectPayloadFactory() {
+        return new PublishedObject.PayloadFactory() {
+            @Override
+            public EventPayload payloadFor(final Object changedObject, ChangeKind changeKind) {
+                return new EventPayloadForObjectChanged<Object>(changedObject);
+            }
+        };
+    }
+
+    protected PublishedAction.PayloadFactory newDefaultActionPayloadFactory() {
+        return new PublishedAction.PayloadFactory(){
+            @Override
+            public EventPayload payloadFor(Identifier actionIdentifier, Object target, List<Object> arguments, Object result) {
+                return new EventPayloadForActionInvocation<Object>(
+                        actionIdentifier, 
+                        target, 
+                        arguments, 
+                        result);
+            }
+        };
+    }
+    
     // ////////////////////////////////////////////////////////////////
     // GUID
     // ////////////////////////////////////////////////////////////////
@@ -660,16 +737,56 @@ public class IsisTransaction implements TransactionScopedComponent {
             publishedChangedObjectsIfRequired(currentUser, endTimestamp);
             doFlush();
             
+            closeServices();
+            doFlush();
+            
             setState(State.COMMITTED);
         } catch (final RuntimeException ex) {
             setAbortCause(new IsisTransactionManagerException(ex));
+            clearCommandServiceIfConfigured();
             throw ex;
         }
     }
 
     
+    private void clearCommandServiceIfConfigured() {
+        completeCommandIfConfigured();
+    }
 
 
+    private void closeServices() {
+        closeOtherApplibServicesIfConfigured();
+        completeCommandIfConfigured();
+    }
+
+    /**
+     * @return - the service, or <tt>null</tt> if no service registered of specified type.
+     */
+    public <T> T getServiceOrNull(Class<T> serviceType) {
+        return servicesInjector.lookupService(serviceType);
+    }
+
+    private void closeOtherApplibServicesIfConfigured() {
+        Bulk.InteractionContext bic = getServiceOrNull(Bulk.InteractionContext.class);
+        if(bic != null) {
+            Bulk.InteractionContext.current.set(null);
+        }
+        EventBusServiceDefault ebs = getServiceOrNull(EventBusServiceDefault.class);
+        if(ebs != null) {
+            ebs.close();
+        }
+    }
+
+    private void completeCommandIfConfigured() {
+        final CommandContext commandContext = getServiceOrNull(CommandContext.class);
+        if(commandContext != null) {
+            final CommandService commandService = getServiceOrNull(CommandService.class);
+            if(commandService != null) {
+                final Command command = commandContext.getCommand();
+                commandService.complete(command);
+            }
+        }
+    }
 
     // ////////////////////////////////////////////////////////////////
     // markAsAborted
