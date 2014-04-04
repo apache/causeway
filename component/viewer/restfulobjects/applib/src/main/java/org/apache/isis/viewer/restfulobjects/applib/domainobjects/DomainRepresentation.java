@@ -18,13 +18,13 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
+import org.codehaus.jackson.JsonNode;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasExtensions;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinkToSelf;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinks;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
-import org.codehaus.jackson.JsonNode;
 
 public abstract class DomainRepresentation extends JsonRepresentation implements HasLinkToSelf, HasLinks, HasExtensions {
 
@@ -43,7 +43,12 @@ public abstract class DomainRepresentation extends JsonRepresentation implements
     }
 
     public LinkRepresentation getLinkWithRel(final Rel rel) {
-        return getLinkWithRel(rel.getName());
+        for (final LinkRepresentation linkRepr : getLinks().arrayIterable(LinkRepresentation.class)) {
+            if(rel.matches(linkRepr.getRel())) {
+                return linkRepr;
+            }
+        }
+        return null;
     }
 
     public LinkRepresentation getLinkWithRel(final String rel) {

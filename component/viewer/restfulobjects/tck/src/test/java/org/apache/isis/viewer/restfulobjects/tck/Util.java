@@ -18,42 +18,26 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck;
 
-import static org.apache.isis.core.commons.matchers.IsisMatchers.matches;
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-
 import javax.ws.rs.core.Response;
-
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.Rel;
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.*;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation.ResultType;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation.ResultType;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.hamcrest.CoreMatchers;
-import org.junit.Test;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
 
 public class Util {
 
@@ -80,15 +64,16 @@ public class Util {
 
     public static JsonRepresentation givenAction(RestfulClient client, final String serviceId, final String actionId) throws JsonParseException, JsonMappingException, IOException {
         final String href = givenHrefToService(client, serviceId);
+        final String detailRel = Rel.DETAILS.andParam("action", actionId);
 
-        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[%s].links[rel=%s]", actionId, Rel.DETAILS.getName());
+        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[%s].links[rel=%s]", actionId, detailRel);
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
         final DomainObjectRepresentation repr = restfulResponse.getEntity();
 
         final JsonRepresentation actionLinkRepr = repr.getAction(actionId);
-        return actionLinkRepr.getRepresentation("links[rel=%s].value", Rel.DETAILS.getName());
+        return actionLinkRepr.getRepresentation("links[rel=%s].value", detailRel);
     }
 
     /**

@@ -82,4 +82,25 @@ public enum Rel {
                  :"");
     }
 
+    public boolean matches(Rel otherRel) {
+        return this == otherRel;
+    }
+
+    public boolean matches(final String otherRelStr) {
+        final Rel otherRel = Rel.parse(otherRelStr);
+        return matches(otherRel);
+    }
+
+    public static Rel parse(String str) {
+        final int i = str.indexOf(";");
+        if(i != -1) {
+            str = str.substring(0, i);
+        }
+        for (Rel candidate: Rel.values()) {
+            if(candidate.getName().equals(str)) {
+                return candidate;
+            }
+        }
+        return null;
+    }
 }

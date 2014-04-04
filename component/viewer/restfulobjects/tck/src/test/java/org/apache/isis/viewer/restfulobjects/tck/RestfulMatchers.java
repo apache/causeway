@@ -18,11 +18,13 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck;
 
-import java.io.IOException;
-
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
-
+import com.google.common.base.Objects;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.junit.Assert;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinkToSelf;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
@@ -32,19 +34,6 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
-import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.AbstractMatcherBuilder;
-import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.CacheControlMatcherBuilder;
-import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.LinkMatcherBuilder;
-
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
-import org.junit.Assert;
-
-import com.google.common.base.Objects;
 
 public class RestfulMatchers {
 
@@ -340,7 +329,7 @@ public class RestfulMatchers {
                         return false;
                     }
                     final LinkRepresentation link = linkRepr.asLink();
-                    if (rel != null && !rel.equals(link.getRel())) {
+                    if (rel != null && !Rel.parse(rel).matches(link.getRel())) {
                         return false;
                     }
                     if (relNameMatcher != null && !relNameMatcher.matches(link.getRel())) {

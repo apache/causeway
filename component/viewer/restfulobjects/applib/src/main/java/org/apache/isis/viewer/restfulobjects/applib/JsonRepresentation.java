@@ -22,34 +22,21 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-
-import org.apache.isis.viewer.restfulobjects.applib.util.JsonNodeUtils;
-import org.apache.isis.viewer.restfulobjects.applib.util.PathNode;
-import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
-
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ArrayNode;
-import org.codehaus.jackson.node.BigIntegerNode;
-import org.codehaus.jackson.node.DecimalNode;
-import org.codehaus.jackson.node.JsonNodeFactory;
-import org.codehaus.jackson.node.NullNode;
-import org.codehaus.jackson.node.ObjectNode;
-import org.codehaus.jackson.node.POJONode;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.*;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.apache.isis.viewer.restfulobjects.applib.util.JsonNodeUtils;
+import org.apache.isis.viewer.restfulobjects.applib.util.PathNode;
+import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 
 /**
  * A wrapper around {@link JsonNode} that provides some additional helper
@@ -793,9 +780,9 @@ public class JsonRepresentation {
         }
         checkValue(path, node, "a bigdecimal");
         if (node.isBigDecimal()) {
-            throw new IllegalArgumentException(formatExMsg(path, "is not a bigdecimal (or any other numeric)"));
+            return node.getDecimalValue();
         }
-        return node.getDecimalValue();
+        throw new IllegalArgumentException(formatExMsg(path, "is not a bigdecimal (or any other numeric)"));
     }
 
     private BigDecimal getBigDecimalFromNumeric(final String path, final JsonNode node) {

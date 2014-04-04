@@ -21,15 +21,12 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import org.codehaus.jackson.node.NullNode;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -37,10 +34,10 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -575,35 +572,21 @@ public final class JsonValueEncoder {
 
 
 
-    public static ObjectAdapter asAdapter(final ObjectSpecification objectSpec, final JsonRepresentation argRepr) {
-        if(!argRepr.mapHas("value")) {
-            String reason = "No 'value' key";
-            argRepr.mapPut("invalidReason", reason);
-            throw new IllegalArgumentException(reason);
-        }
-        if (objectSpec == null) {
-            String reason = "ObjectSpec is null, cannot validate";
-            argRepr.mapPut("invalidReason", reason);
-            throw new IllegalArgumentException(reason);
-        }
-        final EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
-        if (encodableFacet == null) {
-            String reason = "ObjectSpec expected to have an EncodableFacet";
-            argRepr.mapPut("invalidReason", reason);
-            throw new IllegalArgumentException(reason);
-        }
-        
-        final JsonRepresentation argValueRepr = argRepr.getRepresentation("value");
+    public static ObjectAdapter asAdapter(final ObjectSpecification objectSpec, final JsonRepresentation argValueRepr) {
         if(argValueRepr == null) {
             return null;
         }
         if (!argValueRepr.isValue()) {
-            String reason = "Representation must be of a value";
-            argRepr.mapPut("invalidReason", reason);
+            throw new IllegalArgumentException("Representation must be of a value");
+        }
+        final EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
+        if (encodableFacet == null) {
+            String reason = "ObjectSpec expected to have an EncodableFacet";
             throw new IllegalArgumentException(reason);
         }
 
-        final JsonValueConverter jvc = converterBySpec.get(objectSpec.getSpecId());
+        final ObjectSpecId specId = objectSpec.getSpecId();
+        final JsonValueConverter jvc = converterBySpec.get(specId);
         if(jvc == null) {
             // best effort
             if (argValueRepr.isString()) {
@@ -611,9 +594,7 @@ public final class JsonValueEncoder {
                 return encodableFacet.fromEncodedString(argStr);
             }
 
-            final String reason = "Unable to parse value";
-            argRepr.mapPut("invalidReason", reason);
-            throw new IllegalArgumentException(reason);
+            throw new IllegalArgumentException("Unable to parse value");
         }
 
         final ObjectAdapter asAdapter = jvc.asAdapter(argValueRepr);
@@ -624,12 +605,14 @@ public final class JsonValueEncoder {
         // last attempt
         if (argValueRepr.isString()) {
             final String argStr = argValueRepr.asString();
-            return encodableFacet.fromEncodedString(argStr);
+            try {
+                return encodableFacet.fromEncodedString(argStr);
+            } catch(TextEntryParseException ex) {
+                throw new IllegalArgumentException(ex.getMessage());
+            }
         }
 
-        final String reason = "Could not parse value '" + argValueRepr.asString() + "' as a " + objectSpec.getFullIdentifier();
-        argRepr.mapPut("invalidReason", reason);
-        throw new IllegalArgumentException(reason);
+        throw new IllegalArgumentException("Could not parse value '" + argValueRepr.asString() + "' as a " + objectSpec.getFullIdentifier());
     }
 
     public static void appendValueAndFormat(ObjectSpecification objectSpec, ObjectAdapter objectAdapter, JsonRepresentation repr) {

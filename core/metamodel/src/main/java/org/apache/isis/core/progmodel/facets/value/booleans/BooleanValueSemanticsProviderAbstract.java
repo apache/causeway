@@ -54,7 +54,7 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
         } else if ("false".startsWith(compareTo)) {
             return Boolean.FALSE;
         } else {
-            throw new TextEntryParseException("Not a logical value " + entry);
+            throw new TextEntryParseException(String.format("'%s' cannot be parsed as a boolean", entry));
         }
     }
 

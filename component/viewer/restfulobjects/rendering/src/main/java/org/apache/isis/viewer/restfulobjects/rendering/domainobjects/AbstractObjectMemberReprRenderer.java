@@ -155,7 +155,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         representation.mapPut("id", objectMember.getId());
         
         if(!mode.isArguments()) {
-            representation.mapPut("memberType", memberType.getName());
+            representation.mapPut("memberType", objectMemberType.getName());
         }
 
         if (mode.isInline()) {

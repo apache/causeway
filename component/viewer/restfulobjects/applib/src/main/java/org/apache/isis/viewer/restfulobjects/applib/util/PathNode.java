@@ -23,13 +23,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public class PathNode {
     private static final Pattern NODE = Pattern.compile("^([^\\[]*)(\\[(.+)\\])?$");
@@ -117,10 +115,24 @@ public class PathNode {
             return false;
         }
         for (final Map.Entry<String, String> criterium : getCriteria().entrySet()) {
-            final String requiredValue = criterium.getValue();
+            String requiredValue = criterium.getValue();
             if(requiredValue != null) {
                 // list syntax
-                final String actualValue = repr.getString(criterium.getKey());
+                String actualValue = repr.getString(criterium.getKey());
+                if(actualValue == null) {
+                    return false;
+                }
+
+                // determine if fuzzy match (ie without additional parameters)
+                // eg [rel=urn:org.restfulobjects:rel/details;action="list"] matches [rel=urn:org.restfulobjects:rel/details]
+                final int actualValueSemiIndex = actualValue.indexOf(";");
+                final int requiredValueSemiIndex = requiredValue.indexOf(";");
+                if(actualValueSemiIndex != -1 && requiredValueSemiIndex == -1 ) {
+                    actualValue = actualValue.substring(0, actualValueSemiIndex);
+                }
+                if(actualValueSemiIndex == -1 && requiredValueSemiIndex != -1) {
+                    requiredValue = requiredValue.substring(0, requiredValueSemiIndex);
+                }
                 if (!Objects.equal(requiredValue, actualValue)) {
                     return false;
                 }

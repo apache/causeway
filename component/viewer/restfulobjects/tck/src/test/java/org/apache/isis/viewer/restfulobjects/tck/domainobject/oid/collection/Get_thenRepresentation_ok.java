@@ -18,22 +18,11 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid.collection;
 
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.assertThat;
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isMap;
-import static org.hamcrest.CoreMatchers.endsWith;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -45,6 +34,10 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpS
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectCollectionRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.*;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
 
 public class Get_thenRepresentation_ok {
     @Rule
@@ -72,7 +65,7 @@ public class Get_thenRepresentation_ok {
         // then
         final ObjectCollectionRepresentation collectionRepr = collectionJsonResp.getEntity();
 
-        assertThat(collectionRepr.getString("objectMemberType"), is("collection"));
+        assertThat(collectionRepr.getString("memberType"), is("collection"));
 
         // self link
         final LinkRepresentation selfLink = collectionRepr.getLinkWithRel(Rel.SELF);

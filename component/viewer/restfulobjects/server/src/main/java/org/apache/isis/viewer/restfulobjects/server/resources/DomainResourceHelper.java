@@ -41,6 +41,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -342,11 +343,32 @@ public final class DomainResourceHelper {
             return null;
         }
 
+        if(!argRepr.mapHas("value")) {
+            String reason = "No 'value' key";
+            argRepr.mapPut("invalidReason", reason);
+            throw new IllegalArgumentException(reason);
+        }
+
+        if (objectSpec == null) {
+            String reason = "ObjectSpec is null, cannot validate";
+            argRepr.mapPut("invalidReason", reason);
+            throw new IllegalArgumentException(reason);
+        }
+        final EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
+        if (encodableFacet == null) {
+            String reason = "ObjectSpec expected to have an EncodableFacet";
+            argRepr.mapPut("invalidReason", reason);
+            throw new IllegalArgumentException(reason);
+        }
+
+        final JsonRepresentation argValueRepr = argRepr.getRepresentation("value");
+
         // value (encodable)
         if (objectSpec.isEncodeable()) {
             try {
-                return JsonValueEncoder.asAdapter(objectSpec, argRepr);
+                return JsonValueEncoder.asAdapter(objectSpec, argValueRepr);
             }catch(IllegalArgumentException ex) {
+                argRepr.mapPut("invalidReason", ex.getMessage());
                 throw ex;
             }catch(Exception ex) {
                 StringBuilder buf = new StringBuilder("Failed to parse representation ");
@@ -360,13 +382,6 @@ public final class DomainResourceHelper {
                 argRepr.mapPut("invalidReason", reason);
                 throw new IllegalArgumentException(reason);
             }
-        }
-
-        final JsonRepresentation argValueRepr = argRepr.getRepresentation("value");
-        if(argValueRepr == null) {
-            String reason = "No 'value' key";
-            argRepr.mapPut("invalidReason", reason);
-            throw new IllegalArgumentException(reason);
         }
 
         // reference

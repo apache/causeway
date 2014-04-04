@@ -73,7 +73,7 @@ public class Get_givenEntityWithActions_thenRepresentation_ok {
         assertThat(actions.size(), is(3));
 
         final DomainObjectMemberRepresentation containsAction = domainObjectRepr.getAction("contains");
-        assertThat(containsAction.getString("objectMemberType"), is("action"));
+        assertThat(containsAction.getString("memberType"), is("action"));
         assertThat(containsAction.getString("id"), is("contains"));
 
         LinkRepresentation containsActionLink = containsAction.getLinkWithRel(Rel.DETAILS.andParam("action", "contains"));
@@ -84,7 +84,7 @@ public class Get_givenEntityWithActions_thenRepresentation_ok {
 
         // can also look up with abbreviated parameterized version of Rel
         containsActionLink = containsAction.getLinkWithRel(Rel.DETAILS);
-        assertThat(containsActionLink.getRel(), is("action"));
+        assertThat(containsActionLink.getRel(), is("urn:org.restfulobjects:rels/details;action=\"contains\""));
         assertThat(containsActionLink.getHref(), is(self.getHref() + "/actions/contains"));
         assertThat(containsActionLink.getType(), is(RepresentationType.OBJECT_ACTION.getMediaType()));
         assertThat(containsActionLink.getHttpMethod(), is(RestfulHttpMethod.GET));

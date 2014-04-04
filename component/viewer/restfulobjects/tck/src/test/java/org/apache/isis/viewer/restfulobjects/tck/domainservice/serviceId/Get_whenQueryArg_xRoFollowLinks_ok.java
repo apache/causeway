@@ -18,36 +18,28 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId;
 
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isMap;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import java.io.IOException;
-
-
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
 
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.*;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isMap;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
 
 public class Get_whenQueryArg_xRoFollowLinks_ok {
 
@@ -117,7 +109,7 @@ public class Get_whenQueryArg_xRoFollowLinks_ok {
 
         final String href = givenHrefToService("WrapperValuedEntities");
 
-        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[%s].links[rel=%s]", "list", Rel.DETAILS.getName());
+        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[%s].links[rel=%s]", "list", Rel.DETAILS.andParam("action", "list"));
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -129,12 +121,12 @@ public class Get_whenQueryArg_xRoFollowLinks_ok {
         JsonRepresentation actionRepr;
 
         actionRepr = membersList.getRepresentation("list");
-        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"]"), is(not(nullValue())));
-        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"].value"), is(not(nullValue()))); // followed
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.andParam("action", "list")+"]"), is(not(nullValue())));
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.andParam("action", "list")+"].value"), is(not(nullValue()))); // followed
 
         actionRepr = membersList.getRepresentation("newEntity");
-        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"]"), is(not(nullValue())));
-        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"].value"), is(nullValue())); // not followed
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.andParam("action", "newEntity")+"]"), is(not(nullValue())));
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.andParam("action", "newEntity")+"].value"), is(nullValue())); // not followed
     }
 
     @Test
@@ -142,7 +134,7 @@ public class Get_whenQueryArg_xRoFollowLinks_ok {
 
         final String href = givenHrefToService("WrapperValuedEntities");
 
-        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[%s].links[rel=%s],members[%s].links[rel=%s]", "list", Rel.DETAILS.getName(), "newEntity", Rel.DETAILS.getName());
+        final RestfulRequest request = client.createRequest(RestfulHttpMethod.GET, href).withArg(RequestParameter.FOLLOW_LINKS, "members[%s].links[rel=%s],members[%s].links[rel=%s]", "list", Rel.DETAILS.andParam("action", "list"), "newEntity", Rel.DETAILS.andParam("action", "newEntity"));
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = request.executeT();
 
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
@@ -154,12 +146,12 @@ public class Get_whenQueryArg_xRoFollowLinks_ok {
         JsonRepresentation actionRepr;
 
         actionRepr = membersList.getRepresentation("list");
-        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"]"), is(not(nullValue())));
-        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"].value"), is(not(nullValue()))); // followed
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.andParam("action", "list")+"]"), is(not(nullValue())));
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.andParam("action", "list")+"].value"), is(not(nullValue()))); // followed
 
         actionRepr = membersList.getRepresentation("newEntity");
-        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"]"), is(not(nullValue())));
-        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.getName()+"].value"), is(not(nullValue()))); // also followed
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.andParam("action", "newEntity")+"]"), is(not(nullValue())));
+        assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.andParam("action", "newEntity")+"].value"), is(not(nullValue()))); // also followed
     }
     
     private String givenHrefToService(final String serviceId) throws JsonParseException, JsonMappingException, IOException {

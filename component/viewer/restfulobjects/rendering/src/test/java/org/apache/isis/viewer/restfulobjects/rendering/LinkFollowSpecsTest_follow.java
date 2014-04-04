@@ -18,14 +18,13 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.List;
-
+import org.junit.Test;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
-import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class LinkFollowSpecsTest_follow {
 
@@ -167,7 +166,38 @@ public class LinkFollowSpecsTest_follow {
         assertThat(followRelUser.follow("y").isFollowing(), is(true));
     }
 
-    
+    @Test
+    public void multiplePaths_withRelFullCriteria() throws Exception {
+        final List<List<String>> links = asListOfLists("links[rel=urn:org.restfulobjects:rels/details;action=foo].x,links[rel=urn:org.restfulobjects:rels/details;action=bar].y");
+
+        final LinkFollowSpecs linkFollower = LinkFollowSpecs.create(links);
+
+        LinkFollowSpecs followRelVersion = linkFollower.follow("links[rel=urn:org.restfulobjects:rels/details;action=foo]");
+        assertThat(followRelVersion.isFollowing(), is(true));
+        assertThat(followRelVersion.isTerminated(), is(false));
+
+        assertThat(followRelVersion.follow("x").isFollowing(), is(true));
+
+        LinkFollowSpecs followRelUser = linkFollower.follow("links[rel=urn:org.restfulobjects:rels/details;action=bar]");
+        assertThat(followRelUser.isFollowing(), is(true));
+        assertThat(followRelUser.isTerminated(), is(false));
+        assertThat(followRelUser.follow("y").isFollowing(), is(true));
+    }
+
+    @Test
+    public void multiplePaths_withRelSimplifiedCriteria() throws Exception {
+        final List<List<String>> links = asListOfLists("links[rel=urn:org.restfulobjects:rels/details;action=foo].x,links[rel=urn:org.restfulobjects:rels/details;action=bar].y");
+
+        final LinkFollowSpecs linkFollower = LinkFollowSpecs.create(links);
+
+        LinkFollowSpecs followRelVersion = linkFollower.follow("links[rel=urn:org.restfulobjects:rels/details]");
+        assertThat(followRelVersion.isFollowing(), is(true));
+        assertThat(followRelVersion.isTerminated(), is(false));
+
+        assertThat(followRelVersion.follow("x").isFollowing(), is(true));
+    }
+
+
     private List<List<String>> asListOfLists(final String string) {
         return Parser.forListOfListOfStrings().valueOf(string);
     }
