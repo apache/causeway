@@ -25,13 +25,13 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
-public class ExceptionModel extends ModelAbstract<Exception> {
+public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
 
     private static final long serialVersionUID = 1L;
 
     private static final String MAIN_MESSAGE_IF_NOT_RECOGNIZED = "Sorry, an unexpected error occurred.";
     
-    private Exception exception;
+    private List<StackTraceDetail> stackTraceDetailList;
     private boolean recognized;
 
     private final String mainMessage;
@@ -46,20 +46,27 @@ public class ExceptionModel extends ModelAbstract<Exception> {
     private ExceptionModel(String mainMessage, boolean recognized, Exception ex) {
         this.mainMessage = mainMessage;
         this.recognized = recognized;
-        this.exception = ex;
+        setObject(ex);
     }
 
     @Override
-    protected Exception load() {
-        return exception;
+    protected List<StackTraceDetail> load() {
+        return stackTraceDetailList;
     }
 
-    @Override
+    /**
+     * Not API
+     */
     public void setObject(Exception ex) {
-        if(ex == null) {
+        stackTraceDetailList = asStackTrace(ex);
+    }
+
+    @Override
+    public void setObject(List<StackTraceDetail> stackTraceDetail) {
+        if(stackTraceDetail == null) {
             return;
         }
-        this.exception = ex;
+        this.stackTraceDetailList = stackTraceDetail;
     }
 
     public boolean isRecognized() {
@@ -71,10 +78,9 @@ public class ExceptionModel extends ModelAbstract<Exception> {
     }
     
     public List<StackTraceDetail> getStackTrace() {
-        return asStackTrace(exception);
+        return stackTraceDetailList;
     }
 
-    
     private static List<StackTraceDetail> asStackTrace(Throwable ex) {
         List<StackTraceDetail> stackTrace = Lists.newArrayList();
         List<Throwable> causalChain = Throwables.getCausalChain(ex);
@@ -92,9 +98,5 @@ public class ExceptionModel extends ModelAbstract<Exception> {
             stackTrace.add(StackTraceDetail.element(el));
         }
     }
-
-
-
-
 
 }

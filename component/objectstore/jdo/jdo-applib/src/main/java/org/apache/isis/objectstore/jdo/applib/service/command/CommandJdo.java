@@ -387,7 +387,7 @@ public class CommandJdo extends DomainChangeJdoAbstract implements Command {
     
     private String arguments;
     
-    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.Command.ARGUMENTS)
+    @javax.jdo.annotations.Column(allowsNull="true", jdbcType="CLOB")
     @MultiLine(numberOfLines=7)
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Target",sequence = "40")
@@ -396,7 +396,7 @@ public class CommandJdo extends DomainChangeJdoAbstract implements Command {
     }
     
     public void setArguments(final String arguments) {
-        this.arguments = Util.abbreviated(arguments, JdoColumnLength.Command.ARGUMENTS);
+        this.arguments = arguments;
     }
 
     
@@ -427,7 +427,7 @@ public class CommandJdo extends DomainChangeJdoAbstract implements Command {
     
     private String memento;
     
-    @javax.jdo.annotations.Column(allowsNull="false", length=JdoColumnLength.BackgroundTask.MEMENTO)
+    @javax.jdo.annotations.Column(allowsNull="true", jdbcType="CLOB")
     @MultiLine(numberOfLines=9)
     @Hidden(where=Where.ALL_TABLES)
     @MemberOrder(name="Detail",sequence = "30")

@@ -143,14 +143,20 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
 
             if(command != null && command.getExecutor() == Executor.USER && owningAction != null) {
 
+                if(command.getTarget() != null) {
+                    // already set up by a ObjectActionContributee;
+                    // don't overwrite
+                } else {
+                    command.setTargetClass(CommandUtil.targetClassNameFor(targetAdapter));
+                    command.setTargetAction(CommandUtil.targetActionNameFor(owningAction));
+                    command.setArguments(CommandUtil.argDescriptionFor(owningAction, arguments));
+                    
+                    final Bookmark targetBookmark = CommandUtil.bookmarkFor(targetAdapter);
+                    command.setTarget(targetBookmark);
+                }
+
                 command.setMemberIdentifier(CommandUtil.actionIdentifierFor(owningAction));
-                command.setTargetClass(CommandUtil.targetClassNameFor(targetAdapter));
-                command.setTargetAction(CommandUtil.targetActionNameFor(owningAction));
-                command.setArguments(CommandUtil.argDescriptionFor(owningAction, arguments));
-                
-                final Bookmark targetBookmark = CommandUtil.bookmarkFor(targetAdapter);
-                command.setTarget(targetBookmark);
-                
+
                 // the background service is used here merely as a means to capture an invocation memento
                 final BackgroundService backgroundService = getServicesInjector().lookupService(BackgroundService.class);
                 if(backgroundService != null) {

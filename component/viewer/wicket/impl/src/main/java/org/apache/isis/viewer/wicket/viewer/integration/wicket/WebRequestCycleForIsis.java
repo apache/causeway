@@ -178,11 +178,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
         ExceptionModel exceptionModel = ExceptionModel.create(recognizedMessageIfAny, ex);
         
-        if( isSignedIn()) {
-            return new ErrorPage(exceptionModel);
-        } else {
-            return new WicketSignInPage(null, exceptionModel);
-        }
+        return isSignedIn() ? new ErrorPage(exceptionModel) : new WicketSignInPage(null, exceptionModel);
     }
 
     /**
