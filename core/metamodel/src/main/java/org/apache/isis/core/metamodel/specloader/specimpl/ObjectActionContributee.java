@@ -27,6 +27,10 @@ import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -47,6 +51,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
+import org.apache.isis.core.progmodel.facets.actions.invoke.CommandUtil;
 
 public class ObjectActionContributee extends ObjectActionImpl implements ContributeeMember {
 
@@ -193,6 +198,19 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
             bulkInteractionContext.setDomainObjects(Collections.singletonList(contributee.getObject()));
         }
 
+        final CommandContext commandContext = getServicesProvider().lookupService(CommandContext.class);
+        final Command command = commandContext != null ? commandContext.getCommand() : null;
+
+        if(command != null && command.getExecutor() == Executor.USER) {
+
+            command.setTargetClass(CommandUtil.targetClassNameFor(contributee));
+            command.setTargetAction(CommandUtil.targetActionNameFor(this));
+            command.setArguments(CommandUtil.argDescriptionFor(this, arguments));
+            
+            final Bookmark targetBookmark = CommandUtil.bookmarkFor(contributee);
+            command.setTarget(targetBookmark);
+        }
+        
         return serviceAction.execute(serviceAdapter, argsPlusContributee(contributee, arguments));
     }
 
