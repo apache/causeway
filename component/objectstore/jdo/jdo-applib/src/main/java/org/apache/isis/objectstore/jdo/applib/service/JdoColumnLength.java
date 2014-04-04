@@ -44,18 +44,9 @@ public final class JdoColumnLength {
     public static final class Command {
         private Command() {
         }
-        public final static int ARGUMENTS = 1024;
         public static final int EXECUTE_IN = 10;
     }
 
-    public static final class BackgroundTask {
-
-        private BackgroundTask() {
-        }
-        
-        public static final int MEMENTO = 1024;
-    }
-    
     public static final class AuditEntry {
 
         private AuditEntry() {
