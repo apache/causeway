@@ -105,6 +105,8 @@ public final class UserMemento {
 
     /**
      * Determines if the user fulfills the specified role.
+     *  
+     * @param role  the role to search for, regular expressions are allowed 
      */
     public boolean hasRole(final RoleMemento role) {
         return hasRole(role.getName());
@@ -116,7 +118,7 @@ public final class UserMemento {
      */
     public boolean hasRole(final String roleName) {
         for (final RoleMemento role : roles) {
-            if (role.getName().equals(roleName)) {
+            if (role.getName().matches(roleName)) {
                 return true;
             }
         }
