@@ -55,9 +55,14 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
     }
 
     public EnumValueSemanticsProvider(final FacetHolder holder, final Class<T> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, typicalLengthFor(adaptedClass), Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultFor(adaptedClass), configuration, context);
+        super(
+                type(), holder,  adaptedClass, 
+                typicalLengthFor(adaptedClass), 
+                Immutability.IMMUTABLE, 
+                EqualByContent.HONOURED, 
+                defaultFor(adaptedClass), 
+                configuration, context);
     }
-
 
     @Override
     protected T doParse(final Object context, final String entry) {
