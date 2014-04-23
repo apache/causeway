@@ -79,21 +79,21 @@ public class Util {
     /**
      * For clientFollow tests; returns a link to the first entity in the list returned by invoking the 'list' action of the specified repo
      */
-    public static LinkRepresentation domainObjectLink(RestfulClient client, String repoName) throws Exception {
-        return domainObjectLink(client, repoName, "list");
+    public static LinkRepresentation serviceActionListInvokeFirstReference(RestfulClient client, String repoName) throws Exception {
+        return serviceActionListInvokeFirstReference(client, repoName, "list");
     }
 
     /**
      * For clientFollow tests; returns a link to the first entity in the list returned by invoking the specified repo and action
      */
-    public static LinkRepresentation domainObjectLink(RestfulClient client, String repoName, String actionName) throws Exception {
-        return domainObjectLink(client, repoName, actionName, 0);
+    public static LinkRepresentation serviceActionListInvokeFirstReference(RestfulClient client, String repoName, String actionName) throws Exception {
+        return serviceActionListInvokeFirstReference(client, repoName, actionName, 0);
     }
 
     /**
      * For clientFollow tests; returns a link to the Nth entity in the list returned by invoking the specified repo and action
      */
-    public static LinkRepresentation domainObjectLink(RestfulClient client, String repoName, String actionName, int idx) throws Exception {
+    public static LinkRepresentation serviceActionListInvokeFirstReference(RestfulClient client, String repoName, String actionName, int idx) throws Exception {
 
         final DomainServiceResource serviceResource = client.getDomainServiceResource();
 
@@ -137,7 +137,7 @@ public class Util {
      * For resourceProxy tests; returns the Nth entity in the list returned by invoking the specified repo and action
      */
     public static RestfulResponse<DomainObjectRepresentation> domainObjectJaxrsResponse(RestfulClient client, String repoName, String actionName, int idx) throws Exception {
-        final LinkRepresentation link = Util.domainObjectLink(client, repoName, actionName, idx);
+        final LinkRepresentation link = Util.serviceActionListInvokeFirstReference(client, repoName, actionName, idx);
         DomainObjectRepresentation domainObjectRepr = client.follow(link).getEntity().as(DomainObjectRepresentation.class);
 
         final Response jaxrsResponse = client.getDomainObjectResource().object(domainObjectRepr.getDomainType(), domainObjectRepr.getInstanceId());

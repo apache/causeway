@@ -53,8 +53,10 @@ public class Get_whenDoesntExistProp_then_404 {
     @Test
     public void whenPropertyDoesntExist() throws Exception {
 
+        Util.serviceActionListInvokeFirstReference(client, "PrimitiveValuedEntities");
+
         // given
-        final LinkRepresentation linkToExistingObject = Util.domainObjectLink(client, "PrimitiveValuedEntities");
+        final LinkRepresentation linkToExistingObject = Util.serviceActionListInvokeFirstReference(client, "PrimitiveValuedEntities");
         link.withHref(linkToExistingObject.getHref() + "/properties/nonExistentProperty");
         
         // when
@@ -62,6 +64,9 @@ public class Get_whenDoesntExistProp_then_404 {
         
         // then
         assertThat(restfulResp.getStatus(), is(HttpStatusCode.NOT_FOUND));
+        
+        Util.serviceActionListInvokeFirstReference(client, "PrimitiveValuedEntities");
+
     }
 
 }

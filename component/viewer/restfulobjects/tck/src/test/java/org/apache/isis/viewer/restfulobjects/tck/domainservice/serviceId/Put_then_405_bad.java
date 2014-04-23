@@ -19,9 +19,11 @@
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId;
 
 import javax.ws.rs.core.Response;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
@@ -32,6 +34,7 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.apache.isis.viewer.restfulobjects.tck.Util;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -53,6 +56,7 @@ public class Put_then_405_bad {
 
     @Test
     public void followLink() throws Exception {
+
 
         // given
         final Response serviceResp = domainServiceResource.service("ActionsEntities");

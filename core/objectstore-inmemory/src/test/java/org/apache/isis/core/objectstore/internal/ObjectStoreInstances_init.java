@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -46,12 +47,12 @@ public class ObjectStoreInstances_init {
 
     private final Mockery context = new JUnit4Mockery();
 
-    private ObjectSpecification mockSpec;
+    private ObjectSpecId mockSpecId;
 
     @Before
     public void setUp() throws Exception {
-        mockSpec = context.mock(ObjectSpecification.class);
-        instances = new ObjectStoreInstances(mockSpec);
+        mockSpecId = context.mock(ObjectSpecId.class);
+        instances = new ObjectStoreInstances(mockSpecId);
     }
 
     @Test

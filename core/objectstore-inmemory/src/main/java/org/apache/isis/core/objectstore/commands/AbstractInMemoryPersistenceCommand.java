@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.objectstore.internal.ObjectStoreInstances;
 import org.apache.isis.core.objectstore.internal.ObjectStorePersistedObjects;
@@ -45,7 +46,7 @@ public abstract class AbstractInMemoryPersistenceCommand extends PersistenceComm
         if (LOG.isDebugEnabled()) {
             LOG.debug("   saving object " + adapter + " as instance of " + specification.getShortIdentifier());
         }
-        final ObjectStoreInstances ins = instancesFor(specification);
+        final ObjectStoreInstances ins = instancesFor(specification.getSpecId());
         ins.save(adapter); // also sets the version
     }
 
@@ -54,11 +55,11 @@ public abstract class AbstractInMemoryPersistenceCommand extends PersistenceComm
         if (LOG.isDebugEnabled()) {
             LOG.debug("   destroy object " + adapter + " as instance of " + specification.getShortIdentifier());
         }
-        final ObjectStoreInstances ins = instancesFor(specification);
+        final ObjectStoreInstances ins = instancesFor(specification.getSpecId());
         ins.remove(adapter.getOid());
     }
 
-    private ObjectStoreInstances instancesFor(final ObjectSpecification spec) {
+    private ObjectStoreInstances instancesFor(final ObjectSpecId spec) {
         return persistedObjects.instancesFor(spec);
     }
 }

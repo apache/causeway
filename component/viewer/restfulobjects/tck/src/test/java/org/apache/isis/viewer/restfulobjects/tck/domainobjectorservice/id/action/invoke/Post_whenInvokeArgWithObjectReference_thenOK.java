@@ -18,21 +18,24 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.action.invoke;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 import org.jboss.resteasy.client.core.executors.URLConnectionClientExecutor;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.tck.dom.refs.ParentEntity;
+import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectCollectionRepresentation;
@@ -58,7 +61,15 @@ public class Post_whenInvokeArgWithObjectReference_thenOK {
         client = webServerRule.getClient(new URLConnectionClientExecutor());
         objectResource = client.getDomainObjectResource();
     }
-    
+
+    /**
+     * Tests change state, so discard such that will be recreated by next test.
+     */
+    @After
+    public void tearDown() throws Exception {
+        webServerRule.discardWebApp();
+    }
+
     @Test
     public void usingClientFollow() throws Exception {
 
@@ -82,7 +93,12 @@ public class Post_whenInvokeArgWithObjectReference_thenOK {
         LinkRepresentation invokeLinkRepr = removeChildRepr.getLinkWithRel(Rel.INVOKE);
         JsonRepresentation args = invokeLinkRepr.getArguments();
         args.mapPut("childEntity.value", firstChildRepr);
-        client.follow(invokeLinkRepr, args);
+        RestfulResponse<JsonRepresentation> invokeResp = client.follow(invokeLinkRepr, args);
+        
+        @SuppressWarnings("unused")
+        JsonRepresentation invokeRepr = invokeResp.getEntity();
+        final HttpStatusCode status = invokeResp.getStatus();
+        assertThat(status, is(HttpStatusCode.OK));
 
         // then
         childrenRestfulResponse = 

@@ -27,6 +27,7 @@ import java.util.Vector;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +42,7 @@ import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -105,9 +107,9 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
     }
 
     protected void recreateAdapters() {
-        for (final ObjectSpecification noSpec : persistedObjects.specifications()) {
+        for (final ObjectSpecId noSpec : persistedObjects.specifications()) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("recreating adapters for: " + noSpec.getFullIdentifier());
+                LOG.debug("recreating adapters for: " + noSpec.asString());
             }
             recreateAdapters(persistedObjects.instancesFor(noSpec));
         }
@@ -243,7 +245,7 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
             LOG.debug("getObject " + oid);
         }
         final ObjectSpecification objectSpec = getSpecificationLookup().lookupBySpecId(oid.getObjectSpecId());
-        final ObjectStoreInstances ins = instancesFor(objectSpec);
+        final ObjectStoreInstances ins = instancesFor(objectSpec.getSpecId());
         final ObjectAdapter adapter = ins.getObjectAndMapIfRequired(oid);
         if (adapter == null) {
             throw new ObjectNotFoundException(oid);
@@ -297,7 +299,7 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
 
     @Override
     public boolean hasInstances(final ObjectSpecification spec) {
-        if (instancesFor(spec).hasInstances()) {
+        if (instancesFor(spec.getSpecId()).hasInstances()) {
             return true;
         }
 
@@ -314,7 +316,7 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
 
     private void findInstances(final ObjectSpecification spec, final PersistenceQueryBuiltIn persistenceQuery, final List<ObjectAdapter> foundInstances) {
 
-        instancesFor(spec).findInstancesAndAdd(persistenceQuery, foundInstances);
+        instancesFor(spec.getSpecId()).findInstancesAndAdd(persistenceQuery, foundInstances);
 
         // include subclasses
         final List<ObjectSpecification> subclasses = spec.subclasses();
@@ -344,7 +346,7 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
         persistedObjects.registerService(rootOid.getObjectSpecId(), rootOid);
     }
 
-    private ObjectStoreInstances instancesFor(final ObjectSpecification spec) {
+    private ObjectStoreInstances instancesFor(final ObjectSpecId spec) {
         return persistedObjects.instancesFor(spec);
     }
 
@@ -360,9 +362,9 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
     @Override
     public void debugData(final DebugBuilder debug) {
         debug.appendTitle("Domain Objects");
-        for (final ObjectSpecification spec : persistedObjects.specifications()) {
-            debug.appendln(spec.getFullIdentifier());
-            final ObjectStoreInstances instances = instancesFor(spec);
+        for (final ObjectSpecId specId : persistedObjects.specifications()) {
+            debug.appendln(specId.asString());
+            final ObjectStoreInstances instances = instancesFor(specId);
             instances.debugData(debug);
         }
         debug.unindent();

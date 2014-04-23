@@ -66,7 +66,7 @@ public class Get_givenEntityWithApplibProperties_thenRepresentation_ok_TODO {
     public void thenMembers() throws Exception {
 
         // when
-        final LinkRepresentation link = Util.domainObjectLink(client, "ApplibValuedEntities");
+        final LinkRepresentation link = Util.serviceActionListInvokeFirstReference(client, "ApplibValuedEntities");
         domainObjectRepr = client.follow(link).getEntity().as(DomainObjectRepresentation.class);
 
         // and then members (types)

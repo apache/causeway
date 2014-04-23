@@ -409,7 +409,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
 
-        return helper.invokeAction(actionId, arguments, getResourceContext().getWhere());
+        Where where = getResourceContext().getWhere();
+        return helper.invokeAction(actionId, arguments, where);
     }
 
     @Override

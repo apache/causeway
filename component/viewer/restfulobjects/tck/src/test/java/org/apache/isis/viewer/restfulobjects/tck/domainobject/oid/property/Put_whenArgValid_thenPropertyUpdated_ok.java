@@ -34,8 +34,8 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.ISODateTimeFormat;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -46,7 +46,6 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectPropertyRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
@@ -68,6 +67,14 @@ public class Put_whenArgValid_thenPropertyUpdated_ok {
         final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
         domainObjectResource = client.getDomainObjectResource();
+    }
+
+    /**
+     * Tests change state, so discard such that will be recreated by next test.
+     */
+    @After
+    public void tearDown() throws Exception {
+        webServerRule.discardWebApp();
     }
 
     @Test
@@ -125,7 +132,7 @@ public class Put_whenArgValid_thenPropertyUpdated_ok {
 
     @Test
     public void jdkPropertiesUpdated() throws Exception {
-        
+
         // big decimal
         // TODO: bigdecimal is being being truncated/converted to doubles...
         final BigDecimal bd = new BigDecimal("12345678901234567.789");
@@ -180,7 +187,7 @@ public class Put_whenArgValid_thenPropertyUpdated_ok {
     
     @Test
     public void jodaPropertiesUpdated() throws Exception {
-        
+
         // LocalDate
         final LocalDate ld = new LocalDate(2013,5,1);
         modifyLink = getObjectPropertyReprModifyLink("JODA", "73", "localDateProperty");

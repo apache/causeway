@@ -37,12 +37,8 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
-/**
- * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers) and
- * <i>Growing Object-Oriented Software</i> (Freeman &amp; Pryce).
- */
 @RunWith(JMock.class)
 public class ObjectStoreInstances_save {
 
@@ -50,16 +46,16 @@ public class ObjectStoreInstances_save {
 
     private final Mockery context = new JUnit4Mockery();
 
-    private ObjectSpecification mockSpec;
+    private ObjectSpecId mockSpecId;
     private ObjectAdapter mockAdapter;
     private AuthenticationSession mockAuthSession;
 
     @Before
     public void setUp() throws Exception {
-        mockSpec = context.mock(ObjectSpecification.class);
+        mockSpecId = context.mock(ObjectSpecId.class);
         mockAdapter = context.mock(ObjectAdapter.class);
         mockAuthSession = context.mock(AuthenticationSession.class);
-        instances = new ObjectStoreInstances(mockSpec) {
+        instances = new ObjectStoreInstances(mockSpecId) {
             @Override
             protected AuthenticationSession getAuthenticationSession() {
                 return mockAuthSession;

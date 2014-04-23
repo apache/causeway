@@ -354,13 +354,7 @@ public final class DomainResourceHelper {
             argRepr.mapPut("invalidReason", reason);
             throw new IllegalArgumentException(reason);
         }
-        final EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
-        if (encodableFacet == null) {
-            String reason = "ObjectSpec expected to have an EncodableFacet";
-            argRepr.mapPut("invalidReason", reason);
-            throw new IllegalArgumentException(reason);
-        }
-
+        
         final JsonRepresentation argValueRepr = argRepr.getRepresentation("value");
 
         // value (encodable)

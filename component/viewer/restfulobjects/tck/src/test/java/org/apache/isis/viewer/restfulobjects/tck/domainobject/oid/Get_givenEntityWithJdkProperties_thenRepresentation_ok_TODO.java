@@ -66,7 +66,7 @@ public class Get_givenEntityWithJdkProperties_thenRepresentation_ok_TODO {
     public void thenMembers() throws Exception {
 
         // when
-        final LinkRepresentation link = Util.domainObjectLink(client, "JdkValuedEntities");
+        final LinkRepresentation link = Util.serviceActionListInvokeFirstReference(client, "JdkValuedEntities");
         domainObjectRepr = client.follow(link).getEntity().as(DomainObjectRepresentation.class);
 
         // and then members (types)

@@ -71,7 +71,7 @@ public class Get_givenEntityWithJodaProperties_thenRepresentation_ok_TODO {
     public void thenMembers() throws Exception {
 
         // when
-        final LinkRepresentation link = Util.domainObjectLink(client, "JodaValuedEntities");
+        final LinkRepresentation link = Util.serviceActionListInvokeFirstReference(client, "JodaValuedEntities");
         domainObjectRepr = client.follow(link).getEntity().as(DomainObjectRepresentation.class);
 
         // and then members (types)

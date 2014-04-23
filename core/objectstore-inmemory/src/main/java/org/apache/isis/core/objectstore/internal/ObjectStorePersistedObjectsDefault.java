@@ -20,6 +20,7 @@
 package org.apache.isis.core.objectstore.internal;
 
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.collect.Maps;
 
@@ -36,7 +37,7 @@ import org.apache.isis.core.runtime.system.persistence.IdentifierGeneratorDefaul
  */
 public class ObjectStorePersistedObjectsDefault implements ObjectStorePersistedObjects {
 
-    private final Map<ObjectSpecification, ObjectStoreInstances> instancesBySpecMap = Maps.newHashMap();
+    private final Map<ObjectSpecId, ObjectStoreInstances> instancesBySpecMap = Maps.newHashMap();
     private final Map<ObjectSpecId, Oid> serviceOidByIdMap = Maps.newHashMap();
 
     private IdentifierGeneratorDefault.Memento oidGeneratorMemento;
@@ -74,17 +75,17 @@ public class ObjectStorePersistedObjectsDefault implements ObjectStorePersistedO
     // also think we shouldn't surface the entire Map, just the API we require
     // (keySet, values etc).
     @Override
-    public ObjectStoreInstances instancesFor(final ObjectSpecification spec) {
-        ObjectStoreInstances ins = instancesBySpecMap.get(spec);
+    public ObjectStoreInstances instancesFor(final ObjectSpecId specId) {
+        ObjectStoreInstances ins = instancesBySpecMap.get(specId);
         if (ins == null) {
-            ins = new ObjectStoreInstances(spec);
-            instancesBySpecMap.put(spec, ins);
+            ins = new ObjectStoreInstances(specId);
+            instancesBySpecMap.put(specId, ins);
         }
         return ins;
     }
 
     @Override
-    public Iterable<ObjectSpecification> specifications() {
+    public Iterable<ObjectSpecId> specifications() {
         return instancesBySpecMap.keySet();
     }
 

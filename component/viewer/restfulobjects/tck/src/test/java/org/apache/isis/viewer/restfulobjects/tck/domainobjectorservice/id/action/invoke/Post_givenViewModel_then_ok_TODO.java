@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.action.invoke;
 
+import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
@@ -28,6 +29,8 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRe
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonNodeUtils;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -43,15 +46,20 @@ public class Post_givenViewModel_then_ok_TODO {
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();
 
-    private RestfulClient client;
-
-    private DomainServiceResource serviceResource;
+    protected RestfulClient client;
 
     @Before
     public void setUp() throws Exception {
-        client = webServerRule.getClient();
+        final WebServer webServer = webServerRule.getWebServer();
+        client = new RestfulClient(webServer.getBase());
+    }
 
-        serviceResource = client.getDomainServiceResource();
+    /**
+     * Tests change state, so discard such that will be recreated by next test.
+     */
+    @After
+    public void tearDown() throws Exception {
+        webServerRule.discardWebApp();
     }
 
     @Ignore

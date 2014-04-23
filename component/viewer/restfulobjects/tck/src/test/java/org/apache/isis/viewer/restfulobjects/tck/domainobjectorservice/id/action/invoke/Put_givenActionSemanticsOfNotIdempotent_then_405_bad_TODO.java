@@ -50,7 +50,7 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRe
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
 
-public class Put_givenActionSemanticsOfNotIdempotent_then_205_bad_TODO {
+public class Put_givenActionSemanticsOfNotIdempotent_then_405_bad_TODO {
 
     @Rule
     public IsisWebServerRule webServerRule = new IsisWebServerRule();

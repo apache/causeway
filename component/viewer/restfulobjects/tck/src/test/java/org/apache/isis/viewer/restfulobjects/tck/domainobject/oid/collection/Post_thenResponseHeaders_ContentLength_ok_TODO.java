@@ -21,6 +21,8 @@ package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid.collection;
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -37,6 +39,14 @@ public class Post_thenResponseHeaders_ContentLength_ok_TODO {
     public void setUp() throws Exception {
         final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
+    }
+
+    /**
+     * Tests change state, so discard such that will be recreated by next test.
+     */
+    @After
+    public void tearDown() throws Exception {
+        webServerRule.discardWebApp();
     }
 
 }

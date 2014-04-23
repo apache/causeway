@@ -19,9 +19,11 @@
 package org.apache.isis.viewer.restfulobjects.tck.version;
 
 import javax.ws.rs.core.Response;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -33,6 +35,7 @@ import org.apache.isis.viewer.restfulobjects.applib.user.UserResource;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+import org.apache.isis.viewer.restfulobjects.tck.Util;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -53,6 +56,8 @@ public class Delete_then_405_bad {
 
     @Test
     public void representation() throws Exception {
+
+        Util.serviceActionListInvokeFirstReference(client, "PrimitiveValuedEntities");
 
         // given
         final Response resp = resource.version();

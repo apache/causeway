@@ -24,7 +24,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.http.client.HttpClient;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ClientRequestFactory;
 import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
@@ -51,12 +53,21 @@ public class RestfulClient {
     private final ClientExecutor executor;
     private final ClientRequestFactory clientRequestFactory;
 
+    
     /**
      * Using {@link ApacheHttpClient4Executor} and {@link DefaultHttpClient}.
      */
     public RestfulClient(final URI baseUri) {
-        this(baseUri, new DefaultHttpClient());
+        this(baseUri, new ThreadSafeClientConnManager());
     }
+
+    /**
+     * Using {@link ApacheHttpClient4Executor} and {@link DefaultHttpClient}.
+     */
+    public RestfulClient(final URI baseUri, ClientConnectionManager clientConnectionManager) {
+        this(baseUri, new DefaultHttpClient(clientConnectionManager));
+    }
+
 
     /**
      * Using {@link ApacheHttpClient4Executor} and specified {@link HttpClient}.

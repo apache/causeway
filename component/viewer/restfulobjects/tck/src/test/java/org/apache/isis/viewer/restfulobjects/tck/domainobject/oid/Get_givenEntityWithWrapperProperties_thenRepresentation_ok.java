@@ -62,7 +62,7 @@ public class Get_givenEntityWithWrapperProperties_thenRepresentation_ok {
     public void thenMembers() throws Exception {
 
         // when
-        final LinkRepresentation link = Util.domainObjectLink(client, "WrapperValuedEntities");
+        final LinkRepresentation link = Util.serviceActionListInvokeFirstReference(client, "WrapperValuedEntities");
         domainObjectRepr = client.follow(link).getEntity().as(DomainObjectRepresentation.class);
 
 

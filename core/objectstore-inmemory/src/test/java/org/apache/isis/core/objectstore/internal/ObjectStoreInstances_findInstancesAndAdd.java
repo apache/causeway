@@ -35,6 +35,7 @@ import org.junit.Test;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryBuiltIn;
 import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
@@ -50,7 +51,7 @@ public class ObjectStoreInstances_findInstancesAndAdd {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    private ObjectSpecification mockSpec;
+    private ObjectSpecId mockSpecId;
     @Mock
     private PersistenceQueryBuiltIn mockPersistenceQueryBuiltIn;
     @Mock
@@ -65,7 +66,7 @@ public class ObjectStoreInstances_findInstancesAndAdd {
 
     @Before
     public void setUp() throws Exception {
-        instances = new ObjectStoreInstances(mockSpec) {
+        instances = new ObjectStoreInstances(mockSpecId) {
             @Override
             protected AuthenticationSession getAuthenticationSession() {
                 return mockAuthSession;

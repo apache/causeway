@@ -24,19 +24,14 @@ import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 
 public class IsisWebServerRule implements MethodRule {
 
-    private static ThreadLocal<WebServer> WEBSERVER = new ThreadLocal<WebServer>() {
-        @Override
-        protected WebServer initialValue() {
-            final WebServer webServer = new WebServer();
-            webServer.run(39393);
-            return webServer;
-        };
-    };
+    private static ThreadLocal<WebServer> WEBSERVER = new ThreadLocal<WebServer>();
+
     private RestfulClient client;
 
     @Override
@@ -46,7 +41,19 @@ public class IsisWebServerRule implements MethodRule {
     }
 
     public WebServer getWebServer() {
-        return WEBSERVER.get();
+        WebServer webServer = WEBSERVER.get();
+        if(webServer == null) {
+            webServer = new WebServer();
+            WEBSERVER.set(webServer);
+            webServer.run(39393);
+        }
+        return webServer;
+    }
+    
+    public void discardWebApp() {
+        getWebServer().stop();
+        WEBSERVER.set(null);
+        IsisContext.testReset();
     }
 
     public RestfulClient getClient() {

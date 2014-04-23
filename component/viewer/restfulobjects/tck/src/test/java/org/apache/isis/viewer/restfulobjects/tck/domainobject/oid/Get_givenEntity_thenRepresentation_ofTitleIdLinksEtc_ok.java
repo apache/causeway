@@ -62,7 +62,7 @@ public class Get_givenEntity_thenRepresentation_ofTitleIdLinksEtc_ok {
     public void thenTitle_andExtensions_andLinks() throws Exception {
 
         // when
-        final LinkRepresentation link = Util.domainObjectLink(client, "PrimitiveValuedEntities");
+        final LinkRepresentation link = Util.serviceActionListInvokeFirstReference(client, "PrimitiveValuedEntities");
         domainObjectRepr = client.follow(link).getEntity().as(DomainObjectRepresentation.class);
 
         // then has domain type, instanceId, title

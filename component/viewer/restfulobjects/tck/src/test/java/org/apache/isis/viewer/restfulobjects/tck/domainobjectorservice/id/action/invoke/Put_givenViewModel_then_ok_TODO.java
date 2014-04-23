@@ -18,9 +18,12 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.action.invoke;
 
+import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -40,6 +43,14 @@ public class Put_givenViewModel_then_ok_TODO {
         client = webServerRule.getClient();
 
         serviceResource = client.getDomainServiceResource();
+    }
+
+    /**
+     * Tests change state, so discard such that will be recreated by next test.
+     */
+    @After
+    public void tearDown() throws Exception {
+        webServerRule.discardWebApp();
     }
 
     @Ignore

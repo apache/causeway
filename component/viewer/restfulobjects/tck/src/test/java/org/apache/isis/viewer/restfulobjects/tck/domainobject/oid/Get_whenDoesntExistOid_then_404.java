@@ -54,7 +54,7 @@ public class Get_whenDoesntExistOid_then_404 {
     public void usingClientFollow() throws Exception {
 
         // given
-        final LinkRepresentation link = Util.domainObjectLink(client, "PrimitiveValuedEntities");
+        final LinkRepresentation link = Util.serviceActionListInvokeFirstReference(client, "PrimitiveValuedEntities");
         link.withHref("http://localhost:39393/objects/PRMV/nonExistent");
         
         // when

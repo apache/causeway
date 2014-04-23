@@ -50,7 +50,7 @@ public abstract class AbstractTypeMemberReprRenderer<R extends ReprRendererAbstr
 
         // done eagerly so can use as criteria for x-ro-follow-links
         representation.mapPut("id", objectFeature.getId());
-        representation.mapPut("objectMemberType", memberType.getName());
+        representation.mapPut("memberType", memberType.getName());
 
         return cast(this);
     }

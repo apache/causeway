@@ -65,7 +65,7 @@ public class Get_thenResponseCode_andContentType_andContentLength_ok {
     public void usingClientFollow() throws Exception {
 
         // when
-        final LinkRepresentation link = Util.domainObjectLink(client, "PrimitiveValuedEntities");
+        final LinkRepresentation link = Util.serviceActionListInvokeFirstReference(client, "PrimitiveValuedEntities");
         final DomainObjectRepresentation objRepr = client.follow(link).getEntity().as(DomainObjectRepresentation.class);
         final String domainType = objRepr.getDomainType();
         final String instanceId = objRepr.getInstanceId();

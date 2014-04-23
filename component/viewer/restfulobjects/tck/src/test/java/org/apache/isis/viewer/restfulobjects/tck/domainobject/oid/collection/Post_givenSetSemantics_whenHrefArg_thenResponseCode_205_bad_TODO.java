@@ -18,6 +18,26 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid.collection;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+
+import org.apache.isis.core.webserver.WebServer;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
+import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+
 public class Post_givenSetSemantics_whenHrefArg_thenResponseCode_205_bad_TODO {
+
+    @Rule
+    public IsisWebServerRule webServerRule = new IsisWebServerRule();
+
+    protected RestfulClient client;
+
+    @Before
+    public void setUp() throws Exception {
+        final WebServer webServer = webServerRule.getWebServer();
+        client = new RestfulClient(webServer.getBase());
+    }
+
 
 }

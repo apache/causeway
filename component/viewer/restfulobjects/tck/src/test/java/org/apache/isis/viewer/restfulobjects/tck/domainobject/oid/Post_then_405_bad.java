@@ -53,7 +53,7 @@ public class Post_then_405_bad {
     public void followLink() throws Exception {
 
         // when
-        final LinkRepresentation link = Util.domainObjectLink(client, "PrimitiveValuedEntities");
+        final LinkRepresentation link = Util.serviceActionListInvokeFirstReference(client, "PrimitiveValuedEntities");
         final LinkRepresentation deleteLink = link.withMethod(RestfulHttpMethod.POST);
         final RestfulResponse<JsonRepresentation> restfulResponse = client.follow(deleteLink);
 

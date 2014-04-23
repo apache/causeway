@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.objectstore.InMemoryObjectStore;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryBuiltIn;
@@ -53,13 +54,13 @@ public class ObjectStoreInstances {
     private final Map<Oid, Version> versionByOidMap = new HashMap<Oid, Version>();
 
     @SuppressWarnings("unused")
-    private final ObjectSpecification spec;
+    private final ObjectSpecId spec;
 
     // ///////////////////////////////////////////////////////
     // Constructors
     // ///////////////////////////////////////////////////////
 
-    public ObjectStoreInstances(final ObjectSpecification spec) {
+    public ObjectStoreInstances(final ObjectSpecId spec) {
         this.spec = spec;
     }
 

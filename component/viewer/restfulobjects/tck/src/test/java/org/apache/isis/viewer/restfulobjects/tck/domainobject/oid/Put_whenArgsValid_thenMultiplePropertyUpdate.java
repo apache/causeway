@@ -35,6 +35,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.ISODateTimeFormat;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -68,6 +69,15 @@ public class Put_whenArgsValid_thenMultiplePropertyUpdate {
         domainObjectResource = client.getDomainObjectResource();
     }
 
+    /**
+     * Tests change state, so discard such that will be recreated by next test.
+     */
+    @After
+    public void tearDown() throws Exception {
+        webServerRule.discardWebApp();
+    }
+
+    
     @Test
     public void primitivePropertiesUpdated() throws Exception {
         

@@ -39,9 +39,9 @@ public interface ObjectStorePersistedObjects {
 
     public Oid getService(ObjectSpecId objectSpecId);
 
-    public Iterable<ObjectSpecification> specifications();
+    public Iterable<ObjectSpecId> specifications();
 
-    public ObjectStoreInstances instancesFor(ObjectSpecification spec);
+    public ObjectStoreInstances instancesFor(ObjectSpecId spec);
 
     public Iterable<ObjectStoreInstances> instances();
 

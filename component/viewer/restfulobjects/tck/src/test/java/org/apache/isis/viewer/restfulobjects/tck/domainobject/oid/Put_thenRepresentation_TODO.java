@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -38,6 +39,14 @@ public class Put_thenRepresentation_TODO {
     public void setUp() throws Exception {
         final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
+    }
+
+    /**
+     * Tests change state, so discard such that will be recreated by next test.
+     */
+    @After
+    public void tearDown() throws Exception {
+        webServerRule.discardWebApp();
     }
 
     @Ignore
