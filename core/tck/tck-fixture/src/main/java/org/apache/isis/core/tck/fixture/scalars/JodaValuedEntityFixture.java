@@ -20,9 +20,9 @@
 package org.apache.isis.core.tck.fixture.scalars;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
-
 import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.apache.isis.core.tck.dom.scalars.JodaValuedEntity;
 import org.apache.isis.core.tck.dom.scalars.JodaValuedEntityRepository;
@@ -42,7 +42,7 @@ public class JodaValuedEntityFixture extends AbstractFixture {
         final JodaValuedEntity jve = jodaValuesEntityRepository.newEntity();
         jve.setLocalDateProperty(new LocalDate(2008,3,21));
         jve.setLocalDateTimeProperty(new LocalDateTime(2009, 4, 29, 13, 45, 22));
-        jve.setDateTimeProperty(new DateTime(2010, 3, 31, 9, 50, 43));
+        jve.setDateTimeProperty(new DateTime(2010, 3, 31, 9, 50, 43, DateTimeZone.UTC));
         return jve;
     }
 

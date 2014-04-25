@@ -24,6 +24,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -32,8 +34,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.*;
-import org.joda.time.format.DateTimeFormat;
+import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonNodeUtils;
 import org.apache.isis.viewer.restfulobjects.applib.util.PathNode;
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
@@ -43,6 +46,9 @@ import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
  * methods.
  */
 public class JsonRepresentation {
+
+    private static final Pattern FORMAT_BIG_DECIMAL = Pattern.compile("big-decimal\\((\\d+),(\\d+)\\)");
+    private static final Pattern FORMAT_BIG_INTEGER = Pattern.compile("big-integer\\((\\d+)\\)");
 
     public interface HasLinkToSelf {
         public LinkRepresentation getSelf();
@@ -307,7 +313,7 @@ public class JsonRepresentation {
     // getDate, asDate
     // ///////////////////////////////////////////////////////////////////////
 
-    public final static DateTimeFormatter yyyyMMdd = DateTimeFormat.forPattern("yyyy-MM-dd");
+    public final static DateTimeFormatter yyyyMMdd = ISODateTimeFormat.date().withZoneUTC();
 
     public java.util.Date getDate(final String path) {
         return getDate(path, getNode(path));
@@ -333,7 +339,7 @@ public class JsonRepresentation {
     // getDateTime, asDateTime
     // ///////////////////////////////////////////////////////////////////////
 
-    public final static DateTimeFormatter yyyyMMddTHHmmssZ = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ");
+    public final static DateTimeFormatter yyyyMMddTHHmmssZ = ISODateTimeFormat.dateTimeNoMillis().withZoneUTC();
 
     public java.util.Date getDateTime(final String path) {
         return getDateTime(path, getNode(path));
@@ -359,7 +365,7 @@ public class JsonRepresentation {
     // getTime, asTime
     // ///////////////////////////////////////////////////////////////////////
 
-    public final static DateTimeFormatter _HHmmss = DateTimeFormat.forPattern("HH:mm:ss");
+    public final static DateTimeFormatter _HHmmss = ISODateTimeFormat.timeNoMillis().withZoneUTC();
 
     public java.util.Date getTime(final String path) {
         return getTime(path, getNode(path));
@@ -378,7 +384,8 @@ public class JsonRepresentation {
             throw new IllegalArgumentException(formatExMsg(path, "is not a time"));
         }
         final String textValue = node.getTextValue();
-        return new java.util.Date(_HHmmss.parseMillis(textValue));
+        final LocalTime localTime = _HHmmss.parseLocalTime(textValue + "Z");
+        return new java.util.Date(localTime.getMillisOfDay());
     }
 
     // ///////////////////////////////////////////////////////////////////////
@@ -423,9 +430,9 @@ public class JsonRepresentation {
     }
     
     // ///////////////////////////////////////////////////////////////////////
-    // getByte, asByte
+    // isByte, getByte, asByte
     // ///////////////////////////////////////////////////////////////////////
-    
+
     /**
      * Use {@link #isIntegralNumber(String)} to test if number (it is not possible to check if a byte, however).
      */
@@ -599,10 +606,13 @@ public class JsonRepresentation {
             return null;
         }
         checkValue(path, node, "a long");
-        if (!node.isLong()) {
-            throw new IllegalArgumentException(formatExMsg(path, "is not a long"));
+        if(node.isInt()) {
+            return Long.valueOf(node.getIntValue());
         }
-        return node.getLongValue();
+        if(node.isLong()) {
+            return node.getLongValue();
+        }
+        throw new IllegalArgumentException(formatExMsg(path, "is not a long"));
     }
 
     // ///////////////////////////////////////////////////////////////////////
@@ -610,7 +620,7 @@ public class JsonRepresentation {
     // ///////////////////////////////////////////////////////////////////////
 
     /**
-     * Use {@link #isNumber(String)} to test if number (it is not possible to check if a float, however).
+     * Use {@link #isDecimal(String)} to test if a decimal value
      */
     public Float getFloat(final String path) {
         final JsonNode node = getNode(path);
@@ -637,18 +647,34 @@ public class JsonRepresentation {
     
 
     // ///////////////////////////////////////////////////////////////////////
-    // isDouble, getDouble, asDouble
+    // isDecimal, isDouble, getDouble, asDouble
     // ///////////////////////////////////////////////////////////////////////
 
+    public boolean isDecimal(final String path) {
+        return isDecimal(getNode(path));
+    }
+
+    public boolean isDecimal() {
+        return isDecimal(asJsonNode());
+    }
+
+    /**
+     * @deprecated - use {@link #isDecimal(String)}
+     */
+    @Deprecated
     public boolean isDouble(final String path) {
-        return isDouble(getNode(path));
+        return isDecimal(path);
     }
 
+    /**
+     * @deprecated - use {@link #isDecimal()}
+     */
+    @Deprecated
     public boolean isDouble() {
-        return isDouble(asJsonNode());
+        return isDecimal();
     }
 
-    private boolean isDouble(final JsonNode node) {
+    private boolean isDecimal(final JsonNode node) {
         return !representsNull(node) && node.isValueNode() && node.isDouble();
     }
 
@@ -691,33 +717,90 @@ public class JsonRepresentation {
     }
 
     private boolean isBigInteger(final JsonNode node) {
-        return !representsNull(node) && node.isValueNode() && node.isBigInteger();
+        return !representsNull(node) && node.isValueNode() && (node.isBigInteger() || node.isLong() || node.isInt() || node.isTextual() && parseableAsBigInteger(node.getTextValue()));
+    }
+
+    private static boolean parseableAsBigInteger(String str) {
+        try {
+            new BigInteger(str);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**
      * Use {@link #isBigInteger(String)} to check first, if required.
      */
     public BigInteger getBigInteger(final String path) {
-        final JsonNode node = getNode(path);
-        return getBigInteger(path, node);
+        return getBigInteger(path, (String)null);
+    }
+
+    /**
+     * Use {@link #isBigInteger(String)} to check first, if required.
+     */
+    public BigInteger getBigInteger(final String path, final String formatRequested) {
+        final JsonNode node;
+        final String format;
+        if(formatRequested != null) {
+            node = getNode(path);
+            format = formatRequested;
+        } else {
+            final NodeAndFormat nodeAndFormat = getNodeAndFormat(path);
+            node = nodeAndFormat.node;
+            format = nodeAndFormat.format;
+        }
+        return getBigInteger(path, format, node);
     }
 
     /**
      * Use {@link #isBigInteger()} to check first, if required.
      */
     public BigInteger asBigInteger() {
-        return getBigInteger(null, asJsonNode());
+        return asBigInteger(null);
     }
 
-    private BigInteger getBigInteger(final String path, final JsonNode node) {
+    public BigInteger asBigInteger(final String format) {
+        return getBigInteger(null, format, asJsonNode());
+    }
+
+    private BigInteger getBigInteger(final String path, final String format, final JsonNode node) {
         if (representsNull(node)) {
             return null;
         }
-        checkValue(path, node, "a biginteger");
-        if (!node.isBigInteger()) {
-            throw new IllegalArgumentException(formatExMsg(path, "is not a biginteger"));
+        final String requiredType = "a biginteger";
+        if(!isBigInteger(node)) {
+            throw new IllegalArgumentException(formatExMsg(path, "is not " + requiredType));
         }
-        return node.getBigIntegerValue();
+        checkValue(path, node, requiredType);
+        final BigInteger bigInteger = getBigInteger(path, node);
+        if(format != null) {
+            final Matcher matcher = FORMAT_BIG_INTEGER.matcher(format);
+            if(matcher.matches()) {
+                final int precision = Integer.parseInt(matcher.group(1));
+                final BigInteger maxAllowed = BigInteger.TEN.pow(precision);
+                if(bigInteger.compareTo(maxAllowed) > 0) {
+                    throw new IllegalArgumentException(String.format("Value '%s' larger than that allowed by format '%s'", bigInteger, format));
+                }
+            }
+        }
+        return bigInteger;
+    }
+
+    private BigInteger getBigInteger(String path, JsonNode node) {
+        if (node.isBigInteger()) {
+            return node.getBigIntegerValue();
+        }
+        if (node.isTextual()) {
+            return new BigInteger(node.getTextValue());
+        }
+        if (node.isLong()) {
+            return BigInteger.valueOf(node.getLongValue());
+        }
+        if (node.isInt()) {
+            return BigInteger.valueOf(node.getIntValue());
+        }
+        throw new IllegalArgumentException(formatExMsg(path, "is not a biginteger, is not any other integral number, is not text parseable as a biginteger"));
     }
 
     // ///////////////////////////////////////////////////////////////////////
@@ -727,74 +810,95 @@ public class JsonRepresentation {
     public boolean isBigDecimal(final String path) {
         return isBigDecimal(getNode(path));
     }
-    public boolean isBigDecimalOrNumeric(final String path) {
-        return isBigDecimalOrNumeric(getNode(path));
-    }
 
     public boolean isBigDecimal() {
         return isBigDecimal(asJsonNode());
     }
-    public boolean isBigDecimalOrNumeric() {
-        return isBigDecimalOrNumeric(asJsonNode());
-    }
 
     private boolean isBigDecimal(final JsonNode node) {
-        return !representsNull(node) && node.isValueNode() && node.isBigDecimal();
+        return !representsNull(node) && node.isValueNode() && (node.isBigDecimal() || node.isDouble() || node.isLong() || node.isInt() || node.isBigInteger() || node.isTextual() && parseableAsBigDecimal(node.getTextValue()));
     }
-    private boolean isBigDecimalOrNumeric(final JsonNode node) {
-        return !representsNull(node) && node.isValueNode() && (node.isBigDecimal() || node.isDouble() || node.isLong() || node.isInt() || node.isBigInteger());
+
+    private static boolean parseableAsBigDecimal(String str) {
+        try {
+            new BigDecimal(str);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**
      * Use {@link #isBigDecimal(String)} to check first, if required.
      */
     public BigDecimal getBigDecimal(final String path) {
-        final JsonNode node = getNode(path);
-        return getBigDecimal(path, node);
+        return getBigDecimal(path, (String)null);
     }
+
     /**
      * Use {@link #isBigDecimal(String)} to check first, if required.
      */
-    public BigDecimal getBigDecimalFromNumeric(final String path) {
-        final JsonNode node = getNode(path);
-        return getBigDecimalFromNumeric(path, node);
+    public BigDecimal getBigDecimal(final String path, final String formatRequested) {
+        final JsonNode node;
+        final String format;
+        if(formatRequested != null) {
+            node = getNode(path);
+            format = formatRequested;
+        } else {
+            final NodeAndFormat nodeAndFormat = getNodeAndFormat(path);
+            node = nodeAndFormat.node;
+            format = nodeAndFormat.format;
+        }
+        return getBigDecimal(path, format, node);
     }
 
     /**
      * Use {@link #isBigDecimal()} to check first, if required.
      */
     public BigDecimal asBigDecimal() {
-        return getBigDecimal(null, asJsonNode());
+        return asBigDecimal(null);
     }
-    
+
     /**
-     * Use {@link #isBigDecimalOrNumeric()} to check first, if required.
+     * Use {@link #isBigDecimal()} to check first, if required.
      */
-    public BigDecimal asBigDecimalFromNumeric() {
-        return getBigDecimalFromNumeric(null, asJsonNode());
+    public BigDecimal asBigDecimal(String format) {
+        return getBigDecimal(null, format, asJsonNode());
     }
 
-    private BigDecimal getBigDecimal(final String path, final JsonNode node) {
+    private BigDecimal getBigDecimal(final String path, final String format, final JsonNode node) {
         if (representsNull(node)) {
             return null;
         }
-        checkValue(path, node, "a bigdecimal");
-        if (node.isBigDecimal()) {
-            return node.getDecimalValue();
+        final String requiredType = "a bigdecimal";
+        if(!isBigDecimal(node)) {
+            throw new IllegalArgumentException(formatExMsg(path, "is not " + requiredType));
         }
-        throw new IllegalArgumentException(formatExMsg(path, "is not a bigdecimal (or any other numeric)"));
+        checkValue(path, node, requiredType);
+        final BigDecimal bigDecimal = getBigDecimal(path, node);
+        if(format != null) {
+            final Matcher matcher = FORMAT_BIG_DECIMAL.matcher(format);
+            if(matcher.matches()) {
+                final int precision = Integer.parseInt(matcher.group(1));
+                final int scale = Integer.parseInt(matcher.group(2));
+                final BigDecimal maxAllowed = BigDecimal.TEN.pow(precision-scale);
+                if(bigDecimal.compareTo(maxAllowed) > 0) {
+                    throw new IllegalArgumentException(String.format("Value '%s' larger than that allowed by format '%s'", bigDecimal, format));
+                }
+                return bigDecimal.setScale(scale, BigDecimal.ROUND_HALF_EVEN);
+            }
+        }
+        return bigDecimal;
     }
 
-    private BigDecimal getBigDecimalFromNumeric(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
-        checkValue(path, node, "a bigdecimal");
+    private BigDecimal getBigDecimal(String path, JsonNode node) {
         if (node.isBigDecimal()) {
             return node.getDecimalValue();
+        }
+        if (node.isTextual()) {
+            return new BigDecimal(node.getTextValue());
         }
         if (node.isLong()) {
-            // there will be rounding errors, most likely
             return new BigDecimal(node.getLongValue());
         }
         if (node.isDouble()) {
@@ -802,16 +906,14 @@ public class JsonRepresentation {
             return new BigDecimal(node.getDoubleValue());
         }
         if (node.isBigInteger()) {
-            // there will be rounding errors, most likely
             return new BigDecimal(node.getBigIntegerValue());
         }
         if (node.isInt()) {
-            // there will be rounding errors, most likely
             return new BigDecimal(node.getIntValue());
         }
-        throw new IllegalArgumentException(formatExMsg(path, "is not a bigdecimal (or any other numeric)"));
+        throw new IllegalArgumentException(formatExMsg(path, "is not a bigdecimal, is not any other numeric, is not text parseable as a bigdecimal"));
     }
-    
+
 
     // ///////////////////////////////////////////////////////////////////////
     // getString, isString, asString
@@ -1242,7 +1344,7 @@ public class JsonRepresentation {
         }
         final Path path = Path.parse(key);
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value != null? new POJONode(value): NullNode.getInstance() );
+        node.put(path.getTail(), value != null ? new POJONode(value) : NullNode.getInstance());
         return this;
     }
 
@@ -1285,14 +1387,20 @@ public class JsonRepresentation {
         return this;
     }
 
-    public JsonRepresentation mapPut(final String key, final long value) {
-        if (!isMap()) {
-            throw new IllegalStateException("does not represent map");
-        }
-        final Path path = Path.parse(key);
-        final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value);
-        return this;
+    public JsonRepresentation mapPut(final String key, final byte value) {
+        return mapPut(key, (int)value);
+    }
+
+    public JsonRepresentation mapPut(final String key, final Byte value) {
+        return value != null ? mapPut(key, value.byteValue()) : mapPut(key, (Object) value);
+    }
+
+    public JsonRepresentation mapPut(final String key, final short value) {
+        return mapPut(key, (int)value);
+    }
+
+    public JsonRepresentation mapPut(final String key, final Short value) {
+        return value != null ? mapPut(key, value.shortValue()) : mapPut(key, (Object) value);
     }
 
     public JsonRepresentation mapPut(final String key, final int value) {
@@ -1305,7 +1413,11 @@ public class JsonRepresentation {
         return this;
     }
 
-    public JsonRepresentation mapPut(final String key, final double value) {
+    public JsonRepresentation mapPut(final String key, final Integer value) {
+        return value != null ? mapPut(key, value.intValue()) : mapPut(key, (Object) value);
+    }
+
+    public JsonRepresentation mapPut(final String key, final long value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
@@ -1313,6 +1425,10 @@ public class JsonRepresentation {
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
         node.put(path.getTail(), value);
         return this;
+    }
+
+    public JsonRepresentation mapPut(final String key, final Long value) {
+        return value != null ? mapPut(key, value.longValue()) : mapPut(key, (Object) value);
     }
 
     public JsonRepresentation mapPut(final String key, final float value) {
@@ -1325,6 +1441,24 @@ public class JsonRepresentation {
         return this;
     }
 
+    public JsonRepresentation mapPut(final String key, final Float value) {
+        return value != null ? mapPut(key, value.floatValue()) : mapPut(key, (Object) value);
+    }
+
+    public JsonRepresentation mapPut(final String key, final double value) {
+        if (!isMap()) {
+            throw new IllegalStateException("does not represent map");
+        }
+        final Path path = Path.parse(key);
+        final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
+        node.put(path.getTail(), value);
+        return this;
+    }
+
+    public JsonRepresentation mapPut(final String key, final Double value) {
+        return value != null ? mapPut(key, value.doubleValue()) : mapPut(key, (Object) value);
+    }
+
     public JsonRepresentation mapPut(final String key, final boolean value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
@@ -1335,15 +1469,30 @@ public class JsonRepresentation {
         return this;
     }
 
+    public JsonRepresentation mapPut(final String key, final Boolean value) {
+        return value != null ? mapPut(key, value.booleanValue()) : mapPut(key, (Object) value);
+    }
+
+    public JsonRepresentation mapPut(final String key, final char value) {
+        return mapPut(key, ""+value);
+    }
+
+    public JsonRepresentation mapPut(final String key, final Character value) {
+        return value != null ? mapPut(key, value.charValue()) : mapPut(key, (Object) value);
+    }
+
     public JsonRepresentation mapPut(final String key, final BigInteger value) {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value != null? new BigIntegerNode(value): NullNode.getInstance() );
+        if (value != null) {
+            node.put(path.getTail(), value.toString());
+        } else {
+            node.put(path.getTail(), NullNode.getInstance());
+        }
         return this;
-
     }
 
     public JsonRepresentation mapPut(Iterable<Entry<String, JsonRepresentation>> entries) {
@@ -1364,7 +1513,11 @@ public class JsonRepresentation {
         }
         final Path path = Path.parse(key);
         final ObjectNode node = JsonNodeUtils.walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value != null? new DecimalNode(value): NullNode.getInstance() );
+        if (value != null) {
+            node.put(path.getTail(), value.toString());
+        } else {
+            node.put(path.getTail(), NullNode.getInstance());
+        }
         return this;
     }
 
@@ -1462,30 +1615,58 @@ public class JsonRepresentation {
     }
 
     private JsonNode getNode(final String path) {
+        return getNodeAndFormat(path).node;
+    }
+
+    private static class NodeAndFormat {
+        JsonNode node;
+        String format;
+        NodeAndFormat(JsonNode jsonNode, String format) {
+            node = jsonNode;
+            this.format = format;
+        }
+    }
+
+    /**
+     * Walks the path to the specified node, and also returns the value of 'format' in the parent node if present.
+     */
+    private NodeAndFormat getNodeAndFormat(final String path) {
         JsonNode jsonNode = this.jsonNode;
         final List<String> keys = PathNode.split(path);
+        String format = null;
         for (final String key : keys) {
             final PathNode pathNode = PathNode.parse(key);
             if (!pathNode.getKey().isEmpty()) {
+                // grab format (if present) before moving down the path
+                format = getFormatValueIfAnyFrom(jsonNode);
                 jsonNode = jsonNode.path(pathNode.getKey());
             } else {
                 // pathNode is criteria only; don't change jsonNode
             }
             if (jsonNode.isNull()) {
-                return jsonNode;
+                return new NodeAndFormat(jsonNode, format);
             }
             if (!pathNode.hasCriteria()) {
                 continue;
             }
             if (!jsonNode.isArray()) {
-                return NullNode.getInstance();
+                return new NodeAndFormat(NullNode.getInstance(), format);
             }
+            // grab format (if present) before moving down the path
+            format = getFormatValueIfAnyFrom(jsonNode);
             jsonNode = matching(jsonNode, pathNode);
             if (jsonNode.isNull()) {
-                return jsonNode;
+                return new NodeAndFormat(jsonNode, format);
             }
         }
-        return jsonNode;
+        return new NodeAndFormat(jsonNode, format);
+    }
+
+    private String getFormatValueIfAnyFrom(JsonNode jsonNode) {
+        String format;
+        final JsonNode formatNode = jsonNode.get("format");
+        format = formatNode != null && formatNode.isTextual()? formatNode.getTextValue(): null;
+        return format;
     }
 
     private JsonNode matching(final JsonNode jsonNode, final PathNode pathNode) {

@@ -18,65 +18,67 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+
 @RunWith(JMock.class)
 public class JsonValueEncoderTest_asObject {
 
     private final Mockery context = new JUnit4Mockery();
 
-    private JsonRepresentation representation;
-    private ObjectAdapter objectAdapter;
-    private ObjectSpecification objectSpec;
+    private ObjectAdapter mockObjectAdapter;
+    private ObjectSpecification mockObjectSpec;
+    private EncodableFacet mockEncodableFacet;
+    private AdapterManager mockAdapterManager;
 
-    private EncodableFacet encodableFacet;
     private Object encoded;
+
+    private JsonRepresentation representation;
 
     @Before
     public void setUp() throws Exception {
-        objectAdapter = context.mock(ObjectAdapter.class);
-        objectSpec = context.mock(ObjectSpecification.class);
+        mockObjectAdapter = context.mock(ObjectAdapter.class);
+        mockObjectSpec = context.mock(ObjectSpecification.class);
 
         context.checking(new Expectations() {
             {
-                allowing(objectAdapter).getSpecification();
-                will(returnValue(objectSpec));
+                allowing(mockObjectAdapter).getSpecification();
+                will(returnValue(mockObjectSpec));
             }
         });
-        encodableFacet = context.mock(EncodableFacet.class);
+        mockEncodableFacet = context.mock(EncodableFacet.class);
+        mockAdapterManager = context.mock(AdapterManager.class);
 
+        JsonValueEncoder.testSetAdapterManager(mockAdapterManager);
         encoded = new Object();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        JsonValueEncoder.testSetAdapterManager(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void whenAdapterIsNull() throws Exception {
-        JsonValueEncoder.asObject(null);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void whenObjectAdapterIsNotSpecialCaseAndSpecIsNotEncodable() throws Exception {
-        allowingObjectSpecCorrespondingClassIs(String.class);
-        allowingObjectSpecHas(EncodableFacet.class, null);
-        JsonValueEncoder.asObject(objectAdapter);
+        JsonValueEncoder.asObject(null, null);
     }
 
     @Test
@@ -91,15 +93,15 @@ public class JsonValueEncoderTest_asObject {
 
     private void whenBoolean(final Class<?> cls) {
         allowingObjectSpecCorrespondingClassIs(cls);
-        allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
-        never(encodableFacet);
+        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        never(mockEncodableFacet);
         context.checking(new Expectations() {
             {
-                one(objectAdapter).getObject();
+                one(mockObjectAdapter).getObject();
                 will(returnValue(true));
             }
         });
-        assertEquals(true, JsonValueEncoder.asObject(objectAdapter));
+        assertEquals(true, JsonValueEncoder.asObject(mockObjectAdapter, null));
     }
 
     @Test
@@ -114,15 +116,15 @@ public class JsonValueEncoderTest_asObject {
 
     private void whenInteger(final Class<?> cls) {
         allowingObjectSpecCorrespondingClassIs(cls);
-        allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
-        never(encodableFacet);
+        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        never(mockEncodableFacet);
         context.checking(new Expectations() {
             {
-                one(objectAdapter).getObject();
+                one(mockObjectAdapter).getObject();
                 will(returnValue(123));
             }
         });
-        assertEquals(123, JsonValueEncoder.asObject(objectAdapter));
+        assertEquals(123, JsonValueEncoder.asObject(mockObjectAdapter, null));
     }
 
     @Test
@@ -137,15 +139,15 @@ public class JsonValueEncoderTest_asObject {
 
     private void whenLong(final Class<?> cls) {
         allowingObjectSpecCorrespondingClassIs(cls);
-        allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
-        never(encodableFacet);
+        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        never(mockEncodableFacet);
         context.checking(new Expectations() {
             {
-                one(objectAdapter).getObject();
+                one(mockObjectAdapter).getObject();
                 will(returnValue(123456789L));
             }
         });
-        assertEquals(123456789L, JsonValueEncoder.asObject(objectAdapter));
+        assertEquals(123456789L, JsonValueEncoder.asObject(mockObjectAdapter, null));
     }
 
     @Test
@@ -160,72 +162,73 @@ public class JsonValueEncoderTest_asObject {
 
     private void whenDouble(final Class<?> cls) {
         allowingObjectSpecCorrespondingClassIs(cls);
-        allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
-        never(encodableFacet);
+        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        never(mockEncodableFacet);
         context.checking(new Expectations() {
             {
-                one(objectAdapter).getObject();
+                one(mockObjectAdapter).getObject();
                 will(returnValue(12345.6789));
             }
         });
-        assertEquals(12345.6789, JsonValueEncoder.asObject(objectAdapter));
+        assertEquals(12345.6789, JsonValueEncoder.asObject(mockObjectAdapter, null));
     }
 
     @Test
     public void whenBigInteger() throws Exception {
         allowingObjectSpecCorrespondingClassIs(BigInteger.class);
-        allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
-        never(encodableFacet);
+        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        never(mockEncodableFacet);
         final BigInteger value = new BigInteger("123456789012345");
         context.checking(new Expectations() {
 
             {
-                one(objectAdapter).getObject();
+                one(mockObjectAdapter).getObject();
                 will(returnValue(value));
             }
         });
-        assertEquals(value, JsonValueEncoder.asObject(objectAdapter));
+        assertEquals(value, JsonValueEncoder.asObject(mockObjectAdapter, null));
     }
 
     @Test
     public void whenBigDecimal() throws Exception {
         allowingObjectSpecCorrespondingClassIs(BigDecimal.class);
-        allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
-        never(encodableFacet);
+        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
+        never(mockEncodableFacet);
         final BigDecimal value = new BigDecimal("1234567890.1234567890");
         context.checking(new Expectations() {
 
             {
-                oneOf(objectAdapter).getObject();
+                oneOf(mockObjectAdapter).getObject();
                 will(returnValue(value));
             }
         });
-        assertEquals(value, JsonValueEncoder.asObject(objectAdapter));
+        assertEquals(value, JsonValueEncoder.asObject(mockObjectAdapter, null));
     }
 
     @Test
     public void whenString() throws Exception {
         allowingObjectSpecCorrespondingClassIs(String.class);
-        allowingObjectSpecHas(EncodableFacet.class, encodableFacet);
+        allowingObjectSpecHas(EncodableFacet.class, mockEncodableFacet);
         context.checking(new Expectations() {
             {
-                one(encodableFacet).toEncodedString(objectAdapter);
+                oneOf(mockObjectAdapter).getObject();
                 will(returnValue("encodedString"));
             }
         });
-        assertSame("encodedString", JsonValueEncoder.asObject(objectAdapter));
+        final Object actual = JsonValueEncoder.asObject(mockObjectAdapter, null);
+        assertSame("encodedString", actual);
     }
 
     private void allowingObjectSpecCorrespondingClassIs(final Class<?> result) {
         context.checking(new Expectations() {
             {
-                allowing(objectSpec).getCorrespondingClass();
+                allowing(mockObjectSpec).getCorrespondingClass();
                 will(returnValue(result));
             }
         });
         context.checking(new Expectations() {
             {
-                allowing(objectSpec).getSpecId();
+                allowing(mockObjectSpec).getSpecId();
                 will(returnValue(new ObjectSpecId(result.getName())));
             }
         });
@@ -234,7 +237,7 @@ public class JsonValueEncoderTest_asObject {
     private <T extends Facet> void allowingObjectSpecHas(final Class<T> facetClass, final T encodableFacet) {
         context.checking(new Expectations() {
             {
-                allowing(objectSpec).getFacet(facetClass);
+                allowing(mockObjectSpec).getFacet(facetClass);
                 will(returnValue(encodableFacet));
             }
         });

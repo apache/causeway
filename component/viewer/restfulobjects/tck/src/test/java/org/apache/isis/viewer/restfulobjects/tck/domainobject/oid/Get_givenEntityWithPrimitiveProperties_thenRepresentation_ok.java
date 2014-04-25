@@ -77,7 +77,7 @@ public class Get_givenEntityWithPrimitiveProperties_thenRepresentation_ok {
         
         property = domainObjectRepr.getProperty("byteProperty");
         assertThat(property.getMemberType(), is("property"));
-        assertThat(property.getFormat(), is(nullValue()));
+        assertThat(property.getFormat(), is("int"));
         assertThat(property.getXIsisFormat(), is("byte"));
         scalarRepr = property.getRepresentation("value").as(ScalarValueRepresentation.class);
         assertThat(scalarRepr.isIntegralNumber(), is(true));
@@ -86,7 +86,7 @@ public class Get_givenEntityWithPrimitiveProperties_thenRepresentation_ok {
 
         property = domainObjectRepr.getProperty("shortProperty");
         assertThat(property.getMemberType(), is("property"));
-        assertThat(property.getFormat(), is(nullValue()));
+        assertThat(property.getFormat(), is("int"));
         assertThat(property.getXIsisFormat(), is("short"));
         scalarRepr = property.getRepresentation("value").as(ScalarValueRepresentation.class);
         assertThat(scalarRepr.isIntegralNumber(), is(true));

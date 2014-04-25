@@ -351,7 +351,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
     public static Object valueOrRef(final RendererContext resourceContext, final ObjectAdapter objectAdapter, final ObjectSpecification objectSpec) {
         if(objectAdapter.isValue()) {
-            return JsonValueEncoder.asObject(objectAdapter);
+            String format = null; // TODO
+            return JsonValueEncoder.asObject(objectAdapter, format);
         }
         final TitleFacet titleFacet = objectSpec.getFacet(TitleFacet.class);
         final String title = titleFacet.title(objectAdapter, resourceContext.getLocalization());

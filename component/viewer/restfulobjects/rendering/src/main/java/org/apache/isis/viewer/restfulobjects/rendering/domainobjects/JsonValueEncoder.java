@@ -49,6 +49,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
  */
 public final class JsonValueEncoder {
 
+
     private JsonValueEncoder(){}
 
     
@@ -79,13 +80,14 @@ public final class JsonValueEncoder {
         /**
          * The value, otherwise <tt>null</tt>.
          */
-        public abstract ObjectAdapter asAdapter(JsonRepresentation repr);
+        public abstract ObjectAdapter asAdapter(JsonRepresentation repr, String format);
         
-        public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
-            append(repr, objectAdapter, format, xIsisFormat);
+        public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            repr.mapPut("value", unwrapAsObjectElseNullNode(objectAdapter));
+            appendFormats(repr, this.format, this.xIsisFormat);
         }
 
-        public Object asObject(ObjectAdapter objectAdapter) {
+        public Object asObject(ObjectAdapter objectAdapter, String format) {
             return objectAdapter.getObject();
         }
     }
@@ -102,27 +104,49 @@ public final class JsonValueEncoder {
     static {
         putConverter(new JsonValueConverter(null, "string", String.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     return adapterFor(repr.asString());
                 } 
                 return null;
             }
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+                if(obj instanceof String) {
+                    final String str = (String) obj;
+                    repr.mapPut("value", str);
+                } else {
+                    repr.mapPut("value", obj);
+                }
+                appendFormats(repr, this.format, xIsisFormat);
+            }
         });
 
         putConverter(new JsonValueConverter(null, "boolean", boolean.class, Boolean.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isBoolean()) {
                     return adapterFor(repr.asBoolean());
                 } 
                 return null;
             }
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+                if(obj instanceof Boolean) {
+                    final Boolean b = (Boolean) obj;
+                    repr.mapPut("value", b);
+                } else {
+                    repr.mapPut("value", obj);
+                }
+                appendFormats(repr, this.format, xIsisFormat);
+            }
         });
         
-        putConverter(new JsonValueConverter(null, "byte", byte.class, Byte.class){
+        putConverter(new JsonValueConverter("int", "byte", byte.class, Byte.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isNumber()) {
                     return adapterFor(repr.asNumber().byteValue());
                 }
@@ -137,11 +161,22 @@ public final class JsonValueEncoder {
                 }
                 return null;
             }
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+                if(obj instanceof Byte) {
+                    final Byte b = (Byte) obj;
+                    repr.mapPut("value", b);
+                } else {
+                    repr.mapPut("value", obj);
+                }
+                appendFormats(repr, this.format, xIsisFormat);
+            }
         });
         
-        putConverter(new JsonValueConverter(null, "short", short.class, Short.class){
+        putConverter(new JsonValueConverter("int", "short", short.class, Short.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isNumber()) {
                     return adapterFor(repr.asNumber().shortValue());
                 }
@@ -156,11 +191,22 @@ public final class JsonValueEncoder {
                 }
                 return null;
             }
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+                if(obj instanceof Short) {
+                    final Short s = (Short) obj;
+                    repr.mapPut("value", s);
+                } else {
+                    repr.mapPut("value", obj);
+                }
+                appendFormats(repr, this.format, xIsisFormat);
+            }
         });
         
         putConverter(new JsonValueConverter("int", "int", int.class, Integer.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isInt()) {
                     return adapterFor(repr.asInt());
                 }
@@ -175,11 +221,22 @@ public final class JsonValueEncoder {
                 }
                 return null;
             }
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+                if(obj instanceof Integer) {
+                    final Integer i = (Integer) obj;
+                    repr.mapPut("value", i);
+                } else {
+                    repr.mapPut("value", obj);
+                }
+                appendFormats(repr, this.format, xIsisFormat);
+            }
         });
         
         putConverter(new JsonValueConverter("int", "long", long.class, Long.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isLong()) {
                     return adapterFor(repr.asLong());
                 }
@@ -194,11 +251,22 @@ public final class JsonValueEncoder {
                 }
                 return null;
             }
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+                if(obj instanceof Long) {
+                    final Long l = (Long) obj;
+                    repr.mapPut("value", l);
+                } else {
+                    repr.mapPut("value", obj);
+                }
+                appendFormats(repr, this.format, xIsisFormat);
+            }
         });
         
         putConverter(new JsonValueConverter("decimal", "float", float.class, Float.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isDouble()) {
                     return adapterFor((float)(double)repr.asDouble());
                 }
@@ -216,11 +284,22 @@ public final class JsonValueEncoder {
                 }
                 return null;
             }
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+                if(obj instanceof Float) {
+                    final Float f = (Float) obj;
+                    repr.mapPut("value", f);
+                } else {
+                    repr.mapPut("value", obj);
+                }
+                appendFormats(repr, this.format, xIsisFormat);
+            }
         });
         
         putConverter(new JsonValueConverter("decimal", "double", double.class, Double.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isDouble()) {
                     return adapterFor(repr.asDouble());
                 }
@@ -241,11 +320,22 @@ public final class JsonValueEncoder {
                 }
                 return null;
             }
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+                if(obj instanceof Double) {
+                    final Double d = (Double) obj;
+                    repr.mapPut("value", d);
+                } else {
+                    repr.mapPut("value", obj);
+                }
+                appendFormats(repr, this.format, xIsisFormat);
+            }
         });
         
         putConverter(new JsonValueConverter(null, "char", char.class, Character.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     final String str = repr.asString();
                     if(str != null && str.length()>0) {
@@ -262,13 +352,27 @@ public final class JsonValueEncoder {
                 }
                 return null;
             }
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+                if(obj instanceof Character) {
+                    final Character c = (Character) obj;
+                    repr.mapPut("value", c);
+                } else {
+                    repr.mapPut("value", obj);
+                }
+                appendFormats(repr, this.format, xIsisFormat);
+            }
         });
         
-        putConverter(new JsonValueConverter("int", "biginteger", BigInteger.class){
+        putConverter(new JsonValueConverter("big-integer", "javamathbiginteger", BigInteger.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+                if (repr.isString()) {
+                    return adapterFor(new BigInteger(repr.asString()));
+                }
                 if (repr.isBigInteger()) {
-                    return adapterFor(repr.asBigInteger());
+                    return adapterFor(repr.asBigInteger(format));
                 }
                 if (repr.isLong()) {
                     return adapterFor(BigInteger.valueOf(repr.asLong()));
@@ -281,14 +385,27 @@ public final class JsonValueEncoder {
                 }
                 return null;
             }
+            @Override
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+                if(obj instanceof BigInteger) {
+                    final BigInteger bi = (BigInteger) obj;
+                    repr.mapPut("value", bi);
+                } else {
+                    repr.mapPut("value", obj);
+                }
+                appendFormats(repr, format != null? format: this.format, xIsisFormat);
+            }
         });
         
-        putConverter(new JsonValueConverter("decimal", "bigdecimal", BigDecimal.class){
+        putConverter(new JsonValueConverter("big-decimal", "javamathbigdecimal", BigDecimal.class){
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
-                // TODO: if inferring a BigDecimal, need to get the scale from somewhere...
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
+                if (repr.isString()) {
+                    return adapterFor(new BigDecimal(repr.asString()));
+                }
                 if (repr.isBigDecimal()) {
-                    return adapterFor(repr.asBigDecimal());
+                    return adapterFor(repr.asBigDecimal(format));
                 }
                 if (repr.isBigInteger()) {
                     return adapterFor(new BigDecimal(repr.asBigInteger()));
@@ -305,21 +422,30 @@ public final class JsonValueEncoder {
                 return null;
             }
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
-                super.appendValueAndFormat(objectAdapter, repr);
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+                if(obj instanceof BigDecimal) {
+                    final BigDecimal bd = (BigDecimal) obj;
+                    repr.mapPut("value", bd);
+                } else {
+                    repr.mapPut("value", obj);
+                }
+                appendFormats(repr, format != null? format: this.format, xIsisFormat);
             }
         });
 
         putConverter(new JsonValueConverter("date", "jodalocaldate", LocalDate.class){
 
+            // these formatters do NOT use withZoneUTC()
             final List<DateTimeFormatter> formatters = Arrays.asList(
-                    JsonRepresentation.yyyyMMdd, 
+                    ISODateTimeFormat.date(),
+                    ISODateTimeFormat.basicDate(),
                     DateTimeFormat.forPattern("yyyyMMdd"),
-                    ISODateTimeFormat.basicDate()
+                    JsonRepresentation.yyyyMMdd
                     );
 
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
@@ -335,29 +461,31 @@ public final class JsonValueEncoder {
             }
 
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
-                final Object obj = unwrap(objectAdapter);
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof LocalDate) {
                     final LocalDate date = (LocalDate) obj;
                     final String dateStr = formatters.get(0).print(date.toDateTimeAtStartOfDay());
-                    append(repr, dateStr, format, xIsisFormat);
+                    repr.mapPut("value", dateStr);
                 } else {
-                    append(repr, obj, format, xIsisFormat);
+                    repr.mapPut("value", obj);
                 }
+                appendFormats(repr, this.format, xIsisFormat);
             }
         });
 
         putConverter(new JsonValueConverter("date-time", "jodalocaldatetime", LocalDateTime.class){
-            
+
             final List<DateTimeFormatter> formatters = Arrays.asList(
-                    JsonRepresentation.yyyyMMddTHHmmssZ, 
-                    DateTimeFormat.forPattern("yyyyMMdd'T'HHmmssZ"), 
-                    ISODateTimeFormat.basicDateTimeNoMillis(),
-                    ISODateTimeFormat.basicDateTime()
+                    ISODateTimeFormat.dateTimeNoMillis().withZoneUTC(),
+                    ISODateTimeFormat.dateTime().withZoneUTC(),
+                    ISODateTimeFormat.basicDateTimeNoMillis().withZoneUTC(),
+                    ISODateTimeFormat.basicDateTime().withZoneUTC(),
+                    JsonRepresentation.yyyyMMddTHHmmssZ.withZoneUTC()
                     );
             
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
@@ -373,29 +501,31 @@ public final class JsonValueEncoder {
             }
 
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
-                final Object obj = unwrap(objectAdapter); 
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof LocalDateTime) {
                     final LocalDateTime date = (LocalDateTime) obj;
                     final String dateStr = formatters.get(0).print(date.toDateTime());
-                    append(repr, dateStr, format, xIsisFormat);
+                    repr.mapPut("value", dateStr);
                 } else {
-                    append(repr, obj, format, xIsisFormat);
+                    repr.mapPut("value", obj);
                 }
+                appendFormats(repr, this.format, xIsisFormat);
             }
         });
 
         putConverter(new JsonValueConverter("date-time", "jodadatetime", DateTime.class){
             
             final List<DateTimeFormatter> formatters = Arrays.asList(
-                    JsonRepresentation.yyyyMMddTHHmmssZ, 
-                    DateTimeFormat.forPattern("yyyyMMdd'T'HHmmssZ"), 
-                    ISODateTimeFormat.basicDateTimeNoMillis(),
-                    ISODateTimeFormat.basicDateTime()
+                    ISODateTimeFormat.dateTimeNoMillis().withZoneUTC(),
+                    ISODateTimeFormat.dateTime().withZoneUTC(),
+                    ISODateTimeFormat.basicDateTimeNoMillis().withZoneUTC(),
+                    ISODateTimeFormat.basicDateTime().withZoneUTC(),
+                    JsonRepresentation.yyyyMMddTHHmmssZ.withZoneUTC()
                     );
             
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
@@ -411,28 +541,30 @@ public final class JsonValueEncoder {
             }
 
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
-                final Object obj = unwrap(objectAdapter); 
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof DateTime) {
                     final DateTime date = (DateTime) obj;
                     final String dateStr = formatters.get(0).print(date.toDateTime());
-                    append(repr, dateStr, format, xIsisFormat);
+                    repr.mapPut("value", dateStr);
                 } else {
-                    append(repr, obj, format, xIsisFormat);
+                    repr.mapPut("value", obj);
                 }
+                appendFormats(repr, this.format, xIsisFormat);
             }
         });
 
-        putConverter(new JsonValueConverter("date", "javautildate", java.util.Date.class){
+        putConverter(new JsonValueConverter("date-time", "javautildate", java.util.Date.class){
             
             final List<DateTimeFormatter> formatters = Arrays.asList(
-                    JsonRepresentation.yyyyMMddTHHmmssZ, 
-                    DateTimeFormat.forPattern("yyyyMMdd'T'HHmmssZ"), 
-                    ISODateTimeFormat.basicDateTimeNoMillis(),
-                    ISODateTimeFormat.basicDateTime()
+                    ISODateTimeFormat.dateTimeNoMillis().withZoneUTC(),
+                    ISODateTimeFormat.dateTime().withZoneUTC(),
+                    ISODateTimeFormat.basicDateTimeNoMillis().withZoneUTC(),
+                    ISODateTimeFormat.basicDateTime().withZoneUTC(),
+                    JsonRepresentation.yyyyMMddTHHmmssZ.withZoneUTC()
                     );
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
@@ -449,27 +581,29 @@ public final class JsonValueEncoder {
             }
 
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
-                final Object obj = unwrap(objectAdapter); 
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof java.util.Date) {
                     final java.util.Date date = (java.util.Date) obj;
-                    final String dateStr = formatters.get(0).print(new DateTime(date));
-                    append(repr, dateStr, format, xIsisFormat);
+                    final DateTimeFormatter dateTimeFormatter = formatters.get(0);
+                    final String dateStr = dateTimeFormatter.print(new DateTime(date));
+                    repr.mapPut("value", dateStr);
                 } else {
-                    append(repr, obj, format, xIsisFormat);
+                    repr.mapPut("value", obj);
                 }
+                appendFormats(repr, this.format, xIsisFormat);
             }
         });
 
         putConverter(new JsonValueConverter("date", "javasqldate", java.sql.Date.class){
             
             final List<DateTimeFormatter> formatters = Arrays.asList(
-                            JsonRepresentation.yyyyMMdd, 
-                            DateTimeFormat.forPattern("yyyyMMdd"),
-                            ISODateTimeFormat.basicDate()
-                            );
+                    ISODateTimeFormat.date().withZoneUTC(),
+                    ISODateTimeFormat.basicDate().withZoneUTC(),
+                    JsonRepresentation.yyyyMMdd.withZoneUTC()
+                    );
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
@@ -486,26 +620,29 @@ public final class JsonValueEncoder {
             }
 
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
-                final Object obj = unwrap(objectAdapter); 
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof java.sql.Date) {
                     final java.sql.Date date = (java.sql.Date) obj;
                     final String dateStr = formatters.get(0).print(new DateTime(date));
-                    append(repr, dateStr, format, xIsisFormat);
+                    repr.mapPut("value", dateStr);
                 } else {
-                    append(repr, obj, format, xIsisFormat);
+                    repr.mapPut("value", obj);
                 }
+                appendFormats(repr, this.format, xIsisFormat);
             }
         });
 
-        putConverter(new JsonValueConverter("date", "javasqltime", java.sql.Time.class){
+        putConverter(new JsonValueConverter("time", "javasqltime", java.sql.Time.class){
             
             final List<DateTimeFormatter> formatters = Arrays.asList(
-                        JsonRepresentation._HHmmss, 
-                        DateTimeFormat.forPattern("HHmmss"), 
-                        ISODateTimeFormat.basicTime());
+                        ISODateTimeFormat.hourMinuteSecond().withZoneUTC(),
+                        ISODateTimeFormat.basicTimeNoMillis().withZoneUTC(),
+                        ISODateTimeFormat.basicTime().withZoneUTC(),
+                        JsonRepresentation._HHmmss.withZoneUTC()
+            );
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
                     final String dateStr = repr.asString();
                     for (DateTimeFormatter formatter : formatters) {
@@ -522,22 +659,23 @@ public final class JsonValueEncoder {
             }
 
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
-                final Object obj = unwrap(objectAdapter); 
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof java.sql.Time) {
                     final java.sql.Time date = (java.sql.Time) obj;
                     final String dateStr = formatters.get(0).print(new DateTime(date));
-                    append(repr, dateStr, format, xIsisFormat);
+                    repr.mapPut("value", dateStr);
                 } else {
-                    append(repr, obj, format, xIsisFormat);
+                    repr.mapPut("value", obj);
                 }
+                appendFormats(repr, this.format, xIsisFormat);
             }
         });
 
         putConverter(new JsonValueConverter("utc-millisec", "javasqltimestamp", java.sql.Timestamp.class){
             
             @Override
-            public ObjectAdapter asAdapter(JsonRepresentation repr) {
+            public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isLong()) {
                     final Long millis = repr.asLong();
                     final java.sql.Timestamp parsedTimestamp = new java.sql.Timestamp(millis);
@@ -557,24 +695,28 @@ public final class JsonValueEncoder {
             }
 
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, JsonRepresentation repr) {
-                final Object obj = unwrap(objectAdapter); 
+            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof java.sql.Timestamp) {
                     final java.sql.Timestamp date = (java.sql.Timestamp) obj;
                     final long millisStr = date.getTime();
-                    append(repr, millisStr, format, xIsisFormat);
+                    repr.mapPut("value", millisStr);
                 } else {
-                    append(repr, obj, format, xIsisFormat);
+                    repr.mapPut("value", obj);
                 }
+                appendFormats(repr, this.format, xIsisFormat);
             }
         });
     }
 
 
 
-    public static ObjectAdapter asAdapter(final ObjectSpecification objectSpec, final JsonRepresentation argValueRepr) {
+    public static ObjectAdapter asAdapter(final ObjectSpecification objectSpec, final JsonRepresentation argValueRepr, final String format) {
         if(argValueRepr == null) {
             return null;
+        }
+        if (objectSpec == null) {
+            throw new IllegalArgumentException("ObjectSpecification is required");
         }
         if (!argValueRepr.isValue()) {
             throw new IllegalArgumentException("Representation must be of a value");
@@ -597,7 +739,7 @@ public final class JsonValueEncoder {
             throw new IllegalArgumentException("Unable to parse value");
         }
 
-        final ObjectAdapter asAdapter = jvc.asAdapter(argValueRepr);
+        final ObjectAdapter asAdapter = jvc.asAdapter(argValueRepr, format);
         if(asAdapter != null) {
             return asAdapter;
         }
@@ -615,22 +757,23 @@ public final class JsonValueEncoder {
         throw new IllegalArgumentException("Could not parse value '" + argValueRepr.asString() + "' as a " + objectSpec.getFullIdentifier());
     }
 
-    public static void appendValueAndFormat(ObjectSpecification objectSpec, ObjectAdapter objectAdapter, JsonRepresentation repr) {
+    public static void appendValueAndFormat(ObjectSpecification objectSpec, ObjectAdapter objectAdapter, JsonRepresentation repr, String format) {
 
         final JsonValueConverter jvc = converterBySpec.get(objectSpec.getSpecId());
         if(jvc != null) {
-            jvc.appendValueAndFormat(objectAdapter, repr);
+            jvc.appendValueAndFormat(objectAdapter, format, repr);
         } else {
             final EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
             if (encodableFacet == null) {
                 throw new IllegalArgumentException("objectSpec expected to have EncodableFacet");
             }
             Object value = objectAdapter != null? encodableFacet.toEncodedString(objectAdapter): NullNode.getInstance();
-            append(repr, value, "string", "string");
+            repr.mapPut("value", value);
+            appendFormats(repr, "string", "string");
         }
     }
     
-    public static Object asObject(final ObjectAdapter objectAdapter) {
+    public static Object asObject(final ObjectAdapter objectAdapter, final String format) {
         if (objectAdapter == null) {
             throw new IllegalArgumentException("objectAdapter cannot be null");
         }
@@ -638,7 +781,7 @@ public final class JsonValueEncoder {
 
         final JsonValueConverter jvc = converterBySpec.get(objectSpec.getSpecId());
         if(jvc != null) {
-            return jvc.asObject(objectAdapter);
+            return jvc.asObject(objectAdapter, format);
         } 
         
         // else
@@ -649,10 +792,8 @@ public final class JsonValueEncoder {
         return encodableFacet.toEncodedString(objectAdapter);
     }
 
-    
 
-    private static void append(JsonRepresentation repr, Object value, String format, String xIsisFormat) {
-        repr.mapPut("value", value);
+    private static void appendFormats(JsonRepresentation repr, String format, String xIsisFormat) {
         if(format != null) {
             repr.mapPut("format", format);
         }
@@ -661,11 +802,7 @@ public final class JsonValueEncoder {
         }
     }
 
-    private static void append(JsonRepresentation repr, ObjectAdapter value, String format, String xIsisFormat) {
-        append(repr, unwrap(value), format, xIsisFormat);
-    }
-    
-    private static Object unwrap(ObjectAdapter objectAdapter) {
+    private static Object unwrapAsObjectElseNullNode(ObjectAdapter objectAdapter) {
         return objectAdapter != null? objectAdapter.getObject(): NullNode.getInstance();
     }
 
@@ -674,9 +811,16 @@ public final class JsonValueEncoder {
     private static ObjectAdapter adapterFor(Object value) {
         return getAdapterManager().adapterFor(value);
     }
-    
+
+    private static AdapterManager testAdapterManager;
+
+    // for testing purposes only
+    static void testSetAdapterManager(AdapterManager adapterManager) {
+        JsonValueEncoder.testAdapterManager = adapterManager;
+    }
+
     public static AdapterManager getAdapterManager() {
-        return IsisContext.getPersistenceSession().getAdapterManager();
+        return testAdapterManager != null? testAdapterManager:  IsisContext.getPersistenceSession().getAdapterManager();
     }
 
 }

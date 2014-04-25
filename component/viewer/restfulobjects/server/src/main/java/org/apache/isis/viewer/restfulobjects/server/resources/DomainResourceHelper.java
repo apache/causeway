@@ -360,7 +360,7 @@ public final class DomainResourceHelper {
         // value (encodable)
         if (objectSpec.isEncodeable()) {
             try {
-                return JsonValueEncoder.asAdapter(objectSpec, argValueRepr);
+                return JsonValueEncoder.asAdapter(objectSpec, argValueRepr, null);
             }catch(IllegalArgumentException ex) {
                 argRepr.mapPut("invalidReason", ex.getMessage());
                 throw ex;

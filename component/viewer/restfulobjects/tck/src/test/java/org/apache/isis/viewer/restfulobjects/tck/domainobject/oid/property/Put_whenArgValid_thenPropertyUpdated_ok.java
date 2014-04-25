@@ -18,19 +18,15 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid.property;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
-
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.ISODateTimeFormat;
@@ -38,7 +34,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
@@ -49,6 +44,9 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpS
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectPropertyRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class Put_whenArgValid_thenPropertyUpdated_ok {
 
@@ -134,11 +132,10 @@ public class Put_whenArgValid_thenPropertyUpdated_ok {
     public void jdkPropertiesUpdated() throws Exception {
 
         // big decimal
-        // TODO: bigdecimal is being being truncated/converted to doubles...
         final BigDecimal bd = new BigDecimal("12345678901234567.789");
         modifyLink = getObjectPropertyReprModifyLink("JDKV", "29", "bigDecimalProperty");
         argRepr = modifyLink.getArguments().mapPut("value", bd);
-        assertThat(followedRepr(modifyLink,argRepr).getBigDecimalFromNumeric("value"), is(new BigDecimal(12345678901234568L)));
+        assertThat(followedRepr(modifyLink,argRepr).getBigDecimal("value"), is(new BigDecimal("12345678901234567.789")));
 
         // big integer
         final BigInteger bi = new BigInteger("12345678901234567890");
@@ -147,7 +144,7 @@ public class Put_whenArgValid_thenPropertyUpdated_ok {
         assertThat(followedRepr(modifyLink,argRepr).getBigInteger("value"), is(bi));
 
         // java.sql.Date
-        final java.sql.Date sqld = new java.sql.Date(114,4,1);
+        final java.sql.Date sqld = new java.sql.Date(new DateTime(2014,5,1, 0,0, DateTimeZone.UTC).getMillis());
         modifyLink = getObjectPropertyReprModifyLink("JDKV", "29", "javaSqlDateProperty");
         argRepr = modifyLink.getArguments().mapPut("value", asIsoNoT(sqld));
         assertThat(followedRepr(modifyLink,argRepr).getDate("value"), is((java.util.Date)sqld));
@@ -191,9 +188,8 @@ public class Put_whenArgValid_thenPropertyUpdated_ok {
         // LocalDate
         final LocalDate ld = new LocalDate(2013,5,1);
         modifyLink = getObjectPropertyReprModifyLink("JODA", "73", "localDateProperty");
-        argRepr = modifyLink.getArguments().mapPut("value", asIsoNoT(ld.toDate()));
-        assertThat(followedRepr(modifyLink,argRepr).getDate("value"), is(ld.toDate()));
-
+        argRepr = modifyLink.getArguments().mapPut("value", "2013-05-01");
+        assertThat(followedRepr(modifyLink,argRepr).getString("value"), is("2013-05-01")); // hacky
 
         // LocalDateTime
         final LocalDateTime ldt = new LocalDateTime(2013,2,1,14,15,0);
@@ -241,7 +237,7 @@ public class Put_whenArgValid_thenPropertyUpdated_ok {
     }
 
     private static String asIso(final org.joda.time.DateTime dt) {
-        return ISODateTimeFormat.basicDateTimeNoMillis().print(dt);
+        return ISODateTimeFormat.basicDateTimeNoMillis().withZoneUTC().print(dt);
     }
     
     
@@ -251,7 +247,7 @@ public class Put_whenArgValid_thenPropertyUpdated_ok {
     }
 
     private static String asIsoNoT(final org.joda.time.DateTime dt) {
-        return ISODateTimeFormat.basicDate().print(dt);
+        return ISODateTimeFormat.basicDate().withZoneUTC().print(dt);
     }
     
     private static String asIsoOnlyT(final java.util.Date d) {
@@ -260,7 +256,7 @@ public class Put_whenArgValid_thenPropertyUpdated_ok {
     }
 
     private static String asIsoOnlyT(final org.joda.time.DateTime dt) {
-        return ISODateTimeFormat.basicTime().print(dt);
+        return ISODateTimeFormat.basicTime().withZoneUTC().print(dt);
     }
 
 }

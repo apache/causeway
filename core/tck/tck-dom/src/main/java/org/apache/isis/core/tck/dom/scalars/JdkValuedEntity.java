@@ -118,7 +118,7 @@ public class JdkValuedEntity extends AbstractDomainObject {
 
     // }}
 
-    // {{ BigIntegerProperty
+    // {{ BigIntegerProperty (to hold values that are larger than a long)
     private BigInteger bigIntegerProperty;
 
     @Optional
@@ -133,7 +133,22 @@ public class JdkValuedEntity extends AbstractDomainObject {
 
     // }}
 
-    // {{ BigDecimalProperty
+    // {{ BigIntegerProperty2 (to hold values that can also fit into a long)
+    private BigInteger bigIntegerProperty2;
+
+    @Optional
+    @MemberOrder(sequence = "1")
+    public BigInteger getBigIntegerProperty2() {
+        return bigIntegerProperty2;
+    }
+
+    public void setBigIntegerProperty2(final BigInteger bigIntegerProperty2) {
+        this.bigIntegerProperty2 = bigIntegerProperty2;
+    }
+
+    // }}
+
+    // {{ BigDecimalProperty (to hold values that are larger than a double)
     private BigDecimal bigDecimalProperty;
 
     @Optional
@@ -144,6 +159,22 @@ public class JdkValuedEntity extends AbstractDomainObject {
 
     public void setBigDecimalProperty(final BigDecimal bigDecimalProperty) {
         this.bigDecimalProperty = bigDecimalProperty;
+    }
+
+    // }}
+
+
+    // {{ BigDecimalProperty (to hold values that are larger than a double)
+    private BigDecimal bigDecimalProperty2;
+
+    @Optional
+    @MemberOrder(sequence = "1")
+    public BigDecimal getBigDecimalProperty2() {
+        return bigDecimalProperty2;
+    }
+
+    public void setBigDecimalProperty2(final BigDecimal bigDecimalProperty2) {
+        this.bigDecimalProperty2 = bigDecimalProperty2;
     }
 
     // }}

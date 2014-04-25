@@ -17,13 +17,11 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import javax.ws.rs.core.MediaType;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
@@ -54,7 +52,8 @@ public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueRep
         if (facet == null) {
             throw ReprRendererException.create("Not an (encodable) value", objectAdapter.titleString());
         }
-        final Object value = JsonValueEncoder.asObject(objectAdapter);
+        String format = null; // TODO
+        final Object value = JsonValueEncoder.asObject(objectAdapter, format);
 
         representation.mapPut("value", value);
         return this;

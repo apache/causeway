@@ -18,8 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.codehaus.jackson.JsonNode;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public class ScalarValueRepresentation extends DomainRepresentation {
 
@@ -30,6 +30,5 @@ public class ScalarValueRepresentation extends DomainRepresentation {
     public JsonRepresentation getValue() {
         return getRepresentation("value");
     }
-
 
 }

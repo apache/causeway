@@ -19,9 +19,17 @@
 
 package org.apache.isis.core.tck.fixture.scalars;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.util.Date;
+import javax.inject.Inject;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.apache.isis.core.tck.dom.scalars.JdkValuedEntity;
 import org.apache.isis.core.tck.dom.scalars.JdkValuedEntityRepository;
+import org.apache.isis.core.tck.dom.scalars.MyEnum;
 
 public class JdkValuedEntityFixture extends AbstractFixture {
 
@@ -35,13 +43,39 @@ public class JdkValuedEntityFixture extends AbstractFixture {
     }
 
     private JdkValuedEntity createEntity() {
-        return jdkValuesEntityRepository.newEntity();
+        final JdkValuedEntity entity = jdkValuesEntityRepository.newEntity();
+        entity.setBigDecimalProperty(new BigDecimal("12345678901234567890.1234567890"));
+        entity.setBigDecimalProperty2(new BigDecimal("123.45"));
+        entity.setBigIntegerProperty(new BigInteger("12345678901234567890"));
+        entity.setBigIntegerProperty2(new BigInteger("12345"));
+        entity.setJavaSqlDateProperty(asSqlDate("2014-04-24"));
+        entity.setJavaSqlTimeProperty(asSqlTime("1970-01-01T12:34:45Z"));
+        entity.setJavaSqlTimestampProperty(new Timestamp(1234567890));
+        entity.setJavaUtilDateProperty(asDateTime("2013-05-25T12:34:45Z"));
+        entity.setMyEnum(MyEnum.RED);
+        return entity;
     }
 
+    private final static DateTimeFormatter yyyyMMdd = DateTimeFormat.forPattern("yyyy-MM-dd").withZoneUTC();
+    private final static DateTimeFormatter yyyyMMddTHHmmssZ = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ssZ").withZoneUTC();
+
+    private static Date asDate(final String text) {
+        return new java.util.Date(yyyyMMdd.parseDateTime(text).getMillis());
+    }
+
+    private static Date asDateTime(final String text) {
+        return new java.util.Date(yyyyMMddTHHmmssZ.parseDateTime(text).getMillis());
+    }
+
+    private static java.sql.Date asSqlDate(final String text) {
+        return new java.sql.Date(yyyyMMdd.parseDateTime(text).getMillis());
+    }
+
+    private static java.sql.Time asSqlTime(final String text) {
+        return new java.sql.Time(yyyyMMddTHHmmssZ.parseDateTime(text).getMillis());
+    }
+
+    @Inject
     private JdkValuedEntityRepository jdkValuesEntityRepository;
-
-    public void setJdkValuesEntityRepository(final JdkValuedEntityRepository jdkValuesEntityRepository) {
-        this.jdkValuesEntityRepository = jdkValuesEntityRepository;
-    }
 
 }

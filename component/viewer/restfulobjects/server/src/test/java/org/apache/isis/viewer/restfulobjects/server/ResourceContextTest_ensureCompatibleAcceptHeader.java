@@ -18,24 +18,23 @@
  */
 package org.apache.isis.viewer.restfulobjects.server;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-
+import com.google.common.collect.Maps;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ResourceContextTest_ensureCompatibleAcceptHeader {
 
@@ -60,6 +59,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
     public void noop() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(representationType.getMediaType()));
+        givenServletRequestParameterMapEmpty();
 
         instantiateResourceContext(representationType);
     }
@@ -68,6 +68,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
     public void happyCase() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(representationType.getMediaType()));
+        givenServletRequestParameterMapEmpty();
 
         instantiateResourceContext(representationType);
     }
@@ -76,6 +77,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
     public void acceptGenericAndProduceGeneric() throws Exception {
         final RepresentationType representationType = RepresentationType.GENERIC;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(MediaType.APPLICATION_JSON_TYPE));
+        givenServletRequestParameterMapEmpty();
 
         instantiateResourceContext(representationType);
     }
@@ -84,6 +86,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
     public void acceptGenericAndProduceSpecific() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(MediaType.APPLICATION_JSON_TYPE));
+        givenServletRequestParameterMapEmpty();
 
         instantiateResourceContext(representationType);
     }
@@ -92,6 +95,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
     public void nonMatching() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(MediaType.APPLICATION_ATOM_XML_TYPE));
+        givenServletRequestParameterMapEmpty();
 
         try {
             instantiateResourceContext(representationType);
@@ -104,6 +108,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
     public void nonMatchingProfile() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(RepresentationType.USER.getMediaType()));
+        givenServletRequestParameterMapEmpty();
 
         try {
             instantiateResourceContext(representationType);
@@ -116,6 +121,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
     public void nonMatchingProfile_ignoreGeneric() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(RepresentationType.USER.getMediaType(), MediaType.APPLICATION_JSON_TYPE));
+        givenServletRequestParameterMapEmpty();
 
         try {
             instantiateResourceContext(representationType);
@@ -128,6 +134,7 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
     public void emptyList_isOK() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
         givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList());
+        givenServletRequestParameterMapEmpty();
 
         instantiateResourceContext(representationType);
     }
@@ -135,14 +142,24 @@ public class ResourceContextTest_ensureCompatibleAcceptHeader {
     private void givenHttpHeadersGetAcceptableMediaTypesReturns(final List<MediaType> mediaTypes) {
         context.checking(new Expectations() {
             {
-                one(httpHeaders).getAcceptableMediaTypes();
+                oneOf(httpHeaders).getAcceptableMediaTypes();
                 will(returnValue(mediaTypes));
             }
         });
     }
 
+    private void givenServletRequestParameterMapEmpty() {
+        final HashMap<Object, Object> parameterMap = Maps.newHashMap();
+        context.checking(new Expectations() {
+            {
+                oneOf(httpServletRequest).getParameterMap();
+                will(returnValue(parameterMap));
+            }
+        });
+    }
+
     private ResourceContext instantiateResourceContext(final RepresentationType representationType) {
-        return new ResourceContext(representationType, httpHeaders, null, null, null, (String)null, httpServletRequest, null, null, null, null, null, null, null, null);
+        return new ResourceContext(representationType, httpHeaders, null, null, null, null, httpServletRequest, null, null, null, null, null, null, null, null);
     }
 
 }

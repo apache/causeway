@@ -18,15 +18,14 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
-import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.io.IOException;
-
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
+
+import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class JsonRepresentationTest_size {
 
@@ -41,7 +40,7 @@ public class JsonRepresentationTest_size {
     @Test
     public void size_forNonEmptyMap() throws JsonParseException, JsonMappingException, IOException {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
-        assertThat(jsonRepresentation.size(), is(15));
+        assertThat(jsonRepresentation.size(), is(16));
     }
 
     @Test

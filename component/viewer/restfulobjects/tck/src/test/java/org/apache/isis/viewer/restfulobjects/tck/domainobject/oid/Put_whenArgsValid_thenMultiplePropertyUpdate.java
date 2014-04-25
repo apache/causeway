@@ -18,29 +18,22 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.Date;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
-
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
@@ -48,10 +41,12 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectMemberRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class Put_whenArgsValid_thenMultiplePropertyUpdate {
 
@@ -126,10 +121,10 @@ public class Put_whenArgsValid_thenMultiplePropertyUpdate {
 
         final BigDecimal bd = new BigDecimal("12345678901234567.789");
         final BigInteger bi = new BigInteger("12345678901234567890");
-        final java.sql.Date sqld = new java.sql.Date(114,4,1);
+        final java.sql.Date sqld = new java.sql.Date(new DateTime(2014,5,1, 0,0, DateTimeZone.UTC).getMillis());
         final java.sql.Time sqlt = new java.sql.Time(13,0,0);
         final java.sql.Timestamp sqlts = new java.sql.Timestamp(114,4,1,13,0,0,0);
-        final java.util.Date d = new java.util.Date(114,4,1,13,0,0);
+        final java.util.Date d = new DateTime(2014,5,1, 11,45, DateTimeZone.UTC).toDate();
         final String e = "ORANGE";
         final String s = "Tangerine";
         
@@ -147,8 +142,7 @@ public class Put_whenArgsValid_thenMultiplePropertyUpdate {
         
         final DomainObjectRepresentation afterResp = result.getEntity().as(DomainObjectRepresentation.class);
         
-        // TODO: bigdecimal is being being truncated/converted to doubles...
-        assertThat(afterResp.getProperty("bigDecimalProperty").getBigDecimalFromNumeric("value"), is(new BigDecimal(12345678901234568L)));
+        assertThat(afterResp.getProperty("bigDecimalProperty").getBigDecimal("value"), is(new BigDecimal("12345678901234567.789")));
         assertThat(afterResp.getProperty("bigIntegerProperty").getBigInteger("value"), is(bi));
         assertThat(afterResp.getProperty("javaSqlDateProperty").getDate("value"), is((java.util.Date)sqld));
         assertThat(afterResp.getProperty("javaSqlTimeProperty").getTime("value"), is((java.util.Date)sqlt));
@@ -170,11 +164,11 @@ public class Put_whenArgsValid_thenMultiplePropertyUpdate {
         
         final LocalDate ld = new LocalDate(2013,5,1);
         final LocalDateTime ldt = new LocalDateTime(2013,2,1,14,15,0);
-        final DateTime dt = new DateTime(2013,2,1,14,15,0);
+        final DateTime dt = new DateTime(2013,2,1,14,15,0, DateTimeZone.UTC);
         final String s = "New string";
         
-        argRepr.mapPut("localDateProperty.value", asIsoNoT(ld.toDate()));
-        argRepr.mapPut("localDateTimeProperty.value", asIso(ldt.toDate()));
+        argRepr.mapPut("localDateProperty.value", "2013-05-01");
+        argRepr.mapPut("localDateTimeProperty.value", "2013-02-01T14:15:00Z");
         argRepr.mapPut("dateTimeProperty.value", asIso(dt.toDate()));
         argRepr.mapPut("stringProperty.value", s);
 
@@ -183,7 +177,7 @@ public class Put_whenArgsValid_thenMultiplePropertyUpdate {
         
         final DomainObjectRepresentation afterResp = result.getEntity().as(DomainObjectRepresentation.class);
         
-        assertThat(afterResp.getProperty("localDateProperty").getDate("value"), is(ld.toDate()));
+        assertThat(afterResp.getProperty("localDateProperty").getString("value"), is("2013-05-01")); // being a bit hacky here...
         assertThat(afterResp.getProperty("localDateTimeProperty").getDateTime("value"), is(ldt.toDate()));
         assertThat(afterResp.getProperty("dateTimeProperty").getDateTime("value"), is(dt.toDate()));
         assertThat(afterResp.getProperty("stringProperty").getString("value"), is(s));
@@ -195,17 +189,16 @@ public class Put_whenArgsValid_thenMultiplePropertyUpdate {
     }
 
     private static String asIso(final org.joda.time.DateTime dt) {
-        return ISODateTimeFormat.basicDateTimeNoMillis().print(dt);
+        return ISODateTimeFormat.dateTimeNoMillis().withZoneUTC().print(dt);
     }
-    
-    
+
     private static String asIsoNoT(final java.util.Date d) {
         final org.joda.time.DateTime dt = new org.joda.time.DateTime(d.getTime());
         return asIsoNoT(dt);
     }
 
     private static String asIsoNoT(final org.joda.time.DateTime dt) {
-        return ISODateTimeFormat.basicDate().print(dt);
+        return ISODateTimeFormat.date().withZoneUTC().print(dt);
     }
     
     private static String asIsoOnlyT(final java.util.Date d) {
@@ -214,7 +207,7 @@ public class Put_whenArgsValid_thenMultiplePropertyUpdate {
     }
 
     private static String asIsoOnlyT(final org.joda.time.DateTime dt) {
-        return ISODateTimeFormat.basicTime().print(dt);
+        return ISODateTimeFormat.timeNoMillis().withZoneUTC().print(dt);
     }
 
     private DomainObjectRepresentation getObjectRepr(final String domainType, final String instanceId) throws JsonParseException, JsonMappingException, IOException {

@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.applib;
 
 import java.io.IOException;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
@@ -32,7 +32,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class JsonRepresentationTest_getBigInteger {
+public class JsonRepresentationTest_getBigDecimal {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -46,72 +46,72 @@ public class JsonRepresentationTest_getBigInteger {
 
     @Test
     public void happyCase() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getBigInteger("aBigInteger"), is(new BigInteger("12345678901234567890")));
+        assertThat(jsonRepresentation.getBigDecimal("aBigDecimal"), is(new BigDecimal("12345678901234567890.1234")));
     }
 
     @Test
     public void happyCaseForFormatJustFits() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getBigInteger("aBigInteger", "big-integer(20)"), is(new BigInteger("12345678901234567890")));
+        assertThat(jsonRepresentation.getBigDecimal("aBigDecimal", "big-decimal(24,4)"), is(new BigDecimal("12345678901234567890.1234")));
     }
 
     @Test
     public void invalidFormat() throws JsonParseException, JsonMappingException, IOException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("Value '12345678901234567890' larger than that allowed by format 'big-integer(19)'");
+        expectedException.expectMessage("Value '12345678901234567890.1234' larger than that allowed by format 'big-decimal(22,3)'");
 
-        assertThat(jsonRepresentation.getBigInteger("aBigInteger", "big-integer(19)"), is(new BigInteger("12345678901234567890")));
+        assertThat(jsonRepresentation.getBigDecimal("aBigDecimal", "big-decimal(22,3)"), is(new BigDecimal("12345678901234567890")));
     }
 
     @Test
     public void validFormattedFromPath() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getBigInteger("yetAnotherSubMap.aFormattedBigInteger.value"), is(new BigInteger("123")));
+        assertThat(jsonRepresentation.getBigDecimal("yetAnotherSubMap.aFormattedBigDecimal.value"), is(new BigDecimal("123.45")));
     }
 
     @Test
     public void invalidFormattedFromPath() throws JsonParseException, JsonMappingException, IOException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("Value '123' larger than that allowed by format 'big-integer(2)'");
+        expectedException.expectMessage("Value '123.45' larger than that allowed by format 'big-decimal(4,2)'");
 
-        jsonRepresentation.getBigInteger("yetAnotherSubMap.anInvalidFormattedBigInteger.value");
+        jsonRepresentation.getBigDecimal("yetAnotherSubMap.anInvalidFormattedBigDecimal.value");
     }
 
     @Test
     public void invalidFormattedFromPathButOverridden() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getBigInteger("yetAnotherSubMap.anInvalidFormattedBigInteger.value", "big-integer(3)"), is(new BigInteger("123")));
+        assertThat(jsonRepresentation.getBigDecimal("yetAnotherSubMap.anInvalidFormattedBigDecimal.value", "big-decimal(5,2)"), is(new BigDecimal("123.45")));
     }
 
     @Test
     public void forNonExistent() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getBigInteger("doesNotExist"), is(nullValue()));
+        assertThat(jsonRepresentation.getBigDecimal("doesNotExist"), is(nullValue()));
     }
 
     @Test
     public void forNonParseableString() throws JsonParseException, JsonMappingException, IOException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("'aString' is not a biginteger");
+        expectedException.expectMessage("'aString' is not a bigdecimal");
 
-        jsonRepresentation.getBigInteger("aString");
+        jsonRepresentation.getBigDecimal("aString");
     }
 
     @Test
     public void forMap() throws JsonParseException, JsonMappingException, IOException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("'aSubMap' is not a biginteger");
+        expectedException.expectMessage("'aSubMap' is not a bigdecimal");
 
-        jsonRepresentation.getBigInteger("aSubMap");
+        jsonRepresentation.getBigDecimal("aSubMap");
     }
 
     @Test
     public void forList() throws JsonParseException, JsonMappingException, IOException {
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("'aSubList' is not a biginteger");
+        expectedException.expectMessage("'aSubList' is not a bigdecimal");
 
-        jsonRepresentation.getBigInteger("aSubList");
+        jsonRepresentation.getBigDecimal("aSubList");
     }
 
     @Test
     public void forMultipartKey() throws JsonParseException, JsonMappingException, IOException {
-        assertThat(jsonRepresentation.getBigInteger("aSubMap.aBigInteger"), is(new BigInteger("12345678901234567890")));
+        assertThat(jsonRepresentation.getBigDecimal("aSubMap.aBigDecimal"), is(new BigDecimal("12345678901234567890.1234")));
     }
 
 }

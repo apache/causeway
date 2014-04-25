@@ -70,7 +70,8 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
         
         final ValueFacet valueFacet = spec.getFacet(ValueFacet.class);
         if (valueFacet != null) {
-            JsonValueEncoder.appendValueAndFormat(spec, valueAdapter, representation);
+            String format = null; // TODO
+            JsonValueEncoder.appendValueAndFormat(spec, valueAdapter, representation, format);
             return;
         }
 
