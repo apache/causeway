@@ -135,10 +135,10 @@ public class Put_whenArgValid_thenPropertyUpdated_ok {
         final BigDecimal bd = new BigDecimal("12345678901234567.789");
         modifyLink = getObjectPropertyReprModifyLink("JDKV", "29", "bigDecimalProperty");
         argRepr = modifyLink.getArguments().mapPut("value", bd);
-        assertThat(followedRepr(modifyLink,argRepr).getBigDecimal("value"), is(new BigDecimal("12345678901234567.789")));
+        assertThat(followedRepr(modifyLink,argRepr).getBigDecimal("value"), is(new BigDecimal("12345678901234567.7890000000"))); // big-decimal(30,10)
 
         // big integer
-        final BigInteger bi = new BigInteger("12345678901234567890");
+        final BigInteger bi = new BigInteger("123456789012345678");
         modifyLink = getObjectPropertyReprModifyLink("JDKV", "29", "bigIntegerProperty");
         argRepr = modifyLink.getArguments().mapPut("value", bi);
         assertThat(followedRepr(modifyLink,argRepr).getBigInteger("value"), is(bi));

@@ -22,7 +22,7 @@ package org.apache.isis.core.tck.dom.scalars;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
-
+import javax.validation.constraints.Digits;
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
@@ -151,6 +151,7 @@ public class JdkValuedEntity extends AbstractDomainObject {
     // {{ BigDecimalProperty (to hold values that are larger than a double)
     private BigDecimal bigDecimalProperty;
 
+    @Digits(integer=20,fraction = 10) // corresponds to big-decimal(30,10)
     @Optional
     @MemberOrder(sequence = "1")
     public BigDecimal getBigDecimalProperty() {

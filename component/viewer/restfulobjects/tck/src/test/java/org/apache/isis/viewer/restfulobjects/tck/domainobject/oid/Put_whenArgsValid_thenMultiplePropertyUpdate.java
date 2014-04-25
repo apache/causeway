@@ -120,7 +120,7 @@ public class Put_whenArgsValid_thenMultiplePropertyUpdate {
         final JsonRepresentation argRepr = updateLink.getArguments();
 
         final BigDecimal bd = new BigDecimal("12345678901234567.789");
-        final BigInteger bi = new BigInteger("12345678901234567890");
+        final BigInteger bi = new BigInteger("123456789012345678");
         final java.sql.Date sqld = new java.sql.Date(new DateTime(2014,5,1, 0,0, DateTimeZone.UTC).getMillis());
         final java.sql.Time sqlt = new java.sql.Time(13,0,0);
         final java.sql.Timestamp sqlts = new java.sql.Timestamp(114,4,1,13,0,0,0);
@@ -142,7 +142,7 @@ public class Put_whenArgsValid_thenMultiplePropertyUpdate {
         
         final DomainObjectRepresentation afterResp = result.getEntity().as(DomainObjectRepresentation.class);
         
-        assertThat(afterResp.getProperty("bigDecimalProperty").getBigDecimal("value"), is(new BigDecimal("12345678901234567.789")));
+        assertThat(afterResp.getProperty("bigDecimalProperty").getBigDecimal("value"), is(new BigDecimal("12345678901234567.7890000000"))); // big-decimal(30,10)
         assertThat(afterResp.getProperty("bigIntegerProperty").getBigInteger("value"), is(bi));
         assertThat(afterResp.getProperty("javaSqlDateProperty").getDate("value"), is((java.util.Date)sqld));
         assertThat(afterResp.getProperty("javaSqlTimeProperty").getTime("value"), is((java.util.Date)sqlt));

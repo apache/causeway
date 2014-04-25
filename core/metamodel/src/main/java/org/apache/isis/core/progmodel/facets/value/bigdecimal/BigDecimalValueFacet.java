@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 public interface BigDecimalValueFacet extends Facet {
 
     /**
-     * Maximum length of digits for this decimal.
+     * Maximum length of digits for this decimal (in other words, its precision).
      * 
      * <p>
      * For example:
@@ -34,8 +34,16 @@ public interface BigDecimalValueFacet extends Facet {
      * <li><tt>12345.0</tt> has a length of 6 (and {@link #getScale() scale} of 1)</li>
      * </ul>
      */
+    Integer getPrecision();
+
+    /**
+     * Same as {@link #getPrecision()}.
+     *
+     * @deprecated
+     */
+    @Deprecated
     Integer getLength();
-    
+
     /**
      * The number of digits to the right of the decimal place (fractional part) for this decimal.
      * 

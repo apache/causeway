@@ -23,11 +23,15 @@ import org.codehaus.jackson.node.NullNode;
 import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -70,7 +74,22 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
         
         final ValueFacet valueFacet = spec.getFacet(ValueFacet.class);
         if (valueFacet != null) {
-            String format = null; // TODO
+            String format = null;
+            final Class<?> specClass = spec.getCorrespondingClass();
+            if(specClass == java.math.BigDecimal.class) {
+                // look for facet on member, else on the value's spec
+                final BigDecimalValueFacet bigDecimalValueFacet =
+                        getFacet(BigDecimalValueFacet.class,
+                                objectMember,
+                                valueAdapter != null? valueAdapter.getSpecification(): null);
+                if(bigDecimalValueFacet != null) {
+                    final Integer precision = bigDecimalValueFacet.getPrecision();
+                    final Integer scale = bigDecimalValueFacet.getScale();
+                    format = String.format("big-decimal(%d,%d)", precision, scale);
+                }
+            } else if(specClass == java.math.BigInteger.class) {
+                // TODO: need to extend BigIntegerValueFacet similar to BigDecimalValueFacet
+            }
             JsonValueEncoder.appendValueAndFormat(spec, valueAdapter, representation, format);
             return;
         }
@@ -99,8 +118,21 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
         }
     }
 
+    private static <T extends Facet> T getFacet(Class<T> facetType, FacetHolder... holders) {
+        for (FacetHolder holder : holders) {
+            if(holder == null) {
+                continue;
+            }
+            final T facet = holder.getFacet(facetType);
+            if(facet != null) {
+                return facet;
+            }
+        }
+        return null;
+    }
 
-    
+
+
     // ///////////////////////////////////////////////////
     // details link
     // ///////////////////////////////////////////////////

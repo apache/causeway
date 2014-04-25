@@ -19,12 +19,12 @@
 package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
+import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacetAbstract;
 
 
-public class BigDecimalFacetDerivedFromJdoColumn extends FacetAbstract implements BigDecimalValueFacet {
+public class BigDecimalFacetDerivedFromJdoColumn extends BigDecimalValueFacetAbstract {
 
     private final Integer length;
     private final Integer scale;
@@ -33,14 +33,14 @@ public class BigDecimalFacetDerivedFromJdoColumn extends FacetAbstract implement
         return BigDecimalValueFacet.class;
     }
 
-    public BigDecimalFacetDerivedFromJdoColumn(final FacetHolder holder, final Integer length, final Integer scale) {
+    public BigDecimalFacetDerivedFromJdoColumn(final FacetHolder holder, final Integer precision, final Integer scale) {
         super(BigDecimalFacetDerivedFromJdoColumn.type(), holder, Derivation.NOT_DERIVED);
-        this.length = length;
+        this.length = precision;
         this.scale = scale;
     }
 
     @Override
-    public Integer getLength() {
+    public Integer getPrecision() {
         return length;
     }
 

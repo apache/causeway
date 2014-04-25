@@ -69,9 +69,15 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
     // //////////////////////////////////////////////////////////////////
     // Parser
     // //////////////////////////////////////////////////////////////////
-    
+
+    @Deprecated
     @Override
     public Integer getLength() {
+        return getPrecision();
+    }
+
+    @Override
+    public Integer getPrecision() {
         return DEFAULT_LENGTH;
     }
 

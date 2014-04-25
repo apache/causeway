@@ -365,7 +365,7 @@ public final class JsonValueEncoder {
             }
         });
         
-        putConverter(new JsonValueConverter("big-integer", "javamathbiginteger", BigInteger.class){
+        putConverter(new JsonValueConverter("big-integer(18)", "javamathbiginteger", BigInteger.class){
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {
                 if (repr.isString()) {
@@ -430,7 +430,7 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, format != null? format: this.format, xIsisFormat);
+                appendFormats(repr, format != null ? format : this.format, xIsisFormat);
             }
         });
 
@@ -522,7 +522,7 @@ public final class JsonValueEncoder {
                     ISODateTimeFormat.basicDateTimeNoMillis().withZoneUTC(),
                     ISODateTimeFormat.basicDateTime().withZoneUTC(),
                     JsonRepresentation.yyyyMMddTHHmmssZ.withZoneUTC()
-                    );
+            );
             
             @Override
             public ObjectAdapter asAdapter(JsonRepresentation repr, String format) {

@@ -16,36 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.progmodel.facets.properties.javaxvaldigits;
+
+package org.apache.isis.core.progmodel.facets.value.bigdecimal;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacetAbstract;
 
+public abstract class BigDecimalValueFacetAbstract extends FacetAbstract implements BigDecimalValueFacet {
 
-public class BigDecimalFacetForPropertyFromJavaxValidationDigitsAnnotation extends BigDecimalValueFacetAbstract {
-
-    private final int precision;
-    private final int scale;
-
-    public static Class<? extends Facet> type() {
-        return BigDecimalValueFacet.class;
-    }
-
-    public BigDecimalFacetForPropertyFromJavaxValidationDigitsAnnotation(final FacetHolder holder, final Integer precision, final Integer scale) {
-        super(BigDecimalFacetForPropertyFromJavaxValidationDigitsAnnotation.type(), holder, Derivation.NOT_DERIVED);
-        this.precision = precision;
-        this.scale = scale;
+    public BigDecimalValueFacetAbstract(Class<? extends Facet> facetType, FacetHolder holder, Derivation derivation) {
+        super(facetType, holder, derivation);
     }
 
     @Override
-    public Integer getPrecision() {
-        return precision;
+    public abstract Integer getPrecision();
+
+    @Override
+    public final Integer getLength() {
+        return getPrecision();
     }
 
     @Override
-    public Integer getScale() {
-        return scale;
-    }
+    public abstract Integer getScale();
 }

@@ -68,7 +68,7 @@ public class Get_givenEntityWithJdkProperties_thenRepresentation_ok {
 
         property = domainObjectRepr.getProperty("bigDecimalProperty");
         assertThat(property.getMemberType(), is("property"));
-        assertThat(property.getFormat(), is("big-decimal"));
+        assertThat(property.getFormat(), is("big-decimal(30,10)"));
         assertThat(property.getXIsisFormat(), is("javamathbigdecimal"));
         scalarRepr = property.getRepresentation("value").as(ScalarValueRepresentation.class);
         assertThat(scalarRepr.isString(), is(true));
@@ -77,7 +77,7 @@ public class Get_givenEntityWithJdkProperties_thenRepresentation_ok {
 
         property = domainObjectRepr.getProperty("bigDecimalProperty2");
         assertThat(property.getMemberType(), is("property"));
-        assertThat(property.getFormat(), is("big-decimal"));
+        assertThat(property.getFormat(), is("big-decimal(18,2)"));
         assertThat(property.getXIsisFormat(), is("javamathbigdecimal"));
         scalarRepr = property.getRepresentation("value").as(ScalarValueRepresentation.class);
         assertThat(scalarRepr.isString(), is(true));
@@ -86,16 +86,16 @@ public class Get_givenEntityWithJdkProperties_thenRepresentation_ok {
 
         property = domainObjectRepr.getProperty("bigIntegerProperty");
         assertThat(property.getMemberType(), is("property"));
-        assertThat(property.getFormat(), is("big-integer"));
+        assertThat(property.getFormat(), is("big-integer(18)"));
         assertThat(property.getXIsisFormat(), is("javamathbiginteger"));
         scalarRepr = property.getRepresentation("value").as(ScalarValueRepresentation.class);
         assertThat(scalarRepr.isString(), is(true));
         BigInteger bigInteger = scalarRepr.asBigInteger(property.getFormat());
-        assertThat(bigInteger, is(new BigInteger("12345678901234567890")));
+        assertThat(bigInteger, is(new BigInteger("123456789012345678")));
 
         property = domainObjectRepr.getProperty("bigIntegerProperty2");
         assertThat(property.getMemberType(), is("property"));
-        assertThat(property.getFormat(), is("big-integer"));
+        assertThat(property.getFormat(), is("big-integer(18)"));
         scalarRepr = property.getRepresentation("value").as(ScalarValueRepresentation.class);
         assertThat(scalarRepr.isString(), is(true));
         BigInteger bigInteger2 = scalarRepr.asBigInteger(property.getFormat());

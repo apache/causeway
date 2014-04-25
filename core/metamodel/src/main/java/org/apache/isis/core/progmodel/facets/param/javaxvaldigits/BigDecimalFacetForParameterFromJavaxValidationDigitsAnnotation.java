@@ -19,28 +19,28 @@
 package org.apache.isis.core.progmodel.facets.param.javaxvaldigits;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
+import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacetAbstract;
 
-public class BigDecimalFacetForParameterFromJavaxValidationDigitsAnnotation extends FacetAbstract implements BigDecimalValueFacet {
+public class BigDecimalFacetForParameterFromJavaxValidationDigitsAnnotation extends BigDecimalValueFacetAbstract  {
 
-    private final Integer length;
+    private final Integer precision;
     private final Integer scale;
 
     public static Class<? extends Facet> type() {
         return BigDecimalValueFacet.class;
     }
 
-    public BigDecimalFacetForParameterFromJavaxValidationDigitsAnnotation(final FacetHolder holder, final Integer length, final Integer scale) {
+    public BigDecimalFacetForParameterFromJavaxValidationDigitsAnnotation(final FacetHolder holder, final Integer precision, final Integer scale) {
         super(BigDecimalFacetForParameterFromJavaxValidationDigitsAnnotation.type(), holder, Derivation.NOT_DERIVED);
-        this.length = length;
+        this.precision = precision;
         this.scale = scale;
     }
 
     @Override
-    public Integer getLength() {
-        return length;
+    public Integer getPrecision() {
+        return precision;
     }
 
     @Override

@@ -46,7 +46,7 @@ public class JdkValuedEntityFixture extends AbstractFixture {
         final JdkValuedEntity entity = jdkValuesEntityRepository.newEntity();
         entity.setBigDecimalProperty(new BigDecimal("12345678901234567890.1234567890"));
         entity.setBigDecimalProperty2(new BigDecimal("123.45"));
-        entity.setBigIntegerProperty(new BigInteger("12345678901234567890"));
+        entity.setBigIntegerProperty(new BigInteger("123456789012345678"));
         entity.setBigIntegerProperty2(new BigInteger("12345"));
         entity.setJavaSqlDateProperty(asSqlDate("2014-04-24"));
         entity.setJavaSqlTimeProperty(asSqlTime("1970-01-01T12:34:45Z"));
