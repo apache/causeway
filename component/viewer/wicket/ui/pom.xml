@@ -117,11 +117,5 @@
 			<artifactId>log4j</artifactId>
 		</dependency>
 
-		<!-- jmock class mocking -->
-		<dependency>
-			<groupId>org.jmock</groupId>
-			<artifactId>jmock-legacy</artifactId>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 </project>

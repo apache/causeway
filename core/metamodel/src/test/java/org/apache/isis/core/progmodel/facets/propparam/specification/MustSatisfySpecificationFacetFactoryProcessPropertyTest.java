@@ -19,34 +19,25 @@
 
 package org.apache.isis.core.progmodel.facets.propparam.specification;
 
-import static org.apache.isis.core.commons.matchers.IsisMatchers.anInstanceOf;
-
 import java.lang.reflect.Method;
-
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.progmodel.facets.properties.validate.perspec.MustSatisfySpecificationOnPropertyFacet;
 import org.apache.isis.core.progmodel.facets.properties.validate.perspec.MustSatisfySpecificationOnPropertyFacetFactory;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
-@RunWith(JMock.class)
+import static org.apache.isis.core.commons.matchers.IsisMatchers.anInstanceOf;
+
 public class MustSatisfySpecificationFacetFactoryProcessPropertyTest {
 
-    private final Mockery mockery = new JUnit4Mockery() {
-        {
-            setImposteriser(ClassImposteriser.INSTANCE);
-        }
-    };
+    @Rule
+    public JUnitRuleMockery2 mockery = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     private MethodRemover mockMethodRemover;
     private FacetedMethod mockFacetHolder;

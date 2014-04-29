@@ -70,7 +70,7 @@ public final class Files {
     }
 
     // introduced for testing of this utility class.
-    interface Deleter {
+    public interface Deleter {
         void deleteFile(File f);
     }
 

@@ -19,30 +19,28 @@
 
 package org.apache.isis.core.progmodel.facets.propparam.specification;
 
-import static org.apache.isis.core.commons.matchers.IsisMatchers.anInstanceOf;
-
 import java.lang.reflect.Method;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.progmodel.facets.param.validate.perspec.MustSatisfySpecificationOnParameterFacet;
 import org.apache.isis.core.progmodel.facets.param.validate.perspec.MustSatisfySpecificationOnParameterFacetFactory;
+import org.apache.isis.core.unittestsupport.jmocking.JavassistImposteriser;
+
+import static org.apache.isis.core.commons.matchers.IsisMatchers.anInstanceOf;
 
 @RunWith(JMock.class)
 public class MustSatisfySpecificationFacetFactoryProcessParameterTest {
 
     private final Mockery mockery = new JUnit4Mockery() {
         {
-            setImposteriser(ClassImposteriser.INSTANCE);
+            setImposteriser(JavassistImposteriser.INSTANCE);
         }
     };
 

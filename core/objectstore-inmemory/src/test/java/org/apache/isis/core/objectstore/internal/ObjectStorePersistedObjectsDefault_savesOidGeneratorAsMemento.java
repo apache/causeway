@@ -19,27 +19,22 @@
 
 package org.apache.isis.core.objectstore.internal;
 
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.apache.isis.core.runtime.system.persistence.IdentifierGeneratorDefault;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
-import org.junit.Before;
-import org.junit.Test;
-
-import org.apache.isis.core.runtime.system.persistence.IdentifierGeneratorDefault;
 
 public class ObjectStorePersistedObjectsDefault_savesOidGeneratorAsMemento {
 
     private ObjectStorePersistedObjectsDefault persistedObjects;
 
-    private final Mockery context = new JUnit4Mockery() {
-        {
-            setImposteriser(ClassImposteriser.INSTANCE);
-        }
-    };
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     private IdentifierGeneratorDefault.Memento mockMemento;
 

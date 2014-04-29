@@ -152,10 +152,6 @@
 		<!-- others -->
         <dependency>
             <groupId>org.jmock</groupId>
-            <artifactId>jmock-legacy</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jmock</groupId>
             <artifactId>jmock-junit4</artifactId>
         </dependency>
         <dependency>

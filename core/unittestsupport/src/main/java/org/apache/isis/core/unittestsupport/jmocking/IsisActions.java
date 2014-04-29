@@ -23,7 +23,7 @@ import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 
 public final class IsisActions {
-    
+
     private IsisActions() {
     }
     

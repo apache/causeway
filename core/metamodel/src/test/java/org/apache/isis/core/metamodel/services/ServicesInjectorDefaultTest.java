@@ -48,19 +48,19 @@ public class ServicesInjectorDefaultTest {
     
     private ServicesInjectorSpi injector;
 
-    static interface Service1 {
+    public static interface Service1 {
     }
 
-    static interface Service2 {
+    public static interface Service2 {
     }
 
-    static interface Mixin {
+    public static interface Mixin {
     }
 
-    static interface DomainObjectContainerExtended extends DomainObjectContainer, Mixin {
+    public static interface DomainObjectContainerExtended extends DomainObjectContainer, Mixin {
     }
 
-    static interface SomeDomainObject {
+    public static interface SomeDomainObject {
         public void setContainer(DomainObjectContainer container);
         public void setMixin(Mixin mixin);
         public void setService1(Service1 service);

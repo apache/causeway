@@ -1305,23 +1305,6 @@ ${license.additional-notes}
                 </exclusions>
             </dependency>
 
-            <!-- transitively includes cglib:cglib-nodep:2.1_3 and org.objenesis:objenesis:1.0 -->
-            <dependency>
-                <groupId>org.jmock</groupId>
-                <artifactId>jmock-legacy</artifactId>
-                <version>2.6.0</version>
-                <exclusions>
-                	<exclusion>
-                		<groupId>cglib</groupId>
-                		<artifactId>cglib-nodep</artifactId>
-                	</exclusion>
-                	<exclusion>
-                		<groupId>org.objenesis</groupId>
-                		<artifactId>objenesis</artifactId>
-                	</exclusion>
-                </exclusions>
-            </dependency>
-
             <!-- BDD testing -->
             <dependency>
                 <groupId>info.cukes</groupId>
@@ -1428,11 +1411,6 @@ ${license.additional-notes}
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-junit4</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jmock</groupId>
-            <artifactId>jmock-legacy</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

@@ -18,30 +18,27 @@
  */
 package org.apache.isis.core.unittestsupport.jmocking;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static org.junit.Assert.fail;
+import junit.framework.AssertionFailedError;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
-
-import junit.framework.AssertionFailedError;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.internal.AllDeclaredFields;
 import org.jmock.lib.concurrent.Synchroniser;
-import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
-import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
+
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.junit.Assert.fail;
 
 
 /**
@@ -70,7 +67,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
     public static JUnitRuleMockery2 createFor(final Mode mode) {
         final JUnitRuleMockery2 jUnitRuleMockery2 = new JUnitRuleMockery2();
         if (mode == Mode.INTERFACES_AND_CLASSES) {
-            jUnitRuleMockery2.setImposteriser(ClassImposteriser.INSTANCE);
+            jUnitRuleMockery2.setImposteriser(JavassistImposteriser.INSTANCE);
         }
         jUnitRuleMockery2.setThreadingPolicy(new Synchroniser());
         return jUnitRuleMockery2;

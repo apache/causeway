@@ -17,17 +17,14 @@
 package org.apache.isis.core.specsupport.scenarios;
 
 import java.util.Map;
-
 import com.google.common.collect.Maps;
-
 import org.hamcrest.Description;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
-import org.jmock.lib.legacy.ClassImposteriser;
-
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.core.unittestsupport.jmocking.JavassistImposteriser;
 
 class DomainServiceProviderMockery implements DomainServiceProvider {
 
@@ -44,7 +41,7 @@ class DomainServiceProviderMockery implements DomainServiceProvider {
 
     private void init() {
         context = new Mockery() {{
-            setImposteriser(ClassImposteriser.INSTANCE);
+            setImposteriser(JavassistImposteriser.INSTANCE);
         }};
         mocks.clear();
     }
