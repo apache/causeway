@@ -1051,7 +1051,6 @@ ${license.additional-notes}
             </dependency>
 
 
-
             <!-- TCK -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
@@ -1138,19 +1137,9 @@ ${license.additional-notes}
 
             <!-- Bytecode libraries -->
             <dependency>
-                <groupId>asm</groupId>
-                <artifactId>asm</artifactId>
-                <version>3.3.1</version>
-            </dependency>
-            <dependency>
                 <groupId>org.objenesis</groupId>
                 <artifactId>objenesis</artifactId>
                 <version>1.4</version>
-            </dependency>
-            <dependency>
-                <groupId>cglib</groupId>
-                <artifactId>cglib-nodep</artifactId>
-                <version>2.2.2</version>
             </dependency>
             <dependency>
                 <groupId>org.javassist</groupId>
@@ -1411,11 +1400,6 @@ ${license.additional-notes}
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-junit4</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib-nodep</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

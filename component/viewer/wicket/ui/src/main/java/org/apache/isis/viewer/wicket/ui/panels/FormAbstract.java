@@ -131,13 +131,9 @@ public abstract class FormAbstract<T> extends Form<T> implements IHeaderContribu
     // Convenience
     // ///////////////////////////////////////////////////////////////////
 
-    @Inject
-    private ComponentFactoryRegistry componentFactoryRegistry;
-    
     @Override
     public ComponentFactoryRegistry getComponentFactoryRegistry() {
-        //return ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry();
-        return componentFactoryRegistry;
+        return ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry();
     }
 
     @Override

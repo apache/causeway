@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import java.io.Serializable;
+
 import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -28,7 +30,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  * Ideally I'd like to move this to the <tt>org.apache.isis.viewer.wicket.model.isis</tt>
  * package, however to do so would break existing API (gmap3 has a dependency on this, for example).
  */
-public interface ImageResourceCache {
+public interface ImageResourceCache extends Serializable {
 
     ResourceReference resourceReferenceFor(ObjectAdapter adapter);
     

@@ -223,10 +223,15 @@
 				<version>${wicket.version}</version>
 				<exclusions>
 					<exclusion>
-		        			<!-- for dependency convergence -->
+		        		<!-- for dependency convergence -->
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-api</artifactId>
 					</exclusion>
+                    <exclusion>
+                        <!-- for Java7 compatibility (we don't use the proxying capability of this component) -->
+                        <groupId>cglib</groupId>
+                        <artifactId>cglib</artifactId>
+                    </exclusion>
 				</exclusions>
 			</dependency>
 

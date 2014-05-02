@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.pages;
 
+import java.io.Serializable;
+
 import org.apache.wicket.Page;
 
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -26,7 +28,7 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 /**
  * Registry of the {@link Page} class to use for each {@link PageType}.
  */
-public interface PageClassRegistry {
+public interface PageClassRegistry extends Serializable {
 
     /**
      * Used by <tt>WicketObjectsApplication</tt> to lookup pages from the

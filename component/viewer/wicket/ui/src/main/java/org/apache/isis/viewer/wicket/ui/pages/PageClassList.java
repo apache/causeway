@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.pages;
 
+import java.io.Serializable;
+
 import org.apache.isis.viewer.wicket.model.models.PageType;
 
 /**
@@ -31,7 +33,7 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
  * each pages. This interface can be used to selectively replace some or all of
  * these pages.
  */
-public interface PageClassList {
+public interface PageClassList extends Serializable {
 
     void registerPages(PageClassRegistrySpi pageRegistry);
 

@@ -34,6 +34,7 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 
@@ -47,10 +48,12 @@ import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 @Singleton
 public class ImageResourceCacheClassPath implements ImageResourceCache {
 
+    private static final long serialVersionUID = 1L;
+    
     private static final List<String> IMAGE_SUFFICES = Arrays.asList("png", "gif", "jpeg", "jpg");
     private static final String FALLBACK_IMAGE = "Default.png";
     
-    private final Map<ObjectSpecification, ResourceReference> resourceReferenceBySpec = Maps.newHashMap();
+    private final Map<ObjectSpecId, ResourceReference> resourceReferenceBySpec = Maps.newHashMap();
     private PackageResourceReference fallbackResourceReference;
 
 
@@ -75,7 +78,8 @@ public class ImageResourceCacheClassPath implements ImageResourceCache {
         
         resourceReference = lookupResourceReferenceFor(spec);
         
-        resourceReferenceBySpec.put(spec, resourceReference);
+        final ObjectSpecId specId = spec.getSpecId();
+        resourceReferenceBySpec.put(specId, resourceReference);
         return resourceReference;
     }
 

@@ -19,8 +19,10 @@
 
 package org.apache.isis.viewer.wicket.model.isis;
 
+import java.io.Serializable;
 
-public interface WicketViewerSettings {
+
+public interface WicketViewerSettings extends Serializable {
 
     public int getMaxTitleLengthInStandaloneTables();
 

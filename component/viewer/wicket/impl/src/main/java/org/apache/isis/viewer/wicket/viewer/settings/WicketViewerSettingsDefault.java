@@ -29,6 +29,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldWithDatePick
 @Singleton
 public class WicketViewerSettingsDefault implements WicketViewerSettings {
 
+    private static final long serialVersionUID = 1L;
+
     IsisConfiguration getConfiguration() {
         return IsisContext.getConfiguration();
     }

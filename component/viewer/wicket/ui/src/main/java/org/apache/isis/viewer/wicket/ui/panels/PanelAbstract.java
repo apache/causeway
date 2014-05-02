@@ -43,6 +43,7 @@ import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
+import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
 /**
@@ -53,15 +54,6 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
     private static final long serialVersionUID = 1L;
 
     private ComponentType componentType;
-
-    /**
-     * Injected
-     * 
-     * @see #setComponentFactoryRegistry(ComponentFactoryRegistry)
-     */
-    @javax.inject.Inject
-    @Inject
-    private ComponentFactoryRegistry componentFactoryRegistry;
 
     public PanelAbstract(final ComponentType componentType) {
         this(componentType, null);
@@ -99,7 +91,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
      * @return
      */
     protected Component addOrReplace(final ComponentType componentType, final IModel<?> model) {
-        return componentFactoryRegistry.addOrReplaceComponent(this, componentType, model);
+        return getComponentFactoryRegistry().addOrReplaceComponent(this, componentType, model);
     }
 
     /**
@@ -192,12 +184,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
     // /////////////////////////////////////////////////
 
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
-        return componentFactoryRegistry;
-    }
-
-    @Inject
-    public void setComponentFactoryRegistry(final ComponentFactoryRegistry componentFactoryRegistry) {
-        this.componentFactoryRegistry = componentFactoryRegistry;
+        return ((ComponentFactoryRegistryAccessor) getApplication()).getComponentFactoryRegistry();
     }
 
     

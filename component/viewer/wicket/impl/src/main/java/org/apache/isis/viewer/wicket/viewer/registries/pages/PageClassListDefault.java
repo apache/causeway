@@ -42,6 +42,8 @@ import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 @Singleton
 public class PageClassListDefault implements PageClassList {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public void registerPages(final PageClassRegistrySpi pageRegistry) {
         pageRegistry.registerPage(PageType.SIGN_IN, getSignInPageClass());

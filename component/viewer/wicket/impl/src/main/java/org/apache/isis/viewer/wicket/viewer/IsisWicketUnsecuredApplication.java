@@ -176,7 +176,7 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     }
 
     protected void initWicketComponentInjection(final Injector injector) {
-        getComponentInstantiationListeners().add(new GuiceComponentInjector(this, injector));
+        getComponentInstantiationListeners().add(new GuiceComponentInjector(this, injector, false));
     }
 
     /**

@@ -512,7 +512,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     }
 
     protected void initWicketComponentInjection(final Injector injector) {
-        getComponentInstantiationListeners().add(new GuiceComponentInjector(this, injector));
+        getComponentInstantiationListeners().add(new GuiceComponentInjector(this, injector, false));
     }
 
     /**

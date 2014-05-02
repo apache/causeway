@@ -39,6 +39,8 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistrySpi;
 @Singleton
 public class PageClassRegistryDefault implements PageClassRegistry, PageClassRegistrySpi {
 
+    private static final long serialVersionUID = 1L;
+
     private final Map<PageType, Class<? extends Page>> pagesByType = Maps.newHashMap();
 
     /**
