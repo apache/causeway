@@ -254,18 +254,14 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
      * {@link ObjectAdapter adapters} for the {@link #serviceList}.
      */
     private void createServiceAdapters(final List<Object> registeredServices) {
-        getTransactionManager().startTransaction();
         for (final Object service : registeredServices) {
             final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(service.getClass());
             serviceSpecification.markAsService();
             final RootOid existingOid = getOidForService(serviceSpecification);
-            ObjectAdapter serviceAdapter;
-            if (existingOid == null) {
-                serviceAdapter = getAdapterManager().adapterFor(service);
-            } else {
-                serviceAdapter = mapRecreatedPojo(existingOid, service);
-            }
-
+            ObjectAdapter serviceAdapter = 
+                    existingOid == null
+                            ? getAdapterManager().adapterFor(service) 
+                            : mapRecreatedPojo(existingOid, service);
             if (serviceAdapter.getOid().isTransient()) {
                 adapterManager.remapAsPersistent(serviceAdapter, null);
             }
@@ -276,7 +272,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
                 registerService(persistentOid);
             }
         }
-        getTransactionManager().endTransaction();
     }
 
     private void initOtherApplibServicesIfConfigured(final List<Object> registeredServices) {
