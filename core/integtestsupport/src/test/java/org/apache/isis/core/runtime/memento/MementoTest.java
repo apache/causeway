@@ -32,6 +32,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,6 +42,7 @@ import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.tck.dom.refs.BaseEntity;
 import org.apache.isis.core.tck.dom.refs.ParentEntity;
 import org.apache.isis.core.tck.dom.refs.ReferencingEntity;
@@ -111,9 +113,16 @@ public class MementoTest {
         mementoForEpv1 = fromBytes(bytesForEpv1);
         mementoForEpr1 = fromBytes(bytesForEpr1);
         mementoForEpc1 = fromBytes(bytesForEpc1);
+
+        IsisContext.getTransactionManager().startTransaction();
     }
 
 
+    @After
+    public void tearDown() throws Exception {
+        IsisContext.getTransactionManager().endTransaction();
+    }
+    
     private Memento fromBytes(final byte[] bytes) throws IOException {
         bais = new ByteArrayInputStream(bytes);
         DataInputStreamExtended input = new DataInputStreamExtended(bais);
