@@ -26,16 +26,17 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 
 public class ToDoItemSubscriptions {
 
+    //region > LOG
     private final static org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(ToDoItemSubscriptions.class);
+    //endregion
 
     @Programmatic
     @Subscribe
     public void on(ToDoItem.AbstractEvent ev) {
         LOG.info(ev.getEventDescription() + ": " + container.titleOf(ev.getToDoItem()));
     }
-    
-    // //////////////////////////////////////
-    // Injected Services
+
+    //region > injected services
     // //////////////////////////////////////
     
     @javax.inject.Inject
@@ -46,5 +47,6 @@ public class ToDoItemSubscriptions {
     public final void injectEventBusService(EventBusService eventBusService) {
         eventBusService.register(this);
     }
+    //endregion
 
 }

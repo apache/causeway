@@ -18,18 +18,12 @@
  */
 package dom.simple;
 
-import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.Disabled;
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
-import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.util.ObjectContracts;
 
@@ -44,8 +38,7 @@ import org.apache.isis.applib.util.ObjectContracts;
 @Bookmarkable
 public class SimpleObject implements Comparable<SimpleObject> {
 
-    // //////////////////////////////////////
-    // Name (property)
+    //region > name (property)
     // //////////////////////////////////////
     
     private String name;
@@ -60,11 +53,11 @@ public class SimpleObject implements Comparable<SimpleObject> {
     public void setName(final String name) {
         this.name = name;
     }
-    
-    
 
-    // //////////////////////////////////////
-    // compareTo
+    //endregion
+
+
+    //region > compareTo
     // //////////////////////////////////////
 
     @Override
@@ -72,14 +65,15 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return ObjectContracts.compare(this, other, "name");
     }
 
-    
-    // //////////////////////////////////////
-    // Injected
-    // //////////////////////////////////////
+    //endregion
 
+    //region > injected services
+    // //////////////////////////////////////
 
     @javax.inject.Inject
     @SuppressWarnings("unused")
     private DomainObjectContainer container;
-    
+
+    //endregion
+
 }

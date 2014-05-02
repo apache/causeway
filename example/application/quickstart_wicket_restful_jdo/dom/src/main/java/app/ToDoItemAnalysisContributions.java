@@ -31,8 +31,7 @@ import org.apache.isis.applib.annotation.NotInServiceMenu;
 public class ToDoItemAnalysisContributions {
 
 
-    // //////////////////////////////////////
-    // AnalyseCategory
+    //region > analyseCategory (action)
     // //////////////////////////////////////
 
     @NotInServiceMenu
@@ -41,12 +40,14 @@ public class ToDoItemAnalysisContributions {
     public ToDoItemsByCategoryViewModel analyseCategory(final ToDoItem item) {
         return toDoAppAnalysis.toDoItemsForCategory(item.getCategory());
     }
+    //endregion
 
-    
-    // //////////////////////////////////////
-    // injected services
+    //region > injected services
     // //////////////////////////////////////
 
     @javax.inject.Inject
     private ToDoItemAnalysis toDoAppAnalysis;
+
+    //endregion
+
 }

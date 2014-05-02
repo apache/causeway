@@ -18,28 +18,22 @@
  */
 package app;
 
+import dom.todo.ToDoItem.Category;
+
 import java.util.Arrays;
 import java.util.List;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-
-import dom.todo.ToDoItem.Category;
-
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.Programmatic;
 
 @Named("Analysis")
 public class ToDoItemAnalysis {
 
-    // //////////////////////////////////////
-    // Identification in the UI
+
+    //region > identification in the UI
     // //////////////////////////////////////
 
     public String getId() {
@@ -49,11 +43,11 @@ public class ToDoItemAnalysis {
     public String iconName() {
         return "ToDoItem";
     }
+    //endregion
 
+    //region > byCategory (action)
     // //////////////////////////////////////
-    // ByCategory (action)
-    // //////////////////////////////////////
-    
+
     @Named("By Category")
     @Bookmarkable
     @ActionSemantics(Of.SAFE)
@@ -75,8 +69,9 @@ public class ToDoItemAnalysis {
          };
     }
 
-    // //////////////////////////////////////
-    // ByDateRange (action)
+    //endregion
+
+    //region > byDateRange (action)
     // //////////////////////////////////////
     
     public enum DateRange {
@@ -108,23 +103,24 @@ public class ToDoItemAnalysis {
              }
          };
     }
-    
-    
-    // //////////////////////////////////////
-    // ForCategory (programmatic)
+    //endregion
+
+    //region > forCategory (programmatic)
     // //////////////////////////////////////
 
     @Programmatic
     public ToDoItemsByCategoryViewModel toDoItemsForCategory(Category category) {
         return byCategory().apply(category);
     }
-    
 
-    // //////////////////////////////////////
-    // Injected services
+    //endregion
+
+    //region > injected services
     // //////////////////////////////////////
 
     @javax.inject.Inject
     private DomainObjectContainer container;
+
+    //endregion
 
 }
