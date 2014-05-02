@@ -74,6 +74,37 @@ public class ToDoItemTest_description extends ToDoIntegTest {
     }
 
     @Test
+    public void cannotUseModify() throws Exception {
+
+        expectedExceptions.expectMessage("Cannot invoke supporting method for 'Description'; use only property accessor/mutator");
+
+        // given
+        assertThat(toDoItem.getDescription(), is("Buy bread"));
+        
+        // when
+        toDoItem.modifyDescription("Buy bread and butter");
+        
+        // then
+        assertThat(toDoItem.getDescription(), is("Buy bread"));
+    }
+
+    @Test
+    public void cannotUseClear() throws Exception {
+        
+        expectedExceptions.expectMessage("Cannot invoke supporting method for 'Description'; use only property accessor/mutator");
+        
+        // given
+        assertThat(toDoItem.getDescription(), is("Buy bread"));
+        
+        // when
+        toDoItem.clearDescription();
+        
+        // then
+        assertThat(toDoItem.getDescription(), is("Buy bread"));
+    }
+    
+
+    @Test
     public void onlyJustShortEnough() throws Exception {
         
         // when, then

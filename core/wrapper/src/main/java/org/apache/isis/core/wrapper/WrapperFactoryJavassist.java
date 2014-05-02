@@ -17,24 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.core.wrapper.internal;
+package org.apache.isis.core.wrapper;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
+import org.apache.isis.core.wrapper.proxy.ProxyInstantiatorForJavassist;
 
-import org.apache.isis.applib.services.wrapper.WrapperObject;
+public class WrapperFactoryJavassist extends WrapperFactoryAbstract  {
 
-public class JavaProxyFactory<T> implements IProxyFactory<T> {
-    @Override
-    @SuppressWarnings("unchecked")
-    public T createProxy(final T toProxy, final InvocationHandler handler) {
-        final Class<T> proxyClass = (Class<T>) toProxy.getClass();
-        return (T) Proxy.newProxyInstance(proxyClass.getClassLoader(), new Class[] { proxyClass }, handler);
+    public WrapperFactoryJavassist() {
+        super(new ProxyInstantiatorForJavassist());
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public T createProxy(final Class<T> toProxy, final InvocationHandler handler) {
-        return (T) Proxy.newProxyInstance(toProxy.getClassLoader(), new Class[] { toProxy, WrapperObject.class }, handler);
-    }
 }

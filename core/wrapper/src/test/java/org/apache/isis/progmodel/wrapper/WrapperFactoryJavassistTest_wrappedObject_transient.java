@@ -17,15 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.core.wrapper.internal;
+package org.apache.isis.progmodel.wrapper;
 
-import org.objenesis.ObjenesisHelper;
+import org.apache.isis.core.wrapper.WrapperFactoryAbstract;
+import org.apache.isis.core.wrapper.WrapperFactoryJavassist;
 
-class ObjenesisClassInstantiatorCE implements IClassInstantiatorCE {
+public class WrapperFactoryJavassistTest_wrappedObject_transient extends WrapperFactoryAbstractTest_wrappedObject_transient {
 
     @Override
-    public Object newInstance(final Class<?> clazz) throws InstantiationException {
-        return ObjenesisHelper.newInstance(clazz);
+    protected WrapperFactoryAbstract createWrapperFactory() {
+        return new WrapperFactoryJavassist();
     }
-
 }

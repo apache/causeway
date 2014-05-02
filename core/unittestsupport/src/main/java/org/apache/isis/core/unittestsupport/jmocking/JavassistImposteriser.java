@@ -97,8 +97,7 @@ public class JavassistImposteriser implements Imposteriser {
 
     private Class<?> proxyClass(Class<?> mockedType, Class<?>... ancilliaryTypes) {
 
-        final ProxyFactory proxyFactory;
-        proxyFactory = new ProxyFactory();
+        final ProxyFactory proxyFactory = new ProxyFactory();
         proxyFactory.setFilter(new MethodFilter() {
             @Override
             public boolean isHandled(final Method m) {
@@ -107,13 +106,8 @@ public class JavassistImposteriser implements Imposteriser {
             }
         });
 
-        if(mockedType.isInterface()) {
-            proxyFactory.setSuperclass(Object.class);
-            proxyFactory.setInterfaces(prepend(mockedType, ancilliaryTypes));
-        } else {
-            proxyFactory.setSuperclass(mockedType);
-            proxyFactory.setInterfaces(ancilliaryTypes);
-        }
+        proxyFactory.setSuperclass(mockedType);
+        proxyFactory.setInterfaces(ancilliaryTypes);
 
         return proxyFactory.createClass();
 
@@ -197,7 +191,7 @@ public class JavassistImposteriser implements Imposteriser {
         //        return proxy;
     }
 
-    private Class<?>[] prepend(Class<?> first, Class<?>... rest) {
+    private static Class<?>[] combine(Class<?> first, Class<?>... rest) {
         Class<?>[] all = new Class<?>[rest.length+1];
         all[0] = first;
         System.arraycopy(rest, 0, all, 1, rest.length);

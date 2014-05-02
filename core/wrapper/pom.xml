@@ -109,20 +109,29 @@
             <scope>test</scope>
         </dependency>
 
-		<dependency>
+        <dependency>
+            <groupId>org.objenesis</groupId>
+            <artifactId>objenesis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>asm</groupId>
             <artifactId>asm</artifactId>
-		</dependency>
+            <!-- explicitly include for use of WrapperFactoryCglib -->
+            <optional>true</optional>
+        </dependency>
 
-		<dependency>
-			<groupId>org.objenesis</groupId>
-			<artifactId>objenesis</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib-nodep</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <!-- explicitly include for use of WrapperFactoryCglib -->
+            <optional>true</optional>
+        </dependency>
 
 	</dependencies>
 

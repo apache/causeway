@@ -17,16 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.wrapper.internal;
+package org.apache.isis.progmodel.wrapper;
 
-import java.lang.reflect.InvocationHandler;
+import org.apache.isis.core.wrapper.WrapperFactoryAbstract;
+import org.apache.isis.core.wrapper.WrapperFactoryJavassist;
 
-public interface DelegatingInvocationHandler<T> extends InvocationHandler {
+public class WrapperFactoryJavassistTest_wrappedObject extends WrapperFactoryAbstractTest_wrappedObject {
 
-    T getDelegate();
-
-    public boolean isResolveObjectChangedEnabled();
-
-    public void setResolveObjectChangedEnabled(boolean resolveObjectChangedEnabled);
+    @Override
+    protected WrapperFactoryAbstract createWrapperFactory() {
+        return new WrapperFactoryJavassist();
+    }
 
 }

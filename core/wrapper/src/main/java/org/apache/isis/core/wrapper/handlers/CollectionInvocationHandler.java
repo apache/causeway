@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.wrapper.internal;
+package org.apache.isis.core.wrapper.handlers;
 
 import java.util.Collection;
 import java.util.List;

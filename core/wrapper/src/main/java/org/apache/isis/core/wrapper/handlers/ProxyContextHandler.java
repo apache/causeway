@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.wrapper.internal;
+package org.apache.isis.core.wrapper.handlers;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -34,10 +34,17 @@ import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.wrapper.proxy.ProxyInstantiator;
 
-public class Proxy {
+public class ProxyContextHandler {
 
-    public static <T> T proxy(final T domainObject, final WrapperFactory wrapperFactory, final ExecutionMode mode, final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLoader specificationLookup, final AdapterManager adapterManager, final ObjectPersistor objectPersistor) {
+    private final ProxyInstantiator proxyInstantiator;
+    
+    public ProxyContextHandler(final ProxyInstantiator proxyInstantiator) {
+        this.proxyInstantiator = proxyInstantiator;
+    }
+    
+    public <T> T proxy(final T domainObject, final WrapperFactory wrapperFactory, final ExecutionMode mode, final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLoader specificationLookup, final AdapterManager adapterManager, final ObjectPersistor objectPersistor) {
 
         Ensure.ensureThatArg(wrapperFactory, is(not(nullValue())));
         Ensure.ensureThatArg(authenticationSessionProvider, is(not(nullValue())));
@@ -45,36 +52,33 @@ public class Proxy {
         Ensure.ensureThatArg(adapterManager, is(not(nullValue())));
         Ensure.ensureThatArg(objectPersistor, is(not(nullValue())));
 
-        final DomainObjectInvocationHandler<T> invocationHandler = new DomainObjectInvocationHandler<T>(domainObject, wrapperFactory, mode, authenticationSessionProvider, specificationLookup, adapterManager, objectPersistor);
+        final DomainObjectInvocationHandler<T> invocationHandler = new DomainObjectInvocationHandler<T>(domainObject, wrapperFactory, mode, authenticationSessionProvider, specificationLookup, adapterManager, objectPersistor, this);
 
-        final CgLibProxy<T> cglibProxy = new CgLibProxy<T>(invocationHandler);
-        return cglibProxy.proxy();
+        return proxyInstantiator.instantiateProxy(invocationHandler);
     }
 
     /**
      * Whether to execute or not will be picked up from the supplied parent
      * handler.
      */
-    public static <T, E> Collection<E> proxy(final Collection<E> collectionToProxy, final String collectionName, final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
+    public <T, E> Collection<E> proxy(final Collection<E> collectionToProxy, final String collectionName, final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
 
         final CollectionInvocationHandler<T, Collection<E>> collectionInvocationHandler = new CollectionInvocationHandler<T, Collection<E>>(collectionToProxy, collectionName, handler, otma);
         collectionInvocationHandler.setResolveObjectChangedEnabled(handler.isResolveObjectChangedEnabled());
 
-        final CgLibProxy<Collection<E>> cglibProxy = new CgLibProxy<Collection<E>>(collectionInvocationHandler);
-        return cglibProxy.proxy();
+        return proxyInstantiator.instantiateProxy(collectionInvocationHandler);
     }
 
     /**
      * Whether to execute or not will be picked up from the supplied parent
      * handler.
      */
-    public static <T, P, Q> Map<P, Q> proxy(final Map<P, Q> collectionToProxy, final String collectionName, final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
+    public <T, P, Q> Map<P, Q> proxy(final Map<P, Q> collectionToProxy, final String collectionName, final DomainObjectInvocationHandler<T> handler, final OneToManyAssociation otma) {
 
         final MapInvocationHandler<T, Map<P, Q>> mapInvocationHandler = new MapInvocationHandler<T, Map<P, Q>>(collectionToProxy, collectionName, handler, otma);
         mapInvocationHandler.setResolveObjectChangedEnabled(handler.isResolveObjectChangedEnabled());
 
-        final CgLibProxy<Map<P, Q>> cglibProxy = new CgLibProxy<Map<P, Q>>(mapInvocationHandler);
-        return cglibProxy.proxy();
+        return proxyInstantiator.instantiateProxy(mapInvocationHandler);
     }
 
 }

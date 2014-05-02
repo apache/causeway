@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-package org.apache.isis.core.wrapper.internal;
+package org.apache.isis.core.wrapper.proxy;
 
-import org.apache.isis.applib.events.InteractionEvent;
+import org.apache.isis.core.wrapper.handlers.DelegatingInvocationHandler;
 
-public interface InteractionEventDispatcher {
-
-    void dispatch(InteractionEvent interactionEvent);
-
+public interface ProxyInstantiator {
+    public <T> T instantiateProxy(final DelegatingInvocationHandler<T> invocationHandler);
 }

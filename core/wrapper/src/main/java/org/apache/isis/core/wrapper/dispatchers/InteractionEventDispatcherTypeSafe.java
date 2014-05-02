@@ -17,12 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.core.wrapper.internal;
+package org.apache.isis.core.wrapper.dispatchers;
 
-import java.lang.reflect.InvocationHandler;
+import org.apache.isis.applib.events.InteractionEvent;
 
-public interface IProxyFactory<T> {
-    T createProxy(Class<T> toProxyClass, InvocationHandler handler);
+public abstract class InteractionEventDispatcherTypeSafe<T extends InteractionEvent> implements InteractionEventDispatcher {
 
-    T createProxy(T toProxy, InvocationHandler handler);
+    public abstract void dispatchTypeSafe(T interactionEvent);
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void dispatch(final InteractionEvent interactionEvent) {
+        dispatchTypeSafe((T) interactionEvent);
+    }
+
 }

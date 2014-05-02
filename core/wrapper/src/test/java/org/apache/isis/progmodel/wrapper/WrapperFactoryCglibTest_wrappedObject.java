@@ -17,18 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.wrapper.internal;
+package org.apache.isis.progmodel.wrapper;
 
-import org.apache.isis.applib.events.InteractionEvent;
+import org.apache.isis.core.wrapper.WrapperFactoryAbstract;
+import org.apache.isis.core.wrapper.WrapperFactoryCglib;
 
-public abstract class InteractionEventDispatcherTypeSafe<T extends InteractionEvent> implements InteractionEventDispatcher {
-
-    public abstract void dispatchTypeSafe(T interactionEvent);
+public class WrapperFactoryCglibTest_wrappedObject extends WrapperFactoryAbstractTest_wrappedObject {
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void dispatch(final InteractionEvent interactionEvent) {
-        dispatchTypeSafe((T) interactionEvent);
+    protected WrapperFactoryAbstract createWrapperFactory() {
+        return new WrapperFactoryCglib();
     }
 
 }

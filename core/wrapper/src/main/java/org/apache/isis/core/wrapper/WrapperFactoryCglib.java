@@ -19,7 +19,12 @@
 
 package org.apache.isis.core.wrapper;
 
+import org.apache.isis.core.wrapper.proxy.ProxyInstantiatorForCglib;
 
-public class WrapperFactoryDefault extends WrapperFactoryJavassist {
+public class WrapperFactoryCglib extends WrapperFactoryAbstract  {
+
+    public WrapperFactoryCglib() {
+        super(new ProxyInstantiatorForCglib());
+    }
 
 }

@@ -171,6 +171,13 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public void setDescription(final String description) {
         this.description = description;
     }
+    public void modifyDescription(final String description) {
+        setDescription(description);
+    }
+    public void clearDescription() {
+        setDescription(null);
+    }
+    
 
 
     

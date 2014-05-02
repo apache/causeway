@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.wrapper.internal;
+package org.apache.isis.core.wrapper.handlers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -51,6 +51,7 @@ import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
@@ -90,6 +91,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private final AdapterManager adapterManager;
     private final ObjectPersistor objectPersistor;
 
+    private final ProxyContextHandler proxy;
+
     /**
      * The <tt>title()</tt> method; may be <tt>null</tt>.
      */
@@ -106,9 +109,10 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     protected Method wrappedMethod;
 
     public DomainObjectInvocationHandler(final T delegate, final WrapperFactory embeddedViewer, final ExecutionMode mode, final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLoader specificationLookup, final AdapterManager adapterManager,
-            final ObjectPersistor objectPersistor) {
+            final ObjectPersistor objectPersistor, ProxyContextHandler proxy) {
         super(delegate, embeddedViewer, mode);
 
+        this.proxy = proxy;
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.specificationLookup = specificationLookup;
         this.adapterManager = adapterManager;
@@ -178,7 +182,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         if (objectMember.isOneToOneAssociation()) {
 
             if (instanceOf(imperativeFacets, PropertyValidateFacetViaMethod.class, PropertySetterFacetViaModifyMethod.class, PropertyClearFacetViaClearMethod.class)) {
-                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only property accessor/mutator", memberName));
+                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method for '%s'; use only property accessor/mutator", memberName));
             }
 
             final OneToOneAssociation otoa = (OneToOneAssociation) objectMember;
@@ -269,7 +273,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                 if (facet instanceof ImperativeFacet) {
                     return (ImperativeFacet) facet;
                 }
-                return asImperativeFacet(facet.getUnderlyingFacet());
+                Facet underlyingFacet = facet.getUnderlyingFacet();
+                return asImperativeFacet(underlyingFacet);
             }
         });
 
@@ -282,7 +287,12 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
     private static boolean instanceOf(final List<?> objects, final Class<?>... superTypes) {
         for (final Class<?> superType : superTypes) {
-            for (final Object obj : objects) {
+            for (Object obj : objects) {
+                // handle the *WrapTransaction facets etc
+                if(obj instanceof DecoratingFacet) {
+                    DecoratingFacet<?> decoratingFacet = (DecoratingFacet<?>) obj;
+                    obj = ((DecoratingFacet<?>) obj).getDecoratedFacet();
+                }
                 if (superType.isAssignableFrom(obj.getClass())) {
                     return true;
                 }
@@ -405,7 +415,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             if (collectionToLookup instanceof WrapperObject) {
                 collectionViewObject = collectionToLookup;
             } else {
-                collectionViewObject = Proxy.proxy(collectionToLookup, memberName, this, otma);
+                collectionViewObject = proxy.proxy(collectionToLookup, memberName, this, otma);
             }
             collectionViewObjectsByMethod.put(method, collectionViewObject);
         }
@@ -418,7 +428,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             if (mapToLookup instanceof WrapperObject) {
                 mapViewObject = mapToLookup;
             } else {
-                mapViewObject = Proxy.proxy(mapToLookup, memberName, this, otma);
+                mapViewObject = proxy.proxy(mapToLookup, memberName, this, otma);
             }
             mapViewObjectsByMethod.put(method, mapViewObject);
         }

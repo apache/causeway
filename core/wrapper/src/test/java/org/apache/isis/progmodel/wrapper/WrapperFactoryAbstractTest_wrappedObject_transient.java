@@ -40,6 +40,7 @@ import org.apache.isis.applib.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.events.PropertyVisibilityEvent;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.services.wrapper.DisabledException;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
@@ -60,9 +61,13 @@ import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.tck.dom.claimapp.employees.Employee;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.core.wrapper.WrapperFactoryAbstract;
 import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 
-public class WrappedFactoryDefaultTest_wrappedObject_transient {
+/**
+ * Contract test.
+ */
+public abstract class WrapperFactoryAbstractTest_wrappedObject_transient {
 
     @Rule
     public final JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
@@ -97,16 +102,12 @@ public class WrappedFactoryDefaultTest_wrappedObject_transient {
     private Method getPasswordMethod;
     private Method setPasswordMethod;
 
-
-    private WrapperFactoryDefault wrapperFactory;
+    private WrapperFactoryAbstract wrapperFactory;
     private Employee employeeWO;
 
 
     @Before
     public void setUp() throws Exception {
-
-        // employeeRepository = new EmployeeRepositoryImpl();
-        // claimRepository = new ClaimRepositoryImpl();
 
         employeeDO = new Employee();
         employeeDO.setName("Smith");
@@ -114,7 +115,7 @@ public class WrappedFactoryDefaultTest_wrappedObject_transient {
         getPasswordMethod = Employee.class.getMethod("getPassword");
         setPasswordMethod = Employee.class.getMethod("setPassword", String.class);
 
-        wrapperFactory = new WrapperFactoryDefault();
+        wrapperFactory = createWrapperFactory();
         wrapperFactory.setAdapterManager(mockAdapterManager);
         wrapperFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         wrapperFactory.setObjectPersistor(mockObjectPersistor);
@@ -165,6 +166,11 @@ public class WrappedFactoryDefaultTest_wrappedObject_transient {
 
         employeeWO = wrapperFactory.wrap(employeeDO);
     }
+
+    /**
+     * Mandatory hook.
+     */
+    protected abstract WrapperFactoryAbstract createWrapperFactory();
 
     @Test(expected = DisabledException.class)
     public void shouldNotBeAbleToModifyProperty() {
@@ -222,10 +228,10 @@ public class WrappedFactoryDefaultTest_wrappedObject_transient {
         facets = Arrays.asList((Facet)new PropertySetterFacetViaSetterMethod(setPasswordMethod, mockPasswordMember));
         context.checking(new Expectations() {
             {
-                one(mockPasswordMember).getFacets(with(any(Filter.class)));
+                oneOf(mockPasswordMember).getFacets(with(any(Filter.class)));
                 will(returnValue(facets));
                 
-                one(mockPasswordMember).set(mockEmployeeAdapter, mockPasswordAdapter);
+                oneOf(mockPasswordMember).set(mockEmployeeAdapter, mockPasswordAdapter);
             }
         });
 
@@ -237,10 +243,10 @@ public class WrappedFactoryDefaultTest_wrappedObject_transient {
         facets = Arrays.asList((Facet)new PropertyAccessorFacetViaAccessor(getPasswordMethod, mockPasswordMember));
         context.checking(new Expectations() {
             {
-                one(mockPasswordMember).getFacets(with(any(Filter.class)));
+                oneOf(mockPasswordMember).getFacets(with(any(Filter.class)));
                 will(returnValue(facets));
                 
-                one(mockPasswordMember).get(mockEmployeeAdapter);
+                oneOf(mockPasswordMember).get(mockEmployeeAdapter);
                 will(returnValue(mockPasswordAdapter));
             }
         });

@@ -17,17 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.wrapper.internal;
+package org.apache.isis.core.wrapper.handlers;
 
-public class RuntimeExceptionWrapper extends RuntimeException {
-    private static final long serialVersionUID = 1L;
-    private final RuntimeException runtimeException;
+import java.lang.reflect.InvocationHandler;
 
-    public RuntimeExceptionWrapper(final RuntimeException runtimeException) {
-        this.runtimeException = runtimeException;
-    }
+public interface DelegatingInvocationHandler<T> extends InvocationHandler {
 
-    public RuntimeException getRuntimeException() {
-        return runtimeException;
-    }
+    T getDelegate();
+
+    public boolean isResolveObjectChangedEnabled();
+
+    public void setResolveObjectChangedEnabled(boolean resolveObjectChangedEnabled);
+
 }
