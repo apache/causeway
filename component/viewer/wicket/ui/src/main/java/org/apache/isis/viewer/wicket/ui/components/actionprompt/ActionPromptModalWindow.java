@@ -111,9 +111,12 @@ public class ActionPromptModalWindow extends ModalWindow implements ActionPrompt
         // http://api.jqueryui.com/datepicker/#method-show
         //builder.append("$('.first-field input.hasDatepicker').datepicker('show');");
         
-        
-        // ISIS-771: in Wicket 6.12.0 the var ww returns null.
-        builder.append("var ww = Wicket.Window.get();\n ww.autoSizeWindow();\n");
+
+        // ISIS-771, WICKET-5101
+        builder.append("window.setTimeout("
+                + "function() {\n "
+                + "var ww = Wicket.Window.get();\n ww.autoSizeWindow();\n "
+                + "}\n, 0);\n");
         
         target.appendJavaScript(builder.toString());
 

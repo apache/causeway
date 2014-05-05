@@ -23,6 +23,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import com.google.common.primitives.Primitives;
+
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 
 public class MethodExtensions {
@@ -45,9 +47,10 @@ public class MethodExtensions {
         return MethodExtensions.invoke(method, object, parameters);
     }
 
-    public static Object invoke(final Method method, final Object object, final Object[] parameters) {
+    public static Object invoke(final Method method, final Object object, final Object[] arguments) {
         try {
-            return method.invoke(object, parameters);
+            Object[] defaultAnyPrimitive = defaultAnyPrimitive(method.getParameterTypes(), arguments);
+            return method.invoke(object, defaultAnyPrimitive);
         } catch (final IllegalArgumentException e) {
             throw e;
         } catch (final InvocationTargetException e) {
@@ -56,6 +59,27 @@ public class MethodExtensions {
         } catch (final IllegalAccessException e) {
             throw new MetaModelException("illegal access of " + method, e);
         }
+    }
+
+    private static Object[] defaultAnyPrimitive(Class<?>[] parameterTypes, Object[] arguments) {
+        if(parameterTypes == null || arguments == null || parameterTypes.length != arguments.length) {
+            return arguments;
+        }
+        final Object[] argumentsWithPrimitivesDefaulted = new Object[arguments.length];
+        for(int i=0; i<argumentsWithPrimitivesDefaulted.length; i++) {
+            argumentsWithPrimitivesDefaulted[i] = valueIfPrimitiveThenDefaulted(parameterTypes[i], arguments[i]);
+        }
+        return argumentsWithPrimitivesDefaulted;
+    }
+
+    private static Object valueIfPrimitiveThenDefaulted(Class<?> cls, Object argument) {
+        if(argument != null) {
+            return argument;
+        }
+        if(!cls.isPrimitive()) {
+            return argument;
+        }
+        return ClassUtil.defaultByPrimitiveClass.get(cls);
     }
 
     public static Object invokeStatic(final Method method, final Object[] parameters) {
