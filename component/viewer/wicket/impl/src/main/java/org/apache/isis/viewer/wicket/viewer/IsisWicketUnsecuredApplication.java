@@ -28,6 +28,9 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
+import de.agilecoders.wicket.webjars.WicketWebjars;
+import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
+
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
@@ -53,6 +56,7 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
+import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
@@ -85,6 +89,8 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     public static IsisWicketUnsecuredApplication get() {
         return (IsisWicketUnsecuredApplication) WebApplication.get();
     }
+
+    private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 
     /**
      * {@link Inject}ed when {@link #init() initialized}.
@@ -128,15 +134,29 @@ public class IsisWicketUnsecuredApplication extends WebApplication implements Co
     protected void init() {
         super.init();
 
-        // 6.0.0 rather than overriding getRequestCycleSettings
-        // TODO: reinstate REDIRECT_TO_RENDER once WICKET-4773 implemented (Wicket 6.1.0)
-        getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_BUFFER);
-        // 6.0.0 instead of subclassing newRequestCycle
+        // install 2 default collector instances 
+        // (FileAssetPathCollector(WEBJARS_PATH_PREFIX), JarAssetPathCollector)
+        // and a webjars resource finder.
+        WebjarsSettings settings = new WebjarsSettings();
+
+        WicketWebjars.install(this, settings);
+        
+        String isisConfigDir = getServletContext().getInitParameter("isis.config.dir");
+        final String loggingPropertiesDir;
+        if(isisConfigDir != null) {
+            loggingPropertiesDir = isisConfigDir;
+        } else {
+            loggingPropertiesDir = getServletContext().getRealPath("/WEB-INF");
+        }
+
+        loggingConfigurer.configureLogging(loggingPropertiesDir, new String[0]);
+
+        getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_RENDER);
+
         getRequestCycleListeners().add(new WebRequestCycleForIsis());
 
-
-
         getResourceSettings().setParentFolderPlaceholder("$up$");
+
         final DeploymentType deploymentType = determineDeploymentType();
 
         final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder(getServletContext());
