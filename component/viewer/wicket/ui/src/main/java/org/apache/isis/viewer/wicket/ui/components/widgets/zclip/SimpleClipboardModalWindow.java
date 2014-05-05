@@ -101,7 +101,9 @@ public class SimpleClipboardModalWindow extends ModalWindow implements ActionPro
         
         StringBuilder builder = new StringBuilder();
         builder.append("$('.first-field input').focus();\n");
-        builder.append("Wicket.Window.get().autoSizeWindow();\n");
+        
+        // ISIS-771: in Wicket 6.12.0 the var ww returns null.
+        builder.append("var ww = Wicket.Window.get();\n ww.autoSizeWindow();\n");
         target.appendJavaScript(builder.toString());
     }
 

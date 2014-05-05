@@ -189,7 +189,9 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                     super.onError(target, form);
                     if(actionPromptIfAny != null) {
                         // resize, to show any feedback messages.
-                        target.appendJavaScript("Wicket.Window.get().autoSizeWindow();");
+                        
+                        // ISIS-771: in Wicket 6.12.0 the var ww returns null.
+                        target.appendJavaScript("var ww = Wicket.Window.get();\n ww.autoSizeWindow();");
                     }
                     target.add(form);
                 }
