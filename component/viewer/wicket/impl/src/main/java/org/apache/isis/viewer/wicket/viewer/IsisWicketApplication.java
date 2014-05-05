@@ -37,6 +37,11 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
+import de.agilecoders.wicket.webjars.WicketWebjars;
+import de.agilecoders.wicket.webjars.collectors.AssetPathCollector;
+import de.agilecoders.wicket.webjars.collectors.VfsJarAssetPathCollector;
+import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
@@ -220,6 +225,13 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     protected void init() {
         try {
             super.init();
+
+            // install 2 default collector instances 
+            // (FileAssetPathCollector(WEBJARS_PATH_PREFIX), JarAssetPathCollector)
+            // and a webjars resource finder.
+            WebjarsSettings settings = new WebjarsSettings();
+
+            WicketWebjars.install(this, settings);
             
             String isisConfigDir = getServletContext().getInitParameter("isis.config.dir");
             final String loggingPropertiesDir;

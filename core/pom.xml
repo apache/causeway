@@ -71,7 +71,7 @@
         <projectUrl>${project.url}</projectUrl>
 
 		<license.additional-notes>In addition, Isis uses some Javascript libraries:
-* JQuery core and JQuery UI, licensed under the MIT license [1].
+* JQuery UI, licensed under the MIT license [1].
 * Twitter Bootstrap, licensed under ASL v2 [2]
 * JGrowl (JQuery plugin), licensed under MIT license [3]
 * LiveQuery (JQuery plugin), licensed under MIT license [4]

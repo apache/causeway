@@ -106,6 +106,17 @@
 		    <artifactId>wicket-select2</artifactId>
 		</dependency>
 
+        <!-- WEBJARS -->
+        <dependency>
+            <groupId>de.agilecoders.wicket.webjars</groupId>
+            <artifactId>wicket-webjars</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+        </dependency>
+
 		<!-- LOGGING DEPENDENCIES - LOG4J -->
 
 		<dependency>

@@ -43,6 +43,9 @@
         <wicket.version>6.15.0</wicket.version>
         <wicket-jquery-ui.version>6.15.0</wicket-jquery-ui.version>
         <wicketstuff.version>6.15.0</wicketstuff.version>
+
+        <wicket-webjars.version>0.4.1</wicket-webjars.version>
+        <webjars-bootstrap.version>2.3.2</webjars-bootstrap.version>
         
         <wicket-select2.version>2.2.2</wicket-select2.version>
     </properties>
@@ -261,12 +264,32 @@
 			    <version>${wicket-select2.version}</version>
 				<exclusions>
 					<exclusion>
-		        			<!-- for dependency convergence -->
+	        			<!-- for dependency convergence -->
 						<groupId>org.apache.wicket</groupId>
 						<artifactId>wicket-core</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
+
+            <!-- Webjars -->
+            <dependency>
+                <groupId>de.agilecoders.wicket.webjars</groupId>
+                <artifactId>wicket-webjars</artifactId>
+                <version>${wicket-webjars.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- for dependency convergence -->
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+    
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>bootstrap</artifactId>
+                <version>${webjars-bootstrap.version}</version>
+            </dependency>
 
 			<!-- Other -->
 			<dependency>

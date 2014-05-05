@@ -19,19 +19,25 @@
 
 package org.apache.isis.viewer.wicket.ui.pages;
 
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Strings;
+import com.google.common.io.Resources;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+
+import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -46,6 +52,7 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -240,8 +247,18 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     @Override
     public void renderHead(IHeaderResponse response) {
+        
         super.renderHead(response);
+
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
+        response.render(new PriorityHeaderItem(CssReferenceHeaderItem.forReference(new CssResourceReference(PageAbstract.class, "cssreset.css"))));
+        
+        // this works, but renders slightly differently (even though rendered in same place as own copy)
+        // I'm guessing that our bootstrap is customized (was not a 'vanilla' installation).
+        // have therefore left in 
+        
+        //response.render(new PriorityHeaderItem(CssHeaderItem.forReference(new WebjarsCssResourceReference("bootstrap/2.3.2/css/bootstrap.css"))));
+        
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_ISIS_WICKET_VIEWER_JS));
