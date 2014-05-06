@@ -25,16 +25,14 @@ import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
-import org.apache.isis.viewer.wicket.viewer.IsisWicketUnsecuredApplication;
 
 /**
  * {@link DeploymentType} for production usage.
  * 
  * <p>
- * In {@link IsisWicketApplication} and {@link IsisWicketUnsecuredApplication} there
- * is logic to select either this {@link DeploymentType} or {@link WicketServerPrototype}
- * depending on the value of Wicket's own
- * {@link Application#getConfigurationType() configuration mode}. 
+ * In {@link IsisWicketApplication} there is logic to select either this 
+ * {@link DeploymentType} or {@link WicketServerPrototype} depending on the 
+ * value of Wicket's own {@link Application#getConfigurationType() configuration mode}. 
  */
 public class DeploymentTypeWicketAbstract extends DeploymentTypeAbstract {
 
