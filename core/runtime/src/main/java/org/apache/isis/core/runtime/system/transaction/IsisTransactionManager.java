@@ -380,7 +380,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
             if(abortCause == null) {
                 
                 try {
-                    getTransaction().commit();
+                    getTransaction().preCommit();
                 } catch(RuntimeException ex) {
                     // just in case any new exception was raised...
                     abortCause = ex;
@@ -400,7 +400,18 @@ public class IsisTransactionManager implements SessionScopedComponent {
                     getTransaction().setAbortCause(new IsisTransactionManagerException(ex));
                 }
             }
+
+            if(abortCause == null) {
+                try {
+                    getTransaction().commit();
+                } catch(RuntimeException ex) {
+                    // just in case any new exception was raised...
+                    abortCause = ex;
+                    transactionLevel = 1; // because the transactionLevel was decremented earlier
+                }
+            }
             
+
             if(abortCause != null) {
                 
                 if (LOG.isDebugEnabled()) {

@@ -277,6 +277,8 @@ public class IsisTransactionTest {
         
         transaction.addCommand(command);
         transaction.addCommand(command2);
+        
+        transaction.preCommit();
         transaction.commit();
     }
 
@@ -298,6 +300,8 @@ public class IsisTransactionTest {
         
         transaction.addCommand(command);
         transaction.addCommand(command2);
+
+        transaction.preCommit();
         transaction.commit();
     }
 
@@ -320,6 +324,8 @@ public class IsisTransactionTest {
         
         transaction.addCommand(command);
         transaction.addCommand(command2);
+
+        transaction.preCommit();
         transaction.commit();
     }
 
@@ -343,6 +349,8 @@ public class IsisTransactionTest {
         transaction.addCommand(command);
         transaction.addCommand(command2);
         transaction.addCommand(command3);
+
+        transaction.preCommit();
         transaction.commit();
     }
 
@@ -366,6 +374,8 @@ public class IsisTransactionTest {
         transaction.addCommand(command);
         transaction.addCommand(command2);
         transaction.addCommand(command3);
+
+        transaction.preCommit();
         transaction.commit();
     }
 
@@ -382,6 +392,8 @@ public class IsisTransactionTest {
             }
         });
 
+
+        transaction.preCommit();
         transaction.commit();
     }
 
@@ -397,6 +409,8 @@ public class IsisTransactionTest {
     public void shouldThrowExceptionIfAttemptToCommitAnAlreadyAbortedTransaction() throws Exception {
         transaction.markAsAborted();
 
+
+        transaction.preCommit();
         transaction.commit();
     }
 
@@ -412,6 +426,8 @@ public class IsisTransactionTest {
             }
         });
 
+
+        transaction.preCommit();
         transaction.commit();
 
         transaction.markAsAborted();
@@ -428,8 +444,12 @@ public class IsisTransactionTest {
                 oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
             }
         });
+
+        transaction.preCommit();
         transaction.commit();
 
+
+        transaction.preCommit();
         transaction.commit();
     }
 }

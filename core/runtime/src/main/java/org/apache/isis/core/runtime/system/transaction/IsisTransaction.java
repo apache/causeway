@@ -705,16 +705,15 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     
     // ////////////////////////////////////////////////////////////////
-    // commit
+    // preCommit, commit
     // ////////////////////////////////////////////////////////////////
 
-    public synchronized final void commit() {
-
+    synchronized void preCommit() {
         ensureThatState(getState().canCommit(), is(true), "state is: " + getState());
         ensureThatState(abortCause, is(nullValue()), "cannot commit: an abort cause has been set");
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("commit transaction " + this);
+            LOG.debug("preCommit transaction " + this);
         }
 
         if (getState() == State.COMMITTED) {
@@ -723,24 +722,9 @@ public class IsisTransaction implements TransactionScopedComponent {
             }
             return;
         }
-        
 
         try {
-            doAudit(getChangedObjectProperties());
-            
-            final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
-            final Timestamp endTimestamp = Clock.getTimeAsJavaSqlTimestamp();
-            
-            publishActionIfRequired(currentUser, endTimestamp);
-            doFlush();
-            
-            publishedChangedObjectsIfRequired(currentUser, endTimestamp);
-            doFlush();
-            
-            closeServices();
-            doFlush();
-            
-            setState(State.COMMITTED);
+            preCommitServices();
         } catch (final RuntimeException ex) {
             setAbortCause(new IsisTransactionManagerException(ex));
             clearCommandServiceIfConfigured();
@@ -748,7 +732,23 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
-    
+
+    private void preCommitServices() {
+        doAudit(getChangedObjectProperties());
+        
+        final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
+        final Timestamp endTimestamp = Clock.getTimeAsJavaSqlTimestamp();
+        
+        publishActionIfRequired(currentUser, endTimestamp);
+        doFlush();
+        
+        publishedChangedObjectsIfRequired(currentUser, endTimestamp);
+        doFlush();
+        
+        closeServices();
+        doFlush();
+    }
+
     private void clearCommandServiceIfConfigured() {
         completeCommandIfConfigured();
     }
@@ -788,6 +788,29 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
+
+    // ////////////////////////////////////////////////////////////////
+
+    public synchronized void commit() {
+        ensureThatState(getState().canCommit(), is(true), "state is: " + getState());
+        ensureThatState(abortCause, is(nullValue()), "cannot commit: an abort cause has been set");
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("postCommit transaction " + this);
+        }
+
+        if (getState() == State.COMMITTED) {
+            if (LOG.isInfoEnabled()) {
+                LOG.info("already committed; ignoring");
+            }
+            return;
+        }
+
+        setState(State.COMMITTED);
+    }
+
+
+    
     // ////////////////////////////////////////////////////////////////
     // markAsAborted
     // ////////////////////////////////////////////////////////////////
