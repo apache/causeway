@@ -253,11 +253,14 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
         response.render(new PriorityHeaderItem(CssReferenceHeaderItem.forReference(new CssResourceReference(PageAbstract.class, "cssreset.css"))));
         
-        // this works, but renders slightly differently (even though rendered in same place as own copy)
+        // the following line, using wicket-webjars, does work, but renders slightly differently 
+        // (even though the link is rendered in same place as when having the link directly in PageAbstract.html)
         // I'm guessing that our bootstrap is customized (was not a 'vanilla' installation).
-        // have therefore left in 
+        // Am therefore continuing to use our own copy, linked from PageAbstract.html, and have commented the line below out.
+        //
+        // NB: the use of 'current' in the link means to use the version referenced in the pom.xml.
         
-        //response.render(new PriorityHeaderItem(CssHeaderItem.forReference(new WebjarsCssResourceReference("bootstrap/2.3.2/css/bootstrap.css"))));
+        //response.render(new PriorityHeaderItem(CssHeaderItem.forReference(new WebjarsCssResourceReference("bootstrap/current/css/bootstrap.css"))));
         
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
