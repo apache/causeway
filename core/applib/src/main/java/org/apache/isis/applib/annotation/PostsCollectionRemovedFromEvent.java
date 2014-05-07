@@ -24,7 +24,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.services.eventbus.RemovedFromCollectionEvent;
+import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 
 /**
  * Applies only to collections; any changes should be propagated as events to subscribers.  
@@ -32,10 +32,12 @@ import org.apache.isis.applib.services.eventbus.RemovedFromCollectionEvent;
  * 
  * <p>For example:
  * <pre>
- * public static class DomainEntityRemovedFromCollectionEvent extends RemovedFromCollectionEvent {}
+ * public class Order {
+ *   public static class OrderLineItemsRemovedFromEvent extends CollectionRemovedFromEvent {}
  * 
- * &#64;PostsRemovedFromCollectionEvent(DomainEntityRemovedFromCollectionEvent.class)
- * public DomainEntity getDomainEntity() { ...}
+ *   &#64;PostsCollectionRemovedFromEvent(OrderLineItemsRemovedFromEvent.class)
+ *   public SortedSet&lt;OrderLine&gt; getLineItems() { ...}
+ * }
  * </pre>
  * 
  * <p>
@@ -43,17 +45,19 @@ import org.apache.isis.applib.services.eventbus.RemovedFromCollectionEvent;
  * Domain services are guaranteed to be instantiated and resident in memory, whereas the same is not true
  * of domain entities.  The typical implementation of a domain service subscriber is to identify the impacted entities,
  * load them using a repository, and then to delegate to the event to them.
+ * 
+ * @see PostsCollectionAddedToEvent
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
-public @interface PostsRemovedFromCollectionEvent {
+public @interface PostsCollectionRemovedFromEvent {
 
     /**
-     * The subclass of {@link RemovedFromCollectionEvent event} to be instantiated and posted.
+     * The subclass of {@link CollectionRemovedFromEvent event} to be instantiated and posted.
      * 
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      */
-    Class<? extends RemovedFromCollectionEvent<?,?>> value();
+    Class<? extends CollectionRemovedFromEvent<?,?>> value();
 
 }

@@ -24,7 +24,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.services.eventbus.AddedToCollectionEvent;
+import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 
 /**
  * Applies only to collections; any changes should be propagated as events to subscribers.  
@@ -32,10 +32,12 @@ import org.apache.isis.applib.services.eventbus.AddedToCollectionEvent;
  * 
  * <p>For example:
  * <pre>
- * public static class DomainEntityAddedToCollectionEvent extends AddedToCollectionEvent {}
+ * public class Order {
+ *   public static class OrderLineItemsAddedToEvent extends CollectionAddedToEvent {}
  * 
- * &#64;PostsAddedToCollectionEvent(DomainEntityAddedToCollectionEvent.class)
- * public DomainEntity getDomainEntity() { ...}
+ *   &#64;PostsCollectionAddedToEvent(OrderLineItemsAddedToEvent.class)
+ *   public SortedSet&lt;OrderLine&gt; getLineItems() { ...}
+ * }
  * </pre>
  * 
  * <p>
@@ -43,17 +45,19 @@ import org.apache.isis.applib.services.eventbus.AddedToCollectionEvent;
  * Domain services are guaranteed to be instantiated and resident in memory, whereas the same is not true
  * of domain entities.  The typical implementation of a domain service subscriber is to identify the impacted entities,
  * load them using a repository, and then to delegate to the event to them.
+ * 
+ * @see PostsCollectionRemovedFromEvent
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
-public @interface PostsAddedToCollectionEvent {
+public @interface PostsCollectionAddedToEvent {
 
     /**
-     * The subclass of {@link AddedToCollectionEvent event} to be instantiated and posted.
+     * The subclass of {@link CollectionAddedToEvent event} to be instantiated and posted.
      * 
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      */
-    Class<? extends AddedToCollectionEvent<?,?>> value();
+    Class<? extends CollectionAddedToEvent<?,?>> value();
 
 }

@@ -20,21 +20,21 @@ package org.apache.isis.applib.services.eventbus;
 
 import org.apache.isis.applib.util.ObjectContracts;
 
-public abstract class RemovedFromCollectionEvent<S,T> {
+public abstract class CollectionRemovedFromEvent<S,T> {
     private final S source;
     private final T removedValue;
     
     /**
-     * To instantiate reflectively when the {@link PostsAddedToCollectionEvent} annotation
+     * To instantiate reflectively when the {@link PostsCollectionAddedToEvent} annotation
      * is used.
      * 
      * <p>
      * The fields ({@link #source} and {@link #removedValue} are then set reflectively.
      */
-    public RemovedFromCollectionEvent() {
+    public CollectionRemovedFromEvent() {
         this(null, null);
     }
-    public RemovedFromCollectionEvent(S source, T removedValue) {
+    public CollectionRemovedFromEvent(S source, T removedValue) {
         this.source = source;
         this.removedValue = removedValue;
     }

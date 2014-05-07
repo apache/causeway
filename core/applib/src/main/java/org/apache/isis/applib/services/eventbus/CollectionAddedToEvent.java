@@ -21,7 +21,7 @@ package org.apache.isis.applib.services.eventbus;
 import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public abstract class AddedToCollectionEvent<S,T> {
+public abstract class CollectionAddedToEvent<S,T> {
     private final S source;
     private final T addedValue;
     
@@ -32,10 +32,10 @@ public abstract class AddedToCollectionEvent<S,T> {
      * <p>
      * The fields ({@link #source} and {@link #addedValue} are then set reflectively.
      */
-    public AddedToCollectionEvent() {
+    public CollectionAddedToEvent() {
         this(null, null);
     }
-    public AddedToCollectionEvent(S source, T addedValue) {
+    public CollectionAddedToEvent(S source, T addedValue) {
         this.source = source;
         this.addedValue = addedValue;
     }

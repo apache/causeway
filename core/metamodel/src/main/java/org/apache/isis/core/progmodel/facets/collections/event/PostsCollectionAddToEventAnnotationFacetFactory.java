@@ -23,8 +23,8 @@ import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.isis.applib.annotation.PostsAddedToCollectionEvent;
-import org.apache.isis.applib.services.eventbus.AddedToCollectionEvent;
+import org.apache.isis.applib.annotation.PostsCollectionAddedToEvent;
+import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.ServicesProviderAware;
@@ -61,7 +61,7 @@ public class PostsCollectionAddToEventAnnotationFacetFactory extends FacetFactor
     }
 
     private PostsAddedToCollectionEventFacet create(Method method, final FacetHolder holder) {
-        final PostsAddedToCollectionEvent annotation = Annotations.getAnnotation(method, PostsAddedToCollectionEvent.class);
+        final PostsCollectionAddedToEvent annotation = Annotations.getAnnotation(method, PostsCollectionAddedToEvent.class);
         if(annotation == null) {
             return null;
         }
@@ -80,7 +80,7 @@ public class PostsCollectionAddToEventAnnotationFacetFactory extends FacetFactor
         if(collectionFacet != null) {
             holder.removeFacet(collectionFacet);
         }
-        final Class<? extends AddedToCollectionEvent<?,?>> changedEventType = annotation.value();
+        final Class<? extends CollectionAddedToEvent<?,?>> changedEventType = annotation.value();
         return new PostsCollectionAddToEventFacetAnnotation(changedEventType, postsAddedToCollectionEventFacet, collectionAddToFacet, collectionFacet, servicesProvider, holder);
     }
 

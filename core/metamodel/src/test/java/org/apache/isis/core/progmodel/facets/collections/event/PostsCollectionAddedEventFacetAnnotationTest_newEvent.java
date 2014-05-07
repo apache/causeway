@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.progmodel.facets.properties.event;
+package org.apache.isis.core.progmodel.facets.collections.event;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -28,14 +28,14 @@ public class PostsCollectionAddedEventFacetAnnotationTest_newEvent {
 
     public static class SomeDomainObject {}
     
-    public static class SomeDomainObjectCollectionAddedEvent extends AddToCollectionEvent<SomeDomainObject, SomeDomainObject> {}
-    
-    @Test
-    public void test() throws Exception {
-        SomeDomainObject sdo = new SomeDomainObject();
-        final PropertyChangedEvent<SomeDomainObject, LocalDate> ev = PostsPropertyChangedEventFacetAnnotation.newEvent(SomeDatePropertyChangedEvent.class, new SomeDomainObject(), sdo);
-        assertThat(ev.getSource(), is(sdo));
-        assertThat(ev.getNewValue(), is(new LocalDate(2013,4,1)));
-    }
+//    public static class SomeDomainObjectCollectionAddedEvent extends AddToCollectionEvent<SomeDomainObject, SomeDomainObject> {}
+//    
+//    @Test
+//    public void test() throws Exception {
+//        SomeDomainObject sdo = new SomeDomainObject();
+//        final PropertyChangedEvent<SomeDomainObject, LocalDate> ev = PostsPropertyChangedEventFacetAnnotation.newEvent(SomeDatePropertyChangedEvent.class, new SomeDomainObject(), sdo);
+//        assertThat(ev.getSource(), is(sdo));
+//        assertThat(ev.getNewValue(), is(new LocalDate(2013,4,1)));
+//    }
 
 }

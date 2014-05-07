@@ -26,7 +26,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.FatalException;
-import org.apache.isis.applib.services.eventbus.AddedToCollectionEvent;
+import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
@@ -47,10 +47,10 @@ public class PostsCollectionAddToEventFacetAnnotation extends
 
 	private EventBusService eventBusService;
 	private boolean searchedForEventBusService = false;
-	private Class<? extends AddedToCollectionEvent<?, ?>> addedToCollectionEventType;
+	private Class<? extends CollectionAddedToEvent<?, ?>> addedToCollectionEventType;
 
 	public PostsCollectionAddToEventFacetAnnotation(
-			Class<? extends AddedToCollectionEvent<?, ?>> addedToCollectionEventType,
+			Class<? extends CollectionAddedToEvent<?, ?>> addedToCollectionEventType,
 			CollectionAddToFacet collectionAddToFacet,
 			CollectionFacet collectionFacet,
 			ServicesProvider servicesProvider, FacetHolder holder) {
@@ -86,7 +86,7 @@ public class PostsCollectionAddToEventFacetAnnotation extends
 		final Object source = inObject.getObject();
 		try {
 			final Class type =  addedToCollectionEventType;
-			final AddedToCollectionEvent<?, ?> event = newEvent(type, addedValue, source);
+			final CollectionAddedToEvent<?, ?> event = newEvent(type, addedValue, source);
 
 			eventBusService.post(event);
 		} catch (Exception e) {
@@ -95,12 +95,12 @@ public class PostsCollectionAddToEventFacetAnnotation extends
 	}
 
 
-	static <S, T> AddedToCollectionEvent<S, T> newEvent(
-			final Class<? extends AddedToCollectionEvent<S, T>> type,
+	static <S, T> CollectionAddedToEvent<S, T> newEvent(
+			final Class<? extends CollectionAddedToEvent<S, T>> type,
 			final T addedValue, final S source)
 			throws InstantiationException, IllegalAccessException,
 			NoSuchFieldException {
-		final AddedToCollectionEvent<S, T> event = type.newInstance();
+		final CollectionAddedToEvent<S, T> event = type.newInstance();
 
 		setField("source", event, source);
 		setField("addedValue", event, addedValue);
@@ -108,9 +108,9 @@ public class PostsCollectionAddToEventFacetAnnotation extends
 	}
 
 	private static void setField(final String name,
-			final AddedToCollectionEvent<?, ?> event, final Object sourceValue)
+			final CollectionAddedToEvent<?, ?> event, final Object sourceValue)
 			throws NoSuchFieldException, IllegalAccessException {
-		final Field sourceField = AddedToCollectionEvent.class
+		final Field sourceField = CollectionAddedToEvent.class
 				.getDeclaredField(name);
 		sourceField.setAccessible(true);
 		sourceField.set(event, sourceValue);
