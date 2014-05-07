@@ -67,7 +67,7 @@ public class ActionArgumentEvent extends ValidityEvent {
     
     @Override
     public String getReasonMessage() {
-    	return String.format("%s. Position: %s. Proposed: %s", super.getReasonMessage(), this.getPosition(), this.getProposed());
+    	return String.format("Invalid action argument. Position: %s. Proposed value: %s. Reason: %s", this.getPosition(), this.getProposed(), super.getReasonMessage());
     }
     
 }
