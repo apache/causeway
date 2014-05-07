@@ -47,6 +47,7 @@ import org.apache.isis.core.progmodel.facets.collections.aggregated.ParentedSinc
 import org.apache.isis.core.progmodel.facets.collections.clear.CollectionClearFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.collection.CollectionFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.disabled.fromimmutable.DisabledFacetForCollectionDerivedFromImmutableTypeFacetFactory;
+import org.apache.isis.core.progmodel.facets.collections.event.PostsCollectionAddedToEventAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionAddRemoveAndValidateFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.notpersisted.annotation.NotPersistedAnnotationForCollectionFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.sortedby.SortedByAnnotationFacetFactory;
@@ -362,8 +363,11 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(DisabledFacetForPropertyDerivedFromImmutableTypeFacetFactory.class);
         addFactory(DisabledFacetForCollectionDerivedFromImmutableTypeFacetFactory.class);
 
+        // must come after the property/collection/action accessor+mutator facet factories
         addFactory(PostsPropertyChangedEventAnnotationFacetFactory.class);
+        addFactory(PostsCollectionAddedToEventAnnotationFacetFactory.class);
 
+        
         addFactory(ImmutableMarkerInterfaceFacetFactory.class);
 
         addFactory(ViewModelIntefaceFacetFactory.class);

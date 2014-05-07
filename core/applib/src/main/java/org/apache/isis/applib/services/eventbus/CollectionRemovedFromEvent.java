@@ -18,37 +18,52 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.util.ObjectContracts;
 
 public abstract class CollectionRemovedFromEvent<S,T> {
+    
+    public static class Default extends CollectionRemovedFromEvent<Object, Object> {}
+
     private final S source;
-    private final T removedValue;
+    private final Identifier identifier;
+    private final T value;
     
     /**
-     * To instantiate reflectively when the {@link PostsCollectionAddedToEvent} annotation
+     * To instantiate reflectively when the {@link PostsCollectionRemovedFromEvent} annotation
      * is used.
      * 
      * <p>
-     * The fields ({@link #source} and {@link #removedValue} are then set reflectively.
+     * The fields ({@link #source} and {@link #value} are then set reflectively.
      */
     public CollectionRemovedFromEvent() {
-        this(null, null);
+        this(null, null, null);
     }
-    public CollectionRemovedFromEvent(S source, T removedValue) {
+    /**
+     * @deprecated - use {@link #CollectionRemovedFromEvent(Object, Identifier, Object)}
+     */
+    @Deprecated
+    public CollectionRemovedFromEvent(S source, T value) {
+        this(source, null, value);
+    }
+    public CollectionRemovedFromEvent(S source, Identifier identifier, T value) {
         this.source = source;
-        this.removedValue = removedValue;
+        this.identifier = identifier;
+        this.value = value;
     }
 
     public S getSource() {
         return source;
     }
-    
-    public T getRemovedValue() {
-        return removedValue;
+    public Identifier getIdentifier() {
+        return identifier;
+    }
+    public T getValue() {
+        return value;
     }
     
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "source,removedValue");
+        return ObjectContracts.toString(this, "source,value");
     }
 }

@@ -28,8 +28,8 @@ import javassist.util.proxy.ProxyObject;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils;
-import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils.ImperativeFacetFlags;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
@@ -54,7 +54,7 @@ public class ObjectResolveAndObjectChangedEnhancer extends ObjectResolveAndObjec
             public Object invoke(final Object proxied, final Method proxyMethod, final Method proxiedMethod, final Object[] args) throws Throwable {
 
                 final boolean ignore = proxyMethod.getDeclaringClass().equals(Object.class);
-                ImperativeFacetFlags flags = null;
+                ImperativeFacet.Flags flags = null;
 
                 if (!ignore) {
                     final ObjectSpecificationDefault targetObjSpec = getJavaSpecificationOfOwningClass(proxiedMethod);

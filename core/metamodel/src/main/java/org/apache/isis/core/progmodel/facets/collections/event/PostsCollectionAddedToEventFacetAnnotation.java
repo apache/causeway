@@ -20,90 +20,108 @@
 package org.apache.isis.core.progmodel.facets.collections.event;
 
 import java.lang.reflect.Field;
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.FatalException;
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.WrapperPolicy;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.collections.event.PostsAddedToCollectionEventFacet;
-import org.apache.isis.core.metamodel.facets.collections.event.PostsCollectionAddToEventFacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.collections.event.PostsCollectionAddedToEventFacet;
+import org.apache.isis.core.metamodel.facets.collections.event.PostsCollectionAddedToEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 
-public class PostsCollectionAddToEventFacetAnnotation extends
-		PostsCollectionAddToEventFacetAbstract {
+public class PostsCollectionAddedToEventFacetAnnotation 
+        extends PostsCollectionAddedToEventFacetAbstract {
 
+    private final PropertyOrCollectionAccessorFacet getterFacet;
 	private final CollectionAddToFacet collectionAddToFacet;
-	private final CollectionFacet collectionFacet;
 	private final ServicesProvider servicesProvider;
 
 	private EventBusService eventBusService;
 	private boolean searchedForEventBusService = false;
-	private Class<? extends CollectionAddedToEvent<?, ?>> addedToCollectionEventType;
 
-	public PostsCollectionAddToEventFacetAnnotation(
-			Class<? extends CollectionAddedToEvent<?, ?>> addedToCollectionEventType,
-			CollectionAddToFacet collectionAddToFacet,
-			CollectionFacet collectionFacet,
-			ServicesProvider servicesProvider, FacetHolder holder) {
-		super(holder);
-		this.addedToCollectionEventType = addedToCollectionEventType;
+	public PostsCollectionAddedToEventFacetAnnotation(
+			final Class<? extends CollectionAddedToEvent<?, ?>> eventType,
+            final WrapperPolicy wrapperPolicy,
+			final PropertyOrCollectionAccessorFacet getterFacet,
+			final CollectionAddToFacet collectionAddToFacet,
+			final ServicesProvider servicesProvider, 
+			final FacetHolder holder) {
+		super(eventType, wrapperPolicy, holder);
+        this.getterFacet = getterFacet;
 		this.collectionAddToFacet = collectionAddToFacet;
-		this.collectionFacet = collectionFacet;
 		this.servicesProvider = servicesProvider;
 	}
 
 	@Override
-	public void add(ObjectAdapter inObject, ObjectAdapter value) {
+	public void add(ObjectAdapter targetAdapter, ObjectAdapter referencedObjectAdapter) {
 		if (this.collectionAddToFacet == null) {
 			return;
 		}
 		eventBusService = getEventBusService();
 		if (eventBusService == null) {
-			collectionAddToFacet.add(inObject, value);
+			collectionAddToFacet.add(targetAdapter, referencedObjectAdapter);
 			return;
 		}
 
-		final Boolean previouslyExisting = this.collectionFacet.contains(
-				inObject, value);
-		if (!previouslyExisting) {
-			collectionAddToFacet.add(inObject, value);
-			postEvent(inObject, value);
+		final Object referencedObject = AdapterUtils.unwrap(referencedObjectAdapter);
+		
+		// get hold of underlying collection
+		final Object collection = getterFacet.getProperty(targetAdapter);
+
+		// don't post event if has set semantics and contains object
+		if(collection instanceof Set) {
+            Set<?> set = (Set<?>) collection;
+            if(set.contains(referencedObject)) {
+                return;
+            }
 		}
+
+		// either doesn't contain object, or doesn't have set semantics, so post event
+		collectionAddToFacet.add(targetAdapter, referencedObjectAdapter);
+		
+		postEvent(targetAdapter, getIdentified().getIdentifier(), referencedObject);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void postEvent(ObjectAdapter inObject,
-			final Object addedValue) {
-		final Object source = inObject.getObject();
+	private void postEvent(
+	        final ObjectAdapter targetAdapter,
+            final Identifier identifier,
+			final Object addedReference) {
+	    
+		final Object source = targetAdapter.getObject();
 		try {
-			final Class type =  addedToCollectionEventType;
-			final CollectionAddedToEvent<?, ?> event = newEvent(type, addedValue, source);
-
+			final Class type = value();
+			final CollectionAddedToEvent<?, ?> event = newEvent(type, source, identifier, addedReference);
 			eventBusService.post(event);
 		} catch (Exception e) {
 			throw new FatalException(e);
 		}
 	}
 
-
 	static <S, T> CollectionAddedToEvent<S, T> newEvent(
 			final Class<? extends CollectionAddedToEvent<S, T>> type,
-			final T addedValue, final S source)
+			final S source, 
+			final Identifier identifier,
+			final T value)
 			throws InstantiationException, IllegalAccessException,
 			NoSuchFieldException {
 		final CollectionAddedToEvent<S, T> event = type.newInstance();
 
 		setField("source", event, source);
-		setField("addedValue", event, addedValue);
+		setField("identifier", event, identifier);
+		setField("value", event, value);
 		return event;
 	}
 
@@ -134,12 +152,15 @@ public class PostsCollectionAddToEventFacetAnnotation extends
 
 	// //////////////////////////////////////
 	// MultiTypedFacet
+	// //////////////////////////////////////
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Class<? extends Facet>[] facetTypes() {
-		return Lists.newArrayList(PostsAddedToCollectionEventFacet.class,
-				CollectionAddToFacet.class).toArray(
+		return Lists.newArrayList(
+		            type(), // ie CollectionAddedToFacet
+    		        PostsCollectionAddedToEventFacet.class
+				).toArray(
 				new Class[] {});
 	}
 
@@ -148,7 +169,5 @@ public class PostsCollectionAddToEventFacetAnnotation extends
 	public <T extends Facet> T getFacet(Class<T> facet) {
 		return (T) this;
 	}
-
-
 
 }

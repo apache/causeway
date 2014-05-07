@@ -22,6 +22,7 @@ import static org.junit.Assert.assertThat;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 
 public class PostsPropertyChangedEventFacetAnnotationTest_newEvent {
@@ -32,11 +33,18 @@ public class PostsPropertyChangedEventFacetAnnotationTest_newEvent {
     
     @Test
     public void test() throws Exception {
+
         SomeDomainObject sdo = new SomeDomainObject();
-        final PropertyChangedEvent<SomeDomainObject, LocalDate> ev = PostsPropertyChangedEventFacetAnnotation.newEvent(SomeDatePropertyChangedEvent.class, new LocalDate(2013,4,1), new LocalDate(2013,5,2), sdo);
+        Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "someDateProperty");
+        LocalDate oldValue = new LocalDate(2013,4,1);
+        LocalDate newValue = new LocalDate(2013,5,2);
+        
+        final PropertyChangedEvent<SomeDomainObject, LocalDate> ev = 
+                PostsPropertyChangedEventFacetAnnotation.newEvent(SomeDatePropertyChangedEvent.class, sdo, identifier, oldValue, newValue);
         assertThat(ev.getSource(), is(sdo));
-        assertThat(ev.getOldValue(), is(new LocalDate(2013,4,1)));
-        assertThat(ev.getNewValue(), is(new LocalDate(2013,5,2)));
+        assertThat(ev.getIdentifier(), is(identifier));
+        assertThat(ev.getOldValue(), is(oldValue));
+        assertThat(ev.getNewValue(), is(newValue));
     }
 
 }

@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
+import org.apache.isis.applib.annotation.WrapperPolicy;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
@@ -75,14 +76,22 @@ public class PostsPropertyChangedEventAnnotationFacetFactory extends FacetFactor
         if (clearFacet == null && setterFacet == null) {
             return null;
         }
+        
+        
+        // REVIEW: I'm a bit uncertain about this; this facet is multi-valued, but the setUnderlying(...) stuff only
+        // works for single valued types.
+        // the wrapperFactory stuff looks for underlying to find the imperative method, I think this only works in this
+        // case because (by accident rather than design) there is also the PropertyInitializationFacet wrapping the setter.
         if(setterFacet != null) {
             holder.removeFacet(setterFacet);
         }
         if(clearFacet != null) {
             holder.removeFacet(clearFacet);
         }
+        
         final Class<? extends PropertyChangedEvent<?, ?>> changedEventType = annotation.value();
-        return new PostsPropertyChangedEventFacetAnnotation(changedEventType, getterFacet, setterFacet, clearFacet, servicesProvider, holder);
+        final WrapperPolicy wrapperPolicy = annotation.wrapperPolicy();
+        return new PostsPropertyChangedEventFacetAnnotation(changedEventType, wrapperPolicy, getterFacet, setterFacet, clearFacet, servicesProvider, holder);
     }
 
     @Override

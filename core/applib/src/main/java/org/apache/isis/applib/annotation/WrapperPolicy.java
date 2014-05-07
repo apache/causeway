@@ -16,19 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.annotation;
 
-package org.apache.isis.core.metamodel.facets.collections.event;
-
-import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
- * Indicates that (the specified subclass of) {@link PropertyChangedEvent} should be posted to the
- * {@link EventBusService}.
+ * An attribute of {@link PostsPropertyChangedEvent}, {@link PostsCollectionAddedToEvent} and other related annotations;
+ * is a hint to indicate that if the object member is interacted with through a {@link WrapperFactory}, then whether 
+ * business rules (&quot;see it, use it, do it&quot;) should be enforced or not.
+ * 
+ * <p>
+ * This provides a half-way house between strictly UI-interactions and fully programmatic interactions, so that an 
+ * event can be fired programmatically even if the object is disabled in the UI.
  */
-public interface PostsAddedToCollectionEventFacet extends CollectionAddToFacet, MultiTypedFacet, Facet {
-
+public enum WrapperPolicy {
+    ENFORCE_RULES,
+    SKIP_RULES
 }

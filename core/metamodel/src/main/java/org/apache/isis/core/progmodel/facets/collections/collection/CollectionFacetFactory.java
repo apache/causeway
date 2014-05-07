@@ -51,11 +51,11 @@ public class CollectionFacetFactory extends FacetFactoryAbstract implements Coll
 
     }
 
-    private void processCollectionType(final ProcessClassContext processClassContaxt) {
-        final FacetHolder facetHolder = processClassContaxt.getFacetHolder();
+    private void processCollectionType(final ProcessClassContext processClassContext) {
+        final FacetHolder facetHolder = processClassContext.getFacetHolder();
         final TypeOfFacet typeOfFacet = facetHolder.getFacet(TypeOfFacet.class);
         if (typeOfFacet == null) {
-            final Class<?> collectionElementType = collectionElementType(processClassContaxt.getCls());
+            final Class<?> collectionElementType = collectionElementType(processClassContext.getCls());
             facetHolder.addFacet(collectionElementType != Object.class ? new TypeOfFacetInferredFromGenerics(collectionElementType, facetHolder, getSpecificationLoader()) : new TypeOfFacetDefaultToObject(facetHolder, getSpecificationLoader()));
         } else {
             // nothing

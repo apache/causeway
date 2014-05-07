@@ -22,7 +22,9 @@ import com.google.common.eventbus.Subscribe;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 
 public class ToDoItemSubscriptions {
 
@@ -36,6 +38,18 @@ public class ToDoItemSubscriptions {
         LOG.info(ev.getEventDescription() + ": " + container.titleOf(ev.getToDoItem()));
     }
 
+    @Programmatic
+    @Subscribe
+    public void on(PropertyChangedEvent<?,?> ev) {
+        LOG.info(container.titleOf(ev.getSource()) + ", changed " + ev.getIdentifier().getMemberName() + " : " + ev.getOldValue() + " -> " + ev.getNewValue());
+    }
+    
+    @Programmatic
+    @Subscribe
+    public void on(CollectionAddedToEvent<?,?> ev) {
+        LOG.info(container.titleOf(ev.getSource()) + ", added to " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
+    }
+    
     //region > injected services
     // //////////////////////////////////////
     

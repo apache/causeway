@@ -19,23 +19,33 @@ package org.apache.isis.core.progmodel.facets.collections.event;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.joda.time.LocalDate;
+import java.util.Set;
+
 import org.junit.Test;
 
-import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 
 public class PostsCollectionAddedEventFacetAnnotationTest_newEvent {
 
-    public static class SomeDomainObject {}
+    public static class SomeDomainObject {
+        public Set<SomeReferencedObject> getReferences() { return null; }
+    }
+    public static class SomeReferencedObject {}
     
-//    public static class SomeDomainObjectCollectionAddedEvent extends AddToCollectionEvent<SomeDomainObject, SomeDomainObject> {}
-//    
-//    @Test
-//    public void test() throws Exception {
-//        SomeDomainObject sdo = new SomeDomainObject();
-//        final PropertyChangedEvent<SomeDomainObject, LocalDate> ev = PostsPropertyChangedEventFacetAnnotation.newEvent(SomeDatePropertyChangedEvent.class, new SomeDomainObject(), sdo);
-//        assertThat(ev.getSource(), is(sdo));
-//        assertThat(ev.getNewValue(), is(new LocalDate(2013,4,1)));
-//    }
+    public static class SomeDomainObjectCollectionAddedToEvent extends CollectionAddedToEvent<SomeDomainObject, SomeReferencedObject> {}
+    
+    @Test
+    public void test() throws Exception {
+        SomeDomainObject sdo = new SomeDomainObject();
+        SomeReferencedObject other = new SomeReferencedObject();
+        Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
+
+        final CollectionAddedToEvent<SomeDomainObject, SomeReferencedObject> ev = PostsCollectionAddedToEventFacetAnnotation.newEvent(
+                SomeDomainObjectCollectionAddedToEvent.class, sdo, identifier, other);
+        assertThat(ev.getSource(), is(sdo));
+        assertThat(ev.getIdentifier(), is(identifier));
+        assertThat(ev.getValue(), is(other));
+    }
 
 }

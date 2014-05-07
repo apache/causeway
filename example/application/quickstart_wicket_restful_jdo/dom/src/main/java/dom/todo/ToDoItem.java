@@ -22,13 +22,17 @@ import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+
 import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Ordering;
+
 import org.joda.time.LocalDate;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
@@ -41,8 +45,11 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
@@ -410,6 +417,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     private String notes;
 
     @javax.jdo.annotations.Column(allowsNull="true", length=400)
+    @PostsPropertyChangedEvent()
     public String getNotes() {
         return notes;
     }
@@ -479,6 +487,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     @javax.jdo.annotations.Element(column="dependentId")
     private SortedSet<ToDoItem> dependencies = new TreeSet<ToDoItem>();
 
+    @PostsCollectionAddedToEvent(wrapperPolicy=WrapperPolicy.SKIP_RULES)
     @SortedBy(DependenciesComparator.class)
     public SortedSet<ToDoItem> getDependencies() {
         return dependencies;
@@ -487,13 +496,19 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public void setDependencies(final SortedSet<ToDoItem> dependencies) {
         this.dependencies = dependencies;
     }
-
     
+    public void addToDependencies(final ToDoItem toDoItem) {
+        getDependencies().add(toDoItem);
+    }
+    public void removeFromDependencies(final ToDoItem toDoItem) {
+        getDependencies().remove(toDoItem);
+    }
+
     @PublishedAction
     public ToDoItem add(
             @TypicalLength(20)
             final ToDoItem toDoItem) {
-        getDependencies().add(toDoItem);
+        wrapperFactory.wrap(this).addToDependencies(toDoItem);
         return this;
     }
     public List<ToDoItem> autoComplete0Add(final @MinLength(2) String search) {
@@ -523,7 +538,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public ToDoItem remove(
             @TypicalLength(20)
             final ToDoItem toDoItem) {
-        getDependencies().remove(toDoItem);
+        this.removeFromDependencies(toDoItem);
         return this;
     }
     // disable action dependent on state of object
@@ -733,6 +748,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     // Events
     // //////////////////////////////////////
 
+
     public static abstract class AbstractEvent {
         private final String eventDescription;
         private final ToDoItem toDoItem;
@@ -899,6 +915,9 @@ public class ToDoItem implements Comparable<ToDoItem> {
         this.eventBusService = eventBusService;
     }
 
+    @javax.inject.Inject
+    private WrapperFactory wrapperFactory;
+    
     //endregion
 
 }

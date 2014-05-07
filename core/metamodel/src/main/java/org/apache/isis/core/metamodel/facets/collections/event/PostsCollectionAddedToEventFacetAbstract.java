@@ -17,27 +17,32 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.event;
+package org.apache.isis.core.metamodel.facets.collections.event;
 
 import org.apache.isis.applib.annotation.WrapperPolicy;
-import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
+import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 
-public abstract class PostsPropertyChangedEventFacetAbstract 
-        extends SingleValueFacetAbstract<Class<? extends PropertyChangedEvent<?,?>>> 
-        implements PostsPropertyChangedEventFacet {
 
-    public static Class<? extends Facet> type() {
-        // different implementation to PostsCollectionAddToEventFacet (for example) because this facet wraps
-        // multiple facets and so we cannot use the setUnderlyingFacet capability.
-        return PostsPropertyChangedEventFacet.class;
+public abstract class PostsCollectionAddedToEventFacetAbstract 
+    extends SingleValueFacetAbstract<Class<? extends CollectionAddedToEvent<?,?>>> 
+    implements PostsCollectionAddedToEventFacet {
+
+	public static Class<? extends Facet> type() {
+	    
+	    // the "primary" type is CollectionAddToFacet rather than PostsAddedToCollectionEventFacet
+	    // so that this facet can wrap an existing (via setUnderlying).
+	    
+        //return PostsAddedToCollectionEventFacet.class;
+	    return CollectionAddToFacet.class;
     }
 
     private final WrapperPolicy wrapperPolicy;
 
-    public PostsPropertyChangedEventFacetAbstract(final Class<? extends PropertyChangedEvent<?,?>> changedEventType, final WrapperPolicy wrapperPolicy, final FacetHolder holder) {
+    public PostsCollectionAddedToEventFacetAbstract(Class<? extends CollectionAddedToEvent<?, ?>> changedEventType, WrapperPolicy wrapperPolicy, FacetHolder holder) {
         super(type(), changedEventType, holder);
         this.wrapperPolicy = wrapperPolicy;
     }

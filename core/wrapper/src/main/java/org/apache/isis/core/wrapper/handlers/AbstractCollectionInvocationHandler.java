@@ -23,14 +23,17 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.events.CollectionMethodEvent;
 import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 abstract class AbstractCollectionInvocationHandler<T, C> extends DelegatingInvocationHandlerDefault<C> {
 
-    private final List<Method> interceptedMethods = new ArrayList<Method>();
-    private final List<Method> vetoedMethods = new ArrayList<Method>();
+    private final List<Method> interceptedMethods = Lists.newArrayList();
+    private final List<Method> vetoedMethods = Lists.newArrayList();
+
     private final String collectionName;
     private final OneToManyAssociation oneToManyAssociation;
     private final T domainObject;

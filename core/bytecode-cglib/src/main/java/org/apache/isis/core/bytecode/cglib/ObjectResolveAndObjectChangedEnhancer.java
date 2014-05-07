@@ -29,8 +29,8 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 import org.apache.isis.core.commons.lang.ArrayExtensions;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils;
-import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils.ImperativeFacetFlags;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.CglibEnhanced;
@@ -62,7 +62,7 @@ public class ObjectResolveAndObjectChangedEnhancer extends ObjectResolveAndObjec
             public Object intercept(final Object proxied, final Method proxiedMethod, final Object[] args, final MethodProxy proxyMethod) throws Throwable {
 
                 final boolean ignore = proxiedMethod.getDeclaringClass().equals(Object.class);
-                ImperativeFacetFlags flags = null;
+                ImperativeFacet.Flags flags = null;
 
                 if (!ignore) {
                     final ObjectSpecificationDefault targetObjSpec = getJavaSpecificationOfOwningClass(proxiedMethod);

@@ -19,19 +19,19 @@
 
 package org.apache.isis.core.metamodel.facets.collections.event;
 
+import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
+import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
+import org.apache.isis.core.metamodel.facets.PostsEventWithWrapperPolicy;
+import org.apache.isis.core.metamodel.facets.SingleValueFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 
-public abstract class PostsCollectionAddToEventFacetAbstract extends CollectionFacetAbstract implements PostsAddedToCollectionEventFacet {
-
-	public PostsCollectionAddToEventFacetAbstract(FacetHolder holder) {
-		super(holder);
-	}
-
-	public static Class<? extends Facet> type() {
-        return PostsAddedToCollectionEventFacet.class;
-    }
-	
-	  
+/**
+ * Indicates that (the specified subclass of) {@link CollectionAddedToEvent} should be posted to the
+ * {@link EventBusService}.
+ */
+public interface PostsCollectionAddedToEventFacet extends SingleValueFacet<Class<? extends CollectionAddedToEvent<?,?>>>, CollectionAddToFacet, MultiTypedFacet, PostsEventWithWrapperPolicy {
 }
+

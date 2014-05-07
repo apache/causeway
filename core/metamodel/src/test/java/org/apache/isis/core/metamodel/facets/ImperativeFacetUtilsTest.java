@@ -19,8 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 import java.lang.reflect.Method;
+
 import com.google.common.collect.Lists;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -28,14 +35,11 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils.ImperativeFacetFlags;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.unittestsupport.jmocking.JavassistImposteriser;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
 
 @RunWith(JMock.class)
 public class ImperativeFacetUtilsTest {
@@ -78,7 +82,7 @@ public class ImperativeFacetUtilsTest {
                 will(returnValue(Lists.newArrayList()));
             }
         });
-        final ImperativeFacetFlags flags = ImperativeFacetUtils.getImperativeFacetFlags(mockObjectMember, method);
+        final ImperativeFacet.Flags flags = ImperativeFacetUtils.getImperativeFacetFlags(mockObjectMember, method);
         assertThat(flags, is(not(nullValue())));
         assertThat(flags.impliesResolve(), is(false));
         assertThat(flags.impliesObjectChanged(), is(false));
@@ -94,7 +98,7 @@ public class ImperativeFacetUtilsTest {
                 will(returnValue(Lists.newArrayList((Facet) imperativeFacet)));
             }
         });
-        final ImperativeFacetFlags flags = ImperativeFacetUtils.getImperativeFacetFlags(mockObjectMember, method);
+        final ImperativeFacet.Flags flags = ImperativeFacetUtils.getImperativeFacetFlags(mockObjectMember, method);
         assertThat(flags, is(not(nullValue())));
         // TODO: need more tests here, these don't go deep enough...
     }

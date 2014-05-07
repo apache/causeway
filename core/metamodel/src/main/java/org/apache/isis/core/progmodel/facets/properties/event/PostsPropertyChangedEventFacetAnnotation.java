@@ -26,7 +26,8 @@ import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.FatalException;
-import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.WrapperPolicy;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -50,13 +51,14 @@ public class PostsPropertyChangedEventFacetAnnotation extends PostsPropertyChang
     private boolean searchedForEventBusService = false;
 
     public PostsPropertyChangedEventFacetAnnotation(
-            final Class<? extends PropertyChangedEvent<?, ?>> changedEventType, 
+            final Class<? extends PropertyChangedEvent<?, ?>> eventType, 
+            final WrapperPolicy wrapperPolicy,
             final PropertyOrCollectionAccessorFacet getterFacet, 
             final PropertySetterFacet setterFacet, 
             final PropertyClearFacet clearFacet, 
             final ServicesProvider servicesProvider, 
             final FacetHolder holder) {
-        super(changedEventType, holder);
+        super(eventType, wrapperPolicy, holder);
         this.getterFacet = getterFacet;
         this.setterFacet = setterFacet;
         this.clearFacet = clearFacet;
@@ -64,50 +66,56 @@ public class PostsPropertyChangedEventFacetAnnotation extends PostsPropertyChang
     }
 
     @Override
-    public void setProperty(ObjectAdapter inObject, ObjectAdapter value) {
-        if(this.setterFacet == null) {
+    public void setProperty(ObjectAdapter targetAdapter, ObjectAdapter valueAdapter) {
+        if(setterFacet == null) {
             return;
         }
         eventBusService = getEventBusService();
         if(eventBusService == null) {
-            setterFacet.setProperty(inObject, value);
+            setterFacet.setProperty(targetAdapter, valueAdapter);
             return;
         }
         
-        final Object oldValue = this.getterFacet.getProperty(inObject);
-        this.setterFacet.setProperty(inObject, value);
-        final Object newValue = this.getterFacet.getProperty(inObject);
-        postEventIfChanged(inObject, oldValue, newValue);
+        final Object oldValue = getterFacet.getProperty(targetAdapter);
+        setterFacet.setProperty(targetAdapter, valueAdapter);
+        final Object newValue = getterFacet.getProperty(targetAdapter);
+        postEventIfChanged(targetAdapter, getIdentified().getIdentifier(), oldValue, newValue);
     }
 
     @Override
-    public void clearProperty(ObjectAdapter inObject) {
-        if(this.clearFacet == null) {
+    public void clearProperty(ObjectAdapter targetAdapter) {
+        if(clearFacet == null) {
             return;
         }
         eventBusService = getEventBusService();
         if(eventBusService == null) {
-            clearFacet.clearProperty(inObject);
+            clearFacet.clearProperty(targetAdapter);
             return;
         }
 
-        final Object oldValue = this.getterFacet.getProperty(inObject);
-        this.clearFacet.clearProperty(inObject);
-        final Object newValue = this.getterFacet.getProperty(inObject);
-        postEventIfChanged(inObject, oldValue, newValue);
+        final Object oldValue = getterFacet.getProperty(targetAdapter);
+        clearFacet.clearProperty(targetAdapter);
+        final Object newValue = getterFacet.getProperty(targetAdapter);
+        
+        postEventIfChanged(targetAdapter, getIdentified().getIdentifier(), oldValue, newValue);
     }
 
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private void postEventIfChanged(ObjectAdapter inObject, final Object oldValue, final Object newValue) {
+    private void postEventIfChanged(
+            final ObjectAdapter targetAdapter, 
+            final Identifier identifier, 
+            final Object oldValue, 
+            final Object newValue) {
+        
         if(Objects.equal(oldValue, newValue)) {
             // do nothing.
             return;
         }
-        final Object source = inObject.getObject();
+        final Object source = targetAdapter.getObject();
         try {
             final Class type = value();
-            final PropertyChangedEvent<?, ?> event = newEvent(type, oldValue, newValue, source);
+            final PropertyChangedEvent<?, ?> event = newEvent(type, source, identifier, oldValue, newValue);
             
             eventBusService.post(event);
         } catch (Exception e) {
@@ -115,10 +123,16 @@ public class PostsPropertyChangedEventFacetAnnotation extends PostsPropertyChang
         }
     }
 
-    static <S,T> PropertyChangedEvent<S,T> newEvent(final Class<? extends PropertyChangedEvent<S, T>> type, final T oldValue, final T newValue, final S source) throws InstantiationException, IllegalAccessException, NoSuchFieldException {
+    static <S,T> PropertyChangedEvent<S,T> newEvent(
+            final Class<? extends PropertyChangedEvent<S, T>> type, 
+            final S source, 
+            final Identifier identifier,
+            final T oldValue, 
+            final T newValue) throws InstantiationException, IllegalAccessException, NoSuchFieldException {
         final PropertyChangedEvent<S, T> event = type.newInstance();
         
         setField("source", event, source);
+        setField("identifier", event, identifier);
         setField("oldValue", event, oldValue);
         setField("newValue", event, newValue);
         return event;
@@ -147,12 +161,16 @@ public class PostsPropertyChangedEventFacetAnnotation extends PostsPropertyChang
     
     // //////////////////////////////////////
     // MultiTypedFacet
-
+    // //////////////////////////////////////
 
     @SuppressWarnings("unchecked")
     @Override
     public Class<? extends Facet>[] facetTypes() {
-        return Lists.newArrayList(PostsPropertyChangedEventFacet.class, PropertySetterFacet.class, PropertyClearFacet.class).toArray(new Class[]{});
+        return Lists.newArrayList(
+                    PostsPropertyChangedEventFacet.class, 
+                    PropertySetterFacet.class, 
+                    PropertyClearFacet.class
+                ).toArray(new Class[]{});
     }
 
     @SuppressWarnings("unchecked")

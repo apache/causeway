@@ -18,11 +18,16 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
 import org.apache.isis.applib.util.ObjectContracts;
 
 public abstract class PropertyChangedEvent<S,T> {
+    
+    public static class Default extends PropertyChangedEvent<Object, Object> {}
+    
     private final S source;
+    private final Identifier identifier;
     private final T oldValue;
     private final T newValue;
     
@@ -35,18 +40,30 @@ public abstract class PropertyChangedEvent<S,T> {
      * then set reflectively.
      */
     public PropertyChangedEvent() {
-        this(null, null, null);
+        this(null, null, null, null);
     }
+    
+    /**
+     * @deprecated - use {@link #PropertyChangedEvent(Object, Identifier, Object, Object)}.
+     */
+    @Deprecated
     public PropertyChangedEvent(S source, T oldValue, T newValue) {
+        this(source, null, oldValue, newValue);
+    }
+
+    public PropertyChangedEvent(S source, Identifier identifier, T oldValue, T newValue) {
         this.source = source;
+        this.identifier = identifier;
         this.oldValue = oldValue;
         this.newValue = newValue;
     }
-
+    
     public S getSource() {
         return source;
     }
-    
+    public Identifier getIdentifier() {
+        return identifier;
+    }
     public T getOldValue() {
         return oldValue;
     }
