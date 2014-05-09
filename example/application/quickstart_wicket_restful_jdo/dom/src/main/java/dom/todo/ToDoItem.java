@@ -488,6 +488,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     private SortedSet<ToDoItem> dependencies = new TreeSet<ToDoItem>();
 
     @PostsCollectionAddedToEvent(wrapperPolicy=WrapperPolicy.SKIP_RULES)
+    @PostsCollectionRemovedFromEvent(wrapperPolicy=WrapperPolicy.SKIP_RULES)
     @SortedBy(DependenciesComparator.class)
     public SortedSet<ToDoItem> getDependencies() {
         return dependencies;
@@ -508,6 +509,9 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public ToDoItem add(
             @TypicalLength(20)
             final ToDoItem toDoItem) {
+    	// By wrapping the call, Isis will detect that the collection is modified 
+    	// and it will automatically send a CollectionAddedToEvent to the Event Bus.
+    	// See ToDoItemSubscriptions.
         wrapperFactory.wrap(this).addToDependencies(toDoItem);
         return this;
     }
@@ -538,7 +542,10 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public ToDoItem remove(
             @TypicalLength(20)
             final ToDoItem toDoItem) {
-        this.removeFromDependencies(toDoItem);
+    	// By wrapping the call, Isis will detect that the collection is modified 
+    	// and it will automatically send a CollectionRemovedFromEvent to the Event Bus.
+    	// See ToDoItemSubscriptions.
+        wrapperFactory.wrap(this).removeFromDependencies(toDoItem);
         return this;
     }
     // disable action dependent on state of object

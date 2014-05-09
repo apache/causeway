@@ -19,17 +19,17 @@
 
 package org.apache.isis.core.metamodel.facets.collections.event;
 
-import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
+import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.PostsEventWithWrapperPolicy;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 
 /**
- * Indicates that (the specified subclass of) {@link CollectionAddedToEvent} should be posted to the
+ * Indicates that (the specified subclass of) {@link CollectionRemovedFromEvent} should be posted to the
  * {@link EventBusService}.
  */
-public interface PostsCollectionAddedToEventFacet extends SingleValueFacet<Class<? extends CollectionAddedToEvent<?,?>>>, CollectionAddToFacet, MultiTypedFacet, PostsEventWithWrapperPolicy {
+public interface PostsCollectionRemovedFromEventFacet extends SingleValueFacet<Class<? extends CollectionRemovedFromEvent<?,?>>>, CollectionRemoveFromFacet, MultiTypedFacet, PostsEventWithWrapperPolicy {
 }
 
