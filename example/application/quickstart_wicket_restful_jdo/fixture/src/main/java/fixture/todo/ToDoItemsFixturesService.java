@@ -16,18 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package fixture.todo;
 
+import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
-public class ToDoItemsFixture extends ToDoItemsResetForUser {
+/**
+ * Enables fixtures to be installed from the application.
+ */
+@Named("Prototyping") // has the effect of defining a "Prototyping" menu item
+public class ToDoItemsFixturesService extends FixtureScripts {
 
-    public ToDoItemsFixture() {
-        this(null);
-    }
-    
-    public ToDoItemsFixture(String user) {
-        super(user);
+    public ToDoItemsFixturesService() {
+        super("fixture.todo");
     }
 
 }

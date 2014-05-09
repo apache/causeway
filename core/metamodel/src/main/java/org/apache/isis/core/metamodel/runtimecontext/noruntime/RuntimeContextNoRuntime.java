@@ -257,6 +257,11 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
 
+            @Override
+            public void injectServicesInto(Object domainObject) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+
         };
         localizationProvider = new LocalizationProviderAbstract() {
 

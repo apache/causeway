@@ -56,6 +56,8 @@ public interface DomainObjectServices extends Injectable {
      */
     ObjectAdapter createAggregatedInstance(ObjectSpecification spec, ObjectAdapter parent);
 
+    void injectServicesInto(Object domainObject);
+    
     // ///////////////////////////////////////////
     // retrieve
     // ///////////////////////////////////////////

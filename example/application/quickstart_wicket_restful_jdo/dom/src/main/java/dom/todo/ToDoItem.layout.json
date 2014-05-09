@@ -54,12 +54,12 @@
                                 },
                                 cssClass: { value: "x-highlight" }
                             },
+                            notYetCompleted: {
+                                named: { value: "Not done" }
+                            },
                             scheduleExplicitly: {
                             },
                             scheduleImplicitly: {
-                            },
-                            notYetCompleted: {
-                                named: { value: "Not done" }
                             }
                         },
                         describedAs: {

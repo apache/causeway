@@ -16,18 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.services.classdiscovery;
 
-package fixture.todo;
+import java.util.Set;
 
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
 
-public class ToDoItemsFixture extends ToDoItemsResetForUser {
+import org.apache.isis.applib.AbstractService;
 
-    public ToDoItemsFixture() {
-        this(null);
-    }
-    
-    public ToDoItemsFixture(String user) {
-        super(user);
+public class ClassDiscoveryServiceUsingReflections 
+            extends AbstractService 
+            implements ClassDiscoveryService {
+
+    @Override
+    public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type) {
+        final Reflections reflections = new Reflections(
+                ClasspathHelper.forClassLoader(Thread.currentThread().getContextClassLoader()), 
+                ClasspathHelper.forClass(Object.class), 
+                new SubTypesScanner(false));
+        return reflections.getSubTypesOf(type);
     }
 
 }
