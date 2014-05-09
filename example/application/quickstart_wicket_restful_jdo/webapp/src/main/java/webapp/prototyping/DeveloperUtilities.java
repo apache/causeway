@@ -16,6 +16,8 @@
  */
 package webapp.prototyping;
 
+import fixture.todo.ToDoItemsFixturesService;
+
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package webapp.prototyping;
+package fixture.todo;
 
 import java.math.BigDecimal;
 
@@ -40,13 +40,22 @@ public class ToDoItemsCreateForUser extends SimpleFixtureScript {
     private final String user;
     
     public ToDoItemsCreateForUser(String user) {
-        super("Create ToDoItems for '" + user + "'", user);
+        super(friendlyNameFor(user), localNameFor(user));
         this.user = user;
     }
     
+    static String localNameFor(String user) {
+        return user != null? user: "current";
+    }
+
+    static String friendlyNameFor(String user) {
+        return "Create ToDoItems for " + (user != null ? "'" + user + "'" : "current user");
+    }
+
     @Override
     protected void doRun(final FixtureResultList resultList) {
-        installFor(user, resultList);
+        final String ownedBy = user != null? user: getContainer().getUser().getName();
+        installFor(ownedBy, resultList);
         getContainer().flush();
     }
 

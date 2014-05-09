@@ -25,9 +25,13 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.fixtures.FixtureType;
+import org.apache.isis.applib.fixtures.InstallableFixture;
 
 @Named("Script")
-public abstract class FixtureScript extends AbstractViewModel {
+public abstract class FixtureScript 
+        extends AbstractViewModel 
+        implements InstallableFixture {
 
     protected static final String PATH_SEPARATOR = "/";
     
@@ -176,16 +180,24 @@ public abstract class FixtureScript extends AbstractViewModel {
     protected abstract void doRun(FixtureResultList fixtureResults);
 
     // //////////////////////////////////////
+
+    @Override
+    public FixtureType getType() {
+        return FixtureType.DOMAIN_OBJECTS;
+    }
+    
+    @Programmatic
+    public final void install() {
+        run();
+    }
+
+    // //////////////////////////////////////
     
     @Programmatic
     String pathWith(String subkey) {
         return (getQualifiedName() != null? getQualifiedName() + PATH_SEPARATOR: "") +  subkey;
     }
 
-    // //////////////////////////////////////
-    
-    
-    
     // //////////////////////////////////////
 
     @javax.inject.Inject

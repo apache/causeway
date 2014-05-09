@@ -37,6 +37,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService;
 import org.apache.isis.applib.services.memento.MementoService;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -62,7 +63,7 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     private void findAndInstantiateFixtureScripts(List<FixtureScript> fixtureScriptList) {
-        final Set<Class<? extends FixtureScript>> classes = findFixtureScriptClasses();
+        final Set<Class<? extends FixtureScript>> classes = classDiscoveryService.findSubTypesOfClasses(FixtureScript.class);
         for (final Class<? extends FixtureScript> fixtureScriptCls : classes) {
             final String packageName = fixtureScriptCls.getPackage().getName();
             if(!packageName.startsWith(packagePrefix)) {
@@ -79,14 +80,6 @@ public abstract class FixtureScripts extends AbstractService {
                 return ObjectContracts.compare(o1, o2, "friendlyName,qualifiedName");
             }
         }); 
-    }
-
-    private static Set<Class<? extends FixtureScript>> findFixtureScriptClasses() {
-        final Reflections reflections = new Reflections(
-                ClasspathHelper.forClassLoader(Thread.currentThread().getContextClassLoader()), 
-                ClasspathHelper.forClass(Object.class), 
-                new SubTypesScanner(false));
-        return reflections.getSubTypesOf(FixtureScript.class);
     }
 
     private FixtureScript newFixtureScript(Class<? extends FixtureScript> fixtureScriptCls) {
@@ -164,4 +157,8 @@ public abstract class FixtureScripts extends AbstractService {
 
     @javax.inject.Inject
     private DomainObjectContainer container;
+
+    @javax.inject.Inject
+    private ClassDiscoveryService classDiscoveryService;
+
 }

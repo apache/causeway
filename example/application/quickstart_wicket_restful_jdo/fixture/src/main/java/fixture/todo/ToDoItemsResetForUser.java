@@ -16,29 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package webapp.prototyping;
+package fixture.todo;
 
 import org.apache.isis.applib.fixturescripts.CompositeFixtureScript;
 
-public abstract class ToDoItemResetForUser extends CompositeFixtureScript {
+public class ToDoItemsResetForUser extends CompositeFixtureScript {
 
     // //////////////////////////////////////
     // Subclasses
     // //////////////////////////////////////
 
-    public static final class ToDoItemResetForDick extends ToDoItemResetForUser {
+    public static final class ToDoItemResetForDick extends ToDoItemsResetForUser {
         public ToDoItemResetForDick() {
             super("dick");
         }
     }
 
-    public static final class ToDoItemResetForJoe extends ToDoItemResetForUser {
+    public static final class ToDoItemResetForJoe extends ToDoItemsResetForUser {
         public ToDoItemResetForJoe() {
             super("joe");
         }
     }
     
-    public static final class ToDoItemResetForSven extends ToDoItemResetForUser {
+    public static final class ToDoItemResetForSven extends ToDoItemsResetForUser {
         public ToDoItemResetForSven() {
             super("sven");
         }
@@ -50,9 +50,21 @@ public abstract class ToDoItemResetForUser extends CompositeFixtureScript {
     
     private String user;
 
-    public ToDoItemResetForUser(String user) {
-        super("Reset ToDoItems for '" + user + "'", user);
+    public ToDoItemsResetForUser() {
+        this(null);
+    }
+
+    public ToDoItemsResetForUser(String user) {
+        super(friendlyNameFor(localNameFor(user)), localNameFor(user));
         this.user = user;
+    }
+
+    static String localNameFor(String user) {
+        return user != null? user: "current";
+    }
+
+    static String friendlyNameFor(String user) {
+        return "Reset ToDoItems for " + (user != null ? "'" + user + "'" : "current user");
     }
 
     @Override
@@ -60,5 +72,4 @@ public abstract class ToDoItemResetForUser extends CompositeFixtureScript {
         add("delete", new ToDoItemsDeleteForUser(user));
         add("create", new ToDoItemsCreateForUser(user));
     }
-    
 }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package webapp.prototyping;
+package fixture.todo;
 
 import org.apache.isis.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.applib.fixturescripts.SimpleFixtureScript;
@@ -30,14 +30,23 @@ public class ToDoItemsDeleteForUser extends SimpleFixtureScript {
 
     private final String user;
     
-    public ToDoItemsDeleteForUser(String user) {
-        super("Delete ToDoItems for '" + user + "'", user);
+    public ToDoItemsDeleteForUser(final String user) {
+        super(friendlyNameFor(user), localNameFor(user));
         this.user = user;
     }
     
+    static String localNameFor(final String user) {
+        return user != null? user: "current";
+    }
+
+    static String friendlyNameFor(final String user) {
+        return "Delete ToDoItems for " + (user != null ? "'" + user + "'" : "current user");
+    }
+
     @Override
     protected void doRun(final FixtureResultList resultList) {
-        isisJdoSupport.executeUpdate("delete from \"ToDoItem\" where \"ownedBy\" = '" + user + "'");
+        final String ownedBy = user != null? user: getContainer().getUser().getName();
+        isisJdoSupport.executeUpdate("delete from \"ToDoItem\" where \"ownedBy\" = '" + ownedBy + "'");
         getContainer().flush();
     }
 

@@ -16,18 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.services.classdiscovery;
 
-package fixture.todo;
+import java.util.Set;
 
+import org.apache.isis.applib.annotation.Programmatic;
 
-public class ToDoItemsFixture extends ToDoItemsResetForUser {
+public interface ClassDiscoveryService {
 
-    public ToDoItemsFixture() {
-        this(null);
-    }
-    
-    public ToDoItemsFixture(String user) {
-        super(user);
-    }
+    @Programmatic
+    public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type);
 
 }

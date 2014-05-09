@@ -19,11 +19,15 @@ package integration;
 import app.ToDoItemAnalysis;
 import dom.todo.ToDoItemContributions;
 import dom.todo.ToDoItems;
+import fixture.todo.ToDoItemsFixturesService;
 
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
+import org.apache.isis.core.metamodel.services.bookmarks.BookmarkServiceDefault;
+import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
@@ -59,11 +63,15 @@ public class ToDoSystemInitializer {
                     new ToDoItems(),
                     new ToDoItemAnalysis(),
                     new ToDoItemContributions(),
+                    new ToDoItemsFixturesService(),
+                    new ClassDiscoveryServiceUsingReflections(),
                     new WrapperFactoryDefault(),
                     new IsisJdoSupportImpl(),
                     new Bulk.InteractionContext(),
                     new EventBusServiceJdo(),
-                    new QueryResultsCache()
+                    new QueryResultsCache(),
+                    new MementoServiceDefault(),
+                    new BookmarkServiceDefault()
                     );
         }
 
@@ -72,7 +80,5 @@ public class ToDoSystemInitializer {
             testConfiguration.addRegisterEntitiesPackagePrefix("dom");
             return testConfiguration;
         }
-
     }
-    
 }
