@@ -26,17 +26,23 @@ import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
-import org.apache.isis.applib.AbstractService;
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Prototype;
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
 
 /**
  * Enables fixtures to be installed from the application.
  */
 @Named("Prototyping") // has the effect of defining a "Prototyping" menu item
-public class ToDoItemsFixturesService extends AbstractService {
+public class ToDoItemsFixturesService extends FixtureScripts {
 
+    public ToDoItemsFixturesService() {
+        super("webapp.prototyping");
+    }
+
+    @Hidden
     @Prototype
     public String installFixtures() {
         installFixturesFor(null); // ie current user
@@ -45,6 +51,7 @@ public class ToDoItemsFixturesService extends AbstractService {
 
     // //////////////////////////////////////
 
+    @Hidden
     @Prototype
     public String installFixturesForUser(@Named("User") String user) {
         installFixturesFor(user);
@@ -59,6 +66,7 @@ public class ToDoItemsFixturesService extends AbstractService {
 
     // //////////////////////////////////////
 
+    @Hidden
     @Prototype
     public ToDoItem installFixturesAndReturnFirst() {
         installFixtures();
@@ -75,7 +83,7 @@ public class ToDoItemsFixturesService extends AbstractService {
     }
     
     // //////////////////////////////////////
-
+    
     private ToDoItems toDoItems;
     public void injectToDoItems(ToDoItems toDoItems) {
         this.toDoItems = toDoItems;

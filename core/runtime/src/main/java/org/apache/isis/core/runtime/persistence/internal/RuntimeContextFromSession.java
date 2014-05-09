@@ -264,6 +264,11 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                 return RuntimeContextFromSession.this.getPropertyNames();
             }
 
+            @Override
+            public void injectServicesInto(Object domainObject) {
+                getPersistenceSession().getServicesInjector().injectServicesInto(domainObject);
+            }
+
 
         };
         this.querySubmitter = new QuerySubmitterAbstract() {
