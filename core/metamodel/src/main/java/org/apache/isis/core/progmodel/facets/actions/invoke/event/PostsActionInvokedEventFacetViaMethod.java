@@ -69,12 +69,12 @@ public class PostsActionInvokedEventFacetViaMethod extends ActionInvocationFacet
     	final InvocationResult invocationResult = this.internalInvoke(owningAction, targetAdapter, arguments);
     	
     	// Perhaps the Action was not properly invoked (i.e. an exception was raised).
-    	if (invocationResult.getWasInvoked()) {
+    	if (invocationResult.getWhetherInvoked()) {
     		// If invoked, then send the ActionInvokedEvent to the EventBus.
     		postEvent(owningAction, targetAdapter, arguments);
     	}
     	
-    	return invocationResult.getResult();
+    	return invocationResult.getAdapter();
     	
     }
     

@@ -122,27 +122,48 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     
     	// Can return null both because the action finally was not invoked 
     	// or because it returned null.
-    	return internalInvoke(owningAction, targetAdapter, arguments).getResult();
+    	return internalInvoke(owningAction, targetAdapter, arguments).getAdapter();
     	
     }
-    
-    public class InvocationResult {
+
+    /**
+     * Introduced to disambiguate the meaning of <tt>null</tt> as a return value of
+     * {@link ActionInvocationFacetViaMethod#invoke(ObjectAdapter, ObjectAdapter[])}
+     */
+    public static class InvocationResult {
+
+        public static InvocationResult forActionThatReturned(final ObjectAdapter resultAdapter) {
+            return new InvocationResult(true, resultAdapter);
+        }
+
+        public static InvocationResult forActionNotInvoked() {
+            return new InvocationResult(false, null);
+        }
+
+    	private final boolean whetherInvoked;
+    	private final ObjectAdapter adapter;
     	
-    	private final Boolean wasInvoked;
-    	private final ObjectAdapter result;
-    	
-    	public InvocationResult(Boolean invoked, ObjectAdapter result) {
-    		this.wasInvoked = invoked;
-    		this.result = result;
+    	private InvocationResult(final boolean whetherInvoked, final ObjectAdapter result) {
+    		this.whetherInvoked = whetherInvoked;
+    		this.adapter = result;
     	}
 
-		public Boolean getWasInvoked() {
-			return wasInvoked;
+		public boolean getWhetherInvoked() {
+			return whetherInvoked;
 		}
 
-		public ObjectAdapter getResult() {
-			return result;
+		/**
+		 * Returns the result, or null if either the action invocation returned null or 
+		 * if the action was never invoked in the first place.
+		 * 
+		 * <p>
+		 * Use {@link #getWhetherInvoked()} to distinguish between these two cases.
+		 */
+		public ObjectAdapter getAdapter() {
+			return adapter;
 		}
+
+
     	
     }
     
@@ -226,7 +247,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                 if(commandService.persistIfPossible(command)) {
                     // force persistence, then return the command itself.
                     final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(command);
-                    return new InvocationResult(true, resultAdapter);
+                    return InvocationResult.forActionThatReturned(resultAdapter);
                 } else {
                     throw new IsisException(
                             "Unable to schedule action '"
@@ -247,7 +268,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                     LOG.debug(" action result " + result);
                 }
                 if (result == null) {
-                	return new InvocationResult(true, null);
+                	return InvocationResult.forActionThatReturned(null);
                 }
 
                 final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
@@ -269,7 +290,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                             ? new CurrentInvocation(targetAdapter, getIdentified(), arguments, resultAdapter, command)
                             :null);
                 
-                return new InvocationResult(true, resultAdapter);
+                return InvocationResult.forActionThatReturned(resultAdapter);
             }
 
         } catch (final IllegalArgumentException e) {
@@ -292,7 +313,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
             ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
             
             // Action was not invoked (an Exception was thrown)
-            return new InvocationResult(false, null);
+            return InvocationResult.forActionNotInvoked();
         } catch (final IllegalAccessException e) {
             throw new ReflectiveActionException("Illegal access of " + method, e);
         }
