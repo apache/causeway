@@ -31,6 +31,7 @@ import org.apache.isis.core.progmodel.facets.actions.defaults.method.ActionDefau
 import org.apache.isis.core.progmodel.facets.actions.exploration.annotation.ExplorationAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.homepage.HomePageAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.invoke.event.PostsActionInvokedEventFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.annotation.NotContributedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.method.NotInServiceMenuMethodFacetFactory;
@@ -368,6 +369,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(PostsPropertyChangedEventAnnotationFacetFactory.class);
         addFactory(PostsCollectionAddedToEventAnnotationFacetFactory.class);
         addFactory(PostsCollectionRemovedFromEventAnnotationFacetFactory.class);
+        addFactory(PostsActionInvokedEventFacetFactory.class);
 
         
         addFactory(ImmutableMarkerInterfaceFacetFactory.class);

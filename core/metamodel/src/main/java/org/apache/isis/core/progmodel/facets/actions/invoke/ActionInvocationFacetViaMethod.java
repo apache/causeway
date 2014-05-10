@@ -113,13 +113,44 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     public ObjectAdapter invoke(final ObjectAdapter target, final ObjectAdapter[] parameters) {
         return invoke(null, target, parameters);
     }
-
+    
     @Override
     public ObjectAdapter invoke(
             final ObjectAction owningAction, 
             final ObjectAdapter targetAdapter, 
             final ObjectAdapter[] arguments) {
+    
+    	// Can return null both because the action finally was not invoked 
+    	// or because it returned null.
+    	return internalInvoke(owningAction, targetAdapter, arguments).getResult();
+    	
+    }
+    
+    public class InvocationResult {
+    	
+    	private final Boolean wasInvoked;
+    	private final ObjectAdapter result;
+    	
+    	public InvocationResult(Boolean invoked, ObjectAdapter result) {
+    		this.wasInvoked = invoked;
+    		this.result = result;
+    	}
 
+		public Boolean getWasInvoked() {
+			return wasInvoked;
+		}
+
+		public ObjectAdapter getResult() {
+			return result;
+		}
+    	
+    }
+    
+    protected InvocationResult internalInvoke(
+            final ObjectAction owningAction, 
+            final ObjectAdapter targetAdapter, 
+            final ObjectAdapter[] arguments) {
+    	
         final Bulk.InteractionContext bulkInteractionContext = getServicesInjector().lookupService(Bulk.InteractionContext.class);
         final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
         final Command command = commandContext != null ? commandContext.getCommand() : null;
@@ -195,7 +226,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                 if(commandService.persistIfPossible(command)) {
                     // force persistence, then return the command itself.
                     final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(command);
-                    return resultAdapter;
+                    return new InvocationResult(true, resultAdapter);
                 } else {
                     throw new IsisException(
                             "Unable to schedule action '"
@@ -216,7 +247,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                     LOG.debug(" action result " + result);
                 }
                 if (result == null) {
-                    return null;
+                	return new InvocationResult(true, null);
                 }
 
                 final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
@@ -238,7 +269,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                             ? new CurrentInvocation(targetAdapter, getIdentified(), arguments, resultAdapter, command)
                             :null);
                 
-                return resultAdapter;
+                return new InvocationResult(true, resultAdapter);
             }
 
         } catch (final IllegalArgumentException e) {
@@ -259,7 +290,9 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
             }
 
             ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
-            return null;
+            
+            // Action was not invoked (an Exception was thrown)
+            return new InvocationResult(false, null);
         } catch (final IllegalAccessException e) {
             throw new ReflectiveActionException("Illegal access of " + method, e);
         }
