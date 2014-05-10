@@ -50,6 +50,7 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
@@ -487,8 +488,8 @@ public class ToDoItem implements Comparable<ToDoItem> {
     @javax.jdo.annotations.Element(column="dependentId")
     private SortedSet<ToDoItem> dependencies = new TreeSet<ToDoItem>();
 
-    @PostsCollectionAddedToEvent(wrapperPolicy=WrapperPolicy.SKIP_RULES)
-    @PostsCollectionRemovedFromEvent(wrapperPolicy=WrapperPolicy.SKIP_RULES)
+    @PostsCollectionAddedToEvent
+    @PostsCollectionRemovedFromEvent
     @SortedBy(DependenciesComparator.class)
     public SortedSet<ToDoItem> getDependencies() {
         return dependencies;
@@ -511,8 +512,8 @@ public class ToDoItem implements Comparable<ToDoItem> {
             final ToDoItem toDoItem) {
     	// By wrapping the call, Isis will detect that the collection is modified 
     	// and it will automatically send a CollectionAddedToEvent to the Event Bus.
-    	// See ToDoItemSubscriptions.
-        wrapperFactory.wrap(this).addToDependencies(toDoItem);
+    	// ToDoItemSubscriptions is a demo subscriber to this event
+        wrapperFactory.wrapSkipRules(this).addToDependencies(toDoItem);
         return this;
     }
     public List<ToDoItem> autoComplete0Add(final @MinLength(2) String search) {
@@ -544,8 +545,8 @@ public class ToDoItem implements Comparable<ToDoItem> {
             final ToDoItem toDoItem) {
     	// By wrapping the call, Isis will detect that the collection is modified 
     	// and it will automatically send a CollectionRemovedFromEvent to the Event Bus.
-    	// See ToDoItemSubscriptions.
-        wrapperFactory.wrap(this).removeFromDependencies(toDoItem);
+        // ToDoItemSubscriptions is a demo subscriber to this event
+        wrapperFactory.wrapSkipRules(this).removeFromDependencies(toDoItem);
         return this;
     }
     // disable action dependent on state of object

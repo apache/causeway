@@ -21,11 +21,14 @@ package org.apache.isis.applib.services.eventbus;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public abstract class CollectionRemovedFromEvent<S,T> {
+public abstract class CollectionRemovedFromEvent<S,T> extends java.util.EventObject {
     
-    public static class Default extends CollectionRemovedFromEvent<Object, Object> {}
+    private static final long serialVersionUID = 1L;
 
-    private final S source;
+    public static class Default extends CollectionRemovedFromEvent<Object, Object> {
+        private static final long serialVersionUID = 1L;
+    }
+
     private final Identifier identifier;
     private final T value;
     
@@ -39,21 +42,19 @@ public abstract class CollectionRemovedFromEvent<S,T> {
     public CollectionRemovedFromEvent() {
         this(null, null, null);
     }
-    /**
-     * @deprecated - use {@link #CollectionRemovedFromEvent(Object, Identifier, Object)}
-     */
-    @Deprecated
-    public CollectionRemovedFromEvent(S source, T value) {
-        this(source, null, value);
-    }
-    public CollectionRemovedFromEvent(S source, Identifier identifier, T value) {
-        this.source = source;
+    public CollectionRemovedFromEvent(
+            final S source, 
+            final Identifier identifier, 
+            final T value) {
+        super(source);
         this.identifier = identifier;
         this.value = value;
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
     public S getSource() {
-        return source;
+        return (S) source;
     }
     public Identifier getIdentifier() {
         return identifier;

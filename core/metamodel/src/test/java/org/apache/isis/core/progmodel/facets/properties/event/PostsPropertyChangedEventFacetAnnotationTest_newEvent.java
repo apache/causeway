@@ -29,7 +29,9 @@ public class PostsPropertyChangedEventFacetAnnotationTest_newEvent {
 
     public static class SomeDomainObject {}
     
-    public static class SomeDatePropertyChangedEvent extends PropertyChangedEvent<SomeDomainObject, LocalDate> {}
+    public static class SomeDatePropertyChangedEvent extends PropertyChangedEvent<SomeDomainObject, LocalDate> {
+        private static final long serialVersionUID = 1L;
+    }
     
     @Test
     public void test() throws Exception {

@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.annotation.WrapperPolicy;
 import org.apache.isis.applib.events.CollectionAccessEvent;
 import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.applib.events.ObjectTitleEvent;
@@ -55,7 +54,6 @@ import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.PostsEventWithWrapperPolicy;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
@@ -329,7 +327,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         final InteractionResult interactionResult = targetNoSpec.isValidResult(targetAdapter);
         notifyListenersAndVetoIfRequired(interactionResult);
 
-        if (getExecutionMode() == ExecutionMode.EXECUTE) {
+        if (getExecutionMode().shouldExecute()) {
             if (targetAdapter.isTransient()) {
                 getObjectPersistor().makePersistent(targetAdapter);
             }
@@ -370,8 +368,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         final Object argumentObj = underlying(args[0]);
 
-        final WrapperPolicy wrapperPolicy = determineWrapperPolicy(otoa, argumentObj);
-        if(wrapperPolicy == WrapperPolicy.ENFORCE_RULES) {
+        if(getExecutionMode().shouldEnforceRules()) {
             checkVisibility(getAuthenticationSession(), targetAdapter, otoa);
             checkUsability(getAuthenticationSession(), targetAdapter, otoa);
         }
@@ -381,12 +378,12 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         resolveIfRequired(targetAdapter);
 
 
-        if(wrapperPolicy == WrapperPolicy.ENFORCE_RULES) {
+        if(getExecutionMode().shouldEnforceRules()) {
             final InteractionResult interactionResult = otoa.isAssociationValid(targetAdapter, argumentAdapter).getInteractionResult();
             notifyListenersAndVetoIfRequired(interactionResult);
         }
 
-        if (getExecutionMode() == ExecutionMode.EXECUTE) {
+        if (getExecutionMode().shouldExecute()) {
             otoa.set(targetAdapter, argumentAdapter);
         }
 
@@ -395,19 +392,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return null;
     }
 
-    private static WrapperPolicy determineWrapperPolicy(final OneToOneAssociation otoa, final Object argumentObj) {
-        final PostsEventWithWrapperPolicy wrapperPolicyFacet;
-        if(argumentObj != null) {
-            final PropertySetterFacet setterFacet = otoa.getFacet(PropertySetterFacet.class);
-            wrapperPolicyFacet = PostsEventWithWrapperPolicy.Util.getWrapperPolicyFacet(setterFacet);
-        } else {
-            final PropertyClearFacet clearFacet = otoa.getFacet(PropertyClearFacet.class);
-            wrapperPolicyFacet = PostsEventWithWrapperPolicy.Util.getWrapperPolicyFacet(clearFacet);
-        }
-        return wrapperPolicyFacet != null ? wrapperPolicyFacet.getWrapperPolicy() : WrapperPolicy.ENFORCE_RULES;
-    }
-
-    
 
     // /////////////////////////////////////////////////////////////////
     // collection - access
@@ -480,8 +464,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             throw new IllegalArgumentException("Invoking a addTo should only have a single argument");
         }
 
-        final WrapperPolicy wrapperPolicy = determineAddToWrapperPolicy(otma);
-        if(wrapperPolicy == WrapperPolicy.ENFORCE_RULES) {
+        if(getExecutionMode().shouldEnforceRules()) {
             checkVisibility(getAuthenticationSession(), targetAdapter, otma);
             checkUsability(getAuthenticationSession(), targetAdapter, otma);
         }
@@ -494,24 +477,18 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
         final ObjectAdapter argumentNO = getAdapterManager().adapterFor(argumentObj);
 
-        if(wrapperPolicy == WrapperPolicy.ENFORCE_RULES) {
+        if(getExecutionMode().shouldEnforceRules()) {
             final InteractionResult interactionResult = otma.isValidToAdd(targetAdapter, argumentNO).getInteractionResult();
             notifyListenersAndVetoIfRequired(interactionResult);
         }
 
-        if (getExecutionMode() == ExecutionMode.EXECUTE) {
+        if (getExecutionMode().shouldExecute()) {
             otma.addElement(targetAdapter, argumentNO);
         }
 
         objectChangedIfRequired(targetAdapter);
 
         return null;
-    }
-
-    private static WrapperPolicy determineAddToWrapperPolicy(final OneToManyAssociation otma) {
-        final CollectionAddToFacet facet = otma.getFacet(CollectionAddToFacet.class);
-        final PostsEventWithWrapperPolicy wrapperPolicyFacet = PostsEventWithWrapperPolicy.Util.getWrapperPolicyFacet(facet);
-        return wrapperPolicyFacet != null ? wrapperPolicyFacet.getWrapperPolicy() : WrapperPolicy.ENFORCE_RULES;
     }
 
 
@@ -524,8 +501,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             throw new IllegalArgumentException("Invoking a removeFrom should only have a single argument");
         }
 
-        final WrapperPolicy wrapperPolicy = determineRemoveFromWrapperPolicy(otma);
-        if(wrapperPolicy == WrapperPolicy.ENFORCE_RULES) {
+        if(getExecutionMode().shouldEnforceRules()) {
             checkVisibility(getAuthenticationSession(), targetAdapter, otma);
             checkUsability(getAuthenticationSession(), targetAdapter, otma);
         }
@@ -539,25 +515,18 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
         final ObjectAdapter argumentAdapter = getAdapterManager().adapterFor(argumentObj);
 
-        if(wrapperPolicy == WrapperPolicy.ENFORCE_RULES) {
+        if(getExecutionMode().shouldEnforceRules()) {
             final InteractionResult interactionResult = otma.isValidToRemove(targetAdapter, argumentAdapter).getInteractionResult();
             notifyListenersAndVetoIfRequired(interactionResult);
         }
 
-        if (getExecutionMode() == ExecutionMode.EXECUTE) {
+        if (getExecutionMode().shouldExecute()) {
             otma.removeElement(targetAdapter, argumentAdapter);
         }
 
         objectChangedIfRequired(targetAdapter);
 
         return null;
-    }
-
-    private static WrapperPolicy determineRemoveFromWrapperPolicy(final OneToManyAssociation otma) {
-        final CollectionRemoveFromFacet removeFromFacet = otma.getFacet(CollectionRemoveFromFacet.class);
-
-        final PostsEventWithWrapperPolicy wrapperPolicyFacet = PostsEventWithWrapperPolicy.Util.getWrapperPolicyFacet(removeFromFacet);
-        return wrapperPolicyFacet != null ? wrapperPolicyFacet.getWrapperPolicy() : WrapperPolicy.ENFORCE_RULES;
     }
 
     // /////////////////////////////////////////////////////////////////
@@ -581,7 +550,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         final InteractionResult interactionResult = noa.isProposedArgumentSetValid(targetAdapter, argAdapters).getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
 
-        if (getExecutionMode() == ExecutionMode.EXECUTE) {
+        if (getExecutionMode().shouldExecute()) {
             final ObjectAdapter actionReturnNO = noa.execute(targetAdapter, argAdapters);
             return AdapterUtils.unwrap(actionReturnNO);
         }

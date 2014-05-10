@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.collections.event;
 
-import org.apache.isis.applib.annotation.WrapperPolicy;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -40,16 +39,10 @@ public abstract class PostsCollectionAddedToEventFacetAbstract
 	    return CollectionAddToFacet.class;
     }
 
-    private final WrapperPolicy wrapperPolicy;
-
-    public PostsCollectionAddedToEventFacetAbstract(Class<? extends CollectionAddedToEvent<?, ?>> changedEventType, WrapperPolicy wrapperPolicy, FacetHolder holder) {
+    public PostsCollectionAddedToEventFacetAbstract(
+            final Class<? extends CollectionAddedToEvent<?, ?>> changedEventType, 
+            final FacetHolder holder) {
         super(type(), changedEventType, holder);
-        this.wrapperPolicy = wrapperPolicy;
-    }
-
-    @Override
-    public WrapperPolicy getWrapperPolicy() {
-        return wrapperPolicy;
     }
 
 }

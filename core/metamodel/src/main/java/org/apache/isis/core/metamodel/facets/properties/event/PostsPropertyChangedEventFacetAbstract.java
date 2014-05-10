@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.properties.event;
 
-import org.apache.isis.applib.annotation.WrapperPolicy;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -35,16 +34,10 @@ public abstract class PostsPropertyChangedEventFacetAbstract
         return PostsPropertyChangedEventFacet.class;
     }
 
-    private final WrapperPolicy wrapperPolicy;
-
-    public PostsPropertyChangedEventFacetAbstract(final Class<? extends PropertyChangedEvent<?,?>> changedEventType, final WrapperPolicy wrapperPolicy, final FacetHolder holder) {
+    public PostsPropertyChangedEventFacetAbstract(
+            final Class<? extends PropertyChangedEvent<?,?>> changedEventType, 
+            final FacetHolder holder) {
         super(type(), changedEventType, holder);
-        this.wrapperPolicy = wrapperPolicy;
-    }
-
-    @Override
-    public WrapperPolicy getWrapperPolicy() {
-        return wrapperPolicy;
     }
 
 }

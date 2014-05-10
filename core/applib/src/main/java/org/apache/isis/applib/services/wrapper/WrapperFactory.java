@@ -70,7 +70,33 @@ public interface WrapperFactory {
      * @see WrapperFactory#wrap(Object, ExecutionMode)
      */
     public static enum ExecutionMode {
-        EXECUTE, NO_EXECUTE
+        /**
+         * Validate all business rules and then execute.
+         */
+        EXECUTE(true,true), 
+        /**
+         * Skip all business rules and then execute.
+         */
+        SKIP_RULES(false, true), 
+        /**
+         * Validate all business rules but do not execute.
+         */
+        NO_EXECUTE(true, false);
+        
+        private final boolean enforceRules;
+        private final boolean execute;
+
+        private ExecutionMode(final boolean enforceRules, final boolean execute) {
+            this.enforceRules = enforceRules;
+            this.execute = execute;
+        }
+
+        public boolean shouldEnforceRules() {
+            return enforceRules;
+        }
+        public boolean shouldExecute() {
+            return execute;
+        }
     }
 
     WrapperFactory NOOP = new WrapperFactory(){
@@ -80,6 +106,16 @@ public interface WrapperFactory {
             return domainObject;
         }
 
+        @Override
+        public <T> T wrapNoExecute(T domainObject) {
+            return domainObject;
+        }
+        
+        @Override
+        public <T> T wrapSkipRules(T domainObject) {
+            return domainObject;
+        }
+        
         @Override
         public <T> T wrap(T domainObject, ExecutionMode mode) {
             return domainObject;
@@ -125,6 +161,20 @@ public interface WrapperFactory {
     @Programmatic
     <T> T wrap(T domainObject);
 
+    /**
+     * Convenience method for {@link #wrap(Object, ExecutionMode)} with {@link ExecutionMode#NO_EXECUTE},
+     * to make this feature more discoverable.
+     */
+    @Programmatic
+    <T> T wrapNoExecute(T domainObject);
+    
+    /**
+     * Convenience method for {@link #wrap(Object, ExecutionMode)} with {@link ExecutionMode#SKIP_RULES},
+     * to make this feature more discoverable.
+     */
+    @Programmatic
+    <T> T wrapSkipRules(T domainObject);
+    
     /**
      * Same as {@link #wrap(Object)}, except the actual execution occurs only if
      * the <tt>execute</tt> parameter indicates.

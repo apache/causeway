@@ -22,11 +22,14 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public abstract class PropertyChangedEvent<S,T> {
+public abstract class PropertyChangedEvent<S,T> extends java.util.EventObject {
     
-    public static class Default extends PropertyChangedEvent<Object, Object> {}
+    private static final long serialVersionUID = 1L;
+
+    public static class Default extends PropertyChangedEvent<Object, Object> {
+        private static final long serialVersionUID = 1L;
+    }
     
-    private final S source;
     private final Identifier identifier;
     private final T oldValue;
     private final T newValue;
@@ -52,14 +55,16 @@ public abstract class PropertyChangedEvent<S,T> {
     }
 
     public PropertyChangedEvent(S source, Identifier identifier, T oldValue, T newValue) {
-        this.source = source;
+        super(source);
         this.identifier = identifier;
         this.oldValue = oldValue;
         this.newValue = newValue;
     }
     
+    @Override
+    @SuppressWarnings("unchecked")
     public S getSource() {
-        return source;
+        return (S) source;
     }
     public Identifier getIdentifier() {
         return identifier;

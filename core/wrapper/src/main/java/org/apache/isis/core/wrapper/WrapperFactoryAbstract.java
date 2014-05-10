@@ -214,6 +214,16 @@ public abstract class WrapperFactoryAbstract implements WrapperFactory, Authenti
     }
 
     @Override
+    public <T> T wrapNoExecute(final T domainObject) {
+        return wrap(domainObject, ExecutionMode.NO_EXECUTE);
+    }
+    
+    @Override
+    public <T> T wrapSkipRules(final T domainObject) {
+        return wrap(domainObject, ExecutionMode.SKIP_RULES);
+    }
+    
+    @Override
     public <T> T wrap(final T domainObject, final ExecutionMode mode) {
         if (isWrapper(domainObject)) {
             return domainObject;

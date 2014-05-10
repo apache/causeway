@@ -22,11 +22,14 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public abstract class CollectionAddedToEvent<S,T> {
+public abstract class CollectionAddedToEvent<S,T> extends java.util.EventObject {
     
-    public static class Default extends CollectionAddedToEvent<Object, Object> {}
+    private static final long serialVersionUID = 1L;
 
-    private final S source;
+    public static class Default extends CollectionAddedToEvent<Object, Object> {
+        private static final long serialVersionUID = 1L;
+    }
+
     private final Identifier identifier;
     private final T value;
     
@@ -41,22 +44,19 @@ public abstract class CollectionAddedToEvent<S,T> {
         this(null, null, null);
     }
     
-    /**
-     * @deprecated - use {@link #CollectionAddedToEvent(Object, Identifier, Object)}
-     */
-    @Deprecated
-    public CollectionAddedToEvent(S source, T value) {
-        this(source, null, value);
-    }
-
-    public CollectionAddedToEvent(S source, Identifier identifier, T value) {
-        this.source = source;
+    public CollectionAddedToEvent(
+            final S source, 
+            final Identifier identifier, 
+            final T value) {
+        super(source);
         this.identifier = identifier;
         this.value = value;
     }
     
+    @Override
+    @SuppressWarnings("unchecked")
     public S getSource() {
-        return source;
+        return (S)source;
     }
     public Identifier getIdentifier() {
         return identifier;

@@ -25,7 +25,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
  * Applies only to collections; any changes should be propagated as events to subscribers.  
@@ -60,11 +59,5 @@ public @interface PostsCollectionRemovedFromEvent {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      */
     Class<? extends CollectionRemovedFromEvent<?,?>> value() default CollectionRemovedFromEvent.Default.class;
-
-    /**
-     * If invoked through the {@link WrapperFactory}, whether business rules (&quot;see it, use it, do it&quot;)
-     * should be enforced or not.
-     */
-    WrapperPolicy wrapperPolicy() default WrapperPolicy.ENFORCE_RULES;
 
 }

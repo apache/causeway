@@ -27,7 +27,6 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.WrapperPolicy;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -52,12 +51,11 @@ public class PostsCollectionAddedToEventFacetAnnotation
 
 	public PostsCollectionAddedToEventFacetAnnotation(
 			final Class<? extends CollectionAddedToEvent<?, ?>> eventType,
-            final WrapperPolicy wrapperPolicy,
 			final PropertyOrCollectionAccessorFacet getterFacet,
 			final CollectionAddToFacet collectionAddToFacet,
 			final ServicesProvider servicesProvider, 
 			final FacetHolder holder) {
-		super(eventType, wrapperPolicy, holder);
+		super(eventType, holder);
         this.getterFacet = getterFacet;
 		this.collectionAddToFacet = collectionAddToFacet;
 		this.servicesProvider = servicesProvider;

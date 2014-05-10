@@ -26,7 +26,6 @@ import java.lang.annotation.Target;
 
 import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 /**
  * Applies only to actions; any changes should be propagated as events to subscribers.  
@@ -57,11 +56,5 @@ public @interface PostsActionInvokedEvent {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      */
     Class<? extends ActionInvokedEvent<?>> value() default ActionInvokedEvent.Default.class;
-
-    /**
-     * If invoked through the {@link WrapperFactory}, whether business rules (&quot;see it, use it, do it&quot;)
-     * should be enforced or not.
-     */
-    WrapperPolicy wrapperPolicy() default WrapperPolicy.ENFORCE_RULES;
 
 }

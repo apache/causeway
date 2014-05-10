@@ -22,7 +22,6 @@ package org.apache.isis.core.progmodel.facets.collections.event;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.PostsCollectionAddedToEvent;
-import org.apache.isis.applib.annotation.WrapperPolicy;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.ServicesProviderAware;
@@ -66,8 +65,7 @@ public class PostsCollectionAddedToEventAnnotationFacetFactory extends FacetFact
         // the collectionAddToFacet will end up as the underlying facet of the PostsCollectionAddedToEventFacetAnnotation
 
         final Class<? extends CollectionAddedToEvent<?,?>> changedEventType = annotation.value();
-        final WrapperPolicy wrapperPolicy = annotation.wrapperPolicy();
-        return new PostsCollectionAddedToEventFacetAnnotation(changedEventType, wrapperPolicy, getterFacet, collectionAddToFacet, servicesProvider, holder);
+        return new PostsCollectionAddedToEventFacetAnnotation(changedEventType, getterFacet, collectionAddToFacet, servicesProvider, holder);
     }
 
     @Override

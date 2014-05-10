@@ -24,7 +24,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
-import org.apache.isis.applib.annotation.WrapperPolicy;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
@@ -90,8 +89,7 @@ public class PostsPropertyChangedEventAnnotationFacetFactory extends FacetFactor
         }
         
         final Class<? extends PropertyChangedEvent<?, ?>> changedEventType = annotation.value();
-        final WrapperPolicy wrapperPolicy = annotation.wrapperPolicy();
-        return new PostsPropertyChangedEventFacetAnnotation(changedEventType, wrapperPolicy, getterFacet, setterFacet, clearFacet, servicesProvider, holder);
+        return new PostsPropertyChangedEventFacetAnnotation(changedEventType, getterFacet, setterFacet, clearFacet, servicesProvider, holder);
     }
 
     @Override

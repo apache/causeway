@@ -27,7 +27,6 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.WrapperPolicy;
 import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -52,11 +51,10 @@ public class PostsCollectionRemovedFromEventFacetAnnotation extends
 
 	public PostsCollectionRemovedFromEventFacetAnnotation(
 			final Class<? extends CollectionRemovedFromEvent<?, ?>> eventType,
-			final WrapperPolicy wrapperPolicy,
 			final PropertyOrCollectionAccessorFacet getterFacet,
 			final CollectionRemoveFromFacet collectionRemoveFromFacet,
 			final ServicesProvider servicesProvider, final FacetHolder holder) {
-		super(eventType, wrapperPolicy, holder);
+		super(eventType, holder);
 		this.getterFacet = getterFacet;
 		this.collectionRemoveFromFacet = collectionRemoveFromFacet;
 		this.servicesProvider = servicesProvider;

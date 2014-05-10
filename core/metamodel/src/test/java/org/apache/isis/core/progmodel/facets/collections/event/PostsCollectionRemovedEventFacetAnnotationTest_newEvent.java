@@ -32,7 +32,9 @@ public class PostsCollectionRemovedEventFacetAnnotationTest_newEvent {
     }
     public static class SomeReferencedObject {}
     
-    public static class SomeDomainObjectCollectionRemovedFromEvent extends CollectionRemovedFromEvent<SomeDomainObject, SomeReferencedObject> {}
+    public static class SomeDomainObjectCollectionRemovedFromEvent extends CollectionRemovedFromEvent<SomeDomainObject, SomeReferencedObject> {
+        private static final long serialVersionUID = 1L;
+    }
     
     @Test
     public void test() throws Exception {

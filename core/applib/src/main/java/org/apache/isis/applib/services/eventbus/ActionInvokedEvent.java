@@ -18,14 +18,17 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
-import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
+import org.apache.isis.applib.annotation.PostsActionInvokedEvent;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public abstract class ActionInvokedEvent<S> {
+public abstract class ActionInvokedEvent<S> extends java.util.EventObject {
     
-    public static class Default extends ActionInvokedEvent<Object> {}
+    private static final long serialVersionUID = 1L;
 
-    private final S source;
+    public static class Default extends ActionInvokedEvent<Object> {
+        private static final long serialVersionUID = 1L;
+    }
+
     private final String action;
     private final String parameters;
     
@@ -40,14 +43,19 @@ public abstract class ActionInvokedEvent<S> {
         this(null, null, null);
     }
     
-    public ActionInvokedEvent(S source, String action, String parameters) {
-        this.source = source;
+    public ActionInvokedEvent(
+            final S source, 
+            final String action, 
+            final String parameters) {
+        super(source);
         this.action = action;
         this.parameters = parameters;
     }
     
+    @Override
+    @SuppressWarnings("unchecked")
     public S getSource() {
-        return source;
+        return (S)source;
     }
     public String getAction() {
         return action;

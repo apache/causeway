@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.collections.event;
 import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
-import org.apache.isis.core.metamodel.facets.PostsEventWithWrapperPolicy;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 
@@ -30,6 +29,6 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemove
  * Indicates that (the specified subclass of) {@link CollectionRemovedFromEvent} should be posted to the
  * {@link EventBusService}.
  */
-public interface PostsCollectionRemovedFromEventFacet extends SingleValueFacet<Class<? extends CollectionRemovedFromEvent<?,?>>>, CollectionRemoveFromFacet, MultiTypedFacet, PostsEventWithWrapperPolicy {
+public interface PostsCollectionRemovedFromEventFacet extends SingleValueFacet<Class<? extends CollectionRemovedFromEvent<?,?>>>, CollectionRemoveFromFacet, MultiTypedFacet {
 }
 

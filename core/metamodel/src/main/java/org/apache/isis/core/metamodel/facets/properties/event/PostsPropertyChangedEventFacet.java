@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.properties.event;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
-import org.apache.isis.core.metamodel.facets.PostsEventWithWrapperPolicy;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
@@ -31,6 +30,6 @@ import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFac
  * Indicates that (the specified subclass of) {@link PropertyChangedEvent} should be posted to the
  * {@link EventBusService}.
  */
-public interface PostsPropertyChangedEventFacet extends SingleValueFacet<Class<? extends PropertyChangedEvent<?,?>>>, PropertyClearFacet, PropertySetterFacet, MultiTypedFacet, PostsEventWithWrapperPolicy {
+public interface PostsPropertyChangedEventFacet extends SingleValueFacet<Class<? extends PropertyChangedEvent<?,?>>>, PropertyClearFacet, PropertySetterFacet, MultiTypedFacet {
 
 }

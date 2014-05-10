@@ -60,11 +60,4 @@ public @interface PostsCollectionAddedToEvent {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      */
     Class<? extends CollectionAddedToEvent<?,?>> value() default CollectionAddedToEvent.Default.class;
-    
-    /**
-     * If invoked through the {@link WrapperFactory}, whether business rules (&quot;see it, use it, do it&quot;)
-     * should be enforced or not.
-     */
-    WrapperPolicy wrapperPolicy() default WrapperPolicy.ENFORCE_RULES;
-
 }

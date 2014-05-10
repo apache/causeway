@@ -22,7 +22,6 @@ package org.apache.isis.core.progmodel.facets.collections.event;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.PostsCollectionRemovedFromEvent;
-import org.apache.isis.applib.annotation.WrapperPolicy;
 import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.ServicesProviderAware;
@@ -66,8 +65,7 @@ public class PostsCollectionRemovedFromEventAnnotationFacetFactory extends Facet
         // the collectionRemoveFromFacet will end up as the underlying facet of the PostsCollectionRemovedFromEventFacetAnnotation
 
         final Class<? extends CollectionRemovedFromEvent<?,?>> changedEventType = annotation.value();
-        final WrapperPolicy wrapperPolicy = annotation.wrapperPolicy();
-        return new PostsCollectionRemovedFromEventFacetAnnotation(changedEventType, wrapperPolicy, getterFacet, collectionRemoveFromFacet, servicesProvider, holder);
+        return new PostsCollectionRemovedFromEventFacetAnnotation(changedEventType, getterFacet, collectionRemoveFromFacet, servicesProvider, holder);
     }
 
     @Override

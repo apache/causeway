@@ -33,7 +33,9 @@ public class PostsCollectionAddedEventFacetAnnotationTest_newEvent {
     }
     public static class SomeReferencedObject {}
     
-    public static class SomeDomainObjectCollectionAddedToEvent extends CollectionAddedToEvent<SomeDomainObject, SomeReferencedObject> {}
+    public static class SomeDomainObjectCollectionAddedToEvent extends CollectionAddedToEvent<SomeDomainObject, SomeReferencedObject> {
+        private static final long serialVersionUID = 1L;
+    }
     
     @Test
     public void test() throws Exception {
