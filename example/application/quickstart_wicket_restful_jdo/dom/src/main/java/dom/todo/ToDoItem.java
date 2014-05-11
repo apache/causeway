@@ -907,43 +907,5 @@ public class ToDoItem implements Comparable<ToDoItem> {
     //endregion
 
     
-    // //////////////////////////////////////
-    // foo (property)
-    // //////////////////////////////////////
-
-    private ToDoItem foo;
-
-    @javax.jdo.annotations.Persistent()
-    @javax.jdo.annotations.Column(allowsNull="true")
-    @MemberOrder(sequence = "1")
-    public ToDoItem getFoo() {
-        return foo;
-    }
-
-    public void setFoo(final ToDoItem foo) {
-        this.foo = foo;
-    }
-
-    // //////////////////////////////////////
-    // bar (property)
-    // //////////////////////////////////////
-
-    private ToDoItem bar;
-
-    @javax.jdo.annotations.Persistent()
-    @javax.jdo.annotations.Column(allowsNull="true")
-    @MemberOrder(sequence = "1")
-    public ToDoItem getBar() {
-        return bar;
-    }
-
-    public void setBar(final ToDoItem bar) {
-        this.bar = bar;
-    }
-    
-    public List<ToDoItem> choicesBar() {
-        return toDoItems.allToDos();
-    }
-
 
 }
