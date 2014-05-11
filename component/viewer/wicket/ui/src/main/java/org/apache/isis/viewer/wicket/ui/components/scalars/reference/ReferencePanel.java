@@ -72,8 +72,9 @@ public class ReferencePanel extends ScalarPanelAbstract {
     private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
     private EntityLinkSelect2Panel entityLink;
-    private EntityLinkSimplePanel entitySimpleLink;
+    Select2Choice<ObjectAdapterMemento> select2Field;
 
+    private EntityLinkSimplePanel entitySimpleLink;
     private FormComponentLabel labelIfRegular;
 
     public ReferencePanel(final String id, final ScalarModel scalarModel) {
@@ -88,7 +89,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final EntityModel entityLinkModel = (EntityModel) entityLink.getModel();
         entityLinkModel.toViewMode();
         setTitleAttribute(disableReason);
-        syncVisibilityAndUsability(entityLink, entityLink.select2Field);
+        syncVisibilityAndUsability();
     }
 
     private void setTitleAttribute(final String titleAttribute) {
@@ -127,7 +128,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final String name = scalarModel.getName();
         
         entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getWicketId(), this);
-        
+        syncWithInput();
+
         setOutputMarkupId(true);
         entityLink.setOutputMarkupId(true);
         entityLink.setLabel(Model.of(name));
@@ -178,14 +180,14 @@ public class ReferencePanel extends ScalarPanelAbstract {
     protected void onBeforeRenderWhenEnabled() {
         super.onBeforeRenderWhenEnabled();
         entityLink.setEnabled(true);
-        syncVisibilityAndUsability(entityLink, entityLink.select2Field);
+        syncVisibilityAndUsability();
     }
 
     @Override
     protected void onBeforeRenderWhenViewMode() {
         super.onBeforeRenderWhenViewMode();
         entityLink.setEnabled(true);
-        syncVisibilityAndUsability(entityLink, entityLink.select2Field);
+        syncVisibilityAndUsability();
     }
 
     // //////////////////////////////////////
@@ -193,8 +195,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
     // called from buildGui
     @Override
     protected void addFormComponentBehavior(Behavior behavior) {
-        if(entityLink.select2Field != null) {
-            entityLink.select2Field.add(behavior);
+        if(select2Field != null) {
+            select2Field.add(behavior);
         }
     }
 
@@ -329,30 +331,6 @@ public class ReferencePanel extends ScalarPanelAbstract {
         };
     }
 
-    /**
-     * Must be called after {@link #setEnabled(boolean)}, apparently...
-     * originally to ensure that the findUsing button and entityClearLink were
-     * shown/not shown as required, however these have now gone.  Which beckons the question,
-     * is it still important?
-     * 
-     * <p>
-     * REVIEW: there ought to be a better way to do this. I'd hoped to override
-     * {@link #setEnabled(boolean)}, but it is <tt>final</tt>, and there doesn't
-     * seem to be anyway to install a listener. One option might be to move it
-     * to {@link #onBeforeRender()} ?
-     */
-    private void syncVisibilityAndUsability(EntityLinkSelect2Panel linkPanel, Select2Choice<ObjectAdapterMemento> select2Field) {
-        final boolean mutability = linkPanel.isEnableAllowed() && !getModel().isViewMode();
-    
-        if(select2Field != null) {
-            select2Field.setEnabled(mutability);
-        }
-        
-        if(labelIfRegular != null && isEditableWithEitherAutoCompleteOrChoices()) {
-            Components.permanentlyHide(labelIfRegular, ReferencePanel.ID_ENTITY_ICON_AND_TITLE);
-        }
-    }
-
     // //////////////////////////////////////
     
     // called by EntityLinkSelect2Panel
@@ -364,37 +342,39 @@ public class ReferencePanel extends ScalarPanelAbstract {
     // //////////////////////////////////////
 
     // called by EntityLinkSelect2Panel
-    void convertInput(EntityLinkSelect2Panel linkPanel) {
+    void convertInput() {
         if(getModel().isEditMode() && isEditableWithEitherAutoCompleteOrChoices()) {
+
             // flush changes to pending
-            this.onSelected(linkPanel, linkPanel.select2Field.getConvertedInput());
+            ObjectAdapterMemento convertedInput = select2Field.getConvertedInput();
+            
+            getModel().setPending(convertedInput);
+            if(select2Field != null) {
+                select2Field.getModel().setObject(convertedInput);
+            }
+            
+            final ObjectAdapter adapter = convertedInput!=null?convertedInput.getObjectAdapter(ConcurrencyChecking.NO_CHECK):null;
+            getModel().setObject(adapter);
         }
     
         final ObjectAdapter pendingAdapter = getModel().getPendingAdapter();
-        linkPanel.setConvertedInput(pendingAdapter);
+        entityLink.setConvertedInput(pendingAdapter);
     }
 
-    private void onSelected(EntityLinkSelect2Panel linkPanel, final ObjectAdapterMemento selectedAdapterMemento) {
-
-        getModel().setPending(selectedAdapterMemento);
-        getModel().setObject(selectedAdapterMemento!=null?selectedAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK):null);
-        if(linkPanel.select2Field != null) {
-            linkPanel.select2Field.getModel().setObject(selectedAdapterMemento);
-        }
-    }
+    
 
     // //////////////////////////////////////
 
     // called by EntityLinkSelect2Panel
-    void syncWithInput(EntityLinkSelect2Panel linkPanel) {
+    void syncWithInput() {
         final ObjectAdapter adapter = getModel().getPendingElseCurrentAdapter();
-        syncLinkWithInput(linkPanel, adapter);
-        syncLinkWithInputIfAutoCompleteOrChoices(linkPanel);
-        syncVisibilityAndUsability(linkPanel, linkPanel.select2Field);
+        syncLinkWithInput(adapter);
+        syncLinkWithInputIfAutoCompleteOrChoices();
+        syncVisibilityAndUsability();
     }
 
     // called by syncWithInput
-    private void syncLinkWithInput(EntityLinkSelect2Panel linkPanel, final ObjectAdapter adapter) {
+    private void syncLinkWithInput(final ObjectAdapter adapter) {
         if(labelIfRegular == null) {
             return;
         }
@@ -412,33 +392,32 @@ public class ReferencePanel extends ScalarPanelAbstract {
             labelIfRegular.addOrReplace(component);
         } else {
             Components.permanentlyHide(labelIfRegular, ReferencePanel.ID_ENTITY_ICON_AND_TITLE);
-            
         }
     }
 
     // called by syncWithInput
-    private void syncLinkWithInputIfAutoCompleteOrChoices(EntityLinkSelect2Panel linkPanel) {
+    private void syncLinkWithInputIfAutoCompleteOrChoices() {
         if(!isEditableWithEitherAutoCompleteOrChoices()) {
             // this is horrid; adds a label to the id
             // should instead be a 'temporary hide'
-            Components.permanentlyHide(linkPanel, ReferencePanel.ID_AUTO_COMPLETE);
-            linkPanel.select2Field = null; // this forces recreation next time around
+            Components.permanentlyHide(entityLink, ReferencePanel.ID_AUTO_COMPLETE);
+            select2Field = null; // this forces recreation next time around
             return;
         }
     
         final IModel<ObjectAdapterMemento> model = Util.createModel(getModel().asScalarModelWithPending());       
     
-        if(linkPanel.select2Field == null) {
-            linkPanel.setRequired(getModel().isRequired());
-            linkPanel.select2Field = Select2ChoiceUtil.newSelect2Choice(ReferencePanel.ID_AUTO_COMPLETE, model, getModel());
-            setProviderAndCurrAndPending(linkPanel.select2Field, getModel().getActionArgsHint());
+        if(select2Field == null) {
+            entityLink.setRequired(getModel().isRequired());
+            select2Field = Select2ChoiceUtil.newSelect2Choice(ReferencePanel.ID_AUTO_COMPLETE, model, getModel());
+            setProviderAndCurrAndPending(select2Field, getModel().getActionArgsHint());
             if(!getModel().hasChoices()) {
-                final Settings settings = linkPanel.select2Field.getSettings();
+                final Settings settings = select2Field.getSettings();
                 final int minLength = getModel().getAutoCompleteMinLength();
                 settings.setMinimumInputLength(minLength);
                 settings.setPlaceholder(getModel().getName());
             }
-            linkPanel.addOrReplace(linkPanel.select2Field);
+            entityLink.addOrReplace(select2Field);
         } else {
             //
             // the select2Field already exists, so the widget has been rendered before.  If it is
@@ -456,12 +435,34 @@ public class ReferencePanel extends ScalarPanelAbstract {
             // see: FormComponent#getInputAsArray()
             // see: Select2Choice#renderInitializationScript()
             //
-            linkPanel.select2Field.clearInput();
+            select2Field.clearInput();
         }
     
         if(labelIfRegular != null) {
             // no need for link, since can see in drop-down
             Components.permanentlyHide(labelIfRegular, ReferencePanel.ID_ENTITY_ICON_AND_TITLE);
+        }
+    }
+
+    // //////////////////////////////////////
+
+    /**
+     * REVIEW: there ought to be a better way to do this. I'd hoped to override
+     * {@link #setEnabled(boolean)}, but it is <tt>final</tt>, and there doesn't
+     * seem to be anyway to install a listener. One option might be to move it
+     * to {@link #onBeforeRender()} ?
+     * 
+     * <p>
+     * called by onBeforeRender*, also from syncWithInput
+     */
+    private void syncVisibilityAndUsability() {
+        if(labelIfRegular != null && isEditableWithEitherAutoCompleteOrChoices()) {
+            Components.permanentlyHide(labelIfRegular, ReferencePanel.ID_ENTITY_ICON_AND_TITLE);
+        }
+
+        if(select2Field != null) {
+            final boolean mutability = entityLink.isEnableAllowed() && !getModel().isViewMode();
+            select2Field.setEnabled(mutability);
         }
     }
 
@@ -475,8 +476,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
      */
     @Override
     public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
-        if(entityLink.select2Field != null) {
-            setProviderAndCurrAndPending(entityLink.select2Field, argsIfAvailable);
+        if(select2Field != null) {
+            setProviderAndCurrAndPending(select2Field, argsIfAvailable);
             return true;
         } else {
             return false;

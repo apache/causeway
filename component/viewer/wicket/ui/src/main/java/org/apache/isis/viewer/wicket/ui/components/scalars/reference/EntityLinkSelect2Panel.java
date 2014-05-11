@@ -24,7 +24,6 @@ import com.vaynberg.wicket.select2.Select2Choice;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 
@@ -32,7 +31,6 @@ class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> i
 
     private static final long serialVersionUID = 1L;
 
-    Select2Choice<ObjectAdapterMemento> select2Field;
     ReferencePanel owningPanel;
 
     public EntityLinkSelect2Panel(final String id, final ReferencePanel owningPanel) {
@@ -40,7 +38,6 @@ class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> i
         this.owningPanel = owningPanel;
         
         setType(ObjectAdapter.class);
-        owningPanel.syncWithInput(this);
     }
 
     /**
@@ -49,8 +46,8 @@ class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> i
      */
     @Override
     public boolean checkRequired() {
-        if(select2Field != null) {
-            return select2Field.checkRequired();
+        if(owningPanel.select2Field != null) {
+            return owningPanel.select2Field.checkRequired();
         }
         return super.checkRequired();
     }
@@ -68,12 +65,12 @@ class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> i
 
     @Override
     protected void convertInput() {
-        owningPanel.convertInput(this);
+        owningPanel.convertInput();
     }
 
     @Override
     protected void onBeforeRender() {
-        owningPanel.syncWithInput(this);
+        owningPanel.syncWithInput();
         super.onBeforeRender();
     }
 
