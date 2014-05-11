@@ -40,7 +40,8 @@ public abstract class ObjectAdapterMementoProviderAbstract extends TextChoicePro
     private final ScalarModel scalarModel;
 
     public ObjectAdapterMementoProviderAbstract(final ScalarModel scalarModel){
-        this.scalarModel = scalarModel;}
+        this.scalarModel = scalarModel;
+    }
     
     @Override
     protected String getDisplayText(ObjectAdapterMemento choice) {

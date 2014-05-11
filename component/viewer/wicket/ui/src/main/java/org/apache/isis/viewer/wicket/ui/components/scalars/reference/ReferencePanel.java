@@ -66,8 +66,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
     private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     private static final String ID_SCALAR_NAME = "scalarName";
 
-    static final String ID_AUTO_COMPLETE = "autoComplete";
-    static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
+    private static final String ID_AUTO_COMPLETE = "autoComplete";
+    private static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
 
     private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
@@ -75,30 +75,17 @@ public class ReferencePanel extends ScalarPanelAbstract {
     Select2Choice<ObjectAdapterMemento> select2Field;
 
     private EntityLinkSimplePanel entitySimpleLink;
-    private FormComponentLabel labelIfRegular;
 
     public ReferencePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
     }
 
-    // //////////////////////////////////////
     
-    @Override
-    protected void onBeforeRenderWhenDisabled(final String disableReason) {
-        super.onBeforeRenderWhenDisabled(disableReason);
-        final EntityModel entityLinkModel = (EntityModel) entityLink.getModel();
-        entityLinkModel.toViewMode();
-        setTitleAttribute(disableReason);
-        syncVisibilityAndUsability();
-    }
+    // //////////////////////////////////////
+    // addComponentFor{Compact/Regular}
+    // //////////////////////////////////////
 
-    private void setTitleAttribute(final String titleAttribute) {
-        entityLink.add(new AttributeModifier("title", Model.of(titleAttribute)));
-    }
-
-    /**
-     * First called as a side-effect of {@link #beforeRender()}
-     */
+    // First called as a side-effect of {@link #beforeRender()}
     @Override
     protected Component addComponentForCompact() {
 
@@ -119,9 +106,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
     }
 
 
-    /**
-     * First called as a side-effect of {@link #beforeRender()}
-     */
+    // First called as a side-effect of {@link #beforeRender()}
     @Override
     protected FormComponentLabel addComponentForRegular() {
         final ScalarModel scalarModel = getModel();
@@ -133,8 +118,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
         setOutputMarkupId(true);
         entityLink.setOutputMarkupId(true);
         entityLink.setLabel(Model.of(name));
-        
-        labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, entityLink);
+
+        final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, entityLink);
         labelIfRegular.add(entityLink);
         
         final String describedAs = getModel().getDescribedAs();
@@ -176,22 +161,6 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
     // //////////////////////////////////////
 
-    @Override
-    protected void onBeforeRenderWhenEnabled() {
-        super.onBeforeRenderWhenEnabled();
-        entityLink.setEnabled(true);
-        syncVisibilityAndUsability();
-    }
-
-    @Override
-    protected void onBeforeRenderWhenViewMode() {
-        super.onBeforeRenderWhenViewMode();
-        entityLink.setEnabled(true);
-        syncVisibilityAndUsability();
-    }
-
-    // //////////////////////////////////////
-
     // called from buildGui
     @Override
     protected void addFormComponentBehavior(Behavior behavior) {
@@ -200,40 +169,129 @@ public class ReferencePanel extends ScalarPanelAbstract {
         }
     }
 
+    
+    // //////////////////////////////////////
+    // onBeforeRender*
     // //////////////////////////////////////
 
-    private boolean isEditableWithEitherAutoCompleteOrChoices() {
-        if(getModel().getRenderingHint().isInTable()) {
-            return false;
-        }
-        // doesn't apply if not editable, either
-        if(getModel().isViewMode()) {
-            return false;
-        }
-        return getModel().hasChoices() || hasParamOrPropertyAutoComplete() || hasObjectAutoComplete();
+    @Override
+    protected void onBeforeRenderWhenEnabled() {
+        super.onBeforeRenderWhenEnabled();
+        entityLink.setEnabled(true);
+        syncWithInput();
     }
 
-    boolean hasParamOrPropertyAutoComplete() {
-        return getModel().hasAutoComplete();
+    @Override
+    protected void onBeforeRenderWhenViewMode() {
+        super.onBeforeRenderWhenViewMode();
+        entityLink.setEnabled(true);
+        syncWithInput();
     }
 
-    boolean hasObjectAutoComplete() {
-        boolean hasAutoComplete = getModel().hasAutoComplete();
-        if(hasAutoComplete) {
-            return true;
+    @Override
+    protected void onBeforeRenderWhenDisabled(final String disableReason) {
+        super.onBeforeRenderWhenDisabled(disableReason);
+        final EntityModel entityLinkModel = (EntityModel) entityLink.getModel();
+        entityLinkModel.toViewMode();
+        entityLink.add(new AttributeModifier("title", Model.of(disableReason)));
+        syncWithInput();
+    }
+
+    
+    // //////////////////////////////////////
+    // syncWithInput
+    // //////////////////////////////////////
+
+    // called from onBeforeRender*
+    // (was previous called by EntityLinkSelect2Panel in onBeforeRender, this responsibility now moved)
+    private void syncWithInput() {
+        final ObjectAdapter adapter = getModel().getPendingElseCurrentAdapter();
+
+        // syncLinkWithInput
+        if (adapter != null) {
+            if(getComponentForRegular() != null) {
+                final EntityModel entityModelForLink = new EntityModel(adapter);
+                
+                entityModelForLink.setContextAdapterIfAny(getModel().getContextAdapterIfAny());
+                entityModelForLink.setRenderingHint(getModel().getRenderingHint());
+                
+                final ComponentFactory componentFactory = 
+                        getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
+                final Component component = componentFactory.createComponent(entityModelForLink);
+                
+                ((MarkupContainer)getComponentForRegular()).addOrReplace(component);
+            }
+        } else {
+            permanentlyHideEntityIconAndTitleIfInRegularMode();
+        }
+
+
+        // syncLinkWithInputIfAutoCompleteOrChoices
+        if(isEditableWithEitherAutoCompleteOrChoices()) {
+            final IModel<ObjectAdapterMemento> model = Util.createModel(getModel().asScalarModelWithPending());       
+            
+            if(select2Field == null) {
+                entityLink.setRequired(getModel().isRequired());
+                select2Field = Select2ChoiceUtil.newSelect2Choice(ID_AUTO_COMPLETE, model, getModel());
+                setProviderAndCurrAndPending(select2Field, getModel().getActionArgsHint());
+                if(!getModel().hasChoices()) {
+                    final Settings settings = select2Field.getSettings();
+                    final int minLength = getModel().getAutoCompleteMinLength();
+                    settings.setMinimumInputLength(minLength);
+                    settings.setPlaceholder(getModel().getName());
+                }
+                entityLink.addOrReplace(select2Field);
+            } else {
+                //
+                // the select2Field already exists, so the widget has been rendered before.  If it is
+                // being re-rendered now, it may be because some other property/parameter was invalid.
+                // when the form was submitted, the selected object (its oid as a string) would have
+                // been saved as rawInput.  If the property/parameter had been valid, then this rawInput
+                // would be correctly converted and processed by the select2Field's choiceProvider.  However,
+                // an invalid property/parameter means that the webpage is re-rendered in another request,
+                // and the rawInput can no longer be interpreted.  The net result is that the field appears
+                // with no input.
+                //
+                // The fix is therefore (I think) simply to clear any rawInput, so that the select2Field
+                // renders its state from its model.
+                //
+                // see: FormComponent#getInputAsArray()
+                // see: Select2Choice#renderInitializationScript()
+                //
+                select2Field.clearInput();
+            }
+        
+            permanentlyHideEntityIconAndTitleIfInRegularMode();
+            
+            // syncUsability
+            if(select2Field != null) {
+                final boolean mutability = entityLink.isEnableAllowed() && !getModel().isViewMode();
+                select2Field.setEnabled(mutability);
+            }
+
+        } else {
+            // this is horrid; adds a label to the id
+            // should instead be a 'temporary hide'
+            Components.permanentlyHide(entityLink, ID_AUTO_COMPLETE);
+            select2Field = null; // this forces recreation next time around
         }
         
-        // else on underlying type
-        final ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
-        final AutoCompleteFacet autoCompleteFacet = 
-                (typeOfSpecification != null)? typeOfSpecification.getFacet(AutoCompleteFacet.class):null;
-        return autoCompleteFacet != null;
     }
 
-    
+    // called by syncWithInput
+    private void permanentlyHideEntityIconAndTitleIfInRegularMode() {
+        if(getComponentForRegular() != null) {
+            Components.permanentlyHide((MarkupContainer)getComponentForRegular(), ID_ENTITY_ICON_AND_TITLE);
+        }
+    }
+
+
+    // //////////////////////////////////////
+    // setProviderAndCurrAndPending
     // //////////////////////////////////////
     
-    void setProviderAndCurrAndPending(
+    // called by syncWithInput, updateChoices
+    private void setProviderAndCurrAndPending(
             final Select2Choice<ObjectAdapterMemento> select2Field, 
             final ObjectAdapter[] argsIfAvailable) {
         if (getModel().hasChoices()) {
@@ -270,17 +328,18 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final ObjectAdapterMemento curr = select2Field.getModelObject();
         if(curr == null) {
             select2Field.getModel().setObject(null);
-            this.getModel().setObject(null);
+            getModel().setObject(null);
             return;
         }
+        
         if(!curr.containedIn(choiceMementos)) {
             if(!choiceMementos.isEmpty()) {
                 final ObjectAdapterMemento newAdapterMemento = choiceMementos.get(0);
                 select2Field.getModel().setObject(newAdapterMemento);
-                this.getModel().setObject(newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
+                getModel().setObject(newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
             } else {
                 select2Field.getModel().setObject(null);
-                this.getModel().setObject(null);
+                getModel().setObject(null);
             }
         }
     }
@@ -331,6 +390,9 @@ public class ReferencePanel extends ScalarPanelAbstract {
         };
     }
 
+    
+    // //////////////////////////////////////
+    // getInput, convertInput
     // //////////////////////////////////////
     
     // called by EntityLinkSelect2Panel
@@ -343,7 +405,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
     // called by EntityLinkSelect2Panel
     void convertInput() {
-        if(getModel().isEditMode() && isEditableWithEitherAutoCompleteOrChoices()) {
+        if(isEditableWithEitherAutoCompleteOrChoices()) {
 
             // flush changes to pending
             ObjectAdapterMemento convertedInput = select2Field.getConvertedInput();
@@ -361,111 +423,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
         entityLink.setConvertedInput(pendingAdapter);
     }
 
-    
-
     // //////////////////////////////////////
-
-    // called by EntityLinkSelect2Panel
-    void syncWithInput() {
-        final ObjectAdapter adapter = getModel().getPendingElseCurrentAdapter();
-        syncLinkWithInput(adapter);
-        syncLinkWithInputIfAutoCompleteOrChoices();
-        syncVisibilityAndUsability();
-    }
-
-    // called by syncWithInput
-    private void syncLinkWithInput(final ObjectAdapter adapter) {
-        if(labelIfRegular == null) {
-            return;
-        }
-        
-        if (adapter != null) {
-            final EntityModel entityModelForLink = new EntityModel(adapter);
-            
-            entityModelForLink.setContextAdapterIfAny(getModel().getContextAdapterIfAny());
-            entityModelForLink.setRenderingHint(getModel().getRenderingHint());
-            
-            final ComponentFactory componentFactory = 
-                    getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
-            final Component component = componentFactory.createComponent(entityModelForLink);
-            
-            labelIfRegular.addOrReplace(component);
-        } else {
-            Components.permanentlyHide(labelIfRegular, ReferencePanel.ID_ENTITY_ICON_AND_TITLE);
-        }
-    }
-
-    // called by syncWithInput
-    private void syncLinkWithInputIfAutoCompleteOrChoices() {
-        if(!isEditableWithEitherAutoCompleteOrChoices()) {
-            // this is horrid; adds a label to the id
-            // should instead be a 'temporary hide'
-            Components.permanentlyHide(entityLink, ReferencePanel.ID_AUTO_COMPLETE);
-            select2Field = null; // this forces recreation next time around
-            return;
-        }
-    
-        final IModel<ObjectAdapterMemento> model = Util.createModel(getModel().asScalarModelWithPending());       
-    
-        if(select2Field == null) {
-            entityLink.setRequired(getModel().isRequired());
-            select2Field = Select2ChoiceUtil.newSelect2Choice(ReferencePanel.ID_AUTO_COMPLETE, model, getModel());
-            setProviderAndCurrAndPending(select2Field, getModel().getActionArgsHint());
-            if(!getModel().hasChoices()) {
-                final Settings settings = select2Field.getSettings();
-                final int minLength = getModel().getAutoCompleteMinLength();
-                settings.setMinimumInputLength(minLength);
-                settings.setPlaceholder(getModel().getName());
-            }
-            entityLink.addOrReplace(select2Field);
-        } else {
-            //
-            // the select2Field already exists, so the widget has been rendered before.  If it is
-            // being re-rendered now, it may be because some other property/parameter was invalid.
-            // when the form was submitted, the selected object (its oid as a string) would have
-            // been saved as rawInput.  If the property/parameter had been valid, then this rawInput
-            // would be correctly converted and processed by the select2Field's choiceProvider.  However,
-            // an invalid property/parameter means that the webpage is re-rendered in another request,
-            // and the rawInput can no longer be interpreted.  The net result is that the field appears
-            // with no input.
-            //
-            // The fix is therefore (I think) simply to clear any rawInput, so that the select2Field
-            // renders its state from its model.
-            //
-            // see: FormComponent#getInputAsArray()
-            // see: Select2Choice#renderInitializationScript()
-            //
-            select2Field.clearInput();
-        }
-    
-        if(labelIfRegular != null) {
-            // no need for link, since can see in drop-down
-            Components.permanentlyHide(labelIfRegular, ReferencePanel.ID_ENTITY_ICON_AND_TITLE);
-        }
-    }
-
-    // //////////////////////////////////////
-
-    /**
-     * REVIEW: there ought to be a better way to do this. I'd hoped to override
-     * {@link #setEnabled(boolean)}, but it is <tt>final</tt>, and there doesn't
-     * seem to be anyway to install a listener. One option might be to move it
-     * to {@link #onBeforeRender()} ?
-     * 
-     * <p>
-     * called by onBeforeRender*, also from syncWithInput
-     */
-    private void syncVisibilityAndUsability() {
-        if(labelIfRegular != null && isEditableWithEitherAutoCompleteOrChoices()) {
-            Components.permanentlyHide(labelIfRegular, ReferencePanel.ID_ENTITY_ICON_AND_TITLE);
-        }
-
-        if(select2Field != null) {
-            final boolean mutability = entityLink.isEnableAllowed() && !getModel().isViewMode();
-            select2Field.setEnabled(mutability);
-        }
-    }
-
+    // updateChoices
     // //////////////////////////////////////
 
     /**
@@ -484,4 +443,34 @@ public class ReferencePanel extends ScalarPanelAbstract {
         }
     }
 
+    
+    // //////////////////////////////////////
+    // helpers querying model state
+    // //////////////////////////////////////
+
+    // called from convertInput, syncWithInput
+    private boolean isEditableWithEitherAutoCompleteOrChoices() {
+        if(getModel().getRenderingHint().isInTable()) {
+            return false;
+        }
+        // doesn't apply if not editable, either
+        if(getModel().isViewMode()) {
+            return false;
+        }
+        return getModel().hasChoices() || hasParamOrPropertyAutoComplete() || hasObjectAutoComplete();
+    }
+
+    // called by isEditableWithEitherAutoCompleteOrChoices, also syncProviderAndCurrAndPending
+    private boolean hasParamOrPropertyAutoComplete() {
+        return getModel().hasAutoComplete();
+    }
+
+    // called by isEditableWithEitherAutoCompleteOrChoices
+    private boolean hasObjectAutoComplete() {
+        final ObjectSpecification typeOfSpecification = getModel().getTypeOfSpecification();
+        final AutoCompleteFacet autoCompleteFacet = 
+                (typeOfSpecification != null)? typeOfSpecification.getFacet(AutoCompleteFacet.class):null;
+        return autoCompleteFacet != null;
+    }
+    
 }

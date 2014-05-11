@@ -69,12 +69,6 @@ class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> i
     }
 
     @Override
-    protected void onBeforeRender() {
-        owningPanel.syncWithInput();
-        super.onBeforeRender();
-    }
-
-    @Override
     public void onCancel() {
         owningPanel.getModel().clearPending();
     }
