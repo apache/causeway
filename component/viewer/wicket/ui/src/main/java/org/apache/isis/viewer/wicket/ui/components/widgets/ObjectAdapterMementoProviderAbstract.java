@@ -80,4 +80,8 @@ public abstract class ObjectAdapterMementoProviderAbstract extends TextChoicePro
         };
         return Collections2.transform(ids, function);
     }
+    
+    protected ScalarModel getScalarModel() {
+        return scalarModel;
+    }
 }
