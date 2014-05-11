@@ -66,11 +66,10 @@ public class ReferencePanel extends ScalarPanelAbstract {
     private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     private static final String ID_SCALAR_NAME = "scalarName";
 
-    private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
-
     static final String ID_AUTO_COMPLETE = "autoComplete";
-    
     static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
+
+    private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
     private EntityLinkSelect2Panel entityLink;
     private EntityLinkSimplePanel entitySimpleLink;
@@ -81,33 +80,47 @@ public class ReferencePanel extends ScalarPanelAbstract {
         super(id, scalarModel);
     }
 
-    @Override
-    protected void onBeforeRenderWhenEnabled() {
-        super.onBeforeRenderWhenEnabled();
-        entityLink.setEnabled(true);
-        entityLink.owningPanel.syncVisibilityAndUsability(entityLink, entityLink.select2Field);
-    }
-
-    @Override
-    protected void onBeforeRenderWhenViewMode() {
-        super.onBeforeRenderWhenViewMode();
-        entityLink.setEnabled(true);
-        entityLink.owningPanel.syncVisibilityAndUsability(entityLink, entityLink.select2Field);
-    }
-
+    // //////////////////////////////////////
+    
     @Override
     protected void onBeforeRenderWhenDisabled(final String disableReason) {
         super.onBeforeRenderWhenDisabled(disableReason);
         final EntityModel entityLinkModel = (EntityModel) entityLink.getModel();
         entityLinkModel.toViewMode();
         setTitleAttribute(disableReason);
-        entityLink.owningPanel.syncVisibilityAndUsability(entityLink, entityLink.select2Field);
+        syncVisibilityAndUsability(entityLink, entityLink.select2Field);
     }
 
     private void setTitleAttribute(final String titleAttribute) {
         entityLink.add(new AttributeModifier("title", Model.of(titleAttribute)));
     }
 
+    /**
+     * First called as a side-effect of {@link #beforeRender()}
+     */
+    @Override
+    protected Component addComponentForCompact() {
+
+        final ScalarModel scalarModel = getModel();
+        final String name = scalarModel.getName();
+        
+        entitySimpleLink = (EntityLinkSimplePanel) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
+        
+        entitySimpleLink.setOutputMarkupId(true);
+        entitySimpleLink.setLabel(Model.of(name));
+        
+        final FormComponentLabel labelIfCompact = new FormComponentLabel(ID_SCALAR_IF_COMPACT, entitySimpleLink);
+        labelIfCompact.add(entitySimpleLink);
+        
+        addOrReplace(labelIfCompact);
+        
+        return labelIfCompact;
+    }
+
+
+    /**
+     * First called as a side-effect of {@link #beforeRender()}
+     */
     @Override
     protected FormComponentLabel addComponentForRegular() {
         final ScalarModel scalarModel = getModel();
@@ -135,41 +148,16 @@ public class ReferencePanel extends ScalarPanelAbstract {
         addFeedbackTo(labelIfRegular, entityLink);
         addAdditionalLinksTo(labelIfRegular);
         
-        addStandardSemantics();
-        addSemantics();
-
-        if(getModel().isRequired()) {
-            labelIfRegular.add(new CssClassAppender("mandatory"));
-        }
-        return labelIfRegular;
-    }
-
-    protected void addStandardSemantics() {
-        setRequiredIfSpecified();
-    }
-
-    private void setRequiredIfSpecified() {
-        final ScalarModel scalarModel = getModel();
-        final boolean required = scalarModel.isRequired();
-        entityLink.setRequired(required);
-    }
-
-    protected void addSemantics() {
-
-        addObjectAdapterValidator();
-    }
-
-    private void addObjectAdapterValidator() {
-        final ScalarModel scalarModel = getModel();
-
+        // add semantics
+        entityLink.setRequired(getModel().isRequired());
         entityLink.add(new IValidator<ObjectAdapter>() {
-
+        
             private static final long serialVersionUID = 1L;
-
+        
             @Override
             public void validate(final IValidatable<ObjectAdapter> validatable) {
                 final ObjectAdapter proposedAdapter = validatable.getValue();
-                final String reasonIfAny = scalarModel.validate(proposedAdapter);
+                final String reasonIfAny = getModel().validate(proposedAdapter);
                 if (reasonIfAny != null) {
                     final ValidationError error = new ValidationError();
                     error.setMessage(reasonIfAny);
@@ -177,33 +165,32 @@ public class ReferencePanel extends ScalarPanelAbstract {
                 }
             }
         });
-    }
 
-    /**
-     * Mandatory hook method to build the component to render the model when in
-     * {@link Rendering#COMPACT compact} format.
-     */
-    @Override
-    protected Component addComponentForCompact() {
-
-        final ScalarModel scalarModel = getModel();
-        final String name = scalarModel.getName();
-        
-        entitySimpleLink = (EntityLinkSimplePanel) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
-        
-        entitySimpleLink.setOutputMarkupId(true);
-        entitySimpleLink.setLabel(Model.of(name));
-        
-        final FormComponentLabel labelIfCompact = new FormComponentLabel(ID_SCALAR_IF_COMPACT, entitySimpleLink);
-        labelIfCompact.add(entitySimpleLink);
-        
-        addOrReplace(labelIfCompact);
-        
-        return labelIfCompact;
+        if(getModel().isRequired()) {
+            labelIfRegular.add(new CssClassAppender("mandatory"));
+        }
+        return labelIfRegular;
     }
 
     // //////////////////////////////////////
 
+    @Override
+    protected void onBeforeRenderWhenEnabled() {
+        super.onBeforeRenderWhenEnabled();
+        entityLink.setEnabled(true);
+        syncVisibilityAndUsability(entityLink, entityLink.select2Field);
+    }
+
+    @Override
+    protected void onBeforeRenderWhenViewMode() {
+        super.onBeforeRenderWhenViewMode();
+        entityLink.setEnabled(true);
+        syncVisibilityAndUsability(entityLink, entityLink.select2Field);
+    }
+
+    // //////////////////////////////////////
+
+    // called from buildGui
     @Override
     protected void addFormComponentBehavior(Behavior behavior) {
         if(entityLink.select2Field != null) {
@@ -211,20 +198,9 @@ public class ReferencePanel extends ScalarPanelAbstract {
         }
     }
 
-    @Override
-    public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
-        if(entityLink.select2Field != null) {
-            setProviderAndCurrAndPending(entityLink.select2Field, argsIfAvailable);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     // //////////////////////////////////////
 
-    
-    boolean isEditableWithEitherAutoCompleteOrChoices() {
+    private boolean isEditableWithEitherAutoCompleteOrChoices() {
         if(getModel().getRenderingHint().isInTable()) {
             return false;
         }
@@ -252,12 +228,17 @@ public class ReferencePanel extends ScalarPanelAbstract {
         return autoCompleteFacet != null;
     }
 
-    void setProviderAndCurrAndPending(final Select2Choice<ObjectAdapterMemento> select2Field, final ObjectAdapter[] argsIfAvailable) {
+    
+    // //////////////////////////////////////
+    
+    void setProviderAndCurrAndPending(
+            final Select2Choice<ObjectAdapterMemento> select2Field, 
+            final ObjectAdapter[] argsIfAvailable) {
         if (getModel().hasChoices()) {
             
-            final List<ObjectAdapterMemento> choiceMementos = getChoiceMementos(argsIfAvailable);
+            final List<ObjectAdapterMemento> choiceMementos = obtainChoiceMementos(argsIfAvailable);
             ObjectAdapterMementoProviderAbstract providerForChoices = providerForChoices(choiceMementos);
-            
+
             select2Field.setProvider(providerForChoices);
             getModel().clearPending();
             
@@ -272,7 +253,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
         }
     }
 
-    List<ObjectAdapterMemento> getChoiceMementos(final ObjectAdapter[] argsIfAvailable) {
+    // called by setProviderAndCurrAndPending
+    private List<ObjectAdapterMemento> obtainChoiceMementos(final ObjectAdapter[] argsIfAvailable) {
         final List<ObjectAdapter> choices = Lists.newArrayList();
         if(getModel().hasChoices()) {
             choices.addAll(getModel().getChoices(argsIfAvailable));
@@ -281,43 +263,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
         return Lists.newArrayList(Lists.transform(choices, ObjectAdapterMemento.Functions.fromAdapter()));
     }
 
-
-    ChoiceProvider<ObjectAdapterMemento> providerForObjectAutoComplete() {
-        return new ObjectAdapterMementoProviderAbstract(getModel()) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected List<ObjectAdapterMemento> obtainMementos(String term) {
-                final ObjectSpecification typeOfSpecification = getScalarModel().getTypeOfSpecification();
-                final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
-                final List<ObjectAdapter> results = autoCompleteFacet.execute(term);
-                return Lists.transform(results, ObjectAdapterMemento.Functions.fromAdapter());
-            }
-        };
-    }
-
-
-    ChoiceProvider<ObjectAdapterMemento> providerForParamOrPropertyAutoComplete() {
-        return new ObjectAdapterMementoProviderAbstract(getModel()) {
-            
-            private static final long serialVersionUID = 1L;
-            
-            @Override
-            protected List<ObjectAdapterMemento> obtainMementos(String term) {
-                final List<ObjectAdapter> autoCompleteChoices = Lists.newArrayList();
-                if(getScalarModel().hasAutoComplete()) {
-                    autoCompleteChoices.addAll(getScalarModel().getAutoComplete(term));
-                }
-                // take a copy otherwise is only lazily evaluated
-                return Lists.newArrayList(Lists.transform(autoCompleteChoices, ObjectAdapterMemento.Functions.fromAdapter()));
-            }
-            
-        };
-    }
-    
-
-    void resetIfCurrentNotInChoices(final Select2Choice<ObjectAdapterMemento> select2Field, final List<ObjectAdapterMemento> choiceMementos) {
+    // called by setProviderAndCurrAndPending
+    private void resetIfCurrentNotInChoices(final Select2Choice<ObjectAdapterMemento> select2Field, final List<ObjectAdapterMemento> choiceMementos) {
         final ObjectAdapterMemento curr = select2Field.getModelObject();
         if(curr == null) {
             select2Field.getModel().setObject(null);
@@ -336,7 +283,43 @@ public class ReferencePanel extends ScalarPanelAbstract {
         }
     }
 
-    ObjectAdapterMementoProviderAbstract providerForChoices(final List<ObjectAdapterMemento> choiceMementos) {
+    // called by setProviderAndCurrAndPending
+    private ChoiceProvider<ObjectAdapterMemento> providerForObjectAutoComplete() {
+        return new ObjectAdapterMementoProviderAbstract(getModel()) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected List<ObjectAdapterMemento> obtainMementos(String term) {
+                final ObjectSpecification typeOfSpecification = getScalarModel().getTypeOfSpecification();
+                final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
+                final List<ObjectAdapter> results = autoCompleteFacet.execute(term);
+                return Lists.transform(results, ObjectAdapterMemento.Functions.fromAdapter());
+            }
+        };
+    }
+
+    // called by setProviderAndCurrAndPending
+    private ChoiceProvider<ObjectAdapterMemento> providerForParamOrPropertyAutoComplete() {
+        return new ObjectAdapterMementoProviderAbstract(getModel()) {
+            
+            private static final long serialVersionUID = 1L;
+            
+            @Override
+            protected List<ObjectAdapterMemento> obtainMementos(String term) {
+                final List<ObjectAdapter> autoCompleteChoices = Lists.newArrayList();
+                if(getScalarModel().hasAutoComplete()) {
+                    autoCompleteChoices.addAll(getScalarModel().getAutoComplete(term));
+                }
+                // take a copy otherwise is only lazily evaluated
+                return Lists.newArrayList(Lists.transform(autoCompleteChoices, ObjectAdapterMemento.Functions.fromAdapter()));
+            }
+            
+        };
+    }
+
+    // called by setProviderAndCurrAndPending
+    private ObjectAdapterMementoProviderAbstract providerForChoices(final List<ObjectAdapterMemento> choiceMementos) {
         return new ObjectAdapterMementoProviderAbstract(getModel()) {
             private static final long serialVersionUID = 1L;
             @Override
@@ -346,7 +329,72 @@ public class ReferencePanel extends ScalarPanelAbstract {
         };
     }
 
-    void syncLinkWithInput(EntityLinkSelect2Panel linkPanel, final ObjectAdapter adapter) {
+    /**
+     * Must be called after {@link #setEnabled(boolean)}, apparently...
+     * originally to ensure that the findUsing button and entityClearLink were
+     * shown/not shown as required, however these have now gone.  Which beckons the question,
+     * is it still important?
+     * 
+     * <p>
+     * REVIEW: there ought to be a better way to do this. I'd hoped to override
+     * {@link #setEnabled(boolean)}, but it is <tt>final</tt>, and there doesn't
+     * seem to be anyway to install a listener. One option might be to move it
+     * to {@link #onBeforeRender()} ?
+     */
+    private void syncVisibilityAndUsability(EntityLinkSelect2Panel linkPanel, Select2Choice<ObjectAdapterMemento> select2Field) {
+        final boolean mutability = linkPanel.isEnableAllowed() && !getModel().isViewMode();
+    
+        if(select2Field != null) {
+            select2Field.setEnabled(mutability);
+        }
+        
+        if(labelIfRegular != null && isEditableWithEitherAutoCompleteOrChoices()) {
+            Components.permanentlyHide(labelIfRegular, ReferencePanel.ID_ENTITY_ICON_AND_TITLE);
+        }
+    }
+
+    // //////////////////////////////////////
+    
+    // called by EntityLinkSelect2Panel
+    String getInput() {
+        final ObjectAdapter pendingElseCurrentAdapter = getModel().getPendingElseCurrentAdapter();
+        return pendingElseCurrentAdapter != null? pendingElseCurrentAdapter.titleString(null): "(no object)";
+    }
+
+    // //////////////////////////////////////
+
+    // called by EntityLinkSelect2Panel
+    void convertInput(EntityLinkSelect2Panel linkPanel) {
+        if(getModel().isEditMode() && isEditableWithEitherAutoCompleteOrChoices()) {
+            // flush changes to pending
+            this.onSelected(linkPanel, linkPanel.select2Field.getConvertedInput());
+        }
+    
+        final ObjectAdapter pendingAdapter = getModel().getPendingAdapter();
+        linkPanel.setConvertedInput(pendingAdapter);
+    }
+
+    private void onSelected(EntityLinkSelect2Panel linkPanel, final ObjectAdapterMemento selectedAdapterMemento) {
+
+        getModel().setPending(selectedAdapterMemento);
+        getModel().setObject(selectedAdapterMemento!=null?selectedAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK):null);
+        if(linkPanel.select2Field != null) {
+            linkPanel.select2Field.getModel().setObject(selectedAdapterMemento);
+        }
+    }
+
+    // //////////////////////////////////////
+
+    // called by EntityLinkSelect2Panel
+    void syncWithInput(EntityLinkSelect2Panel linkPanel) {
+        final ObjectAdapter adapter = getModel().getPendingElseCurrentAdapter();
+        syncLinkWithInput(linkPanel, adapter);
+        syncLinkWithInputIfAutoCompleteOrChoices(linkPanel);
+        syncVisibilityAndUsability(linkPanel, linkPanel.select2Field);
+    }
+
+    // called by syncWithInput
+    private void syncLinkWithInput(EntityLinkSelect2Panel linkPanel, final ObjectAdapter adapter) {
         if(labelIfRegular == null) {
             return;
         }
@@ -368,58 +416,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
         }
     }
 
-
-    void onSelected(EntityLinkSelect2Panel linkPanel, final ObjectAdapterMemento selectedAdapterMemento) {
-
-        getModel().setPending(selectedAdapterMemento);
-        getModel().setObject(selectedAdapterMemento!=null?selectedAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK):null);
-        if(linkPanel.select2Field != null) {
-            linkPanel.select2Field.getModel().setObject(selectedAdapterMemento);
-        }
-    }
-
-    /**
-     * Must be called after {@link #setEnabled(boolean)}, apparently...
-     * originally to ensure that the findUsing button and entityClearLink were
-     * shown/not shown as required, however these have now gone.  Which beckons the question,
-     * is it still important?
-     * 
-     * <p>
-     * REVIEW: there ought to be a better way to do this. I'd hoped to override
-     * {@link #setEnabled(boolean)}, but it is <tt>final</tt>, and there doesn't
-     * seem to be anyway to install a listener. One option might be to move it
-     * to {@link #onBeforeRender()} ?
-     */
-    void syncVisibilityAndUsability(EntityLinkSelect2Panel linkPanel, Select2Choice<ObjectAdapterMemento> select2Field) {
-        final boolean mutability = linkPanel.isEnableAllowed() && !getModel().isViewMode();
-    
-        if(select2Field != null) {
-            select2Field.setEnabled(mutability);
-        }
-        
-        if(labelIfRegular != null && isEditableWithEitherAutoCompleteOrChoices()) {
-            Components.permanentlyHide(labelIfRegular, ReferencePanel.ID_ENTITY_ICON_AND_TITLE);
-        }
-    }
-
-    void convertInput(EntityLinkSelect2Panel linkPanel) {
-        if(getModel().isEditMode() && isEditableWithEitherAutoCompleteOrChoices()) {
-            // flush changes to pending
-            this.onSelected(linkPanel, linkPanel.select2Field.getConvertedInput());
-        }
-    
-        final ObjectAdapter pendingAdapter = getModel().getPendingAdapter();
-        linkPanel.setConvertedInput(pendingAdapter);
-    }
-
-    void syncWithInput(EntityLinkSelect2Panel linkPanel) {
-        final ObjectAdapter adapter = getModel().getPendingElseCurrentAdapter();
-        syncLinkWithInput(linkPanel, adapter);
-        doSyncWithInputIfAutoCompleteOrChoices(linkPanel);
-        syncVisibilityAndUsability(linkPanel, linkPanel.select2Field);
-    }
-
-    void doSyncWithInputIfAutoCompleteOrChoices(EntityLinkSelect2Panel linkPanel) {
+    // called by syncWithInput
+    private void syncLinkWithInputIfAutoCompleteOrChoices(EntityLinkSelect2Panel linkPanel) {
         if(!isEditableWithEitherAutoCompleteOrChoices()) {
             // this is horrid; adds a label to the id
             // should instead be a 'temporary hide'
@@ -467,10 +465,22 @@ public class ReferencePanel extends ScalarPanelAbstract {
         }
     }
 
-    String getInput() {
-        final ObjectAdapter pendingElseCurrentAdapter = getModel().getPendingElseCurrentAdapter();
-        return pendingElseCurrentAdapter != null? pendingElseCurrentAdapter.titleString(null): "(no object)";
-    }
+    // //////////////////////////////////////
 
+    /**
+     * Hook method to refresh choices when changing.
+     * 
+     * <p>
+     * called from onUpdate callback
+     */
+    @Override
+    public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
+        if(entityLink.select2Field != null) {
+            setProviderAndCurrAndPending(entityLink.select2Field, argsIfAvailable);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }
