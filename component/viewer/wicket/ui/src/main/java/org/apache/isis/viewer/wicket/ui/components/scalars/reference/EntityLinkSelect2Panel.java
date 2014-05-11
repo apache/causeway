@@ -25,24 +25,14 @@ import org.apache.wicket.markup.html.form.FormComponentPanel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.ui.components.actions.ActionInvokeHandler;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 
-/**
- * {@link FormComponentPanel} representing a reference to an entity: a link and
- * (optionally) an autocomplete field.
- */
-class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> implements CancelHintRequired, ActionInvokeHandler  {
+class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> implements CancelHintRequired  {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * This component may be null if there are no choices or autoComplete, or if in read-only mode.
-     */
     Select2Choice<ObjectAdapterMemento> select2Field;
-
     ReferencePanel owningPanel;
 
     public EntityLinkSelect2Panel(final String id, final ReferencePanel owningPanel) {
@@ -50,7 +40,7 @@ class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> i
         this.owningPanel = owningPanel;
         
         setType(ObjectAdapter.class);
-        syncWithInput();
+        owningPanel.syncWithInput(this);
     }
 
     /**
@@ -73,27 +63,18 @@ class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> i
      */
     @Override
     public String getInput() {
-        final ObjectAdapter pendingElseCurrentAdapter = owningPanel.getModel().getPendingElseCurrentAdapter();
-        return pendingElseCurrentAdapter != null? pendingElseCurrentAdapter.titleString(null): "(no object)";
+        return owningPanel.getInput();
     }
 
     @Override
     protected void convertInput() {
-        this.owningPanel.convertInput(this);
+        owningPanel.convertInput(this);
     }
 
     @Override
     protected void onBeforeRender() {
-        syncWithInput();
+        owningPanel.syncWithInput(this);
         super.onBeforeRender();
-    }
-
-    private void syncWithInput() {
-        this.owningPanel.syncWithInput(this);
-    }
-
-    @Override
-    public void onClick(final ActionModel actionModel) {
     }
 
     @Override

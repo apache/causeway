@@ -52,7 +52,6 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.actions.ActionInvokeHandler;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
@@ -65,7 +64,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * {@link PanelAbstract Panel} representing the summary details (title, icon and
  * actions) of an entity, as per the provided {@link EntityModel}.
  */
-public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements ActionInvokeHandler {
+public class EntityHeaderPanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -171,11 +170,6 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> implements Act
     @SuppressWarnings("deprecation")
     protected Filter<ObjectAction> dynamicallyVisibleFor(final ObjectAdapter adapter) {
         return ObjectAction.Filters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.ANYWHERE);
-    }
-
-    @Override
-    public void onClick(final ActionModel actionModel) {
-        setResponsePage(new ActionPromptPage(actionModel));
     }
 
     

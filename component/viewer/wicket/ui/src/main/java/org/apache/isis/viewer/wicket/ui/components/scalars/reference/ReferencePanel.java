@@ -358,7 +358,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
         entityModelForLink.setContextAdapterIfAny(getModel().getContextAdapterIfAny());
         entityModelForLink.setRenderingHint(getModel().getRenderingHint());
         
-        final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
+        final ComponentFactory componentFactory = 
+                getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
         final Component component = componentFactory.createComponent(entityModelForLink);
         
         linkPanel.addOrReplace(component);
@@ -463,6 +464,11 @@ public class ReferencePanel extends ScalarPanelAbstract {
         // no need for the 'null' title, since if there is no object yet
         // can represent this fact in the drop-down
         // permanentlyHide(ID_ENTITY_TITLE_NULL);
+    }
+
+    String getInput() {
+        final ObjectAdapter pendingElseCurrentAdapter = getModel().getPendingElseCurrentAdapter();
+        return pendingElseCurrentAdapter != null? pendingElseCurrentAdapter.titleString(null): "(no object)";
     }
 
 

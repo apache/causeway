@@ -19,44 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import com.google.common.collect.Lists;
-import com.vaynberg.wicket.select2.ChoiceProvider;
-import com.vaynberg.wicket.select2.Select2Choice;
-import com.vaynberg.wicket.select2.Settings;
-
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
-import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
-import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
-import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending.Util;
-import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.util.MementoFunctions;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.actions.ActionInvokeHandler;
-import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 
@@ -64,7 +34,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormCom
  * {@link FormComponentPanel} representing a reference to an entity: a link and
  * (optionally) an autocomplete field.
  */
-public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdapter> implements CancelHintRequired, ActionInvokeHandler  {
+public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdapter> implements CancelHintRequired  {
 
     private static final long serialVersionUID = 1L;
 
@@ -109,10 +79,6 @@ public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdap
             addOrReplace(new Label(ID_ENTITY_TITLE_NULL, ""));
             permanentlyHide(ID_ENTITY_ICON_AND_TITLE);
         }
-    }
-
-    @Override
-    public void onClick(final ActionModel actionModel) {
     }
 
     @Override
