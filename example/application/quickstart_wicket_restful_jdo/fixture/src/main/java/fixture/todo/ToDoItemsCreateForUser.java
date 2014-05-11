@@ -63,7 +63,7 @@ public class ToDoItemsCreateForUser extends SimpleFixtureScript {
 
         createToDoItemForUser("Buy milk", Category.Domestic, Subcategory.Shopping, user, daysFromToday(0), new BigDecimal("0.75"), resultList);
         createToDoItemForUser("Buy bread", Category.Domestic, Subcategory.Shopping, user, daysFromToday(0), new BigDecimal("1.75"), resultList);
-        createToDoItemForUser("Buy stamps", Category.Domestic, Subcategory.Shopping, user, daysFromToday(0), new BigDecimal("10.00"), resultList).setComplete(true);
+        createToDoItemForUser("Buy stamps", Category.Domestic, Subcategory.Shopping, user, daysFromToday(0), new BigDecimal("10.00"), resultList);
         createToDoItemForUser("Pick up laundry", Category.Domestic, Subcategory.Chores, user, daysFromToday(6), new BigDecimal("7.50"), resultList);
         createToDoItemForUser("Mow lawn", Category.Domestic, Subcategory.Garden, user, daysFromToday(6), null, resultList);
         createToDoItemForUser("Vacuum house", Category.Domestic, Subcategory.Housework, user, daysFromToday(3), null, resultList);
@@ -71,7 +71,7 @@ public class ToDoItemsCreateForUser extends SimpleFixtureScript {
 
         createToDoItemForUser("Write to penpal", Category.Other, Subcategory.Other, user, null, null, resultList);
 
-        createToDoItemForUser("Write blog post", Category.Professional, Subcategory.Marketing, user, daysFromToday(7), null, resultList).setComplete(true);
+        createToDoItemForUser("Write blog post", Category.Professional, Subcategory.Marketing, user, daysFromToday(7), null, resultList);
         createToDoItemForUser("Organize brown bag", Category.Professional, Subcategory.Consulting, user, daysFromToday(14), null, resultList);
         createToDoItemForUser("Submit conference session", Category.Professional, Subcategory.Education, user, daysFromToday(21), null, resultList);
         createToDoItemForUser("Stage Isis release", Category.Professional, Subcategory.OpenSource, user, null, null, resultList);

@@ -19,7 +19,11 @@
 
 package fixture.todo;
 
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 
+/**
+ * Refactored to reuse the newer {@link FixtureScript} API.
+ */
 public class ToDoItemsFixture extends ToDoItemsResetForUser {
 
     public ToDoItemsFixture() {
@@ -28,6 +32,7 @@ public class ToDoItemsFixture extends ToDoItemsResetForUser {
     
     public ToDoItemsFixture(String user) {
         super(user);
+        setDiscoverability(Discoverability.NON_DISCOVERABLE);
     }
 
 }

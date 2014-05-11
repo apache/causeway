@@ -71,5 +71,6 @@ public class ToDoItemsResetForUser extends CompositeFixtureScript {
     protected void addChildren() {
         add("delete", new ToDoItemsDeleteForUser(user));
         add("create", new ToDoItemsCreateForUser(user));
+        add("complete", new ToDoItemsCompleteForUser(user));
     }
 }
