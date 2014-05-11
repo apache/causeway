@@ -47,6 +47,13 @@ public class PropertyInitializationFacetViaSetterMethod extends PropertyInitiali
     }
 
     @Override
+    public Intent getIntent(final Method method) {
+        // LIMITATION: we cannot distinguish between setXxx being called for a modify or for an initialization
+        // so we just assume its a setter.
+        return Intent.MODIFY_PROPERTY;
+    }
+
+    @Override
     public boolean impliesResolve() {
         return false;
     }

@@ -52,7 +52,7 @@ public final class ImperativeFacetUtils {
      */
     @Deprecated
     public static ImperativeFacet.Flags getImperativeFacetFlags(final ObjectMember member, final Method method) {
-        return ImperativeFacet.Util.getImperativeFacetFlags(member, method);
+        return ImperativeFacet.Util.getFlags(member, method);
     }
 
 }

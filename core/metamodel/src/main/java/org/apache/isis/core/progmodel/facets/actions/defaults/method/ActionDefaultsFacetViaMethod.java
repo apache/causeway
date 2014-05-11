@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetViaMethod;
@@ -64,6 +65,11 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
     @Override
     public List<Method> getMethods() {
         return Collections.singletonList(defaultMethod);
+    }
+
+    @Override
+    public Intent getIntent(final Method method) {
+        return Intent.DEFAULTS;
     }
 
     @Override

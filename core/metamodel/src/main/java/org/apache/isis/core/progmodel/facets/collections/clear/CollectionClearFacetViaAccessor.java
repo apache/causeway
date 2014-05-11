@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacetAbstract;
 
 public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstract implements ImperativeFacet {
@@ -53,6 +54,11 @@ public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstrac
     @Override
     public List<Method> getMethods() {
         return Collections.singletonList(method);
+    }
+
+    @Override
+    public Intent getIntent(final Method method) {
+        return Intent.ACCESSOR;
     }
 
     @Override

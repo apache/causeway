@@ -110,14 +110,8 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
     public void endTransactionCommitsTransactionWhenLevelDecrementsDownToZero() throws Exception {
         // setup
         context.ignoring(mockObjectStore);
-        context.checking(new Expectations() {
-            {
-                oneOf(mockPersistenceSession).startTransactionOnCommandIfConfigured(with(any(UUID.class)));
-            }
-        });
         transactionManager.startTransaction();
 
-        
         context.checking(new Expectations() {
             {
                 oneOf(mockPersistenceSession).objectChangedAllDirty();
@@ -150,7 +144,7 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
         context.checking(new Expectations() {
             {
                 final Sequence transactionOrdering = context.sequence("transactionOrdering");
-                one(mockObjectStore).startTransaction();
+                oneOf(mockObjectStore).startTransaction();
                 inSequence(transactionOrdering);
 
                 // flushed twice, once before publishing, once after

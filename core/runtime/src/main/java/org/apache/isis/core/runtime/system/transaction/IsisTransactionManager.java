@@ -27,16 +27,22 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
+import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.audit.AuditingService3;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.command.CommandDefault;
+import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
 import org.apache.isis.applib.services.publish.EventPayloadForObjectChanged;
@@ -53,6 +59,8 @@ import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
+import org.apache.isis.core.runtime.services.RequestScopedService;
+import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
@@ -262,7 +270,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
     
 
     // //////////////////////////////////////////////////////
-    // start, flush, abort, end
+    // start
     // //////////////////////////////////////////////////////
 
     public synchronized void startTransaction() {
@@ -271,12 +279,18 @@ public class IsisTransactionManager implements SessionScopedComponent {
         if (getTransaction() == null || getTransaction().getState().isComplete()) {
             noneInProgress = true;
 
+            final List<Object> registeredServices = servicesInjector.getRegisteredServices();
+
+            startRequestOnRequestScopedServices(registeredServices);
+            createCommandIfConfigured();
+            initOtherApplibServicesIfConfigured(registeredServices);
+            
             IsisTransaction isisTransaction = createTransaction();
             transactionLevel = 0;
 
             transactionalResource.startTransaction();
-            
-            persistenceSession.startTransactionOnCommandIfConfigured(isisTransaction.getTransactionId());
+
+            startTransactionOnCommandIfConfigured(isisTransaction.getTransactionId());
         }
 
         transactionLevel++;
@@ -286,6 +300,88 @@ public class IsisTransactionManager implements SessionScopedComponent {
         }
     }
 
+    
+    private void initOtherApplibServicesIfConfigured(final List<Object> registeredServices) {
+        
+        final EventBusServiceDefault ebsd = getServiceOrNull(EventBusServiceDefault.class);
+        if(ebsd != null) {
+            ebsd.open();
+        }
+        
+        final Bulk.InteractionContext bic = getServiceOrNull(Bulk.InteractionContext.class);
+        if(bic != null) {
+            Bulk.InteractionContext.current.set(bic);
+        }
+        
+    }
+
+    private void startRequestOnRequestScopedServices(final List<Object> registeredServices) {
+        for (final Object service : registeredServices) {
+            if(service instanceof RequestScopedService) {
+                ((RequestScopedService)service).__isis_startRequest();
+            }
+        }
+    }
+
+    private void endRequestOnRequestScopeServices() {
+        for (final Object service : servicesInjector.getRegisteredServices()) {
+            if(service instanceof RequestScopedService) {
+                ((RequestScopedService)service).__isis_endRequest();
+            }
+        }
+    }
+
+    private void createCommandIfConfigured() {
+        final CommandContext commandContext = getServiceOrNull(CommandContext.class);
+        if(commandContext == null) {
+            return;
+        } 
+        final CommandService commandService = getServiceOrNull(CommandService.class);
+        final Command command = 
+                commandService != null 
+                    ? commandService.create() 
+                    : new CommandDefault();
+        commandContext.setCommand(command);
+
+        if(command.getTimestamp() == null) {
+            command.setTimestamp(Clock.getTimeAsJavaSqlTimestamp());
+        }
+        if(command.getUser() == null) {
+            command.setUser(getAuthenticationSession().getUserName());
+        }
+        
+        // the remaining properties are set further down the call-stack, if an action is actually performed
+    }
+
+    /**
+     * Called by IsisTransactionManager on start
+     */
+    public void startTransactionOnCommandIfConfigured(final UUID transactionId) {
+        final CommandContext commandContext = getServiceOrNull(CommandContext.class);
+        if(commandContext == null) {
+            return;
+        } 
+        final CommandService commandService = getServiceOrNull(CommandService.class);
+        if(commandService == null) {
+            return;
+        } 
+        final Command command = commandContext.getCommand();
+        commandService.startTransaction(command, transactionId);
+    }
+
+
+    /**
+     * @return - the service, or <tt>null</tt> if no service registered of specified type.
+     */
+    public <T> T getServiceOrNull(Class<T> serviceType) {
+        return servicesInjector.lookupService(serviceType);
+    }
+
+
+
+    // //////////////////////////////////////////////////////
+    // flush
+    // //////////////////////////////////////////////////////
 
     public synchronized boolean flushTransaction() {
 
@@ -299,6 +395,10 @@ public class IsisTransactionManager implements SessionScopedComponent {
         }
         return false;
     }
+
+    // //////////////////////////////////////////////////////
+    // end, abort
+    // //////////////////////////////////////////////////////
 
     /**
      * Ends the transaction if nesting level is 0 (but will abort the transaction instead, 
@@ -411,6 +511,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
                 }
             }
             
+            
+            endRequestOnRequestScopeServices();
 
             if(abortCause != null) {
                 

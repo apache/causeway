@@ -47,6 +47,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
@@ -116,8 +117,6 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject {
     private Employee employeeWO;
 
     private WrapperFactoryAbstract wrapperFactory;
-
-
 
 
     @Before
@@ -330,7 +329,7 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject {
         FacetUtil.addFacet(new HideForContextFacetViaMethod(hide, facetedMethod));
         FacetUtil.addFacet(new DisableForContextFacetViaMethod(disable, facetedMethod));
         FacetUtil.addFacet(new PropertyValidateFacetViaMethod(validate, facetedMethod));
-        FacetUtil.addFacet(new NamedFacetViaMethod(accessor.getName(), accessor, facetedMethod));
+        FacetUtil.addFacet(new NamedFacetInferred(accessor.getName(), facetedMethod));
         return facetedMethod;
     }
 

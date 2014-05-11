@@ -25,7 +25,6 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 public class EventBusServiceDefault extends EventBusService {
-
     
     private final Set<Object> objectsToRegister = Sets.newHashSet();
     
@@ -52,12 +51,14 @@ public class EventBusServiceDefault extends EventBusService {
     }
 
     public void open() {
+        final Set<Object> objectsToRegister = this.objectsToRegister;
         for (final Object object : objectsToRegister) {
             getEventBus().register(object);
         }
     }
 
     public void close() {
+        final Set<Object> objectsToRegister = this.objectsToRegister;
         for (final Object object : objectsToRegister) {
             getEventBus().unregister(object);
         }

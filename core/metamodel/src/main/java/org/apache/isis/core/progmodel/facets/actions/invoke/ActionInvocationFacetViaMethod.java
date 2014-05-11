@@ -47,6 +47,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacetAbstract;
@@ -97,6 +98,11 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     @Override
     public List<Method> getMethods() {
         return Collections.singletonList(method);
+    }
+
+    @Override
+    public Intent getIntent(final Method method) {
+        return Intent.EXECUTE;
     }
 
     @Override

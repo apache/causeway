@@ -35,7 +35,7 @@ public class ObjectImmutableTest extends AbstractTest {
     @Test
     public void settingValueOnImmutableObjectThrowsException() {
         try {
-            product355VO.setDescription("Changed");
+            product355WO.setDescription("Changed");
             fail("Should have thrown exception");
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisabledFacetForPropertyDerivedFromImmutable.class));
@@ -46,7 +46,7 @@ public class ObjectImmutableTest extends AbstractTest {
     @Test
     public void settingAssociationOnImmutableObjectThrowsException() {
         try {
-            product355VO.setPlaceOfManufacture(countryUsaDO);
+            product355WO.setPlaceOfManufacture(countryUsaDO);
             fail("Should have thrown exception");
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisabledFacetForPropertyDerivedFromImmutable.class));
@@ -57,7 +57,7 @@ public class ObjectImmutableTest extends AbstractTest {
     @Test
     public void addingToCollectionOnImmutableObjectThrowsException() {
         try {
-            product355VO.addToSimilarProducts(product850DO);
+            product355WO.addToSimilarProducts(product850DO);
             fail("Should have thrown exception");
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisabledFacetForCollectionDerivedFromImmutable.class));
@@ -71,7 +71,7 @@ public class ObjectImmutableTest extends AbstractTest {
                                                          // throws
         // ObjectPersistenceException
         try {
-            product355VO.removeFromSimilarProducts(product850DO);
+            product355WO.removeFromSimilarProducts(product850DO);
             fail("Should have thrown exception");
         } catch (final DisabledException ex) {
             assertThat(ex.getAdvisorClass(), classEqualTo(DisabledFacetForCollectionDerivedFromImmutable.class));
@@ -81,7 +81,7 @@ public class ObjectImmutableTest extends AbstractTest {
 
     @Test
     public void canInvokingOnImmutableObject() {
-        product355VO.foobar();
+        product355WO.foobar();
     }
 
 }

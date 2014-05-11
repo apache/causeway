@@ -60,6 +60,11 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
     }
 
     @Override
+    public Intent getIntent(final Method method) {
+        return Intent.CHOICES_OR_AUTOCOMPLETE;
+    }
+
+    @Override
     public boolean impliesResolve() {
         return true;
     }

@@ -27,6 +27,7 @@ import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.progmodel.facets.object.dirty.MarkDirtyObjectFacetAbstract;
 
 public class MarkDirtyObjectFacetViaMethod extends MarkDirtyObjectFacetAbstract implements ImperativeFacet {
@@ -41,6 +42,11 @@ public class MarkDirtyObjectFacetViaMethod extends MarkDirtyObjectFacetAbstract 
     @Override
     public List<Method> getMethods() {
         return Collections.singletonList(method);
+    }
+
+    @Override
+    public Intent getIntent(final Method method) {
+        return Intent.LIFECYCLE;
     }
 
     @Override

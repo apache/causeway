@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.progmodel.facets.members.hidden.HideForContextFacetAbstract;
 
@@ -47,6 +48,11 @@ public class HideForContextFacetViaMethod extends HideForContextFacetAbstract im
     @Override
     public List<Method> getMethods() {
         return Collections.singletonList(method);
+    }
+
+    @Override
+    public Intent getIntent(final Method method) {
+        return Intent.CHECK_IF_HIDDEN;
     }
 
     @Override

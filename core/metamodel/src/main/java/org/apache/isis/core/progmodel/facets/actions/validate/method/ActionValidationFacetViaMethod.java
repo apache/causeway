@@ -48,6 +48,11 @@ public class ActionValidationFacetViaMethod extends ActionValidationFacetAbstrac
     }
 
     @Override
+    public Intent getIntent(final Method method) {
+        return Intent.CHECK_IF_VALID;
+    }
+
+    @Override
     public boolean impliesResolve() {
         return true;
     }

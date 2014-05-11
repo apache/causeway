@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 
 public class CreatedCallbackFacetViaMethod extends CreatedCallbackFacetAbstract implements ImperativeFacet {
 
@@ -41,6 +42,11 @@ public class CreatedCallbackFacetViaMethod extends CreatedCallbackFacetAbstract 
     @Override
     public void addMethod(final Method method) {
         methods.add(method);
+    }
+
+    @Override
+    public Intent getIntent(final Method method) {
+        return Intent.LIFECYCLE;
     }
 
     @Override

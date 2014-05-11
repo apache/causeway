@@ -28,6 +28,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionUtils;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.progmodel.facets.members.hidden.HideForSessionFacetAbstract;
 
 public class HideForSessionFacetViaMethod extends HideForSessionFacetAbstract implements ImperativeFacet {
@@ -46,6 +47,11 @@ public class HideForSessionFacetViaMethod extends HideForSessionFacetAbstract im
     @Override
     public List<Method> getMethods() {
         return Collections.singletonList(method);
+    }
+
+    @Override
+    public Intent getIntent(final Method method) {
+        return Intent.CHECK_IF_HIDDEN;
     }
 
     @Override

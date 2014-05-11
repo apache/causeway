@@ -102,7 +102,7 @@ public class ImperativeFacetUtilsTest {
                 will(returnValue(Lists.newArrayList()));
             }
         });
-        final ImperativeFacet.Flags flags = ImperativeFacet.Util.getImperativeFacetFlags(mockObjectMember, method);
+        final ImperativeFacet.Flags flags = ImperativeFacet.Util.getFlags(mockObjectMember, method);
         assertThat(flags, is(not(nullValue())));
         assertThat(flags.impliesResolve(), is(false));
         assertThat(flags.impliesObjectChanged(), is(false));
@@ -117,7 +117,7 @@ public class ImperativeFacetUtilsTest {
                 will(returnValue(Lists.newArrayList((Facet) mockImperativeFacet)));
             }
         });
-        final ImperativeFacet.Flags flags = ImperativeFacet.Util.getImperativeFacetFlags(mockObjectMember, method);
+        final ImperativeFacet.Flags flags = ImperativeFacet.Util.getFlags(mockObjectMember, method);
         assertThat(flags, is(not(nullValue())));
         // TODO: need more tests here, these don't go deep enough...
     }

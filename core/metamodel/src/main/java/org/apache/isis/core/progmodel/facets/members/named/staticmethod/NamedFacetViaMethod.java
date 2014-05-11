@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
 
 public class NamedFacetViaMethod extends NamedFacetAbstract implements ImperativeFacet {
@@ -43,6 +44,11 @@ public class NamedFacetViaMethod extends NamedFacetAbstract implements Imperativ
     @Override
     public List<Method> getMethods() {
         return Collections.singletonList(method);
+    }
+
+    @Override
+    public Intent getIntent(final Method method) {
+        return Intent.UI_HINT;
     }
 
     @Override

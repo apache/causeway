@@ -54,6 +54,11 @@ public class CollectionAddToFacetViaAccessor extends CollectionAddToFacetAbstrac
     }
 
     @Override
+    public Intent getIntent(final Method method) {
+        return Intent.MODIFY_COLLECTION_ADD;
+    }
+
+    @Override
     public boolean impliesResolve() {
         return true;
     }

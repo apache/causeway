@@ -26,17 +26,14 @@ import java.util.List;
 import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.ServicesProvider;
-import org.apache.isis.core.metamodel.adapter.ServicesProviderAware;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
-import org.apache.isis.core.metamodel.facets.properties.event.PostsPropertyChangedEventFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -60,38 +57,28 @@ public class PostsPropertyChangedEventAnnotationFacetFactory extends FacetFactor
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
-        FacetUtil.addFacet(create(method, processMethodContext.getFacetHolder()));
-    }
-
-    private PostsPropertyChangedEventFacet create(Method method, final FacetHolder holder) {
+        FacetedMethod holder = processMethodContext.getFacetHolder();
+        
         final PostsPropertyChangedEvent annotation = Annotations.getAnnotation(method, PostsPropertyChangedEvent.class);
         if(annotation == null) {
-            return null;
+            return;
         }
         final PropertyOrCollectionAccessorFacet getterFacet = holder.getFacet(PropertyOrCollectionAccessorFacet.class);
         if(getterFacet == null) {
-            return null;
+            return;
         } 
-        final PropertyClearFacet clearFacet = holder.getFacet(PropertyClearFacet.class);
+        
         final PropertySetterFacet setterFacet = holder.getFacet(PropertySetterFacet.class);
-        if (clearFacet == null && setterFacet == null) {
-            return null;
-        }
-        
-        
-        // REVIEW: I'm a bit uncertain about this; this facet is multi-valued, but the setUnderlying(...) stuff only
-        // works for single valued types.
-        // the wrapperFactory stuff looks for underlying to find the imperative method, I think this only works in this
-        // case because (by accident rather than design) there is also the PropertyInitializationFacet wrapping the setter.
         if(setterFacet != null) {
-            holder.removeFacet(setterFacet);
-        }
-        if(clearFacet != null) {
-            holder.removeFacet(clearFacet);
+            final Class<? extends PropertyChangedEvent<?, ?>> changedEventType = annotation.value();
+            FacetUtil.addFacet(new PostsPropertyChangedEventSetterFacetAnnotation(changedEventType, getterFacet, setterFacet, servicesInjector, holder));
         }
         
-        final Class<? extends PropertyChangedEvent<?, ?>> changedEventType = annotation.value();
-        return new PostsPropertyChangedEventFacetAnnotation(changedEventType, getterFacet, setterFacet, clearFacet, servicesInjector, holder);
+        final PropertyClearFacet clearFacet = holder.getFacet(PropertyClearFacet.class);
+        if(clearFacet != null) {
+            final Class<? extends PropertyChangedEvent<?, ?>> changedEventType = annotation.value();
+            FacetUtil.addFacet(new PostsPropertyChangedEventClearFacetAnnotation(changedEventType, getterFacet, clearFacet, servicesInjector, holder));
+        }
     }
 
     // //////////////////////////////////////
@@ -128,5 +115,4 @@ public class PostsPropertyChangedEventAnnotationFacetFactory extends FacetFactor
         this.servicesInjector = servicesInjector;
     }
 
-    
 }

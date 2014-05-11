@@ -68,7 +68,7 @@ public class ObjectResolveAndObjectChangedEnhancer extends ObjectResolveAndObjec
                     final ObjectSpecificationDefault targetObjSpec = getJavaSpecificationOfOwningClass(proxiedMethod);
                     final ObjectMember member = targetObjSpec.getMember(proxiedMethod);
 
-                    flags = ImperativeFacetUtils.getImperativeFacetFlags(member, proxiedMethod);
+                    flags = ImperativeFacet.Util.getFlags(member, proxiedMethod);
 
                     if (flags.impliesResolve()) {
                         objectResolver.resolve(proxied, member.getName());

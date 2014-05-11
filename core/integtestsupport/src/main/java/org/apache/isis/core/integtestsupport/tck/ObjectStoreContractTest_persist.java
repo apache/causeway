@@ -153,19 +153,28 @@ public abstract class ObjectStoreContractTest_persist {
     public void removeInstance() throws Exception {
 
         // given persisted
+        iswf.beginTran();
         resetPersistenceStore();
         ObjectAdapter adapter = iswf.persist(iswf.fixtures.smpl2);
         final RootOid oid = (RootOid) adapter.getOid();
+        iswf.commitTran();
+        
         iswf.bounceSystem();
 
         // when destroy
+        iswf.beginTran();
         adapter = iswf.reload(oid);
         
         SimpleEntity epv = (SimpleEntity) adapter.getObject();
         iswf.destroy(epv);
+        iswf.commitTran();
+
         iswf.bounceSystem();
 
         // then not found
+        iswf.beginTran();
         assertEquals(false, getStore().hasInstances(epvSpecification));
+        iswf.commitTran();
     }
 }
+

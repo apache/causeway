@@ -22,9 +22,12 @@ package org.apache.isis.core.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -71,6 +74,33 @@ public interface ImperativeFacet {
      */
     public List<Method> getMethods();
 
+    public static enum Intent {
+        CHECK_IF_HIDDEN,
+        CHECK_IF_DISABLED,
+        CHECK_IF_VALID,
+        ACCESSOR,
+        EXECUTE,
+        MODIFY_PROPERTY,
+        /**
+         * Modify property using modify/clear rather than simply using set.
+         */
+        MODIFY_PROPERTY_SUPPORTING, 
+        MODIFY_COLLECTION_ADD,
+        MODIFY_COLLECTION_REMOVE,
+        CHOICES_OR_AUTOCOMPLETE,
+        DEFAULTS, 
+        INITIALIZATION,
+        LIFECYCLE, 
+        UI_HINT
+    }
+    
+    /**
+     * The intent of this method, so that the {@link WrapperFactory} knows whether to delegate on or to reject.
+     * @param method - one of the methods returned from {@link #getMethods()}
+     */
+    public Intent getIntent(Method method);
+
+
     /**
      * For use by
      * {@link FacetHolder#getFacets(org.apache.isis.core.metamodel.facetapi.progmodel.facets.org.apache.isis.nof.arch.facets.Facet.Filter)}
@@ -78,7 +108,7 @@ public interface ImperativeFacet {
     public static Filter<Facet> FILTER = new Filter<Facet>() {
         @Override
         public boolean accept(final Facet facet) {
-            return ImperativeFacetUtils.isImperativeFacet(facet);
+            return ImperativeFacet.Util.isImperativeFacet(facet);
         }
     };
 
@@ -128,14 +158,14 @@ public interface ImperativeFacet {
             return getImperativeFacet(facet) != null;
         }
 
-        public static Flags getImperativeFacetFlags(final ObjectMember member, final Method method) {
+        public static Flags getFlags(final ObjectMember member, final Method method) {
             final Flags flags = new Flags();
             if (member == null) {
                 return flags;
             }
             final List<Facet> allFacets = member.getFacets(Filters.anyOfType(Facet.class));
             for (final Facet facet : allFacets) {
-                final ImperativeFacet imperativeFacet = ImperativeFacetUtils.getImperativeFacet(facet);
+                final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
                 if (imperativeFacet == null) {
                     continue;
                 }
@@ -151,6 +181,40 @@ public interface ImperativeFacet {
                 }
             }
             return flags;
+        }
+        
+        public static Intent getIntent(final ObjectMember member, final Method method) {
+            final List<Facet> allFacets = member.getFacets(Filters.anyOfType(Facet.class));
+            final List<ImperativeFacet> imperativeFacets = Lists.newArrayList();
+            for (final Facet facet : allFacets) {
+                final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
+                if (imperativeFacet == null) {
+                    continue;
+                }
+                final List<Method> methods = imperativeFacet.getMethods();
+                if (!methods.contains(method)) {
+                    continue;
+                }
+                imperativeFacets.add(imperativeFacet);
+            }
+            switch(imperativeFacets.size()) {
+                case 0:
+                    break;
+                case 1:
+                    return imperativeFacets.get(0).getIntent(method);
+                default:
+                    Intent intentToReturn = null;
+                    for (ImperativeFacet imperativeFacet : imperativeFacets) {
+                        Intent intent = imperativeFacet.getIntent(method);
+                        if(intentToReturn == null) {
+                            intentToReturn = intent;
+                        } else if(intentToReturn != intent) {
+                            throw new IllegalArgumentException(member.getIdentifier().toClassAndNameIdentityString() +  ": more than one ImperativeFacet for method " + method.getName() + " , with inconsistent intents: " + imperativeFacets.toString());
+                        }
+                    }
+                    return intentToReturn;
+            }
+            throw new IllegalArgumentException(member.getIdentifier().toClassAndNameIdentityString() +  ": unable to determine intent of " + method.getName());
         }
     }
 
@@ -175,7 +239,5 @@ public interface ImperativeFacet {
             return impliesObjectChanged;
         }
     }
-
-
 
 }

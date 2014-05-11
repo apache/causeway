@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 
 public class RemovingCallbackFacetViaMethod extends RemovingCallbackFacetAbstract implements ImperativeFacet {
 
@@ -46,6 +47,11 @@ public class RemovingCallbackFacetViaMethod extends RemovingCallbackFacetAbstrac
     @Override
     public boolean impliesResolve() {
         return false;
+    }
+
+    @Override
+    public Intent getIntent(final Method method) {
+        return Intent.LIFECYCLE;
     }
 
     @Override

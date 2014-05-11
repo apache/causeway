@@ -97,7 +97,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
      * Lazily built by {@link #getMember(Method)}.
      */
     private Map<Method, ObjectMember> membersByMethod = null;
-
+    
     private final IntrospectionContext introspectionContext;
     private final CreateObjectContext createObjectContext;
 
@@ -425,14 +425,18 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     public ObjectMember getMember(final Method method) {
         if (membersByMethod == null) {
-            final HashMap<Method, ObjectMember> membersByMethod = Maps.newHashMap();
-            cataloguePropertiesAndCollections(membersByMethod);
-            catalogueActions(membersByMethod);
-            this.membersByMethod = membersByMethod;
+            this.membersByMethod = catalogueMembers();
         }
         return membersByMethod.get(method);
     }
 
+    private HashMap<Method, ObjectMember> catalogueMembers() {
+        final HashMap<Method, ObjectMember> membersByMethod = Maps.newHashMap();
+        cataloguePropertiesAndCollections(membersByMethod);
+        catalogueActions(membersByMethod);
+        return membersByMethod;
+    }
+    
     private void cataloguePropertiesAndCollections(final Map<Method, ObjectMember> membersByMethod) {
         final Filter<ObjectAssociation> noop = Filters.anyOfType(ObjectAssociation.class);
         final List<ObjectAssociation> fields = getAssociations(Contributed.EXCLUDED, noop);
@@ -440,7 +444,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             final ObjectAssociation field = fields.get(i);
             final List<Facet> facets = field.getFacets(ImperativeFacet.FILTER);
             for (final Facet facet : facets) {
-                final ImperativeFacet imperativeFacet = ImperativeFacetUtils.getImperativeFacet(facet);
+                final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
                 for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
                     membersByMethod.put(imperativeFacetMethod, field);
                 }
@@ -454,7 +458,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             final ObjectAction userAction = userActions.get(i);
             final List<Facet> facets = userAction.getFacets(ImperativeFacet.FILTER);
             for (final Facet facet : facets) {
-                final ImperativeFacet imperativeFacet = ImperativeFacetUtils.getImperativeFacet(facet);
+                final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
                 for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
                     membersByMethod.put(imperativeFacetMethod, userAction);
                 }

@@ -19,11 +19,6 @@
 
 package org.apache.isis.core.progmodel.facets.properties.event;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
@@ -32,56 +27,31 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ServicesProvider;
-import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.facets.properties.event.PostsPropertyChangedEventFacet;
-import org.apache.isis.core.metamodel.facets.properties.event.PostsPropertyChangedEventFacetAbstract;
+import org.apache.isis.core.metamodel.facets.properties.event.PostsPropertyChangedEventClearFacet;
+import org.apache.isis.core.metamodel.facets.properties.event.PostsPropertyChangedEventClearFacetAbstract;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
-import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
-public class PostsPropertyChangedEventFacetAnnotation extends PostsPropertyChangedEventFacetAbstract {
+public class PostsPropertyChangedEventClearFacetAnnotation 
+        extends PostsPropertyChangedEventClearFacetAbstract {
 
     private final PropertyOrCollectionAccessorFacet getterFacet;
-    private final PropertySetterFacet setterFacet;
     private final PropertyClearFacet clearFacet;
-    private final ServicesInjector servicesInjector;
+    private final Helper helper;
     
-    private EventBusService eventBusService;
-    private boolean searchedForEventBusService = false;
-
-    public PostsPropertyChangedEventFacetAnnotation(
+    public PostsPropertyChangedEventClearFacetAnnotation(
             final Class<? extends PropertyChangedEvent<?, ?>> eventType, 
             final PropertyOrCollectionAccessorFacet getterFacet, 
-            final PropertySetterFacet setterFacet, 
             final PropertyClearFacet clearFacet, 
             final ServicesInjector servicesInjector,
             final FacetHolder holder) {
         super(eventType, holder);
         this.getterFacet = getterFacet;
-        this.setterFacet = setterFacet;
         this.clearFacet = clearFacet;
-        this.servicesInjector = servicesInjector;
-    }
-
-    @Override
-    public void setProperty(ObjectAdapter targetAdapter, ObjectAdapter valueAdapter) {
-        if(setterFacet == null) {
-            return;
-        }
-        eventBusService = getEventBusService();
-        if(eventBusService == null) {
-            setterFacet.setProperty(targetAdapter, valueAdapter);
-            return;
-        }
-        
-        final Object oldValue = getterFacet.getProperty(targetAdapter);
-        setterFacet.setProperty(targetAdapter, valueAdapter);
-        final Object newValue = getterFacet.getProperty(targetAdapter);
-        postEventIfChanged(targetAdapter, getIdentified().getIdentifier(), oldValue, newValue);
+        this.helper = new Helper(servicesInjector);
     }
 
     @Override
@@ -89,8 +59,8 @@ public class PostsPropertyChangedEventFacetAnnotation extends PostsPropertyChang
         if(clearFacet == null) {
             return;
         }
-        eventBusService = getEventBusService();
-        if(eventBusService == null) {
+
+        if(helper.getEventBusService() == null) {
             clearFacet.clearProperty(targetAdapter);
             return;
         }
@@ -119,20 +89,12 @@ public class PostsPropertyChangedEventFacetAnnotation extends PostsPropertyChang
             final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
             final PropertyChangedEvent<?, ?> event = Util.newEvent(type, source, identifier, oldValue, newValue);
             
-            eventBusService.post(event);
+            helper.postEvent(event);
         } catch (Exception e) {
             throw new FatalException(e);
         }
     }
 
-    private EventBusService getEventBusService() {
-        if (!searchedForEventBusService) {
-            eventBusService = this.servicesInjector.lookupService(EventBusService.class);
-        }
-        searchedForEventBusService = true;
-        return eventBusService;
-    }
-    
     // //////////////////////////////////////
     // MultiTypedFacet
     // //////////////////////////////////////
@@ -141,9 +103,8 @@ public class PostsPropertyChangedEventFacetAnnotation extends PostsPropertyChang
     @Override
     public Class<? extends Facet>[] facetTypes() {
         return Lists.newArrayList(
-                    PostsPropertyChangedEventFacet.class, 
-                    PropertySetterFacet.class, 
-                    PropertyClearFacet.class
+                    type(),
+                    PostsPropertyChangedEventClearFacet.class
                 ).toArray(new Class[]{});
     }
 

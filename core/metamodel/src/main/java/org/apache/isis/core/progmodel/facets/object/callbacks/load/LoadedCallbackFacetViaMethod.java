@@ -49,6 +49,11 @@ public class LoadedCallbackFacetViaMethod extends LoadedCallbackFacetAbstract im
     }
 
     @Override
+    public Intent getIntent(final Method method) {
+        return Intent.LIFECYCLE;
+    }
+
+    @Override
     public boolean impliesResolve() {
         return false;
     }

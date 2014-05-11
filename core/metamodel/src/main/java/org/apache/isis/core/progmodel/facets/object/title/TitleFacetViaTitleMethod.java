@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 
 public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements ImperativeFacet {
@@ -50,6 +51,11 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
     @Override
     public List<Method> getMethods() {
         return Collections.singletonList(method);
+    }
+
+    @Override
+    public Intent getIntent(final Method method) {
+        return Intent.UI_HINT;
     }
 
     @Override

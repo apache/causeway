@@ -240,13 +240,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
 
         final List<Object> registeredServices = servicesInjector.getRegisteredServices();
         
-        startRequestOnRequestScopedServices(registeredServices);
-
-        createCommandIfConfigured();
-        
         createServiceAdapters(registeredServices);
-        
-        initOtherApplibServicesIfConfigured(registeredServices);
     }
 
     /**
@@ -272,67 +266,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
                 registerService(persistentOid);
             }
         }
-    }
-
-    private void initOtherApplibServicesIfConfigured(final List<Object> registeredServices) {
-        
-        final EventBusServiceDefault ebsd = getServiceOrNull(EventBusServiceDefault.class);
-        if(ebsd != null) {
-            ebsd.open();
-        }
-        
-        final Bulk.InteractionContext bic = getServiceOrNull(Bulk.InteractionContext.class);
-        if(bic != null) {
-            Bulk.InteractionContext.current.set(bic);
-        }
-        
-    }
-
-    private void startRequestOnRequestScopedServices(final List<Object> registeredServices) {
-        for (final Object service : registeredServices) {
-            if(service instanceof RequestScopedService) {
-                ((RequestScopedService)service).__isis_startRequest();
-            }
-        }
-    }
-
-    private void createCommandIfConfigured() {
-        final CommandContext commandContext = getServiceOrNull(CommandContext.class);
-        if(commandContext == null) {
-            return;
-        } 
-        final CommandService commandService = getServiceOrNull(CommandService.class);
-        final Command command = 
-                commandService != null 
-                    ? commandService.create() 
-                    : new CommandDefault();
-        commandContext.setCommand(command);
-
-        if(command.getTimestamp() == null) {
-            command.setTimestamp(Clock.getTimeAsJavaSqlTimestamp());
-        }
-        if(command.getUser() == null) {
-            command.setUser(getAuthenticationSession().getUserName());
-        }
-        
-        // the remaining properties are set further down the call-stack, if an action is actually performed
-    }
-
-
-    /**
-     * Called by IsisTransactionManager on start
-     */
-    public void startTransactionOnCommandIfConfigured(final UUID transactionId) {
-        final CommandContext commandContext = getServiceOrNull(CommandContext.class);
-        if(commandContext == null) {
-            return;
-        } 
-        final CommandService commandService = getServiceOrNull(CommandService.class);
-        if(commandService == null) {
-            return;
-        } 
-        final Command command = commandContext.getCommand();
-        commandService.startTransaction(command, transactionId);
     }
 
 
@@ -382,19 +315,9 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
             // ignore
         }
 
-        endRequestOnRequestScopeServices();
-        
         setState(State.CLOSED);
     }
 
-
-    private void endRequestOnRequestScopeServices() {
-        for (final Object service : servicesInjector.getRegisteredServices()) {
-            if(service instanceof RequestScopedService) {
-                ((RequestScopedService)service).__isis_endRequest();
-            }
-        }
-    }
 
     // ///////////////////////////////////////////////////////////////////////////
     // State Management

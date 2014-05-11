@@ -54,6 +54,7 @@ import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
@@ -105,7 +106,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     protected Method saveMethod;
 
     /**
-     * The <tt>underlying()</tt> method from {@link WrapperObject#wrapped()}.
+     * The <tt>wrapped()</tt> method from {@link WrapperObject#wrapped()}.
      */
     protected Method wrappedMethod;
 
@@ -150,7 +151,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
 
 
-
         final ObjectSpecification targetNoSpec = targetAdapter.getSpecification();
 
         // save method, through the proxy
@@ -158,72 +158,57 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             return handleSaveMethod(getAuthenticationSession(), targetAdapter, targetNoSpec);
         }
 
-        if (isUnderlyingMethod(method)) {
+        if (isWrappedMethod(method)) {
             return getDelegate();
         }
 
         final ObjectMember objectMember = locateAndCheckMember(method);
-        final List<Facet> imperativeFacets = getImperativeFacets(objectMember, method);
 
         final String memberName = objectMember.getName();
 
-        if (instanceOf(imperativeFacets, DisableForContextFacetViaMethod.class, HideForContextFacetViaMethod.class)) {
+        final Intent intent = ImperativeFacet.Util.getIntent(objectMember, method);
+        if(intent == Intent.CHECK_IF_HIDDEN || intent == Intent.CHECK_IF_DISABLED) {
             throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'", memberName));
         }
 
         final String methodName = method.getName();
 
-        if (instanceOf(imperativeFacets, ActionDefaultsFacet.class, PropertyDefaultFacet.class, ActionChoicesFacet.class, ActionParameterChoicesFacet.class, PropertyChoicesFacet.class)) {
+        if (intent == Intent.DEFAULTS || intent == Intent.CHOICES_OR_AUTOCOMPLETE) {
             return method.invoke(getDelegate(), args);
         }
 
         if (objectMember.isOneToOneAssociation()) {
 
-            if (instanceOf(imperativeFacets, PropertyValidateFacetViaMethod.class, PropertySetterFacetViaModifyMethod.class, PropertyClearFacetViaClearMethod.class)) {
+            if (intent == Intent.CHECK_IF_VALID || intent == Intent.MODIFY_PROPERTY_SUPPORTING) {
                 throw new UnsupportedOperationException(String.format("Cannot invoke supporting method for '%s'; use only property accessor/mutator", memberName));
             }
 
             final OneToOneAssociation otoa = (OneToOneAssociation) objectMember;
             
-            if (instanceOf(imperativeFacets, PropertyOrCollectionAccessorFacet.class)) {
+            if (intent == Intent.ACCESSOR) {
                 return handleGetterMethodOnProperty(args, targetAdapter, otoa, methodName);
             }
             
-            if (instanceOf(imperativeFacets, PropertySetterFacet.class, PropertyInitializationFacet.class)) {
+            if (intent == Intent.MODIFY_PROPERTY || intent == Intent.INITIALIZATION) {
                 return handleSetterMethodOnProperty(args, getAuthenticationSession(), targetAdapter, otoa, methodName);
             }
         }
         if (objectMember.isOneToManyAssociation()) {
 
-            if (instanceOf(imperativeFacets, CollectionValidateAddToFacetViaMethod.class, CollectionValidateRemoveFromFacetViaMethod.class)) {
+            if (intent == Intent.CHECK_IF_VALID) {
                 throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only collection accessor/mutator", memberName));
             }
 
-
             final OneToManyAssociation otma = (OneToManyAssociation) objectMember;
-            if (instanceOf(imperativeFacets, PropertyOrCollectionAccessorFacet.class)) {
+            if (intent == Intent.ACCESSOR) {
                 return handleGetterMethodOnCollection(method, args, targetAdapter, otma, memberName);
             }
-            if (instanceOf(imperativeFacets, CollectionAddToFacet.class)) {
+            if (intent == Intent.MODIFY_COLLECTION_ADD) {
                 return handleCollectionAddToMethod(args, targetAdapter, otma, methodName);
             }
-            if (instanceOf(imperativeFacets, CollectionRemoveFromFacet.class)) {
+            if (intent == Intent.MODIFY_COLLECTION_REMOVE) {
                 return handleCollectionRemoveFromMethod(args, targetAdapter, otma, methodName);
             }
-        }
-
-        // filter out
-        if (instanceOf(imperativeFacets, PropertyOrCollectionAccessorFacet.class)) {
-            throw new UnsupportedOperationException(String.format("Can only invoke accessor on properties or collections; '%s' represents %s", methodName, decode(objectMember)));
-        }
-        if (instanceOf(imperativeFacets, PropertySetterFacet.class)) {
-            throw new UnsupportedOperationException(String.format("Can only invoke mutator on properties; '%s' represents %s", methodName, decode(objectMember)));
-        }
-        if (instanceOf(imperativeFacets, CollectionAddToFacet.class)) {
-            throw new UnsupportedOperationException(String.format("Can only invoke 'adder' on collections; '%s' represents %s", methodName, decode(objectMember)));
-        }
-        if (instanceOf(imperativeFacets, CollectionRemoveFromFacet.class)) {
-            throw new UnsupportedOperationException(String.format("Can only invoke 'remover' on collections; '%s' represents %s", methodName, decode(objectMember)));
         }
 
         if (objectMember instanceof ObjectAction) {
@@ -231,8 +216,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             // for all members, check visibility and usability
             checkVisibility(getAuthenticationSession(), targetAdapter, objectMember);
 
-
-            if (instanceOf(imperativeFacets, ActionValidationFacetViaMethod.class)) {
+            if (intent == Intent.CHECK_IF_VALID) {
                 throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only the 'invoke' method", memberName));
             }
 
@@ -289,14 +273,23 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
     private static boolean instanceOf(final List<?> objects, final Class<?>... superTypes) {
         for (final Class<?> superType : superTypes) {
+            // REVIEW: this is all a bit hacky...
             for (Object obj : objects) {
-                // handle the *WrapTransaction facets etc
+                // handle the *decorators
                 if(obj instanceof DecoratingFacet) {
                     DecoratingFacet<?> decoratingFacet = (DecoratingFacet<?>) obj;
                     obj = ((DecoratingFacet<?>) obj).getDecoratedFacet();
                 }
                 if (superType.isAssignableFrom(obj.getClass())) {
                     return true;
+                }
+                if(obj instanceof Facet) {
+                    Facet facet = (Facet) obj;
+                    // handle any wrapping (eg PostPropertyChangedSetterEventFacet)
+                    Facet underlyingFacet = facet.getUnderlyingFacet();
+                    if(underlyingFacet != null && superType.isAssignableFrom(obj.getClass())) {
+                        return true;
+                    }
                 }
             }
         }
@@ -662,7 +655,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return method.equals(saveMethod);
     }
 
-    protected boolean isUnderlyingMethod(final Method method) {
+    protected boolean isWrappedMethod(final Method method) {
         return method.equals(wrappedMethod);
     }
 

@@ -24,7 +24,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
-import org.apache.isis.core.metamodel.facets.properties.event.PostsPropertyChangedEventFacetAbstract;
+import org.apache.isis.core.metamodel.facets.properties.event.PostsPropertyChangedEventSetterFacetAbstract;
 
 public class PostsPropertyChangedEventFacet_UtilTest_newEvent {
 
@@ -46,7 +46,7 @@ public class PostsPropertyChangedEventFacet_UtilTest_newEvent {
         LocalDate newValue = new LocalDate(2013,5,2);
         
         final PropertyChangedEvent<Object, Object> ev = 
-                PostsPropertyChangedEventFacet.Util.newEvent(PropertyChangedEvent.Default.class, sdo, identifier, oldValue, newValue);
+                PostsPropertyChangedEventSetterFacet.Util.newEvent(PropertyChangedEvent.Default.class, sdo, identifier, oldValue, newValue);
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOldValue(), is((Object)oldValue));
@@ -63,7 +63,7 @@ public class PostsPropertyChangedEventFacet_UtilTest_newEvent {
         LocalDate newValue = new LocalDate(2013,5,2);
         
         final PropertyChangedEvent<SomeDomainObject, LocalDate> ev = 
-                PostsPropertyChangedEventFacet.Util.newEvent(SomeDatePropertyChangedEvent.class, sdo, identifier, oldValue, newValue);
+                PostsPropertyChangedEventSetterFacet.Util.newEvent(SomeDatePropertyChangedEvent.class, sdo, identifier, oldValue, newValue);
         assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOldValue(), is(oldValue));

@@ -19,12 +19,16 @@
 
 package org.apache.isis.core.integtestsupport.legacy;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.wrapper.WrapperObject;
 import org.apache.isis.core.integtestsupport.legacy.sample.domain.Country;
 import org.apache.isis.core.integtestsupport.legacy.sample.domain.Customer;
 import org.apache.isis.core.integtestsupport.legacy.sample.domain.Product;
@@ -47,12 +51,12 @@ public abstract class AbstractTest {
     protected Customer custJsWO;
 
     protected Product product355DO;
-    protected Product product355VO;
+    protected Product product355WO;
 
     protected Product product850DO;
 
     protected Country countryGbrDO;
-    protected Country countryGbrVO;
+    protected Country countryGbrWO;
 
     protected Country countryUsaDO;
     protected Country countryAusDO;
@@ -68,17 +72,21 @@ public abstract class AbstractTest {
     public void setUp() {
 
         product355DO = productRepository.findByCode("355-40311");
-        product355VO = wrapperFactory.wrap(product355DO);
+        product355WO = wrapperFactory.wrap(product355DO);
         product850DO = productRepository.findByCode("850-18003");
 
         countryGbrDO = countryRepository.findByCode("GBR");
-        countryGbrVO = wrapperFactory.wrap(countryGbrDO);
+        countryGbrWO = wrapperFactory.wrap(countryGbrDO);
 
         countryUsaDO = countryRepository.findByCode("USA");
         countryAusDO = countryRepository.findByCode("AUS");
 
         custJsDO = customerRepository.findByName("Pawson");
         custJsWO = wrapperFactory.wrap(custJsDO);
+        
+        assertThat(product355WO instanceof WrapperObject, is(true));
+        assertThat(countryGbrWO instanceof WrapperObject, is(true));
+        assertThat(custJsWO instanceof WrapperObject, is(true));
     }
 
     @After
