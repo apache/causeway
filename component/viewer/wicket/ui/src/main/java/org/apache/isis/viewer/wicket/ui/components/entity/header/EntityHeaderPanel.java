@@ -27,10 +27,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.Page;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 
-import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
@@ -42,11 +39,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
@@ -57,7 +52,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilde
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.pages.actionprompt.ActionPromptPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**

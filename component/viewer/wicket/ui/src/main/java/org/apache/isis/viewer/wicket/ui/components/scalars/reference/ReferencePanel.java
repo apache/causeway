@@ -28,6 +28,7 @@ import com.vaynberg.wicket.select2.Settings;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
@@ -44,7 +45,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending.Util;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -69,10 +69,13 @@ public class ReferencePanel extends ScalarPanelAbstract {
     private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
     static final String ID_AUTO_COMPLETE = "autoComplete";
+    
     static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
 
     private EntityLinkSelect2Panel entityLink;
     private EntityLinkSimplePanel entitySimpleLink;
+
+    private FormComponentLabel labelIfRegular;
 
     public ReferencePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
@@ -116,7 +119,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         entityLink.setOutputMarkupId(true);
         entityLink.setLabel(Model.of(name));
         
-        final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, entityLink);
+        labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, entityLink);
         labelIfRegular.add(entityLink);
         
         final String describedAs = getModel().getDescribedAs();
@@ -344,25 +347,25 @@ public class ReferencePanel extends ScalarPanelAbstract {
     }
 
     void syncLinkWithInput(EntityLinkSelect2Panel linkPanel, final ObjectAdapter adapter) {
-        if (adapter != null) {
-            addOrReplaceIconAndTitle(linkPanel, adapter);
-        } else {
-            Components.permanentlyHide(linkPanel, ReferencePanel.ID_ENTITY_ICON_AND_TITLE);
+        if(labelIfRegular == null) {
+            return;
         }
-    }
-
-    void addOrReplaceIconAndTitle(EntityLinkSelect2Panel linkPanel, ObjectAdapter pendingOrCurrentAdapter) {
-
-        final EntityModel entityModelForLink = new EntityModel(pendingOrCurrentAdapter);
         
-        entityModelForLink.setContextAdapterIfAny(getModel().getContextAdapterIfAny());
-        entityModelForLink.setRenderingHint(getModel().getRenderingHint());
-        
-        final ComponentFactory componentFactory = 
-                getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
-        final Component component = componentFactory.createComponent(entityModelForLink);
-        
-        linkPanel.addOrReplace(component);
+        if (adapter != null) {
+            final EntityModel entityModelForLink = new EntityModel(adapter);
+            
+            entityModelForLink.setContextAdapterIfAny(getModel().getContextAdapterIfAny());
+            entityModelForLink.setRenderingHint(getModel().getRenderingHint());
+            
+            final ComponentFactory componentFactory = 
+                    getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
+            final Component component = componentFactory.createComponent(entityModelForLink);
+            
+            labelIfRegular.addOrReplace(component);
+        } else {
+            Components.permanentlyHide(labelIfRegular, ReferencePanel.ID_ENTITY_ICON_AND_TITLE);
+            
+        }
     }
 
 
@@ -394,8 +397,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
             select2Field.setEnabled(mutability);
         }
         
-        if(isEditableWithEitherAutoCompleteOrChoices()) {
-            Components.permanentlyHide(linkPanel, ReferencePanel.ID_ENTITY_ICON_AND_TITLE);
+        if(labelIfRegular != null && isEditableWithEitherAutoCompleteOrChoices()) {
+            Components.permanentlyHide(labelIfRegular, ReferencePanel.ID_ENTITY_ICON_AND_TITLE);
         }
     }
 
@@ -457,13 +460,11 @@ public class ReferencePanel extends ScalarPanelAbstract {
             //
             linkPanel.select2Field.clearInput();
         }
-        
-        // no need for link, since can see in drop-down
-        Components.permanentlyHide(linkPanel, ReferencePanel.ID_ENTITY_ICON_AND_TITLE);
     
-        // no need for the 'null' title, since if there is no object yet
-        // can represent this fact in the drop-down
-        // permanentlyHide(ID_ENTITY_TITLE_NULL);
+        if(labelIfRegular != null) {
+            // no need for link, since can see in drop-down
+            Components.permanentlyHide(labelIfRegular, ReferencePanel.ID_ENTITY_ICON_AND_TITLE);
+        }
     }
 
     String getInput() {

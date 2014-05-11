@@ -22,13 +22,18 @@ import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+
 import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.NullValue;
 import javax.jdo.annotations.VersionStrategy;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Ordering;
+
 import org.joda.time.LocalDate;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
@@ -900,5 +905,45 @@ public class ToDoItem implements Comparable<ToDoItem> {
     }
 
     //endregion
+
+    
+    // //////////////////////////////////////
+    // foo (property)
+    // //////////////////////////////////////
+
+    private ToDoItem foo;
+
+    @javax.jdo.annotations.Persistent()
+    @javax.jdo.annotations.Column(allowsNull="true")
+    @MemberOrder(sequence = "1")
+    public ToDoItem getFoo() {
+        return foo;
+    }
+
+    public void setFoo(final ToDoItem foo) {
+        this.foo = foo;
+    }
+
+    // //////////////////////////////////////
+    // bar (property)
+    // //////////////////////////////////////
+
+    private ToDoItem bar;
+
+    @javax.jdo.annotations.Persistent()
+    @javax.jdo.annotations.Column(allowsNull="true")
+    @MemberOrder(sequence = "1")
+    public ToDoItem getBar() {
+        return bar;
+    }
+
+    public void setBar(final ToDoItem bar) {
+        this.bar = bar;
+    }
+    
+    public List<ToDoItem> choicesBar() {
+        return toDoItems.allToDos();
+    }
+
 
 }
