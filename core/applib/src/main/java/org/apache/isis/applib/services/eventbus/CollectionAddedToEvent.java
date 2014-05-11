@@ -28,21 +28,13 @@ public abstract class CollectionAddedToEvent<S,T> extends java.util.EventObject 
 
     public static class Default extends CollectionAddedToEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
+        public Default(Object source, Identifier identifier, Object value) {
+            super(source, identifier, value);
+        }
     }
 
     private final Identifier identifier;
     private final T value;
-    
-    /**
-     * To instantiate reflectively when the {@link PostsPropertyChangedEvent} annotation
-     * is used.
-     * 
-     * <p>
-     * The fields ({@link #source} and {@link #value} are then set reflectively.
-     */
-    public CollectionAddedToEvent() {
-        this(null, null, null);
-    }
     
     public CollectionAddedToEvent(
             final S source, 

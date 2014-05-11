@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.progmodel.facets.properties.event;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import com.google.common.base.Objects;
@@ -31,6 +33,7 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
+import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
@@ -38,13 +41,14 @@ import org.apache.isis.core.metamodel.facets.properties.event.PostsPropertyChang
 import org.apache.isis.core.metamodel.facets.properties.event.PostsPropertyChangedEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public class PostsPropertyChangedEventFacetAnnotation extends PostsPropertyChangedEventFacetAbstract {
 
     private final PropertyOrCollectionAccessorFacet getterFacet;
     private final PropertySetterFacet setterFacet;
     private final PropertyClearFacet clearFacet;
-    private final ServicesProvider servicesProvider;
+    private final ServicesInjector servicesInjector;
     
     private EventBusService eventBusService;
     private boolean searchedForEventBusService = false;
@@ -54,13 +58,13 @@ public class PostsPropertyChangedEventFacetAnnotation extends PostsPropertyChang
             final PropertyOrCollectionAccessorFacet getterFacet, 
             final PropertySetterFacet setterFacet, 
             final PropertyClearFacet clearFacet, 
-            final ServicesProvider servicesProvider, 
+            final ServicesInjector servicesInjector,
             final FacetHolder holder) {
         super(eventType, holder);
         this.getterFacet = getterFacet;
         this.setterFacet = setterFacet;
         this.clearFacet = clearFacet;
-        this.servicesProvider = servicesProvider;
+        this.servicesInjector = servicesInjector;
     }
 
     @Override
@@ -110,10 +114,10 @@ public class PostsPropertyChangedEventFacetAnnotation extends PostsPropertyChang
             // do nothing.
             return;
         }
-        final Object source = targetAdapter.getObject();
         try {
             final Class type = value();
-            final PropertyChangedEvent<?, ?> event = newEvent(type, source, identifier, oldValue, newValue);
+            final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
+            final PropertyChangedEvent<?, ?> event = Util.newEvent(type, source, identifier, oldValue, newValue);
             
             eventBusService.post(event);
         } catch (Exception e) {
@@ -121,38 +125,10 @@ public class PostsPropertyChangedEventFacetAnnotation extends PostsPropertyChang
         }
     }
 
-    static <S,T> PropertyChangedEvent<S,T> newEvent(
-            final Class<? extends PropertyChangedEvent<S, T>> type, 
-            final S source, 
-            final Identifier identifier,
-            final T oldValue, 
-            final T newValue) throws InstantiationException, IllegalAccessException, NoSuchFieldException {
-        final PropertyChangedEvent<S, T> event = type.newInstance();
-        
-        setField("source", event, source);
-        setField("identifier", event, identifier);
-        setField("oldValue", event, oldValue);
-        setField("newValue", event, newValue);
-        return event;
-    }
-
-    private static void setField(final String name, final PropertyChangedEvent<?, ?> event, final Object sourceValue) throws NoSuchFieldException, IllegalAccessException {
-        final Field sourceField = PropertyChangedEvent.class.getDeclaredField(name);
-        sourceField.setAccessible(true);
-        sourceField.set(event, sourceValue);
-    }
-    
     private EventBusService getEventBusService() {
-        if(!searchedForEventBusService) {
-            final List<ObjectAdapter> serviceAdapters = servicesProvider.getServices();
-            for (ObjectAdapter serviceAdapter : serviceAdapters) {
-                final Object service = serviceAdapter.getObject();
-                if(service instanceof EventBusService) {
-                    eventBusService = (EventBusService) service;
-                    break;
-                }
-            }
-        } 
+        if (!searchedForEventBusService) {
+            eventBusService = this.servicesInjector.lookupService(EventBusService.class);
+        }
         searchedForEventBusService = true;
         return eventBusService;
     }

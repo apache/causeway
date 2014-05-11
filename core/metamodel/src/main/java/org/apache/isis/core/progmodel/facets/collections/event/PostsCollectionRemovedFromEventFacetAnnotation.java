@@ -20,6 +20,7 @@
 package org.apache.isis.core.progmodel.facets.collections.event;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,13 +39,14 @@ import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccess
 import org.apache.isis.core.metamodel.facets.collections.event.PostsCollectionRemovedFromEventFacet;
 import org.apache.isis.core.metamodel.facets.collections.event.PostsCollectionRemovedFromEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public class PostsCollectionRemovedFromEventFacetAnnotation extends
 		PostsCollectionRemovedFromEventFacetAbstract {
 
 	private final PropertyOrCollectionAccessorFacet getterFacet;
 	private final CollectionRemoveFromFacet collectionRemoveFromFacet;
-	private final ServicesProvider servicesProvider;
+    private final ServicesInjector servicesInjector;
 
 	private EventBusService eventBusService;
 	private boolean searchedForEventBusService = false;
@@ -53,11 +55,12 @@ public class PostsCollectionRemovedFromEventFacetAnnotation extends
 			final Class<? extends CollectionRemovedFromEvent<?, ?>> eventType,
 			final PropertyOrCollectionAccessorFacet getterFacet,
 			final CollectionRemoveFromFacet collectionRemoveFromFacet,
-			final ServicesProvider servicesProvider, final FacetHolder holder) {
+            final ServicesInjector servicesInjector,
+			final FacetHolder holder) {
 		super(eventType, holder);
 		this.getterFacet = getterFacet;
 		this.collectionRemoveFromFacet = collectionRemoveFromFacet;
-		this.servicesProvider = servicesProvider;
+        this.servicesInjector = servicesInjector;
 	}
 
 	@Override
@@ -96,54 +99,23 @@ public class PostsCollectionRemovedFromEventFacetAnnotation extends
 	private void postEvent(final ObjectAdapter targetAdapter,
 			final Identifier identifier, final Object removedReference) {
 
-		final Object source = targetAdapter.getObject();
 		try {
 			final Class type = value();
-			final CollectionRemovedFromEvent<?, ?> event = newEvent(type, source,
-					identifier, removedReference);
+			final Object source = AdapterUtils.unwrap(targetAdapter);
+			final CollectionRemovedFromEvent<?, ?> event = Util.newEvent(type, source, identifier, removedReference);
 			eventBusService.post(event);
 		} catch (Exception e) {
 			throw new FatalException(e);
 		}
 	}
 
-	static <S, T> CollectionRemovedFromEvent<S, T> newEvent(
-			final Class<? extends CollectionRemovedFromEvent<S, T>> type,
-			final S source, final Identifier identifier, final T value)
-			throws InstantiationException, IllegalAccessException,
-			NoSuchFieldException {
-		final CollectionRemovedFromEvent<S, T> event = type.newInstance();
-
-		setField("source", event, source);
-		setField("identifier", event, identifier);
-		setField("value", event, value);
-		return event;
-	}
-
-	private static void setField(final String name,
-			final CollectionRemovedFromEvent<?, ?> event, final Object sourceValue)
-			throws NoSuchFieldException, IllegalAccessException {
-		final Field sourceField = CollectionRemovedFromEvent.class
-				.getDeclaredField(name);
-		sourceField.setAccessible(true);
-		sourceField.set(event, sourceValue);
-	}
-
-	private EventBusService getEventBusService() {
-		if (!searchedForEventBusService) {
-			final List<ObjectAdapter> serviceAdapters = servicesProvider
-					.getServices();
-			for (ObjectAdapter serviceAdapter : serviceAdapters) {
-				final Object service = serviceAdapter.getObject();
-				if (service instanceof EventBusService) {
-					eventBusService = (EventBusService) service;
-					break;
-				}
-			}
-		}
-		searchedForEventBusService = true;
-		return eventBusService;
-	}
+    private EventBusService getEventBusService() {
+        if (!searchedForEventBusService) {
+            eventBusService = this.servicesInjector.lookupService(EventBusService.class);
+        }
+        searchedForEventBusService = true;
+        return eventBusService;
+    }
 
 	// //////////////////////////////////////
 	// MultiTypedFacet

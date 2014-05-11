@@ -162,9 +162,6 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
 		public ObjectAdapter getAdapter() {
 			return adapter;
 		}
-
-
-    	
     }
     
     protected InvocationResult internalInvoke(

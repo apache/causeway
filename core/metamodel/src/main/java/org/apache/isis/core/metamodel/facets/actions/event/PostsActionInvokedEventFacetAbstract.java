@@ -17,14 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.invoke.event;
+package org.apache.isis.core.metamodel.facets.actions.event;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 
-public abstract class PostsActionInvokedEventFacetAbstract extends FacetAbstract implements ActionInvocationFacet {
+public abstract class PostsActionInvokedEventFacetAbstract 
+        extends FacetAbstract 
+        implements ActionInvocationFacet {
 
     public static Class<? extends Facet> type() {
     	

@@ -21,7 +21,9 @@ package org.apache.isis.core.progmodel.facets.actions.invoke.event;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.annotation.PostsActionInvokedEvent;
 import org.apache.isis.applib.annotation.PostsCollectionAddedToEvent;
+import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -97,7 +99,7 @@ public class PostsActionInvokedEventFacetFactory extends MethodPrefixBasedFacetF
         final Method actionMethod = processMethodContext.getMethod();
 
         try {
-            final PostsCollectionAddedToEvent annotation = Annotations.getAnnotation(actionMethod, PostsCollectionAddedToEvent.class);
+            final PostsActionInvokedEvent annotation = Annotations.getAnnotation(actionMethod, PostsActionInvokedEvent.class);
             if(annotation == null) {
                 return;
             }
@@ -112,9 +114,9 @@ public class PostsActionInvokedEventFacetFactory extends MethodPrefixBasedFacetF
             final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
             final FacetHolder holder = processMethodContext.getFacetHolder();
             
-            final Class<? extends CollectionAddedToEvent<?,?>> changedEventType = annotation.value();
+            final Class<? extends ActionInvokedEvent<?>> changedEventType = annotation.value();
 
-            FacetUtil.addFacet(new PostsActionInvokedEventFacetViaMethod(actionMethod, typeSpec, returnSpec, holder, getRuntimeContext(), getAdapterManager(), getServicesInjector(), changedEventType));
+            FacetUtil.addFacet(new PostsActionInvokedEventFacetAnnotation(actionMethod, typeSpec, returnSpec, holder, getRuntimeContext(), getAdapterManager(), getServicesInjector(), changedEventType));
         } finally {
             processMethodContext.removeMethod(actionMethod);
         }

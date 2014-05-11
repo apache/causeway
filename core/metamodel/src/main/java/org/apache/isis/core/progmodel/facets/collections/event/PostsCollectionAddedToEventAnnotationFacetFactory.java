@@ -33,10 +33,12 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.collections.event.PostsCollectionAddedToEventFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class PostsCollectionAddedToEventAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesProviderAware {
+public class PostsCollectionAddedToEventAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
 
-    private ServicesProvider servicesProvider;
+    private ServicesInjector servicesInjector;
 
     public PostsCollectionAddedToEventAnnotationFacetFactory() {
         super(FeatureType.COLLECTIONS_ONLY);
@@ -65,12 +67,14 @@ public class PostsCollectionAddedToEventAnnotationFacetFactory extends FacetFact
         // the collectionAddToFacet will end up as the underlying facet of the PostsCollectionAddedToEventFacetAnnotation
 
         final Class<? extends CollectionAddedToEvent<?,?>> changedEventType = annotation.value();
-        return new PostsCollectionAddedToEventFacetAnnotation(changedEventType, getterFacet, collectionAddToFacet, servicesProvider, holder);
+        return new PostsCollectionAddedToEventFacetAnnotation(changedEventType, getterFacet, collectionAddToFacet, servicesInjector, holder);
     }
 
+    // //////////////////////////////////////
+
     @Override
-    public void setServicesProvider(ServicesProvider servicesProvider) {
-        this.servicesProvider = servicesProvider;
+    public void setServicesInjector(ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
     }
 
 }

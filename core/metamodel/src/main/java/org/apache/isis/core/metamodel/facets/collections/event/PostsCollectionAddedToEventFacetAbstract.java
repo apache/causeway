@@ -19,7 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.collections.event;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
+import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
@@ -44,5 +49,6 @@ public abstract class PostsCollectionAddedToEventFacetAbstract
             final FacetHolder holder) {
         super(type(), changedEventType, holder);
     }
+
 
 }

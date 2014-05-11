@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.progmodel.facets.collections.event;
 
-import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
@@ -30,7 +28,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -38,13 +35,14 @@ import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccess
 import org.apache.isis.core.metamodel.facets.collections.event.PostsCollectionAddedToEventFacet;
 import org.apache.isis.core.metamodel.facets.collections.event.PostsCollectionAddedToEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public class PostsCollectionAddedToEventFacetAnnotation 
         extends PostsCollectionAddedToEventFacetAbstract {
 
     private final PropertyOrCollectionAccessorFacet getterFacet;
 	private final CollectionAddToFacet collectionAddToFacet;
-	private final ServicesProvider servicesProvider;
+	private final ServicesInjector servicesInjector;
 
 	private EventBusService eventBusService;
 	private boolean searchedForEventBusService = false;
@@ -53,12 +51,12 @@ public class PostsCollectionAddedToEventFacetAnnotation
 			final Class<? extends CollectionAddedToEvent<?, ?>> eventType,
 			final PropertyOrCollectionAccessorFacet getterFacet,
 			final CollectionAddToFacet collectionAddToFacet,
-			final ServicesProvider servicesProvider, 
+		    final ServicesInjector servicesInjector,
 			final FacetHolder holder) {
 		super(eventType, holder);
         this.getterFacet = getterFacet;
 		this.collectionAddToFacet = collectionAddToFacet;
-		this.servicesProvider = servicesProvider;
+		this.servicesInjector = servicesInjector;
 	}
 
 	@Override
@@ -97,55 +95,23 @@ public class PostsCollectionAddedToEventFacetAnnotation
             final Identifier identifier,
 			final Object addedReference) {
 	    
-		final Object source = targetAdapter.getObject();
 		try {
 			final Class type = value();
-			final CollectionAddedToEvent<?, ?> event = newEvent(type, source, identifier, addedReference);
+            final Object source = AdapterUtils.unwrap(targetAdapter);
+			final CollectionAddedToEvent<?, ?> event = Util.newEvent(type, source, identifier, addedReference);
 			eventBusService.post(event);
 		} catch (Exception e) {
 			throw new FatalException(e);
 		}
 	}
 
-	static <S, T> CollectionAddedToEvent<S, T> newEvent(
-			final Class<? extends CollectionAddedToEvent<S, T>> type,
-			final S source, 
-			final Identifier identifier,
-			final T value)
-			throws InstantiationException, IllegalAccessException,
-			NoSuchFieldException {
-		final CollectionAddedToEvent<S, T> event = type.newInstance();
-
-		setField("source", event, source);
-		setField("identifier", event, identifier);
-		setField("value", event, value);
-		return event;
-	}
-
-	private static void setField(final String name,
-			final CollectionAddedToEvent<?, ?> event, final Object sourceValue)
-			throws NoSuchFieldException, IllegalAccessException {
-		final Field sourceField = CollectionAddedToEvent.class
-				.getDeclaredField(name);
-		sourceField.setAccessible(true);
-		sourceField.set(event, sourceValue);
-	}
-
-	private EventBusService getEventBusService() {
-		if (!searchedForEventBusService) {
-			final List<ObjectAdapter> serviceAdapters = servicesProvider
-					.getServices();
-			for (ObjectAdapter serviceAdapter : serviceAdapters) {
-				final Object service = serviceAdapter.getObject();
-				if (service instanceof EventBusService) {
-					eventBusService = (EventBusService) service;
-					break;
-				}
-			}
-		}
-		searchedForEventBusService = true;
-		return eventBusService;
-	}
+    private EventBusService getEventBusService() {
+        if (!searchedForEventBusService) {
+            eventBusService = this.servicesInjector.lookupService(EventBusService.class);
+        }
+        searchedForEventBusService = true;
+        return eventBusService;
+    }
 
 	// //////////////////////////////////////
 	// MultiTypedFacet

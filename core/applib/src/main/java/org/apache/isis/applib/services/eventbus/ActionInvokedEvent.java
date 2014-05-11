@@ -18,6 +18,11 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PostsActionInvokedEvent;
 import org.apache.isis.applib.util.ObjectContracts;
 
@@ -27,29 +32,28 @@ public abstract class ActionInvokedEvent<S> extends java.util.EventObject {
 
     public static class Default extends ActionInvokedEvent<Object> {
         private static final long serialVersionUID = 1L;
+        public Default(Object source, Identifier identifier, Object... arguments) {
+            super(source, identifier, arguments);
+        }
     }
 
-    private final String action;
-    private final String parameters;
-    
-    /**
-     * To instantiate reflectively when the {@link PostsActionInvokedEvent} annotation
-     * is used.
-     * 
-     * <p>
-     * The fields ({@link #source} and {@link #value} are then set reflectively.
-     */
-    public ActionInvokedEvent() {
-        this(null, null, null);
+    private final Identifier identifier;
+    private final List<Object> arguments;
+
+    public ActionInvokedEvent(
+            final S source, 
+            final Identifier identifier, 
+            final Object... arguments) {
+        this(source, identifier, arguments != null? Arrays.asList(arguments): Collections.emptyList());
     }
     
     public ActionInvokedEvent(
             final S source, 
-            final String action, 
-            final String parameters) {
+            final Identifier identifier, 
+            final List<Object> arguments) {
         super(source);
-        this.action = action;
-        this.parameters = parameters;
+        this.identifier = identifier;
+        this.arguments = Collections.unmodifiableList(arguments);
     }
     
     @Override
@@ -57,15 +61,14 @@ public abstract class ActionInvokedEvent<S> extends java.util.EventObject {
     public S getSource() {
         return (S)source;
     }
-    public String getAction() {
-        return action;
+    public Identifier getIdentifier() {
+        return identifier;
     }
-    public String getParameters() {
-        return parameters;
+    public List<Object> getArguments() {
+        return arguments;
     }
-    
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "source,action,parameters");
+        return ObjectContracts.toString(this, "source,identifier");
     }
 }

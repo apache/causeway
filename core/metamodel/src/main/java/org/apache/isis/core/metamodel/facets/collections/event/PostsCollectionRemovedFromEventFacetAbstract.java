@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.collections.event;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

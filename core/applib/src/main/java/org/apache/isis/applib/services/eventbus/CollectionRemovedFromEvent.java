@@ -27,21 +27,14 @@ public abstract class CollectionRemovedFromEvent<S,T> extends java.util.EventObj
 
     public static class Default extends CollectionRemovedFromEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
+        public Default(Object source, Identifier identifier, Object value) {
+            super(source, identifier, value);
+        }
     }
 
     private final Identifier identifier;
     private final T value;
     
-    /**
-     * To instantiate reflectively when the {@link PostsCollectionRemovedFromEvent} annotation
-     * is used.
-     * 
-     * <p>
-     * The fields ({@link #source} and {@link #value} are then set reflectively.
-     */
-    public CollectionRemovedFromEvent() {
-        this(null, null, null);
-    }
     public CollectionRemovedFromEvent(
             final S source, 
             final Identifier identifier, 

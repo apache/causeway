@@ -34,6 +34,7 @@ import com.google.common.collect.Ordering;
 import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.*;
@@ -45,6 +46,7 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
@@ -141,6 +143,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     private String description;
 
     @javax.jdo.annotations.Column(allowsNull="false", length=100)
+    @PostsPropertyChangedEvent()
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") 
     @TypicalLength(50)
     public String getDescription() {
@@ -299,6 +302,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
         this.complete = complete;
     }
 
+    @PostsActionInvokedEvent(CompletedEvent.class)
     @Command
     @PublishedAction
     @Bulk
@@ -317,8 +321,6 @@ public class ToDoItem implements Comparable<ToDoItem> {
                 + (bulkInteractionContext.isFirst() ? " (first)" : "")
                 + (bulkInteractionContext.isLast() ? " (last)" : ""));
 
-        eventBusService.post(new CompletedEvent(this));
-
         // if invoked as a regular action, return this object;
         // otherwise (if invoked as bulk), return null (so go back to the list)
         return bulkInteractionContext.getInvokedAs() == InvokedAs.REGULAR? this: null;
@@ -328,13 +330,12 @@ public class ToDoItem implements Comparable<ToDoItem> {
         return isComplete() ? "Already completed" : null;
     }
 
+    @PostsActionInvokedEvent(NoLongerCompletedEvent.class)
     @Command
     @PublishedAction
     @Bulk
     public ToDoItem notYetCompleted() {
         setComplete(false);
-
-        eventBusService.post(new NoLongerCompletedEvent(this));
 
         // if invoked as a regular action, return this object;
         // otherwise (if invoked as bulk), return null (so go back to the list)
@@ -418,7 +419,6 @@ public class ToDoItem implements Comparable<ToDoItem> {
     private String notes;
 
     @javax.jdo.annotations.Column(allowsNull="true", length=400)
-    @PostsPropertyChangedEvent()
     public String getNotes() {
         return notes;
     }
@@ -614,14 +614,13 @@ public class ToDoItem implements Comparable<ToDoItem> {
     //region > delete (action)
     // //////////////////////////////////////
 
+    @PostsActionInvokedEvent(DeletedEvent.class)
     @Bulk
     public List<ToDoItem> delete() {
         
         container.removeIfNotAlready(this);
 
         container.informUser("Deleted " + container.titleOf(this));
-        
-        eventBusService.post(new DeletedEvent(this));
         
         // invalid to return 'this' (cannot render a deleted object)
         return toDoItems.notYetComplete(); 
@@ -730,9 +729,9 @@ public class ToDoItem implements Comparable<ToDoItem> {
         }
         return null;
     }
+    //endregion
 
-    // //////////////////////////////////////
-    // Programmatic Helpers
+    //region > programmatic helpers
     // //////////////////////////////////////
 
     private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
@@ -753,41 +752,50 @@ public class ToDoItem implements Comparable<ToDoItem> {
 
     //region > events
     // //////////////////////////////////////
-    // Events
-    // //////////////////////////////////////
 
-
-    public static abstract class AbstractEvent {
-        private final String eventDescription;
-        private final ToDoItem toDoItem;
-        public AbstractEvent(String eventDescription, ToDoItem toDoItem) {
-            this.eventDescription = eventDescription;
-            this.toDoItem = toDoItem;
+    public static abstract class AbstractActionInvokedEvent extends ActionInvokedEvent<ToDoItem> {
+        private static final long serialVersionUID = 1L;
+        private final String description;
+        public AbstractActionInvokedEvent(
+                final String description, 
+                final ToDoItem source, 
+                final Identifier identifier, 
+                final Object... arguments) {
+            super(source, identifier, arguments);
+            this.description = description;
         }
         public String getEventDescription() {
-            return eventDescription;
-        }
-        public ToDoItem getToDoItem() {
-            return toDoItem;
+            return description;
         }
     }
 
-    public static class CompletedEvent extends AbstractEvent {
-
-        public CompletedEvent(ToDoItem toDoItem) {
-            super("completed", toDoItem);
+    public static class CompletedEvent extends AbstractActionInvokedEvent {
+        private static final long serialVersionUID = 1L;
+        public CompletedEvent(
+                final ToDoItem source, 
+                final Identifier identifier, 
+                final Object... arguments) {
+            super("completed", source, identifier, arguments);
         }
     }
 
-    public static class NoLongerCompletedEvent extends AbstractEvent {
-        public NoLongerCompletedEvent(ToDoItem toDoItem) {
-            super("no longer completed", toDoItem);
+    public static class NoLongerCompletedEvent extends AbstractActionInvokedEvent {
+        private static final long serialVersionUID = 1L;
+        public NoLongerCompletedEvent(
+                final ToDoItem source, 
+                final Identifier identifier, 
+                final Object... arguments) {
+            super("no longer completed", source, identifier, arguments);
         }
     }
 
-    public static class DeletedEvent extends AbstractEvent {
-        public DeletedEvent(ToDoItem toDoItem) {
-            super("deleted", toDoItem);
+    public static class DeletedEvent extends AbstractActionInvokedEvent {
+        private static final long serialVersionUID = 1L;
+        public DeletedEvent(
+                final ToDoItem source, 
+                final Identifier identifier, 
+                final Object... arguments) {
+            super("deleted", source, identifier, arguments);
         }
     }
     //endregion

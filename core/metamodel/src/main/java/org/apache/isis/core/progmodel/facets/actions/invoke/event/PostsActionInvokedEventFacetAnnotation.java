@@ -23,27 +23,33 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.FatalException;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.actions.event.PostsActionInvokedEventFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetViaMethod;
 
-public class PostsActionInvokedEventFacetViaMethod extends ActionInvocationFacetViaMethod implements ImperativeFacet {
+public class PostsActionInvokedEventFacetAnnotation 
+        extends ActionInvocationFacetViaMethod 
+        implements ImperativeFacet, PostsActionInvokedEventFacet {
 	
+	private ServicesInjector servicesInjector;
+	private Class<? extends ActionInvokedEvent<?>> eventType;
+
 	private EventBusService eventBusService;
 	private boolean searchedForEventBusService = false;
-	private ServicesInjector servicesInjector;
-	private Class<? extends CollectionAddedToEvent<?, ?>> eventType;
-
-    public PostsActionInvokedEventFacetViaMethod(
+	
+    public PostsActionInvokedEventFacetAnnotation(
             final Method method, 
             final ObjectSpecification onType, 
             final ObjectSpecification returnType, 
@@ -51,10 +57,9 @@ public class PostsActionInvokedEventFacetViaMethod extends ActionInvocationFacet
             final RuntimeContext runtimeContext, 
             final AdapterManager adapterManager, 
             final ServicesInjector servicesInjector,
-			final Class<? extends CollectionAddedToEvent<?, ?>> eventType) {
+			final Class<? extends ActionInvokedEvent<?>> eventType) {
         super(method, onType, returnType, holder, runtimeContext, adapterManager, servicesInjector);
         
-        // Also needed here.
         this.servicesInjector = servicesInjector;
         
         this.eventType = eventType;
@@ -75,47 +80,25 @@ public class PostsActionInvokedEventFacetViaMethod extends ActionInvocationFacet
     	}
     	
     	return invocationResult.getAdapter();
-    	
     }
     
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	private void postEvent(
             final ObjectAction owningAction, 
             final ObjectAdapter targetAdapter, 
-            final ObjectAdapter[] arguments) {
+            final ObjectAdapter[] argumentAdapters) {
 	    
-		final Object source = targetAdapter.getObject();
 		try {
 			final Class type = eventType;
-			final ActionInvokedEvent event = newEvent(type, owningAction, source, arguments);
+			Identifier actionIdentifier = owningAction.getIdentifier();
+	        final Object source = AdapterUtils.unwrap(targetAdapter);
+			final Object[] arguments = AdapterUtils.unwrap(argumentAdapters);
+            @SuppressWarnings("unchecked")
+            final ActionInvokedEvent<?> event = org.apache.isis.core.metamodel.facets.actions.event.PostsActionInvokedEventFacet.Util.newEvent(type, source, actionIdentifier, arguments);
 			getEventBusService().post(event);
 		} catch (Exception e) {
 			throw new FatalException(e);
 		}
-	}
-
-	static <S> ActionInvokedEvent<S> newEvent(
-			final Class<? extends ActionInvokedEvent<S>> type,
-		            final ObjectAction owningAction, 
-		            final S source, 
-		            final ObjectAdapter[] arguments)
-			throws InstantiationException, IllegalAccessException,
-			NoSuchFieldException {
-		final ActionInvokedEvent<S> event = type.newInstance();
-
-		setField("owningAction", event, owningAction);
-		setField("targetAdapter", event, source);
-		setField("arguments", event, arguments.toString());
-		return event;
-	}
-
-	private static void setField(final String name,
-			final ActionInvokedEvent<?> event, final Object sourceValue)
-			throws NoSuchFieldException, IllegalAccessException {
-		final Field sourceField = CollectionAddedToEvent.class
-				.getDeclaredField(name);
-		sourceField.setAccessible(true);
-		sourceField.set(event, sourceValue);
 	}
 
 	private EventBusService getEventBusService() {

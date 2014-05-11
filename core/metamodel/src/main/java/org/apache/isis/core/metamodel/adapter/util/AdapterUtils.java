@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.adapter.util;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -28,71 +27,60 @@ public class AdapterUtils {
 
     private AdapterUtils() {
     }
-
+    
+    /**
+     * @deprecated - use {@link ObjectAdapter.Util#exists(ObjectAdapter)}
+     */
+    @Deprecated
     public static boolean exists(final ObjectAdapter adapter) {
-        return adapter != null && adapter.getObject() != null;
+        return ObjectAdapter.Util.exists(adapter);
     }
-
+    
+    /**
+     * @deprecated - use {@link ObjectAdapter.Util#wrappedEqual(ObjectAdapter, ObjectAdapter)}
+     */
+    @Deprecated
     public static boolean wrappedEqual(final ObjectAdapter adapter1, final ObjectAdapter adapter2) {
-        final boolean defined1 = exists(adapter1);
-        final boolean defined2 = exists(adapter2);
-        if (defined1 && !defined2) {
-            return false;
-        }
-        if (!defined1 && defined2) {
-            return false;
-        }
-        if (!defined1 && !defined2) {
-            return true;
-        } // both null
-        return adapter1.getObject().equals(adapter2.getObject());
+        return ObjectAdapter.Util.wrappedEqual(adapter1, adapter2);
     }
 
+    /**
+     * @deprecated - use {@link ObjectAdapter.Util#unwrap(ObjectAdapter)}
+     */
+    @Deprecated
     public static Object unwrap(final ObjectAdapter adapter) {
-        return adapter != null ? adapter.getObject() : null;
+        return ObjectAdapter.Util.unwrap(adapter);
     }
 
+    /**
+     * @deprecated - use {@link ObjectAdapter.Util#unwrap(ObjectAdapter[])}
+     */
     public static Object[] unwrap(final ObjectAdapter[] adapters) {
-        if (adapters == null) {
-            return null;
-        }
-        final Object[] unwrappedObjects = new Object[adapters.length];
-        int i = 0;
-        for (final ObjectAdapter adapter : adapters) {
-            unwrappedObjects[i++] = unwrap(adapter);
-        }
-        return unwrappedObjects;
+        return ObjectAdapter.Util.unwrap(adapters);
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * @deprecated - use {@link ObjectAdapter.Util#unwrapT(List)}
+     */
+    @Deprecated
     public static <T> List<T> unwrap(final List<ObjectAdapter> adapters) {
-        final List<T> list = new ArrayList<T>();
-        for (final ObjectAdapter adapter : adapters) {
-            list.add((T) unwrap(adapter));
-        }
-        return list;
+        return ObjectAdapter.Util.unwrapT(adapters);
     }
 
+    /**
+     * @deprecated - use {@link ObjectAdapter.Util#titleString(ObjectAdapter)}
+     */
+    @Deprecated
     public static String titleString(final ObjectAdapter adapter) {
-        return adapter != null ? adapter.titleString() : "";
+        return ObjectAdapter.Util.titleString(adapter);
     }
 
+    /**
+     * @deprecated - use {@link ObjectAdapter.Util#nullSafeEquals(Object, Object)}
+     */
+    @Deprecated
     public static boolean nullSafeEquals(final Object obj1, final Object obj2) {
-        if (obj1 == null && obj2 == null) {
-            return true;
-        }
-        if (obj1 == null || obj2 == null) {
-            return false;
-        }
-        if (obj1.equals(obj2)) {
-            return true;
-        }
-        if (obj1 instanceof ObjectAdapter && obj2 instanceof ObjectAdapter) {
-            final ObjectAdapter adapterObj1 = (ObjectAdapter) obj1;
-            final ObjectAdapter adapterObj2 = (ObjectAdapter) obj2;
-            return nullSafeEquals(adapterObj1.getObject(), adapterObj2.getObject());
-        }
-        return false;
+        return ObjectAdapter.Util.nullSafeEquals(obj1, obj2);
     }
 
 }

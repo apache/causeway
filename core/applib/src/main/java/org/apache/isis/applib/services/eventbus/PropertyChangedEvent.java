@@ -28,6 +28,9 @@ public abstract class PropertyChangedEvent<S,T> extends java.util.EventObject {
 
     public static class Default extends PropertyChangedEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
+        public Default(Object source, Identifier identifier, Object oldValue, Object newValue) {
+            super(source, identifier, oldValue, newValue);
+        }
     }
     
     private final Identifier identifier;
@@ -35,26 +38,19 @@ public abstract class PropertyChangedEvent<S,T> extends java.util.EventObject {
     private final T newValue;
     
     /**
-     * To instantiate reflectively when the {@link PostsPropertyChangedEvent} annotation
-     * is used.
-     * 
-     * <p>
-     * The fields ({@link #source}, {@link #oldValue} and {@link #newValue}) are
-     * then set reflectively.
-     */
-    public PropertyChangedEvent() {
-        this(null, null, null, null);
-    }
-    
-    /**
      * @deprecated - use {@link #PropertyChangedEvent(Object, Identifier, Object, Object)}.
      */
     @Deprecated
-    public PropertyChangedEvent(S source, T oldValue, T newValue) {
+    public PropertyChangedEvent(
+            final S source, 
+            final T oldValue, final T newValue) {
         this(source, null, oldValue, newValue);
     }
 
-    public PropertyChangedEvent(S source, Identifier identifier, T oldValue, T newValue) {
+    public PropertyChangedEvent(
+            final S source, 
+            final Identifier identifier, 
+            final T oldValue, final T newValue) {
         super(source);
         this.identifier = identifier;
         this.oldValue = oldValue;

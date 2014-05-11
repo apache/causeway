@@ -18,13 +18,17 @@
  */
 package integration.tests.colls;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import integration.tests.ToDoIntegTest;
 
 import java.util.List;
 
 import dom.todo.ToDoItem;
+import dom.todo.ToDoItemSubscriptions;
 import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixture;
 
@@ -32,12 +36,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
+
 public class ToDoItemTest_dependencies_remove extends ToDoIntegTest {
 
     private ToDoItem toDoItem;
     private ToDoItem otherToDoItem;
     private ToDoItem yetAnotherToDoItem;
-    
+
+    private ToDoItemSubscriptions toDoItemSubscriptions;
 
     @Before
     public void setUp() throws Exception {
@@ -46,15 +53,17 @@ public class ToDoItemTest_dependencies_remove extends ToDoIntegTest {
 
         final List<ToDoItem> items = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(items.get(0));
-        otherToDoItem = items.get(1); // wrapping this seems to trip up cglib :-(
-        yetAnotherToDoItem = items.get(2); // wrapping this seems to trip up cglib :-(
+        otherToDoItem = wrap(items.get(1));
+        yetAnotherToDoItem = wrap(items.get(2));
         
         toDoItem.add(otherToDoItem);
+        toDoItemSubscriptions = service(ToDoItemSubscriptions.class);
     }
 
     @After
     public void tearDown() throws Exception {
         unwrap(toDoItem).getDependencies().clear();
+        toDoItemSubscriptions.reset();
     }
 
     @Test
@@ -68,11 +77,21 @@ public class ToDoItemTest_dependencies_remove extends ToDoIntegTest {
         
         // then
         assertThat(toDoItem.getDependencies().size(), is(0));
+        
+        // and then
+        @SuppressWarnings("unchecked")
+        final CollectionRemovedFromEvent<ToDoItem,ToDoItem> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(CollectionRemovedFromEvent.class);
+        assertThat(ev, is(not(nullValue()))); 
+        
+        ToDoItem source = ev.getSource();
+        assertThat(source, is(equalTo(unwrap(toDoItem))));
+        assertThat(ev.getIdentifier().getMemberName(), is("dependencies"));
+        assertThat(ev.getValue(), is(unwrap(otherToDoItem)));
     }
 
 
     @Test
-    public void cannotRemoveItemIfNotADepedndency() throws Exception {
+    public void cannotRemoveItemIfNotADependency() throws Exception {
 
         // when, then
         expectedExceptions.expectMessage("Not a dependency");

@@ -33,10 +33,12 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.collections.event.PostsCollectionRemovedFromEventFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class PostsCollectionRemovedFromEventAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesProviderAware {
+public class PostsCollectionRemovedFromEventAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
 
-    private ServicesProvider servicesProvider;
+    private ServicesInjector servicesInjector;
 
     public PostsCollectionRemovedFromEventAnnotationFacetFactory() {
         super(FeatureType.COLLECTIONS_ONLY);
@@ -65,12 +67,14 @@ public class PostsCollectionRemovedFromEventAnnotationFacetFactory extends Facet
         // the collectionRemoveFromFacet will end up as the underlying facet of the PostsCollectionRemovedFromEventFacetAnnotation
 
         final Class<? extends CollectionRemovedFromEvent<?,?>> changedEventType = annotation.value();
-        return new PostsCollectionRemovedFromEventFacetAnnotation(changedEventType, getterFacet, collectionRemoveFromFacet, servicesProvider, holder);
+        return new PostsCollectionRemovedFromEventFacetAnnotation(changedEventType, getterFacet, collectionRemoveFromFacet, servicesInjector, holder);
     }
 
+    // //////////////////////////////////////
+
     @Override
-    public void setServicesProvider(ServicesProvider servicesProvider) {
-        this.servicesProvider = servicesProvider;
+    public void setServicesInjector(ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
     }
 
 }
