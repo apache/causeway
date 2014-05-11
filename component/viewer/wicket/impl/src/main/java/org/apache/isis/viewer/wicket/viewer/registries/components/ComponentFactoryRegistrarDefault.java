@@ -79,7 +79,6 @@ import org.apache.isis.viewer.wicket.ui.components.unknown.UnknownModelPanelFact
 import org.apache.isis.viewer.wicket.ui.components.value.StandaloneValuePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLinkSelect2PanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices.ValueChoicesSelect2PanelFactory;
 
@@ -231,8 +230,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     protected void addComponentFactoriesForEntityLink(final ComponentFactoryList componentFactories) {
-        // must come before EntityLinkSimplePanelFactory (as is more specific) 
-        componentFactories.add(new EntityLinkSelect2PanelFactory()); 
         componentFactories.add(new EntityLinkSimplePanelFactory());
     }
 

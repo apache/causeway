@@ -24,6 +24,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.vaynberg.wicket.select2.ChoiceProvider;
 import com.vaynberg.wicket.select2.Select2Choice;
+import com.vaynberg.wicket.select2.Select2MultiChoice;
 import com.vaynberg.wicket.select2.Settings;
 
 import org.apache.wicket.Component;

@@ -59,6 +59,7 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
         final EntityModel model = new EntityModel(adapter);
         model.setRenderingHint(parentAdapterMementoIfAny != null? RenderingHint.PARENTED_TITLE_COLUMN: RenderingHint.STANDALONE_TITLE_COLUMN);
         model.setContextAdapterIfAny(parentAdapterMementoIfAny);
+        // will use EntityLinkSimplePanelFactory as model is an EntityModel
         final ComponentFactory componentFactory = findComponentFactory(ComponentType.ENTITY_LINK, model);
         return componentFactory.createComponent(id, model);
     }

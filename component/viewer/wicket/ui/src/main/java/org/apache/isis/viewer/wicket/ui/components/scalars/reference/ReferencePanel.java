@@ -75,9 +75,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         super.onBeforeRenderWhenDisabled(disableReason);
         final EntityModel entityLinkModel = (EntityModel) entityLink.getModel();
         entityLinkModel.toViewMode();
-        
         setTitleAttribute(disableReason);
-
         entityLink.syncVisibilityAndUsability();
     }
 
@@ -90,7 +88,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getName();
         
-        entityLink = (EntityLinkSelect2Panel) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
+        entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getWicketId(), getModel());
         
         setOutputMarkupId(true);
         entityLink.setOutputMarkupId(true);
@@ -166,8 +164,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getName();
         
-        final Component entityLinkComponent = getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
-        entityLink = (EntityLinkSelect2Panel) entityLinkComponent;
+        entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getWicketId(), getModel());
         
         entityLink.setOutputMarkupId(true);
         entityLink.setLabel(Model.of(name));
