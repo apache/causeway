@@ -34,6 +34,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -50,6 +51,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
     private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
     private EntityLinkSelect2Panel entityLink;
+    private EntityLinkSimplePanel entitySimpleLink;
 
     public ReferencePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
@@ -163,13 +165,13 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getName();
         
-        entityLink = new EntityLinkSelect2Panel(ComponentType.ENTITY_LINK.getWicketId(), getModel());
+        entitySimpleLink = (EntityLinkSimplePanel) getComponentFactoryRegistry().createComponent(ComponentType.ENTITY_LINK, getModel());
         
-        entityLink.setOutputMarkupId(true);
-        entityLink.setLabel(Model.of(name));
+        entitySimpleLink.setOutputMarkupId(true);
+        entitySimpleLink.setLabel(Model.of(name));
         
-        final FormComponentLabel labelIfCompact = new FormComponentLabel(ID_SCALAR_IF_COMPACT, entityLink);
-        labelIfCompact.add(entityLink);
+        final FormComponentLabel labelIfCompact = new FormComponentLabel(ID_SCALAR_IF_COMPACT, entitySimpleLink);
+        labelIfCompact.add(entitySimpleLink);
         
         addOrReplace(labelIfCompact);
         
