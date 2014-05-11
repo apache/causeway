@@ -54,6 +54,6 @@ public @interface PostsPropertyChangedEvent {
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      */
-    Class<? extends PropertyChangedEvent<?,?>> value();
+    Class<? extends PropertyChangedEvent<?,?>> value() default PropertyChangedEvent.Default.class;
 
 }

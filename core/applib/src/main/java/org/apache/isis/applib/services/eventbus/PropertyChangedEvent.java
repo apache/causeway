@@ -18,35 +18,53 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public abstract class PropertyChangedEvent<S,T> {
-    private final S source;
+public abstract class PropertyChangedEvent<S,T> extends java.util.EventObject {
+    
+    private static final long serialVersionUID = 1L;
+
+    public static class Default extends PropertyChangedEvent<Object, Object> {
+        private static final long serialVersionUID = 1L;
+        public Default(Object source, Identifier identifier, Object oldValue, Object newValue) {
+            super(source, identifier, oldValue, newValue);
+        }
+    }
+    
+    private final Identifier identifier;
     private final T oldValue;
     private final T newValue;
     
     /**
-     * To instantiate reflectively when the {@link PostsPropertyChangedEvent} annotation
-     * is used.
-     * 
-     * <p>
-     * The fields ({@link #source}, {@link #oldValue} and {@link #newValue}) are
-     * then set reflectively.
+     * @deprecated - use {@link #PropertyChangedEvent(Object, Identifier, Object, Object)}.
      */
-    public PropertyChangedEvent() {
-        this(null, null, null);
+    @Deprecated
+    public PropertyChangedEvent(
+            final S source, 
+            final T oldValue, final T newValue) {
+        this(source, null, oldValue, newValue);
     }
-    public PropertyChangedEvent(S source, T oldValue, T newValue) {
-        this.source = source;
+
+    public PropertyChangedEvent(
+            final S source, 
+            final Identifier identifier, 
+            final T oldValue, final T newValue) {
+        super(source);
+        this.identifier = identifier;
         this.oldValue = oldValue;
         this.newValue = newValue;
     }
-
-    public S getSource() {
-        return source;
-    }
     
+    @Override
+    @SuppressWarnings("unchecked")
+    public S getSource() {
+        return (S) source;
+    }
+    public Identifier getIdentifier() {
+        return identifier;
+    }
     public T getOldValue() {
         return oldValue;
     }

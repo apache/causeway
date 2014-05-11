@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.Programmatic;
  * This should be prepared in a way that can be processed by the {@link EventSerializer}.  For example:
  * <ul>
  * <li>The {@link EventSerializer.Simple simple event serializer} simply invokes
- * {@link Object#toString() toString()} on the payload.  Use the {@link Simple simple} implementation
+ * {@link Object#toString() toString()} on the payload.  Use the {@link Default simple} implementation
  * which simply wraps a string.
  * </li>
  * <li>The <tt>RestfulObjectsSpecEventSerializer</tt> event serializer expects a pojo domain object

@@ -24,6 +24,9 @@ import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
+import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -92,5 +95,87 @@ public interface ImperativeFacet {
      * @return
      */
     public boolean impliesObjectChanged();
+
+
+    // //////////////////////////////////////
+
+    public static class Util {
+        private Util(){}
+
+        /**
+         * Returns the provided {@link Facet facet} as an {@link ImperativeFacet} if
+         * it either is one or if it is a {@link DecoratingFacet} that in turn wraps
+         * an {@link ImperativeFacet}.
+         * 
+         * <p>
+         * Otherwise, returns <tt>null</tt>.
+         */
+        public static ImperativeFacet getImperativeFacet(final Facet facet) {
+            if (facet instanceof ImperativeFacet) {
+                return (ImperativeFacet) facet;
+            }
+            if (facet.getUnderlyingFacet() instanceof ImperativeFacet) {
+                return (ImperativeFacet) facet.getUnderlyingFacet();
+            }
+            if (facet instanceof DecoratingFacet) {
+                final DecoratingFacet<?> decoratingFacet = ObjectExtensions.asT(facet);
+                return getImperativeFacet(decoratingFacet.getDecoratedFacet());
+            }
+            return null;
+        }
+        
+        public static boolean isImperativeFacet(final Facet facet) {
+            return getImperativeFacet(facet) != null;
+        }
+
+        public static Flags getImperativeFacetFlags(final ObjectMember member, final Method method) {
+            final Flags flags = new Flags();
+            if (member == null) {
+                return flags;
+            }
+            final List<Facet> allFacets = member.getFacets(Filters.anyOfType(Facet.class));
+            for (final Facet facet : allFacets) {
+                final ImperativeFacet imperativeFacet = ImperativeFacetUtils.getImperativeFacet(facet);
+                if (imperativeFacet == null) {
+                    continue;
+                }
+                final List<Method> methods = imperativeFacet.getMethods();
+                if (!methods.contains(method)) {
+                    continue;
+                }
+                flags.apply(imperativeFacet);
+
+                // no need to search further
+                if (flags.bothSet()) {
+                    break;
+                }
+            }
+            return flags;
+        }
+    }
+
+    public static class Flags {
+        private boolean impliesResolve;
+        private boolean impliesObjectChanged;
+
+        public void apply(final ImperativeFacet imperativeFacet) {
+            this.impliesResolve |= imperativeFacet.impliesResolve();
+            this.impliesObjectChanged |= imperativeFacet.impliesObjectChanged();
+        }
+
+        public boolean bothSet() {
+            return impliesResolve && impliesObjectChanged;
+        }
+
+        public boolean impliesResolve() {
+            return impliesResolve;
+        }
+
+        public boolean impliesObjectChanged() {
+            return impliesObjectChanged;
+        }
+    }
+
+
 
 }

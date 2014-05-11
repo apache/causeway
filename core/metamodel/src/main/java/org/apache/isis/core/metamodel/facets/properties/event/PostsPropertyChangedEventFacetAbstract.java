@@ -19,18 +19,28 @@
 
 package org.apache.isis.core.metamodel.facets.properties.event;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 
-public abstract class PostsPropertyChangedEventFacetAbstract extends SingleValueFacetAbstract<Class<? extends PropertyChangedEvent<?,?>>> implements PostsPropertyChangedEventFacet {
+public abstract class PostsPropertyChangedEventFacetAbstract 
+        extends SingleValueFacetAbstract<Class<? extends PropertyChangedEvent<?,?>>> 
+        implements PostsPropertyChangedEventFacet {
 
     public static Class<? extends Facet> type() {
+        // different implementation to PostsCollectionAddToEventFacet (for example) because this facet wraps
+        // multiple facets and so we cannot use the setUnderlyingFacet capability.
         return PostsPropertyChangedEventFacet.class;
     }
 
-    public PostsPropertyChangedEventFacetAbstract(final Class<? extends PropertyChangedEvent<?,?>> changedEventType, final FacetHolder holder) {
+    public PostsPropertyChangedEventFacetAbstract(
+            final Class<? extends PropertyChangedEvent<?,?>> changedEventType, 
+            final FacetHolder holder) {
         super(type(), changedEventType, holder);
     }
 

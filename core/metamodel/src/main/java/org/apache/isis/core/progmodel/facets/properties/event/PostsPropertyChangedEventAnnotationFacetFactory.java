@@ -39,6 +39,8 @@ import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.properties.event.PostsPropertyChangedEventFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -47,9 +49,9 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVis
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-public class PostsPropertyChangedEventAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesProviderAware, MetaModelValidatorRefiner {
+public class PostsPropertyChangedEventAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, MetaModelValidatorRefiner {
 
-    private ServicesProvider servicesProvider;
+    private ServicesInjector servicesInjector;
 
     public PostsPropertyChangedEventAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -75,21 +77,25 @@ public class PostsPropertyChangedEventAnnotationFacetFactory extends FacetFactor
         if (clearFacet == null && setterFacet == null) {
             return null;
         }
+        
+        
+        // REVIEW: I'm a bit uncertain about this; this facet is multi-valued, but the setUnderlying(...) stuff only
+        // works for single valued types.
+        // the wrapperFactory stuff looks for underlying to find the imperative method, I think this only works in this
+        // case because (by accident rather than design) there is also the PropertyInitializationFacet wrapping the setter.
         if(setterFacet != null) {
             holder.removeFacet(setterFacet);
         }
         if(clearFacet != null) {
             holder.removeFacet(clearFacet);
         }
+        
         final Class<? extends PropertyChangedEvent<?, ?>> changedEventType = annotation.value();
-        return new PostsPropertyChangedEventFacetAnnotation(changedEventType, getterFacet, setterFacet, clearFacet, servicesProvider, holder);
+        return new PostsPropertyChangedEventFacetAnnotation(changedEventType, getterFacet, setterFacet, clearFacet, servicesInjector, holder);
     }
 
-    @Override
-    public void setServicesProvider(ServicesProvider servicesProvider) {
-        this.servicesProvider = servicesProvider;
-    }
-
+    // //////////////////////////////////////
+    
     @Override
     public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
         metaModelValidator.add(new MetaModelValidatorVisiting(newValidatorVisitor()));
@@ -115,4 +121,12 @@ public class PostsPropertyChangedEventAnnotationFacetFactory extends FacetFactor
         };
     }
 
+    // //////////////////////////////////////
+
+    @Override
+    public void setServicesInjector(ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
+    }
+
+    
 }

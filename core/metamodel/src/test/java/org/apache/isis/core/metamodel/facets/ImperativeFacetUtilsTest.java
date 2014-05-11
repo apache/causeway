@@ -19,26 +19,36 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 import java.lang.reflect.Method;
+
 import com.google.common.collect.Lists;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils.ImperativeFacetFlags;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.unittestsupport.jmocking.JavassistImposteriser;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
-
-@RunWith(JMock.class)
 public class ImperativeFacetUtilsTest {
+
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     public static class Customer {
 
@@ -54,31 +64,45 @@ public class ImperativeFacetUtilsTest {
 
     }
 
-    private final Mockery context = new JUnit4Mockery() {
-        {
-            setImposteriser(JavassistImposteriser.INSTANCE);
-        }
-    };
-
+    @Mock
     private ObjectMember mockObjectMember;
+
+    public static interface ImperativeFacetAndFacet extends ImperativeFacet, Facet {}
+    @Mock
+    private ImperativeFacetAndFacet mockImperativeFacet;
+    
     private Method method;
 
     @Before
     public void setUp() throws Exception {
-        mockObjectMember = context.mock(ObjectMember.class);
         method = Customer.class.getDeclaredMethod("getFirstName");
+
+        context.checking(new Expectations() {
+            {
+                allowing(mockImperativeFacet).getMethods();
+                will(returnValue(Lists.newArrayList(method)));
+
+                allowing(mockImperativeFacet).impliesResolve();
+                will(returnValue(true));
+                
+                allowing(mockImperativeFacet).impliesObjectChanged();
+                will(returnValue(true));
+            }
+        });
+
     }
 
     @SuppressWarnings("unchecked")
     @Test
     public void getImperativeFacetsWhenHasNone() throws Exception {
+        
         context.checking(new Expectations() {
             {
-                one(mockObjectMember).getFacets(with(any(Filter.class)));
+                oneOf(mockObjectMember).getFacets(with(any(Filter.class)));
                 will(returnValue(Lists.newArrayList()));
             }
         });
-        final ImperativeFacetFlags flags = ImperativeFacetUtils.getImperativeFacetFlags(mockObjectMember, method);
+        final ImperativeFacet.Flags flags = ImperativeFacet.Util.getImperativeFacetFlags(mockObjectMember, method);
         assertThat(flags, is(not(nullValue())));
         assertThat(flags.impliesResolve(), is(false));
         assertThat(flags.impliesObjectChanged(), is(false));
@@ -87,14 +111,13 @@ public class ImperativeFacetUtilsTest {
     @SuppressWarnings("unchecked")
     @Test
     public void getImperativeFacetsWhenHasOneImperativeFacet() throws Exception {
-        final ImperativeFacet imperativeFacet = null;
         context.checking(new Expectations() {
             {
-                one(mockObjectMember).getFacets(with(any(Filter.class)));
-                will(returnValue(Lists.newArrayList((Facet) imperativeFacet)));
+                oneOf(mockObjectMember).getFacets(with(any(Filter.class)));
+                will(returnValue(Lists.newArrayList((Facet) mockImperativeFacet)));
             }
         });
-        final ImperativeFacetFlags flags = ImperativeFacetUtils.getImperativeFacetFlags(mockObjectMember, method);
+        final ImperativeFacet.Flags flags = ImperativeFacet.Util.getImperativeFacetFlags(mockObjectMember, method);
         assertThat(flags, is(not(nullValue())));
         // TODO: need more tests here, these don't go deep enough...
     }

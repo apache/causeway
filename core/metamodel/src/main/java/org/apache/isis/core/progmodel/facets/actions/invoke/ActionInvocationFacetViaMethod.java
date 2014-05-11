@@ -113,13 +113,62 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     public ObjectAdapter invoke(final ObjectAdapter target, final ObjectAdapter[] parameters) {
         return invoke(null, target, parameters);
     }
-
+    
     @Override
     public ObjectAdapter invoke(
             final ObjectAction owningAction, 
             final ObjectAdapter targetAdapter, 
             final ObjectAdapter[] arguments) {
+    
+    	// Can return null both because the action finally was not invoked 
+    	// or because it returned null.
+    	return internalInvoke(owningAction, targetAdapter, arguments).getAdapter();
+    	
+    }
 
+    /**
+     * Introduced to disambiguate the meaning of <tt>null</tt> as a return value of
+     * {@link ActionInvocationFacetViaMethod#invoke(ObjectAdapter, ObjectAdapter[])}
+     */
+    public static class InvocationResult {
+
+        public static InvocationResult forActionThatReturned(final ObjectAdapter resultAdapter) {
+            return new InvocationResult(true, resultAdapter);
+        }
+
+        public static InvocationResult forActionNotInvoked() {
+            return new InvocationResult(false, null);
+        }
+
+    	private final boolean whetherInvoked;
+    	private final ObjectAdapter adapter;
+    	
+    	private InvocationResult(final boolean whetherInvoked, final ObjectAdapter result) {
+    		this.whetherInvoked = whetherInvoked;
+    		this.adapter = result;
+    	}
+
+		public boolean getWhetherInvoked() {
+			return whetherInvoked;
+		}
+
+		/**
+		 * Returns the result, or null if either the action invocation returned null or 
+		 * if the action was never invoked in the first place.
+		 * 
+		 * <p>
+		 * Use {@link #getWhetherInvoked()} to distinguish between these two cases.
+		 */
+		public ObjectAdapter getAdapter() {
+			return adapter;
+		}
+    }
+    
+    protected InvocationResult internalInvoke(
+            final ObjectAction owningAction, 
+            final ObjectAdapter targetAdapter, 
+            final ObjectAdapter[] arguments) {
+    	
         final Bulk.InteractionContext bulkInteractionContext = getServicesInjector().lookupService(Bulk.InteractionContext.class);
         final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
         final Command command = commandContext != null ? commandContext.getCommand() : null;
@@ -195,7 +244,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                 if(commandService.persistIfPossible(command)) {
                     // force persistence, then return the command itself.
                     final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(command);
-                    return resultAdapter;
+                    return InvocationResult.forActionThatReturned(resultAdapter);
                 } else {
                     throw new IsisException(
                             "Unable to schedule action '"
@@ -216,7 +265,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                     LOG.debug(" action result " + result);
                 }
                 if (result == null) {
-                    return null;
+                	return InvocationResult.forActionThatReturned(null);
                 }
 
                 final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
@@ -238,7 +287,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                             ? new CurrentInvocation(targetAdapter, getIdentified(), arguments, resultAdapter, command)
                             :null);
                 
-                return resultAdapter;
+                return InvocationResult.forActionThatReturned(resultAdapter);
             }
 
         } catch (final IllegalArgumentException e) {
@@ -259,7 +308,9 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
             }
 
             ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
-            return null;
+            
+            // Action was not invoked (an Exception was thrown)
+            return InvocationResult.forActionNotInvoked();
         } catch (final IllegalAccessException e) {
             throw new ReflectiveActionException("Illegal access of " + method, e);
         }

@@ -250,8 +250,34 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
         private Util() {
         }
 
+
         public static Object unwrap(final ObjectAdapter adapter) {
             return adapter != null ? adapter.getObject() : null;
+        }
+
+        public static Object[] unwrap(final ObjectAdapter[] adapters) {
+            if (adapters == null) {
+                return null;
+            }
+            final Object[] unwrappedObjects = new Object[adapters.length];
+            int i = 0;
+            for (final ObjectAdapter adapter : adapters) {
+                unwrappedObjects[i++] = unwrap(adapter);
+            }
+            return unwrappedObjects;
+        }
+
+        public static List<Object> unwrap(final List<ObjectAdapter> adapters) {
+            List<Object> objects = Lists.newArrayList();
+            for (ObjectAdapter adapter : adapters) {
+                objects.add(unwrap(adapter));
+            }
+            return objects;
+        }
+
+        @SuppressWarnings("unchecked")
+        public static <T> List<T> unwrapT(final List<ObjectAdapter> adapters) {
+            return (List<T>) unwrap(adapters);
         }
 
         public static String unwrapAsString(final ObjectAdapter adapter) {
@@ -265,13 +291,45 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
             return (String) obj;
         }
 
+        public static String titleString(final ObjectAdapter adapter) {
+            return adapter != null ? adapter.titleString(null) : "";
+        }
 
-        public static List<Object> unwrap(final List<ObjectAdapter> adapters) {
-            List<Object> objects = Lists.newArrayList();
-            for (ObjectAdapter adapter : adapters) {
-                objects.add(unwrap(adapter));
+        public static boolean exists(final ObjectAdapter adapter) {
+            return adapter != null && adapter.getObject() != null;
+        }
+
+        public static boolean wrappedEqual(final ObjectAdapter adapter1, final ObjectAdapter adapter2) {
+            final boolean defined1 = exists(adapter1);
+            final boolean defined2 = exists(adapter2);
+            if (defined1 && !defined2) {
+                return false;
             }
-            return objects;
+            if (!defined1 && defined2) {
+                return false;
+            }
+            if (!defined1 && !defined2) {
+                return true;
+            } // both null
+            return adapter1.getObject().equals(adapter2.getObject());
+        }
+
+        public static boolean nullSafeEquals(final Object obj1, final Object obj2) {
+            if (obj1 == null && obj2 == null) {
+                return true;
+            }
+            if (obj1 == null || obj2 == null) {
+                return false;
+            }
+            if (obj1.equals(obj2)) {
+                return true;
+            }
+            if (obj1 instanceof ObjectAdapter && obj2 instanceof ObjectAdapter) {
+                final ObjectAdapter adapterObj1 = (ObjectAdapter) obj1;
+                final ObjectAdapter adapterObj2 = (ObjectAdapter) obj2;
+                return nullSafeEquals(adapterObj1.getObject(), adapterObj2.getObject());
+            }
+            return false;
         }
 
     }

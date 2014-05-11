@@ -18,6 +18,7 @@ package integration;
 
 import app.ToDoItemAnalysis;
 import dom.todo.ToDoItemContributions;
+import dom.todo.ToDoItemSubscriptions;
 import dom.todo.ToDoItems;
 import fixture.todo.ToDoItemsFixturesService;
 
@@ -65,6 +66,7 @@ public class ToDoSystemInitializer {
                     new ToDoItemContributions(),
                     new ToDoItemsFixturesService(),
                     new ClassDiscoveryServiceUsingReflections(),
+                    new ToDoItemSubscriptions(),
                     new WrapperFactoryDefault(),
                     new IsisJdoSupportImpl(),
                     new Bulk.InteractionContext(),

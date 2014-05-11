@@ -23,18 +23,20 @@ import integration.ToDoSystemInitializer;
 import org.junit.BeforeClass;
 
 import org.apache.isis.core.integtestsupport.IntegrationTestAbstract;
+import org.apache.isis.core.integtestsupport.IsisSystemForTest;
 import org.apache.isis.core.integtestsupport.scenarios.ScenarioExecutionForIntegration;
 
 public abstract class ToDoIntegTest extends IntegrationTestAbstract {
-
+    
+    private static IsisSystemForTest isft;
     
     @BeforeClass
     public static void initClass() {
         org.apache.log4j.PropertyConfigurator.configure("logging.properties");
-        ToDoSystemInitializer.initIsft();
+        isft = ToDoSystemInitializer.initIsft();
         
         // instantiating will install onto ThreadLocal
         new ScenarioExecutionForIntegration();
     }
-
+    
 }
