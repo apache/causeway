@@ -34,7 +34,6 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.entitylink.EntityLinkSelect2Panel;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**

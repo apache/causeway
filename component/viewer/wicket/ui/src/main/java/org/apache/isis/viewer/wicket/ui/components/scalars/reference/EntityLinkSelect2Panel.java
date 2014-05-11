@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.widgets.entitylink;
+package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
 import java.util.List;
 
@@ -64,8 +64,8 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 public class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> implements CancelHintRequired, ActionInvokeHandler  {
 
     private static final long serialVersionUID = 1L;
-    private static final String ID_AUTO_COMPLETE = "autoComplete";
 
+    private static final String ID_AUTO_COMPLETE = "autoComplete";
     private static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
 
     /**

@@ -20,4 +20,39 @@
 .referencePanel .scalarIfCompact .scalarValue {
 	float: none;
 }
- 
+
+.referencePanel div.entityLinkSelect2Panel  {
+    display: inline
+}
+
+.referencePanel div.entityLinkSelect2Panel > div {
+    margin-left: 2px;
+}
+
+.referencePanel .entityLinkSelect2Panel .entityImage {
+    width: 16px;
+    height: 16px;
+}
+
+.referencePanel .entityLinkSelect2Panel a.entityClearLink {
+    display:inline-table;
+    margin-left: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    font-size: smaller;
+}
+
+.collectionContentsAsAjaxTablePanel .referencePanel .entityLinkSelect2Panel .autoCompletePlaceholder {
+    padding-top: 0px;
+    height: 0px;
+}
+
+.collectionContentsAsAjaxTablePanel .referencePanel .entityLinkSelect2Panel .wrapper {
+    display:table-cell;
+}
+
+.referencePanel .entityLinkSelect2Panel .autoCompletePlaceholder {
+    display: block;
+    padding-top: 5px;
+    height: 25px;
+}
