@@ -74,7 +74,8 @@ public class Get_thenRepresentation_ok {
         assertThat(selfLink, isLink(client)
                                 .httpMethod(RestfulHttpMethod.GET)
                                 .href(endsWith("/objects/org.apache.isis.core.tck.dom.defaults.WithDefaultsEntity/58/properties/anInt"))
-                                .returning(HttpStatusCode.OK));
+                                .returning(HttpStatusCode.OK)
+                                .build());
 
         // up link
         final LinkRepresentation upLink = propertyRepr.getLinkWithRel(Rel.UP);
@@ -83,14 +84,16 @@ public class Get_thenRepresentation_ok {
                                 .href(endsWith("/objects/org.apache.isis.core.tck.dom.defaults.WithDefaultsEntity/58"))
                                 .returning(HttpStatusCode.OK)
                                 .type(RepresentationType.DOMAIN_OBJECT.getMediaType())
-                                .title("default-name"));
+                                .title("default-name")
+                                .build());
 
         //modify link
         final LinkRepresentation modifyLink = propertyRepr.getLinkWithRel(Rel.MODIFY);
         assertThat(modifyLink, isLink(client)
                                 .httpMethod(RestfulHttpMethod.PUT)
                                 .type(RepresentationType.OBJECT_PROPERTY.getMediaType())
-                                .href(endsWith("/objects/org.apache.isis.core.tck.dom.defaults.WithDefaultsEntity/58/properties/anInt")));
+                                .href(endsWith("/objects/org.apache.isis.core.tck.dom.defaults.WithDefaultsEntity/58/properties/anInt"))
+                                .build());
 
         assertThat(modifyLink.getArguments(), is(not(nullValue())));
         assertThat(modifyLink.getArguments().isArray(), is(false));
@@ -101,13 +104,15 @@ public class Get_thenRepresentation_ok {
         assertThat(clearLink, isLink(client)
                                 .httpMethod(RestfulHttpMethod.DELETE)
                                 .type(RepresentationType.OBJECT_PROPERTY.getMediaType())
-                                .href(endsWith("/objects/org.apache.isis.core.tck.dom.defaults.WithDefaultsEntity/58/properties/anInt")));
+                                .href(endsWith("/objects/org.apache.isis.core.tck.dom.defaults.WithDefaultsEntity/58/properties/anInt"))
+                                .build());
 
-     // described by link
+        // described by link
         final LinkRepresentation describedByLink = propertyRepr.getLinkWithRel(Rel.DESCRIBEDBY);
         assertThat(describedByLink, isLink(client)
                                 .returning(HttpStatusCode.OK)
-                                .responseEntityWithSelfHref(describedByLink.getHref()));
+                                .responseEntityWithSelfHref(describedByLink.getHref())
+                                .build());
 
         assertThat(propertyRepr.getInt("value"), is(42));
         assertThat(propertyRepr.getString("format"),is("int"));

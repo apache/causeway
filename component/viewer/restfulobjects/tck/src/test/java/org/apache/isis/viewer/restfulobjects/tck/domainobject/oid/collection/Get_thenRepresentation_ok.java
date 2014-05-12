@@ -72,7 +72,8 @@ public class Get_thenRepresentation_ok {
         assertThat(selfLink, isLink(client)
                                 .httpMethod(RestfulHttpMethod.GET)
                                 .href(endsWith("/objects/BSRL/64/collections/visibleAndEditableCollection"))
-                                .returning(HttpStatusCode.OK));
+                                .returning(HttpStatusCode.OK)
+                                .build());
 
         // up link
         final LinkRepresentation upLink = collectionRepr.getLinkWithRel(Rel.UP);
@@ -81,14 +82,16 @@ public class Get_thenRepresentation_ok {
                                 .href(endsWith("http://localhost:39393/objects/BSRL/64"))
                                 .returning(HttpStatusCode.OK)
                                 .type(RepresentationType.DOMAIN_OBJECT.getMediaType())
-                                .title("Untitled Bus Rules Entity"));
+                                .title("Untitled Bus Rules Entity")
+                                .build());
 
         //addto link
         final LinkRepresentation addtoLink = collectionRepr.getLinkWithRel(Rel.ADD_TO);
         assertThat(addtoLink, isLink(client)
                                 .httpMethod(RestfulHttpMethod.POST)
                                 .type(RepresentationType.OBJECT_COLLECTION.getMediaType())
-                                .href(endsWith("/objects/BSRL/64/collections/visibleAndEditableCollection")));
+                                .href(endsWith("/objects/BSRL/64/collections/visibleAndEditableCollection"))
+                                .build());
 
         assertThat(addtoLink.getArguments(), is(not(nullValue())));
         assertThat(addtoLink.getArguments().isArray(), is(false));
@@ -99,7 +102,8 @@ public class Get_thenRepresentation_ok {
         assertThat(removeFromLink, isLink(client)
                                 .httpMethod(RestfulHttpMethod.DELETE)
                                 .type(RepresentationType.OBJECT_COLLECTION.getMediaType())
-                                .href(endsWith("/objects/BSRL/64/collections/visibleAndEditableCollection")));
+                                .href(endsWith("/objects/BSRL/64/collections/visibleAndEditableCollection"))
+                                .build());
 
         assertThat(removeFromLink.getArguments(), is(not(nullValue())));
         assertThat(removeFromLink.getArguments().isArray(), is(false));
@@ -109,7 +113,8 @@ public class Get_thenRepresentation_ok {
         final LinkRepresentation describedByLink = collectionRepr.getLinkWithRel(Rel.DESCRIBEDBY);
         assertThat(describedByLink, isLink(client)
                                 .returning(HttpStatusCode.OK)
-                                .responseEntityWithSelfHref(describedByLink.getHref()));
+                                .responseEntityWithSelfHref(describedByLink.getHref())
+                                .build());
 
         assertThat(collectionRepr.getArray("value").isArray(),is(true));
 
