@@ -51,6 +51,6 @@ public abstract class SimpleFixtureScript extends FixtureScript {
     // //////////////////////////////////////
 
     @Programmatic
-    protected abstract void doRun(FixtureResultList fixtureResults);
+    protected abstract void doRun(String parameters, FixtureResultList fixtureResults);
 
 }

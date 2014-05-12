@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package fixture.todo;
+package fixture.todo.simple;
 
 import java.util.Collection;
 
@@ -30,30 +30,28 @@ import dom.todo.ToDoItems;
 import org.apache.isis.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.applib.fixturescripts.SimpleFixtureScript;
 
-public class ToDoItemsCompleteForUser extends SimpleFixtureScript {
+public class ToDoItemsComplete extends SimpleFixtureScript {
 
-    // //////////////////////////////////////
-    // Constructor
-    // //////////////////////////////////////
+    //region > factory methods & constructor
+    public static ToDoItemsComplete forCurrent() {
+        return new ToDoItemsComplete(null);
+    }
+
+    public static ToDoItemsComplete forUser(final String user) {
+        return new ToDoItemsComplete(user);
+    }
 
     private final String user;
-    
-    public ToDoItemsCompleteForUser(String user) {
-        super(friendlyNameFor(user), localNameFor(user));
+    private ToDoItemsComplete(final String user) {
+        super(Util.friendlyNameFor("Complete selected ToDoItems for ", user), Util.localNameFor(user));
         this.user = user;
     }
-    
-    static String localNameFor(String user) {
-        return user != null? user: "current";
-    }
+    //endregion
 
-    static String friendlyNameFor(String user) {
-        return "Complete selected ToDoItems for " + (user != null ? "'" + user + "'" : "current user");
-    }
-
+    //region > doRun
     @Override
-    protected void doRun(final FixtureResultList resultList) {
-        final String ownedBy = user != null? user: getContainer().getUser().getName();
+    protected void doRun(String parameters, final FixtureResultList resultList) {
+        final String ownedBy = Util.coalesce(user, parameters, getContainer().getUser().getName());
         installFor(ownedBy, resultList);
         getContainer().flush();
     }
@@ -65,14 +63,14 @@ public class ToDoItemsCompleteForUser extends SimpleFixtureScript {
         getContainer().flush();
     }
 
-    private void complete(final String user, String description, final FixtureResultList resultList) {
+    private void complete(final String user, final String description, final FixtureResultList resultList) {
         final ToDoItem toDoItem = findToDoItem(description, user);
         toDoItem.setComplete(true);
         resultList.add(this, toDoItem);
     }
 
     private ToDoItem findToDoItem(final String description, final String user) {
-        final Collection<ToDoItem> filtered = Collections2.filter(toDoItems.allToDos(), new Predicate<ToDoItem>() {
+        final Collection<ToDoItem> filtered = Collections2.filter(getContainer().allInstances(ToDoItem.class), new Predicate<ToDoItem>() {
             @Override
             public boolean apply(ToDoItem input) {
                 return Objects.equal(description, input.getDescription()) &&
@@ -81,12 +79,5 @@ public class ToDoItemsCompleteForUser extends SimpleFixtureScript {
         });
         return filtered.isEmpty()? null: filtered.iterator().next();
     }
-
-
-    // //////////////////////////////////////
-    // Injected services
-    // //////////////////////////////////////
-
-    @javax.inject.Inject
-    private ToDoItems toDoItems;
+    //endregion
 }

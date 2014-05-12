@@ -16,45 +16,47 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package fixture.todo;
+package fixture.todo.simple;
 
 import org.apache.isis.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.applib.fixturescripts.SimpleFixtureScript;
 import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
 
-public class ToDoItemsDeleteForUser extends SimpleFixtureScript {
+public class ToDoItemsDelete extends SimpleFixtureScript {
 
-    // //////////////////////////////////////
-    // Constructor
-    // //////////////////////////////////////
+    //region > factory methods & constructor
+    public static ToDoItemsDelete forCurrent() {
+        return new ToDoItemsDelete(null);
+    }
+
+    public static ToDoItemsDelete forUser(final String user) {
+        return new ToDoItemsDelete(user);
+    }
 
     private final String user;
     
-    public ToDoItemsDeleteForUser(final String user) {
-        super(friendlyNameFor(user), localNameFor(user));
+    private ToDoItemsDelete(final String user) {
+        super(Util.friendlyNameFor("Delete ToDoItems for ", user), Util.localNameFor(user));
         this.user = user;
     }
-    
-    static String localNameFor(final String user) {
-        return user != null? user: "current";
-    }
+    //endregion
 
-    static String friendlyNameFor(final String user) {
-        return "Delete ToDoItems for " + (user != null ? "'" + user + "'" : "current user");
-    }
-
+    //region > doRun
     @Override
-    protected void doRun(final FixtureResultList resultList) {
-        final String ownedBy = user != null? user: getContainer().getUser().getName();
-        isisJdoSupport.executeUpdate("delete from \"ToDoItem\" where \"ownedBy\" = '" + ownedBy + "'");
+    protected void doRun(final String parameters, final FixtureResultList resultList) {
+        final String ownedBy = Util.coalesce(user, parameters, getContainer().getUser().getName());
+        installFor(ownedBy);
         getContainer().flush();
     }
 
-    // //////////////////////////////////////
-    // Injected services
-    // //////////////////////////////////////
+    private void installFor(final String ownedBy) {
+        isisJdoSupport.executeUpdate("delete from \"ToDoItem\" where \"ownedBy\" = '" + ownedBy + "'");
+    }
+    //endregion
 
+    //region > injected services
     @javax.inject.Inject
     private IsisJdoSupport isisJdoSupport;
+    //endregion
 
 }

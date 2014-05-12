@@ -30,7 +30,7 @@ import java.util.List;
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItemSubscriptions;
 import dom.todo.ToDoItems;
-import fixture.todo.ToDoItemsFixture;
+import fixture.todo.integtests.ToDoItemsIntegTestFixture;
 
 import org.junit.After;
 import org.junit.Before;
@@ -49,7 +49,7 @@ public class ToDoItemTest_dependencies_remove extends ToDoIntegTest {
     @Before
     public void setUp() throws Exception {
         // given
-        scenarioExecution().install(new ToDoItemsFixture());
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
 
         final List<ToDoItem> items = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(items.get(0));

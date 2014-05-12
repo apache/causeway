@@ -24,11 +24,12 @@ import java.util.List;
 
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
-import fixture.todo.ToDoItemsFixture;
+import fixture.todo.integtests.ToDoItemsIntegTestFixture;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,7 +56,7 @@ public class ToDoItemTest_dependencies_addedEvent extends ToDoIntegTest {
 
     @Before
     public void setUp() throws Exception {
-        scenarioExecution().install(new ToDoItemsFixture());
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
 
         final List<ToDoItem> items = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(items.get(0));

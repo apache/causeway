@@ -27,7 +27,7 @@ import java.util.List;
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 import dom.todo.ToDoItem.Category;
-import fixture.todo.ToDoItemsFixture;
+import fixture.todo.integtests.ToDoItemsIntegTestFixture;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class ToDoItemTest_ownedBy extends ToDoIntegTest {
 
     @Before
     public void setUp() throws Exception {
-        scenarioExecution().install(new ToDoItemsFixture());
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
 
         final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(all.get(0));

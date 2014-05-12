@@ -16,23 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package fixture.todo.scenarios;
 
-package fixture.todo;
+import fixture.todo.simple.ToDoItemsCreate;
+import fixture.todo.simple.ToDoItemsDelete;
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.fixturescripts.CompositeFixtureScript;
 
-/**
- * Refactored to reuse the newer {@link FixtureScript} API.
- */
-public class ToDoItemsFixture extends ToDoItemsResetForUser {
-
-    public ToDoItemsFixture() {
-        this(null);
+public final class ToDoItemsRecreateForDick extends CompositeFixtureScript {
+    public ToDoItemsRecreateForDick() {
+        super("Recreate ToDoItems for 'dick'", "recreate-dick");
     }
     
-    public ToDoItemsFixture(String user) {
-        super(user);
-        setDiscoverability(Discoverability.NON_DISCOVERABLE);
+    @Override
+    protected void addChildren() {
+        add("delete", ToDoItemsDelete.forUser("dick"));
+        add("create", ToDoItemsCreate.forUser("dick"));
     }
-
 }

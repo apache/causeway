@@ -26,7 +26,7 @@ import java.util.List;
 
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
-import fixture.todo.ToDoItemsFixture;
+import fixture.todo.integtests.ToDoItemsIntegTestFixture;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -39,7 +39,7 @@ public class ToDoItemsTest_finders extends ToDoIntegTest {
 
     @Before
     public void setUp() throws Exception {
-        scenarioExecution().install(new ToDoItemsFixture());
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
 
         final List<ToDoItem> notYetCompleteItems = wrap(service(ToDoItems.class)).notYetComplete();
         final List<ToDoItem> completedItems = wrap(service(ToDoItems.class)).complete();

@@ -27,7 +27,7 @@ import java.util.List;
 
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
-import fixture.todo.ToDoItemsFixture;
+import fixture.todo.integtests.ToDoItemsIntegTestFixture;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +40,7 @@ public class ToDoItemTest_cost extends ToDoIntegTest {
     @Before
     public void setUp() throws Exception {
         // given
-        scenarioExecution().install(new ToDoItemsFixture());
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
 
         final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(all.get(0));

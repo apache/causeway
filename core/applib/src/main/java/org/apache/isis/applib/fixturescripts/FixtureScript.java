@@ -152,7 +152,7 @@ public abstract class FixtureScript
 
     /**
      * Whether this fixture script is {@link Discoverability discoverable} (in other words
-     * whether it will be listed to be run in the {@link FixtureScripts#runFixtureScript(FixtureScript) run fixture script} action.
+     * whether it will be listed to be run in the {@link FixtureScripts#runFixtureScript(FixtureScript, String) run fixture script} action.
      * 
      * <p>
      * By default {@link CompositeFixtureScript}s are {@link Discoverability#DISCOVERABLE discoverable}, while
@@ -170,14 +170,22 @@ public abstract class FixtureScript
     // //////////////////////////////////////
 
     @Programmatic
-    public final List<FixtureResult> run() {
+    public final List<FixtureResult> run(final String parameters) {
         FixtureResultList fixtureResults = new FixtureResultList(fixtureScripts);
-        doRun(fixtureResults);
+        doRun(parameters, fixtureResults);
         return fixtureResults.getResults();
     }
 
     @Programmatic
-    protected abstract void doRun(FixtureResultList fixtureResults);
+    protected abstract void doRun(final String parameters, final FixtureResultList fixtureResults);
+
+    /**
+     * Optional hook to validate parameters.
+     */
+    @Programmatic
+    public String validateRun(final String parameters) {
+        return null;
+    }
 
     // //////////////////////////////////////
 
@@ -188,7 +196,7 @@ public abstract class FixtureScript
     
     @Programmatic
     public final void install() {
-        run();
+        run(null);
     }
 
     // //////////////////////////////////////

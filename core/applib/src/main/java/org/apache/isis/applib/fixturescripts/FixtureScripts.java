@@ -34,6 +34,11 @@ import org.reflections.util.ClasspathHelper;
 
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.DescribedAs;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.MultiLine;
+import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -99,24 +104,34 @@ public abstract class FixtureScripts extends AbstractService {
     // //////////////////////////////////////
     
     @Prototype
-    public List<FixtureResult> runFixtureScript(final FixtureScript fixtureScript) {
-        return fixtureScript.run();
+    @MemberOrder(sequence="10")
+    public List<FixtureResult> runFixtureScript(
+            final FixtureScript fixtureScript, 
+            @Named("Parameters")
+            @DescribedAs("Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)")
+            @MultiLine(numberOfLines=10)
+            @Optional
+            final String parameters) {
+        return fixtureScript.run(parameters);
     }
     public List<FixtureScript> choices0RunFixtureScript() {
         return fixtureScriptList;
     }
-    public String disableRunFixtureScript(final FixtureScript fixtureScript) {
+    public String disableRunFixtureScript(final FixtureScript fixtureScript, final String parameters) {
         return fixtureScriptList.isEmpty()? "No fixture scripts found under package '" + packagePrefix + "'": null;
+    }
+    public String validateRunFixtureScript(final FixtureScript fixtureScript, final String parameters) {
+        return fixtureScript.validateRun(parameters);
     }
     
     // //////////////////////////////////////
 
-    String mementoFor(FixtureScript fs) {
+    String mementoFor(final FixtureScript fs) {
         return mementoService.create()
                 .set("path", fs.getParentPath())
                 .asString();
     }
-    void initOf(String mementoStr, FixtureScript fs) {
+    void initOf(final String mementoStr, final FixtureScript fs) {
         Memento memento = mementoService.parse(mementoStr);
         fs.setParentPath(memento.get("path", String.class));
     }

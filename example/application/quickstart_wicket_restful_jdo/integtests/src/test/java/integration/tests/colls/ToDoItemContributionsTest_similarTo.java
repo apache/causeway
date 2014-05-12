@@ -29,7 +29,7 @@ import dom.todo.ToDoItemContributions;
 import dom.todo.ToDoItems;
 import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItem.Subcategory;
-import fixture.todo.ToDoItemsFixture;
+import fixture.todo.integtests.ToDoItemsIntegTestFixture;
 
 import org.joda.time.LocalDate;
 import org.junit.After;
@@ -45,7 +45,7 @@ public class ToDoItemContributionsTest_similarTo extends ToDoIntegTest {
 
     @Before
     public void setUp() throws Exception {
-        scenarioExecution().install(new ToDoItemsFixture());
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
 
         final ToDoItems toDoItems = wrap(service(ToDoItems.class));
         toDoItemContributions = wrap(service(ToDoItemContributions.class));

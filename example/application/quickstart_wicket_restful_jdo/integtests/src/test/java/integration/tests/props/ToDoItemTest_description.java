@@ -30,7 +30,7 @@ import java.util.List;
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItemSubscriptions;
 import dom.todo.ToDoItems;
-import fixture.todo.ToDoItemsFixture;
+import fixture.todo.integtests.ToDoItemsIntegTestFixture;
 
 import org.junit.After;
 import org.junit.Before;
@@ -45,7 +45,7 @@ public class ToDoItemTest_description extends ToDoIntegTest {
 
     @Before
     public void setUp() throws Exception {
-        scenarioExecution().install(new ToDoItemsFixture());
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
 
         final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(all.get(0));

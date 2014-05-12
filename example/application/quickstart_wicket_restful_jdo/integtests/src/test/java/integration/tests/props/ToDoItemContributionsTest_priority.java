@@ -27,7 +27,7 @@ import java.util.List;
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItemContributions;
 import dom.todo.ToDoItems;
-import fixture.todo.ToDoItemsFixture;
+import fixture.todo.integtests.ToDoItemsIntegTestFixture;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +40,7 @@ public class ToDoItemContributionsTest_priority extends ToDoIntegTest {
 
     @Before
     public void setUp() throws Exception {
-        scenarioExecution().install(new ToDoItemsFixture());
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
 
         final ToDoItems toDoItems = wrap(service(ToDoItems.class));
         toDoItemContributions = service(ToDoItemContributions.class);

@@ -34,20 +34,20 @@ public abstract class CompositeFixtureScript extends FixtureScript {
     public CompositeFixtureScript(final String localName) {
         this(localName, localName, defaultDiscoverability());
     }
-    public CompositeFixtureScript(String friendlyName, final String localName) {
+    public CompositeFixtureScript(final String friendlyName, final String localName) {
         this(friendlyName, localName, defaultDiscoverability());
     }
-    public CompositeFixtureScript(final FixtureScript parent, String friendlyName, final String localName) {
+    public CompositeFixtureScript(final FixtureScript parent, final String friendlyName, final String localName) {
         this(parent, friendlyName, localName, defaultDiscoverability());
     }
     
-    public CompositeFixtureScript(final String localName, Discoverability discoverability) {
+    public CompositeFixtureScript(final String localName, final Discoverability discoverability) {
         super(localName, localName, discoverability);
     }
-    public CompositeFixtureScript(String friendlyName, final String localName, Discoverability discoverability) {
+    public CompositeFixtureScript(String friendlyName, final String localName, final Discoverability discoverability) {
         super(friendlyName, localName, discoverability);
     }
-    public CompositeFixtureScript(final FixtureScript parent, String friendlyName, final String localName, Discoverability discoverability) {
+    public CompositeFixtureScript(final FixtureScript parent, final String friendlyName, final String localName, final Discoverability discoverability) {
         super(parent, friendlyName, localName, discoverability);
     }
     
@@ -57,14 +57,14 @@ public abstract class CompositeFixtureScript extends FixtureScript {
     /**
      * Adds a child {@link FixtureScript fixture script} (simply using its default name).
      */
-    protected final void add(FixtureScript fixtureScript) {
+    protected final void add(final FixtureScript fixtureScript) {
         add(null, fixtureScript);
     }
     /**
      * Adds a child {@link FixtureScript fixture script}, overriding its default name with one more
      * meaningful in the context of this fixture.
      */
-    protected final void add(String localNameOverride, FixtureScript fixtureScript) {
+    protected final void add(final String localNameOverride, final FixtureScript fixtureScript) {
         fixtureScript.setParentPath(pathWith(""));
         if(localNameOverride != null) {
             fixtureScript.setLocalName(localNameOverride);
@@ -80,10 +80,10 @@ public abstract class CompositeFixtureScript extends FixtureScript {
      */
     protected abstract void addChildren();
 
-    protected void doRun(FixtureResultList fixtureResults) {
+    protected void doRun(final String parameters, final FixtureResultList fixtureResults) {
         addChildren();
         for (final FixtureScript child : children) {
-            child.doRun(fixtureResults);
+            child.doRun(parameters, fixtureResults);
         }
     }
 
