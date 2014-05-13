@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -27,11 +28,34 @@ import com.google.common.collect.Maps;
 
 /**
  * Collecting parameter.
+ *
+ * <p>
+ * Instantiate using {@link FixtureScripts#newFixtureResultList()}
  */
 public class FixtureResultList {
-    
+
+    /**
+     * Null implementation, to assist with unit testing of {@link org.apache.isis.applib.fixturescripts.FixtureScript}s.
+     */
+    public static final FixtureResultList NOOP = new FixtureResultList(null) {
+        @Override
+        public <T> T add(FixtureScript script, T object) {
+            return object;
+        }
+
+        @Override
+        public <T> T add(FixtureScript script, String key, T object) {
+            return object;
+        }
+
+        @Override
+        public List<FixtureResult> getResults() {
+            return Collections.emptyList();
+        }
+    };
+
     private final FixtureScripts fixtureScripts;
-    
+
     FixtureResultList(FixtureScripts fixtureScripts) {
         this.fixtureScripts = fixtureScripts;
     }

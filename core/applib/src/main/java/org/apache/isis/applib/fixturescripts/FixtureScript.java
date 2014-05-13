@@ -34,7 +34,7 @@ public abstract class FixtureScript
         implements InstallableFixture {
 
     protected static final String PATH_SEPARATOR = "/";
-    
+
     // //////////////////////////////////////
     
     /**
@@ -43,12 +43,12 @@ public abstract class FixtureScript
     public enum Discoverability {
         /**
          * the fixture script is discoverable and so will be listed by the 
-         * {@link FixtureScripts#runFixtureScript(FixtureScript) run fixture script} action
+         * {@link FixtureScripts#runFixtureScript(FixtureScript,String) run fixture script} action
          */
         DISCOVERABLE,
         /**
          * The fixture script is non-discoverable and so will <i>not</i> be listed by the 
-         * {@link FixtureScripts#runFixtureScript(FixtureScript) run fixture script} action
+         * {@link FixtureScripts#runFixtureScript(FixtureScript,String) run fixture script} action
          */
         NON_DISCOVERABLE
     }
@@ -76,6 +76,18 @@ public abstract class FixtureScript
 
     protected String friendlyNameElseDerived(String str) {
         return str != null ? str : StringUtil.asNaturalName2(getClass().getSimpleName());
+    }
+
+    // //////////////////////////////////////
+
+    /**
+     * Returns the first non-null string; for convenience of subclass implementations
+     */
+    protected static String coalesce(final String... strings) {
+        for (String string : strings) {
+            if(string != null) return string;
+        }
+        return null;
     }
 
     // //////////////////////////////////////
@@ -204,7 +216,7 @@ public abstract class FixtureScript
 
     @javax.inject.Inject
     protected FixtureScripts fixtureScripts;
-    
-    
+
+
 
 }

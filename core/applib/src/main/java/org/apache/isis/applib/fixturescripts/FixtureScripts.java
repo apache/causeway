@@ -23,23 +23,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-
 import javax.annotation.PostConstruct;
-
 import com.google.common.collect.Lists;
-
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.util.ClasspathHelper;
-
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.DescribedAs;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.MultiLine;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.Optional;
-import org.apache.isis.applib.annotation.Prototype;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService;
@@ -100,7 +88,14 @@ public abstract class FixtureScripts extends AbstractService {
             return null;
         }
     }
-    
+
+    /**
+     * For subclasses to instantiate .
+     */
+    protected FixtureResultList newFixtureResultList() {
+        return new FixtureResultList(this);
+    }
+
     // //////////////////////////////////////
     
     @Prototype
