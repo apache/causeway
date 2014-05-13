@@ -20,12 +20,24 @@ package org.apache.isis.applib.fixturescripts;
 
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.fixturescripts.FixtureScript.Discoverability;
 
 @Named("Simple Script")
 public abstract class SimpleFixtureScript extends FixtureScript {
 
     private static Discoverability defaultDiscoverability() {
         return Discoverability.NON_DISCOVERABLE;
+    }
+    
+    /**
+     * Initializes a {@link Discoverability#NON_DISCOVERABLE} fixture, with 
+     * {@link #getFriendlyName()} and {@link #getLocalName()} derived from the class name.
+     * 
+     * <p>
+     * Use {@link #setDiscoverability(Discoverability)} to override.
+     */
+    public SimpleFixtureScript() {
+        this(null, null);
     }
     
     /**

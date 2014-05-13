@@ -23,6 +23,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.fixturescripts.FixtureScript.Discoverability;
 
 @Named("Composite Script")
 public abstract class CompositeFixtureScript extends FixtureScript {
@@ -30,6 +31,18 @@ public abstract class CompositeFixtureScript extends FixtureScript {
     private static Discoverability defaultDiscoverability() {
         return Discoverability.DISCOVERABLE;
     }
+
+    /**
+     * Initializes a {@link Discoverability#DISCOVERABLE} fixture, with 
+     * {@link #getFriendlyName()} and {@link #getLocalName()} derived from the class name.
+     * 
+     * <p>
+     * Use {@link #setDiscoverability(Discoverability)} to override.
+     */
+    public CompositeFixtureScript() {
+        this(null, null);
+    }
+    
 
     /**
      * Initializes a {@link Discoverability#DISCOVERABLE} fixture.
