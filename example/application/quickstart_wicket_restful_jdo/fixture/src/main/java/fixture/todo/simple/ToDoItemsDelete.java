@@ -36,7 +36,7 @@ public class ToDoItemsDelete extends SimpleFixtureScript {
     private final String user;
     
     private ToDoItemsDelete(final String user) {
-        super(Util.friendlyNameFor("Delete ToDoItems for ", user), Util.localNameFor(user));
+        super(null, Util.localNameFor("delete", user));
         this.user = user;
     }
     //endregion

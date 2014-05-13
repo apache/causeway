@@ -25,7 +25,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
 import dom.todo.ToDoItem;
-import dom.todo.ToDoItems;
 
 import org.apache.isis.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.applib.fixturescripts.SimpleFixtureScript;
@@ -43,7 +42,7 @@ public class ToDoItemsComplete extends SimpleFixtureScript {
 
     private final String user;
     private ToDoItemsComplete(final String user) {
-        super(Util.friendlyNameFor("Complete selected ToDoItems for ", user), Util.localNameFor(user));
+        super(null, Util.localNameFor("complete", user));
         this.user = user;
     }
     //endregion

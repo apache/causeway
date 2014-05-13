@@ -27,16 +27,8 @@ public final class Util {
     
     private Util(){}
 
-    static String localNameFor(final String user) {
-        return coalesce(user, "current");
-    }
-    
-    static String friendlyNameFor(final String prefix, final String user) {
-        return prefix + quotedElseCurrent(user);
-    }
-
-    static String quotedElseCurrent(final String user) {
-        return user != null ? "'" + user + "'" : "current user";
+    static String localNameFor(final String prefix, String user) {
+        return prefix + "-" + coalesce(user, "current");
     }
 
     static String coalesce(final String... strings) {
@@ -45,7 +37,6 @@ public final class Util {
         }
         return null;
     }
-
 
     static LocalDate daysFromToday(final int i) {
         final LocalDate date = new LocalDate(Clock.getTimeAsDateTime());

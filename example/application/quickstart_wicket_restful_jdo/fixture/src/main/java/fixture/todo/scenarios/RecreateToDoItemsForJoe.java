@@ -18,23 +18,19 @@
  */
 package fixture.todo.scenarios;
 
-import fixture.todo.simple.ToDoItemsComplete;
 import fixture.todo.simple.ToDoItemsCreate;
 import fixture.todo.simple.ToDoItemsDelete;
 
 import org.apache.isis.applib.fixturescripts.CompositeFixtureScript;
 
-public class ToDoItemsRecreateAndCompleteSeveralForCurrent extends CompositeFixtureScript {
-
-    public ToDoItemsRecreateAndCompleteSeveralForCurrent() {
-        super("Recreate ToDoItems and complete several for current user", "recreate-current");
+public final class RecreateToDoItemsForJoe extends CompositeFixtureScript {
+    public RecreateToDoItemsForJoe() {
+        super(null, "recreate-joe");
     }
     
     @Override
     protected void addChildren() {
-        add("delete", ToDoItemsDelete.forCurrent());
-        add("create", ToDoItemsCreate.forCurrent());
-        add("complete", ToDoItemsComplete.forCurrent());
+        add("delete", ToDoItemsDelete.forUser("joe"));
+        add("create", ToDoItemsCreate.forUser("joe"));
     }
-
 }

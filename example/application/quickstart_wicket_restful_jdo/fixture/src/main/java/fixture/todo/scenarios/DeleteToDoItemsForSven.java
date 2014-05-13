@@ -22,9 +22,9 @@ import fixture.todo.simple.ToDoItemsDelete;
 
 import org.apache.isis.applib.fixturescripts.CompositeFixtureScript;
 
-public final class ToDoItemsDeleteForSven extends CompositeFixtureScript {
-    public ToDoItemsDeleteForSven() {
-        super("Delete ToDoItems for 'sven'", "delete-sven");
+public final class DeleteToDoItemsForSven extends CompositeFixtureScript {
+    public DeleteToDoItemsForSven() {
+        super(null, "delete-sven");
     }
     
     @Override

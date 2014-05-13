@@ -23,14 +23,14 @@ import fixture.todo.simple.ToDoItemsDelete;
 
 import org.apache.isis.applib.fixturescripts.CompositeFixtureScript;
 
-public final class ToDoItemsRecreateForJoe extends CompositeFixtureScript {
-    public ToDoItemsRecreateForJoe() {
-        super("Recreate ToDoItems for 'joe'", "recreate-joe");
+public final class RecreateToDoItemsForDick extends CompositeFixtureScript {
+    public RecreateToDoItemsForDick() {
+        super(null, "recreate-dick");
     }
     
     @Override
     protected void addChildren() {
-        add("delete", ToDoItemsDelete.forUser("joe"));
-        add("create", ToDoItemsCreate.forUser("joe"));
+        add("delete", ToDoItemsDelete.forUser("dick"));
+        add("create", ToDoItemsCreate.forUser("dick"));
     }
 }

@@ -55,33 +55,27 @@ public abstract class FixtureScript
 
     // //////////////////////////////////////
 
+    /**
+     * @param friendlyName - if null, will be derived from class name
+     * @param localName - if null, will be derived from class name
+     * @param discoverability
+     */
     public FixtureScript(
             final String friendlyName, 
             final String localName, 
             final Discoverability discoverability) {
-        this(null, friendlyName, localName, discoverability);
-    }
-    public FixtureScript(
-            final FixtureScript parent, 
-            final String friendlyName, 
-            final String localName, 
-            final Discoverability discoverability) {
-        this.localName = ensureNotNull("localName", localName);
-        this.friendlyName = ensureNotNull("friendlyName", friendlyName);
-        this.parentPath = parentPathOf(parent);
+        this.localName = localNameElseDerived(localName);
+        this.friendlyName = friendlyNameElseDerived(friendlyName);
+        this.parentPath = "";
         this.discoverability = discoverability;
     }
     
-    private static String parentPathOf(FixtureScript parent) {
-        return parent != null? parent.getParentPath() + PATH_SEPARATOR : "";
+    protected String localNameElseDerived(String str) {
+        return str != null ? str : StringUtil.asLowerDashed(friendlyNameElseDerived(str));
     }
 
-    // for subclasses
-    protected static String ensureNotNull(String name, String val) {
-        if(val == null) {
-            throw new IllegalArgumentException(name + " cannot be null");
-        }
-        return val;
+    protected String friendlyNameElseDerived(String str) {
+        return str != null ? str : StringUtil.asNaturalName2(getClass().getSimpleName());
     }
 
     // //////////////////////////////////////
@@ -136,13 +130,13 @@ public abstract class FixtureScript
     private String parentPath;
     
     /**
-     * Path of the parent of this script (if any), with trailing period.
+     * Path of the parent of this script (if any), with trailing {@value #PATH_SEPARATOR}.
      */
     @Hidden
     public String getParentPath() {
         return parentPath;
     }
-    public void setParentPath(String parentPath) {
+    public void setParentPath(final String parentPath) {
         this.parentPath = parentPath;
     }
     

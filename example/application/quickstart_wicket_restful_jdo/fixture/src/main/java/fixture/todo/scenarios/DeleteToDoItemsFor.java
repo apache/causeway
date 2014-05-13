@@ -25,9 +25,9 @@ import fixture.todo.simple.ToDoItemsDelete;
 import org.apache.isis.applib.fixturescripts.CompositeFixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureResultList;
 
-public final class ToDoItemsDeleteFor extends CompositeFixtureScript {
-    public ToDoItemsDeleteFor() {
-        super("Delete ToDoItems for specified user", "delete-specified");
+public final class DeleteToDoItemsFor extends CompositeFixtureScript {
+    public DeleteToDoItemsFor() {
+        super(null, "delete-specified");
     }
     
     @Override

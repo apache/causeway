@@ -27,7 +27,6 @@ import dom.todo.ToDoItems;
 
 import org.joda.time.LocalDate;
 
-import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.applib.fixturescripts.SimpleFixtureScript;
 
@@ -45,7 +44,7 @@ public class ToDoItemsCreate extends SimpleFixtureScript {
     private final String user;
     
     private ToDoItemsCreate(final String user) {
-        super(Util.friendlyNameFor("Create ToDoItems for ", user), Util.localNameFor(user));
+        super(null, Util.localNameFor("create", user));
         this.user = user;
     }
     //endregion

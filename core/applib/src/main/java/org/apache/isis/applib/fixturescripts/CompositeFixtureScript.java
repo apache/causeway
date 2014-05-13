@@ -31,24 +31,17 @@ public abstract class CompositeFixtureScript extends FixtureScript {
         return Discoverability.DISCOVERABLE;
     }
 
-    public CompositeFixtureScript(final String localName) {
-        this(localName, localName, defaultDiscoverability());
-    }
+    /**
+     * Initializes a {@link Discoverability#DISCOVERABLE} fixture.
+     * 
+     * <p>
+     * Use {@link #setDiscoverability(Discoverability)} to override.
+     * 
+     * @param friendlyName - if null, will be derived from class name
+     * @param localName - if null, will be derived from class name
+     */
     public CompositeFixtureScript(final String friendlyName, final String localName) {
-        this(friendlyName, localName, defaultDiscoverability());
-    }
-    public CompositeFixtureScript(final FixtureScript parent, final String friendlyName, final String localName) {
-        this(parent, friendlyName, localName, defaultDiscoverability());
-    }
-    
-    public CompositeFixtureScript(final String localName, final Discoverability discoverability) {
-        super(localName, localName, discoverability);
-    }
-    public CompositeFixtureScript(String friendlyName, final String localName, final Discoverability discoverability) {
-        super(friendlyName, localName, discoverability);
-    }
-    public CompositeFixtureScript(final FixtureScript parent, final String friendlyName, final String localName, final Discoverability discoverability) {
-        super(parent, friendlyName, localName, discoverability);
+        super(friendlyName, localName, defaultDiscoverability());
     }
     
     // //////////////////////////////////////

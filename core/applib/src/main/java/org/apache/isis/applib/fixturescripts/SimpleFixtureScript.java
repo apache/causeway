@@ -27,25 +27,18 @@ public abstract class SimpleFixtureScript extends FixtureScript {
     private static Discoverability defaultDiscoverability() {
         return Discoverability.NON_DISCOVERABLE;
     }
-
-    public SimpleFixtureScript(String localName) {
-        this(localName, defaultDiscoverability());
-    }
-    public SimpleFixtureScript(String friendlyName, String localName) {
-        this(friendlyName, localName, defaultDiscoverability());
-    }
-    public SimpleFixtureScript(FixtureScript parent, String friendlyName, String localName) {
-        this(parent, friendlyName, localName, defaultDiscoverability());
-    }
     
-    public SimpleFixtureScript(String localName, Discoverability discoverability) {
-        this(localName, localName, discoverability);
-    }
-    public SimpleFixtureScript(String friendlyName, String localName, Discoverability discoverability) {
-        super(friendlyName, localName, discoverability);
-    }
-    public SimpleFixtureScript(FixtureScript parent, String friendlyName, String localName, Discoverability discoverability) {
-        super(parent, friendlyName, localName, discoverability);
+    /**
+     * Initializes a {@link Discoverability#NON_DISCOVERABLE} fixture.
+     * 
+     * <p>
+     * Use {@link #setDiscoverability(Discoverability)} to override.
+     * 
+     * @param friendlyName - if null, will be derived from class name
+     * @param localName - if null, will be derived from class name
+     */
+    public SimpleFixtureScript(final String friendlyName, final String localName) {
+        super(friendlyName, localName, defaultDiscoverability());
     }
     
     // //////////////////////////////////////

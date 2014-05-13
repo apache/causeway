@@ -32,7 +32,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
 public class ToDoItemsIntegTestFixture extends CompositeFixtureScript {
 
     public ToDoItemsIntegTestFixture() {
-        super("demo");
+        super(null, null);
         setDiscoverability(Discoverability.NON_DISCOVERABLE);
     }
 
