@@ -69,9 +69,20 @@ public class FixtureResultList {
         return add(script, nextItemFor(script), object);
     }
 
+    /**
+     * Wraps the object within a {@link org.apache.isis.applib.fixturescripts.FixtureResult} and add to this list.
+     *
+     * <P>
+     *     If the object is not yet persisted, then the {@link FixtureScripts#getNonPersistedObjectsStrategy() FixtureScripts}'
+     *     configuration will determine whether it is {@link org.apache.isis.applib.fixturescripts.FixtureScripts.NonPersistedObjectsStrategy#PERSIST eagerly persisted}
+     *     or simply {@link org.apache.isis.applib.fixturescripts.FixtureScripts.NonPersistedObjectsStrategy#IGNORE ignored}.
+     * </P>
+     */
     public <T> T add(final FixtureScript script, final String key, final T object) {
         final FixtureResult fr = fixtureScripts.newFixtureResult(script, key, object);
-        list.add(fr);
+        if(fr != null) {
+            list.add(fr);
+        }
         return object;
     }
 

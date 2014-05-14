@@ -45,7 +45,10 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
  * 
  * <p>
  * Does the mechanics of actually installing the fixtures.
+ *
+ * @deprecated - instead, use the replacement FixtureScript API ({@link org.apache.isis.applib.fixturescripts.FixtureScript} and {@link org.apache.isis.applib.fixturescripts.FixtureScripts})
  */
+@Deprecated
 public class FixturesInstallerDelegate {
 
     private static final Logger LOG = LoggerFactory.getLogger(FixturesInstallerDelegate.class);
@@ -54,10 +57,6 @@ public class FixturesInstallerDelegate {
     private final SwitchUserServiceImpl switchUserService = new SwitchUserServiceImpl();
     private final UserProfileService perspectivePersistenceService = new ProfileServiceImpl();
 
-    /**
-     * Optionally injected in {@link #FixtureBuilderImpl(PersistenceSession)
-     * constructor}.
-     */
     private final PersistenceSession persistenceSession;
 
     /**

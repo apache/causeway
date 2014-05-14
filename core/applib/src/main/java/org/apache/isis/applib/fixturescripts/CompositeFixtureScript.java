@@ -19,11 +19,8 @@
 package org.apache.isis.applib.fixturescripts;
 
 import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.fixturescripts.FixtureScript.Discoverability;
 
 @Named("Composite Script")
 public abstract class CompositeFixtureScript extends FixtureScript {
@@ -83,6 +80,11 @@ public abstract class CompositeFixtureScript extends FixtureScript {
 
     /**
      * Mandatory hook method.
+     *
+     * <p>
+     *     Subclasses should instantiate each child and then call {@link #add(FixtureScript)} (or the overloaded
+     *      {@link #add(String, FixtureScript)})
+     * </p>.
      */
     protected abstract void addChildren();
 

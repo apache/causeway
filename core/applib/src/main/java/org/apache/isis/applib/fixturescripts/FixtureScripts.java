@@ -26,7 +26,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import com.google.common.collect.Lists;
 import org.apache.isis.applib.AbstractService;
-import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -37,15 +37,43 @@ import org.apache.isis.applib.util.ObjectContracts;
 
 public abstract class FixtureScripts extends AbstractService {
 
-    private final String packagePrefix;
-    
     /**
+     * How to handle objects that are to be
+     * {@link org.apache.isis.applib.fixturescripts.FixtureScripts#newFixtureResult(FixtureScript, String, Object) added}
+     * into a {@link org.apache.isis.applib.fixturescripts.FixtureResult} but which are not yet persisted.
+     */
+    public enum NonPersistedObjectsStrategy {
+        PERSIST,
+        IGNORE
+    }
+
+    private final String packagePrefix;
+    private final NonPersistedObjectsStrategy nonPersistedObjectsStrategy;
+
+    /**
+     * Defaults to {@link org.apache.isis.applib.fixturescripts.FixtureScripts.NonPersistedObjectsStrategy#PERSIST persist}
+     * strategy if non-persisted objects are {@link #newFixtureResult(FixtureScript, String, Object) added} to a {@link org.apache.isis.applib.fixturescripts.FixtureResultList}.
+     *
      * @param packagePrefix - to search for fixture script implementations, eg "com.mycompany"
      */
     public FixtureScripts(String packagePrefix) {
-        this.packagePrefix = packagePrefix;
+        this(packagePrefix, NonPersistedObjectsStrategy.PERSIST);
     }
-    
+
+    /**
+     * @param packagePrefix  - to search for fixture script implementations, eg "com.mycompany"
+     * @param nonPersistedObjectsStrategy - how to handle any non-persisted objects that are {@link #newFixtureResult(FixtureScript, String, Object) added} to a {@link org.apache.isis.applib.fixturescripts.FixtureResultList}.
+     */
+    public FixtureScripts(String packagePrefix, NonPersistedObjectsStrategy nonPersistedObjectsStrategy) {
+        this.packagePrefix = packagePrefix;
+        this.nonPersistedObjectsStrategy = nonPersistedObjectsStrategy;
+    }
+
+    @Programmatic
+    public NonPersistedObjectsStrategy getNonPersistedObjectsStrategy() {
+        return nonPersistedObjectsStrategy;
+    }
+
     // //////////////////////////////////////
 
     private final List<FixtureScript> fixtureScriptList = Lists.newArrayList();
@@ -82,7 +110,7 @@ public abstract class FixtureScripts extends AbstractService {
             if(!template.isDiscoverable()) {
                 return null;
             }
-            return container.newViewModelInstance(fixtureScriptCls, mementoFor(template));
+            return getContainer().newViewModelInstance(fixtureScriptCls, mementoFor(template));
         } catch(Exception ex) {
             // ignore if does not have a no-arg constructor or cannot be instantiated
             return null;
@@ -107,6 +135,12 @@ public abstract class FixtureScripts extends AbstractService {
             @MultiLine(numberOfLines=10)
             @Optional
             final String parameters) {
+
+        // if this method is called programmatically, the caller may have simply new'd up the fixture script
+        // (rather than use container.newTransientInstance(...).  To allow this use case, we need to ensure that
+        // domain services are injected into the fixture script.
+        getContainer().injectServicesInto(fixtureScript);
+
         return fixtureScript.run(parameters);
     }
     public List<FixtureScript> choices0RunFixtureScript() {
@@ -146,8 +180,22 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     FixtureResult newFixtureResult(FixtureScript script, String subkey, Object object) {
+        if(object == null) {
+            return null;
+        }
+        if (object instanceof ViewModel || getContainer().isPersistent(object)) {
+            // continue
+        } else {
+            switch(nonPersistedObjectsStrategy) {
+                case PERSIST:
+                    getContainer().flush();
+                    break;
+                case IGNORE:
+                    return null;
+            }
+        }
         String mementoFor = mementoFor(script, subkey, object);
-        return container.newViewModelInstance(FixtureResult.class, mementoFor);
+        return getContainer().newViewModelInstance(FixtureResult.class, mementoFor);
     }
 
     private String mementoFor(FixtureScript script, String subkey, Object object) {
@@ -164,9 +212,6 @@ public abstract class FixtureScripts extends AbstractService {
     
     @javax.inject.Inject
     private BookmarkService bookmarkService;
-
-    @javax.inject.Inject
-    private DomainObjectContainer container;
 
     @javax.inject.Inject
     private ClassDiscoveryService classDiscoveryService;

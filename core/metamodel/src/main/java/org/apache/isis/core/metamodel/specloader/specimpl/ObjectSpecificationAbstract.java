@@ -19,17 +19,17 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.applib.annotation.When;
@@ -52,7 +52,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.help.HelpFacet;
@@ -79,24 +78,8 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
-import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.Instance;
-import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
-import org.apache.isis.core.metamodel.spec.Persistability;
-import org.apache.isis.core.metamodel.spec.SpecificationContext;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.*;
+import org.apache.isis.core.metamodel.spec.feature.*;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.objectlist.ObjectSpecificationForFreeStandingList;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.NotContributedFacet;
@@ -776,13 +759,20 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         
         final List<ObjectAction> actions = Lists.newArrayList();
         for (final ActionType type : types) {
-            @SuppressWarnings("unchecked")
-            final List<ObjectAction> filterActions = 
-                    Lists.newArrayList(Iterables.filter(
-                            objectActions, 
-                            Filters.asPredicate(Filters.and(
-                                    ObjectAction.Filters.ofType(type), filter))));
-            actions.addAll(filterActions);
+            final Predicate<ObjectAction> predicate =
+                    Filters.asPredicate(Filters.and(
+                        ObjectAction.Filters.ofType(type),
+                        filter));
+            for (ObjectAction objectAction : objectActions) {
+                if(predicate.apply(objectAction)) {
+                    actions.add(objectAction);
+                }
+            }
+            // an NPE here somehow???
+//            @SuppressWarnings("unchecked")
+//            final Collection<ObjectAction> filterActions =
+//                    Collections2.filter(objectActions, predicate);
+//            actions.addAll(filterActions);
         }
         return Lists.newArrayList(Iterables.filter(
                 actions, ContributeeMember.Predicates.regularElse(contributed)));
