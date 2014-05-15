@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.log4j.Level;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -36,6 +37,7 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -146,8 +148,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     private IsisSystemDefault isisSystem;
     private AuthenticationSession authenticationSession;
 
-    private DomainObjectContainer container;
-    
     private final IsisConfiguration configuration;
     private final PersistenceMechanismInstaller persistenceMechanismInstaller;
     private final AuthenticationRequest authenticationRequest;
@@ -159,6 +159,8 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     
     private final MetaModelValidator metaModelValidator;
     private final ProgrammingModel programmingModel;
+    
+    private DomainObjectContainer container;
 
     
     ////////////////////////////////////////////////////////////
@@ -179,8 +181,8 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         
         private final List <Listener> listeners = Lists.newArrayList();
 
-        private org.apache.log4j.Level level = null;
-        
+        private org.apache.log4j.Level level;
+
         public Builder with(IsisConfiguration configuration) {
             this.configuration = configuration;
             return this;
@@ -214,7 +216,11 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         public IsisSystemForTest build() {
             final List<Object> servicesIfAny = asList(services);
             final List<InstallableFixture> fixturesIfAny = asList(fixtures);
-            return new IsisSystemForTest(configuration, programmingModel, metaModelValidator, persistenceMechanismInstaller, authenticationRequest, servicesIfAny, fixturesIfAny, listeners);
+            IsisSystemForTest isisSystem = new IsisSystemForTest(configuration, programmingModel, metaModelValidator, persistenceMechanismInstaller, authenticationRequest, servicesIfAny, fixturesIfAny, listeners);
+            if(level != null) {
+                isisSystem.setLevel(level);
+            }
+            return isisSystem;
         }
 
         private static <T> List<T> asList(T[] objects) {
@@ -243,7 +249,15 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         return new Builder();
     }
 
-    private IsisSystemForTest(IsisConfiguration configuration, ProgrammingModel programmingModel, MetaModelValidator metaModelValidator, PersistenceMechanismInstaller persistenceMechanismInstaller, AuthenticationRequest authenticationRequest, List<Object> services, List<InstallableFixture> fixtures, List<Listener> listeners) {
+    private IsisSystemForTest(
+            final IsisConfiguration configuration, 
+            final ProgrammingModel programmingModel, 
+            final MetaModelValidator metaModelValidator, 
+            final PersistenceMechanismInstaller persistenceMechanismInstaller, 
+            final AuthenticationRequest authenticationRequest, 
+            final List<Object> services, 
+            final List<InstallableFixture> fixtures, 
+            final List<Listener> listeners) {
         this.configuration = configuration;
         this.programmingModel = programmingModel;
         this.metaModelValidator = metaModelValidator;
@@ -287,7 +301,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     private void setUpSystem(FireListeners fireListeners) throws Exception {
-        
 
         boolean firstTime = isisSystem == null;
         if(fireListeners.shouldFire()) {
@@ -299,6 +312,10 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             isisLoggingConfigurer.configureLogging(".", new String[]{});
 
             isisSystem = createIsisSystem(services);
+
+            // ensures that a FixtureClock is installed as the singleton underpinning the ClockService
+            FixtureClock.initialize();
+
             isisSystem.init();
             IsisContext.closeSession();
         }
@@ -698,7 +715,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
      */
     public void setContainer(DomainObjectContainer container) {
         this.container = container;
-        
     }
 
     
