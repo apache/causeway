@@ -37,7 +37,15 @@ public class ToDoItemsFixturesService extends FixtureScripts {
         super("fixture.todo");
     }
 
-    
+    /**
+     * Raising visibility to <tt>public</tt> so that choices are available for first param
+     * of {@link #runFixtureScript(FixtureScript, String)}.
+     */
+    @Override
+    public List<FixtureScript> choices0RunFixtureScript() {
+        return super.choices0RunFixtureScript();
+    }
+
     @Prototype
     @MemberOrder(sequence="20")
     public List<FixtureResult> recreateToDoItemsForCurrent() {

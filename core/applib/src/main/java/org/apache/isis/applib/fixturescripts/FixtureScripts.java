@@ -23,11 +23,23 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+
 import javax.annotation.PostConstruct;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.ViewModel;
-import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.annotation.DescribedAs;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.MinLength;
+import org.apache.isis.applib.annotation.MultiLine;
+import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService;
@@ -126,6 +138,10 @@ public abstract class FixtureScripts extends AbstractService {
 
     // //////////////////////////////////////
     
+    /**
+     * To make this action usable in the UI, override either {@link #choices0RunFixtureScript()} or 
+     * {@link #autoComplete0RunFixtureScript(String)} with <tt>public</tt> visibility</tt>.
+     */
     @Prototype
     @MemberOrder(sequence="10")
     public List<FixtureResult> runFixtureScript(
@@ -143,8 +159,20 @@ public abstract class FixtureScripts extends AbstractService {
 
         return fixtureScript.run(parameters);
     }
-    public List<FixtureScript> choices0RunFixtureScript() {
+    protected List<FixtureScript> choices0RunFixtureScript() {
         return fixtureScriptList;
+    }
+    protected List<FixtureScript> autoComplete0RunFixtureScript(final @MinLength(1) String arg) {
+        return Lists.newArrayList(
+                Collections2.filter(fixtureScriptList, new Predicate<FixtureScript>() {
+                    @Override
+                    public boolean apply(FixtureScript input) {
+                        return contains(input.getFriendlyName()) || contains(input.getLocalName());
+                    }
+                    private boolean contains(String str) {
+                        return str != null && str.contains(arg);
+                    }
+                }));
     }
     public String disableRunFixtureScript(final FixtureScript fixtureScript, final String parameters) {
         return fixtureScriptList.isEmpty()? "No fixture scripts found under package '" + packagePrefix + "'": null;
