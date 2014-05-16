@@ -176,8 +176,8 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         private MetaModelValidator metaModelValidator;
         private ProgrammingModel programmingModel;
 
-        private Object[] services;
-        private InstallableFixture[] fixtures;
+        private final List<Object> services = Lists.newArrayList();
+        private final List<InstallableFixture> fixtures = Lists.newArrayList();
         
         private final List <Listener> listeners = Lists.newArrayList();
 
@@ -199,12 +199,12 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
 
         public Builder withServices(Object... services) {
-            this.services = services;
+            this.services.addAll(Arrays.asList(services));
             return this;
         }
 
         public Builder withFixtures(InstallableFixture... fixtures) {
-            this.fixtures = fixtures;
+            this.fixtures.addAll(Arrays.asList(fixtures));
             return this;
         }
         
@@ -214,18 +214,22 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
 
         public IsisSystemForTest build() {
-            final List<Object> servicesIfAny = asList(services);
-            final List<InstallableFixture> fixturesIfAny = asList(fixtures);
-            IsisSystemForTest isisSystem = new IsisSystemForTest(configuration, programmingModel, metaModelValidator, persistenceMechanismInstaller, authenticationRequest, servicesIfAny, fixturesIfAny, listeners);
+            final IsisSystemForTest isisSystem =
+                    new IsisSystemForTest(
+                            configuration,
+                            programmingModel,
+                            metaModelValidator,
+                            persistenceMechanismInstaller,
+                            authenticationRequest,
+                            services,
+                            fixtures,
+                            listeners);
             if(level != null) {
                 isisSystem.setLevel(level);
             }
             return isisSystem;
         }
 
-        private static <T> List<T> asList(T[] objects) {
-            return objects != null? Arrays.asList(objects): Collections.<T>emptyList();
-        }
 
         public Builder with(Listener listener) {
             if(listener != null) {

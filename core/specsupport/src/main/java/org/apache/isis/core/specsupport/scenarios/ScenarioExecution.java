@@ -67,7 +67,7 @@ public abstract class ScenarioExecution {
     public static ScenarioExecution current() {
         final ScenarioExecution execution = current.get();
         if(execution == null) {
-            throw new IllegalStateException("Scenario has not yet been instantiated by Cukes");
+            throw new IllegalStateException("Scenario has not yet been instantiated");
         } 
         return execution;
     }
