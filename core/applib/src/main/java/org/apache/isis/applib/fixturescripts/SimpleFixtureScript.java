@@ -19,8 +19,6 @@
 package org.apache.isis.applib.fixturescripts;
 
 import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.fixturescripts.FixtureScript.Discoverability;
 
 @Named("Simple Script")
 public abstract class SimpleFixtureScript extends FixtureScript {
@@ -53,9 +51,5 @@ public abstract class SimpleFixtureScript extends FixtureScript {
         super(friendlyName, localName, defaultDiscoverability());
     }
     
-    // //////////////////////////////////////
-
-    @Programmatic
-    protected abstract void doRun(String parameters, FixtureResultList fixtureResults);
 
 }

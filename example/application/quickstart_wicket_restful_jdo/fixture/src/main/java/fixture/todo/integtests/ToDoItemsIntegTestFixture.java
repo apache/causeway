@@ -25,6 +25,7 @@ import fixture.todo.simple.ToDoItemsDelete;
 
 import org.apache.isis.applib.fixturescripts.CompositeFixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext;
 
 /**
  * Refactored to reuse the newer {@link FixtureScript} API.
@@ -37,10 +38,10 @@ public class ToDoItemsIntegTestFixture extends CompositeFixtureScript {
     }
 
     @Override
-    protected void addChildren() {
-        add("delete", ToDoItemsDelete.forCurrent());
-        add("create", ToDoItemsCreate.forCurrent());
-        add("complete", ToDoItemsComplete.forCurrent());
+    protected void execute(ExecutionContext executionContext) {
+        execute("delete", ToDoItemsDelete.forCurrent(), executionContext);
+        execute("create", ToDoItemsCreate.forCurrent(), executionContext);
+        execute("complete", ToDoItemsComplete.forCurrent(), executionContext);
     }
 
 }

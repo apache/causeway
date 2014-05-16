@@ -25,6 +25,7 @@ import fixture.todo.simple.ToDoItemsDelete;
 
 import org.apache.isis.applib.fixturescripts.CompositeFixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureResultList;
+import org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext;
 
 public final class RecreateToDoItemsFor extends CompositeFixtureScript {
     public RecreateToDoItemsFor() {
@@ -32,18 +33,13 @@ public final class RecreateToDoItemsFor extends CompositeFixtureScript {
     }
     
     @Override
-    protected void doRun(String parameters, FixtureResultList fixtureResults) {
-        super.doRun(parameters, fixtureResults);
-    }
-
-    @Override
     public String validateRun(String parameters) {
         return Strings.isNullOrEmpty(parameters) ? "Specify the owner of the ToDoItems to be recreated" : null;
     }
     
     @Override
-    protected void addChildren() {
-        add("delete", ToDoItemsDelete.forUser(null));
-        add("create", ToDoItemsCreate.forUser(null));
+    protected void execute(ExecutionContext executionContext) {
+        execute("delete", ToDoItemsDelete.forUser(null), executionContext);
+        execute("create", ToDoItemsCreate.forUser(null), executionContext);
     }
 }

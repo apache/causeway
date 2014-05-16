@@ -131,9 +131,10 @@ public abstract class FixtureScripts extends AbstractService {
 
     /**
      * For subclasses to instantiate .
+     * @param parameters
      */
-    protected FixtureResultList newFixtureResultList() {
-        return new FixtureResultList(this);
+    protected FixtureScript.ExecutionContext newExecutionContext(String parameters) {
+        return new FixtureScript.ExecutionContext(parameters, this);
     }
 
     // //////////////////////////////////////
@@ -180,7 +181,8 @@ public abstract class FixtureScripts extends AbstractService {
     public String validateRunFixtureScript(final FixtureScript fixtureScript, final String parameters) {
         return fixtureScript.validateRun(parameters);
     }
-    
+
+
     // //////////////////////////////////////
 
     String mementoFor(final FixtureScript fs) {

@@ -22,6 +22,7 @@ import fixture.todo.simple.ToDoItemsCreate;
 import fixture.todo.simple.ToDoItemsDelete;
 
 import org.apache.isis.applib.fixturescripts.CompositeFixtureScript;
+import org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext;
 
 public final class RecreateToDoItemsForJoe extends CompositeFixtureScript {
     public RecreateToDoItemsForJoe() {
@@ -29,8 +30,8 @@ public final class RecreateToDoItemsForJoe extends CompositeFixtureScript {
     }
     
     @Override
-    protected void addChildren() {
-        add("delete", ToDoItemsDelete.forUser("joe"));
-        add("create", ToDoItemsCreate.forUser("joe"));
+    protected void execute(ExecutionContext executionContext) {
+        execute("delete", ToDoItemsDelete.forUser("joe"), executionContext);
+        execute("create", ToDoItemsCreate.forUser("joe"), executionContext);
     }
 }

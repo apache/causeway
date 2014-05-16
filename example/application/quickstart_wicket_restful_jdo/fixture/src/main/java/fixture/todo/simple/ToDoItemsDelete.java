@@ -20,6 +20,7 @@ package fixture.todo.simple;
 
 import org.apache.isis.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.applib.fixturescripts.SimpleFixtureScript;
+import org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext;
 import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
 
 public class ToDoItemsDelete extends SimpleFixtureScript {
@@ -41,10 +42,10 @@ public class ToDoItemsDelete extends SimpleFixtureScript {
     }
     //endregion
 
-    //region > doRun
+    //region > execute
     @Override
-    protected void doRun(final String parameters, final FixtureResultList resultList) {
-        final String ownedBy = Util.coalesce(user, parameters, getContainer().getUser().getName());
+    protected void execute(ExecutionContext executionContext) {
+        final String ownedBy = Util.coalesce(user, executionContext.getParameters(), getContainer().getUser().getName());
         installFor(ownedBy);
         getContainer().flush();
     }

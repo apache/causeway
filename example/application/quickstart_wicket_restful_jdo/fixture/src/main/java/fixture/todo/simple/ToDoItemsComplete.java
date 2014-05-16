@@ -28,6 +28,7 @@ import dom.todo.ToDoItem;
 
 import org.apache.isis.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.applib.fixturescripts.SimpleFixtureScript;
+import org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext;
 
 public class ToDoItemsComplete extends SimpleFixtureScript {
 
@@ -49,23 +50,23 @@ public class ToDoItemsComplete extends SimpleFixtureScript {
 
     //region > doRun
     @Override
-    protected void doRun(String parameters, final FixtureResultList resultList) {
-        final String ownedBy = Util.coalesce(user, parameters, getContainer().getUser().getName());
-        installFor(ownedBy, resultList);
+    protected void execute(ExecutionContext executionContext) {
+        final String ownedBy = Util.coalesce(user, executionContext.getParameters(), getContainer().getUser().getName());
+        installFor(ownedBy, executionContext);
         getContainer().flush();
     }
 
-    private void installFor(final String user, final FixtureResultList resultList) {
-        complete(user, "Buy stamps", resultList);
-        complete(user, "Write blog post", resultList);
+    private void installFor(final String user, final ExecutionContext executionContext) {
+        complete(user, "Buy stamps", executionContext);
+        complete(user, "Write blog post", executionContext);
 
         getContainer().flush();
     }
 
-    private void complete(final String user, final String description, final FixtureResultList resultList) {
+    private void complete(final String user, final String description, final ExecutionContext executionContext) {
         final ToDoItem toDoItem = findToDoItem(description, user);
         toDoItem.setComplete(true);
-        resultList.add(this, toDoItem);
+        executionContext.add(this, toDoItem);
     }
 
     private ToDoItem findToDoItem(final String description, final String user) {

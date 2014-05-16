@@ -73,19 +73,87 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     // ////////////////////////////////////////////////
 
     /**
-     * Add the properties from an existing Properties object.
+     * How to handle the case when the configuration already contains the key being added.
+     */
+    public enum ContainsPolicy {
+        /**
+         * If the configuration already contains the key, then ignore the new value.
+         */
+        IGNORE,
+        /**
+         * If the configuration already contains the key, then overwrite with the new.
+         */
+        OVERWRITE,
+        /**
+         * If the configuration already contains the key, then throw an exception.
+         */
+        EXCEPTION
+    }
+    
+    /**
+     * Add the properties from an existing Properties object; if the key exists in the configuration then will be ignored.
+     * 
+     * @see #add(Properties, ContainsPolicy)
+     * @see #put(Properties)
      */
     public void add(final Properties properties) {
+        add(properties, ContainsPolicy.IGNORE);
+    }
+    
+    /**
+     * Add the properties from an existing Properties object; if the key exists in the configuration then will be overwritten.
+     * 
+     * @see #add(Properties)
+     * @see #add(Properties, ContainsPolicy)
+     */
+    public void put(final Properties properties) {
+        add(properties, ContainsPolicy.OVERWRITE);
+    }
+    
+    /**
+     * Add the properties from an existing Properties object; if the key exists in the configuration then the
+     * {@link ContainsPolicy} will be applied.
+     * 
+     * @see #add(Properties)
+     * @see #put(Properties)
+     */
+    public void add(final Properties properties, final ContainsPolicy policy) {
         for(Object key: properties.keySet()) {
-        	Object value = properties.get(key);
-        	add((String)key, (String)value);
+            Object value = properties.get(key);
+            add((String)key, (String)value);
         }
     }
     
     /**
-     * Adds a key-value pair to this set of properties
+     * Adds a key-value pair to this set of properties; if the key exists in the configuration then will be ignored.
+     * 
+     * <p>
+     * @see #add(String, String, ContainsPolicy)
+     * @see #put(String, String)
      */
     public void add(final String key, final String value) {
+        add(key, value, ContainsPolicy.IGNORE);
+    }
+
+    /**
+     * Adds a key-value pair to this set of properties; if the key exists in the configuration then will be replaced.
+     * 
+     * <p>
+     * @see #add(String, String)
+     * @see #add(String, String, ContainsPolicy)
+     */
+    public void put(final String key, final String value) {
+        add(key, value, ContainsPolicy.OVERWRITE);
+    }
+
+    /**
+     * Adds a key-value pair to this set of properties; if the key exists in the configuration then the
+     * {@link ContainsPolicy} will be applied.
+     * 
+     * @see #add(String, String)
+     * @see #put(String, String)
+     */
+    public void add(final String key, final String value, final ContainsPolicy policy) {
         if (value == null) {
             LOG.debug("ignoring " + key + " as value is null");
             return;
@@ -93,12 +161,22 @@ public class IsisConfigurationDefault implements IsisConfiguration {
         if (key == null) {
             return;
         }
-    	if (properties.containsKey(key)) {
-    		LOG.info("skipping " + key + "=" + value + " as value already set (with " + properties.get(key) + ")" );
-    	} else {
+        if (properties.containsKey(key)) {
+            switch (policy) {
+            case IGNORE:
+                LOG.info("ignoring " + key + "=" + value + " as value already set (with " + properties.get(key) + ")" );
+                break;
+            case OVERWRITE:
+                LOG.info("overwriting " + key + "=" + value + " (previous value was " + properties.get(key) + ")" );
+                properties.put(key, value);
+                break;
+            case EXCEPTION:
+                throw new IllegalStateException("Configuration already has a key " + key + ", value of " + properties.get(key) );
+            }
+        } else {
             LOG.info("adding " + key + "=" + value);
             properties.put(key, value);
-    	}
+        }
     }
 
     @Override

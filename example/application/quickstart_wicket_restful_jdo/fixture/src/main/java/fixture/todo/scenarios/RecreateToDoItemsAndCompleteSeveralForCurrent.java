@@ -31,10 +31,10 @@ public class RecreateToDoItemsAndCompleteSeveralForCurrent extends CompositeFixt
     }
     
     @Override
-    protected void addChildren() {
-        add("delete", ToDoItemsDelete.forCurrent());
-        add("create", ToDoItemsCreate.forCurrent());
-        add("complete", ToDoItemsComplete.forCurrent());
+    protected void execute(ExecutionContext executionContext) {
+        execute("delete", ToDoItemsDelete.forCurrent(), executionContext);
+        execute("create", ToDoItemsCreate.forCurrent(), executionContext);
+        execute("complete", ToDoItemsComplete.forCurrent(), executionContext);
     }
 
 }

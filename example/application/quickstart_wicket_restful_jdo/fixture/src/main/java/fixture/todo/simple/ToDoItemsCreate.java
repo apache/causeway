@@ -29,6 +29,7 @@ import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.applib.fixturescripts.SimpleFixtureScript;
+import org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext;
 
 public class ToDoItemsCreate extends SimpleFixtureScript {
 
@@ -49,30 +50,30 @@ public class ToDoItemsCreate extends SimpleFixtureScript {
     }
     //endregion
 
-    //region > doRun
+    //region > execute
     @Override
-    protected void doRun(final String parameters, final FixtureResultList resultList) {
-        final String ownedBy = Util.coalesce(user, parameters, getContainer().getUser().getName());
-        installFor(ownedBy, resultList);
+    protected void execute(ExecutionContext executionContext) {
+        final String ownedBy = Util.coalesce(user, executionContext.getParameters(), getContainer().getUser().getName());
+        installFor(ownedBy, executionContext);
         getContainer().flush();
     }
 
-    private void installFor(final String user, final FixtureResultList resultList) {
+    private void installFor(final String user, final ExecutionContext executionContext) {
 
-        createToDoItemForUser("Buy milk", Category.Domestic, Subcategory.Shopping, user, Util.daysFromToday(0), new BigDecimal("0.75"), resultList);
-        createToDoItemForUser("Buy bread", Category.Domestic, Subcategory.Shopping, user, Util.daysFromToday(0), new BigDecimal("1.75"), resultList);
-        createToDoItemForUser("Buy stamps", Category.Domestic, Subcategory.Shopping, user, Util.daysFromToday(0), new BigDecimal("10.00"), resultList);
-        createToDoItemForUser("Pick up laundry", Category.Domestic, Subcategory.Chores, user, Util.daysFromToday(6), new BigDecimal("7.50"), resultList);
-        createToDoItemForUser("Mow lawn", Category.Domestic, Subcategory.Garden, user, Util.daysFromToday(6), null, resultList);
-        createToDoItemForUser("Vacuum house", Category.Domestic, Subcategory.Housework, user, Util.daysFromToday(3), null, resultList);
-        createToDoItemForUser("Sharpen knives", Category.Domestic, Subcategory.Chores, user, Util.daysFromToday(14), null, resultList);
+        createToDoItemForUser("Buy milk", Category.Domestic, Subcategory.Shopping, user, Util.daysFromToday(0), new BigDecimal("0.75"), executionContext);
+        createToDoItemForUser("Buy bread", Category.Domestic, Subcategory.Shopping, user, Util.daysFromToday(0), new BigDecimal("1.75"), executionContext);
+        createToDoItemForUser("Buy stamps", Category.Domestic, Subcategory.Shopping, user, Util.daysFromToday(0), new BigDecimal("10.00"), executionContext);
+        createToDoItemForUser("Pick up laundry", Category.Domestic, Subcategory.Chores, user, Util.daysFromToday(6), new BigDecimal("7.50"), executionContext);
+        createToDoItemForUser("Mow lawn", Category.Domestic, Subcategory.Garden, user, Util.daysFromToday(6), null, executionContext);
+        createToDoItemForUser("Vacuum house", Category.Domestic, Subcategory.Housework, user, Util.daysFromToday(3), null, executionContext);
+        createToDoItemForUser("Sharpen knives", Category.Domestic, Subcategory.Chores, user, Util.daysFromToday(14), null, executionContext);
 
-        createToDoItemForUser("Write to penpal", Category.Other, Subcategory.Other, user, null, null, resultList);
+        createToDoItemForUser("Write to penpal", Category.Other, Subcategory.Other, user, null, null, executionContext);
 
-        createToDoItemForUser("Write blog post", Category.Professional, Subcategory.Marketing, user, Util.daysFromToday(7), null, resultList);
-        createToDoItemForUser("Organize brown bag", Category.Professional, Subcategory.Consulting, user, Util.daysFromToday(14), null, resultList);
-        createToDoItemForUser("Submit conference session", Category.Professional, Subcategory.Education, user, Util.daysFromToday(21), null, resultList);
-        createToDoItemForUser("Stage Isis release", Category.Professional, Subcategory.OpenSource, user, null, null, resultList);
+        createToDoItemForUser("Write blog post", Category.Professional, Subcategory.Marketing, user, Util.daysFromToday(7), null, executionContext);
+        createToDoItemForUser("Organize brown bag", Category.Professional, Subcategory.Consulting, user, Util.daysFromToday(14), null, executionContext);
+        createToDoItemForUser("Submit conference session", Category.Professional, Subcategory.Education, user, Util.daysFromToday(21), null, executionContext);
+        createToDoItemForUser("Stage Isis release", Category.Professional, Subcategory.OpenSource, user, null, null, executionContext);
 
         getContainer().flush();
     }
@@ -81,9 +82,11 @@ public class ToDoItemsCreate extends SimpleFixtureScript {
             final String description, 
             final Category category, Subcategory subcategory, 
             final String user, 
-            final LocalDate dueBy, final BigDecimal cost, FixtureResultList resultList) {
+            final LocalDate dueBy, 
+            final BigDecimal cost, 
+            final ExecutionContext executionContext) {
         ToDoItem newToDo = toDoItems.newToDo(description, category, subcategory, user, dueBy, cost);
-        return resultList.add(this, newToDo);
+        return executionContext.add(this, newToDo);
     }
     //endregion
 

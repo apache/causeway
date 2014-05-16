@@ -30,29 +30,9 @@ import com.google.common.collect.Maps;
  * Collecting parameter.
  *
  * <p>
- * Instantiate using {@link FixtureScripts#newFixtureResultList()}
+ * Instantiate using {@link FixtureScripts#newExecutionContext(String)}
  */
 public class FixtureResultList {
-
-    /**
-     * Null implementation, to assist with unit testing of {@link org.apache.isis.applib.fixturescripts.FixtureScript}s.
-     */
-    public static final FixtureResultList NOOP = new FixtureResultList(null) {
-        @Override
-        public <T> T add(FixtureScript script, T object) {
-            return object;
-        }
-
-        @Override
-        public <T> T add(FixtureScript script, String key, T object) {
-            return object;
-        }
-
-        @Override
-        public List<FixtureResult> getResults() {
-            return Collections.emptyList();
-        }
-    };
 
     private final FixtureScripts fixtureScripts;
 
@@ -62,7 +42,6 @@ public class FixtureResultList {
 
     // //////////////////////////////////////
 
-    
     private final List<FixtureResult> list = Lists.newArrayList();
 
     public <T> T add(final FixtureScript script, final T object) {
@@ -86,6 +65,8 @@ public class FixtureResultList {
         return object;
     }
 
+
+
     public List<FixtureResult> getResults() {
         return list;
     }
@@ -102,6 +83,5 @@ public class FixtureResultList {
         }
         return "item-"+atomicInteger.incrementAndGet();
     }
-
 
 }

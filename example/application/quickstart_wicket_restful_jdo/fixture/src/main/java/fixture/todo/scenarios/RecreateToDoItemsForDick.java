@@ -29,8 +29,8 @@ public final class RecreateToDoItemsForDick extends CompositeFixtureScript {
     }
     
     @Override
-    protected void addChildren() {
-        add("delete", ToDoItemsDelete.forUser("dick"));
-        add("create", ToDoItemsCreate.forUser("dick"));
+    protected void execute(ExecutionContext executionContext) {
+        execute("delete", ToDoItemsDelete.forUser("dick"), executionContext);
+        execute("create", ToDoItemsCreate.forUser("dick"), executionContext);
     }
 }

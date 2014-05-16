@@ -24,6 +24,7 @@ import fixture.todo.simple.ToDoItemsDelete;
 
 import org.apache.isis.applib.fixturescripts.CompositeFixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureResultList;
+import org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext;
 
 public final class DeleteToDoItemsFor extends CompositeFixtureScript {
     public DeleteToDoItemsFor() {
@@ -31,17 +32,12 @@ public final class DeleteToDoItemsFor extends CompositeFixtureScript {
     }
     
     @Override
-    protected void doRun(final String parameters, final FixtureResultList fixtureResults) {
-        super.doRun(parameters, fixtureResults);
-    }
-
-    @Override
     public String validateRun(final String parameters) {
         return Strings.isNullOrEmpty(parameters) ? "Specify the owner of the ToDoItems to be deleted" : null;
     }
     
     @Override
-    protected void addChildren() {
-        add("delete", ToDoItemsDelete.forUser(null));
+    protected void execute(ExecutionContext executionContext) {
+        execute("delete", ToDoItemsDelete.forUser(null), executionContext);
     }
 }

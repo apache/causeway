@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
-import java.util.List;
-import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.Named;
 
 @Named("Composite Script")
@@ -40,7 +38,6 @@ public abstract class CompositeFixtureScript extends FixtureScript {
         this(null, null);
     }
     
-
     /**
      * Initializes a {@link Discoverability#DISCOVERABLE} fixture.
      * 
@@ -56,43 +53,23 @@ public abstract class CompositeFixtureScript extends FixtureScript {
     
     // //////////////////////////////////////
 
-    private final List<FixtureScript> children = Lists.newArrayList();
-    /**
-     * Adds a child {@link FixtureScript fixture script} (simply using its default name).
-     */
-    protected final void add(final FixtureScript fixtureScript) {
-        add(null, fixtureScript);
-    }
     /**
      * Adds a child {@link FixtureScript fixture script}, overriding its default name with one more
      * meaningful in the context of this fixture.
      */
-    protected final void add(final String localNameOverride, final FixtureScript fixtureScript) {
+    protected final void execute(final String localNameOverride, final FixtureScript fixtureScript, ExecutionContext executionContext) {
         fixtureScript.setParentPath(pathWith(""));
         if(localNameOverride != null) {
             fixtureScript.setLocalName(localNameOverride);
         }
         getContainer().injectServicesInto(fixtureScript);
-        children.add(fixtureScript);
+        fixtureScript.execute(executionContext);
     }
-
-    // //////////////////////////////////////
-
     /**
-     * Mandatory hook method.
-     *
-     * <p>
-     *     Subclasses should instantiate each child and then call {@link #add(FixtureScript)} (or the overloaded
-     *      {@link #add(String, FixtureScript)})
-     * </p>.
+     * Executes a child {@link FixtureScript fixture script} (simply using its default name).
      */
-    protected abstract void addChildren();
-
-    protected void doRun(final String parameters, final FixtureResultList fixtureResults) {
-        addChildren();
-        for (final FixtureScript child : children) {
-            child.doRun(parameters, fixtureResults);
-        }
+    protected final void execute(final FixtureScript fixtureScript, ExecutionContext executionContext) {
+        execute(null, fixtureScript, executionContext);
     }
 
 }

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.AbstractViewModel;
@@ -127,7 +128,8 @@ public abstract class FixtureScript
     private String localName;
     /**
      * Will always be populated, initially by the default name, but can be
-     * {@link #setLocalName(String) overridden} if {@link CompositeFixtureScript#add(String, FixtureScript) reused} within a {@link CompositeFixtureScript composite fixture script}.
+     * {@link #setLocalName(String) overridden} if
+     * {@link CompositeFixtureScript#execute(FixtureScript, org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)} reused} within a {@link CompositeFixtureScript composite fixture script}.
      */
     @Hidden
     public String getLocalName() {
@@ -175,15 +177,63 @@ public abstract class FixtureScript
     
     // //////////////////////////////////////
 
-    @Programmatic
-    public final List<FixtureResult> run(final String parameters) {
-        FixtureResultList fixtureResults = new FixtureResultList(fixtureScripts);
-        doRun(parameters, fixtureResults);
-        return fixtureResults.getResults();
+    public static class ExecutionContext {
+
+        /**
+         * Null implementation, to assist with unit testing of {@link org.apache.isis.applib.fixturescripts.FixtureScript}s.
+         */
+        public static final ExecutionContext NOOP = new ExecutionContext(null, null) {
+            @Override
+            public <T> T add(FixtureScript script, T object) {
+                return object;
+            }
+
+            @Override
+            public <T> T add(FixtureScript script, String key, T object) {
+                return object;
+            }
+
+            @Override
+            public List<FixtureResult> getResults() {
+                return Collections.emptyList();
+            }
+        };
+
+
+        private final String parameters;
+        private final FixtureResultList fixtureResults;
+
+        public ExecutionContext(String parameters, FixtureScripts fixtureScripts) {
+            fixtureResults = new FixtureResultList(fixtureScripts);
+            this.parameters = parameters;
+        }
+
+        public String getParameters() {
+            return parameters;
+        }
+        public List<FixtureResult> getResults() {
+            return fixtureResults.getResults();
+        }
+
+        public <T> T add(final FixtureScript script, final T object) {
+            return fixtureResults.add(script, object);
+        }
+
+        public <T> T add(final FixtureScript script, final String key, final T object) {
+            return fixtureResults.add(script, key, object);
+        }
+
     }
 
     @Programmatic
-    protected abstract void doRun(final String parameters, final FixtureResultList fixtureResults);
+    public final List<FixtureResult> run(final String parameters) {
+        final ExecutionContext executionContext = new ExecutionContext(parameters, fixtureScripts);
+        execute(executionContext);
+        return executionContext.getResults();
+    }
+
+    @Programmatic
+    protected abstract void execute(final ExecutionContext executionContext);
 
     /**
      * Optional hook to validate parameters.
@@ -192,6 +242,8 @@ public abstract class FixtureScript
     public String validateRun(final String parameters) {
         return null;
     }
+
+
 
     // //////////////////////////////////////
 
