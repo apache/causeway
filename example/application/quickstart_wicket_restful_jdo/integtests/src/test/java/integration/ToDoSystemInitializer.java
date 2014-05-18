@@ -24,6 +24,7 @@ import fixture.todo.ToDoItemsFixturesService;
 
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
@@ -73,7 +74,8 @@ public class ToDoSystemInitializer {
                     new EventBusServiceJdo(),
                     new QueryResultsCache(),
                     new MementoServiceDefault(),
-                    new BookmarkServiceDefault()
+                    new BookmarkServiceDefault(),
+                    new ClockService()
                     );
         }
 

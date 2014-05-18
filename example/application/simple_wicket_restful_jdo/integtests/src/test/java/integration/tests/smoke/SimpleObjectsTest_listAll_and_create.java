@@ -18,39 +18,33 @@
  */
 package integration.tests.smoke;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
-import integration.tests.SimpleAppIntegTest;
-
-import java.util.List;
-
 import dom.simple.SimpleObject;
 import dom.simple.SimpleObjects;
 import fixture.simple.SimpleObjectsFixture;
+import integration.tests.SimpleAppIntegTest;
 
-import org.joda.time.LocalDate;
+import java.util.List;
+import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.clock.Clock;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class SimpleObjectsTest_listAll_and_create extends SimpleAppIntegTest {
 
-    private SimpleObjects simpleObjects;
-
     @Before
-    public void setUp() throws Exception {
-
+    public void setUpData() throws Exception {
         scenarioExecution().install(new SimpleObjectsFixture());
-        
-        simpleObjects = wrap(service(SimpleObjects.class));
     }
 
-    
+    @Inject
+    private SimpleObjects simpleObjects;
+
     @Test
     public void listAll() throws Exception {
 
-        final List<SimpleObject> all = simpleObjects.listAll();
+        final List<SimpleObject> all = wrap(simpleObjects).listAll();
         assertThat(all.size(), is(3));
         
         SimpleObject simpleObject = wrap(all.get(0));
@@ -59,10 +53,10 @@ public class SimpleObjectsTest_listAll_and_create extends SimpleAppIntegTest {
     
     @Test
     public void create() throws Exception {
+
+        wrap(simpleObjects).create("Faz");
         
-        simpleObjects.create("Faz");
-        
-        final List<SimpleObject> all = simpleObjects.listAll();
+        final List<SimpleObject> all = wrap(simpleObjects).listAll();
         assertThat(all.size(), is(4));
     }
 

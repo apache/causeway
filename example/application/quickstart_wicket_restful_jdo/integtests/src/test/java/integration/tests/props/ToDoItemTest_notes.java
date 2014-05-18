@@ -18,37 +18,34 @@
  */
 package integration.tests.props;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-import integration.tests.ToDoIntegTest;
-
-import java.util.List;
-
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItemSubscriptions;
 import dom.todo.ToDoItems;
 import fixture.todo.integtests.ToDoItemsIntegTestFixture;
+import integration.tests.ToDoIntegTest;
 
+import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 public class ToDoItemTest_notes extends ToDoIntegTest {
+
+    @Before
+    public void setUpData() throws Exception {
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
+    }
 
     private ToDoItem toDoItem;
     private ToDoItemSubscriptions toDoItemSubscriptions;
 
     @Before
     public void setUp() throws Exception {
-        // given
-        scenarioExecution().install(new ToDoItemsIntegTestFixture());
-
         final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
         toDoItem = wrap(all.get(0));
         toDoItemSubscriptions = service(ToDoItemSubscriptions.class);

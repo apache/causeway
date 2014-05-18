@@ -18,35 +18,40 @@
  */
 package integration.tests.actions;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
-import integration.tests.ToDoIntegTest;
-
-import java.util.EventObject;
-import java.util.List;
-
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItemSubscriptions;
 import dom.todo.ToDoItems;
 import fixture.todo.integtests.ToDoItemsIntegTestFixture;
+import integration.tests.ToDoIntegTest;
 
+import java.util.EventObject;
+import java.util.List;
+import javax.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+
 public class ToDoItemTest_completed extends ToDoIntegTest {
 
-    private ToDoItem toDoItem;
+    @Before
+    public void setUpData() throws Exception {
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
+    }
+
+    @Inject
+    private ToDoItems toDoItems;
+    @Inject
     private ToDoItemSubscriptions toDoItemSubscriptions;
+
+    private ToDoItem toDoItem;
 
     @Before
     public void setUp() throws Exception {
-        scenarioExecution().install(new ToDoItemsIntegTestFixture());
-
-        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
+        final List<ToDoItem> all = toDoItems.notYetComplete();
         toDoItem = wrap(all.get(0));
-        
-        toDoItemSubscriptions = service(ToDoItemSubscriptions.class);
     }
 
     @After
@@ -54,7 +59,6 @@ public class ToDoItemTest_completed extends ToDoIntegTest {
         toDoItemSubscriptions.reset();
     }
 
-    
     @Test
     public void happyCase() throws Exception {
         

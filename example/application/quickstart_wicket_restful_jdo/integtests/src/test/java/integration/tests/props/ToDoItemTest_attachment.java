@@ -18,36 +18,37 @@
  */
 package integration.tests.props;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import dom.todo.ToDoItem;
+import dom.todo.ToDoItems;
+import fixture.todo.integtests.ToDoItemsIntegTestFixture;
 import integration.tests.ToDoIntegTest;
 
 import java.nio.charset.Charset;
 import java.util.List;
-
 import javax.activation.MimeType;
-
-import dom.todo.ToDoItem;
-import dom.todo.ToDoItems;
-import fixture.todo.integtests.ToDoItemsIntegTestFixture;
-
-import org.junit.After;
+import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.apache.isis.applib.value.Blob;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ToDoItemTest_attachment extends ToDoIntegTest {
 
+    @Before
+    public void setUpData() throws Exception {
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
+    }
+
+    @Inject
+    private ToDoItems toDoItems;
 
     private ToDoItem toDoItem;
 
     @Before
     public void setUp() throws Exception {
-        
-        scenarioExecution().install(new ToDoItemsIntegTestFixture());
-        
-        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
+        final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
         toDoItem = wrap(all.get(0));
     }
 

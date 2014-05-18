@@ -18,11 +18,6 @@
  */
 package fixture.todo.simple;
 
-import org.joda.time.LocalDate;
-
-import org.apache.isis.applib.clock.Clock;
-
-
 public final class Util {
     
     private Util(){}
@@ -36,11 +31,6 @@ public final class Util {
             if(str != null) { return str; }
         }
         return null;
-    }
-
-    static LocalDate daysFromToday(final int i) {
-        final LocalDate date = new LocalDate(Clock.getTimeAsDateTime());
-        return date.plusDays(i);
     }
 
 }

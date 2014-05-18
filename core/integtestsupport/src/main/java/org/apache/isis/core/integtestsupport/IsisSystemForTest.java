@@ -564,7 +564,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     ////////////////////////////////////////////////////////////
 
     @Override
-    public Statement apply(final Statement base, Description description) {
+    public Statement apply(final Statement base, final Description description) {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
@@ -691,6 +691,20 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             fid.addFixture(fixture);
         }
         fid.installFixtures();
+
+        // ensure that tests are performed in separate xactn to any fixture setup.
+        final IsisTransactionManager transactionManager = getTransactionManager();
+        final IsisTransaction transaction = transactionManager.getTransaction();
+        final State transactionState = transaction.getState();
+        if(transactionState.canCommit()) {
+            commitTran();
+            try {
+                bounceSystem();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            beginTran();
+        }
     }
 
 

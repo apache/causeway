@@ -18,23 +18,34 @@
  */
 package integration.tests.repo;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import integration.tests.ToDoIntegTest;
 import dom.todo.ToDoItem;
-import dom.todo.ToDoItems;
 import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItem.Subcategory;
+import dom.todo.ToDoItems;
+import integration.tests.ToDoIntegTest;
 
+import javax.inject.Inject;
+import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 public class ToDoItemsTest_newToDo_and_delete extends ToDoIntegTest {
+
+    @Before
+    public void setUpData() throws Exception {
+        // none
+    }
+
+    @Inject
+    private ToDoItems toDoItems;
 
     @Test
     public void happyCase() throws Exception {
         
         // given
-        int size = wrap(service(ToDoItems.class)).notYetComplete().size();
+        int size = wrap(toDoItems).notYetComplete().size();
         
         // when
         final ToDoItem newToDo = wrap(service(ToDoItems.class)).newToDo("new todo", Category.Professional, Subcategory.OpenSource, null, null);

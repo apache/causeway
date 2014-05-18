@@ -18,18 +18,15 @@
  */
 package fixture.todo.simple;
 
-import java.math.BigDecimal;
-
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItem.Subcategory;
 import dom.todo.ToDoItems;
 
+import java.math.BigDecimal;
 import org.joda.time.LocalDate;
-
-import org.apache.isis.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.applib.fixturescripts.SimpleFixtureScript;
-import org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext;
+import org.apache.isis.applib.services.clock.ClockService;
 
 public class ToDoItemsCreate extends SimpleFixtureScript {
 
@@ -60,19 +57,19 @@ public class ToDoItemsCreate extends SimpleFixtureScript {
 
     private void installFor(final String user, final ExecutionContext executionContext) {
 
-        createToDoItemForUser("Buy milk", Category.Domestic, Subcategory.Shopping, user, Util.daysFromToday(0), new BigDecimal("0.75"), executionContext);
-        createToDoItemForUser("Buy bread", Category.Domestic, Subcategory.Shopping, user, Util.daysFromToday(0), new BigDecimal("1.75"), executionContext);
-        createToDoItemForUser("Buy stamps", Category.Domestic, Subcategory.Shopping, user, Util.daysFromToday(0), new BigDecimal("10.00"), executionContext);
-        createToDoItemForUser("Pick up laundry", Category.Domestic, Subcategory.Chores, user, Util.daysFromToday(6), new BigDecimal("7.50"), executionContext);
-        createToDoItemForUser("Mow lawn", Category.Domestic, Subcategory.Garden, user, Util.daysFromToday(6), null, executionContext);
-        createToDoItemForUser("Vacuum house", Category.Domestic, Subcategory.Housework, user, Util.daysFromToday(3), null, executionContext);
-        createToDoItemForUser("Sharpen knives", Category.Domestic, Subcategory.Chores, user, Util.daysFromToday(14), null, executionContext);
+        createToDoItemForUser("Buy milk", Category.Domestic, Subcategory.Shopping, user, nowPlusDays(0), new BigDecimal("0.75"), executionContext);
+        createToDoItemForUser("Buy bread", Category.Domestic, Subcategory.Shopping, user, nowPlusDays(0), new BigDecimal("1.75"), executionContext);
+        createToDoItemForUser("Buy stamps", Category.Domestic, Subcategory.Shopping, user, nowPlusDays(0), new BigDecimal("10.00"), executionContext);
+        createToDoItemForUser("Pick up laundry", Category.Domestic, Subcategory.Chores, user, nowPlusDays(6), new BigDecimal("7.50"), executionContext);
+        createToDoItemForUser("Mow lawn", Category.Domestic, Subcategory.Garden, user, nowPlusDays(6), null, executionContext);
+        createToDoItemForUser("Vacuum house", Category.Domestic, Subcategory.Housework, user, nowPlusDays(3), null, executionContext);
+        createToDoItemForUser("Sharpen knives", Category.Domestic, Subcategory.Chores, user, nowPlusDays(14), null, executionContext);
 
         createToDoItemForUser("Write to penpal", Category.Other, Subcategory.Other, user, null, null, executionContext);
 
-        createToDoItemForUser("Write blog post", Category.Professional, Subcategory.Marketing, user, Util.daysFromToday(7), null, executionContext);
-        createToDoItemForUser("Organize brown bag", Category.Professional, Subcategory.Consulting, user, Util.daysFromToday(14), null, executionContext);
-        createToDoItemForUser("Submit conference session", Category.Professional, Subcategory.Education, user, Util.daysFromToday(21), null, executionContext);
+        createToDoItemForUser("Write blog post", Category.Professional, Subcategory.Marketing, user, nowPlusDays(7), null, executionContext);
+        createToDoItemForUser("Organize brown bag", Category.Professional, Subcategory.Consulting, user, nowPlusDays(14), null, executionContext);
+        createToDoItemForUser("Submit conference session", Category.Professional, Subcategory.Education, user, nowPlusDays(21), null, executionContext);
         createToDoItemForUser("Stage Isis release", Category.Professional, Subcategory.OpenSource, user, null, null, executionContext);
 
         getContainer().flush();
@@ -88,11 +85,18 @@ public class ToDoItemsCreate extends SimpleFixtureScript {
         ToDoItem newToDo = toDoItems.newToDo(description, category, subcategory, user, dueBy, cost);
         return executionContext.add(this, newToDo);
     }
+
+    private LocalDate nowPlusDays(int days) {
+        return clockService.now().plusDays(days);
+    }
     //endregion
 
     //region > injected services
     @javax.inject.Inject
     private ToDoItems toDoItems;
+
+    @javax.inject.Inject
+    private ClockService clockService;
     //endregion
 
 

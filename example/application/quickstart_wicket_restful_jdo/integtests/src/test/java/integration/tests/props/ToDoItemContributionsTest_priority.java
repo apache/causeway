@@ -18,33 +18,37 @@
  */
 package integration.tests.props;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import integration.tests.ToDoIntegTest;
-
-import java.util.List;
-
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItemContributions;
 import dom.todo.ToDoItems;
 import fixture.todo.integtests.ToDoItemsIntegTestFixture;
+import integration.tests.ToDoIntegTest;
 
+import java.util.List;
+import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 public class ToDoItemContributionsTest_priority extends ToDoIntegTest {
 
+    @Before
+    public void setUpData() throws Exception {
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
+    }
+
+    @Inject
+    private ToDoItems toDoItems;
+    @Inject
     private ToDoItemContributions toDoItemContributions;
     
     private List<ToDoItem> notYetComplete;
 
     @Before
     public void setUp() throws Exception {
-        scenarioExecution().install(new ToDoItemsIntegTestFixture());
-
-        final ToDoItems toDoItems = wrap(service(ToDoItems.class));
-        toDoItemContributions = service(ToDoItemContributions.class);
-        notYetComplete = toDoItems.notYetComplete();
+        notYetComplete = wrap(toDoItems).notYetComplete();
     }
 
     @Test

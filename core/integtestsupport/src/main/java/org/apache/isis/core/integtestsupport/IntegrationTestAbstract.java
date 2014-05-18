@@ -23,7 +23,6 @@ import org.junit.rules.ExpectedException;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
@@ -158,6 +157,7 @@ public abstract class IntegrationTestAbstract {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
+                    isft.getContainer().injectServicesInto(target);
                     isft.beginTran();
                     try {
                         base.evaluate();

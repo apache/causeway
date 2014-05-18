@@ -18,44 +18,43 @@
  */
 package integration.tests.colls;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-import integration.tests.ToDoIntegTest;
-
-import java.util.List;
-
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItemSubscriptions;
 import dom.todo.ToDoItems;
 import fixture.todo.integtests.ToDoItemsIntegTestFixture;
+import integration.tests.ToDoIntegTest;
 
+import java.util.List;
+import javax.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
-import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
 
 public class ToDoItemTest_dependencies_add extends ToDoIntegTest {
 
+    @Before
+    public void setUpData() throws Exception {
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
+    }
+
+
+    @Inject
+    private ToDoItems toDoItems;
+    @Inject
+    private ToDoItemSubscriptions toDoItemSubscriptions;
+
     private ToDoItem toDoItem;
     private ToDoItem otherToDoItem;
-    
-    private ToDoItemSubscriptions toDoItemSubscriptions;
-    
 
     @Before
     public void setUp() throws Exception {
-        scenarioExecution().install(new ToDoItemsIntegTestFixture());
-
-        final List<ToDoItem> items = wrap(service(ToDoItems.class)).notYetComplete();
+        final List<ToDoItem> items = wrap(toDoItems).notYetComplete();
         toDoItem = wrap(items.get(0));
         otherToDoItem = wrap(items.get(1));
-        
-        toDoItemSubscriptions = service(ToDoItemSubscriptions.class);
     }
 
     @After
