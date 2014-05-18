@@ -70,7 +70,14 @@ public abstract class IntegrationTestAbstract {
         scenarioExecution().endTran(true);
         scenarioExecution().beginTran();
     }
-    
+
+    protected void nextSession() {
+        scenarioExecution().endTran(true);
+        scenarioExecution().closeSession();
+        scenarioExecution().openSession();
+        scenarioExecution().beginTran();
+    }
+
     // //////////////////////////////////////
 
     

@@ -373,11 +373,22 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     public void bounceSystem() throws Exception {
         firePreBounceSystem();
-        tearDownSystem(FireListeners.DONT_FIRE);
-        setUpSystem(FireListeners.DONT_FIRE);
+        closeSession();
+        openSession();
         firePostBounceSystem();
     }
 
+    public void openSession() throws Exception {
+        openSession(authenticationSession);
+    }
+
+    public void openSession(AuthenticationSession authenticationSession) throws Exception {
+        IsisContext.openSession(authenticationSession);
+    }
+
+    public void closeSession() throws Exception {
+        IsisContext.closeSession();
+    }
 
     private IsisSystemDefault createIsisSystem(List<Object> services) {
         final IsisSystemDefault system = new IsisSystemDefault(DeploymentType.UNIT_TESTING, services) {

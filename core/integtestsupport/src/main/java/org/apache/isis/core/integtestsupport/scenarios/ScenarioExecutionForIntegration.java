@@ -18,6 +18,7 @@ package org.apache.isis.core.integtestsupport.scenarios;
 
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
@@ -75,6 +76,33 @@ public class ScenarioExecutionForIntegration extends ScenarioExecution  {
             isft.commitTran();
         } else {
             isft.abortTran();
+        }
+    }
+
+    @Override
+    public void openSession() {
+        try {
+            isft.openSession();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void openSession(AuthenticationSession authenticationSession) {
+        try {
+            isft.openSession(authenticationSession);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void closeSession() {
+        try {
+            isft.closeSession();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
