@@ -58,7 +58,7 @@ public class IsisBlobMapping extends SingleFieldMultiMapping {
     {
         addColumns(ClassNameConstants.JAVA_LANG_STRING); // name
         addColumns(ClassNameConstants.JAVA_LANG_STRING); // mime type
-        addColumns(ClassNameConstants.JAVA_LANG_BYTE_ARRAY); // bytes
+        addColumns(ClassNameConstants.JAVA_IO_SERIALIZABLE); // bytes
     }
 
     public Object getValueForDatastoreMapping(NucleusContext nucleusCtx, int index, Object value)

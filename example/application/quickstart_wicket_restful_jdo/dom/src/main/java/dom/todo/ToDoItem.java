@@ -22,18 +22,13 @@ import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-
 import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.NullValue;
 import javax.jdo.annotations.VersionStrategy;
-
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Ordering;
-
 import org.joda.time.LocalDate;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.NonRecoverableException;
@@ -48,12 +43,9 @@ import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
-import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
@@ -434,9 +426,12 @@ public class ToDoItem implements Comparable<ToDoItem> {
     // //////////////////////////////////////
 
     private Blob attachment;
-
-    @javax.jdo.annotations.Persistent(defaultFetchGroup="false")
-    @javax.jdo.annotations.Column(allowsNull="true")
+    @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+            @javax.jdo.annotations.Column(name = "attachment_name"),
+            @javax.jdo.annotations.Column(name = "attachment_mimetype"),
+            @javax.jdo.annotations.Column(name = "attachment_bytes", sqlType = "BLOB")
+    })
+    @Optional
     public Blob getAttachment() {
         return attachment;
     }
