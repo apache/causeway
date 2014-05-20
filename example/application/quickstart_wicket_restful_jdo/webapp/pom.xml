@@ -54,6 +54,7 @@
                         </goals>
                         <configuration>
                             <backgroundImage>${basedir}/src/main/jettyconsole/isis-banner.png</backgroundImage>
+                            <destinationFile>${project.build.directory}/${project.build.finalName}-jetty-console.jar</destinationFile>
                         </configuration>
                         <phase>package</phase>
                     </execution>
@@ -286,7 +287,7 @@
                             <tasks>
                                 <exec executable="java" failonerror="true">
                                     <arg value="-jar" />
-                                    <arg value="${project.build.directory}/${project.build.finalName}-jetty-console.war" />
+                                    <arg value="${project.build.directory}/${project.build.finalName}-jetty-console.jar" />
                                 </exec>
                             </tasks>
                         </configuration>
