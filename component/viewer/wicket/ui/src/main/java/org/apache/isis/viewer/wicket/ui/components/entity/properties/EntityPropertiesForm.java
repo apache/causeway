@@ -20,18 +20,12 @@ package org.apache.isis.viewer.wicket.ui.components.entity.properties;
 
 import java.util.List;
 import java.util.Map;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.ajax.attributes.IAjaxCallListener;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.core.request.handler.BookmarkablePageRequestHandler;
-import org.apache.wicket.core.request.handler.PageProvider;
-import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -41,12 +35,8 @@ import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.http.handler.RedirectRequestHandler;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
-
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -76,7 +66,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPath
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.panels.ButtonWithPreValidateHook;
+import org.apache.isis.viewer.wicket.ui.panels.AjaxButtonWithPreValidateHook;
 import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -308,7 +298,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         markupContainer.add(editButton);
 
         
-        okButton = new ButtonWithPreValidateHook(ID_OK_BUTTON, Model.of("OK")) {
+        okButton = new AjaxButtonWithPreValidateHook(ID_OK_BUTTON, Model.of("OK")) {
             private static final long serialVersionUID = 1L;
 
 
@@ -357,9 +347,15 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                     super.validate();
                 }
             }
-            
+
             @Override
-            public void onSubmit() {
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                super.onError(target, form);
+                toEditMode(target);
+            }
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 if (getForm().hasError()) {
                     // stay in edit mode
                     return;
@@ -393,7 +389,8 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                     if(message == null) {
                         throw ex;
                     }
-                    toEditMode(null);
+
+                    toEditMode(target);
                     return;
                 }
 
