@@ -185,14 +185,20 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         final List<Object> services = obtainServices();
 
         // bind metamodel to the (runtime) framework
-        RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
+        final RuntimeContextFromSession runtimeContext = obtainRuntimeContextFromSession();
         runtimeContext.injectInto(reflector);
 
+        return newIsisSessionFactory(deploymentType, userProfileLoader, persistenceSessionFactory, configuration, authenticationManager, authorizationManager, templateImageLoader, oidMarshaller, reflector, container, services);
+    }
+
+    protected RuntimeContextFromSession obtainRuntimeContextFromSession() {
+        return new RuntimeContextFromSession();
+    }
+
+    protected IsisSessionFactoryDefault newIsisSessionFactory(DeploymentType deploymentType, UserProfileLoader userProfileLoader, PersistenceSessionFactory persistenceSessionFactory, IsisConfiguration configuration, AuthenticationManager authenticationManager, AuthorizationManager authorizationManager, TemplateImageLoader templateImageLoader, OidMarshaller oidMarshaller, SpecificationLoaderSpi reflector, DomainObjectContainer container, List<Object> services) {
         return new IsisSessionFactoryDefault(deploymentType, configuration, reflector, templateImageLoader, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, container, services, oidMarshaller);
     }
 
-
-    
     private static Collection<MetaModelRefiner> refiners(Object... possibleRefiners ) {
         return ListExtensions.filtered(Arrays.asList(possibleRefiners), MetaModelRefiner.class);
     }

@@ -25,6 +25,11 @@ package org.apache.isis.core.commons.exceptions;
  * <p>
  * The viewer is expected to render the message within the application in a
  * user-friendly fashion, for example as a growl-like notification.
+ *
+ * <p>
+ * <b>Note:</b> application code should not throw this exception directly; instead use {@link org.apache.isis.applib.ApplicationException}, 
+ * {@link org.apache.isis.applib.RecoverableException}, {@link org.apache.isis.applib.NonRecoverableException} or {@link org.apache.isis.applib.FatalException}
+ * </p>
  */
 public class IsisApplicationException extends IsisException {
 

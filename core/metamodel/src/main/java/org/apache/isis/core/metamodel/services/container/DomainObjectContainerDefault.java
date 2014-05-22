@@ -22,16 +22,10 @@ package org.apache.isis.core.metamodel.services.container;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-
 import com.google.common.base.Predicate;
-
-import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.PersistFailedException;
-import org.apache.isis.applib.RepositoryException;
-import org.apache.isis.applib.ViewModel;
+import org.apache.isis.applib.*;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.query.Query;
@@ -46,17 +40,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
-import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAware;
-import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
-import org.apache.isis.core.metamodel.adapter.LocalizationProviderAware;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
-import org.apache.isis.core.metamodel.adapter.ObjectDirtierAware;
-import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
-import org.apache.isis.core.metamodel.adapter.ObjectPersistorAware;
-import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
-import org.apache.isis.core.metamodel.adapter.QuerySubmitterAware;
+import org.apache.isis.core.metamodel.adapter.*;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
@@ -520,15 +504,21 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
             super(ConcurrencyException.class, prefix("Another user has just changed this data"));
         }
     }
-    
+    static class ExceptionRecognizerForRecoverableException extends ExceptionRecognizerForType {
+        public ExceptionRecognizerForRecoverableException() {
+            super(RecoverableException.class);
+        }
+    }
+
     private final ExceptionRecognizer recognizer = 
             new ExceptionRecognizerComposite(
-                    new ExceptionRecognizerForConcurrencyException()
+                    new ExceptionRecognizerForConcurrencyException(),
+                    new ExceptionRecognizerForRecoverableException()
                 );
     
     /**
      * Framework-provided implementation of {@link ExceptionRecognizer},
-     * which will automatically recognize any {@link RecognizedException}s or
+     * which will automatically recognize any {@link org.apache.isis.applib.RecoverableException}s or
      * any {@link ConcurrencyException}s.
      */
     @Override

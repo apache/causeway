@@ -624,6 +624,42 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         
     }
 
+    /**
+     * Either commits or aborts the transaction, depending on the Transaction's {@link org.apache.isis.core.runtime.system.transaction.IsisTransaction#getState()}
+     */
+    public void endTran() {
+        final IsisTransactionManager transactionManager = getTransactionManager();
+        final IsisTransaction transaction = transactionManager.getTransaction();
+        if(transaction == null) {
+            Assert.fail("No transaction exists");
+            return;
+        }
+
+        transactionManager.endTransaction();
+
+        final State state = transaction.getState();
+        switch(state) {
+            case COMMITTED:
+                break;
+            case ABORTED:
+                break;
+            case IN_PROGRESS:
+                Assert.fail("Transaction is still in state of '" + state + "'");
+                break;
+            case MUST_ABORT:
+                Assert.fail("Transaction is still in state of '" + state + "'");
+                break;
+            default:
+                Assert.fail("Unknown transaction state '" + state + "'");
+        }
+    }
+
+    /**
+     * Commits the transaction.
+     * 
+     * @deprecated - typically use just {@link #endTran()}
+     */
+    @Deprecated
     public void commitTran() {
         final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getTransaction();
@@ -646,6 +682,12 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
     }
 
+    /**
+     * Commits the transaction.
+     *
+     * @deprecated - typically use just {@link #abortTran()}
+     */
+    @Deprecated
     public void abortTran() {
         final IsisTransactionManager transactionManager = getTransactionManager();
         final IsisTransaction transaction = transactionManager.getTransaction();

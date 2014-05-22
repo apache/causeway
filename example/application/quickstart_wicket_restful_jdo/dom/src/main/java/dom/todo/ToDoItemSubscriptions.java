@@ -20,12 +20,12 @@ package dom.todo;
 
 import java.util.EventObject;
 import java.util.List;
-
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
-
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
@@ -37,27 +37,78 @@ public class ToDoItemSubscriptions {
     private final static org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(ToDoItemSubscriptions.class);
     //endregion
 
-    
+
+    //region > on(Event)...
+    // //////////////////////////////////////
+    public static enum Behaviour {
+        AcceptEvents,
+        RejectEventsWithRecoverableException,
+        RejectEventsWithNonRecoverableException,
+        ThrowOtherException
+    }
+    private Behaviour behaviour = Behaviour.AcceptEvents;
+
+    /**
+     * To demo/test what occurs if a subscriber that might veto an event.
+     */
+    @Prototype
+    @MemberOrder(name = "Prototyping", sequence = "80")
+    @Named("Set subscriber behaviour")
+    @ActionSemantics(ActionSemantics.Of.IDEMPOTENT)
+    public String subscriberBehaviour(@Named("Behaviour") Behaviour behaviour) {
+        this.behaviour = behaviour;
+        return "Subscriber behaviour set to: " + behaviour;
+    }
+    public Behaviour default0SubscriberBehaviour() {
+        return this.behaviour;
+    }
+    @Programmatic
+    public Behaviour getSubscriberBehaviour() {
+        return behaviour;
+    }
+    private void rejectIfRequired() {
+        if(behaviour == Behaviour.RejectEventsWithRecoverableException) {
+            throw new RecoverableException("Rejecting event (recoverable exception thrown)");
+        }
+        if(behaviour == Behaviour.RejectEventsWithNonRecoverableException) {
+            throw new NonRecoverableException("Rejecting event (recoverable exception thrown)");
+        }
+        if(behaviour == Behaviour.ThrowOtherException) {
+            throw new RuntimeException("Throwing some other exception");
+        }
+    }
+    //endregion
+
     //region > on(Event)...
     // //////////////////////////////////////
 
     @Programmatic
     @Subscribe
     public void on(ToDoItem.AbstractActionInvokedEvent ev) {
+        rejectIfRequired();
         recordEvent(ev);
         LOG.info(ev.getEventDescription() + ": " + container.titleOf(ev.getSource()));
     }
 
+
     @Programmatic
     @Subscribe
     public void on(PropertyChangedEvent<?,?> ev) {
+        rejectIfRequired();
         recordEvent(ev);
+        if(ev.getIdentifier().getMemberName().contains("description")) {
+            String newValue = (String) ev.getNewValue();
+            if(newValue.matches(".*demo veto.*")) {
+                throw new RecoverableException("oh no you don't! " + ev.getNewValue());
+            }
+        }
         LOG.info(container.titleOf(ev.getSource()) + ", changed " + ev.getIdentifier().getMemberName() + " : " + ev.getOldValue() + " -> " + ev.getNewValue());
     }
     
     @Programmatic
     @Subscribe
     public void on(CollectionAddedToEvent<?,?> ev) {
+        rejectIfRequired();
         recordEvent(ev);
         LOG.info(container.titleOf(ev.getSource()) + ", added to " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
     }
@@ -65,6 +116,7 @@ public class ToDoItemSubscriptions {
     @Programmatic
     @Subscribe
     public void on(CollectionRemovedFromEvent<?,?> ev) {
+        rejectIfRequired();
         recordEvent(ev);
         LOG.info(container.titleOf(ev.getSource()) + ", removed from " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
     }
@@ -106,6 +158,7 @@ public class ToDoItemSubscriptions {
     @Programmatic
     public void reset() {
         receivedEvents.clear();
+        subscriberBehaviour(ToDoItemSubscriptions.Behaviour.AcceptEvents);
     }
 
     //endregion

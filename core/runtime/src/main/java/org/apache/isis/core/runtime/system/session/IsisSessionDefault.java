@@ -19,25 +19,22 @@
 
 package org.apache.isis.core.runtime.system.session;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import com.google.common.eventbus.EventBus;
-
+import com.google.common.eventbus.SubscriberExceptionContext;
+import com.google.common.eventbus.SubscriberExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
+import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
@@ -46,6 +43,9 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
+
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.hamcrest.CoreMatchers.*;
 
 /**
  * Analogous to a Hibernate <tt>Session</tt>, holds the current set of
@@ -105,9 +105,27 @@ public class IsisSessionDefault implements IsisSession {
 
     @Override
     public void open() {
-        this.eventBus = new EventBus();
+        this.eventBus = newEventBus();
         
         persistenceSession.open();
+    }
+
+    protected EventBus newEventBus() {
+        return new EventBus(newEventBusSubscriberExceptionHandler());
+    }
+
+    protected SubscriberExceptionHandler newEventBusSubscriberExceptionHandler() {
+        return new SubscriberExceptionHandler(){
+            @Override
+            public void handleException(Throwable exception, SubscriberExceptionContext context) {
+                if(exception instanceof RecoverableException ||
+                   exception instanceof NonRecoverableException) {
+                    getTransactionManager().getTransaction().setAbortCause(new IsisApplicationException(exception));
+                } else {
+                    // simply ignore
+                }
+            }
+        };
     }
 
     /**

@@ -19,35 +19,16 @@
 
 package org.apache.isis.core.runtime.system.transaction;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import java.util.List;
 import java.util.UUID;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.PublishedAction;
-import org.apache.isis.applib.annotation.PublishedObject;
-import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.CommandDefault;
 import org.apache.isis.applib.services.command.spi.CommandService;
-import org.apache.isis.applib.services.publish.EventPayload;
-import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
-import org.apache.isis.applib.services.publish.EventPayloadForObjectChanged;
-import org.apache.isis.applib.services.publish.EventSerializer;
-import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -55,15 +36,17 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
+
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
+import static org.hamcrest.CoreMatchers.*;
 
 public class IsisTransactionManager implements SessionScopedComponent {
 
@@ -389,6 +372,10 @@ public class IsisTransactionManager implements SessionScopedComponent {
             LOG.debug("flushTransaction");
         }
 
+        if(getTransaction().getState().mustAbort()) {
+            throw getTransaction().getAbortCause();
+        }
+
         if (getTransaction() != null) {
             persistenceSession.objectChangedAllDirty();
             getTransaction().flush();
@@ -558,7 +545,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
     /**
      * Overridable hook, used in
-     * {@link #createTransaction(MessageBroker, UpdateNotifier)
+     * {@link #createTransaction(org.apache.isis.core.commons.authentication.MessageBroker, UpdateNotifier, org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource)}
      * 
      * <p> Called when a new {@link IsisTransaction} is created.
      */
@@ -568,7 +555,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
     /**
      * Overridable hook, used in
-     * {@link #createTransaction(MessageBroker, UpdateNotifier)
+     * {@link #createTransaction(org.apache.isis.core.commons.authentication.MessageBroker, UpdateNotifier, org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource)}
      * 
      * <p> Called when a new {@link IsisTransaction} is created.
      */

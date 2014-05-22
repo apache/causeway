@@ -25,13 +25,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.profiles.Perspective;
@@ -46,8 +43,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils;
-import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
@@ -58,25 +53,10 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
-import org.apache.isis.core.metamodel.spec.SpecificationContext;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.spec.*;
+import org.apache.isis.core.metamodel.spec.feature.*;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.specimpl.CreateObjectContext;
-import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilder;
-import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
-import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionContext;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionImpl;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
-import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationImpl;
-import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationImpl;
+import org.apache.isis.core.metamodel.specloader.specimpl.*;
 
 public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements DebuggableWithTitle, FacetHolder {
 
@@ -408,8 +388,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                         
         // initialize new object
         final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(Contributed.EXCLUDED);
-        for (int i = 0; i < fields.size(); i++) {
-            fields.get(i).toDefault(adapter);
+        for (ObjectAssociation field : fields) {
+            field.toDefault(adapter);
         }
         getDependencyInjector().injectServicesInto(adapter.getObject());
         

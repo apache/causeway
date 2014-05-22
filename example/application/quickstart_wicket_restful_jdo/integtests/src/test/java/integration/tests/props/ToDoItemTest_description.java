@@ -29,10 +29,13 @@ import javax.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class ToDoItemTest_description extends ToDoIntegTest {
 
@@ -70,17 +73,6 @@ public class ToDoItemTest_description extends ToDoIntegTest {
         
         // then
         assertThat(toDoItem.getDescription(), is("Buy bread and butter"));
-
-        // and then published and received
-        @SuppressWarnings("unchecked")
-        final PropertyChangedEvent<ToDoItem,String> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(PropertyChangedEvent.class);
-        assertThat(ev, is(not(nullValue()))); 
-        
-        ToDoItem source = ev.getSource();
-        assertThat(source, is(equalTo(unwrap(toDoItem))));
-        assertThat(ev.getIdentifier().getMemberName(), is("description"));
-        assertThat(ev.getOldValue(), is("Buy bread"));
-        assertThat(ev.getNewValue(), is("Buy bread and butter"));
     }
 
 
@@ -140,12 +132,80 @@ public class ToDoItemTest_description extends ToDoIntegTest {
 
     @Test
     public void tooLong() throws Exception {
-        
-        // when, then
+
+        // then
         expectedExceptions.expectMessage("The value proposed exceeds the maximum length of 100");
+
+        // when
         toDoItem.setDescription(characters(101));
     }
-    
+
+
+    @Test
+    public void subscriberReceivesEvent() throws Exception {
+
+        // given
+        assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.AcceptEvents));
+        assertThat(toDoItem.getDescription(), is("Buy bread"));
+
+        // when
+        toDoItem.setDescription("Buy bread and butter");
+
+        // then published and received
+        @SuppressWarnings("unchecked")
+        final PropertyChangedEvent<ToDoItem,String> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(PropertyChangedEvent.class);
+        assertThat(ev, is(not(nullValue())));
+
+        ToDoItem source = ev.getSource();
+        assertThat(source, is(equalTo(unwrap(toDoItem))));
+        assertThat(ev.getIdentifier().getMemberName(), is("description"));
+        assertThat(ev.getOldValue(), is("Buy bread"));
+        assertThat(ev.getNewValue(), is("Buy bread and butter"));
+    }
+
+    @Test
+    public void subscriberVetoesEventWithRecoverableException() throws Exception {
+
+        // given
+        toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithRecoverableException);
+
+        // then
+        expectedExceptions.expect(RecoverableException.class);
+
+        // when
+        toDoItem.setDescription("Buy bread and butter");
+    }
+
+
+    @Test
+    public void subscriberVetoesEventWithNonRecoverableException() throws Exception {
+
+        // given
+        toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithNonRecoverableException);
+
+        // then
+        expectedExceptions.expect(NonRecoverableException.class);
+
+        // when
+        toDoItem.setDescription("Buy bread and butter");
+    }
+
+
+    @Test
+    public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
+
+        // given
+        toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ThrowOtherException);
+
+        // when
+        toDoItem.setDescription("Buy bread and butter");
+
+        // then
+        // (no expectedExceptions setup, expect to continue)
+        assertTrue(true);
+    }
+
+
     private static String characters(final int n) {
         StringBuffer buf = new StringBuffer();
         for(int i=0; i<n; i++) {

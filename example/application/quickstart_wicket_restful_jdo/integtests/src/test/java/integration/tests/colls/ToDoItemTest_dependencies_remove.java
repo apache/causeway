@@ -29,10 +29,13 @@ import javax.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class ToDoItemTest_dependencies_remove extends ToDoIntegTest {
 
@@ -79,24 +82,16 @@ public class ToDoItemTest_dependencies_remove extends ToDoIntegTest {
         
         // then
         assertThat(toDoItem.getDependencies().size(), is(0));
-        
-        // and then
-        @SuppressWarnings("unchecked")
-        final CollectionRemovedFromEvent<ToDoItem,ToDoItem> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(CollectionRemovedFromEvent.class);
-        assertThat(ev, is(not(nullValue()))); 
-        
-        ToDoItem source = ev.getSource();
-        assertThat(source, is(equalTo(unwrap(toDoItem))));
-        assertThat(ev.getIdentifier().getMemberName(), is("dependencies"));
-        assertThat(ev.getValue(), is(unwrap(otherToDoItem)));
     }
 
 
     @Test
     public void cannotRemoveItemIfNotADependency() throws Exception {
 
-        // when, then
+        // then
         expectedExceptions.expectMessage("Not a dependency");
+
+        // when
         toDoItem.remove(yetAnotherToDoItem);
     }
 
@@ -105,10 +100,74 @@ public class ToDoItemTest_dependencies_remove extends ToDoIntegTest {
 
         // given
         unwrap(toDoItem).setComplete(true);
-        
-        // when, then
+
+        // then
         expectedExceptions.expectMessage("Cannot remove dependencies for items that are complete");
+
+        // when
         toDoItem.remove(otherToDoItem);
     }
+
+    @Test
+    public void subscriberReceivesEvent() throws Exception {
+
+        // given
+        assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.AcceptEvents));
+        assertThat(toDoItem.getDependencies().size(), is(1));
+
+        // when
+        toDoItem.remove(otherToDoItem);
+
+        // then
+        @SuppressWarnings("unchecked")
+        final CollectionRemovedFromEvent<ToDoItem,ToDoItem> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(CollectionRemovedFromEvent.class);
+        assertThat(ev, is(not(nullValue())));
+
+        ToDoItem source = ev.getSource();
+        assertThat(source, is(equalTo(unwrap(toDoItem))));
+        assertThat(ev.getIdentifier().getMemberName(), is("dependencies"));
+        assertThat(ev.getValue(), is(unwrap(otherToDoItem)));
+    }
+
+    @Test
+    public void subscriberVetoesEventWithRecoverableException() throws Exception {
+
+        // given
+        toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithRecoverableException);
+
+        // then
+        expectedExceptions.expect(RecoverableException.class);
+
+        // when
+        toDoItem.remove(otherToDoItem);
+    }
+
+    @Test
+    public void subscriberVetoesEventWithNonRecoverableException() throws Exception {
+
+        // given
+        toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithNonRecoverableException);
+
+        // then
+        expectedExceptions.expect(NonRecoverableException.class);
+
+        // when
+        toDoItem.remove(otherToDoItem);
+    }
+
+    @Test
+    public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
+
+        // given
+        toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ThrowOtherException);
+
+        // when
+        toDoItem.remove(otherToDoItem);
+
+        // then
+        // (no expectedExceptions setup, expect to continue)
+        assertTrue(true);
+    }
+
 
 }

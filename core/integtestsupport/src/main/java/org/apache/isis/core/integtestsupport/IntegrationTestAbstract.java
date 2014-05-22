@@ -18,12 +18,16 @@
  */
 package org.apache.isis.core.integtestsupport;
 
+import java.util.List;
+import com.google.common.base.Throwables;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
@@ -168,9 +172,17 @@ public abstract class IntegrationTestAbstract {
                     isft.beginTran();
                     try {
                         base.evaluate();
-                        isft.commitTran();
+                        isft.endTran();
                     } catch(Throwable e) {
                         isft.bounceSystem();
+                        final List<Throwable> causalChain = Throwables.getCausalChain(e);
+                        // if underlying cause is an applib-defined exception, throw that rather than Isis' wrapper exception
+                        for (Throwable cause : causalChain) {
+                            if(cause instanceof RecoverableException ||
+                               cause instanceof NonRecoverableException) {
+                                throw cause;
+                            }
+                        }
                         throw e;
                     }
                 }

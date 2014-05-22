@@ -51,6 +51,7 @@ public final class ThrowableExtensions {
         if (targetException instanceof RecoverableException) {
             // an application exception from the domain code is re-thrown as an
             // IsisException with same semantics
+            // TODO: should probably be using ApplicationException here
             throw new IsisApplicationException(targetException);
         }
         if (targetException instanceof RuntimeException) {

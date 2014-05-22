@@ -30,9 +30,12 @@ import javax.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.RecoverableException;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class ToDoItemTest_completed extends ToDoIntegTest {
 
@@ -70,14 +73,6 @@ public class ToDoItemTest_completed extends ToDoIntegTest {
         
         // then
         assertThat(toDoItem.isComplete(), is(true));
-        
-        // and then
-        final ToDoItem.CompletedEvent ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(ToDoItem.CompletedEvent.class);
-        assertThat(ev, is(not(nullValue()))); 
-        
-        ToDoItem source = ev.getSource();
-        assertThat(source, is(equalTo(unwrap(toDoItem))));
-        assertThat(ev.getIdentifier().getMemberName(), is("completed"));
     }
 
     @Test
@@ -109,5 +104,68 @@ public class ToDoItemTest_completed extends ToDoIntegTest {
         final EventObject ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(EventObject.class);
         assertThat(ev, is(nullValue())); 
     }
+
+    @Test
+    public void subscriberReceivesEvent() throws Exception {
+
+        // given
+        assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.AcceptEvents));
+        assertThat(toDoItem.isComplete(), is(false));
+
+        // when
+        toDoItem.completed();
+
+        // then
+        assertThat(toDoItem.isComplete(), is(true));
+
+        // and then
+        final ToDoItem.CompletedEvent ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(ToDoItem.CompletedEvent.class);
+        assertThat(ev, is(not(nullValue())));
+
+        ToDoItem source = ev.getSource();
+        assertThat(source, is(equalTo(unwrap(toDoItem))));
+        assertThat(ev.getIdentifier().getMemberName(), is("completed"));
+    }
+
+    @Test
+    public void subscriberVetoesEventWithRecoverableException() throws Exception {
+
+        // given
+        toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithRecoverableException);
+
+        // then
+        expectedExceptions.expect(RecoverableException.class);
+
+        // when
+        toDoItem.completed();
+    }
+
+    @Test
+    public void subscriberVetoesEventWithNonRecoverableException() throws Exception {
+
+        // given
+        toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithNonRecoverableException);
+
+        // then
+        expectedExceptions.expect(NonRecoverableException.class);
+
+        // when
+        toDoItem.completed();
+    }
+
+    @Test
+    public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
+
+        // given
+        toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ThrowOtherException);
+
+        // when
+        toDoItem.completed();
+
+        // then
+        // (no expectedExceptions setup, expect to continue)
+        assertTrue(true);
+    }
+
 
 }

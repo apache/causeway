@@ -29,10 +29,13 @@ import javax.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class ToDoItemTest_dependencies_add extends ToDoIntegTest {
 
@@ -91,8 +94,10 @@ public class ToDoItemTest_dependencies_add extends ToDoIntegTest {
     @Test
     public void cannotDependOnSelf() throws Exception {
 
-        // when, then
+        // then
         expectedExceptions.expectMessage("Can't set up a dependency to self");
+
+        // when
         toDoItem.add(toDoItem);
     }
 
@@ -102,9 +107,72 @@ public class ToDoItemTest_dependencies_add extends ToDoIntegTest {
         // given
         unwrap(toDoItem).setComplete(true);
         
-        // when, then
+        // then
         expectedExceptions.expectMessage("Cannot add dependencies for items that are complete");
+
+        // when
         toDoItem.add(otherToDoItem);
+    }
+
+
+    @Test
+    public void subscriberReceivesEvent() throws Exception {
+
+        // given
+        assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.AcceptEvents));
+
+        // when
+        toDoItem.add(otherToDoItem);
+
+        // then
+        @SuppressWarnings("unchecked")
+        final CollectionAddedToEvent<ToDoItem,ToDoItem> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(CollectionAddedToEvent.class);
+        assertThat(ev, is(not(nullValue())));
+
+        ToDoItem source = ev.getSource();
+        assertThat(source, is(equalTo(unwrap(toDoItem))));
+        assertThat(ev.getIdentifier().getMemberName(), is("dependencies"));
+        assertThat(ev.getValue(), is(unwrap(otherToDoItem)));
+    }
+
+    @Test
+    public void subscriberVetoesEventWithRecoverableException() throws Exception {
+
+        // given
+        toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithRecoverableException);
+
+        // then
+        expectedExceptions.expect(RecoverableException.class);
+
+        // when
+        toDoItem.add(otherToDoItem);
+    }
+
+    @Test
+    public void subscriberVetoesEventWithNonRecoverableException() throws Exception {
+
+        // given
+        toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithNonRecoverableException);
+
+        // then
+        expectedExceptions.expect(NonRecoverableException.class);
+
+        // when
+        toDoItem.add(otherToDoItem);
+    }
+
+    @Test
+    public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
+
+        // given
+        toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ThrowOtherException);
+
+        // when
+        toDoItem.add(otherToDoItem);
+
+        // then
+        // (no expectedExceptions setup, expect to continue)
+        assertTrue(true);
     }
 
 }

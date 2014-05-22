@@ -697,8 +697,8 @@ public class ToDoItem implements Comparable<ToDoItem> {
             throw new RecoverableException("Demo throwing " + type.name());
         case RecoverableExceptionAutoEscalated:
             try {
-                // this will trigger an exception (because subcategory cannot be null), causing the xactn to be aborted
-                setSubcategory(null);
+                // this will trigger an exception (because category cannot be null), causing the xactn to be aborted
+                setCategory(null);
                 container.flush();
             } catch(Exception e) {
                 // it's a programming mistake to throw only a recoverable exception here, because of the xactn's state.
