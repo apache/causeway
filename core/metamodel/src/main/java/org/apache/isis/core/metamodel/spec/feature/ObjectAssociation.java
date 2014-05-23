@@ -145,6 +145,62 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                 }
             };
         }
+
+        /**
+         * Only fields that are for properties (ie 1:1 associations)
+         */
+        public final static Predicate<ObjectAssociation> PROPERTIES =
+                org.apache.isis.applib.filter.Filters.asPredicate(Filters.PROPERTIES);
+
+        /**
+         * Only fields that are for reference properties (ie 1:1 associations)
+         */
+        public final static Predicate<ObjectAssociation> REFERENCE_PROPERTIES =
+                org.apache.isis.applib.filter.Filters.asPredicate(Filters.REFERENCE_PROPERTIES);
+
+        /**
+         * Only fields that are for properties (ie 1:1 associations)
+         */
+        public final static Predicate<ObjectAssociation> WHERE_VISIBLE_IN_COLLECTION_TABLE =
+                org.apache.isis.applib.filter.Filters.asPredicate(Filters.WHERE_VISIBLE_IN_COLLECTION_TABLE);
+
+        /**
+         * Only fields that are for properties (ie 1:1 associations)
+         */
+        public final static Predicate<ObjectAssociation> WHERE_VISIBLE_IN_STANDALONE_TABLE =
+                org.apache.isis.applib.filter.Filters.asPredicate(Filters.WHERE_VISIBLE_IN_STANDALONE_TABLE);
+
+        /**
+         * All fields (that is, excludes out nothing).
+         */
+        public final static Predicate<ObjectAssociation> ALL =
+                org.apache.isis.applib.filter.Filters.asPredicate(Filters.ALL);
+
+        /**
+         * Only fields that are for collections (ie 1:m associations)
+         */
+        public final static Predicate<ObjectAssociation> COLLECTIONS =
+                org.apache.isis.applib.filter.Filters.asPredicate(Filters.COLLECTIONS);
+
+        /**
+         * Only properties that are visible statically, ie have not been
+         * unconditionally hidden at compile time.
+         */
+        public static final Predicate<ObjectAssociation> VISIBLE_AT_LEAST_SOMETIMES =
+                org.apache.isis.applib.filter.Filters.asPredicate(Filters.VISIBLE_AT_LEAST_SOMETIMES);
+
+        public static final Predicate<ObjectAssociation> staticallyVisible(final Where context) {
+            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.staticallyVisible(context));
+        }
+
+        public static final Predicate<ObjectAssociation> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target, final Where where) {
+            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.dynamicallyVisible(session, target, where));
+        }
+
+        public static final Predicate<ObjectAssociation> enabled(final AuthenticationSession session, final ObjectAdapter adapter, final Where where) {
+            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.enabled(session, adapter, where));
+        }
+
     }
     
     // //////////////////////////////////////////////////////
@@ -158,7 +214,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         /**
          * Filters only fields that are for properties (ie 1:1 associations)
+         *
+         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
+        @Deprecated
         public final static Filter<ObjectAssociation> PROPERTIES = new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(final ObjectAssociation association) {
@@ -168,7 +227,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         /**
          * Filters only fields that are for reference properties (ie 1:1 associations)
+         *
+         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
+        @Deprecated
         public final static Filter<ObjectAssociation> REFERENCE_PROPERTIES = new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(final ObjectAssociation association) {
@@ -179,7 +241,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         
         /**
          * Filters only fields that are for properties (ie 1:1 associations)
+         *
+         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
+        @Deprecated
         public final static Filter<ObjectAssociation> WHERE_VISIBLE_IN_COLLECTION_TABLE = new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(final ObjectAssociation association) {
@@ -190,7 +255,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         /**
          * Filters only fields that are for properties (ie 1:1 associations)
+         *
+         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
+        @Deprecated
         public final static Filter<ObjectAssociation> WHERE_VISIBLE_IN_STANDALONE_TABLE = new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(final ObjectAssociation association) {
@@ -201,7 +269,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         /**
          * Returns all fields (that is, filters out nothing).
+         *
+         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
+        @Deprecated
         public final static Filter<ObjectAssociation> ALL = new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(final ObjectAssociation property) {
@@ -211,7 +282,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         /**
          * Filters only fields that are for collections (ie 1:m associations)
+         *
+         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
+        @Deprecated
         public final static Filter<ObjectAssociation> COLLECTIONS = new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(final ObjectAssociation property) {
@@ -222,7 +296,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         /**
          * Filters only properties that are visible statically, ie have not been
          * unconditionally hidden at compile time.
+         *
+         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
+        @Deprecated
         public static final Filter<ObjectAssociation> VISIBLE_AT_LEAST_SOMETIMES = new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(final ObjectAssociation property) {
@@ -231,6 +308,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             }
         };
 
+        /**
+        * @deprecated -use {@link com.google.common.base.Predicate equivalent}
+        */
+        @Deprecated
         public static final Filter<ObjectAssociation> staticallyVisible(final Where context) {
             return new Filter<ObjectAssociation>() {
                 @Override
@@ -244,7 +325,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             };
         }
 
-        
+        /**
+         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
+         */
+        @Deprecated
         public static Filter<ObjectAssociation> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target, final Where where) {
             return new Filter<ObjectAssociation>() {
                 @Override
@@ -255,7 +339,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             };
         }
 
-
+        /**
+         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
+         */
+        @Deprecated
         public static Filter<ObjectAssociation> enabled(final AuthenticationSession session, final ObjectAdapter adapter, final Where where) {
             return new Filter<ObjectAssociation>() {
                 @Override

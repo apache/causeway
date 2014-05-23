@@ -167,7 +167,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
         if(isNotIntrospected()) {
             final List<ObjectAction> actions = createActions(metadataProperties);
-            sortAndUpdateActions(actions);
+            sortCacheAndUpdateActions(actions);
         }
 
         if(isNotIntrospected()) {

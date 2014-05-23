@@ -20,9 +20,8 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.List;
-
+import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
-
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.When;
@@ -205,6 +204,47 @@ public interface ObjectAction extends ObjectMember {
 
 
     // //////////////////////////////////////////////////////
+    // Predicates
+    // //////////////////////////////////////////////////////
+
+    public static final class Predicates {
+
+        private Predicates(){}
+
+        public static final Predicate<ObjectAction> VISIBLE_AT_LEAST_SOMETIMES =
+                org.apache.isis.applib.filter.Filters.asPredicate(Filters.VISIBLE_AT_LEAST_SOMETIMES);
+
+        public static Predicate<ObjectAction> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target, final Where where) {
+            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.dynamicallyVisible(session, target, where));
+        }
+
+        public static Predicate<ObjectAction> withId(final String actionId) {
+            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.withId(actionId));
+        }
+
+        public static Predicate<ObjectAction> withNoValidationRules() {
+            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.withNoValidationRules());
+        }
+
+        public static Predicate<ObjectAction> ofType(final ActionType type) {
+            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.ofType(type));
+        }
+
+        public static Predicate<ObjectAction> bulk() {
+            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.bulk());
+        }
+
+        public static Predicate<ObjectAction> notBulkOnly() {
+            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.notBulkOnly());
+        }
+
+        public static Predicate<ObjectAction> memberOrderOf(ObjectAssociation association) {
+            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.memberOrderOf(association));
+        }
+    }
+
+
+    // //////////////////////////////////////////////////////
     // Filters
     // //////////////////////////////////////////////////////
 
@@ -212,8 +252,11 @@ public interface ObjectAction extends ObjectMember {
     public static final class Filters {
         
         private Filters(){}
-        
-        @SuppressWarnings("deprecation")
+
+        /**
+         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
+         */
+        @Deprecated
         public static final Filter<ObjectAction> VISIBLE_AT_LEAST_SOMETIMES = new Filter<ObjectAction>() {
             @Override
             public boolean accept(final ObjectAction action) {
@@ -222,7 +265,10 @@ public interface ObjectAction extends ObjectMember {
             }
         };
 
-        @SuppressWarnings("deprecation")
+        /**
+         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
+         */
+        @Deprecated
         public static Filter<ObjectAction> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target, final Where where) {
             return new Filter<ObjectAction>() {
                 @Override
@@ -233,7 +279,10 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
-        @SuppressWarnings("deprecation")
+        /**
+         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
+         */
+        @Deprecated
         public static Filter<ObjectAction> withId(final String actionId) {
             return new Filter<ObjectAction>(){
                 @Override
@@ -243,7 +292,10 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
-        @SuppressWarnings("deprecation")
+        /**
+         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
+         */
+        @Deprecated
         public static Filter<ObjectAction> withNoValidationRules() {
             return new Filter<ObjectAction>(){
                 @Override
@@ -253,7 +305,10 @@ public interface ObjectAction extends ObjectMember {
                 }};
         }
 
-        @SuppressWarnings("deprecation")
+        /**
+         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
+         */
+        @Deprecated
         public static Filter<ObjectAction> ofType(final ActionType type) {
             return new Filter<ObjectAction>(){
                 @Override
@@ -263,7 +318,10 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
-        @SuppressWarnings("deprecation")
+        /**
+         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
+         */
+        @Deprecated
         public static Filter<ObjectAction> bulk() {
             return new Filter<ObjectAction>(){
 
@@ -288,8 +346,11 @@ public interface ObjectAction extends ObjectMember {
                     return true;
                 }};
         }
-        
-        @SuppressWarnings("deprecation")
+
+        /**
+         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
+         */
+        @Deprecated
         public static Filter<ObjectAction> notBulkOnly() {
             return new Filter<ObjectAction>(){
 
@@ -321,6 +382,5 @@ public interface ObjectAction extends ObjectMember {
                 }
             };
         }
-
     }
 }

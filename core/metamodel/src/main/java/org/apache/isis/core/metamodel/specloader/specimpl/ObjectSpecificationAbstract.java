@@ -19,15 +19,12 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.Identifier;
@@ -125,10 +122,21 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     private final List<ObjectAssociation> associations = Lists.newArrayList();
     private final List<ObjectAction> objectActions = Lists.newArrayList();
-    
+    // partitions and caches objectActions by type; updated in sortCacheAndUpdateActions()
+    private final Map<ActionType, List<ObjectAction>> objectActionsByType = createObjectActionsByType();
+
+    private static Map<ActionType, List<ObjectAction>> createObjectActionsByType() {
+        final Map<ActionType, List<ObjectAction>> map = Maps.newHashMap();
+        for (final ActionType type : ActionType.values()) {
+            map.put(type, Lists.<ObjectAction>newArrayList());
+        }
+        return map;
+    }
+
     private boolean contributeeAssociationsAdded;
     private boolean contributeeActionsAdded;
-    
+
+
     private final List<ObjectSpecification> interfaces = Lists.newArrayList();
     private final SubclassList subclasses = new SubclassList();
 
@@ -210,7 +218,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     
     /**
      * As provided explicitly within the
-     * {@link #IntrospectableSpecificationAbstract(Class, String, SpecificationContext)
+     * {@link #ObjectSpecificationAbstract(Class, String, org.apache.isis.core.metamodel.spec.SpecificationContext, org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext)}
      * constructor}.
      * 
      * <p>
@@ -222,11 +230,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return correspondingClass;
     }
 
-    /**
-     * As provided explicitly within the
-     * {@link #IntrospectableSpecificationAbstract(Class, String, SpecificationContext)
-     * constructor}.
-     */
     @Override
     public String getShortIdentifier() {
         return shortName;
@@ -249,8 +252,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     /**
-     * Only if {@link #setIntrospected(boolean)} has been called (should be
-     * called within {@link #updateFromFacetValues()}.
+     * Only if {@link #setIntrospectionState(org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract.IntrospectionState)}
+     * has been called (should be called within {@link #updateFromFacetValues()}.
      */
     public IntrospectionState getIntrospectionState() {
         return introspected;
@@ -327,14 +330,24 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     protected void sortAndUpdateAssociations(final List<ObjectAssociation> associations) {
         final List<ObjectAssociation> orderedAssociations = sortAssociations(associations);
-        this.associations.clear();
-        this.associations.addAll(orderedAssociations);
+        synchronized (this.associations) {
+            this.associations.clear();
+            this.associations.addAll(orderedAssociations);
+        }
     }
 
-    protected void sortAndUpdateActions(final List<ObjectAction> objectActions) {
+    protected void sortCacheAndUpdateActions(final List<ObjectAction> objectActions) {
         final List<ObjectAction> orderedActions = sortActions(objectActions);
-        this.objectActions.clear();
-        this.objectActions.addAll(orderedActions);
+        synchronized (this.objectActions){
+            this.objectActions.clear();
+            this.objectActions.addAll(orderedActions);
+
+            for (final ActionType type : ActionType.values()) {
+                final List<ObjectAction> objectActionForType = objectActionsByType.get(type);
+                objectActionForType.clear();
+                objectActionForType.addAll(Collections2.filter(objectActions, ObjectAction.Predicates.ofType(type)));
+            }
+        }
     }
 
     // //////////////////////////////////////////////////////////////////////
@@ -458,8 +471,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     /**
-     * Expect to be populated using {@link #setSingularName(String)}, but has
-     * default name as well.
+     * The name according to any available {@link org.apache.isis.core.metamodel.facets.named.NamedFacet},
+     * but falling back to {@link #getFullIdentifier()} otherwise.
      */
     @Override
     public String getSingularName() {
@@ -468,8 +481,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     /**
-     * Expect to be populated using {@link #setPluralName(String)} but has
-     * default name as well.
+     * The pluralized name according to any available {@link org.apache.isis.core.metamodel.facets.object.plural.PluralFacet},
+     * else <tt>null</tt>.
      */
     @Override
     public String getPluralName() {
@@ -478,8 +491,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     /**
-     * Expect to be populated using {@link #setDescribedAs(String)} but has
-     * default name as well.
+     * The description according to any available {@link org.apache.isis.core.metamodel.facets.object.plural.PluralFacet},
+     * else empty string (<tt>""</tt>).
      */
     @Override
     public String getDescription() {
@@ -641,17 +654,20 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     @Override
-    public List<ObjectAssociation> getAssociations(final Contributed contributee) {
-        if(contributee.isIncluded() && !contributeeAssociationsAdded) {
-            List<ObjectAssociation> associations = Lists.newArrayList(this.associations);
-            final List<ObjectAssociation> contributeeAssociations = createContributeeAssociations();
-            associations.addAll(contributeeAssociations);
-            sortAndUpdateAssociations(associations);
-            contributeeAssociationsAdded = true;
+    public List<ObjectAssociation> getAssociations(final Contributed contributed) {
+        // the "contributed.isIncluded()" guard is required because we cannot do this too early;
+        // there must be a session available
+        if(contributed.isIncluded() && !contributeeAssociationsAdded) {
+            synchronized (this.associations) {
+                List<ObjectAssociation> associations = Lists.newArrayList(this.associations);
+                associations.addAll(createContributeeAssociations());
+                sortAndUpdateAssociations(associations);
+                contributeeAssociationsAdded = true;
+            }
         }
         final List<ObjectAssociation> associations = Lists.newArrayList(this.associations);
         return Lists.newArrayList(Iterables.filter(
-                associations, ContributeeMember.Predicates.regularElse(contributee)));
+                associations, ContributeeMember.Predicates.regularElse(contributed)));
     }
 
 
@@ -750,34 +766,32 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             final List<ActionType> types,
             final Contributed contributed, 
             final Filter<ObjectAction> filter) {
+
+        // update our list of actions if requesting for contributed actions
+        // and they have not yet been added
+        // the "contributed.isIncluded()" guard is required because we cannot do this too early;
+        // there must be a session available
         if(contributed.isIncluded() && !contributeeActionsAdded) {
-            final List<ObjectAction> actions = Lists.newArrayList(this.objectActions);
-            actions.addAll(createContributeeActions());
-            sortAndUpdateActions(actions);
-            contributeeActionsAdded = true;
+            synchronized (this.objectActions) {
+                final List<ObjectAction> actions = Lists.newArrayList(this.objectActions);
+                actions.addAll(createContributeeActions());
+                sortCacheAndUpdateActions(actions);
+                contributeeActionsAdded = true;
+            }
         }
-        
+
         final List<ObjectAction> actions = Lists.newArrayList();
         for (final ActionType type : types) {
-            final Predicate<ObjectAction> predicate =
-                    Filters.asPredicate(Filters.and(
-                        ObjectAction.Filters.ofType(type),
-                        filter));
-            for (ObjectAction objectAction : objectActions) {
-                if(predicate.apply(objectAction)) {
-                    actions.add(objectAction);
-                }
-            }
-            // an NPE here somehow???
-//            @SuppressWarnings("unchecked")
-//            final Collection<ObjectAction> filterActions =
-//                    Collections2.filter(objectActions, predicate);
-//            actions.addAll(filterActions);
+            final Collection<ObjectAction> filterActions =
+                    Collections2.filter(objectActionsByType.get(type), Filters.asPredicate(filter));
+            actions.addAll(filterActions);
         }
-        return Lists.newArrayList(Iterables.filter(
-                actions, ContributeeMember.Predicates.regularElse(contributed)));
+        return Lists.newArrayList(
+                Iterables.filter(
+                        actions,
+                        ContributeeMember.Predicates.regularElse(contributed)));
     }
-    
+
     @Override
     public List<ObjectAction> getObjectActions(
             final Contributed contributed) {
@@ -1045,7 +1059,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     
 
     /**
-     * @param the number of the parameter that matches, or -1 if none.
+     * @param serviceAction - number of the parameter that matches, or -1 if none.
      */
     private int contributeeParameterMatchOf(final ObjectAction serviceAction) {
         final List<ObjectActionParameter> params = serviceAction.getParameters();
