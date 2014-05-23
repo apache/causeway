@@ -18,6 +18,8 @@
  */
 package fixture.todo;
 
+import fixture.todo.scenarios.RecreateToDoItemsAndCompleteSeveralForCurrent;
+
 import java.util.List;
 
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -49,18 +51,6 @@ public class ToDoItemsFixturesService extends FixtureScripts {
     @Prototype
     @MemberOrder(sequence="20")
     public List<FixtureResult> recreateToDoItemsForCurrent() {
-        return findFixtureScriptFor("recreate-current").run(null);
-    }
-    public String disableRecreateToDoItemsForCurrent() {
-        return findFixtureScriptFor("recreate-current") == null? "Could not find fixture script 'recreate-current'": null;
-    }
-    private FixtureScript findFixtureScriptFor(String qualifiedName) {
-        List<FixtureScript> fixtureScripts = choices0RunFixtureScript();
-        for (FixtureScript fs : fixtureScripts) {
-            if(fs.getQualifiedName().contains(qualifiedName)) {
-                return fs;
-            }
-        }
-        return null;
+        return findFixtureScriptFor(RecreateToDoItemsAndCompleteSeveralForCurrent.class).run(null);
     }
 }

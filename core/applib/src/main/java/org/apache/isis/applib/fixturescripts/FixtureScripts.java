@@ -182,6 +182,25 @@ public abstract class FixtureScripts extends AbstractService {
         return fixtureScript.validateRun(parameters);
     }
 
+    protected FixtureScript findFixtureScriptFor(String qualifiedName) {
+        List<FixtureScript> fixtureScripts = fixtureScriptList;
+        for (FixtureScript fs : fixtureScripts) {
+            if(fs.getQualifiedName().contains(qualifiedName)) {
+                return fs;
+            }
+        }
+        return null;
+    }
+    protected FixtureScript findFixtureScriptFor(Class<? extends FixtureScript> fixtureScriptClass) {
+        List<FixtureScript> fixtureScripts = fixtureScriptList;
+        for (FixtureScript fs : fixtureScripts) {
+            if(fixtureScriptClass.isAssignableFrom(fs.getClass())) {
+                return fs;
+            }
+        }
+        return null;
+    }
+
 
     // //////////////////////////////////////
 

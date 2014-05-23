@@ -20,8 +20,10 @@ package org.apache.isis.applib.fixturescripts;
 
 import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Paged;
 import org.apache.isis.applib.annotation.Title;
 
+@Paged(500)
 public class FixtureResult extends AbstractViewModel {
 
     @Override
