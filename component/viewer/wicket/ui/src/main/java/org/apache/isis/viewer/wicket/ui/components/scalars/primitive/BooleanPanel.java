@@ -19,20 +19,16 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
-import java.util.List;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.model.Model;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -117,6 +113,15 @@ public class BooleanPanel extends ScalarPanelAbstract {
         checkBox.setOutputMarkupId(true);
         checkBox.setEnabled(false); // will be enabled before rendering if
                                     // required
+
+        // must prime the underlying model if this is a primitive boolean
+        final ObjectSpecification objectSpecification = getModel().getTypeOfSpecification();
+        if(objectSpecification.getFullIdentifier().equals("boolean")) {
+            if(getModel().getObject() == null) {
+                getModel().setObject(getAdapterManager().adapterFor(false));
+            }
+        }
+
         return checkBox;
     }
 
