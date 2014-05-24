@@ -20,6 +20,7 @@ package org.apache.isis.applib.fixturescripts;
 
 import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Paged;
 import org.apache.isis.applib.annotation.Title;
 
@@ -62,6 +63,14 @@ public class FixtureResult extends AbstractViewModel {
         this.object = object;
     }
     
+    // //////////////////////////////////////
+
+    @Named("Class")
+    @MemberOrder(sequence="3")
+    public String getClassName() {
+        return object != null? object.getClass().getName(): null;
+    }
+
     // //////////////////////////////////////
 
     @javax.inject.Inject
