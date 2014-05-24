@@ -29,7 +29,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-        <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
+        <datanucleus-accessplatform-jdo-rdbms.version>3.3.8</datanucleus-accessplatform-jdo-rdbms.version>
         <datanucleus-jodatime.version>3.2.1</datanucleus-jodatime.version>
         <datanucleus-maven-plugin.version>3.3.2</datanucleus-maven-plugin.version>
 
