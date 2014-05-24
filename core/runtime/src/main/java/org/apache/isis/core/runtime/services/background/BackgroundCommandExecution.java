@@ -17,17 +17,15 @@
 package org.apache.isis.core.runtime.services.background;
 
 import java.util.List;
-
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.Command.Executor;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
@@ -86,44 +84,45 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
     
     private void execute(final IsisTransactionManager transactionManager, final Command command) {
-        commandContext.setCommand(command);
-            transactionManager.executeWithinTransaction(new TransactionalClosureAbstract() {
-                @Override
-                public void execute() {
-                    try {
-                        command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
-                        command.setExecutor(Executor.BACKGROUND);
-                        
-                        final String memento = command.getMemento();
-                        final ActionInvocationMemento aim = new ActionInvocationMemento(mementoService, memento);
-                        
-                        final String actionId = aim.getActionId();
-               
-                        final Bookmark targetBookmark = aim.getTarget();
-                        final Object targetObject = bookmarkService.lookup(targetBookmark);
-                        
-                        final ObjectAdapter targetAdapter = adapterFor(targetObject);
-                        final ObjectSpecification specification = targetAdapter.getSpecification();
-               
-                        final ObjectAction objectAction = findAction(specification, actionId);
-                        if(objectAction == null) {
-                            throw new Exception("Unknown action '" + actionId + "'");
-                        }
-                        
-                        final ObjectAdapter[] argAdapters = argAdaptersFor(aim);
-                        final ObjectAdapter resultAdapter = objectAction.execute(targetAdapter, argAdapters);
-                        if(resultAdapter != null) {
-                            Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                            command.setResult(resultBookmark);
-                        }
+        transactionManager.executeWithinTransaction(new TransactionalClosureAbstract() {
+            @Override
+            public void execute() {
+                commandContext.setCommand(command);
+                try {
 
-                    } catch (Exception e) {
-                        command.setException(Throwables.getStackTraceAsString(e));
-                    } finally {
-                        command.setCompletedAt(Clock.getTimeAsJavaSqlTimestamp());
+                    command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
+                    command.setExecutor(Executor.BACKGROUND);
+
+                    final String memento = command.getMemento();
+                    final ActionInvocationMemento aim = new ActionInvocationMemento(mementoService, memento);
+
+                    final String actionId = aim.getActionId();
+
+                    final Bookmark targetBookmark = aim.getTarget();
+                    final Object targetObject = bookmarkService.lookup(targetBookmark);
+
+                    final ObjectAdapter targetAdapter = adapterFor(targetObject);
+                    final ObjectSpecification specification = targetAdapter.getSpecification();
+
+                    final ObjectAction objectAction = findAction(specification, actionId);
+                    if(objectAction == null) {
+                        throw new Exception("Unknown action '" + actionId + "'");
                     }
+
+                    final ObjectAdapter[] argAdapters = argAdaptersFor(aim);
+                    final ObjectAdapter resultAdapter = objectAction.execute(targetAdapter, argAdapters);
+                    if(resultAdapter != null) {
+                        Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
+                        command.setResult(resultBookmark);
+                    }
+
+                } catch (Exception e) {
+                    command.setException(Throwables.getStackTraceAsString(e));
+                } finally {
+                    command.setCompletedAt(Clock.getTimeAsJavaSqlTimestamp());
                 }
-            });
+            }
+        });
     }
 
     private ObjectAction findAction(final ObjectSpecification specification, final String actionId) {
