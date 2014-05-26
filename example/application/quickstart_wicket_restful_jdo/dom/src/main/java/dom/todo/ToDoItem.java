@@ -49,6 +49,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(
@@ -110,8 +111,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     //endregion
 
     // region > title, icon
-    // //////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public String title() {
         final TitleBuffer buf = new TitleBuffer();
         buf.append(getDescription());
@@ -131,8 +131,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     //endregion
 
     //region > description (property)
-    // //////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private String description;
 
     @javax.jdo.annotations.Column(allowsNull="false", length=100)
@@ -155,8 +154,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
     //endregion
 
     //region > dueBy (property)
-    // //////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
     private LocalDate dueBy;
 
@@ -181,8 +179,8 @@ public class ToDoItem implements Comparable<ToDoItem> {
     //endregion
 
     //region > category and subcategory (property)
-    // //////////////////////////////////////
 
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static enum Category {
         Professional {
             @Override
@@ -260,13 +258,10 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public void setSubcategory(final Subcategory subcategory) {
         this.subcategory = subcategory;
     }
-
-
     //endregion
 
     //region > ownedBy (property)
-    // //////////////////////////////////////
-    
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private String ownedBy;
 
     @javax.jdo.annotations.Column(allowsNull="false")
@@ -277,13 +272,10 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public void setOwnedBy(final String ownedBy) {
         this.ownedBy = ownedBy;
     }
-
-
     //endregion
 
     //region > complete (property), completed (action), notYetCompleted (action)
-    // //////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private boolean complete;
 
     @Disabled
@@ -338,14 +330,10 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public String disableNotYetCompleted() {
         return !complete ? "Not yet completed" : null;
     }
-
     //endregion
 
     //region > completeSlowly (property)
-    // //////////////////////////////////////
-    // completeSlowly
-    // //////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Hidden
     public void completeSlowly(int millis) {
         try {
@@ -354,13 +342,10 @@ public class ToDoItem implements Comparable<ToDoItem> {
         }
         setComplete(true);
     }
-
-
     //endregion
 
     //region > cost (property), updateCost (action)
-    // //////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private BigDecimal cost;
 
     @javax.jdo.annotations.Column(allowsNull="true", scale=2)
@@ -401,14 +386,10 @@ public class ToDoItem implements Comparable<ToDoItem> {
         if(proposedCost == null) { return null; }
         return proposedCost.compareTo(BigDecimal.ZERO) < 0? "Cost must be positive": null;
     }
-
     //endregion
 
     //region > notes (property)
-    // //////////////////////////////////////
-    // Notes (property)
-    // //////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private String notes;
 
     @javax.jdo.annotations.Column(allowsNull="true", length=400)
@@ -419,17 +400,15 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public void setNotes(final String notes) {
         this.notes = notes;
     }
-
     //endregion
 
     //region > attachment (property)
-    // //////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private Blob attachment;
     @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
             @javax.jdo.annotations.Column(name = "attachment_name"),
             @javax.jdo.annotations.Column(name = "attachment_mimetype"),
-            @javax.jdo.annotations.Column(name = "attachment_bytes", sqlType = "BLOB")
+            @javax.jdo.annotations.Column(name = "attachment_bytes", jdbcType = "BLOB", sqlType = "BLOB")
     })
     @Optional
     public Blob getAttachment() {
@@ -439,11 +418,28 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public void setAttachment(final Blob attachment) {
         this.attachment = attachment;
     }
+    //endregion
 
-    // //////////////////////////////////////
-    // Version (derived property)
-    // //////////////////////////////////////
+    //region > doc (property)
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private Clob doc;
+    @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+            @javax.jdo.annotations.Column(name = "doc_name"),
+            @javax.jdo.annotations.Column(name = "doc_mimetype"),
+            @javax.jdo.annotations.Column(name = "doc_chars", jdbcType = "CLOB", sqlType = "CLOB")
+    })
+    @Optional
+    public Clob getDoc() {
+        return doc;
+    }
 
+    public void setDoc(final Clob doc) {
+        this.doc = doc;
+    }
+    //endregion
+
+    //region > version (derived property)
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public Long getVersionSequence() {
         if(!(this instanceof javax.jdo.spi.PersistenceCapable)) {
             return null;
@@ -456,11 +452,10 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public boolean hideVersionSequence() {
         return !(this instanceof javax.jdo.spi.PersistenceCapable);
     }
-
     //endregion
 
     //region > dependencies (property), add (action), remove (action)
-    // //////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // overrides the natural ordering
     public static class DependenciesComparator implements Comparator<ToDoItem> {
@@ -476,8 +471,6 @@ public class ToDoItem implements Comparable<ToDoItem> {
                     .compare(p, q);
         }
     }
-
-    
 
     @javax.jdo.annotations.Persistent(table="ToDoItemDependencies")
     @javax.jdo.annotations.Join(column="dependingId")
@@ -563,12 +556,10 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public Collection<ToDoItem> choices0Remove() {
         return getDependencies();
     }
-
-
     //endregion
 
     //region > clone (action)
-    // //////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // the name of the action in the UI
     // nb: method is not called "clone()" is inherited by java.lang.Object and
@@ -604,12 +595,10 @@ public class ToDoItem implements Comparable<ToDoItem> {
             final LocalDate dueBy, final BigDecimal cost) {
         return toDoItems.validateNewToDo(description, category, subcategory, dueBy, cost);
     }
-
     //endregion
 
     //region > delete (action)
-    // //////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @PostsActionInvokedEvent(DeletedEvent.class)
     @Bulk
     public List<ToDoItem> delete() {
@@ -621,13 +610,10 @@ public class ToDoItem implements Comparable<ToDoItem> {
         // invalid to return 'this' (cannot render a deleted object)
         return toDoItems.notYetComplete(); 
     }
-
-
     //endregion
 
     //region > totalCost (property)
-    // //////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @ActionSemantics(Of.SAFE)
     @Bulk(AppliesTo.BULK_ONLY)
     public BigDecimal totalCost() {
@@ -638,14 +624,10 @@ public class ToDoItem implements Comparable<ToDoItem> {
         }
         return total.setScale(2);
     }
-
-
-
     //endregion
 
     //region > scheduleExplicitly (action), scheduleImplicitly (background action)
-    // //////////////////////////////////////
-    
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @ActionSemantics(Of.IDEMPOTENT)
     @Prototype
     public ToDoItem scheduleExplicitly() {
@@ -663,14 +645,10 @@ public class ToDoItem implements Comparable<ToDoItem> {
         completeSlowly(3000);
         return this;
     }
-
-
-
     //endregion
 
     //region > openSourceCodeOnGithub (action)
-    // //////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Prototype
     @ActionSemantics(Of.SAFE)
     public URL openSourceCodeOnGithub() throws MalformedURLException {
@@ -679,8 +657,8 @@ public class ToDoItem implements Comparable<ToDoItem> {
     //endregion
 
     //region > demoException (action)
-    // //////////////////////////////////////
-    
+
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     static enum DemoExceptionType {
         RecoverableException,
         RecoverableExceptionAutoEscalated,
@@ -707,12 +685,10 @@ public class ToDoItem implements Comparable<ToDoItem> {
             }
         }
     }
-
-
     //endregion
 
     //region > object-level validation
-    // //////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * In a real app, if this were actually a rule, then we'd expect that
@@ -725,11 +701,11 @@ public class ToDoItem implements Comparable<ToDoItem> {
         }
         return null;
     }
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //endregion
 
     //region > programmatic helpers
-    // //////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
 
     @Programmatic // excluded from the framework's metamodel
@@ -743,12 +719,11 @@ public class ToDoItem implements Comparable<ToDoItem> {
     private static boolean isMoreThanOneWeekInPast(final LocalDate dueBy) {
         return dueBy.toDateTimeAtStartOfDay().getMillis() < Clock.getTime() - ONE_WEEK_IN_MILLIS;
     }
-
     //endregion
 
     //region > events
-    // //////////////////////////////////////
 
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static abstract class AbstractActionInvokedEvent extends ActionInvokedEvent<ToDoItem> {
         private static final long serialVersionUID = 1L;
         private final String description;
@@ -794,11 +769,12 @@ public class ToDoItem implements Comparable<ToDoItem> {
             super("deleted", source, identifier, arguments);
         }
     }
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //endregion
 
     //region > predicates
-    // //////////////////////////////////////
 
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static class Predicates {
         
         public static Predicate<ToDoItem> thoseOwnedBy(final String currentUser) {
@@ -873,12 +849,11 @@ public class ToDoItem implements Comparable<ToDoItem> {
         }
 
     }
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //endregion
 
     //region > toString, compareTo
-    // //////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public String toString() {
         return ObjectContracts.toString(this, "description,complete,dueBy,ownedBy");
@@ -891,12 +866,11 @@ public class ToDoItem implements Comparable<ToDoItem> {
     public int compareTo(final ToDoItem other) {
         return ObjectContracts.compare(this, other, "complete,dueBy,description");
     }
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //endregion
 
     //region > injected services
-    // //////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @javax.inject.Inject
     private DomainObjectContainer container;
 
@@ -929,9 +903,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
 
     @javax.inject.Inject
     private WrapperFactory wrapperFactory;
-    
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //endregion
-
-    
 
 }

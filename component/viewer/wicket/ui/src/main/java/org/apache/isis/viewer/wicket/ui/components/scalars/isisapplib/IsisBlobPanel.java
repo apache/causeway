@@ -21,16 +21,14 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
 
 import java.util.List;
-
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.request.resource.ByteArrayResource;
-
+import org.apache.wicket.request.resource.IResource;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 /**
- * Panel for rendering scalars of type {@link Blob Isis' applib.Blob}.
+ * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Blob Isis' applib.Blob}.
  */
 public class IsisBlobPanel extends IsisBlobOrClobPanelAbstract<Blob> {
 
@@ -50,7 +48,7 @@ public class IsisBlobPanel extends IsisBlobOrClobPanelAbstract<Blob> {
         return blob;
     }
 
-    protected ByteArrayResource newResource(final Blob blob) {
+    protected IResource newResource(final Blob blob) {
         return new ByteArrayResource(blob.getMimeType().getBaseType(), blob.getBytes(), blob.getName());
     }
 

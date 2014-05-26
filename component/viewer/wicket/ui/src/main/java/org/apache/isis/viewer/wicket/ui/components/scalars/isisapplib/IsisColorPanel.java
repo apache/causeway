@@ -23,7 +23,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
 /**
- * Panel for rendering scalars of type {@link Color Isis' applib.Color}.
+ * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Color Isis' applib.Color}.
  */
 public class IsisColorPanel extends ScalarPanelTextFieldParseableAbstract {
 

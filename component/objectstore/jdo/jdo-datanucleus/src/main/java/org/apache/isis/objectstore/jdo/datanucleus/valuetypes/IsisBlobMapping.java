@@ -20,7 +20,6 @@ package org.apache.isis.objectstore.jdo.datanucleus.valuetypes;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
 import org.datanucleus.ClassLoaderResolver;
 import org.datanucleus.ClassNameConstants;
 import org.datanucleus.ExecutionContext;
@@ -29,7 +28,6 @@ import org.datanucleus.metadata.AbstractMemberMetaData;
 import org.datanucleus.store.rdbms.RDBMSStoreManager;
 import org.datanucleus.store.rdbms.mapping.java.SingleFieldMultiMapping;
 import org.datanucleus.store.rdbms.table.Table;
-
 import org.apache.isis.applib.value.Blob;
 
 public class IsisBlobMapping extends SingleFieldMultiMapping {
@@ -58,7 +56,8 @@ public class IsisBlobMapping extends SingleFieldMultiMapping {
     {
         addColumns(ClassNameConstants.JAVA_LANG_STRING); // name
         addColumns(ClassNameConstants.JAVA_LANG_STRING); // mime type
-        addColumns(ClassNameConstants.JAVA_IO_SERIALIZABLE); // bytes
+        // this mapping type isn't supported out-of-the-box by DN, so instead we register IsisBlobRDBMSMapping
+        addColumns(ClassNameConstants.BYTE_ARRAY); // bytes
     }
 
     public Object getValueForDatastoreMapping(NucleusContext nucleusCtx, int index, Object value)
@@ -101,9 +100,12 @@ public class IsisBlobMapping extends SingleFieldMultiMapping {
             // Do nothing
         }
 
-        String name = getDatastoreMapping(0).getString(resultSet, exprIndex[0]); 
-        String mimeTypeBase = getDatastoreMapping(1).getString(resultSet, exprIndex[1]); 
-        byte[] bytes = (byte[]) getDatastoreMapping(2).getObject(resultSet,exprIndex[2]); 
+        final String name = getDatastoreMapping(0).getString(resultSet, exprIndex[0]);
+        final String mimeTypeBase = getDatastoreMapping(1).getString(resultSet, exprIndex[1]);
+        final byte[] bytes = (byte[]) getDatastoreMapping(2).getObject(resultSet, exprIndex[2]);
+        if(name == null || mimeTypeBase == null || bytes == null) {
+            return null;
+        }
         return new Blob(name, mimeTypeBase, bytes);
     }
 

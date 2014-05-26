@@ -58,7 +58,7 @@ public class IsisClobMapping extends SingleFieldMultiMapping {
     {
         addColumns(ClassNameConstants.JAVA_LANG_STRING); // name
         addColumns(ClassNameConstants.JAVA_LANG_STRING); // mime type
-        addColumns(ClassNameConstants.JAVA_LANG_CHARACTER_ARRAY); // chars
+        addColumns(ClassNameConstants.JAVA_LANG_STRING); // chars
     }
 
     public Object getValueForDatastoreMapping(NucleusContext nucleusCtx, int index, Object value)
@@ -82,7 +82,7 @@ public class IsisClobMapping extends SingleFieldMultiMapping {
         } else {
             getDatastoreMapping(0).setString(preparedStmt, exprIndex[0], clob.getName());
             getDatastoreMapping(1).setString(preparedStmt, exprIndex[1], clob.getMimeType().getBaseType());
-            getDatastoreMapping(2).setObject(preparedStmt, exprIndex[2], clob.getChars());
+            getDatastoreMapping(2).setObject(preparedStmt, exprIndex[2], clob.getChars().toString());
         }
     }
     
@@ -101,9 +101,12 @@ public class IsisClobMapping extends SingleFieldMultiMapping {
             // Do nothing
         }
 
-        String name = getDatastoreMapping(0).getString(resultSet, exprIndex[0]); 
-        String mimeTypeBase = getDatastoreMapping(1).getString(resultSet, exprIndex[1]); 
-        char[] chars = (char[]) getDatastoreMapping(2).getObject(resultSet,exprIndex[2]); 
-        return new Clob(name, mimeTypeBase, chars);
+        final String name = getDatastoreMapping(0).getString(resultSet, exprIndex[0]);
+        final String mimeTypeBase = getDatastoreMapping(1).getString(resultSet, exprIndex[1]);
+        final String str = getDatastoreMapping(2).getString(resultSet, exprIndex[2]);
+        if(name == null || mimeTypeBase == null || str == null) {
+            return null;
+        }
+        return new Clob(name, mimeTypeBase, str.toCharArray());
     }
 }

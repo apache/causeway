@@ -37,9 +37,20 @@
         <mapping 
             java-type="org.apache.isis.applib.value.Clob" 
             mapping-class="org.apache.isis.objectstore.jdo.datanucleus.valuetypes.IsisClobMapping"/>
-
     </extension>
 
+
+    <extension point="org.datanucleus.store.rdbms.rdbms_mapping">
+        <mapping java-type="[B" jdbc-type="BLOB" sql-type="BLOB" default="true"
+                 rdbms-mapping-class="org.apache.isis.objectstore.jdo.datanucleus.valuemappings.IsisBlobRDBMSMapping">
+        </mapping>
+        <mapping java-type="[Ljava.lang.Byte;" jdbc-type="BLOB" sql-type="BLOB" default="true"
+                 rdbms-mapping-class="org.apache.isis.objectstore.jdo.datanucleus.valuemappings.IsisBlobRDBMSMapping">
+        </mapping>
+    </extension>
+    <!--
+    to support http://www.datanucleus.org/products/accessplatform/jdo/types.html#typeconverter
+    -->
     <extension point="org.datanucleus.java_type">
         <java-type 
         	name="org.apache.isis.applib.value.Date" 
@@ -53,19 +64,6 @@
             dfg="true" 
             embedded="true"
             long-converter="org.apache.isis.objectstore.jdo.datanucleus.valuetypes.IsisDateTimeConverter"/>
-
-        <java-type 
-            name="org.apache.isis.applib.value.Blob" 
-            persistent="true" 
-            dfg="false" 
-            embedded="true"
-            string-converter="org.apache.isis.objectstore.jdo.datanucleus.valuetypes.IsisBlobConverter"/>
-        <java-type 
-            name="org.apache.isis.applib.value.Clob" 
-            persistent="true" 
-            dfg="false" 
-            embedded="true"
-            string-converter="org.apache.isis.objectstore.jdo.datanucleus.valuetypes.IsisClobConverter"/>
     </extension>
 
 </plugin>

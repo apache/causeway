@@ -122,6 +122,11 @@
                         hidden: {
                             where: STANDALONE_TABLES
                         }
+                    },
+                    doc: {
+                        hidden: {
+                            where: STANDALONE_TABLES
+                        }
                     }
                 }
             }

@@ -27,25 +27,21 @@ import com.google.common.base.Charsets;
 
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.request.resource.IResource;
-import org.apache.wicket.request.resource.ResourceStreamResource;
-import org.apache.wicket.util.resource.StringResourceStream;
 
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 /**
  * Panel for rendering scalars of type {@link Clob Isis' applib.Clob}.
+ *
+ * <p>
+ *    TODO: for now, this only handles CLOBs encoded as UTF-8.  One option might be to 'guess' the character encoding, eg akin to cpdetector?
+ * </p>
  */
 public class IsisClobPanel extends IsisBlobOrClobPanelAbstract<Clob> {
 
     private static final long serialVersionUID = 1L;
     
-    /**
-     * TODO: for now, this only handles CLOBs encoded as UTF-8.
-     * 
-     * <p>
-     * One option might be to 'guess' the character encoding, eg akin to cpdetector?
-     */
     private static final Charset CHARSET = Charsets.UTF_8;
 
     public IsisClobPanel(final String id, final ScalarModel model) {
@@ -62,8 +58,7 @@ public class IsisClobPanel extends IsisBlobOrClobPanelAbstract<Clob> {
     }
 
     protected IResource newResource(final Clob clob) {
-        return new ResourceStreamResource(new StringResourceStream(clob.getChars(), clob.getMimeType().getBaseType()));
+        return new CharSequenceResource(clob.getMimeType().getBaseType(), clob.getChars(), clob.getName());
     }
-
 
 }
