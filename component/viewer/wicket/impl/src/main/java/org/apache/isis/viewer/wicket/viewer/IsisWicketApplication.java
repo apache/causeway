@@ -368,6 +368,57 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         }
     }
 
+
+    // //////////////////////////////////////
+
+    private IsisConfigurationBuilder createConfigBuilder() {
+        return createConfigBuilder(getServletContext());
+    }
+
+    protected IsisConfigurationBuilder createConfigBuilder(final ServletContext servletContext) {
+
+        final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
+        final ResourceStreamSourceForWebInf rssWebInf = new ResourceStreamSourceForWebInf(servletContext);
+        final ResourceStreamSourceContextLoaderClassPath rssContextLoaderClassPath = ResourceStreamSourceContextLoaderClassPath.create();
+        final ResourceStreamSourceCurrentClassClassPath rssCurrentClassPath = new ResourceStreamSourceCurrentClassClassPath();
+        final ResourceStreamSourceComposite compositeSource = new ResourceStreamSourceComposite(rssWebInf, rssContextLoaderClassPath, rssCurrentClassPath);
+
+        if ( configLocation != null ) {
+            LOG.info( "Config override location: " + configLocation );
+            compositeSource.addResourceStreamSource(ResourceStreamSourceFileSystem.create(configLocation));
+        } else {
+            LOG.info( "Config override location: No override location configured!" );
+        }
+
+        final IsisConfigurationBuilder configurationBuilder = new IsisConfigurationBuilderResourceStreams(compositeSource);
+
+        primeConfigurationBuilder(configurationBuilder, servletContext);
+        configurationBuilder.addDefaultConfigurationResources();
+
+        IsisWebAppBootstrapperUtil.addConfigurationResourcesForViewers(configurationBuilder, servletContext);
+        return configurationBuilder;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
+        final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers = (List<IsisConfigurationBuilderPrimer>) servletContext.getAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY);
+        if (isisConfigurationBuilderPrimers == null) {
+            return;
+        }
+        for (final IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
+            isisConfigurationBuilderPrimer.primeConfigurationBuilder(isisConfigurationBuilder);
+        }
+    }
+
+    // //////////////////////////////////////
+
+    /**
+     * Override if required
+     */
+    protected Module newIsisWicketModule() {
+        return new IsisWicketModule();
+    }
+
     // //////////////////////////////////////
 
     /**
@@ -437,57 +488,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
                                 componentFactories,
                                 getCssResourceReferences)));
     }
-
-    // //////////////////////////////////////
-
-    private IsisConfigurationBuilder createConfigBuilder() {
-        return createConfigBuilder(getServletContext());
-    }
-
-    protected IsisConfigurationBuilder createConfigBuilder(final ServletContext servletContext) {
-
-        final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
-        final ResourceStreamSourceForWebInf rssWebInf = new ResourceStreamSourceForWebInf(servletContext);
-        final ResourceStreamSourceContextLoaderClassPath rssContextLoaderClassPath = ResourceStreamSourceContextLoaderClassPath.create();
-        final ResourceStreamSourceCurrentClassClassPath rssCurrentClassPath = new ResourceStreamSourceCurrentClassClassPath();
-        final ResourceStreamSourceComposite compositeSource = new ResourceStreamSourceComposite(rssWebInf, rssContextLoaderClassPath, rssCurrentClassPath);
-
-        if ( configLocation != null ) {
-            LOG.info( "Config override location: " + configLocation );
-            compositeSource.addResourceStreamSource(ResourceStreamSourceFileSystem.create(configLocation));
-        } else {
-            LOG.info( "Config override location: No override location configured!" );
-        }
-
-        final IsisConfigurationBuilder configurationBuilder = new IsisConfigurationBuilderResourceStreams(compositeSource);
-
-        primeConfigurationBuilder(configurationBuilder, servletContext);
-        configurationBuilder.addDefaultConfigurationResources();
-
-        IsisWebAppBootstrapperUtil.addConfigurationResourcesForViewers(configurationBuilder, servletContext);
-        return configurationBuilder;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
-        final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers = (List<IsisConfigurationBuilderPrimer>) servletContext.getAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY);
-        if (isisConfigurationBuilderPrimers == null) {
-            return;
-        }
-        for (final IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
-            isisConfigurationBuilderPrimer.primeConfigurationBuilder(isisConfigurationBuilder);
-        }
-    }
-
-    // //////////////////////////////////////
-
-    /**
-     * Override if required
-     */
-    protected Module newIsisWicketModule() {
-        return new IsisWicketModule();
-    }
-
 
     // //////////////////////////////////////
 
@@ -563,6 +563,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     protected IsisInjectModule newIsisModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder) {
         return new IsisInjectModule(deploymentType, isisConfigurationBuilder);
     }
+
+    // //////////////////////////////////////
 
 
     protected void initWicketComponentInjection(final Injector injector) {
