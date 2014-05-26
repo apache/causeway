@@ -241,16 +241,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
             filterJavascriptContributions();
 
+            mountPages();
 
-            // 
-            // map entity and action to provide prettier URLs
-            //
-            // nb: action mount cannot contain {actionArgs}, because the default 
-            // parameters encoder doesn't seem to be able to handle multiple args
-            //
-            mountPage("/entity/${objectOid}", PageType.ENTITY);
-            mountPage("/action/${objectOid}/${actionOwningSpec}/${actionId}/${actionType}", PageType.ACTION_PROMPT);
-            
             @SuppressWarnings("unused")
             SharedResources sharedResources = getSharedResources();
             
@@ -502,6 +494,23 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         });
     }
 
+    // //////////////////////////////////////
+
+    /**
+     * Map entity and action to provide prettier URLs.
+     *
+     * <p>
+     * Factored out for easy (informal) pluggability.
+     * </p>
+     */
+    protected void mountPages() {
+
+        mountPage("/entity/${objectOid}", PageType.ENTITY);
+
+        // nb: action mount cannot contain {actionArgs}, because the default
+        // parameters encoder doesn't seem to be able to handle multiple args
+        mountPage("/action/${objectOid}/${actionOwningSpec}/${actionId}/${actionType}", PageType.ACTION_PROMPT);
+    }
 
     // //////////////////////////////////////
 
