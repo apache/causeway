@@ -132,24 +132,8 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleFo
  * make the {@link ComponentFactory} defined within it available.
  *
  * <p>
- * Alternatively, {@link ComponentFactory}s can be specified by overridding
- * {@link #newComponentFactoryList()}. This offers more fine-grained control for
- * the ordering, but is more fiddly.
- *
- * <p>
- * There are also a number of other pluggable hooks (similar way to other Wicket
- * customizations)
- * <ul>
- * <li> {@link #newComponentFactoryList()} (mentioned above)</li>
- * <li> {@link #newComponentFactoryRegistry()} (uses the
- * {@link ComponentFactoryRegistrar} provided by {@link #newComponentFactoryList()})</li>
- * <li> {@link #newPageClassList()}</li>
- * <li> {@link #newPageRegistry()} (uses the {@link PageClassList} provided by
- * {@link #newPageClassList()})</li>
- * <li> {@link #newConverterLocator()} (probably should not be changed.)</li>
- * <li> {@link #newRequestCycle(Request, Response)} (probably should not be
- * changed.)</li>
- * </ul>
+ * Alternatively, {@link ComponentFactory}s can be specified by overridding {@link #newIsisWicketModule()}.
+ * This mechanism allows a number of other aspects to be customized.
  */
 public class IsisWicketApplication extends AuthenticatedWebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider {
 
@@ -226,13 +210,9 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         try {
             super.init();
 
-            // install 2 default collector instances 
-            // (FileAssetPathCollector(WEBJARS_PATH_PREFIX), JarAssetPathCollector)
-            // and a webjars resource finder.
-            WebjarsSettings settings = new WebjarsSettings();
+            configureWebJars();
 
-            WicketWebjars.install(this, settings);
-            
+
             String isisConfigDir = getServletContext().getInitParameter("isis.config.dir");
             final String loggingPropertiesDir;
             if(isisConfigDir != null) {
@@ -313,6 +293,23 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             }
         }
     }
+
+    // //////////////////////////////////////
+
+    /**
+     * Install 2 default collector instances: (FileAssetPathCollector(WEBJARS_PATH_PREFIX), JarAssetPathCollector),
+     * and a webjars resource finder.
+     *
+     * <p>
+     * Factored out for easy (informal) pluggability.
+     * </p>
+     */
+    protected void configureWebJars() {
+        WebjarsSettings settings = new WebjarsSettings();
+        WicketWebjars.install(this, settings);
+    }
+
+    // //////////////////////////////////////
 
     /**
      * The validation errors, if any, that occurred on {@link #init() startup}.
