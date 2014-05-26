@@ -479,6 +479,15 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         }
     }
 
+    // //////////////////////////////////////
+
+    /**
+     * Override if required
+     */
+    protected Module newIsisWicketModule() {
+        return new IsisWicketModule();
+    }
+
 
     // //////////////////////////////////////
 
@@ -558,13 +567,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
     protected void initWicketComponentInjection(final Injector injector) {
         getComponentInstantiationListeners().add(new GuiceComponentInjector(this, injector, false));
-    }
-
-    /**
-     * Override if required
-     */
-    protected Module newIsisWicketModule() {
-        return new IsisWicketModule();
     }
 
     // /////////////////////////////////////////////////
