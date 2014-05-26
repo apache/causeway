@@ -328,6 +328,45 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         return new WebRequestCycleForIsis();
     }
 
+    // //////////////////////////////////////
+
+    /**
+     * Made protected visibility for easy (informal) pluggability.
+     */
+    protected void determineDeploymentTypeIfRequired() {
+        if(deploymentType != null) {
+            return;
+        }
+
+        determiningDeploymentType = true;
+        try {
+            final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
+            final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
+            String deploymentTypeFromConfig = configuration.getString("isis.deploymentType");
+            deploymentType = determineDeploymentType(deploymentTypeFromConfig);
+        } finally {
+            determiningDeploymentType = false;
+        }
+    }
+
+    /**
+     * Made protected visibility for easy (informal) pluggability.
+     */
+    protected DeploymentTypeWicketAbstract determineDeploymentType(String deploymentTypeFromConfig) {
+        final DeploymentTypeWicketAbstract prototype = new WicketServerPrototype();
+        final DeploymentTypeWicketAbstract deployment = new WicketServer();
+
+        if(deploymentTypeFromConfig != null) {
+            final DeploymentType deploymentType = DeploymentType.lookup(deploymentTypeFromConfig);
+            return !deploymentType.getDeploymentCategory().isProduction()
+                    ? prototype
+                    : deployment;
+        } else {
+            return usesDevelopmentConfig()
+                    ? prototype
+                    : deployment;
+        }
+    }
 
     // //////////////////////////////////////
 
@@ -428,22 +467,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     }
 
 
-    private void determineDeploymentTypeIfRequired() {
-        if(deploymentType != null) {
-            return;
-        }
-        
-        determiningDeploymentType = true;
-        try {
-            final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
-            final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
-            String deploymentTypeFromConfig = configuration.getString("isis.deploymentType");
-            deploymentType = determineDeploymentType(deploymentTypeFromConfig);
-        } finally {
-            determiningDeploymentType = false;
-        }
-    }
-    
     /**
      * Whether Wicket tags should be stripped from the markup, as specified by configuration settings (otherwise 
      * depends on the {@link #deploymentType deployment type}. 
@@ -483,22 +506,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     
     protected IsisInjectModule newIsisModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder) {
         return new IsisInjectModule(deploymentType, isisConfigurationBuilder);
-    }
-
-    private DeploymentTypeWicketAbstract determineDeploymentType(String deploymentTypeFromConfig) {
-        final DeploymentTypeWicketAbstract prototype = new WicketServerPrototype();
-        final DeploymentTypeWicketAbstract deployment = new WicketServer();
-        
-        if(deploymentTypeFromConfig != null) {
-            final DeploymentType deploymentType = DeploymentType.lookup(deploymentTypeFromConfig);
-            return !deploymentType.getDeploymentCategory().isProduction() 
-                    ? prototype 
-                    : deployment;
-        } else {
-            return usesDevelopmentConfig() 
-                    ? prototype 
-                    : deployment;
-        }
     }
 
     private IsisConfigurationBuilder createConfigBuilder() {
