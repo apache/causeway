@@ -371,6 +371,77 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     // //////////////////////////////////////
 
     /**
+     * Made protected visibility for easy (informal) pluggability.
+     */
+    protected void buildCssBundle() {
+        // get the css for all components built by component factories
+        final Set<CssResourceReference> references = cssResourceReferencesForAllComponents();
+
+        // some additional special cases.
+        addSpecialCasesToCssBundle(references);
+
+        // create the bundle
+        getResourceBundles().addCssBundle(
+                IsisWicketApplication.class, "isis-wicket-viewer-bundle.css",
+                references.toArray(new CssResourceReference[]{}));
+    }
+
+    /**
+     * Additional special cases to be included in the main CSS bundle.
+     *
+     * <p>
+     * These are typically either superclasses or components that don't have their own ComponentFactory, or
+     * for {@link ComponentFactory}s (such as <tt>StringPanelFactory</tt>) that don't quite follow the usual pattern
+     * (because they create different types of panels).
+     *
+     * <p>
+     * Note that it doesn't really matter if we miss one or two; their CSS will simply be served up individually.
+     */
+    protected void addSpecialCasesToCssBundle(final Set<CssResourceReference> references) {
+
+        // abstract classes
+
+        // ... though it turns out we cannot add this particular one to the bundle, because
+        // it has CSS image links intended to be resolved relative to LinksSelectorPanelAbstract.class.
+        // Adding them into the bundle would mean these CSS links are resolved relative to IsisWicketApplication.class
+        // instead.
+        // references.add(PanelUtil.cssResourceReferenceFor(LinksSelectorPanelAbstract.class));
+
+        // components without factories
+        references.add(PanelUtil.cssResourceReferenceFor(AdditionalLinksPanel.class));
+        references.add(PanelUtil.cssResourceReferenceFor(CssSubMenuItemsPanel.class));
+        references.add(PanelUtil.cssResourceReferenceFor(CssMenuItemPanel.class));
+        references.add(PanelUtil.cssResourceReferenceFor(EntityPropertiesForm.class));
+
+        // non-conforming component factories
+        references.add(PanelUtil.cssResourceReferenceFor(MultiLineStringPanel.class));
+    }
+
+    protected final static Function<ComponentFactory, Iterable<CssResourceReference>> getCssResourceReferences =
+            new Function<ComponentFactory, Iterable<CssResourceReference>>(){
+                @Override
+                public Iterable<CssResourceReference> apply(final ComponentFactory input) {
+                    final CssResourceReference cssResourceReference = input.getCssResourceReference();
+                    return cssResourceReference != null?
+                            Collections.singletonList(cssResourceReference):
+                            Collections.<CssResourceReference>emptyList();
+                }
+            };
+
+
+    protected Set<CssResourceReference> cssResourceReferencesForAllComponents() {
+        Collection<ComponentFactory> componentFactories = getComponentFactoryRegistry().listComponentFactories();
+        return Sets.newLinkedHashSet(
+                Iterables.concat(
+                        Iterables.transform(
+                                componentFactories,
+                                getCssResourceReferences)));
+    }
+
+
+    // //////////////////////////////////////
+
+    /**
      * The validation errors, if any, that occurred on {@link #init() startup}.
      */
     public List<String> getValidationErrors() {
@@ -399,71 +470,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
                 return getPlaceholder(s, '~');
             }
         });
-    }
-
-    private void buildCssBundle() {
-        // get the css for all components built by component factories
-        final Set<CssResourceReference> references = cssResourceReferencesForAllComponents();
-        
-        // some additional special cases.
-        addSpecialCasesToCssBundle(references);
-        
-        // create the bundle
-        getResourceBundles().addCssBundle(
-                IsisWicketApplication.class, "isis-wicket-viewer-bundle.css", 
-                references.toArray(new CssResourceReference[]{}));
-    }
-
-    /**
-     * Additional special cases to be included in the main CSS bundle.
-     * 
-     * <p>
-     * These are typically either superclasses or components that don't have their own ComponentFactory, or
-     * for {@link ComponentFactory}s (such as <tt>StringPanelFactory</tt>) that don't quite follow the usual pattern
-     * (because they create different types of panels).
-     * 
-     * <p>
-     * Note that it doesn't really matter if we miss one or two; their CSS will simply be served up individually. 
-     */
-    private void addSpecialCasesToCssBundle(final Set<CssResourceReference> references) {
-
-        // abstract classes
-        
-        // ... though it turns out we cannot add this particular one to the bundle, because 
-        // it has CSS image links intended to be resolved relative to LinksSelectorPanelAbstract.class.
-        // Adding them into the bundle would mean these CSS links are resolved relative to IsisWicketApplication.class 
-        // instead.
-        // references.add(PanelUtil.cssResourceReferenceFor(LinksSelectorPanelAbstract.class));
-        
-        // components without factories
-        references.add(PanelUtil.cssResourceReferenceFor(AdditionalLinksPanel.class));
-        references.add(PanelUtil.cssResourceReferenceFor(CssSubMenuItemsPanel.class));
-        references.add(PanelUtil.cssResourceReferenceFor(CssMenuItemPanel.class));
-        references.add(PanelUtil.cssResourceReferenceFor(EntityPropertiesForm.class));
-        
-        // non-conforming component factories
-        references.add(PanelUtil.cssResourceReferenceFor(MultiLineStringPanel.class));
-    }
-
-    private final static Function<ComponentFactory, Iterable<CssResourceReference>> getCssResourceReferences = 
-            new Function<ComponentFactory, Iterable<CssResourceReference>>(){
-                @Override
-                public Iterable<CssResourceReference> apply(final ComponentFactory input) {
-                   final CssResourceReference cssResourceReference = input.getCssResourceReference();
-                   return cssResourceReference != null? 
-                           Collections.singletonList(cssResourceReference): 
-                           Collections.<CssResourceReference>emptyList();
-                }
-             };
-
-
-    private Set<CssResourceReference> cssResourceReferencesForAllComponents() {
-        Collection<ComponentFactory> componentFactories = getComponentFactoryRegistry().listComponentFactories();
-        return Sets.newLinkedHashSet(
-                Iterables.concat(
-                        Iterables.transform(
-                                componentFactories, 
-                                getCssResourceReferences)));
     }
 
 
