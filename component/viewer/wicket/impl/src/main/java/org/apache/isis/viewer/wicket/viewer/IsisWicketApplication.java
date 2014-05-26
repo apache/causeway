@@ -19,11 +19,7 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.ServiceLoader;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.ServletContext;
 
@@ -38,8 +34,6 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 
 import de.agilecoders.wicket.webjars.WicketWebjars;
-import de.agilecoders.wicket.webjars.collectors.AssetPathCollector;
-import de.agilecoders.wicket.webjars.collectors.VfsJarAssetPathCollector;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 
 import org.apache.wicket.Application;
@@ -56,10 +50,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
 import org.slf4j.Logger;
@@ -91,7 +82,6 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
@@ -99,9 +89,6 @@ import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityPrope
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItemPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssSubMenuItemsPanel;
-import org.apache.isis.viewer.wicket.ui.overlays.Overlays;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -512,7 +499,19 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         mountPage("/action/${objectOid}/${actionOwningSpec}/${actionId}/${actionType}", PageType.ACTION_PROMPT);
     }
 
+    protected void mountPage(final String mountPath, final PageType pageType) {
+        final Class<? extends Page> pageClass = this.pageClassRegistry.getPageClass(pageType);
+        mount(new MountedMapper(mountPath, pageClass){
+            @Override
+            protected String getOptionalPlaceholder(String s) {
+                return getPlaceholder(s, '~');
+            }
+        });
+    }
+
+
     // //////////////////////////////////////
+
 
     /**
      * The validation errors, if any, that occurred on {@link #init() startup}.
@@ -535,17 +534,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         LOG.error(msg);
     }
 
-    private void mountPage(final String mountPath, final PageType pageType) {
-        final Class<? extends Page> pageClass = this.pageClassRegistry.getPageClass(pageType);
-        mount(new MountedMapper(mountPath, pageClass){
-            @Override
-            protected String getOptionalPlaceholder(String s) {
-                return getPlaceholder(s, '~');
-            }
-        });
-    }
-
-
     /**
      * Whether Wicket tags should be stripped from the markup, as specified by configuration settings (otherwise 
      * depends on the {@link #deploymentType deployment type}. 
@@ -558,7 +546,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         final boolean strip = configuration.getBoolean(STRIP_WICKET_TAGS_KEY, deploymentType.isProduction());
         return strip;
     }
-    
+
+    // //////////////////////////////////////
 
     @Override
     protected void onDestroy() {
@@ -571,6 +560,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             throw ex;
         }
     }
+
+    // //////////////////////////////////////
 
     @Override
     public RuntimeConfigurationType getConfigurationType() {
