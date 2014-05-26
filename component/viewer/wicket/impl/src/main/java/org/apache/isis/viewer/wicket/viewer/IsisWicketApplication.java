@@ -212,16 +212,9 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
             configureWebJars();
 
-
             String isisConfigDir = getServletContext().getInitParameter("isis.config.dir");
-            final String loggingPropertiesDir;
-            if(isisConfigDir != null) {
-                loggingPropertiesDir = isisConfigDir;
-            } else {
-                loggingPropertiesDir = getServletContext().getRealPath("/WEB-INF");
-            }
 
-            loggingConfigurer.configureLogging(loggingPropertiesDir, new String[0]);
+            configureLogging(isisConfigDir);
     
             getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_RENDER);
     
@@ -308,6 +301,23 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         WebjarsSettings settings = new WebjarsSettings();
         WicketWebjars.install(this, settings);
     }
+
+    // //////////////////////////////////////
+
+    /**
+     * Factored out for easy (informal) pluggability.
+     */
+    protected void configureLogging(String isisConfigDir) {
+        final String loggingPropertiesDir;
+        if(isisConfigDir != null) {
+            loggingPropertiesDir = isisConfigDir;
+        } else {
+            loggingPropertiesDir = getServletContext().getRealPath("/WEB-INF");
+        }
+
+        loggingConfigurer.configureLogging(loggingPropertiesDir, new String[0]);
+    }
+
 
     // //////////////////////////////////////
 
