@@ -19,10 +19,11 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import de.agilecoders.wicket.webjars.WicketWebjars;
+import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
+
 import java.util.*;
-
 import javax.servlet.ServletContext;
-
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
@@ -32,16 +33,7 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-
-import de.agilecoders.wicket.webjars.WicketWebjars;
-import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
-
-import org.apache.wicket.Application;
-import org.apache.wicket.ConverterLocator;
-import org.apache.wicket.IConverterLocator;
-import org.apache.wicket.Page;
-import org.apache.wicket.RuntimeConfigurationType;
-import org.apache.wicket.SharedResources;
+import org.apache.wicket.*;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.mapper.MountedMapper;
@@ -55,7 +47,6 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
@@ -234,8 +225,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             SharedResources sharedResources = getSharedResources();
             
         } catch(RuntimeException ex) {
-            List<MetaModelInvalidException> mmies = Lists.newArrayList(
-                    Iterables.filter(Throwables.getCausalChain(ex), MetaModelInvalidException.class));
+            List<MetaModelInvalidException> mmies = locateMetaModelInvalidExceptions(ex);
             if(!mmies.isEmpty()) {
                 final MetaModelInvalidException mmie = mmies.get(0);
                 log("");
@@ -512,6 +502,10 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
     // //////////////////////////////////////
 
+    protected List<MetaModelInvalidException> locateMetaModelInvalidExceptions(RuntimeException ex) {
+        return Lists.newArrayList(
+                Iterables.filter(Throwables.getCausalChain(ex), MetaModelInvalidException.class));
+    }
 
     /**
      * The validation errors, if any, that occurred on {@link #init() startup}.
@@ -533,6 +527,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         System.err.println(msg);
         LOG.error(msg);
     }
+
+    // //////////////////////////////////////
 
     /**
      * Whether Wicket tags should be stripped from the markup, as specified by configuration settings (otherwise 
@@ -618,10 +614,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     // Component Factories
     // /////////////////////////////////////////////////
 
-    /**
-     * The {@link ComponentFactoryRegistry} created in
-     * {@link #newComponentFactoryRegistry()}.
-     */
     @Override
     public final ComponentFactoryRegistry getComponentFactoryRegistry() {
         return componentFactoryRegistry;
