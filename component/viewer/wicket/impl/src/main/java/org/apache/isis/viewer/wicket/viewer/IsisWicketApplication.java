@@ -239,17 +239,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             // must be done after injected componentFactoryRegistry into the app itself
             buildCssBundle();
 
-            // filters Javascript header contributions so rendered to bottom of page
-            setHeaderResponseDecorator(new IHeaderResponseDecorator()
-            {
-                @Override
-                public IHeaderResponse decorate(IHeaderResponse response)
-                {
-                    // use this header resource decorator to load all JavaScript resources in the page
-                    // footer (after </body>)
-                    return new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS");
-                }
-            });
+            filterJavascriptContributions();
+
 
             // 
             // map entity and action to provide prettier URLs
@@ -488,6 +479,29 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
                                 componentFactories,
                                 getCssResourceReferences)));
     }
+
+    // //////////////////////////////////////
+
+    /**
+     * filters Javascript header contributions so rendered to bottom of page.
+     *
+     * <p>
+     * Factored out for easy (informal) pluggability.
+     * </p>
+     */
+    protected void filterJavascriptContributions() {
+        setHeaderResponseDecorator(new IHeaderResponseDecorator()
+        {
+            @Override
+            public IHeaderResponse decorate(IHeaderResponse response)
+            {
+                // use this header resource decorator to load all JavaScript resources in the page
+                // footer (after </body>)
+                return new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS");
+            }
+        });
+    }
+
 
     // //////////////////////////////////////
 
