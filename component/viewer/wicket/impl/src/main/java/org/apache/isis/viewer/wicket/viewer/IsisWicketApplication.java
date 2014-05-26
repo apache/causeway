@@ -58,6 +58,7 @@ import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
@@ -218,7 +219,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     
             getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_RENDER);
     
-            getRequestCycleListeners().add(new WebRequestCycleForIsis());
+            getRequestCycleListeners().add(newWebRequestCycleForIsis());
     
             getResourceSettings().setParentFolderPlaceholder("$up$");
             
@@ -316,6 +317,15 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         }
 
         loggingConfigurer.configureLogging(loggingPropertiesDir, new String[0]);
+    }
+
+    // //////////////////////////////////////
+
+    /**
+     * Factored out for easy (informal) pluggability.
+     */
+    protected IRequestCycleListener newWebRequestCycleForIsis() {
+        return new WebRequestCycleForIsis();
     }
 
 
