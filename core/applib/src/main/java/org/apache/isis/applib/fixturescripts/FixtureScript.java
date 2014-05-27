@@ -19,7 +19,6 @@
 package org.apache.isis.applib.fixturescripts;
 
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -111,21 +110,12 @@ public abstract class FixtureScript
 
 
     private PrintStream tracePrintStream;
-    private PrintWriter tracePrintWriter;
 
     /**
      * Enable tracing of the execution to the provided {@link java.io.PrintStream}.
      */
     public FixtureScript withTracing(PrintStream tracePrintStream) {
         this.tracePrintStream = tracePrintStream;
-        return this;
-    }
-
-    /**
-     * Enable tracing of the execution to the provided {@link java.io.PrintWriter}.
-     */
-    public FixtureScript withTracing(PrintWriter tracePrintWriter) {
-        this.tracePrintWriter = tracePrintWriter;
         return this;
     }
 
@@ -261,6 +251,7 @@ public abstract class FixtureScript
         private final String parameters;
         private final FixtureResultList fixtureResults;
         private final Map<String,Class> fixtureScriptClasses = Maps.newLinkedHashMap();
+        private PrintStream tracePrintStream;
 
         public ExecutionContext(String parameters, FixtureScripts fixtureScripts) {
             fixtureResults = new FixtureResultList(fixtureScripts);
@@ -283,64 +274,63 @@ public abstract class FixtureScript
         }
 
         public void executeIfNotAlready(FixtureScript fixtureScript) {
-            if(!hasExecuted(fixtureScript)) {
+            if(shouldExecute(fixtureScript)) {
+                trace(fixtureScript, As.EXEC);
                 fixtureScript.execute(this);
-                executed(fixtureScript);
+            } else {
+                trace(fixtureScript, As.SKIP);
             }
         }
 
-        private boolean hasExecuted(FixtureScript fixtureScript) {
-            return fixtureScriptClasses.values().contains(fixtureScript.getClass());
-        }
-
-        private void executed(FixtureScript fixtureScript) {
-            fixtureScriptClasses.put(fixtureScript.getQualifiedName(), fixtureScript.getClass());
-        }
-
-        public StringBuilder appendExecutedTo(StringBuilder buf) {
-            final int max = maxQualifiedNameLength();
-            for (final String qualifiedName : this.fixtureScriptClasses.keySet()) {
-                buf.append(pad(qualifiedName, max))
-                   .append(": ")
-                   .append(fixtureScriptClasses.get(qualifiedName).getName())
-                   .append("\n");
+        static enum As { EXEC, SKIP }
+        private void trace(FixtureScript fixtureScript, As as) {
+            if(tracePrintStream == null) {
+                return;
             }
-            return buf;
+            final String qualifiedName = fixtureScript.getQualifiedName();
+            final String paddedQualifiedName = pad(qualifiedName, maxQualifiedNameLength());
+            final String trace = paddedQualifiedName + ": " + as + " " + fixtureScript.getClass().getName() + "\n";
+            tracePrintStream.print(trace);
+            tracePrintStream.flush();
+        }
+
+        private boolean shouldExecute(FixtureScript fixtureScript) {
+            final boolean contained = fixtureScriptClasses.values().contains(fixtureScript.getClass());
+            if(!contained) {
+                fixtureScriptClasses.put(fixtureScript.getQualifiedName(), fixtureScript.getClass());
+            }
+            return !contained;
+        }
+
+        private static String pad(String str, int padTo) {
+            return Strings.padEnd(str, padTo, ' ');
         }
 
         private int maxQualifiedNameLength() {
-            int max = 0;
+            int max = 40;
             for (final String qualifiedName : this.fixtureScriptClasses.keySet()) {
                 max = Math.max(max, qualifiedName.length());
             }
-            return max;
+            return roundup(max, 20);
         }
 
-        private static String pad(String str, int len) {
-            return Strings.padEnd(str, len, ' ');
+        static int roundup(int n, int roundTo) {
+            return ((n / roundTo) + 1) * roundTo;
         }
 
+        public ExecutionContext withTracing(PrintStream tracePrintStream) {
+            this.tracePrintStream = tracePrintStream;
+            return this;
+        }
     }
 
     @Programmatic
     public final List<FixtureResult> run(final String parameters) {
-        final ExecutionContext executionContext = new ExecutionContext(parameters, fixtureScripts);
+        final ExecutionContext executionContext = new ExecutionContext(parameters, fixtureScripts).withTracing(this.tracePrintStream);
         executionContext.executeIfNotAlready(this);
-        traceIfRequired(executionContext);
         return executionContext.getResults();
     }
 
-    private void traceIfRequired(ExecutionContext executionContext) {
-        if(tracePrintStream != null || tracePrintWriter != null) {
-            final String trace = executionContext.appendExecutedTo(new StringBuilder()).toString();
-            if(tracePrintWriter != null) {
-                tracePrintWriter.print(trace);
-            }
-            if(tracePrintStream != null) {
-                tracePrintStream.print(trace);
-            }
-        }
-    }
 
     /**
      * Optional hook to validate parameters.
