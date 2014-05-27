@@ -18,19 +18,12 @@
  */
 package fixture.todo.scenarios;
 
-import fixture.todo.simple.ToDoItemsCreate;
-import fixture.todo.simple.ToDoItemsDelete;
+import fixture.todo.simple.ToDoItemsRecreate;
 
-import org.apache.isis.applib.fixturescripts.CompositeFixtureScript;
+public final class RecreateToDoItemsForDick extends ToDoItemsRecreate {
 
-public final class RecreateToDoItemsForDick extends CompositeFixtureScript {
     public RecreateToDoItemsForDick() {
-        super(null, "recreate-dick");
-    }
-    
-    @Override
-    protected void execute(ExecutionContext executionContext) {
-        execute("delete", ToDoItemsDelete.forUser("dick"), executionContext);
-        execute("create", ToDoItemsCreate.forUser("dick"), executionContext);
+        super("dick");
+        withDiscoverability(Discoverability.DISCOVERABLE);
     }
 }

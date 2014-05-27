@@ -37,11 +37,9 @@ import static org.junit.Assert.assertThat;
 
 public class ToDoItemContributionsTest_updateCategory extends ToDoIntegTest {
 
-
-
     @Before
     public void setUpData() throws Exception {
-        scenarioExecution().install(new ToDoItemsIntegTestFixture());
+        scenarioExecution().install(new ToDoItemsIntegTestFixture().withTracing());
     }
 
     @Inject

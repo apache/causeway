@@ -18,28 +18,19 @@
  */
 package fixture.todo.scenarios;
 
+import fixture.todo.simple.ToDoItemsRecreate;
+
 import com.google.common.base.Strings;
 
-import fixture.todo.simple.ToDoItemsCreate;
-import fixture.todo.simple.ToDoItemsDelete;
+public final class RecreateToDoItemsFor extends ToDoItemsRecreate {
 
-import org.apache.isis.applib.fixturescripts.CompositeFixtureScript;
-import org.apache.isis.applib.fixturescripts.FixtureResultList;
-import org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext;
-
-public final class RecreateToDoItemsFor extends CompositeFixtureScript {
     public RecreateToDoItemsFor() {
-        super(null, "recreate-specified");
+        super(null);
+        withDiscoverability(Discoverability.DISCOVERABLE);
     }
     
     @Override
     public String validateRun(String parameters) {
         return Strings.isNullOrEmpty(parameters) ? "Specify the owner of the ToDoItems to be recreated" : null;
-    }
-    
-    @Override
-    protected void execute(ExecutionContext executionContext) {
-        execute("delete", ToDoItemsDelete.forUser(null), executionContext);
-        execute("create", ToDoItemsCreate.forUser(null), executionContext);
     }
 }

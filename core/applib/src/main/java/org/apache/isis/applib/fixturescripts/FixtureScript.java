@@ -18,9 +18,13 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.List;
-
+import java.util.Map;
+import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
 import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Named;
@@ -57,6 +61,30 @@ public abstract class FixtureScript
     // //////////////////////////////////////
 
     /**
+     * Initializes a {@link Discoverability#NON_DISCOVERABLE} fixture, with
+     * {@link #getFriendlyName()} and {@link #getLocalName()} derived from the class name.
+     *
+     * <p>
+     * Use {@link #withDiscoverability(Discoverability)} to override.
+     */
+    public FixtureScript() {
+        this(null, null);
+    }
+
+    /**
+     * Initializes a {@link Discoverability#NON_DISCOVERABLE} fixture.
+     *
+     * <p>
+     * Use {@link #withDiscoverability(Discoverability)} to override.
+     *
+     * @param friendlyName - if null, will be derived from class name
+     * @param localName - if null, will be derived from class name
+     */
+    public FixtureScript(final String friendlyName, final String localName) {
+        this(friendlyName, localName, Discoverability.NON_DISCOVERABLE);
+    }
+
+    /**
      * @param friendlyName - if null, will be derived from class name
      * @param localName - if null, will be derived from class name
      * @param discoverability
@@ -77,6 +105,35 @@ public abstract class FixtureScript
 
     protected String friendlyNameElseDerived(String str) {
         return str != null ? str : StringUtil.asNaturalName2(getClass().getSimpleName());
+    }
+
+    // //////////////////////////////////////
+
+
+    private PrintStream tracePrintStream;
+    private PrintWriter tracePrintWriter;
+
+    /**
+     * Enable tracing of the execution to the provided {@link java.io.PrintStream}.
+     */
+    public FixtureScript withTracing(PrintStream tracePrintStream) {
+        this.tracePrintStream = tracePrintStream;
+        return this;
+    }
+
+    /**
+     * Enable tracing of the execution to the provided {@link java.io.PrintWriter}.
+     */
+    public FixtureScript withTracing(PrintWriter tracePrintWriter) {
+        this.tracePrintWriter = tracePrintWriter;
+        return this;
+    }
+
+    /**
+     * Enable tracing of the execution to stdout.
+     */
+    public FixtureScript withTracing() {
+        return withTracing(System.out);
     }
 
     // //////////////////////////////////////
@@ -129,7 +186,7 @@ public abstract class FixtureScript
     /**
      * Will always be populated, initially by the default name, but can be
      * {@link #setLocalName(String) overridden} if
-     * {@link CompositeFixtureScript#execute(FixtureScript, org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)} reused} within a {@link CompositeFixtureScript composite fixture script}.
+     * {@link DiscoverableFixtureScript#execute(FixtureScript, org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)} reused} within a {@link DiscoverableFixtureScript composite fixture script}.
      */
     @Hidden
     public String getLocalName() {
@@ -163,16 +220,17 @@ public abstract class FixtureScript
      * whether it will be listed to be run in the {@link FixtureScripts#runFixtureScript(FixtureScript, String) run fixture script} action.
      * 
      * <p>
-     * By default {@link CompositeFixtureScript}s are {@link Discoverability#DISCOVERABLE discoverable}, while
-     * {@link SimpleFixtureScript}s are {@link Discoverability#NON_DISCOVERABLE not}.  This can be overridden in the
-     * constructor, however.
+     * By default {@link DiscoverableFixtureScript}s are {@link Discoverability#DISCOVERABLE discoverable}, all other
+     * {@link FixtureScript}s are {@link Discoverability#NON_DISCOVERABLE not}.  This can be overridden in the
+     * constructor, however or by calling the {@link #withDiscoverability(org.apache.isis.applib.fixturescripts.FixtureScript.Discoverability) setter}.
      */
     @Hidden
     public boolean isDiscoverable() {
         return discoverability == Discoverability.DISCOVERABLE;
     }
-    public void setDiscoverability(Discoverability discoverability) {
+    public FixtureScript withDiscoverability(Discoverability discoverability) {
         this.discoverability = discoverability;
+        return this;
     }
     
     // //////////////////////////////////////
@@ -202,6 +260,7 @@ public abstract class FixtureScript
 
         private final String parameters;
         private final FixtureResultList fixtureResults;
+        private final Map<String,Class> fixtureScriptClasses = Maps.newLinkedHashMap();
 
         public ExecutionContext(String parameters, FixtureScripts fixtureScripts) {
             fixtureResults = new FixtureResultList(fixtureScripts);
@@ -223,17 +282,65 @@ public abstract class FixtureScript
             return fixtureResults.add(script, key, object);
         }
 
+        public void executeIfNotAlready(FixtureScript fixtureScript) {
+            if(!hasExecuted(fixtureScript)) {
+                fixtureScript.execute(this);
+                executed(fixtureScript);
+            }
+        }
+
+        private boolean hasExecuted(FixtureScript fixtureScript) {
+            return fixtureScriptClasses.values().contains(fixtureScript.getClass());
+        }
+
+        private void executed(FixtureScript fixtureScript) {
+            fixtureScriptClasses.put(fixtureScript.getQualifiedName(), fixtureScript.getClass());
+        }
+
+        public StringBuilder appendExecutedTo(StringBuilder buf) {
+            final int max = maxQualifiedNameLength();
+            for (final String qualifiedName : this.fixtureScriptClasses.keySet()) {
+                buf.append(pad(qualifiedName, max))
+                   .append(": ")
+                   .append(fixtureScriptClasses.get(qualifiedName).getName())
+                   .append("\n");
+            }
+            return buf;
+        }
+
+        private int maxQualifiedNameLength() {
+            int max = 0;
+            for (final String qualifiedName : this.fixtureScriptClasses.keySet()) {
+                max = Math.max(max, qualifiedName.length());
+            }
+            return max;
+        }
+
+        private static String pad(String str, int len) {
+            return Strings.padEnd(str, len, ' ');
+        }
+
     }
 
     @Programmatic
     public final List<FixtureResult> run(final String parameters) {
         final ExecutionContext executionContext = new ExecutionContext(parameters, fixtureScripts);
-        execute(executionContext);
+        executionContext.executeIfNotAlready(this);
+        traceIfRequired(executionContext);
         return executionContext.getResults();
     }
 
-    @Programmatic
-    protected abstract void execute(final ExecutionContext executionContext);
+    private void traceIfRequired(ExecutionContext executionContext) {
+        if(tracePrintStream != null || tracePrintWriter != null) {
+            final String trace = executionContext.appendExecutedTo(new StringBuilder()).toString();
+            if(tracePrintWriter != null) {
+                tracePrintWriter.print(trace);
+            }
+            if(tracePrintStream != null) {
+                tracePrintStream.print(trace);
+            }
+        }
+    }
 
     /**
      * Optional hook to validate parameters.
@@ -243,6 +350,34 @@ public abstract class FixtureScript
         return null;
     }
 
+
+
+    // //////////////////////////////////////
+
+    /**
+     * Adds a child {@link FixtureScript fixture script}, overriding its default name with one more
+     * meaningful in the context of this fixture.
+     */
+    protected final void execute(final String localNameOverride, final FixtureScript fixtureScript, ExecutionContext executionContext) {
+        fixtureScript.setParentPath(pathWith(""));
+        if(localNameOverride != null) {
+            fixtureScript.setLocalName(localNameOverride);
+        }
+        getContainer().injectServicesInto(fixtureScript);
+        executionContext.executeIfNotAlready(fixtureScript);
+    }
+    /**
+     * Executes a child {@link FixtureScript fixture script} (simply using its default name).
+     */
+    protected final void execute(final FixtureScript fixtureScript, ExecutionContext executionContext) {
+        execute(null, fixtureScript, executionContext);
+    }
+
+    /**
+     * Do not call directly; instead use {@link ExecutionContext#executeIfNotAlready(FixtureScript)}
+     */
+    @Programmatic
+    protected abstract void execute(final ExecutionContext executionContext);
 
 
     // //////////////////////////////////////

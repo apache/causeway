@@ -19,29 +19,22 @@
 
 package fixture.todo.integtests;
 
-import fixture.todo.simple.ToDoItemsComplete;
-import fixture.todo.simple.ToDoItemsCreate;
-import fixture.todo.simple.ToDoItemsDelete;
+import fixture.todo.simple.ToDoItemsRecreateAndCompleteSeveral;
 
-import org.apache.isis.applib.fixturescripts.CompositeFixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext;
 
 /**
  * Refactored to reuse the newer {@link FixtureScript} API.
  */
-public class ToDoItemsIntegTestFixture extends CompositeFixtureScript {
+public class ToDoItemsIntegTestFixture extends FixtureScript {
 
     public ToDoItemsIntegTestFixture() {
-        super(null, null);
-        setDiscoverability(Discoverability.NON_DISCOVERABLE);
+        super(null, "integ-test");
     }
 
     @Override
     protected void execute(ExecutionContext executionContext) {
-        execute("delete", ToDoItemsDelete.forCurrent(), executionContext);
-        execute("create", ToDoItemsCreate.forCurrent(), executionContext);
-        execute("complete", ToDoItemsComplete.forCurrent(), executionContext);
+        execute(new ToDoItemsRecreateAndCompleteSeveral(null), executionContext);
     }
 
 }

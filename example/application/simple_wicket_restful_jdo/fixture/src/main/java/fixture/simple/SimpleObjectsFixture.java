@@ -22,29 +22,21 @@ package fixture.simple;
 import dom.simple.SimpleObject;
 import dom.simple.SimpleObjects;
 
-import org.apache.isis.applib.fixtures.AbstractFixture;
-import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-public class SimpleObjectsFixture extends AbstractFixture {
+public class SimpleObjectsFixture extends FixtureScript {
 
-    
     @Override
-    public void install() {
+    protected void execute(ExecutionContext executionContext) {
 
-        isisJdoSupport.executeUpdate("delete from \"SimpleObject\"");
+        // prereqs
+        execute(new SimpleObjectsTearDownFixture(), executionContext);
 
-        installObjects();
-        
-        getContainer().flush();
-    }
-
-    private void installObjects() {
-
+        // create
         create("Foo");
         create("Bar");
         create("Baz");
     }
-
 
     // //////////////////////////////////////
 
@@ -52,15 +44,9 @@ public class SimpleObjectsFixture extends AbstractFixture {
         return simpleObjects.create(name);
     }
 
-
-    // //////////////////////////////////////
-    // Injected services
     // //////////////////////////////////////
 
     @javax.inject.Inject
     private SimpleObjects simpleObjects;
-
-    @javax.inject.Inject
-    private IsisJdoSupport isisJdoSupport;
 
 }

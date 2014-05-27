@@ -21,7 +21,6 @@ package fixture.todo;
 import fixture.todo.scenarios.RecreateToDoItemsAndCompleteSeveralForCurrent;
 
 import java.util.List;
-
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Prototype;
@@ -50,7 +49,8 @@ public class ToDoItemsFixturesService extends FixtureScripts {
 
     @Prototype
     @MemberOrder(sequence="20")
-    public List<FixtureResult> recreateToDoItemsForCurrent() {
-        return findFixtureScriptFor(RecreateToDoItemsAndCompleteSeveralForCurrent.class).run(null);
+    public Object recreateToDoItemsForCurrentAndReturnFirst() {
+        final List<FixtureResult> run = findFixtureScriptFor(RecreateToDoItemsAndCompleteSeveralForCurrent.class).run(null);
+        return run.get(0).getObject();
     }
 }

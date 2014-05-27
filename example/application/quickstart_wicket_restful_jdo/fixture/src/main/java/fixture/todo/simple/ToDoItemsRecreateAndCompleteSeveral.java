@@ -18,31 +18,22 @@
  */
 package fixture.todo.simple;
 
-import java.util.Collection;
+import dom.todo.ToDoItem;
 
+import java.util.Collection;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-import dom.todo.ToDoItem;
+public class ToDoItemsRecreateAndCompleteSeveral extends FixtureScript {
 
-import org.apache.isis.applib.fixturescripts.FixtureResultList;
-import org.apache.isis.applib.fixturescripts.SimpleFixtureScript;
-import org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext;
-
-public class ToDoItemsComplete extends SimpleFixtureScript {
-
-    //region > factory methods & constructor
-    public static ToDoItemsComplete forCurrent() {
-        return new ToDoItemsComplete(null);
-    }
-
-    public static ToDoItemsComplete forUser(final String user) {
-        return new ToDoItemsComplete(user);
-    }
-
+    //region > constructor
     private final String user;
-    private ToDoItemsComplete(final String user) {
+    /**
+     * @param user - if null then executes for the current user or will use any {@link #run(String) parameters} provided when run.
+     */
+    public ToDoItemsRecreateAndCompleteSeveral(final String user) {
         super(null, Util.localNameFor("complete", user));
         this.user = user;
     }
@@ -52,15 +43,13 @@ public class ToDoItemsComplete extends SimpleFixtureScript {
     @Override
     protected void execute(ExecutionContext executionContext) {
         final String ownedBy = Util.coalesce(user, executionContext.getParameters(), getContainer().getUser().getName());
-        installFor(ownedBy, executionContext);
-        getContainer().flush();
-    }
 
-    private void installFor(final String user, final ExecutionContext executionContext) {
-        complete(user, "Buy stamps", executionContext);
-        complete(user, "Write blog post", executionContext);
+        // prereqs
+        execute(new ToDoItemsRecreate(null), executionContext);
 
-        getContainer().flush();
+        // this fixture
+        complete(ownedBy, "Buy stamps", executionContext);
+        complete(ownedBy, "Write blog post", executionContext);
     }
 
     private void complete(final String user, final String description, final ExecutionContext executionContext) {

@@ -18,23 +18,13 @@
  */
 package fixture.todo.scenarios;
 
-import fixture.todo.simple.ToDoItemsComplete;
-import fixture.todo.simple.ToDoItemsCreate;
-import fixture.todo.simple.ToDoItemsDelete;
+import fixture.todo.simple.ToDoItemsRecreateAndCompleteSeveral;
 
-import org.apache.isis.applib.fixturescripts.CompositeFixtureScript;
-
-public class RecreateToDoItemsAndCompleteSeveralForCurrent extends CompositeFixtureScript {
+public class RecreateToDoItemsAndCompleteSeveralForCurrent extends ToDoItemsRecreateAndCompleteSeveral {
 
     public RecreateToDoItemsAndCompleteSeveralForCurrent() {
-        super(null, "recreate-current");
-    }
-    
-    @Override
-    protected void execute(ExecutionContext executionContext) {
-        execute("delete", ToDoItemsDelete.forCurrent(), executionContext);
-        execute("create", ToDoItemsCreate.forCurrent(), executionContext);
-        execute("complete", ToDoItemsComplete.forCurrent(), executionContext);
+        super(null);
+        withDiscoverability(Discoverability.DISCOVERABLE);
     }
 
 }

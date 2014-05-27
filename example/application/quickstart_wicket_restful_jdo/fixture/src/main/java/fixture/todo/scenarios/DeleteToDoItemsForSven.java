@@ -20,16 +20,11 @@ package fixture.todo.scenarios;
 
 import fixture.todo.simple.ToDoItemsDelete;
 
-import org.apache.isis.applib.fixturescripts.CompositeFixtureScript;
-import org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext;
+public final class DeleteToDoItemsForSven extends ToDoItemsDelete {
 
-public final class DeleteToDoItemsForSven extends CompositeFixtureScript {
     public DeleteToDoItemsForSven() {
-        super(null, "delete-sven");
-    }
-    
-    @Override
-    protected void execute(ExecutionContext executionContext) {
-        execute("delete", ToDoItemsDelete.forUser("sven"), executionContext);
+        super("sven");
+        withDiscoverability(Discoverability.DISCOVERABLE);
+
     }
 }

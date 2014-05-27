@@ -16,14 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package fixture.todo.scenarios;
 
-import fixture.todo.simple.ToDoItemsRecreate;
+package fixture.simple;
 
-public final class RecreateToDoItemsForJoe extends ToDoItemsRecreate {
+import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
 
-    public RecreateToDoItemsForJoe() {
-        super("joe");
-        withDiscoverability(Discoverability.DISCOVERABLE);
+public class SimpleObjectsTearDownFixture extends FixtureScript {
+
+    @Override
+    protected void execute(ExecutionContext executionContext) {
+        isisJdoSupport.executeUpdate("delete from \"SimpleObject\"");
     }
+
+
+    @javax.inject.Inject
+    private IsisJdoSupport isisJdoSupport;
+
 }

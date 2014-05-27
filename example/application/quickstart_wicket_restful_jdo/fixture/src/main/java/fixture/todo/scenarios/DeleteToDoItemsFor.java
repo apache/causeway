@@ -18,26 +18,19 @@
  */
 package fixture.todo.scenarios;
 
-import com.google.common.base.Strings;
-
 import fixture.todo.simple.ToDoItemsDelete;
 
-import org.apache.isis.applib.fixturescripts.CompositeFixtureScript;
-import org.apache.isis.applib.fixturescripts.FixtureResultList;
-import org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext;
+import com.google.common.base.Strings;
 
-public final class DeleteToDoItemsFor extends CompositeFixtureScript {
+public class DeleteToDoItemsFor extends ToDoItemsDelete {
+
     public DeleteToDoItemsFor() {
-        super(null, "delete-specified");
+        super(null);
+        withDiscoverability(Discoverability.DISCOVERABLE);
     }
     
     @Override
     public String validateRun(final String parameters) {
         return Strings.isNullOrEmpty(parameters) ? "Specify the owner of the ToDoItems to be deleted" : null;
-    }
-    
-    @Override
-    protected void execute(ExecutionContext executionContext) {
-        execute("delete", ToDoItemsDelete.forUser(null), executionContext);
     }
 }

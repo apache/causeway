@@ -18,25 +18,18 @@
  */
 package fixture.todo.simple;
 
-import org.apache.isis.applib.fixturescripts.FixtureResultList;
-import org.apache.isis.applib.fixturescripts.SimpleFixtureScript;
-import org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
 
-public class ToDoItemsDelete extends SimpleFixtureScript {
+public class ToDoItemsDelete extends FixtureScript {
 
-    //region > factory methods & constructor
-    public static ToDoItemsDelete forCurrent() {
-        return new ToDoItemsDelete(null);
-    }
-
-    public static ToDoItemsDelete forUser(final String user) {
-        return new ToDoItemsDelete(user);
-    }
-
+    //region > constructor
     private final String user;
-    
-    private ToDoItemsDelete(final String user) {
+
+    /**
+     * @param user - if null then executes for the current user or will use any {@link #run(String) parameters} provided when run.
+     */
+    public ToDoItemsDelete(final String user) {
         super(null, Util.localNameFor("delete", user));
         this.user = user;
     }
@@ -46,13 +39,10 @@ public class ToDoItemsDelete extends SimpleFixtureScript {
     @Override
     protected void execute(ExecutionContext executionContext) {
         final String ownedBy = Util.coalesce(user, executionContext.getParameters(), getContainer().getUser().getName());
-        installFor(ownedBy);
-        getContainer().flush();
-    }
 
-    private void installFor(final String ownedBy) {
         isisJdoSupport.executeUpdate("delete from \"ToDoItem\" where \"ownedBy\" = '" + ownedBy + "'");
     }
+
     //endregion
 
     //region > injected services
