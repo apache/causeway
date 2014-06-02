@@ -22,24 +22,16 @@
 package dom.simple;
 
 import java.util.List;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.Programmatic;
 
 public class SimpleObjects {
 
-
-    // //////////////////////////////////////
-    // Identification in the UI
+    //region > identification in the UI
     // //////////////////////////////////////
 
     public String getId() {
@@ -50,10 +42,11 @@ public class SimpleObjects {
         return "SimpleObject";
     }
 
+    //endregion
+
+    //region > listAll (action)
     // //////////////////////////////////////
-    // List (action)
-    // //////////////////////////////////////
-    
+
     @Bookmarkable
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "1")
@@ -61,9 +54,9 @@ public class SimpleObjects {
         return container.allInstances(SimpleObject.class);
     }
 
+    //endregion
 
-    // //////////////////////////////////////
-    // Create (action)
+    //region > create (action)
     // //////////////////////////////////////
     
     @MemberOrder(sequence = "2")
@@ -75,11 +68,14 @@ public class SimpleObjects {
         return obj;
     }
 
-    // //////////////////////////////////////
-    // Injected services
+    //endregion
+
+    //region > injected services
     // //////////////////////////////////////
 
     @javax.inject.Inject 
     DomainObjectContainer container;
+
+    //endregion
 
 }

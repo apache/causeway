@@ -17,6 +17,6 @@
   <stringAttribute value="org.eclipse.m2e.launchconfig.classpathProvider" key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER"/>
   <stringAttribute value="org.apache.isis.WebServer" key="org.eclipse.jdt.launching.MAIN_TYPE"/>
   <stringAttribute value="--port 8080 -D isis.persistor.datanucleus.install-fixtures=true --type SERVER_PROTOTYPE" key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS"/>
-  <stringAttribute value="simple_wicket_restful_jdo-webapp" key="org.eclipse.jdt.launching.PROJECT_ATTR"/>
+  <stringAttribute value="${rootArtifactId}-webapp" key="org.eclipse.jdt.launching.PROJECT_ATTR"/>
   <stringAttribute value="org.eclipse.m2e.launchconfig.sourcepathProvider" key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER"/>
 </launchConfiguration>

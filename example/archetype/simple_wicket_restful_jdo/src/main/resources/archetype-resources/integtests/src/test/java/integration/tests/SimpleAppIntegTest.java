@@ -30,7 +30,6 @@ import org.apache.isis.core.integtestsupport.scenarios.ScenarioExecutionForInteg
 
 public abstract class SimpleAppIntegTest extends IntegrationTestAbstract {
 
-    
     @BeforeClass
     public static void initClass() {
         org.apache.log4j.PropertyConfigurator.configure("logging.properties");

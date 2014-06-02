@@ -22,34 +22,18 @@
 
 package fixture.simple;
 
-import dom.simple.SimpleObject;
-import dom.simple.SimpleObjects;
-
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
 
-public class SimpleObjectsFixture extends FixtureScript {
+public class SimpleObjectsTearDownFixture extends FixtureScript {
 
     @Override
     protected void execute(ExecutionContext executionContext) {
-
-        // prereqs
-        execute(new SimpleObjectsTearDownFixture(), executionContext);
-
-        // create
-        create("Foo");
-        create("Bar");
-        create("Baz");
+        isisJdoSupport.executeUpdate("delete from ${symbol_escape}"SimpleObject${symbol_escape}"");
     }
 
-    // //////////////////////////////////////
-
-    private SimpleObject create(final String name) {
-        return simpleObjects.create(name);
-    }
-
-    // //////////////////////////////////////
 
     @javax.inject.Inject
-    private SimpleObjects simpleObjects;
+    private IsisJdoSupport isisJdoSupport;
 
 }
