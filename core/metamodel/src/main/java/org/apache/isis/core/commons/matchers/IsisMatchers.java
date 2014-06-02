@@ -19,25 +19,18 @@
 
 package org.apache.isis.core.commons.matchers;
 
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.Description;
-import org.hamcrest.Factory;
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
-import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.*;
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.StringContains;
 import org.hamcrest.core.StringEndsWith;
 import org.hamcrest.core.StringStartsWith;
-
 import org.apache.isis.core.commons.lang.StringExtensions;
+
+import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
  * Hamcrest {@link Matcher} implementations.

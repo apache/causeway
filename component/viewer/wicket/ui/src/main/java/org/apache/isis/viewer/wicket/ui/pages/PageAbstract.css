@@ -978,3 +978,11 @@ for some reason the containedToggleboxPanel.css is not being picked up...
 .containedToggleboxPanel .containedToggleboxPanelForm {
     display: inline;
 }
+
+
+
+
+.collectionContentsAsAjaxTablePanel table.contents tbody td div.FixtureResult-className label,
+.collectionContentsAsAjaxTablePanel table.contents tbody td div.FixtureResult-fixtureScriptClassName label {
+    text-transform: none;
+}

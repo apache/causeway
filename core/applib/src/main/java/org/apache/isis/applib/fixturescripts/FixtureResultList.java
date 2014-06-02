@@ -18,11 +18,9 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -35,6 +33,10 @@ import com.google.common.collect.Maps;
 public class FixtureResultList {
 
     private final FixtureScripts fixtureScripts;
+    /**
+     * {@link org.apache.isis.applib.fixturescripts.FixtureScript}s used to generate this result list.
+     */
+    private final List<FixtureScript> fixtureScriptList = Lists.newArrayList();
 
     FixtureResultList(FixtureScripts fixtureScripts) {
         this.fixtureScripts = fixtureScripts;
@@ -57,15 +59,17 @@ public class FixtureResultList {
      *     or simply {@link org.apache.isis.applib.fixturescripts.FixtureScripts.NonPersistedObjectsStrategy#IGNORE ignored}.
      * </P>
      */
-    public <T> T add(final FixtureScript script, final String key, final T object) {
-        final FixtureResult fr = fixtureScripts.newFixtureResult(script, key, object);
+    public <T> T add(final FixtureScript fixtureScript, final String key, final T object) {
+        final boolean firstTime = !fixtureScriptList.contains(fixtureScript);
+        final FixtureResult fr = fixtureScripts.newFixtureResult(fixtureScript, key, object, firstTime);
         if(fr != null) {
             list.add(fr);
+            if(firstTime) {
+                fixtureScriptList.add(fixtureScript);
+            }
         }
         return object;
     }
-
-
 
     public List<FixtureResult> getResults() {
         return list;

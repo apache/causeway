@@ -19,10 +19,7 @@
 package org.apache.isis.applib.fixturescripts;
 
 import org.apache.isis.applib.AbstractViewModel;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.Paged;
-import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.*;
 
 @Paged(500)
 public class FixtureResult extends AbstractViewModel {
@@ -39,8 +36,23 @@ public class FixtureResult extends AbstractViewModel {
 
     // //////////////////////////////////////
 
-    private String key;
+    private String fixtureScriptClassName;
+
+    @Named("Fixture script")
+    @Optional
+    @MemberOrder(sequence="1")
+    public String getFixtureScriptClassName() {
+        return fixtureScriptClassName;
+    }
+    public void setFixtureScriptClassName(String fixtureScriptClassName) {
+        this.fixtureScriptClassName = fixtureScriptClassName;
+    }
     
+    // //////////////////////////////////////
+
+    private String key;
+
+    @Named("Result key")
     @Title(sequence="1", append=": ")
     @MemberOrder(sequence="1")
     public String getKey() {
@@ -49,11 +61,12 @@ public class FixtureResult extends AbstractViewModel {
     public void setKey(String key) {
         this.key = key;
     }
-    
+
     // //////////////////////////////////////
-    
+
     private Object object;
-    
+
+    @Named("Result")
     @Title(sequence="2")
     @MemberOrder(sequence="1")
     public Object getObject() {
@@ -65,7 +78,7 @@ public class FixtureResult extends AbstractViewModel {
     
     // //////////////////////////////////////
 
-    @Named("Class")
+    @Named("Result class")
     @MemberOrder(sequence="3")
     public String getClassName() {
         return object != null? object.getClass().getName(): null;

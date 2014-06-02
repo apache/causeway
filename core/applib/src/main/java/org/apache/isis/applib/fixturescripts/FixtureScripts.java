@@ -51,7 +51,7 @@ public abstract class FixtureScripts extends AbstractService {
 
     /**
      * How to handle objects that are to be
-     * {@link org.apache.isis.applib.fixturescripts.FixtureScripts#newFixtureResult(FixtureScript, String, Object) added}
+     * {@link FixtureScripts#newFixtureResult(FixtureScript, String, Object, boolean) added}
      * into a {@link org.apache.isis.applib.fixturescripts.FixtureResult} but which are not yet persisted.
      */
     public enum NonPersistedObjectsStrategy {
@@ -64,7 +64,7 @@ public abstract class FixtureScripts extends AbstractService {
 
     /**
      * Defaults to {@link org.apache.isis.applib.fixturescripts.FixtureScripts.NonPersistedObjectsStrategy#PERSIST persist}
-     * strategy if non-persisted objects are {@link #newFixtureResult(FixtureScript, String, Object) added} to a {@link org.apache.isis.applib.fixturescripts.FixtureResultList}.
+     * strategy if non-persisted objects are {@link #newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link org.apache.isis.applib.fixturescripts.FixtureResultList}.
      *
      * @param packagePrefix - to search for fixture script implementations, eg "com.mycompany"
      */
@@ -74,7 +74,7 @@ public abstract class FixtureScripts extends AbstractService {
 
     /**
      * @param packagePrefix  - to search for fixture script implementations, eg "com.mycompany"
-     * @param nonPersistedObjectsStrategy - how to handle any non-persisted objects that are {@link #newFixtureResult(FixtureScript, String, Object) added} to a {@link org.apache.isis.applib.fixturescripts.FixtureResultList}.
+     * @param nonPersistedObjectsStrategy - how to handle any non-persisted objects that are {@link #newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link org.apache.isis.applib.fixturescripts.FixtureResultList}.
      */
     public FixtureScripts(String packagePrefix, NonPersistedObjectsStrategy nonPersistedObjectsStrategy) {
         this.packagePrefix = packagePrefix;
@@ -218,17 +218,19 @@ public abstract class FixtureScripts extends AbstractService {
 
     String mementoFor(FixtureResult fr) {
         return mementoService.create()
+                .set("fixtureScriptClassName", fr.getFixtureScriptClassName())
                 .set("key", fr.getKey())
                 .set("object", bookmarkService.bookmarkFor(fr.getObject()))
                 .asString();
     }
     void initOf(String mementoStr, FixtureResult fr) {
         Memento memento = mementoService.parse(mementoStr);
+        fr.setFixtureScriptClassName(memento.get("fixtureScriptClassName", String.class));
         fr.setKey(memento.get("key", String.class));
         fr.setObject(bookmarkService.lookup(memento.get("object", Bookmark.class)));
     }
 
-    FixtureResult newFixtureResult(FixtureScript script, String subkey, Object object) {
+    FixtureResult newFixtureResult(FixtureScript script, String subkey, Object object, boolean firstTime) {
         if(object == null) {
             return null;
         }
@@ -243,12 +245,17 @@ public abstract class FixtureScripts extends AbstractService {
                     return null;
             }
         }
-        String mementoFor = mementoFor(script, subkey, object);
+        String mementoFor = mementoFor(script, subkey, object, firstTime);
         return getContainer().newViewModelInstance(FixtureResult.class, mementoFor);
     }
 
-    private String mementoFor(FixtureScript script, String subkey, Object object) {
+    private String mementoFor(
+            final FixtureScript script,
+            final String subkey,
+            final Object object,
+            final boolean firstTime) {
         final FixtureResult template = new FixtureResult();
+        template.setFixtureScriptClassName(firstTime? script.getClass().getName(): null);
         template.setKey(script.pathWith(subkey));
         template.setObject(object);
         return mementoFor(template);
