@@ -21,36 +21,23 @@
  */
 package dom.todo;
 
-import java.math.BigDecimal;
-import java.util.List;
-
-import com.google.common.base.Predicates;
-
 import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItem.Subcategory;
 
+import java.math.BigDecimal;
+import java.util.List;
+import com.google.common.base.Predicates;
 import org.joda.time.LocalDate;
-
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.Optional;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.clock.ClockService;
 
 @Named("ToDos")
 public class ToDoItems {
 
-    public ToDoItems() {
-    }
-    
-    // //////////////////////////////////////
-    // Identification in the UI
+    //region > identification in the UI
     // //////////////////////////////////////
 
     public String getId() {
@@ -60,9 +47,9 @@ public class ToDoItems {
     public String iconName() {
         return "ToDoItem";
     }
+    //endregion
 
-    // //////////////////////////////////////
-    // NotYetComplete (action)
+    //region > notYetComplete (action)
     // //////////////////////////////////////
 
     @Bookmarkable
@@ -83,10 +70,9 @@ public class ToDoItems {
                         "findByOwnedByAndCompleteIsFalse", 
                         "ownedBy", currentUserName()));
     }
+    //endregion
 
-
-    // //////////////////////////////////////
-    // Complete (action)
+    //region > complete (action)
     // //////////////////////////////////////
     
     @ActionSemantics(Of.SAFE)
@@ -106,10 +92,9 @@ public class ToDoItems {
                     "findByOwnedByAndCompleteIsTrue", 
                     "ownedBy", currentUserName()));
     }
+    //endregion
 
-
-    // //////////////////////////////////////
-    // categorized (action)
+    //region > categorized (action)
     // //////////////////////////////////////
 
 	@SuppressWarnings("unchecked")
@@ -146,10 +131,9 @@ public class ToDoItems {
             final boolean completed) {
         return Subcategory.validate(category, subcategory);
     }
+    //endregion
 
-
-    // //////////////////////////////////////
-    // NewToDo (action)
+    //region > newToDo (action)
     // //////////////////////////////////////
 
     @MemberOrder(sequence = "40")
@@ -180,13 +164,11 @@ public class ToDoItems {
             final LocalDate dueBy, final BigDecimal cost) {
         return Subcategory.validate(category, subcategory);
     }
+    //endregion
 
-    // //////////////////////////////////////
-    // AllToDos (action)
+    //region > allToDos (action)
     // //////////////////////////////////////
 
-    // findByOwnedBy
-    
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "50")
     public List<ToDoItem> allToDos() {
@@ -199,10 +181,9 @@ public class ToDoItems {
         }
         return items;
     }
+    //endregion
 
-
-    // //////////////////////////////////////
-    // AutoComplete
+    //region > autoComplete (programmatic)
     // //////////////////////////////////////
 
     @Programmatic // not part of metamodel
@@ -213,9 +194,9 @@ public class ToDoItems {
                         "ownedBy", currentUserName(), 
                         "description", description));
     }
+    //endregion
 
-    // //////////////////////////////////////
-    // Programmatic Helpers
+    //region > helpers
     // //////////////////////////////////////
 
     @Programmatic // for use by fixtures
@@ -243,18 +224,16 @@ public class ToDoItems {
         return container.getUser().getName();
     }
 
-    
-    // //////////////////////////////////////
-    // Injected Services
-    // //////////////////////////////////////
+    //endregion
 
+    //region > injected services
+    // //////////////////////////////////////
+    
     @javax.inject.Inject
     private DomainObjectContainer container;
 
     @javax.inject.Inject
     private ClockService clockService;
-
-    // //////////////////////////////////////
-
+    //endregion
 
 }

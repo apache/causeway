@@ -21,40 +21,27 @@
  */
 package dom.todo;
 
+import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItem.Subcategory;
+
 import java.util.List;
 import java.util.concurrent.Callable;
-
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
-
-import dom.todo.ToDoItem.Category;
-import dom.todo.ToDoItem.Subcategory;
-
 import org.joda.time.LocalDate;
-
 import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.DescribedAs;
-import org.apache.isis.applib.annotation.Disabled;
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.NotContributed.As;
-import org.apache.isis.applib.annotation.NotInServiceMenu;
-import org.apache.isis.applib.annotation.Optional;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 
 public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
-    
-    // //////////////////////////////////////
-    // priority (contributed property)
+    //region > priority (contributed property)
     // //////////////////////////////////////
     
     @DescribedAs("The relative priority of this item compared to others not yet complete (using 'due by' date)")
@@ -107,8 +94,9 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
         });
 
 
-    // //////////////////////////////////////
-    // Next, Previous (contributed actions)
+    //endregion
+
+    //region >  next, previous (contributed actions)
     // //////////////////////////////////////
 
     @DescribedAs("The next item not yet completed")
@@ -172,9 +160,9 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
         }
         return priority>=0 && items.size()>=priority? items.get(priority-1): itemElse;
     }
+    //endregion
 
-    // //////////////////////////////////////
-    // SimilarTo (contributed collection)
+    //region > similarTo (contributed collection)
     // //////////////////////////////////////
     
     @NotInServiceMenu
@@ -198,10 +186,9 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
             }
         };
     }
+    //endregion
 
-    
-    // //////////////////////////////////////
-    // UpdateCategory (contributed action)
+    //region > updateCategory (contributed action)
     // //////////////////////////////////////
 
     @DescribedAs("Update category and subcategory")
@@ -234,25 +221,25 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
             final ToDoItem item, final Category category, final Subcategory subcategory) {
         return Subcategory.validate(category, subcategory);
     }
+    //endregion
 
-    
-    // //////////////////////////////////////
-    // helpers
+    //region > helpers
     // //////////////////////////////////////
     
     protected String currentUserName() {
         return getContainer().getUser().getName();
     }
 
+    //endregion
 
-    // //////////////////////////////////////
-    // Injected services
+    //region > injected services
     // //////////////////////////////////////
 
     @javax.inject.Inject
     private ToDoItems toDoItems;
-    
+
     @javax.inject.Inject
     private QueryResultsCache queryResultsCache;
+    //endregion
 
 }

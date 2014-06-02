@@ -21,32 +21,36 @@
  */
 package integration.tests.actions;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import dom.todo.ToDoItem;
+import dom.todo.ToDoItems;
+import fixture.todo.integtests.ToDoItemsIntegTestFixture;
 import integration.tests.ToDoIntegTest;
 
 import java.util.List;
-
-import dom.todo.ToDoItem;
-import dom.todo.ToDoItems;
-import fixture.todo.ToDoItemsFixture;
-
-import org.junit.After;
+import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 public class ToDoItemTest_notYetCompleted extends ToDoIntegTest {
+
+    @Before
+    public void setUpData() throws Exception {
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
+    }
+
+    @Inject
+    private ToDoItems toDoItems;
 
     private ToDoItem toDoItem;
 
     @Before
     public void setUp() throws Exception {
-        scenarioExecution().install(new ToDoItemsFixture());
-
-        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
+        final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
         toDoItem = wrap(all.get(0));
     }
-
 
     @Test
     public void happyCase() throws Exception {
@@ -60,7 +64,6 @@ public class ToDoItemTest_notYetCompleted extends ToDoIntegTest {
         // then
         assertThat(toDoItem.isComplete(), is(false));
     }
-
 
     @Test
     public void cannotUndoIfNotYetCompleted() throws Exception {

@@ -22,5 +22,5 @@
   <stringAttribute value="--port 8080 --type SERVER_PROTOTYPE" key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS"/>
   <stringAttribute value="${rootArtifactId}-webapp" key="org.eclipse.jdt.launching.PROJECT_ATTR"/>
   <stringAttribute value="org.eclipse.m2e.launchconfig.sourcepathProvider" key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER"/>
-  <stringAttribute value="${jrebel_args} -Drebel.log=true -Drebel.plugins=c:/github/danhaywood/isis-jrebel-plugin/target/danhaywood-isis-jrebel-plugin-1.0.0-SNAPSHOT.jar -Disis-jrebel-plugin.packagePrefix=dom.todo,org.apache.isis.objectstore.jdo.applib -Disis-jrebel-plugin.loggingLevel=warn -XX:MaxPermSize=128m" key="org.eclipse.jdt.launching.VM_ARGUMENTS"/>
+  <stringAttribute value="${jrebel_args} -Drebel.log=false -Drebel.check_class_hash=true -Drebel.packages_exclude=org.apache.isis -Dproject.root=${project_loc}/.. -Dtarget.dir=target-ide -Drebel.plugins=C:/github/danhaywood/isis-jrebel-plugin/target/danhaywood-isis-jrebel-plugin-1.0.0-SNAPSHOT.jar -Disis-jrebel-plugin.packagePrefix=dom.todo,org.apache.isis.objectstore.jdo.applib -Disis-jrebel-plugin.loggingLevel=warn -XX:MaxPermSize=128m" key="org.eclipse.jdt.launching.VM_ARGUMENTS"/>
 </launchConfiguration>

@@ -21,29 +21,48 @@
  */
 package integration.tests.props;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import dom.todo.ToDoItem;
+import dom.todo.ToDoItemSubscriptions;
+import dom.todo.ToDoItems;
+import fixture.todo.integtests.ToDoItemsIntegTestFixture;
 import integration.tests.ToDoIntegTest;
 
 import java.util.List;
-
-import dom.todo.ToDoItem;
-import dom.todo.ToDoItems;
-import fixture.todo.ToDoItemsFixture;
-
+import javax.inject.Inject;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class ToDoItemTest_description extends ToDoIntegTest {
+
+    @Before
+    public void setUpData() throws Exception {
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
+    }
+
+    @Inject
+    private ToDoItems toDoItems;
+    @Inject
+    private ToDoItemSubscriptions toDoItemSubscriptions;
 
     private ToDoItem toDoItem;
 
     @Before
     public void setUp() throws Exception {
-        scenarioExecution().install(new ToDoItemsFixture());
-
-        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
+        final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
         toDoItem = wrap(all.get(0));
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        toDoItemSubscriptions.reset();
     }
 
     @Test
@@ -77,6 +96,37 @@ public class ToDoItemTest_description extends ToDoIntegTest {
     }
 
     @Test
+    public void cannotUseModify() throws Exception {
+
+        expectedExceptions.expectMessage("Cannot invoke supporting method for 'Description'; use only property accessor/mutator");
+
+        // given
+        assertThat(toDoItem.getDescription(), is("Buy bread"));
+        
+        // when
+        toDoItem.modifyDescription("Buy bread and butter");
+        
+        // then
+        assertThat(toDoItem.getDescription(), is("Buy bread"));
+    }
+
+    @Test
+    public void cannotUseClear() throws Exception {
+        
+        expectedExceptions.expectMessage("Cannot invoke supporting method for 'Description'; use only property accessor/mutator");
+        
+        // given
+        assertThat(toDoItem.getDescription(), is("Buy bread"));
+        
+        // when
+        toDoItem.clearDescription();
+        
+        // then
+        assertThat(toDoItem.getDescription(), is("Buy bread"));
+    }
+    
+
+    @Test
     public void onlyJustShortEnough() throws Exception {
         
         // when, then
@@ -85,12 +135,80 @@ public class ToDoItemTest_description extends ToDoIntegTest {
 
     @Test
     public void tooLong() throws Exception {
-        
-        // when, then
+
+        // then
         expectedExceptions.expectMessage("The value proposed exceeds the maximum length of 100");
+
+        // when
         toDoItem.setDescription(characters(101));
     }
-    
+
+
+    @Test
+    public void subscriberReceivesEvent() throws Exception {
+
+        // given
+        assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.AcceptEvents));
+        assertThat(toDoItem.getDescription(), is("Buy bread"));
+
+        // when
+        toDoItem.setDescription("Buy bread and butter");
+
+        // then published and received
+        @SuppressWarnings("unchecked")
+        final PropertyChangedEvent<ToDoItem,String> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(PropertyChangedEvent.class);
+        assertThat(ev, is(not(nullValue())));
+
+        ToDoItem source = ev.getSource();
+        assertThat(source, is(equalTo(unwrap(toDoItem))));
+        assertThat(ev.getIdentifier().getMemberName(), is("description"));
+        assertThat(ev.getOldValue(), is("Buy bread"));
+        assertThat(ev.getNewValue(), is("Buy bread and butter"));
+    }
+
+    @Test
+    public void subscriberVetoesEventWithRecoverableException() throws Exception {
+
+        // given
+        toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithRecoverableException);
+
+        // then
+        expectedExceptions.expect(RecoverableException.class);
+
+        // when
+        toDoItem.setDescription("Buy bread and butter");
+    }
+
+
+    @Test
+    public void subscriberVetoesEventWithNonRecoverableException() throws Exception {
+
+        // given
+        toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithNonRecoverableException);
+
+        // then
+        expectedExceptions.expect(NonRecoverableException.class);
+
+        // when
+        toDoItem.setDescription("Buy bread and butter");
+    }
+
+
+    @Test
+    public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
+
+        // given
+        toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ThrowOtherException);
+
+        // when
+        toDoItem.setDescription("Buy bread and butter");
+
+        // then
+        // (no expectedExceptions setup, expect to continue)
+        assertTrue(true);
+    }
+
+
     private static String characters(final int n) {
         StringBuffer buf = new StringBuffer();
         for(int i=0; i<n; i++) {

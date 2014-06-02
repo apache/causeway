@@ -21,26 +21,20 @@
  */
 package app;
 
-import java.util.Arrays;
-import java.util.List;
-
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItem.Subcategory;
 import dom.todo.ToDoItems;
 
+import java.util.Arrays;
+import java.util.List;
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import org.apache.isis.applib.AbstractViewModel;
-import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.MultiLine;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.Render.Type;
-import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.util.ObjectContracts;
 
 @Named("By Category")
@@ -49,9 +43,7 @@ public class ToDoItemsByCategoryViewModel
         extends AbstractViewModel 
         implements Comparable<ToDoItemsByCategoryViewModel> {
 
-    
-    // //////////////////////////////////////
-    // ViewModel implementation
+    //region > viewModel implementation
     // //////////////////////////////////////
 
     @Override
@@ -64,8 +56,9 @@ public class ToDoItemsByCategoryViewModel
         setCategory(Category.valueOf(memento));
     }
 
-    // //////////////////////////////////////
-    // Category
+    //endregion
+
+    //region > category (property)
     // //////////////////////////////////////
 
     private Category category;
@@ -81,10 +74,9 @@ public class ToDoItemsByCategoryViewModel
     public void setCategory(final Category category) {
         this.category = category;
     }
+    //endregion
 
-
-    // //////////////////////////////////////
-    // NotYetComplete, Complete
+    //region > notYetComplete (property), complete (property)
     // //////////////////////////////////////
 
     @MultiLine(numberOfLines=5)
@@ -93,8 +85,6 @@ public class ToDoItemsByCategoryViewModel
         return Joiner.on(", ").join(
             Iterables.transform(subcategories(), summarizeBySubcategory(notYetComplete)));
     }
-
-    // //////////////////////////////////////
 
     @MultiLine(numberOfLines=5)
     public String getComplete() {
@@ -119,13 +109,12 @@ public class ToDoItemsByCategoryViewModel
     }
 
     private static int countIn(final Iterable<ToDoItem> items, final Subcategory subcategory) {
-        return Iterables.size(Iterables.filter(items, 
+        return Iterables.size(Iterables.filter(items,
                 ToDoItem.Predicates.thoseSubcategorised(subcategory)));
     }
+    //endregion
 
-    
-    // //////////////////////////////////////
-    // getItemsNotYetComplete, getItemsComplete
+    //region > getItemsNotYetComplete (collection), getItemsComplete (collection)
     // //////////////////////////////////////
 
     /**
@@ -137,8 +126,6 @@ public class ToDoItemsByCategoryViewModel
         return Lists.newArrayList(Iterables.filter(notYetComplete, ToDoItem.Predicates.thoseCategorised(getCategory())));
     }
 
-    // //////////////////////////////////////
-
     /**
      * All those items {@link ToDoItems${symbol_pound}complete() complete}, for this {@link ${symbol_pound}getCategory() category}.
      */
@@ -148,9 +135,9 @@ public class ToDoItemsByCategoryViewModel
         return Lists.newArrayList(Iterables.filter(complete, ToDoItem.Predicates.thoseCategorised(getCategory())));
     }
 
-    
-    // //////////////////////////////////////
-    // DeleteCompleted (action)
+    //endregion
+
+    //region > deleteCompleted (action)
     // //////////////////////////////////////
 
     @Named("Delete")
@@ -161,24 +148,23 @@ public class ToDoItemsByCategoryViewModel
         // force reload of page
         return this;
     }
-    
-    
 
-    // //////////////////////////////////////
-    // compareTo
+    //endregion
+
+    //region > compareTo
     // //////////////////////////////////////
 
     @Override
     public int compareTo(ToDoItemsByCategoryViewModel other) {
         return ObjectContracts.compare(this, other, "category");
     }
+    //endregion
 
-    
+    //region > injected services
     // //////////////////////////////////////
-    // injected services
-    // //////////////////////////////////////
-    
+
     @javax.inject.Inject
     private ToDoItems toDoItems;
+    //endregion
 
 }

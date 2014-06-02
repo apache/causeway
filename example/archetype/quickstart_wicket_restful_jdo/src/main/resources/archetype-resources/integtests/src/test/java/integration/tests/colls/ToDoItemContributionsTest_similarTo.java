@@ -21,46 +21,48 @@
  */
 package integration.tests.colls;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
-import integration.tests.ToDoIntegTest;
-
-import java.util.List;
-
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItemContributions;
 import dom.todo.ToDoItems;
-import dom.todo.ToDoItem.Category;
-import dom.todo.ToDoItem.Subcategory;
-import fixture.todo.ToDoItemsFixture;
+import fixture.todo.integtests.ToDoItemsIntegTestFixture;
+import integration.tests.ToDoIntegTest;
 
-import org.joda.time.LocalDate;
-import org.junit.After;
+import java.util.List;
+import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.clock.Clock;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ToDoItemContributionsTest_similarTo extends ToDoIntegTest {
 
-    private ToDoItem toDoItem;
+    @Before
+    public void setUpData() throws Exception {
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
+    }
+
+    @Inject
+    private ToDoItems toDoItems;
+    @Inject
     private ToDoItemContributions toDoItemContributions;
+
+    private ToDoItemContributions toDoItemContributionsWrapped;
+    private ToDoItem toDoItem;
 
     @Before
     public void setUp() throws Exception {
-        scenarioExecution().install(new ToDoItemsFixture());
-
-        final ToDoItems toDoItems = wrap(service(ToDoItems.class));
-        toDoItemContributions = wrap(service(ToDoItemContributions.class));
-        final List<ToDoItem> all = toDoItems.notYetComplete();
+        final List<ToDoItem> all = this.toDoItems.notYetComplete();
         toDoItem = wrap(all.get(0));
+
+        toDoItemContributionsWrapped = wrap(toDoItemContributions);
     }
 
     @Test
     public void happyCase() throws Exception {
         
         // when
-        List<ToDoItem> similarItems = toDoItemContributions.similarTo(toDoItem);
+        List<ToDoItem> similarItems = toDoItemContributionsWrapped.similarTo(toDoItem);
         
         // then
         assertThat(similarItems.size(), is(6));

@@ -21,32 +21,38 @@
  */
 package integration.tests.repo;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import dom.todo.ToDoItem;
+import dom.todo.ToDoItems;
+import fixture.todo.integtests.ToDoItemsIntegTestFixture;
 import integration.tests.ToDoIntegTest;
 
 import java.util.List;
-
-import dom.todo.ToDoItem;
-import dom.todo.ToDoItems;
-import fixture.todo.ToDoItemsFixture;
-
+import javax.inject.Inject;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 public class ToDoItemsTest_finders extends ToDoIntegTest {
+
+    @Before
+    public void setUpData() throws Exception {
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
+    }
+
+    @Inject
+    private ToDoItems toDoItems;
 
     private int notYetCompletedSize;
     private int completedSize;
 
     @Before
     public void setUp() throws Exception {
-        scenarioExecution().install(new ToDoItemsFixture());
+        final List<ToDoItem> notYetCompleteItems = wrap(toDoItems).notYetComplete();
+        final List<ToDoItem> completedItems = wrap(toDoItems).complete();
 
-        final List<ToDoItem> notYetCompleteItems = wrap(service(ToDoItems.class)).notYetComplete();
-        final List<ToDoItem> completedItems = wrap(service(ToDoItems.class)).complete();
-        
         notYetCompletedSize = notYetCompleteItems.size();
         completedSize = completedItems.size();
         

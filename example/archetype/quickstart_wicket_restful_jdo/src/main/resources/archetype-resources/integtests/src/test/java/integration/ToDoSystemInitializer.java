@@ -21,16 +21,22 @@ package integration;
 
 import app.ToDoItemAnalysis;
 import dom.todo.ToDoItemContributions;
+import dom.todo.ToDoItemSubscriptions;
 import dom.todo.ToDoItems;
+import fixture.todo.ToDoItemsFixturesService;
 
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
+import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
+import org.apache.isis.core.metamodel.services.bookmarks.BookmarkServiceDefault;
+import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.wrapper.WrapperFactoryDefault;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
+import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
+import org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo;
 import org.apache.isis.objectstore.jdo.datanucleus.service.support.IsisJdoSupportImpl;
 
 /**
@@ -62,29 +68,24 @@ public class ToDoSystemInitializer {
                     new ToDoItems(),
                     new ToDoItemAnalysis(),
                     new ToDoItemContributions(),
+                    new ToDoItemsFixturesService(),
+                    new ClassDiscoveryServiceUsingReflections(),
+                    new ToDoItemSubscriptions(),
                     new WrapperFactoryDefault(),
                     new IsisJdoSupportImpl(),
                     new Bulk.InteractionContext(),
-                    new QueryResultsCache()
+                    new EventBusServiceJdo(),
+                    new QueryResultsCache(),
+                    new MementoServiceDefault(),
+                    new BookmarkServiceDefault(),
+                    new ClockService()
                     );
         }
 
-        private IsisConfiguration testConfiguration() {
-            final IsisConfigurationDefault testConfiguration = new IsisConfigurationDefault();
-
-            testConfiguration.add("isis.persistor.datanucleus.RegisterEntities.packagePrefix", "dom");
-            testConfiguration.add("isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
-            
-            testConfiguration.add("isis.persistor.datanucleus.impl.datanucleus.defaultInheritanceStrategy", "TABLE_PER_CLASS");
-            testConfiguration.add(DataNucleusObjectStore.INSTALL_FIXTURES_KEY , "true");
-            
-            testConfiguration.add("isis.persistor.datanucleus.impl.datanucleus.cache.level2.type","none");
-
-            testConfiguration.add("isis.persistor.datanucleus.impl.datanucleus.identifier.case", "PreserveCase");
-
+        private static IsisConfiguration testConfiguration() {
+            final IsisConfigurationForJdoIntegTests testConfiguration = new IsisConfigurationForJdoIntegTests();
+            testConfiguration.addRegisterEntitiesPackagePrefix("dom");
             return testConfiguration;
         }
-
     }
-
 }

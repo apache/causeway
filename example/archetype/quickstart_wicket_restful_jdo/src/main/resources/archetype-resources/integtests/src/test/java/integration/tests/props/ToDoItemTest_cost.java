@@ -21,31 +21,36 @@
  */
 package integration.tests.props;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import dom.todo.ToDoItem;
+import dom.todo.ToDoItems;
+import fixture.todo.integtests.ToDoItemsIntegTestFixture;
 import integration.tests.ToDoIntegTest;
 
 import java.math.BigDecimal;
 import java.util.List;
-
-import dom.todo.ToDoItem;
-import dom.todo.ToDoItems;
-import fixture.todo.ToDoItemsFixture;
-
+import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 public class ToDoItemTest_cost extends ToDoIntegTest {
+
+    @Before
+    public void setUpData() throws Exception {
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
+    }
+
+    @Inject
+    private ToDoItems toDoItems;
 
     private ToDoItem toDoItem;
     private BigDecimal cost;
 
     @Before
     public void setUp() throws Exception {
-        // given
-        scenarioExecution().install(new ToDoItemsFixture());
-
-        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
+        final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
         toDoItem = wrap(all.get(0));
         cost = toDoItem.getCost();
     }

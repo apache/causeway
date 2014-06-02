@@ -21,17 +21,10 @@ package webapp.admin;
 
 import java.util.List;
 import java.util.UUID;
-
 import org.joda.time.LocalDate;
-
 import org.apache.isis.applib.AbstractService;
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.Optional;
-import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditEntryJdo;
 import org.apache.isis.objectstore.jdo.applib.service.audit.AuditingServiceJdoRepository;
@@ -42,7 +35,7 @@ import org.apache.isis.objectstore.jdo.applib.service.publish.PublishingServiceJ
 
 public class Admin extends AbstractService {
 
-    
+
     @ActionSemantics(Of.SAFE)
     @Bookmarkable
     @MemberOrder(sequence="10.1")

@@ -50,9 +50,7 @@ public class ToDoItemsByDateRangeViewModel
         extends AbstractViewModel 
         implements Comparable<ToDoItemsByDateRangeViewModel> {
 
-    
-    // //////////////////////////////////////
-    // ViewModel implementation
+    //region > viewModel implementation
     // //////////////////////////////////////
 
     @Override
@@ -65,8 +63,11 @@ public class ToDoItemsByDateRangeViewModel
         setDateRange(DateRange.valueOf(memento));
     }
 
+    //endregion
+
+    //region > dateRange (property)
     // //////////////////////////////////////
-    // DateRange
+    //
     // //////////////////////////////////////
 
     private DateRange dateRange;
@@ -82,18 +83,18 @@ public class ToDoItemsByDateRangeViewModel
     public void setDateRange(final DateRange dateRange) {
         this.dateRange = dateRange;
     }
+    //endregion
 
-
-    // //////////////////////////////////////
-    // Count
+    //region > count (derived property)
     // //////////////////////////////////////
 
     public int getCount() {
         return getItemsNotYetComplete().size();
     }
-    
-    // //////////////////////////////////////
-    // getItemsNotYetComplete
+
+    //endregion
+
+    //region > getItemsNotYetComplete (collection)
     // //////////////////////////////////////
 
     /**
@@ -135,20 +136,18 @@ public class ToDoItemsByDateRangeViewModel
         }
         return DateRange.Later;
     }
+    //endregion
 
-
-    // //////////////////////////////////////
-    // compareTo
+    //region > compareTo
     // //////////////////////////////////////
 
     @Override
     public int compareTo(ToDoItemsByDateRangeViewModel other) {
         return ObjectContracts.compare(this, other, "dateRange");
     }
+    //endregion
 
-    
-    // //////////////////////////////////////
-    // injected services
+    //region > injected services
     // //////////////////////////////////////
     
     @javax.inject.Inject
@@ -156,5 +155,7 @@ public class ToDoItemsByDateRangeViewModel
 
     @javax.inject.Inject
     private ClockService clockService;
+
+    //endregion
 
 }

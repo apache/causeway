@@ -19,43 +19,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integration.tests.props;
+package fixture.todo.scenarios;
 
-import dom.todo.ToDoItem;
-import dom.todo.ToDoItems;
-import fixture.todo.integtests.ToDoItemsIntegTestFixture;
-import integration.tests.ToDoIntegTest;
+import fixture.todo.simple.ToDoItemsRecreate;
 
-import java.util.List;
-import javax.inject.Inject;
-import org.junit.Before;
-import org.junit.Test;
+public final class RecreateToDoItemsForDick extends ToDoItemsRecreate {
 
-public class ToDoItemTest_ownedBy extends ToDoIntegTest {
-
-    @Before
-    public void setUpData() throws Exception {
-        scenarioExecution().install(new ToDoItemsIntegTestFixture());
+    public RecreateToDoItemsForDick() {
+        super("dick");
+        withDiscoverability(Discoverability.DISCOVERABLE);
     }
-
-    @Inject
-    private ToDoItems toDoItems;
-
-    private ToDoItem toDoItem;
-
-    @Before
-    public void setUp() throws Exception {
-        final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
-        toDoItem = wrap(all.get(0));
-    }
-
-    @Test
-    public void cannotModify() throws Exception {
-        
-        // when, then
-        expectedExceptions.expectMessage("Always hidden");
-        toDoItem.setOwnedBy("other");
-    }
-
-
 }

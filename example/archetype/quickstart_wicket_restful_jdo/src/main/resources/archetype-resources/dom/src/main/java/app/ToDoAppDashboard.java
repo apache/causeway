@@ -31,6 +31,8 @@ import org.apache.isis.applib.annotation.Render.Type;
 
 public class ToDoAppDashboard extends AbstractViewModel {
 
+    //region > identification in the UI
+    // //////////////////////////////////////
     public String title() {
         return "Dashboard";
     }
@@ -38,9 +40,9 @@ public class ToDoAppDashboard extends AbstractViewModel {
     public String iconName() {
         return "Dashboard";
     }
-    
-    // //////////////////////////////////////
-    // ViewModel contract
+    //endregion
+
+    //region > ViewModel contract
     // //////////////////////////////////////
 
     private String memento;
@@ -55,9 +57,9 @@ public class ToDoAppDashboard extends AbstractViewModel {
         this.memento = memento;
     }
 
+    //endregion
 
-    // //////////////////////////////////////
-    // getAnalysisByCategory
+    //region > getAnalysisByCategory (collection)
     // //////////////////////////////////////
 
     @Named("By Category")
@@ -66,9 +68,9 @@ public class ToDoAppDashboard extends AbstractViewModel {
     public List<ToDoItemsByCategoryViewModel> getAnalysisByCategory() {
         return toDoItemAnalysis.toDoItemsByCategory();
     }
-    
-    // //////////////////////////////////////
-    // getAnalysisByDateRange
+    //endregion
+
+    //region > getAnalysisByDateRange (collection)
     // //////////////////////////////////////
     
     @Named("By Date Range")
@@ -77,13 +79,14 @@ public class ToDoAppDashboard extends AbstractViewModel {
     public List<ToDoItemsByDateRangeViewModel> getAnalysisByDateRange() {
         return toDoItemAnalysis.toDoItemsByDateRange();
     }
-    
+    //endregion
 
-    // //////////////////////////////////////
-    // injected services
+    //region > injected services
     // //////////////////////////////////////
     
     @javax.inject.Inject
     private ToDoItemAnalysis toDoItemAnalysis;
+
+    //endregion
 
 }

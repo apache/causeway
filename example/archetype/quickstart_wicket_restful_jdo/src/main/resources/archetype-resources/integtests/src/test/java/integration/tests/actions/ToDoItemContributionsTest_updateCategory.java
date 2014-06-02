@@ -21,53 +21,58 @@
  */
 package integration.tests.actions;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import dom.todo.ToDoItem;
+import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItem.Subcategory;
+import dom.todo.ToDoItemContributions;
+import dom.todo.ToDoItems;
+import fixture.todo.integtests.ToDoItemsIntegTestFixture;
 import integration.tests.ToDoIntegTest;
 
 import java.util.List;
-
-import dom.todo.ToDoItem;
-import dom.todo.ToDoItemContributions;
-import dom.todo.ToDoItems;
-import dom.todo.ToDoItem.Category;
-import dom.todo.ToDoItem.Subcategory;
-import fixture.todo.ToDoItemsFixture;
-
-import org.joda.time.LocalDate;
-import org.junit.After;
+import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.clock.Clock;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ToDoItemContributionsTest_updateCategory extends ToDoIntegTest {
 
-    private ToDoItem toDoItem;
+    @Before
+    public void setUpData() throws Exception {
+        scenarioExecution().install(new ToDoItemsIntegTestFixture().withTracing());
+    }
+
+    @Inject
+    private ToDoItems toDoItems;
+    @Inject
     private ToDoItemContributions toDoItemContributions;
+
+    private ToDoItemContributions toDoItemContributionsWrapper;
+    private ToDoItem toDoItem;
 
     @Before
     public void setUp() throws Exception {
-        scenarioExecution().install(new ToDoItemsFixture());
-
-        final ToDoItems toDoItems = wrap(service(ToDoItems.class));
-        toDoItemContributions = wrap(service(ToDoItemContributions.class));
         final List<ToDoItem> all = toDoItems.notYetComplete();
         toDoItem = wrap(all.get(0));
+
+        toDoItemContributionsWrapper = wrap(toDoItemContributions);
     }
 
     @Test
     public void happyCase() throws Exception {
         
         // when
-        toDoItemContributions.updateCategory(toDoItem, Category.Professional, Subcategory.Consulting);
+        toDoItemContributionsWrapper.updateCategory(toDoItem, Category.Professional, Subcategory.Consulting);
         
         // then
         assertThat(toDoItem.getCategory(), is(Category.Professional));
         assertThat(toDoItem.getSubcategory(), is(Subcategory.Consulting));
         
         // when
-        toDoItemContributions.updateCategory(toDoItem, Category.Domestic, Subcategory.Chores);
+        toDoItemContributionsWrapper.updateCategory(toDoItem, Category.Domestic, Subcategory.Chores);
         
         // then
         assertThat(toDoItem.getCategory(), is(Category.Domestic));
@@ -79,15 +84,15 @@ public class ToDoItemContributionsTest_updateCategory extends ToDoIntegTest {
     public void categoryCannotBeNull() throws Exception {
         
         // when, then
-        expectedExceptions.expectMessage("Category is mandatory");
-        toDoItemContributions.updateCategory(toDoItem, null, Subcategory.Chores);
+        expectedExceptions.expectMessage("'Category' is mandatory");
+        toDoItemContributionsWrapper.updateCategory(toDoItem, null, Subcategory.Chores);
     }
 
     @Test
     public void subcategoryCanBeNull() throws Exception {
         
         // when, then
-        toDoItemContributions.updateCategory(toDoItem, Category.Professional, null);
+        toDoItemContributionsWrapper.updateCategory(toDoItem, Category.Professional, null);
     }
     
     @Test
@@ -95,7 +100,7 @@ public class ToDoItemContributionsTest_updateCategory extends ToDoIntegTest {
         
         // when, then
         expectedExceptions.expectMessage(containsString("Invalid subcategory"));
-        toDoItemContributions.updateCategory(toDoItem, Category.Professional, Subcategory.Chores);
+        toDoItemContributionsWrapper.updateCategory(toDoItem, Category.Professional, Subcategory.Chores);
     }
     
 }

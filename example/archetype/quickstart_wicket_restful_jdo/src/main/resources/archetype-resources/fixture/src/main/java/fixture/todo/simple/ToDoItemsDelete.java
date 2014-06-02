@@ -19,47 +19,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package app;
+package fixture.todo.simple;
 
-import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
 
-@Hidden
-public class ToDoAppDashboardService  {
+public class ToDoItemsDelete extends FixtureScript {
 
-    //region > identification in the UI
-    // //////////////////////////////////////
+    //region > constructor
+    private final String user;
 
-    private static final String ID = "dashboard";
-
-    public String getId() {
-        return ID;
-    }
-
-    public String iconName() {
-        return ID;
+    /**
+     * @param user - if null then executes for the current user or will use any {@link ${symbol_pound}run(String) parameters} provided when run.
+     */
+    public ToDoItemsDelete(final String user) {
+        super(null, Util.localNameFor("delete", user));
+        this.user = user;
     }
     //endregion
 
-    //region > lookup (action)
-    // //////////////////////////////////////
-    @ActionSemantics(Of.SAFE)
-    @HomePage
-    public ToDoAppDashboard lookup() {
-        return container.newViewModelInstance(ToDoAppDashboard.class, ID);
+    //region > execute
+    @Override
+    protected void execute(ExecutionContext executionContext) {
+        final String ownedBy = Util.coalesce(user, executionContext.getParameters(), getContainer().getUser().getName());
+
+        isisJdoSupport.executeUpdate("delete from ${symbol_escape}"ToDoItem${symbol_escape}" where ${symbol_escape}"ownedBy${symbol_escape}" = '" + ownedBy + "'");
     }
 
     //endregion
 
     //region > injected services
-    // //////////////////////////////////////
-
     @javax.inject.Inject
-    private DomainObjectContainer container;
-
+    private IsisJdoSupport isisJdoSupport;
     //endregion
 
 }

@@ -19,43 +19,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integration.tests.props;
 
-import dom.todo.ToDoItem;
-import dom.todo.ToDoItems;
-import fixture.todo.integtests.ToDoItemsIntegTestFixture;
-import integration.tests.ToDoIntegTest;
+package fixture.todo.integtests;
 
-import java.util.List;
-import javax.inject.Inject;
-import org.junit.Before;
-import org.junit.Test;
+import fixture.todo.simple.ToDoItemsRecreateAndCompleteSeveral;
 
-public class ToDoItemTest_ownedBy extends ToDoIntegTest {
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-    @Before
-    public void setUpData() throws Exception {
-        scenarioExecution().install(new ToDoItemsIntegTestFixture());
+/**
+ * Refactored to reuse the newer {@link FixtureScript} API.
+ */
+public class ToDoItemsIntegTestFixture extends FixtureScript {
+
+    public ToDoItemsIntegTestFixture() {
+        super(null, "integ-test");
     }
 
-    @Inject
-    private ToDoItems toDoItems;
-
-    private ToDoItem toDoItem;
-
-    @Before
-    public void setUp() throws Exception {
-        final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
-        toDoItem = wrap(all.get(0));
+    @Override
+    protected void execute(ExecutionContext executionContext) {
+        execute(new ToDoItemsRecreateAndCompleteSeveral(null), executionContext);
     }
-
-    @Test
-    public void cannotModify() throws Exception {
-        
-        // when, then
-        expectedExceptions.expectMessage("Always hidden");
-        toDoItem.setOwnedBy("other");
-    }
-
 
 }

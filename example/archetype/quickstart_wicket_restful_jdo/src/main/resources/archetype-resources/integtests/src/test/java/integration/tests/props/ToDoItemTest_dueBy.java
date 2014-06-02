@@ -21,32 +21,39 @@
  */
 package integration.tests.props;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import dom.todo.ToDoItem;
+import dom.todo.ToDoItems;
+import fixture.todo.integtests.ToDoItemsIntegTestFixture;
 import integration.tests.ToDoIntegTest;
 
 import java.util.List;
-
-import dom.todo.ToDoItem;
-import dom.todo.ToDoItems;
-import fixture.todo.ToDoItemsFixture;
-
+import javax.inject.Inject;
 import org.joda.time.LocalDate;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.services.clock.ClockService;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ToDoItemTest_dueBy extends ToDoIntegTest {
+
+    @Before
+    public void setUpData() throws Exception {
+        scenarioExecution().install(new ToDoItemsIntegTestFixture());
+    }
+
+    @Inject
+    private ClockService clockService;
+    @Inject
+    private ToDoItems toDoItems;
 
     private ToDoItem toDoItem;
 
     @Before
     public void setUp() throws Exception {
-        scenarioExecution().install(new ToDoItemsFixture());
-
-        final List<ToDoItem> all = wrap(service(ToDoItems.class)).notYetComplete();
+        final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
         toDoItem = wrap(all.get(0));
     }
 
@@ -54,7 +61,7 @@ public class ToDoItemTest_dueBy extends ToDoIntegTest {
     public void happyCase() throws Exception {
         
         // when
-        final LocalDate fiveDaysFromNow = Clock.getTimeAsLocalDate().plusDays(5);
+        final LocalDate fiveDaysFromNow = clockService.now().plusDays(5);
         toDoItem.setDueBy(fiveDaysFromNow);
         
         // then
@@ -75,7 +82,7 @@ public class ToDoItemTest_dueBy extends ToDoIntegTest {
     @Test
     public void canBeUpToSixDaysInPast() throws Exception {
         
-        final LocalDate nowAsLocalDate = Clock.getTimeAsLocalDate();
+        final LocalDate nowAsLocalDate = clockService.now();
         final LocalDate sixDaysAgo = nowAsLocalDate.plusDays(-5);
 
         // when
