@@ -20,6 +20,14 @@ Description
 
 TLP releases:
 
+  * isis-1.5.0                                     : 06 Jun 2014
+  * isis-objectstore-jdo-1.5.0                     : 06 Jun 2014
+  * isis-security-shiro-1.5.0                      : 06 Jun 2014
+  * isis-viewer-restfulobjects-2.3.0               : 06 Jun 2014
+  * isis-viewer-wicket-1.5.0                       : 06 Jun 2014
+  * quickstart-wicket-restful_jdo-archetype-1.5.0  : 06 Jun 2014
+  * simple-wicket-restful_jdo-archetype-1.5.0      : 06 Jun 2014
+  
   * isis-objectstore-jdo-1.4.1                     : 14 Mar 2014
   * isis-viewer-wicket-1.4.1                       : 14 Mar 2014
   * quickstart-wicket-restful_jdo-archetype-1.4.1  : 14 Mar 2014
@@ -29,7 +37,7 @@ TLP releases:
   * isis-objectstore-jdo-1.4.0                     : 11 Mar 2014
   * isis-security-file-1.4.0                       : 11 Mar 2014
   * isis-security-shiro-1.4.0                      : 11 Mar 2014
-  * isis-viewer-restfulobjects-2.1.0               : 11 Mar 2014
+  * isis-viewer-restfulobjects-2.2.0               : 11 Mar 2014
   * isis-viewer-wicket-1.4.0                       : 11 Mar 2014
   * quickstart-wicket-restful_jdo-archetype-1.4.0  : 11 Mar 2014
   * simple-wicket-restful_jdo-archetype-1.4.0      : 11 Mar 2014
