@@ -29,7 +29,7 @@
 
 	<groupId>org.apache.isis.security</groupId>
 	<artifactId>isis-security-shiro</artifactId>
-    <version>1.4.2-SNAPSHOT</version>
+    <version>1.5.0</version>
 
 	<name>Isis Shiro Security</name>
 
@@ -103,7 +103,7 @@
 			<dependency>
 			    <groupId>org.apache.isis.security</groupId>
 			    <artifactId>isis-security-shiro</artifactId>
-				<version>1.4.2-SNAPSHOT</version>
+				<version>1.5.0</version>
 			</dependency>
     	</dependencies>
     </dependencyManagement>
@@ -151,4 +151,8 @@
 
 
 	</dependencies>
+
+  <scm>
+    <tag>isis-security-shiro-1.5.0</tag>
+  </scm>
 </project>
