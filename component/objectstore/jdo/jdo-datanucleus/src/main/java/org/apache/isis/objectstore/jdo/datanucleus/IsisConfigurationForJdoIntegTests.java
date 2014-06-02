@@ -67,7 +67,9 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
         addDataNucleusProperty("datanucleus.defaultInheritanceStrategy", "TABLE_PER_CLASS");
         addDataNucleusProperty("datanucleus.cache.level2.type","none");
         addDataNucleusProperty("datanucleus.identifier.case", "PreserveCase");
-        
+
+        addDataNucleusProperty("datanucleus.persistenceByReachabilityAtCommit", "false");
+
         // Don't do validations that consume setup time.
         addDataNucleusProperty("datanucleus.autoCreateSchema", "true");
         addDataNucleusProperty("datanucleus.validateTables", "false");
