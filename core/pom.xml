@@ -21,7 +21,7 @@
 
     <groupId>org.apache.isis.core</groupId>
     <artifactId>isis</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.0-SNAPSHOT</version>
     
     <packaging>pom</packaging>
 
@@ -90,7 +90,7 @@
         <connection>scm:git:http://git.apache.org/isis.git/core</connection>
         <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/isis.git/trunk/framework/</developerConnection>
         <url>git://git.apache.org/isis.git/core</url>
-      <tag>isis-1.5.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <!-- used in Site generation for relative references. -->
@@ -918,13 +918,13 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
                 <!-- not scope=test, because referenced by some sql-tests-common under compile scope -->
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -933,14 +933,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-applib</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-applib</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -949,7 +949,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-log4j</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
@@ -958,14 +958,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -974,12 +974,12 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -988,33 +988,33 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-bytecode-cglib</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-bytecode-javassist</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
 
             <!-- webserver -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-webserver</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
 
             <!-- specsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-specsupport</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
 
             <!-- integtestsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-integtestsupport</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
                 <!-- not scope=test, because referenced by some sql-tests-common under compile scope -->
             </dependency>
 
@@ -1022,7 +1022,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-wrapper</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
 
 
@@ -1030,24 +1030,24 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-objectstore</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-objectstore</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-profilestore</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
 
 
@@ -1055,17 +1055,17 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-tck</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-tck-dom</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-tck-fixture</artifactId>
-                <version>1.5.0</version>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
 
 
