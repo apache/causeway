@@ -18,11 +18,8 @@
  */
 package org.apache.isis.core.metamodel.services.bookmarks;
 
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.NotContributed;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.NotContributed.As;
-import org.apache.isis.applib.annotation.NotInServiceMenu;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -30,6 +27,7 @@ import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAware;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 
+@DomainService
 public class BookmarkServiceDefault implements BookmarkService, DomainObjectServicesAware {
 
     private DomainObjectServices domainObjectServices;

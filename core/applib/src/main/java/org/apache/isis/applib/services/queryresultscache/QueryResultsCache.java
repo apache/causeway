@@ -27,8 +27,10 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 
+@DomainService
 @RequestScoped
 public class QueryResultsCache {
 

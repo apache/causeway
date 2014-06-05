@@ -16,6 +16,7 @@
  */
 package org.apache.isis.core.runtime.services.xmlsnapshot;
 
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,6 +27,7 @@ import org.apache.isis.core.runtime.snapshot.XmlSnapshotBuilder;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
+@DomainService
 public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
 
     static class XmlSnapshotServiceDefaultBuilder implements XmlSnapshotService.Builder{

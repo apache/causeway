@@ -25,8 +25,10 @@ import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
 
 import org.apache.isis.applib.AbstractService;
+import org.apache.isis.applib.annotation.DomainService;
 
-public class ClassDiscoveryServiceUsingReflections 
+@DomainService
+public class ClassDiscoveryServiceUsingReflections
             extends AbstractService 
             implements ClassDiscoveryService {
 

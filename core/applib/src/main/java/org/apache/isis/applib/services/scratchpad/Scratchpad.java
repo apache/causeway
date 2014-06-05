@@ -24,8 +24,10 @@ import javax.enterprise.context.RequestScoped;
 
 import com.google.common.collect.Maps;
 
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 
+@DomainService
 @RequestScoped
 public class Scratchpad {
     

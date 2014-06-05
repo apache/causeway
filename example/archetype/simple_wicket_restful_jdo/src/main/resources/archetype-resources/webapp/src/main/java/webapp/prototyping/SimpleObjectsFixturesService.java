@@ -21,22 +21,27 @@
  */
 package webapp.prototyping;
 
-import java.util.List;
-
 import dom.simple.SimpleObject;
 import dom.simple.SimpleObjects;
 import fixture.simple.SimpleObjectsFixture;
 
-import org.apache.isis.applib.AbstractService;
+import java.util.List;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Prototype;
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
 
 /**
  * Enables fixtures to be installed from the application.
  */
+@DomainService(20)
 @Named("Prototyping")
-public class SimpleObjectsFixturesService extends AbstractService {
+public class SimpleObjectsFixturesService extends FixtureScripts {
+
+    public SimpleObjectsFixturesService() {
+        super("fixture.simple");
+    }
 
     @Prototype
     public String installFixtures() {

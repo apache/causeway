@@ -21,11 +21,13 @@ import javax.enterprise.context.RequestScoped;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Register this as a service in order to access context information about any {@link Command}.
  */
+@DomainService
 @RequestScoped
 public class CommandContext {
 

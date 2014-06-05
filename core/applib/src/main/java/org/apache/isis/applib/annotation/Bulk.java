@@ -62,6 +62,7 @@ public @interface Bulk {
     /**
      * Register this as a service in order to access context information about a bulk action invocation.
      */
+    @DomainService
     @RequestScoped
     public static class InteractionContext {
 

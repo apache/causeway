@@ -25,20 +25,13 @@ import java.util.SortedMap;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.enterprise.context.RequestScoped;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.factory.InstanceCreationClassException;
-import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.runtime.fixturedomainservice.ObjectFixtureService;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.SystemConstants;
@@ -58,7 +51,7 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
     public ServicesInstallerFromConfiguration() {
         this(new ServiceInstantiator());
     }
-    
+
     ServicesInstallerFromConfiguration(final ServiceInstantiator serviceInstantiator) {
         super(ServicesInstaller.TYPE, "configuration");
         this.serviceInstantiator = serviceInstantiator;
@@ -68,11 +61,11 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
     public List<Object> getServices(final DeploymentType deploymentType) {
 
         LOG.info("installing " + this.getClass().getName());
-        
+
         final List<Object> serviceList = Lists.newArrayList();
         appendServices(getConfiguration(), null, serviceList);
         appendServices(getConfiguration(), deploymentType.name(), serviceList);
-        
+
         if (serviceList.size() == 0) {
             throw new InitialisationException("No services specified");
         }
@@ -81,12 +74,12 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
 
     private void appendServices(final IsisConfiguration configuration, final String group, List<Object> listOfServices) {
         final String root = ConfigurationConstants.ROOT + (group == null ? "" : group.toLowerCase() + ".");
-        
+
         String servicePrefix = configuration.getString(root + SERVICES_PREFIX);
         if (group != null && servicePrefix == null) {
             servicePrefix = configuration.getString(ConfigurationConstants.ROOT + SERVICES_PREFIX);
         }
-        
+
         final String prefix = servicePrefix(servicePrefix);
         final String configuredServices = configuration.getString(root + SERVICES);
         appendConfiguredServices(prefix, configuredServices, listOfServices);
@@ -94,13 +87,13 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
     }
 
     private final static Pattern regex = Pattern.compile("((\\d+):)(.*)");
-    
+
     private void appendConfiguredServices(final String servicePrefix, final String configuredServices, List<Object> serviceList) {
         if (configuredServices == null) {
             return;
         }
         final SortedMap<Integer,List<Object>> positionedServices = Maps.newTreeMap();
-        
+
         final StringTokenizer services = new StringTokenizer(configuredServices, ConfigurationConstants.LIST_SEPARATOR);
         if (!services.hasMoreTokens()) {
             throw new InitialisationException("Services specified, but none loaded");
@@ -144,7 +137,7 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
             final String type = serviceName.substring(0, pos);
             if ("repository".equals(type)) {
                 final String className = servicePrefix + serviceName.substring(pos + 1);
-                
+
                 final Class<?> underlying = loadClass(className);
                 return new SimpleRepository(underlying);
             } else {
@@ -152,8 +145,8 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
                 final Class<?> cls = loadClass(type);
                 return serviceInstantiator.createInstance(cls);
             }
-        } 
-        
+        }
+
         final Class<?> cls = loadClass(servicePrefix + serviceName);
         return serviceInstantiator.createInstance(cls);
     }

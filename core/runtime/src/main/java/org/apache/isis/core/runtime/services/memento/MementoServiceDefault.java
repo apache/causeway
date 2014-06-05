@@ -29,9 +29,11 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.memento.MementoService;
 
+@DomainService
 public class MementoServiceDefault implements MementoService {
 
     static class MementoDefault implements Memento {

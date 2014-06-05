@@ -394,6 +394,4 @@ public abstract class FixtureScript
     @javax.inject.Inject
     protected FixtureScripts fixtureScripts;
 
-
-
 }
