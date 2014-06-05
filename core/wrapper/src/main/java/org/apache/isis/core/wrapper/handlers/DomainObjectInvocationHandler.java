@@ -25,23 +25,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.events.CollectionAccessEvent;
-import org.apache.isis.applib.events.InteractionEvent;
-import org.apache.isis.applib.events.ObjectTitleEvent;
-import org.apache.isis.applib.events.PropertyAccessEvent;
-import org.apache.isis.applib.events.UsabilityEvent;
-import org.apache.isis.applib.events.ValidityEvent;
-import org.apache.isis.applib.events.VisibilityEvent;
+import org.apache.isis.applib.events.*;
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.services.wrapper.DisabledException;
-import org.apache.isis.applib.services.wrapper.HiddenException;
-import org.apache.isis.applib.services.wrapper.InteractionException;
-import org.apache.isis.applib.services.wrapper.InvalidException;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.applib.services.wrapper.*;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
-import org.apache.isis.applib.services.wrapper.WrapperObject;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -55,17 +43,6 @@ import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
-import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacet;
-import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
-import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
-import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
-import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
-import org.apache.isis.core.metamodel.facets.properties.modify.PropertyInitializationFacet;
-import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -74,14 +51,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.progmodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateRemoveFromFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.members.hidden.method.HideForContextFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.properties.modify.PropertyClearFacetViaClearMethod;
-import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetterFacetViaModifyMethod;
-import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacetViaMethod;
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
@@ -144,7 +113,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             return delegate(method, args);
         }
 
-        final ObjectAdapter targetAdapter = getAdapterManager().getAdapterFor(getDelegate());
+        final ObjectAdapter targetAdapter = getAdapterManager().adapterFor(getDelegate());
 
         if (isTitleMethod(method)) {
             return handleTitleMethod(method, args, targetAdapter);

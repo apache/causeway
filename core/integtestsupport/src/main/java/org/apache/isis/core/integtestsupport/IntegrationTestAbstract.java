@@ -28,6 +28,7 @@ import org.junit.runners.model.Statement;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
@@ -189,6 +190,20 @@ public abstract class IntegrationTestAbstract {
             };
         }
     }
+
+    // //////////////////////////////////////
+
+    /**
+     * Convenience method to avoid some boilerplate and rename (as more in keeping with the
+     * {@link org.apache.isis.applib.fixturescripts.FixtureScript} API compared to the older
+     * {@link org.apache.isis.applib.fixtures.InstallableFixture} API).
+     */
+    protected static void runScript(FixtureScript... fixtureScripts) {
+        scenarioExecution().install(fixtureScripts);
+    }
+
+    // //////////////////////////////////////
+
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
