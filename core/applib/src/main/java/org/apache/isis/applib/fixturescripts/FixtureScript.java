@@ -326,7 +326,7 @@ public abstract class FixtureScript
 
     @Programmatic
     public final List<FixtureResult> run(final String parameters) {
-        final ExecutionContext executionContext = new ExecutionContext(parameters, fixtureScripts).withTracing(this.tracePrintStream);
+        final ExecutionContext executionContext = fixtureScripts.newExecutionContext(parameters).withTracing(this.tracePrintStream);
         executionContext.executeIfNotAlready(this);
         return executionContext.getResults();
     }
@@ -348,7 +348,7 @@ public abstract class FixtureScript
      * Adds a child {@link FixtureScript fixture script}, overriding its default name with one more
      * meaningful in the context of this fixture.
      */
-    protected final void execute(final String localNameOverride, final FixtureScript fixtureScript, ExecutionContext executionContext) {
+    protected void execute(final String localNameOverride, final FixtureScript fixtureScript, ExecutionContext executionContext) {
         fixtureScript.setParentPath(pathWith(""));
         if(localNameOverride != null) {
             fixtureScript.setLocalName(localNameOverride);
@@ -359,7 +359,7 @@ public abstract class FixtureScript
     /**
      * Executes a child {@link FixtureScript fixture script} (simply using its default name).
      */
-    protected final void execute(final FixtureScript fixtureScript, ExecutionContext executionContext) {
+    protected void execute(final FixtureScript fixtureScript, ExecutionContext executionContext) {
         execute(null, fixtureScript, executionContext);
     }
 
