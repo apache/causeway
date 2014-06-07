@@ -29,10 +29,6 @@
 	<artifactId>simple_wicket_restful_jdo-integtests</artifactId>
 	<name>Simple Wicket/Restful/JDO Integration Tests</name>
 
-    <properties>
-        <skipTests>true</skipTests>
-    </properties>
-
     <build>
         <testResources>
             <testResource>

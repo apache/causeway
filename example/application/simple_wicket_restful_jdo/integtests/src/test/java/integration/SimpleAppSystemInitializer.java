@@ -17,9 +17,13 @@
 package integration;
 
 import dom.simple.SimpleObjects;
+import fixture.simple.SimpleObjectsFixturesService;
 
+import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
+import org.apache.isis.core.metamodel.services.bookmarks.BookmarkServiceDefault;
+import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
@@ -52,8 +56,12 @@ public class SimpleAppSystemInitializer {
             
             withServices(
                     new SimpleObjects(),
+                    new SimpleObjectsFixturesService(),
                     new WrapperFactoryDefault(),
-                    new IsisJdoSupportImpl()
+                    new IsisJdoSupportImpl(),
+                    new ClassDiscoveryServiceUsingReflections(),
+                    new MementoServiceDefault(),
+                    new BookmarkServiceDefault()
                     );
         }
 

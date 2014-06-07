@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.services.devutils.DeveloperUtilitiesServic
 
 /**
  * These overrides are simply to 'move' the action underneath the 
- * {@link SimpleObjectsFixturesService prototyping} menu.
+ * {@link fixture.simple.SimpleObjectsFixturesService prototyping} menu.
  */
 public class DeveloperUtilities extends DeveloperUtilitiesServiceDefault {
 

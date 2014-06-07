@@ -160,6 +160,9 @@ public abstract class FixtureScripts extends AbstractService {
 
         return fixtureScript.run(parameters);
     }
+    public FixtureScript default0RunFixtureScript() {
+        return fixtureScriptList.isEmpty() ? null: fixtureScriptList.get(0);
+    }
     protected List<FixtureScript> choices0RunFixtureScript() {
         return fixtureScriptList;
     }

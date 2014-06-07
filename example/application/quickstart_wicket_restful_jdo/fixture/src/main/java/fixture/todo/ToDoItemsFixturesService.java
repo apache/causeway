@@ -38,6 +38,11 @@ public class ToDoItemsFixturesService extends FixtureScripts {
         super("fixture.todo");
     }
 
+    //@Override // compatibility with core 1.6.0
+    public FixtureScript default0RunFixtureScript() {
+        return findFixtureScriptFor(RecreateToDoItemsAndCompleteSeveralForCurrent.class);
+    }
+
     /**
      * Raising visibility to <tt>public</tt> so that choices are available for first param
      * of {@link #runFixtureScript(FixtureScript, String)}.
@@ -46,6 +51,9 @@ public class ToDoItemsFixturesService extends FixtureScripts {
     public List<FixtureScript> choices0RunFixtureScript() {
         return super.choices0RunFixtureScript();
     }
+
+    // //////////////////////////////////////
+
 
     @Prototype
     @MemberOrder(sequence="20")
