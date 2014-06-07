@@ -54,6 +54,7 @@
                         </goals>
                         <configuration>
                             <backgroundImage>${basedir}/src/main/jettyconsole/isis-banner.png</backgroundImage>
+                            <destinationFile>${project.build.directory}/${project.build.finalName}-jetty-console.jar</destinationFile>
                         </configuration>
                         <phase>package</phase>
                     </execution>
@@ -185,6 +186,10 @@
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-wrapper</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-profilestore</artifactId>
         </dependency>
         <dependency>
@@ -238,7 +243,7 @@
          <!-- 
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>jdbc</artifactId>
+            <artifactId>sqljdbc4</artifactId>
             <version>4.0</version>
         </dependency>
           -->
@@ -271,7 +276,7 @@
                             <tasks>
                                 <exec executable="java" failonerror="true">
                                     <arg value="-jar" />
-                                    <arg value="${project.build.directory}/${project.build.finalName}-jetty-console.war" />
+                                    <arg value="${project.build.directory}/${project.build.finalName}-jetty-console.jar" />
                                 </exec>
                             </tasks>
                         </configuration>
@@ -285,7 +290,6 @@
             <properties>
                 <!-- as used in the rebel.xml in the dom project -->
                 <target.dir>target</target.dir>
-
                 <isis-jrebel-plugin.packagePrefix>dom.simple,org.apache.isis.objectstore.jdo.applib</isis-jrebel-plugin.packagePrefix>
                 <isis-jrebel-plugin.loggingLevel>warn</isis-jrebel-plugin.loggingLevel>
             </properties>
@@ -339,5 +343,7 @@
             </build>
         </profile>
     </profiles>
+
+
 
 </project>
