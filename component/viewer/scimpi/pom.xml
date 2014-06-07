@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-        <version>1.4.0</version>
+        <version>1.5.0</version>
 		<relativePath>../../../core/pom.xml</relativePath>
 	</parent>
 
@@ -127,6 +127,5 @@
 	<modules>
 		<module>dispatcher</module>
 		<module>servlet</module>
-		<module>tck</module>
 	</modules>
 </project>

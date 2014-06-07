@@ -37,10 +37,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <isis.version>1.4.0</isis.version>
+        <isis.version>1.6.0-SNAPSHOT</isis.version>
         <isis-objectstore-nosql.version>1.0.0-SNAPSHOT</isis-objectstore-nosql.version>
         <isis-viewer-scimpi.version>1.0.0-SNAPSHOT</isis-viewer-scimpi.version>
-        <isis-security-file.version>1.4.0</isis-security-file.version>
+        <isis-security-file.version>1.6.0-SNAPSHOT</isis-security-file.version>
     </properties>
 
     <repositories>
