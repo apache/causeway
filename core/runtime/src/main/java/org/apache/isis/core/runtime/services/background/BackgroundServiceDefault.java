@@ -16,23 +16,16 @@
  */
 package org.apache.isis.core.runtime.services.background;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-
 import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
 
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
-
 import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundCommandService;
@@ -56,6 +49,12 @@ import org.apache.isis.core.progmodel.facets.actions.invoke.CommandUtil;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
+import static org.hamcrest.CoreMatchers.*;
+
+/**
+ * This is <i>not</i> annotated as an auto-discoverable {@link org.apache.isis.applib.annotation.DomainService} because
+ * it has mandatory dependencies.
+ */
 public class BackgroundServiceDefault implements BackgroundService {
 
     private final MementoServiceDefault mementoService;
@@ -249,7 +248,7 @@ public class BackgroundServiceDefault implements BackgroundService {
     public void injectBookmarkService(BookmarkService bookmarkService) {
         this.bookmarkService = bookmarkService;
     }
-    
+
     private BackgroundCommandService backgroundCommandService;
     /**
      * Mandatory service.

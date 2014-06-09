@@ -16,35 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.object.domainservice;
 
-package org.apache.isis.applib.annotation;
 
-import java.lang.annotation.*;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+
 
 /**
- * Indicates that the class should be automatically recognized as a domain service.
- *
- * <p>
- * Also indicates whether the domain service acts as a repository for an entity, and menu ordering UI hints.
- * </p>
+ * Corresponds to annotating the class with the {@link org.apache.isis.applib.annotation.DomainService} annotation.
  */
-@Inherited
-@Target({ ElementType.TYPE })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface DomainService {
+public interface DomainServiceFacet extends Facet {
 
     /**
-     * If this domain service acts as a repository for an entity type, specify that entity type.
-     */
-    Class<?> repositoryFor() default Object.class;
-
-    /**
-     * Number in Dewey Decimal format representing the order.
+     * Corresponds to {@link org.apache.isis.applib.annotation.DomainService#menuOrder()}.
      *
      * <p>
-     * Same convention as {@link MemberOrder#sequence()}.  If not specified, placed after any named.
+     * May be null.
      * </p>
      */
-    String menuOrder() default "" + Integer.MAX_VALUE;
+    public String getMenuOrder();
 
+    /**
+     * Corresponds to {@link org.apache.isis.applib.annotation.DomainService#repositoryFor()}.
+     *
+     * <p>
+     * May be null.
+     * </p>
+     */
+    public Class<?> getRepositoryFor();
 }

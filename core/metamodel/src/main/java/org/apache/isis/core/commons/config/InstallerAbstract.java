@@ -147,7 +147,7 @@ public abstract class InstallerAbstract implements Installer, IsisConfigurationB
      * 
      * <p>
      * Implementation note: the implementation is in fact just
-     * {@link InstallerLookupDefault}.
+     * {@link InstallerLookup}.
      */
     public IsisConfiguration getConfiguration() {
         if (isisConfigurationBuilder != null) {

@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 
 @Named("Analysis")
+@DomainService(menuOrder = "20")
 public class ToDoItemAnalysis {
 
 

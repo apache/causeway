@@ -18,18 +18,11 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId;
 
-import static org.apache.isis.core.commons.matchers.IsisMatchers.matches;
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.assertThat;
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isArray;
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isMap;
-import static org.hamcrest.CoreMatchers.endsWith;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import javax.ws.rs.core.Response;
-
+import org.hamcrest.Matchers;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
@@ -40,10 +33,11 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectMe
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
-import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+
+import static org.apache.isis.core.commons.matchers.IsisMatchers.matches;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.*;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
 
 public class Get_thenRepresentation_ok {
 
@@ -83,7 +77,7 @@ public class Get_thenRepresentation_ok {
         
         assertThat(repr.getServiceId(), is("JdkValuedEntities"));
         
-        assertThat(repr.getSelf(), isLink().httpMethod(RestfulHttpMethod.GET));
+        assertThat(repr.getSelf(), isLink().httpMethod(RestfulHttpMethod.GET).build());
         
         assertThat(repr.getMembers(), isMap());
         assertThat(repr.getMembers().size(), is(2));
@@ -99,7 +93,7 @@ public class Get_thenRepresentation_ok {
                                        .httpMethod(RestfulHttpMethod.GET)
                                        .href(endsWith("/services/JdkValuedEntities/actions/list"))
                                        .returning(HttpStatusCode.OK)
-                                       .responseEntityWithSelfHref(listMemberReprDetailsLink.getHref()));
+                                       .responseEntityWithSelfHref(listMemberReprDetailsLink.getHref()).build());
         
         
         assertThat(repr.getLinks(), isArray());
@@ -110,18 +104,18 @@ public class Get_thenRepresentation_ok {
         LinkRepresentation describedByLink = repr.getLinkWithRel(Rel.DESCRIBEDBY);
         assertThat(describedByLink, isLink(client)
                                        .httpMethod(RestfulHttpMethod.GET)
-                                       .href(endsWith("/domain-types/JdkValuedEntities"))
+                                       .href(endsWith("/domain-types/JdkValuedEntities")).build()
                                        );
         assertThat(describedByLink, isLink(client)
                 .returning(HttpStatusCode.OK)
-                .responseEntityWithSelfHref(describedByLink.getHref()));
+                .responseEntityWithSelfHref(describedByLink.getHref()).build());
         
         assertThat(repr.getLinkWithRel(Rel.PERSIST), is(nullValue()));
         assertThat(repr.getLinkWithRel(Rel.UPDATE), is(nullValue()));
         assertThat(repr.getLinkWithRel(Rel.DELETE), is(nullValue()));
         
         assertThat(repr.getExtensions(), isMap());
-        assertThat(repr.getOid(), matches("JdkValuedEntities:2"));
+        assertThat(repr.getOid(), matches("JdkValuedEntities:16"));
     }
 
 
@@ -151,7 +145,7 @@ public class Get_thenRepresentation_ok {
                                         .rel(Rel.DETAILS)
                                         .httpMethod(RestfulHttpMethod.GET)
                                         .href(Matchers.endsWith(":39393/services/BusinessRulesEntities/actions/visibleAndInvocableAction"))
-                                        .returning(HttpStatusCode.OK));
+                                        .returning(HttpStatusCode.OK).build());
     }
 
 
@@ -178,7 +172,7 @@ public class Get_thenRepresentation_ok {
         // even though not invocable, still can traverse to its details page
         assertThat(actionDetailsLink, isLink(this.client)
                                         .href(Matchers.endsWith(":39393/services/BusinessRulesEntities/actions/visibleButNotInvocableAction"))
-                                        .returning(HttpStatusCode.OK));
+                                        .returning(HttpStatusCode.OK).build());
     }
 
     @Test

@@ -32,7 +32,6 @@ import org.apache.isis.core.runtime.imageloader.TemplateImageLoaderInstaller;
 import org.apache.isis.core.runtime.installerregistry.installerapi.EmbeddedWebServerInstaller;
 import org.apache.isis.core.runtime.installerregistry.installerapi.IsisViewerInstaller;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
-import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
@@ -170,7 +169,7 @@ public final class SystemConstants {
      */
     public static final String IMAGE_LOADER_DEFAULT = "awt";
     /**
-     * Default if running on Google App Engine, see {@link InstallerLookupDefault#templateImageLoaderInstaller(String)}
+     * Default if running on Google App Engine, see {@link org.apache.isis.core.runtime.installerregistry.InstallerLookup#templateImageLoaderInstaller(String)}
      */
     public static final String IMAGE_LOADER_NOOP = "noop";
 

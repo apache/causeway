@@ -36,6 +36,7 @@ import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 
+@DomainService
 public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
     //region > priority (contributed property)

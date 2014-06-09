@@ -17,18 +17,14 @@
 package org.apache.isis.applib.services.clock;
 
 import java.sql.Timestamp;
-
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
-
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 
 @DomainService
-@Hidden
 public class ClockService {
     
     @Programmatic

@@ -39,7 +39,6 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
-import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -111,7 +110,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             isisConfigurationBuilder.add(WebAppConstants.WEB_APP_DIR, webappDir);
             isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "true");
 
-            final InstallerLookup installerLookup = new InstallerLookupDefault();
+            final InstallerLookup installerLookup = new InstallerLookup();
 
             injector = createGuiceInjector(isisConfigurationBuilder, deploymentType, installerLookup);
 

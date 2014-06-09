@@ -22,46 +22,23 @@ package org.apache.isis.core.runtime.runner;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
-import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerAdditionalProperty;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerConfiguration;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerDebug;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerDeploymentType;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerDiagnostics;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixture;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerHelp;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerNoSplash;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerPersistor;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerQuiet;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerReflector;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerUserProfileStore;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerVerbose;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerVersion;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerViewer;
+import org.apache.isis.core.runtime.runner.opts.*;
 import org.apache.isis.core.runtime.runner.opts.OptionValidator;
-import org.apache.isis.core.runtime.runner.opts.OptionValidatorForViewers;
 import org.apache.isis.core.runtime.system.DeploymentType;
 
 public class IsisRunner {
@@ -92,7 +69,7 @@ public class IsisRunner {
 
         // setup logging immediately
         loggingConfigurer.configureLogging(determineConfigDirectory(), args);
-        this.installerLookup = new InstallerLookupDefault();
+        this.installerLookup = new InstallerLookup();
 
         this.optionHandlerViewer = addStandardOptionHandlersAndValidators(this.installerLookup);
     }

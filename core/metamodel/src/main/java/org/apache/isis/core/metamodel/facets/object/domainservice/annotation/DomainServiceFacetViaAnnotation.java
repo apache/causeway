@@ -16,36 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package app;
-
-import dom.todo.ToDoItem;
-
-import org.apache.isis.applib.annotation.*;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.NotContributed.As;
-
-@DomainService
-@Hidden
-public class ToDoItemAnalysisContributions {
+package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
 
-    //region > analyseCategory (action)
-    // //////////////////////////////////////
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;
 
-    @NotInServiceMenu
-    @NotContributed(As.ASSOCIATION)
-    @ActionSemantics(Of.SAFE)
-    public ToDoItemsByCategoryViewModel analyseCategory(final ToDoItem item) {
-        return toDoAppAnalysis.toDoItemsForCategory(item.getCategory());
+
+public class DomainServiceFacetViaAnnotation extends DomainServiceFacetAbstract {
+
+    public DomainServiceFacetViaAnnotation(FacetHolder facetHolder, String menuOrder, Class<?> repositoryFor) {
+        super(facetHolder, menuOrder, repositoryFor);
     }
-    //endregion
-
-    //region > injected services
-    // //////////////////////////////////////
-
-    @javax.inject.Inject
-    private ToDoItemAnalysis toDoAppAnalysis;
-
-    //endregion
-
 }

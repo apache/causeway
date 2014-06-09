@@ -21,14 +21,15 @@ package org.apache.isis.core.runtime.services;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
+import java.util.SortedSet;
 import javax.annotation.PreDestroy;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
     public final static String PACKAGE_PREFIX_KEY = "isis.services.ServicesInstallerFromAnnotation.packagePrefix";
 
     private final ServiceInstantiator serviceInstantiator;
-    private List<Object> domainServices;
+
 
     public ServicesInstallerFromAnnotation() {
         this(new ServiceInstantiator());
@@ -62,7 +63,6 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
     private String packagePrefixes;
 
     private final SortedMap<Integer,List<Object>> positionedServices = Maps.newTreeMap();
-
 
     public void init() {
         initIfRequired();
@@ -80,7 +80,6 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
                 throw new IllegalStateException("Could not locate '" + PACKAGE_PREFIX_KEY + "' key in property files - aborting");
             }
 
-            domainServices = addAllDomainServices();
         } finally {
             initialized = true;
         }
@@ -91,42 +90,6 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
     }
 
     // //////////////////////////////////////
-
-    private List<Object> addAllDomainServices() {
-
-        final SortedMap<Integer,List<Object>> positionedServices = Maps.newTreeMap();
-
-        for (final String packagePrefix : Iterables.transform(Splitter.on(",").split(packagePrefixes), trim())) {
-            Reflections reflections = new Reflections(packagePrefix);
-
-            final Iterable<Class<?>> classes = Iterables.filter(
-                    reflections.getTypesAnnotatedWith(DomainService.class), instantiatable());
-            for (final Class<?> cls : classes) {
-
-                final DomainService domainService = cls.getAnnotation(DomainService.class);
-                final int order = domainService.value();
-                final String serviceName = cls.getName();
-
-                List<Object> list = positionedServices.get(order);
-                if(list == null) {
-                    list = Lists.newArrayList();
-                    positionedServices.put(order, list);
-                }
-
-                LOG.info("creating service " + serviceName + (order!=Integer.MAX_VALUE?" at position " + order: "" ));
-                Object service = instantiateService(cls);
-                if(service != null) {
-                    list.add(service);
-                }
-            }
-        }
-        final List<Object> serviceList = Lists.newArrayList();
-        for (Integer position : positionedServices.keySet()) {
-            final List<Object> list = positionedServices.get(position);
-            serviceList.addAll(list);
-        }
-        return serviceList;
-    }
 
     private Predicate<Class<?>> instantiatable() {
         return and(not(nullClass()), not(abstractClass()));
@@ -140,7 +103,6 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
             }
         };
     }
-
 
     private static Predicate<Class<?>> nullClass() {
         return new Predicate<Class<?>>() {
@@ -165,17 +127,50 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
 
     // //////////////////////////////////////
 
+    private Map<DeploymentType, List<Object>> servicesByDeploymentType = Maps.newHashMap();
+
     @Override
     public List<Object> getServices(DeploymentType deploymentType) {
         initIfRequired();
-        return domainServices;
+
+        List<Object> serviceList = servicesByDeploymentType.get(deploymentType);
+        if(serviceList == null) {
+
+            final SortedMap<String, SortedSet<String>> positionedServices = Maps.newTreeMap(new DeweyOrderComparator());
+            appendServices(deploymentType, positionedServices);
+
+            serviceList = ServicesInstallerUtils.instantiateServicesFrom(positionedServices, serviceInstantiator);
+
+            servicesByDeploymentType.put(deploymentType, serviceList);
+        }
+        return serviceList;
     }
 
     // //////////////////////////////////////
 
-    private Object instantiateService(final Class cls) {
-        return serviceInstantiator.createInstance(cls);
+    public void appendServices(
+            DeploymentType deploymentType,
+            SortedMap<String, SortedSet<String>> positionedServices) {
+        initIfRequired();
+
+        for (final String packagePrefix : Iterables.transform(Splitter.on(",").split(packagePrefixes), trim())) {
+            Reflections reflections = new Reflections(packagePrefix);
+
+            final Iterable<Class<?>> classes = Iterables.filter(
+                    reflections.getTypesAnnotatedWith(DomainService.class), instantiatable());
+            for (final Class<?> cls : classes) {
+
+                final DomainService domainService = cls.getAnnotation(DomainService.class);
+                final String order = domainService.menuOrder();
+                final String serviceName = cls.getName();
+
+                ServicesInstallerUtils.appendInPosition(positionedServices, order, serviceName);
+            }
+        }
     }
+
+
+    // //////////////////////////////////////
 
     @Override
     public List<Class<?>> getTypes() {

@@ -20,6 +20,9 @@
 package org.apache.isis.core.wrapper;
 
 
+import org.apache.isis.applib.annotation.DomainService;
+
+@DomainService
 public class WrapperFactoryDefault extends WrapperFactoryJavassist {
 
 }

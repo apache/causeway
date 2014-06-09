@@ -21,18 +21,15 @@ package org.apache.isis.core.runtime.runner;
 
 import java.util.Collections;
 import java.util.List;
-
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installerregistry.installerapi.IsisViewerInstaller;
-import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.IsisSystemFactory;
@@ -47,8 +44,8 @@ public class IsisInjectModule extends AbstractModule {
 
     private final List<String> viewerNames = Lists.newArrayList();
 
-    private static InstallerLookupDefault defaultInstallerLookup() {
-        return new InstallerLookupDefault();
+    private static InstallerLookup defaultInstallerLookup() {
+        return new InstallerLookup();
     }
 
     private static IsisConfigurationBuilderDefault defaultConfigurationBuider() {

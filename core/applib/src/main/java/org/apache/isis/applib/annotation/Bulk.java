@@ -158,6 +158,7 @@ public @interface Bulk {
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
+        @Programmatic
         public void setInvokedAs(InvokedAs invokedAs) {
             this.invokedAs = invokedAs;
         }
@@ -165,6 +166,7 @@ public @interface Bulk {
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
+        @Programmatic
         public void setDomainObjects(List<Object> domainObjects) {
             this.domainObjects = domainObjects;
         }
@@ -172,6 +174,7 @@ public @interface Bulk {
         /**
          * <b>NOT API</b>: intended to be called only by the framework.
          */
+        @Programmatic
         public void setIndex(int index) {
             this.index = index;
         }
@@ -231,7 +234,6 @@ public @interface Bulk {
         public boolean isLast() {
             return this.index == (getSize()-1);
         }
-
 
     }
 

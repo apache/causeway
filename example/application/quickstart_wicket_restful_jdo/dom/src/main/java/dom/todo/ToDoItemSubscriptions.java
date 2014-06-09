@@ -31,6 +31,7 @@ import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 
+@DomainService
 public class ToDoItemSubscriptions {
 
     //region > LOG

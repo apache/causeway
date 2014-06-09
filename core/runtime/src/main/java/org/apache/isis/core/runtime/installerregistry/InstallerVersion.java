@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.installers;
+package org.apache.isis.core.runtime.installerregistry;
 
 import java.io.IOException;
 import java.io.InputStream;

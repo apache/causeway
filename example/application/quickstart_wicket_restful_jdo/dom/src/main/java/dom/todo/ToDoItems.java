@@ -32,6 +32,7 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.clock.ClockService;
 
 @Named("ToDos")
+@DomainService(menuOrder = "10", repositoryFor = ToDoItem.class)
 public class ToDoItems {
 
     //region > identification in the UI

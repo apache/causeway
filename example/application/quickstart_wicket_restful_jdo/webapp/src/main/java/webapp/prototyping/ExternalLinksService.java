@@ -19,12 +19,10 @@ package webapp.prototyping;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.Prototype;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.MemberOrder;
 
+@DomainService(menuOrder = "40.3")
 public class ExternalLinksService {
 
     public static enum ExternalLink {

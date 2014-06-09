@@ -21,6 +21,7 @@ package fixture.simple;
 import dom.simple.SimpleObjects;
 
 import java.util.List;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Prototype;
@@ -33,13 +34,14 @@ import org.apache.isis.applib.fixturescripts.SimpleFixtureScript;
  * Enables fixtures to be installed from the application.
  */
 @Named("Prototyping")
+@DomainService(menuOrder = "1")
 public class SimpleObjectsFixturesService extends FixtureScripts {
 
     public SimpleObjectsFixturesService() {
         super("fixture.simple");
     }
 
-    //@Override // compatibility with core 1.6.0
+    //@Override // compatibility with core 1.5.0
     public FixtureScript default0RunFixtureScript() {
         return findFixtureScriptFor(SimpleFixtureScript.class);
     }

@@ -22,17 +22,11 @@ package org.apache.isis.core.integtestsupport.legacy;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
 import org.jmock.Mockery;
-import org.junit.internal.runners.InitializationError;
-import org.junit.internal.runners.JUnit4ClassRunner;
-import org.junit.internal.runners.MethodRoadie;
-import org.junit.internal.runners.TestClass;
-import org.junit.internal.runners.TestMethod;
+import org.junit.internal.runners.*;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
-
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
@@ -42,7 +36,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.exploration.AuthenticationRequestExploration;
 import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
-import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
+import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -88,7 +82,7 @@ public class IsisTestRunner extends JUnit4ClassRunner {
                                                                                // off
                                                                                // splash
 
-        final InstallerLookupDefault installerLookup = new InstallerLookupDefault();
+        final InstallerLookup installerLookup = new InstallerLookup();
         isisConfigurationBuilder.injectInto(installerLookup);
         installerLookup.init();
 

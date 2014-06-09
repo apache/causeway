@@ -19,19 +19,14 @@
 
 package org.apache.isis.core.runtime.services;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.InstallerAbstract;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.fixturedomainservice.ObjectFixtureService;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.SystemConstants;
@@ -44,7 +39,7 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
     private static final String EXPLORATION_OBJECTS = "exploration-objects";
     private static final String SERVICES_PREFIX = "services.prefix";
 
-    private static final char DELIMITER = '#';
+    private final static Pattern regex = Pattern.compile("((\\d+):)(.*)");
 
     private final ServiceInstantiator serviceInstantiator;
 
@@ -56,48 +51,54 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
         super(ServicesInstaller.TYPE, "configuration");
         this.serviceInstantiator = serviceInstantiator;
     }
-    
+
+    // //////////////////////////////////////
+
+    private Map<DeploymentType, List<Object>> servicesByDeploymentType = Maps.newHashMap();
+
     @Override
     public List<Object> getServices(final DeploymentType deploymentType) {
 
         LOG.info("installing " + this.getClass().getName());
 
-        final List<Object> serviceList = Lists.newArrayList();
-        appendServices(getConfiguration(), null, serviceList);
-        appendServices(getConfiguration(), deploymentType.name(), serviceList);
+        List<Object> serviceList = servicesByDeploymentType.get(deploymentType);
+        if(serviceList == null) {
 
-        if (serviceList.size() == 0) {
-            throw new InitialisationException("No services specified");
+            final SortedMap<String, SortedSet<String>> positionedServices = Maps.newTreeMap(new DeweyOrderComparator());
+            appendServices(deploymentType, positionedServices);
+
+            serviceList = ServicesInstallerUtils.instantiateServicesFrom(positionedServices, serviceInstantiator);
+
+            servicesByDeploymentType.put(deploymentType, serviceList);
         }
-        return Collections.unmodifiableList(serviceList);
+        return serviceList;
     }
 
-    private void appendServices(final IsisConfiguration configuration, final String group, List<Object> listOfServices) {
+    // //////////////////////////////////////
+
+    public void appendServices(DeploymentType deploymentType, final SortedMap<String, SortedSet<String>> positionedServices) {
+
+        appendConfiguredServices(null, positionedServices);
+        appendConfiguredServices(deploymentType, positionedServices);
+
+        appendObjectFixtureService(null, positionedServices);
+    }
+
+    private void appendConfiguredServices(final DeploymentType deploymentType, final SortedMap<String, SortedSet<String>> positionedServices) {
+        String group = deploymentType != null? deploymentType.name(): null;
         final String root = ConfigurationConstants.ROOT + (group == null ? "" : group.toLowerCase() + ".");
 
-        String servicePrefix = configuration.getString(root + SERVICES_PREFIX);
+        String servicePrefix = getConfiguration().getString(root + SERVICES_PREFIX);
         if (group != null && servicePrefix == null) {
-            servicePrefix = configuration.getString(ConfigurationConstants.ROOT + SERVICES_PREFIX);
+            servicePrefix = getConfiguration().getString(ConfigurationConstants.ROOT + SERVICES_PREFIX);
         }
 
-        final String prefix = servicePrefix(servicePrefix);
-        final String configuredServices = configuration.getString(root + SERVICES);
-        appendConfiguredServices(prefix, configuredServices, listOfServices);
-        appendObjectFixtureService(configuration, root, listOfServices);
-    }
-
-    private final static Pattern regex = Pattern.compile("((\\d+):)(.*)");
-
-    private void appendConfiguredServices(final String servicePrefix, final String configuredServices, List<Object> serviceList) {
+        final String configuredServices = getConfiguration().getString(root + SERVICES);
         if (configuredServices == null) {
             return;
         }
-        final SortedMap<Integer,List<Object>> positionedServices = Maps.newTreeMap();
 
         final StringTokenizer services = new StringTokenizer(configuredServices, ConfigurationConstants.LIST_SEPARATOR);
-        if (!services.hasMoreTokens()) {
-            throw new InitialisationException("Services specified, but none loaded");
-        }
         while (services.hasMoreTokens()) {
             String serviceName = services.nextToken().trim();
             if (serviceName.equals("")) {
@@ -109,72 +110,31 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
                 order = Integer.parseInt(matcher.group(2));
                 serviceName = matcher.group(3);
             }
-            List<Object> list = positionedServices.get(order);
-            if(list == null) {
-                list = Lists.newArrayList();
-                positionedServices.put(order, list);
-            }
 
-            LOG.info("creating service " + serviceName + (order!=Integer.MAX_VALUE?" at position " + order: "" ));
-            Object service = instantiateService(servicePrefix, serviceName);
-            if(service != null) {
-                list.add(service);
-            }
-        }
-        for (Integer position : positionedServices.keySet()) {
-            final List<Object> list = positionedServices.get(position);
-            serviceList.addAll(list);
+            ServicesInstallerUtils.appendInPosition(positionedServices, "" + order, ServicesInstallerUtils.fullyQualifiedServiceName(servicePrefix, serviceName));
         }
     }
 
-    private Object instantiateService(final String servicePrefix, String serviceName) {
-        final int pos = serviceName.indexOf(DELIMITER);
-        if( pos == 0) {
-            // a commented out line, in other words...
-            return null;
-        }
-        if (pos != -1) {
-            final String type = serviceName.substring(0, pos);
-            if ("repository".equals(type)) {
-                final String className = servicePrefix + serviceName.substring(pos + 1);
+    private void appendObjectFixtureService(DeploymentType deploymentType, final SortedMap<String, SortedSet<String>> positionedServices) {
 
-                final Class<?> underlying = loadClass(className);
-                return new SimpleRepository(underlying);
-            } else {
-                // disregard, assume the stuff after the delimiter (#) was a comment
-                final Class<?> cls = loadClass(type);
-                return serviceInstantiator.createInstance(cls);
-            }
-        }
+        final String group = deploymentType != null? deploymentType.name(): null;
+        final String root = ConfigurationConstants.ROOT + (group == null ? "" : group.toLowerCase() + ".");
 
-        final Class<?> cls = loadClass(servicePrefix + serviceName);
-        return serviceInstantiator.createInstance(cls);
-    }
-
-    private void appendObjectFixtureService(final IsisConfiguration configuration, final String root, List<Object> serviceList) {
-        if (configuration.getBoolean(root + EXPLORATION_OBJECTS)) {
-            final DeploymentType deploymentType = DeploymentType.lookup(configuration.getString(SystemConstants.DEPLOYMENT_TYPE_KEY));
-            if (deploymentType.isExploring()) {
-                serviceList.add(new ObjectFixtureService());
+        if (getConfiguration().getBoolean(root + EXPLORATION_OBJECTS)) {
+            final DeploymentType explorationDeploymentType = DeploymentType.lookup(getConfiguration().getString(SystemConstants.DEPLOYMENT_TYPE_KEY));
+            if (explorationDeploymentType.isExploring()) {
+                ServicesInstallerUtils.appendInPosition(positionedServices, "" + Integer.MAX_VALUE, ObjectFixtureService.class.getName());
             }
         }
     }
 
+    // unused, I think....?
     private static String servicePrefix(final String servicePrefix) {
         String prefix = servicePrefix == null ? "" : servicePrefix.trim();
         if (prefix.length() > 0 && !prefix.endsWith(ConfigurationConstants.DELIMITER)) {
             prefix = prefix + ConfigurationConstants.DELIMITER;
         }
         return prefix;
-    }
-
-    private static Class<?> loadClass(final String className) {
-        try {
-            LOG.debug("loading class for service: " + className);
-            return Thread.currentThread().getContextClassLoader().loadClass(className);
-        } catch (final ClassNotFoundException ex) {
-            throw new InitialisationException(String.format("Cannot find class '%s' for service", className));
-        }
     }
 
     @Override
