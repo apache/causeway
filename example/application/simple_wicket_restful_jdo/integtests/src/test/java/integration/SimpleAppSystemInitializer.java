@@ -27,6 +27,7 @@ import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
+import org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo;
 import org.apache.isis.objectstore.jdo.datanucleus.service.support.IsisJdoSupportImpl;
 
 /**
@@ -49,20 +50,22 @@ public class SimpleAppSystemInitializer {
     private static class SimpleAppSystemBuilder extends IsisSystemForTest.Builder {
 
         public SimpleAppSystemBuilder() {
-            //withFixtures( ... reference data fixtures ...); // if we had any...
             withLoggingAt(org.apache.log4j.Level.INFO);
             with(testConfiguration());
             with(new DataNucleusPersistenceMechanismInstaller());
-            
+
+            // services annotated with @DomainService
+            withServicesIn( "dom.simple"
+                            ,"fixture.simple"
+                            ,"org.apache.isis.core.wrapper"
+                            ,"org.apache.isis.applib"
+                            ,"org.apache.isis.core.metamodel.services"
+                            ,"org.apache.isis.core.runtime.services" );
+            // all other services
             withServices(
-                    new SimpleObjects(),
-                    new SimpleObjectsFixturesService(),
-                    new WrapperFactoryDefault(),
                     new IsisJdoSupportImpl(),
-                    new ClassDiscoveryServiceUsingReflections(),
-                    new MementoServiceDefault(),
-                    new BookmarkServiceDefault()
-                    );
+                    new EventBusServiceJdo()
+            );
         }
 
         private static IsisConfiguration testConfiguration() {

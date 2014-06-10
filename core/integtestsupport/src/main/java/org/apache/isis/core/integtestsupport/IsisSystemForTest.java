@@ -20,16 +20,10 @@
 package org.apache.isis.core.integtestsupport;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.log4j.Level;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -54,6 +48,7 @@ import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
+import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -198,11 +193,26 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             return this;
         }
 
+        public Builder withServicesIn(String... packagePrefixes ) {
+            if(packagePrefixes.length == 0) {
+                throw new IllegalArgumentException("Specify packagePrefixes to search for @DomainService-annotated services");
+            }
+            final ServicesInstallerFromAnnotation installer = new ServicesInstallerFromAnnotation();
+            installer.withPackagePrefixes(packagePrefixes);
+            final List<Object> serviceList = installer.getServices(null);
+            this.services.addAll(serviceList);
+            return this;
+        }
+
         public Builder withServices(Object... services) {
             this.services.addAll(Arrays.asList(services));
             return this;
         }
 
+        /**
+         * @deprecated - prefer to use {@link org.apache.isis.applib.fixturescripts.FixtureScript}s API instead.
+         */
+        @Deprecated
         public Builder withFixtures(InstallableFixture... fixtures) {
             this.fixtures.addAll(Arrays.asList(fixtures));
             return this;

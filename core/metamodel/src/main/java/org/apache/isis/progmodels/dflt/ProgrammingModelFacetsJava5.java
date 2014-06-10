@@ -22,6 +22,7 @@ package org.apache.isis.progmodels.dflt;
 import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFromAuditedAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.audit.configuration.AuditableFromConfigurationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.audit.markerifc.AuditableMarkerInterfaceFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.domainservice.annotation.DomainServiceViaAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.progmodel.facets.actions.bulk.annotation.BulkAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.command.annotation.CommandAnnotationFacetFactory;
@@ -95,14 +96,7 @@ import org.apache.isis.core.progmodel.facets.object.icon.method.IconMethodFacetF
 import org.apache.isis.core.progmodel.facets.object.ignore.annotation.RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.isis.RemoveSetDomainObjectContainerMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.isis.RemoveStaticGettersAndSettersFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveGetClassMethodFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveInitMethodFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveInjectMethodsFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveJavaLangComparableMethodsFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveJavaLangObjectMethodsFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveSuperclassMethodsFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.ignore.javalang.RemoveSyntheticOrAbstractMethodsFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.ignore.javalang.*;
 import org.apache.isis.core.progmodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.immutable.annotation.ImmutableAnnotationFacetFactory;
@@ -132,8 +126,8 @@ import org.apache.isis.core.progmodel.facets.object.validperspec.MustSatisfySpec
 import org.apache.isis.core.progmodel.facets.object.validprops.ObjectValidPropertiesFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.value.annotation.ValueFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.viewmodel.annotation.ViewModelIntefaceFacetFactory;
-import org.apache.isis.core.progmodel.facets.paged.PagedOnParentedCollectionFacetFactory;
 import org.apache.isis.core.progmodel.facets.paged.PagedAnnotationOnTypeFacetFactory;
+import org.apache.isis.core.progmodel.facets.paged.PagedOnParentedCollectionFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.autocomplete.ActionParameterAutoCompleteFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.enums.ParameterChoicesFacetDerivedFromChoicesFacetFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.method.ActionChoicesFacetFactory;
@@ -227,8 +221,10 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.
         addFactory(FallbackFacetFactory.class);
+
         addFactory(ObjectTypeDerivedFromClassNameFacetFactory.class);
-        
+        addFactory(DomainServiceViaAnnotationFacetFactory.class);
+
         addFactory(IteratorFilteringFacetFactory.class);
         addFactory(RemoveSyntheticOrAbstractMethodsFacetFactory.class);
         addFactory(RemoveSuperclassMethodsFacetFactory.class);

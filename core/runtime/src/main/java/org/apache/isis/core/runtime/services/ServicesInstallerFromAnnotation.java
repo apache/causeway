@@ -25,10 +25,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import javax.annotation.PreDestroy;
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
+import com.google.common.base.*;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import org.reflections.Reflections;
@@ -62,7 +59,17 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
 
     private String packagePrefixes;
 
-    private final SortedMap<Integer,List<Object>> positionedServices = Maps.newTreeMap();
+    /**
+     * For integration testing.
+     *
+     * <p>
+     *     Otherwise these are read from the {@link org.apache.isis.core.commons.config.IsisConfiguration}
+     * </p>
+     */
+    public void withPackagePrefixes(String... packagePrefixes) {
+        this.packagePrefixes = Joiner.on(",").join(packagePrefixes);
+    }
+
 
     public void init() {
         initIfRequired();
@@ -72,6 +79,9 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
 
     protected void initIfRequired() {
         if(initialized) {
+            return;
+        }
+        if(packagePrefixes != null) {
             return;
         }
         try {
