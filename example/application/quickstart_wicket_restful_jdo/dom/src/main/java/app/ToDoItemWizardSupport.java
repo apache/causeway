@@ -24,6 +24,7 @@ import org.joda.time.LocalDate;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -33,8 +34,9 @@ import org.apache.isis.applib.services.memento.MementoService;
 public class ToDoItemWizardSupport {
 
 
-    @MemberOrder(name = "ToDos", sequence = "1.1")
-    public ToDoItemWizard openWizard() {
+    @Named("New To Do (wizard)")
+    @MemberOrder(name = "ToDos", sequence = "6")
+    public ToDoItemWizard newToDoItemWizard() {
         return clone(new ToDoItemWizard());
     }
 

@@ -52,7 +52,7 @@ public class ToDoItems {
 
     @Bookmarkable
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "1")
+    @MemberOrder(sequence = "10")
     public List<ToDoItem> notYetComplete() {
         final List<ToDoItem> items = notYetCompleteNoUi();
         if(items.isEmpty()) {
@@ -74,7 +74,7 @@ public class ToDoItems {
     // //////////////////////////////////////
     
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "3")
+    @MemberOrder(sequence = "20")
     public List<ToDoItem> complete() {
         final List<ToDoItem> items = completeNoUi();
         if(items.isEmpty()) {
@@ -98,7 +98,7 @@ public class ToDoItems {
 	@SuppressWarnings("unchecked")
 	@Bookmarkable
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "30")
+    @MemberOrder(sequence = "40")
     public List<ToDoItem> categorized(
     		@Named("Category") final Category category,
     		@Named("Subcategory") final Subcategory subcategory,
@@ -134,7 +134,7 @@ public class ToDoItems {
     //region > newToDo (action)
     // //////////////////////////////////////
 
-    @MemberOrder(sequence = "40")
+    @MemberOrder(sequence = "5")
     public ToDoItem newToDo(
             final @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") @Named("Description") String description, 
             final @Named("Category") Category category,
@@ -167,6 +167,7 @@ public class ToDoItems {
     //region > allToDos (action)
     // //////////////////////////////////////
 
+    @Prototype
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "50")
     public List<ToDoItem> allToDos() {
