@@ -38,7 +38,6 @@ import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bulk.AppliesTo;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 import org.apache.isis.applib.annotation.Command.ExecuteIn;
-import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -174,7 +173,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
         if (dueBy == null) {
             return null;
         }
-        return isMoreThanOneWeekInPast(dueBy) ? "Due by date cannot be more than one week old" : null;
+        return toDoItems.validateDueBy(dueBy);
     }
     //endregion
 
@@ -706,19 +705,15 @@ public class ToDoItem implements Comparable<ToDoItem> {
 
     //region > programmatic helpers
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
 
     @Programmatic // excluded from the framework's metamodel
     public boolean isDue() {
         if (getDueBy() == null) {
             return false;
         }
-        return !isMoreThanOneWeekInPast(getDueBy());
+        return !toDoItems.isMoreThanOneWeekInPast(getDueBy());
     }
 
-    private static boolean isMoreThanOneWeekInPast(final LocalDate dueBy) {
-        return dueBy.toDateTimeAtStartOfDay().getMillis() < Clock.getTime() - ONE_WEEK_IN_MILLIS;
-    }
     //endregion
 
     //region > events
@@ -880,12 +875,12 @@ public class ToDoItem implements Comparable<ToDoItem> {
     @javax.inject.Inject
     @SuppressWarnings("unused")
     private ClockService clockService;
-    
+
     Bulk.InteractionContext bulkInteractionContext;
     public void injectBulkInteractionContext(Bulk.InteractionContext bulkInteractionContext) {
         this.bulkInteractionContext = bulkInteractionContext;
     }
-    
+
     @SuppressWarnings("unused")
     @javax.inject.Inject
     private CommandContext commandContext;
@@ -903,6 +898,7 @@ public class ToDoItem implements Comparable<ToDoItem> {
 
     @javax.inject.Inject
     private WrapperFactory wrapperFactory;
+
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //endregion
 

@@ -22,17 +22,12 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
-
-import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.PrependingStringBuffer;
-import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
-
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -43,6 +38,7 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkable.BookmarkPolicyFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
@@ -564,7 +560,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     }
 
     // //////////////////////////////////////////////////////////
-    // validation
+    // validation & apply
     // //////////////////////////////////////////////////////////
 
     public String getReasonInvalidIfAny() {
@@ -573,8 +569,13 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         return validity.isAllowed() ? null : validity.getReason();
     }
 
-    public void apply() {
-        final ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
+    /**
+     * Apply changes to the underlying adapter (possibly returning a new adapter).
+     *
+     * @return adapter, which may be different from the original (if a {@link org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
+     */
+    public ObjectAdapter apply() {
+        ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
         for (final ScalarModel scalarModel : propertyScalarModels.values()) {
             final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty();
             if(property.containsDoOpFacet(NotPersistedFacet.class)) {
@@ -584,8 +585,21 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
             final ObjectAdapter associate = scalarModel.getObject();
             property.set(adapter, associate);
         }
+
+        final ViewModelFacet viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
+        if(viewModelFacet != null) {
+            final Object viewModel = adapter.getObject();
+            final boolean cloneable = viewModelFacet.isCloneable(viewModel);
+            if(cloneable) {
+                final Object newViewModel = viewModelFacet.clone(viewModel);
+                adapter = getAdapterManager().adapterFor(newViewModel);
+            }
+        }
+
         getObjectAdapterMemento().setAdapter(adapter);
         toViewMode();
+
+        return adapter;
     }
 
 

@@ -301,7 +301,6 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         okButton = new AjaxButtonWithPreValidateHook(ID_OK_BUTTON, Model.of("OK")) {
             private static final long serialVersionUID = 1L;
 
-
             @Override
             public String preValidate() {
                 // attempt to load with concurrency checking, catching recognized exceptions
@@ -316,30 +315,29 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
                     // reload
                     getEntityModel().load(ConcurrencyChecking.NO_CHECK);
-                    
+
                     getForm().clearInput();
                     getEntityModel().resetPropertyModels();
-                    
+
                     toViewMode(null);
                     toEditMode(null);
-                    
+
                     return recognizedErrorMessage;
                 }
-                
+
                 return null;
             }
 
             @Override
             public void validate() {
-
                 // add in any error message that we might have recognized from above
                 EntityPropertiesForm form = EntityPropertiesForm.this;
                 String preValidationErrorIfAny = form.getPreValidationErrorIfAny();
-                
+
                 if(preValidationErrorIfAny != null) {
                     feedbackOrNotifyAnyRecognizedError(preValidationErrorIfAny, form);
                     // skip validation, because would relate to old values
-                    
+
                     final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject(), null);
                     EntityPropertiesForm.this.setResponsePage(entityPage);
                 } else {
@@ -356,13 +354,15 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+
                 if (getForm().hasError()) {
                     // stay in edit mode
                     return;
-                } 
-                
-                final ObjectAdapter object = getEntityModel().getObject();
-                final Memento snapshotToRollbackToIfInvalid = new Memento(object);
+                }
+
+                final ObjectAdapter adapter = getEntityModel().getObject();
+                final Memento snapshotToRollbackToIfInvalid = new Memento(adapter);
+
                 // to perform object-level validation, we must apply the
                 // changes first
                 // contrast this with ActionPanel (for validating action
@@ -377,11 +377,11 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                     toEditMode(null);
                     return;
                 }
-                
+
                 try {
                     EntityPropertiesForm.this.getTransactionManager().flushTransaction();
                 } catch(RuntimeException ex) {
-                    
+
                     // There's no need to abort the transaction here, as it will have already been done
                     // (in IsisTransactionManager#executeWithinTransaction(...)).
 
@@ -400,6 +400,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                     throw ex;
                 }
 
+
                 toViewMode(null);
                 
                 // "redirect-after-post"
@@ -411,11 +412,13 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                 // otherwise (what I think happens) is that the httpServletResponse.sendRedirect ends up being to the same URL,
                 // and this is rejected as invalid either by the browser or by the servlet container (perhaps only if running remotely).
                 //
-                final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject(), null);
+
+                // we obtain the adapter from the entity model because it may have changed as the result of an apply earlier on.
+                final ObjectAdapter objectAdapter = getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                final EntityPage entityPage = new EntityPage(objectAdapter, null);
                 EntityPropertiesForm.this.setResponsePage(entityPage);
                 
             }
-
         };
         markupContainer.add(okButton);
 
@@ -453,7 +456,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                         }
                     }
                 });
-                
+
                 try {
                     getEntityModel().resetPropertyModels();
                 } catch(RuntimeException ex) {
@@ -479,6 +482,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         editButton.add(new JGrowlBehaviour());
         cancelButton.add(new JGrowlBehaviour());
     }
+
 
     private String recognizeExceptionAndNotify(RuntimeException ex, Component feedbackComponentIfAny) {
         
@@ -596,5 +600,6 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     protected MessageBroker getMessageBroker() {
         return getAuthenticationSession().getMessageBroker();
     }
+
 
 }

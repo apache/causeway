@@ -1,0 +1,77 @@
+{
+    "columns": [
+        {
+            "span": 12,
+            "memberGroups": {
+                "General": {
+                    "members": {
+                        "description": {
+                            "typicalLength": {
+                                "value": 50
+                            }
+                        },
+                        "category": {
+                            "typicalLength": {
+                                "value": 12
+                            }
+                        },
+                        "dueBy": {
+                            "typicalLength": {
+                                "value": 12
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "span": 0,
+            "memberGroups": {}
+        },
+        {
+            "span": 0,
+            "memberGroups": {}
+        },
+        {
+            "span": 8,
+            "collections": {}
+        }
+    ],
+    "actions": {
+        "previous": {
+            "named": {
+                "value": "Previous"
+            }
+        },
+        "next": {
+            "named": {
+                "value": "Next"
+            }
+        },
+        "finish": {
+            "named": {
+                "value": "Finish"
+            }
+        },
+        "downloadLayout": {
+            "named": {
+                "value": "Download Layout"
+            }
+        },
+        "viewModelInit": {
+            "named": {
+                "value": "View Model Init"
+            }
+        },
+        "viewModelMemento": {
+            "named": {
+                "value": "View Model Memento"
+            }
+        },
+        "recentChanges": {
+            "named": {
+                "value": "Recent Changes"
+            }
+        }
+    }
+}

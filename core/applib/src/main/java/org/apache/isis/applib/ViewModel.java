@@ -46,4 +46,12 @@ public interface ViewModel {
      */
     @Hidden
     public void viewModelInit(String memento);
+
+    /**
+     * Cloneable view models can in effect appear to be editable; the viewer can build a new view model from a
+     * view model whose state has been edited.
+     */
+    public interface Cloneable extends java.lang.Cloneable {
+        public Object clone();
+    }
 }

@@ -224,6 +224,20 @@ public class ToDoItems {
 
     //endregion
 
+    //region > common validation
+    // //////////////////////////////////////
+    private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
+
+    @Programmatic
+    public String validateDueBy(LocalDate dueBy) {
+        return isMoreThanOneWeekInPast(dueBy) ? "Due by date cannot be more than one week old" : null;
+    }
+    @Programmatic
+    boolean isMoreThanOneWeekInPast(final LocalDate dueBy) {
+        return dueBy.toDateTimeAtStartOfDay().getMillis() < clockService.nowAsMillis() - ONE_WEEK_IN_MILLIS;
+    }
+    //endregion
+
     //region > injected services
     // //////////////////////////////////////
     
@@ -232,6 +246,8 @@ public class ToDoItems {
 
     @javax.inject.Inject
     private ClockService clockService;
+
+
     //endregion
 
 }

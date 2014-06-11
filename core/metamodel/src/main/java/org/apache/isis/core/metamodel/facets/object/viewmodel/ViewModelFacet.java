@@ -34,4 +34,10 @@ public interface ViewModelFacet extends Facet {
 
     String memento(Object pojo);
 
+    /**
+     * Whether {@link #clone(Object)} can be called.
+     */
+    boolean isCloneable(Object pojo);
+
+    Object clone(Object pojo);
 }

@@ -19,25 +19,19 @@
 
 package org.apache.isis.viewer.wicket.ui.pages;
 
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Strings;
-import com.google.common.io.Resources;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-
-import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -353,7 +347,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         if(applicationActions == ApplicationActions.INCLUDE) {
             addActionPromptModalWindow();
             final ApplicationActionsModel model = new ApplicationActionsModel();
-            model.setActionPromptModalWindowProvider(this);
+            model.setActionPromptProvider(this);
             addComponent(container, ComponentType.APPLICATION_ACTIONS, model);
         } else {
             Components.permanentlyHide(container, ComponentType.APPLICATION_ACTIONS);

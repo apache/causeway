@@ -43,7 +43,15 @@ public abstract class AbstractViewModel extends AbstractContainedObject implemen
      * Equivalent to annotating every property and collection with {@link Disabled}.
      */
     public String disabled(Identifier.Type type) {
-        return type == Identifier.Type.PROPERTY_OR_COLLECTION? "Read-only": null;
+        // cloneable view models are not read-only
+        // because the viewer can simulate them being edited
+        if(this instanceof ViewModel.Cloneable) {
+            return null;
+        }
+        if (type != Identifier.Type.PROPERTY_OR_COLLECTION) {
+            return null;
+        }
+        return "Non-cloneable view models are read-only";
     }
 
 }
