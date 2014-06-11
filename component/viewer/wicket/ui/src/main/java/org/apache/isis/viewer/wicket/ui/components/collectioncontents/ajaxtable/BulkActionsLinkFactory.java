@@ -19,28 +19,22 @@
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
 import java.util.List;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-
 import org.apache.wicket.Session;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
-
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.Command.Executor;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.MessageBroker;
-import org.apache.isis.core.commons.exceptions.IsisApplicationException;
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -54,7 +48,6 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
-import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseHandlingStrategy;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
@@ -81,9 +74,9 @@ final class BulkActionsLinkFactory implements ActionLinkFactory {
 
     @Override
     public LinkAndLabel newLink(
-            final ObjectAdapterMemento serviceAdapterMemento, 
-            final ObjectAction objectAction, 
-            final String linkId, 
+            final ObjectAdapterMemento serviceAdapterMemento,
+            final ObjectAction objectAction,
+            final String linkId,
             final ActionPromptProvider actionPromptModalWindowProvider) {
         
         final ActionMemento actionMemento = new ActionMemento(objectAction);

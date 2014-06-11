@@ -19,9 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -29,25 +26,18 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.link.PopupSettings;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.resource.IResourceStream;
-
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.model.models.*;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
@@ -82,8 +72,8 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
      * concurrency checking is disabled; otherwise it is enforced.
      */
     protected AbstractLink newLink(
-            final String linkId, 
-            final ObjectAdapter objectAdapter, final ObjectAction action, 
+            final String linkId,
+            final ObjectAdapter objectAdapter, final ObjectAction action,
             final ActionPromptProvider actionPromptProvider) {
         
         final ActionPrompt actionPrompt = actionPromptProvider.getActionPrompt();
@@ -98,7 +88,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                 
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    
+
                     if(ajaxDeferredBehaviour != null) {
                         ajaxDeferredBehaviour.initiate(target);
                     } else {

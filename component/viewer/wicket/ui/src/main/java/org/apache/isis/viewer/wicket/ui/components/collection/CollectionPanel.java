@@ -69,7 +69,7 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
         this(id, collectionModel, new EntityModel(collectionModel.getParentObjectAdapterMemento()), collectionModel.getCollectionMemento().getCollection());
     }
 
-    CollectionPanel(String id, EntityCollectionModel collectionModel, EntityModel entityModel, OneToManyAssociation otma) {
+    CollectionPanel(final String id, final EntityCollectionModel collectionModel, final EntityModel entityModel, final OneToManyAssociation otma) {
         super(id, collectionModel);
 
         addActionPromptModalWindow();

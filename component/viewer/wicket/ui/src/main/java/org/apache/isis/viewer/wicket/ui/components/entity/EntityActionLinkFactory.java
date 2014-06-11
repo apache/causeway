@@ -19,9 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity;
 
-import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -33,13 +31,8 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.model.models.*;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
-import org.apache.isis.viewer.wicket.ui.util.Links;
 
 public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
 
@@ -53,14 +46,19 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
     }
 
     @Override
-    public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId, final ActionPromptProvider actionPromptModalWindowProvider) {
+    public LinkAndLabel newLink(
+            final ObjectAdapterMemento adapterMemento,
+            final ObjectAction action,
+            final String linkId,
+            final ActionPromptProvider actionPromptProvider) {
+
         final ObjectAdapter adapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
         
         final Boolean persistent = adapter.representsPersistent();
         if (!persistent) {
             throw new IllegalArgumentException("Object '" + adapter.titleString(null) + "' is not persistent.");
         }
-        
+
         // check visibility and whether enabled
         final AuthenticationSession session = getAuthenticationSession();
         
@@ -68,8 +66,9 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
         if (visibility.isVetoed()) {
             return null;
         }
+
         
-        final AbstractLink link = newLink(linkId, adapter, action, actionPromptModalWindowProvider);
+        final AbstractLink link = newLink(linkId, adapter, action, actionPromptProvider);
         
         final Consent usability = action.isUsable(session, adapter, Where.OBJECT_FORMS);
         final String disabledReasonIfAny = usability.getReason();

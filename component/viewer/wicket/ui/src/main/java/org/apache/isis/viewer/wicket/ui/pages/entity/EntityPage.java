@@ -147,4 +147,6 @@ public class EntityPage extends PageAbstract {
         return IsisContext.getDeploymentType();
     }
 
+
+
 }

@@ -112,16 +112,16 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
         // prune any service names that have no service actions
         serviceNamesInOrder.retainAll(serviceActionsByName.keySet());
         
-        return buildMenuItems(serviceNamesInOrder, serviceActionsByName, appActionsModel.getActionPromptModalWindowProvider());
+        return buildMenuItems(serviceNamesInOrder, serviceActionsByName, appActionsModel.getActionPromptProvider());
     }
 
     /**
      * Builds a hierarchy of {@link CssMenuItem}s, following the provided map of {@link LogicalServiceAction}s (keyed by their service Name).
      */
     private List<CssMenuItem> buildMenuItems(
-            final List<String> serviceNamesInOrder, 
-            final Map<String, List<LogicalServiceAction>> serviceActionsByName, 
-            final ActionPromptProvider actionPromptModalWindowProvider) {
+            final List<String> serviceNamesInOrder,
+            final Map<String, List<LogicalServiceAction>> serviceActionsByName,
+            final ActionPromptProvider actionPromptProvider) {
         
         final List<CssMenuItem> menuItems = Lists.newArrayList();
         for (String serviceName : serviceNamesInOrder) {
@@ -135,7 +135,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
                 }
                 final ObjectAdapterMemento serviceAdapterMemento = logicalServiceAction.serviceAdapterMemento;
                 final ObjectAction objectAction = logicalServiceAction.objectAction;
-                final Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, objectAction, cssMenuLinkFactory, actionPromptModalWindowProvider);
+                final Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, objectAction, cssMenuLinkFactory, actionPromptProvider);
                 if (subMenuItemBuilder == null) {
                     // not visible
                     continue;

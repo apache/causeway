@@ -70,25 +70,26 @@ public class CssMenuBuilder {
 
 
     public CssMenuPanel buildPanel(
-            final String wicketId, final String rootName, 
-            final ActionPromptProvider actionPromptModalWindowProvider) {
+            final String wicketId,
+            final String rootName,
+            final ActionPromptProvider actionPromptProvider) {
         final CssMenuItem findUsing = CssMenuItem.newMenuItem(rootName).build();
-        addMenuItems(findUsing, actions, actionPromptModalWindowProvider);
+        addMenuItems(findUsing, actions, actionPromptProvider);
         final CssMenuPanel cssMenuPanel = new CssMenuPanel(wicketId, Style.SMALL, Collections.singletonList(findUsing));
         return cssMenuPanel;
     }
 
     private void addMenuItems(
-            final CssMenuItem parent, 
-            final List<ObjectAction> actions, 
-            final ActionPromptProvider actionPromptModalWindowProvider) {
-        addMenuItemsForActionsOfType(parent, actions, ActionType.USER, actionPromptModalWindowProvider);
+            final CssMenuItem parent,
+            final List<ObjectAction> actions,
+            final ActionPromptProvider actionPromptProvider) {
+        addMenuItemsForActionsOfType(parent, actions, ActionType.USER, actionPromptProvider);
         if ( isExploring() || isPrototyping()) {
-            addMenuItemsForActionsOfType(parent, actions, ActionType.EXPLORATION, actionPromptModalWindowProvider);
-            addMenuItemsForActionsOfType(parent, actions, ActionType.PROTOTYPE, actionPromptModalWindowProvider);
+            addMenuItemsForActionsOfType(parent, actions, ActionType.EXPLORATION, actionPromptProvider);
+            addMenuItemsForActionsOfType(parent, actions, ActionType.PROTOTYPE, actionPromptProvider);
         }
         if (isDebugMode()) {
-            addMenuItemsForActionsOfType(parent, actions, ActionType.DEBUG, actionPromptModalWindowProvider);
+            addMenuItemsForActionsOfType(parent, actions, ActionType.DEBUG, actionPromptProvider);
         }
     }
 
@@ -110,26 +111,26 @@ public class CssMenuBuilder {
     }
 
     private void addMenuItemsForActionsOfType(
-            final CssMenuItem parent, 
-            final List<ObjectAction> actions, 
-            final ActionType type, 
-            final ActionPromptProvider actionPromptModalWindowProvider) {
+            final CssMenuItem parent,
+            final List<ObjectAction> actions,
+            final ActionType type,
+            final ActionPromptProvider actionPromptProvider) {
         final Collection<ObjectAction> filterActionsOfType = Collections2.filter(actions, Filters.asPredicate(ObjectAction.Filters.ofType(type)));
         for (final ObjectAction action : filterActionsOfType) {
-            addMenuItem(parent, action, actionPromptModalWindowProvider);
+            addMenuItem(parent, action, actionPromptProvider);
         }
     }
 
     private void addMenuItem(
-            final CssMenuItem parent, 
-            final ObjectAction action, 
+            final CssMenuItem parent,
+            final ObjectAction action,
             final ActionPromptProvider actionPromptModalWindowProvider) {
         addMenuItemForAction(parent, action, actionPromptModalWindowProvider);
     }
 
     private void addMenuItemForAction(
-            final CssMenuItem parent, 
-            final ObjectAction action, 
+            final CssMenuItem parent,
+            final ObjectAction action,
             final ActionPromptProvider actionPromptModalWindowProvider) {
         
         final NotContributedFacet notContributed = action.getFacet(NotContributedFacet.class);

@@ -783,7 +783,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
         final ObjectAdapter adapterAccordingToOidAdapterMap = oidAdapterMap.getAdapter(adapterOid);
         // take care not to touch the pojo, since it might have been deleted.
         ensureThatArg(
-                adapter, is(adapterAccordingToOidAdapterMap), 
+                adapter, is(adapterAccordingToOidAdapterMap),
                 "mismatch in OidAdapter map: " + "adapter's Oid: " + adapterOid + ", " + "provided adapter's OID: " + adapter.getOid() + "; " + "map's adapter's Oid: " + adapterAccordingToOidAdapterMap.getOid());
     }
 

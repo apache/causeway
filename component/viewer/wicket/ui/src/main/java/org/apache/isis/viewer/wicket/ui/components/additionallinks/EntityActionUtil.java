@@ -58,11 +58,9 @@ public final class EntityActionUtil {
     private final static MemberOrderFacetComparator memberOrderFacetComparator = new MemberOrderFacetComparator(false);
     
     public static List<LinkAndLabel> entityActions(
-            final EntityModel entityModel, 
-            final ObjectAssociation association, 
-            final ActionPromptProvider actionPromptModalWindowProvider) {
-        
-        
+            final EntityModel entityModel,
+            final ObjectAssociation association,
+            final ActionPromptProvider actionPromptProvider) {
         
         final List<ObjectAction> associatedActions = Lists.newArrayList();
 
@@ -88,7 +86,7 @@ public final class EntityActionUtil {
     
             @Override
             public LinkAndLabel apply(ObjectAction objectAction) {
-                return linkFactory.newLink(adapterMemento, objectAction, LinksSelectorPanelAbstract.ID_ADDITIONAL_LINK, actionPromptModalWindowProvider);
+                return linkFactory.newLink(adapterMemento, objectAction, LinksSelectorPanelAbstract.ID_ADDITIONAL_LINK, actionPromptProvider);
             }});
     }
 

@@ -35,7 +35,7 @@ class AppActionsCssMenuLinkFactory extends ActionLinkFactoryAbstract {
     
     @Override
     public LinkAndLabel newLink(
-            final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId, 
+            final ObjectAdapterMemento adapterMemento, final ObjectAction action, final String linkId,
             final ActionPromptProvider actionPromptModalWindowProvider) {
         
         ObjectAdapter objectAdapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);

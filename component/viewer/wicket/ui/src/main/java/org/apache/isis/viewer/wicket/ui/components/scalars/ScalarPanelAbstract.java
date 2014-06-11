@@ -40,13 +40,10 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.*;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Rendering;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -174,11 +171,9 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
      * Builds GUI lazily prior to first render.
      * 
      * <p>
-     * This design allows the panel to be configured first, using
-     * {@link #setFormat(Rendering)}.
-     * 
+     * This design allows the panel to be configured first.
+     *
      * @see #onBeforeRender()
-     * @see #setFormat(Rendering)
      */
     private void buildGui() {
         
@@ -250,8 +245,9 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         if(scalarModel.getKind() == ScalarModel.Kind.PROPERTY) {
             final ObjectAdapterMemento parentMemento = scalarModel.getParentObjectAdapterMemento();
             final EntityModel parentEntityModel = new EntityModel(parentMemento);
-            final ActionPromptProvider provider = ActionPromptProvider.Util.getFrom(this);
-            entityActions = EntityActionUtil.entityActions(parentEntityModel, scalarModel.getPropertyMemento().getProperty(), provider);
+            final ActionPromptProvider actionPromptProvider = ActionPromptProvider.Util.getFrom(this);
+            entityActions = EntityActionUtil.entityActions(
+                    parentEntityModel, scalarModel.getPropertyMemento().getProperty(), actionPromptProvider);
         } else {
             entityActions = null;
         }

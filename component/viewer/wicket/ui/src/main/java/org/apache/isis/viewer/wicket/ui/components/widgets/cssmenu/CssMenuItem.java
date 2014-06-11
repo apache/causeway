@@ -19,14 +19,10 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
-import static org.hamcrest.CoreMatchers.is;
-
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -35,7 +31,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.Blob;
@@ -56,6 +51,8 @@ import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+
+import static org.hamcrest.CoreMatchers.is;
 
 public class CssMenuItem implements Serializable {
 
@@ -260,16 +257,12 @@ public class CssMenuItem implements Serializable {
     /**
      * Creates a {@link Builder} for a submenu item invoking an action on the provided
      * {@link ObjectAdapterMemento target adapter}.
-     * @param page 
-     * 
-     * @return the builder, else <tt>null</tt> if the action is not visible for
-     *         the current user.
      */
     public Builder newSubMenuItem(
-            final ObjectAdapterMemento targetAdapterMemento, 
-            final ObjectAction objectAction, 
-            final ActionLinkFactory cssMenuLinkFactory, 
-            final ActionPromptProvider actionPromptModalWindowProvider) {
+            final ObjectAdapterMemento targetAdapterMemento,
+            final ObjectAction objectAction,
+            final ActionLinkFactory cssMenuLinkFactory,
+            final ActionPromptProvider actionPromptProvider) {
 
         // check visibility
         final AuthenticationSession session = getAuthenticationSession();
@@ -280,7 +273,9 @@ public class CssMenuItem implements Serializable {
         }
 
         // build the link
-        final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(targetAdapterMemento, objectAction, PageAbstract.ID_MENU_LINK, actionPromptModalWindowProvider);
+        final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(
+                targetAdapterMemento, objectAction, PageAbstract.ID_MENU_LINK,
+                actionPromptProvider);
         if(linkAndLabel==null) {
             // can only get a null if invisible, so this should not happen given guard above
             return null;
@@ -345,11 +340,13 @@ public class CssMenuItem implements Serializable {
 
     /**
      * Creates a {@link Builder} for a submenu item where the provided {@link ActionLinkFactory} is able to provide the target adapter. 
-     * @param page 
      */
-    public Builder newSubMenuItem(final ObjectAction objectAction, final ActionLinkFactory cssMenuLinkFactory, final ActionPromptProvider actionPromptModalWindowProvider) {
+    public Builder newSubMenuItem(
+            final ObjectAction objectAction,
+            final ActionLinkFactory cssMenuLinkFactory,
+            final ActionPromptProvider actionPromptProvider) {
 
-        final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(null, objectAction, PageAbstract.ID_MENU_LINK, actionPromptModalWindowProvider);
+        final LinkAndLabel linkAndLabel = cssMenuLinkFactory.newLink(null, objectAction, PageAbstract.ID_MENU_LINK, actionPromptProvider);
 
         final AbstractLink link = linkAndLabel.getLink();
         final String actionLabel = linkAndLabel.getLabel();
