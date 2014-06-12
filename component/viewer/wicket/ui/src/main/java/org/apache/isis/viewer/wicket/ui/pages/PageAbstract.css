@@ -198,6 +198,23 @@ colors
 
 /* Buttons */
 
+.wizardButtons .next,
+.wizardButtons .previous,
+.wizardButtons .finish {
+    height: 30px;
+    min-width: 80px;
+}
+
+
+.wizardButtons input:disabled {
+    background-color: lightgray;
+    cursor: not-allowed;
+}
+
+
+.wizardButtons .next,
+.wizardButtons .previous,
+.wizardButtons .finish,
 .edit,
 .ok,
 .okButton {
@@ -212,6 +229,9 @@ colors
 	cursor:pointer;
 }
 
+.wizardNext:focus,
+.wizardPrevious:focus,
+.wizardFinish:focus,
 .edit:focus,
 .ok:focus,
 .okButton:focus {

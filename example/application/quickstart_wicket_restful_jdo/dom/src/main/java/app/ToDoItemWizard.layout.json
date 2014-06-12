@@ -10,11 +10,7 @@
                                 "value": 50
                             }
                         },
-                        "category": {
-                            "typicalLength": {
-                                "value": 12
-                            }
-                        },
+                        "category": { },
                         "dueBy": {
                             "typicalLength": {
                                 "value": 12
@@ -51,26 +47,6 @@
         "finish": {
             "named": {
                 "value": "Finish"
-            }
-        },
-        "downloadLayout": {
-            "named": {
-                "value": "Download Layout"
-            }
-        },
-        "viewModelInit": {
-            "named": {
-                "value": "View Model Init"
-            }
-        },
-        "viewModelMemento": {
-            "named": {
-                "value": "View Model Memento"
-            }
-        },
-        "recentChanges": {
-            "named": {
-                "value": "Recent Changes"
             }
         }
     }

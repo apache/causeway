@@ -28,16 +28,16 @@ import org.joda.time.LocalDate;
 import org.apache.isis.applib.AbstractWizard;
 import org.apache.isis.applib.annotation.*;
 
-@Named("By Category")
-@Bookmarkable
 public class ToDoItemWizard
         extends AbstractWizard<ToDoItemWizard, ToDoItemWizard.State>
         implements Categorized {
 
+    //region > constructor
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public ToDoItemWizard() {
-        setState(State.ENTER_DESCRIPTION_PAGE);
+        setState(State.DESCRIPTION);
     }
-
+    //endregion
 
     //region > identification
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,6 @@ public class ToDoItemWizard
 
     //region > viewModel implementation
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     @Override
     public String viewModelMemento() {
         return toDoItemWizardSupport.mementoFor(this);
@@ -60,6 +59,7 @@ public class ToDoItemWizard
         toDoItemWizardSupport.initOf(memento, this);
     }
 
+    @Override
     public ToDoItemWizard clone() {
         return cloneThis();
     }
@@ -69,19 +69,19 @@ public class ToDoItemWizard
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public enum State implements AbstractWizard.State<ToDoItemWizard> {
-        ENTER_DESCRIPTION_PAGE,
-        ENTER_CATEGORY_PAGE,
-        ENTER_DUE_BY_PAGE,
+        DESCRIPTION,
+        CATEGORIES,
+        DUE_BY,
         CONFIRMATION_PAGE;
 
         public boolean hideDescription() {
-            return this != ENTER_DESCRIPTION_PAGE && this != CONFIRMATION_PAGE;
+            return this != DESCRIPTION && this != CONFIRMATION_PAGE;
         }
-        public boolean hideCategory() {
-            return this != ENTER_CATEGORY_PAGE && this != CONFIRMATION_PAGE;
+        public boolean hideCategories() {
+            return this != CATEGORIES && this != CONFIRMATION_PAGE;
         }
         public boolean hideDueBy() {
-            return this != ENTER_DUE_BY_PAGE && this != CONFIRMATION_PAGE;
+            return this != DUE_BY && this != CONFIRMATION_PAGE;
         }
 
         public String disableFinish(ToDoItemWizard toDoItemWizard) {
@@ -91,9 +91,9 @@ public class ToDoItemWizard
         @Override
         public State next() {
             switch (this) {
-                case ENTER_DESCRIPTION_PAGE: return ENTER_CATEGORY_PAGE;
-                case ENTER_CATEGORY_PAGE: return ENTER_DUE_BY_PAGE;
-                case ENTER_DUE_BY_PAGE: return CONFIRMATION_PAGE;
+                case DESCRIPTION: return CATEGORIES;
+                case CATEGORIES: return DUE_BY;
+                case DUE_BY: return CONFIRMATION_PAGE;
                 default: return CONFIRMATION_PAGE;
             }
         }
@@ -105,9 +105,9 @@ public class ToDoItemWizard
         @Override
         public State previous() {
             switch (this) {
-                case CONFIRMATION_PAGE: return ENTER_DUE_BY_PAGE;
-                case ENTER_DUE_BY_PAGE: return ENTER_CATEGORY_PAGE;
-                case ENTER_CATEGORY_PAGE: return ENTER_DESCRIPTION_PAGE;
+                case CONFIRMATION_PAGE: return DUE_BY;
+                case DUE_BY: return CATEGORIES;
+                case CATEGORIES: return DESCRIPTION;
                 default: return null;
             }
         }
@@ -139,7 +139,6 @@ public class ToDoItemWizard
 
     //region > category (property)
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     private Category category;
 
     /**
@@ -154,27 +153,22 @@ public class ToDoItemWizard
     }
 
     public boolean hideCategory() {
-        return getState().hideCategory();
+        return getState().hideCategories();
     }
     //endregion
 
+    //region > subcategory (hidden property)
     private ToDoItem.Subcategory subcategory;
 
+    @Hidden
+    @Optional
     public ToDoItem.Subcategory getSubcategory() {
         return subcategory;
     }
     public void setSubcategory(final ToDoItem.Subcategory subcategory) {
         this.subcategory = subcategory;
     }
-
-    /**
-     * Only show subcategory if has been populated.
-     */
-    public boolean hideSubcategory() {
-        return subcategory == null;
-    }
     //endregion
-
 
     //region > dueBy (property)
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,7 +200,7 @@ public class ToDoItemWizard
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @MemberOrder(sequence = "1")
     public ToDoItem finish() {
-        return toDoItems.newToDo(getDescription(), getCategory(), null, getDueBy(), null);
+        return toDoItems.newToDo(getDescription(), getCategory(), getSubcategory(), getDueBy(), null);
     }
 
     public String disableFinish() {
@@ -215,18 +209,14 @@ public class ToDoItemWizard
     //endregion
 
     //region > wizard impl
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     protected ToDoItemWizard cloneThis() {
         return toDoItemWizardSupport.clone(this);
     }
     //endregion
 
-
-
     //region > injected services
-    // //////////////////////////////////////
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @javax.inject.Inject
     private ToDoItemWizardSupport toDoItemWizardSupport;
 

@@ -19,13 +19,10 @@
 package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
 
 import java.util.List;
-
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
-import javax.jdo.spi.PersistenceCapable;
-
 import com.google.common.base.Strings;
-
+import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -71,6 +68,14 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
             if (existingFacet instanceof MandatoryFacetExplicitForProperty) {
                 // do not replace this facet; 
                 // an explicit @Mandatory annotation cannot be overridden by @Column annotation
+                return;
+            }
+
+            // TODO: this isn't really good enough; in theory there could be other implementations of view model
+            // rather than just implementing ViewModel.  However, we can't do a lookup of the ObjectSpecification for 'cls'
+            // because we would (I think) go into an infinite loop...
+            final Class<?> cls = processMethodContext.getCls();
+            if(ViewModel.class.isAssignableFrom(cls)) {
                 return;
             }
         }

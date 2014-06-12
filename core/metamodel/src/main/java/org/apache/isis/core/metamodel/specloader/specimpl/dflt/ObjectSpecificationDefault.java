@@ -52,6 +52,8 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.object.wizard.viewmodel.WizardFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.*;
 import org.apache.isis.core.metamodel.spec.feature.*;
@@ -296,6 +298,32 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         fieldNames.append(fieldNames.length() > 0 ? ", " : "");
         fieldNames.append(name);
     }
+
+
+    // //////////////////////////////////////////////////////////////
+    // view models and wizards
+    // //////////////////////////////////////////////////////////////
+
+    @Override
+    public boolean isViewModel() {
+        return containsFacet(ViewModelFacet.class);
+    }
+
+    @Override
+    public boolean isViewModelCloneable(ObjectAdapter targetAdapter) {
+        final ViewModelFacet facet = getFacet(ViewModelFacet.class);
+        if(facet == null) {
+            return false;
+        }
+        final Object pojo = targetAdapter.getObject();
+        return facet.isCloneable(pojo);
+    }
+
+    @Override
+    public boolean isWizard() {
+        return containsFacet(WizardFacet.class);
+    }
+
 
     // //////////////////////////////////////////////////////////////////////
     // getObjectAction

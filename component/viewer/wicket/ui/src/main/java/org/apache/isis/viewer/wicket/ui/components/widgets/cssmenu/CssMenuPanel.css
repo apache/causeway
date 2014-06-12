@@ -129,6 +129,7 @@
 
 .cssMenuPanel li.cssSubMenuItem p.disabled {
 	color: lightgray;
+    cursor: not-allowed;
 }
 
 .cssMenuPanel li.cssSubMenuItem {

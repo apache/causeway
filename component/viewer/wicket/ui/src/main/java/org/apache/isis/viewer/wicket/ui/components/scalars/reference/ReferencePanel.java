@@ -184,17 +184,18 @@ public class ReferencePanel extends ScalarPanelAbstract {
     @Override
     protected void onBeforeRenderWhenViewMode() {
         super.onBeforeRenderWhenViewMode();
-        entityLink.setEnabled(true);
+        entityLink.setEnabled(false);
         syncWithInput();
     }
 
     @Override
     protected void onBeforeRenderWhenDisabled(final String disableReason) {
         super.onBeforeRenderWhenDisabled(disableReason);
+        syncWithInput();
         final EntityModel entityLinkModel = (EntityModel) entityLink.getModel();
         entityLinkModel.toViewMode();
+        entityLink.setEnabled(false);
         entityLink.add(new AttributeModifier("title", Model.of(disableReason)));
-        syncWithInput();
     }
 
     
@@ -472,5 +473,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
                 (typeOfSpecification != null)? typeOfSpecification.getFacet(AutoCompleteFacet.class):null;
         return autoCompleteFacet != null;
     }
-    
+
+
+
 }

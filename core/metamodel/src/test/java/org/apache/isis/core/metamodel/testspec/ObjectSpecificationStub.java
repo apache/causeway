@@ -370,11 +370,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public String toString() {
-        return getFullIdentifier();
-    }
-
-    @Override
     public Consent isValid(final ObjectAdapter transientObject) {
         return null;
     }
@@ -483,6 +478,33 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return null;
     }
 
+
+
+    // /////////////////////////////////////////////////////////
+    // view models and wizards
+    // /////////////////////////////////////////////////////////
+
+    @Override
+    public boolean isViewModel() {
+        return false;
+    }
+
+    @Override
+    public boolean isViewModelCloneable(ObjectAdapter targetAdapter) {
+        return false;
+    }
+
+    @Override
+    public boolean isWizard() {
+        return false;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return getFullIdentifier();
+    }
 
 
 }

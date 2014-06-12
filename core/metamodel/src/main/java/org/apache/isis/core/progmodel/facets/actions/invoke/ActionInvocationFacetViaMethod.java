@@ -23,12 +23,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 import org.apache.isis.applib.annotation.Command.ExecuteIn;
@@ -47,7 +46,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacetAbstract;
@@ -185,7 +183,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                 executionParameters[i] = unwrap(arguments[i]);
             }
 
-            final Object object = unwrap(targetAdapter);
+            final Object targetPojo = unwrap(targetAdapter);
             
             final BulkFacet bulkFacet = getFacetHolder().getFacet(BulkFacet.class);
             if (bulkFacet != null && 
@@ -193,7 +191,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                 bulkInteractionContext.getInvokedAs() == null) {
                 
                 bulkInteractionContext.setInvokedAs(InvokedAs.REGULAR);
-                bulkInteractionContext.setDomainObjects(Collections.singletonList(object));
+                bulkInteractionContext.setDomainObjects(Collections.singletonList(targetPojo));
             }
 
             if(command != null && command.getExecutor() == Executor.USER && owningAction != null) {
@@ -265,16 +263,33 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                     command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
                 }
                 
-                final Object result = method.invoke(object, executionParameters);
+                Object result = method.invoke(targetPojo, executionParameters);
 
                 if (LOG.isDebugEnabled()) {
                     LOG.debug(" action result " + result);
                 }
                 if (result == null) {
+                    if(targetAdapter.getSpecification().isViewModelCloneable(null)) {
+                        // if this was a void method on a ViewModel.Cloneable, then (to save boilerplate in the domain)
+                        // automatically do the clone and return the clone instead.
+                        final ViewModel.Cloneable cloneable = (ViewModel.Cloneable) targetAdapter.getObject();
+                        final Object clone = cloneable.clone();
+                        final ObjectAdapter clonedAdapter = getAdapterManager().adapterFor(clone);
+                        return InvocationResult.forActionThatReturned(clonedAdapter);
+                    }
                 	return InvocationResult.forActionThatReturned(null);
                 }
 
-                final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
+                ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
+
+                if(resultAdapter.getSpecification().isViewModelCloneable(resultAdapter)) {
+                    // if the object returned is a ViewModel.Cloneable, then
+                    // (to save boilerplate in the domain) automatically do the clone.
+                    final ViewModel.Cloneable cloneable = (ViewModel.Cloneable) result;
+                    result = cloneable.clone();
+                    resultAdapter = getAdapterManager().adapterFor(result);
+                }
+
 
                 // copy over TypeOfFacet if required
                 final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);

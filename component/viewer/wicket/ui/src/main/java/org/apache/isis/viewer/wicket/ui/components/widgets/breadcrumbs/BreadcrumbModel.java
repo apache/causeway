@@ -45,6 +45,12 @@ public class BreadcrumbModel implements Serializable {
     }
 
     public void visited(final EntityModel entityModel) {
+
+        // ignore view models
+        if(entityModel.getTypeOfSpecification().isViewModel()) {
+            return;
+        }
+
         final String oidStr = oidStrFor(entityModel);
         
         removeExisting(oidStr);

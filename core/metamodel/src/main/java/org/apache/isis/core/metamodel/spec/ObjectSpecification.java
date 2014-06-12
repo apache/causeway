@@ -354,9 +354,11 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     public void markAsService();
 
 
+    // //////////////////////////////////////////////////////////////
+    // view models and wizards
+    // //////////////////////////////////////////////////////////////
 
-
-
-
-
+    boolean isViewModel();
+    boolean isViewModelCloneable(ObjectAdapter targetAdapter);
+    boolean isWizard();
 }

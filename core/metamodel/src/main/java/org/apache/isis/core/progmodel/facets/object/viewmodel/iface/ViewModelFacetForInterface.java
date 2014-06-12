@@ -43,7 +43,7 @@ public class ViewModelFacetForInterface extends ViewModelFacetAbstract {
 
     @Override
     public boolean isCloneable(Object pojo) {
-        return pojo instanceof ViewModel.Cloneable;
+        return pojo != null && pojo instanceof ViewModel.Cloneable;
     }
 
     @Override

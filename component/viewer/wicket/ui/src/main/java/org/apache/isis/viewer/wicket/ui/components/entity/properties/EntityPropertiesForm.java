@@ -26,6 +26,7 @@ import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -34,6 +35,7 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
@@ -48,6 +50,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
+import org.apache.isis.core.metamodel.facets.object.wizard.viewmodel.WizardFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
@@ -62,12 +65,16 @@ import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPathSignificantWebMarkupContainer;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.isis.viewer.wicket.ui.panels.AjaxButtonWithPreValidateHook;
+import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.IFormSubmitterWithPreValidateHook;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -87,9 +94,16 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     
     private static final String ID_PROPERTIES = "properties";
     private static final String ID_PROPERTY = "property";
+
     private static final String ID_EDIT_BUTTON = "edit";
     private static final String ID_OK_BUTTON = "ok";
     private static final String ID_CANCEL_BUTTON = "cancel";
+
+    private static final String ID_WIZARD_NEXT_BUTTON = "wizardNext";
+    private static final String ID_WIZARD_PREVIOUS_BUTTON = "wizardPrevious";
+    private static final String ID_WIZARD_FINISH_BUTTON = "wizardFinish";
+    private static final String ID_WIZARD_CANCEL_BUTTON = "wizardCancel";
+
     private static final String ID_FEEDBACK = "feedback";
 
     private final Component owningPanel;
@@ -136,6 +150,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         if(columnSpans.getLeft() > 0) {
             addedProperties = addPropertiesInColumn(leftColumn, MemberGroupLayoutHint.LEFT, columnSpans);
             addButtons(leftColumn);
+            addWizardButtons(leftColumn);
             addFeedbackGui(leftColumn);
         } else {
             Components.permanentlyHide(this, ID_LEFT_COLUMN);
@@ -143,7 +158,10 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         }
         if(!addedProperties) {
             // a bit hacky...
-            Components.permanentlyHide(this, ID_EDIT_BUTTON, ID_OK_BUTTON, ID_CANCEL_BUTTON, ID_FEEDBACK);
+            Components.permanentlyHide(this,
+                    ID_EDIT_BUTTON, ID_OK_BUTTON, ID_CANCEL_BUTTON,
+                    ID_WIZARD_NEXT_BUTTON, ID_WIZARD_PREVIOUS_BUTTON, ID_WIZARD_FINISH_BUTTON, ID_WIZARD_CANCEL_BUTTON,
+                    ID_FEEDBACK);
         }
         
         // middle column
@@ -188,6 +206,11 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
             Components.permanentlyHide(this, ID_ENTITY_COLLECTIONS_OVERFLOW);
         }
 
+    }
+
+    private boolean isWizard() {
+        final ObjectSpecification specification = getEntityModel().getObject().getSpecification();
+        return specification.containsFacet(WizardFacet.class);
     }
 
     private boolean addPropertiesInColumn(MarkupContainer markupContainer, MemberGroupLayoutHint hint, ColumnSpans columnSpans) {
@@ -256,9 +279,148 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         return Filters.and(ObjectAssociation.Filters.PROPERTIES, ObjectAssociation.Filters.dynamicallyVisible(getAuthenticationSession(), adapter, where));
     }
 
+
+    abstract class AjaxButtonWithOnError extends AjaxButton {
+
+        public AjaxButtonWithOnError(String id, IModel<String> model) {
+            super(id, model);
+        }
+
+        @Override
+        protected void onError(AjaxRequestTarget target, Form<?> form) {
+            super.onError(target, form);
+            toEditMode(target);
+        }
+    }
+
+    public class AjaxButtonForValidate extends AjaxButtonWithOnError implements IFormSubmitterWithPreValidateHook {
+        private static final long serialVersionUID = 1L;
+        public AjaxButtonForValidate(String id, IModel<String> model) {
+            super(id, model);
+        }
+
+        @Override
+        public String preValidate() {
+            // attempt to load with concurrency checking, catching recognized exceptions
+            try {
+                getEntityModel().load(ConcurrencyChecking.CHECK); // could have also just called #getObject(), since CHECK is the default
+
+            } catch(ConcurrencyException ex){
+                String recognizedErrorMessage = recognizeException(ex);
+                if(recognizedErrorMessage == null) {
+                    throw ex;
+                }
+
+                // reload
+                getEntityModel().load(ConcurrencyChecking.NO_CHECK);
+
+                getForm().clearInput();
+                getEntityModel().resetPropertyModels();
+
+                toViewMode(null);
+                toEditMode(null);
+
+                return recognizedErrorMessage;
+            }
+
+            return null;
+        }
+
+        @Override
+        public void validate() {
+            // add in any error message that we might have recognized from above
+            EntityPropertiesForm form = EntityPropertiesForm.this;
+            String preValidationErrorIfAny = form.getPreValidationErrorIfAny();
+
+            if(preValidationErrorIfAny != null) {
+                feedbackOrNotifyAnyRecognizedError(preValidationErrorIfAny, form);
+                // skip validation, because would relate to old values
+
+                final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject(), null);
+                EntityPropertiesForm.this.setResponsePage(entityPage);
+            } else {
+                // run Wicket's validation
+                super.validate();
+            }
+        }
+
+        @Override
+        protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+
+            if (getForm().hasError()) {
+                // stay in edit mode
+                return;
+            }
+
+            doPreApply();
+            if (applyFormChangesElse()) return;
+            final Object redirectIfAny = doPostApply();
+
+            if (flushChangesElse(target)) return;
+
+            getEntityModel().resetPropertyModels();
+
+            toViewMode(null);
+
+            // "redirect-after-post"
+            //
+            // RequestCycle.get().getActiveRequestHandler() indicates this is handled by the ListenerInterfaceRequestHandler
+            // which renders page at end.
+            //
+            // it's necessary to zap the page parameters (so mapping is to just wicket/page?nn)
+            // otherwise (what I think happens) is that the httpServletResponse.sendRedirect ends up being to the same URL,
+            // and this is rejected as invalid either by the browser or by the servlet container (perhaps only if running remotely).
+            //
+
+            final ObjectAdapter objectAdapter;
+            if(redirectIfAny != null) {
+                objectAdapter = getPersistenceSession().getAdapterManager().adapterFor(redirectIfAny);
+            } else {
+                // we obtain the adapter from the entity model because (if a view model) then the entity model may contain
+                // a different adapter (the cloned view model) to the one with which we started with.
+                objectAdapter = getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+            }
+
+            final EntityPage entityPage = new EntityPage(objectAdapter, null);
+            EntityPropertiesForm.this.setResponsePage(entityPage);
+        }
+
+        /**
+         * Optional hook to override.
+         *
+         * <p>
+         * If a non-null value is returned, then transition to it (ie eg the finish() transition for a wizard).
+         * </p>
+         */
+        protected void doPreApply() {
+        }
+
+        /**
+         * Optional hook to override.
+         *
+         * <p>
+         * If a non-null value is returned, then transition to it (ie eg the finish() transition for a wizard).
+         * </p>
+         */
+        protected Object doPostApply() {
+            return null;
+        }
+
+    }
+
+    abstract class AjaxButtonForCancel extends AjaxButtonWithOnError {
+
+        public AjaxButtonForCancel(String id, IModel<String> model) {
+            super(id, model);
+            setDefaultFormProcessing(false);
+        }
+    }
+
+
     private void addButtons(MarkupContainer markupContainer) {
-        
-        editButton = new AjaxButton(ID_EDIT_BUTTON, Model.of("Edit")) {
+
+        // edit button
+        editButton = new AjaxButtonWithOnError(ID_EDIT_BUTTON, Model.of("Edit")) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -282,11 +444,6 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
             }
 
             @Override
-            protected void onError(final AjaxRequestTarget target, final Form<?> form) {
-                toEditMode(target);
-            }
-        
-            @Override
             protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
                 super.updateAjaxAttributes(attributes);
                 attributes.getAjaxCallListeners().add(new org.apache.wicket.ajax.attributes.AjaxCallListener(){
@@ -300,142 +457,18 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                 });
             }
         };
-        
-        
         markupContainer.add(editButton);
 
-        
-        okButton = new AjaxButtonWithPreValidateHook(ID_OK_BUTTON, Model.of("OK")) {
-            private static final long serialVersionUID = 1L;
 
-            @Override
-            public String preValidate() {
-                // attempt to load with concurrency checking, catching recognized exceptions
-                try {
-                    getEntityModel().load(ConcurrencyChecking.CHECK); // could have also just called #getObject(), since CHECK is the default
-
-                } catch(ConcurrencyException ex){
-                    String recognizedErrorMessage = recognizeException(ex);
-                    if(recognizedErrorMessage == null) {
-                        throw ex;
-                    }
-
-                    // reload
-                    getEntityModel().load(ConcurrencyChecking.NO_CHECK);
-
-                    getForm().clearInput();
-                    getEntityModel().resetPropertyModels();
-
-                    toViewMode(null);
-                    toEditMode(null);
-
-                    return recognizedErrorMessage;
-                }
-
-                return null;
-            }
-
-            @Override
-            public void validate() {
-                // add in any error message that we might have recognized from above
-                EntityPropertiesForm form = EntityPropertiesForm.this;
-                String preValidationErrorIfAny = form.getPreValidationErrorIfAny();
-
-                if(preValidationErrorIfAny != null) {
-                    feedbackOrNotifyAnyRecognizedError(preValidationErrorIfAny, form);
-                    // skip validation, because would relate to old values
-
-                    final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject(), null);
-                    EntityPropertiesForm.this.setResponsePage(entityPage);
-                } else {
-                    // run Wicket's validation
-                    super.validate();
-                }
-            }
-
-            @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
-                super.onError(target, form);
-                toEditMode(target);
-            }
-
-            @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-
-                if (getForm().hasError()) {
-                    // stay in edit mode
-                    return;
-                }
-
-                final ObjectAdapter adapter = getEntityModel().getObject();
-                final Memento snapshotToRollbackToIfInvalid = new Memento(adapter);
-
-                // to perform object-level validation, we must apply the
-                // changes first
-                // contrast this with ActionPanel (for validating action
-                // arguments) where
-                // we do the validation prior to the execution of the
-                // action
-                getEntityModel().apply();
-                final String invalidReasonIfAny = getEntityModel().getReasonInvalidIfAny();
-                if (invalidReasonIfAny != null) {
-                    getForm().error(invalidReasonIfAny);
-                    snapshotToRollbackToIfInvalid.recreateObject();
-                    toEditMode(null);
-                    return;
-                }
-
-                try {
-                    EntityPropertiesForm.this.getTransactionManager().flushTransaction();
-                } catch(RuntimeException ex) {
-
-                    // There's no need to abort the transaction here, as it will have already been done
-                    // (in IsisTransactionManager#executeWithinTransaction(...)).
-
-                    String message = recognizeExceptionAndNotify(ex, EntityPropertiesForm.this);
-                    if(message == null) {
-                        throw ex;
-                    }
-
-                    toEditMode(target);
-                    return;
-                }
-
-                try {
-                    getEntityModel().resetPropertyModels();
-                } catch(RuntimeException ex) {
-                    throw ex;
-                }
-
-
-                toViewMode(null);
-                
-                // "redirect-after-post"
-                //
-                // RequestCycle.get().getActiveRequestHandler() indicates this is handled by the ListenerInterfaceRequestHandler
-                // which renders page at end.
-                //
-                // it's necessary to zap the page parameters (so mapping is to just wicket/page?nn) 
-                // otherwise (what I think happens) is that the httpServletResponse.sendRedirect ends up being to the same URL,
-                // and this is rejected as invalid either by the browser or by the servlet container (perhaps only if running remotely).
-                //
-
-                // we obtain the adapter from the entity model because it may have changed as the result of an apply earlier on.
-                final ObjectAdapter objectAdapter = getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-                final EntityPage entityPage = new EntityPage(objectAdapter, null);
-                EntityPropertiesForm.this.setResponsePage(entityPage);
-                
-            }
-        };
+        // ok button
+        okButton = new AjaxButtonForValidate(ID_OK_BUTTON, Model.of("OK"));
         markupContainer.add(okButton);
 
-        cancelButton = new AjaxButton(ID_CANCEL_BUTTON, Model.of("Cancel")) {
+
+        // cancel button
+        cancelButton = new AjaxButtonForCancel(ID_CANCEL_BUTTON, Model.of("Cancel")) {
             private static final long serialVersionUID = 1L;
             
-            {
-                setDefaultFormProcessing(false);
-            }
-
             @Override
             public void validate() {
 
@@ -471,11 +504,6 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                 }
                 toViewMode(target);
             }
-
-            @Override
-            protected void onError(final AjaxRequestTarget target, final Form<?> form) {
-                toViewMode(target);
-            }
         };
 
         markupContainer.add(cancelButton);
@@ -488,6 +516,165 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         okButton.add(new JGrowlBehaviour());
         editButton.add(new JGrowlBehaviour());
         cancelButton.add(new JGrowlBehaviour());
+    }
+
+    private void addWizardButtons(MarkupContainer markupContainer) {
+
+        // next
+        wizardNextButton = new AjaxButtonForValidate(ID_WIZARD_NEXT_BUTTON, Model.of("Next")) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void doPreApply() {
+                wizardNext();
+            }
+
+        };
+        markupContainer.add(wizardNextButton);
+
+        wizardPreviousButton = new AjaxButtonForValidate(ID_WIZARD_PREVIOUS_BUTTON, Model.of("Previous")) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void doPreApply() {
+                wizardPrevious();
+            }
+        };
+        markupContainer.add(wizardPreviousButton);
+
+
+        wizardFinishButton = new AjaxButtonForValidate(ID_WIZARD_FINISH_BUTTON, Model.of("Finish")) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected Object doPostApply() {
+                return wizardFinish();
+            }
+        };
+        markupContainer.add(wizardFinishButton);
+
+
+        wizardCancelButton = new Button(ID_WIZARD_CANCEL_BUTTON, Model.of("Cancel")) {
+
+            private static final long serialVersionUID = 1L;
+            {
+                setDefaultFormProcessing(false);
+            }
+
+            public void onSubmit() {
+                final PageAbstract page = determinePageToRedirectTo();
+                EntityPropertiesForm.this.setResponsePage(page);
+            }
+
+            private PageAbstract determinePageToRedirectTo() {
+
+                // go to the most recently viewed entity (if available) ...
+                final List<EntityModel> list = getBreadcrumbs();
+                for (EntityModel entityModel : list) {
+                    ObjectSpecification objectSpec = entityModel.getTypeOfSpecification();
+                    if(!objectSpec.isViewModel()) {
+                        ObjectAdapter objectAdapter = entityModel.getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+
+                        return new EntityPage(objectAdapter, null);
+                    }
+                }
+
+                // ... else go to the home page
+                return new HomePage();
+            }
+
+            private List<EntityModel> getBreadcrumbs() {
+                final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
+                final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
+                return breadcrumbModel.getList();
+            }
+        };
+        markupContainer.add(wizardCancelButton);
+
+
+        wizardNextButton.setOutputMarkupPlaceholderTag(true);
+        wizardPreviousButton.setOutputMarkupPlaceholderTag(true);
+        wizardFinishButton.setOutputMarkupPlaceholderTag(true);
+        wizardCancelButton.setOutputMarkupPlaceholderTag(true);
+
+        // flush any JGrowl messages if they are added.
+        wizardNextButton.add(new JGrowlBehaviour());
+        wizardPreviousButton.add(new JGrowlBehaviour());
+        wizardFinishButton.add(new JGrowlBehaviour());
+        wizardCancelButton.add(new JGrowlBehaviour());
+    }
+
+    private void wizardNext() {
+        final ObjectAdapter adapter = getEntityModel().getObject();
+        final WizardFacet wizardFacet = adapter.getSpecification().getFacet(WizardFacet.class);
+        wizardFacet.next(adapter.getObject());
+    }
+
+    private String wizardDisableNext() {
+        final ObjectAdapter adapter = getEntityModel().getObject();
+        final WizardFacet wizardFacet = adapter.getSpecification().getFacet(WizardFacet.class);
+        return wizardFacet.disableNext(adapter.getObject());
+    }
+
+    private void wizardPrevious() {
+        final ObjectAdapter adapter = getEntityModel().getObject();
+        final WizardFacet wizardFacet = adapter.getSpecification().getFacet(WizardFacet.class);
+        wizardFacet.previous(adapter.getObject());
+    }
+
+    private String wizardDisablePrevious() {
+        final ObjectAdapter adapter = getEntityModel().getObject();
+        final WizardFacet wizardFacet = adapter.getSpecification().getFacet(WizardFacet.class);
+        return wizardFacet.disablePrevious(adapter.getObject());
+    }
+
+    private Object wizardFinish() {
+        final ObjectAdapter adapter = getEntityModel().getObject();
+        final WizardFacet wizardFacet = adapter.getSpecification().getFacet(WizardFacet.class);
+        return wizardFacet.finish(adapter.getObject());
+    }
+
+    private String wizardDisableFinish() {
+        final ObjectAdapter adapter = getEntityModel().getObject();
+        final WizardFacet wizardFacet = adapter.getSpecification().getFacet(WizardFacet.class);
+        return wizardFacet.disableFinish(adapter.getObject());
+    }
+
+    // to perform object-level validation, we must apply the changes first
+    // contrast this with ActionPanel (for validating actionarguments) where
+    // we do the validation prior to the execution of the action
+    private boolean applyFormChangesElse() {
+        final ObjectAdapter adapter = getEntityModel().getObject();
+        final Memento snapshotToRollbackToIfInvalid = new Memento(adapter);
+
+        getEntityModel().apply();
+        final String invalidReasonIfAny = getEntityModel().getReasonInvalidIfAny();
+        if (invalidReasonIfAny != null) {
+            error(invalidReasonIfAny);
+            snapshotToRollbackToIfInvalid.recreateObject();
+            toEditMode(null);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean flushChangesElse(AjaxRequestTarget target) {
+        try {
+            this.getTransactionManager().flushTransaction();
+        } catch(RuntimeException ex) {
+
+            // There's no need to abort the transaction here, as it will have already been done
+            // (in IsisTransactionManager#executeWithinTransaction(...)).
+
+            String message = recognizeExceptionAndNotify(ex, this);
+            if(message == null) {
+                throw ex;
+            }
+
+            toEditMode(target);
+            return true;
+        }
+        return false;
     }
 
 
@@ -538,17 +725,32 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     }
 
     void toViewMode(final AjaxRequestTarget target) {
+
         getEntityModel().toViewMode();
-        if(editButton != null) {
-            editButton.setVisible(isAnythingEditable());
+
+        if(isWizard()) {
+            // just redirect
+            toEditMode(target);
+            return;
         }
-        if(okButton != null) {
-            okButton.setVisible(false);
-        }
-        if(cancelButton != null) {
-            cancelButton.setVisible(false);
-        }
+
+        // not a wizard
+        setVisible(editButton, isAnythingEditable());
+        setVisible(okButton, false);
+        setVisible(cancelButton, false);
+
+        setVisible(wizardCancelButton, false);
+        setVisible(wizardFinishButton, false);
+        setVisible(wizardPreviousButton, false);
+        setVisible(wizardNextButton, false);
+
         requestRepaintPanel(target);
+    }
+
+    private void setVisible(Button b, boolean editable) {
+        if(b != null) {
+            b.setVisible(editable);
+        }
     }
 
     private boolean isAnythingEditable() {
@@ -569,10 +771,35 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
     private void toEditMode(final AjaxRequestTarget target) {
         getEntityModel().toEditMode();
-        editButton.setVisible(false);
-        okButton.setVisible(true);
-        cancelButton.setVisible(true);
+
+        // wizard handling.
+        if(isWizard()) {
+            disableIfRequired(wizardNextButton, wizardDisableNext());
+            disableIfRequired(wizardPreviousButton, wizardDisablePrevious());
+            disableIfRequired(wizardFinishButton, wizardDisableFinish());
+
+            cancelButton.setVisible(false);
+            okButton.setVisible(false);
+            editButton.setVisible(false);
+
+        } else {
+            wizardCancelButton.setVisible(false);
+            wizardFinishButton.setVisible(false);
+            wizardPreviousButton.setVisible(false);
+            wizardNextButton.setVisible(false);
+
+            editButton.setVisible(false);
+            okButton.setVisible(true);
+            cancelButton.setVisible(true);
+        }
         requestRepaintPanel(target);
+    }
+
+    private void disableIfRequired(Button button, String disabledReason) {
+        if(disabledReason != null) {
+            button.setEnabled(false);
+            button.add(new AttributeAppender("title", disabledReason));
+        }
     }
 
     private void addFeedbackGui(MarkupContainer markupContainer) {

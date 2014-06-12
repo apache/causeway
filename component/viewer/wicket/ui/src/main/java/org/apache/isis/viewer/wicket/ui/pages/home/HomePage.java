@@ -20,15 +20,9 @@
 package org.apache.isis.viewer.wicket.ui.pages.home;
 
 import java.util.List;
-
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -78,11 +72,11 @@ public class HomePage extends PageAbstract {
     }
     
     private ObjectAndAction lookupHomePageAction() {
-        List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-        for (ObjectAdapter serviceAdapter : serviceAdapters) {
+        final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
+        for (final ObjectAdapter serviceAdapter : serviceAdapters) {
             final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
-            List<ObjectAction> objectActions = serviceSpec.getObjectActions(Contributed.EXCLUDED);
-            for (ObjectAction objectAction : objectActions) {
+            final List<ObjectAction> objectActions = serviceSpec.getObjectActions(Contributed.EXCLUDED);
+            for (final ObjectAction objectAction : objectActions) {
                 if(objectAction.containsFacet(HomePageFacet.class)) {
                     return new ObjectAndAction(serviceAdapter, objectAction);
                 }

@@ -33,9 +33,9 @@ public class ViewModelInterfaceFacetFactory extends FacetFactoryAbstract {
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        boolean implementsInterface = ViewModel.class.isAssignableFrom(processClassContaxt.getCls());
-        FacetUtil.addFacet(create(implementsInterface, processClassContaxt.getFacetHolder()));
+    public void process(final ProcessClassContext processClassContext) {
+        boolean implementsInterface = ViewModel.class.isAssignableFrom(processClassContext.getCls());
+        FacetUtil.addFacet(create(implementsInterface, processClassContext.getFacetHolder()));
     }
 
     private ViewModelFacet create(final boolean implementsInterface, final FacetHolder holder) {

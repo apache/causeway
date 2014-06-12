@@ -211,7 +211,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
             return false;
         }
         final ToDoItemWizard toDoItemWizard = (ToDoItemWizard) item;
-        return toDoItemWizard.getState().hideCategory();
+        return toDoItemWizard.getState().hideCategories();
     }
     public Category default1UpdateCategory(
             final Categorized item) {

@@ -75,10 +75,6 @@ public class ObjectSpecificationForFreeStandingList extends ObjectSpecificationA
         // don't install anything for NotPersistableFacet
     }
 
-    // /////////////////////////////////////////////////////////
-    // Override facets
-    // /////////////////////////////////////////////////////////
-
     // /////////////////////////////////////////////////////
     // Service
     // /////////////////////////////////////////////////////
@@ -94,8 +90,28 @@ public class ObjectSpecificationForFreeStandingList extends ObjectSpecificationA
     public void markAsService() {
     }
 
+
     @Override
     public boolean isService() {
+        return false;
+    }
+
+    // /////////////////////////////////////////////////////////
+    // view models and wizards
+    // /////////////////////////////////////////////////////////
+
+    @Override
+    public boolean isViewModel() {
+        return false;
+    }
+
+    @Override
+    public boolean isViewModelCloneable(ObjectAdapter targetAdapter) {
+        return false;
+    }
+
+    @Override
+    public boolean isWizard() {
         return false;
     }
 

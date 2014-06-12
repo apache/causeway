@@ -52,6 +52,7 @@ public class ToDoItemWizardSupport {
         memento.set("state", toDoItemWizard.getState());
         memento.set("description", toDoItemWizard.getDescription());
         memento.set("category", toDoItemWizard.getCategory());
+        memento.set("subcategory", toDoItemWizard.getSubcategory());
         memento.set("dueBy", toDoItemWizard.getDueBy());
         return memento.asString();
     }
@@ -62,6 +63,7 @@ public class ToDoItemWizardSupport {
         toDoItemWizard.setState(memento.get("state", ToDoItemWizard.State.class));
         toDoItemWizard.setDescription(memento.get("description", String.class));
         toDoItemWizard.setCategory(memento.get("category", ToDoItem.Category.class));
+        toDoItemWizard.setSubcategory(memento.get("subcategory", ToDoItem.Subcategory.class));
         toDoItemWizard.setDueBy(memento.get("dueBy", LocalDate.class));
     }
 
