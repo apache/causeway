@@ -17,29 +17,39 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.object.viewmodel.annotation;
+package org.apache.isis.core.progmodel.facets.object.viewmodel.iface;
 
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetAbstract;
 
-public class ViewModelIntefaceFacetFactory extends FacetFactoryAbstract {
+public class ViewModelFacetForInterface extends ViewModelFacetAbstract {
 
-    public ViewModelIntefaceFacetFactory() {
-        super(FeatureType.OBJECTS_ONLY);
+    public ViewModelFacetForInterface(final FacetHolder holder) {
+        super(holder);
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        boolean implementsInterface = ViewModel.class.isAssignableFrom(processClassContaxt.getCls());
-        FacetUtil.addFacet(create(implementsInterface, processClassContaxt.getFacetHolder()));
+    public void initialize(Object pojo, String memento) {
+        final ViewModel viewModel = (ViewModel)pojo;
+        viewModel.viewModelInit(memento);
+    }
+    
+    @Override
+    public String memento(Object pojo) {
+        final ViewModel viewModel = (ViewModel)pojo;
+        return viewModel.viewModelMemento();
     }
 
-    private ViewModelFacet create(final boolean implementsInterface, final FacetHolder holder) {
-        return !implementsInterface ? null : new ViewModelFacetForInterface(holder);
+    @Override
+    public boolean isCloneable(Object pojo) {
+        return pojo instanceof ViewModel.Cloneable;
+    }
+
+    @Override
+    public Object clone(Object pojo) {
+        ViewModel.Cloneable viewModelCloneable = (ViewModel.Cloneable) pojo;
+        return viewModelCloneable.clone();
     }
 
 }

@@ -125,7 +125,8 @@ import org.apache.isis.core.progmodel.facets.object.validate.method.ValidateObje
 import org.apache.isis.core.progmodel.facets.object.validperspec.MustSatisfySpecificationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.validprops.ObjectValidPropertiesFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.value.annotation.ValueFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.viewmodel.annotation.ViewModelIntefaceFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.viewmodel.iface.ViewModelInterfaceFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.wizard.iface.iface.WizardInterfaceFacetFactory;
 import org.apache.isis.core.progmodel.facets.paged.PagedAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.paged.PagedOnParentedCollectionFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.autocomplete.ActionParameterAutoCompleteFacetFactory;
@@ -224,6 +225,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(ObjectTypeDerivedFromClassNameFacetFactory.class);
         addFactory(DomainServiceViaAnnotationFacetFactory.class);
+        addFactory(WizardInterfaceFacetFactory.class);
 
         addFactory(IteratorFilteringFacetFactory.class);
         addFactory(RemoveSyntheticOrAbstractMethodsFacetFactory.class);
@@ -370,7 +372,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         
         addFactory(ImmutableMarkerInterfaceFacetFactory.class);
 
-        addFactory(ViewModelIntefaceFacetFactory.class);
+        addFactory(ViewModelInterfaceFacetFactory.class);
 
         addFactory(MaxLengthAnnotationForTypeFacetFactory.class);
         addFactory(MaxLengthAnnotationForPropertyFacetFactory.class);

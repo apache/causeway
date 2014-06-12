@@ -52,6 +52,7 @@ public interface ViewModel {
      * view model whose state has been edited.
      */
     public interface Cloneable extends java.lang.Cloneable {
+        @Hidden
         public Object clone();
     }
 }

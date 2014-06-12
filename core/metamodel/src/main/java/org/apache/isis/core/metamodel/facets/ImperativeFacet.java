@@ -51,7 +51,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  * Note that {@link Facet}s relating to the class itself (ie for
  * {@link ObjectSpecification}) should not implement this interface.
  */
-public interface ImperativeFacet {
+public interface ImperativeFacet extends Facet {
 
     /**
      * The {@link Method}s invoked by this {@link Facet}.

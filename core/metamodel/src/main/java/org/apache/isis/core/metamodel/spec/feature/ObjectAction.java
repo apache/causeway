@@ -20,8 +20,10 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.List;
+import com.google.common.base.Functions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.When;
@@ -30,6 +32,7 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.lang.StringFunctions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
@@ -38,6 +41,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetFilters;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.object.wizard.viewmodel.WizardFacet;
 import org.apache.isis.core.metamodel.interactions.AccessContext;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
@@ -347,9 +351,6 @@ public interface ObjectAction extends ObjectMember {
                 }};
         }
 
-        /**
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-         */
         @Deprecated
         public static Filter<ObjectAction> notBulkOnly() {
             return new Filter<ObjectAction>(){
@@ -361,6 +362,23 @@ public interface ObjectAction extends ObjectMember {
                 }};
         }
 
+        public static Filter<ObjectAction> excludeWizardActions(final ObjectSpecification objectSpecification) {
+            return org.apache.isis.applib.filter.Filters.not(wizardActions(objectSpecification));
+            //return wizardActions(objectSpecification);
+        }
+
+        private static Filter<ObjectAction> wizardActions(final ObjectSpecification objectSpecification) {
+            return new Filter<ObjectAction>() {
+                @Override
+                public boolean accept(ObjectAction input) {
+                    if(objectSpecification == null) {
+                        return false;
+                    }
+                    final WizardFacet wizardFacet = objectSpecification.getFacet(WizardFacet.class);
+                    return wizardFacet != null && wizardFacet.isWizardAction(input);
+                }
+            };
+        }
 
         @SuppressWarnings("deprecation")
         public static Filter<ObjectAction> memberOrderOf(ObjectAssociation association) {
@@ -371,14 +389,37 @@ public interface ObjectAction extends ObjectMember {
                 @Override
                 public boolean accept(ObjectAction t) {
                     final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
-                    if(memberOrderFacet == null) {
-                        return false; 
+                    if(memberOrderFacet == null || Strings.isNullOrEmpty(memberOrderFacet.name())) {
+                        return false;
                     }
-                    final String memberOrderName = memberOrderFacet.name();
+                    final String memberOrderName = memberOrderFacet.name().toLowerCase();
                     if(Strings.isNullOrEmpty(memberOrderName)) {
                         return false;
                     }
                     return memberOrderName.equalsIgnoreCase(assocName) || memberOrderName.equalsIgnoreCase(assocId);
+                }
+            };
+        }
+
+        public static Filter<ObjectAction> memberOrderNotAssociationOf(final ObjectSpecification adapterSpec) {
+
+            final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.INCLUDED);
+            final List<String> associationNames = Lists.transform(associations, Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toName()));
+            final List<String> associationIds = Lists.transform(associations, Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toId()));
+
+            return new Filter<ObjectAction>() {
+
+                @Override
+                public boolean accept(ObjectAction t) {
+                    final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
+                    if(memberOrderFacet == null || Strings.isNullOrEmpty(memberOrderFacet.name())) {
+                        return true;
+                    }
+                    String memberOrderName = memberOrderFacet.name().toLowerCase();
+                    if(Strings.isNullOrEmpty(memberOrderName)) {
+                        return false;
+                    }
+                    return !associationNames.contains(memberOrderName) && !associationIds.contains(memberOrderName);
                 }
             };
         }

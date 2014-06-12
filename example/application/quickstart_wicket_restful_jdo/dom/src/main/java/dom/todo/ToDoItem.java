@@ -99,7 +99,7 @@ import org.apache.isis.applib.value.Clob;
 @AutoComplete(repository=ToDoItems.class, action="autoComplete") // default unless overridden by autoCompleteNXxx() method
 //@Bounded - if there were a small number of instances only (overrides autoComplete functionality)
 @Bookmarkable
-public class ToDoItem implements Comparable<ToDoItem> {
+public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     //region > LOG
     /**

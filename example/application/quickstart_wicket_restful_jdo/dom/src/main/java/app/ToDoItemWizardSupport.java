@@ -45,7 +45,7 @@ public class ToDoItemWizardSupport {
     }
 
     //region > view model support
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Programmatic
     String mementoFor(ToDoItemWizard toDoItemWizard) {
         final MementoService.Memento memento = mementoService.create();
@@ -68,7 +68,7 @@ public class ToDoItemWizardSupport {
     //endregion
 
     //region > injected services
-    // //////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     @javax.inject.Inject
     private DomainObjectContainer container;

@@ -151,7 +151,7 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
 
     private void buildEntityActionsGui(
             final List<ObjectAction> bulkActions, 
-            final ActionPromptProvider actionPromptModalWindowProvider, 
+            final ActionPromptProvider actionPromptProvider,
             final ObjectAdapterToggleboxColumn toggleboxColumn) {
         final EntityCollectionModel model = getModel();
         
@@ -163,9 +163,9 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         if(!bulkActions.isEmpty()) {
             final ActionLinkFactory linkFactory = new BulkActionsLinkFactory(model, dataTable, toggleboxColumn);
 
-            final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(null, getServiceAdapters(), bulkActions, linkFactory);
+            final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(null, bulkActions, linkFactory, actionPromptProvider, null);
             // TODO: i18n
-            final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions", actionPromptModalWindowProvider);
+            final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
 
             this.addOrReplace(cssMenuPanel);
         } else {

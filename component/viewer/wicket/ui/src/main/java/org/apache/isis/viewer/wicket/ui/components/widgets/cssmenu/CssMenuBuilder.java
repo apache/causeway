@@ -22,11 +22,10 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
-
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
@@ -48,48 +47,65 @@ public class CssMenuBuilder {
      * The target to invoke upon; may be null in case of bulk actions; not used if a contributed action. 
      */
     private final ObjectAdapterMemento adapterMemento;
-    /**
-     * Used to determine wire up against contributed actions.
-     */
-    private final List<ObjectAdapter> serviceAdapters;
-    
     private final List<ObjectAction> actions;
+    private final CssMenuContext cssMenuContext;
 
-    private final ActionLinkFactory cssMenuLinkFactory;
-    
-    public CssMenuBuilder(final ObjectAdapterMemento adapterMemento, final List<ObjectAdapter> serviceAdapters, final List<ObjectAction> actions, final ActionLinkFactory cssMenuLinkFactory) {
+    public static class CssMenuContext {
+        private final ActionLinkFactory cssMenuLinkFactory;
+        private final ActionPromptProvider actionPromptProvider;
+        private final Predicate<ObjectAction> objectActionPredicate;
+
+        public CssMenuContext(ActionLinkFactory cssMenuLinkFactory, ActionPromptProvider actionPromptProvider, Predicate<ObjectAction> objectActionPredicate) {
+            this.cssMenuLinkFactory = cssMenuLinkFactory;
+            this.actionPromptProvider = actionPromptProvider;
+            this.objectActionPredicate = objectActionPredicate != null? objectActionPredicate: Predicates.<ObjectAction>alwaysTrue();
+        }
+
+        public CssMenuContext(ActionLinkFactory cssMenuLinkFactory, ActionPromptProvider actionPromptProvider) {
+            this(cssMenuLinkFactory, actionPromptProvider, null);
+        }
+
+        public ActionLinkFactory getCssMenuLinkFactory() {
+            return cssMenuLinkFactory;
+        }
+        public ActionPromptProvider getActionPromptProvider() {
+            return actionPromptProvider;
+        }
+        public Predicate<ObjectAction> getObjectActionPredicate() {
+            return objectActionPredicate;
+        }
+    }
+
+    public CssMenuBuilder(
+            final ObjectAdapterMemento adapterMemento,
+            final List<ObjectAction> actions,
+            final ActionLinkFactory cssMenuLinkFactory,
+            final ActionPromptProvider actionPromptProvider,
+            final Predicate<ObjectAction> objectActionPredicate) {
         this.adapterMemento = adapterMemento; // may be null
-        this.serviceAdapters = serviceAdapters;
         this.actions = actions;
-        this.cssMenuLinkFactory = cssMenuLinkFactory;
+        this.cssMenuContext = new CssMenuContext(cssMenuLinkFactory, actionPromptProvider, objectActionPredicate);
     }
-
-    public CssMenuBuilder(final List<ObjectAction> actions, final ActionLinkFactory cssMenuLinkFactory) {
-        this(null, null, actions, cssMenuLinkFactory);
-    }
-
 
     public CssMenuPanel buildPanel(
             final String wicketId,
-            final String rootName,
-            final ActionPromptProvider actionPromptProvider) {
-        final CssMenuItem findUsing = CssMenuItem.newMenuItem(rootName).build();
-        addMenuItems(findUsing, actions, actionPromptProvider);
-        final CssMenuPanel cssMenuPanel = new CssMenuPanel(wicketId, Style.SMALL, Collections.singletonList(findUsing));
+            final String rootName) {
+        final CssMenuItem root = CssMenuItem.newMenuItem(rootName).build();
+        addMenuItems(root, actions);
+        final CssMenuPanel cssMenuPanel = new CssMenuPanel(wicketId, Style.SMALL, Collections.singletonList(root));
         return cssMenuPanel;
     }
 
     private void addMenuItems(
             final CssMenuItem parent,
-            final List<ObjectAction> actions,
-            final ActionPromptProvider actionPromptProvider) {
-        addMenuItemsForActionsOfType(parent, actions, ActionType.USER, actionPromptProvider);
+            final List<ObjectAction> actions) {
+        addMenuItemsForActionsOfType(parent, actions, ActionType.USER);
         if ( isExploring() || isPrototyping()) {
-            addMenuItemsForActionsOfType(parent, actions, ActionType.EXPLORATION, actionPromptProvider);
-            addMenuItemsForActionsOfType(parent, actions, ActionType.PROTOTYPE, actionPromptProvider);
+            addMenuItemsForActionsOfType(parent, actions, ActionType.EXPLORATION);
+            addMenuItemsForActionsOfType(parent, actions, ActionType.PROTOTYPE);
         }
         if (isDebugMode()) {
-            addMenuItemsForActionsOfType(parent, actions, ActionType.DEBUG, actionPromptProvider);
+            addMenuItemsForActionsOfType(parent, actions, ActionType.DEBUG);
         }
     }
 
@@ -113,25 +129,22 @@ public class CssMenuBuilder {
     private void addMenuItemsForActionsOfType(
             final CssMenuItem parent,
             final List<ObjectAction> actions,
-            final ActionType type,
-            final ActionPromptProvider actionPromptProvider) {
+            final ActionType type) {
         final Collection<ObjectAction> filterActionsOfType = Collections2.filter(actions, Filters.asPredicate(ObjectAction.Filters.ofType(type)));
         for (final ObjectAction action : filterActionsOfType) {
-            addMenuItem(parent, action, actionPromptProvider);
+            addMenuItem(parent, action);
         }
     }
 
     private void addMenuItem(
             final CssMenuItem parent,
-            final ObjectAction action,
-            final ActionPromptProvider actionPromptModalWindowProvider) {
-        addMenuItemForAction(parent, action, actionPromptModalWindowProvider);
+            final ObjectAction action) {
+        addMenuItemForAction(parent, action);
     }
 
     private void addMenuItemForAction(
             final CssMenuItem parent,
-            final ObjectAction action,
-            final ActionPromptProvider actionPromptModalWindowProvider) {
+            final ObjectAction action) {
         
         final NotContributedFacet notContributed = action.getFacet(NotContributedFacet.class);
         if (notContributed != null && notContributed.toActions()) {
@@ -144,23 +157,19 @@ public class CssMenuBuilder {
         final ObjectAdapterMemento targetAdapterMemento = adapterMemento; // determineAdapterFor(action);
         if(targetAdapterMemento != null) {
             // against an entity or a service (if a contributed action)
-            subMenuItemBuilder = parent.newSubMenuItem(targetAdapterMemento, action, cssMenuLinkFactory, actionPromptModalWindowProvider);
+            subMenuItemBuilder = parent.newSubMenuItem(targetAdapterMemento, action, cssMenuContext);
         } else {
             if (action.containsDoOpFacet(BulkFacet.class)) {
                 // ignore fact have no target action; 
                 // we expect that the link factory is able to handle this
                 // (ie will iterate through all objects from a list and invoke in bulk)
-                subMenuItemBuilder = parent.newSubMenuItem(action, cssMenuLinkFactory, actionPromptModalWindowProvider);
+                subMenuItemBuilder = parent.newSubMenuItem(action, cssMenuContext);
             }
         }
         
         if (subMenuItemBuilder != null) {
             subMenuItemBuilder.build();
         }
-    }
-
-    protected List<ObjectAdapter> getServiceAdapters() {
-        return serviceAdapters;
     }
 
 }

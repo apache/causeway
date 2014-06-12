@@ -21,12 +21,9 @@ package org.apache.isis.viewer.wicket.ui.components.additionallinks;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-
 import org.apache.wicket.Session;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
@@ -42,7 +39,6 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
@@ -57,15 +53,16 @@ public final class EntityActionUtil {
 
     private final static MemberOrderFacetComparator memberOrderFacetComparator = new MemberOrderFacetComparator(false);
     
-    public static List<LinkAndLabel> entityActions(
+    public static List<LinkAndLabel> entityActionsForAssociation(
             final EntityModel entityModel,
             final ObjectAssociation association,
-            final ActionPromptProvider actionPromptProvider) {
+            final ActionPromptProvider actionPromptProvider,
+            final DeploymentType deploymentType) {
         
         final List<ObjectAction> associatedActions = Lists.newArrayList();
 
         addActions(ActionType.USER, entityModel, association, associatedActions);
-        if(getDeploymentType().isPrototyping()) {
+        if(deploymentType.isPrototyping()) {
             addActions(ActionType.EXPLORATION, entityModel, association, associatedActions);
             addActions(ActionType.PROTOTYPE, entityModel, association, associatedActions);
         }
@@ -90,28 +87,29 @@ public final class EntityActionUtil {
             }});
     }
 
-    protected static DeploymentType getDeploymentType() {
-        return IsisContext.getDeploymentType();
-    }
-
-    protected static List<ObjectAction> addActions(ActionType type, final EntityModel entityModel, final ObjectAssociation association, final List<ObjectAction> associatedActions) {
+    private static List<ObjectAction> addActions(
+            final ActionType type,
+            final EntityModel entityModel,
+            final ObjectAssociation association,
+            final List<ObjectAction> associatedActions) {
         final ObjectSpecification adapterSpec = entityModel.getTypeOfSpecification();
         final ObjectAdapter adapter = entityModel.load(ConcurrencyChecking.NO_CHECK);
-        
+
+        final AuthenticationSessionProvider asa = (AuthenticationSessionProvider) Session.get();
+        AuthenticationSession authSession = asa.getAuthenticationSession();
+
+        final ObjectSpecification objectSpecification = entityModel.getTypeOfSpecification();
         @SuppressWarnings({ "unchecked", "deprecation" })
         Filter<ObjectAction> filter = Filters.and(
-                ObjectAction.Filters.memberOrderOf(association), 
-                EntityActionUtil.dynamicallyVisibleFor(adapter),
-                ObjectAction.Filters.notBulkOnly());
+                    ObjectAction.Filters.memberOrderOf(association),
+                    ObjectAction.Filters.dynamicallyVisible(authSession, adapter, Where.ANYWHERE),
+                    ObjectAction.Filters.notBulkOnly(),
+                    ObjectAction.Filters.excludeWizardActions(objectSpecification));
+
         final List<ObjectAction> userActions = adapterSpec.getObjectActions(type, Contributed.INCLUDED, filter);
         associatedActions.addAll(userActions);
         return userActions;
     }
 
-    private static Filter<ObjectAction> dynamicallyVisibleFor(final ObjectAdapter adapter) {
-        final AuthenticationSessionProvider asa = (AuthenticationSessionProvider) Session.get();
-        AuthenticationSession authSession = asa.getAuthenticationSession();
-        return ObjectAction.Filters.dynamicallyVisible(authSession, adapter, Where.ANYWHERE);
-    }
 
 }

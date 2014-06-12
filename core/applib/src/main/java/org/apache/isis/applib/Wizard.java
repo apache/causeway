@@ -17,19 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
+package org.apache.isis.applib;
 
-import java.io.Serializable;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.applib.annotation.Programmatic;
 
-public interface ActionLinkFactory extends Serializable {
+/**
+ * Indicates that a domain object is intended to be used as an (editable) wizard.
+ */
+public interface Wizard<W> extends ViewModel.Cloneable {
 
-    LinkAndLabel newLink(
-            final ObjectAdapterMemento adapter,
-            final ObjectAction noAction,
-            final String linkId,
-            final ActionPromptProvider actionPromptProvider);
+    public W next();
+    public String disableNext();
+
+    public W previous();
+    public String disablePrevious();
+
+    public Object finish();
+    public String disableFinish();
+
 }

@@ -21,14 +21,11 @@ package org.apache.isis.viewer.wicket.ui.components.appactions.cssmenu;
 
 import java.util.List;
 import java.util.Map;
-
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
-
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
@@ -39,14 +36,14 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem.Builder;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 
 /**
@@ -112,7 +109,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
         // prune any service names that have no service actions
         serviceNamesInOrder.retainAll(serviceActionsByName.keySet());
         
-        return buildMenuItems(serviceNamesInOrder, serviceActionsByName, appActionsModel.getActionPromptProvider());
+        return buildMenuItems(serviceNamesInOrder, serviceActionsByName, new CssMenuBuilder.CssMenuContext(cssMenuLinkFactory, appActionsModel.getActionPromptProvider()));
     }
 
     /**
@@ -121,7 +118,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
     private List<CssMenuItem> buildMenuItems(
             final List<String> serviceNamesInOrder,
             final Map<String, List<LogicalServiceAction>> serviceActionsByName,
-            final ActionPromptProvider actionPromptProvider) {
+            final CssMenuBuilder.CssMenuContext cssMenuContext) {
         
         final List<CssMenuItem> menuItems = Lists.newArrayList();
         for (String serviceName : serviceNamesInOrder) {
@@ -135,7 +132,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
                 }
                 final ObjectAdapterMemento serviceAdapterMemento = logicalServiceAction.serviceAdapterMemento;
                 final ObjectAction objectAction = logicalServiceAction.objectAction;
-                final Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, objectAction, cssMenuLinkFactory, actionPromptProvider);
+                final Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, objectAction, cssMenuContext);
                 if (subMenuItemBuilder == null) {
                     // not visible
                     continue;

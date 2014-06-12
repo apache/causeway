@@ -17,19 +17,29 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
+package org.apache.isis.core.metamodel.facets.object.wizard.viewmodel;
 
-import java.io.Serializable;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 
-public interface ActionLinkFactory extends Serializable {
+/**
+ * Indicates that this class is a wizard.
+ * 
+ * <p>
+ * In the standard Apache Isis Programming Model, typically corresponds to
+ * applying the <tt>@Wizard</tt> annotation at the class level.
+ */
+public interface WizardFacet extends Facet {
 
-    LinkAndLabel newLink(
-            final ObjectAdapterMemento adapter,
-            final ObjectAction noAction,
-            final String linkId,
-            final ActionPromptProvider actionPromptProvider);
+
+    public void next(Object pojo);
+    public String disableNext(Object pojo);
+
+    public void previous(Object pojo);
+    public String disablePrevious(Object pojo);
+
+    public Object finish(Object pojo);
+    public String disableFinish(Object pojo);
+
+    boolean isWizardAction(ObjectAction input);
 }

@@ -77,7 +77,7 @@ final class BulkActionsLinkFactory implements ActionLinkFactory {
             final ObjectAdapterMemento serviceAdapterMemento,
             final ObjectAction objectAction,
             final String linkId,
-            final ActionPromptProvider actionPromptModalWindowProvider) {
+            final ActionPromptProvider actionPromptProvider) {
         
         final ActionMemento actionMemento = new ActionMemento(objectAction);
         final AbstractLink link = new Link<Object>(linkId) {

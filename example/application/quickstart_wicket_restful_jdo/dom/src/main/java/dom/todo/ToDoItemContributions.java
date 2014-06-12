@@ -18,6 +18,7 @@
  */
 package dom.todo;
 
+import app.ToDoItemWizard;
 import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItem.Subcategory;
 
@@ -192,8 +193,8 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     @DescribedAs("Update category and subcategory")
     @NotInServiceMenu
     @ActionSemantics(Of.IDEMPOTENT)
-    public ToDoItem updateCategory(
-            final ToDoItem item, 
+    public Categorized updateCategory(
+            final Categorized item,
             final @Named("Category") Category category,
             final @Optional @Named("Subcategory") Subcategory subcategory) {
         item.setCategory(category);
@@ -201,22 +202,33 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
         return item;
     }
 
+    public boolean hideUpdateCategory(
+            final Categorized item,
+            final Category category,
+            final Subcategory subcategory) {
+        // bit nasty, I suppose; pushing the boundaries of "DCI"
+        if(!(item instanceof ToDoItemWizard)) {
+            return false;
+        }
+        final ToDoItemWizard toDoItemWizard = (ToDoItemWizard) item;
+        return toDoItemWizard.getState().hideCategory();
+    }
     public Category default1UpdateCategory(
-            final ToDoItem item) {
+            final Categorized item) {
         return item != null? item.getCategory(): null;
     }
     public Subcategory default2UpdateCategory(
-            final ToDoItem item) {
+            final Categorized item) {
         return item != null? item.getSubcategory(): null;
     }
 
     public List<Subcategory> choices2UpdateCategory(
-            final ToDoItem item, final Category category) {
+            final Categorized item, final Category category) {
         return Subcategory.listFor(category);
     }
     
     public String validateUpdateCategory(
-            final ToDoItem item, final Category category, final Subcategory subcategory) {
+            final Categorized item, final Category category, final Subcategory subcategory) {
         return Subcategory.validate(category, subcategory);
     }
     //endregion

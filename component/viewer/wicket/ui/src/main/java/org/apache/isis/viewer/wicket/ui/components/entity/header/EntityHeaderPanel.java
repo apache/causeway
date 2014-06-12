@@ -20,29 +20,24 @@
 package org.apache.isis.viewer.wicket.ui.components.entity.header;
 
 import java.util.List;
-
-import com.google.common.base.Functions;
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
-
 import org.apache.wicket.Component;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.core.commons.lang.StringFunctions;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.*;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityActionLinkFactory;
@@ -103,8 +98,10 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> {
             final List<ObjectAction> topLevelActions = getTopLevelActions(adapter);
 
             if(!topLevelActions.isEmpty()) {
-                final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(adapterMemento, getServiceAdapters(), topLevelActions, linkFactory);
-                final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions", ActionPromptProvider.Util.getFrom(this));
+                final ActionPromptProvider actionPromptProvider = ActionPromptProvider.Util.getFrom(this);
+                final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(
+                        adapterMemento, topLevelActions, linkFactory, actionPromptProvider, null);
+                final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
 
                 this.addOrReplace(cssMenuPanel);
             } else {
@@ -126,45 +123,26 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> {
         return topLevelActions;
     }
 
-    private void addTopLevelActions(final ObjectAdapter adapter, ActionType actionType, final List<ObjectAction> topLevelActions) {
+    private void addTopLevelActions(
+            final ObjectAdapter adapter,
+            final ActionType actionType,
+            final List<ObjectAction> topLevelActions) {
+
         final ObjectSpecification adapterSpec = adapter.getSpecification();
+        final AuthenticationSession authenticationSession = getAuthenticationSession();
+
         @SuppressWarnings({ "unchecked", "deprecation" })
         Filter<ObjectAction> filter = Filters.and(
-                memberOrderNameNotAssociation(adapterSpec), 
-                dynamicallyVisibleFor(adapter), 
-                ObjectAction.Filters.notBulkOnly());
+                ObjectAction.Filters.memberOrderNotAssociationOf(adapterSpec),
+                ObjectAction.Filters.dynamicallyVisible(authenticationSession, adapter, Where.ANYWHERE),
+                ObjectAction.Filters.notBulkOnly(),
+                ObjectAction.Filters.excludeWizardActions(adapterSpec));
+
         final List<ObjectAction> userActions = adapterSpec.getObjectActions(actionType, Contributed.INCLUDED, filter);
         topLevelActions.addAll(userActions);
     }
-    
-    @SuppressWarnings("deprecation")
-    private static Filter<ObjectAction> memberOrderNameNotAssociation(final ObjectSpecification adapterSpec) {
 
-        final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.INCLUDED);
-        final List<String> associationNames = Lists.transform(associations, Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toName()));
-        final List<String> associationIds = Lists.transform(associations, Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toId()));
 
-        return new Filter<ObjectAction>() {
-
-            @Override
-            public boolean accept(ObjectAction t) {
-                final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
-                if(memberOrderFacet == null || Strings.isNullOrEmpty(memberOrderFacet.name())) {
-                    return true;
-                }
-                String memberOrderName = StringFunctions.toLowerCase().apply(memberOrderFacet.name());
-                return !associationNames.contains(memberOrderName) && !associationIds.contains(memberOrderName);
-            }
-        };
-    }
-    
-
-    @SuppressWarnings("deprecation")
-    protected Filter<ObjectAction> dynamicallyVisibleFor(final ObjectAdapter adapter) {
-        return ObjectAction.Filters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.ANYWHERE);
-    }
-
-    
     // ///////////////////////////////////////////////////////////////////
     // Convenience
     // ///////////////////////////////////////////////////////////////////

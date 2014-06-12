@@ -16,20 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package dom.todo;
 
-package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
+/**
+ * Enables {@link dom.todo.ToDoItemContributions#updateCategory(dom.todo.Categorized, dom.todo.ToDoItem.Category, dom.todo.ToDoItem.Subcategory)} to be contributed to
+ * both the {@link dom.todo.ToDoItem} (entity) and also the {@link app.ToDoItemWizard} (wizard).
+ */
+public interface Categorized {
 
-import java.io.Serializable;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+    ToDoItem.Category getCategory();
+    void setCategory(ToDoItem.Category category);
 
-public interface ActionLinkFactory extends Serializable {
-
-    LinkAndLabel newLink(
-            final ObjectAdapterMemento adapter,
-            final ObjectAction noAction,
-            final String linkId,
-            final ActionPromptProvider actionPromptProvider);
+    ToDoItem.Subcategory getSubcategory();
+    void setSubcategory(ToDoItem.Subcategory subcategory);
 }

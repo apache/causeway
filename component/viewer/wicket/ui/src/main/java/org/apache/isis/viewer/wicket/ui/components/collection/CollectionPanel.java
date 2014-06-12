@@ -28,6 +28,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -74,10 +76,10 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
 
         addActionPromptModalWindow();
         
-        List<LinkAndLabel> entityActions = EntityActionUtil.entityActions(entityModel, otma, this);
+        List<LinkAndLabel> entityActions = EntityActionUtil.entityActionsForAssociation(entityModel, otma, this, getDeploymentType());
         collectionModel.addEntityActions(entityActions);
     }
-    
+
     @Override
     protected void onInitialize() {
         super.onInitialize();
@@ -129,15 +131,22 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
     // ///////////////////////////////////////////////////////////////////
     // ActionPromptModalWindowProvider
     // ///////////////////////////////////////////////////////////////////
-    
+
     private ActionPromptModalWindow actionPromptModalWindow;
     public ActionPromptModalWindow getActionPrompt() {
         return ActionPromptModalWindow.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
     }
-    
+
     private void addActionPromptModalWindow() {
-        this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW); 
+        this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW);
         addOrReplace(actionPromptModalWindow);
+    }
+
+
+    // ///////////////////////////////////////////////////////////////////
+
+    protected DeploymentType getDeploymentType() {
+        return IsisContext.getDeploymentType();
     }
 
 

@@ -18,24 +18,29 @@
  */
 package app;
 
+import dom.todo.Categorized;
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItems;
 
 import com.google.common.base.Strings;
 import org.joda.time.LocalDate;
-import org.apache.isis.applib.AbstractViewModel;
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.ViewModel;
+import org.apache.isis.applib.AbstractWizard;
 import org.apache.isis.applib.annotation.*;
 
 @Named("By Category")
 @Bookmarkable
 public class ToDoItemWizard
-        extends AbstractViewModel implements ViewModel.Cloneable {
+        extends AbstractWizard<ToDoItemWizard, ToDoItemWizard.State>
+        implements Categorized {
+
+    public ToDoItemWizard() {
+        setState(State.ENTER_DESCRIPTION_PAGE);
+    }
+
 
     //region > identification
-    // //////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public String title() {
         return !Strings.isNullOrEmpty(getDescription()) ? getDescription() : "New item";
@@ -43,7 +48,7 @@ public class ToDoItemWizard
     //endregion
 
     //region > viewModel implementation
-    // //////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public String viewModelMemento() {
@@ -56,14 +61,14 @@ public class ToDoItemWizard
     }
 
     public ToDoItemWizard clone() {
-        return toDoItemWizardSupport.clone(this);
+        return cloneThis();
     }
     //endregion
 
     //region > state (property)
-    // //////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public enum State {
+    public enum State implements AbstractWizard.State<ToDoItemWizard> {
         ENTER_DESCRIPTION_PAGE,
         ENTER_CATEGORY_PAGE,
         ENTER_DUE_BY_PAGE,
@@ -83,6 +88,7 @@ public class ToDoItemWizard
             return Strings.isNullOrEmpty(toDoItemWizard.getDescription())? "Must enter a description": null;
         }
 
+        @Override
         public State next() {
             switch (this) {
                 case ENTER_DESCRIPTION_PAGE: return ENTER_CATEGORY_PAGE;
@@ -91,10 +97,12 @@ public class ToDoItemWizard
                 default: return CONFIRMATION_PAGE;
             }
         }
-        public String disableNext(ToDoItemWizard toDoItemWizard) {
-            return toDoItemWizard.state.next() == null? "No more pages": null;
+        @Override
+        public String disableNext(ToDoItemWizard w) {
+            return w.getState().next() == null? "No more pages": null;
         }
 
+        @Override
         public State previous() {
             switch (this) {
                 case CONFIRMATION_PAGE: return ENTER_DUE_BY_PAGE;
@@ -103,20 +111,10 @@ public class ToDoItemWizard
                 default: return null;
             }
         }
-        public String disablePrevious(ToDoItemWizard toDoItemWizard) {
-            return toDoItemWizard.state.previous() == null? "No more pages": null;
+        @Override
+        public String disablePrevious(ToDoItemWizard w) {
+            return w.getState().previous() == null? "No more pages": null;
         }
-    }
-
-    private State state = State.ENTER_DESCRIPTION_PAGE;
-
-    @Programmatic
-    public State getState() {
-        return state;
-    }
-
-    public void setState(final State state) {
-        this.state = state;
     }
     //endregion
 
@@ -135,12 +133,12 @@ public class ToDoItemWizard
     }
 
     public boolean hideDescription() {
-        return state.hideDescription();
+        return getState().hideDescription();
     }
     //endregion
 
     //region > category (property)
-    // //////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private Category category;
 
@@ -156,9 +154,27 @@ public class ToDoItemWizard
     }
 
     public boolean hideCategory() {
-        return state.hideCategory();
+        return getState().hideCategory();
     }
     //endregion
+
+    private ToDoItem.Subcategory subcategory;
+
+    public ToDoItem.Subcategory getSubcategory() {
+        return subcategory;
+    }
+    public void setSubcategory(final ToDoItem.Subcategory subcategory) {
+        this.subcategory = subcategory;
+    }
+
+    /**
+     * Only show subcategory if has been populated.
+     */
+    public boolean hideSubcategory() {
+        return subcategory == null;
+    }
+    //endregion
+
 
     //region > dueBy (property)
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,47 +198,31 @@ public class ToDoItemWizard
         return toDoItems.validateDueBy(dueBy);
     }
     public boolean hideDueBy() {
-        return state.hideDueBy();
-    }
-    //endregion
-
-    //region > next (action)
-    // //////////////////////////////////////
-    @MemberOrder(sequence = "1")
-    public ToDoItemWizard next() {
-        state = state.next();
-        return toDoItemWizardSupport.clone(this);
-    }
-
-    public String disableNext() {
-        return state.disableNext(this);
-    }
-    //endregion
-
-    //region > previous (action)
-    // //////////////////////////////////////
-    @MemberOrder(sequence = "1")
-    public ToDoItemWizard previous() {
-        state = state.previous();
-        return toDoItemWizardSupport.clone(this);
-    }
-
-    public String disablePrevious() {
-        return state.disablePrevious(this);
+        return getState().hideDueBy();
     }
     //endregion
 
     //region > finish (action)
-    // //////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @MemberOrder(sequence = "1")
     public ToDoItem finish() {
         return toDoItems.newToDo(getDescription(), getCategory(), null, getDueBy(), null);
     }
 
     public String disableFinish() {
-        return state.disableFinish(this);
+        return getState().disableFinish(this);
     }
     //endregion
+
+    //region > wizard impl
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    protected ToDoItemWizard cloneThis() {
+        return toDoItemWizardSupport.clone(this);
+    }
+    //endregion
+
+
 
     //region > injected services
     // //////////////////////////////////////
@@ -233,11 +233,5 @@ public class ToDoItemWizard
     @javax.inject.Inject
     private ToDoItems toDoItems;
     //endregion
-
-
-    @Override
-    public String disabled(Identifier.Type type) {
-        return null;
-    }
 
 }

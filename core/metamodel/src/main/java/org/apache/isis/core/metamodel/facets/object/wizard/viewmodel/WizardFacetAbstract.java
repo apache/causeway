@@ -17,19 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
+package org.apache.isis.core.metamodel.facets.object.wizard.viewmodel;
 
-import java.io.Serializable;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
-public interface ActionLinkFactory extends Serializable {
+public abstract class WizardFacetAbstract extends MarkerFacetAbstract implements WizardFacet {
 
-    LinkAndLabel newLink(
-            final ObjectAdapterMemento adapter,
-            final ObjectAction noAction,
-            final String linkId,
-            final ActionPromptProvider actionPromptProvider);
+    public static Class<? extends Facet> type() {
+        return WizardFacet.class;
+    }
+
+    public WizardFacetAbstract(final FacetHolder holder) {
+        super(type(), holder);
+    }
+
 }

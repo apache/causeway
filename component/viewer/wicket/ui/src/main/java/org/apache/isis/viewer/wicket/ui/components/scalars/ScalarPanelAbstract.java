@@ -38,6 +38,8 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.*;
@@ -246,8 +248,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
             final ObjectAdapterMemento parentMemento = scalarModel.getParentObjectAdapterMemento();
             final EntityModel parentEntityModel = new EntityModel(parentMemento);
             final ActionPromptProvider actionPromptProvider = ActionPromptProvider.Util.getFrom(this);
-            entityActions = EntityActionUtil.entityActions(
-                    parentEntityModel, scalarModel.getPropertyMemento().getProperty(), actionPromptProvider);
+            entityActions = EntityActionUtil.entityActionsForAssociation(
+                    parentEntityModel, scalarModel.getPropertyMemento().getProperty(), actionPromptProvider, getDeploymentType());
         } else {
             entityActions = null;
         }
@@ -302,5 +304,11 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         return false;
     }
 
+
+    // ///////////////////////////////////////////////////////////////////
+
+    protected DeploymentType getDeploymentType() {
+        return IsisContext.getDeploymentType();
+    }
 
 }

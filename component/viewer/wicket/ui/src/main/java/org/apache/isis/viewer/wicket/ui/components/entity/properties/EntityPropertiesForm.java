@@ -93,9 +93,16 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     private static final String ID_FEEDBACK = "feedback";
 
     private final Component owningPanel;
+
     private Button editButton;
     private Button okButton;
     private Button cancelButton;
+
+    private Button wizardNextButton;
+    private Button wizardPreviousButton;
+    private Button wizardFinishButton;
+    private Button wizardCancelButton;
+
     private FeedbackPanel feedback;
     
     private boolean renderedFirstField;

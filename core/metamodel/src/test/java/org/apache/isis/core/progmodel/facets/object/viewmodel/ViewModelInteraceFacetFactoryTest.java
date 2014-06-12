@@ -17,25 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.object.stable;
+package org.apache.isis.core.progmodel.facets.object.viewmodel;
 
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.viewmodel.annotation.ViewModelIntefaceFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.viewmodel.annotation.ViewModelFacetForInterface;
+import org.apache.isis.core.progmodel.facets.object.viewmodel.iface.ViewModelInterfaceFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.viewmodel.iface.ViewModelFacetForInterface;
 
 public class ViewModelInteraceFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private ViewModelIntefaceFacetFactory facetFactory;
+    private ViewModelInterfaceFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ViewModelIntefaceFacetFactory();
+        facetFactory = new ViewModelInterfaceFacetFactory();
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ViewModelInteraceFacetFactoryTest extends AbstractFacetFactoryTest 
         super.tearDown();
     }
 
-    public void testStableAnnotationPickedUpOnClassAndDefaultsToAlways() {
+    public void testViewModelInterfacePickedUpOnClassAndDefaultsToAlways() {
         class Customer implements ViewModel {
 
             @Override
