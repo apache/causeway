@@ -24,6 +24,7 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -32,6 +33,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionExecutor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -153,6 +155,9 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                         // we now show it once more, so that a veil continues to be shown until the
                         // new page is rendered.
                         target.appendJavaScript("isisShowVeil();\n");
+
+                        send(getPage(), Broadcast.EXACT, new IsisActionCompletedEvent(getActionModel(), target, form));
+
                         target.add(form);
                     } else {
                         if (actionPromptIfAny != null) {

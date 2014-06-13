@@ -72,20 +72,19 @@ public class ToDoItemWizard
         DESCRIPTION,
         CATEGORIES,
         DUE_BY,
-        CONFIRMATION_PAGE;
+        SUMMARY_PAGE;
 
         public boolean hideDescription() {
-            return this != DESCRIPTION && this != CONFIRMATION_PAGE;
+            return this != DESCRIPTION;
         }
         public boolean hideCategories() {
-            return this != CATEGORIES && this != CONFIRMATION_PAGE;
+            return this != CATEGORIES;
         }
         public boolean hideDueBy() {
-            return this != DUE_BY && this != CONFIRMATION_PAGE;
+            return this != DUE_BY;
         }
-
-        public String disableFinish(ToDoItemWizard toDoItemWizard) {
-            return Strings.isNullOrEmpty(toDoItemWizard.getDescription())? "Must enter a description": null;
+        public boolean hideSummary() {
+            return this != SUMMARY_PAGE;
         }
 
         @Override
@@ -93,8 +92,8 @@ public class ToDoItemWizard
             switch (this) {
                 case DESCRIPTION: return CATEGORIES;
                 case CATEGORIES: return DUE_BY;
-                case DUE_BY: return CONFIRMATION_PAGE;
-                default: return CONFIRMATION_PAGE;
+                case DUE_BY: return SUMMARY_PAGE;
+                default: return null;
             }
         }
         @Override
@@ -105,7 +104,7 @@ public class ToDoItemWizard
         @Override
         public State previous() {
             switch (this) {
-                case CONFIRMATION_PAGE: return DUE_BY;
+                case SUMMARY_PAGE: return DUE_BY;
                 case DUE_BY: return CATEGORIES;
                 case CATEGORIES: return DESCRIPTION;
                 default: return null;
@@ -115,6 +114,7 @@ public class ToDoItemWizard
         public String disablePrevious(ToDoItemWizard w) {
             return w.getState().previous() == null? "No more pages": null;
         }
+
     }
     //endregion
 
@@ -155,18 +155,26 @@ public class ToDoItemWizard
     public boolean hideCategory() {
         return getState().hideCategories();
     }
+
+    public String disableCategory() {
+        return subcategory != null? "Use the update action to change both category and subcategory": null;
+    }
     //endregion
 
     //region > subcategory (hidden property)
     private ToDoItem.Subcategory subcategory;
 
-    @Hidden
+    @Disabled(reason = "Use the update action to change both category and subcategory")
     @Optional
     public ToDoItem.Subcategory getSubcategory() {
         return subcategory;
     }
     public void setSubcategory(final ToDoItem.Subcategory subcategory) {
         this.subcategory = subcategory;
+    }
+
+    public boolean hideSubcategory() {
+        return subcategory == null || getState().hideCategories();
     }
     //endregion
 
@@ -196,6 +204,39 @@ public class ToDoItemWizard
     }
     //endregion
 
+    //region > summary propertyies
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public String getDescriptionOnSummary() {
+        return getDescription();
+    }
+    public boolean hideDescriptionOnSummary() {
+        return getState().hideSummary();
+    }
+
+    public Category getCategoryOnSummary() {
+        return getCategory();
+    }
+    public boolean hideCategoryOnSummary() {
+        return getState().hideSummary();
+    }
+
+    public ToDoItem.Subcategory getSubcategoryOnSummary() {
+        return getSubcategory();
+    }
+    public boolean hideSubcategoryOnSummary() {
+        return getState().hideSummary() || getSubcategory() == null;
+    }
+
+    public LocalDate getDueByOnSummary() {
+        return getDueBy();
+    }
+    public boolean hideDueByOnSummary() {
+        return getState().hideSummary();
+    }
+    //endregion
+
+
     //region > finish (action)
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @MemberOrder(sequence = "1")
@@ -203,8 +244,10 @@ public class ToDoItemWizard
         return toDoItems.newToDo(getDescription(), getCategory(), getSubcategory(), getDueBy(), null);
     }
 
+    @Override
     public String disableFinish() {
-        return getState().disableFinish(this);
+        // no additional rules
+        return null;
     }
     //endregion
 

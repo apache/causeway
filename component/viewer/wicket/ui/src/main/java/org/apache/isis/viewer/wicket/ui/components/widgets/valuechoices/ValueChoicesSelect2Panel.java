@@ -177,12 +177,15 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
     protected void onBeforeRenderWhenEnabled() { 
         // Edit: read/write
         select2Field.setEnabled(true);
+
+        // TODO: should the title AttributeModifier installed in onBeforeWhenDisabled be removed here?
     }
 
     @Override
     protected void onBeforeRenderWhenDisabled(final String disableReason) {
         super.onBeforeRenderWhenDisabled(disableReason);
         setTitleAttribute(disableReason);
+        select2Field.setEnabled(false);
     }
 
     private void setTitleAttribute(final String titleAttribute) {

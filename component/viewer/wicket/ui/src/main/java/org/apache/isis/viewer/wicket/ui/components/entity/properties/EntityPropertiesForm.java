@@ -27,6 +27,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -61,6 +62,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.memento.Memento;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
+import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -818,6 +821,39 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     private static void addClassForSpan(final Component component, final int numGridCols) {
         component.add(new CssClassAppender("span"+numGridCols));
     }
+
+
+
+    @Override
+    public void onEvent(IEvent<?> event) {
+        super.onEvent(event);
+        final IsisActionCompletedEvent ev = IsisEnvelopeEvent.openLetter(event, IsisActionCompletedEvent.class);
+        if(ev == null) {
+            return;
+        }
+
+        // hmm, it turns out that there is no need to do anything here;
+        // was trying to force a redraw but the redraw was fine (just a bug in ValueChoicesSelect2Panel).
+        // even though this callback is now redundant, gonna leave it in for future reference of how to
+        // propogage and handle events
+        return;
+
+//        final AjaxRequestTarget target = ev.getTarget();
+//        if(target == null) {
+//            // just in case...
+//            return;
+//        }
+//
+//        if(getEntityModel().isEditMode()) {
+//            toEditMode(target);
+//        } else {
+//            toViewMode(target);
+//        }
+//
+//        // force a redraw...
+//        onBeforeRender();
+    }
+
 
     ///////////////////////////////////////////////////////
     // Dependencies (from context)

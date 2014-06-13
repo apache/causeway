@@ -203,6 +203,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
     // syncWithInput
     // //////////////////////////////////////
 
+
     // called from onBeforeRender*
     // (was previous called by EntityLinkSelect2Panel in onBeforeRender, this responsibility now moved)
     private void syncWithInput() {

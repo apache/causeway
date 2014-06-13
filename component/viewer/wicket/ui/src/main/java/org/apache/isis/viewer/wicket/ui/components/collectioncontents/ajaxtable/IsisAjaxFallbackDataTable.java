@@ -24,7 +24,6 @@ import java.util.Map;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -34,13 +33,12 @@ import org.apache.wicket.markup.repeater.IItemFactory;
 import org.apache.wicket.markup.repeater.IItemReuseStrategy;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.OddEvenItem;
-import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Generics;
 
+import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
-import org.apache.isis.viewer.wicket.model.hints.UiHintsSetEvent;
 
 public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> implements UiHintPathSignificant {
     
@@ -174,7 +172,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> implements 
             return;
         } 
         uiHintContainer.setHint(this, IsisAjaxFallbackDataTable.UIHINT_PAGE_NUMBER, ""+getCurrentPage());
-        send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(uiHintContainer, target));
+        send(getPage(), Broadcast.EXACT, new IsisUiHintEvent(uiHintContainer, target));
     }
 
     public void setSortOrderHintAndBroadcast(SortOrder order, String property, AjaxRequestTarget target) {
@@ -189,7 +187,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> implements 
         }
         // .. then set this one
         uiHintContainer.setHint(this, order.name(), property);
-        send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(uiHintContainer, target));
+        send(getPage(), Broadcast.EXACT, new IsisUiHintEvent(uiHintContainer, target));
     }
 
     private UiHintContainer getUiHintContainer() {

@@ -61,8 +61,9 @@ import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.viewer.wicket.model.hints.UiHintsBroadcastEvent;
-import org.apache.isis.viewer.wicket.model.hints.UiHintsSetEvent;
+import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
+import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
+import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
@@ -98,7 +99,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static final String REGULAR_CASE_KEY = "isis.viewer.wicket.regularCase";
 
     /**
-     * @see https://github.com/brandonaaron/livequery
+     * @see  http://github.com/brandonaaron/livequery
      */
     private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
     private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
@@ -163,7 +164,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         EXCLUDE
     }
     
-    public PageAbstract(final PageParameters pageParameters, ApplicationActions applicationActions, final String title, final ComponentType... childComponentIds) {
+    public PageAbstract(
+            final PageParameters pageParameters,
+            final ApplicationActions applicationActions,
+            final String title,
+            final ComponentType... childComponentIds) {
         try {
             // for breadcrumbs support
             getSession().bind();
@@ -219,11 +224,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         return pageClassRegistry.getPageClass(PageType.SIGN_IN);
     }
 
-
     private static String asCssStyle(final String str) {
         return StringExtensions.asLowerDashed(str);
     }
-
 
     protected ExceptionModel recognizeException(Exception ex) {
         List<ExceptionRecognizer> exceptionRecognizers;
@@ -236,8 +239,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         final String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
         return ExceptionModel.create(recognizedMessageIfAny, ex);
     }
-
-    
 
     @Override
     public void renderHead(IHeaderResponse response) {
@@ -327,7 +328,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     
 
     /**
-     * As provided in the {@link #PageAbstract(ComponentType) constructor}.
+     * As provided in the {@link #PageAbstract(org.apache.wicket.request.mapper.parameter.PageParameters, org.apache.isis.viewer.wicket.ui.pages.PageAbstract.ApplicationActions, String, org.apache.isis.viewer.wicket.ui.ComponentType...)} constructor}.
      * 
      * <p>
      * This superclass doesn't do anything with this property directly, but
@@ -424,13 +425,14 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     // ///////////////////////////////////////////////////////////////////
 
     /**
-     * Propogate any received events down to all child components.
+     * Propogates all {@link org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract letter} events down to
+     * all child components, wrapped in an {@link org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent envelope} event.
      */
     public void onEvent(org.apache.wicket.event.IEvent<?> event) {
         Object payload = event.getPayload();
-        if(payload instanceof UiHintsSetEvent) {
-            UiHintsSetEvent setEv = (UiHintsSetEvent)payload;
-            UiHintsBroadcastEvent broadcastEv = new UiHintsBroadcastEvent(setEv);
+        if(payload instanceof IsisEventLetterAbstract) {
+            IsisEventLetterAbstract letter = (IsisEventLetterAbstract)payload;
+            IsisEnvelopeEvent broadcastEv = new IsisEnvelopeEvent(letter);
             send(this, Broadcast.BREADTH, broadcastEv);
         }
     }

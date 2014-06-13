@@ -18,11 +18,21 @@ package org.apache.isis.viewer.wicket.model.hints;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-public class UiHintsSetEvent extends UiHintsEventAbstract {
+/**
+ *
+ */
+public class IsisUiHintEvent extends IsisEventLetterAbstract {
     
-    public UiHintsSetEvent(UiHintContainer uiHintContainer, AjaxRequestTarget target) {
-        super(uiHintContainer, target);
+    private final UiHintContainer uiHintContainer;
+
+    public IsisUiHintEvent(UiHintContainer uiHintContainer, AjaxRequestTarget target) {
+        super(target);
+        this.uiHintContainer = uiHintContainer;
     }
-    
+
+    public UiHintContainer getUiHintContainer() {
+        return uiHintContainer;
+    }
+
 }
 

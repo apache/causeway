@@ -19,11 +19,9 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationIncrementLink;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.hints.UiHintsSetEvent;
 
 public class IsisAjaxPagingNavigationIncrementLink extends AjaxPagingNavigationIncrementLink {
 

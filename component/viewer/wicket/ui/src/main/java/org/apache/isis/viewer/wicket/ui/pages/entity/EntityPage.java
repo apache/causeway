@@ -23,13 +23,12 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.wicket.model.hints.UiHintsBroadcastEvent;
+import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
@@ -70,13 +69,18 @@ public class EntityPage extends PageAbstract {
         this(new PageParameters(), newEntityModel(adapter, exIfAny));
     }
 
-    private static EntityModel newEntityModel(ObjectAdapter adapter, ConcurrencyException exIfAny) {
+    private static EntityModel newEntityModel(
+            final ObjectAdapter adapter,
+            final ConcurrencyException exIfAny) {
         EntityModel model = new EntityModel(adapter);
         model.setException(exIfAny);
         return model;
     }
 
-    private EntityPage(PageParameters pageParameters, EntityModel entityModel, String titleString) {
+    private EntityPage(
+            final PageParameters pageParameters,
+            final EntityModel entityModel,
+            final String titleString) {
         super(pageParameters, ApplicationActions.INCLUDE, titleString, ComponentType.ENTITY);
 
         this.model = entityModel;
@@ -115,7 +119,7 @@ public class EntityPage extends PageAbstract {
         addBookmarkedPages();
 
         // ensure the copy link holds this page.
-        send(this, Broadcast.BREADTH, new UiHintsBroadcastEvent(entityModel));
+        send(this, Broadcast.BREADTH, new IsisUiHintEvent(entityModel, null));
     }
 
     private void addBreadcrumb(EntityModel entityModel) {

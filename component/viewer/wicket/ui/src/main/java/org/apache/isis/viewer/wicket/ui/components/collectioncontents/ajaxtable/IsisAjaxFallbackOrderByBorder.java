@@ -18,15 +18,12 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.IAjaxCallListener;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.sort.AjaxFallbackOrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.hints.UiHintsSetEvent;
 
 public class IsisAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBorder<T> {
 

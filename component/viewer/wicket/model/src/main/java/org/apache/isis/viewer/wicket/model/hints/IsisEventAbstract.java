@@ -18,19 +18,28 @@ package org.apache.isis.viewer.wicket.model.hints;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-public abstract class UiHintsEventAbstract {
+/**
+ * All Isis-related events subclass from this, and fall into two categories.
+ *
+ * <p>
+ * Components that are raising events should create a subclass of {@link org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract} (the letter)
+ * and then {@link org.apache.wicket.Component#send(org.apache.wicket.event.IEventSink, org.apache.wicket.event.Broadcast, Object) send} as a
+ * {@link org.apache.wicket.event.Broadcast#EXACT exact} message to <tt>PageAbstract</tt>.
+ * </p>
+ *
+ * <p>
+ * Then, <tt>PageAbstract</tt> will wrap the letter into the {@link org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent} (envelope) and
+ * send as a {@link org.apache.wicket.event.Broadcast#BREADTH down} to all its components.
+ * </p>
+ */
+public abstract class IsisEventAbstract {
     
-    private final UiHintContainer uiHintContainer;
     private final AjaxRequestTarget target;
     
-    public UiHintsEventAbstract(UiHintContainer uiHintContainer, AjaxRequestTarget target) {
-        this.uiHintContainer = uiHintContainer;
+    public IsisEventAbstract(AjaxRequestTarget target) {
         this.target = target;
     }
 
-    public UiHintContainer getUiHintContainer() {
-        return uiHintContainer;
-    }
     /**
      * The {@link AjaxRequestTarget target}, if any, that caused this event to be generated.
      * 

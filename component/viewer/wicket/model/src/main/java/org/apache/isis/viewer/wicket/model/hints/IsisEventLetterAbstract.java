@@ -16,15 +16,19 @@
  */
 package org.apache.isis.viewer.wicket.model.hints;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 
-public class UiHintsBroadcastEvent extends UiHintsEventAbstract {
-    
-    public UiHintsBroadcastEvent(UiHintsEventAbstract ev) {
-        super(ev.getUiHintContainer(), ev.getTarget());
+/**
+ * All events to be propogated should inherit from this.
+ *
+ * <p>
+ *
+ * </p>
+ */
+public abstract class IsisEventLetterAbstract extends IsisEventAbstract {
+
+    public IsisEventLetterAbstract(AjaxRequestTarget target) {
+        super(target);
     }
-    public UiHintsBroadcastEvent(UiHintContainer uiHintContainer) {
-        super(uiHintContainer, null);
-    }
-    
 }
 

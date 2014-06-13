@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.selector.links;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,15 +43,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
-import org.apache.isis.viewer.wicket.model.hints.UiHintsSetEvent;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.collection.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -244,7 +242,7 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
             return;
         }
         uiHintContainer.setHint(LinksSelectorPanelAbstract.this, UIHINT_VIEW, ""+viewNum);
-        send(getPage(), Broadcast.EXACT, new UiHintsSetEvent(uiHintContainer, target));
+        send(getPage(), Broadcast.EXACT, new IsisUiHintEvent(uiHintContainer, target));
     }
 
     /**

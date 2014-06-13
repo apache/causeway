@@ -26,10 +26,10 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
+import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.hints.UiHintsBroadcastEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
@@ -146,17 +146,18 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
     @Override
     public void onEvent(IEvent<?> event) {
         super.onEvent(event);
-        if(!(event.getPayload() instanceof UiHintsBroadcastEvent)) {
+
+        final IsisUiHintEvent uiHintEvent = IsisEnvelopeEvent.openLetter(event, IsisUiHintEvent.class);
+        if(uiHintEvent == null) {
             return;
         } 
-        final UiHintsBroadcastEvent ev = (UiHintsBroadcastEvent) event.getPayload();
-        addSubscribingLink(ev.getUiHintContainer());
-        AjaxRequestTarget target = ev.getTarget();
+        addSubscribingLink(uiHintEvent.getUiHintContainer());
+        final AjaxRequestTarget target = uiHintEvent.getTarget();
         if(target != null) {
             target.add(subscribingLink);
         }
     }
-    
+
     // //////////////////////////////////////
 
     protected PageClassRegistry getPageClassRegistry() {
