@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.wizard.properties.properties;
+package org.apache.isis.viewer.wicket.ui.components.wizard.properties;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;

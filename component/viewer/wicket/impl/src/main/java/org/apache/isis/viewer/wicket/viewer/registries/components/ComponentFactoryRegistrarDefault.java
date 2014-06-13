@@ -63,7 +63,7 @@ import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFac
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices.ValueChoicesSelect2PanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.wizard.properties.properties.WizardPropertiesPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.wizard.properties.WizardPropertiesPanelFactory;
 
 /**
  * Default implementation of {@link ComponentFactoryRegistrar} that registers a

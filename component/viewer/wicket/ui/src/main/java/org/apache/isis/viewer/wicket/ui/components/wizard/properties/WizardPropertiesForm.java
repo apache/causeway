@@ -16,30 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.wizard.properties.properties;
+package org.apache.isis.viewer.wicket.ui.components.wizard.properties;
 
 import java.util.List;
 import java.util.Map;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -62,8 +56,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.memento.Memento;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
-import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -71,14 +63,12 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPathSignificantWebMarkupContainer;
-import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.IFormSubmitterWithPreValidateHook;
-import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
@@ -89,18 +79,11 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
     private static final String ID_MEMBER_GROUP_NAME = "memberGroupName";
 
     private static final String ID_LEFT_COLUMN = "leftColumn";
-    private static final String ID_MIDDLE_COLUMN = "middleColumn";
-    private static final String ID_RIGHT_COLUMN = "rightColumn";
-    
-    private static final String ID_ENTITY_COLLECTIONS = "entityCollections";
+
     private static final String ID_ENTITY_COLLECTIONS_OVERFLOW = "entityCollectionsOverflow";
     
     private static final String ID_PROPERTIES = "properties";
     private static final String ID_PROPERTY = "property";
-
-    private static final String ID_EDIT_BUTTON = "edit";
-    private static final String ID_OK_BUTTON = "ok";
-    private static final String ID_CANCEL_BUTTON = "cancel";
 
     private static final String ID_WIZARD_NEXT_BUTTON = "wizardNext";
     private static final String ID_WIZARD_PREVIOUS_BUTTON = "wizardPrevious";
@@ -110,10 +93,6 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
     private static final String ID_FEEDBACK = "feedback";
 
     private final Component owningPanel;
-
-    private Button editButton;
-    private Button okButton;
-    private Button cancelButton;
 
     private Button wizardNextButton;
     private Button wizardPreviousButton;
@@ -145,76 +124,19 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
 
         renderedFirstField = false;
         
-        // left column
-        MarkupContainer leftColumn = new WebMarkupContainer(ID_LEFT_COLUMN);
+        final MarkupContainer leftColumn = new WebMarkupContainer(ID_LEFT_COLUMN);
         add(leftColumn);
         
-        boolean addedProperties;
-        if(columnSpans.getLeft() > 0) {
-            addedProperties = addPropertiesInColumn(leftColumn, MemberGroupLayoutHint.LEFT, columnSpans);
-            addButtons(leftColumn);
-            addWizardButtons(leftColumn);
-            addFeedbackGui(leftColumn);
-        } else {
-            Components.permanentlyHide(this, ID_LEFT_COLUMN);
-            addedProperties = false;
-        }
-        if(!addedProperties) {
-            // a bit hacky...
-            Components.permanentlyHide(this,
-                    ID_EDIT_BUTTON, ID_OK_BUTTON, ID_CANCEL_BUTTON,
-                    ID_WIZARD_NEXT_BUTTON, ID_WIZARD_PREVIOUS_BUTTON, ID_WIZARD_FINISH_BUTTON, ID_WIZARD_CANCEL_BUTTON,
-                    ID_FEEDBACK);
-        }
-        
-        // middle column
-        if(columnSpans.getMiddle() > 0) {
-            MarkupContainer middleColumn = new WebMarkupContainer(ID_MIDDLE_COLUMN);
-            add(middleColumn);
-            addPropertiesInColumn(middleColumn, MemberGroupLayoutHint.MIDDLE, columnSpans);
-        } else {
-            Components.permanentlyHide(this, ID_MIDDLE_COLUMN);
-        }
-
-        // right column
-        if(columnSpans.getRight() > 0) {
-            MarkupContainer rightColumn = new WebMarkupContainer(ID_RIGHT_COLUMN);
-            add(rightColumn);
-            addPropertiesInColumn(rightColumn, MemberGroupLayoutHint.RIGHT, columnSpans);
-        } else {
-            Components.permanentlyHide(this, ID_RIGHT_COLUMN);
-        }
+        addPropertiesInColumn(leftColumn, MemberGroupLayoutHint.LEFT, columnSpans);
+        addWizardButtons(leftColumn);
+        addFeedbackGui(leftColumn);
 
         // collections
-        if(columnSpans.getCollections() > 0) {
-            final String idCollectionsToShow;
-            final String idCollectionsToHide;
-            int collectionSpan;
-            if (columnSpans.exceedsRow())  {
-                idCollectionsToShow = ID_ENTITY_COLLECTIONS_OVERFLOW;
-                idCollectionsToHide = ID_ENTITY_COLLECTIONS;
-                collectionSpan = 12;
-            } else {
-                idCollectionsToShow = ID_ENTITY_COLLECTIONS;
-                idCollectionsToHide = ID_ENTITY_COLLECTIONS_OVERFLOW;
-                collectionSpan = columnSpans.getCollections();
-            }
-
-            final Component collectionsColumn = getComponentFactoryRegistry().addOrReplaceComponent(this, idCollectionsToShow, ComponentType.ENTITY_COLLECTIONS, entityModel);
-            addClassForSpan(collectionsColumn, collectionSpan);
-            
-            Components.permanentlyHide(this, idCollectionsToHide);
-        } else {
-            Components.permanentlyHide(this, ID_ENTITY_COLLECTIONS);
-            Components.permanentlyHide(this, ID_ENTITY_COLLECTIONS_OVERFLOW);
-        }
-
+        final Component collectionsColumn = getComponentFactoryRegistry().addOrReplaceComponent(
+                this, ID_ENTITY_COLLECTIONS_OVERFLOW, ComponentType.ENTITY_COLLECTIONS, entityModel);
+        addClassForSpan(collectionsColumn, 12);
     }
 
-    private boolean isWizard() {
-        final ObjectSpecification specification = getEntityModel().getObject().getSpecification();
-        return specification.containsFacet(WizardFacet.class);
-    }
 
     private boolean addPropertiesInColumn(MarkupContainer markupContainer, MemberGroupLayoutHint hint, ColumnSpans columnSpans) {
         final int span = hint.from(columnSpans);
@@ -228,11 +150,11 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
         final RepeatingView memberGroupRv = new RepeatingView(ID_MEMBER_GROUP);
         markupContainer.add(memberGroupRv);
 
-        Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(associations);
+        final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(associations);
         
         final List<String> groupNames = ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), hint);
         
-        for(String groupName: groupNames) {
+        for(final String groupName: groupNames) {
             final List<ObjectAssociation> associationsInGroup = associationsByGroup.get(groupName);
             if(associationsInGroup==null) {
                 continue;
@@ -245,8 +167,6 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
             final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
             memberGroupRvContainer.add(propertyRv);
 
-            @SuppressWarnings("unused")
-            Component component;
             for (final ObjectAssociation association : associationsInGroup) {
                 final WebMarkupContainer propertyRvContainer = new UiHintPathSignificantWebMarkupContainer(propertyRv.newChildId());
                 propertyRv.add(propertyRvContainer);
@@ -258,7 +178,8 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
         return !groupNames.isEmpty();
     }
 
-    private void addPropertyToForm(final EntityModel entityModel,
+    private void addPropertyToForm(
+            final EntityModel entityModel,
             final ObjectAssociation association,
             final WebMarkupContainer container) {
         final OneToOneAssociation otoa = (OneToOneAssociation) association;
@@ -283,7 +204,7 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
     }
 
 
-    abstract class AjaxButtonWithOnError extends AjaxButton {
+    private abstract class AjaxButtonWithOnError extends AjaxButton {
 
         public AjaxButtonWithOnError(String id, IModel<String> model) {
             super(id, model);
@@ -296,7 +217,7 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
         }
     }
 
-    public class AjaxButtonForValidate extends AjaxButtonWithOnError implements IFormSubmitterWithPreValidateHook {
+    private abstract class AjaxButtonForValidate extends AjaxButtonWithOnError implements IFormSubmitterWithPreValidateHook {
         private static final long serialVersionUID = 1L;
         public AjaxButtonForValidate(String id, IModel<String> model) {
             super(id, model);
@@ -320,7 +241,6 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
                 getForm().clearInput();
                 getEntityModel().resetPropertyModels();
 
-                toViewMode(null);
                 toEditMode(null);
 
                 return recognizedErrorMessage;
@@ -363,7 +283,7 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
 
             getEntityModel().resetPropertyModels();
 
-            toViewMode(null);
+            toEditMode(null);
 
             // "redirect-after-post"
             //
@@ -411,127 +331,17 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
 
     }
 
-    abstract class AjaxButtonForCancel extends AjaxButtonWithOnError {
-
-        public AjaxButtonForCancel(String id, IModel<String> model) {
-            super(id, model);
-            setDefaultFormProcessing(false);
-        }
-    }
-
-
-    private void addButtons(MarkupContainer markupContainer) {
-
-        // edit button
-        editButton = new AjaxButtonWithOnError(ID_EDIT_BUTTON, Model.of("Edit")) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void validate() {
-
-                // same logic as in cancelButton; should this be factored out?
-                try {
-                    getEntityModel().load(ConcurrencyChecking.CHECK);
-                } catch(ConcurrencyException ex) {
-                    getMessageBroker().addMessage("Object changed by " + ex.getOid().getVersion().getUser() + ", automatically reloading");
-                    getEntityModel().load(ConcurrencyChecking.NO_CHECK);
-                }
-                
-                super.validate();
-            }
-            
-            @Override
-            public void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-                getEntityModel().resetPropertyModels();
-                toEditMode(target);
-            }
-
-            @Override
-            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-                super.updateAjaxAttributes(attributes);
-                attributes.getAjaxCallListeners().add(new org.apache.wicket.ajax.attributes.AjaxCallListener(){
-
-                    private static final long serialVersionUID = 1L;
-
-                    @Override
-                    public CharSequence getSuccessHandler(Component component) {
-                        return "$('.first-field input').focus();";
-                    }
-                });
-            }
-        };
-        markupContainer.add(editButton);
-
-
-        // ok button
-        okButton = new AjaxButtonForValidate(ID_OK_BUTTON, Model.of("OK"));
-        markupContainer.add(okButton);
-
-
-        // cancel button
-        cancelButton = new AjaxButtonForCancel(ID_CANCEL_BUTTON, Model.of("Cancel")) {
-            private static final long serialVersionUID = 1L;
-            
-            @Override
-            public void validate() {
-
-                // same logic as in editButton; should this be factored out?
-                try {
-                    getEntityModel().load(ConcurrencyChecking.CHECK);
-                } catch(ConcurrencyException ex) {
-                    getMessageBroker().addMessage("Object changed by " + ex.getOid().getVersion().getUser() + ", automatically reloading");
-                    getEntityModel().load(ConcurrencyChecking.NO_CHECK);
-                }
-                super.validate();
-            }
-            
-            @Override
-            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-                Session.get().getFeedbackMessages().clear();
-                getForm().clearInput();
-                getForm().visitFormComponentsPostOrder(new IVisitor<FormComponent<?>, Void>() {
-
-                    @Override
-                    public void component(FormComponent<?> formComponent, IVisit<Void> visit) {
-                        if (formComponent instanceof CancelHintRequired) {
-                            final CancelHintRequired cancelHintRequired = (CancelHintRequired) formComponent;
-                            cancelHintRequired.onCancel();
-                        }
-                    }
-                });
-
-                try {
-                    getEntityModel().resetPropertyModels();
-                } catch(RuntimeException ex) {
-                    throw ex;
-                }
-                toViewMode(target);
-            }
-        };
-
-        markupContainer.add(cancelButton);
-
-        okButton.setOutputMarkupPlaceholderTag(true);
-        editButton.setOutputMarkupPlaceholderTag(true);
-        cancelButton.setOutputMarkupPlaceholderTag(true);
-        
-        // flush any JGrowl messages (typically concurrency exceptions) if they are added.
-        okButton.add(new JGrowlBehaviour());
-        editButton.add(new JGrowlBehaviour());
-        cancelButton.add(new JGrowlBehaviour());
-    }
-
     private void addWizardButtons(MarkupContainer markupContainer) {
 
         // next
         wizardNextButton = new AjaxButtonForValidate(ID_WIZARD_NEXT_BUTTON, Model.of("Next")) {
             private static final long serialVersionUID = 1L;
-
             @Override
             protected void doPreApply() {
-                wizardNext();
+                final ObjectAdapter adapter = getEntityModel().getObject();
+                final WizardFacet wizardFacet = adapter.getSpecification().getFacet(WizardFacet.class);
+                wizardFacet.next(adapter.getObject());
             }
-
         };
         markupContainer.add(wizardNextButton);
 
@@ -540,7 +350,9 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
 
             @Override
             protected void doPreApply() {
-                wizardPrevious();
+                final ObjectAdapter adapter = getEntityModel().getObject();
+                final WizardFacet wizardFacet = adapter.getSpecification().getFacet(WizardFacet.class);
+                wizardFacet.previous(adapter.getObject());
             }
         };
         markupContainer.add(wizardPreviousButton);
@@ -551,7 +363,9 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
 
             @Override
             protected Object doPostApply() {
-                return wizardFinish();
+                final ObjectAdapter adapter = getEntityModel().getObject();
+                final WizardFacet wizardFacet = adapter.getSpecification().getFacet(WizardFacet.class);
+                return wizardFacet.finish(adapter.getObject());
             }
         };
         markupContainer.add(wizardFinishButton);
@@ -607,42 +421,6 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
         wizardCancelButton.add(new JGrowlBehaviour());
     }
 
-    private void wizardNext() {
-        final ObjectAdapter adapter = getEntityModel().getObject();
-        final WizardFacet wizardFacet = adapter.getSpecification().getFacet(WizardFacet.class);
-        wizardFacet.next(adapter.getObject());
-    }
-
-    private String wizardDisableNext() {
-        final ObjectAdapter adapter = getEntityModel().getObject();
-        final WizardFacet wizardFacet = adapter.getSpecification().getFacet(WizardFacet.class);
-        return wizardFacet.disableNext(adapter.getObject());
-    }
-
-    private void wizardPrevious() {
-        final ObjectAdapter adapter = getEntityModel().getObject();
-        final WizardFacet wizardFacet = adapter.getSpecification().getFacet(WizardFacet.class);
-        wizardFacet.previous(adapter.getObject());
-    }
-
-    private String wizardDisablePrevious() {
-        final ObjectAdapter adapter = getEntityModel().getObject();
-        final WizardFacet wizardFacet = adapter.getSpecification().getFacet(WizardFacet.class);
-        return wizardFacet.disablePrevious(adapter.getObject());
-    }
-
-    private Object wizardFinish() {
-        final ObjectAdapter adapter = getEntityModel().getObject();
-        final WizardFacet wizardFacet = adapter.getSpecification().getFacet(WizardFacet.class);
-        return wizardFacet.finish(adapter.getObject());
-    }
-
-    private String wizardDisableFinish() {
-        final ObjectAdapter adapter = getEntityModel().getObject();
-        final WizardFacet wizardFacet = adapter.getSpecification().getFacet(WizardFacet.class);
-        return wizardFacet.disableFinish(adapter.getObject());
-    }
-
     // to perform object-level validation, we must apply the changes first
     // contrast this with ActionPanel (for validating actionarguments) where
     // we do the validation prior to the execution of the action
@@ -680,9 +458,7 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
         return false;
     }
 
-
     private String recognizeExceptionAndNotify(RuntimeException ex, Component feedbackComponentIfAny) {
-        
         // see if the exception is recognized as being a non-serious error
         
         String recognizedErrorMessageIfAny = recognizeException(ex);
@@ -707,9 +483,6 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
 
     private String recognizeException(RuntimeException ex) {
         
-        // REVIEW: this code is similar to stuff in EntityPropertiesForm, perhaps move up to superclass?
-        // REVIEW: similar code also in WebRequestCycleForIsis; combine?
-        
         final List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
         final String message = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
         return message;
@@ -718,8 +491,6 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
     private void requestRepaintPanel(final AjaxRequestTarget target) {
         if (target != null) {
             target.add(owningPanel);
-            // TODO: is it necessary to add these too?
-            target.add(editButton, okButton, cancelButton, feedback);
         }
     }
 
@@ -727,74 +498,21 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
         return (EntityModel) getModel();
     }
 
-    void toViewMode(final AjaxRequestTarget target) {
-
+    void toEditMode(final AjaxRequestTarget target) {
         getEntityModel().toViewMode();
-
-        if(isWizard()) {
-            // just redirect
-            toEditMode(target);
-            return;
-        }
-
-        // not a wizard
-        setVisible(editButton, isAnythingEditable());
-        setVisible(okButton, false);
-        setVisible(cancelButton, false);
-
-        setVisible(wizardCancelButton, false);
-        setVisible(wizardFinishButton, false);
-        setVisible(wizardPreviousButton, false);
-        setVisible(wizardNextButton, false);
-
-        requestRepaintPanel(target);
-    }
-
-    private void setVisible(Button b, boolean editable) {
-        if(b != null) {
-            b.setVisible(editable);
-        }
-    }
-
-    private boolean isAnythingEditable() {
-        final EntityModel entityModel = (EntityModel) getModel();
-        final ObjectAdapter adapter = entityModel.getObject();
-
-        return !enabledAssociations(adapter, adapter.getSpecification()).isEmpty();
-    }
-    
-    private List<ObjectAssociation> enabledAssociations(final ObjectAdapter adapter, final ObjectSpecification objSpec) {
-        return objSpec.getAssociations(Contributed.EXCLUDED, enabledAssociationFilter(adapter));
-    }
-
-    @SuppressWarnings("unchecked")
-    private Filter<ObjectAssociation> enabledAssociationFilter(final ObjectAdapter adapter) {
-        return Filters.and(ObjectAssociation.Filters.PROPERTIES, ObjectAssociation.Filters.enabled(getAuthenticationSession(), adapter, Where.OBJECT_FORMS));
-    }
-
-    private void toEditMode(final AjaxRequestTarget target) {
         getEntityModel().toEditMode();
 
         // wizard handling.
-        if(isWizard()) {
-            disableIfRequired(wizardNextButton, wizardDisableNext());
-            disableIfRequired(wizardPreviousButton, wizardDisablePrevious());
-            disableIfRequired(wizardFinishButton, wizardDisableFinish());
+        final ObjectAdapter adapter = getEntityModel().getObject();
+        final WizardFacet wizardFacet = adapter.getSpecification().getFacet(WizardFacet.class);
+        disableIfRequired(wizardNextButton, wizardFacet.disableNext(adapter.getObject()));
+        final ObjectAdapter adapter1 = getEntityModel().getObject();
+        final WizardFacet wizardFacet1 = adapter1.getSpecification().getFacet(WizardFacet.class);
+        disableIfRequired(wizardPreviousButton, wizardFacet1.disablePrevious(adapter1.getObject()));
+        final ObjectAdapter adapter2 = getEntityModel().getObject();
+        final WizardFacet wizardFacet2 = adapter2.getSpecification().getFacet(WizardFacet.class);
+        disableIfRequired(wizardFinishButton, wizardFacet2.disableFinish(adapter2.getObject()));
 
-            cancelButton.setVisible(false);
-            okButton.setVisible(false);
-            editButton.setVisible(false);
-
-        } else {
-            wizardCancelButton.setVisible(false);
-            wizardFinishButton.setVisible(false);
-            wizardPreviousButton.setVisible(false);
-            wizardNextButton.setVisible(false);
-
-            editButton.setVisible(false);
-            okButton.setVisible(true);
-            cancelButton.setVisible(true);
-        }
         requestRepaintPanel(target);
     }
 
@@ -817,41 +535,8 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
         }
     }
 
-    
     private static void addClassForSpan(final Component component, final int numGridCols) {
         component.add(new CssClassAppender("span"+numGridCols));
-    }
-
-
-
-    @Override
-    public void onEvent(IEvent<?> event) {
-        super.onEvent(event);
-        final IsisActionCompletedEvent ev = IsisEnvelopeEvent.openLetter(event, IsisActionCompletedEvent.class);
-        if(ev == null) {
-            return;
-        }
-
-        // hmm, it turns out that there is no need to do anything here;
-        // was trying to force a redraw but the redraw was fine (just a bug in ValueChoicesSelect2Panel).
-        // even though this callback is now redundant, gonna leave it in for future reference of how to
-        // propogage and handle events
-        return;
-
-//        final AjaxRequestTarget target = ev.getTarget();
-//        if(target == null) {
-//            // just in case...
-//            return;
-//        }
-//
-//        if(getEntityModel().isEditMode()) {
-//            toEditMode(target);
-//        } else {
-//            toViewMode(target);
-//        }
-//
-//        // force a redraw...
-//        onBeforeRender();
     }
 
 
@@ -870,6 +555,5 @@ public class WizardPropertiesForm extends FormAbstract<ObjectAdapter> {
     protected MessageBroker getMessageBroker() {
         return getAuthenticationSession().getMessageBroker();
     }
-
 
 }

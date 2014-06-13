@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.wizard.properties.properties;
+package org.apache.isis.viewer.wicket.ui.components.wizard.properties;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -38,7 +38,7 @@ public class WizardPropertiesPanel extends PanelAbstract<EntityModel> {
     public WizardPropertiesPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
         buildGui();
-        form.toViewMode(null);
+        form.toEditMode(null);
     }
 
     private void buildGui() {
