@@ -63,7 +63,6 @@ import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFac
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices.ValueChoicesSelect2PanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.wizard.properties.WizardPropertiesPanelFactory;
 
 /**
  * Default implementation of {@link ComponentFactoryRegistrar} that registers a
@@ -137,8 +136,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         // top-level
         componentFactories.add(new EntityCombinedPanelFactory());
         
-        componentFactories.add(new WizardPropertiesPanelFactory());
-
         // lower-level
         componentFactories.add(new EntityIconAndTitlePanelFactory());
         componentFactories.add(new EntityHeaderPanelFactory());

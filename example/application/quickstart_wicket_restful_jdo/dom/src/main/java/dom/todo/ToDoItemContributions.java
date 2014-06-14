@@ -18,7 +18,6 @@
  */
 package dom.todo;
 
-import app.ToDoItemWizard;
 import dom.todo.ToDoItem.Category;
 import dom.todo.ToDoItem.Subcategory;
 
@@ -200,18 +199,6 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
         item.setCategory(category);
         item.setSubcategory(subcategory);
         return item;
-    }
-
-    public boolean hideUpdateCategory(
-            final Categorized item,
-            final Category category,
-            final Subcategory subcategory) {
-        // bit nasty, I suppose; pushing the boundaries of "DCI"
-        if(!(item instanceof ToDoItemWizard)) {
-            return false;
-        }
-        final ToDoItemWizard toDoItemWizard = (ToDoItemWizard) item;
-        return toDoItemWizard.getState().hideCategories();
     }
     public Category default1UpdateCategory(
             final Categorized item) {
