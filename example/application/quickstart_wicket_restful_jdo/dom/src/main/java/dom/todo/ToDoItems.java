@@ -138,7 +138,7 @@ public class ToDoItems {
     public ToDoItem newToDo(
             final @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") @Named("Description") String description, 
             final @Named("Category") Category category,
-            final @Named("Subcategory") Subcategory subcategory,
+            final @Optional @Named("Subcategory") Subcategory subcategory,
             final @Optional @Named("Due by") LocalDate dueBy,
             final @Optional @Named("Cost") BigDecimal cost) {
         return newToDo(description, category, subcategory, currentUserName(), dueBy, cost);

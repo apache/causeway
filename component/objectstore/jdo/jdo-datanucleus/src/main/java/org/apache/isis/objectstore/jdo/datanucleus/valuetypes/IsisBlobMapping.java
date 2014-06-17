@@ -20,6 +20,7 @@ package org.apache.isis.objectstore.jdo.datanucleus.valuetypes;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import org.datanucleus.ClassLoaderResolver;
 import org.datanucleus.ClassNameConstants;
 import org.datanucleus.ExecutionContext;
@@ -75,9 +76,18 @@ public class IsisBlobMapping extends SingleFieldMultiMapping {
     {
         Blob blob = ((Blob)value);
         if (blob == null) {
-            getDatastoreMapping(0).setObject(preparedStmt, exprIndex[0], null);
-            getDatastoreMapping(1).setObject(preparedStmt, exprIndex[1], null);
-            getDatastoreMapping(2).setObject(preparedStmt, exprIndex[2], null);
+            getDatastoreMapping(0).setString(preparedStmt, exprIndex[0], null);
+            getDatastoreMapping(1).setString(preparedStmt, exprIndex[1], null);
+
+            // using:
+            // getDatastoreMapping(2).setObject(preparedStmt, exprIndex[2], null);
+            // fails for PostgreSQL, as interprets as a reference to an oid (pointer to offline blob)
+            // rather than a bytea (inline blob)
+            try {
+                preparedStmt.setBytes(exprIndex[2], null);
+            } catch (SQLException e) {
+                // ignore
+            }
         } else {
             getDatastoreMapping(0).setString(preparedStmt, exprIndex[0], blob.getName());
             getDatastoreMapping(1).setString(preparedStmt, exprIndex[1], blob.getMimeType().getBaseType());
