@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.viewer;
 
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
+import net.ftlines.wicketsource.WicketSource;
 
 import java.util.*;
 import javax.servlet.ServletContext;
@@ -90,6 +91,7 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebS
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapter;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
+import org.apache.isis.viewer.wicket.viewer.settings.IsisResourceSettings;
 
 /**
  * Main application, subclassing the Wicket {@link Application} and
@@ -179,6 +181,22 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     public IsisWicketApplication() {
     }
 
+
+    /**
+     * Although there are warnings about not overriding this method, it doesn't seem possible
+     * to call {@link #setResourceSettings(org.apache.wicket.settings.IResourceSettings)} in the
+     * {@link #init()} method.
+     */
+    @Override
+    protected void internalInit() {
+        // replace with custom implementation of ResourceSettings that changes the order
+        // in which search for i18n properties, to search for the application-specific
+        // settings before any other.
+        setResourceSettings(new IsisResourceSettings(this));
+
+        super.internalInit();
+    }
+
     /**
      * Initializes the application; in particular, bootstrapping the Isis
      * backend, and initializing the {@link ComponentFactoryRegistry} to be used
@@ -219,6 +237,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
             filterJavascriptContributions();
 
+            configureWicketSourcePlugin();
+
             mountPages();
 
             @SuppressWarnings("unused")
@@ -245,6 +265,12 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
                 LOG.error("Failed to initialize", ex);
                 throw ex;
             }
+        }
+    }
+
+    private void configureWicketSourcePlugin() {
+        if(!deploymentType.isProduction()) {
+            WicketSource.configure(this);
         }
     }
 

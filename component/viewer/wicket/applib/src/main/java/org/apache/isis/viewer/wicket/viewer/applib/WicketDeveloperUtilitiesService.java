@@ -17,22 +17,30 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.pages.login;
+package org.apache.isis.viewer.wicket.viewer.applib;
 
-/**
- * TODO
- */
-public class UserPanel /* extends PanelAbstract */{
+import org.apache.wicket.Application;
+import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Prototype;
 
-    private static final long serialVersionUID = 1L;
+public class WicketDeveloperUtilitiesService {
 
-    // public UserPanel(String id, Class<? extends Page> signoutClass) {
-    // super(id);
-    // AuthenticatedWebSessionForIsis session =
-    // getIsisAuthenticatedWebSession();
-    // add(new Label("fullname",
-    // session.getAuthenticationSession().getUserName()));
-    // add(new BookmarkablePageLink("signout", signoutClass));
-    // }
+    /**
+     * Clears the i18n cache so that localized keys can be reloaded.
+     *
+     * <p>
+     * Have hidden this service because it seems that Wicket automatically invalidates
+     * the resource cache anyway if running in development/prototype mode.
+     * </p>
+     */
+    @Hidden
+    @Prototype
+    @ActionSemantics(ActionSemantics.Of.IDEMPOTENT)
+    public void resetI18nCache() {
+        Application.get()
+                .getResourceSettings()
+                .getLocalizer().clearCache();
 
+    }
 }

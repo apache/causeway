@@ -46,7 +46,8 @@
 
         <wicket-webjars.version>0.4.1</wicket-webjars.version>
         <webjars-bootstrap.version>2.3.2</webjars-bootstrap.version>
-        
+        <wicket-source.version>6.0.0.8</wicket-source.version>
+
         <wicket-select2.version>2.2.2</wicket-select2.version>
     </properties>
 
@@ -54,6 +55,7 @@
     <url>http://isis.apache.org/${relativeUrl}</url>
 
 	<modules>
+		<module>applib</module>
 		<module>model</module>
 		<module>ui</module>
 		<module>impl</module>
@@ -96,6 +98,11 @@
         <dependencies>
 
 	    	<!-- also for benefit of application developers, using scope=import -->
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>isis-viewer-wicket-applib</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-model</artifactId>
@@ -289,6 +296,19 @@
                 <groupId>org.webjars</groupId>
                 <artifactId>bootstrap</artifactId>
                 <version>${webjars-bootstrap.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.ftlines.wicket-source</groupId>
+                <artifactId>wicket-source</artifactId>
+                <version>${wicket-source.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- for dependency convergence -->
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-core</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
 			<!-- Other -->

@@ -28,6 +28,7 @@ import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -144,7 +145,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
 
 
         private void addButtons() {
-            AjaxButton okButton = new AjaxButton(ID_OK_BUTTON) {
+            AjaxButton okButton = new AjaxButton(ID_OK_BUTTON, new ResourceModel("okLabel")) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -198,7 +199,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             okButton.add(new JGrowlBehaviour());
             add(okButton);
             
-            AjaxButton cancelButton = new AjaxButton(ID_CANCEL_BUTTON) {
+            AjaxButton cancelButton = new AjaxButton(ID_CANCEL_BUTTON, new ResourceModel("cancelLabel")) {
                 private static final long serialVersionUID = 1L;
 
                 @Override

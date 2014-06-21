@@ -22,22 +22,15 @@ package org.apache.isis.viewer.wicket.ui.pages;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.head.CssReferenceHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
-import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.head.*;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -50,7 +43,6 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -63,14 +55,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
-import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
-import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
-import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.model.models.*;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -118,6 +103,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     
     public static final String ID_MENU_LINK = "menuLink";
     public static final String ID_LOGOUT_LINK = "logoutLink";
+    public static final String ID_LOGOUT_TEXT = "logoutText";
     public static final String ID_ABOUT_LINK = "aboutLink";
     private static final String ID_COPY_LINK = "copyLink";
     private static final String ID_BREADCRUMBS = "breadcrumbs";

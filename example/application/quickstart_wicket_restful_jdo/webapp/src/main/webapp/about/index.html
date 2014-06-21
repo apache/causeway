@@ -60,18 +60,17 @@ th, td {
             <a href="http://isis.apache.org">Apache Isis</a>&trade; is a framework to let you rapidly develop 
             domain-driven apps in Java.  This app has been generated using Isis' 
             <a href="http://isis.apache.org/getting-started/quickstart-archetype.html">quickstart</a> archetype, 
-            which configures Isis' most commonly used components as part of a straightforward
-            &quot;todo&quot; app.  
+            which configures Isis' most commonly used components as part of a (quite feature rich) &quot;todo&quot; app.
             
             <p>
             The app itself consists of a single domain class, <tt>ToDoItem</tt>, along with a number of supporting 
-            services.  You are free to strip it back and reuse for your own purposes.
+            services.
             </p>
             
             <p>
-            Alternatively, if stripping back this app is too much work, you might want to start with the even simpler 
-            <a href="http://isis.apache.org/getting-started/simple-archetype.html">simple</a> archetype, and use this
-            app by way of reference.
+            To build your own app, while you could start with this todo app and remove/rename as required, you are
+            probably better off using the extremely minimal
+            <a href="http://isis.apache.org/getting-started/simple-archetype.html">simple</a> archetype.
             </p>
             
             <p>
@@ -112,7 +111,7 @@ th, td {
             </table>
 
             <p>
-            The default user/password is <i>sven/pass</i> (as configured in the 
+            The default user/password is <b><i>sven/pass</i></b> (as configured in the
             <a href="https://github.com/apache/isis/blob/master/example/application/quickstart%5Fwicket_restful_jdo/webapp/src/main/webapp/WEB-INF/shiro.ini">shiro.ini</a> file).
             </p>
     
@@ -132,25 +131,23 @@ th, td {
                   </li>
                   </ul>
               </li>
-              <li>Fixture classes (in <tt>fixture</tt> module and <tt>webapp</tt> module)
+              <li>Fixture scripts (in <tt>fixture</tt> module)
                 <ul>
-                  <li><a href="https://github.com/apache/isis/blob/master/example/application/quickstart%5Fwicket_restful_jdo/fixture/src/main/java/fixture/todo/ToDoItemsFixture.java"><tt>ToDoItemsFixture</tt></a> example fixture data (since configured for in-memory HSQLDB)
-                  </li>
-                  <li><a href="https://github.com/apache/isis/blob/master/example/application/quickstart%5Fwicket_restful_jdo/webapp/src/main/java/webapp/prototyping/ToDoItemsFixturesService.java"><tt>ToDoItemsFixtureService</tt></a> domain service to install fixtures at run-time
+                  <li><a href="https://github.com/apache/isis/blob/master/example/application/quickstart%5Fwicket_restful_jdo/fixture/src/main/java/fixture/todo/ToDoItemsFixturesService.java"><tt>ToDoItemsFixtureService</tt></a> domain service to install fixtures at run-time
                   </li>
                 </ul>
               </li>
               <li><tt><a href="https://github.com/apache/isis/blob/master/example/application/quickstart%5Fwicket_restful_jdo/webapp/src/main/webapp/WEB-INF/web.xml">WEB-INF/web.xml</a></tt> (in <tt>webapp</tt> module)
                 <ul>
-                  <li><tt>AboutPageFilter</tt> - filter that redirects to this page 
+                  <li><tt><a href="https://github.com/apache/isis/blob/master/example/application/quickstart_wicket_restful_jdo/webapp/src/main/webapp/WEB-INF/web.xml#L98">ResourceCachingFilter</a></tt> and <tt><a href="https://github.com/apache/isis/blob/master/example/application/quickstart_wicket_restful_jdo/webapp/src/main/webapp/WEB-INF/web.xml#L134">ResourceServlet</a></tt> - filter and servlet for serving up static resources.
                   </li>
-                  <li><tt>ResourceCachingFilter</tt> and <tt>ResourceServlet</tt> - filter and servlet for serving up static resources. 
+                  <li><tt><a href="https://github.com/apache/isis/blob/master/example/application/quickstart_wicket_restful_jdo/webapp/src/main/webapp/WEB-INF/web.xml#L174">WicketFilter</a></tt> - filter for the wicket application, mapped to <tt>/wicket/*</tt>
                   </li>
-                  <li><tt>WicketFilter</tt> - filter for the wicket application, mapped to <tt>/wicket/*</tt> 
+                  <li><tt><a href="https://github.com/apache/isis/blob/master/example/application/quickstart_wicket_restful_jdo/webapp/src/main/webapp/WEB-INF/web.xml#L223">ResteasyBootstrap</a></tt>,
+                      <tt><a href="https://github.com/apache/isis/blob/master/example/application/quickstart_wicket_restful_jdo/webapp/src/main/webapp/WEB-INF/web.xml#L240">IsisSessionFilterForRestfulObjects</a></tt>,
+                      <tt><a href="https://github.com/apache/isis/blob/master/example/application/quickstart_wicket_restful_jdo/webapp/src/main/webapp/WEB-INF/web.xml#L271">RestfulObjectsRestEasyDispatcher</a></tt> - listeners, filters and servlets to bootstrap and map restful objects viewer to <tt>/restful/*</tt>.
                   </li>
-                  <li><tt>ResteasyBootstrap</tt>, <tt>IsisSessionFilterForRestfulObjects</tt>, <tt>RestfulObjectsRestEasyDispatcher</tt> - listeners, filters and servlets to bootstrap and map restful objects viewer to <tt>/restful/*</tt>. 
-                  </li>
-                  <li>commented out <tt>IsisWebAppBootstrapper</tt> listener; this is NOT required unless wicket viewer config is removed 
+                  <li>commented out <tt><a href="https://github.com/apache/isis/blob/master/example/application/quickstart_wicket_restful_jdo/webapp/src/main/webapp/WEB-INF/web.xml#L208">IsisWebAppBootstrapper</a></tt> listener; this is NOT required unless wicket viewer config is removed
                   </li>
                 </ul>
               </li>
@@ -182,29 +179,6 @@ th, td {
                   <li>configuration for Shiro security
                   </li>
                 </ul>
-              </li>
-            </ul>
-    
-            <h2>Next steps</h2>
-            <p>Use the following as a check-list for refactoring towards your own application:
-            <ul>
-              <li>Experiment with users, roles and permissions (in <tt>shiro.ini</tt>)
-              </li>
-              <li>Refactor the <tt>ToDoItem</tt>, <tt>ToDoItems</tt> and <tt>ToDoItemsJdo</tt> towards your own application's functionality; obviously you are likely to introduce many more classes and services
-              </li>
-              <li>Reconfigure <tt>persistor.properties</tt> to specify the JDBC URL to the database you wish to work with; if necessary also update the <tt>pom.xml</tt> in the <tt>webapp</tt> module to add the JDBC driver to the classpath
-              </li>
-              <li>Fine-tune other RDBMS settings in <tt>persistor_datanucleus.properties</tt>
-              </li>
-              <li>Assuming you are using a persistent data store, then remove the <tt>ToDoItemsFixtureService</tt> from the <tt>isis.properties</tt> file (<tt>isis.services</tt> key).  Alternatively you could keep but refactor to provide a similar service for your own application's domain.    
-              </li>
-              <li>Replace (or remove) the publishing and auditing service implementations.
-              </li>
-              <li>If you want the wicket viewer but NOT the restful objects viewer, then remove/comment out the <tt>ResteasyBootstrap</tt>, <tt>IsisSessionFilterForRestfulObjects</tt>, <tt>RestfulObjectsRestEasyDispatcher</tt> from <tt>web.xml</tt>
-              </li>
-              <li>If you want the restful objects viewer but NOT the wicket viewer, then remove/comment out the <tt>WicketFilter</tt> filter and uncomment the <tt>IsisWebAppBootstrapper</tt> listener in <tt>web.xml</tt>
-              </li>
-              <li>Update this page (<tt>about/index.html</tt>) as required for your application, and/or remove the <tt>welcome-file-list</tt> from <tt>web.xml</tt>
               </li>
             </ul>
         </div>

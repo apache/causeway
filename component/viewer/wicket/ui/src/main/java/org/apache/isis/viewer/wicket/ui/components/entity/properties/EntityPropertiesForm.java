@@ -35,7 +35,7 @@ import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
@@ -49,7 +49,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
-import org.apache.isis.core.metamodel.facets.object.wizard.viewmodel.WizardFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
@@ -189,11 +188,6 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
             Components.permanentlyHide(this, ID_ENTITY_COLLECTIONS_OVERFLOW);
         }
 
-    }
-
-    private boolean isWizard() {
-        final ObjectSpecification specification = getEntityModel().getObject().getSpecification();
-        return specification.containsFacet(WizardFacet.class);
     }
 
     private boolean addPropertiesInColumn(MarkupContainer markupContainer, MemberGroupLayoutHint hint, ColumnSpans columnSpans) {
@@ -403,7 +397,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     private void addButtons(MarkupContainer markupContainer) {
 
         // edit button
-        editButton = new AjaxButtonWithOnError(ID_EDIT_BUTTON, Model.of("Edit")) {
+        editButton = new AjaxButtonWithOnError(ID_EDIT_BUTTON, new ResourceModel("editLabel")) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -444,12 +438,12 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
 
         // ok button
-        okButton = new AjaxButtonForValidate(ID_OK_BUTTON, Model.of("OK"));
+        okButton = new AjaxButtonForValidate(ID_OK_BUTTON, new ResourceModel("okLabel"));
         markupContainer.add(okButton);
 
 
         // cancel button
-        cancelButton = new AjaxButtonForCancel(ID_CANCEL_BUTTON, Model.of("Cancel")) {
+        cancelButton = new AjaxButtonForCancel(ID_CANCEL_BUTTON, new ResourceModel("cancelLabel")) {
             private static final long serialVersionUID = 1L;
             
             @Override
