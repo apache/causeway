@@ -18,19 +18,20 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
+import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 import java.io.IOException;
 import java.math.BigDecimal;
+
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
 
 public class JsonRepresentationTest_getBigDecimal {
 
@@ -49,6 +50,16 @@ public class JsonRepresentationTest_getBigDecimal {
         assertThat(jsonRepresentation.getBigDecimal("aBigDecimal"), is(new BigDecimal("12345678901234567890.1234")));
     }
 
+    @Test
+    public void happyCaseConvertingAnotherDoubleToBigDecimal() throws JsonParseException, JsonMappingException, IOException {
+        assertThat(jsonRepresentation.getBigDecimal("anotherDouble"), is(new BigDecimal("1234567.89")));
+    }
+
+    @Test
+    public void happyCaseConvertingAnIntToBigDecimal() throws JsonParseException, JsonMappingException, IOException {
+        assertThat(jsonRepresentation.getBigDecimal("anInt"), is(new BigDecimal("123")));
+    }
+    
     @Test
     public void happyCaseForFormatJustFits() throws JsonParseException, JsonMappingException, IOException {
         assertThat(jsonRepresentation.getBigDecimal("aBigDecimal", "big-decimal(24,4)"), is(new BigDecimal("12345678901234567890.1234")));

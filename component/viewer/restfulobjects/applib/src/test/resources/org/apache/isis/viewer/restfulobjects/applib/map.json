@@ -3,6 +3,7 @@
   "aNull": null,
   "aLong": 1234567890123,
   "aDouble": 12345678901234534.3242,
+  "anotherDouble": 1234567.89,
   "aBigDecimal": "12345678901234567890.1234",
   "aBigInteger": "12345678901234567890",
   "aBoolean": true,
