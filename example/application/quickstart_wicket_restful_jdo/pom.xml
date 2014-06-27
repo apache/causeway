@@ -93,13 +93,9 @@
                     <version>2.16</version>
                     <configuration>
                         <includes>
-                            <include>**/*Test.java</include>
-                            <include>**/*Test_*.java</include>
-                            <include>**/*Spec*.java</include>
+                            <include>**/*.java</include>
                         </includes>
                         <excludes>
-                            <exclude>**/Test*.java</exclude>
-                            <exclude>**/*ForTesting.java</exclude>
                             <exclude>**/*Abstract*.java</exclude>
                         </excludes>
                         <useFile>true</useFile>

@@ -36,8 +36,6 @@ import org.apache.isis.applib.services.clock.ClockService;
 public class ToDoItems {
 
     //region > identification in the UI
-    // //////////////////////////////////////
-
     public String getId() {
         return "toDoItems";
     }
@@ -48,8 +46,6 @@ public class ToDoItems {
     //endregion
 
     //region > notYetComplete (action)
-    // //////////////////////////////////////
-
     @Bookmarkable
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "10")
@@ -71,8 +67,6 @@ public class ToDoItems {
     //endregion
 
     //region > complete (action)
-    // //////////////////////////////////////
-    
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "20")
     public List<ToDoItem> complete() {
@@ -93,8 +87,6 @@ public class ToDoItems {
     //endregion
 
     //region > categorized (action)
-    // //////////////////////////////////////
-
 	@SuppressWarnings("unchecked")
 	@Bookmarkable
     @ActionSemantics(Of.SAFE)
@@ -132,8 +124,6 @@ public class ToDoItems {
     //endregion
 
     //region > newToDo (action)
-    // //////////////////////////////////////
-
     @MemberOrder(sequence = "5")
     public ToDoItem newToDo(
             final @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") @Named("Description") String description, 
@@ -165,8 +155,6 @@ public class ToDoItems {
     //endregion
 
     //region > allToDos (action)
-    // //////////////////////////////////////
-
     @Prototype
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "50")
@@ -183,8 +171,6 @@ public class ToDoItems {
     //endregion
 
     //region > autoComplete (programmatic)
-    // //////////////////////////////////////
-
     @Programmatic // not part of metamodel
     public List<ToDoItem> autoComplete(final String description) {
         return container.allMatches(
@@ -196,8 +182,6 @@ public class ToDoItems {
     //endregion
 
     //region > helpers
-    // //////////////////////////////////////
-
     @Programmatic // for use by fixtures
     public ToDoItem newToDo(
             final String description, 
@@ -226,7 +210,6 @@ public class ToDoItems {
     //endregion
 
     //region > common validation
-    // //////////////////////////////////////
     private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
 
     @Programmatic
@@ -240,15 +223,11 @@ public class ToDoItems {
     //endregion
 
     //region > injected services
-    // //////////////////////////////////////
-    
     @javax.inject.Inject
     private DomainObjectContainer container;
 
     @javax.inject.Inject
     private ClockService clockService;
-
-
     //endregion
 
 }

@@ -39,6 +39,7 @@ public class ToDoItemChangedPayloadFactory implements PayloadFactory{
             return getChanged().getDescription();
         }
     }
+
     @Override
     public EventPayload payloadFor(Object changedObject, ChangeKind changeKind) {
         return new ToDoItemPayload((ToDoItem) changedObject);

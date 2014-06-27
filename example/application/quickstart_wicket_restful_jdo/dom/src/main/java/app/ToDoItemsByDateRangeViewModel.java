@@ -48,8 +48,6 @@ public class ToDoItemsByDateRangeViewModel
         implements Comparable<ToDoItemsByDateRangeViewModel> {
 
     //region > viewModel implementation
-    // //////////////////////////////////////
-
     @Override
     public String viewModelMemento() {
         return getDateRange().name();
@@ -63,10 +61,6 @@ public class ToDoItemsByDateRangeViewModel
     //endregion
 
     //region > dateRange (property)
-    // //////////////////////////////////////
-    //
-    // //////////////////////////////////////
-
     private DateRange dateRange;
 
     /**
@@ -83,17 +77,12 @@ public class ToDoItemsByDateRangeViewModel
     //endregion
 
     //region > count (derived property)
-    // //////////////////////////////////////
-
     public int getCount() {
         return getItemsNotYetComplete().size();
     }
-
     //endregion
 
     //region > getItemsNotYetComplete (collection)
-    // //////////////////////////////////////
-
     /**
      * All those items {@link ToDoItems#notYetComplete() not yet complete}, for this {@link #getCategory() category}.
      */
@@ -136,8 +125,6 @@ public class ToDoItemsByDateRangeViewModel
     //endregion
 
     //region > compareTo
-    // //////////////////////////////////////
-
     @Override
     public int compareTo(ToDoItemsByDateRangeViewModel other) {
         return ObjectContracts.compare(this, other, "dateRange");
@@ -145,14 +132,11 @@ public class ToDoItemsByDateRangeViewModel
     //endregion
 
     //region > injected services
-    // //////////////////////////////////////
-    
     @javax.inject.Inject
     private ToDoItems toDoItems;
 
     @javax.inject.Inject
     private ClockService clockService;
-
     //endregion
 
 }

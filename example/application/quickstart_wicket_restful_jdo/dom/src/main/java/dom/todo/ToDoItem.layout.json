@@ -25,14 +25,8 @@
                         "typicalLength": { "value": 50 }
                     },
                     "category": {
-                        "disabled": {
-                            "reason": "Use action to update both category and subcategory"
-                        }
                     },
                     "subcategory": {
-                        "disabled": {
-                            "reason": "Use action to update both category and subcategory"
-                        },
                         "actions": {
                             "updateCategory": {
                                 "named": {

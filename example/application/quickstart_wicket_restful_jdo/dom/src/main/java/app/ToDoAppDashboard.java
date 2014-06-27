@@ -29,7 +29,6 @@ import org.apache.isis.applib.annotation.Render.Type;
 public class ToDoAppDashboard extends AbstractViewModel {
 
     //region > identification in the UI
-    // //////////////////////////////////////
     public String title() {
         return "Dashboard";
     }
@@ -40,8 +39,6 @@ public class ToDoAppDashboard extends AbstractViewModel {
     //endregion
 
     //region > ViewModel contract
-    // //////////////////////////////////////
-
     private String memento;
     
     @Override
@@ -57,8 +54,6 @@ public class ToDoAppDashboard extends AbstractViewModel {
     //endregion
 
     //region > getAnalysisByCategory (collection)
-    // //////////////////////////////////////
-
     @Named("By Category")
     @Render(Type.EAGERLY)
     @Disabled
@@ -68,8 +63,6 @@ public class ToDoAppDashboard extends AbstractViewModel {
     //endregion
 
     //region > getAnalysisByDateRange (collection)
-    // //////////////////////////////////////
-    
     @Named("By Date Range")
     @Render(Type.EAGERLY)
     @Disabled
@@ -79,8 +72,6 @@ public class ToDoAppDashboard extends AbstractViewModel {
     //endregion
 
     //region > injected services
-    // //////////////////////////////////////
-    
     @javax.inject.Inject
     private ToDoItemAnalysis toDoItemAnalysis;
 

@@ -24,7 +24,7 @@ import org.junit.BeforeClass;
 import org.apache.isis.core.integtestsupport.IntegrationTestAbstract;
 import org.apache.isis.core.integtestsupport.scenarios.ScenarioExecutionForIntegration;
 
-public abstract class ToDoIntegTest extends IntegrationTestAbstract {
+public abstract class AbstractToDoIntegTest extends IntegrationTestAbstract {
     
     @BeforeClass
     public static void initClass() {

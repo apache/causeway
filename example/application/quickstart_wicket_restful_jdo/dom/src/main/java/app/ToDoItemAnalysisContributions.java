@@ -30,8 +30,6 @@ public class ToDoItemAnalysisContributions {
 
 
     //region > analyseCategory (action)
-    // //////////////////////////////////////
-
     @NotInServiceMenu
     @NotContributed(As.ASSOCIATION)
     @ActionSemantics(Of.SAFE)
@@ -41,8 +39,6 @@ public class ToDoItemAnalysisContributions {
     //endregion
 
     //region > injected services
-    // //////////////////////////////////////
-
     @javax.inject.Inject
     private ToDoItemAnalysis toDoAppAnalysis;
 

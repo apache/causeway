@@ -38,9 +38,8 @@ public class ToDoItemSubscriptions {
     private final static org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(ToDoItemSubscriptions.class);
     //endregion
 
-
     //region > on(Event)...
-    // //////////////////////////////////////
+
     public static enum Behaviour {
         AcceptEvents,
         RejectEventsWithRecoverableException,
@@ -81,8 +80,6 @@ public class ToDoItemSubscriptions {
     //endregion
 
     //region > on(Event)...
-    // //////////////////////////////////////
-
     @Programmatic
     @Subscribe
     public void on(ToDoItem.AbstractActionInvokedEvent ev) {
@@ -90,7 +87,6 @@ public class ToDoItemSubscriptions {
         recordEvent(ev);
         LOG.info(ev.getEventDescription() + ": " + container.titleOf(ev.getSource()));
     }
-
 
     @Programmatic
     @Subscribe
@@ -121,12 +117,9 @@ public class ToDoItemSubscriptions {
         recordEvent(ev);
         LOG.info(container.titleOf(ev.getSource()) + ", removed from " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
     }
-
     //endregion
 
     //region > receivedEvents
-    // //////////////////////////////////////
-    
     private final List<java.util.EventObject> receivedEvents = Lists.newLinkedList();
 
     /**
@@ -161,13 +154,9 @@ public class ToDoItemSubscriptions {
         receivedEvents.clear();
         subscriberBehaviour(ToDoItemSubscriptions.Behaviour.AcceptEvents);
     }
-
     //endregion
 
-
     //region > injected services
-    // //////////////////////////////////////
-    
     @javax.inject.Inject
     private DomainObjectContainer container;
 

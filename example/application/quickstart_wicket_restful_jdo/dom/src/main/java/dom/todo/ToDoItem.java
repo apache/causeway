@@ -111,7 +111,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     // region > title, icon
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public String title() {
         final TitleBuffer buf = new TitleBuffer();
         buf.append(getDescription());
@@ -131,13 +130,11 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > description (property)
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private String description;
 
     @javax.jdo.annotations.Column(allowsNull="false", length=100)
     @PostsPropertyChangedEvent()
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") 
-    @TypicalLength(50)
     public String getDescription() {
         return description;
     }
@@ -154,7 +151,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > dueBy (property)
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
     private LocalDate dueBy;
 
@@ -180,7 +176,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     //region > category and subcategory (property)
 
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static enum Category {
         Professional {
             @Override
@@ -239,6 +234,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     private Category category;
 
     @javax.jdo.annotations.Column(allowsNull="false")
+    @Disabled(reason="Use action to update both category and subcategory")
     public Category getCategory() {
         return category;
     }
@@ -252,6 +248,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     private Subcategory subcategory;
 
     @javax.jdo.annotations.Column(allowsNull="true")
+    @Disabled(reason="Use action to update both category and subcategory")
     public Subcategory getSubcategory() {
         return subcategory;
     }
@@ -261,7 +258,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > ownedBy (property)
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     private String ownedBy;
 
     @javax.jdo.annotations.Column(allowsNull="false")
@@ -275,7 +272,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > complete (property), completed (action), notYetCompleted (action)
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     private boolean complete;
 
     @Disabled
@@ -345,7 +342,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > cost (property), updateCost (action)
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private BigDecimal cost;
 
     @javax.jdo.annotations.Column(allowsNull="true", scale=2)
@@ -358,7 +354,8 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     public void setCost(final BigDecimal cost) {
         this.cost = cost!=null?cost.setScale(2):null;
     }
-    
+
+    @ActionSemantics(Of.IDEMPOTENT)
     public ToDoItem updateCost(
             @Named("New cost") 
             @javax.validation.constraints.Digits(integer=10, fraction=2) 
@@ -389,7 +386,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > notes (property)
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private String notes;
 
     @javax.jdo.annotations.Column(allowsNull="true", length=400)
@@ -403,7 +399,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > attachment (property)
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private Blob attachment;
     @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
             @javax.jdo.annotations.Column(name = "attachment_name"),
@@ -421,7 +416,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > doc (property)
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private Clob doc;
     @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
             @javax.jdo.annotations.Column(name = "doc_name"),
@@ -439,7 +433,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > version (derived property)
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public Long getVersionSequence() {
         if(!(this instanceof javax.jdo.spi.PersistenceCapable)) {
             return null;
@@ -455,7 +448,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > dependencies (property), add (action), remove (action)
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // overrides the natural ordering
     public static class DependenciesComparator implements Comparator<ToDoItem> {
@@ -559,7 +551,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > clone (action)
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // the name of the action in the UI
     // nb: method is not called "clone()" is inherited by java.lang.Object and
@@ -598,7 +589,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > delete (action)
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @PostsActionInvokedEvent(DeletedEvent.class)
     @Bulk
     public List<ToDoItem> delete() {
@@ -613,7 +603,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > totalCost (property)
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @ActionSemantics(Of.SAFE)
     @Bulk(AppliesTo.BULK_ONLY)
     public BigDecimal totalCost() {
@@ -627,7 +616,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > scheduleExplicitly (action), scheduleImplicitly (background action)
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @ActionSemantics(Of.IDEMPOTENT)
     @Prototype
     public ToDoItem scheduleExplicitly() {
@@ -636,8 +624,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         return this;
     }
     
-    // //////////////////////////////////////
-
     @ActionSemantics(Of.IDEMPOTENT)
     @Command(executeIn=ExecuteIn.BACKGROUND)
     @Prototype
@@ -648,7 +634,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > openSourceCodeOnGithub (action)
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Prototype
     @ActionSemantics(Of.SAFE)
     public URL openSourceCodeOnGithub() throws MalformedURLException {
@@ -658,7 +643,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     //region > demoException (action)
 
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     static enum DemoExceptionType {
         RecoverableException,
         RecoverableExceptionAutoEscalated,
@@ -688,7 +672,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > object-level validation
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * In a real app, if this were actually a rule, then we'd expect that
@@ -705,8 +688,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > programmatic helpers
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     @Programmatic // excluded from the framework's metamodel
     public boolean isDue() {
         if (getDueBy() == null) {
@@ -714,12 +695,10 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         }
         return !toDoItems.isMoreThanOneWeekInPast(getDueBy());
     }
-
     //endregion
 
     //region > events
 
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static abstract class AbstractActionInvokedEvent extends ActionInvokedEvent<ToDoItem> {
         private static final long serialVersionUID = 1L;
         private final String description;
@@ -765,12 +744,11 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
             super("deleted", source, identifier, arguments);
         }
     }
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     //endregion
 
     //region > predicates
 
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static class Predicates {
         
         public static Predicate<ToDoItem> thoseOwnedBy(final String currentUser) {
@@ -845,7 +823,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         }
 
     }
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     //endregion
 
     //region > toString, compareTo

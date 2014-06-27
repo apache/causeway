@@ -40,8 +40,6 @@ import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
     //region > priority (contributed property)
-    // //////////////////////////////////////
-    
     @DescribedAs("The relative priority of this item compared to others not yet complete (using 'due by' date)")
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
@@ -67,7 +65,6 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
                 return null;
             }}, ToDoItemContributions.class, "relativePriority", toDoItem);
     }
-
 
     private List<ToDoItem> sortedNotYetComplete() {
         return ORDERING_DUE_BY
@@ -95,8 +92,6 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     //endregion
 
     //region >  next, previous (contributed actions)
-    // //////////////////////////////////////
-
     @DescribedAs("The next item not yet completed")
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
@@ -161,8 +156,6 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     //endregion
 
     //region > similarTo (contributed collection)
-    // //////////////////////////////////////
-    
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
     @NotContributed(As.ACTION)
@@ -187,7 +180,6 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     //endregion
 
     //region > updateCategory (contributed action)
-    // //////////////////////////////////////
 
     @DescribedAs("Update category and subcategory")
     @NotInServiceMenu
@@ -221,17 +213,12 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     //endregion
 
     //region > helpers
-    // //////////////////////////////////////
-    
     protected String currentUserName() {
         return getContainer().getUser().getName();
     }
-
     //endregion
 
     //region > injected services
-    // //////////////////////////////////////
-
     @javax.inject.Inject
     private ToDoItems toDoItems;
 

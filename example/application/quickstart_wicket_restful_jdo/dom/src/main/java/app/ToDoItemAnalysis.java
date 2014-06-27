@@ -35,8 +35,6 @@ public class ToDoItemAnalysis {
 
 
     //region > identification in the UI
-    // //////////////////////////////////////
-
     public String getId() {
         return "analysis";
     }
@@ -47,8 +45,6 @@ public class ToDoItemAnalysis {
     //endregion
 
     //region > byCategory (action)
-    // //////////////////////////////////////
-
     @Named("By Category")
     @Bookmarkable
     @ActionSemantics(Of.SAFE)
@@ -69,12 +65,10 @@ public class ToDoItemAnalysis {
              }
          };
     }
-
     //endregion
 
     //region > byDateRange (action)
-    // //////////////////////////////////////
-    
+
     public enum DateRange {
         OverDue,
         Today,
@@ -107,8 +101,6 @@ public class ToDoItemAnalysis {
     //endregion
 
     //region > forCategory (programmatic)
-    // //////////////////////////////////////
-
     @Programmatic
     public ToDoItemsByCategoryViewModel toDoItemsForCategory(Category category) {
         return byCategory().apply(category);
@@ -117,8 +109,6 @@ public class ToDoItemAnalysis {
     //endregion
 
     //region > injected services
-    // //////////////////////////////////////
-
     @javax.inject.Inject
     private DomainObjectContainer container;
 
