@@ -67,16 +67,9 @@ final class ServicesInstallerUtils  {
         }
         if (pos != -1) {
             final String type = serviceName.substring(0, pos);
-            if ("repository".equals(type)) {
-                final String className = serviceName.substring(pos + 1);
-
-                final Class<?> underlying = loadClass(className);
-                return new SimpleRepository(underlying);
-            } else {
-                // disregard, assume the stuff after the delimiter (#) was a comment
-                final Class<?> cls = loadClass(type);
-                return serviceInstantiator.createInstance(cls);
-            }
+            // disregard, assume the stuff after the delimiter (#) was a comment
+            final Class<?> cls = loadClass(type);
+            return serviceInstantiator.createInstance(cls);
         }
 
         final Class<?> cls = loadClass(serviceName);

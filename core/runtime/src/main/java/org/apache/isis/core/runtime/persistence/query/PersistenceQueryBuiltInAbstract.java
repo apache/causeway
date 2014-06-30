@@ -36,7 +36,6 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
  */
 public abstract class PersistenceQueryBuiltInAbstract extends PersistenceQueryAbstract implements PersistenceQueryBuiltIn {
 
-
     protected long index;
     protected long countedSoFar;
 

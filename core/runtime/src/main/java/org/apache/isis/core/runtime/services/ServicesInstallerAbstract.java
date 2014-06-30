@@ -19,14 +19,13 @@
 
 package org.apache.isis.core.runtime.services;
 
-import static org.apache.isis.core.commons.lang.ObjectExtensions.asCollectionT;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.runtime.system.DeploymentType;
+
+import static org.apache.isis.core.commons.lang.ObjectExtensions.asCollectionT;
 
 public abstract class ServicesInstallerAbstract extends InstallerAbstract implements ServicesInstaller {
     private final List<Object> services = new ArrayList<Object>();
@@ -51,10 +50,6 @@ public abstract class ServicesInstallerAbstract extends InstallerAbstract implem
         } else {
             services.add(service);
         }
-    }
-
-    public void addSimpleRepository(final Class<?> cls) {
-        addService(new SimpleRepository(cls));
     }
 
     @Override

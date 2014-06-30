@@ -64,7 +64,7 @@ public interface Query<T> extends Serializable {
 
 
     /**
-     * The number of items to return, starting at {@link QueryFindAllPaged#getStart()}
+     * The number of items to return, starting at {@link #getStart()}
      * @return
      */
     public long getCount();
