@@ -20,30 +20,42 @@
 package org.apache.isis.applib.services.wrapper;
 
 /**
- * Implemented by all objects that have been viewed as per
- * {@link WrapperFactory#wrap(Object)}.
+ * Replaced by {@link org.apache.isis.applib.services.wrapper.WrappingObject}.
+ *
+ * <p>
+ *     The methods in this (sub-)interface are all deprecated because of the risk
+ *     of collision with a method on the underlying domain object.
+ * </p>
+ *
+ * @deprecated
  */
-public interface WrapperObject {
+@Deprecated
+public interface WrapperObject extends WrappingObject {
 
     /**
-     * Programmatic equivalent of invoking save for a transient object (that is,
-     * like hitting the <i>save</i> button that the DnD viewer automatically
-     * renders.
+     * Same as {@link #__isis_save()}.
+     *
+     * <p>
+     * NOTE: domain classes may not have a method with this name.  This method has been deprecated because
+     * the risk of a collision is high.
+     * </p>
+     *
+     * @deprecated - use <tt>__isis_save()</tt> instead.
      */
+    @Deprecated
     void save();
 
     /**
-     * Provide access to the underlying, wrapped object.
-     * 
+     * Same as {@link #__isis_wrapped()}.
+     *
      * <p>
-     * Used to unwrap objects used as arguments to actions (otherwise, end up
-     * creating a <tt>ObjectSpecification</tt> for the CGLib-enhanced class, not
-     * the original class).
-     * 
-     * <p>
-     * <b>NOTE: there is a string-literal reference to this name
-     * <tt>DomainObjectInvocationHandler</tt>, so it should not be changed.</b>.
+     * NOTE: domain classes may not have a method with this name.  This method has been deprecated because
+     * the risk of a collision is reasonably high.
+     * </p>
+     *
+     * @deprecated - use <tt>__isis_save()</tt> instead.
      */
+    @Deprecated
     Object wrapped();
 
 }

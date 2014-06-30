@@ -23,27 +23,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.events.ActionArgumentEvent;
-import org.apache.isis.applib.events.ActionInvocationEvent;
-import org.apache.isis.applib.events.ActionUsabilityEvent;
-import org.apache.isis.applib.events.ActionVisibilityEvent;
-import org.apache.isis.applib.events.CollectionAccessEvent;
-import org.apache.isis.applib.events.CollectionAddToEvent;
-import org.apache.isis.applib.events.CollectionMethodEvent;
-import org.apache.isis.applib.events.CollectionRemoveFromEvent;
-import org.apache.isis.applib.events.CollectionUsabilityEvent;
-import org.apache.isis.applib.events.CollectionVisibilityEvent;
-import org.apache.isis.applib.events.InteractionEvent;
-import org.apache.isis.applib.events.ObjectTitleEvent;
-import org.apache.isis.applib.events.ObjectValidityEvent;
-import org.apache.isis.applib.events.PropertyAccessEvent;
-import org.apache.isis.applib.events.PropertyModifyEvent;
-import org.apache.isis.applib.events.PropertyUsabilityEvent;
-import org.apache.isis.applib.events.PropertyVisibilityEvent;
+import org.apache.isis.applib.events.*;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.applib.services.wrapper.WrapperObject;
+import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
@@ -225,7 +208,13 @@ public abstract class WrapperFactoryAbstract implements WrapperFactory, Authenti
     
     @Override
     public <T> T wrap(final T domainObject, final ExecutionMode mode) {
-        if (isWrapper(domainObject)) {
+        if (domainObject instanceof WrappingObject) {
+            final WrappingObject wrapperObject = (WrappingObject) domainObject;
+            final ExecutionMode wrapperMode = wrapperObject.__isis_executionMode();
+            if(wrapperMode != mode) {
+                final Object underlyingDomainObject = wrapperObject.__isis_wrapped();
+                return (T)createProxy(underlyingDomainObject, mode);
+            }
             return domainObject;
         }
         return createProxy(domainObject, mode);
@@ -237,7 +226,7 @@ public abstract class WrapperFactoryAbstract implements WrapperFactory, Authenti
 
     @Override
     public boolean isWrapper(final Object possibleWrappedDomainObject) {
-        return possibleWrappedDomainObject instanceof WrapperObject;
+        return possibleWrappedDomainObject instanceof WrappingObject;
     }
 
     @Override
@@ -245,8 +234,8 @@ public abstract class WrapperFactoryAbstract implements WrapperFactory, Authenti
     @Programmatic
     public <T> T unwrap(T possibleWrappedDomainObject) {
         if(isWrapper(possibleWrappedDomainObject)) {
-            WrapperObject wrapperObject = (WrapperObject) possibleWrappedDomainObject;
-            return (T) wrapperObject.wrapped();
+            final WrappingObject wrappingObject = (WrappingObject) possibleWrappedDomainObject;
+            return (T) wrappingObject.__isis_wrapped();
         } 
         return possibleWrappedDomainObject;
     }

@@ -479,7 +479,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     public void setDependencies(final SortedSet<ToDoItem> dependencies) {
         this.dependencies = dependencies;
     }
-    
+
     public void addToDependencies(final ToDoItem toDoItem) {
         getDependencies().add(toDoItem);
     }

@@ -63,6 +63,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private final ObjectPersistor objectPersistor;
 
     private final ProxyContextHandler proxy;
+    private final ExecutionMode executionMode;
 
     /**
      * The <tt>title()</tt> method; may be <tt>null</tt>.
@@ -70,27 +71,55 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     protected Method titleMethod;
 
     /**
+     * The <tt>__isis_save()</tt> method from {@link WrapperObject#__isis_save()}.
+     */
+    protected Method __isis_saveMethod;
+
+    /**
      * The <tt>save()</tt> method from {@link WrapperObject#save()}.
      */
+    @Deprecated
     protected Method saveMethod;
+
+    /**
+     * The <tt>__isis_wrapped()</tt> method from {@link WrapperObject#__isis_wrapped()}.
+     */
+    protected Method __isis_wrappedMethod;
 
     /**
      * The <tt>wrapped()</tt> method from {@link WrapperObject#wrapped()}.
      */
+    @Deprecated
     protected Method wrappedMethod;
 
-    public DomainObjectInvocationHandler(final T delegate, final WrapperFactory embeddedViewer, final ExecutionMode mode, final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLoader specificationLookup, final AdapterManager adapterManager,
-            final ObjectPersistor objectPersistor, ProxyContextHandler proxy) {
-        super(delegate, embeddedViewer, mode);
+    /**
+     * The <tt>__isis_executionMode()</tt> method from {@link WrapperObject#__isis_executionMode()}.
+     */
+    protected Method __isis_executionMode;
+
+    public DomainObjectInvocationHandler(
+            final T delegate,
+            final WrapperFactory wrapperFactory,
+            final ExecutionMode mode,
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final SpecificationLoader specificationLookup,
+            final AdapterManager adapterManager,
+            final ObjectPersistor objectPersistor,
+            final ProxyContextHandler proxy) {
+        super(delegate, wrapperFactory, mode);
 
         this.proxy = proxy;
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.specificationLookup = specificationLookup;
         this.adapterManager = adapterManager;
         this.objectPersistor = objectPersistor;
+        this.executionMode = mode;
 
         try {
-            titleMethod = delegate.getClass().getMethod("title", new Class[] {});
+            titleMethod = delegate.getClass().getMethod("title", new Class[]{});
+            __isis_saveMethod = WrapperObject.class.getMethod("__isis_save", new Class[]{});
+            __isis_wrappedMethod = WrapperObject.class.getMethod("__isis_wrapped", new Class[]{});
+            __isis_executionMode = WrapperObject.class.getMethod("__isis_executionMode", new Class[]{});
             saveMethod = WrapperObject.class.getMethod("save", new Class[] {});
             wrappedMethod = WrapperObject.class.getMethod("wrapped", new Class[] {});
         } catch (final NoSuchMethodException e) {
@@ -129,6 +158,10 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         if (isWrappedMethod(method)) {
             return getDelegate();
+        }
+
+        if (isExecutionModeMethod(method)) {
+            return executionMode;
         }
 
         final ObjectMember objectMember = locateAndCheckMember(method);
@@ -182,14 +215,9 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         if (objectMember instanceof ObjectAction) {
 
-            // for all members, check visibility and usability
-            checkVisibility(getAuthenticationSession(), targetAdapter, objectMember);
-
             if (intent == Intent.CHECK_IF_VALID) {
                 throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only the 'invoke' method", memberName));
             }
-
-            checkUsability(getAuthenticationSession(), targetAdapter, objectMember);
 
             final ObjectAction noa = (ObjectAction) objectMember;
             return handleActionMethod(args, getAuthenticationSession(), targetAdapter, noa, memberName);
@@ -286,8 +314,10 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
     private Object handleSaveMethod(final AuthenticationSession session, final ObjectAdapter targetAdapter, final ObjectSpecification targetNoSpec) {
 
-        final InteractionResult interactionResult = targetNoSpec.isValidResult(targetAdapter);
-        notifyListenersAndVetoIfRequired(interactionResult);
+        if(getExecutionMode().shouldEnforceRules()) {
+            final InteractionResult interactionResult = targetNoSpec.isValidResult(targetAdapter);
+            notifyListenersAndVetoIfRequired(interactionResult);
+        }
 
         if (getExecutionMode().shouldExecute()) {
             if (targetAdapter.isTransient()) {
@@ -307,7 +337,9 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             throw new IllegalArgumentException("Invoking a 'get' should have no arguments");
         }
 
-        checkVisibility(getAuthenticationSession(), targetAdapter, otoa);
+        if(getExecutionMode().shouldEnforceRules()) {
+            checkVisibility(getAuthenticationSession(), targetAdapter, otoa);
+        }
 
         resolveIfRequired(targetAdapter);
 
@@ -366,8 +398,10 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             throw new IllegalArgumentException("Invoking a 'get' should have no arguments");
         }
 
-        checkVisibility(getAuthenticationSession(), targetAdapter, otma);
-        
+        if(getExecutionMode().shouldEnforceRules()) {
+            checkVisibility(getAuthenticationSession(), targetAdapter, otma);
+        }
+
         resolveIfRequired(targetAdapter);
 
         final ObjectAdapter currentReferencedAdapter = otma.get(targetAdapter);
@@ -497,6 +531,11 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
     private Object handleActionMethod(final Object[] args, final AuthenticationSession session, final ObjectAdapter targetAdapter, final ObjectAction noa, final String memberName) {
 
+        if(getExecutionMode().shouldEnforceRules()) {
+            checkVisibility(getAuthenticationSession(), targetAdapter, noa);
+            checkUsability(getAuthenticationSession(), targetAdapter, noa);
+        }
+
         final Object[] underlyingArgs = new Object[args.length];
         int i = 0;
         for (final Object arg : args) {
@@ -509,8 +548,10 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             argAdapters[j++] = underlyingArg != null ? getAdapterManager().adapterFor(underlyingArg) : null;
         }
 
-        final InteractionResult interactionResult = noa.isProposedArgumentSetValid(targetAdapter, argAdapters).getInteractionResult();
-        notifyListenersAndVetoIfRequired(interactionResult);
+        if(getExecutionMode().shouldEnforceRules()) {
+            final InteractionResult interactionResult = noa.isProposedArgumentSetValid(targetAdapter, argAdapters).getInteractionResult();
+            notifyListenersAndVetoIfRequired(interactionResult);
+        }
 
         if (getExecutionMode().shouldExecute()) {
             final ObjectAdapter actionReturnNO = noa.execute(targetAdapter, argAdapters);
@@ -621,11 +662,15 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     protected boolean isSaveMethod(final Method method) {
-        return method.equals(saveMethod);
+        return method.equals(saveMethod) || method.equals(__isis_saveMethod);
     }
 
     protected boolean isWrappedMethod(final Method method) {
-        return method.equals(wrappedMethod);
+        return method.equals(wrappedMethod) || method.equals(__isis_wrappedMethod);
+    }
+
+    protected boolean isExecutionModeMethod(final Method method) {
+        return method.equals(__isis_executionMode);
     }
 
     // /////////////////////////////////////////////////////////////////
