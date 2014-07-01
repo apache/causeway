@@ -52,13 +52,6 @@
             <modules>
                 <module>core</module>
 
-                <module>component/progmodel/groovy</module>
-        
-                <module>component/profilestore/xml</module>
-
-                <module>component/security/file</module>
-        
-                <module>component/viewer/dnd</module>
                 <module>component/viewer/scimpi</module>
                 <module>component/viewer/wicket</module>
         
@@ -77,8 +70,6 @@
             <modules>
                 <module>core</module>
 
-                <module>component/security/file</module>
-        
                 <module>component/viewer/wicket</module>
         
                 <module>example/application/quickstart_wicket_restful_jdo</module>
@@ -93,7 +84,6 @@
             <id>sonar</id>
             <modules>
                 <module>core</module>
-                <module>component/security/file</module>
                 <module>component/viewer/wicket</module>
             </modules>
         </profile>
@@ -102,13 +92,6 @@
             <id>core</id>
             <modules>
                 <module>core</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>security-file</id>
-            <modules>
-                <module>component/security/file</module>
             </modules>
         </profile>
 

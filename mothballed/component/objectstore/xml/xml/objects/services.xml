@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<services>
+  <service oid="org.apache.isis.core.tck.dom.xmlos.TeamDomainRepository:1390427852616"/>
+</services>
+

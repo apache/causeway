@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<isis oid="RLE:99" user="tester" ver="D">
+  <value field="Name">Harry</value>
+  <association field="Person" oid="RLE:101"/>
+</isis>
+
