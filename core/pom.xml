@@ -1879,6 +1879,7 @@ ${license.additional-notes}
         <module>objectstore-inmemory</module>
         <module>profilestore-inmemory</module>
         <module>security-noop</module>
+        <module>security-shiro</module>
 
         <module>unittestsupport</module>
         <module>specsupport</module>

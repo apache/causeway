@@ -57,7 +57,6 @@
                 <module>component/profilestore/xml</module>
 
                 <module>component/security/file</module>
-                <module>component/security/shiro</module>
         
                 <module>component/viewer/dnd</module>
                 <module>component/viewer/scimpi</module>
@@ -79,7 +78,6 @@
                 <module>core</module>
 
                 <module>component/security/file</module>
-                <module>component/security/shiro</module>
         
                 <module>component/viewer/wicket</module>
         
@@ -96,7 +94,6 @@
             <modules>
                 <module>core</module>
                 <module>component/security/file</module>
-                <module>component/security/shiro</module>
                 <module>component/viewer/wicket</module>
             </modules>
         </profile>
@@ -112,13 +109,6 @@
             <id>security-file</id>
             <modules>
                 <module>component/security/file</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>security-shiro</id>
-            <modules>
-                <module>component/security/shiro</module>
             </modules>
         </profile>
 
