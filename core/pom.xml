@@ -70,7 +70,7 @@
 
         <projectUrl>${project.url}</projectUrl>
 
-		<license.additional-notes>In addition, Isis uses some Javascript libraries:
+        <license.additional-notes>In addition, Isis uses some Javascript libraries:
 * JQuery UI, licensed under the MIT license [1].
 * Twitter Bootstrap, licensed under ASL v2 [2]
 * JGrowl (JQuery plugin), licensed under MIT license [3]
@@ -291,31 +291,31 @@
             </snapshots>
         </repository>
 
-		<!-- required for RestEasy -->
-		<repository>
-			<id>jboss</id>
-			<url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
-		    <snapshots>
-		      <enabled>false</enabled>
-		    </snapshots>
-		</repository>
-		<repository>
-			<id>maven2-repository.dev.java.net</id>
-			<name>Java.net Repository for Maven</name>
-			<url>http://download.java.net/maven/2/</url>
-			<layout>default</layout>
-		    <snapshots>
-		      <enabled>false</enabled>
-		    </snapshots>
-		</repository>
-		<repository>
-			<id>maven-repository.dev.java.net</id>
-			<name>Java.net Maven 1 Repository (legacy)</name>
-			<url>http://download.java.net/maven/1</url>
-		    <snapshots>
-		      <enabled>false</enabled>
-		    </snapshots>
-		</repository>
+        <!-- required for RestEasy -->
+        <repository>
+            <id>jboss</id>
+            <url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+            <snapshots>
+              <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>maven2-repository.dev.java.net</id>
+            <name>Java.net Repository for Maven</name>
+            <url>http://download.java.net/maven/2/</url>
+            <layout>default</layout>
+            <snapshots>
+              <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>maven-repository.dev.java.net</id>
+            <name>Java.net Maven 1 Repository (legacy)</name>
+            <url>http://download.java.net/maven/1</url>
+            <snapshots>
+              <enabled>false</enabled>
+            </snapshots>
+        </repository>
 
     </repositories>
 
@@ -356,107 +356,107 @@
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
                     <version>0.10</version>
-	                <configuration>
-	                    <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
-	                    <excludeSubProjects>true</excludeSubProjects>
-	                    <excludes>
-	                        <exclude>**/target/**</exclude>
-	                        <exclude>**/target-ide/**</exclude>
+                    <configuration>
+                        <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
+                        <excludeSubProjects>true</excludeSubProjects>
+                        <excludes>
+                            <exclude>**/target/**</exclude>
+                            <exclude>**/target-ide/**</exclude>
 
-	                        <exclude>**/*.project</exclude>
-	                        <exclude>**/.classpath</exclude>
-	                        <exclude>**/.settings/**</exclude>
-	                        <exclude>**/*.launch</exclude>
-	                        <exclude>src/site/resources/ide/eclipse/**</exclude>
+                            <exclude>**/*.project</exclude>
+                            <exclude>**/.classpath</exclude>
+                            <exclude>**/.settings/**</exclude>
+                            <exclude>**/*.launch</exclude>
+                            <exclude>src/site/resources/ide/eclipse/**</exclude>
 
-	                        <exclude>**/*.pdn</exclude>
-	                        <exclude>**/*.svg</exclude>
-	                        <exclude>**/*.json</exclude>
-	                        <exclude>**/*.min.js</exclude>
+                            <exclude>**/*.pdn</exclude>
+                            <exclude>**/*.svg</exclude>
+                            <exclude>**/*.json</exclude>
+                            <exclude>**/*.min.js</exclude>
                             
-	                        <exclude>**/*.ucd</exclude>
-	                        <exclude>**/*.ucls</exclude>
+                            <exclude>**/*.ucd</exclude>
+                            <exclude>**/*.ucls</exclude>
 
-	                        <exclude>**/xml/objects/**</exclude>
-	                        <exclude>**/test.data</exclude>
+                            <exclude>**/xml/objects/**</exclude>
+                            <exclude>**/test.data</exclude>
 
-	                        <exclude>**/src/main/appended-resources/supplemental-models.xml</exclude>
-	                        <exclude>**/datanucleus.log</exclude>
-	                    </excludes>
-	                    <licenses>
-	                      <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-	                        <licenseFamilyCategory>AL2  </licenseFamilyCategory>
-	                        <licenseFamilyName>Apache License 2.0</licenseFamilyName>
-	                        <notes />
-	                        <patterns>
-	                          <pattern>Licensed to the Apache Software Foundation (ASF) under one</pattern>
-	                        </patterns>
-	                      </license>
-	                      <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-	                        <licenseFamilyCategory>JQRY</licenseFamilyCategory>
-	                        <licenseFamilyName>MIT  </licenseFamilyName>
-	                        <notes />
-	                        <patterns>
-	                          <pattern>Dual licensed under the MIT</pattern>
-	                        </patterns>
-	                      </license>
-	                      <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-	                        <licenseFamilyCategory>JQRYUI</licenseFamilyCategory>
-	                        <licenseFamilyName>MIT  </licenseFamilyName>
-	                        <notes />
-	                        <patterns>
-	                          <pattern>jQuery Foundation and other contributors Licensed MIT</pattern>
-	                        </patterns>
-	                      </license>
-	                      <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-	                        <licenseFamilyCategory>JMOCK</licenseFamilyCategory>
-	                        <licenseFamilyName>JMock</licenseFamilyName>
-	                        <notes />
-	                        <patterns>
-	                          <pattern>Copyright (c) 2000-2007, jMock.org</pattern>
-	                        </patterns>
-	                      </license>
-	                      <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-	                        <licenseFamilyCategory>DOCBK</licenseFamilyCategory>
-	                        <licenseFamilyName>DocBook 4.5</licenseFamilyName>
-	                        <notes />
-	                        <patterns>
-	                          <pattern>Permission to copy in any form is granted for use</pattern>
-	                          <pattern>Permission to use, copy, modify and distribute the DocBook DTD</pattern>
-	                          <pattern>is hereby granted in perpetuity, provided that the above copyright</pattern>
-	                          <pattern>This is the catalog data file for DocBook XML V4.5. It is provided as</pattern>
-	                          <pattern>XML Catalog data for DocBook XML V4.5</pattern>
-	                          <pattern>DocBook additional general entities V4.5</pattern>
-	                          <pattern>XML EXCHANGE TABLE MODEL DECLARATION MODULE</pattern>
-	                        </patterns>
-	                      </license>
-	                      <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-	                        <licenseFamilyCategory>W3C  </licenseFamilyCategory>
-	                        <licenseFamilyName>XHTML</licenseFamilyName>
-	                        <notes />
-	                        <patterns>
-	                          <pattern>Copyright (c) 1998-2002 W3C (MIT, INRIA, Keio),</pattern>
-	                        </patterns>
-	                      </license>
-			            </licenses>
-			            <licenseFamilies>
-	                      <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-	                        <familyName>Apache License 2.0</familyName>
-	                      </licenseFamily>
-	                      <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-	                        <familyName>MIT</familyName>
-	                      </licenseFamily>
-	                      <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-	                        <familyName>JMock</familyName>
-	                      </licenseFamily>
-	                      <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-	                        <familyName>DocBook 4.5</familyName>
-	                      </licenseFamily>
-	                      <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-	                        <familyName>XHTML</familyName>
-	                      </licenseFamily>
-			            </licenseFamilies>
-	                </configuration>
+                            <exclude>**/src/main/appended-resources/supplemental-models.xml</exclude>
+                            <exclude>**/datanucleus.log</exclude>
+                        </excludes>
+                        <licenses>
+                          <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                            <licenseFamilyCategory>AL2  </licenseFamilyCategory>
+                            <licenseFamilyName>Apache License 2.0</licenseFamilyName>
+                            <notes />
+                            <patterns>
+                              <pattern>Licensed to the Apache Software Foundation (ASF) under one</pattern>
+                            </patterns>
+                          </license>
+                          <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                            <licenseFamilyCategory>JQRY</licenseFamilyCategory>
+                            <licenseFamilyName>MIT  </licenseFamilyName>
+                            <notes />
+                            <patterns>
+                              <pattern>Dual licensed under the MIT</pattern>
+                            </patterns>
+                          </license>
+                          <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                            <licenseFamilyCategory>JQRYUI</licenseFamilyCategory>
+                            <licenseFamilyName>MIT  </licenseFamilyName>
+                            <notes />
+                            <patterns>
+                              <pattern>jQuery Foundation and other contributors Licensed MIT</pattern>
+                            </patterns>
+                          </license>
+                          <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                            <licenseFamilyCategory>JMOCK</licenseFamilyCategory>
+                            <licenseFamilyName>JMock</licenseFamilyName>
+                            <notes />
+                            <patterns>
+                              <pattern>Copyright (c) 2000-2007, jMock.org</pattern>
+                            </patterns>
+                          </license>
+                          <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                            <licenseFamilyCategory>DOCBK</licenseFamilyCategory>
+                            <licenseFamilyName>DocBook 4.5</licenseFamilyName>
+                            <notes />
+                            <patterns>
+                              <pattern>Permission to copy in any form is granted for use</pattern>
+                              <pattern>Permission to use, copy, modify and distribute the DocBook DTD</pattern>
+                              <pattern>is hereby granted in perpetuity, provided that the above copyright</pattern>
+                              <pattern>This is the catalog data file for DocBook XML V4.5. It is provided as</pattern>
+                              <pattern>XML Catalog data for DocBook XML V4.5</pattern>
+                              <pattern>DocBook additional general entities V4.5</pattern>
+                              <pattern>XML EXCHANGE TABLE MODEL DECLARATION MODULE</pattern>
+                            </patterns>
+                          </license>
+                          <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                            <licenseFamilyCategory>W3C  </licenseFamilyCategory>
+                            <licenseFamilyName>XHTML</licenseFamilyName>
+                            <notes />
+                            <patterns>
+                              <pattern>Copyright (c) 1998-2002 W3C (MIT, INRIA, Keio),</pattern>
+                            </patterns>
+                          </license>
+                        </licenses>
+                        <licenseFamilies>
+                          <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
+                            <familyName>Apache License 2.0</familyName>
+                          </licenseFamily>
+                          <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
+                            <familyName>MIT</familyName>
+                          </licenseFamily>
+                          <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
+                            <familyName>JMock</familyName>
+                          </licenseFamily>
+                          <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
+                            <familyName>DocBook 4.5</familyName>
+                          </licenseFamily>
+                          <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
+                            <familyName>XHTML</familyName>
+                          </licenseFamily>
+                        </licenseFamilies>
+                    </configuration>
                 </plugin>
 
 
@@ -967,9 +967,9 @@ ${license.additional-notes}
     </reporting>
 
     <dependencyManagement>
-    	<!-- is also for benefit of application developers, using scope=import -->
-    	<dependencies>
-    	
+        <!-- is also for benefit of application developers, using scope=import -->
+        <dependencies>
+        
             <!-- unittestsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
@@ -1128,9 +1128,9 @@ ${license.additional-notes}
 
             <!-- JodaTime -->
             <dependency>
-	    		<groupId>joda-time</groupId>
-	    		<artifactId>joda-time</artifactId>
-	            <version>2.3</version>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>2.3</version>
             </dependency>
 
             <!-- Logging -->
@@ -1138,12 +1138,12 @@ ${license.additional-notes}
               <groupId>org.slf4j</groupId>
               <artifactId>slf4j-api</artifactId>
               <version>1.7.6</version>
-            </dependency>	
+            </dependency>    
             <dependency>
-	            <groupId>org.slf4j</groupId>
-	            <artifactId>slf4j-log4j12</artifactId>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
                 <version>1.7.6</version>
-	        </dependency>
+            </dependency>
             <dependency>
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
@@ -1256,11 +1256,11 @@ ${license.additional-notes}
               <version>2.3.1</version>
             </dependency>
 
-			<dependency>
-			  <groupId>org.lazyluke</groupId>
-			  <artifactId>log4jdbc-remix</artifactId>
-			  <version>0.2.7</version>
-			</dependency>
+            <dependency>
+              <groupId>org.lazyluke</groupId>
+              <artifactId>log4jdbc-remix</artifactId>
+              <version>0.2.7</version>
+            </dependency>
             
 
             <!-- RestEasy -->
@@ -1306,8 +1306,8 @@ ${license.additional-notes}
                 <version>6.1.26</version>
                 <exclusions>
                     <exclusion>
-		                <groupId>org.mortbay.jetty</groupId>
-		                <artifactId>servlet-api</artifactId>
+                        <groupId>org.mortbay.jetty</groupId>
+                        <artifactId>servlet-api</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -1317,10 +1317,10 @@ ${license.additional-notes}
                 <artifactId>htmlparser</artifactId>
                 <version>2.1</version>
                 <exclusions>
-                	<exclusion>
-                		<groupId>com.sun</groupId>
-                		<artifactId>tools</artifactId>
-                	</exclusion>
+                    <exclusion>
+                        <groupId>com.sun</groupId>
+                        <artifactId>tools</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
 
@@ -1343,7 +1343,7 @@ ${license.additional-notes}
                 <version>2.6.0</version>
                 <exclusions>
                     <exclusion>
-		        <!-- for dependency convergence -->
+                <!-- for dependency convergence -->
                         <groupId>junit</groupId>
                         <artifactId>junit-dep</artifactId>
                     </exclusion>
@@ -1432,98 +1432,98 @@ ${license.additional-notes}
            
            
            
-	    	<!-- for benefit of application developers, using scope=import -->
-			<dependency>
-				<groupId>org.apache.isis.objectstore</groupId>
-				<artifactId>isis-objectstore-jdo-applib</artifactId>
-				<version>1.6.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.objectstore</groupId>
-				<artifactId>isis-objectstore-jdo-applib</artifactId>
+            <!-- for benefit of application developers, using scope=import -->
+            <dependency>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-objectstore-jdo-applib</artifactId>
                 <version>1.6.0-SNAPSHOT</version>
-				<scope>test</scope>
-				<type>test-jar</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.objectstore</groupId>
-				<artifactId>isis-objectstore-jdo-metamodel</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-objectstore-jdo-applib</artifactId>
                 <version>1.6.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.objectstore</groupId>
-				<artifactId>isis-objectstore-jdo-metamodel</artifactId>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-objectstore-jdo-metamodel</artifactId>
                 <version>1.6.0-SNAPSHOT</version>
-				<scope>test</scope>
-				<type>test-jar</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.objectstore</groupId>
-				<artifactId>isis-objectstore-jdo-datanucleus</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-objectstore-jdo-metamodel</artifactId>
                 <version>1.6.0-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.isis.objectstore</groupId>
-				<artifactId>isis-objectstore-jdo-datanucleus</artifactId>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-objectstore-jdo-datanucleus</artifactId>
                 <version>1.6.0-SNAPSHOT</version>
-				<scope>test</scope>
-				<type>test-jar</type>
-			</dependency>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.objectstore</groupId>
+                <artifactId>isis-objectstore-jdo-datanucleus</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
 
 
 
-			<!-- DataNucleus -->
+            <!-- DataNucleus -->
             <dependency>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>datanucleus-accessplatform-jdo-rdbms</artifactId>
                 <version>${datanucleus-accessplatform-jdo-rdbms.version}</version>
                 <type>pom</type>
             </dependency>
-	        <dependency>
-	            <groupId>org.datanucleus</groupId>
-	            <artifactId>datanucleus-jodatime</artifactId>
+            <dependency>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>datanucleus-jodatime</artifactId>
                 <version>${datanucleus-jodatime.version}</version>
-	        </dependency>
+            </dependency>
  
 
 
-	    	<!-- for benefit of application developers, using scope=import -->
-	   		<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-restfulobjects-applib</artifactId>
-				<version>2.4.0-SNAPSHOT</version>
-			</dependency>
-	   		<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-restfulobjects-applib</artifactId>
-				<version>2.4.0-SNAPSHOT</version>
+            <!-- for benefit of application developers, using scope=import -->
+               <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>isis-viewer-restfulobjects-applib</artifactId>
+                <version>2.4.0-SNAPSHOT</version>
+            </dependency>
+               <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>isis-viewer-restfulobjects-applib</artifactId>
+                <version>2.4.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
-			</dependency>
-	   		<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-restfulobjects-rendering</artifactId>
-				<version>2.4.0-SNAPSHOT</version>
-			</dependency>
-	   		<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-restfulobjects-rendering</artifactId>
-				<version>2.4.0-SNAPSHOT</version>
+            </dependency>
+               <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>isis-viewer-restfulobjects-rendering</artifactId>
+                <version>2.4.0-SNAPSHOT</version>
+            </dependency>
+               <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>isis-viewer-restfulobjects-rendering</artifactId>
+                <version>2.4.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
-			</dependency>
-	   		<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-restfulobjects-server</artifactId>
-				<version>2.4.0-SNAPSHOT</version>
-			</dependency>
-	   		<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-restfulobjects-server</artifactId>
-				<version>2.4.0-SNAPSHOT</version>
+            </dependency>
+               <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>isis-viewer-restfulobjects-server</artifactId>
+                <version>2.4.0-SNAPSHOT</version>
+            </dependency>
+               <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>isis-viewer-restfulobjects-server</artifactId>
+                <version>2.4.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
-			</dependency>
+            </dependency>
 
             <dependency>
                 <!-- 
@@ -1877,7 +1877,12 @@ ${license.additional-notes}
         <module>bytecode-javassist</module>
         
         <module>objectstore-inmemory</module>
+        <module>objectstore-jdo-applib</module>
+        <module>objectstore-jdo-metamodel</module>
+        <module>objectstore-jdo-datanucleus</module>
+
         <module>profilestore-inmemory</module>
+
         <module>security-noop</module>
         <module>security-shiro</module>
 
@@ -1887,16 +1892,12 @@ ${license.additional-notes}
 
         <module>wrapper</module>
 
+        <module>viewer-restfulobjects-applib</module>
+        <module>viewer-restfulobjects-rendering</module>
+        <module>viewer-restfulobjects-server</module>
+
         <module>tck</module>
-
-        <module>jdo-applib</module>
-		<module>jdo-metamodel</module>
-		<module>jdo-datanucleus</module>
-
-	    <module>restfulobjects-applib</module>
-	    <module>restfulobjects-rendering</module>
-	    <module>restfulobjects-server</module>
-	    <module>restfulobjects-tck</module>
+        <module>viewer-restfulobjects-tck</module>
     </modules>
 
 </project>
