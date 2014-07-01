@@ -62,7 +62,6 @@
                 <module>component/viewer/dnd</module>
                 <module>component/viewer/scimpi</module>
                 <module>component/viewer/wicket</module>
-                <module>component/viewer/restfulobjects</module>
         
                 <module>example/application/quickstart_wicket_restful_jdo</module>
                 <module>example/application/simple_wicket_restful_jdo</module>
@@ -83,7 +82,6 @@
                 <module>component/security/shiro</module>
         
                 <module>component/viewer/wicket</module>
-                <module>component/viewer/restfulobjects</module>
         
                 <module>example/application/quickstart_wicket_restful_jdo</module>
                 <module>example/application/simple_wicket_restful_jdo</module>
@@ -100,7 +98,6 @@
                 <module>component/security/file</module>
                 <module>component/security/shiro</module>
                 <module>component/viewer/wicket</module>
-                <module>component/viewer/restfulobjects</module>
             </modules>
         </profile>
 
@@ -129,13 +126,6 @@
             <id>viewer-wicket</id>
             <modules>
                 <module>component/viewer/wicket</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>viewer-restfulobjects</id>
-            <modules>
-                <module>component/viewer/restfulobjects</module>
             </modules>
         </profile>
 

@@ -290,6 +290,33 @@
               <enabled>true</enabled>
             </snapshots>
         </repository>
+
+		<!-- required for RestEasy -->
+		<repository>
+			<id>jboss</id>
+			<url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+		    <snapshots>
+		      <enabled>false</enabled>
+		    </snapshots>
+		</repository>
+		<repository>
+			<id>maven2-repository.dev.java.net</id>
+			<name>Java.net Repository for Maven</name>
+			<url>http://download.java.net/maven/2/</url>
+			<layout>default</layout>
+		    <snapshots>
+		      <enabled>false</enabled>
+		    </snapshots>
+		</repository>
+		<repository>
+			<id>maven-repository.dev.java.net</id>
+			<name>Java.net Maven 1 Repository (legacy)</name>
+			<url>http://download.java.net/maven/1</url>
+		    <snapshots>
+		      <enabled>false</enabled>
+		    </snapshots>
+		</repository>
+
     </repositories>
 
     
@@ -1405,7 +1432,7 @@ ${license.additional-notes}
            
            
            
-	    	<!-- also for benefit of application developers, using scope=import -->
+	    	<!-- for benefit of application developers, using scope=import -->
 			<dependency>
 				<groupId>org.apache.isis.objectstore</groupId>
 				<artifactId>isis-objectstore-jdo-applib</artifactId>
@@ -1458,6 +1485,54 @@ ${license.additional-notes}
                 <version>${datanucleus-jodatime.version}</version>
 	        </dependency>
  
+
+
+	    	<!-- for benefit of application developers, using scope=import -->
+	   		<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>isis-viewer-restfulobjects-applib</artifactId>
+				<version>2.4.0-SNAPSHOT</version>
+			</dependency>
+	   		<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>isis-viewer-restfulobjects-applib</artifactId>
+				<version>2.4.0-SNAPSHOT</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+			</dependency>
+	   		<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>isis-viewer-restfulobjects-rendering</artifactId>
+				<version>2.4.0-SNAPSHOT</version>
+			</dependency>
+	   		<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>isis-viewer-restfulobjects-rendering</artifactId>
+				<version>2.4.0-SNAPSHOT</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+			</dependency>
+	   		<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>isis-viewer-restfulobjects-server</artifactId>
+				<version>2.4.0-SNAPSHOT</version>
+			</dependency>
+	   		<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>isis-viewer-restfulobjects-server</artifactId>
+				<version>2.4.0-SNAPSHOT</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+			</dependency>
+
+            <dependency>
+                <!-- 
+                required because resteasy-jaxrs declares as a test dependency
+                whereas httpclient4 needs it as a compile dependency -->
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.1.2</version>
+            </dependency>
 
        </dependencies>
     </dependencyManagement>
@@ -1811,11 +1886,16 @@ ${license.additional-notes}
 
         <module>wrapper</module>
 
+        <module>tck</module>
+
         <module>jdo-applib</module>
 		<module>jdo-metamodel</module>
 		<module>jdo-datanucleus</module>
 
-        <module>tck</module>
+	    <module>restfulobjects-applib</module>
+	    <module>restfulobjects-rendering</module>
+	    <module>restfulobjects-server</module>
+	    <module>restfulobjects-tck</module>
     </modules>
 
 </project>
