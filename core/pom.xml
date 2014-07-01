@@ -84,6 +84,16 @@
 [4] https://github.com/brandonaaron/livequery#license
 [5] http://www.steamdev.com/zclip/
 [6] https://github.com/zeroclipboard/ZeroClipboard</license.additional-notes>        
+
+
+        <!-- from Datanucleus Objectstore -->
+        <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
+        <datanucleus-jodatime.version>3.2.1</datanucleus-jodatime.version>
+        <datanucleus-maven-plugin.version>3.3.2</datanucleus-maven-plugin.version>
+
+        <!-- ensure compatible with version aggregated in datanucleus-accessplatform-jdo-rdbms -->
+        <jdo-api.version>3.1-rc1</jdo-api.version>
+
     </properties>
 
     <scm>
@@ -240,6 +250,17 @@
         </notifiers>
     </ciManagement>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>DataNucleus_2</id>
+            <url>http://www.datanucleus.org/downloads/maven2/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+
     <repositories>
         <repository>
             <id>Apache Repository</id>
@@ -262,8 +283,16 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>datanucleus-nightly</id>
+            <url>http://www.datanucleus.org/downloads/maven2-nightly/</url>
+            <snapshots>
+              <enabled>true</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
+    
 
     <build>
         <outputDirectory>${project.build.directory}/classes</outputDirectory>
@@ -1189,7 +1218,7 @@ ${license.additional-notes}
                 <artifactId>jettison</artifactId>
                 <version>1.3.3</version>
             </dependency>
-             -->
+            -->
             
 
             <!-- Databases -->
@@ -1373,7 +1402,64 @@ ${license.additional-notes}
                <version>2.14.3</version>
            </dependency>
 
-        </dependencies>
+           
+           
+           
+	    	<!-- also for benefit of application developers, using scope=import -->
+			<dependency>
+				<groupId>org.apache.isis.objectstore</groupId>
+				<artifactId>isis-objectstore-jdo-applib</artifactId>
+				<version>1.6.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.objectstore</groupId>
+				<artifactId>isis-objectstore-jdo-applib</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.objectstore</groupId>
+				<artifactId>isis-objectstore-jdo-metamodel</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.objectstore</groupId>
+				<artifactId>isis-objectstore-jdo-metamodel</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.objectstore</groupId>
+				<artifactId>isis-objectstore-jdo-datanucleus</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.objectstore</groupId>
+				<artifactId>isis-objectstore-jdo-datanucleus</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+				<scope>test</scope>
+				<type>test-jar</type>
+			</dependency>
+
+
+
+			<!-- DataNucleus -->
+            <dependency>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>datanucleus-accessplatform-jdo-rdbms</artifactId>
+                <version>${datanucleus-accessplatform-jdo-rdbms.version}</version>
+                <type>pom</type>
+            </dependency>
+	        <dependency>
+	            <groupId>org.datanucleus</groupId>
+	            <artifactId>datanucleus-jodatime</artifactId>
+                <version>${datanucleus-jodatime.version}</version>
+	        </dependency>
+ 
+
+       </dependencies>
     </dependencyManagement>
 
     <dependencies>
@@ -1724,6 +1810,10 @@ ${license.additional-notes}
         <module>integtestsupport</module>
 
         <module>wrapper</module>
+
+        <module>jdo-applib</module>
+		<module>jdo-metamodel</module>
+		<module>jdo-datanucleus</module>
 
         <module>tck</module>
     </modules>

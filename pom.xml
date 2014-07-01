@@ -64,8 +64,6 @@
                 <module>component/viewer/wicket</module>
                 <module>component/viewer/restfulobjects</module>
         
-                <module>component/objectstore/jdo</module>
-        
                 <module>example/application/quickstart_wicket_restful_jdo</module>
                 <module>example/application/simple_wicket_restful_jdo</module>
                 
@@ -87,8 +85,6 @@
                 <module>component/viewer/wicket</module>
                 <module>component/viewer/restfulobjects</module>
         
-                <module>component/objectstore/jdo</module>
-        
                 <module>example/application/quickstart_wicket_restful_jdo</module>
                 <module>example/application/simple_wicket_restful_jdo</module>
                 
@@ -101,7 +97,6 @@
             <id>sonar</id>
             <modules>
                 <module>core</module>
-                <module>component/objectstore/jdo</module>
                 <module>component/security/file</module>
                 <module>component/security/shiro</module>
                 <module>component/viewer/wicket</module>
@@ -127,13 +122,6 @@
             <id>security-shiro</id>
             <modules>
                 <module>component/security/shiro</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>objectstore-jdo</id>
-            <modules>
-                <module>component/objectstore/jdo</module>
             </modules>
         </profile>
 
