@@ -29,6 +29,11 @@ import java.util.EventObject;
 import java.util.List;
 import javax.activation.MimeType;
 import javax.inject.Inject;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.joda.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
@@ -39,11 +44,11 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
+import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.applib.value.Blob;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -250,6 +255,62 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             }
 
         }
+
+        /**
+         * This test demonstrates how a single service can be replaced, eg to use a mock.
+         */
+        public static class Completed2 extends ToDoItemIntegTest {
+
+            private EventBusService originalEventBusService;
+            @Mock
+            private EventBusService mockEventBusService;
+
+            @Before
+            public void setUpMockEventBusService() throws Exception {
+                originalEventBusService = scenarioExecution().service(EventBusService.class);
+
+                context.checking(new Expectations() {{
+                    ignoring(mockEventBusService).register(with(any(Object.class)));
+                    ignoring(mockEventBusService).unregister(with(any(Object.class)));
+                }});
+
+                scenarioExecution().replaceService(originalEventBusService, mockEventBusService);
+                scenarioExecution().closeSession();
+                scenarioExecution().openSession();
+            }
+
+            @After
+            public void reinstateOriginalEventBusService() throws Exception {
+                scenarioExecution().replaceService(mockEventBusService, originalEventBusService);
+            }
+
+            @Test
+            public void raisesEvent() throws Exception {
+
+                // then
+                context.checking(new Expectations() {{
+                    oneOf(mockEventBusService).post(with(completedEvent()));
+                }});
+
+                // when
+                toDoItem.completed();
+            }
+
+            private Matcher<Object> completedEvent() {
+                return new TypeSafeMatcher<Object>() {
+                    @Override
+                    protected boolean matchesSafely(Object item) {
+                        return item instanceof ToDoItem.CompletedEvent;
+                    }
+
+                    @Override
+                    public void describeTo(Description description) {
+                        description.appendText(" instance of a ToDoItem.CompletedEvent");
+                    }
+                };
+            }
+        }
+
 
         public static class Duplicate extends ToDoItemIntegTest {
 

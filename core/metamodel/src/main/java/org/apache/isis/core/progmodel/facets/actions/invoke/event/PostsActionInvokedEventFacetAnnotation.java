@@ -19,13 +19,10 @@
 
 package org.apache.isis.core.progmodel.facets.actions.invoke.event;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
-import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -46,9 +43,6 @@ public class PostsActionInvokedEventFacetAnnotation
 	private ServicesInjector servicesInjector;
 	private Class<? extends ActionInvokedEvent<?>> eventType;
 
-	private EventBusService eventBusService;
-	private boolean searchedForEventBusService = false;
-	
     public PostsActionInvokedEventFacetAnnotation(
             final Method method, 
             final ObjectSpecification onType, 
@@ -61,7 +55,6 @@ public class PostsActionInvokedEventFacetAnnotation
         super(method, onType, returnType, holder, runtimeContext, adapterManager, servicesInjector);
         
         this.servicesInjector = servicesInjector;
-        
         this.eventType = eventType;
     }
 
@@ -102,11 +95,6 @@ public class PostsActionInvokedEventFacetAnnotation
 	}
 
 	private EventBusService getEventBusService() {
-		if (!searchedForEventBusService) {
-			eventBusService = this.servicesInjector.lookupService(EventBusService.class);
-		}
-		searchedForEventBusService = true;
-		return eventBusService;
+        return this.servicesInjector.lookupService(EventBusService.class);
 	}
-
 }

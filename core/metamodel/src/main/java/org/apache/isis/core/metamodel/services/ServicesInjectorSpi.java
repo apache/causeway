@@ -68,5 +68,15 @@ public interface ServicesInjectorSpi extends ApplicationScopedComponent, Injecta
     void setServices(List<Object> services);
 
 
-
+    /**
+     * Update an individual service.
+     *
+     * <p>
+     * There should already be a service {@link #getRegisteredServices() registered} of the specified type.
+     *
+     * @return <tt>true</tt> if a service of the specified type was found and updated, <tt>false</tt> otherwise.
+     * @param originalService
+     * @param replacementService
+     */
+    <T> void replaceService(T originalService, T replacementService);
 }

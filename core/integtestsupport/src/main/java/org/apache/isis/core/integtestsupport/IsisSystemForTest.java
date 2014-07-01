@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.objectstore.InMemoryPersistenceMechanismInstaller;
@@ -401,6 +402,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     private IsisSystemDefault createIsisSystem(List<Object> services) {
+
         final IsisSystemDefault system = new IsisSystemDefault(DeploymentType.UNIT_TESTING, services) {
             @Override
             public IsisConfiguration getConfiguration() {
@@ -490,9 +492,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     /**
      * The {@link IsisSystemDefault} created during {@link #setUpSystem()}.
-     * 
+     *
      * <p>
-     * Can fine-tune the actual implementation using the hook {@link #createIsisSystem()}.
+     * Can fine-tune the actual implementation using the hook {@link #createIsisSystem(List)}.
      */
     public IsisSystemDefault getIsisSystem() {
         return isisSystem;
@@ -731,17 +733,21 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         if(serviceClass == DomainObjectContainer.class) {
             return (T) getContainer();
         }
-        List<ObjectAdapter> servicesAdapters = getPersistenceSession().getServices();
-        for(ObjectAdapter serviceAdapter: servicesAdapters) {
-            Object servicePojo = serviceAdapter.getObject();
-            if(serviceClass.isAssignableFrom(servicePojo.getClass())) {
-                return (T) servicePojo;
-            }
+        final ServicesInjectorSpi servicesInjector = getPersistenceSession().getServicesInjector();
+        final T service = servicesInjector.lookupService(serviceClass);
+        if(service == null) {
+            throw new RuntimeException("Could not find a service of type: " + serviceClass.getName());
         }
-        throw new RuntimeException("Could not find a service of type: " + serviceClass.getName());
+        return service;
     }
 
-    
+    @Override
+    public <T> void replaceService(final T originalService, final T replacementService) {
+        final ServicesInjectorSpi servicesInjector = getPersistenceSession().getServicesInjector();
+        servicesInjector.replaceService(originalService, replacementService);
+    }
+
+
     ////////////////////////////////////////////////////////////
     // Fixture management 
     // (for each test, rather than at bootstrap)

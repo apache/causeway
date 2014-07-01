@@ -17,6 +17,7 @@
 package org.apache.isis.core.specsupport.scenarios;
 
 import java.util.Map;
+import java.util.Set;
 import com.google.common.collect.Maps;
 import org.hamcrest.Description;
 import org.jmock.Expectations;
@@ -83,7 +84,26 @@ class DomainServiceProviderMockery implements DomainServiceProvider {
         mocks.put(serviceClass, mock);
         return (T) mock;
     }
-    
+
+    @Override
+    public <T> void replaceService(final T original, final T replacement) {
+        final Class<?> originalKey = keyFor(original);
+        if(originalKey == null) {
+            throw new IllegalArgumentException("Service to replace not found");
+        }
+        mocks.put(originalKey, replacement);
+    }
+
+    private Class<?> keyFor(Object original) {
+        final Set<Map.Entry<Class<?>, Object>> entries = mocks.entrySet();
+        for (Map.Entry<Class<?>, Object> entry : entries) {
+            if(entry.getValue() == original) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
     public Mockery mockery() {
         return context;
     }

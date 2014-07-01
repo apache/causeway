@@ -114,6 +114,28 @@ public abstract class ScenarioExecution {
     }
 
     /**
+     * Replaces the service implementation with some other.
+     *
+     * <p>
+     * Allows services to be mocked out.  It is the responsibility of the test to reinstate the &quot;original&quot;
+     * service implementation afterwards.
+     *
+     * <p>
+     * Mock services may requiring expectations to ignore any initialization that the framework would normally perform
+     * on them.  For example, if mocking out the {@link org.apache.isis.applib.services.eventbus.EventBusService}, the
+     * mock should be set up to ignore any calls to
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService#register(Object) register} and
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService#unregister(Object)}.
+     *
+     * <p>
+     * Because integration tests cache services in the session, this method should typically be followed by
+     * calls to {@link #closeSession() close} the current session and then to re-{@link #openSession() open} a new one.
+     */
+    public <T> void replaceService(T original, T replacement) {
+        dsp.replaceService(original, replacement);
+    }
+
+    /**
      * Convenience method, returning the {@link DomainObjectContainer},
      * first ensuring that it is available.
      * 
@@ -136,7 +158,6 @@ public abstract class ScenarioExecution {
     public WrapperFactory wrapperFactory() {
         return WrapperFactory.NOOP;
     }
-
 
 
     // //////////////////////////////////////

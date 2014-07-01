@@ -19,11 +19,6 @@
 
 package org.apache.isis.core.metamodel.services;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -31,23 +26,22 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
 import javax.inject.Inject;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
+
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.hamcrest.CoreMatchers.*;
 
 /**
  * Must be a thread-safe.
@@ -106,6 +100,21 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         addServices(services);
         autowireServicesAndContainer();
     }
+
+    @Override
+    public <T> void replaceService(final T existingService, final T replacementService) {
+
+        if(!services.remove(existingService)) {
+            throw new IllegalArgumentException("Service to be replaced was not found (" + existingService + ")");
+        }
+
+        services.add(replacementService);
+        // invalidate cache
+        servicesByType.clear();
+
+        autowireServicesAndContainer();
+    }
+
 
     @Override
     public List<Object> getRegisteredServices() {

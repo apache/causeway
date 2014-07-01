@@ -17,7 +17,6 @@
 package org.apache.isis.core.specsupport.scenarios;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 
 /**
@@ -35,4 +34,13 @@ public interface DomainServiceProvider {
 
     public abstract <T> T getService(Class<T> serviceClass);
 
+    /**
+     * Replaces the service implementation with some other.
+     *
+     * <p>
+     * Allows services to be mocked out.  It is the responsibility of the test to reinstate the &quot;original&quot;
+     * service implementation afterwards.
+     * </p>
+     */
+    public abstract <T> void replaceService(T original, T replacement);
 }

@@ -30,9 +30,9 @@ public abstract class AbstractToDoIntegTest extends IntegrationTestAbstract {
     public static void initClass() {
         org.apache.log4j.PropertyConfigurator.configure("logging.properties");
         ToDoSystemInitializer.initIsft();
-        
+
         // instantiating will install onto ThreadLocal
         new ScenarioExecutionForIntegration();
     }
-    
+
 }
