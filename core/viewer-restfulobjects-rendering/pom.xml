@@ -20,18 +20,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.isis.viewer</groupId>
-		<artifactId>isis-viewer-restfulobjects</artifactId>
-		<version>2.4.0-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis</artifactId>
+        <version>1.6.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>isis-viewer-restfulobjects-rendering</artifactId>
+    <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
+
 	<name>Isis RestfulObjects Viewer Rendering</name>
 
 	<properties>
 		<siteBaseDir>..</siteBaseDir>
-		<relativeUrl>viewer/</relativeUrl>
+		<relativeUrl>viewer-restfulobjects-rendering/</relativeUrl>
 	</properties>
 
     <!-- used in Site generation for relative references. -->
@@ -54,8 +55,8 @@
             <artifactId>isis-core-runtime</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-restfulobjects-applib</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
         </dependency>
 
 	</dependencies>

@@ -20,18 +20,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.isis.objectstore</groupId>
-		<artifactId>isis-objectstore-jdo</artifactId>
+    <parent>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis</artifactId>
         <version>1.6.0-SNAPSHOT</version>
-	</parent>
+    </parent>
 
-	<artifactId>isis-objectstore-jdo-applib</artifactId>
+    <groupId>org.apache.isis.core</groupId>
+	<artifactId>isis-core-objectstore-jdo-applib</artifactId>
 	<name>Isis JDO ObjectStore AppLib</name>
 
 	<properties>
 		<siteBaseDir>..</siteBaseDir>
-		<relativeUrl>jdo-applib/</relativeUrl>
+		<relativeUrl>objectstore-jdo-applib/</relativeUrl>
 	</properties>
 
     <!-- used in Site generation for relative references. -->
@@ -109,19 +110,6 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
-	<dependencyManagement>
-		<dependencies>
-			<!-- for DataNucleus, see below -->
-			<dependency>
-	            <groupId>org.apache.isis.objectstore</groupId>
-				<artifactId>isis-objectstore-jdo</artifactId>
-				<version>1.6.0-SNAPSHOT</version>
-				<type>pom</type>
-				<scope>import</scope>						
-			</dependency>
-		</dependencies>
-	</dependencyManagement>	
 
 	<dependencies>
         <dependency>

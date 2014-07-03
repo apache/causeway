@@ -111,8 +111,8 @@
 		</dependency>
 
 		<dependency>
-            <groupId>org.apache.isis.objectstore</groupId>
-			<artifactId>isis-objectstore-jdo-applib</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-objectstore-jdo-applib</artifactId>
 		</dependency>
         
 		<dependency>

@@ -23,12 +23,10 @@
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis-core-tck</artifactId>
         <version>1.6.0-SNAPSHOT</version>
-        <relativePath>../../../../core/tck/pom.xml</relativePath>
+        <relativePath>../tck/pom.xml</relativePath>
     </parent>
 
-    <groupId>org.apache.isis.viewer</groupId>
-	<artifactId>isis-viewer-restfulobjects-tck</artifactId>
-    <version>2.4.0-SNAPSHOT</version>
+	<artifactId>isis-core-viewer-restfulobjects-tck</artifactId>
 
 	<name>Isis RestfulObjects Viewer TCK tests</name>
 	
@@ -36,10 +34,8 @@
 	
     <properties>
 
-        <isis-viewer-restfulobjects.version>2.4.0-SNAPSHOT</isis-viewer-restfulobjects.version>
-
 		<siteBaseDir>..</siteBaseDir>
-		<relativeUrl>restfulobjects-tck/</relativeUrl>
+		<relativeUrl>viewer-restfulobjects-tck/</relativeUrl>
 		<!-- until someone comes up with a better solution -->
         <distMgmtSiteUrl>file:///tmp/m2-sites/isis/viewer/restfulobjects</distMgmtSiteUrl>
     </properties>
@@ -93,9 +89,8 @@
 
         <!-- isis viewer -->
 		<dependency>
-	        <groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-restfulobjects-server</artifactId>
-            <version>${isis-viewer-restfulobjects.version}</version>
+	        <groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-viewer-restfulobjects-server</artifactId>
 		</dependency>
         
 

@@ -241,10 +241,12 @@
             <notifier>
                 <type>mail</type>
                 <address>dev@isis.apache.org</address>
+                <!--
                 <sendOnError />
                 <sendOnFailure />
                 <sendOnSuccess />
                 <sendOnWarning />
+                -->
                 <configuration />
             </notifier>
         </notifiers>
@@ -1105,6 +1107,11 @@ ${license.additional-notes}
                 <artifactId>isis-core-security</artifactId>
                 <version>1.6.0-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-security-shiro</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
 
 
             <!-- TCK -->
@@ -1434,37 +1441,37 @@ ${license.additional-notes}
            
             <!-- for benefit of application developers, using scope=import -->
             <dependency>
-                <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-objectstore-jdo-applib</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-objectstore-jdo-applib</artifactId>
                 <version>1.6.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-objectstore-jdo-applib</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
-                <scope>test</scope>
-                <type>test-jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-objectstore-jdo-metamodel</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-objectstore-jdo-metamodel</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-objectstore-jdo-applib</artifactId>
                 <version>1.6.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-objectstore-jdo-datanucleus</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-objectstore-jdo-metamodel</artifactId>
                 <version>1.6.0-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.isis.objectstore</groupId>
-                <artifactId>isis-objectstore-jdo-datanucleus</artifactId>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-objectstore-jdo-metamodel</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-objectstore-jdo-datanucleus</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-objectstore-jdo-datanucleus</artifactId>
                 <version>1.6.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
@@ -1489,38 +1496,38 @@ ${license.additional-notes}
 
             <!-- for benefit of application developers, using scope=import -->
                <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-restfulobjects-applib</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
                <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-restfulobjects-applib</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
                <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-restfulobjects-rendering</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
                <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-restfulobjects-rendering</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
                <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-restfulobjects-server</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
                <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-restfulobjects-server</artifactId>
-                <version>2.4.0-SNAPSHOT</version>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1570,6 +1577,7 @@ ${license.additional-notes}
         </dependency>
     </dependencies>
 
+    <!--
     <distributionManagement>
         <site>
             <id>isis-site</id>
@@ -1577,6 +1585,7 @@ ${license.additional-notes}
             <url>${distMgmtSiteUrl}</url>
         </site>
     </distributionManagement>
+    -->
 
     <profiles>
         <profile>
@@ -1674,7 +1683,9 @@ ${license.additional-notes}
                         <configuration>
                             <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
                             <minimumTokens>100</minimumTokens>
+                            <!--
                             <linkXref>true</linkXref>
+                            -->
                             <targetJdk>${compileTarget}</targetJdk>
                             <rulesets>
                                 <ruleset>${pmd.ruleset}</ruleset>

@@ -24,18 +24,17 @@
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
         <version>1.6.0-SNAPSHOT</version>
-		<relativePath>../../../core/pom.xml</relativePath>
 	</parent>
 
-	<groupId>org.apache.isis.security</groupId>
-	<artifactId>isis-security-shiro</artifactId>
+	<groupId>org.apache.isis.core</groupId>
+	<artifactId>isis-core-security-shiro</artifactId>
     <version>1.6.0-SNAPSHOT</version>
 
 	<name>Isis Shiro Security</name>
 
 	<properties>
-        <siteBaseDir>.</siteBaseDir>
-		<relativeUrl />
+        <siteBaseDir>..</siteBaseDir>
+		<relativeUrl>security-shiro</relativeUrl>
 		<shiro.version>1.2.1</shiro.version>
         <!-- 
         staying with 1.2.1 for now; see ISIS-574
@@ -101,8 +100,8 @@
     	<!-- for benefit of application developers, using scope=import -->
     	<dependencies>
 			<dependency>
-			    <groupId>org.apache.isis.security</groupId>
-			    <artifactId>isis-security-shiro</artifactId>
+			    <groupId>org.apache.isis.core</groupId>
+			    <artifactId>isis-core-security-shiro</artifactId>
 				<version>1.6.0-SNAPSHOT</version>
 			</dependency>
     	</dependencies>
