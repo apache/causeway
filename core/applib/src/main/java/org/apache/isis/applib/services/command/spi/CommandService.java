@@ -22,14 +22,12 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.command.Command;
 
 /**
- * Intended for service to implement, providing a different implementation of
- * {@link Command}.
- * 
+ * Factory and persistence service for {@link Command}s.
+ *
  * <p>
- * The default implementation (provided automatically by the framework) will
- * instantiate an in-memory implementation of {@link Command}.  However, other
- * services (eg as provided by the JDO objectstore) might provide a persistable 
- * {@link Command} object.
+ * There is currently only one implementation, <tt>CommandServiceJdo</tt>, part of the
+ * <tt>o.a.i.module:isis-module-command-jdo</tt>.  To use, must both include on the classpath and also
+ * register its services (eg in <tt>isis.properties</tt>).
  */
 public interface CommandService {
 

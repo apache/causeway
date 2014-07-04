@@ -20,8 +20,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
-import org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo;
-import org.apache.isis.objectstore.jdo.datanucleus.service.support.IsisJdoSupportImpl;
 
 /**
  * Holds an instance of an {@link IsisSystemForTest} as a {@link ThreadLocal} on the current thread,
@@ -56,12 +54,10 @@ public class ToDoSystemInitializer {
                             ,"org.apache.isis.core.wrapper"
                             ,"org.apache.isis.applib"
                             ,"org.apache.isis.core.metamodel.services"
-                            ,"org.apache.isis.core.runtime.services");
-            // all other services
-            withServices(
-                    new IsisJdoSupportImpl(),
-                    new EventBusServiceJdo()
-                    );
+                            ,"org.apache.isis.core.runtime.services"
+                            ,"org.apache.isis.objectstore.jdo.datanucleus.service.support" // IsisJdoSupportImpl
+                            ,"org.apache.isis.objectstore.jdo.datanucleus.service.eventbus" // EventBusServiceJdo
+                            );
         }
 
         private static IsisConfiguration testConfiguration() {

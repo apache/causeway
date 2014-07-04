@@ -66,7 +66,80 @@
 			</plugin>
 		</plugins>
 	</reporting>
-	
+
+    <build>
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>datanucleus-maven-plugin</artifactId>
+                <version>${datanucleus-maven-plugin.version}</version>
+                <configuration>
+                    <fork>false</fork>
+                    <verbose>true</verbose>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>enhance</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>
+                                            org.datanucleus
+                                        </groupId>
+                                        <artifactId>
+                                            datanucleus-maven-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [3.2.0-release,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>enhance</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
 	<dependencies>
 		<dependency>
 			<groupId>joda-time</groupId>
@@ -85,15 +158,18 @@
             <artifactId>geronimo-jcdi_1.0_spec</artifactId>
         </dependency>
 
-        <!--
-        must be kept consistent with the API bundled by
-        org.datanucleus:datanucleus-accessplatform-jdo-rdbms
-        -->
+
+        <!-- DataNucleus (jdo-api, and for enhancer) -->
         <dependency>
-            <groupId>javax.jdo</groupId>
-            <artifactId>jdo-api</artifactId>
-            <version>3.1-rc1</version>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-accessplatform-jdo-rdbms</artifactId>
+            <type>pom</type>
         </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-jodatime</artifactId>
+        </dependency>
+
 
 
         <dependency>
@@ -102,6 +178,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- as used by ClassDiscoveryServiceUsingReflections -->
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>

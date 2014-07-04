@@ -25,12 +25,11 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * This service provides access to context information about any {@link Command}.
+ * This service (API and implementation) provides access to context information about any {@link Command}.
  *
- * <p>
- * Because this service is annotated with {@link org.apache.isis.applib.annotation.DomainService} and is
- * implemented in the core applib, it is automatically registered and available for use; no configuration is required.
- * </p>
+ * This implementation has no UI and there is only one implementation (this class) in applib, so it is annotated with
+ * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
+ * available for use; no further configuration is required.
  */
 @DomainService
 @RequestScoped

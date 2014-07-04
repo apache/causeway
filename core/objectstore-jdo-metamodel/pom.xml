@@ -40,7 +40,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-objectstore-jdo-applib</artifactId>
+			<artifactId>isis-core-applib</artifactId>
 		</dependency>
         <dependency>
             <groupId>org.datanucleus</groupId>

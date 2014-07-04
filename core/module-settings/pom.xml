@@ -42,6 +42,38 @@
 
     <url>http://isis.apache.org/${relativeUrl}</url>
 
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-settings-applib</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-settings-applib</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-settings-impl-jdo</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-settings-impl-jdo</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
 	<dependencies>
         <dependency>
             <groupId>org.apache.isis.core</groupId>

@@ -27,13 +27,10 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 public abstract class AbstractIsisSessionTemplate {
 
-//    public static boolean enabled = true;
     /**
      * Sets up an {@link IsisSession} then passes along any calling framework's context. 
      */
     public void execute(final AuthenticationSession authSession, final Object context) {
-//        if(!enabled) return;
-//        enabled = false;
         try {
             IsisContext.openSession(authSession);
             PersistenceSession persistenceSession = getPersistenceSession();

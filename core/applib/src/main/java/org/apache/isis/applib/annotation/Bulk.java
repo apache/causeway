@@ -60,12 +60,12 @@ public @interface Bulk {
     AppliesTo value() default AppliesTo.BULK_AND_REGULAR;
     
     /**
-     * This service provides access to context information about a bulk action invocation.
+     * This service (API and implementation) provides access to context information about a bulk action invocation.
      *
      * <p>
-     * Because this service is annotated with {@link org.apache.isis.applib.annotation.DomainService} and is
-     * implemented in the applib, it is automatically registered and available for use; no configuration is required.
-     * </p>
+     * This implementation has no UI and there is only one implementation (this class) in applib, so it is annotated
+     * with {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered
+     * and available for use; no further configuration is required.
      */
     @DomainService
     @RequestScoped

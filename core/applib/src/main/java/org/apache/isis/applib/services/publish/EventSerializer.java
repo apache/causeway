@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 public interface EventSerializer {
 
     /**
-     * Combine the {@link EventMetadata metadata} and the {@link EventPayload payload}
+     * Combines the {@link EventMetadata metadata} and the {@link EventPayload payload}
      * into some serialized form (such as JSON, XML or a string) that can then be published.
      * 
      * <p>
@@ -39,7 +39,10 @@ public interface EventSerializer {
      * @return a string, some JSON, some XML or some other standard serialized form. 
      */
     public Object serialize(EventMetadata metadata, EventPayload payload);
-    
+
+    /**
+     * Used as a fallback if no other implementation is defined.
+     */
     public static class Simple implements EventSerializer {
 
         @Programmatic

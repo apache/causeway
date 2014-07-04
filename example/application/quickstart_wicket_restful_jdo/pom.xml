@@ -339,7 +339,6 @@
             </dependency>
 
 
-
             <!-- quartz scheduler integration -->
 
             <dependency>

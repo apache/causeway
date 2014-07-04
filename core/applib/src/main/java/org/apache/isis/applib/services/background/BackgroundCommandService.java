@@ -20,13 +20,20 @@ import org.apache.isis.applib.services.command.Command;
 
 
 /**
- * Execute a {@link ActionInvocationMemento memento-ized} action as a
- * decoupled task.
- * 
+ * Persists a {@link ActionInvocationMemento memento-ized} action such that it can be executed asynchronously,
+ * for example through a Quartz scheduler.
+ *
  * <p>
  * Separate from {@link BackgroundService} primarily so that the default
  * implementation, <tt>BackgroundServiceDefault</tt> (in core-runtime) can
  * delegate to different implementations of this service.
+ *
+ * <p>
+ * There is currently only implementation of this service, <tt>BackgroundCommandServiceJdo</tt> in
+ * <tt>o.a.i.module:isis-module-command-jdo</tt>.  That implementation has no UI and no side-effects (the programmatic
+ * API is through {@link org.apache.isis.applib.services.background.BackgroundService}).  It is therefore
+ * annotated with {@link org.apache.isis.applib.annotation.DomainService} so that it is automatically registered as
+ * a service.
  */
 public interface BackgroundCommandService {
 

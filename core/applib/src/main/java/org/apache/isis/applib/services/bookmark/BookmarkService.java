@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
-import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Programmatic;
 
@@ -31,7 +30,6 @@ import org.apache.isis.applib.annotation.Programmatic;
  * automatically registered and available for use; no configuration is required.
  * </p>
  */
-@Named("Bookmarks")
 public interface BookmarkService {
 
     @NotInServiceMenu

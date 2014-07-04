@@ -28,14 +28,14 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * This service provides a mechanism to interchange information between multiple objects invoked in the same
+ * This service (API and implementation) provides a mechanism to interchange information between multiple objects invoked in the same
  * interaction.  Most commonly this will be as the result of invoking a {@link org.apache.isis.applib.annotation.Bulk}
  * action.
  *
  * <p>
- * Because this service is annotated with {@link org.apache.isis.applib.annotation.DomainService} and is
- * implemented in the core applib, it is automatically registered and available for use; no configuration is required.
- * </p>
+ * This implementation has no UI and there is only one implementation (this class) in applib, so it is annotated with
+ * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
+ * available for use; no further configuration is required.
  */
 @DomainService
 @RequestScoped

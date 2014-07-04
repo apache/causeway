@@ -31,14 +31,14 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * This service provides a mechanism by which idempotent query results can be cached for the duration of an interaction.
+ * This service (API and implementation) provides a mechanism by which idempotent query results can be cached for the duration of an interaction.
  * Most commonly this allows otherwise &quot;naive&quot; - eg that makes a repository call many times within a loop - to
  * be performance tuned.  The benefit is that the algorithm of the business logic can remain easy to understand.
  *
  * <p>
- * Because this service is annotated with {@link org.apache.isis.applib.annotation.DomainService} and is
- * implemented in the applib, it is automatically registered and available for use; no configuration is required.
- * </p>
+ * This implementation has no UI and there is only one implementation (this class) in applib, it is annotated with
+ * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
+ * available for use; no further configuration is required.
  */
 @DomainService
 @RequestScoped

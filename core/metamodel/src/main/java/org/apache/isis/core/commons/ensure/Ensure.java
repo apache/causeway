@@ -45,7 +45,7 @@ public final class Ensure {
     /**
      * To ensure that the provided argument is correct.
      * 
-     * @see #ensureThatArg(Object, Matcher,State)
+     * @see #ensureThatArg(Object, Matcher, String)
      * @see #ensureThatState(Object, Matcher, String)
      * @see #ensureThatContext(Object, Matcher)
      * 

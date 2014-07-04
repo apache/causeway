@@ -28,9 +28,10 @@ import org.apache.isis.applib.annotation.DomainService;
  * the Isis programming model.
  *
  * <p>
- * Because this implementation is annotated with {@link org.apache.isis.applib.annotation.DomainService}, it can be
- * by including <tt>o.a.i.module:isis-module-wrapper</tt> on the classpath; no further configuration is required.
- * </p>
+ * This implementation has no UI-visible actions and is the supported implementation, so it is annotated with
+ * {@link org.apache.isis.applib.annotation.DomainService}.   This means that by including
+ * <tt>o.a.i.module:isis-module-wrapper</tt> on the classpath, the service is automatically registered; no further
+ * configuration is required.
  */
 @DomainService
 public class WrapperFactoryDefault extends WrapperFactoryJavassist {

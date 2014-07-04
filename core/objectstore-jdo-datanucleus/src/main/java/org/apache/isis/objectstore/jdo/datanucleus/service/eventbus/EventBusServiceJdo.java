@@ -31,9 +31,9 @@ import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis.Hint;
  * occur as a side-effect of the JDO load/detach lifecycle.
  *
  * <p>
- * Because this service is annotated with {@link org.apache.isis.applib.annotation.DomainService} and is
- * implemented in the core runtime, it is automatically registered and available for use; no configuration is required.
- * </p>
+ * This implementation has no UI and there are no other implementations of the service API, and so it is annotated
+ * with {@link org.apache.isis.applib.annotation.DomainService}.  Because it is implemented in the core, this means
+ * that it is automatically registered and available for use; no further configuration is required.
  */
 @DomainService
 public class EventBusServiceJdo extends EventBusServiceDefault {

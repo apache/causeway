@@ -1076,13 +1076,6 @@ ${license.additional-notes}
                 <!-- not scope=test, because referenced by some sql-tests-common under compile scope -->
             </dependency>
 
-            <!-- wrapper service -->
-            <dependency>
-                <groupId>org.apache.isis.module</groupId>
-                <artifactId>isis-module-wrapper</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
-            </dependency>
-
 
             <!-- default implementations of components -->
             <dependency>
@@ -1442,18 +1435,6 @@ ${license.additional-notes}
             <!-- for benefit of application developers, using scope=import -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-objectstore-jdo-applib</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-objectstore-jdo-applib</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
-                <scope>test</scope>
-                <type>test-jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-objectstore-jdo-metamodel</artifactId>
                 <version>1.6.0-SNAPSHOT</version>
             </dependency>
@@ -1539,6 +1520,148 @@ ${license.additional-notes}
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>
                 <version>1.1.2</version>
+            </dependency>
+
+
+            <!-- modules -->
+            <!-- (in future, these might be released separately from core -->
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-audit-jdo</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-audit-jdo</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-background</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-background</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-command-jdo</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-command-jdo</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-devutils</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-devutils</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <!--
+            declared as a convenience; alternative is for the domain application to
+            scope=import the o.a.i.module:isis-module-devutils in root pom.xml's dependencyManagement/dependencies
+            -->
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-devutils-applib</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-devutils-applib</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-devutils-impl</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-devutils-impl</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-publishing-jdo</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-publishing-jdo</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-publishingeventserializer-ro</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-publishingeventserializer-ro</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-settings</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <!--
+            declared as a convenience; alternative is for the domain application to
+            scope=import the o.a.i.module:isis-module-devutils in root pom.xml's dependencyManagement/dependencies
+            -->
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-settings-applib</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-settings-applib</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-settings-impl-jdo</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-settings-impl-jdo</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-wrapper</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
 
        </dependencies>
@@ -1888,7 +2011,6 @@ ${license.additional-notes}
         <module>bytecode-javassist</module>
         
         <module>objectstore-inmemory</module>
-        <module>objectstore-jdo-applib</module>
         <module>objectstore-jdo-metamodel</module>
         <module>objectstore-jdo-datanucleus</module>
 
@@ -1910,6 +2032,7 @@ ${license.additional-notes}
         <module>module-command-jdo</module>
         <module>module-devutils</module>
         <module>module-publishing-jdo</module>
+        <module>module-publishingeventserializer-ro</module>
         <module>module-settings</module>
         <module>module-wrapper</module>
 

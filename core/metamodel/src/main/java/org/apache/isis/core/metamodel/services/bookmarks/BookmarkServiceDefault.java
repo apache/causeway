@@ -18,8 +18,9 @@
  */
 package org.apache.isis.core.metamodel.services.bookmarks;
 
-import org.apache.isis.applib.annotation.*;
-import org.apache.isis.applib.annotation.NotContributed.As;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -31,56 +32,22 @@ import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
  * This service enables a serializable &quot;bookmark&quot; to be created for an entity.
  *
  * <p>
- * Because this service is annotated with {@link org.apache.isis.applib.annotation.DomainService} and is
- * implemented in the core.metamodel, it is automatically registered and available for use; no configuration is required.
- * </p>
+ * This implementation has no UI and there are no other implementations of the service API, and so it annotated
+ * with {@link org.apache.isis.applib.annotation.DomainService}.  Because this class is implemented in core, this means
+ * that it is automatically registered and available for use; no further configuration is required.
  */
 @DomainService
 public class BookmarkServiceDefault implements BookmarkService, DomainObjectServicesAware {
 
     private DomainObjectServices domainObjectServices;
     
-    /**
-     * Contributed action contributed to any class that implements {@link BookmarkHolder}.
-     * 
-     * <p>
-     * If required, applications can suppress by subclassing and annotating the
-     * overridden method with <tt>@Hidden</tt>:
-     * <pre>
-     * @Hidden
-     * public Object lookup(final BookmarkHolder bookmarkHolder) {
-     *     return super.lookup(bookmarkHolder);
-     * }
-     * </pre>
-     */
     @Override
-    @NotInServiceMenu
-    @NotContributed(As.ASSOCIATION)
+    @Programmatic
     public Object lookup(final BookmarkHolder bookmarkHolder) {
         Bookmark bookmark = bookmarkHolder.bookmark();
         return bookmark != null? lookup(bookmark): null;
     }
 
-    /**
-     * Contributed property (named '<tt>Object</tt>'), contributed to
-     * any class that implements {@link BookmarkHolder}.
-     * 
-     * <p>
-     * If required, applications can suppress by subclassing and annotating the
-     * overridden method with <tt>@Hidden</tt>:
-     * <pre>
-     * @Hidden
-     * public Object object(final BookmarkHolder bookmarkHolder) {
-     *     return super.object(bookmarkHolder);
-     * }
-     * </pre>
-     */
-    @NotInServiceMenu
-    @NotContributed(As.ACTION)
-    public Object object(final BookmarkHolder bookmarkHolder) {
-        return lookup(bookmarkHolder);
-    }
-    
     @Hidden
     @Override
     public Object lookup(final Bookmark bookmark) {
