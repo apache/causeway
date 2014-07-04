@@ -84,6 +84,18 @@
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-jcdi_1.0_spec</artifactId>
         </dependency>
+
+        <!--
+        must be kept consistent with the API bundled by
+        org.datanucleus:datanucleus-accessplatform-jdo-rdbms
+        -->
+        <dependency>
+            <groupId>javax.jdo</groupId>
+            <artifactId>jdo-api</artifactId>
+            <version>3.1-rc1</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-unittestsupport</artifactId>

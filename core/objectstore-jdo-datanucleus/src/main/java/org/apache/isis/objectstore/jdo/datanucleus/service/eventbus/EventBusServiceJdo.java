@@ -16,15 +16,26 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus.service.eventbus;
 
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis.Hint;
 
 /**
- * An implementation that allows events to be {@link #post(Object) posted} from the
- * setters of entities, automatically ignoring any calls to those setters that occur
- * as a side-effect of the JDO load/detach lifecycle. 
+ * This domain service that enables both the framework and application code to publish events through a Guava
+ * {@link com.google.common.eventbus.EventBus} instance.
+ *
+ * <p>
+ * In addition, this implementation is &quot;JDO-aware&quot; meaning that it allows events to be
+ * {@link #post(Object) posted} from the setters of entities, automatically ignoring any calls to those setters that
+ * occur as a side-effect of the JDO load/detach lifecycle.
+ *
+ * <p>
+ * Because this service is annotated with {@link org.apache.isis.applib.annotation.DomainService} and is
+ * implemented in the core runtime, it is automatically registered and available for use; no configuration is required.
+ * </p>
  */
+@DomainService
 public class EventBusServiceJdo extends EventBusServiceDefault {
 
 

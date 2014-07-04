@@ -59,6 +59,11 @@ import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
  * 
  * <p>
  * An exception will be thrown if any other methods are thrown.
+ *
+ * <p>
+ * An implementation of this service (<tt>WrapperFactoryDefault</tt>) can be registered by including
+ * <tt>o.a.i.module:isis-module-wrapper</tt> on the classpath; no further configuration is required.
+ * </p>
  */
 @Hidden
 public interface WrapperFactory {

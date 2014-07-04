@@ -22,6 +22,15 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * This service enables a serializable &quot;bookmark&quot; to be created for an entity.
+ *
+ * <p>
+ * Because an implementation of this service (<tt>BookmarkServiceDefault</tt>) is annotated with
+ * {@link org.apache.isis.applib.annotation.DomainService} and is implemented in the core.metamodel, it is
+ * automatically registered and available for use; no configuration is required.
+ * </p>
+ */
 @Named("Bookmarks")
 public interface BookmarkService {
 

@@ -25,7 +25,12 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * Register this as a service in order to access context information about any {@link Command}.
+ * This service provides access to context information about any {@link Command}.
+ *
+ * <p>
+ * Because this service is annotated with {@link org.apache.isis.applib.annotation.DomainService} and is
+ * implemented in the core applib, it is automatically registered and available for use; no configuration is required.
+ * </p>
  */
 @DomainService
 @RequestScoped

@@ -27,6 +27,15 @@ import org.reflections.util.ClasspathHelper;
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.DomainService;
 
+/**
+ * This utility service supports the dynamic discovery of classes from the classpath.  One service that uses this
+ * is the <tt>FixtureScripts</tt> domain service.
+ *
+ * <p>
+ * Because this service is annotated with {@link org.apache.isis.applib.annotation.DomainService} and is
+ * implemented in the core applib, it is automatically registered and available for use; no configuration is required.
+ * </p>
+ */
 @DomainService
 public class ClassDiscoveryServiceUsingReflections
             extends AbstractService 

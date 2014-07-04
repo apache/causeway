@@ -21,6 +21,16 @@ import org.w3c.dom.Element;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * This service allows an XML document to be generated capturing the data of a root entity and specified related
+ * entities.  This XML can be used for various purposes, such as mail merge/reporting, or adhoc auditing.
+ *
+ * <p>
+ * Because an implementation of this service (<tt>XmlSnapshotServiceDefault</tt>) is annotated with
+ * {@link org.apache.isis.applib.annotation.DomainService} and is implemented in the core runtime, it is automatically
+ * registered and available for use; no configuration is required.
+ * </p>
+ */
 public interface XmlSnapshotService {
 
     public interface Snapshot {

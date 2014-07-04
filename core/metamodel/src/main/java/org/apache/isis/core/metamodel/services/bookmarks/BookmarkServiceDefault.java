@@ -27,14 +27,21 @@ import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAware;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 
+/**
+ * This service enables a serializable &quot;bookmark&quot; to be created for an entity.
+ *
+ * <p>
+ * Because this service is annotated with {@link org.apache.isis.applib.annotation.DomainService} and is
+ * implemented in the core.metamodel, it is automatically registered and available for use; no configuration is required.
+ * </p>
+ */
 @DomainService
 public class BookmarkServiceDefault implements BookmarkService, DomainObjectServicesAware {
 
     private DomainObjectServices domainObjectServices;
     
     /**
-     * Contributed action contributed to
-     * any class that implements {@link BookmarkHolder}.
+     * Contributed action contributed to any class that implements {@link BookmarkHolder}.
      * 
      * <p>
      * If required, applications can suppress by subclassing and annotating the

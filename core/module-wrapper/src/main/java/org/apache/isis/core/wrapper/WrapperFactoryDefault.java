@@ -22,6 +22,16 @@ package org.apache.isis.core.wrapper;
 
 import org.apache.isis.applib.annotation.DomainService;
 
+/**
+ * This service provides the ability to &quot;wrap&quot; of a domain object such that it can
+ * be interacted with while enforcing the hide/disable/validate rules implies by
+ * the Isis programming model.
+ *
+ * <p>
+ * Because this implementation is annotated with {@link org.apache.isis.applib.annotation.DomainService}, it can be
+ * by including <tt>o.a.i.module:isis-module-wrapper</tt> on the classpath; no further configuration is required.
+ * </p>
+ */
 @DomainService
 public class WrapperFactoryDefault extends WrapperFactoryJavassist {
 

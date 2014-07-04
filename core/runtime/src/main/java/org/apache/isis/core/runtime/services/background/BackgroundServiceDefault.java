@@ -53,7 +53,8 @@ import static org.hamcrest.CoreMatchers.*;
 
 /**
  * This is <i>not</i> annotated as an auto-discoverable {@link org.apache.isis.applib.annotation.DomainService} because
- * it has mandatory dependencies.
+ * it has mandatory dependencies; specifically, an implementation of
+ * {@link org.apache.isis.applib.services.background.BackgroundCommandService} must be configured.
  */
 public class BackgroundServiceDefault implements BackgroundService {
 
@@ -241,25 +242,28 @@ public class BackgroundServiceDefault implements BackgroundService {
     
     // //////////////////////////////////////
 
-    private BookmarkService bookmarkService;
-    /**
-     * Mandatory service.
-     */
-    public void injectBookmarkService(BookmarkService bookmarkService) {
-        this.bookmarkService = bookmarkService;
-    }
-
     private BackgroundCommandService backgroundCommandService;
     /**
-     * Mandatory service.
+     * Mandatory service; must be configured.
      */
     public void injectBackgroundCommandService(final BackgroundCommandService backgroundCommandService) {
         this.backgroundCommandService = backgroundCommandService;
     }
 
+    private BookmarkService bookmarkService;
+    /**
+     * Mandatory service (but {@link org.apache.isis.core.metamodel.services.bookmarks.BookmarkServiceDefault}
+     * implementation is part of core and annotated with {@link org.apache.isis.applib.annotation.DomainService},
+     * so guaranteed to be available).
+     */
+    public void injectBookmarkService(BookmarkService bookmarkService) {
+        this.bookmarkService = bookmarkService;
+    }
+
     private CommandContext commandContext;
     /**
-     * Mandatory service.
+     * Mandatory service (but {@link org.apache.isis.applib.services.command.CommandContext} implementation is part of
+     * core and annotated with {@link org.apache.isis.applib.annotation.DomainService}, so guaranteed to be available).
      */
     public void injectCommandContext(final CommandContext commandContext) {
         this.commandContext = commandContext;

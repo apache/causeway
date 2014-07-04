@@ -27,22 +27,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-
 import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
 import javax.jdo.datastore.JDOConnection;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import org.apache.isis.applib.FatalException;
-import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -50,6 +46,15 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 
+/**
+ * This service provdes a number of utility methods to supplement/support the capabilities of the JDO Objectstore.
+ *
+ * <p>
+ * Because this service is annotated with {@link org.apache.isis.applib.annotation.DomainService} and is
+ * implemented in the core, it is automatically registered and available for use; no configuration is required.
+ * </p>
+ */
+@DomainService
 @Hidden
 public class IsisJdoSupportImpl implements IsisJdoSupport {
     

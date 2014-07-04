@@ -1078,8 +1078,8 @@ ${license.additional-notes}
 
             <!-- wrapper service -->
             <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-wrapper</artifactId>
+                <groupId>org.apache.isis.module</groupId>
+                <artifactId>isis-module-wrapper</artifactId>
                 <version>1.6.0-SNAPSHOT</version>
             </dependency>
 
@@ -1901,11 +1901,17 @@ ${license.additional-notes}
         <module>specsupport</module>
         <module>integtestsupport</module>
 
-        <module>wrapper</module>
-
         <module>viewer-restfulobjects-applib</module>
         <module>viewer-restfulobjects-rendering</module>
         <module>viewer-restfulobjects-server</module>
+
+        <module>module-audit-jdo</module>
+        <module>module-background</module>
+        <module>module-command-jdo</module>
+        <module>module-devutils</module>
+        <module>module-publishing-jdo</module>
+        <module>module-settings</module>
+        <module>module-wrapper</module>
 
         <module>tck</module>
         <module>viewer-restfulobjects-tck</module>

@@ -24,6 +24,16 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 
+/**
+ * This service allows an application to be decoupled from the system time.  The most common use case is in support of
+ * testing scenarios, to &quot;mock the clock&quot;.  Use of this service also opens up the use of centralized
+ * co-ordinated time management through a centralized time service.
+ *
+ * <p>
+ * Because this service is annotated with {@link org.apache.isis.applib.annotation.DomainService} and is
+ * implemented in the core applib, it is automatically registered and available for use; no configuration is required.
+ * </p>
+ */
 @DomainService
 public class ClockService {
     

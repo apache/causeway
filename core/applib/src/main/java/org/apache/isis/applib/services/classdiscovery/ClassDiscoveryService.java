@@ -22,6 +22,16 @@ import java.util.Set;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+/**
+ * This utility service supports the dynamic discovery of classes from the classpath.  One service that uses this
+ * is the <tt>FixtureScripts</tt> domain service.
+ *
+ * <p>
+ * Because an implementation of this service (<tt>ClassDiscoveryServiceUsingReflections</tt> is annotated with
+ * {@link org.apache.isis.applib.annotation.DomainService} and is implemented in the core applib, it is automatically
+ * registered and available for use; no configuration is required.
+ * </p>
+ */
 public interface ClassDiscoveryService {
 
     @Programmatic

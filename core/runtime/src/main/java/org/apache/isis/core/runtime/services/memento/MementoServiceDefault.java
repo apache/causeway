@@ -33,6 +33,15 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.memento.MementoService;
 
+ /**
+ * This service provides a mechanism by which a serializable memento of arbitrary state can be created.  Most
+ * commonly this is in support of implementing the {@link org.apache.isis.applib.ViewModel} interface.
+ *
+ * <p>
+ * Because this service is annotated with {@link org.apache.isis.applib.annotation.DomainService} and is
+ * implemented in the core runtime, it is automatically registered and available for use; no configuration is required.
+ * </p>
+ */
 @DomainService
 public class MementoServiceDefault implements MementoService {
 

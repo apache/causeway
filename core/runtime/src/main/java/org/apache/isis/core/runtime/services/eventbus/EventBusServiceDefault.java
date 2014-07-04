@@ -24,6 +24,10 @@ import com.google.common.eventbus.EventBus;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
+/**
+ * @deprecated - because <tt>EventBusServiceJdo</tt> is annotated as the default implementation.
+ */
+@Deprecated
 public class EventBusServiceDefault extends EventBusService {
     
     private final Set<Object> objectsToRegister = Sets.newHashSet();
