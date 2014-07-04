@@ -16,15 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services.bookmarks;
+package org.apache.isis.applib.services.bookmark;
 
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.bookmark.BookmarkHolder;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 
 /**
  * Domain service that contributes a property (named '<tt>Object</tt>') to

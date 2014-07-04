@@ -162,6 +162,7 @@ public class ToDoItemSubscriptions {
 
     @SuppressWarnings("unused")
     private EventBusService eventBusService;
+    @Programmatic
     public final void injectEventBusService(EventBusService eventBusService) {
         eventBusService.register(this);
     }

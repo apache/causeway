@@ -44,8 +44,24 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
 
     public final static String PACKAGE_PREFIX_KEY = "isis.services.ServicesInstallerFromAnnotation.packagePrefix";
 
-    private final ServiceInstantiator serviceInstantiator;
+    /**
+     * These package prefixes (core and modules) are always included.
+     *
+     * <p>
+     * It's important that any services annotated {@link org.apache.isis.applib.annotation.DomainService} and residing
+     * in any of these packages must have no side-effects and must have only one implementation.
+     */
+    public final static String PACKAGE_PREFIX_STANDARD =
+                                         ",org.apache.isis.applib" +
+                                         ",org.apache.isis.core.wrapper" +
+                                         ",org.apache.isis.core.metamodel.services" +
+                                         ",org.apache.isis.core.runtime.services" +
+                                         ",org.apache.isis.objectstore.jdo.applib.service" +
+                                         ",org.apache.isis.viewer.restfulobjects.rendering.eventserializer" +
+                                         ",org.apache.isis.objectstore.jdo.datanucleus.service.support" +
+                                         ",org.apache.isis.objectstore.jdo.datanucleus.service.eventbus";
 
+    private final ServiceInstantiator serviceInstantiator;
 
     public ServicesInstallerFromAnnotation() {
         this(new ServiceInstantiator());
@@ -84,11 +100,13 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
         if(packagePrefixes != null) {
             return;
         }
+
         try {
-            packagePrefixes = getConfiguration().getString(PACKAGE_PREFIX_KEY);
+            String packagePrefixes = getConfiguration().getString(PACKAGE_PREFIX_KEY);
             if(Strings.isNullOrEmpty(packagePrefixes)) {
                 throw new IllegalStateException("Could not locate '" + PACKAGE_PREFIX_KEY + "' key in property files - aborting");
             }
+            this.packagePrefixes = packagePrefixes + PACKAGE_PREFIX_STANDARD;
 
         } finally {
             initialized = true;

@@ -38,12 +38,7 @@ public class ServiceInitializer {
 
     private Map<String, String> props;
     
-    static class ServiceInitMethods {
-        Object service;
-        Method postConstruct;
-        Method preDestrory;
-    }
-    
+
     private Map<Object, Method> postConstructMethodsByService = Maps.newLinkedHashMap(); 
     private Map<Object, Method> preDestroyMethodsByService = Maps.newLinkedHashMap(); 
 

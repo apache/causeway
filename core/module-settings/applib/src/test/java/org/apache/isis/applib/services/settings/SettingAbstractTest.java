@@ -16,17 +16,14 @@
  */
 package org.apache.isis.applib.services.settings;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.MemberOrder;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class SettingAbstractTest {
 

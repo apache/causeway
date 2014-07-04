@@ -30,7 +30,7 @@
 	<artifactId>isis-module-settings</artifactId>
     <packaging>pom</packaging>
 
-	<name>Isis Module: Application and User Settings</name>
+	<name>Isis Module: App and User Settings</name>
 	<description>
 		Application and user settings
 	</description>

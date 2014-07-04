@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.Programmatic;
  * any class that implements {@link org.apache.isis.applib.services.bookmark.BookmarkHolder}.
  *
  * <p>
- * Alternatively, can use {@link org.apache.isis.core.metamodel.services.bookmarks.BookmarkHolderAssociationContributions}
+ * Alternatively, can use {@link BookmarkHolderAssociationContributions}
  * to contribute an property.
  *
  * <p>

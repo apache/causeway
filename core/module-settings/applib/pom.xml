@@ -28,7 +28,7 @@
 
 	<artifactId>isis-module-settings-applib</artifactId>
 
-	<name>Isis Module: Application and User Settings applib</name>
+	<name>Isis Module: App and User Settings applib</name>
 	<description>
 		API for the application and user settings module.
 	</description>

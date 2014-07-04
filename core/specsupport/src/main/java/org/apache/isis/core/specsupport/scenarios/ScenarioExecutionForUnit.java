@@ -21,17 +21,14 @@ import org.jmock.Sequence;
 import org.jmock.States;
 import org.jmock.internal.ExpectationBuilder;
 
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.core.wrapper.WrapperFactoryDefault;
-
 /**
  * An implementation of {@link ScenarioExecution} with which uses JMock to provide
  * all services.
  * 
  * <p>
  * Expectations can be {@link Mockery#checking(org.jmock.internal.ExpectationBuilder) set} 
- * and interactions {@link Mockery#assertIsSatisfied() verified} by 
- * {@link #mockery() accessing} the underlying {@link Mockery}.  
+ * and interactions {@link Mockery#assertIsSatisfied() verified} by accessing
+ * the underlying {@link Mockery}.
  */
 public class ScenarioExecutionForUnit extends ScenarioExecution {
 

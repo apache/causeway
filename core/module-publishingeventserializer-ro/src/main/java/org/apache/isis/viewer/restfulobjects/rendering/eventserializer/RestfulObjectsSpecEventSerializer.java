@@ -56,12 +56,14 @@ public class RestfulObjectsSpecEventSerializer implements EventSerializer {
     //region > init, shutdown
     private String baseUrl;
 
+    @Programmatic
     @PostConstruct
     public void init(Map<String,String> props) {
         final String baseUrlFromConfig = props.get(BASE_URL_KEY);
         baseUrl = baseUrlFromConfig != null? baseUrlFromConfig: BASE_URL_DEFAULT;
     }
 
+    @Programmatic
     @PreDestroy
     public void shutdown() {
     }

@@ -28,7 +28,7 @@
 
 	<artifactId>isis-module-settings-impl-jdo</artifactId>
 
-	<name>Isis Module: Application and User Settings (JDO implementation)</name>
+	<name>Isis Module: App and User Settings (JDO impl)</name>
 	<description>
 		Implementation of the application and user settings module, persisting
         to database (using JDO Objectstore)
@@ -116,8 +116,8 @@
 
 	<dependencies>
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-applib</artifactId>
+            <groupId>org.apache.isis.module</groupId>
+            <artifactId>isis-module-settings-applib</artifactId>
         </dependency>
 
         <dependency>
