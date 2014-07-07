@@ -21,24 +21,23 @@ package org.apache.isis.applib.services.eventbus;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.PostsActionInvokedEvent;
-import org.apache.isis.applib.util.ObjectContracts;
 
-public abstract class ActionInvokedEvent<S> extends java.util.EventObject {
+/**
+ * @deprecated - use instead {@link ActionInteraction}
+ */
+@Deprecated
+public abstract class ActionInvokedEvent<S> extends ActionInteraction<S> {
     
     private static final long serialVersionUID = 1L;
 
+    @Deprecated
     public static class Default extends ActionInvokedEvent<Object> {
         private static final long serialVersionUID = 1L;
         public Default(Object source, Identifier identifier, Object... arguments) {
             super(source, identifier, arguments);
         }
     }
-
-    private final Identifier identifier;
-    private final List<Object> arguments;
 
     public ActionInvokedEvent(
             final S source, 
@@ -51,24 +50,6 @@ public abstract class ActionInvokedEvent<S> extends java.util.EventObject {
             final S source, 
             final Identifier identifier, 
             final List<Object> arguments) {
-        super(source);
-        this.identifier = identifier;
-        this.arguments = Collections.unmodifiableList(arguments);
-    }
-    
-    @Override
-    @SuppressWarnings("unchecked")
-    public S getSource() {
-        return (S)source;
-    }
-    public Identifier getIdentifier() {
-        return identifier;
-    }
-    public List<Object> getArguments() {
-        return arguments;
-    }
-    @Override
-    public String toString() {
-        return ObjectContracts.toString(this, "source,identifier");
+        super(source, identifier, arguments);
     }
 }

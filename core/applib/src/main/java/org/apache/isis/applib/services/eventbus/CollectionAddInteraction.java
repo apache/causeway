@@ -19,27 +19,52 @@
 package org.apache.isis.applib.services.eventbus;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.util.ObjectContracts;
 
-/**
- * @deprecated - use instead {@link CollectionAddInteraction}
- */
-@Deprecated
-public abstract class CollectionAddedToEvent<S,T> extends CollectionAddInteraction<S,T> {
-    
+public class CollectionAddInteraction<S,T> extends AbstractInteraction<S> {
+
     private static final long serialVersionUID = 1L;
 
-    @Deprecated
-    public static class Default extends CollectionAddedToEvent<Object, Object> {
+    //region > Default class (used by annotation)
+
+    public static class Default extends CollectionAddInteraction<Object, Object> {
         private static final long serialVersionUID = 1L;
         public Default(Object source, Identifier identifier, Object value) {
             super(source, identifier, value);
         }
     }
+    //endregion
 
-    public CollectionAddedToEvent(
-            final S source, 
-            final Identifier identifier, 
-            final T value) {
-        super(source, identifier, value);
+    //region > constructors
+    public CollectionAddInteraction(
+            final S source,
+            final Identifier identifier) {
+        super(source, identifier);
     }
+
+    public CollectionAddInteraction(
+            final S source,
+            final Identifier identifier,
+            final T value) {
+        this(source, identifier);
+        this.value = value;
+    }
+    //endregion
+
+    //region > value
+    private T value;
+    public T getValue() {
+        return value;
+    }
+    public void setValue(T value) {
+        this.value = value;
+    }
+    //endregion
+
+    //region > toString
+    @Override
+    public String toString() {
+        return ObjectContracts.toString(this, "source,identifier,value");
+    }
+    //endregion
 }

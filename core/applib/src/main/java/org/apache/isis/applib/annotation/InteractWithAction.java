@@ -23,7 +23,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
+import org.apache.isis.applib.services.eventbus.ActionInteraction;
 
 /**
  * Applies only to actions; any changes should be propagated as events to subscribers.  
@@ -31,9 +31,9 @@ import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
  * 
  * <p>For example:
  * <pre>
- * public static class StartDateChangedEvent extends ActionInvokedEvent {}
+ * public static class ChangeStartDateEvent extends ActionInteractionEvent {}
  * 
- * &#64;PostsActionInvokedEvent(StartDateChangedEvent.class)
+ * &#64;InteractWithAction(ChangedStartDateEvent.class)
  * public void changeStartDate(final Date startDate) { ...}
  * </pre>
  * 
@@ -41,20 +41,17 @@ import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
  * Only domain services should be registered as subscribers; only domain services are guaranteed to be instantiated and
  * resident in memory.  The typical implementation of a domain service subscriber is to identify the impacted entities,
  * load them using a repository, and then to delegate to the event to them.
- *
- * @deprecated - use instead {@link InteractWithAction}.
  */
-@Deprecated
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
-public @interface PostsActionInvokedEvent {
+public @interface InteractWithAction {
 
     /**
-     * The subclass of {@link ActionInvokedEvent} to be instantiated and posted.
+     * The subclass of {@link org.apache.isis.applib.services.eventbus.ActionInteraction} to be instantiated and posted.
      * 
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      */
-    Class<? extends ActionInvokedEvent<?>> value() default ActionInvokedEvent.Default.class;
+    Class<? extends ActionInteraction<?>> value() default ActionInteraction.Default.class;
 
 }

@@ -50,22 +50,22 @@ public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetA
     }
 
     @Override
-    public ObjectAdapter invoke(final ObjectAction owningAction, final ObjectAdapter targetAdapter, final ObjectAdapter[] parameterAdapters) {
+    public ObjectAdapter invoke(final ObjectAction owningAction, final ObjectAdapter targetAdapter, final ObjectAdapter[] argumentAdapters) {
         final ObjectAdapter result = getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
             @Override
             public ObjectAdapter execute() {
-                return underlyingFacet.invoke(owningAction, targetAdapter, parameterAdapters);
+                return underlyingFacet.invoke(owningAction, targetAdapter, argumentAdapters);
             }
         });
         return result;
     }
 
     @Override
-    public ObjectAdapter invoke(final ObjectAdapter targetAdapter, final ObjectAdapter[] parameterAdapters) {
+    public ObjectAdapter invoke(final ObjectAdapter targetAdapter, final ObjectAdapter[] argumentAdapters) {
         final ObjectAdapter result = getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
             @Override
             public ObjectAdapter execute() {
-                return underlyingFacet.invoke(targetAdapter, parameterAdapters);
+                return underlyingFacet.invoke(targetAdapter, argumentAdapters);
             }
         });
         return result;

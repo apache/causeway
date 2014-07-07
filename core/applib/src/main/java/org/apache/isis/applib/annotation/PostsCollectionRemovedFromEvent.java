@@ -41,19 +41,21 @@ import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
  * </pre>
  * 
  * <p>
- * It is highly advisable that only domain services - not domain entities - are registered as subscribers.  
- * Domain services are guaranteed to be instantiated and resident in memory, whereas the same is not true
- * of domain entities.  The typical implementation of a domain service subscriber is to identify the impacted entities,
+ * Only domain services should be registered as subscribers; only domain services are guaranteed to be instantiated and
+ * resident in memory.  The typical implementation of a domain service subscriber is to identify the impacted entities,
  * load them using a repository, and then to delegate to the event to them.
  * 
  * @see PostsCollectionAddedToEvent
+ *
+ * @deprecated - use instead {@link InteractWithCollectionRemove}.
  */
+@Deprecated
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface PostsCollectionRemovedFromEvent {
 
     /**
-     * The subclass of {@link CollectionRemovedFromEvent event} to be instantiated and posted.
+     * The subclass of {@link CollectionRemovedFromEvent} to be instantiated and posted.
      * 
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.

@@ -19,13 +19,11 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
+
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.hamcrest.CoreMatchers.*;
 
 public abstract class FacetAbstract implements Facet {
 
@@ -50,7 +48,10 @@ public abstract class FacetAbstract implements Facet {
     private IdentifiedHolder identifiedHolder;
 
     @SuppressWarnings("unchecked")
-    public FacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final Derivation derivation) {
+    public FacetAbstract(
+            final Class<? extends Facet> facetType,
+            final FacetHolder holder,
+            final Derivation derivation) {
         this.facetType = ensureThatArg(facetType, is(not(nullValue(Class.class))));
         setFacetHolder(ensureThatArg(holder, is(not(nullValue(FacetHolder.class)))));
         this.derived = derivation == Derivation.DERIVED;

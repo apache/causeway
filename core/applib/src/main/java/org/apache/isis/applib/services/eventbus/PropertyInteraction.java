@@ -19,38 +19,63 @@
 package org.apache.isis.applib.services.eventbus;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.util.ObjectContracts;
 
-/**
- * @deprecated - use instead {@link PropertyInteraction}
- */
-@Deprecated
-public abstract class PropertyChangedEvent<S,T> extends PropertyInteraction<S,T> {
-    
+public abstract class PropertyInteraction<S,T> extends AbstractInteraction<S> {
+
     private static final long serialVersionUID = 1L;
 
-    @Deprecated
-    public static class Default extends PropertyChangedEvent<Object, Object> {
+    //region > Default class (used by annotation)
+
+    public static class Default extends PropertyInteraction<Object, Object> {
         private static final long serialVersionUID = 1L;
         public Default(Object source, Identifier identifier, Object oldValue, Object newValue) {
             super(source, identifier, oldValue, newValue);
         }
     }
-    
-    /**
-     * @deprecated - use {@link #PropertyChangedEvent(Object, Identifier, Object, Object)}.
-     */
-    @Deprecated
-    public PropertyChangedEvent(
-            final S source, 
-            final T oldValue, final T newValue) {
-        this(source, null, oldValue, newValue);
+    //endregion
+
+    //region > constructors
+    public PropertyInteraction(
+            final S source,
+            final Identifier identifier) {
+        super(source, identifier);
     }
 
-    public PropertyChangedEvent(
-            final S source, 
-            final Identifier identifier, 
+    public PropertyInteraction(
+            final S source,
+            final Identifier identifier,
             final T oldValue, final T newValue) {
-        super(source, identifier, oldValue, newValue);
+        this(source, identifier);
+        this.oldValue = oldValue;
+        this.newValue = newValue;
     }
+    //endregion
 
+    //region > oldValue
+    private T oldValue;
+    public T getOldValue() {
+        return oldValue;
+    }
+    public void setOldValue(T oldValue) {
+        this.oldValue = oldValue;
+    }
+    //endregion
+
+    //region > newValue
+    private T newValue;
+    public T getNewValue() {
+        return newValue;
+    }
+    public void setNewValue(T newValue) {
+        this.newValue = newValue;
+    }
+    //endregion
+
+    //region > toString
+    @Override
+    public String toString() {
+        return ObjectContracts.toString(this, "source,identifier,oldValue,newValue");
+    }
+    //endregion
 }

@@ -114,19 +114,19 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     }
 
     @Override
-    public ObjectAdapter invoke(final ObjectAdapter target, final ObjectAdapter[] parameters) {
-        return invoke(null, target, parameters);
+    public ObjectAdapter invoke(final ObjectAdapter targetAdapter, final ObjectAdapter[] argumentAdapters) {
+        return invoke(null, targetAdapter, argumentAdapters);
     }
     
     @Override
     public ObjectAdapter invoke(
             final ObjectAction owningAction, 
             final ObjectAdapter targetAdapter, 
-            final ObjectAdapter[] arguments) {
+            final ObjectAdapter[] argumentAdapters) {
     
     	// Can return null both because the action finally was not invoked 
     	// or because it returned null.
-    	return internalInvoke(owningAction, targetAdapter, arguments).getAdapter();
+    	return internalInvoke(owningAction, targetAdapter, argumentAdapters).getAdapter();
     	
     }
 

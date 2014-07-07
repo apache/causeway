@@ -23,38 +23,38 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
+import org.apache.isis.applib.services.eventbus.CollectionAddInteraction;
 
 /**
- * Applies only to actions; any changes should be propagated as events to subscribers.  
- * Only posted if no exception is thrown.
+ * Applies only to collections; any changes should be propagated as events to subscribers.  
+ * Only posted after a successful validation.
  * 
  * <p>For example:
  * <pre>
- * public static class StartDateChangedEvent extends ActionInvokedEvent {}
+ * public class Order {
+ *   public static class OrderLineItemsAddedTo extends CollectionInteractionEvent {}
  * 
- * &#64;PostsActionInvokedEvent(StartDateChangedEvent.class)
- * public void changeStartDate(final Date startDate) { ...}
+ *   &#64;InteractWithCollectionAdd(OrderLineItemsAddedTo.class)
+ *   public SortedSet&lt;OrderLine&gt; getLineItems() { ...}
+ * }
  * </pre>
  * 
  * <p>
  * Only domain services should be registered as subscribers; only domain services are guaranteed to be instantiated and
  * resident in memory.  The typical implementation of a domain service subscriber is to identify the impacted entities,
  * load them using a repository, and then to delegate to the event to them.
- *
- * @deprecated - use instead {@link InteractWithAction}.
+ * 
+ * @see org.apache.isis.applib.annotation.PostsCollectionRemovedFromEvent
  */
-@Deprecated
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
-public @interface PostsActionInvokedEvent {
+public @interface InteractWithCollectionAdd {
 
     /**
-     * The subclass of {@link ActionInvokedEvent} to be instantiated and posted.
+     * The subclass of {@link org.apache.isis.applib.services.eventbus.CollectionAddInteraction} to be instantiated and posted.
      * 
      * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      */
-    Class<? extends ActionInvokedEvent<?>> value() default ActionInvokedEvent.Default.class;
-
+    Class<? extends CollectionAddInteraction<?,?>> value() default CollectionAddInteraction.Default.class;
 }

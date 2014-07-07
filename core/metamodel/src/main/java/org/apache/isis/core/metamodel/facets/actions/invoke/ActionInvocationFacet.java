@@ -41,9 +41,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 public interface ActionInvocationFacet extends Facet {
 
     @Deprecated
-    public ObjectAdapter invoke(ObjectAdapter target, ObjectAdapter[] parameters);
+    public ObjectAdapter invoke(ObjectAdapter targetAdapter, ObjectAdapter[] argumentAdapters);
 
-    public ObjectAdapter invoke(ObjectAction owningAction, ObjectAdapter target, ObjectAdapter[] arguments);
+    public ObjectAdapter invoke(ObjectAction owningAction, ObjectAdapter targetAdapter, ObjectAdapter[] argumentAdapters);
 
     public ObjectSpecification getReturnType();
 
