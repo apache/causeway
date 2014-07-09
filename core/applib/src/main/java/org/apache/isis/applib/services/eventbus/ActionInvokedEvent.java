@@ -24,10 +24,10 @@ import java.util.List;
 import org.apache.isis.applib.Identifier;
 
 /**
- * @deprecated - use instead {@link ActionInteraction}
+ * @deprecated - use instead {@link ActionInteractionEvent}
  */
 @Deprecated
-public abstract class ActionInvokedEvent<S> extends ActionInteraction<S> {
+public abstract class ActionInvokedEvent<S> extends ActionInteractionEvent<S> {
     
     private static final long serialVersionUID = 1L;
 

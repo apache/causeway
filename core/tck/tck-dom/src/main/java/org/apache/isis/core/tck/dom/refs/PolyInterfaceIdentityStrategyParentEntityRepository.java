@@ -19,14 +19,12 @@
 
 package org.apache.isis.core.tck.dom.refs;
 
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.ObjectType;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.core.tck.dom.AbstractEntityRepository;
 
 @Named("PolyInterfaceIdentityStrategyParentEntities")
 @ObjectType("PolyInterfaceIdentityStrategyParentEntities")
+@DomainService
 public class PolyInterfaceIdentityStrategyParentEntityRepository extends AbstractEntityRepository<PolyInterfaceIdentityStrategyParentEntity> {
 
     public PolyInterfaceIdentityStrategyParentEntityRepository() {

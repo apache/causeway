@@ -55,7 +55,7 @@ public abstract class ToDoItemContributionsIntegTest extends AbstractToDoIntegTe
         toDoItemContributionsWrapped = wrap(toDoItemContributions);
     }
 
-    public static class Collections {
+    public static class Actions {
         public static class UpdateCategory extends ToDoItemContributionsIntegTest {
 
             @Test

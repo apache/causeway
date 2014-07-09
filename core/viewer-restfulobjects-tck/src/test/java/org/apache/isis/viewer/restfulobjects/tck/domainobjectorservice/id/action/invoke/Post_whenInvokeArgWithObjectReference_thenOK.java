@@ -18,18 +18,13 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.action.invoke;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
-
 import org.jboss.resteasy.client.core.executors.URLConnectionClientExecutor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.tck.dom.refs.ParentEntity;
-import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -40,6 +35,9 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRe
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectCollectionRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * This test calls {@link ParentEntity#getChildren()} to retrieve the list of children,
@@ -75,7 +73,7 @@ public class Post_whenInvokeArgWithObjectReference_thenOK {
 
         // given
         RestfulResponse<ObjectCollectionRepresentation> childrenRestfulResponse = 
-                RestfulResponse.ofT(objectResource.accessCollection("PRNT", "43", "children"));
+                RestfulResponse.ofT(objectResource.accessCollection("PRNT", "50", "children"));
         ObjectCollectionRepresentation childrenRepr = childrenRestfulResponse.getEntity();
 
         JsonRepresentation collValue = childrenRepr.getValue();
@@ -87,7 +85,7 @@ public class Post_whenInvokeArgWithObjectReference_thenOK {
         
         // when
         final RestfulResponse<ObjectActionRepresentation> removeChildRestfulResponse = 
-                RestfulResponse.ofT(objectResource.actionPrompt("PRNT", "43", "removeChild"));
+                RestfulResponse.ofT(objectResource.actionPrompt("PRNT", "50", "removeChild"));
         final ObjectActionRepresentation removeChildRepr = removeChildRestfulResponse.getEntity();
         
         LinkRepresentation invokeLinkRepr = removeChildRepr.getLinkWithRel(Rel.INVOKE);
@@ -102,7 +100,7 @@ public class Post_whenInvokeArgWithObjectReference_thenOK {
 
         // then
         childrenRestfulResponse = 
-                RestfulResponse.ofT(objectResource.accessCollection("PRNT", "43", "children"));
+                RestfulResponse.ofT(objectResource.accessCollection("PRNT", "50", "children"));
         childrenRepr = childrenRestfulResponse.getEntity();
 
         collValue = childrenRepr.getValue();

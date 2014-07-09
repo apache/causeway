@@ -21,10 +21,10 @@ package org.apache.isis.applib.services.eventbus;
 import org.apache.isis.applib.Identifier;
 
 /**
- * @deprecated - use instead {@link CollectionRemoveInteraction}
+ * @deprecated - use instead {@link CollectionInteractionEvent}
  */
 @Deprecated
-public abstract class CollectionRemovedFromEvent<S,T> extends CollectionRemoveInteraction<S,T> {
+public abstract class CollectionRemovedFromEvent<S,T> extends CollectionInteractionEvent<S,T> {
     
     private static final long serialVersionUID = 1L;
 
@@ -40,7 +40,7 @@ public abstract class CollectionRemovedFromEvent<S,T> extends CollectionRemoveIn
             final S source, 
             final Identifier identifier, 
             final T value) {
-        super(source, identifier, value);
+        super(source, identifier, Of.REMOVE_FROM, value);
     }
 
 }

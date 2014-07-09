@@ -31,8 +31,7 @@ import org.apache.isis.core.progmodel.facets.actions.debug.annotation.DebugAnnot
 import org.apache.isis.core.progmodel.facets.actions.defaults.method.ActionDefaultsFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.exploration.annotation.ExplorationAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.homepage.HomePageAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
-import org.apache.isis.core.progmodel.facets.actions.invoke.event.PostsActionInvokedEventFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.invoke.event.InteractionWithActionFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.annotation.NotContributedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.method.NotInServiceMenuMethodFacetFactory;
@@ -49,8 +48,7 @@ import org.apache.isis.core.progmodel.facets.collections.aggregated.ParentedSinc
 import org.apache.isis.core.progmodel.facets.collections.clear.CollectionClearFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.collection.CollectionFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.disabled.fromimmutable.DisabledFacetForCollectionDerivedFromImmutableTypeFacetFactory;
-import org.apache.isis.core.progmodel.facets.collections.event.PostsCollectionAddedToEventAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.collections.event.PostsCollectionRemovedFromEventAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.collections.event.InteractionWithCollectionFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionAddRemoveAndValidateFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.notpersisted.annotation.NotPersistedAnnotationForCollectionFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.sortedby.SortedByAnnotationFacetFactory;
@@ -154,7 +152,7 @@ import org.apache.isis.core.progmodel.facets.properties.choices.method.PropertyC
 import org.apache.isis.core.progmodel.facets.properties.defaults.fromtype.PropertyDefaultDerivedFromTypeFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.defaults.method.PropertyDefaultFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.disabled.fromimmutable.DisabledFacetForPropertyDerivedFromImmutableTypeFacetFactory;
-import org.apache.isis.core.progmodel.facets.properties.event.PostsPropertyChangedEventAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.interaction.InteractionWithPropertyFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.javaxvaldigits.BigDecimalForPropertyDerivedFromJavaxValidationDigitsFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.mandatory.annotation.MandatoryAnnotationForPropertyFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.mandatory.annotation.OptionalAnnotationForPropertyFacetFactory;
@@ -274,7 +272,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(SortedByAnnotationFacetFactory.class);
 
         // actions
-        addFactory(ActionInvocationFacetFactory.class);
+        addFactory(InteractionWithActionFacetFactory.class);
         addFactory(ActionValidationFacetViaValidateMethodFacetFactory.class);
         addFactory(ActionChoicesFacetFactory.class);
         addFactory(ActionParameterChoicesFacetFactory.class);
@@ -361,13 +359,12 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(DisabledFacetForPropertyDerivedFromImmutableTypeFacetFactory.class);
         addFactory(DisabledFacetForCollectionDerivedFromImmutableTypeFacetFactory.class);
 
-        // must come after the property/collection/action accessor+mutator facet factories
-        addFactory(PostsPropertyChangedEventAnnotationFacetFactory.class);
-        addFactory(PostsCollectionAddedToEventAnnotationFacetFactory.class);
-        addFactory(PostsCollectionRemovedFromEventAnnotationFacetFactory.class);
-        addFactory(PostsActionInvokedEventFacetFactory.class);
+        // must come after the property/collection accessor+mutator facet factories
+        // TODO: might try to conflate with the regular PropertySetterFacet/PropertyClearFacet
+        addFactory(InteractionWithPropertyFacetFactory.class);
+        // TODO: might try to conflate with the regular CollectionAddToFacet/CollectionRemoveFromFacet
+        addFactory(InteractionWithCollectionFacetFactory.class);
 
-        
         addFactory(ImmutableMarkerInterfaceFacetFactory.class);
 
         addFactory(ViewModelInterfaceFacetFactory.class);
@@ -503,8 +500,4 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(FacetsAnnotationFacetFactory.class);
     }
-
-
-
-
 }

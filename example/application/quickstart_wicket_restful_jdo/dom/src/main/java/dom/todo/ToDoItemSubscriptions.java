@@ -26,10 +26,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.*;
-import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
-import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
-import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
+import org.apache.isis.applib.services.eventbus.*;
 
 @DomainService
 public class ToDoItemSubscriptions {
@@ -82,7 +79,7 @@ public class ToDoItemSubscriptions {
     //region > on(Event)...
     @Programmatic
     @Subscribe
-    public void on(ToDoItem.AbstractActionInvokedEvent ev) {
+    public void on(ToDoItem.AbstractActionInteractionEvent ev) {
         rejectIfRequired();
         recordEvent(ev);
         LOG.info(ev.getEventDescription() + ": " + container.titleOf(ev.getSource()));
@@ -90,7 +87,15 @@ public class ToDoItemSubscriptions {
 
     @Programmatic
     @Subscribe
-    public void on(PropertyChangedEvent<?,?> ev) {
+    public void on(ActionInteractionEvent<?> ev) {
+        rejectIfRequired();
+        recordEvent(ev);
+        LOG.info(ev.getIdentifier().getMemberName() + ": " + container.titleOf(ev.getSource()));
+    }
+
+    @Programmatic
+    @Subscribe
+    public void on(PropertyInteractionEvent<?,?> ev) {
         rejectIfRequired();
         recordEvent(ev);
         if(ev.getIdentifier().getMemberName().contains("description")) {
@@ -104,18 +109,14 @@ public class ToDoItemSubscriptions {
     
     @Programmatic
     @Subscribe
-    public void on(CollectionAddedToEvent<?,?> ev) {
+    public void on(CollectionInteractionEvent<?,?> ev) {
         rejectIfRequired();
         recordEvent(ev);
-        LOG.info(container.titleOf(ev.getSource()) + ", added to " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
-    }
-    
-    @Programmatic
-    @Subscribe
-    public void on(CollectionRemovedFromEvent<?,?> ev) {
-        rejectIfRequired();
-        recordEvent(ev);
-        LOG.info(container.titleOf(ev.getSource()) + ", removed from " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
+        if(ev.getOf() == CollectionInteractionEvent.Of.ADD_TO) {
+            LOG.info(container.titleOf(ev.getSource()) + ", added to " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
+        } else {
+            LOG.info(container.titleOf(ev.getSource()) + ", removed from " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
+        }
     }
     //endregion
 

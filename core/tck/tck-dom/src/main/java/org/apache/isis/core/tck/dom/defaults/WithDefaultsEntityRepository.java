@@ -22,12 +22,14 @@ package org.apache.isis.core.tck.dom.defaults;
 import java.util.List;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.applib.filter.Filter;
 
 @Named("Simples")
+@DomainService
 public class WithDefaultsEntityRepository extends AbstractFactoryAndRepository  {
 
     @Override

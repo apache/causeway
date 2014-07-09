@@ -45,7 +45,7 @@ public class Get_whenRequestHeaders_Accept_ok {
     @Before
     public void setUp() throws Exception {
         client = webServerRule.getClient();
-        request = client.createRequest(RestfulHttpMethod.GET, "objects/BSRL/64");
+        request = client.createRequest(RestfulHttpMethod.GET, "objects/BSRL/74");
     }
 
     @Test

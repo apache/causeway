@@ -19,14 +19,11 @@
 
 package org.apache.isis.core.integtestsupport.legacy;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperObject;
 import org.apache.isis.core.integtestsupport.legacy.sample.domain.Country;
@@ -42,9 +39,12 @@ import org.apache.isis.core.integtestsupport.legacy.sample.service.OrderReposito
 import org.apache.isis.core.integtestsupport.legacy.sample.service.ProductRepository;
 import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 @RunWith(IsisTestRunner.class)
 @Fixtures({ @Fixture(CountriesFixture.class), @Fixture(ProductsFixture.class), @Fixture(CustomersFixture.class), @Fixture(CustomerOrdersFixture.class) })
-@Services({ @Service(CountryRepository.class), @Service(ProductRepository.class), @Service(CustomerRepository.class), @Service(OrderRepository.class), @Service(WrapperFactoryDefault.class) })
+@Services({ @Service(CountryRepository.class), @Service(ProductRepository.class), @Service(CustomerRepository.class), @Service(OrderRepository.class), @Service(WrapperFactoryDefault.class), @Service(EventBusService.Noop.class) })
 public abstract class AbstractTest {
 
     protected Customer custJsDO;

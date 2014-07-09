@@ -19,16 +19,14 @@
 
 package org.apache.isis.core.tck.dom.scalars;
 
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.ObjectType;
-import org.apache.isis.applib.annotation.QueryOnly;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.core.tck.dom.AbstractEntityRepository;
 
 @Named("PrimitiveValuedEntities")
 @ObjectType("PrimitiveValuedEntities")
+@DomainService
 public class PrimitiveValuedEntityRepository extends AbstractEntityRepository<PrimitiveValuedEntity> {
 
     public PrimitiveValuedEntityRepository() {

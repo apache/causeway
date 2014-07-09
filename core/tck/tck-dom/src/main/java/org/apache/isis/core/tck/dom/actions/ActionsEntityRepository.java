@@ -21,18 +21,14 @@ package org.apache.isis.core.tck.dom.actions;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.MustSatisfy;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.ObjectType;
-import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.tck.dom.AbstractEntityRepository;
 
 @Named("ActionsEntities")
 @ObjectType("ActionsEntities")
+@DomainService
 public class ActionsEntityRepository extends AbstractEntityRepository<ActionsEntity> {
 
     public ActionsEntityRepository() {

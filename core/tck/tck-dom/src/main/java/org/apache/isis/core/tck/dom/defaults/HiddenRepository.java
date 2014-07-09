@@ -18,9 +18,11 @@
  */
 package org.apache.isis.core.tck.dom.defaults;
 
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Hidden;
 
 @Hidden
+@DomainService
 public class HiddenRepository {
 
     public String someAction() {

@@ -22,16 +22,14 @@ package org.apache.isis.core.progmodel.facets.actions.defaults.method;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
-import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.actions.invoke.event.InteractionWithActionFacetAbstract;
 
 public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract implements ImperativeFacet {
 
@@ -49,8 +47,8 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
     private static Method determineActionMethod(final FacetHolder holder) {
         Method method2;
         final Facet actionInvocationFacet = holder.getFacet(ActionInvocationFacet.class);
-        if (actionInvocationFacet instanceof ActionInvocationFacetViaMethod) {
-            final ActionInvocationFacetViaMethod facetViaMethod = (ActionInvocationFacetViaMethod) actionInvocationFacet;
+        if (actionInvocationFacet instanceof InteractionWithActionFacetAbstract) {
+            final InteractionWithActionFacetAbstract facetViaMethod = (InteractionWithActionFacetAbstract) actionInvocationFacet;
             method2 = facetViaMethod.getMethods().get(0);
         } else {
             method2 = null;

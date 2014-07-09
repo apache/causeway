@@ -26,11 +26,10 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
-import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 
 /**
  * {@link DebugFacet} can also be installed via a naming convention, see
- * {@link ActionInvocationFacetFactory}.
+ * {@link org.apache.isis.core.progmodel.facets.actions.invoke.event.InteractionWithActionFacetFactory}.
  */
 public class DebugAnnotationFacetFactory extends FacetFactoryAbstract {
 

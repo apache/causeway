@@ -58,7 +58,7 @@ public class Get_givenHiddenMembers_thenRepresentation_ok {
     public void domainObjectWithHiddenMembers() throws Exception {
 
         // given, when
-        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("BSRL","64");
+        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("BSRL","74");
 
         // property ('invisibleProperty')
         final JsonRepresentation properties = domainObjectRepr.getProperties();

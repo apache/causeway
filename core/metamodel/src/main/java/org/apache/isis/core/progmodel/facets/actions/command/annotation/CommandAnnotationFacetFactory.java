@@ -27,12 +27,7 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.progmodel.facets.actions.command.CommandFacetAbstract.Enablement;
-import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 
-/**
- * {@link CommandFacet} can also be installed via a naming convention, see
- * {@link ActionInvocationFacetFactory}.
- */
 public class CommandAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public CommandAnnotationFacetFactory() {

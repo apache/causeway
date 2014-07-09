@@ -46,8 +46,9 @@ import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
  * load them using a repository, and then to delegate to the event to them.
  * 
  * @see PostsCollectionAddedToEvent
+ * @see org.apache.isis.applib.annotation.InteractionWithCollection
  *
- * @deprecated - use instead {@link InteractWithCollectionRemove}.
+ * @deprecated - use instead {@link InteractionWithCollection}.
  */
 @Deprecated
 @Retention(RetentionPolicy.RUNTIME)

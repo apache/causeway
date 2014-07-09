@@ -21,10 +21,10 @@ package org.apache.isis.applib.services.eventbus;
 import org.apache.isis.applib.Identifier;
 
 /**
- * @deprecated - use instead {@link PropertyInteraction}
+ * @deprecated - use instead {@link PropertyInteractionEvent}
  */
 @Deprecated
-public abstract class PropertyChangedEvent<S,T> extends PropertyInteraction<S,T> {
+public abstract class PropertyChangedEvent<S,T> extends PropertyInteractionEvent<S,T> {
     
     private static final long serialVersionUID = 1L;
 

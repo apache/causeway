@@ -45,7 +45,7 @@ public class Get_whenRequestHeaders_Accept_ok_TODO {
     @Before
     public void setUp() throws Exception {
         client = webServerRule.getClient();
-        request = client.createRequest(RestfulHttpMethod.GET, "objects/BSRL/64/collections/visibleAndEditableCollection");
+        request = client.createRequest(RestfulHttpMethod.GET, "objects/BSRL/73/collections/visibleAndEditableCollection");
     }
 
     @Test

@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.tck.dom.scalars;
 
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
@@ -26,6 +27,7 @@ import org.apache.isis.core.tck.dom.AbstractEntityRepository;
 
 @Named("JdkValuedEntities")
 @ObjectType("JdkValuedEntities")
+@DomainService
 public class JdkValuedEntityRepository extends AbstractEntityRepository<JdkValuedEntity> {
 
     public JdkValuedEntityRepository() {

@@ -18,11 +18,10 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid.collection;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import javax.ws.rs.core.Response;
-
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
@@ -30,9 +29,9 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpS
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectPropertyRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class Get_then_200_ok {
 	@Rule
@@ -53,7 +52,7 @@ public class Get_then_200_ok {
     public void collectionDetails() throws Exception {
 
         // when
-        final Response collectionResp = domainObjectResource.accessCollection("BSRL", "64", "visibleAndEditableCollection");
+        final Response collectionResp = domainObjectResource.accessCollection("BSRL", "73", "visibleAndEditableCollection");
         final RestfulResponse<ObjectPropertyRepresentation> collectionJsonResp = RestfulResponse.ofT(collectionResp);
         assertThat(collectionJsonResp.getStatus(), is(HttpStatusCode.OK));
 

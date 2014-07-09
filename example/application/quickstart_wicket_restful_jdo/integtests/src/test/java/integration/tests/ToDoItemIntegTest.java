@@ -36,16 +36,14 @@ import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.joda.time.LocalDate;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
-import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
-import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
+import org.apache.isis.applib.services.eventbus.*;
 import org.apache.isis.applib.value.Blob;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -259,7 +257,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
         /**
          * This test demonstrates how a single service can be replaced, eg to use a mock.
          */
-        public static class Completed2 extends ToDoItemIntegTest {
+        public static class Completed_withMockService extends ToDoItemIntegTest {
 
             private EventBusService originalEventBusService;
             @Mock
@@ -367,8 +365,33 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 expectedExceptions.expectMessage("Not yet completed");
                 toDoItem.notYetCompleted();
             }
-        }
 
+            /**
+             * Even though {@link dom.todo.ToDoItem#notYetCompleted()} is not annotated with
+             * {@link org.apache.isis.applib.annotation.InteractionWithAction}, an event is still raised.
+             */
+            @Test
+            public void subscriberReceivesEvent() throws Exception {
+
+                // given
+                assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.AcceptEvents));
+                unwrap(toDoItem).setComplete(true);
+
+                // when
+                toDoItem.notYetCompleted();
+
+                // then
+                assertThat(toDoItem.isComplete(), is(false));
+
+                // and then
+                final ActionInteractionEvent<ToDoItem> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(ActionInteractionEvent.class);
+                assertThat(ev, is(not(nullValue())));
+
+                ToDoItem source = ev.getSource();
+                assertThat(source, is(equalTo(unwrap(toDoItem))));
+                assertThat(ev.getIdentifier().getMemberName(), is("notYetCompleted"));
+            }
+        }
     }
 
     public static class Collections {
@@ -403,16 +426,6 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                     // then
                     assertThat(toDoItem.getDependencies().size(), is(1));
                     assertThat(toDoItem.getDependencies().first(), is(unwrap(otherToDoItem)));
-
-                    // and then
-                    @SuppressWarnings("unchecked")
-                    final CollectionAddedToEvent<ToDoItem,ToDoItem> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(CollectionAddedToEvent.class);
-                    assertThat(ev, is(not(nullValue())));
-
-                    ToDoItem source = ev.getSource();
-                    assertThat(source, is(equalTo(unwrap(toDoItem))));
-                    assertThat(ev.getIdentifier().getMemberName(), is("dependencies"));
-                    assertThat(ev.getValue(), is(unwrap(otherToDoItem)));
                 }
 
 
@@ -444,20 +457,35 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 public void subscriberReceivesEvent() throws Exception {
 
                     // given
-                    assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.AcceptEvents));
+                    toDoItemSubscriptions.reset();
 
                     // when
                     toDoItem.add(otherToDoItem);
 
-                    // then
+                    // then received events
                     @SuppressWarnings("unchecked")
-                    final CollectionAddedToEvent<ToDoItem,ToDoItem> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(CollectionAddedToEvent.class);
-                    assertThat(ev, is(not(nullValue())));
+                    final List<EventObject> receivedEvents = toDoItemSubscriptions.receivedEvents();
+                    assertThat(receivedEvents.size(), is(2));
 
-                    ToDoItem source = ev.getSource();
-                    assertThat(source, is(equalTo(unwrap(toDoItem))));
-                    assertThat(ev.getIdentifier().getMemberName(), is("dependencies"));
-                    assertThat(ev.getValue(), is(unwrap(otherToDoItem)));
+                    // then first event is a collection interaction
+                    // (this is posted programmatically in ToDoItem#add)
+                    final EventObject ev0 = receivedEvents.get(1);
+                    Assert.assertThat(ev0 instanceof CollectionInteractionEvent, is(true));
+                    final CollectionInteractionEvent<ToDoItem,ToDoItem> ciEv = (CollectionInteractionEvent<ToDoItem, ToDoItem>) ev0;
+
+                    assertThat(ciEv.getSource(), is(equalTo(unwrap(toDoItem))));
+                    assertThat(ciEv.getIdentifier().getMemberName(), is("dependencies"));
+                    assertThat(ciEv.getOf(), is(CollectionInteractionEvent.Of.ADD_TO));
+                    assertThat(ciEv.getValue(), is(unwrap(otherToDoItem)));
+
+                    // then second (most recently received) event is an action interaction
+                    // (this is posted declaratively by framework after ToDoItem#add completed)
+                    final EventObject ev1 = receivedEvents.get(0);
+                    Assert.assertThat(ev1 instanceof ActionInteractionEvent, is(true));
+                    final ActionInteractionEvent<ToDoItem> aiEv = (ActionInteractionEvent<ToDoItem>) ev1;
+
+                    assertThat(aiEv.getSource(), is(equalTo(unwrap(toDoItem))));
+                    assertThat(aiEv.getIdentifier().getMemberName(), is("add"));
                 }
 
                 @Test
@@ -562,21 +590,37 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 public void subscriberReceivesEvent() throws Exception {
 
                     // given
+                    toDoItemSubscriptions.reset();
                     assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.AcceptEvents));
                     assertThat(toDoItem.getDependencies().size(), is(1));
 
                     // when
                     toDoItem.remove(otherToDoItem);
 
-                    // then
+                    // then received events
                     @SuppressWarnings("unchecked")
-                    final CollectionRemovedFromEvent<ToDoItem,ToDoItem> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(CollectionRemovedFromEvent.class);
-                    assertThat(ev, is(not(nullValue())));
+                    final List<EventObject> receivedEvents = toDoItemSubscriptions.receivedEvents();
+                    assertThat(receivedEvents.size(), is(2));
 
-                    ToDoItem source = ev.getSource();
-                    assertThat(source, is(equalTo(unwrap(toDoItem))));
-                    assertThat(ev.getIdentifier().getMemberName(), is("dependencies"));
-                    assertThat(ev.getValue(), is(unwrap(otherToDoItem)));
+                    // then first event is a collection interaction
+                    // (this is posted programmatically in ToDoItem#add)
+                    final EventObject ev0 = receivedEvents.get(1);
+                    Assert.assertThat(ev0 instanceof CollectionInteractionEvent, is(true));
+                    final CollectionInteractionEvent<ToDoItem,ToDoItem> ciEv = (CollectionInteractionEvent<ToDoItem, ToDoItem>) ev0;
+
+                    assertThat(ciEv.getSource(), is(equalTo(unwrap(toDoItem))));
+                    assertThat(ciEv.getIdentifier().getMemberName(), is("dependencies"));
+                    assertThat(ciEv.getOf(), is(CollectionInteractionEvent.Of.REMOVE_FROM));
+                    assertThat(ciEv.getValue(), is(unwrap(otherToDoItem)));
+
+                    // then second (most recently received) event is an action interaction
+                    // (this is posted declaratively by framework after ToDoItem#add completed)
+                    final EventObject ev1 = receivedEvents.get(0);
+                    Assert.assertThat(ev1 instanceof ActionInteractionEvent, is(true));
+                    final ActionInteractionEvent<ToDoItem> aiEv = (ActionInteractionEvent<ToDoItem>) ev1;
+
+                    assertThat(aiEv.getSource(), is(equalTo(unwrap(toDoItem))));
+                    assertThat(aiEv.getIdentifier().getMemberName(), is("remove"));
                 }
 
                 @Test
@@ -808,7 +852,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
 
                 // then published and received
                 @SuppressWarnings("unchecked")
-                final PropertyChangedEvent<ToDoItem,String> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(PropertyChangedEvent.class);
+                final PropertyInteractionEvent<ToDoItem,String> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(PropertyInteractionEvent.class);
                 assertThat(ev, is(not(nullValue())));
 
                 ToDoItem source = ev.getSource();

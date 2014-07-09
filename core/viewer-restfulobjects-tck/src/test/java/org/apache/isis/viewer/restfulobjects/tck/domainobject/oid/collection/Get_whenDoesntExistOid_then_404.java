@@ -47,7 +47,7 @@ public class Get_whenDoesntExistOid_then_404 {
     @Test
     public void returns404() throws Exception {
 
-        givenWhenThen("64", RestfulResponse.HttpStatusCode.OK);
+        givenWhenThen("73", RestfulResponse.HttpStatusCode.OK);
         givenWhenThen("nonExistentOid", RestfulResponse.HttpStatusCode.NOT_FOUND);
 
     }

@@ -20,7 +20,6 @@
 package org.apache.isis.core.progmodel.facets.actions.command.configuration;
 
 import java.lang.reflect.Method;
-
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Command;
 import org.apache.isis.applib.services.HasTransactionId;
@@ -34,11 +33,10 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 
 /**
  * {@link CommandFacet} can also be installed via a naming convention, see
- * {@link ActionInvocationFacetFactory}.
+ * {@link org.apache.isis.core.progmodel.facets.actions.invoke.event.InteractionWithActionFacetFactory}.
  */
 public class CommandFromConfigurationFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware  {
 

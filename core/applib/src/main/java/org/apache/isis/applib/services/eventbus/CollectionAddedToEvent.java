@@ -21,10 +21,10 @@ package org.apache.isis.applib.services.eventbus;
 import org.apache.isis.applib.Identifier;
 
 /**
- * @deprecated - use instead {@link CollectionAddInteraction}
+ * @deprecated - use instead {@link CollectionInteractionEvent}
  */
 @Deprecated
-public abstract class CollectionAddedToEvent<S,T> extends CollectionAddInteraction<S,T> {
+public abstract class CollectionAddedToEvent<S,T> extends CollectionInteractionEvent<S,T> {
     
     private static final long serialVersionUID = 1L;
 
@@ -40,6 +40,6 @@ public abstract class CollectionAddedToEvent<S,T> extends CollectionAddInteracti
             final S source, 
             final Identifier identifier, 
             final T value) {
-        super(source, identifier, value);
+        super(source, identifier, Of.ADD_TO, value);
     }
 }

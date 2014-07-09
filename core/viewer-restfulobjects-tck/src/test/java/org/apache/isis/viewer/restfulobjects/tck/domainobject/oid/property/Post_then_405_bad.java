@@ -23,18 +23,16 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.apache.isis.core.webserver.WebServer;
-import org.apache.isis.viewer.restfulobjects.applib.*;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectPropertyRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
-import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers;
 
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isMap;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -58,7 +56,7 @@ public class Post_then_405_bad {
     public void representation() throws Exception {
 
         // given
-        final Response idPropertyResp = domainObjectResource.propertyDetails("org.apache.isis.core.tck.dom.defaults.WithDefaultsEntity","58", "anInt");
+        final Response idPropertyResp = domainObjectResource.propertyDetails("org.apache.isis.core.tck.dom.defaults.WithDefaultsEntity","67", "anInt");
         final RestfulResponse<ObjectPropertyRepresentation> idPropertyJsonResp = RestfulResponse.ofT(idPropertyResp);
         final ObjectPropertyRepresentation propertyRepr = idPropertyJsonResp.getEntity();
         final LinkRepresentation selfLink = propertyRepr.getLinkWithRel(Rel.SELF);

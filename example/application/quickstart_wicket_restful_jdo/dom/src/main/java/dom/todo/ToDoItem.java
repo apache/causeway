@@ -42,7 +42,7 @@ import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
+import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
@@ -133,7 +133,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     private String description;
 
     @javax.jdo.annotations.Column(allowsNull="false", length=100)
-    @PostsPropertyChangedEvent()
+    @InteractionWithProperty()
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") 
     public String getDescription() {
         return description;
@@ -284,7 +284,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         this.complete = complete;
     }
 
-    @PostsActionInvokedEvent(CompletedEvent.class)
+    @InteractionWithAction(CompletedEvent.class)
     @Command
     @PublishedAction
     @Bulk
@@ -312,7 +312,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         return isComplete() ? "Already completed" : null;
     }
 
-    @PostsActionInvokedEvent(NoLongerCompletedEvent.class)
+    @InteractionWithAction(NoLongerCompletedEvent.class)
     @Command
     @PublishedAction
     @Bulk
@@ -469,8 +469,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     @javax.jdo.annotations.Element(column="dependentId")
     private SortedSet<ToDoItem> dependencies = new TreeSet<ToDoItem>();
 
-    @PostsCollectionAddedToEvent
-    @PostsCollectionRemovedFromEvent
+    @InteractionWithCollection
     @SortedBy(DependenciesComparator.class)
     public SortedSet<ToDoItem> getDependencies() {
         return dependencies;
@@ -492,7 +491,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
             @TypicalLength(20)
             final ToDoItem toDoItem) {
     	// By wrapping the call, Isis will detect that the collection is modified 
-    	// and it will automatically send a CollectionAddedToEvent to the Event Bus.
+    	// and it will automatically send a CollectionInteractionEvent to the Event Bus.
     	// ToDoItemSubscriptions is a demo subscriber to this event
         wrapperFactory.wrapSkipRules(this).addToDependencies(toDoItem);
         return this;
@@ -525,7 +524,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
             @TypicalLength(20)
             final ToDoItem toDoItem) {
     	// By wrapping the call, Isis will detect that the collection is modified 
-    	// and it will automatically send a CollectionRemovedFromEvent to the Event Bus.
+    	// and it will automatically send a CollectionInteractionEvent to the Event Bus.
         // ToDoItemSubscriptions is a demo subscriber to this event
         wrapperFactory.wrapSkipRules(this).removeFromDependencies(toDoItem);
         return this;
@@ -589,7 +588,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > delete (action)
-    @PostsActionInvokedEvent(DeletedEvent.class)
+    @InteractionWithAction(DeletedEvent.class)
     @Bulk
     public List<ToDoItem> delete() {
         
@@ -699,13 +698,13 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     //region > events
 
-    public static abstract class AbstractActionInvokedEvent extends ActionInvokedEvent<ToDoItem> {
+    public static abstract class AbstractActionInteractionEvent extends ActionInteractionEvent<ToDoItem> {
         private static final long serialVersionUID = 1L;
         private final String description;
-        public AbstractActionInvokedEvent(
-                final String description, 
-                final ToDoItem source, 
-                final Identifier identifier, 
+        public AbstractActionInteractionEvent(
+                final String description,
+                final ToDoItem source,
+                final Identifier identifier,
                 final Object... arguments) {
             super(source, identifier, arguments);
             this.description = description;
@@ -715,7 +714,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         }
     }
 
-    public static class CompletedEvent extends AbstractActionInvokedEvent {
+    public static class CompletedEvent extends AbstractActionInteractionEvent {
         private static final long serialVersionUID = 1L;
         public CompletedEvent(
                 final ToDoItem source, 
@@ -725,7 +724,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         }
     }
 
-    public static class NoLongerCompletedEvent extends AbstractActionInvokedEvent {
+    public static class NoLongerCompletedEvent extends AbstractActionInteractionEvent {
         private static final long serialVersionUID = 1L;
         public NoLongerCompletedEvent(
                 final ToDoItem source, 
@@ -735,7 +734,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         }
     }
 
-    public static class DeletedEvent extends AbstractActionInvokedEvent {
+    public static class DeletedEvent extends AbstractActionInteractionEvent {
         private static final long serialVersionUID = 1L;
         public DeletedEvent(
                 final ToDoItem source, 

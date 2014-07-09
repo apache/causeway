@@ -20,7 +20,6 @@ package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid;
 
 import javax.ws.rs.core.Response;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.apache.isis.core.webserver.WebServer;
@@ -57,7 +56,7 @@ public class Get_givenEntityWithCollections_thenRepresentation_ok_TODO {
     public void thenCollections() throws Exception {
 
         // when
-        final Response jaxrsResponse = domainObjectResource.object("PRMV","31");
+        final Response jaxrsResponse = domainObjectResource.object("PRMV","40");
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = RestfulResponse.ofT(jaxrsResponse);
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
 

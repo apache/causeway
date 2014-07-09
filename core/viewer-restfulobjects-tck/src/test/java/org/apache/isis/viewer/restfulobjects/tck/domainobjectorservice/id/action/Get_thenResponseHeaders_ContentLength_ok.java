@@ -18,11 +18,10 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.action;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import javax.ws.rs.core.Response;
-
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
@@ -31,9 +30,9 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Heade
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class Get_thenResponseHeaders_ContentLength_ok {
 
@@ -53,7 +52,7 @@ public class Get_thenResponseHeaders_ContentLength_ok {
     @Test
     public void ok() throws Exception {
         // given
-    	final Response actionPromptResp = domainObjectResource.actionPrompt("RTNE", "67", "contains");
+    	final Response actionPromptResp = domainObjectResource.actionPrompt("RTNE", "76", "contains");
 
         // when
     	final RestfulResponse<ObjectActionRepresentation> actionPromptJsonResp = RestfulResponse.ofT(actionPromptResp);

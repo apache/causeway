@@ -36,9 +36,9 @@ public abstract class EventBusService {
 
     /**
      * A no-op implementation to use as a default for domain objects that are being
-     * instantiated and for which the event bus service has not yet been injected. 
+     * instantiated and for which the event bus service has not yet been injected.
      */
-    public static final EventBusService NOOP = new EventBusService() {
+    public static class Noop extends EventBusService {
         @Override
         public void register(Object domainObject) {};
         @Override
@@ -49,7 +49,9 @@ public abstract class EventBusService {
         protected EventBus getEventBus() {
             return null;
         }
-    };
+    }
+
+    public static final EventBusService NOOP = new Noop();
     
     /**
      * @return an {@link EventBus} scoped to the current session.
