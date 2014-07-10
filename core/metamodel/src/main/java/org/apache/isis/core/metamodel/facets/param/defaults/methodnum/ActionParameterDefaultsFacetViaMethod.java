@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacetAbstract;
@@ -67,7 +66,7 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
 
     @Override
     public Object getDefault(final ObjectAdapter target, List<ObjectAdapter> argumentsIfAvailable) {
-        return AdapterInvokeUtils.invokeAutofit(method, target, argumentsIfAvailable, getAdapterManager());
+        return ObjectAdapter.InvokeUtils.invokeAutofit(method, target, argumentsIfAvailable, getAdapterManager());
     }
 
 

@@ -33,7 +33,6 @@ import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 
@@ -118,7 +117,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
         try {
             for (final TitleComponent component : this.components) {
-                final Object titlePart = AdapterInvokeUtils.invoke(component.getMethod(), targetAdapter);
+                final Object titlePart = ObjectAdapter.InvokeUtils.invoke(component.getMethod(), targetAdapter);
                 if (titlePart == null) {
                     continue;
                 } 

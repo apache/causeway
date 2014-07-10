@@ -26,7 +26,6 @@ import java.util.List;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacetAbstract;
@@ -76,7 +75,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
 
     @Override
     public Object[][] getChoices(final ObjectAdapter owningAdapter) {
-        final Object invoke = AdapterInvokeUtils.invoke(method, owningAdapter);
+        final Object invoke = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         if (!(invoke instanceof Object[])) {
             throw new DomainModelException("Expected an array of collections (Object[]) containing choices for all parameters, but got " + invoke + " instead. Perhaps the parameter number is missing!");
         }

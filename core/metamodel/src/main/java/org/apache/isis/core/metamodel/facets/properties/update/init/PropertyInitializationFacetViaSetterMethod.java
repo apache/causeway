@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
@@ -65,7 +64,7 @@ public class PropertyInitializationFacetViaSetterMethod extends PropertyInitiali
 
     @Override
     public void initProperty(final ObjectAdapter owningAdapter, final ObjectAdapter initialAdapter) {
-        AdapterInvokeUtils.invoke(method, owningAdapter, initialAdapter);
+        ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, initialAdapter);
     }
 
     @Override

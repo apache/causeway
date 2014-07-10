@@ -33,7 +33,7 @@ public abstract class ActionInteractionEvent<S> extends AbstractInteractionEvent
 
     /**
      * Propagated if no custom subclass was specified using
-     * {@link org.apache.isis.applib.annotation.InteractionWithAction} annotation.
+     * {@link org.apache.isis.applib.annotation.ActionInteraction} annotation.
      */
     public static class Default extends ActionInteractionEvent<Object> {
         private static final long serialVersionUID = 1L;

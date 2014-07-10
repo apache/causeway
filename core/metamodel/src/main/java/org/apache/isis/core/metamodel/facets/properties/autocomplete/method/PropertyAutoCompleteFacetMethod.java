@@ -26,7 +26,6 @@ import java.util.List;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacetAbstract;
@@ -84,7 +83,7 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
 
     @Override
     public Object[] autoComplete(ObjectAdapter owningAdapter, String searchArg) {
-        final Object options = AdapterInvokeUtils.invoke(method, owningAdapter, searchArg);
+        final Object options = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, searchArg);
         if (options == null) {
             return null;
         }

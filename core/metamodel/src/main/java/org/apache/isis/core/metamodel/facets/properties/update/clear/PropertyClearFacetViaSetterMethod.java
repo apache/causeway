@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
@@ -63,7 +62,7 @@ public class PropertyClearFacetViaSetterMethod extends PropertyClearFacetAbstrac
 
     @Override
     public void clearProperty(final ObjectAdapter owningAdapter) {
-        AdapterInvokeUtils.invoke(method, owningAdapter);
+        ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
     }
 
     @Override

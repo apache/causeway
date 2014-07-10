@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -82,7 +81,7 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
 
     @Override
     public Object[] getDefaults(final ObjectAdapter owningAdapter) {
-        return (Object[]) AdapterInvokeUtils.invoke(defaultMethod, owningAdapter);
+        return (Object[]) ObjectAdapter.InvokeUtils.invoke(defaultMethod, owningAdapter);
     }
 
     @Override

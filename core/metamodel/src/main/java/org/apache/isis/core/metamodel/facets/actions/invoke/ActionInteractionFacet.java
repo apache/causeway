@@ -19,46 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.actions.invoke;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
-
-/**
- * Extends the mechanism by which the action should be invoked by sending an
- * Event to the internal Event Bus after being invoked without throwing 
- * an Exception.
- */
 public interface ActionInteractionFacet extends ActionInvocationFacet {
 
-    public static class Util {
-        private Util(){}
-        
-        @SuppressWarnings("unchecked")
-        public static <S> ActionInteractionEvent<S> newEvent(
-                    final Class<? extends ActionInteractionEvent<S>> type,
-                    final S source, 
-                    final Identifier identifier, 
-                    final Object... arguments) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-            final Constructor<?>[] constructors = type.getConstructors();
-            for (final Constructor<?> constructor : constructors) {
-                final Class<?>[] parameterTypes = constructor.getParameterTypes();
-                if(parameterTypes.length != 3) {
-                    continue;
-                }
-                if(!parameterTypes[0].isAssignableFrom(source.getClass())) {
-                    continue;
-                }
-                if(!parameterTypes[1].isAssignableFrom(Identifier.class)) {
-                    continue;
-                }
-                if(!parameterTypes[2].isAssignableFrom(Object[].class)) {
-                    continue;
-                }
-                final Object event = constructor.newInstance(source, identifier, arguments);
-                return (ActionInteractionEvent<S>) event;
-            }
-            throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", [Ljava.lang.Object;)");
-        }
-    }
 }

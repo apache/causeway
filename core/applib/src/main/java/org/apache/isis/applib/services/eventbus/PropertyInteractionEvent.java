@@ -28,7 +28,7 @@ public abstract class PropertyInteractionEvent<S,T> extends AbstractInteractionE
     //region > Default class
     /**
      * Propagated if no custom subclass was specified using
-     * {@link org.apache.isis.applib.annotation.InteractionWithAction} annotation.
+     * {@link org.apache.isis.applib.annotation.ActionInteraction} annotation.
      */
     public static class Default extends PropertyInteractionEvent<Object, Object> {
         private static final long serialVersionUID = 1L;

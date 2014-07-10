@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.actions.invoke;
 
 import java.lang.reflect.Method;
-import org.apache.isis.applib.annotation.InteractionWithAction;
+import org.apache.isis.applib.annotation.ActionInteraction;
 import org.apache.isis.applib.annotation.PostsActionInvokedEvent;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.core.commons.lang.StringExtensions;
@@ -104,11 +104,11 @@ public class InteractionWithActionFacetFactory extends MethodPrefixBasedFacetFac
             final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
             final FacetHolder holder = processMethodContext.getFacetHolder();
 
-            final InteractionWithAction interactionWithAction =Annotations.getAnnotation(actionMethod, InteractionWithAction.class);
+            final ActionInteraction actionInteraction =Annotations.getAnnotation(actionMethod, ActionInteraction.class);
             final PostsActionInvokedEvent postsActionInvokedEvent = Annotations.getAnnotation(actionMethod, PostsActionInvokedEvent.class);
 
-            if (interactionWithAction != null) {
-                Class<? extends ActionInteractionEvent<?>> eventType = interactionWithAction.value();
+            if (actionInteraction != null) {
+                Class<? extends ActionInteractionEvent<?>> eventType = actionInteraction.value();
                 FacetUtil.addFacet(new InteractionWithActionFacetAnnotation(actionMethod, typeSpec, returnSpec, holder, getRuntimeContext(), getAdapterManager(), getServicesInjector(), eventType));
             } else if (postsActionInvokedEvent != null) {
                 Class<? extends ActionInteractionEvent<?>> eventType = postsActionInvokedEvent.value();

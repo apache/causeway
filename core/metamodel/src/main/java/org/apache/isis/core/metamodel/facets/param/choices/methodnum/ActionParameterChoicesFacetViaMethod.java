@@ -26,7 +26,6 @@ import java.util.List;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -71,7 +70,7 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
 
     @Override
     public Object[] getChoices(final ObjectAdapter adapter, final List<ObjectAdapter> argumentsIfAvailable) {
-        final Object choices = AdapterInvokeUtils.invokeAutofit(method, adapter, argumentsIfAvailable, getAdapterManager());
+        final Object choices = ObjectAdapter.InvokeUtils.invokeAutofit(method, adapter, argumentsIfAvailable, getAdapterManager());
         if (choices == null) {
             return new Object[0];
         }

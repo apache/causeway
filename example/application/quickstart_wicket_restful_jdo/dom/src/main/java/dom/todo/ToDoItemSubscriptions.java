@@ -38,14 +38,16 @@ public class ToDoItemSubscriptions {
     //region > on(Event)...
 
     public static enum Behaviour {
-        AcceptEvents,
-        RejectEventsWithRecoverableException,
-        RejectEventsWithNonRecoverableException,
-        ThrowOtherException,
-        HideDependenciesCollection,
-        HideSimilarToCollection
+        ActionExecuteAccept,
+        ActionExecuteVetoWithRecoverableException,
+        ActionExecuteVetoWithNonRecoverableException,
+        ActionExecuteVetoWithOtherException,
+        DependenciesCollectionHide,
+        DependenciesCollectionDisable,
+        SimilarToCollectionHide,
+        SimilarToCollectionDisable
     }
-    private Behaviour behaviour = Behaviour.AcceptEvents;
+    private Behaviour behaviour = Behaviour.ActionExecuteAccept;
 
     /**
      * To demo/test what occurs if a subscriber that might veto an event.
@@ -66,13 +68,13 @@ public class ToDoItemSubscriptions {
         return behaviour;
     }
     private void rejectIfRequired() {
-        if(behaviour == Behaviour.RejectEventsWithRecoverableException) {
+        if(behaviour == Behaviour.ActionExecuteVetoWithRecoverableException) {
             throw new RecoverableException("Rejecting event (recoverable exception thrown)");
         }
-        if(behaviour == Behaviour.RejectEventsWithNonRecoverableException) {
+        if(behaviour == Behaviour.ActionExecuteVetoWithNonRecoverableException) {
             throw new NonRecoverableException("Rejecting event (recoverable exception thrown)");
         }
-        if(behaviour == Behaviour.ThrowOtherException) {
+        if(behaviour == Behaviour.ActionExecuteVetoWithOtherException) {
             throw new RuntimeException("Throwing some other exception");
         }
     }
@@ -82,7 +84,7 @@ public class ToDoItemSubscriptions {
     @Programmatic
     @Subscribe
     public void on(ToDoItem.AbstractActionInteractionEvent ev) {
-        switch(ev.getMode()) {
+        switch(ev.getPhase()) {
             case HIDE:
                 break;
             case DISABLE:
@@ -100,7 +102,7 @@ public class ToDoItemSubscriptions {
     @Programmatic
     @Subscribe
     public void on(ActionInteractionEvent<?> ev) {
-        switch(ev.getMode()) {
+        switch(ev.getPhase()) {
             case HIDE:
                 break;
             case DISABLE:
@@ -118,7 +120,7 @@ public class ToDoItemSubscriptions {
     @Programmatic
     @Subscribe
     public void on(PropertyInteractionEvent<?,?> ev) {
-        switch(ev.getMode()) {
+        switch(ev.getPhase()) {
             case HIDE:
                 break;
             case DISABLE:
@@ -142,21 +144,32 @@ public class ToDoItemSubscriptions {
     @Programmatic
     @Subscribe
     public void on(CollectionInteractionEvent<?,?> ev) {
-        switch (ev.getMode()) {
+        switch (ev.getPhase()) {
             case HIDE:
                 // this is how a subscriber could hide a collection
-                if(getSubscriberBehaviour() == Behaviour.HideDependenciesCollection) {
+                if(getSubscriberBehaviour() == Behaviour.DependenciesCollectionHide) {
                     if(ev.getIdentifier().getMemberName().equals("dependencies")) {
-                        ev.vetoHide();
+                        ev.hide();
                     }
                 }
-                if(getSubscriberBehaviour() == Behaviour.HideSimilarToCollection) {
+                if(getSubscriberBehaviour() == Behaviour.SimilarToCollectionHide) {
                     if(ev.getIdentifier().getMemberName().equals("similarTo")) {
-                        ev.vetoHide();
+                        ev.hide();
                     }
                 }
                 break;
             case DISABLE:
+                // this is how a subscriber could hide a collection
+                if(getSubscriberBehaviour() == Behaviour.DependenciesCollectionDisable) {
+                    if(ev.getIdentifier().getMemberName().equals("dependencies")) {
+                        ev.hide();
+                    }
+                }
+                if(getSubscriberBehaviour() == Behaviour.SimilarToCollectionDisable) {
+                    if(ev.getIdentifier().getMemberName().equals("similarTo")) {
+                        ev.hide();
+                    }
+                }
                 break;
             case VALIDATE:
                 break;
@@ -207,7 +220,7 @@ public class ToDoItemSubscriptions {
     @Programmatic
     public void reset() {
         receivedEvents.clear();
-        subscriberBehaviour(ToDoItemSubscriptions.Behaviour.AcceptEvents);
+        subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteAccept);
     }
     //endregion
 

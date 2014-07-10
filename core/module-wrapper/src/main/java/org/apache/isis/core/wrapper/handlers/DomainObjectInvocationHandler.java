@@ -35,7 +35,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -344,7 +343,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         resolveIfRequired(targetAdapter);
 
         final ObjectAdapter currentReferencedAdapter = otoa.get(targetAdapter);
-        final Object currentReferencedObj = AdapterUtils.unwrap(currentReferencedAdapter);
+        final Object currentReferencedObj = ObjectAdapter.Util.unwrap(currentReferencedAdapter);
 
         final PropertyAccessEvent ev = new PropertyAccessEvent(getDelegate(), otoa.getIdentifier(), currentReferencedObj);
         notifyListeners(ev);
@@ -405,7 +404,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         resolveIfRequired(targetAdapter);
 
         final ObjectAdapter currentReferencedAdapter = otma.get(targetAdapter);
-        final Object currentReferencedObj = AdapterUtils.unwrap(currentReferencedAdapter);
+        final Object currentReferencedObj = ObjectAdapter.Util.unwrap(currentReferencedAdapter);
 
         final CollectionAccessEvent ev = new CollectionAccessEvent(getDelegate(), otma.getIdentifier());
 
@@ -555,7 +554,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         if (getExecutionMode().shouldExecute()) {
             final ObjectAdapter actionReturnNO = noa.execute(targetAdapter, argAdapters);
-            return AdapterUtils.unwrap(actionReturnNO);
+            return ObjectAdapter.Util.unwrap(actionReturnNO);
         }
 
         objectChangedIfRequired(targetAdapter);

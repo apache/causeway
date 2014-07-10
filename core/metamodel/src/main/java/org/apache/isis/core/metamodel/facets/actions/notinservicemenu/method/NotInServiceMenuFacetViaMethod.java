@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacetAbstract;
@@ -43,7 +42,7 @@ public class NotInServiceMenuFacetViaMethod extends NotInServiceMenuFacetAbstrac
         if (owningAdapter == null) {
             return null;
         }
-        final Boolean currentlyHidden = (Boolean) AdapterInvokeUtils.invoke(notInServiceMenuMethod, owningAdapter);
+        final Boolean currentlyHidden = (Boolean) ObjectAdapter.InvokeUtils.invoke(notInServiceMenuMethod, owningAdapter);
         return currentlyHidden.booleanValue() ? "notInServiceMenuXxx() method returning true" : null;
     }
 

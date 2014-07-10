@@ -26,7 +26,6 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -81,7 +80,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
             validate(parseValueContext);
         }
 
-        final Object context = AdapterUtils.unwrap(contextAdapter);
+        final Object context = ObjectAdapter.Util.unwrap(contextAdapter);
 
         getDependencyInjector().injectServicesInto(parser);
 
@@ -123,7 +122,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public String parseableTitle(final ObjectAdapter contextAdapter) {
-        final Object pojo = AdapterUtils.unwrap(contextAdapter);
+        final Object pojo = ObjectAdapter.Util.unwrap(contextAdapter);
 
         getDependencyInjector().injectServicesInto(parser);
         return ((Parser)parser).parseableTitleOf(pojo);

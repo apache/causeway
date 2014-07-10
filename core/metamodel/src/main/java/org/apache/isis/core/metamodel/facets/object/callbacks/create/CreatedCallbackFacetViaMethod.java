@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
@@ -65,7 +64,7 @@ public class CreatedCallbackFacetViaMethod extends CreatedCallbackFacetAbstract 
 
     @Override
     public void invoke(final ObjectAdapter adapter) {
-        AdapterInvokeUtils.invokeAll(methods, adapter);
+        ObjectAdapter.InvokeUtils.invokeAll(methods, adapter);
     }
 
     @Override

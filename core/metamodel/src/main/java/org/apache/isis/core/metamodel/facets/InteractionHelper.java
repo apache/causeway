@@ -19,37 +19,32 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import org.apache.isis.applib.FatalException;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.*;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInteractionFacet;
-import org.apache.isis.core.metamodel.facets.collections.interaction.InteractionWithCollectionAddFacet;
-import org.apache.isis.core.metamodel.facets.collections.interaction.InteractionWithCollectionRemoveFacet;
-import org.apache.isis.core.metamodel.facets.properties.interaction.InteractionWithPropertyClearFacet;
-import org.apache.isis.core.metamodel.facets.properties.interaction.InteractionWithPropertySetterFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 
 public class InteractionHelper {
 
     private final ServicesInjector servicesInjector;
-    private final AbstractInteractionEvent.Mode mode;
 
-    private EventBusService eventBusService;
-    private boolean searchedForEventBusService = false;
 
     public InteractionHelper(
-            final ServicesInjector servicesInjector,
-            final AbstractInteractionEvent.Mode mode) {
+            final ServicesInjector servicesInjector) {
         this.servicesInjector = servicesInjector;
-        this.mode = mode;
     }
 
+    //region > postEventForAction, newActionInteractionEvent
     @SuppressWarnings({ "rawtypes" })
     public ActionInteractionEvent<?> postEventForAction(
             final Class eventType,
+            final ActionInteractionEvent<?> existingEvent,
+            final AbstractInteractionEvent.Phase phase,
             final IdentifiedHolder identified,
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] argumentAdapters) {
@@ -58,12 +53,16 @@ public class InteractionHelper {
             return null;
         }
         try {
-            final Object source = AdapterUtils.unwrap(targetAdapter);
-            final Object[] arguments = AdapterUtils.unwrap(argumentAdapters);
-            final ActionInteractionEvent<?> event =
-                    ActionInteractionFacet.Util.newEvent(
-                            eventType, source, identified.getIdentifier(), arguments);
-            event.setMode(mode);
+            final ActionInteractionEvent<?> event;
+            if (existingEvent != null) {
+                event = existingEvent;
+            } else {
+                final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
+                final Object[] arguments = ObjectAdapter.Util.unwrap(argumentAdapters);
+                final Identifier identifier = identified.getIdentifier();
+                event = newActionInteractionEvent(eventType, source, identifier, arguments);
+            }
+            event.setPhase(phase);
             getEventBusService().post(event);
             return event;
         } catch (Exception e) {
@@ -71,23 +70,56 @@ public class InteractionHelper {
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public PropertyInteractionEvent<?, ?> postEventForPropertySet(
+    @SuppressWarnings("unchecked")
+    static <S> ActionInteractionEvent<S> newActionInteractionEvent(
+            final Class<? extends ActionInteractionEvent<S>> type,
+            final S source,
+            final Identifier identifier,
+            final Object... arguments) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+        final Constructor<?>[] constructors = type.getConstructors();
+        for (final Constructor<?> constructor : constructors) {
+            final Class<?>[] parameterTypes = constructor.getParameterTypes();
+            if(parameterTypes.length != 3) {
+                continue;
+            }
+            if(!parameterTypes[0].isAssignableFrom(source.getClass())) {
+                continue;
+            }
+            if(!parameterTypes[1].isAssignableFrom(Identifier.class)) {
+                continue;
+            }
+            if(!parameterTypes[2].isAssignableFrom(Object[].class)) {
+                continue;
+            }
+            final Object event = constructor.newInstance(source, identifier, arguments);
+            return (ActionInteractionEvent<S>) event;
+        }
+        throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", [Ljava.lang.Object;)");
+    }
+    //endregion
+
+    //region > postEventForProperty, newPropertyInteraction
+    public PropertyInteractionEvent<?, ?> postEventForProperty(
             final Class eventType,
+            final PropertyInteractionEvent<?, ?> existingEvent,
+            final AbstractInteractionEvent.Phase phase,
             final ObjectAdapter targetAdapter,
             final IdentifiedHolder identified,
             final Object oldValue,
             final Object newValue) {
-
         if(!hasEventBusService()) {
             return null;
         }
         try {
-            final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
-            final PropertyInteractionEvent<?, ?> event =
-                    InteractionWithPropertySetterFacet.Util.newEvent(
-                            eventType, source, identified.getIdentifier(), oldValue, newValue);
-            event.setMode(mode);
+            final PropertyInteractionEvent<?, ?> event;
+            if(existingEvent != null) {
+                event = existingEvent;
+            } else {
+                final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
+                final Identifier identifier = identified.getIdentifier();
+                event = newPropertyInteractionEvent(eventType, source, identifier, oldValue, newValue);
+            }
+            event.setPhase(phase);
             getEventBusService().post(event);
             return event;
         } catch (Exception e) {
@@ -95,23 +127,63 @@ public class InteractionHelper {
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public PropertyInteractionEvent<?, ?> postEventForPropertyClear(
+    @SuppressWarnings("unchecked")
+    static <S,T> PropertyInteractionEvent<S,T> newPropertyInteractionEvent(
+            final Class<? extends PropertyInteractionEvent<S, T>> type,
+            final S source,
+            final Identifier identifier,
+            final T oldValue,
+            final T newValue) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
+
+        final Constructor<?>[] constructors = type.getConstructors();
+        for (final Constructor<?> constructor : constructors) {
+            final Class<?>[] parameterTypes = constructor.getParameterTypes();
+            if(parameterTypes.length != 4) {
+                continue;
+            }
+            if(!parameterTypes[0].isAssignableFrom(source.getClass())) {
+                continue;
+            }
+            if(!parameterTypes[1].isAssignableFrom(Identifier.class)) {
+                continue;
+            }
+            if(oldValue != null && !parameterTypes[2].isAssignableFrom(oldValue.getClass())) {
+                continue;
+            }
+            if(newValue != null && !parameterTypes[3].isAssignableFrom(newValue.getClass())) {
+                continue;
+            }
+            final Object event = constructor.newInstance(source, identifier, oldValue, newValue);
+            return (PropertyInteractionEvent<S, T>) event;
+        }
+
+        throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object, java.lang.Object)");
+    }
+    //endregion
+
+    //region > postEventForCollection, newCollectionInteractionEvent
+
+    public CollectionInteractionEvent<?, ?> postEventForCollection(
             final Class eventType,
-            final ObjectAdapter targetAdapter,
+            final CollectionInteractionEvent<?, ?> existingEvent,
+            AbstractInteractionEvent.Phase phase, final ObjectAdapter targetAdapter,
             final IdentifiedHolder identified,
-            final Object oldValue,
-            final Object newValue) {
-
+            final CollectionInteractionEvent.Of of,
+            final Object reference) {
         if(!hasEventBusService()) {
             return null;
         }
         try {
-            final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
-            final PropertyInteractionEvent<?, ?> event =
-                    InteractionWithPropertyClearFacet.Util.newEvent(
-                            eventType, source, identified.getIdentifier(), oldValue, newValue);
-            event.setMode(mode);
+            final CollectionInteractionEvent<?, ?> event;
+            if (existingEvent != null) {
+                event = existingEvent;
+                event.setOf(of);
+            } else {
+                final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
+                final Identifier identifier = identified.getIdentifier();
+                event = newCollectionInteractionEvent(eventType, null, source, identifier, of, reference);
+            }
+            event.setPhase(phase);
             getEventBusService().post(event);
             return event;
         } catch (Exception e) {
@@ -119,52 +191,95 @@ public class InteractionHelper {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    <S, T> CollectionInteractionEvent<S, T> newCollectionInteractionEvent(
+            final Class<? extends CollectionInteractionEvent<S, T>> type,
+            final AbstractInteractionEvent.Phase phase,
+            final S source,
+            final Identifier identifier,
+            final CollectionInteractionEvent.Of of,
+            final T value)
+            throws NoSuchMethodException, SecurityException, InstantiationException,
+            IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public CollectionInteractionEvent<?, ?> postEventForCollectionAdd(
-            final Class eventType,
-            final ObjectAdapter targetAdapter,
-            final IdentifiedHolder identified,
-            final Object addedReference) {
+        final Constructor<?>[] constructors = type.getConstructors();
 
-        if(!hasEventBusService()) {
-            return null;
+        // search for constructor accepting source, identifier, type, value
+        for (final Constructor<?> constructor : constructors) {
+            final Class<?>[] parameterTypes = constructor.getParameterTypes();
+            if(parameterTypes.length != 4) {
+                continue;
+            }
+            if(!parameterTypes[0].isAssignableFrom(source.getClass())) {
+                continue;
+            }
+            if(!parameterTypes[1].isAssignableFrom(Identifier.class)) {
+                continue;
+            }
+            if(!parameterTypes[2].isAssignableFrom(CollectionInteractionEvent.Of.class)) {
+                continue;
+            }
+            if(value != null && !parameterTypes[3].isAssignableFrom(value.getClass())) {
+                continue;
+            }
+            final Object event = constructor.newInstance(source, identifier, of, value);
+            return (CollectionInteractionEvent<S, T>) event;
         }
-        try {
-            final Object source = AdapterUtils.unwrap(targetAdapter);
-            final CollectionInteractionEvent<?, ?> event =
-                    InteractionWithCollectionAddFacet.Util.newEvent(
-                            eventType, source, identified.getIdentifier(), addedReference);
-            event.setMode(mode);
-            getEventBusService().post(event);
-            return event;
-        } catch (Exception e) {
-            throw new FatalException(e);
+
+        if(phase == AbstractInteractionEvent.Phase.EXECUTE) {
+            if(of == CollectionInteractionEvent.Of.ADD_TO) {
+                // support for @PostsCollectionAddedTo annotation:
+                // search for constructor accepting source, identifier, value
+                for (final Constructor<?> constructor : constructors) {
+                    final Class<?>[] parameterTypes = constructor.getParameterTypes();
+                    if(parameterTypes.length != 3) {
+                        continue;
+                    }
+                    if(!parameterTypes[0].isAssignableFrom(source.getClass())) {
+                        continue;
+                    }
+                    if(!parameterTypes[1].isAssignableFrom(Identifier.class)) {
+                        continue;
+                    }
+                    if(value != null && !parameterTypes[2].isAssignableFrom(value.getClass())) {
+                        continue;
+                    }
+                    final Object event = constructor.newInstance(source, identifier, value);
+                    return (CollectionInteractionEvent<S, T>) event;
+                }
+            } else if(of == CollectionInteractionEvent.Of.REMOVE_FROM) {
+                // support for @PostsCollectionRemovedFrom annotation:
+                // search for constructor accepting source, identifier, value
+                for (final Constructor<?> constructor : constructors) {
+                    final Class<?>[] parameterTypes = constructor.getParameterTypes();
+                    if(parameterTypes.length != 3) {
+                        continue;
+                    }
+                    if(!parameterTypes[0].isAssignableFrom(source.getClass())) {
+                        continue;
+                    }
+                    if(!parameterTypes[1].isAssignableFrom(Identifier.class)) {
+                        continue;
+                    }
+                    if(value != null && !parameterTypes[2].isAssignableFrom(value.getClass())) {
+                        continue;
+                    }
+                    final Object event = constructor.newInstance(
+                            source, identifier, value);
+                    return (CollectionInteractionEvent<S, T>) event;
+                }
+            }
         }
+        throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object)");
     }
 
+    //endregion
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public CollectionInteractionEvent<?, ?> postEventForCollectionRemove(
-            final Class eventType,
-            final ObjectAdapter targetAdapter,
-            final IdentifiedHolder identified,
-            final Object removedReference) {
-        if(!hasEventBusService()) {
-            return null;
-        }
-        try {
-            final Object source = AdapterUtils.unwrap(targetAdapter);
-            final CollectionInteractionEvent<?, ?> event =
-                    InteractionWithCollectionRemoveFacet.Util.newEvent(
-                            eventType, source, identified.getIdentifier(), removedReference);
-            event.setMode(mode);
-            getEventBusService().post(event);
-            return event;
-        } catch (Exception e) {
-            throw new FatalException(e);
-        }
-    }
+
+    //region > eventBusService
+
+    private EventBusService eventBusService;
+    private boolean searchedForEventBusService = false;
 
     public boolean hasEventBusService() {
         return getEventBusService() != null;
@@ -177,5 +292,7 @@ public class InteractionHelper {
         searchedForEventBusService = true;
         return eventBusService;
     }
+
+    //endregion
 
 }

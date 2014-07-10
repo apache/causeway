@@ -133,7 +133,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     private String description;
 
     @javax.jdo.annotations.Column(allowsNull="false", length=100)
-    @InteractionWithProperty()
+    @PropertyInteraction()
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") 
     public String getDescription() {
         return description;
@@ -284,7 +284,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         this.complete = complete;
     }
 
-    @InteractionWithAction(CompletedEvent.class)
+    @ActionInteraction(CompletedEvent.class)
     @Command
     @PublishedAction
     @Bulk
@@ -312,7 +312,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         return isComplete() ? "Already completed" : null;
     }
 
-    @InteractionWithAction(NoLongerCompletedEvent.class)
+    @ActionInteraction(NoLongerCompletedEvent.class)
     @Command
     @PublishedAction
     @Bulk
@@ -469,7 +469,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     @javax.jdo.annotations.Element(column="dependentId")
     private SortedSet<ToDoItem> dependencies = new TreeSet<ToDoItem>();
 
-    @InteractionWithCollection
+    @CollectionInteraction
     @SortedBy(DependenciesComparator.class)
     public SortedSet<ToDoItem> getDependencies() {
         return dependencies;
@@ -588,7 +588,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > delete (action)
-    @InteractionWithAction(DeletedEvent.class)
+    @ActionInteraction(DeletedEvent.class)
     @Bulk
     public List<ToDoItem> delete() {
         

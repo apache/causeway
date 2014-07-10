@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.validating.validateobject.ValidateObjectFacetAbstract;
@@ -60,7 +59,7 @@ public class ValidateObjectFacetMethod extends ValidateObjectFacetAbstract imple
 
     @Override
     public String invalidReason(final ObjectAdapter owningAdapter) {
-        return (String) AdapterInvokeUtils.invoke(method, owningAdapter);
+        return (String) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
     }
 
     @Override

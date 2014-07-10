@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.util.AdapterUtils.unwrap;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.CollectionAddToEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -33,7 +31,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
  * See {@link InteractionContext} for overview; analogous to
  * {@link CollectionAddToEvent}.
  */
-public class CollectionAddToContext extends ValidityContext<CollectionAddToEvent> {
+public class CollectionAddToContext extends ValidityContext<CollectionAddToEvent> implements ProposedHolder {
 
     private final ObjectAdapter proposed;
 
@@ -43,13 +41,14 @@ public class CollectionAddToContext extends ValidityContext<CollectionAddToEvent
         this.proposed = proposed;
     }
 
+    @Override
     public ObjectAdapter getProposed() {
         return proposed;
     }
 
     @Override
     public CollectionAddToEvent createInteractionEvent() {
-        return new CollectionAddToEvent(unwrap(getTarget()), getIdentifier(), unwrap(getProposed()));
+        return new CollectionAddToEvent(ObjectAdapter.Util.unwrap(getTarget()), getIdentifier(), ObjectAdapter.Util.unwrap(getProposed()));
     }
 
 }

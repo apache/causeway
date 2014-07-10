@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.facets.actions.typeof.annotation.TypeOfFac
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.collections.disabled.fromimmutable.DisabledFacetOnCollectionDerivedFromImmutableFactory;
-import org.apache.isis.core.metamodel.facets.collections.interaction.HiddenFacetOnCollectionInteractionFactory;
+import org.apache.isis.core.metamodel.facets.collections.interaction.CollectionInteractionFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToRemoveFromAndValidateFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.notpersisted.annotation.NotPersistedFacetOnCollectionAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.collections.paged.annotation.PagedFacetOnCollectionFactory;
@@ -127,6 +127,7 @@ import org.apache.isis.core.metamodel.facets.properties.choices.method.PropertyC
 import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromTypeFactory;
 import org.apache.isis.core.metamodel.facets.properties.defaults.method.PropertyDefaultFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutableFactory;
+import org.apache.isis.core.metamodel.facets.properties.interaction.PropertyInteractionFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.mandatory.MandatoryFacetOnPropertyMandatoryAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.optional.MandatoryFacetOnPropertyInvertedByOptionalAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.dflt.MandatoryFacetOnProperyDefaultFactory;
@@ -151,7 +152,6 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.facets.actions.invoke.InteractionWithActionFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.collection.CollectionFacetFactory;
-import org.apache.isis.core.metamodel.facets.collections.interaction.InteractionWithCollectionFacetFactory;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.annotprop.DisabledFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetFactory;
@@ -173,7 +173,6 @@ import org.apache.isis.core.metamodel.facets.object.plural.annotation.PluralAnno
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationOnTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.validating.mustsatisfyspec.MustSatisfySpecificationOnParameterFacetFactory;
-import org.apache.isis.core.metamodel.facets.properties.interaction.InteractionWithPropertyFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.update.PropertyModifyFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.update.PropertySetAndClearFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.multiline.annotation.MultiLineOnPropertyFacetFactory;
@@ -362,12 +361,8 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // must come after the property/collection accessor+mutator facet factories
         // (nb there isn't one for actions because the action interaction is conflated with the
         // action invocation).
-        addFactory(InteractionWithPropertyFacetFactory.class);
-        addFactory(InteractionWithCollectionFacetFactory.class);
-
-
-        // the other 'modes' of interactions
-        addFactory(HiddenFacetOnCollectionInteractionFactory.class);
+        addFactory(PropertyInteractionFacetFactory.class);
+        addFactory(CollectionInteractionFacetFactory.class);
 
 
         addFactory(ImmutableFacetMarkerInterfaceFactory.class);

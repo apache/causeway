@@ -28,10 +28,8 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacetAbstract;
 
 public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstract implements ImperativeFacet {
@@ -79,7 +77,7 @@ public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstrac
 
     @Override
     public void clear(final ObjectAdapter owningAdapter) {
-        final Collection<?> collection = (Collection<?>) AdapterInvokeUtils.invoke(method, owningAdapter);
+        final Collection<?> collection = (Collection<?>) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         collection.clear();
         final ObjectAdapter adapter = getAdapterManager().getAdapterFor(owningAdapter);
         getObjectDirtier().objectChanged(adapter);

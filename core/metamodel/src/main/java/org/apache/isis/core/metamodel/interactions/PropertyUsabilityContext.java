@@ -19,7 +19,8 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.util.AdapterUtils.unwrap;
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
+
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;

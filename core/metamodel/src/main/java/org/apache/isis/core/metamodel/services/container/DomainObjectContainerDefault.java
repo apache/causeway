@@ -44,7 +44,6 @@ import org.apache.isis.core.metamodel.adapter.*;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
-import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -396,7 +395,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     public <T> List<T> allMatches(final Query<T> query) {
         flush(); // auto-flush any pending changes
         final List<ObjectAdapter> allMatching = getQuerySubmitter().allMatchingQuery(query);
-        return AdapterUtils.unwrap(allMatching);
+        return ObjectAdapter.Util.unwrapT(allMatching);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -437,7 +436,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     public <T> T firstMatch(final Query<T> query) {
         flush(); // auto-flush any pending changes
         final ObjectAdapter firstMatching = getQuerySubmitter().firstMatchingQuery(query);
-        return (T) AdapterUtils.unwrap(firstMatching);
+        return (T) ObjectAdapter.Util.unwrap(firstMatching);
     }
 
     // //////////////////////////////////////////////////////////////////

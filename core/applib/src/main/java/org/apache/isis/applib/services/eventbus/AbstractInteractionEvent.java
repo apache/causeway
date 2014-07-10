@@ -32,30 +32,30 @@ public abstract class AbstractInteractionEvent<S> extends java.util.EventObject 
         this.identifier = identifier;
     }
 
-    //region > Mode
+    //region > Phase
 
-    public enum Mode {
+    public enum Phase {
         HIDE,
         DISABLE,
         VALIDATE,
         EXECUTE
     }
 
-    private Mode mode;
+    private Phase phase;
 
     /**
      * Whether the framework is checking visibility, enablement, validity or actually executing (invoking action,
      * updating property or collection).
      */
-    public Mode getMode() {
-        return mode;
+    public Phase getPhase() {
+        return phase;
     }
 
     /**
      * Not API, set by the framework.
      */
-    public void setMode(Mode mode) {
-        this.mode = mode;
+    public void setPhase(Phase phase) {
+        this.phase = phase;
     }
     //endregion
 
@@ -74,14 +74,40 @@ public abstract class AbstractInteractionEvent<S> extends java.util.EventObject 
     }
     //endregion
 
-    //region > vetoHide, isHidden
+    //region > hide, isHidden
     private boolean hidden;
     public boolean isHidden() {
         return hidden;
     }
 
-    public void vetoHide() {
+    public void hide() {
         this.hidden = true;
+    }
+    //endregion
+
+    //region > disable, isDisabled, getDisabledReason
+    private String disabledReason;
+    public boolean isDisabled() {
+        return disabledReason != null;
+    }
+    public String getDisabledReason() {
+        return disabledReason;
+    }
+    public void disable(final String reason) {
+        this.disabledReason = reason;
+    }
+    //endregion
+
+    //region > invalidate, isInvalid, getInvalidityReason
+    private String invalidatedReason;
+    public boolean isInvalid() {
+        return invalidatedReason != null;
+    }
+    public String getInvalidityReason() {
+        return invalidatedReason;
+    }
+    public void invalidate(final String reason) {
+        this.invalidatedReason = reason;
     }
     //endregion
 

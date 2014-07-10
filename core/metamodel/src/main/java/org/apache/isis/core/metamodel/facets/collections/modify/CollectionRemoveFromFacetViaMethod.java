@@ -24,11 +24,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacetAbstract;
 
 public class CollectionRemoveFromFacetViaMethod extends CollectionRemoveFromFacetAbstract implements ImperativeFacet {
 
@@ -65,7 +62,7 @@ public class CollectionRemoveFromFacetViaMethod extends CollectionRemoveFromFace
 
     @Override
     public void remove(final ObjectAdapter owningAdapter, final ObjectAdapter elementAdapter) {
-        AdapterInvokeUtils.invoke(method, owningAdapter, elementAdapter);
+        ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, elementAdapter);
     }
 
     @Override

@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.object.icon.method;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
 
@@ -38,7 +37,7 @@ public class IconFacetMethod extends IconFacetAbstract {
     @Override
     public String iconName(final ObjectAdapter owningAdapter) {
         try {
-            return (String) AdapterInvokeUtils.invoke(method, owningAdapter);
+            return (String) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         } catch (final RuntimeException ex) {
             return null;
         }

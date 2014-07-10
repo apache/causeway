@@ -26,7 +26,6 @@ import java.util.List;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -72,7 +71,7 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
 
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter owningAdapter) {
-        final Object result = AdapterInvokeUtils.invoke(method, owningAdapter);
+        final Object result = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         if (result == null) {
             return null;
         }

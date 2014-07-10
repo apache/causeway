@@ -91,7 +91,7 @@ public abstract class InteractionWithActionFacetAbstract
         this.adapterManager = adapterManager;
         this.servicesInjector = servicesInjector;
         this.eventType = eventType;
-        this.interactionHelper = new InteractionHelper(servicesInjector, AbstractInteractionEvent.Mode.EXECUTE);
+        this.interactionHelper = new InteractionHelper(servicesInjector);
     }
 
     /**
@@ -172,7 +172,7 @@ public abstract class InteractionWithActionFacetAbstract
         // Perhaps the Action was not properly invoked (i.e. an exception was raised).
         if (invocationResult.getWhetherInvoked()) {
             // If invoked, then send the ActionInteractionEvent to the EventBus.
-            interactionHelper.postEventForAction(eventType, owningAction, targetAdapter, arguments);
+            interactionHelper.postEventForAction(eventType, null, AbstractInteractionEvent.Phase.EXECUTE, owningAction, targetAdapter, arguments);
         }
 
         return invocationResult.getAdapter();

@@ -194,7 +194,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void subscriberReceivesEvent() throws Exception {
 
                 // given
-                assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.AcceptEvents));
+                assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.ActionExecuteAccept));
                 assertThat(toDoItem.isComplete(), is(false));
 
                 // when
@@ -216,7 +216,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void subscriberVetoesEventWithRecoverableException() throws Exception {
 
                 // given
-                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithRecoverableException);
+                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithRecoverableException);
 
                 // then
                 expectedExceptions.expect(RecoverableException.class);
@@ -229,7 +229,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void subscriberVetoesEventWithNonRecoverableException() throws Exception {
 
                 // given
-                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithNonRecoverableException);
+                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithNonRecoverableException);
 
                 // then
                 expectedExceptions.expect(NonRecoverableException.class);
@@ -242,7 +242,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
 
                 // given
-                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ThrowOtherException);
+                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithOtherException);
 
                 // when
                 toDoItem.completed();
@@ -368,13 +368,13 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
 
             /**
              * Even though {@link dom.todo.ToDoItem#notYetCompleted()} is not annotated with
-             * {@link org.apache.isis.applib.annotation.InteractionWithAction}, an event is still raised.
+             * {@link org.apache.isis.applib.annotation.ActionInteraction}, an event is still raised.
              */
             @Test
             public void subscriberReceivesEvent() throws Exception {
 
                 // given
-                assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.AcceptEvents));
+                assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.ActionExecuteAccept));
                 unwrap(toDoItem).setComplete(true);
 
                 // when
@@ -492,7 +492,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 public void subscriberVetoesEventWithRecoverableException() throws Exception {
 
                     // given
-                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithRecoverableException);
+                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithRecoverableException);
 
                     // then
                     expectedExceptions.expect(RecoverableException.class);
@@ -505,7 +505,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 public void subscriberVetoesEventWithNonRecoverableException() throws Exception {
 
                     // given
-                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithNonRecoverableException);
+                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithNonRecoverableException);
 
                     // then
                     expectedExceptions.expect(NonRecoverableException.class);
@@ -518,7 +518,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
 
                     // given
-                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ThrowOtherException);
+                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithOtherException);
 
                     // when
                     toDoItem.add(otherToDoItem);
@@ -591,7 +591,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
 
                     // given
                     toDoItemSubscriptions.reset();
-                    assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.AcceptEvents));
+                    assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.ActionExecuteAccept));
                     assertThat(toDoItem.getDependencies().size(), is(1));
 
                     // when
@@ -627,7 +627,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 public void subscriberVetoesEventWithRecoverableException() throws Exception {
 
                     // given
-                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithRecoverableException);
+                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithRecoverableException);
 
                     // then
                     expectedExceptions.expect(RecoverableException.class);
@@ -640,7 +640,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 public void subscriberVetoesEventWithNonRecoverableException() throws Exception {
 
                     // given
-                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithNonRecoverableException);
+                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithNonRecoverableException);
 
                     // then
                     expectedExceptions.expect(NonRecoverableException.class);
@@ -653,7 +653,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
 
                     // given
-                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ThrowOtherException);
+                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithOtherException);
 
                     // when
                     toDoItem.remove(otherToDoItem);
@@ -844,7 +844,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void subscriberReceivesEvent() throws Exception {
 
                 // given
-                assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.AcceptEvents));
+                assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.ActionExecuteAccept));
                 assertThat(toDoItem.getDescription(), is("Buy bread"));
 
                 // when
@@ -866,7 +866,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void subscriberVetoesEventWithRecoverableException() throws Exception {
 
                 // given
-                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithRecoverableException);
+                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithRecoverableException);
 
                 // then
                 expectedExceptions.expect(RecoverableException.class);
@@ -880,7 +880,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void subscriberVetoesEventWithNonRecoverableException() throws Exception {
 
                 // given
-                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.RejectEventsWithNonRecoverableException);
+                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithNonRecoverableException);
 
                 // then
                 expectedExceptions.expect(NonRecoverableException.class);
@@ -894,7 +894,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
 
                 // given
-                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ThrowOtherException);
+                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithOtherException);
 
                 // when
                 toDoItem.setDescription("Buy bread and butter");

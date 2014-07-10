@@ -19,11 +19,17 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.core.commons.lang.ClassExtensions;
+import org.apache.isis.core.commons.lang.ListExtensions;
+import org.apache.isis.core.commons.lang.MethodExtensions;
+import org.apache.isis.core.commons.lang.MethodUtil;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
@@ -43,7 +49,6 @@ import org.apache.isis.core.metamodel.spec.Specification;
  */
 public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotation.When.Persistable {
 
-    
     /**
      * Refines {@link Instance#getSpecification()}.
      */
@@ -250,7 +255,6 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
         private Util() {
         }
 
-
         public static Object unwrap(final ObjectAdapter adapter) {
             return adapter != null ? adapter.getObject() : null;
         }
@@ -334,7 +338,114 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
 
     }
 
-    
+    public final class InvokeUtils {
+
+        private InvokeUtils() {
+        }
+
+        public static void invokeAll(final List<Method> methods, final ObjectAdapter adapter) {
+            MethodUtil.invoke(methods, Util.unwrap(adapter));
+        }
+
+        public static Object invoke(final Method method, final ObjectAdapter adapter) {
+            return MethodExtensions.invoke(method, Util.unwrap(adapter));
+        }
+
+        public static Object invoke(final Method method, final ObjectAdapter adapter, final Object arg0) {
+            return MethodExtensions.invoke(method, Util.unwrap(adapter), new Object[] {arg0});
+        }
+
+        public static Object invoke(final Method method, final ObjectAdapter adapter, final ObjectAdapter arg0Adapter) {
+            return invoke(method, adapter, Util.unwrap(arg0Adapter));
+        }
+
+        public static Object invoke(final Method method, final ObjectAdapter adapter, final ObjectAdapter[] argumentAdapters) {
+            return MethodExtensions.invoke(method, Util.unwrap(adapter), Util.unwrap(argumentAdapters));
+        }
+
+        public static Object invoke(final Method method, final ObjectAdapter adapter, final Map<Integer, ObjectAdapter> argumentAdapters) {
+            return invoke(method, adapter, asArray(argumentAdapters, method.getParameterTypes().length));
+        }
+
+        private static ObjectAdapter[] asArray(Map<Integer, ObjectAdapter> argumentAdapters, int length) {
+            ObjectAdapter[] args = new ObjectAdapter[length];
+            for (final Map.Entry<Integer, ObjectAdapter> entry : argumentAdapters.entrySet()) {
+                final Integer paramNum = entry.getKey();
+                if(paramNum < length) {
+                    args[paramNum] = entry.getValue();
+                }
+            }
+            return args;
+        }
+
+        /**
+         * Invokes the method, adjusting arguments as required to make them fit the method's parameters.
+         *
+         * <p>
+         * That is:
+         * <ul>
+         * <li>if the method declares parameters but arguments are missing, then will provide 'null' defaults for these.
+         * <li>if the method does not declare all parameters for arguments, then truncates arguments.
+         * </ul>
+         */
+        public static Object invokeAutofit(final Method method, final ObjectAdapter target, List<ObjectAdapter> argumentsIfAvailable, final AdapterManager adapterManager) {
+            final List<ObjectAdapter> args = Lists.newArrayList();
+            if(argumentsIfAvailable != null) {
+                args.addAll(argumentsIfAvailable);
+            }
+
+            adjust(method, args, adapterManager);
+
+            final ObjectAdapter[] argArray = args.toArray(new ObjectAdapter[]{});
+            return invoke(method, target, argArray);
+        }
+
+        private static void adjust(final Method method, final List<ObjectAdapter> args, final AdapterManager adapterManager) {
+            final Class<?>[] parameterTypes = method.getParameterTypes();
+            ListExtensions.adjust(args, parameterTypes.length);
+
+            for(int i=0; i<parameterTypes.length; i++) {
+                final Class<?> cls = parameterTypes[i];
+                if(args.get(i) == null && cls.isPrimitive()) {
+                    final Object object = ClassExtensions.toDefault(cls);
+                    final ObjectAdapter adapter = adapterManager.adapterFor(object);
+                    args.set(i, adapter);
+                }
+            }
+        }
+
+        /**
+         * Invokes the method, adjusting arguments as required.
+         *
+         * <p>
+         * That is:
+         * <ul>
+         * <li>if the method declares parameters but no arguments are provided, then will provide 'null' defaults for these.
+         * <li>if the method does not declare parameters but arguments were provided, then will ignore those argumens.
+         * </ul>
+         */
+        @SuppressWarnings("unused")
+        private static Object invokeWithDefaults(final Method method, final ObjectAdapter adapter, final ObjectAdapter[] argumentAdapters) {
+            final int numParams = method.getParameterTypes().length;
+            ObjectAdapter[] adapters;
+
+            if(argumentAdapters == null || argumentAdapters.length == 0) {
+                adapters = new ObjectAdapter[numParams];
+            } else if(numParams == 0) {
+                // ignore any arguments, even if they were supplied.
+                // eg used by contributee actions, but
+                // underlying service 'default' action declares no params
+                adapters = new ObjectAdapter[0];
+            } else if(argumentAdapters.length == numParams){
+                adapters = argumentAdapters;
+            } else {
+                throw new IllegalArgumentException("Method has " + numParams + " params but " + argumentAdapters.length + " arguments provided");
+            }
+
+            return invoke(method, adapter, adapters);
+        }
+    }
+
     public static class Functions {
         
         private Functions(){}

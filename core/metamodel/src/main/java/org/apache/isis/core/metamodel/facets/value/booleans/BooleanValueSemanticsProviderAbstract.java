@@ -23,7 +23,6 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -112,7 +111,7 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
 
     @Override
     public boolean isSet(final ObjectAdapter adapter) {
-        if (!AdapterUtils.exists(adapter)) {
+        if (!ObjectAdapter.Util.exists(adapter)) {
             return false;
         }
         final Object object = adapter.getObject();

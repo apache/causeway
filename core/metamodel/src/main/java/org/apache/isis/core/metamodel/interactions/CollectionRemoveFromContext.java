@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.util.AdapterUtils.unwrap;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.CollectionRemoveFromEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -29,11 +27,13 @@ import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
+
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link CollectionRemoveFromEvent}.
  */
-public class CollectionRemoveFromContext extends ValidityContext<CollectionRemoveFromEvent> {
+public class CollectionRemoveFromContext extends ValidityContext<CollectionRemoveFromEvent> implements ProposedHolder{
 
     private final ObjectAdapter proposed;
 
@@ -43,6 +43,7 @@ public class CollectionRemoveFromContext extends ValidityContext<CollectionRemov
         this.proposed = proposed;
     }
 
+    @Override
     public ObjectAdapter getProposed() {
         return proposed;
     }

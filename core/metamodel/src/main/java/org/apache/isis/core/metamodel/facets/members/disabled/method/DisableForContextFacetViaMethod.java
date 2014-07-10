@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
@@ -72,7 +71,7 @@ public class DisableForContextFacetViaMethod extends DisableForContextFacetAbstr
         if (target == null) {
             return null;
         }
-        return (String) AdapterInvokeUtils.invoke(method, target, ic.getContributeeAsMap());
+        return (String) ObjectAdapter.InvokeUtils.invoke(method, target, ic.getContributeeAsMap());
     }
 
     @Override

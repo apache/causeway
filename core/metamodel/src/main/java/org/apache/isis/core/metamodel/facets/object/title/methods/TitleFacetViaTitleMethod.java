@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
@@ -70,7 +69,7 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
     @Override
     public String title(final ObjectAdapter owningAdapter, final Localization localization) {
         try {
-            return (String) AdapterInvokeUtils.invoke(method, owningAdapter);
+            return (String) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         } catch (final RuntimeException ex) {
             LOG.warn("title failure", ex);
             return "Failed Title";

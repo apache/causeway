@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.util.AdapterUtils.unwrap;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.ActionArgumentEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -28,6 +26,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 
 /**
  * See {@link InteractionContext} for overview; analogous to

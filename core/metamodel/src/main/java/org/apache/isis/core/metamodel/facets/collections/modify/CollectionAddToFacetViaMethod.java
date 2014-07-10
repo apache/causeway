@@ -24,10 +24,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacetAbstract;
 
 public class CollectionAddToFacetViaMethod extends CollectionAddToFacetAbstract implements ImperativeFacet {
 
@@ -64,7 +62,7 @@ public class CollectionAddToFacetViaMethod extends CollectionAddToFacetAbstract 
 
     @Override
     public void add(final ObjectAdapter owningAdapter, final ObjectAdapter elementAdapter) {
-        AdapterInvokeUtils.invoke(method, owningAdapter, elementAdapter);
+        ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, elementAdapter);
     }
 
     @Override

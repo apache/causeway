@@ -32,7 +32,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 public interface PropertyOrCollectionAccessorFacet extends Facet {
 
     /**
-     * Gets the value of this property or collection from this object.
+     * Gets the value of this property or collection from this object (as a pojo, not as
+     * an {@link org.apache.isis.core.metamodel.adapter.ObjectAdapter adapter}).
      */
     public Object getProperty(ObjectAdapter inObject);
 }

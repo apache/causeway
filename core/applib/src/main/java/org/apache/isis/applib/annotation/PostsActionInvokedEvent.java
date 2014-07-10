@@ -42,7 +42,7 @@ import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
  * resident in memory.  The typical implementation of a domain service subscriber is to identify the impacted entities,
  * load them using a repository, and then to delegate to the event to them.
  *
- * @deprecated - use instead {@link InteractionWithAction}.
+ * @deprecated - use instead {@link ActionInteraction}.
  */
 @Deprecated
 @Retention(RetentionPolicy.RUNTIME)

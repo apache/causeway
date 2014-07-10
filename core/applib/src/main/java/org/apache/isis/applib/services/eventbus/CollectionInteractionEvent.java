@@ -28,7 +28,7 @@ public abstract class CollectionInteractionEvent<S,T> extends AbstractInteractio
     //region > Default class
     /**
      * Propagated if no custom subclass was specified using
-     * {@link org.apache.isis.applib.annotation.InteractionWithAction} annotation.
+     * {@link org.apache.isis.applib.annotation.ActionInteraction} annotation.
      */
     public static class Default extends CollectionInteractionEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
@@ -72,23 +72,41 @@ public abstract class CollectionInteractionEvent<S,T> extends AbstractInteractio
     //endregion
 
     //region > Of
-
     public static enum Of {
         /**
-         * The collection is being added to.
+         * The collection is being accessed
+         * ({@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#HIDE hide} and
+         * {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#DISABLE disable}) checks.
+         */
+        ACCESS,
+        /**
+         * The collection is being added to
+         * ({@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#VALIDATE validity} check and
+         * {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTE execution}).
          */
         ADD_TO,
         /**
-         * The collection is being removed from.
+         * The collection is being removed from
+         * ({@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#VALIDATE validity} check and
+         * {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTE execution}).
          */
         REMOVE_FROM
     }
 
-    private final Of of;
+    private Of of;
 
     public Of getOf() {
         return of;
     }
+
+    /**
+     * Not API; updates from {@link Of#ACCESS} to either {@link Of#ADD_TO} or {@link Of#REMOVE_FROM} when hits the
+     * {@link Phase#VALIDATE validation phase}.
+     */
+    public void setOf(Of of) {
+        this.of = of;
+    }
+
     //endregion
 
     //region > toString

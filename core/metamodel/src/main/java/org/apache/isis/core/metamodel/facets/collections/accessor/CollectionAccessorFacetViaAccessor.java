@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
@@ -71,7 +70,7 @@ public class CollectionAccessorFacetViaAccessor extends PropertyOrCollectionAcce
 
     @Override
     public Object getProperty(final ObjectAdapter owningAdapter) {
-        return AdapterInvokeUtils.invoke(method, owningAdapter);
+        return ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
     }
 
     @Override

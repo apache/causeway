@@ -18,41 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.interaction;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
-
 class Utils {
     private Utils(){}
-    @SuppressWarnings("unchecked")
-    public static <S,T> PropertyInteractionEvent<S,T> newEvent(
-            final Class<? extends PropertyInteractionEvent<S, T>> type,
-            final S source, 
-            final Identifier identifier,
-            final T oldValue, 
-            final T newValue) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
-        final Constructor<?>[] constructors = type.getConstructors();
-        for (final Constructor<?> constructor : constructors) {
-            final Class<?>[] parameterTypes = constructor.getParameterTypes();
-            if(parameterTypes.length != 4) {
-                continue;
-            }
-            if(!parameterTypes[0].isAssignableFrom(source.getClass())) {
-                continue;
-            }
-            if(!parameterTypes[1].isAssignableFrom(Identifier.class)) {
-                continue;
-            }
-            if(oldValue != null && !parameterTypes[2].isAssignableFrom(oldValue.getClass())) {
-                continue;
-            }
-            if(newValue != null && !parameterTypes[3].isAssignableFrom(newValue.getClass())) {
-                continue;
-            }
-            final Object event = constructor.newInstance(source, identifier, oldValue, newValue);
-            return (PropertyInteractionEvent<S, T>) event;
-        }
-        throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object, java.lang.Object)");
-    }
 }

@@ -27,11 +27,8 @@ import java.util.List;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
-import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
-import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacetAbstract;
 
 public class CollectionAddToFacetViaAccessor extends CollectionAddToFacetAbstract implements ImperativeFacet {
 
@@ -77,8 +74,8 @@ public class CollectionAddToFacetViaAccessor extends CollectionAddToFacetAbstrac
     @Override
     public void add(final ObjectAdapter owningAdapter, final ObjectAdapter elementAdapter) {
         @SuppressWarnings("unchecked")
-        final Collection<? super Object> collection = (Collection<? super Object>) AdapterInvokeUtils.invoke(method, owningAdapter);
-        final Object elementPojo = AdapterUtils.unwrap(elementAdapter);
+        final Collection<? super Object> collection = (Collection<? super Object>) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
+        final Object elementPojo = ObjectAdapter.Util.unwrap(elementAdapter);
         collection.add(elementPojo);
         getObjectDirtier().objectChanged(owningAdapter);
     }
