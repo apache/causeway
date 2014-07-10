@@ -36,22 +36,19 @@ import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
-import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
-import org.apache.isis.core.progmodel.facets.actions.bulk.BulkFacet;
-import org.apache.isis.core.progmodel.facets.actions.invoke.CommandUtil;
+import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
+import org.apache.isis.core.metamodel.facets.actions.invoke.CommandUtil;
 
 public class ObjectActionContributee extends ObjectActionImpl implements ContributeeMember {
 

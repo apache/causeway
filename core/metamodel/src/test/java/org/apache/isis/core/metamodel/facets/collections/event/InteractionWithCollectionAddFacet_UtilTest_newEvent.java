@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
+import org.apache.isis.core.metamodel.facets.collections.interaction.InteractionWithCollectionAddFacet;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

@@ -22,20 +22,12 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import javax.jdo.annotations.NotPersistent;
-import javax.jdo.annotations.PrimaryKey;
-
-import junit.framework.Assert;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.DisabledFacetDerivedFromJdoPrimaryKeyAnnotation;
-import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyFacet;
-import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.OptionalFacetDerivedFromJdoPrimaryKeyAnnotation;
+import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 
 public class GivenJdoNotPersistentAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

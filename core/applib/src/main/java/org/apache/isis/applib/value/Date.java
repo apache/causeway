@@ -40,7 +40,7 @@ import org.apache.isis.applib.clock.Clock;
  * <li>withinPreviousDatePeriod(int days, int months, int years)</li>
  * </ul>
  */
-@Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.value.date.DateValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.date.DateValueSemanticsProvider")
 public class Date extends Magnitude<Date> {
     private static final long serialVersionUID = 1L;
     private final DateTime date;

@@ -24,8 +24,6 @@ import java.util.List;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
-import com.google.common.base.Objects;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -33,7 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits.BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -41,9 +39,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorCom
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
-import org.apache.isis.core.progmodel.facets.properties.javaxvaldigits.BigDecimalFacetForPropertyFromJavaxValidationDigitsAnnotation;
-import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
+import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
+import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
@@ -152,7 +149,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
                 
                 if(facet instanceof BigDecimalFacetDerivedFromJdoColumn) {
                     
-                    if(underlying instanceof BigDecimalFacetForPropertyFromJavaxValidationDigitsAnnotation) {
+                    if(underlying instanceof BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation) {
 
                         if(notNullButNotEqual(facet.getLength(), underlying.getLength())) {
                             validationFailures.add("%s: @javax.jdo.annotations.Column(length=...) different from @javax.validation.constraint.Digits(...); should equal the sum of its integer and fraction attributes", association.getIdentifier().toClassAndNameIdentityString());

@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
 import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
+import org.apache.isis.core.metamodel.facets.collections.interaction.InteractionWithCollectionRemoveFacet;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

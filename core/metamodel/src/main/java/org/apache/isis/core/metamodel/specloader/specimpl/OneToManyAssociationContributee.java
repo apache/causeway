@@ -19,7 +19,6 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -32,12 +31,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
-import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacet;
-import org.apache.isis.core.metamodel.facets.members.resolve.RenderFacetAbstract;
-import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacetAbstract;
-import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
@@ -45,9 +42,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
-import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacetImpl;
-import org.apache.isis.core.progmodel.facets.members.resolve.RenderFacetAnnotation;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetImpl;
 
 public class OneToManyAssociationContributee extends OneToManyAssociationImpl implements ContributeeMember {
 

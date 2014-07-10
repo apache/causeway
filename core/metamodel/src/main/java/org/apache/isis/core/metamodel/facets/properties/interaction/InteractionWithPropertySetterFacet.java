@@ -24,7 +24,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
-import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 
 /**
  * Indicates that (the specified subclass of) {@link PropertyInteractionEvent} should be posted to the

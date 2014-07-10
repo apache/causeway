@@ -19,12 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.collections.modify;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -63,4 +65,27 @@ public interface CollectionFacet extends Facet {
      */
     TypeOfFacet getTypeOfFacet();
 
+
+    public static class Utils {
+
+        public static CollectionFacet getCollectionFacetFromSpec(final ObjectAdapter objectRepresentingCollection) {
+            final ObjectSpecification collectionSpec = objectRepresentingCollection.getSpecification();
+            return collectionSpec.getFacet(CollectionFacet.class);
+        }
+
+        public static int size(final ObjectAdapter collection) {
+            final CollectionFacet facet = getCollectionFacetFromSpec(collection);
+            return facet.size(collection);
+        }
+
+        public static List<ObjectAdapter> convertToAdapterList(final ObjectAdapter collection) {
+            final CollectionFacet facet = getCollectionFacetFromSpec(collection);
+            final List<ObjectAdapter> adapters = new ArrayList<ObjectAdapter>();
+            for (final ObjectAdapter adapter : facet.iterable(collection)) {
+                adapters.add(adapter);
+            }
+            return adapters;
+        }
+
+    }
 }

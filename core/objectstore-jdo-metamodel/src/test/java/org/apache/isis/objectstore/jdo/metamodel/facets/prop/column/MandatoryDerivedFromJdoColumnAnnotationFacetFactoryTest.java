@@ -26,8 +26,8 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
-import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 
 public class MandatoryDerivedFromJdoColumnAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

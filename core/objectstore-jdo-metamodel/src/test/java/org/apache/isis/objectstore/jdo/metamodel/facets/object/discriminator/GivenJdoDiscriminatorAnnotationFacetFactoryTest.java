@@ -23,14 +23,12 @@ import java.util.List;
 import javax.jdo.annotations.Discriminator;
 import javax.jdo.annotations.PersistenceCapable;
 
-import junit.framework.Assert;
-
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 
 public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

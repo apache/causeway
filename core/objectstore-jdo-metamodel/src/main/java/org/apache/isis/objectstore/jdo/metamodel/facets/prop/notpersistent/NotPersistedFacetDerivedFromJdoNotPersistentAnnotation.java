@@ -19,7 +19,7 @@
 package org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
 
 
 public class NotPersistedFacetDerivedFromJdoNotPersistentAnnotation extends NotPersistedFacetAbstract {

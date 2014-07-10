@@ -18,7 +18,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;

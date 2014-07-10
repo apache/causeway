@@ -34,7 +34,7 @@ import org.apache.isis.applib.clock.Clock;
  * Value object representing a date and time value. By default, the time is
  * initialised to the current time, unless otherwise specified.
  */
-@Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.value.datetime.DateTimeValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.datetime.DateTimeValueSemanticsProvider")
 public class DateTime extends Magnitude<DateTime> {
 
     private static final long serialVersionUID = 1L;

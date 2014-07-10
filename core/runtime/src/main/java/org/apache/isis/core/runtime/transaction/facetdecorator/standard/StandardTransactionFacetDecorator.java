@@ -26,8 +26,8 @@ import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFace
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
-import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
-import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.runtime.transaction.facetdecorator.TransactionFacetDecoratorAbstract;
 import org.apache.isis.core.runtime.transaction.facets.ActionInvocationFacetWrapTransaction;
 import org.apache.isis.core.runtime.transaction.facets.CollectionAddToFacetWrapTransaction;

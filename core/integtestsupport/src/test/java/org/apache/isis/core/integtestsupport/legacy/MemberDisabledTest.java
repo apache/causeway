@@ -31,8 +31,8 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.core.integtestsupport.legacy.sample.domain.Order;
-import org.apache.isis.core.progmodel.facets.members.disabled.annotation.DisabledFacetAnnotation;
-import org.apache.isis.core.progmodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.members.disabled.annotprop.DisabledFacetAnnotation;
+import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 
 public class MemberDisabledTest extends AbstractTest {
 

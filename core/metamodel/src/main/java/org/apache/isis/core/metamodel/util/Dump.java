@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
-import org.apache.isis.core.metamodel.facets.object.bounded.ChoicesFacetUtils;
+import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.cached.CachedFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtils;
 import org.apache.isis.core.metamodel.spec.ActionType;

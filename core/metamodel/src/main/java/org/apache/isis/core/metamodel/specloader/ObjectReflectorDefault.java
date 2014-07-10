@@ -53,8 +53,8 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorSet;
-import org.apache.isis.core.metamodel.facets.object.bounded.ChoicesFacetUtils;
-import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetUtils;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
@@ -80,7 +80,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.metamodel.specloader.specimpl.objectlist.ObjectSpecificationForFreeStandingList;
+import org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
@@ -508,7 +508,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
         // ... and create the specs
         if (FreeStandingList.class.isAssignableFrom(cls)) {
-            return new ObjectSpecificationForFreeStandingList(specContext, objectMemberContext);
+            return new ObjectSpecificationOnStandaloneList(specContext, objectMemberContext);
         } else {
             final SpecificationLoaderSpi specificationLoader = this;
             final IntrospectionContext introspectionContext = new IntrospectionContext(getClassSubstitutor());

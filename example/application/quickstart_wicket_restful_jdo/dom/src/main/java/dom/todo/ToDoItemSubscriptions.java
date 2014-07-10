@@ -41,7 +41,9 @@ public class ToDoItemSubscriptions {
         AcceptEvents,
         RejectEventsWithRecoverableException,
         RejectEventsWithNonRecoverableException,
-        ThrowOtherException
+        ThrowOtherException,
+        HideDependenciesCollection,
+        HideSimilarToCollection
     }
     private Behaviour behaviour = Behaviour.AcceptEvents;
 
@@ -80,43 +82,95 @@ public class ToDoItemSubscriptions {
     @Programmatic
     @Subscribe
     public void on(ToDoItem.AbstractActionInteractionEvent ev) {
-        rejectIfRequired();
-        recordEvent(ev);
-        LOG.info(ev.getEventDescription() + ": " + container.titleOf(ev.getSource()));
+        switch(ev.getMode()) {
+            case HIDE:
+                break;
+            case DISABLE:
+                break;
+            case VALIDATE:
+                break;
+            case EXECUTE:
+                rejectIfRequired();
+                recordEvent(ev);
+                LOG.info(ev.getEventDescription() + ": " + container.titleOf(ev.getSource()));
+                break;
+        }
     }
 
     @Programmatic
     @Subscribe
     public void on(ActionInteractionEvent<?> ev) {
-        rejectIfRequired();
-        recordEvent(ev);
-        LOG.info(ev.getIdentifier().getMemberName() + ": " + container.titleOf(ev.getSource()));
+        switch(ev.getMode()) {
+            case HIDE:
+                break;
+            case DISABLE:
+                break;
+            case VALIDATE:
+                break;
+            case EXECUTE:
+                rejectIfRequired();
+                recordEvent(ev);
+                LOG.info(ev.getIdentifier().getMemberName() + ": " + container.titleOf(ev.getSource()));
+                break;
+        }
     }
 
     @Programmatic
     @Subscribe
     public void on(PropertyInteractionEvent<?,?> ev) {
-        rejectIfRequired();
-        recordEvent(ev);
-        if(ev.getIdentifier().getMemberName().contains("description")) {
-            String newValue = (String) ev.getNewValue();
-            if(newValue.matches(".*demo veto.*")) {
-                throw new RecoverableException("oh no you don't! " + ev.getNewValue());
-            }
+        switch(ev.getMode()) {
+            case HIDE:
+                break;
+            case DISABLE:
+                break;
+            case VALIDATE:
+                break;
+            case EXECUTE:
+                rejectIfRequired();
+                recordEvent(ev);
+                if(ev.getIdentifier().getMemberName().contains("description")) {
+                    String newValue = (String) ev.getNewValue();
+                    if(newValue.matches(".*demo veto.*")) {
+                        throw new RecoverableException("oh no you don't! " + ev.getNewValue());
+                    }
+                }
+                LOG.info(container.titleOf(ev.getSource()) + ", changed " + ev.getIdentifier().getMemberName() + " : " + ev.getOldValue() + " -> " + ev.getNewValue());
+                break;
         }
-        LOG.info(container.titleOf(ev.getSource()) + ", changed " + ev.getIdentifier().getMemberName() + " : " + ev.getOldValue() + " -> " + ev.getNewValue());
     }
     
     @Programmatic
     @Subscribe
     public void on(CollectionInteractionEvent<?,?> ev) {
-        rejectIfRequired();
-        recordEvent(ev);
-        if(ev.getOf() == CollectionInteractionEvent.Of.ADD_TO) {
-            LOG.info(container.titleOf(ev.getSource()) + ", added to " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
-        } else {
-            LOG.info(container.titleOf(ev.getSource()) + ", removed from " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
+        switch (ev.getMode()) {
+            case HIDE:
+                // this is how a subscriber could hide a collection
+                if(getSubscriberBehaviour() == Behaviour.HideDependenciesCollection) {
+                    if(ev.getIdentifier().getMemberName().equals("dependencies")) {
+                        ev.vetoHide();
+                    }
+                }
+                if(getSubscriberBehaviour() == Behaviour.HideSimilarToCollection) {
+                    if(ev.getIdentifier().getMemberName().equals("similarTo")) {
+                        ev.vetoHide();
+                    }
+                }
+                break;
+            case DISABLE:
+                break;
+            case VALIDATE:
+                break;
+            case EXECUTE:
+                rejectIfRequired();
+                recordEvent(ev);
+                if(ev.getOf() == CollectionInteractionEvent.Of.ADD_TO) {
+                    LOG.info(container.titleOf(ev.getSource()) + ", added to " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
+                } else {
+                    LOG.info(container.titleOf(ev.getSource()) + ", removed from " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
+                }
+                break;
         }
+
     }
     //endregion
 

@@ -21,21 +21,22 @@ package org.apache.isis.core.metamodel.facets.properties.interaction;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
-import org.apache.isis.applib.FatalException;
-import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
 import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
+import org.apache.isis.core.metamodel.facets.InteractionHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
-import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public abstract class InteractionWithPropertyClearFacetAbstract
         extends SingleValueFacetAbstract<Class<? extends PropertyInteractionEvent<?,?>>>
         implements InteractionWithPropertyClearFacet, MultiTypedFacet {
+
 
     public static Class<? extends Facet> type() {
         return PropertyClearFacet.class;
@@ -43,7 +44,7 @@ public abstract class InteractionWithPropertyClearFacetAbstract
 
     private final PropertyOrCollectionAccessorFacet getterFacet;
     private final PropertyClearFacet clearFacet;
-    private final Helper helper;
+    private final InteractionHelper interactionHelper;
 
     public InteractionWithPropertyClearFacetAbstract(
             final Class<? extends PropertyInteractionEvent<?, ?>> eventType,
@@ -54,7 +55,7 @@ public abstract class InteractionWithPropertyClearFacetAbstract
         super(type(), eventType, holder);
         this.getterFacet = getterFacet;
         this.clearFacet = clearFacet;
-        this.helper = new Helper(servicesInjector);
+        this.interactionHelper = new InteractionHelper(servicesInjector, AbstractInteractionEvent.Mode.EXECUTE);
     }
 
     @Override
@@ -63,7 +64,7 @@ public abstract class InteractionWithPropertyClearFacetAbstract
             return;
         }
 
-        if(helper.getEventBusService() == null) {
+        if(!interactionHelper.hasEventBusService()) {
             clearFacet.clearProperty(targetAdapter);
             return;
         }
@@ -72,31 +73,15 @@ public abstract class InteractionWithPropertyClearFacetAbstract
         clearFacet.clearProperty(targetAdapter);
         final Object newValue = getterFacet.getProperty(targetAdapter);
 
-        postEventIfChanged(targetAdapter, getIdentified().getIdentifier(), oldValue, newValue);
-    }
-
-
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    private void postEventIfChanged(
-            final ObjectAdapter targetAdapter,
-            final Identifier identifier,
-            final Object oldValue,
-            final Object newValue) {
-
         if(Objects.equal(oldValue, newValue)) {
             // do nothing.
             return;
         }
-        try {
-            final Class type = value();
-            final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
-            final PropertyInteractionEvent<?, ?> event = Util.newEvent(type, source, identifier, oldValue, newValue);
 
-            helper.postEvent(event);
-        } catch (Exception e) {
-            throw new FatalException(e);
-        }
+        interactionHelper.postEventForPropertyClear(value(), targetAdapter, getIdentified(), oldValue, newValue);
     }
+
+
 
     // //////////////////////////////////////
     // MultiTypedFacet

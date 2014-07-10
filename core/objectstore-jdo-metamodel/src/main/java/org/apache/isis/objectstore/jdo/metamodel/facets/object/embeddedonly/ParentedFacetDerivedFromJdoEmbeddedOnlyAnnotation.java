@@ -21,7 +21,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.embeddedonly;
 import javax.jdo.annotations.EmbeddedOnly;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.aggregated.ParentedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacetAbstract;
 
 /**
  * Derived from being {@link EmbeddedOnly}.

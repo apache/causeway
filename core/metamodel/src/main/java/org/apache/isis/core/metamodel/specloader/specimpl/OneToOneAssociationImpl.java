@@ -36,15 +36,14 @@ import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.object.bounded.ChoicesFacetUtils;
+import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
-import org.apache.isis.core.metamodel.facets.properties.modify.PropertyInitializationFacet;
-import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.PropertyAccessContext;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
@@ -57,7 +56,7 @@ import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.progmodel.facets.param.autocomplete.MinLengthUtil;
+import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 
 public class OneToOneAssociationImpl extends ObjectAssociationAbstract implements OneToOneAssociation {
 

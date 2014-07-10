@@ -19,35 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.object.immutable;
 
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class ImmutableFacetUtils {
+@Deprecated
+public final class ImmutableFacetUtils {
 
+    @Deprecated
     public static boolean isAlwaysImmutable(final ObjectSpecification specification) {
-        // this is a workaround for a dubious test
-        if (specification == null) {
-            return false;
-        }
-
-        final ImmutableFacet immutableFacet = specification.getFacet(ImmutableFacet.class);
-        if (immutableFacet == null) {
-            return false;
-        }
-        return immutableFacet.when() == When.ALWAYS;
+        return ImmutableFacet.Utils.isAlwaysImmutable(specification);
     }
 
     public static boolean isImmutableOncePersisted(final ObjectSpecification specification) {
-        // this is a workaround for a dubious test
-        if (specification == null) {
-            return false;
-        }
-
-        final ImmutableFacet immutableFacet = specification.getFacet(ImmutableFacet.class);
-        if (immutableFacet == null) {
-            return false;
-        }
-        return immutableFacet.when() == When.ONCE_PERSISTED;
+        return ImmutableFacet.Utils.isImmutableOncePersisted(specification);
     }
 
     private ImmutableFacetUtils() {

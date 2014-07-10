@@ -26,7 +26,7 @@ import javax.jdo.annotations.Version;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 
 public class JdoVersionAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

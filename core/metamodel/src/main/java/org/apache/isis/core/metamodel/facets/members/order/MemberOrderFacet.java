@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets.members.order;
 
 import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
-import org.apache.isis.core.metamodel.facets.object.orderactions.ActionOrderFacet;
-import org.apache.isis.core.metamodel.facets.object.orderfields.FieldOrderFacet;
+import org.apache.isis.core.metamodel.facets.object.actionorder.ActionOrderFacet;
+import org.apache.isis.core.metamodel.facets.object.fieldorder.FieldOrderFacet;
 
 /**
  * The preferred mechanism for determining the order in which the members of the

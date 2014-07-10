@@ -27,7 +27,7 @@ import org.apache.wicket.markup.html.image.resource.RenderedDynamicImageResource
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.progmodel.facets.value.image.ImageValueFacet;
+import org.apache.isis.core.metamodel.facets.value.image.ImageValueFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 

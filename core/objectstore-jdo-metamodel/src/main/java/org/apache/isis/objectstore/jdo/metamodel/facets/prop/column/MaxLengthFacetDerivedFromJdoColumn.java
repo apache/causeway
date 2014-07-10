@@ -19,7 +19,7 @@
 package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacetAbstract;
 
 
 public class MaxLengthFacetDerivedFromJdoColumn extends MaxLengthFacetAbstract {

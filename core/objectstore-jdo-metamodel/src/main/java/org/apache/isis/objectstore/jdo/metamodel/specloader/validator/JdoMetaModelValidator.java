@@ -21,7 +21,7 @@ package org.apache.isis.objectstore.jdo.metamodel.specloader.validator;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.object.aggregated.ParentedFacet;
+import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;

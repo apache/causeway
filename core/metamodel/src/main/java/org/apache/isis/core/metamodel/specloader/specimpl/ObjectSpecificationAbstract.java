@@ -50,12 +50,12 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.help.HelpFacet;
-import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
+import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.object.aggregated.ParentedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.ClearDirtyObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.IsDirtyObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.MarkDirtyObjectFacet;
@@ -64,12 +64,12 @@ import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
-import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
@@ -78,8 +78,7 @@ import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
 import org.apache.isis.core.metamodel.spec.*;
 import org.apache.isis.core.metamodel.spec.feature.*;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
-import org.apache.isis.core.metamodel.specloader.specimpl.objectlist.ObjectSpecificationForFreeStandingList;
-import org.apache.isis.core.progmodel.facets.actions.notcontributed.NotContributedFacet;
+import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
 
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
 
@@ -471,7 +470,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     /**
-     * The name according to any available {@link org.apache.isis.core.metamodel.facets.named.NamedFacet},
+     * The name according to any available {@link org.apache.isis.core.metamodel.facets.all.named.NamedFacet},
      * but falling back to {@link #getFullIdentifier()} otherwise.
      */
     @Override
@@ -681,7 +680,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * The association with the given {@link ObjectAssociation#getId() id}.
      * 
      * <p>
-     * This is overridable because {@link ObjectSpecificationForFreeStandingList}
+     * This is overridable because {@link org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList}
      * simply returns <tt>null</tt>.
      * 
      * <p>
@@ -689,7 +688,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * 
      * <p>
      * TODO: could this be made final? (ie does the framework ever call this
-     * method for an {@link ObjectSpecificationForFreeStandingList})
+     * method for an {@link org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList})
      */
     @Override
     public ObjectAssociation getAssociation(final String id) {

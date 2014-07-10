@@ -74,6 +74,18 @@ public abstract class AbstractInteractionEvent<S> extends java.util.EventObject 
     }
     //endregion
 
+    //region > vetoHide, isHidden
+    private boolean hidden;
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void vetoHide() {
+        this.hidden = true;
+    }
+    //endregion
+
+
     //region > toString
     @Override
     public String toString() {

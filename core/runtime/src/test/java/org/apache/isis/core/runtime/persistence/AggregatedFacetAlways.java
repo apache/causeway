@@ -21,7 +21,7 @@ package org.apache.isis.core.runtime.persistence;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.aggregated.ParentedFacet;
+import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacet;
 
 public class AggregatedFacetAlways extends MarkerFacetAbstract {
 

@@ -21,7 +21,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey;
 import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetAbstract;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 
 

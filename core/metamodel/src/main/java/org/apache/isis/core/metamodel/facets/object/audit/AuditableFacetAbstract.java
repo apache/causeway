@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.object.audit;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.actions.command.CommandFacetAbstract.Enablement;
 
 
 public abstract class AuditableFacetAbstract extends FacetAbstract implements

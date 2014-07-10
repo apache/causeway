@@ -19,18 +19,17 @@
 
 package org.apache.isis.core.integtestsupport.legacy;
 
+import org.junit.Test;
+import org.apache.isis.applib.services.wrapper.HiddenException;
+import org.apache.isis.core.integtestsupport.legacy.sample.domain.Country;
+import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberAnnotation;
+import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod;
+
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-
-import org.junit.Test;
-
-import org.apache.isis.applib.services.wrapper.HiddenException;
-import org.apache.isis.core.integtestsupport.legacy.sample.domain.Country;
-import org.apache.isis.core.progmodel.facets.members.hidden.annotation.HiddenFacetOnMemberAnnotation;
-import org.apache.isis.core.progmodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.members.hidden.method.HideForContextFacetViaMethod;
 
 public class MemberHiddenTest extends AbstractTest {
 

@@ -28,9 +28,9 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacet;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
-import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
@@ -43,11 +43,11 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.progmodel.facets.actions.validate.ActionValidationFacet;
-import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacet;
-import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
-import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacet;
+import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
+import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateAddToFacet;
+import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
 
 public class MetaModelRow implements Comparable<MetaModelRow>{
 

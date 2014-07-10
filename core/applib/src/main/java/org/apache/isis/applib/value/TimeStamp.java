@@ -29,7 +29,7 @@ import org.apache.isis.applib.clock.Clock;
  * 
  * @see DateTime
  */
-@Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.value.timestamp.TimeStampValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.metamodel.facets.value.timestamp.TimeStampValueSemanticsProvider")
 public class TimeStamp extends Magnitude<TimeStamp> {
 
     private static final long serialVersionUID = 1L;

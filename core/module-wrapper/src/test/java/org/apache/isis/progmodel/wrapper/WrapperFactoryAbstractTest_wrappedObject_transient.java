@@ -41,7 +41,6 @@ import org.apache.isis.applib.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.events.PropertyVisibilityEvent;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.services.wrapper.DisabledException;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
@@ -54,16 +53,15 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.progmodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.progmodel.facets.members.disabled.staticmethod.DisabledFacetAlwaysEverywhere;
-import org.apache.isis.core.progmodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
-import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetterFacetViaSetterMethod;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAlwaysEverywhere;
+import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
+import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.tck.dom.claimapp.employees.Employee;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.core.wrapper.WrapperFactoryAbstract;
-import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 
 /**
  * Contract test.

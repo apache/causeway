@@ -19,7 +19,7 @@
 package org.apache.isis.objectstore.jdo.metamodel.facets.object.discriminator;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.object.objecttype.ObjectSpecIdFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
 
 
 public class ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation extends

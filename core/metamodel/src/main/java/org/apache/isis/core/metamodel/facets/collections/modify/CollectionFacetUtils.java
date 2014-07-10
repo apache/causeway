@@ -19,55 +19,28 @@
 
 package org.apache.isis.core.metamodel.facets.collections.modify;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+@Deprecated
 public final class CollectionFacetUtils {
+
     private CollectionFacetUtils() {
     }
 
-    public static CollectionFacet getCollectionFacetFromSpec(final ObjectAdapter objectRepresentingCollection) {
-        final ObjectSpecification collectionSpec = objectRepresentingCollection.getSpecification();
-        return collectionSpec.getFacet(CollectionFacet.class);
-    }
-
-    public static int size(final ObjectAdapter collection) {
-        final CollectionFacet facet = getCollectionFacetFromSpec(collection);
-        return facet.size(collection);
-    }
-
-    public static ObjectAdapter firstElement(final ObjectAdapter collection) {
-        final CollectionFacet facet = getCollectionFacetFromSpec(collection);
-        return facet.firstElement(collection);
-    }
-
-    /**
-     * @deprecated - use instead {@link #convertToList(ObjectAdapter)}.
-     */
     @Deprecated
-    public static Object[] convertToArray(final ObjectAdapter collection) {
-        return convertToList(collection).toArray();
+    public static CollectionFacet getCollectionFacetFromSpec(final ObjectAdapter objectRepresentingCollection) {
+        return CollectionFacet.Utils.getCollectionFacetFromSpec(objectRepresentingCollection);
     }
 
-    public static List<Object> convertToList(final ObjectAdapter collection) {
-        final CollectionFacet facet = getCollectionFacetFromSpec(collection);
-        final List<Object> objects = new ArrayList<Object>();
-        for (final ObjectAdapter adapter : facet.iterable(collection)) {
-            objects.add(adapter.getObject());
-        }
-        return objects;
+    @Deprecated
+    public static int size(final ObjectAdapter collection) {
+        return CollectionFacet.Utils.size(collection);
     }
 
+    @Deprecated
     public static List<ObjectAdapter> convertToAdapterList(final ObjectAdapter collection) {
-        final CollectionFacet facet = getCollectionFacetFromSpec(collection);
-        final List<ObjectAdapter> adapters = new ArrayList<ObjectAdapter>();
-        for (final ObjectAdapter adapter : facet.iterable(collection)) {
-            adapters.add(adapter);
-        }
-        return adapters;
+        return CollectionFacet.Utils.convertToAdapterList(collection);
     }
 
 }

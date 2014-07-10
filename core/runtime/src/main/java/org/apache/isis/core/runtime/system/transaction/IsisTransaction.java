@@ -78,12 +78,12 @@ import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFace
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.facets.object.publish.PublishedObjectFacet;
+import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext.TransactionState;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.progmodel.facets.actions.invoke.CommandUtil;
+import org.apache.isis.core.metamodel.facets.actions.invoke.CommandUtil;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -91,7 +91,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Persiste
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
-import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 

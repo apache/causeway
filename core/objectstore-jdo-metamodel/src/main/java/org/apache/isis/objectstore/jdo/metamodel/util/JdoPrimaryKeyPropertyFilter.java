@@ -22,8 +22,8 @@ package org.apache.isis.objectstore.jdo.metamodel.util;
 import javax.jdo.annotations.PrimaryKey;
 
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyFacet;

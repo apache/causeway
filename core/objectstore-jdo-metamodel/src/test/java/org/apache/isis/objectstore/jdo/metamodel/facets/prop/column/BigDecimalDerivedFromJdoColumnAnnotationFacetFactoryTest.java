@@ -27,8 +27,8 @@ import java.util.List;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 
 public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 

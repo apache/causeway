@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAware;
-import org.apache.isis.core.progmodel.facets.object.objecttype.ObjectSpecIdFacetDerivedFromClassName;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName;
 
 public class JdoDiscriminatorAnnotationFacetFactory extends FacetFactoryAbstract implements ClassSubstitutorAware  {
 

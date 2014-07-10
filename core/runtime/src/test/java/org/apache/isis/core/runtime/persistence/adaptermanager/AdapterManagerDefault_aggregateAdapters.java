@@ -45,7 +45,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.progmodel.app.IsisMetaModel;
+import org.apache.isis.core.metamodel.app.IsisMetaModel;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;

@@ -43,7 +43,7 @@ public final class ReflectorConstants {
      * {@link IsisConfiguration}.
      */
     public static final String META_MODEL_VALIDATOR_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.validator";
-    public static final String META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT = "org.apache.isis.core.progmodel.metamodelvalidator.dflt.MetaModelValidatorDefault";
+    public static final String META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT = "org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault";
 
 
     /**

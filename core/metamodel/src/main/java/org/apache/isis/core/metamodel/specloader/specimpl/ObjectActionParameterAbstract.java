@@ -44,9 +44,9 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
@@ -58,8 +58,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.progmodel.facets.object.bounded.ChoicesFacetFromBoundedAbstract;
-import org.apache.isis.core.progmodel.facets.param.autocomplete.MinLengthUtil;
+import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
+import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 
 public abstract class ObjectActionParameterAbstract implements ObjectActionParameter {
 

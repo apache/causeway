@@ -27,8 +27,8 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.wrapper.DisabledException;
-import org.apache.isis.core.progmodel.facets.collections.disabled.fromimmutable.DisabledFacetForCollectionDerivedFromImmutable;
-import org.apache.isis.core.progmodel.facets.properties.disabled.fromimmutable.DisabledFacetForPropertyDerivedFromImmutable;
+import org.apache.isis.core.metamodel.facets.collections.disabled.fromimmutable.DisabledFacetOnCollectionDerivedFromImmutable;
+import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutable;
 
 public class ObjectImmutableTest extends AbstractTest {
 
@@ -38,7 +38,7 @@ public class ObjectImmutableTest extends AbstractTest {
             product355WO.setDescription("Changed");
             fail("Should have thrown exception");
         } catch (final DisabledException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(DisabledFacetForPropertyDerivedFromImmutable.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(DisabledFacetOnPropertyDerivedFromImmutable.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Description"));
         }
     }
@@ -49,7 +49,7 @@ public class ObjectImmutableTest extends AbstractTest {
             product355WO.setPlaceOfManufacture(countryUsaDO);
             fail("Should have thrown exception");
         } catch (final DisabledException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(DisabledFacetForPropertyDerivedFromImmutable.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(DisabledFacetOnPropertyDerivedFromImmutable.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Place Of Manufacture"));
         }
     }
@@ -60,7 +60,7 @@ public class ObjectImmutableTest extends AbstractTest {
             product355WO.addToSimilarProducts(product850DO);
             fail("Should have thrown exception");
         } catch (final DisabledException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(DisabledFacetForCollectionDerivedFromImmutable.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(DisabledFacetOnCollectionDerivedFromImmutable.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Similar Products"));
         }
     }
@@ -74,7 +74,7 @@ public class ObjectImmutableTest extends AbstractTest {
             product355WO.removeFromSimilarProducts(product850DO);
             fail("Should have thrown exception");
         } catch (final DisabledException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(DisabledFacetForCollectionDerivedFromImmutable.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(DisabledFacetOnCollectionDerivedFromImmutable.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Similar Products"));
         }
     }

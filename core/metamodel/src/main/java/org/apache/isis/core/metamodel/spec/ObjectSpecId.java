@@ -24,7 +24,7 @@ import java.io.Serializable;
 
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
-import org.apache.isis.core.metamodel.facets.object.objecttype.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 
 /**
  * Represents an {@link ObjectSpecification}, as determined by

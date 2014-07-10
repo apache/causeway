@@ -20,7 +20,6 @@
 package org.apache.isis.core.integtestsupport.legacy;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -31,7 +30,7 @@ import org.junit.Test;
 import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.applib.services.wrapper.WrapperObject;
 import org.apache.isis.core.integtestsupport.legacy.sample.domain.Customer;
-import org.apache.isis.core.progmodel.facets.object.validate.method.ValidateObjectFacetViaValidateMethod;
+import org.apache.isis.core.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethod;
 
 public class SaveObjectsTest extends AbstractTest {
 
@@ -104,7 +103,7 @@ public class SaveObjectsTest extends AbstractTest {
             fail("An InvalidImperativelyException should have been thrown");
         } catch (final InvalidException ex) {
 
-            assertThat(ex.getAdvisorClass(), classEqualTo(ValidateObjectFacetViaValidateMethod.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(ValidateObjectFacetMethod.class));
             assertThat(getDomainObjectContainer().isPersistent(newCustomer), is(false)); // not
                                                                                          // saved
             assertThat(ex.getMessage(), Matchers.containsString("No shakes"));

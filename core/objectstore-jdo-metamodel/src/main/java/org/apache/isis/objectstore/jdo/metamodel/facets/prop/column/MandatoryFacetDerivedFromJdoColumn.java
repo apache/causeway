@@ -20,7 +20,7 @@
 package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetAbstract;
 
 /**
  * Derived by presence of an <tt>@Column</tt> method.

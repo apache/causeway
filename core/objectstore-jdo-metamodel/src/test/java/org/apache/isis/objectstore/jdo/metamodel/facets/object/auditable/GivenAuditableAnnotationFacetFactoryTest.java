@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetAuditedAnnotation;
 import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
-import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class GivenAuditableAnnotationFacetFactoryTest extends

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.jdo.annotations.Column;
@@ -27,13 +26,12 @@ import javax.jdo.annotations.IdentityType;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.properties.validating.maxlenannot.MaxLengthFacetOnPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -41,8 +39,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorCom
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
-import org.apache.isis.core.progmodel.facets.properties.validate.maxlenannot.MaxLengthFacetAnnotationForProperty;
-import org.apache.isis.core.progmodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
@@ -119,7 +115,7 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
                         continue;
                     }
 
-                    if(facet instanceof MaxLengthFacetDerivedFromJdoColumn && underlying instanceof MaxLengthFacetAnnotationForProperty) {
+                    if(facet instanceof MaxLengthFacetDerivedFromJdoColumn && underlying instanceof MaxLengthFacetOnPropertyAnnotation) {
                         if(facet.value() != underlying.value()) {
                             validationFailures.add("%s: incompatible usage of Isis' @MaxLength annotation and @javax.jdo.annotations.Column with inconsistent lengths; use just @javax.jdo.annotations.Column(length=...)", association.getIdentifier().toClassAndNameIdentityString());
                         }

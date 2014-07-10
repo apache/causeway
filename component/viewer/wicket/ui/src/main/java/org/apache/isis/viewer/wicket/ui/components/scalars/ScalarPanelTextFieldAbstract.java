@@ -31,8 +31,8 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
-import org.apache.isis.core.metamodel.facets.maxlen.MaxLengthFacet;
-import org.apache.isis.core.metamodel.facets.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 

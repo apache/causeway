@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
+import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInteractionFacet;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;

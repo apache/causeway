@@ -30,8 +30,9 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetDefault;
+import org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.mandatory.MandatoryFacetOnPropertyMandatoryAnnotation;
+import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -39,7 +40,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorCom
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
-import org.apache.isis.core.progmodel.facets.properties.mandatory.annotation.MandatoryFacetExplicitForProperty;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.OptionalFacetDerivedFromJdoPrimaryKeyAnnotation;
@@ -65,7 +65,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                 // we must keep an optional facet here for different reasons
                 return;
             }
-            if (existingFacet instanceof MandatoryFacetExplicitForProperty) {
+            if (existingFacet instanceof MandatoryFacetOnPropertyMandatoryAnnotation) {
                 // do not replace this facet; 
                 // an explicit @Mandatory annotation cannot be overridden by @Column annotation
                 return;
