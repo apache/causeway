@@ -71,9 +71,10 @@ public abstract class PropertySetterFacetForInteractionAbstract
 
 
         try {
-            // ... post the executing event
+            // pick up existing event (saved in thread local during the validation phase)
             final PropertyInteractionEvent<?, ?> existingEvent = propertyInteractionFacet.currentInteraction.get();
 
+            // ... post the executing event
             final Object oldValue = getterFacet.getProperty(targetAdapter);
             final Object newValue = ObjectAdapter.Util.unwrap(newValueAdapter);
 

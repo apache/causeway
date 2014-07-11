@@ -62,57 +62,58 @@ public abstract class PropertyInteractionFacetAbstract
             return null;
         }
 
+        // reset (belt-n-braces)
+        currentInteraction.set(null);
+
         final PropertyInteractionEvent<?, ?> event =
                 interactionHelper.postEventForProperty(
                         eventType(), null, AbstractInteractionEvent.Phase.HIDE, getIdentified(), ic.getTarget(), null, null);
-        if (event == null || !event.isHidden()) {
-            // make available for next phase
-            currentInteraction.set(event);
-            return null;
-        } else {
-            // clean up
-            currentInteraction.set(null);
+        if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
         }
+        return null;
     }
 
     @Override
     public String disables(UsabilityContext<? extends UsabilityEvent> ic) {
-        final PropertyInteractionEvent<?, ?> existingEvent = currentInteraction.get();
+        if(!interactionHelper.hasEventBusService()) {
+            return null;
+        }
+
+        // reset (belt-n-braces)
+        currentInteraction.set(null);
+
         final PropertyInteractionEvent<?, ?> event =
                 interactionHelper.postEventForProperty(
-                    eventType(), existingEvent, AbstractInteractionEvent.Phase.DISABLE, getIdentified(), ic.getTarget(), null, null);
-        if (event == null || !event.isDisabled()) {
-            // make available for next phase
-            currentInteraction.set(event);
-            return null;
-        } else {
-            // clean up
-            currentInteraction.set(null);
+                    eventType(), null, AbstractInteractionEvent.Phase.DISABLE, getIdentified(), ic.getTarget(), null, null);
+        if (event != null && event.isDisabled()) {
             return event.getDisabledReason();
         }
+        return null;
     }
 
     @Override
     public String invalidates(ValidityContext<? extends ValidityEvent> ic) {
+        if(!interactionHelper.hasEventBusService()) {
+            return null;
+        }
 
-        final PropertyInteractionEvent<?, ?> existingEvent = currentInteraction.get();
+        // reset (belt-n-braces)
+        currentInteraction.set(null);
 
         final Object oldValue = getterFacet.getProperty(ic.getTarget());
         final Object proposedValue = proposedFrom(ic);
 
         final PropertyInteractionEvent<?, ?> event =
                 interactionHelper.postEventForProperty(
-                        eventType(), existingEvent, AbstractInteractionEvent.Phase.VALIDATE, getIdentified(), ic.getTarget(), oldValue, proposedValue);
-        if(event == null || !event.isInvalid()) {
-            // make available for next phase
-            currentInteraction.set(event);
-            return null;
-        } else {
-            // clean up
-            currentInteraction.set(null);
+                        eventType(), null, AbstractInteractionEvent.Phase.VALIDATE, getIdentified(), ic.getTarget(), oldValue, proposedValue);
+        if (event != null && event.isInvalid()) {
             return event.getInvalidityReason();
         }
+
+        // make available for next phases (executing/executed)
+        currentInteraction.set(event);
+        return null;
     }
 
     private static Object proposedFrom(ValidityContext<? extends ValidityEvent> ic) {

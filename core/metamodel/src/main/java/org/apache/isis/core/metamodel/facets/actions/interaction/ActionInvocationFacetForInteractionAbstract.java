@@ -175,14 +175,14 @@ public abstract class ActionInvocationFacetForInteractionAbstract
             final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
             final Command command = commandContext != null ? commandContext.getCommand() : null;
 
-            // ... post the executing event
+            // pick up existing event (saved in thread local during the validation phase)
             final ActionInteractionEvent<?> existingEvent = actionInteractionFacet.currentInteraction.get();
 
+            // ... post the executing event
             final ActionInteractionEvent<?> event =
                     interactionHelper.postEventForAction(
                             eventType, existingEvent, command, AbstractInteractionEvent.Phase.EXECUTING,
                             owningAction, targetAdapter, arguments);
-            actionInteractionFacet.currentInteraction.set(event);
 
             // ... invoke the action
             final InvocationResult invocationResult = internalInvoke(owningAction, targetAdapter, arguments);

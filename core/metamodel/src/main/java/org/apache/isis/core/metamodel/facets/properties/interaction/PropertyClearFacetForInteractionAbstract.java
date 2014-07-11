@@ -73,11 +73,11 @@ public abstract class PropertyClearFacetForInteractionAbstract
 
 
         try {
-            // ... post the executing event
+            // pick up existing event (saved in thread local during the validation phase)
             final PropertyInteractionEvent<?, ?> existingEvent = propertyInteractionFacet.currentInteraction.get();
 
+            // ... post the executing event
             final Object oldValue = getterFacet.getProperty(targetAdapter);
-
             interactionHelper.postEventForProperty(
                     value(), existingEvent, AbstractInteractionEvent.Phase.EXECUTING,
                     getIdentified(), targetAdapter, oldValue, null);

@@ -56,12 +56,10 @@ public class InteractionHelper {
         }
         try {
             final ActionInteractionEvent<?> event;
-            if (existingEvent != null) {
+            if (existingEvent != null && phase.isValidatingOrLater()) {
                 event = existingEvent;
-                if(phase.isValidatingOrLater()) {
-                    final Object[] arguments = ObjectAdapter.Util.unwrap(argumentAdapters);
-                    event.setArguments(Arrays.asList(arguments));
-                }
+                final Object[] arguments = ObjectAdapter.Util.unwrap(argumentAdapters);
+                event.setArguments(Arrays.asList(arguments));
                 if(phase.isExecutingOrLater()) {
                     event.setCommand(command);
                 }
@@ -121,12 +119,10 @@ public class InteractionHelper {
         }
         try {
             final PropertyInteractionEvent<?, ?> event;
-            if(existingEvent != null) {
+            if(existingEvent != null && phase.isValidatingOrLater()) {
                 event = existingEvent;
-                if(phase.isValidatingOrLater()) {
-                    setEventOldValue(event, oldValue);
-                    setEventNewValue(event, newValue);
-                }
+                setEventOldValue(event, oldValue);
+                setEventNewValue(event, newValue);
             } else {
                 final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
                 final Identifier identifier = identified.getIdentifier();
@@ -197,12 +193,10 @@ public class InteractionHelper {
         }
         try {
             final CollectionInteractionEvent<?, ?> event;
-            if (existingEvent != null) {
+            if (existingEvent != null && phase.isValidatingOrLater()) {
                 event = existingEvent;
-                if(phase.isValidatingOrLater()) {
-                    event.setOf(of);
-                    setEventValue(event, reference);
-                }
+                event.setOf(of);
+                setEventValue(event, reference);
             } else {
                 final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
                 final Identifier identifier = identified.getIdentifier();

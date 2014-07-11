@@ -40,6 +40,14 @@ public abstract class ActionInteractionFacetAbstract
 
     private final InteractionHelper interactionHelper;
 
+    /**
+     * Pass event from validate to executing phases.
+     *
+     * <p>
+     * A new event is created for the hide, disable and validate phases.  But when the validate completes (and if does
+     * not invalidate), then the event is passed through to the executing phase using this thread-local.
+     * </p>
+     */
     final static ThreadLocal<ActionInteractionEvent<?>> currentInteraction = new ThreadLocal<ActionInteractionEvent<?>>();
 
     public ActionInteractionFacetAbstract(
@@ -57,65 +65,63 @@ public abstract class ActionInteractionFacetAbstract
             return null;
         }
 
+        // reset (belt-n-braces)
+        currentInteraction.set(null);
+
         final ActionInteractionEvent<?> event =
                 interactionHelper.postEventForAction(
                         eventType(), null, null, AbstractInteractionEvent.Phase.HIDE,
                         getIdentified(), ic.getTarget(), null);
-        if (event == null || !event.isHidden()) {
-            // make available for next phase
-            currentInteraction.set(event);
-            return null;
-        } else {
-            // clean up
-            currentInteraction.set(null);
+        if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
         }
+        return null;
     }
 
     @Override
     public String disables(UsabilityContext<? extends UsabilityEvent> ic) {
-        final ActionInteractionEvent<?> existingEvent = currentInteraction.get();
+        if(!interactionHelper.hasEventBusService()) {
+            return null;
+        }
+
+        // reset (belt-n-braces)
+        currentInteraction.set(null);
+
         final ActionInteractionEvent<?> event =
                 interactionHelper.postEventForAction(
-                        eventType(), existingEvent, null, AbstractInteractionEvent.Phase.DISABLE,
+                        eventType(), null, null, AbstractInteractionEvent.Phase.DISABLE,
                         getIdentified(), ic.getTarget(), null);
-        if (event == null || !event.isDisabled()) {
-            // make available for next phase
-            currentInteraction.set(event);
-            return null;
-        } else {
-            // clean up
-            currentInteraction.set(null);
+        if (event != null && event.isDisabled()) {
             return event.getDisabledReason();
         }
+        return null;
     }
 
     @Override
     public String invalidates(ValidityContext<? extends ValidityEvent> ic) {
+        if(!interactionHelper.hasEventBusService()) {
+            return null;
+        }
 
-        final ActionInteractionEvent<?> existingEvent = currentInteraction.get();
+        // reset (belt-n-braces)
+        currentInteraction.set(null);
 
         final ActionInvocationContext aic = (ActionInvocationContext) ic;
-
         final ActionInteractionEvent<?> event =
                 interactionHelper.postEventForAction(
-                        eventType(), existingEvent, null, AbstractInteractionEvent.Phase.VALIDATE,
+                        eventType(), null, null, AbstractInteractionEvent.Phase.VALIDATE,
                         getIdentified(), ic.getTarget(), aic.getArgs());
-        if(event == null || !event.isInvalid()) {
-            // make available for next phase
-            currentInteraction.set(event);
-            return null;
-        } else {
-            // clean up
-            currentInteraction.set(null);
+        if (event != null && event.isInvalid()) {
             return event.getInvalidityReason();
         }
-    }
 
+        // make available for next phases (executing/executed)
+        currentInteraction.set(event);
+        return null;
+    }
 
     private Class<?> eventType() {
         return value();
     }
-
 
 }

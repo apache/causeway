@@ -52,63 +52,62 @@ public abstract class CollectionInteractionFacetAbstract extends SingleClassValu
             return null;
         }
 
+        // reset (belt-n-braces)
+        currentInteraction.set(null);
+
         final CollectionInteractionEvent<?, ?> event =
                 interactionHelper.postEventForCollection(
                         eventType(), null, AbstractInteractionEvent.Phase.HIDE, getIdentified(), ic.getTarget(), CollectionInteractionEvent.Of.ACCESS, null);
-        if (event == null || !event.isHidden()) {
-            // make available for next phase
-            currentInteraction.set(event);
-            return null;
-        } else {
-            // clean up
-            currentInteraction.set(null);
+        if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
         }
+        return null;
     }
 
     @Override
     public String disables(UsabilityContext<? extends UsabilityEvent> ic) {
-        final CollectionInteractionEvent<?, ?> existingEvent = currentInteraction.get();
+        if(!interactionHelper.hasEventBusService()) {
+            return null;
+        }
+
+        // reset (belt-n-braces)
+        currentInteraction.set(null);
+
         final CollectionInteractionEvent<?, ?> event =
                 interactionHelper.postEventForCollection(
-                    eventType(), existingEvent, AbstractInteractionEvent.Phase.DISABLE, getIdentified(), ic.getTarget(), CollectionInteractionEvent.Of.ACCESS, null);
-        if (event == null || !event.isDisabled()) {
-            // make available for next phase
-            currentInteraction.set(event);
-            return null;
-        } else {
-            // clean up
-            currentInteraction.set(null);
+                    eventType(), null, AbstractInteractionEvent.Phase.DISABLE, getIdentified(), ic.getTarget(), CollectionInteractionEvent.Of.ACCESS, null);
+        if (event != null && event.isDisabled()) {
             return event.getDisabledReason();
         }
+        return null;
     }
 
     @Override
     public String invalidates(ValidityContext<? extends ValidityEvent> ic) {
+        if(!interactionHelper.hasEventBusService()) {
+            return null;
+        }
 
-        final CollectionInteractionEvent<?, ?> existingEvent = currentInteraction.get();
+        // reset (belt-n-braces)
+        currentInteraction.set(null);
 
         final ProposedHolder catc = (ProposedHolder) ic;
         final Object proposed = catc.getProposed().getObject();
 
         final CollectionInteractionEvent<?, ?> event =
                 interactionHelper.postEventForCollection(
-                        eventType(), existingEvent, AbstractInteractionEvent.Phase.VALIDATE, getIdentified(), ic.getTarget(), CollectionInteractionEvent.Of.ADD_TO, proposed);
-        if(event == null || !event.isInvalid()) {
-            // make available for next phase
-            currentInteraction.set(event);
-            return null;
-        } else {
-            // clean up
-            currentInteraction.set(null);
+                        eventType(), null, AbstractInteractionEvent.Phase.VALIDATE, getIdentified(), ic.getTarget(), CollectionInteractionEvent.Of.ADD_TO, proposed);
+        if (event != null && event.isInvalid()) {
             return event.getInvalidityReason();
         }
-    }
 
+        // make available for next phases (executing/executed)
+        currentInteraction.set(event);
+        return null;
+    }
 
     private Class<?> eventType() {
         return value();
     }
-
 
 }

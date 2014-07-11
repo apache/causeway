@@ -88,8 +88,10 @@ public abstract class CollectionRemoveFromFacetForInteractionAbstract
             // contains the element, so
             // execute the remove wrapped between the executing and executed events ...
 
-            // ... post the executing event
+            // pick up existing event (saved in thread local during the validation phase)
             final CollectionInteractionEvent<?, ?> existingEvent = collectionInteractionFacet.currentInteraction.get();
+
+            // ... post the executing event
             final CollectionInteractionEvent<?, ?> event = interactionHelper.postEventForCollection(
                     value(), existingEvent, AbstractInteractionEvent.Phase.EXECUTING,
                     getIdentified(), targetAdapter, CollectionInteractionEvent.Of.REMOVE_FROM, referencedObject);
