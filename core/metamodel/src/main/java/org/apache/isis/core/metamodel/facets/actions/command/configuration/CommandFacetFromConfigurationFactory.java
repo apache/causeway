@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 
 /**
  * {@link CommandFacet} can also be installed via a naming convention, see
- * {@link org.apache.isis.core.metamodel.facets.actions.invoke.InteractionWithActionFacetFactory}.
+ * {@link org.apache.isis.core.metamodel.facets.actions.interaction.ActionInteractionFacetFactory}.
  */
 public class CommandFacetFromConfigurationFactory extends FacetFactoryAbstract implements IsisConfigurationAware  {
 

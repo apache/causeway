@@ -63,9 +63,17 @@ public abstract class CollectionInteractionEvent<S,T> extends AbstractInteractio
 
     //region > value
     private T value;
+
+    /**
+     * The proposed reference to either add or remove (per {@link #getOf()}), populated at {@link Phase#VALIDATE}
+     * and subsequent phases (is null for {@link Phase#HIDE hidden} and {@link Phase#DISABLE disable} phases).
+     */
     public T getValue() {
         return value;
     }
+    /**
+     * Not API, set by the framework.
+     */
     public void setValue(T value) {
         this.value = value;
     }
@@ -82,13 +90,13 @@ public abstract class CollectionInteractionEvent<S,T> extends AbstractInteractio
         /**
          * The collection is being added to
          * ({@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#VALIDATE validity} check and
-         * {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTE execution}).
+         * {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTED execution}).
          */
         ADD_TO,
         /**
          * The collection is being removed from
          * ({@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#VALIDATE validity} check and
-         * {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTE execution}).
+         * {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTED execution}).
          */
         REMOVE_FROM
     }
@@ -112,7 +120,7 @@ public abstract class CollectionInteractionEvent<S,T> extends AbstractInteractio
     //region > toString
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "source,identifier,of,mode,value");
+        return ObjectContracts.toString(this, "source,identifier,phase,of,value");
     }
     //endregion
 }

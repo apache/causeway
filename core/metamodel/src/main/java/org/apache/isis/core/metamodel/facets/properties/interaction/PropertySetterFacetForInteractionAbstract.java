@@ -60,30 +60,44 @@ public abstract class PropertySetterFacetForInteractionAbstract
     }
 
     @Override
-    public void setProperty(ObjectAdapter targetAdapter, ObjectAdapter valueAdapter) {
+    public void setProperty(ObjectAdapter targetAdapter, ObjectAdapter newValueAdapter) {
         if(setterFacet == null) {
             return;
         }
         if(!interactionHelper.hasEventBusService()) {
-            setterFacet.setProperty(targetAdapter, valueAdapter);
+            setterFacet.setProperty(targetAdapter, newValueAdapter);
             return;
         }
 
-        final Object oldValue = getterFacet.getProperty(targetAdapter);
-        setterFacet.setProperty(targetAdapter, valueAdapter);
-        final Object newValue = getterFacet.getProperty(targetAdapter);
 
-        if(Objects.equal(oldValue, newValue)) {
-            // do nothing.
-            return;
+        try {
+            // ... post the executing event
+            final PropertyInteractionEvent<?, ?> existingEvent = propertyInteractionFacet.currentInteraction.get();
+
+            final Object oldValue = getterFacet.getProperty(targetAdapter);
+            final Object newValue = ObjectAdapter.Util.unwrap(newValueAdapter);
+
+            interactionHelper.postEventForProperty(
+                    value(), existingEvent, AbstractInteractionEvent.Phase.EXECUTING,
+                    getIdentified(), targetAdapter, oldValue, newValue);
+
+            // ... perform the property modification
+            setterFacet.setProperty(targetAdapter, newValueAdapter);
+
+            // reading the actual value from the target object, playing it safe...
+            final Object actualNewValue = getterFacet.getProperty(targetAdapter);
+            if(Objects.equal(oldValue, actualNewValue)) {
+                return;
+            }
+
+            // ... post the executing event
+            final PropertyInteractionEvent<?, ?> event = propertyInteractionFacet.currentInteraction.get();
+            interactionHelper.postEventForProperty(value(), verify(event), AbstractInteractionEvent.Phase.EXECUTED, getIdentified(), targetAdapter, oldValue, actualNewValue);
+
+        } finally {
+            // clean up
+            propertyInteractionFacet.currentInteraction.set(null);
         }
-
-        // ... and post the event (reusing existing event if available)
-        final PropertyInteractionEvent<?, ?> event = propertyInteractionFacet.currentInteraction.get();
-        interactionHelper.postEventForProperty(value(), verify(event), AbstractInteractionEvent.Phase.EXECUTE, targetAdapter, getIdentified(), oldValue, newValue);
-
-        // clean up
-        propertyInteractionFacet.currentInteraction.set(null);
     }
 
     /**

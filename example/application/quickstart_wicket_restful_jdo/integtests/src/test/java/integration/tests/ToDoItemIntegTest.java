@@ -33,10 +33,10 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
+import org.jmock.Sequence;
 import org.jmock.auto.Mock;
 import org.joda.time.LocalDate;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.apache.isis.applib.NonRecoverableException;
@@ -191,21 +191,27 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             }
 
             @Test
-            public void subscriberReceivesEvent() throws Exception {
+            public void subscriberReceivesEvents() throws Exception {
 
                 // given
-                assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.ActionExecuteAccept));
-                assertThat(toDoItem.isComplete(), is(false));
+                toDoItemSubscriptions.reset();
+                assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.AnyExecuteAccept));
+                assertThat(unwrap(toDoItem).isComplete(), is(false));
 
                 // when
                 toDoItem.completed();
 
                 // then
-                assertThat(toDoItem.isComplete(), is(true));
+                assertThat(unwrap(toDoItem).isComplete(), is(true));
 
                 // and then
-                final ToDoItem.CompletedEvent ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(ToDoItem.CompletedEvent.class);
-                assertThat(ev, is(not(nullValue())));
+                final List<ToDoItem.CompletedEvent> receivedEvents = toDoItemSubscriptions.receivedEvents(ToDoItem.CompletedEvent.class);
+
+                // hide, disable, validate, executing, executed
+                // sent to both the general on(ActionInteractionEvent ev)
+                // and also the specific on(final ToDoItem.CompletedEvent ev)
+                assertThat(receivedEvents.size(), is(5*2));
+                final ToDoItem.CompletedEvent ev = receivedEvents.get(0);
 
                 ToDoItem source = ev.getSource();
                 assertThat(source, is(equalTo(unwrap(toDoItem))));
@@ -216,7 +222,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void subscriberVetoesEventWithRecoverableException() throws Exception {
 
                 // given
-                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithRecoverableException);
+                toDoItemSubscriptions.subscriberBehaviour(null, ToDoItemSubscriptions.Behaviour.AnyExecuteVetoWithRecoverableException);
 
                 // then
                 expectedExceptions.expect(RecoverableException.class);
@@ -229,7 +235,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void subscriberVetoesEventWithNonRecoverableException() throws Exception {
 
                 // given
-                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithNonRecoverableException);
+                toDoItemSubscriptions.subscriberBehaviour(null, ToDoItemSubscriptions.Behaviour.AnyExecuteVetoWithNonRecoverableException);
 
                 // then
                 expectedExceptions.expect(NonRecoverableException.class);
@@ -242,7 +248,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
 
                 // given
-                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithOtherException);
+                toDoItemSubscriptions.subscriberBehaviour(null, ToDoItemSubscriptions.Behaviour.AnyExecuteVetoWithOtherException);
 
                 // when
                 toDoItem.completed();
@@ -285,25 +291,41 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             @Test
             public void raisesEvent() throws Exception {
 
+                final Sequence busRulesThenExec = context.sequence("busRulesThenExec");
                 // then
                 context.checking(new Expectations() {{
-                    oneOf(mockEventBusService).post(with(completedEvent()));
+                    oneOf(mockEventBusService).post(with(completedEvent(AbstractInteractionEvent.Phase.HIDE)));
+                    inSequence(busRulesThenExec);
+                    oneOf(mockEventBusService).post(with(completedEvent(AbstractInteractionEvent.Phase.DISABLE)));
+                    inSequence(busRulesThenExec);
+                    oneOf(mockEventBusService).post(with(completedEvent(AbstractInteractionEvent.Phase.VALIDATE)));
+                    inSequence(busRulesThenExec);
+                    oneOf(mockEventBusService).post(with(completedEvent(AbstractInteractionEvent.Phase.EXECUTING)));
+                    inSequence(busRulesThenExec);
+                    oneOf(mockEventBusService).post(with(completedEvent(AbstractInteractionEvent.Phase.EXECUTED)));
+                    inSequence(busRulesThenExec);
                 }});
 
                 // when
                 toDoItem.completed();
             }
 
-            private Matcher<Object> completedEvent() {
+            private Matcher<Object> completedEvent(final AbstractInteractionEvent.Phase phase) {
                 return new TypeSafeMatcher<Object>() {
                     @Override
                     protected boolean matchesSafely(Object item) {
-                        return item instanceof ToDoItem.CompletedEvent;
+                        if (!(item instanceof ToDoItem.CompletedEvent)) {
+                            return false;
+                        }
+
+                        final ToDoItem.CompletedEvent completedEvent = (ToDoItem.CompletedEvent) item;
+                        return completedEvent.getPhase() == phase;
+
                     }
 
                     @Override
                     public void describeTo(Description description) {
-                        description.appendText(" instance of a ToDoItem.CompletedEvent");
+                        description.appendText(" instance of a ToDoItem.CompletedEvent, " + phase);
                     }
                 };
             }
@@ -374,14 +396,14 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void subscriberReceivesEvent() throws Exception {
 
                 // given
-                assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.ActionExecuteAccept));
+                assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.AnyExecuteAccept));
                 unwrap(toDoItem).setComplete(true);
 
                 // when
                 toDoItem.notYetCompleted();
 
                 // then
-                assertThat(toDoItem.isComplete(), is(false));
+                assertThat(unwrap(toDoItem).isComplete(), is(false));
 
                 // and then
                 final ActionInteractionEvent<ToDoItem> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(ActionInteractionEvent.class);
@@ -465,34 +487,41 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                     // then received events
                     @SuppressWarnings("unchecked")
                     final List<EventObject> receivedEvents = toDoItemSubscriptions.receivedEvents();
-                    assertThat(receivedEvents.size(), is(2));
 
-                    // then first event is a collection interaction
-                    // (this is posted programmatically in ToDoItem#add)
-                    final EventObject ev0 = receivedEvents.get(1);
-                    Assert.assertThat(ev0 instanceof CollectionInteractionEvent, is(true));
-                    final CollectionInteractionEvent<ToDoItem,ToDoItem> ciEv = (CollectionInteractionEvent<ToDoItem, ToDoItem>) ev0;
+                    assertThat(receivedEvents.size(), is(7));
+                    assertThat(receivedEvents.get(0) instanceof ActionInteractionEvent, is(true)); // ToDoItem#add() executed
+                    assertThat(receivedEvents.get(1) instanceof CollectionInteractionEvent, is(true)); // ToDoItem#dependencies add, executed
+                    assertThat(receivedEvents.get(2) instanceof CollectionInteractionEvent, is(true)); // ToDoItem#dependencies add, executing
+                    assertThat(receivedEvents.get(3) instanceof ActionInteractionEvent, is(true)); // ToDoItem#add executing
+                    assertThat(receivedEvents.get(4) instanceof ActionInteractionEvent, is(true)); // ToDoItem#add validate
+                    assertThat(receivedEvents.get(5) instanceof ActionInteractionEvent, is(true)); // ToDoItem#add disable
+                    assertThat(receivedEvents.get(6) instanceof ActionInteractionEvent, is(true)); // ToDoItem#add hide
+
+                    // inspect the collection interaction (posted programmatically in ToDoItem#add)
+                    final CollectionInteractionEvent<ToDoItem,ToDoItem> ciEv = (CollectionInteractionEvent<ToDoItem, ToDoItem>) toDoItemSubscriptions.mostRecentlyReceivedEvent(CollectionInteractionEvent.class);
+                    assertThat(ciEv, is(notNullValue()));
 
                     assertThat(ciEv.getSource(), is(equalTo(unwrap(toDoItem))));
                     assertThat(ciEv.getIdentifier().getMemberName(), is("dependencies"));
                     assertThat(ciEv.getOf(), is(CollectionInteractionEvent.Of.ADD_TO));
                     assertThat(ciEv.getValue(), is(unwrap(otherToDoItem)));
 
-                    // then second (most recently received) event is an action interaction
-                    // (this is posted declaratively by framework after ToDoItem#add completed)
-                    final EventObject ev1 = receivedEvents.get(0);
-                    Assert.assertThat(ev1 instanceof ActionInteractionEvent, is(true));
-                    final ActionInteractionEvent<ToDoItem> aiEv = (ActionInteractionEvent<ToDoItem>) ev1;
+                    // inspect the action interaction (posted declaratively by framework)
+                    final ActionInteractionEvent<ToDoItem> aiEv = (ActionInteractionEvent<ToDoItem>) toDoItemSubscriptions.mostRecentlyReceivedEvent(ActionInteractionEvent.class);
+                    assertThat(aiEv, is(notNullValue()));
 
                     assertThat(aiEv.getSource(), is(equalTo(unwrap(toDoItem))));
                     assertThat(aiEv.getIdentifier().getMemberName(), is("add"));
+                    assertThat(aiEv.getArguments().size(), is(1));
+                    assertThat(aiEv.getArguments().get(0), is(unwrap((Object)otherToDoItem)));
+                    assertThat(aiEv.getCommand(), is(notNullValue()));
                 }
 
                 @Test
                 public void subscriberVetoesEventWithRecoverableException() throws Exception {
 
                     // given
-                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithRecoverableException);
+                    toDoItemSubscriptions.subscriberBehaviour(null, ToDoItemSubscriptions.Behaviour.AnyExecuteVetoWithRecoverableException);
 
                     // then
                     expectedExceptions.expect(RecoverableException.class);
@@ -505,7 +534,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 public void subscriberVetoesEventWithNonRecoverableException() throws Exception {
 
                     // given
-                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithNonRecoverableException);
+                    toDoItemSubscriptions.subscriberBehaviour(null, ToDoItemSubscriptions.Behaviour.AnyExecuteVetoWithNonRecoverableException);
 
                     // then
                     expectedExceptions.expect(NonRecoverableException.class);
@@ -518,7 +547,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
 
                     // given
-                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithOtherException);
+                    toDoItemSubscriptions.subscriberBehaviour(null, ToDoItemSubscriptions.Behaviour.AnyExecuteVetoWithOtherException);
 
                     // when
                     toDoItem.add(otherToDoItem);
@@ -587,47 +616,10 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 }
 
                 @Test
-                public void subscriberReceivesEvent() throws Exception {
-
-                    // given
-                    toDoItemSubscriptions.reset();
-                    assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.ActionExecuteAccept));
-                    assertThat(toDoItem.getDependencies().size(), is(1));
-
-                    // when
-                    toDoItem.remove(otherToDoItem);
-
-                    // then received events
-                    @SuppressWarnings("unchecked")
-                    final List<EventObject> receivedEvents = toDoItemSubscriptions.receivedEvents();
-                    assertThat(receivedEvents.size(), is(2));
-
-                    // then first event is a collection interaction
-                    // (this is posted programmatically in ToDoItem#add)
-                    final EventObject ev0 = receivedEvents.get(1);
-                    Assert.assertThat(ev0 instanceof CollectionInteractionEvent, is(true));
-                    final CollectionInteractionEvent<ToDoItem,ToDoItem> ciEv = (CollectionInteractionEvent<ToDoItem, ToDoItem>) ev0;
-
-                    assertThat(ciEv.getSource(), is(equalTo(unwrap(toDoItem))));
-                    assertThat(ciEv.getIdentifier().getMemberName(), is("dependencies"));
-                    assertThat(ciEv.getOf(), is(CollectionInteractionEvent.Of.REMOVE_FROM));
-                    assertThat(ciEv.getValue(), is(unwrap(otherToDoItem)));
-
-                    // then second (most recently received) event is an action interaction
-                    // (this is posted declaratively by framework after ToDoItem#add completed)
-                    final EventObject ev1 = receivedEvents.get(0);
-                    Assert.assertThat(ev1 instanceof ActionInteractionEvent, is(true));
-                    final ActionInteractionEvent<ToDoItem> aiEv = (ActionInteractionEvent<ToDoItem>) ev1;
-
-                    assertThat(aiEv.getSource(), is(equalTo(unwrap(toDoItem))));
-                    assertThat(aiEv.getIdentifier().getMemberName(), is("remove"));
-                }
-
-                @Test
                 public void subscriberVetoesEventWithRecoverableException() throws Exception {
 
                     // given
-                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithRecoverableException);
+                    toDoItemSubscriptions.subscriberBehaviour(null, ToDoItemSubscriptions.Behaviour.AnyExecuteVetoWithRecoverableException);
 
                     // then
                     expectedExceptions.expect(RecoverableException.class);
@@ -640,7 +632,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 public void subscriberVetoesEventWithNonRecoverableException() throws Exception {
 
                     // given
-                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithNonRecoverableException);
+                    toDoItemSubscriptions.subscriberBehaviour(null, ToDoItemSubscriptions.Behaviour.AnyExecuteVetoWithNonRecoverableException);
 
                     // then
                     expectedExceptions.expect(NonRecoverableException.class);
@@ -653,7 +645,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
 
                     // given
-                    toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithOtherException);
+                    toDoItemSubscriptions.subscriberBehaviour(null, ToDoItemSubscriptions.Behaviour.AnyExecuteVetoWithOtherException);
 
                     // when
                     toDoItem.remove(otherToDoItem);
@@ -844,7 +836,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void subscriberReceivesEvent() throws Exception {
 
                 // given
-                assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.ActionExecuteAccept));
+                assertThat(toDoItemSubscriptions.getSubscriberBehaviour(), is(ToDoItemSubscriptions.Behaviour.AnyExecuteAccept));
                 assertThat(toDoItem.getDescription(), is("Buy bread"));
 
                 // when
@@ -866,7 +858,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void subscriberVetoesEventWithRecoverableException() throws Exception {
 
                 // given
-                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithRecoverableException);
+                toDoItemSubscriptions.subscriberBehaviour(null, ToDoItemSubscriptions.Behaviour.AnyExecuteVetoWithRecoverableException);
 
                 // then
                 expectedExceptions.expect(RecoverableException.class);
@@ -880,7 +872,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void subscriberVetoesEventWithNonRecoverableException() throws Exception {
 
                 // given
-                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithNonRecoverableException);
+                toDoItemSubscriptions.subscriberBehaviour(null, ToDoItemSubscriptions.Behaviour.AnyExecuteVetoWithNonRecoverableException);
 
                 // then
                 expectedExceptions.expect(NonRecoverableException.class);
@@ -894,7 +886,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
 
                 // given
-                toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.ActionExecuteVetoWithOtherException);
+                toDoItemSubscriptions.subscriberBehaviour(null, ToDoItemSubscriptions.Behaviour.AnyExecuteVetoWithOtherException);
 
                 // when
                 toDoItem.setDescription("Buy bread and butter");
@@ -978,11 +970,6 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
 
                 // then
                 assertThat(toDoItem.getNotes(), is(newNotes));
-
-                // and then not published so not received
-                @SuppressWarnings("unchecked")
-                final PropertyChangedEvent<ToDoItem,String> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(PropertyChangedEvent.class);
-                assertThat(ev, is(nullValue()));
             }
 
             @Test
@@ -994,6 +981,28 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 // then
                 assertThat(toDoItem.getNotes(), is((String)null));
             }
+
+            @Test
+            public void suscriberReceivedDefaultEvent() throws Exception {
+
+                final String newNotes = "Lorem ipsum yada yada";
+
+                // when
+                toDoItem.setNotes(newNotes);
+
+                // then
+                assertThat(unwrap(toDoItem).getNotes(), is(newNotes));
+
+                // and then receive the default event.
+                @SuppressWarnings("unchecked")
+                final PropertyInteractionEvent.Default ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(PropertyInteractionEvent.Default.class);
+                assertThat(ev, is(notNullValue()));
+
+                assertThat(ev.getSource(), is((Object)unwrap(toDoItem)));
+                assertThat(ev.getNewValue(), is((Object)newNotes));
+            }
+
+
         }
 
         public static class OwnedBy extends ToDoItemIntegTest {

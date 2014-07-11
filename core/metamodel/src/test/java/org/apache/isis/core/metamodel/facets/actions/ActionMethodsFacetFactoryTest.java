@@ -31,6 +31,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInteractionFacetFactory;
+import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInvocationFacetForInteractionAbstract;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
@@ -44,7 +46,7 @@ import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
-import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -60,8 +62,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.actions.invoke.InteractionWithActionFacetAbstract;
-import org.apache.isis.core.metamodel.facets.actions.invoke.InteractionWithActionFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacet;
@@ -85,7 +85,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     private final ObjectSpecification customerSpec = new ObjectSpecificationStub("Customer");
 
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {
-        final InteractionWithActionFacetFactory facetFactory = new InteractionWithActionFacetFactory();
+        final ActionInteractionFacetFactory facetFactory = new ActionInteractionFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
         reflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -100,15 +100,15 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof InteractionWithActionFacetAbstract);
-        final InteractionWithActionFacetAbstract actionInvocationFacetViaMethod = (InteractionWithActionFacetAbstract) facet;
+        assertTrue(facet instanceof ActionInvocationFacetForInteractionAbstract);
+        final ActionInvocationFacetForInteractionAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForInteractionAbstract) facet;
         assertEquals(actionMethod, actionInvocationFacetViaMethod.getMethods().get(0));
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(actionMethod));
     }
 
     public void testProvidesDefaultNameForActionButIgnoresAnyNamedAnnotation() {
-        final InteractionWithActionFacetFactory facetFactory = new InteractionWithActionFacetFactory();
+        final ActionInteractionFacetFactory facetFactory = new ActionInteractionFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
         reflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -130,7 +130,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testPicksUpDebugPrefixAndSetsNameAppropriatelyAlso() {
-        final InteractionWithActionFacetFactory facetFactory = new InteractionWithActionFacetFactory();
+        final ActionInteractionFacetFactory facetFactory = new ActionInteractionFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
         reflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -154,7 +154,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testPicksUpExplorationPrefixAndSetsNameAppropriatelyAlso() {
-        final InteractionWithActionFacetFactory facetFactory = new InteractionWithActionFacetFactory();
+        final ActionInteractionFacetFactory facetFactory = new ActionInteractionFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
         reflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -178,7 +178,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testCannotHaveBothDebugAndThenExplorationPrefix() {
-        final InteractionWithActionFacetFactory facetFactory = new InteractionWithActionFacetFactory();
+        final ActionInteractionFacetFactory facetFactory = new ActionInteractionFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
         reflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -199,7 +199,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testCannotHaveBothExplorationAndThenDebugPrefix() {
-        final InteractionWithActionFacetFactory facetFactory = new InteractionWithActionFacetFactory();
+        final ActionInteractionFacetFactory facetFactory = new ActionInteractionFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
         reflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -567,7 +567,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testActionReturnTypeWhenVoid() {
-        final InteractionWithActionFacetFactory facetFactory = new InteractionWithActionFacetFactory();
+        final ActionInteractionFacetFactory facetFactory = new ActionInteractionFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
         reflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -581,12 +581,12 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        final InteractionWithActionFacetAbstract actionInvocationFacetViaMethod = (InteractionWithActionFacetAbstract) facet;
+        final ActionInvocationFacetForInteractionAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForInteractionAbstract) facet;
         assertEquals(voidSpec, actionInvocationFacetViaMethod.getReturnType());
     }
 
     public void testActionReturnTypeWhenNotVoid() {
-        final InteractionWithActionFacetFactory facetFactory = new InteractionWithActionFacetFactory();
+        final ActionInteractionFacetFactory facetFactory = new ActionInteractionFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
         reflector.setLoadSpecificationStringReturn(stringSpec);
 
@@ -601,12 +601,12 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        final InteractionWithActionFacetAbstract actionInvocationFacetViaMethod = (InteractionWithActionFacetAbstract) facet;
+        final ActionInvocationFacetForInteractionAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForInteractionAbstract) facet;
         assertEquals(stringSpec, actionInvocationFacetViaMethod.getReturnType());
     }
 
     public void testActionOnType() {
-        final InteractionWithActionFacetFactory facetFactory = new InteractionWithActionFacetFactory();
+        final ActionInteractionFacetFactory facetFactory = new ActionInteractionFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
         reflector.setLoadSpecificationStringReturn(customerSpec);
 
@@ -621,7 +621,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        final InteractionWithActionFacetAbstract actionInvocationFacetViaMethod = (InteractionWithActionFacetAbstract) facet;
+        final ActionInvocationFacetForInteractionAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForInteractionAbstract) facet;
         assertEquals(customerSpec, actionInvocationFacetViaMethod.getOnType());
     }
 
@@ -769,7 +769,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     
     public void testActionsPickedUpFromSuperclass() {
-        final InteractionWithActionFacetFactory facetFactory = new InteractionWithActionFacetFactory();
+        final ActionInteractionFacetFactory facetFactory = new ActionInteractionFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
         reflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -793,7 +793,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testActionsPickedUpFromSuperclassButHelpersFromSubClass() {
-        final InteractionWithActionFacetFactory facetFactory = new InteractionWithActionFacetFactory();
+        final ActionInteractionFacetFactory facetFactory = new ActionInteractionFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
         reflector.setLoadSpecificationStringReturn(voidSpec);
 

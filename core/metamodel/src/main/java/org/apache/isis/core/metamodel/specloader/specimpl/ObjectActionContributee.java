@@ -48,7 +48,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
-import org.apache.isis.core.metamodel.facets.actions.invoke.CommandUtil;
+import org.apache.isis.core.metamodel.facets.actions.interaction.CommandUtil;
 
 public class ObjectActionContributee extends ObjectActionImpl implements ContributeeMember {
 

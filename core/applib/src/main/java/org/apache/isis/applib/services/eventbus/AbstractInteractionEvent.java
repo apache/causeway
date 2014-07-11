@@ -38,7 +38,24 @@ public abstract class AbstractInteractionEvent<S> extends java.util.EventObject 
         HIDE,
         DISABLE,
         VALIDATE,
-        EXECUTE
+        EXECUTING,
+        EXECUTED;
+
+        /**
+         * The significance being that at this point the proposed values/arguments are known, and so the event can be
+         * fully populated.
+         */
+        public boolean isValidatingOrLater() {
+            return this == VALIDATE || isExecutingOrLater();
+        }
+
+        /**
+         * When the {@link org.apache.isis.applib.services.command.Command} is made available on the {@link ActionInteractionEvent}
+         * via {@link ActionInteractionEvent#getCommand()}.
+         */
+        public boolean isExecutingOrLater() {
+            return this == EXECUTING || this == EXECUTED;
+        }
     }
 
     private Phase phase;

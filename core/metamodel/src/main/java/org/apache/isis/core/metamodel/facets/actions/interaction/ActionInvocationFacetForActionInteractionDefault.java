@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.invoke;
+package org.apache.isis.core.metamodel.facets.actions.interaction;
 
 import java.lang.reflect.Method;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
@@ -27,18 +27,18 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class InteractionWithActionFacetDefault
-        extends InteractionWithActionFacetAbstract {
+public class ActionInvocationFacetForActionInteractionDefault
+        extends ActionInvocationFacetForInteractionAbstract {
 
-    public InteractionWithActionFacetDefault(
-            final Method method,
+    public ActionInvocationFacetForActionInteractionDefault(
+            final Class<? extends ActionInteractionEvent<?>> eventType, final Method method,
             final ObjectSpecification onType,
             final ObjectSpecification returnType,
+            final ActionInteractionFacetAbstract actionInteractionFacet,
             final FacetHolder holder,
             final RuntimeContext runtimeContext,
             final AdapterManager adapterManager,
-            final ServicesInjector servicesInjector,
-            final Class<? extends ActionInteractionEvent<?>> eventType) {
-        super(method, onType, returnType, holder, runtimeContext, adapterManager, servicesInjector, eventType);
+            final ServicesInjector servicesInjector) {
+        super(eventType, method, onType, returnType, actionInteractionFacet, holder, runtimeContext, adapterManager, servicesInjector);
     }
 }

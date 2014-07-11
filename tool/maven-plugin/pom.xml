@@ -103,22 +103,27 @@
 		    <artifactId>isis-core-runtime</artifactId>
 		</dependency>
 
-
         <!-- 
         all the plethora of exclusions in the following dependencies
         are to ensure dependency convergence.
         
         In some cases, what would have been a transitive dependency
-        is added as a direct dependency in order that it's divergent dependency
+        is added as a direct dependency in order that its divergent dependency
         can be excluded.
         
-        It's all a bit of a pigs' ear...
+        It's all a bit of a pig's ear...
         -->
 
 		<dependency>
 		      <groupId>org.apache.maven</groupId>
 		      <artifactId>maven-plugin-api</artifactId>
 		      <version>3.0.5</version>
+	    </dependency>
+
+		<dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+		    <version>2.1</version>
 	    </dependency>
 
 		<dependency>

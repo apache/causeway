@@ -34,8 +34,7 @@ public class PropertyClearFacetForPropertyInteractionAnnotation
             final PropertyOrCollectionAccessorFacet getterFacet,
             final PropertyClearFacet clearFacet,
             final PropertyInteractionFacetAbstract propertyInteractionFacet,
-            final ServicesInjector servicesInjector,
-            final FacetHolder holder) {
+            final FacetHolder holder, final ServicesInjector servicesInjector) {
         super(eventType, getterFacet, clearFacet, propertyInteractionFacet, servicesInjector, holder);
     }
 }

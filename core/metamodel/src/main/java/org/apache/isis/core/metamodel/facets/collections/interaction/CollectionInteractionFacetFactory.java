@@ -60,10 +60,12 @@ public class CollectionInteractionFacetFactory extends FacetFactoryAbstract impl
         final CollectionInteractionFacetAbstract collectionInteractionFacet;
         if(collectionInteraction != null) {
             collectionInteractionEventType = collectionInteraction.value();
-            collectionInteractionFacet = new CollectionInteractionFacetAnnotation(collectionInteractionEventType, holder, servicesInjector, getSpecificationLoader());
+            collectionInteractionFacet = new CollectionInteractionFacetAnnotation(
+                    collectionInteractionEventType, holder, servicesInjector, getSpecificationLoader());
         } else {
             collectionInteractionEventType = CollectionInteractionEvent.Default.class;
-            collectionInteractionFacet = new CollectionInteractionFacetDefault(collectionInteractionEventType, holder, servicesInjector, getSpecificationLoader());
+            collectionInteractionFacet = new CollectionInteractionFacetDefault(
+                    collectionInteractionEventType, holder, servicesInjector, getSpecificationLoader());
         }
         FacetUtil.addFacet(collectionInteractionFacet);
 
@@ -87,11 +89,14 @@ public class CollectionInteractionFacetFactory extends FacetFactoryAbstract impl
             // the current collectionAddToFacet will end up as the underlying facet of one of these facets to be created.
             final CollectionAddToFacetForInteractionAbstract replacementFacet;
             if(collectionInteraction != null) {
-                replacementFacet = new CollectionAddToFacetForCollectionInteractionAnnotation(collectionInteractionEventType, getterFacet, collectionAddToFacet, collectionInteractionFacet, servicesInjector, holder);
+                replacementFacet = new CollectionAddToFacetForCollectionInteractionAnnotation(
+                        collectionInteractionEventType, getterFacet, collectionAddToFacet, collectionInteractionFacet, holder, servicesInjector);
             } else if (postsCollectionAddedToEvent != null) {
-                replacementFacet = new CollectionAddToFacetForPostsCollectionAddedToEventAnnotation(postsCollectionAddedToEvent.value(), getterFacet, collectionAddToFacet, collectionInteractionFacet, servicesInjector, holder);
+                replacementFacet = new CollectionAddToFacetForPostsCollectionAddedToEventAnnotation(
+                        postsCollectionAddedToEvent.value(), getterFacet, collectionAddToFacet, collectionInteractionFacet, holder, servicesInjector);
             } else {
-                replacementFacet = new CollectionAddToFacetForCollectionInteractionDefault(collectionInteractionEventType, getterFacet, collectionAddToFacet, collectionInteractionFacet, servicesInjector, holder);
+                replacementFacet = new CollectionAddToFacetForCollectionInteractionDefault(
+                        collectionInteractionEventType, getterFacet, collectionAddToFacet, collectionInteractionFacet, holder, servicesInjector);
             }
             FacetUtil.addFacet(replacementFacet);
         }

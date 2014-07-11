@@ -73,10 +73,12 @@ public class PropertyInteractionFacetFactory extends FacetFactoryAbstract implem
         final PropertyInteractionFacetAbstract propertyInteractionFacet;
         if(propertyInteraction != null) {
             propertyInteractionEventType = propertyInteraction.value();
-            propertyInteractionFacet = new PropertyInteractionFacetAnnotation(propertyInteractionEventType, getterFacet, holder, servicesInjector, getSpecificationLoader());
+            propertyInteractionFacet = new PropertyInteractionFacetAnnotation(
+                    propertyInteractionEventType, getterFacet, holder, servicesInjector, getSpecificationLoader());
         } else {
             propertyInteractionEventType = PropertyInteractionEvent.Default.class;
-            propertyInteractionFacet = new PropertyInteractionFacetDefault(propertyInteractionEventType, getterFacet, holder, servicesInjector, getSpecificationLoader());
+            propertyInteractionFacet = new PropertyInteractionFacetDefault(
+                    propertyInteractionEventType, getterFacet, holder, servicesInjector, getSpecificationLoader());
         }
         FacetUtil.addFacet(propertyInteractionFacet);
 
@@ -96,11 +98,14 @@ public class PropertyInteractionFacetFactory extends FacetFactoryAbstract implem
             // the current setter facet will end up as the underlying facet
             final PropertySetterFacetForInteractionAbstract replacementFacet;
             if(propertyInteraction != null) {
-                replacementFacet = new PropertySetterFacetForPropertyInteractionAnnotation(propertyInteractionEventType, getterFacet, setterFacet, propertyInteractionFacet, servicesInjector, holder);
+                replacementFacet = new PropertySetterFacetForPropertyInteractionAnnotation(
+                        propertyInteractionEventType, getterFacet, setterFacet, propertyInteractionFacet, holder, servicesInjector);
             } else if(postsPropertyChangedEvent != null) {
-                replacementFacet = new PropertySetterFacetForPostsPropertyChangedEventAnnotation(postsPropertyChangedEvent.value(), getterFacet, setterFacet, propertyInteractionFacet, servicesInjector, holder);
+                replacementFacet = new PropertySetterFacetForPostsPropertyChangedEventAnnotation(
+                        postsPropertyChangedEvent.value(), getterFacet, setterFacet, propertyInteractionFacet, holder, servicesInjector);
             } else {
-                replacementFacet = new PropertySetterFacetForPropertyInteractionDefault(PropertyInteractionEvent.Default.class, getterFacet, setterFacet, propertyInteractionFacet, servicesInjector, holder);
+                replacementFacet = new PropertySetterFacetForPropertyInteractionDefault(
+                        PropertyInteractionEvent.Default.class, getterFacet, setterFacet, propertyInteractionFacet, holder, servicesInjector);
             }
             FacetUtil.addFacet(replacementFacet);
         }
@@ -110,11 +115,14 @@ public class PropertyInteractionFacetFactory extends FacetFactoryAbstract implem
             // the current clear facet will end up as the underlying facet
             final PropertyClearFacetForInteractionAbstract replacementFacet;
             if(propertyInteraction != null) {
-                replacementFacet = new PropertyClearFacetForPropertyInteractionAnnotation(propertyInteractionEventType, getterFacet, clearFacet, propertyInteractionFacet, servicesInjector, holder);
+                replacementFacet = new PropertyClearFacetForPropertyInteractionAnnotation(
+                        propertyInteractionEventType, getterFacet, clearFacet, propertyInteractionFacet, holder, servicesInjector);
             } else if(postsPropertyChangedEvent != null) {
-                replacementFacet = new PropertyClearFacetForPostsPropertyChangedEventAnnotation(postsPropertyChangedEvent.value(), getterFacet, clearFacet, propertyInteractionFacet, servicesInjector, holder);
+                replacementFacet = new PropertyClearFacetForPostsPropertyChangedEventAnnotation(
+                        postsPropertyChangedEvent.value(), getterFacet, clearFacet, propertyInteractionFacet, holder, servicesInjector);
             } else {
-                replacementFacet = new PropertyClearFacetForPropertyInteractionDefault(PropertyInteractionEvent.Default.class, getterFacet, clearFacet, propertyInteractionFacet, servicesInjector, holder);
+                replacementFacet = new PropertyClearFacetForPropertyInteractionDefault(
+                        PropertyInteractionEvent.Default.class, getterFacet, clearFacet, propertyInteractionFacet, holder, servicesInjector);
             }
             FacetUtil.addFacet(replacementFacet);
         }

@@ -57,9 +57,17 @@ public abstract class PropertyInteractionEvent<S,T> extends AbstractInteractionE
 
     //region > oldValue
     private T oldValue;
+
+    /**
+     * The current (pre-modification) value of the property; populated at {@link Phase#VALIDATE} and subsequent phases
+     * (but null for {@link Phase#HIDE hidden} and {@link Phase#DISABLE disable} phases).
+     */
     public T getOldValue() {
         return oldValue;
     }
+    /**
+     * Not API; for framework use only.
+     */
     public void setOldValue(T oldValue) {
         this.oldValue = oldValue;
     }
@@ -67,9 +75,16 @@ public abstract class PropertyInteractionEvent<S,T> extends AbstractInteractionE
 
     //region > newValue
     private T newValue;
+    /**
+     * The proposed (post-modification) value of the property; populated at {@link Phase#VALIDATE} and subsequent phases
+     * (but null for {@link Phase#HIDE hidden} and {@link Phase#DISABLE disable} phases).
+     */
     public T getNewValue() {
         return newValue;
     }
+    /**
+     * Not API; for framework use only.
+     */
     public void setNewValue(T newValue) {
         this.newValue = newValue;
     }
@@ -78,7 +93,7 @@ public abstract class PropertyInteractionEvent<S,T> extends AbstractInteractionE
     //region > toString
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "source,identifier,mode,oldValue,newValue");
+        return ObjectContracts.toString(this, "source,identifier,phase,oldValue,newValue");
     }
     //endregion
 }

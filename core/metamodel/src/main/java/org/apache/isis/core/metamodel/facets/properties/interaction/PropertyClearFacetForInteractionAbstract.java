@@ -71,21 +71,35 @@ public abstract class PropertyClearFacetForInteractionAbstract
             return;
         }
 
-        final Object oldValue = getterFacet.getProperty(targetAdapter);
-        clearFacet.clearProperty(targetAdapter);
-        final Object newValue = getterFacet.getProperty(targetAdapter);
 
-        if(Objects.equal(oldValue, newValue)) {
-            // do nothing.
-            return;
+        try {
+            // ... post the executing event
+            final PropertyInteractionEvent<?, ?> existingEvent = propertyInteractionFacet.currentInteraction.get();
+
+            final Object oldValue = getterFacet.getProperty(targetAdapter);
+
+            interactionHelper.postEventForProperty(
+                    value(), existingEvent, AbstractInteractionEvent.Phase.EXECUTING,
+                    getIdentified(), targetAdapter, oldValue, null);
+
+            // ... perform the property clear
+            clearFacet.clearProperty(targetAdapter);
+
+            // reading the actual value from the target object, playing it safe...
+            final Object actualNewValue = getterFacet.getProperty(targetAdapter);
+            if(Objects.equal(oldValue, actualNewValue)) {
+                // do nothing.
+                return;
+            }
+
+            // ... and post the event (reusing existing event if available)
+            final PropertyInteractionEvent<?, ?> event = propertyInteractionFacet.currentInteraction.get();
+            interactionHelper.postEventForProperty(value(), verify(event), AbstractInteractionEvent.Phase.EXECUTED, getIdentified(), targetAdapter, oldValue, actualNewValue);
+
+        } finally {
+            // clean up
+            propertyInteractionFacet.currentInteraction.set(null);
         }
-
-        // ... and post the event (reusing existing event if available)
-        final PropertyInteractionEvent<?, ?> event = propertyInteractionFacet.currentInteraction.get();
-        interactionHelper.postEventForProperty(value(), verify(event), AbstractInteractionEvent.Phase.EXECUTE, targetAdapter, getIdentified(), oldValue, newValue);
-
-        // clean up
-        propertyInteractionFacet.currentInteraction.set(null);
     }
 
     /**

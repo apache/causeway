@@ -72,25 +72,40 @@ public abstract class CollectionRemoveFromFacetForInteractionAbstract
             return;
         }
 
-        final Object referencedObject = ObjectAdapter.Util.unwrap(referencedObjectAdapter);
 
-        // get hold of underlying collection
-        final Object collection = getterFacet.getProperty(targetAdapter);
+        try {
 
-        // don't post event if the collections does not contain object
-        if (!((Collection<?>) collection).contains(referencedObject)) {
-            return;
+            final Object referencedObject = ObjectAdapter.Util.unwrap(referencedObjectAdapter);
+
+            // get hold of underlying collection
+            final Object collection = getterFacet.getProperty(targetAdapter);
+
+            // don't post event if the collections does not contain object
+            if (!((Collection<?>) collection).contains(referencedObject)) {
+                return;
+            }
+
+            // contains the element, so
+            // execute the remove wrapped between the executing and executed events ...
+
+            // ... post the executing event
+            final CollectionInteractionEvent<?, ?> existingEvent = collectionInteractionFacet.currentInteraction.get();
+            final CollectionInteractionEvent<?, ?> event = interactionHelper.postEventForCollection(
+                    value(), existingEvent, AbstractInteractionEvent.Phase.EXECUTING,
+                    getIdentified(), targetAdapter, CollectionInteractionEvent.Of.REMOVE_FROM, referencedObject);
+
+            // ... perform remove
+            collectionRemoveFromFacet.remove(targetAdapter, referencedObjectAdapter);
+
+            // ... and post the executed event
+            interactionHelper.postEventForCollection(
+                    value(), verify(event), AbstractInteractionEvent.Phase.EXECUTED,
+                    getIdentified(), targetAdapter, CollectionInteractionEvent.Of.REMOVE_FROM, referencedObject);
+
+        } finally {
+            // clean up
+            collectionInteractionFacet.currentInteraction.set(null);
         }
-
-        // contains the element, so execute the remove...
-        collectionRemoveFromFacet.remove(targetAdapter, referencedObjectAdapter);
-
-        // ... and post the event (reusing existing event if available)
-        final CollectionInteractionEvent<?, ?> event = collectionInteractionFacet.currentInteraction.get();
-        interactionHelper.postEventForCollection(value(), verify(event), AbstractInteractionEvent.Phase.EXECUTE, targetAdapter, getIdentified(), CollectionInteractionEvent.Of.REMOVE_FROM, referencedObject);
-
-        collectionInteractionFacet.currentInteraction.set(null);
-
     }
 
     /**

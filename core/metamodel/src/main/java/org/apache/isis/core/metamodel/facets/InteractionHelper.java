@@ -21,8 +21,10 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.eventbus.*;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -34,8 +36,7 @@ public class InteractionHelper {
     private final ServicesInjector servicesInjector;
 
 
-    public InteractionHelper(
-            final ServicesInjector servicesInjector) {
+    public InteractionHelper(final ServicesInjector servicesInjector) {
         this.servicesInjector = servicesInjector;
     }
 
@@ -44,6 +45,7 @@ public class InteractionHelper {
     public ActionInteractionEvent<?> postEventForAction(
             final Class eventType,
             final ActionInteractionEvent<?> existingEvent,
+            final Command command,
             final AbstractInteractionEvent.Phase phase,
             final IdentifiedHolder identified,
             final ObjectAdapter targetAdapter,
@@ -56,11 +58,18 @@ public class InteractionHelper {
             final ActionInteractionEvent<?> event;
             if (existingEvent != null) {
                 event = existingEvent;
+                if(phase.isValidatingOrLater()) {
+                    final Object[] arguments = ObjectAdapter.Util.unwrap(argumentAdapters);
+                    event.setArguments(Arrays.asList(arguments));
+                }
+                if(phase.isExecutingOrLater()) {
+                    event.setCommand(command);
+                }
             } else {
                 final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
                 final Object[] arguments = ObjectAdapter.Util.unwrap(argumentAdapters);
                 final Identifier identifier = identified.getIdentifier();
-                event = newActionInteractionEvent(eventType, source, identifier, arguments);
+                event = newActionInteractionEvent(eventType, identifier, source, arguments);
             }
             event.setPhase(phase);
             getEventBusService().post(event);
@@ -73,8 +82,8 @@ public class InteractionHelper {
     @SuppressWarnings("unchecked")
     static <S> ActionInteractionEvent<S> newActionInteractionEvent(
             final Class<? extends ActionInteractionEvent<S>> type,
-            final S source,
             final Identifier identifier,
+            final S source,
             final Object... arguments) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
         final Constructor<?>[] constructors = type.getConstructors();
         for (final Constructor<?> constructor : constructors) {
@@ -103,8 +112,8 @@ public class InteractionHelper {
             final Class eventType,
             final PropertyInteractionEvent<?, ?> existingEvent,
             final AbstractInteractionEvent.Phase phase,
-            final ObjectAdapter targetAdapter,
             final IdentifiedHolder identified,
+            final ObjectAdapter targetAdapter,
             final Object oldValue,
             final Object newValue) {
         if(!hasEventBusService()) {
@@ -114,10 +123,14 @@ public class InteractionHelper {
             final PropertyInteractionEvent<?, ?> event;
             if(existingEvent != null) {
                 event = existingEvent;
+                if(phase.isValidatingOrLater()) {
+                    setEventOldValue(event, oldValue);
+                    setEventNewValue(event, newValue);
+                }
             } else {
                 final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
                 final Identifier identifier = identified.getIdentifier();
-                event = newPropertyInteractionEvent(eventType, source, identifier, oldValue, newValue);
+                event = newPropertyInteractionEvent(eventType, identifier, source, oldValue, newValue);
             }
             event.setPhase(phase);
             getEventBusService().post(event);
@@ -127,11 +140,19 @@ public class InteractionHelper {
         }
     }
 
+    private static <S,T> void setEventOldValue(PropertyInteractionEvent<S, T> event, Object oldValue) {
+        event.setOldValue((T) oldValue);
+    }
+
+    private static <S,T> void setEventNewValue(PropertyInteractionEvent<S, T> event, Object newValue) {
+        event.setNewValue((T) newValue);
+    }
+
     @SuppressWarnings("unchecked")
     static <S,T> PropertyInteractionEvent<S,T> newPropertyInteractionEvent(
             final Class<? extends PropertyInteractionEvent<S, T>> type,
-            final S source,
             final Identifier identifier,
+            final S source,
             final T oldValue,
             final T newValue) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
 
@@ -166,8 +187,9 @@ public class InteractionHelper {
     public CollectionInteractionEvent<?, ?> postEventForCollection(
             final Class eventType,
             final CollectionInteractionEvent<?, ?> existingEvent,
-            AbstractInteractionEvent.Phase phase, final ObjectAdapter targetAdapter,
+            AbstractInteractionEvent.Phase phase,
             final IdentifiedHolder identified,
+            final ObjectAdapter targetAdapter,
             final CollectionInteractionEvent.Of of,
             final Object reference) {
         if(!hasEventBusService()) {
@@ -177,11 +199,14 @@ public class InteractionHelper {
             final CollectionInteractionEvent<?, ?> event;
             if (existingEvent != null) {
                 event = existingEvent;
-                event.setOf(of);
+                if(phase.isValidatingOrLater()) {
+                    event.setOf(of);
+                    setEventValue(event, reference);
+                }
             } else {
                 final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
                 final Identifier identifier = identified.getIdentifier();
-                event = newCollectionInteractionEvent(eventType, null, source, identifier, of, reference);
+                event = newCollectionInteractionEvent(eventType, null, identifier, source, of, reference);
             }
             event.setPhase(phase);
             getEventBusService().post(event);
@@ -191,12 +216,16 @@ public class InteractionHelper {
         }
     }
 
+    private static <T,S> void setEventValue(CollectionInteractionEvent<T, S> event, Object reference) {
+        event.setValue((S) reference);
+    }
+
     @SuppressWarnings("unchecked")
     <S, T> CollectionInteractionEvent<S, T> newCollectionInteractionEvent(
             final Class<? extends CollectionInteractionEvent<S, T>> type,
             final AbstractInteractionEvent.Phase phase,
-            final S source,
             final Identifier identifier,
+            final S source,
             final CollectionInteractionEvent.Of of,
             final T value)
             throws NoSuchMethodException, SecurityException, InstantiationException,
@@ -226,7 +255,7 @@ public class InteractionHelper {
             return (CollectionInteractionEvent<S, T>) event;
         }
 
-        if(phase == AbstractInteractionEvent.Phase.EXECUTE) {
+        if(phase == AbstractInteractionEvent.Phase.EXECUTED) {
             if(of == CollectionInteractionEvent.Of.ADD_TO) {
                 // support for @PostsCollectionAddedTo annotation:
                 // search for constructor accepting source, identifier, value
@@ -289,7 +318,10 @@ public class InteractionHelper {
         if (!searchedForEventBusService) {
             eventBusService = this.servicesInjector.lookupService(EventBusService.class);
         }
-        searchedForEventBusService = true;
+        // this caching has been disabled, because it prevents integration tests from switching out the
+        // EventBusService with a mock.
+        // perhaps a better appraoch
+        //searchedForEventBusService = true;
         return eventBusService;
     }
 

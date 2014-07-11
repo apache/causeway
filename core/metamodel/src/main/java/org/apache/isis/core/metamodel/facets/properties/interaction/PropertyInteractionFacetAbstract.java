@@ -24,6 +24,7 @@ import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
 import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.InteractionHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
@@ -63,7 +64,7 @@ public abstract class PropertyInteractionFacetAbstract
 
         final PropertyInteractionEvent<?, ?> event =
                 interactionHelper.postEventForProperty(
-                        eventType(), null, AbstractInteractionEvent.Phase.HIDE, ic.getTarget(), getIdentified(), null, null);
+                        eventType(), null, AbstractInteractionEvent.Phase.HIDE, getIdentified(), ic.getTarget(), null, null);
         if (event == null || !event.isHidden()) {
             // make available for next phase
             currentInteraction.set(event);
@@ -80,7 +81,7 @@ public abstract class PropertyInteractionFacetAbstract
         final PropertyInteractionEvent<?, ?> existingEvent = currentInteraction.get();
         final PropertyInteractionEvent<?, ?> event =
                 interactionHelper.postEventForProperty(
-                    eventType(), existingEvent, AbstractInteractionEvent.Phase.DISABLE, ic.getTarget(), getIdentified(), null, null);
+                    eventType(), existingEvent, AbstractInteractionEvent.Phase.DISABLE, getIdentified(), ic.getTarget(), null, null);
         if (event == null || !event.isDisabled()) {
             // make available for next phase
             currentInteraction.set(event);
@@ -98,13 +99,11 @@ public abstract class PropertyInteractionFacetAbstract
         final PropertyInteractionEvent<?, ?> existingEvent = currentInteraction.get();
 
         final Object oldValue = getterFacet.getProperty(ic.getTarget());
-
-        final ProposedHolder ph = (ProposedHolder) ic;
-        final Object proposedValue = ph.getProposed().getObject();
+        final Object proposedValue = proposedFrom(ic);
 
         final PropertyInteractionEvent<?, ?> event =
                 interactionHelper.postEventForProperty(
-                        eventType(), existingEvent, AbstractInteractionEvent.Phase.VALIDATE, ic.getTarget(), getIdentified(), oldValue, proposedValue);
+                        eventType(), existingEvent, AbstractInteractionEvent.Phase.VALIDATE, getIdentified(), ic.getTarget(), oldValue, proposedValue);
         if(event == null || !event.isInvalid()) {
             // make available for next phase
             currentInteraction.set(event);
@@ -114,6 +113,12 @@ public abstract class PropertyInteractionFacetAbstract
             currentInteraction.set(null);
             return event.getInvalidityReason();
         }
+    }
+
+    private static Object proposedFrom(ValidityContext<? extends ValidityEvent> ic) {
+        final ProposedHolder ph = (ProposedHolder) ic;
+        final ObjectAdapter proposedAdapter = ph.getProposed();
+        return proposedAdapter != null? proposedAdapter.getObject(): null;
     }
 
     private Class<?> eventType() {

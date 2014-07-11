@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.invoke;
+package org.apache.isis.core.metamodel.facets.actions.interaction;
 
 import java.lang.reflect.Method;
 import org.apache.isis.applib.annotation.ActionInteraction;
@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -40,18 +41,17 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
 /**
- * Sets up {@link ActionInvocationFacet}, along with a number of supporting
+ * Sets up {@link ActionInteractionFacet} and also an {@link ActionInvocationFacet}, along with a number of supporting
  * facets that are based on the action's name.
  * 
  * <p>
- * The supporting methods are: {@link ExecutedFacet}, {@link ExplorationFacet}
+ * The supporting methods are: {@link ExplorationFacet}
  * and {@link DebugFacet}. In addition a {@link NamedFacet} is inferred from the
  * name (taking into account the above well-known prefixes).
  */
-public class InteractionWithActionFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware, ServicesInjectorAware, RuntimeContextAware {
+public class ActionInteractionFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterManagerAware, ServicesInjectorAware, RuntimeContextAware {
 
     private static final String EXPLORATION_PREFIX = "Exploration";
     private static final String DEBUG_PREFIX = "Debug";
@@ -66,7 +66,7 @@ public class InteractionWithActionFacetFactory extends MethodPrefixBasedFacetFac
      * Note that the {@link Facet}s registered are the generic ones from
      * noa-architecture (where they exist)
      */
-    public InteractionWithActionFacetFactory() {
+    public ActionInteractionFacetFactory() {
         super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
@@ -104,19 +104,38 @@ public class InteractionWithActionFacetFactory extends MethodPrefixBasedFacetFac
             final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
             final FacetHolder holder = processMethodContext.getFacetHolder();
 
+            //
+            // Set up ActionInteractionFacet, which will act as the hiding/disabling/validating advisor
+            //
             final ActionInteraction actionInteraction =Annotations.getAnnotation(actionMethod, ActionInteraction.class);
+            final Class<? extends ActionInteractionEvent<?>> actionInteractionEventType;
+
+            final ActionInteractionFacetAbstract actionInteractionFacet;
+            if(actionInteraction != null) {
+                actionInteractionEventType = actionInteraction.value();
+                actionInteractionFacet = new ActionInteractionFacetAnnotation(actionInteractionEventType, holder, servicesInjector, getSpecificationLoader());
+            } else {
+                actionInteractionEventType = ActionInteractionEvent.Default.class;
+                actionInteractionFacet = new ActionInteractionFacetDefault(actionInteractionEventType, holder, servicesInjector, getSpecificationLoader());
+            }
+            FacetUtil.addFacet(actionInteractionFacet);
+
+
             final PostsActionInvokedEvent postsActionInvokedEvent = Annotations.getAnnotation(actionMethod, PostsActionInvokedEvent.class);
 
+            final ActionInvocationFacetForInteractionAbstract actionInvocationFacet;
             if (actionInteraction != null) {
-                Class<? extends ActionInteractionEvent<?>> eventType = actionInteraction.value();
-                FacetUtil.addFacet(new InteractionWithActionFacetAnnotation(actionMethod, typeSpec, returnSpec, holder, getRuntimeContext(), getAdapterManager(), getServicesInjector(), eventType));
+                actionInvocationFacet = new ActionInvocationFacetForActionInteractionAnnotation(
+                        actionInteractionEventType, actionMethod, typeSpec, returnSpec, actionInteractionFacet, holder, getRuntimeContext(), getAdapterManager(), getServicesInjector());
             } else if (postsActionInvokedEvent != null) {
-                Class<? extends ActionInteractionEvent<?>> eventType = postsActionInvokedEvent.value();
-                FacetUtil.addFacet(new InteractionWithActionFacetPostsActionInvokedEventAnnotation(actionMethod, typeSpec, returnSpec, holder, getRuntimeContext(), getAdapterManager(), getServicesInjector(), eventType));
+                actionInvocationFacet = new ActionInvocationFacetForPostsActionInvokedEventAnnotation(
+                        postsActionInvokedEvent.value(), actionMethod, typeSpec, returnSpec, actionInteractionFacet, holder, getRuntimeContext(), getAdapterManager(), getServicesInjector());
             } else {
-                Class<? extends ActionInteractionEvent<?>> eventType = ActionInteractionEvent.Default.class;
-                FacetUtil.addFacet(new InteractionWithActionFacetDefault(actionMethod, typeSpec, returnSpec, holder, getRuntimeContext(), getAdapterManager(), getServicesInjector(), eventType));
+                actionInvocationFacet = new ActionInvocationFacetForActionInteractionDefault(
+                        ActionInteractionEvent.Default.class, actionMethod, typeSpec, returnSpec, actionInteractionFacet, holder, getRuntimeContext(), getAdapterManager(), getServicesInjector());
             }
+            FacetUtil.addFacet(actionInvocationFacet);
+
         } finally {
             processMethodContext.removeMethod(actionMethod);
         }

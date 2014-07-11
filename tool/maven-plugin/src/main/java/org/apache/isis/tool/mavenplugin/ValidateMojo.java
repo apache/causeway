@@ -46,7 +46,7 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
-import org.apache.isis.core.progmodel.app.IsisMetaModel;
+import org.apache.isis.core.metamodel.app.IsisMetaModel;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 import org.apache.isis.tool.mavenplugin.util.ClassRealms;
 import org.apache.isis.tool.mavenplugin.util.ClassWorlds;

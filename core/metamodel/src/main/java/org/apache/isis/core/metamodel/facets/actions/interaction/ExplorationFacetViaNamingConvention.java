@@ -17,29 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.invoke;
+package org.apache.isis.core.metamodel.facets.actions.interaction;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacetAbstract;
 
-/**
- * Language-specific introspectors should implement in order to invoke with the
- * language-specific API.
- * 
- * <p>
- * For example, a Java-based subclass would use
- * <tt>java.lang.reflect.Method</tt> to invoke whereas under .NET it would be
- * <tt>System.Reflect.MethodInfo</tt>.
- */
-public abstract class ActionInvocationFacetAbstract extends FacetAbstract implements ActionInvocationFacet {
+public class ExplorationFacetViaNamingConvention extends ExplorationFacetAbstract {
 
-    public static Class<? extends Facet> type() {
-        return ActionInvocationFacet.class;
-    }
-
-    public ActionInvocationFacetAbstract(final FacetHolder holder) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+    public ExplorationFacetViaNamingConvention(final FacetHolder holder) {
+        super(holder);
     }
 
 }

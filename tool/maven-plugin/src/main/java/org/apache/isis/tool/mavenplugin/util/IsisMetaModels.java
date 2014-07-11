@@ -1,6 +1,6 @@
 package org.apache.isis.tool.mavenplugin.util;
 
-import org.apache.isis.core.progmodel.app.IsisMetaModel;
+import org.apache.isis.core.metamodel.app.IsisMetaModel;
 
 public final class IsisMetaModels {
     

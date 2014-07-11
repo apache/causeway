@@ -17,8 +17,21 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.invoke;
+package org.apache.isis.core.metamodel.facets.actions.interaction;
 
-public interface ActionInteractionFacet extends ActionInvocationFacet {
+import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+
+public class ActionInteractionFacetDefault extends ActionInteractionFacetAbstract {
+
+    public ActionInteractionFacetDefault(
+            final Class<? extends ActionInteractionEvent<?>> eventType,
+            final FacetHolder holder,
+            final ServicesInjector servicesInjector,
+            final SpecificationLoader specificationLoader) {
+        super(eventType, holder, servicesInjector, specificationLoader);
+    }
 
 }

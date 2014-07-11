@@ -17,15 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.invoke;
+package org.apache.isis.core.metamodel.facets.actions.interaction;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacetAbstract;
+import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
+import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
-public class ExplorationFacetViaNamingConvention extends ExplorationFacetAbstract {
-
-    public ExplorationFacetViaNamingConvention(final FacetHolder holder) {
-        super(holder);
-    }
+public interface ActionInteractionFacet
+        extends SingleClassValueFacet, HidingInteractionAdvisor, DisablingInteractionAdvisor, ValidatingInteractionAdvisor {
 
 }

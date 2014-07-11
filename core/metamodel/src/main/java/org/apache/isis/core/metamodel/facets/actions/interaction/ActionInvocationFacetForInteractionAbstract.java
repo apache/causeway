@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.invoke;
+package org.apache.isis.core.metamodel.facets.actions.interaction;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -45,52 +45,55 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.InteractionHelper;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
-import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 
-public abstract class InteractionWithActionFacetAbstract
+public abstract class ActionInvocationFacetForInteractionAbstract
         extends ActionInvocationFacetAbstract
-        implements ImperativeFacet, ActionInteractionFacet {
+        implements ImperativeFacet {
 
-    private final static Logger LOG = LoggerFactory.getLogger(InteractionWithActionFacetAbstract.class);
+    private final static Logger LOG = LoggerFactory.getLogger(ActionInvocationFacetForInteractionAbstract.class);
 
     private final Method method;
     private final ObjectSpecification onType;
     private final ObjectSpecification returnType;
 
     private final AdapterManager adapterManager;
+    private final ActionInteractionFacetAbstract actionInteractionFacet;
     private final RuntimeContext runtimeContext;
 
     private final ServicesInjector servicesInjector;
-    private final Class<? extends ActionInteractionEvent<?>> eventType;
+    final Class<? extends ActionInteractionEvent<?>> eventType;
     private final InteractionHelper interactionHelper;
 
-    public InteractionWithActionFacetAbstract(
+    public ActionInvocationFacetForInteractionAbstract(
+            final Class<? extends ActionInteractionEvent<?>> eventType,
             final Method method,
             final ObjectSpecification onType,
             final ObjectSpecification returnType,
+            final ActionInteractionFacetAbstract actionInteractionFacet,
             final FacetHolder holder,
             final RuntimeContext runtimeContext,
             final AdapterManager adapterManager,
-            final ServicesInjector servicesInjector,
-            final Class<? extends ActionInteractionEvent<?>> eventType) {
+            final ServicesInjector servicesInjector) {
         super(holder);
+        this.eventType = eventType;
         this.method = method;
         this.onType = onType;
         this.returnType = returnType;
+        this.actionInteractionFacet = actionInteractionFacet;
         this.runtimeContext = runtimeContext;
         this.adapterManager = adapterManager;
         this.servicesInjector = servicesInjector;
-        this.eventType = eventType;
         this.interactionHelper = new InteractionHelper(servicesInjector);
     }
 
@@ -167,15 +170,47 @@ public abstract class InteractionWithActionFacetAbstract
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] arguments) {
 
-        final InvocationResult invocationResult = internalInvoke(owningAction, targetAdapter, arguments);
+        try {
 
-        // Perhaps the Action was not properly invoked (i.e. an exception was raised).
-        if (invocationResult.getWhetherInvoked()) {
-            // If invoked, then send the ActionInteractionEvent to the EventBus.
-            interactionHelper.postEventForAction(eventType, null, AbstractInteractionEvent.Phase.EXECUTE, owningAction, targetAdapter, arguments);
+            final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
+            final Command command = commandContext != null ? commandContext.getCommand() : null;
+
+            // ... post the executing event
+            final ActionInteractionEvent<?> existingEvent = actionInteractionFacet.currentInteraction.get();
+
+            final ActionInteractionEvent<?> event =
+                    interactionHelper.postEventForAction(
+                            eventType, existingEvent, command, AbstractInteractionEvent.Phase.EXECUTING,
+                            owningAction, targetAdapter, arguments);
+            actionInteractionFacet.currentInteraction.set(event);
+
+            // ... invoke the action
+            final InvocationResult invocationResult = internalInvoke(owningAction, targetAdapter, arguments);
+
+            // ... post the executed event
+            if (invocationResult.getWhetherInvoked()) {
+                // perhaps the Action was not properly invoked (i.e. an exception was raised).
+                // If invoked, then send the ActionInteractionEvent to the EventBus.
+                interactionHelper.postEventForAction(
+                        eventType, verify(event), command, AbstractInteractionEvent.Phase.EXECUTED,
+                        owningAction, targetAdapter, arguments);
+            }
+
+            return invocationResult.getAdapter();
+
+        } finally {
+
+            // clean up
+            actionInteractionFacet.currentInteraction.set(null);
         }
+    }
 
-        return invocationResult.getAdapter();
+    /**
+     * Optional hook to allow the facet implementation for the deprecated {@link org.apache.isis.applib.annotation.PostsActionInvokedEvent} annotation
+     * to discard the event if of a different type.
+     */
+    protected ActionInteractionEvent<?> verify(ActionInteractionEvent<?> event) {
+        return event;
     }
 
     protected InvocationResult internalInvoke(

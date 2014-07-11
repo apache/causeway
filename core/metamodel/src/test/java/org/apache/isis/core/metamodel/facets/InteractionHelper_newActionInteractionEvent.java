@@ -43,7 +43,7 @@ public class InteractionHelper_newActionInteractionEvent {
         Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
 
         final ActionInteractionEvent<Object> ev = new InteractionHelper(null).newActionInteractionEvent(
-                ActionInteractionEvent.Default.class, sdo, identifier, new Object[]{1, "bar"});
+                ActionInteractionEvent.Default.class, identifier, sdo, new Object[]{1, "bar"});
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getArguments(), is(not(nullValue())));
@@ -57,7 +57,7 @@ public class InteractionHelper_newActionInteractionEvent {
         Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
 
         final ActionInteractionEvent<Object> ev = new InteractionHelper(null).newActionInteractionEvent(
-                ActionInvokedEvent.Default.class, sdo, identifier, new Object[]{1, "bar"});
+                ActionInvokedEvent.Default.class, identifier, sdo, new Object[]{1, "bar"});
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getArguments(), is(not(nullValue())));
@@ -71,7 +71,7 @@ public class InteractionHelper_newActionInteractionEvent {
         Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
         
         final ActionInteractionEvent<SomeDomainObject> ev = new InteractionHelper(null).newActionInteractionEvent(
-                SomeDomainObjectFooInvokedEvent.class, sdo, identifier, new Object[]{1, "bar"});
+                SomeDomainObjectFooInvokedEvent.class, identifier, sdo, new Object[]{1, "bar"});
         assertThat((SomeDomainObject)ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getArguments(), is(not(nullValue())));

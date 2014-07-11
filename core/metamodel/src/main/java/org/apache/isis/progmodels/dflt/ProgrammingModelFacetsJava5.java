@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.facets.actions.debug.annotation.DebugFacet
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.exploration.annotation.ExplorationFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInteractionFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.annotation.NotContributedFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method.NotInServiceMenuFacetViaMethodFactory;
@@ -149,7 +150,6 @@ import org.apache.isis.core.metamodel.facets.value.money.MoneyValueFacetUsingSem
 import org.apache.isis.core.metamodel.facets.value.password.PasswordValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.timestampsql.JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
-import org.apache.isis.core.metamodel.facets.actions.invoke.InteractionWithActionFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.collection.CollectionFacetFactory;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
@@ -271,7 +271,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(SortedByFacetAnnotationFactory.class);
 
         // actions
-        addFactory(InteractionWithActionFacetFactory.class);
+        addFactory(ActionInteractionFacetFactory.class);
         addFactory(ActionValidationFacetViaMethodFactory.class);
         addFactory(ActionChoicesFacetViaMethodFactory.class);
         addFactory(ActionParameterChoicesFacetViaMethodFactory.class);

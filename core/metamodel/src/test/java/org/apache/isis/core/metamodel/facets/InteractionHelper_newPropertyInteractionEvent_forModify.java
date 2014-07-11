@@ -44,7 +44,7 @@ public class InteractionHelper_newPropertyInteractionEvent_forModify {
         LocalDate newValue = new LocalDate(2013,5,2);
         
         final PropertyInteractionEvent<Object, Object> ev =
-                new InteractionHelper(null).newPropertyInteractionEvent(PropertyInteractionEvent.Default.class, sdo, identifier, oldValue, newValue);
+                new InteractionHelper(null).newPropertyInteractionEvent(PropertyInteractionEvent.Default.class, identifier, sdo, oldValue, newValue);
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOldValue(), is((Object)oldValue));
@@ -61,7 +61,7 @@ public class InteractionHelper_newPropertyInteractionEvent_forModify {
         LocalDate newValue = new LocalDate(2013,5,2);
         
         final PropertyInteractionEvent<SomeDomainObject, LocalDate> ev =
-                new InteractionHelper(null).newPropertyInteractionEvent(SomeDatePropertyChangedEvent.class, sdo, identifier, oldValue, newValue);
+                new InteractionHelper(null).newPropertyInteractionEvent(SomeDatePropertyChangedEvent.class, identifier, sdo, oldValue, newValue);
         assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOldValue(), is(oldValue));

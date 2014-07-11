@@ -46,7 +46,7 @@ public class InteractionHelper_newCollectionInteractionEvent_forRemove {
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
 
         final CollectionInteractionEvent<Object, Object> ev = new InteractionHelper(null).newCollectionInteractionEvent(
-                CollectionRemovedFromEvent.Default.class, null, sdo, identifier, CollectionInteractionEvent.Of.REMOVE_FROM, other);
+                CollectionRemovedFromEvent.Default.class, null, identifier, sdo, CollectionInteractionEvent.Of.REMOVE_FROM, other);
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOf(), is(CollectionInteractionEvent.Of.REMOVE_FROM));
@@ -60,7 +60,7 @@ public class InteractionHelper_newCollectionInteractionEvent_forRemove {
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
 
         final CollectionInteractionEvent<Object, Object> ev = new InteractionHelper(null).newCollectionInteractionEvent(
-                CollectionRemovedFromEvent.Default.class, null, sdo, identifier, CollectionInteractionEvent.Of.REMOVE_FROM, other);
+                CollectionRemovedFromEvent.Default.class, null, identifier, sdo, CollectionInteractionEvent.Of.REMOVE_FROM, other);
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOf(), is(CollectionInteractionEvent.Of.REMOVE_FROM));
@@ -74,7 +74,7 @@ public class InteractionHelper_newCollectionInteractionEvent_forRemove {
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
 
         final CollectionInteractionEvent<SomeDomainObject, SomeReferencedObject> ev = new InteractionHelper(null).newCollectionInteractionEvent(
-                SomeDomainObjectCollectionRemovedFromEvent.class, null, sdo, identifier, CollectionInteractionEvent.Of.REMOVE_FROM, other);
+                SomeDomainObjectCollectionRemovedFromEvent.class, null, identifier, sdo, CollectionInteractionEvent.Of.REMOVE_FROM, other);
         assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOf(), is(CollectionInteractionEvent.Of.REMOVE_FROM));

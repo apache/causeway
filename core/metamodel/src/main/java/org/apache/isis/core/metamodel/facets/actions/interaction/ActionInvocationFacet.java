@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.invoke;
+package org.apache.isis.core.metamodel.facets.actions.interaction;
 
 import java.util.Arrays;
 import java.util.List;
@@ -59,14 +59,18 @@ public interface ActionInvocationFacet extends Facet {
         private final ObjectAdapter result;
 
         public CurrentInvocation(
-                final ObjectAdapter target, final IdentifiedHolder action, final ObjectAdapter[] parameters, 
+                final ObjectAdapter target,
+                final IdentifiedHolder action,
+                final ObjectAdapter[] parameters,
                 final ObjectAdapter result, 
                 final Command command) {
             this(target, action, Arrays.asList(parameters), result, command);
         }
 
         public CurrentInvocation(
-                final ObjectAdapter target, final IdentifiedHolder action, final List<ObjectAdapter> parameters, 
+                final ObjectAdapter target,
+                final IdentifiedHolder action,
+                final List<ObjectAdapter> parameters,
                 final ObjectAdapter result, 
                 final Command command) {
             this.target = target;

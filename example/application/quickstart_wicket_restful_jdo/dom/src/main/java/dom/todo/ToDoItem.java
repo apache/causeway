@@ -491,7 +491,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
             @TypicalLength(20)
             final ToDoItem toDoItem) {
     	// By wrapping the call, Isis will detect that the collection is modified 
-    	// and it will automatically send a CollectionInteractionEvent to the Event Bus.
+    	// and it will automatically send CollectionInteractionEvents to the Event Bus.
     	// ToDoItemSubscriptions is a demo subscriber to this event
         wrapperFactory.wrapSkipRules(this).addToDependencies(toDoItem);
         return this;

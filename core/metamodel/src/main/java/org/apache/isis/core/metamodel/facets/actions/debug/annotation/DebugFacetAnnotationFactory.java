@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 
 /**
  * {@link DebugFacet} can also be installed via a naming convention, see
- * {@link org.apache.isis.core.metamodel.facets.actions.invoke.InteractionWithActionFacetFactory}.
+ * {@link org.apache.isis.core.metamodel.facets.actions.interaction.ActionInteractionFacetFactory}.
  */
 public class DebugFacetAnnotationFactory extends FacetFactoryAbstract {
 

@@ -34,8 +34,7 @@ public class CollectionAddToFacetForPostsCollectionAddedToEventAnnotation
             final PropertyOrCollectionAccessorFacet getterFacet,
             final CollectionAddToFacet collectionAddToFacet,
             final CollectionInteractionFacetAbstract collectionInteractionFacet,
-            final ServicesInjector servicesInjector,
-            final FacetHolder holder) {
+            final FacetHolder holder, final ServicesInjector servicesInjector) {
 		super(eventType, getterFacet, collectionAddToFacet, collectionInteractionFacet, servicesInjector, holder);
 	}
 

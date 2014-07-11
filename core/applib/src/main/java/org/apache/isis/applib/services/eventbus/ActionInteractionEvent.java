@@ -73,16 +73,21 @@ public abstract class ActionInteractionEvent<S> extends AbstractInteractionEvent
      * The {@link org.apache.isis.applib.services.command.Command} for this action.
      *
      * <p>
+     * Set when in {@link Phase#EXECUTING} and {@link Phase#EXECUTED}, but not for earlier phases.
+     *
+     * <p>
      * The command is set by the framework based on the configured
      * {@link org.apache.isis.applib.services.command.CommandContext}) service).  Ths command may or may not be
      * persisted, depending on the which implementation of
      * {@link org.apache.isis.applib.services.command.spi.CommandService} service is configured.
-     *
-     * @return
      */
     public Command getCommand() {
         return command;
     }
+
+    /**
+     * Not API - set by the framework.
+     */
     public void setCommand(Command command) {
         this.command = command;
     }
@@ -90,6 +95,10 @@ public abstract class ActionInteractionEvent<S> extends AbstractInteractionEvent
 
     //region > arguments
     private List<Object> arguments;
+    /**
+     * The arguments being used to invoke the action; populated at {@link Phase#VALIDATE} and subsequent phases
+     * (but null for {@link Phase#HIDE hidden} and {@link Phase#DISABLE disable} phases).
+     */
     public List<Object> getArguments() {
         return arguments;
     }
@@ -105,7 +114,7 @@ public abstract class ActionInteractionEvent<S> extends AbstractInteractionEvent
     //region > toString
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "source,identifier,mode");
+        return ObjectContracts.toString(this, "source,identifier,phase");
     }
     //endregion
 
