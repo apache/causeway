@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -578,10 +577,19 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
         for (final ScalarModel scalarModel : propertyScalarModels.values()) {
             final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty();
-            if(property.containsDoOpFacet(NotPersistedFacet.class)) {
-                // ignore derived properties
-                continue;
-            }
+
+            //
+            // previously there was a guard here to only apply changes provided:
+            //
+            // property.containsDoOpFacet(NotPersistedFacet.class) == null
+            //
+            // however, that logic is wrong; although a property may not be directly
+            // persisted so far as JDO is concerned, it may be indirectly persisted
+            // as the result of business logic in the setter.
+            //
+            // for example, see ExampleTaggableEntity (in isisaddons-module-tags).
+            //
+
             final ObjectAdapter associate = scalarModel.getObject();
             property.set(adapter, associate);
         }
