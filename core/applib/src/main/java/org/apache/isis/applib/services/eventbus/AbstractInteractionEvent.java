@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
+import java.util.Map;
+import com.google.common.collect.Maps;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.util.ObjectContracts;
 
@@ -128,6 +130,25 @@ public abstract class AbstractInteractionEvent<S> extends java.util.EventObject 
     }
     //endregion
 
+    //region > userData
+    /**
+     * Provides a mechanism to pass data to the next {@link #getPhase() phase}.
+     */
+    private final Map<Object, Object> userData = Maps.newHashMap();
+
+    /**
+     * Obtain user-data, as set by a previous {@link #getPhase() phase}.
+     */
+    public Object get(Object key) {
+        return userData.get(key);
+    }
+    /**
+     * Set user-data, for the use of a subsequent {@link #getPhase() phase}.
+     */
+    public void put(Object key, Object value) {
+        userData.put(key, value);
+    }
+    //endregion
 
     //region > toString
     @Override
