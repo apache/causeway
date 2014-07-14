@@ -18,13 +18,12 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices;
 
 import java.util.Collection;
 import java.util.List;
-
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.vaynberg.wicket.select2.ChoiceProvider;
 import com.vaynberg.wicket.select2.Select2Choice;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
@@ -32,7 +31,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -135,31 +133,52 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
     
     protected ChoiceProvider<ObjectAdapterMemento> newChoiceProvider(final List<ObjectAdapterMemento> choicesMementos) {
-        ChoiceProvider<ObjectAdapterMemento> provider = new ObjectAdapterMementoProviderAbstract(getScalarModel()) {
+        return new FixedObjectAdapterMementoProvider(getScalarModel(), choicesMementos);
+    }
 
-            private static final long serialVersionUID = 1L;
 
-            @Override
-            public Collection<ObjectAdapterMemento> toChoices(final Collection<String> ids) {
-                final List<ObjectAdapterMemento> mementos = obtainMementos(null);
-                final Predicate<ObjectAdapterMemento> predicate = new Predicate<ObjectAdapterMemento>() {
+    static class FixedObjectAdapterMementoProvider extends ObjectAdapterMementoProviderAbstract {
 
-                    @Override
-                    public boolean apply(ObjectAdapterMemento input) {
-                        final String id = (String) getId(input);
-                        return ids.contains(id);
+        private static final long serialVersionUID = 1L;
+        private final List<ObjectAdapterMemento> choicesMementos;
+
+        public FixedObjectAdapterMementoProvider(
+                final ScalarModel scalarModel,
+                final List<ObjectAdapterMemento> choicesMementos) {
+            super(scalarModel);
+            this.choicesMementos = choicesMementos;
+        }
+
+        @Override
+        public Collection<ObjectAdapterMemento> toChoices(final Collection<String> ids) {
+            final List<ObjectAdapterMemento> mementos = obtainMementos(null);
+
+            final Predicate<ObjectAdapterMemento> lookupOam = new Predicate<ObjectAdapterMemento>() {
+                @Override
+                public boolean apply(ObjectAdapterMemento input) {
+                    final String id = (String) getId(input);
+                    return ids.contains(id);
+                }
+            };
+
+            final Function<String, ObjectAdapterMemento> toOam = new Function<String, ObjectAdapterMemento>() {
+                @Override
+                public ObjectAdapterMemento apply(String input) {
+                    if (NULL_PLACEHOLDER.equals(input)) {
+                        return null;
                     }
-                };
-                return Collections2.filter(mementos, predicate); 
-            }
+                    final Collection<ObjectAdapterMemento> filteredCollection = Collections2.filter(mementos, lookupOam);
+                    return filteredCollection.iterator().next();
+                }
+            };
+            return Collections2.transform(ids, toOam);
+        }
 
-            @Override
-            protected List<ObjectAdapterMemento> obtainMementos(String term) {
-                return choicesMementos;
-            }
+        @Override
+        protected List<ObjectAdapterMemento> obtainMementos(String term) {
+            return choicesMementos;
+        }
 
-        };
-        return provider;
     }
 
     @Override
@@ -246,4 +265,5 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
     public ScalarModel getScalarModel() {
         return scalarModel;
     }
+
 }

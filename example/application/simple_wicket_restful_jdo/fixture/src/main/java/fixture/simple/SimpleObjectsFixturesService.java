@@ -18,8 +18,6 @@
  */
 package fixture.simple;
 
-import dom.simple.SimpleObjects;
-
 import java.util.List;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -65,11 +63,5 @@ public class SimpleObjectsFixturesService extends FixtureScripts {
         return run.get(0).getObject();
     }
 
-    // //////////////////////////////////////
-
-    private SimpleObjects simpleObjects;
-    public void injectSimpleObjects(SimpleObjects simpleObjects) {
-        this.simpleObjects = simpleObjects;
-    }
 
 }

@@ -34,7 +34,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends TextChoicePro
 
     private static final long serialVersionUID = 1L;
     
-    private static final String NULL_PLACEHOLDER = "$$_isis_null_$$";
+    protected static final String NULL_PLACEHOLDER = "$$_isis_null_$$";
     private static final String NULL_DISPLAY_TEXT = "";
 
     private final ScalarModel scalarModel;
@@ -50,7 +50,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends TextChoicePro
 
     @Override
     protected Object getId(ObjectAdapterMemento choice) {
-        return choice != null? choice.toString(): NULL_PLACEHOLDER;
+        return choice != null? choice.asString(): NULL_PLACEHOLDER;
     }
 
     @Override

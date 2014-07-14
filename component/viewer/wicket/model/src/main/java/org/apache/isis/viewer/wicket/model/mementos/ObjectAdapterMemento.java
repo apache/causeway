@@ -65,6 +65,7 @@ public class ObjectAdapterMemento implements Serializable {
     }
 
 
+
     enum Type {
         /**
          * The {@link ObjectAdapter} that this is the memento for directly has
@@ -349,6 +350,10 @@ public class ObjectAdapterMemento implements Serializable {
 
     @Override
     public String toString() {
+        return asString();
+    }
+
+    public String asString() {
         return type.toString(this);
     }
 
