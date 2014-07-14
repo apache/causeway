@@ -24,6 +24,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
 
 public abstract class AbstractIsisSessionTemplate {
 
@@ -41,12 +42,41 @@ public abstract class AbstractIsisSessionTemplate {
         }
     }
 
+
     // //////////////////////////////////////
     
     /**
-     * Mandatory hook.
+     * Either override {@link #doExecute(Object)} (this method) or alternatively override
+     * {@link #doExecuteWithTransaction(Object)}.
+     *
+     * <p>
+     * This method is called within a current {@link org.apache.isis.core.runtime.system.session.IsisSession session},
+     * but with no current transaction.  The default implementation sets up a
+     * {@link org.apache.isis.core.runtime.system.transaction.IsisTransaction transaction}
+     * and then calls {@link #doExecuteWithTransaction(Object)}.  Override if you require more sophisticated
+     * transaction handling.
      */
-    protected abstract void doExecute(Object context);
+    protected void doExecute(final Object context) {
+        final PersistenceSession persistenceSession = getPersistenceSession();
+        final IsisTransactionManager transactionManager = getTransactionManager(persistenceSession);
+        transactionManager.executeWithinTransaction(new TransactionalClosureAbstract() {
+            @Override
+            public void execute() {
+                doExecuteWithTransaction(context);
+            }
+        });
+    }
+
+    /**
+     * Either override {@link #doExecuteWithTransaction(Object)} (this method) or alternatively override
+     * {@link #doExecuteWithTransaction(Object)}.
+     *
+     * <p>
+     * This method is called within a current
+     * {@link org.apache.isis.core.runtime.system.transaction.IsisTransaction transaction}, by the default
+     * implementation of {@link #doExecute(Object)}.
+     */
+    protected void doExecuteWithTransaction(final Object context) {}
 
     // //////////////////////////////////////
 
