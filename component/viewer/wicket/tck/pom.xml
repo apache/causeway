@@ -36,7 +36,6 @@
 
 	<properties>
         <isis-viewer-wicket.version>1.6.0-SNAPSHOT</isis-viewer-wicket.version>
-		<jetty.version>6.1.4</jetty.version>
 		<siteBaseDir>..</siteBaseDir>
 		<relativeUrl>wicket-tck/</relativeUrl>
 		<!-- until someone comes up with a better solution -->

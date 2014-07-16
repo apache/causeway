@@ -35,8 +35,8 @@
 	<properties>
         <siteBaseDir>..</siteBaseDir>
 		<relativeUrl>security-shiro</relativeUrl>
-		<shiro.version>1.2.1</shiro.version>
-        <!-- 
+
+        <!--
         staying with 1.2.1 for now; see ISIS-574
 		<shiro.version>1.2.2</shiro.version>
          -->
@@ -127,19 +127,16 @@
 		<dependency>
 		  <groupId>org.slf4j</groupId>
 		  <artifactId>jcl-over-slf4j</artifactId>
-		  <version>1.7.5</version>
-            <scope>test</scope>
+          <scope>test</scope>
 		</dependency>
 
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-core</artifactId>
-            <version>${shiro.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-web</artifactId>
-            <version>${shiro.version}</version>
         </dependency>
 
 	    <dependency>

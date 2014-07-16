@@ -94,6 +94,59 @@
         <!-- ensure compatible with version aggregated in datanucleus-accessplatform-jdo-rdbms -->
         <jdo-api.version>3.1-rc1</jdo-api.version>
 
+        <shiro.version>1.2.1</shiro.version>
+
+        <slf4j.version>1.7.6</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+
+        <joda-time.version>2.3</joda-time.version>
+        <guava.version>16.0.1</guava.version>
+
+        <hamcrest.version>1.3</hamcrest.version>
+
+        <objenesis.version>1.4</objenesis.version>
+        <javassist.version>3.18.1-GA</javassist.version>
+        <reflections.version>0.9.8</reflections.version>
+
+        <commons-logging.version>1.1.2</commons-logging.version>
+        <commons-cli.version>1.2</commons-cli.version>
+        <commons-httpclient.version>3.1</commons-httpclient.version>
+        <commons-codec.version>1.9</commons-codec.version>
+
+        <jackson.version>1.9.11</jackson.version>
+        <gson.version>2.2.4</gson.version>
+
+        <!-- using 2.3.2 throws strange error about not finding org.hsqldb.jdbcDriver -->
+        <hsqldb.version>2.3.1</hsqldb.version>
+        <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
+        <resteasy-jaxrs.version>2.3.7.Final</resteasy-jaxrs.version>
+
+        <jetty.version>6.1.26</jetty.version>
+
+        <guice.version>3.0</guice.version>
+        <picocontainer.version>2.14.3</picocontainer.version>
+
+        <dom4j.version>1.6.1</dom4j.version>
+        <jdom.version>2.0.2</jdom.version>
+        <xstream.version>1.4.7</xstream.version>
+        <htmlparser.version>2.1</htmlparser.version>
+
+        <junit.version>4.11</junit.version>
+        <jmock.version>2.6.0</jmock.version>
+        <easymock.version>2.5.2</easymock.version>
+        <cucumber.version>1.1.5</cucumber.version>
+
+        <geronimo-jsp_2.1_spec.version>1.0.1</geronimo-jsp_2.1_spec.version>
+        <geronimo-jta_1.1_spec.version>1.1.1</geronimo-jta_1.1_spec.version>
+        <geronimo-jta_1.0.1B_spec.version>1.1.1</geronimo-jta_1.0.1B_spec.version>
+        <geronimo-servlet_2.5_spec.version>1.2</geronimo-servlet_2.5_spec.version>
+        <geronimo-annotation_1.0_spec.version>1.1.1</geronimo-annotation_1.0_spec.version>
+        <geronimo-activation_1.1_spec.version>1.1</geronimo-activation_1.1_spec.version>
+        <geronimo-javamail_1.4_spec.version>1.7.1</geronimo-javamail_1.4_spec.version>
+        <geronimo-atinject_1.0_spec.version>1.0</geronimo-atinject_1.0_spec.version>
+        <geronimo-jcdi_1.0_spec.version>1.0</geronimo-jcdi_1.0_spec.version>
+        <validation-api.version>1.1.0.Final</validation-api.version>
+
     </properties>
 
     <scm>
@@ -820,7 +873,7 @@
                 <plugin>
                     <groupId>org.mortbay.jetty</groupId>
                     <artifactId>maven-jetty-plugin</artifactId>
-                    <version>6.1.26</version>
+                    <version>${jetty.version}</version>
                     <configuration>
                         <webAppConfig>
                             <contextPath>webapp</contextPath>
@@ -1076,8 +1129,7 @@ ${license.additional-notes}
                 <!-- not scope=test, because referenced by some sql-tests-common under compile scope -->
             </dependency>
 
-
-            <!-- default implementations of components -->
+            <!-- object store(s) -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-objectstore</artifactId>
@@ -1092,9 +1144,70 @@ ${license.additional-notes}
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-profilestore</artifactId>
+                <artifactId>isis-core-objectstore-jdo-metamodel</artifactId>
                 <version>1.6.0-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-objectstore-jdo-metamodel</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-objectstore-jdo-datanucleus</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-objectstore-jdo-datanucleus</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+
+
+            <!-- Restful Objects viewer -->
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+
+
+            <!-- security implementation(s) -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security</artifactId>
@@ -1103,6 +1216,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security-shiro</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
+
+
+            <!-- profile store -->
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-profilestore</artifactId>
                 <version>1.6.0-SNAPSHOT</version>
             </dependency>
 
@@ -1127,404 +1248,6 @@ ${license.additional-notes}
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-tck-viewer-restfulobjects</artifactId>
                 <version>1.6.0-SNAPSHOT</version>
-            </dependency>
-
-
-
-            <!-- JodaTime -->
-            <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>2.3</version>
-            </dependency>
-
-            <!-- Logging -->
-            <dependency>
-              <groupId>org.slf4j</groupId>
-              <artifactId>slf4j-api</artifactId>
-              <version>1.7.6</version>
-            </dependency>    
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>1.7.6</version>
-            </dependency>
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>1.2.17</version>
-            </dependency>
-
-            <!-- Apache Commons -->
-
-            <dependency>
-                <groupId>commons-cli</groupId>
-                <artifactId>commons-cli</artifactId>
-                <version>1.2</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-httpclient</groupId>
-                <artifactId>commons-httpclient</artifactId>
-                <version>3.1</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>1.9</version>
-            </dependency>
-
-
-            <!--  Other Common Utils -->
-            <dependency>
-                 <groupId>org.reflections</groupId>
-                 <artifactId>reflections</artifactId>
-                 <version>0.9.8</version>
-            </dependency>
-     
-
-            <!-- Google Guava (collections and commons) -->
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>16.0.1</version>
-            </dependency>
-
-            <!-- Google Guice (dependency injection) -->
-            <dependency>
-                <groupId>com.google.inject</groupId>
-                <artifactId>guice</artifactId>
-                <version>3.0</version>
-            </dependency>
-
-            <!-- Bytecode libraries -->
-            <dependency>
-                <groupId>org.objenesis</groupId>
-                <artifactId>objenesis</artifactId>
-                <version>1.4</version>
-            </dependency>
-            <dependency>
-                <groupId>org.javassist</groupId>
-                <artifactId>javassist</artifactId>
-                <version>3.18.1-GA</version>
-            </dependency>
-
-            <!-- XML libraries -->
-            <dependency>
-                <groupId>dom4j</groupId>
-                <artifactId>dom4j</artifactId>
-                <version>1.6.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jdom</groupId>
-                <artifactId>jdom</artifactId>
-                <version>2.0.2</version>
-            </dependency>
-            
-            <dependency>
-                <groupId>com.thoughtworks.xstream</groupId>
-                <artifactId>xstream</artifactId>
-                <version>1.4.7</version>
-            </dependency>
-
-
-            <!-- JSON libraries -->
-            <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-core-asl</artifactId>
-                <version>1.9.11</version>
-            </dependency>
-            <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-mapper-asl</artifactId>
-                <version>1.9.11</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.code.gson</groupId>
-                <artifactId>gson</artifactId>
-                <version>2.2.4</version>
-            </dependency>
-            <!--
-            seemingly unused. 
-            <dependency>
-                <groupId>org.codehaus.jettison</groupId>
-                <artifactId>jettison</artifactId>
-                <version>1.3.3</version>
-            </dependency>
-            -->
-            
-
-            <!-- Databases -->
-            <dependency>
-              <groupId>org.hsqldb</groupId>
-              <artifactId>hsqldb</artifactId>
-              <!-- using 2.3.2 throws strange error about not finding org.hsqldb.jdbcDriver -->
-              <version>2.3.1</version>
-            </dependency>
-
-            <dependency>
-              <groupId>org.lazyluke</groupId>
-              <artifactId>log4jdbc-remix</artifactId>
-              <version>0.2.7</version>
-            </dependency>
-            
-
-            <!-- RestEasy -->
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-jaxrs</artifactId>
-                <version>2.3.7.Final</version>
-                <exclusions>
-                    <!-- instead use org.apache.geronimo.specs:geronimo-servlet_2.5_spec -->
-                    <exclusion>
-                        <groupId>javax.servlet</groupId>
-                        <artifactId>servlet-api</artifactId>
-                    </exclusion>
-                    <!-- instead use org.apache.geronimo.specs:geronimo-annotation_1.0_spec -->
-                    <exclusion>
-                        <groupId>javax.annotation</groupId>
-                        <artifactId>jsr250-api</artifactId>
-                    </exclusion>
-                    <!-- org.apache.geronimo.specs:geronimo-activation_1.1_spec -->
-                    <exclusion>
-                        <groupId>javax.activation</groupId>
-                        <artifactId>activation</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <!-- predicate libraries -->
-            <dependency>
-                <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest-core</artifactId>
-                <version>1.3</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest-library</artifactId>
-                <version>1.3</version>
-            </dependency>
-
-            <!-- Web development -->
-            <dependency>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>jetty</artifactId>
-                <version>6.1.26</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.mortbay.jetty</groupId>
-                        <artifactId>servlet-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>org.htmlparser</groupId>
-                <artifactId>htmlparser</artifactId>
-                <version>2.1</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.sun</groupId>
-                        <artifactId>tools</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <!-- Testing libraries (not scope=test because used by isis-core-integtest) -->
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.11</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jmock</groupId>
-                <artifactId>jmock</artifactId>
-                <version>2.6.0</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jmock</groupId>
-                <artifactId>jmock-junit4</artifactId>
-                <version>2.6.0</version>
-                <exclusions>
-                    <exclusion>
-                <!-- for dependency convergence -->
-                        <groupId>junit</groupId>
-                        <artifactId>junit-dep</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <!-- BDD testing -->
-            <dependency>
-                <groupId>info.cukes</groupId>
-                <artifactId>cucumber-java</artifactId>
-                <version>1.1.5</version>
-            </dependency>
-            <dependency>
-                <groupId>info.cukes</groupId>
-                <artifactId>cucumber-junit</artifactId>
-                <version>1.1.5</version>
-            </dependency>
-
-            <!-- Testing libraries (scope=test) -->
-            <dependency>
-                <groupId>org.easymock</groupId>
-                <artifactId>easymock</artifactId>
-                <version>2.5.2</version>
-                <scope>test</scope>
-            </dependency>
-
-            <!-- Specs -->
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-jsp_2.1_spec</artifactId>
-                <version>1.0.1</version>
-            </dependency>
-              <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-jta_1.1_spec</artifactId>
-                <version>1.1.1</version>
-              </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-jta_1.0.1B_spec</artifactId>
-                <version>1.1.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-servlet_2.5_spec</artifactId>
-                <version>1.2</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-annotation_1.0_spec</artifactId>
-                <version>1.1.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-activation_1.1_spec</artifactId>
-                <version>1.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-javamail_1.4_spec</artifactId>
-                <version>1.7.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-atinject_1.0_spec</artifactId>
-                <version>1.0</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.validation</groupId>
-                <artifactId>validation-api</artifactId>
-                <version>1.1.0.Final</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-jcdi_1.0_spec</artifactId>
-                <version>1.0</version>
-            </dependency>
-
-           <dependency>
-               <groupId>org.picocontainer</groupId>
-               <artifactId>picocontainer</artifactId>
-               <version>2.14.3</version>
-           </dependency>
-
-           
-           
-           
-            <!-- for benefit of application developers, using scope=import -->
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-objectstore-jdo-metamodel</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-objectstore-jdo-metamodel</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
-                <scope>test</scope>
-                <type>test-jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-objectstore-jdo-datanucleus</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-objectstore-jdo-datanucleus</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
-                <scope>test</scope>
-                <type>test-jar</type>
-            </dependency>
-
-
-
-            <!-- DataNucleus -->
-            <dependency>
-                <groupId>org.datanucleus</groupId>
-                <artifactId>datanucleus-accessplatform-jdo-rdbms</artifactId>
-                <version>${datanucleus-accessplatform-jdo-rdbms.version}</version>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.datanucleus</groupId>
-                <artifactId>datanucleus-jodatime</artifactId>
-                <version>${datanucleus-jodatime.version}</version>
-            </dependency>
- 
-
-
-            <!-- for benefit of application developers, using scope=import -->
-               <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
-            </dependency>
-               <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
-                <type>test-jar</type>
-                <scope>test</scope>
-            </dependency>
-               <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
-            </dependency>
-               <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
-                <type>test-jar</type>
-                <scope>test</scope>
-            </dependency>
-               <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
-            </dependency>
-               <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
-                <type>test-jar</type>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <!-- 
-                required because resteasy-jaxrs declares as a test dependency
-                whereas httpclient4 needs it as a compile dependency -->
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-                <version>1.1.2</version>
             </dependency>
 
 
@@ -1578,6 +1301,7 @@ ${license.additional-notes}
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
+
             <!--
             declared as a convenience; alternative is for the domain application to
             scope=import the o.a.i.module:isis-module-devutils in root pom.xml's dependencyManagement/dependencies
@@ -1669,7 +1393,345 @@ ${license.additional-notes}
                 <version>1.6.0-SNAPSHOT</version>
             </dependency>
 
-       </dependencies>
+
+            <!-- JodaTime -->
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${joda-time.version}</version>
+            </dependency>
+
+            <!-- Google Guava (collections and commons) -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <!-- Logging -->
+            <dependency>
+              <groupId>org.slf4j</groupId>
+              <artifactId>slf4j-api</artifactId>
+              <version>${slf4j.version}</version>
+            </dependency>    
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <!--
+                required because resteasy-jaxrs declares as a test dependency
+                whereas httpclient4 needs it as a compile dependency -->
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>${commons-logging.version}</version>
+            </dependency>
+
+
+            <!-- Apache Commons -->
+            <dependency>
+                <groupId>commons-cli</groupId>
+                <artifactId>commons-cli</artifactId>
+                <version>${commons-cli.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>${commons-httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
+            </dependency>
+
+            <!-- Dependency injection -->
+            <dependency>
+                <groupId>com.google.inject</groupId>
+                <artifactId>guice</artifactId>
+                <version>${guice.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.picocontainer</groupId>
+                <artifactId>picocontainer</artifactId>
+                <version>${picocontainer.version}</version>
+            </dependency>
+
+            <!--  Reflection/metadata -->
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>${reflections.version}</version>
+            </dependency>
+
+            <!-- Bytecode libraries -->
+            <dependency>
+                <groupId>org.objenesis</groupId>
+                <artifactId>objenesis</artifactId>
+                <version>${objenesis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>${javassist.version}</version>
+            </dependency>
+
+
+            <!-- XML libraries -->
+            <dependency>
+                <groupId>dom4j</groupId>
+                <artifactId>dom4j</artifactId>
+                <version>${dom4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jdom</groupId>
+                <artifactId>jdom</artifactId>
+                <version>${jdom.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.thoughtworks.xstream</groupId>
+                <artifactId>xstream</artifactId>
+                <version>${xstream.version}</version>
+            </dependency>
+
+
+            <!-- JSON libraries -->
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-core-asl</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-mapper-asl</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
+            </dependency>
+
+
+            <!-- HTML -->
+            <dependency>
+                <groupId>org.htmlparser</groupId>
+                <artifactId>htmlparser</artifactId>
+                <version>${htmlparser.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.sun</groupId>
+                        <artifactId>tools</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+
+            <!-- Databases -->
+            <dependency>
+              <groupId>org.hsqldb</groupId>
+              <artifactId>hsqldb</artifactId>
+              <version>${hsqldb.version}</version>
+            </dependency>
+
+            <dependency>
+              <groupId>org.lazyluke</groupId>
+              <artifactId>log4jdbc-remix</artifactId>
+              <version>${log4jdbc-remix.version}</version>
+            </dependency>
+
+
+            <!-- Shiro -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-core</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-web</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+
+
+            <!-- RestEasy -->
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-jaxrs</artifactId>
+                <version>${resteasy-jaxrs.version}</version>
+                <exclusions>
+                    <!-- instead use org.apache.geronimo.specs:geronimo-servlet_2.5_spec -->
+                    <exclusion>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>servlet-api</artifactId>
+                    </exclusion>
+                    <!-- instead use org.apache.geronimo.specs:geronimo-annotation_1.0_spec -->
+                    <exclusion>
+                        <groupId>javax.annotation</groupId>
+                        <artifactId>jsr250-api</artifactId>
+                    </exclusion>
+                    <!-- org.apache.geronimo.specs:geronimo-activation_1.1_spec -->
+                    <exclusion>
+                        <groupId>javax.activation</groupId>
+                        <artifactId>activation</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- predicate libraries -->
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-core</artifactId>
+                <version>${hamcrest.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-library</artifactId>
+                <version>${hamcrest.version}</version>
+            </dependency>
+
+            <!-- Web development -->
+            <dependency>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty</artifactId>
+                <version>${jetty.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.mortbay.jetty</groupId>
+                        <artifactId>servlet-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Testing libraries (not scope=test because used by isis-core-integtest) -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jmock</groupId>
+                <artifactId>jmock</artifactId>
+                <version>${jmock.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jmock</groupId>
+                <artifactId>jmock-junit4</artifactId>
+                <version>${jmock.version}</version>
+                <exclusions>
+                    <exclusion>
+                <!-- for dependency convergence -->
+                        <groupId>junit</groupId>
+                        <artifactId>junit-dep</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- BDD testing -->
+            <dependency>
+                <groupId>info.cukes</groupId>
+                <artifactId>cucumber-java</artifactId>
+                <version>${cucumber.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>info.cukes</groupId>
+                <artifactId>cucumber-junit</artifactId>
+                <version>${cucumber.version}</version>
+            </dependency>
+
+            <!-- Testing libraries (scope=test) -->
+            <dependency>
+                <groupId>org.easymock</groupId>
+                <artifactId>easymock</artifactId>
+                <version>${easymock.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Specs -->
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-jsp_2.1_spec</artifactId>
+                <version>${geronimo-jsp_2.1_spec.version}</version>
+            </dependency>
+              <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-jta_1.1_spec</artifactId>
+                <version>${geronimo-jta_1.1_spec.version}</version>
+              </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-jta_1.0.1B_spec</artifactId>
+                <version>${geronimo-jta_1.0.1B_spec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-servlet_2.5_spec</artifactId>
+                <version>${geronimo-servlet_2.5_spec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-annotation_1.0_spec</artifactId>
+                <version>${geronimo-annotation_1.0_spec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-activation_1.1_spec</artifactId>
+                <version>${geronimo-activation_1.1_spec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-javamail_1.4_spec</artifactId>
+                <version>${geronimo-javamail_1.4_spec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-atinject_1.0_spec</artifactId>
+                <version>${geronimo-atinject_1.0_spec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-jcdi_1.0_spec</artifactId>
+                <version>${geronimo-jcdi_1.0_spec.version}</version>
+            </dependency>
+
+
+            <!-- javax APIs -->
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${validation-api.version}</version>
+            </dependency>
+
+
+            <!-- DataNucleus -->
+            <dependency>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>datanucleus-accessplatform-jdo-rdbms</artifactId>
+                <version>${datanucleus-accessplatform-jdo-rdbms.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>datanucleus-jodatime</artifactId>
+                <version>${datanucleus-jodatime.version}</version>
+            </dependency>
+ 
+        </dependencies>
     </dependencyManagement>
 
     <dependencies>
@@ -1686,6 +1748,7 @@ ${license.additional-notes}
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
         </dependency>
+
 
         <!-- test dependencies -->
         <dependency>
