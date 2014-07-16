@@ -608,20 +608,7 @@ public final class DomainResourceHelper {
         if (queryStringTrimmed.isEmpty()) {
             return JsonRepresentation.newMap();
         }
-        
-        String queryStringUrlDecoded; 
-        try {
-            // this is a bit hacky...
-            queryStringUrlDecoded = UrlEncodingUtils.urlDecode(queryStringTrimmed); 
-        } catch(Exception ex) {
-            queryStringUrlDecoded = queryStringTrimmed;
-        }
-                     
-        if (queryStringUrlDecoded.isEmpty()) {
-            return JsonRepresentation.newMap();
-        }
-
-        return read(queryStringUrlDecoded, "query string");
+        return read(queryStringTrimmed, "query string");
     }
 
     public static JsonRepresentation readAsMap(final String body) {

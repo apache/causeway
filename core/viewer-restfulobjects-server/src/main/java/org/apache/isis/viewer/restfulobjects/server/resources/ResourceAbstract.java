@@ -45,6 +45,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -111,20 +112,32 @@ public abstract class ResourceAbstract {
 
     private ResourceContext resourceContext;
 
-    protected void init(Where where) {
+    protected void init(final Where where) {
         init(RepresentationType.GENERIC, where);
     }
 
     protected void init(final RepresentationType representationType, Where where) {
-        init(representationType, where, (String)null);
+        String queryStringIfAny = getUrlDecodedQueryStringIfAny();
+        init(representationType, where, queryStringIfAny);
     }
 
-    protected void init(RepresentationType representationType, Where where, InputStream arguments) {
-        final String queryString = DomainResourceHelper.asStringUtf8(arguments);
-        init(representationType, where, queryString);
+    private String getUrlDecodedQueryStringIfAny() {
+        final String queryStringIfAny = httpServletRequest.getQueryString();
+        return UrlEncodingUtils.urlDecodeNullSafe(queryStringIfAny);
     }
 
-    protected void init(RepresentationType representationType, Where where, String queryString) {
+    protected void init(
+            final RepresentationType representationType,
+            final Where where,
+            final InputStream arguments) {
+        final String urlDecodedQueryString = DomainResourceHelper.asStringUtf8(arguments);
+        init(representationType, where, urlDecodedQueryString);
+    }
+
+    protected void init(
+            final RepresentationType representationType,
+            final Where where,
+            final String urlUnencodedQueryString) {
         if (!IsisContext.inSession()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
@@ -133,7 +146,7 @@ public abstract class ResourceAbstract {
         }
 
         this.resourceContext = new ResourceContext(
-                representationType, httpHeaders, uriInfo, request, where, queryString, httpServletRequest, httpServletResponse,
+                representationType, httpHeaders, uriInfo, request, where, urlUnencodedQueryString, httpServletRequest, httpServletResponse,
                 securityContext, getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader(), getConfiguration());
     }
 

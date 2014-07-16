@@ -58,6 +58,12 @@ public class ApplibValuedEntity extends AbstractDomainObject {
         this.stringProperty = description;
     }
 
+    public ApplibValuedEntity updateStringProperty(
+            @Optional final String description) {
+        setStringProperty(stringProperty);
+        return this;
+    }
+
     // }}
 
     
@@ -76,6 +82,12 @@ public class ApplibValuedEntity extends AbstractDomainObject {
         this.dateProperty = dateProperty;
     }
 
+    public ApplibValuedEntity updateDateProperty(
+            @Optional final Date dateProperty) {
+        setDateProperty(dateProperty);
+        return this;
+    }
+
     // }}
 
     // {{ ColorProperty
@@ -90,6 +102,12 @@ public class ApplibValuedEntity extends AbstractDomainObject {
 
     public void setColorProperty(final Color colorProperty) {
         this.colorProperty = colorProperty;
+    }
+
+    public ApplibValuedEntity updateColorProperty(
+            @Optional final Color colorProperty) {
+        setColorProperty(colorProperty);
+        return this;
     }
 
     // }}
@@ -108,6 +126,11 @@ public class ApplibValuedEntity extends AbstractDomainObject {
         this.dateTimeProperty = dateTimeProperty;
     }
 
+    public ApplibValuedEntity updateDateTimeProperty(
+            @Optional final DateTime dateTimeProperty) {
+        setDateTimeProperty(dateTimeProperty);
+        return this;
+    }
     // }}
 
     // {{ ImageProperty
@@ -122,6 +145,12 @@ public class ApplibValuedEntity extends AbstractDomainObject {
 
     public void setImageProperty(final Image imageProperty) {
         this.imageProperty = imageProperty;
+    }
+
+    public ApplibValuedEntity updateImageProperty(
+            @Optional final Image imageProperty) {
+        setImageProperty(imageProperty);
+        return this;
     }
 
     // }}
@@ -140,6 +169,12 @@ public class ApplibValuedEntity extends AbstractDomainObject {
         this.moneyProperty = moneyProperty;
     }
 
+    public ApplibValuedEntity updateMoneyProperty(
+            @Optional final Money moneyProperty) {
+        this.moneyProperty = moneyProperty;
+        return this;
+    }
+
     // }}
 
     // {{ PasswordProperty
@@ -154,6 +189,12 @@ public class ApplibValuedEntity extends AbstractDomainObject {
 
     public void setPasswordProperty(final Password passwordProperty) {
         this.passwordProperty = passwordProperty;
+    }
+
+    public ApplibValuedEntity updatePasswordProperty(
+            @Optional final Password passwordProperty) {
+        setPasswordProperty(passwordProperty);
+        return this;
     }
 
     // }}
@@ -172,6 +213,12 @@ public class ApplibValuedEntity extends AbstractDomainObject {
         this.percentageProperty = percentageProperty;
     }
 
+    public ApplibValuedEntity updatePercentageProperty(
+            @Optional final Percentage percentageProperty) {
+        setPercentageProperty(percentageProperty);
+        return this;
+    }
+
     // }}
 
     // {{ TimeProperty
@@ -188,6 +235,12 @@ public class ApplibValuedEntity extends AbstractDomainObject {
         this.timeProperty = timeProperty;
     }
 
+    public ApplibValuedEntity updateTimeProperty(
+            @Optional final Time timeProperty) {
+        setTimeProperty(timeProperty);
+        return this;
+    }
+
     // }}
 
     // {{ TimeStampProperty
@@ -202,6 +255,12 @@ public class ApplibValuedEntity extends AbstractDomainObject {
 
     public void setTimestampProperty(final TimeStamp timestampProperty) {
         this.timeStampProperty = timestampProperty;
+    }
+
+    public ApplibValuedEntity updateTimestampProperty(
+            @Optional final TimeStamp timestampProperty) {
+        setTimestampProperty(timestampProperty);
+        return this;
     }
     // }}
 

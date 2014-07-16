@@ -25,12 +25,18 @@ import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Title;
 
+/**
+ * TODO: delete ... OVERLAPS WITH ApplibValuedEntity, JdkValuedEntity, JodaValuedEntity
+ *
+ * @deprecated
+ */
 @javax.jdo.annotations.PersistenceCapable
 @javax.jdo.annotations.Discriminator("APLV")
 @javax.jdo.annotations.Query(
         name="dtmv_findByStringProperty", language="JDOQL",  
         value="SELECT FROM org.apache.isis.tck.dom.scalars.DateTimeValuedEntity WHERE stringProperty == :i")
 @ObjectType("APLV")
+@Deprecated
 public class DateTimeValuedEntity extends AbstractDomainObject {
 
     
@@ -45,10 +51,9 @@ public class DateTimeValuedEntity extends AbstractDomainObject {
         return stringProperty;
     }
 
-    public void setStringProperty(final String description) {
-        this.stringProperty = description;
+    public void setStringProperty(final String stringProperty) {
+        this.stringProperty = stringProperty;
     }
-
     // }}
 
     
@@ -78,6 +83,12 @@ public class DateTimeValuedEntity extends AbstractDomainObject {
 
     public void setJavaSqlDate(final java.sql.Date javaSqlDate) {
         this.javaSqlDate = javaSqlDate;
+    }
+
+    public DateTimeValuedEntity updateJavaSqlDate(
+            @Optional final java.sql.Date javaSqlDate) {
+        setJavaSqlDate(javaSqlDate);
+        return this;
     }
     // }}
 
@@ -120,7 +131,6 @@ public class DateTimeValuedEntity extends AbstractDomainObject {
     public org.joda.time.LocalDateTime getJodaLocalDateTime() {
         return jodaLocalDateTime;
     }
-
     public void setJodaLocalDateTime(final org.joda.time.LocalDateTime jodaLocalDateTime) {
         this.jodaLocalDateTime = jodaLocalDateTime;
     }

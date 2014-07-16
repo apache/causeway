@@ -39,11 +39,30 @@ public final class UrlEncodingUtils {
         }
     };
 
+    public final static Function<String, String> FUNCTION_NULLSAFE = new Function<String, String>() {
+
+        @Override
+        public String apply(final String input) {
+            if (input == null) {
+                return null;
+            }
+            try {
+                return URLDecoder.decode(input, "UTF-8");
+            } catch (final UnsupportedEncodingException e) {
+                return "";
+            }
+        }
+    };
+
     private UrlEncodingUtils() {
     }
 
     public static String urlDecode(final String string) {
         return FUNCTION.apply(string);
+    }
+
+    public static String urlDecodeNullSafe(final String string) {
+        return FUNCTION_NULLSAFE.apply(string);
     }
 
     public static String urlEncode(final String str) {
@@ -54,5 +73,6 @@ public final class UrlEncodingUtils {
             throw new RuntimeException(e);
         }
     }
+
 
 }

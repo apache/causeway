@@ -18,21 +18,11 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.io.InputStream;
 import java.util.List;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.jboss.resteasy.annotations.ClientResponseType;
-
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -42,8 +32,6 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceR
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
-import org.apache.isis.viewer.restfulobjects.server.resources.DomainResourceHelper.MemberMode;
-import org.apache.isis.viewer.restfulobjects.server.resources.ResourceAbstract.Caching;
 
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements DomainServiceResource {
@@ -157,8 +145,15 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @GET
     @Path("/{serviceId}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response invokeActionQueryOnly(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, @QueryParam("x-isis-querystring") final String xIsisQueryString) {
-        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, xIsisQueryString);
+    public Response invokeActionQueryOnly(
+            final @PathParam("serviceId") String serviceId,
+            final @PathParam("actionId") String actionId,
+            final @QueryParam("x-isis-querystring") String xIsisUrlEncodedQueryString) {
+
+
+        final String urlUnencodedQueryString = UrlEncodingUtils.urlDecodeNullSafe(xIsisUrlEncodedQueryString != null? xIsisUrlEncodedQueryString: httpServletRequest.getQueryString());
+        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, urlUnencodedQueryString);
+
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
         
@@ -175,7 +170,10 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Consumes({ MediaType.WILDCARD })
     // to save the client having to specify a Content-Type: application/json
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response invokeActionIdempotent(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream body) {
+    public Response invokeActionIdempotent(
+            final @PathParam("serviceId") String serviceId,
+            final @PathParam("actionId") String actionId,
+            final InputStream body) {
         init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, body);
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();

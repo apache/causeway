@@ -44,6 +44,7 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.DomainTypeResource;
+import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.ActionDescriptionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.ActionParameterDescriptionReprRenderer;
@@ -212,11 +213,11 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     public Response domainTypeIsSubtypeOf(
             @PathParam("domainType") final String domainType, 
             @QueryParam("supertype") final String superTypeStr, // simple style
-            @QueryParam("args") final String args // formal style
+            @QueryParam("args") final String argsUrlEncoded // formal style
             ) {
         init(Where.ANYWHERE);
 
-        final String supertype = domainTypeFor(superTypeStr, args, "supertype");
+        final String supertype = domainTypeFor(superTypeStr, argsUrlEncoded, "supertype");
 
         final ObjectSpecification domainTypeSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
         final ObjectSpecification supertypeSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(supertype));
@@ -242,12 +243,12 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     public Response domainTypeIsSupertypeOf(
             @PathParam("domainType") final String domainType, 
             @QueryParam("subtype") final String subTypeStr, // simple style
-            @QueryParam("args") final String args // formal style
+            @QueryParam("args") final String argsUrlEncoded // formal style
             ) {
 
         init(Where.ANYWHERE);
 
-        final String subtype = domainTypeFor(subTypeStr, args, "subtype");
+        final String subtype = domainTypeFor(subTypeStr, argsUrlEncoded, "subtype");
 
         final ObjectSpecification domainTypeSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
         final ObjectSpecification subtypeSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(subtype));
@@ -265,20 +266,25 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         return responseOfOk(renderer, Caching.ONE_DAY).build();
     }
 
-    private static String domainTypeFor(final String domainTypeStr, final String argumentsQueryString, final String argsParamName) {
+    private static String domainTypeFor(
+            final String domainTypeStr,
+            final String argsAsUrlEncodedQueryString,
+            final String argsParamName) {
+
         // simple style; simple return
         if (!Strings.isNullOrEmpty(domainTypeStr)) {
             return domainTypeStr;
         }
 
-        // formal style; must parse from args that has a link with an href to
-        // the domain type
-        final String href = linkFromFormalArgs(argumentsQueryString, argsParamName);
+
+        // formal style; must parse from args that has a link with an href to the domain type
+        final String argsAsQueryString = UrlEncodingUtils.urlDecode(argsAsUrlEncodedQueryString);
+        final String href = linkFromFormalArgs(argsAsQueryString, argsParamName);
         return UrlParserUtils.domainTypeFrom(href);
     }
 
-    private static String linkFromFormalArgs(final String argumentsQueryString, final String paramName) {
-        final JsonRepresentation arguments = DomainResourceHelper.readQueryStringAsMap(argumentsQueryString);
+    private static String linkFromFormalArgs(final String argumentsAsQueryString, final String paramName) {
+        final JsonRepresentation arguments = DomainResourceHelper.readQueryStringAsMap(argumentsAsQueryString);
         if (!arguments.isLink(paramName)) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Args should contain a link '%s'", paramName);
         }

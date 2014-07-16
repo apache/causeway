@@ -19,14 +19,9 @@
 
 package org.apache.isis.core.tck.dom.scalars;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Date;
-
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
-
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
@@ -56,6 +51,12 @@ public class JodaValuedEntity extends AbstractDomainObject {
         this.stringProperty = stringProperty;
     }
 
+    public JodaValuedEntity updateStringProperty(
+            @Optional final String stringProperty) {
+        setStringProperty(stringProperty);
+        return this;
+    }
+
     // }}
 
     // {{ LocalDateProperty
@@ -69,6 +70,12 @@ public class JodaValuedEntity extends AbstractDomainObject {
 
     public void setLocalDateProperty(final LocalDate localDateProperty) {
         this.localDateProperty = localDateProperty;
+    }
+
+    public JodaValuedEntity updateLocalDateProperty(
+            @Optional final LocalDate localDateProperty) {
+        setLocalDateProperty(localDateProperty);
+        return this;
     }
     // }}
 
@@ -85,6 +92,12 @@ public class JodaValuedEntity extends AbstractDomainObject {
     public void setLocalDateTimeProperty(final LocalDateTime localDateTimeProperty) {
         this.localDateTimeProperty = localDateTimeProperty;
     }
+
+    public JodaValuedEntity updateLocalDateTimeProperty(
+            @Optional final LocalDateTime localDateTimeProperty) {
+        setLocalDateTimeProperty(localDateTimeProperty);
+        return this;
+    }
     // }}
     
     
@@ -99,6 +112,12 @@ public class JodaValuedEntity extends AbstractDomainObject {
     
     public void setDateTimeProperty(final DateTime dateTimeProperty) {
         this.dateTimeProperty = dateTimeProperty;
+    }
+
+    public JodaValuedEntity updateDateTimeProperty(
+            @Optional final DateTime dateTimeProperty) {
+        setDateTimeProperty(dateTimeProperty);
+        return this;
     }
     // }}
 

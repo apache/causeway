@@ -22,17 +22,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
-
+import javax.ws.rs.core.*;
 import com.google.common.collect.Sets;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -70,7 +63,7 @@ public class ResourceContext implements RendererContext {
     private List<List<String>> followLinks;
 
     private final Where where;
-    private final String queryString;
+    private final String urlUnencodedQueryString;
     private JsonRepresentation readQueryStringAsMap;
 
     //////////////////////////////////////////////////////////////////
@@ -83,11 +76,12 @@ public class ResourceContext implements RendererContext {
             final UriInfo uriInfo, 
             final Request request, 
             final Where where, 
-            final String queryStringIfAny,
+            final String urlUnencodedQueryStringIfAny,
             final HttpServletRequest httpServletRequest, 
             final HttpServletResponse httpServletResponse,
             final SecurityContext securityContext, 
-            final Localization localization, final AuthenticationSession authenticationSession, 
+            final Localization localization,
+            final AuthenticationSession authenticationSession,
             final PersistenceSession persistenceSession, 
             final AdapterManager objectAdapterLookup, 
             final SpecificationLoader specificationLookup, 
@@ -96,7 +90,7 @@ public class ResourceContext implements RendererContext {
         this.httpHeaders = httpHeaders;
         this.uriInfo = uriInfo;
         this.request = request;
-        this.queryString = queryStringIfAny;
+        this.urlUnencodedQueryString = urlUnencodedQueryStringIfAny;
         this.httpServletRequest = httpServletRequest;
         this.httpServletResponse = httpServletResponse;
         this.securityContext = securityContext;
@@ -162,18 +156,11 @@ public class ResourceContext implements RendererContext {
     }
 
     /**
-     * The {@link HttpServletRequest#getQueryString() query string}, cached
-     * after first call.
-     * 
-     * <p>
-     * Note that this can return non-null for <tt>PUT</tt>s as well as <tt>GET</tt>s.
-     * It will only have been URL encoded for the latter; the caller should handle both cases.
+     * Note that this can return non-null for all HTTP methods; will be either the
+     * query string (GET, DELETE) or read out of the input stream (PUT, POST).
      */
-    public String getQueryString() {
-        if(queryString != null) {
-            return queryString;
-        }
-        return getHttpServletRequest().getQueryString();
+    public String getUrlUnencodedQueryString() {
+        return urlUnencodedQueryString;
     }
 
     public JsonRepresentation getQueryStringAsJsonRepr() {
@@ -202,7 +189,8 @@ public class ResourceContext implements RendererContext {
             }
             return map;
         } else {
-            return DomainResourceHelper.readQueryStringAsMap(getQueryString());
+            final String queryString = getUrlUnencodedQueryString();
+            return DomainResourceHelper.readQueryStringAsMap(queryString);
         }
     }
 

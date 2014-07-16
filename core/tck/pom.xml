@@ -17,7 +17,8 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -38,18 +39,18 @@
         <datanucleus-maven-plugin.version>3.3.2</datanucleus-maven-plugin.version>
         <datanucleus-jodatime.version>3.2.1</datanucleus-jodatime.version>
     </properties>
-    
+
     <repositories>
         <repository>
-              <id>apache.snapshots</id>
-              <name>Apache Snapshots</name>
-              <url>https://repository.apache.org/content/repositories/snapshots/</url>
-              <releases>
-                  <enabled>false</enabled>
-              </releases>
-              <snapshots>
-              </snapshots>
-          </repository>
+            <id>apache.snapshots</id>
+            <name>Apache Snapshots</name>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+            </snapshots>
+        </repository>
     </repositories>
 
     <build>
@@ -112,24 +113,24 @@
                     <version>6.1.26</version>
                 </plugin>
 
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-shade-plugin</artifactId>
-					<version>2.2</version>
-				</plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>2.2</version>
+                </plugin>
 
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-antrun-plugin</artifactId>
-					<version>1.7</version>
-					<executions>
-						<execution>
-					        <goals>
-					          <goal>run</goal>
-					        </goals>
-						</execution>
-					</executions>
-				</plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.7</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -143,7 +144,7 @@
             </plugin>
         </plugins>
     </build>
-    
+
     <dependencyManagement>
         <dependencies>
 
@@ -164,8 +165,10 @@
 
     </dependencyManagement>
 
-	<modules>
-	  <module>tck-dom</module>
-	  <module>tck-fixture</module>
-	</modules>
+    <modules>
+        <module>tck-dom</module>
+        <module>tck-fixture</module>
+        <module>tck-viewer-restfulobjects</module>
+    </modules>
+
 </project>

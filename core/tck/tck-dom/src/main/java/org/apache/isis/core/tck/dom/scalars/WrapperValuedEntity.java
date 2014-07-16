@@ -44,8 +44,14 @@ public class WrapperValuedEntity extends AbstractDomainObject {
         return stringProperty;
     }
 
-    public void setStringProperty(final String description) {
-        this.stringProperty = description;
+    public void setStringProperty(final String stringProperty) {
+        this.stringProperty = stringProperty;
+    }
+
+    public WrapperValuedEntity updateStringProperty(
+            @Optional final String stringProperty) {
+        setStringProperty(stringProperty);
+        return this;
     }
 
     // }}
@@ -63,6 +69,11 @@ public class WrapperValuedEntity extends AbstractDomainObject {
         this.booleanProperty = booleanProperty;
     }
 
+    public WrapperValuedEntity updateBooleanProperty(@Optional final Boolean booleanProperty) {
+        setBooleanProperty(booleanProperty);
+        return this;
+    }
+
     // }}
 
     // {{ ByteProperty
@@ -74,8 +85,14 @@ public class WrapperValuedEntity extends AbstractDomainObject {
         return byteProperty;
     }
 
-    public void setByteProperty(final Byte byteWProperty) {
-        this.byteProperty = byteWProperty;
+    public void setByteProperty(final Byte byteProperty) {
+        this.byteProperty = byteProperty;
+    }
+
+    public WrapperValuedEntity updateByteProperty(
+            @Optional final Byte byteProperty) {
+        setByteProperty(byteProperty);
+        return this;
     }
 
     // }}
@@ -93,6 +110,12 @@ public class WrapperValuedEntity extends AbstractDomainObject {
         this.shortProperty = shortProperty;
     }
 
+    public WrapperValuedEntity updateShortProperty(
+            @Optional final Short shortProperty) {
+        setShortProperty(shortProperty);
+        return this;
+    }
+
     // }}
 
     // {{ IntegerProperty
@@ -106,6 +129,12 @@ public class WrapperValuedEntity extends AbstractDomainObject {
 
     public void setIntegerProperty(final Integer integerProperty) {
         this.integerProperty = integerProperty;
+    }
+
+    public WrapperValuedEntity updateIntegerProperty(
+            @Optional final Integer integerProperty) {
+        setIntegerProperty(integerProperty);
+        return this;
     }
 
     // }}
@@ -123,6 +152,12 @@ public class WrapperValuedEntity extends AbstractDomainObject {
         this.longProperty = longProperty;
     }
 
+    public WrapperValuedEntity updateLongProperty(
+            @Optional final Long longProperty) {
+        setLongProperty(longProperty);
+        return this;
+    }
+
     // }}
 
     // {{ FloatProperty
@@ -134,8 +169,14 @@ public class WrapperValuedEntity extends AbstractDomainObject {
         return floatProperty;
     }
 
-    public void setFloatProperty(final Float floatWProperty) {
-        this.floatProperty = floatWProperty;
+    public void setFloatProperty(final Float floatProperty) {
+        this.floatProperty = floatProperty;
+    }
+
+    public WrapperValuedEntity updateFloatProperty(
+            @Optional final Float floatProperty) {
+        setFloatProperty(floatProperty);
+        return this;
     }
 
     // }}
@@ -149,9 +190,16 @@ public class WrapperValuedEntity extends AbstractDomainObject {
         return doubleProperty;
     }
 
-    public void setDoubleProperty(final Double doubleWProperty) {
-        this.doubleProperty = doubleWProperty;
+    public void setDoubleProperty(final Double doubleProperty) {
+        this.doubleProperty = doubleProperty;
     }
+
+    public WrapperValuedEntity updateDoubleProperty(
+            @Optional final Double doubleProperty) {
+        setDoubleProperty(doubleProperty);
+        return this;
+    }
+
     // }}
 
     // {{ CharacterProperty (property)
@@ -168,6 +216,13 @@ public class WrapperValuedEntity extends AbstractDomainObject {
     public void setCharacterProperty(final Character charProperty) {
         this.characterProperty = charProperty;
     }
+
+    public WrapperValuedEntity updateCharacterProperty(
+            @Optional final Character charProperty) {
+        setCharacterProperty(charProperty);
+        return this;
+    }
+
     // }}
 
 

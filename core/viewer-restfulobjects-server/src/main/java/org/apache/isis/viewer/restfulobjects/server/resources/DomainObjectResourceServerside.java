@@ -33,6 +33,7 @@ import javax.ws.rs.core.Response;
 import org.jboss.resteasy.annotations.ClientResponseType;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -317,7 +318,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final OneToManyAssociation collection = helper.getCollectionThatIsVisibleForIntent(collectionId, Intent.MUTATE, getResourceContext().getWhere());
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
-        final ObjectAdapter argAdapter = helper.parseAsMapWithSingleValue(collectionSpec, getResourceContext().getQueryString());
+        final ObjectAdapter argAdapter = helper.parseAsMapWithSingleValue(collectionSpec, getResourceContext().getUrlUnencodedQueryString());
 
         final Consent consent = collection.isValidToRemove(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -369,8 +370,14 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @GET
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response invokeActionQueryOnly(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, @QueryParam("x-isis-querystring") final String xIsisQueryString) {
-        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, xIsisQueryString);
+    public Response invokeActionQueryOnly(
+            final @PathParam("domainType") String domainType,
+            final @PathParam("instanceId") String instanceId,
+            final @PathParam("actionId") String actionId,
+            final @QueryParam("x-isis-querystring") String xIsisUrlEncodedQueryString) {
+
+        final String urlUnencodedQueryString = UrlEncodingUtils.urlDecodeNullSafe(xIsisUrlEncodedQueryString != null? xIsisUrlEncodedQueryString: httpServletRequest.getQueryString());
+        init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, urlUnencodedQueryString);
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
 
@@ -385,7 +392,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD })
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response invokeActionIdempotent(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, final InputStream body) {
+    public Response invokeActionIdempotent(
+            final @PathParam("domainType") String domainType,
+            final @PathParam("instanceId") String instanceId,
+            final @PathParam("actionId") String actionId,
+            final InputStream body) {
+
         init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, body);
 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
