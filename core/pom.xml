@@ -94,7 +94,7 @@
         <!-- ensure compatible with version aggregated in datanucleus-accessplatform-jdo-rdbms -->
         <jdo-api.version>3.1-rc1</jdo-api.version>
 
-        <shiro.version>1.2.1</shiro.version>
+        <shiro.version>1.2.3</shiro.version>
 
         <slf4j.version>1.7.6</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
