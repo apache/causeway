@@ -21,12 +21,12 @@
 
     <parent>
         <groupId>org.apache.isis.example.application</groupId>
-        <artifactId>quickstart_wicket_restful_jdo</artifactId>
+        <artifactId>simpleapp</artifactId>
         <version>1.6.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>quickstart_wicket_restful_jdo-webapp</artifactId>
-    <name>Quickstart Wicket/Restful/JDO Webapp</name>
+    <artifactId>simpleapp-webapp</artifactId>
+    <name>Simple Wicket/Restful/JDO Webapp</name>
 
     <description>This module runs both the Wicket viewer and the Restfulobjects viewer in a single webapp configured to run using the datanucleus object store.</description>
 
@@ -78,7 +78,7 @@
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <warName>quickstart</warName>
+                    <warName>simple</warName>
                     <archive>
                         <manifest>
                             <addClasspath>false</addClasspath>
@@ -139,7 +139,7 @@
         <!-- other modules in this project -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>quickstart_wicket_restful_jdo-dom</artifactId>
+            <artifactId>simpleapp-dom</artifactId>
             <exclusions>
                 <exclusion>
                     <!-- so don't pick up transitive dependency to asm 4.0.0 -->
@@ -150,7 +150,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>quickstart_wicket_restful_jdo-fixture</artifactId>
+            <artifactId>simpleapp-fixture</artifactId>
             <exclusions>
                 <exclusion>
                     <!-- so don't pick up transitive dependency to asm 4.0.0 -->
@@ -203,14 +203,34 @@
             <groupId>org.apache.isis.module</groupId>
             <artifactId>isis-module-devutils-impl</artifactId>
         </dependency>
+        <!--
+        uncomment to enable auditing (@Audited),
+        persisted to database
+        -->
+        <!--
         <dependency>
             <groupId>org.apache.isis.module</groupId>
             <artifactId>isis-module-audit-jdo</artifactId>
         </dependency>
+        -->
+
+        <!--
+        uncomment to enable commands (@Command annotation)
+        persisted to database, also enabling the ability to run commands in the background
+        (eg using the Quartz scheduler)
+        -->
+        <!--
         <dependency>
             <groupId>org.apache.isis.module</groupId>
             <artifactId>isis-module-command-jdo</artifactId>
         </dependency>
+        -->
+
+        <!--
+        uncomment to enable publishing (@PublishedObject, @PublishedAction annotations)
+        persisted to database, and using the Restful Objects (JSON) serialization of the event.
+        -->
+        <!--
         <dependency>
             <groupId>org.apache.isis.module</groupId>
             <artifactId>isis-module-publishing-jdo</artifactId>
@@ -219,10 +239,18 @@
             <groupId>org.apache.isis.module</groupId>
             <artifactId>isis-module-publishingeventserializer-ro</artifactId>
         </dependency>
+        -->
+
+        <!--
+        uncomment to use the AppSettings or UserSettings services
+        (see also declaration of its applib in dom module)
+        -->
+        <!--
         <dependency>
             <groupId>org.apache.isis.module</groupId>
             <artifactId>isis-module-settings-impl-jdo</artifactId>
         </dependency>
+        -->
 
 
         <!-- to run using WebServer (optional) -->
@@ -287,17 +315,6 @@
           </exclusions>
         </dependency>
 
-
-        <!-- quartz scheduler integration -->
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz-jobs</artifactId>
-        </dependency>
-
     </dependencies>
 
     <profiles>
@@ -329,7 +346,7 @@
             <properties>
                 <!-- as used in the rebel.xml in the dom project -->
                 <target.dir>target</target.dir>
-                <isis-jrebel-plugin.packagePrefix>dom.todo,org.apache.isis.objectstore.jdo.applib</isis-jrebel-plugin.packagePrefix>
+                <isis-jrebel-plugin.packagePrefix>dom.simple,org.apache.isis.objectstore.jdo.applib</isis-jrebel-plugin.packagePrefix>
                 <isis-jrebel-plugin.loggingLevel>warn</isis-jrebel-plugin.loggingLevel>
             </properties>
             <build>

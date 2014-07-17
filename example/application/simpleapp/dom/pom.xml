@@ -22,12 +22,12 @@
 
 	<parent>
     	<groupId>org.apache.isis.example.application</groupId>
-    	<artifactId>quickstart_wicket_restful_jdo</artifactId>
+    	<artifactId>simpleapp</artifactId>
         <version>1.6.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>quickstart_wicket_restful_jdo-dom</artifactId>
-	<name>Quickstart Wicket/Restful/JDO DOM</name>
+	<artifactId>simpleapp-dom</artifactId>
+	<name>Simple Wicket/Restful/JDO DOM</name>
 
 	<build>
         <resources>
@@ -110,6 +110,11 @@
 			<artifactId>isis-core-applib</artifactId>
 		</dependency>
 
+        <!--
+        uncomment to use the AppSettings or UserSettings services
+        (also uncomment corresponding dependency in webapp module)
+        -->
+        <!--
         <dependency>
             <groupId>org.apache.isis.module</groupId>
             <artifactId>isis-module-settings-applib</artifactId>
@@ -118,6 +123,8 @@
             <groupId>org.apache.isis.module</groupId>
             <artifactId>isis-module-devutils-applib</artifactId>
         </dependency>
+        -->
+
 
 		<dependency>
             <groupId>org.apache.isis.core</groupId>
@@ -131,6 +138,6 @@
             <artifactId>objenesis</artifactId>
             <scope>test</scope>
         </dependency>
+
 	</dependencies>
-    
 </project>

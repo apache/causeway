@@ -22,10 +22,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.apache.isis.example.application</groupId>
-    <artifactId>simple_wicket_restful_jdo</artifactId>
+    <artifactId>todoapp</artifactId>
     <version>1.6.0-SNAPSHOT</version>
 
-    <name>Simple Wicket/Restful/JDO App</name>
+    <name>Quickstart Wicket/Restful/JDO App</name>
 
     <packaging>pom</packaging>
 
@@ -35,12 +35,14 @@
 
 	<properties>
         <isis.version>1.6.0-SNAPSHOT</isis.version>
-        <isis-viewer-wicket.version>1.6.0-SNAPSHOT</isis-viewer-wicket.version>
+		<isis-viewer-wicket.version>1.6.0-SNAPSHOT</isis-viewer-wicket.version>
 
         <!-- must be consistent with the versions defined by the JDO Objectstore -->
         <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
         <datanucleus-maven-plugin.version>3.3.2</datanucleus-maven-plugin.version>
-
+        
+        <quartz-scheduler.version>2.2.1</quartz-scheduler.version>
+        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -88,13 +90,9 @@
                     <version>2.16</version>
                     <configuration>
                         <includes>
-                            <include>**/*Test.java</include>
-                            <include>**/*Test_*.java</include>
-                            <include>**/*Spec*.java</include>
+                            <include>**/*.java</include>
                         </includes>
                         <excludes>
-                            <exclude>**/Test*.java</exclude>
-                            <exclude>**/*ForTesting.java</exclude>
                             <exclude>**/*Abstract*.java</exclude>
                         </excludes>
                         <useFile>true</useFile>
@@ -326,19 +324,34 @@
             <!-- this project's own modules -->
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>simple_wicket_restful_jdo-dom</artifactId>
+                <artifactId>todoapp-dom</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>simple_wicket_restful_jdo-fixture</artifactId>
+                <artifactId>todoapp-fixture</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>simple_wicket_restful_jdo-webapp</artifactId>
+                <artifactId>todoapp-webapp</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+
+            <!-- quartz scheduler integration -->
+
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>${quartz-scheduler.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz-jobs</artifactId>
+                <version>${quartz-scheduler.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
     

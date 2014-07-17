@@ -22,17 +22,17 @@
 
     <parent>
     	<groupId>org.apache.isis.example.application</groupId>
-        <artifactId>simple_wicket_restful_jdo</artifactId>
+        <artifactId>todoapp</artifactId>
         <version>1.6.0-SNAPSHOT</version>
     </parent>
 
-	<artifactId>simple_wicket_restful_jdo-fixture</artifactId>
-	<name>Simple Wicket/Restful/JDO Fixtures</name>
+	<artifactId>todoapp-fixture</artifactId>
+	<name>Quickstart Wicket/Restful/JDO Fixtures</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>simple_wicket_restful_jdo-dom</artifactId>
+			<artifactId>todoapp-dom</artifactId>
 		</dependency>
 	</dependencies>
 

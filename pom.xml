@@ -55,11 +55,11 @@
                 <module>component/viewer/scimpi</module>
                 <module>component/viewer/wicket</module>
         
-                <module>example/application/quickstart_wicket_restful_jdo</module>
-                <module>example/application/simple_wicket_restful_jdo</module>
+                <module>example/application/todoapp</module>
+                <module>example/application/simpleapp</module>
                 
-                <module>example/archetype/quickstart_wicket_restful_jdo</module>
-                <module>example/archetype/simple_wicket_restful_jdo</module>
+                <module>example/archetype/todoapp</module>
+                <module>example/archetype/simpleapp</module>
         
                 <module>tool/maven-plugin</module>
             </modules>
@@ -72,11 +72,11 @@
 
                 <module>component/viewer/wicket</module>
         
-                <module>example/application/quickstart_wicket_restful_jdo</module>
-                <module>example/application/simple_wicket_restful_jdo</module>
+                <module>example/application/todoapp</module>
+                <module>example/application/simpleapp</module>
                 
-                <module>example/archetype/simple_wicket_restful_jdo</module>
-                <module>example/archetype/quickstart_wicket_restful_jdo</module>
+                <module>example/archetype/todoapp</module>
+                <module>example/archetype/simpleapp</module>
             </modules>
         </profile>
 
@@ -105,8 +105,8 @@
         <profile>
             <id>examples</id>
             <modules>
-                <module>example/application/quickstart_wicket_restful_jdo</module>
-                <module>example/application/simple_wicket_restful_jdo</module>
+                <module>example/application/todoapp</module>
+                <module>example/application/simpleapp</module>
             </modules>
         </profile>
     </profiles>
