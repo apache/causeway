@@ -22,12 +22,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.shiro.authz.Permission;
-import org.apache.shiro.authz.permission.WildcardPermission;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.shiro.authz.Permission;
+import org.apache.shiro.authz.permission.WildcardPermission;
 
 public class IsisPermission extends WildcardPermission {
 
@@ -42,7 +40,7 @@ public class IsisPermission extends WildcardPermission {
         IsisPermission.VETOING_PERMISSIONS.get().clear();
     }
 
-    public static boolean isVetoed(String permissionGroup, Permission p) {
+    static boolean isVetoed(String permissionGroup, Permission p) {
         if(permissionGroup == null) {
             return false;
         }
@@ -58,7 +56,7 @@ public class IsisPermission extends WildcardPermission {
         return false;
     }
 
-    public static void addVeto(IsisPermission vetoingPermission) {
+    static void addVeto(IsisPermission vetoingPermission) {
         String permissionGroup = vetoingPermission.getPermissionGroup();
         List<IsisPermission> vetoingPermissions = IsisPermission.VETOING_PERMISSIONS.get().get(permissionGroup);
         if(vetoingPermissions == null) {
@@ -111,7 +109,23 @@ public class IsisPermission extends WildcardPermission {
     String getPermissionGroup() {
         return permissionGroup;
     }
-    
+
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof IsisPermission) {
+            IsisPermission ip = (IsisPermission) other;
+            return permissionGroup.equals(ip.getPermissionGroup()) && super.equals(other);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        // good enough
+        return super.hashCode();
+    }
+
     @Override
     public String toString() {
         return (veto?"!":"") + (permissionGroup != null? permissionGroup + "/": "") + super.toString();
