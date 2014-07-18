@@ -20,15 +20,19 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -37,11 +41,15 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.*;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.AjaxDeferredBehaviour.OpenUrlStrategy;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
@@ -92,15 +100,45 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     if(ajaxDeferredBehaviour != null) {
                         ajaxDeferredBehaviour.initiate(target);
                     } else {
-                        final ActionPanel actionPromptPanel = 
+                        final ActionPanel actionPanel =
                                 (ActionPanel) getComponentFactoryRegistry().createComponent(
                                         ComponentType.ACTION_PROMPT, actionPrompt.getContentId(), actionModel);
                         
-                        actionPrompt.setPanel(actionPromptPanel, target);
-                        actionPromptPanel.setActionPrompt(actionPrompt);
+                        actionPrompt.setPanel(actionPanel, target);
+                        actionPanel.setActionPrompt(actionPrompt);
                         actionPrompt.show(target);
-                        
-                        target.focusComponent(actionPromptPanel);
+
+                        focusOnFirstParameter(target, actionPanel);
+                    }
+                }
+
+                private void focusOnFirstParameter(AjaxRequestTarget target, ActionPanel actionPanel) {
+
+                    // first, force all parameters to build themselves...
+                    actionPanel.visitChildren(new IVisitor<Component, Component>() {
+                        @Override
+                        public void component(Component object, IVisit<Component> visit) {
+                            if (object instanceof ScalarPanelAbstract) {
+                                ScalarPanelAbstract spa = (ScalarPanelAbstract) object;
+                                spa.forceBuildGui();
+                                visit.dontGoDeeper();
+                            }
+                        }
+                    });
+
+                    // second, go searching for the first <input> in the action panel.
+                    final Component actionPanelFirstParam = actionPanel.visitChildren(new IVisitor<Component, Component>() {
+                        @Override
+                        public void component(Component object, IVisit<Component> visit) {
+                            if (object instanceof FormComponent) {
+                                visit.stop(object);
+                            }
+                        }
+                    });
+
+                    // third, if found then use Wicket API to focus on this component
+                    if(actionPanelFirstParam != null) {
+                        target.focusComponent(actionPanelFirstParam);
                     }
                 }
             };

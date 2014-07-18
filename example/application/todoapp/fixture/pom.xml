@@ -27,7 +27,7 @@
     </parent>
 
 	<artifactId>todoapp-fixture</artifactId>
-	<name>Quickstart Wicket/Restful/JDO Fixtures</name>
+	<name>ToDo App Fixtures</name>
 
 	<dependencies>
 		<dependency>

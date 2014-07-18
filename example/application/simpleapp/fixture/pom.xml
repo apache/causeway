@@ -27,7 +27,7 @@
     </parent>
 
 	<artifactId>simpleapp-fixture</artifactId>
-	<name>Simple Wicket/Restful/JDO Fixtures</name>
+	<name>Simple App Fixtures</name>
 
 	<dependencies>
 		<dependency>

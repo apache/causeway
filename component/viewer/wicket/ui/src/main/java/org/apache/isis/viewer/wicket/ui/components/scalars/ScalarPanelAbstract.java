@@ -139,10 +139,30 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         return componentIfRegular;
     }
 
+    private boolean guiForceBuilt = false;
+    /**
+     * Bit of a hack, but is an API to force the eager building of this component such that focus can be placed on it.
+     *
+     * <p>
+     *     This is used in {@link org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactoryAbstract}
+     *     when creating the action prompt parameters panel.
+     * </p>
+     */
+    public void forceBuildGui() {
+        buildGui();
+        guiForceBuilt = true;
+    }
     @Override
     protected void onBeforeRender() {
-        if (!hasBeenRendered() || alwaysRebuildGui()) {
-            buildGui();
+
+        if ((!hasBeenRendered() || alwaysRebuildGui())) {
+            if(!guiForceBuilt) {
+                // skip building, as was forced previously
+                buildGui();
+            } else {
+                // reset flag, so preserve original behaviour before the 'forced' hack.
+                guiForceBuilt = false;
+            }
         }
         final ScalarModel scalarModel = getModel();
         if (scalarModel.isViewMode()) {

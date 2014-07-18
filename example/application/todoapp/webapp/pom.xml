@@ -26,7 +26,7 @@
     </parent>
 
     <artifactId>todoapp-webapp</artifactId>
-    <name>Quickstart Wicket/Restful/JDO Webapp</name>
+    <name>ToDo App Webapp</name>
 
     <description>This module runs both the Wicket viewer and the Restfulobjects viewer in a single webapp configured to run using the datanucleus object store.</description>
 

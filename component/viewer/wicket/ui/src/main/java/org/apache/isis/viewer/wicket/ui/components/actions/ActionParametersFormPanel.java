@@ -50,7 +50,6 @@ import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import static org.hamcrest.CoreMatchers.*;
 
@@ -95,8 +94,6 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
         
         private final List<ScalarPanelAbstract> paramPanels = Lists.newArrayList();
 
-        private boolean renderedFirstField;
-
         public ActionParameterForm(final String id, final ActionModel actionModel) {
             super(id, actionModel);
 
@@ -134,11 +131,6 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                 if(paramPanel != null) {
                     paramPanel.setOutputMarkupId(true);
                     paramPanel.notifyOnChange(this);
-                }
-                
-                if(!renderedFirstField) {
-                    component.add(new CssClassAppender("first-field"));
-                    renderedFirstField = true;
                 }
             }
         }

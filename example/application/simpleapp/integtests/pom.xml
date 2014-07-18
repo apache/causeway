@@ -27,7 +27,7 @@
     </parent>
 
 	<artifactId>simpleapp-integtests</artifactId>
-	<name>Simple Wicket/Restful/JDO Integration Tests</name>
+	<name>Simple App Integration Tests</name>
 
     <build>
         <testResources>

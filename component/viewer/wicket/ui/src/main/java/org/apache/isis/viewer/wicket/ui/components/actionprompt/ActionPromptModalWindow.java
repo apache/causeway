@@ -104,13 +104,6 @@ public class ActionPromptModalWindow extends ModalWindow implements ActionPrompt
         super.show(target);
         
         StringBuilder builder = new StringBuilder();
-        builder.append("$('.first-field input').focus();");
-        
-        // attempting to fix https://issues.apache.org/jira/browse/ISIS-544
-        // unfortunately, doesn't seem to do anything
-        // http://api.jqueryui.com/datepicker/#method-show
-        //builder.append("$('.first-field input.hasDatepicker').datepicker('show');");
-        
 
         // ISIS-771, WICKET-5101
         builder.append("window.setTimeout("

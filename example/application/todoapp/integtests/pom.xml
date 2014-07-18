@@ -27,7 +27,7 @@
     </parent>
 
 	<artifactId>todoapp-integtests</artifactId>
-	<name>Quickstart Wicket/Restful/JDO Integration Tests</name>
+	<name>ToDo App Integration Tests</name>
 
     <build>
         <testResources>

@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>simpleapp-dom</artifactId>
-	<name>Simple Wicket/Restful/JDO DOM</name>
+	<name>Simple App DOM</name>
 
 	<build>
         <resources>

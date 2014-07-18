@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>todoapp-dom</artifactId>
-	<name>Quickstart Wicket/Restful/JDO DOM</name>
+	<name>ToDo App DOM</name>
 
 	<build>
         <resources>
