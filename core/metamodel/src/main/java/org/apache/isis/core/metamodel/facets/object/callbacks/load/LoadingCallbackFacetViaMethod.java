@@ -28,6 +28,10 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
+/**
+ * @deprecated - THIS CAN NEVER BE CALLED (BY JDO OBJECTSTORE AT LEAST)
+ */
+@Deprecated
 public class LoadingCallbackFacetViaMethod extends LoadingCallbackFacetAbstract implements ImperativeFacet {
 
     private final List<Method> methods = new ArrayList<Method>();

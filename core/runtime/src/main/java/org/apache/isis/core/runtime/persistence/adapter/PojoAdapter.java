@@ -519,18 +519,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     // Fire Changes
     // ///////////////////////////////////////////////////////////////////
 
-    /**
-     * Guaranteed to be called whenever this object is known to have changed
-     * (specifically, by the <tt>ObjectStorePersistor</tt>).
-     * 
-     * <p>
-     * This implementation does nothing, but subclasses (for example
-     * <tt>PojoAdapterX</tt>) might provide listeners.
-     */
-    @Override
-    public void fireChangedEvent() {
-    }
-
 
     @Override
     public boolean respondToChangesInPersistentObjects() {

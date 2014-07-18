@@ -20,18 +20,13 @@
 package org.apache.isis.core.runtime.persistence.objectstore.algorithm;
 
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
@@ -76,7 +71,10 @@ public class PersistAlgorithmDefault extends PersistAlgorithmAbstract {
             if(LOG.isDebugEnabled()) {
                 LOG.debug("make persistent " + adapter);
             }
-            CallbackUtils.callCallback(adapter, PersistingCallbackFacet.class);
+
+            // this is now a responsibility of the objectstore
+            // CallbackUtils.callCallback(adapter, PersistingCallbackFacet.class);
+
             toPersistObjectSet.remapAsPersistent(adapter);
             
             // was previously to SERIALIZING_RESOLVED, but 
@@ -105,7 +103,10 @@ public class PersistAlgorithmDefault extends PersistAlgorithmAbstract {
                 }
             }
             toPersistObjectSet.addCreateObjectCommand(adapter);
-            CallbackUtils.callCallback(adapter, PersistedCallbackFacet.class);
+
+            // this is now a responsibility of the objectstore
+            // CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
+            
             adapter.changeState(stateWhilePersisting.getEndState());
         }
 

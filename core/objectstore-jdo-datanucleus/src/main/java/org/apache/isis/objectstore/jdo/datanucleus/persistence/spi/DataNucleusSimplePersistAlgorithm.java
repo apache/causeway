@@ -20,11 +20,8 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence.spi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithmAbstract;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
@@ -60,8 +57,13 @@ public class DataNucleusSimplePersistAlgorithm extends PersistAlgorithmAbstract 
         if (LOG.isDebugEnabled()) {
             LOG.debug("persist " + adapter);
         }
-        CallbackUtils.callCallback(adapter, PersistingCallbackFacet.class);
+
+        // previously we called the PersistingCallback here.
+        // this is now done in the JDO framework synchronizer.
+        //
+        // the guard below used to be because (apparently)
         // the callback might have caused the adapter to become persistent.
+        // leaving it in as think it does no harm...
         if (alreadyPersistedOrNotPersistable(adapter)) {
             return;
         }

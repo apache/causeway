@@ -218,8 +218,6 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
 
     void setVersion(Version version);
 
-    void fireChangedEvent();
-
     /**
      * Whether this instance belongs to another object (meaning its
      * {@link #getOid()} will be <tt>ParentedOid</tt>, either an 

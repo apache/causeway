@@ -20,14 +20,11 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence;
 
 import java.text.MessageFormat;
 import java.util.concurrent.Callable;
-
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.spi.PersistenceCapable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -38,10 +35,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.*;
 import org.apache.isis.core.runtime.persistence.PersistorUtil;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
@@ -60,7 +54,16 @@ public class FrameworkSynchronizer {
      * Just used for logging.
      */
     public enum CalledFrom {
-        EVENT_LOAD, EVENT_STORE, EVENT_PREDIRTY, OS_QUERY, OS_RESOLVE, OS_LAZILYLOADED, EVENT_PREDELETE, EVENT_POSTDELETE
+        EVENT_LOAD,
+        EVENT_PRESTORE,
+        EVENT_POSTSTORE,
+        EVENT_PREDIRTY,
+        EVENT_POSTDIRTY,
+        OS_QUERY,
+        OS_RESOLVE,
+        OS_LAZILYLOADED,
+        EVENT_PREDELETE,
+        EVENT_POSTDELETE
     }
 
 
@@ -78,15 +81,15 @@ public class FrameworkSynchronizer {
                 final Version datastoreVersion = getVersionIfAny(pc);
                 
                 final RootOid originalOid ;
-                ObjectAdapter originalAdapter = getAdapterManager().getAdapterFor(pojo);
-                if(originalAdapter != null) {
+                ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+                if(adapter != null) {
                     ensureRootObject(pojo);
-                    originalOid = (RootOid) originalAdapter.getOid();
+                    originalOid = (RootOid) adapter.getOid();
 
-                    final Version originalVersion = originalAdapter.getVersion();
+                    final Version originalVersion = adapter.getVersion();
 
                     // sync the pojo held by the adapter with that just loaded
-                    getPersistenceSession().remapRecreatedPojo(originalAdapter, pojo);
+                    getPersistenceSession().remapRecreatedPojo(adapter, pojo);
                     
                     // since there was already an adapter, do concurrency check
                     // (but don't set abort cause if checking is suppressed through thread-local)
@@ -114,20 +117,21 @@ public class FrameworkSynchronizer {
                     
                     // it appears to be possible that there is already an adapter for this Oid, 
                     // ie from ObjectStore#resolveImmediately()
-                    originalAdapter = getAdapterManager().getAdapterFor(originalOid);
-                    if(originalAdapter != null) {
-                        getPersistenceSession().remapRecreatedPojo(originalAdapter, pojo);
+                    adapter = getAdapterManager().getAdapterFor(originalOid);
+                    if(adapter != null) {
+                        getPersistenceSession().remapRecreatedPojo(adapter, pojo);
                     } else {
-                        originalAdapter = getPersistenceSession().mapRecreatedPojo(originalOid, pojo);
+                        adapter = getPersistenceSession().mapRecreatedPojo(originalOid, pojo);
+                        CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
                     }
                 }
-                if(!originalAdapter.isResolved()) {
-                    PersistorUtil.startResolving(originalAdapter);
-                    PersistorUtil.toEndState(originalAdapter);
+                if(!adapter.isResolved()) {
+                    PersistorUtil.startResolving(adapter);
+                    PersistorUtil.toEndState(adapter);
                 }
-                originalAdapter.setVersion(datastoreVersion);
+                adapter.setVersion(datastoreVersion);
                 if(pojo.jdoIsDeleted()) {
-                    originalAdapter.changeState(ResolveState.DESTROYED);
+                    adapter.changeState(ResolveState.DESTROYED);
                 }
 
                 ensureFrameworksInAgreement(pojo);
@@ -136,12 +140,54 @@ public class FrameworkSynchronizer {
     }
 
 
+    /**
+     * Called either when an entity is initially persisted, or when an entity is updated; fires the appropriate
+     * lifecycle callback.
+     *
+     * <p>
+     * The implementation therefore uses Isis' {@link org.apache.isis.core.metamodel.adapter.oid.Oid#isTransient() oid}
+     * to determine which callback to fire.
+     */
+    public void preStoreProcessingFor(final PersistenceCapable pojo, final CalledFrom calledFrom) {
+        withLogging(pojo, new Runnable() {
+            @Override
+            public void run() {
+                final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+                if(adapter == null) {
+                    // not expected.
+                    return;
+                }
+
+                final RootOid isisOid = (RootOid) adapter.getOid();
+                if (isisOid.isTransient()) {
+                    // persisting
+                    // previously this was performed in the DataNucleusSimplePersistAlgorithm.
+                    CallbackFacet.Util.callCallback(adapter, PersistingCallbackFacet.class);
+                } else {
+                    // updating
+
+                    // don't call here, already called in preDirty.
+
+                    // CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
+                }
+
+            }
+        }, calledFrom);
+    }
+
+    /**
+     * Called either when an entity is initially persisted, or when an entity is updated; fires the appropriate lifecycle callback
+     *
+     * <p>
+     * The implementation therefore uses Isis' {@link org.apache.isis.core.metamodel.adapter.oid.Oid#isTransient() oid}
+     * to determine which callback to fire.
+     */
     public void postStoreProcessingFor(final PersistenceCapable pojo, CalledFrom calledFrom) {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
                 ensureRootObject(pojo);
-                
+
                 // assert is persistent
                 if(!pojo.jdoIsPersistent()) {
                     throw new IllegalStateException("Pojo JDO state is not persistent! pojo dnOid: " + JDOHelper.getObjectId(pojo));
@@ -149,33 +195,30 @@ public class FrameworkSynchronizer {
 
                 final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
                 final RootOid isisOid = (RootOid) adapter.getOid();
-                
-                Class<? extends CallbackFacet> callbackFacetClass;
+
+
                 if (isisOid.isTransient()) {
                     // persisting
                     final RootOid persistentOid = getOidGenerator().createPersistentOrViewModelOid(pojo, isisOid);
-                    
+
                     getPersistenceSession().remapAsPersistent(adapter, persistentOid);
 
-                    callbackFacetClass = PersistedCallbackFacet.class;
-                    
+                    CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
+
                     final IsisTransaction transaction = getCurrentTransaction();
                     transaction.enlistCreated(adapter);
                 } else {
-                    // updating
-                    callbackFacetClass = UpdatedCallbackFacet.class;
-                    
-                    // no need to call transaction.enlist(..); 
-                    // already called in preDirty and the post value is captured lazily
+                    // updating;
+                    // the callback and transaction.enlist are done in the preDirty callback
+                    // (can't be done here, as the enlist requires to capture the 'before' values)
+                    CallbackFacet.Util.callCallback(adapter, UpdatedCallbackFacet.class);
                 }
-                
+
                 Utils.clearDirtyFor(adapter);
-                
+
                 Version versionIfAny = getVersionIfAny(pojo);
                 adapter.setVersion(versionIfAny);
-                CallbackUtils.callCallback(adapter, callbackFacetClass);
 
-                
                 ensureFrameworksInAgreement(pojo);
             }
         }, calledFrom);
@@ -208,6 +251,9 @@ public class FrameworkSynchronizer {
                     // hasn't yet executed, so thinks that the adapter is still transient. 
                     return;
                 }
+
+                CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
+
                 final IsisTransaction transaction = getCurrentTransaction();
                 transaction.enlistUpdating(adapter);
 
@@ -218,7 +264,6 @@ public class FrameworkSynchronizer {
     }
 
 
-    
     public ObjectAdapter lazilyLoaded(final PersistenceCapable pojo, CalledFrom calledFrom) {
         return withLogging(pojo, new Callable<ObjectAdapter>() {
             @Override
@@ -243,6 +288,7 @@ public class FrameworkSynchronizer {
                 final IsisTransaction transaction = getCurrentTransaction();
                 transaction.enlistDeleting(adapter);
 
+                CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
                 ensureFrameworksInAgreement(pojo);
             }
         }, calledFrom);
@@ -257,7 +303,8 @@ public class FrameworkSynchronizer {
                 if(!adapter.isDestroyed()) {
                     adapter.changeState(ResolveState.DESTROYED);
                 }
-                
+
+                CallbackFacet.Util.callCallback(adapter, RemovedCallbackFacet.class);
                 ensureFrameworksInAgreement(pojo);
             }
         }, calledFrom);

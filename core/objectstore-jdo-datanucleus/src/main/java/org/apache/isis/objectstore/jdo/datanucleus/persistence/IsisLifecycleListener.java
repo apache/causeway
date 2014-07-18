@@ -83,7 +83,13 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
 
 	@Override
     public void preStore(InstanceLifecycleEvent event) {
-        withLogging(Phase.PRE, event, new RunnableNoop(event));
+        withLogging(Phase.PRE, event, new RunnableAbstract(event){
+            @Override
+            protected void doRun() {
+                final PersistenceCapable pojo = Utils.persistenceCapableFor(event);
+                synchronizer.preStoreProcessingFor(pojo, CalledFrom.EVENT_PRESTORE);
+
+            }});
     }
 
     @Override
@@ -92,8 +98,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             @Override
             protected void doRun() {
                 final PersistenceCapable pojo = Utils.persistenceCapableFor(event);
-                synchronizer.postStoreProcessingFor(pojo, CalledFrom.EVENT_STORE);
-
+                synchronizer.postStoreProcessingFor(pojo, CalledFrom.EVENT_POSTSTORE);
             }});
     }
 
@@ -109,14 +114,14 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
 
     @Override
     public void postDirty(InstanceLifecycleEvent event) {
-        
+
         // cannot assert on the frameworks being in agreement, due to the scenario documented
         // in the FrameworkSynchronizer#preDirtyProcessing(...)
         //
         // 1<->m bidirectional, persistence-by-reachability
-        
+
         withLogging(Phase.POST, event, new RunnableNoop(event));
-    }    
+    }
 
     @Override
     public void preDelete(InstanceLifecycleEvent event) {

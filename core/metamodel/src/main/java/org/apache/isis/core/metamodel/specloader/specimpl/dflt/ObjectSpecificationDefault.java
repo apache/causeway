@@ -45,7 +45,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
@@ -420,9 +420,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             field.toDefault(adapter);
         }
         getDependencyInjector().injectServicesInto(adapter.getObject());
-        
-        CallbackUtils.callCallback(adapter, CreatedCallbackFacet.class);
-        
+
+        CallbackFacet.Util.callCallback(adapter, CreatedCallbackFacet.class);
+
         return adapter;
     }
 

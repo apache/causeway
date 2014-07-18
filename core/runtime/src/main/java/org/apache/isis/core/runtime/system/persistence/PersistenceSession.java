@@ -18,33 +18,16 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.applib.services.command.CommandDefault;
-import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -59,13 +42,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackUtils;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LoadingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.*;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
@@ -73,11 +50,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
-import org.apache.isis.core.metamodel.spec.Dirtiable;
-import org.apache.isis.core.metamodel.spec.FreeStandingList;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.*;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
@@ -87,20 +60,13 @@ import org.apache.isis.core.runtime.persistence.objectstore.algorithm.ToPersistO
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPattern;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
-import org.apache.isis.core.runtime.services.RequestScopedService;
-import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
+import org.apache.isis.core.runtime.persistence.query.*;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.transaction.EnlistedObjectDirtying;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturnAbstract;
-import org.apache.isis.core.runtime.system.transaction.UpdateNotifier;
+import org.apache.isis.core.runtime.system.transaction.*;
+
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
+import static org.hamcrest.CoreMatchers.*;
 
 public class PersistenceSession implements Persistor, EnlistedObjectDirtying, ToPersistObjectSet, RecreatedPojoRemapper, AdapterLifecycleTransitioner, SessionScopedComponent, DebuggableWithTitle {
 
@@ -727,7 +693,11 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
             @Override
             public void preExecute() {
-                CallbackUtils.callCallback(adapter, LoadingCallbackFacet.class);
+                // previously there was callback to LoadingCallbackFacet.class
+                // for JDO objectstore at least this codepath does not fire, and JDO (not surprisingly)
+                // provides no preLoad callback.
+                //
+                // for consistency, have therefore removed this call.
             }
 
             @Override
@@ -737,12 +707,16 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
 
             @Override
             public void onSuccess() {
-                CallbackUtils.callCallback(adapter, LoadedCallbackFacet.class);
+                // previously there was callback to LoadedCallbackFacet.class
+                // for JDO objectstore at least this codepath does not fire, and instead we rely on the
+                // JDO lifecycle event (IsisLifecycleListener/FrameworkSynchronizer) to perform the callback.
+                //
+                // have therefore removed this call.
             }
 
             @Override
             public void onFailure() {
-                // TODO: should we do something here?
+                // should we do something here?
             }
         });
     }
@@ -865,17 +839,21 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     }
 
     private void addObjectChangedForPresentationLayer(final ObjectAdapter adapter) {
-        LOG.debug("object change to update presentation layer " + adapter.getOid());
-        adapter.fireChangedEvent();
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("object change to update presentation layer " + adapter.getOid());
+        }
         getUpdateNotifier().addChangedObject(adapter);
     }
 
     private void addObjectChangedForPersistenceLayer(final ObjectAdapter adapter) {
-        LOG.debug("object change to be persisted " + adapter.getOid());
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("object change to be persisted " + adapter.getOid());
+        }
         getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
             @Override
             public void preExecute() {
-                CallbackUtils.callCallback(adapter, UpdatingCallbackFacet.class);
+                // previously called the UpdatingCallbackFacet here (not sure if actually called though, see ISIS-796);
+                // at any rate, is now done by the object store.
             }
 
             @Override
@@ -886,12 +864,13 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
 
             @Override
             public void onSuccess() {
-                CallbackUtils.callCallback(adapter, UpdatedCallbackFacet.class);
+                // previously called the UpdatedCallbackFacet here (though not sure if actually called though, see in part ISIS-796);
+                // at any rate, is now done by the object store.
             }
 
             @Override
             public void onFailure() {
-                // TODO: should we do something here?
+                // should we do something here?
             }
         });
         getUpdateNotifier().addChangedObject(adapter);
@@ -917,7 +896,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
             @Override
             public void preExecute() {
-                CallbackUtils.callCallback(adapter, RemovingCallbackFacet.class);
+                // previously called the RemovingCallbackFacet here; now done through the object store (see ISIS-796).
             }
 
             @Override
@@ -928,12 +907,12 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
 
             @Override
             public void onSuccess() {
-                CallbackUtils.callCallback(adapter, RemovedCallbackFacet.class);
+                // previously called the RemovedCallbackFacet here; now done through the object store (see ISIS-796).
             }
 
             @Override
             public void onFailure() {
-                // TODO: some sort of callback?
+                // some sort of callback?
             }
         });
     }

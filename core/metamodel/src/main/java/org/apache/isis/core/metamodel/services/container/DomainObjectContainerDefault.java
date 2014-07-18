@@ -74,7 +74,12 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     @Override
     public String titleOf(final Object domainObject) {
         final ObjectAdapter objectAdapter = adapterManager.adapterFor(domainObject);
-        return objectAdapter.getSpecification().getTitle(objectAdapter, localizationProvider.getLocalization());
+        final boolean destroyed = objectAdapter.isDestroyed();
+        if(!destroyed) {
+            return objectAdapter.getSpecification().getTitle(objectAdapter, localizationProvider.getLocalization());
+        } else {
+            return "[DELETED]";
+        }
     }
 
     // //////////////////////////////////////////////////////////////////

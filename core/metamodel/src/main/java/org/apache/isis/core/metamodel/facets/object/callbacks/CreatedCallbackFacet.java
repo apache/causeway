@@ -27,10 +27,8 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
  * <tt>created</tt> method. The framework calls this once the object has been
  * created via <tt>newTransientInstance</tt> or <tt>newInstance</tt>. The method
  * is <i>not</i> called when the object is subsequently resolved having been
- * persisted; for that see {@link LoadingCallbackFacet} and
- * {@link LoadedCallbackFacet}.
+ * persisted; for that see {@link LoadedCallbackFacet}.
  * 
- * @see LoadingCallbackFacet
  * @see LoadedCallbackFacet
  */
 public interface CreatedCallbackFacet extends CallbackFacet {

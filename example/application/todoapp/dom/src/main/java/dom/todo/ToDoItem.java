@@ -670,6 +670,40 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     }
     //endregion
 
+    //region > lifecycle callbacks
+
+    public void created() {
+        LOG.debug("lifecycle callback: created: " + container.titleOf(this));
+    }
+
+    public void loaded() {
+        LOG.debug("lifecycle callback: loaded: " + container.titleOf(this));
+    }
+
+    public void persisting() {
+        LOG.debug("lifecycle callback: persisting: " + container.titleOf(this));
+    }
+
+    public void persisted() {
+        LOG.debug("lifecycle callback: persisted: " + container.titleOf(this));
+    }
+
+    public void updating() {
+        LOG.debug("lifecycle callback: updating: " + container.titleOf(this));
+    }
+    public void updated() {
+        LOG.debug("lifecycle callback: updated: " + container.titleOf(this));
+    }
+
+    public void removing() {
+        LOG.debug("lifecycle callback: removing: " + container.titleOf(this));
+    }
+
+    public void removed() {
+        LOG.debug("lifecycle callback: removed: " + container.titleOf(this));
+    }
+    //endregion
+
     //region > object-level validation
 
     /**
@@ -683,7 +717,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         }
         return null;
     }
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //endregion
 
     //region > programmatic helpers

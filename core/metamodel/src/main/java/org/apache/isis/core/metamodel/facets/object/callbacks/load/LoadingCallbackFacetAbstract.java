@@ -24,6 +24,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacetAbstract;
 
+/**
+ * @deprecated - THIS CAN NEVER BE CALLED (BY JDO OBJECTSTORE AT LEAST)
+ */
+@Deprecated
 public abstract class LoadingCallbackFacetAbstract extends CallbackFacetAbstract implements LoadingCallbackFacet {
 
     public static Class<? extends Facet> type() {
