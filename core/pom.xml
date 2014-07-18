@@ -429,6 +429,7 @@
                             <exclude>**/*.json</exclude>
                             <exclude>**/*.min.js</exclude>
                             
+                            <exclude>**/MANIFEST.MF</exclude>
                             <exclude>**/*.ucd</exclude>
                             <exclude>**/*.ucls</exclude>
 
