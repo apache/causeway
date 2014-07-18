@@ -969,6 +969,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             if(!(serviceAction instanceof ObjectActionImpl)) {
                 continue;
             }
+            if(!serviceAction.getSemantics().isSafe()) {
+                continue;
+            }
             contributedActions.add((ObjectActionImpl) serviceAction);
         }
         

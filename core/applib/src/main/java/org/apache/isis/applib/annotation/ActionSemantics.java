@@ -58,7 +58,7 @@ public @interface ActionSemantics {
          * An example is increasing the quantity of a line item in an Order by 1.
          */
         NON_IDEMPOTENT;
-        
+
         public String getFriendlyName() {
             return Enums.getFriendlyNameOf(this);
         }
@@ -74,7 +74,9 @@ public @interface ActionSemantics {
             return this == SAFE || this == IDEMPOTENT;
         }
 
-
+        public boolean isSafe() {
+            return this == SAFE;
+        }
     }
 
     Of value() default Of.NON_IDEMPOTENT;
