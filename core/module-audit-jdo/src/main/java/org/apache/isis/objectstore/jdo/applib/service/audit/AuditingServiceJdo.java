@@ -19,13 +19,14 @@
 package org.apache.isis.objectstore.jdo.applib.service.audit;
 
 import java.util.UUID;
-
-import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.AbstractService;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
-public class AuditingServiceJdo extends AbstractFactoryAndRepository implements AuditingService3 {
+@DomainService
+public class AuditingServiceJdo extends AbstractService implements AuditingService3 {
 
     @Programmatic
     public void audit(
