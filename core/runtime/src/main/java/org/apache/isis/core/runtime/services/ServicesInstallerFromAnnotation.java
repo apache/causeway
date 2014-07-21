@@ -29,9 +29,11 @@ import com.google.common.base.*;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import org.reflections.Reflections;
+import org.reflections.vfs.Vfs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.runtime.system.DeploymentType;
 
@@ -182,6 +184,7 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
         initIfRequired();
 
         for (final String packagePrefix : Iterables.transform(Splitter.on(",").split(packagePrefixes), trim())) {
+            Vfs.setDefaultURLTypes(ClassDiscoveryServiceUsingReflections.getUrlTypes());
             Reflections reflections = new Reflections(packagePrefix);
 
             final Iterable<Class<?>> classes = Iterables.filter(

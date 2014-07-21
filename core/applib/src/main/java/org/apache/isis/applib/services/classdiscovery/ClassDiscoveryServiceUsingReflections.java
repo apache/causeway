@@ -18,12 +18,20 @@
  */
 package org.apache.isis.applib.services.classdiscovery;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
-
+import com.google.common.collect.Lists;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
-
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.vfs.SystemDir;
+import org.reflections.vfs.Vfs;
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.DomainService;
 
@@ -42,13 +50,99 @@ public class ClassDiscoveryServiceUsingReflections
             extends AbstractService 
             implements ClassDiscoveryService {
 
+
     @Override
     public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type) {
-        final Reflections reflections = new Reflections(
-                ClasspathHelper.forClassLoader(Thread.currentThread().getContextClassLoader()), 
-                ClasspathHelper.forClass(Object.class), 
+        List<Vfs.UrlType> urlTypes = getUrlTypes();
+        Vfs.setDefaultURLTypes(urlTypes);
+
+        ConfigurationBuilder configuration = ConfigurationBuilder.build(
+                ClasspathHelper.forClassLoader(Thread.currentThread().getContextClassLoader()),
+                ClasspathHelper.forClass(Object.class),
                 new SubTypesScanner(false));
+        // doesn't seem to do anything
+        // configuration = configuration.filterInputsBy(ignorePom());
+        final Reflections reflections = new Reflections(configuration);
         return reflections.getSubTypesOf(type);
+    }
+
+    // //////////////////////////////////////
+
+    /**
+     * Has <tt>public</tt> visibility only so can be reused by other services (including Isis runtime itself).
+     */
+    public static List<Vfs.UrlType> getUrlTypes() {
+        final List<Vfs.UrlType> urlTypes = Lists.newArrayList();
+        urlTypes.add(new PomUrlType());
+        urlTypes.add(new JettyConsoleUrlType());
+        urlTypes.addAll(Arrays.asList(Vfs.DefaultUrlTypes.values()));
+        return urlTypes;
+    }
+
+    private static class PomUrlType implements Vfs.UrlType {
+        public boolean matches(URL url) {
+            final String protocol = url.getProtocol();
+            final String externalForm = url.toExternalForm();
+            return protocol.equals("file") && externalForm.endsWith(".pom");
+        }
+
+        public Vfs.Dir createDir(final URL url) throws Exception {
+            return null;
+        }
+    }
+
+    public static class JettyConsoleUrlType implements Vfs.UrlType {
+        public boolean matches(URL url) {
+            final String protocol = url.getProtocol();
+            final String externalForm = url.toExternalForm();
+            final boolean matches = protocol.equals("file") && externalForm.contains("jetty-console") && externalForm.contains("-any-") && externalForm.endsWith("webapp/WEB-INF/classes/");
+            return matches;
+        }
+
+        public Vfs.Dir createDir(final URL url) throws Exception {
+            return new SystemDir(getFile(url));
+        }
+    }
+
+    /**
+     * try to get {@link java.io.File} from url
+     *
+     * <p>
+     *     Copied from {@link org.reflections.vfs.Vfs} (not publicly accessible)
+     * </p>
+     */
+    static java.io.File getFile(URL url) {
+        java.io.File file;
+        String path;
+
+        try {
+            path = url.toURI().getSchemeSpecificPart();
+            if ((file = new java.io.File(path)).exists()) return file;
+        } catch (URISyntaxException e) {
+        }
+
+        try {
+            path = URLDecoder.decode(url.getPath(), "UTF-8");
+            if (path.contains(".jar!")) path = path.substring(0, path.lastIndexOf(".jar!") + ".jar".length());
+            if ((file = new java.io.File(path)).exists()) return file;
+
+        } catch (UnsupportedEncodingException e) {
+        }
+
+        try {
+            path = url.toExternalForm();
+            if (path.startsWith("jar:")) path = path.substring("jar:".length());
+            if (path.startsWith("file:")) path = path.substring("file:".length());
+            if (path.contains(".jar!")) path = path.substring(0, path.indexOf(".jar!") + ".jar".length());
+            if ((file = new java.io.File(path)).exists()) return file;
+
+            path = path.replace("%20", " ");
+            if ((file = new java.io.File(path)).exists()) return file;
+
+        } catch (Exception e) {
+        }
+
+        return null;
     }
 
 }
