@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import com.google.common.collect.Lists;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundCommandService;
@@ -52,10 +53,10 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import static org.hamcrest.CoreMatchers.*;
 
 /**
- * This is <i>not</i> annotated as an auto-discoverable {@link org.apache.isis.applib.annotation.DomainService} because
- * it has mandatory dependencies; specifically, an implementation of
- * {@link org.apache.isis.applib.services.background.BackgroundCommandService} must be configured.
+ * Depends on an implementation of {@link org.apache.isis.applib.services.background.BackgroundCommandService} to
+ * be configured.
  */
+@DomainService
 public class BackgroundServiceDefault implements BackgroundService {
 
     private final MementoServiceDefault mementoService;

@@ -28,6 +28,9 @@ import org.apache.isis.core.runtime.services.background.BackgroundCommandExecuti
 import org.apache.isis.objectstore.jdo.applib.service.background.BackgroundCommandServiceJdoRepository;
 import org.apache.isis.objectstore.jdo.applib.service.command.CommandJdo;
 
+/**
+ * If used, ensure that <code>org.apache.isis.module:isis-module-background</code> is also included on classpath.
+ */
 public final class BackgroundCommandExecutionFromBackgroundCommandServiceJdo extends BackgroundCommandExecution {
 
     @SuppressWarnings("unused")
