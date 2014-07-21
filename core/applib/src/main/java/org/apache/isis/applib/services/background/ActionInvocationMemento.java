@@ -18,9 +18,6 @@ package org.apache.isis.applib.services.background;
 
 import java.util.Iterator;
 import java.util.List;
-
-import com.google.common.primitives.Primitives;
-
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.memento.MementoService;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
@@ -31,9 +28,8 @@ import org.apache.isis.applib.services.memento.MementoService.Memento;
  * 
  * <p>
  * Provided as a mechanism by which implementations of {@link BackgroundService} can 
- * hand-off work to the {@link BackgroundCommandService} through 
- * {@link BackgroundCommandService#execute(ActionInvocationMemento)}.   This is used by the
- * default implementation of <tt>BackgroundServiceDefault</tt> in Isis' core-runtime.
+ * hand-off work to the {@link BackgroundCommandService}.  This is used by the
+ * default implementation of <tt>BackgroundServiceDefault</tt> in the <tt>isis-module-background</tt> module.
  * 
  * <p>
  * Implementation-wise this is a wrapper around {@link MementoService.Memento}, 
