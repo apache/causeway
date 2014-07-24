@@ -130,7 +130,11 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     final Component actionPanelFirstParam = actionPanel.visitChildren(new IVisitor<Component, Component>() {
                         @Override
                         public void component(Component object, IVisit<Component> visit) {
-                            if (object instanceof FormComponent) {
+                            if (object instanceof FormComponent &&
+                                !"scalarIfCompact".equals(object.getId()) &&
+                                object.getOutputMarkupId()) {
+                                // there are components for 'compact' and 'regular'; we want the 'regular' one
+                                // also double check that has outputMarkupId enabled (prereq for setting focus)
                                 visit.stop(object);
                             }
                         }
