@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-        <version>1.6.0-SNAPSHOT</version>
+        <version>1.6.0</version>
 	</parent>
 
 	<artifactId>isis-core-bytecode-javassist</artifactId>
@@ -39,7 +39,7 @@
         <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/trunk/runtimes/dflt/bytecode/javassist/</connection>
         <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/trunk$/{relativeUrl}</developerConnection>
         <url>http://svn.apache.org/repos/asf/incubator/isis/trunk/runtimes/dflt/bytecode/javassist/</url>
-      <tag>HEAD</tag>
+      <tag>isis-1.6.0-RC3</tag>
   </scm>
 
     <!-- used in Site generation for relative references. -->

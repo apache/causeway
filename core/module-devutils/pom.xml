@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-        <version>1.6.0-SNAPSHOT</version>
+        <version>1.6.0</version>
 	</parent>
 
     <groupId>org.apache.isis.module</groupId>
@@ -48,12 +48,12 @@
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-devutils-applib</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.6.0</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-devutils-applib</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.6.0</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
@@ -61,12 +61,12 @@
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-devutils-impl</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.6.0</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-devutils-impl</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.6.0</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
