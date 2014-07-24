@@ -59,23 +59,44 @@ th, td {
             <p>
             <a href="http://isis.apache.org" target="_blank">Apache Isis</a>&trade; is a framework to let you rapidly develop
             domain-driven apps in Java.  This app has been generated using Isis' 
-            <a href="http://isis.apache.org/intro/getting-started/simpleapp-archetype.html" target="_blank">SimpleApp</a> archetype,
+            <a href="http://isis.apache.org/intro/getting-started/simple%61pp-archetype.html" target="_blank">SimpleApp</a> archetype,
             which configures Isis to run a very simple and purposefully minimal application.
             
             <p>
             The app itself consists of a single domain class, 
-            <a href="https://github.com/apache/isis/blob/master/example/application/simpleapp/dom/src/main/java/dom/simple/SimpleObject.java"  target="_blank"><tt>SimpleObject</tt></a>,
-            along with an equally simple (factory/repository) domain service, <a href="https://github.com/apache/isis/blob/master/example/application/simpleapp/dom/src/main/java/dom/simple/SimpleObjects.java" target="_blank"><tt>SimpleObjects</tt></a>.
+            <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/dom/src/main/java/dom/simple/SimpleObject.java"  target="_blank"><tt>SimpleObject</tt></a>,
+            along with an equally simple (factory/repository) domain service, <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/dom/src/main/java/dom/simple/SimpleObjects.java" target="_blank"><tt>SimpleObjects</tt></a>.
             </p>
-            
-            <p>
-            Alternatively, if you'd like to start from a richer starting point, you might want to use the
-            <a href="http://isis.apache.org/intro/getting-started/todoapp-archetype.html" target="_blank">TodoApp</a> archetype.
-            </p>
-            
+
+            <p>To access the app:</p>
+            <ul>
+                <li>
+                    <p>
+                        <b><a href="wicket/">wicket/</a></b>
+                    </p>
+                    <p>
+                        provides accesses to a generic UI for end-users,
+                        Isis' <a href="http://isis.apache.org/components/viewers/wicket/about.html" target="_blank">Wicket Viewer</a>.
+                        As its name suggests, this viewer is built on top of <a href="http://wicket.apache.org" target="_blank">Apache Wicket</a>&trade;.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <b>
+                            <a href="restful/">restful/</a>
+                        </b>
+                    </p>
+                    <p>
+                        provides access to a RESTful API conformant with the
+                        <a href="http://restfulobjects.org">Restful Objects</a> spec</td>.  This is part of Isis Core.  The
+                        implementation technology is JBoss RestEasy.
+                    </p>
+                </li>
+            </ul>
+
             <p>
             The default user/password is <b><i>sven/pass</i></b> (as configured in the
-            <a href="https://github.com/apache/isis/blob/master/example/application/simpleapp/webapp/src/main/webapp/WEB-INF/shiro.ini" target="_blank">shiro.ini</a> file).
+            <a href="https://github.com/apache/isis/blob/master/example/application/simple%61pp/webapp/src/main/webapp/WEB-INF/shiro.ini" target="_blank">shiro.ini</a> file).
             </p>
             
         </div>
