@@ -1095,6 +1095,11 @@ ${license.additional-notes}
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-wrapper</artifactId>
+                <version>1.6.0-SNAPSHOT</version>
+            </dependency>
 
             <!-- bytecode components -->
             <dependency>
@@ -1387,11 +1392,6 @@ ${license.additional-notes}
                 <version>1.6.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.module</groupId>
-                <artifactId>isis-module-wrapper</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
             </dependency>
 
 
@@ -2074,6 +2074,7 @@ ${license.additional-notes}
         <module>log4j</module>
         <module>metamodel</module>
         <module>runtime</module>
+        <module>wrapper</module>
         <module>webserver</module>
 
         <module>bytecode-cglib</module>
@@ -2103,7 +2104,6 @@ ${license.additional-notes}
         <module>module-publishing-jdo</module>
         <module>module-publishingeventserializer-ro</module>
         <module>module-settings</module>
-        <module>module-wrapper</module>
 
         <module>tck</module>
     </modules>

@@ -64,8 +64,8 @@
             <artifactId>isis-core-applib</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.module</groupId>
-            <artifactId>isis-module-wrapper</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-wrapper</artifactId>
         </dependency>
 
         <dependency>
