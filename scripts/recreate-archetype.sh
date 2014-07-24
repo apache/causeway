@@ -1,3 +1,10 @@
+JIRA=$1
+
+if [ ! "$JIRA" ]; then
+    echo "usage: $(basename $0) ISIS-nnn"
+    exit 1
+fi
+
 export ISISART=$(basename $(pwd))-archetype
 
 TOFIX=""
@@ -68,3 +75,5 @@ rm -rf ../../archetype/$ISISCPN
 echo "adding new archetype ..."
 mv target/generated-sources/archetype ../../archetype/$ISISCPN
 git add ../../archetype/$ISISCPN
+git commit -m "$JIRA: recreating $ISISCPN archetype"
+
