@@ -23,12 +23,10 @@ package dom.simple;
 
 import java.util.List;
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
 
+@DomainService(menuOrder = "10", repositoryFor = SimpleObject.class)
 public class SimpleObjects {
 
     //region > identification in the UI

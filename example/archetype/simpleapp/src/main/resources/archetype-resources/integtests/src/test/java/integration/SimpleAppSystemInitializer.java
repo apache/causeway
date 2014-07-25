@@ -19,14 +19,10 @@
  */
 package integration;
 
-import dom.simple.SimpleObjects;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
-import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
-import org.apache.isis.objectstore.jdo.datanucleus.service.support.IsisJdoSupportImpl;
 
 /**
  * Holds an instance of an {@link IsisSystemForTest} as a {@link ThreadLocal} on the current thread,
@@ -48,16 +44,20 @@ public class SimpleAppSystemInitializer {
     private static class SimpleAppSystemBuilder extends IsisSystemForTest.Builder {
 
         public SimpleAppSystemBuilder() {
-            //withFixtures( ... reference data fixtures ...); // if we had any...
             withLoggingAt(org.apache.log4j.Level.INFO);
             with(testConfiguration());
             with(new DataNucleusPersistenceMechanismInstaller());
-            
-            withServices(
-                    new SimpleObjects(),
-                    new WrapperFactoryDefault(),
-                    new IsisJdoSupportImpl()
-                    );
+
+            // services annotated with @DomainService
+            withServicesIn( "dom.simple"
+                            ,"fixture.simple"
+                            ,"org.apache.isis.core.wrapper"
+                            ,"org.apache.isis.applib"
+                            ,"org.apache.isis.core.metamodel.services"
+                            ,"org.apache.isis.core.runtime.services"
+                            ,"org.apache.isis.objectstore.jdo.datanucleus.service.support" // IsisJdoSupportImpl
+                            ,"org.apache.isis.objectstore.jdo.datanucleus.service.eventbus" // EventBusServiceJdo
+                            );
         }
 
         private static IsisConfiguration testConfiguration() {

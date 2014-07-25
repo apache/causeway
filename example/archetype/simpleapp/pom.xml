@@ -17,13 +17,13 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.isis.archetype</groupId>
-  <artifactId>simple_wicket_restful_jdo-archetype</artifactId>
+  <artifactId>simpleapp-archetype</artifactId>
   <version>1.6.0-SNAPSHOT</version>
   <packaging>maven-archetype</packaging>
-  <name>simple_wicket_restful_jdo-archetype</name>
+  <name>simpleapp-archetype</name>
   <build>
     <extensions>
       <extension>
@@ -44,7 +44,7 @@
   <parent>
     <groupId>org.apache.isis.core</groupId>
     <artifactId>isis</artifactId>
-    <version>1.6.0-SNAPSHOT</version>
+    <version>1.6.0</version>
     <relativePath>../../../core/pom.xml</relativePath>
   </parent>
 </project>

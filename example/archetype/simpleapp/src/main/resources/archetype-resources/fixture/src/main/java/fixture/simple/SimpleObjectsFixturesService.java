@@ -19,53 +19,52 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package webapp.prototyping;
-
-import dom.simple.SimpleObject;
-import dom.simple.SimpleObjects;
-import fixture.simple.SimpleObjectsFixture;
+package fixture.simple;
 
 import java.util.List;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Prototype;
+import org.apache.isis.applib.fixturescripts.FixtureResult;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
+import org.apache.isis.applib.fixturescripts.SimpleFixtureScript;
 
 /**
  * Enables fixtures to be installed from the application.
  */
-@DomainService(20)
 @Named("Prototyping")
+@DomainService(menuOrder = "20")
 public class SimpleObjectsFixturesService extends FixtureScripts {
 
     public SimpleObjectsFixturesService() {
         super("fixture.simple");
     }
 
-    @Prototype
-    public String installFixtures() {
-        final FixturesInstallerDelegate installer = new FixturesInstallerDelegate().withOverride();
-        installer.addFixture(new SimpleObjectsFixture());
-        installer.installFixtures();
-        return "Example fixtures installed";
+    //@Override // compatibility with core 1.5.0
+    public FixtureScript default0RunFixtureScript() {
+        return findFixtureScriptFor(SimpleFixtureScript.class);
     }
+
+    /**
+     * Raising visibility to <tt>public</tt> so that choices are available for first param
+     * of {@link ${symbol_pound}runFixtureScript(FixtureScript, String)}.
+     */
+    @Override
+    public List<FixtureScript> choices0RunFixtureScript() {
+        return super.choices0RunFixtureScript();
+    }
+
 
     // //////////////////////////////////////
 
     @Prototype
-    public SimpleObject installFixturesAndReturnFirst() {
-        installFixtures();
-        List<SimpleObject> all = simpleObjects.listAll();
-        return !all.isEmpty() ? all.get(0) : null;
+    @MemberOrder(sequence="20")
+    public Object installFixturesAndReturnFirst() {
+        final List<FixtureResult> run = findFixtureScriptFor(SimpleObjectsFixture.class).run(null);
+        return run.get(0).getObject();
     }
 
-    
-    // //////////////////////////////////////
-
-    private SimpleObjects simpleObjects;
-    public void injectSimpleObjects(SimpleObjects simpleObjects) {
-        this.simpleObjects = simpleObjects;
-    }
 
 }
