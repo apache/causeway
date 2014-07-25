@@ -24,7 +24,7 @@
 	<parent>
 		<groupId>org.apache.isis.viewer</groupId>
 		<artifactId>isis-viewer-wicket</artifactId>
-        <version>1.6.0</version>
+        <version>1.7.0-SNAPSHOT</version>
 	</parent>
 
 	<name>Isis Wicket Viewer Implementation</name>
