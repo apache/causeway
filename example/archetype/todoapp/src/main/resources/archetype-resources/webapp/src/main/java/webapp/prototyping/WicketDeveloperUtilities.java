@@ -21,33 +21,22 @@ package webapp.prototyping;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.metamodel.services.devutils.DeveloperUtilitiesServiceDefault;
+import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.viewer.wicket.viewer.applib.WicketDeveloperUtilitiesService;
 
 /**
  * These overrides are simply to 'move' the action underneath the 
  * 'Prototyping' menu.
  */
-@DomainService(menuOrder = "40.2")
-public class DeveloperUtilities extends DeveloperUtilitiesServiceDefault {
+@DomainService(menuOrder = "40.3")
+public class WicketDeveloperUtilities extends WicketDeveloperUtilitiesService {
 
-    @MemberOrder(name="Prototyping", sequence="90.1")
-    @Override
-    public Clob downloadMetaModel() {
-        return super.downloadMetaModel();
-    }
-    
-    @MemberOrder(name="Prototyping", sequence="90.2")
-    @Override
-    public Blob downloadLayouts() {
-        return super.downloadLayouts();
-    }
-
+    @Named("Clear i18n Cache")
     @MemberOrder(name="Prototyping", sequence="90.3")
     @Override
-    public void refreshServices() {
-        super.refreshServices();
+    public void resetI18nCache() {
+        super.resetI18nCache();
     }
+
 }
 

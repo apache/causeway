@@ -19,23 +19,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integration.tests;
+package dom.todo;
 
-import integration.ToDoSystemInitializer;
+/**
+ * Enables {@link dom.todo.ToDoItemContributions${symbol_pound}updateCategory(dom.todo.Categorized, dom.todo.ToDoItem.Category, dom.todo.ToDoItem.Subcategory)} to be contributed to
+ * both the {@link dom.todo.ToDoItem} (entity) and also the {@link app.ToDoItemWizard} (wizard).
+ */
+public interface Categorized {
 
-import org.junit.BeforeClass;
-import org.apache.isis.core.integtestsupport.IntegrationTestAbstract;
-import org.apache.isis.core.integtestsupport.scenarios.ScenarioExecutionForIntegration;
+    ToDoItem.Category getCategory();
+    void setCategory(ToDoItem.Category category);
 
-public abstract class ToDoIntegTest extends IntegrationTestAbstract {
-    
-    @BeforeClass
-    public static void initClass() {
-        org.apache.log4j.PropertyConfigurator.configure("logging.properties");
-        ToDoSystemInitializer.initIsft();
-        
-        // instantiating will install onto ThreadLocal
-        new ScenarioExecutionForIntegration();
-    }
-    
+    ToDoItem.Subcategory getSubcategory();
+    void setSubcategory(ToDoItem.Subcategory subcategory);
 }

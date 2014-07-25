@@ -19,43 +19,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package integration.tests.props;
+package integration.tests;
 
-import dom.todo.ToDoItem;
-import dom.todo.ToDoItems;
-import fixture.todo.integtests.ToDoItemsIntegTestFixture;
-import integration.tests.ToDoIntegTest;
+import integration.ToDoSystemInitializer;
 
-import java.util.List;
-import javax.inject.Inject;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.BeforeClass;
+import org.apache.isis.core.integtestsupport.IntegrationTestAbstract;
+import org.apache.isis.core.integtestsupport.scenarios.ScenarioExecutionForIntegration;
 
-public class ToDoItemTest_ownedBy extends ToDoIntegTest {
+public abstract class AbstractToDoIntegTest extends IntegrationTestAbstract {
+    
+    @BeforeClass
+    public static void initClass() {
+        org.apache.log4j.PropertyConfigurator.configure("logging.properties");
+        ToDoSystemInitializer.initIsft();
 
-    @Before
-    public void setUpData() throws Exception {
-        scenarioExecution().install(new ToDoItemsIntegTestFixture());
+        // instantiating will install onto ThreadLocal
+        new ScenarioExecutionForIntegration();
     }
-
-    @Inject
-    private ToDoItems toDoItems;
-
-    private ToDoItem toDoItem;
-
-    @Before
-    public void setUp() throws Exception {
-        final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
-        toDoItem = wrap(all.get(0));
-    }
-
-    @Test
-    public void cannotModify() throws Exception {
-        
-        // when, then
-        expectedExceptions.expectMessage("Always hidden");
-        toDoItem.setOwnedBy("other");
-    }
-
 
 }

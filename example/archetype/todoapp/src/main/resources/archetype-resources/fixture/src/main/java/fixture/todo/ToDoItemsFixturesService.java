@@ -24,6 +24,7 @@ package fixture.todo;
 import fixture.todo.scenarios.RecreateToDoItemsAndCompleteSeveralForCurrent;
 
 import java.util.List;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Prototype;
@@ -35,10 +36,16 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
  * Enables fixtures to be installed from the application.
  */
 @Named("Prototyping") // has the effect of defining a "Prototyping" menu item
+@DomainService(menuOrder = "40.1")
 public class ToDoItemsFixturesService extends FixtureScripts {
 
     public ToDoItemsFixturesService() {
         super("fixture.todo");
+    }
+
+    //@Override // compatibility with core 1.5.0
+    public FixtureScript default0RunFixtureScript() {
+        return findFixtureScriptFor(RecreateToDoItemsAndCompleteSeveralForCurrent.class);
     }
 
     /**
@@ -49,6 +56,9 @@ public class ToDoItemsFixturesService extends FixtureScripts {
     public List<FixtureScript> choices0RunFixtureScript() {
         return super.choices0RunFixtureScript();
     }
+
+    // //////////////////////////////////////
+
 
     @Prototype
     @MemberOrder(sequence="20")

@@ -26,7 +26,7 @@
     </parent>
 
 	<artifactId>${artifactId}</artifactId>
-	<name>Quickstart Wicket/Restful/JDO Fixtures</name>
+	<name>ToDo App Fixtures</name>
 
 	<dependencies>
 		<dependency>

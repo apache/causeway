@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>${artifactId}</artifactId>
-	<name>Quickstart Wicket/Restful/JDO DOM</name>
+	<name>ToDo App DOM</name>
 
 	<build>
         <resources>
@@ -101,11 +101,15 @@
 			<artifactId>isis-core-applib</artifactId>
 		</dependency>
 
-		<dependency>
-            <groupId>org.apache.isis.objectstore</groupId>
-			<artifactId>isis-objectstore-jdo-applib</artifactId>
-		</dependency>
-        
+        <dependency>
+            <groupId>org.apache.isis.module</groupId>
+            <artifactId>isis-module-settings-applib</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.module</groupId>
+            <artifactId>isis-module-devutils-applib</artifactId>
+        </dependency>
+
 		<dependency>
             <groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-unittestsupport</artifactId>
