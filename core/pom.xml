@@ -21,7 +21,7 @@
 
     <groupId>org.apache.isis.core</groupId>
     <artifactId>isis</artifactId>
-    <version>1.6.0-SNAPSHOT</version>
+    <version>1.7.0-SNAPSHOT</version>
     
     <packaging>pom</packaging>
 
@@ -429,6 +429,7 @@
                             <exclude>**/*.json</exclude>
                             <exclude>**/*.min.js</exclude>
                             
+                            <exclude>**/MANIFEST.MF</exclude>
                             <exclude>**/*.ucd</exclude>
                             <exclude>**/*.ucls</exclude>
 
@@ -1029,13 +1030,13 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <!-- not scope=test, because referenced by some sql-tests-common under compile scope -->
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1044,14 +1045,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-applib</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-applib</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1060,7 +1061,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-log4j</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
@@ -1069,14 +1070,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1085,47 +1086,52 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-wrapper</artifactId>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
 
             <!-- bytecode components -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-bytecode-cglib</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-bytecode-javassist</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
 
             <!-- webserver -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-webserver</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
 
             <!-- specsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-specsupport</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
 
             <!-- integtestsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-integtestsupport</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <!-- not scope=test, because referenced by some sql-tests-common under compile scope -->
             </dependency>
 
@@ -1133,36 +1139,36 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-objectstore</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-objectstore</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-objectstore-jdo-metamodel</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-objectstore-jdo-metamodel</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-objectstore-jdo-datanucleus</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-objectstore-jdo-datanucleus</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
@@ -1172,36 +1178,36 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1211,12 +1217,12 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security-shiro</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
 
 
@@ -1224,7 +1230,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-profilestore</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
 
 
@@ -1232,22 +1238,22 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-tck</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-tck-dom</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-tck-fixture</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-tck-viewer-restfulobjects</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
 
 
@@ -1256,48 +1262,48 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-audit-jdo</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-audit-jdo</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-background</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-background</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-command-jdo</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-command-jdo</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-devutils</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-devutils</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
@@ -1309,55 +1315,55 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-devutils-applib</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-devutils-applib</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-devutils-impl</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-devutils-impl</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-publishing-jdo</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-publishing-jdo</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-publishingeventserializer-ro</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-publishingeventserializer-ro</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-settings</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <!--
             declared as a convenience; alternative is for the domain application to
@@ -1366,31 +1372,26 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-settings-applib</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-settings-applib</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-settings-impl-jdo</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.module</groupId>
                 <artifactId>isis-module-settings-impl-jdo</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
+                <version>1.7.0-SNAPSHOT</version>
                 <scope>test</scope>
                 <type>test-jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.module</groupId>
-                <artifactId>isis-module-wrapper</artifactId>
-                <version>1.6.0-SNAPSHOT</version>
             </dependency>
 
 
@@ -2073,6 +2074,7 @@ ${license.additional-notes}
         <module>log4j</module>
         <module>metamodel</module>
         <module>runtime</module>
+        <module>wrapper</module>
         <module>webserver</module>
 
         <module>bytecode-cglib</module>
@@ -2102,7 +2104,6 @@ ${license.additional-notes}
         <module>module-publishing-jdo</module>
         <module>module-publishingeventserializer-ro</module>
         <module>module-settings</module>
-        <module>module-wrapper</module>
 
         <module>tck</module>
     </modules>

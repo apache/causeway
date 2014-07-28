@@ -23,20 +23,16 @@ package app;
 
 import dom.todo.ToDoItem;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.NotContributed.As;
-import org.apache.isis.applib.annotation.NotInServiceMenu;
 
+@DomainService
 @Hidden
 public class ToDoItemAnalysisContributions {
 
 
     //region > analyseCategory (action)
-    // //////////////////////////////////////
-
     @NotInServiceMenu
     @NotContributed(As.ASSOCIATION)
     @ActionSemantics(Of.SAFE)
@@ -46,8 +42,6 @@ public class ToDoItemAnalysisContributions {
     //endregion
 
     //region > injected services
-    // //////////////////////////////////////
-
     @javax.inject.Inject
     private ToDoItemAnalysis toDoAppAnalysis;
 

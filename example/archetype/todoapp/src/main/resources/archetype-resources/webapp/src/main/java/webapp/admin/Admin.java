@@ -33,6 +33,7 @@ import org.apache.isis.objectstore.jdo.applib.service.command.CommandServiceJdoR
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishingServiceJdoRepository;
 
+@DomainService(menuOrder = "35")
 public class Admin extends AbstractService {
 
 

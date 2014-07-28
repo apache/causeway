@@ -23,7 +23,7 @@
     <artifactId>${artifactId}</artifactId>
     <version>${version}</version>
 
-    <name>Simple Wicket/Restful/JDO App</name>
+    <name>Simple App</name>
 
     <packaging>pom</packaging>
 
@@ -32,11 +32,8 @@
     </prerequisites>
 
 	<properties>
-        <isis.version>1.5.0</isis.version>
-        <isis-objectstore-jdo.version>1.5.0</isis-objectstore-jdo.version>
-        <isis-viewer-wicket.version>1.5.0</isis-viewer-wicket.version>
-        <isis-viewer-restfulobjects.version>2.3.0</isis-viewer-restfulobjects.version>
-        <isis-security-shiro.version>1.5.0</isis-security-shiro.version>
+        <isis.version>1.6.0</isis.version>
+        <isis-viewer-wicket.version>1.6.0</isis-viewer-wicket.version>
 
         <!-- must be consistent with the versions defined by the JDO Objectstore -->
         <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
@@ -308,33 +305,9 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.objectstore</groupId>
-				<artifactId>isis-objectstore-jdo</artifactId>
-				<version>${isis-objectstore-jdo.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
-			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket</artifactId>
 				<version>${isis-viewer-wicket.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-restfulobjects</artifactId>
-				<version>${isis-viewer-restfulobjects.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.security</groupId>
-				<artifactId>isis-security-shiro</artifactId>
-				<version>${isis-security-shiro.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

@@ -44,10 +44,14 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
     
     /**
      * We take care to read this only once.
+     *
+     * <p>
+     *     Is <code>transient</code> because
+     * </p>
      */
     @Inject
     @Named("metaInfManifest")
-    private InputStream metaInfManifestIs;
+    private transient InputStream metaInfManifestIs;
     
     private JarManifestModel jarManifestModel;
     

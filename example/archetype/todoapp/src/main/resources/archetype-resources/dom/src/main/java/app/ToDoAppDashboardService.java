@@ -21,45 +21,16 @@
  */
 package app;
 
-import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.services.homepage.AbstractHomePageDashboardService;
 
+@DomainService
 @Hidden
-public class ToDoAppDashboardService  {
+public class ToDoAppDashboardService extends AbstractHomePageDashboardService<ToDoAppDashboard> {
 
-    //region > identification in the UI
-    // //////////////////////////////////////
-
-    private static final String ID = "dashboard";
-
-    public String getId() {
-        return ID;
+    public ToDoAppDashboardService() {
+        super(ToDoAppDashboard.class);
     }
-
-    public String iconName() {
-        return ID;
-    }
-    //endregion
-
-    //region > lookup (action)
-    // //////////////////////////////////////
-    @ActionSemantics(Of.SAFE)
-    @HomePage
-    public ToDoAppDashboard lookup() {
-        return container.newViewModelInstance(ToDoAppDashboard.class, ID);
-    }
-
-    //endregion
-
-    //region > injected services
-    // //////////////////////////////////////
-
-    @javax.inject.Inject
-    private DomainObjectContainer container;
-
-    //endregion
 
 }

@@ -29,6 +29,10 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 public class SimpleObjectsFixture extends FixtureScript {
 
+    public SimpleObjectsFixture() {
+        withDiscoverability(Discoverability.DISCOVERABLE);
+    }
+
     @Override
     protected void execute(ExecutionContext executionContext) {
 
@@ -36,15 +40,15 @@ public class SimpleObjectsFixture extends FixtureScript {
         execute(new SimpleObjectsTearDownFixture(), executionContext);
 
         // create
-        create("Foo");
-        create("Bar");
-        create("Baz");
+        create("Foo", executionContext);
+        create("Bar", executionContext);
+        create("Baz", executionContext);
     }
 
     // //////////////////////////////////////
 
-    private SimpleObject create(final String name) {
-        return simpleObjects.create(name);
+    private SimpleObject create(final String name, ExecutionContext executionContext) {
+        return executionContext.add(this, simpleObjects.create(name));
     }
 
     // //////////////////////////////////////

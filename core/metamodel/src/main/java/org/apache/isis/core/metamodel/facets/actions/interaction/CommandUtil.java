@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 
 /**
- * Factoring out the commonality between {@link ActionInvocationFacetViaMethod} and <tt>BackgroundServiceDefault</tt>.
+ * Factoring out the commonality between <tt>ActionInvocationFacetViaMethod</tt> and <tt>BackgroundServiceDefault</tt>.
  */
 public class CommandUtil {
 

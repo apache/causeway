@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Command.Persistence;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.command.Command;
@@ -33,6 +34,7 @@ import org.apache.isis.applib.services.command.spi.CommandService;
 /**
  *
  */
+@DomainService
 public class CommandServiceJdo extends AbstractService implements CommandService {
 
     @SuppressWarnings("unused")

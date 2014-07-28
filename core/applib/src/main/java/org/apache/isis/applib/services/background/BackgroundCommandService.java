@@ -25,7 +25,7 @@ import org.apache.isis.applib.services.command.Command;
  *
  * <p>
  * Separate from {@link BackgroundService} primarily so that the default
- * implementation, <tt>BackgroundServiceDefault</tt> (in core-runtime) can
+ * implementation, <tt>BackgroundServiceDefault</tt> (in <tt>isis-module-background</tt>) can
  * delegate to different implementations of this service.
  *
  * <p>

@@ -35,11 +35,10 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.clock.ClockService;
 
 @Named("ToDos")
+@DomainService(menuOrder = "10", repositoryFor = ToDoItem.class)
 public class ToDoItems {
 
     //region > identification in the UI
-    // //////////////////////////////////////
-
     public String getId() {
         return "toDoItems";
     }
@@ -50,11 +49,9 @@ public class ToDoItems {
     //endregion
 
     //region > notYetComplete (action)
-    // //////////////////////////////////////
-
     @Bookmarkable
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "1")
+    @MemberOrder(sequence = "10")
     public List<ToDoItem> notYetComplete() {
         final List<ToDoItem> items = notYetCompleteNoUi();
         if(items.isEmpty()) {
@@ -73,10 +70,8 @@ public class ToDoItems {
     //endregion
 
     //region > complete (action)
-    // //////////////////////////////////////
-    
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "3")
+    @MemberOrder(sequence = "20")
     public List<ToDoItem> complete() {
         final List<ToDoItem> items = completeNoUi();
         if(items.isEmpty()) {
@@ -95,12 +90,10 @@ public class ToDoItems {
     //endregion
 
     //region > categorized (action)
-    // //////////////////////////////////////
-
 	@SuppressWarnings("unchecked")
 	@Bookmarkable
     @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "30")
+    @MemberOrder(sequence = "40")
     public List<ToDoItem> categorized(
     		@Named("Category") final Category category,
     		@Named("Subcategory") final Subcategory subcategory,
@@ -134,9 +127,7 @@ public class ToDoItems {
     //endregion
 
     //region > newToDo (action)
-    // //////////////////////////////////////
-
-    @MemberOrder(sequence = "40")
+    @MemberOrder(sequence = "5")
     public ToDoItem newToDo(
             final @RegEx(validation = "${symbol_escape}${symbol_escape}w[@&:${symbol_escape}${symbol_escape}-${symbol_escape}${symbol_escape},${symbol_escape}${symbol_escape}.${symbol_escape}${symbol_escape}+ ${symbol_escape}${symbol_escape}w]*") @Named("Description") String description, 
             final @Named("Category") Category category,
@@ -167,8 +158,7 @@ public class ToDoItems {
     //endregion
 
     //region > allToDos (action)
-    // //////////////////////////////////////
-
+    @Prototype
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "50")
     public List<ToDoItem> allToDos() {
@@ -184,8 +174,6 @@ public class ToDoItems {
     //endregion
 
     //region > autoComplete (programmatic)
-    // //////////////////////////////////////
-
     @Programmatic // not part of metamodel
     public List<ToDoItem> autoComplete(final String description) {
         return container.allMatches(
@@ -197,8 +185,6 @@ public class ToDoItems {
     //endregion
 
     //region > helpers
-    // //////////////////////////////////////
-
     @Programmatic // for use by fixtures
     public ToDoItem newToDo(
             final String description, 
@@ -226,9 +212,20 @@ public class ToDoItems {
 
     //endregion
 
+    //region > common validation
+    private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
+
+    @Programmatic
+    public String validateDueBy(LocalDate dueBy) {
+        return isMoreThanOneWeekInPast(dueBy) ? "Due by date cannot be more than one week old" : null;
+    }
+    @Programmatic
+    boolean isMoreThanOneWeekInPast(final LocalDate dueBy) {
+        return dueBy.toDateTimeAtStartOfDay().getMillis() < clockService.nowAsMillis() - ONE_WEEK_IN_MILLIS;
+    }
+    //endregion
+
     //region > injected services
-    // //////////////////////////////////////
-    
     @javax.inject.Inject
     private DomainObjectContainer container;
 

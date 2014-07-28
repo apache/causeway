@@ -23,7 +23,7 @@
     <artifactId>${artifactId}</artifactId>
     <version>${version}</version>
 
-    <name>Quickstart Wicket/Restful/JDO App</name>
+    <name>ToDo App</name>
 
     <packaging>pom</packaging>
 
@@ -32,11 +32,8 @@
     </prerequisites>
 
 	<properties>
-        <isis.version>1.5.0</isis.version>
-		<isis-objectstore-jdo.version>1.5.0</isis-objectstore-jdo.version>
-		<isis-viewer-wicket.version>1.5.0</isis-viewer-wicket.version>
-		<isis-viewer-restfulobjects.version>2.3.0</isis-viewer-restfulobjects.version>
-		<isis-security-shiro.version>1.5.0</isis-security-shiro.version>
+        <isis.version>1.6.0</isis.version>
+		<isis-viewer-wicket.version>1.6.0</isis-viewer-wicket.version>
 
         <!-- must be consistent with the versions defined by the JDO Objectstore -->
         <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
@@ -90,13 +87,9 @@
                     <version>2.16</version>
                     <configuration>
                         <includes>
-                            <include>**/*Test.java</include>
-                            <include>**/*Test_*.java</include>
-                            <include>**/*Spec*.java</include>
+                            <include>**/*.java</include>
                         </includes>
                         <excludes>
-                            <exclude>**/Test*.java</exclude>
-                            <exclude>**/*ForTesting.java</exclude>
                             <exclude>**/*Abstract*.java</exclude>
                         </excludes>
                         <useFile>true</useFile>
@@ -310,33 +303,9 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.objectstore</groupId>
-				<artifactId>isis-objectstore-jdo</artifactId>
-				<version>${isis-objectstore-jdo.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
-			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket</artifactId>
 				<version>${isis-viewer-wicket.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>isis-viewer-restfulobjects</artifactId>
-				<version>${isis-viewer-restfulobjects.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.security</groupId>
-				<artifactId>isis-security-shiro</artifactId>
-				<version>${isis-security-shiro.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -358,7 +327,6 @@
                 <artifactId>${rootArtifactId}-webapp</artifactId>
                 <version>${version}</version>
             </dependency>
-
 
 
             <!-- quartz scheduler integration -->

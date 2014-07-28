@@ -15,68 +15,62 @@
  *  limitations under the License.
  */
 {
-    columns: [
+    "columns": [
     {
-        span: 6,
-        memberGroups: {
-            General: {
-                members: {
-                    description: {
-                        typicalLength: { value: 50 }
+        "span": 6,
+        "memberGroups": {
+            "General": {
+                "members": {
+                    "description": {
+                        "typicalLength": { "value": 50 }
                     },
-                    category: {
-                        disabled: {
-                            reason: "Use action to update both category and subcategory"
-                        }
+                    "category": {
                     },
-                    subcategory: {
-                        disabled: {
-                            reason: "Use action to update both category and subcategory"
-                        },
-                        actions: {
-                            updateCategory: {
-                                named: {
-                                    value: "Update"
+                    "subcategory": {
+                        "actions": {
+                            "updateCategory": {
+                                "named": {
+                                    "value": "Update"
                                 }
                             },
-                            analyseCategory: {}
+                            "analyseCategory": {}
                         }
                     },
-                    ownedBy: {
-                        hidden: {}
+                    "ownedBy": {
+                        "hidden": {}
                     },
-                    complete: {
-                        actions: {
-                            completed: {
-                                named: { value: "Done" },
-                                describedAs: {
-                                    value: "Mark this todo item as having been completed"
+                    "complete": {
+                        "actions": {
+                            "completed": {
+                                "named": { "value": "Done" },
+                                "describedAs": {
+                                    "value": "Mark this todo item as having been completed"
                                 },
-                                cssClass: { value: "x-highlight" }
+                                "cssClass": { "value": "x-highlight" }
                             },
-                            notYetCompleted: {
-                                named: { value: "Not done" }
+                            "notYetCompleted": {
+                                "named": { "value": "Not done" }
                             },
-                            scheduleExplicitly: {
+                            "scheduleExplicitly": {
                             },
-                            scheduleImplicitly: {
+                            "scheduleImplicitly": {
                             }
                         },
-                        describedAs: {
-                            value: "Whether this todo item has been completed"
+                        "describedAs": {
+                            "value": "Whether this todo item has been completed"
                         }
                     }
                 }
             },
-            Misc: {
-                members: {
-                    versionSequence: {
-                        named: { 
-                            value: "Version" 
+            "Misc": {
+                "members": {
+                    "versionSequence": {
+                        "named": {
+                            "value": "Version"
                         },
-                        disabled: {},
-                        hidden: {
-                            where: ALL_TABLES
+                        "disabled": {},
+                        "hidden": {
+                            "where": "ALL_TABLES"
                         }
                     }
                 }
@@ -84,48 +78,48 @@
         }
     },
     {
-        span: 6,
-        memberGroups: {
-            Priority: {
-                members: {
-                     relativePriority: {
-                        actions: {
-                            previous: {},
-                            next: {}
+        "span": 6,
+        "memberGroups": {
+            "Priority": {
+                "members": {
+                     "relativePriority": {
+                        "actions": {
+                            "previous": {},
+                            "next": {}
                         }
                     },
-                    dueBy: {
-                        cssClass: { value: "x-key" }
+                    "dueBy": {
+                        "cssClass": { "value": "x-key" }
                     }
                 }
             },
-            Other: {
-                members: {
-                    cost: {
-                        actions: {
-                            updateCost:{
-                                named: {
-                                    value: "Update"
+            "Other": {
+                "members": {
+                    "cost": {
+                        "actions": {
+                            "updateCost":{
+                                "named": {
+                                    "value": "Update"
                                 }
                             }
                         }
                     },
-                    notes: {
-                        multiLine: {
-                            numberOfLines: 5
+                    "notes": {
+                        "multiLine": {
+                            "numberOfLines": 5
                         },
-                        hidden: {
-                            where: ALL_TABLES
+                        "hidden": {
+                            "where": "ALL_TABLES"
                         }
                     },
-                    attachment: {
-                        hidden: {
-                            where: STANDALONE_TABLES
+                    "attachment": {
+                        "hidden": {
+                            "where": "STANDALONE_TABLES"
                         }
                     },
-                    doc: {
-                        hidden: {
-                            where: STANDALONE_TABLES
+                    "doc": {
+                        "hidden": {
+                            "where": "STANDALONE_TABLES"
                         }
                     }
                 }
@@ -133,49 +127,49 @@
         }
     },
     {
-        span: 0
+        "span": 0
     },
     {
-        span: 6,
-        collections: {
-            dependencies: {
-                disabled: {},
-                actions: {
-                    add:{},
-                    remove: {
-                        cssClass: { value: "x-caution" }
+        "span": 6,
+        "collections": {
+            "dependencies": {
+                "disabled": {},
+                "actions": {
+                    "add":{},
+                    "remove": {
+                        "cssClass": { "value": "x-caution" }
                     }
                 },
-                paged: {
-                    value: 5
+                "paged": {
+                    "value": 5
                 },
-                render: {
-                    value: EAGERLY
+                "render": {
+                    "value": "EAGERLY"
                 }
             },
-            similarTo: {
-                disabled: {},
-                paged: {
-                    value: 3
+            "similarTo": {
+                "disabled": {},
+                "paged": {
+                    "value": 3
                 },
-                render: {
-                    value: LAZILY
+                "render": {
+                    "value": "LAZILY"
                 }
             }
         }
     }
     ],
-    actions: {
-        totalCost: {},
-        delete: {
-            cssClass: { value: "x-caution" }
+    "actions": {
+        "totalCost": {},
+        "delete": {
+            "cssClass": { "value": "x-caution" }
         },
-        duplicate: {
-	        named: {
-	            value: "Clone"
+        "duplicate": {
+	        "named": {
+	            "value": "Clone"
 	        },
-            describedAs: {
-                value: "Create a new todo item from this one"
+            "describedAs": {
+                "value": "Create a new todo item from this one"
             }
         }
     }

@@ -26,7 +26,7 @@
     </parent>
 
 	<artifactId>${artifactId}</artifactId>
-	<name>Simple Wicket/Restful/JDO Integration Tests</name>
+	<name>Simple App Integration Tests</name>
 
     <build>
         <testResources>
@@ -76,8 +76,8 @@
             <artifactId>isis-core-wrapper</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.objectstore</groupId>
-            <artifactId>isis-objectstore-jdo-datanucleus</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-objectstore-jdo-datanucleus</artifactId>
         </dependency>
 
         <dependency>

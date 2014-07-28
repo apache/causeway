@@ -19,8 +19,7 @@
  */
 package webapp.prototyping;
 
-import fixture.todo.ToDoItemsFixturesService;
-
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
@@ -28,8 +27,9 @@ import org.apache.isis.core.metamodel.services.devutils.DeveloperUtilitiesServic
 
 /**
  * These overrides are simply to 'move' the action underneath the 
- * {@link ToDoItemsFixturesService fixtures} menu.
+ * 'Prototyping' menu.
  */
+@DomainService(menuOrder = "40.2")
 public class DeveloperUtilities extends DeveloperUtilitiesServiceDefault {
 
     @MemberOrder(name="Prototyping", sequence="90.1")

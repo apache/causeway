@@ -44,8 +44,6 @@ public class ToDoItemsByCategoryViewModel
         implements Comparable<ToDoItemsByCategoryViewModel> {
 
     //region > viewModel implementation
-    // //////////////////////////////////////
-
     @Override
     public String viewModelMemento() {
         return getCategory().name();
@@ -55,12 +53,9 @@ public class ToDoItemsByCategoryViewModel
     public void viewModelInit(String memento) {
         setCategory(Category.valueOf(memento));
     }
-
     //endregion
 
     //region > category (property)
-    // //////////////////////////////////////
-
     private Category category;
 
     /**
@@ -77,8 +72,6 @@ public class ToDoItemsByCategoryViewModel
     //endregion
 
     //region > notYetComplete (property), complete (property)
-    // //////////////////////////////////////
-
     @MultiLine(numberOfLines=5)
     public String getNotYetComplete() {
         final List<ToDoItem> notYetComplete = getItemsNotYetComplete();
@@ -115,8 +108,6 @@ public class ToDoItemsByCategoryViewModel
     //endregion
 
     //region > getItemsNotYetComplete (collection), getItemsComplete (collection)
-    // //////////////////////////////////////
-
     /**
      * All those items {@link ToDoItems${symbol_pound}notYetComplete() not yet complete}, for this {@link ${symbol_pound}getCategory() category}.
      */
@@ -138,8 +129,6 @@ public class ToDoItemsByCategoryViewModel
     //endregion
 
     //region > deleteCompleted (action)
-    // //////////////////////////////////////
-
     @Named("Delete")
     public ToDoItemsByCategoryViewModel deleteCompleted() {
         for (ToDoItem item : getItemsComplete()) {
@@ -152,8 +141,6 @@ public class ToDoItemsByCategoryViewModel
     //endregion
 
     //region > compareTo
-    // //////////////////////////////////////
-
     @Override
     public int compareTo(ToDoItemsByCategoryViewModel other) {
         return ObjectContracts.compare(this, other, "category");
@@ -161,8 +148,6 @@ public class ToDoItemsByCategoryViewModel
     //endregion
 
     //region > injected services
-    // //////////////////////////////////////
-
     @javax.inject.Inject
     private ToDoItems toDoItems;
     //endregion

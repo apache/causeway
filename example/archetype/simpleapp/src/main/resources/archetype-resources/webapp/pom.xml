@@ -26,7 +26,7 @@
     </parent>
 
     <artifactId>${artifactId}</artifactId>
-    <name>Simple Wicket/Restful/JDO Webapp</name>
+    <name>Simple App Webapp</name>
 
     <description>This module runs both the Wicket viewer and the Restfulobjects viewer in a single webapp configured to run using the datanucleus object store.</description>
 
@@ -156,20 +156,20 @@
         
         <!-- other isis components -->
         <dependency>
-            <groupId>org.apache.isis.objectstore</groupId>
-            <artifactId>isis-objectstore-jdo-datanucleus</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-objectstore-jdo-datanucleus</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>isis-viewer-wicket-impl</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.viewer</groupId>
-            <artifactId>isis-viewer-restfulobjects-server</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>isis-security-shiro</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-security-shiro</artifactId>
         </dependency>
 
 
@@ -190,7 +190,74 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-security</artifactId>
         </dependency>
-        
+
+
+        <!-- isis modules -->
+        <dependency>
+            <groupId>org.apache.isis.module</groupId>
+            <artifactId>isis-module-devutils-impl</artifactId>
+        </dependency>
+        <!--
+        uncomment to enable auditing (@Audited),
+        persisted to database
+        -->
+        <!--
+        <dependency>
+            <groupId>org.apache.isis.module</groupId>
+            <artifactId>isis-module-audit-jdo</artifactId>
+        </dependency>
+        -->
+
+        <!--
+        uncomment to enable BackgroundService;
+        depends on: an implementation of BackgroundCommandService to persist commands
+        (see isis-module-command-jdo)
+        -->
+        <!--
+        <dependency>
+            <groupId>org.apache.isis.module</groupId>
+            <artifactId>isis-module-background</artifactId>
+        </dependency>
+        -->
+        <!--
+        uncomment to enable commands (@Command annotation)
+        persisted to database, also enabling the ability to run commands in the background
+        (eg using the Quartz scheduler)
+        -->
+        <!--
+        <dependency>
+            <groupId>org.apache.isis.module</groupId>
+            <artifactId>isis-module-command-jdo</artifactId>
+        </dependency>
+        -->
+
+        <!--
+        uncomment to enable publishing (@PublishedObject, @PublishedAction annotations)
+        persisted to database, and using the Restful Objects (JSON) serialization of the event.
+        -->
+        <!--
+        <dependency>
+            <groupId>org.apache.isis.module</groupId>
+            <artifactId>isis-module-publishing-jdo</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.module</groupId>
+            <artifactId>isis-module-publishingeventserializer-ro</artifactId>
+        </dependency>
+        -->
+
+        <!--
+        uncomment to use the AppSettings or UserSettings services
+        (see also declaration of its applib in dom module)
+        -->
+        <!--
+        <dependency>
+            <groupId>org.apache.isis.module</groupId>
+            <artifactId>isis-module-settings-impl-jdo</artifactId>
+        </dependency>
+        -->
+
+
         <!-- to run using WebServer (optional) -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>

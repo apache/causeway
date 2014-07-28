@@ -28,12 +28,8 @@ import org.joda.time.LocalDate;
 
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.ViewModel;
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.NotInServiceMenu;
-import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -46,6 +42,7 @@ import org.apache.isis.objectstore.jdo.applib.service.command.CommandServiceJdoR
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishedEventJdo;
 import org.apache.isis.objectstore.jdo.applib.service.publish.PublishingServiceJdoRepository;
 
+@DomainService
 public class AdminContributions extends AbstractService {
 
     /**

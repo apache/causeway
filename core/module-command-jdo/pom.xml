@@ -23,7 +23,7 @@
 	<parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
-        <version>1.6.0-SNAPSHOT</version>
+        <version>1.7.0-SNAPSHOT</version>
 	</parent>
 
     <groupId>org.apache.isis.module</groupId>
@@ -149,6 +149,14 @@
             <artifactId>datanucleus-jodatime</artifactId>
         </dependency>
 
-   </dependencies>
+
+        <dependency>
+            <groupId>org.apache.isis.module</groupId>
+            <artifactId>isis-module-background</artifactId>
+            <!-- optional because may not want to use BackgroundCommandExecutionFromBackgroundCommandServiceJdo -->
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
 
 </project>

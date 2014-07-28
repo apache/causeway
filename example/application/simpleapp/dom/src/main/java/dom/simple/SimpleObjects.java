@@ -23,7 +23,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 
-@DomainService(menuOrder = "2", repositoryFor = SimpleObject.class)
+@DomainService(menuOrder = "10", repositoryFor = SimpleObject.class)
 public class SimpleObjects {
 
     //region > identification in the UI

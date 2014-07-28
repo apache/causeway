@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.isis.example.application</groupId>
         <artifactId>simpleapp</artifactId>
-        <version>1.6.0-SNAPSHOT</version>
+        <version>1.7.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>simpleapp-webapp</artifactId>
@@ -185,8 +185,8 @@
             <artifactId>isis-core-runtime</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.isis.module</groupId>
-            <artifactId>isis-module-wrapper</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-wrapper</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
@@ -214,6 +214,17 @@
         </dependency>
         -->
 
+        <!--
+        uncomment to enable BackgroundService;
+        depends on: an implementation of BackgroundCommandService to persist commands
+        (see isis-module-command-jdo)
+        -->
+        <!--
+        <dependency>
+            <groupId>org.apache.isis.module</groupId>
+            <artifactId>isis-module-background</artifactId>
+        </dependency>
+        -->
         <!--
         uncomment to enable commands (@Command annotation)
         persisted to database, also enabling the ability to run commands in the background

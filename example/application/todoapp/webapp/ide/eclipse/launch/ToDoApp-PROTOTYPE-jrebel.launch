@@ -18,7 +18,7 @@
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.apache.isis.WebServer"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--port 8080 --type SERVER_PROTOTYPE"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="quickstart_wicket_restful_jdo-webapp"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="todoapp-webapp"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="${jrebel_args} -Drebel.log=false -Drebel.check_class_hash=true -Drebel.packages_exclude=org.apache.isis -Dproject.root=${project_loc}/.. -Dtarget.dir=target-ide -Drebel.plugins=C:/github/danhaywood/isis-jrebel-plugin/target/danhaywood-isis-jrebel-plugin-1.0.0-SNAPSHOT.jar -Disis-jrebel-plugin.packagePrefix=dom.todo,org.apache.isis.objectstore.jdo.applib -Disis-jrebel-plugin.loggingLevel=warn -XX:MaxPermSize=128m"/>
 </launchConfiguration>

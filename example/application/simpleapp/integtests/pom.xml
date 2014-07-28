@@ -23,7 +23,7 @@
     <parent>
     	<groupId>org.apache.isis.example.application</groupId>
         <artifactId>simpleapp</artifactId>
-        <version>1.6.0-SNAPSHOT</version>
+        <version>1.7.0-SNAPSHOT</version>
     </parent>
 
 	<artifactId>simpleapp-integtests</artifactId>
@@ -108,8 +108,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.module</groupId>
-            <artifactId>isis-module-wrapper</artifactId>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-wrapper</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>

@@ -39,11 +39,10 @@ import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 
+@DomainService
 public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
     //region > priority (contributed property)
-    // //////////////////////////////////////
-    
     @DescribedAs("The relative priority of this item compared to others not yet complete (using 'due by' date)")
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
@@ -69,7 +68,6 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
                 return null;
             }}, ToDoItemContributions.class, "relativePriority", toDoItem);
     }
-
 
     private List<ToDoItem> sortedNotYetComplete() {
         return ORDERING_DUE_BY
@@ -97,8 +95,6 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     //endregion
 
     //region >  next, previous (contributed actions)
-    // //////////////////////////////////////
-
     @DescribedAs("The next item not yet completed")
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
@@ -163,8 +159,6 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     //endregion
 
     //region > similarTo (contributed collection)
-    // //////////////////////////////////////
-    
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
     @NotContributed(As.ACTION)
@@ -189,52 +183,45 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     //endregion
 
     //region > updateCategory (contributed action)
-    // //////////////////////////////////////
 
     @DescribedAs("Update category and subcategory")
     @NotInServiceMenu
     @ActionSemantics(Of.IDEMPOTENT)
-    public ToDoItem updateCategory(
-            final ToDoItem item, 
+    public Categorized updateCategory(
+            final Categorized item,
             final @Named("Category") Category category,
             final @Optional @Named("Subcategory") Subcategory subcategory) {
         item.setCategory(category);
         item.setSubcategory(subcategory);
         return item;
     }
-
     public Category default1UpdateCategory(
-            final ToDoItem item) {
+            final Categorized item) {
         return item != null? item.getCategory(): null;
     }
     public Subcategory default2UpdateCategory(
-            final ToDoItem item) {
+            final Categorized item) {
         return item != null? item.getSubcategory(): null;
     }
 
     public List<Subcategory> choices2UpdateCategory(
-            final ToDoItem item, final Category category) {
+            final Categorized item, final Category category) {
         return Subcategory.listFor(category);
     }
     
     public String validateUpdateCategory(
-            final ToDoItem item, final Category category, final Subcategory subcategory) {
+            final Categorized item, final Category category, final Subcategory subcategory) {
         return Subcategory.validate(category, subcategory);
     }
     //endregion
 
     //region > helpers
-    // //////////////////////////////////////
-    
     protected String currentUserName() {
         return getContainer().getUser().getName();
     }
-
     //endregion
 
     //region > injected services
-    // //////////////////////////////////////
-
     @javax.inject.Inject
     private ToDoItems toDoItems;
 

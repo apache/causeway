@@ -22,17 +22,15 @@ package webapp.prototyping;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.Prototype;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.MemberOrder;
 
+@DomainService(menuOrder = "40.3")
 public class ExternalLinksService {
 
     public static enum ExternalLink {
         ISIS_DOCUMENTATION("Apache Isis docs", "http://isis.apache.org/documentation.html"),
-        PROJECT_ON_GITHUB("Project source code on Github", "https://github.com/apache/isis/tree/master/example/application/${parentArtifactId}/");
+        PROJECT_ON_GITHUB("Project source code on Github", "https://github.com/apache/isis/tree/master/example/application/quickstart_wicket_restful_jdo/");
         
         private final String title;
         private final String url;
