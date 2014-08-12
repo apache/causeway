@@ -79,7 +79,7 @@ public class Get_whenList_thenRepresentation_ok {
                 .rel(Rel.ELEMENT)
                 .title("Untitled Actions Entity")
                 .httpMethod(RestfulHttpMethod.GET)
-                .href(matches("http://localhost:\\d+/objects/RTNE/75"))
+                .href(matches("http://localhost:\\d+/objects/RTNE/79"))
                 .type(RepresentationType.DOMAIN_OBJECT.getMediaType())
                 .arguments(JsonRepresentation.newMap())
                 .build());

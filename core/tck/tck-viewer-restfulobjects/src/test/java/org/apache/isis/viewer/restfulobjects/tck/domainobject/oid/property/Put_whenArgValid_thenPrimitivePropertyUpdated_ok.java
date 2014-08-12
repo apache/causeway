@@ -73,49 +73,49 @@ public class Put_whenArgValid_thenPrimitivePropertyUpdated_ok {
 
         // byte
         final byte b = (byte)99;
-        modifyLink = getObjectPropertyReprModifyLink("PRMV", "40", "byteProperty");
+        modifyLink = getObjectPropertyReprModifyLink("PRMV", "41", "byteProperty");
         argRepr = modifyLink.getArguments().mapPut("value", b);
         assertThat(followedRepr(modifyLink,argRepr).getByte("value"), is(b));
         
         // char
         final char c = 'b';
-        modifyLink = getObjectPropertyReprModifyLink("PRMV", "40", "charProperty");
+        modifyLink = getObjectPropertyReprModifyLink("PRMV", "41", "charProperty");
         argRepr = modifyLink.getArguments().mapPut("value", c);
         assertThat(followedRepr(modifyLink,argRepr).getChar("value"), is(c));
 
         // double
         final double d = 12345.678;
-        modifyLink = getObjectPropertyReprModifyLink("PRMV", "40", "doubleProperty");
+        modifyLink = getObjectPropertyReprModifyLink("PRMV", "41", "doubleProperty");
         argRepr = modifyLink.getArguments().mapPut("value", d);
         assertThat(followedRepr(modifyLink,argRepr).getDouble("value"), is(d));
 
         // float
         final float f = 54321.123F;
-        modifyLink = getObjectPropertyReprModifyLink("PRMV", "40", "floatProperty");
+        modifyLink = getObjectPropertyReprModifyLink("PRMV", "41", "floatProperty");
         argRepr = modifyLink.getArguments().mapPut("value", f);
         assertThat(followedRepr(modifyLink,argRepr).getFloat("value"), is(f));
         
         // int
         final int i = 999999;
-        modifyLink = getObjectPropertyReprModifyLink("PRMV", "40", "intProperty");
+        modifyLink = getObjectPropertyReprModifyLink("PRMV", "41", "intProperty");
         argRepr = modifyLink.getArguments().mapPut("value", i);
         assertThat(followedRepr(modifyLink,argRepr).getInt("value"), is(i));
         
         // long
         final long l = 99999999999L;
-        modifyLink = getObjectPropertyReprModifyLink("PRMV", "40", "longProperty");
+        modifyLink = getObjectPropertyReprModifyLink("PRMV", "41", "longProperty");
         argRepr = modifyLink.getArguments().mapPut("value", l);
         assertThat(followedRepr(modifyLink,argRepr).getLong("value"), is(l));
         
         // short
         final short s = (short)999;
-        modifyLink = getObjectPropertyReprModifyLink("PRMV", "40", "shortProperty");
+        modifyLink = getObjectPropertyReprModifyLink("PRMV", "41", "shortProperty");
         argRepr = modifyLink.getArguments().mapPut("value", s);
         assertThat(followedRepr(modifyLink,argRepr).getShort("value"), is(s));
         
         // boolean
         final boolean z = false;
-        modifyLink = getObjectPropertyReprModifyLink("PRMV", "40", "booleanProperty");
+        modifyLink = getObjectPropertyReprModifyLink("PRMV", "41", "booleanProperty");
         argRepr = modifyLink.getArguments().mapPut("value", z);
         assertThat(followedRepr(modifyLink,argRepr).getBoolean("value"), is(z));
         

@@ -115,8 +115,6 @@ public class SimpleApplication extends IsisWicketApplication {
         final Module simpleOverrides = new AbstractModule() {
             @Override
             protected void configure() {
-                bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarForSimpleApp.class);
-                
                 bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Simple App");
                 bind(String.class).annotatedWith(Names.named("applicationCss")).toInstance("css/application.css");
                 bind(String.class).annotatedWith(Names.named("applicationJs")).toInstance("scripts/application.js");

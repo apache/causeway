@@ -76,7 +76,7 @@ public class Put_whenArgsValid_thenMultiplePropertyUpdate {
     @Test
     public void primitivePropertiesUpdated() throws Exception {
         
-        final DomainObjectRepresentation domainObjectRepr = getObjectRepr("PRMV", "40");
+        final DomainObjectRepresentation domainObjectRepr = getObjectRepr("PRMV", "41");
         
         final LinkRepresentation updateLink = domainObjectRepr.getLinkWithRel(Rel.UPDATE);
         

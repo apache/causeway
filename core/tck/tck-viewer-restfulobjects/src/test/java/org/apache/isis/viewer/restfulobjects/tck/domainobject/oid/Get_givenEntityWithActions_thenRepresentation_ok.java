@@ -57,7 +57,7 @@ public class Get_givenEntityWithActions_thenRepresentation_ok {
     public void thenMembers() throws Exception {
 
         // when
-        final Response jaxrsResponse = domainObjectResource.object("RTNE","75");
+        final Response jaxrsResponse = domainObjectResource.object("RTNE","76");
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = RestfulResponse.ofT(jaxrsResponse);
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
 

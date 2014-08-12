@@ -203,6 +203,7 @@
             <groupId>org.apache.isis.module</groupId>
             <artifactId>isis-module-devutils-impl</artifactId>
         </dependency>
+
         <!--
         uncomment to enable auditing (@Audited),
         persisted to database
@@ -214,17 +215,6 @@
         </dependency>
         -->
 
-        <!--
-        uncomment to enable BackgroundService;
-        depends on: an implementation of BackgroundCommandService to persist commands
-        (see isis-module-command-jdo)
-        -->
-        <!--
-        <dependency>
-            <groupId>org.apache.isis.module</groupId>
-            <artifactId>isis-module-background</artifactId>
-        </dependency>
-        -->
         <!--
         uncomment to enable commands (@Command annotation)
         persisted to database, also enabling the ability to run commands in the background

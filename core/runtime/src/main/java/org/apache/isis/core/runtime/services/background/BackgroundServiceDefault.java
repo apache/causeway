@@ -75,15 +75,8 @@ public class BackgroundServiceDefault implements BackgroundService {
     @Programmatic
     @PostConstruct
     public void init(Map<String,String> props) {
-        ensureDependenciesInjected();
     }
     
-    private void ensureDependenciesInjected() {
-        Ensure.ensureThatState(this.bookmarkService, is(not(nullValue())), "BookmarkService domain service must be configured");
-        Ensure.ensureThatState(this.backgroundCommandService, is(not(nullValue())), "BackgroundCommandService domain service must be configured");
-        Ensure.ensureThatState(this.commandContext, is(not(nullValue())), "CommandContext domain service must be configured");
-    }
-
 
     private ObjectSpecificationDefault getJavaSpecificationOfOwningClass(final Method method) {
         return getJavaSpecification(method.getDeclaringClass());
@@ -109,10 +102,15 @@ public class BackgroundServiceDefault implements BackgroundService {
     @Programmatic
     @Override
     public <T> T execute(final T domainObject) {
+
+        // only perform check if actually used.
+        ensureDependenciesInjected();
+
         final Class<? extends Object> cls = domainObject.getClass();
         final MethodHandler methodHandler = newMethodHandler(domainObject);
         return newProxy(cls, methodHandler);
     }
+
 
     @SuppressWarnings("unchecked")
     private <T> T newProxy(Class<? extends Object> cls, MethodHandler methodHandler) {
@@ -243,35 +241,24 @@ public class BackgroundServiceDefault implements BackgroundService {
     
     // //////////////////////////////////////
 
+    @javax.inject.Inject
     private BackgroundCommandService backgroundCommandService;
-    /**
-     * Mandatory service; must be configured.
-     */
-    public void injectBackgroundCommandService(final BackgroundCommandService backgroundCommandService) {
-        this.backgroundCommandService = backgroundCommandService;
-    }
 
+    @javax.inject.Inject
     private BookmarkService bookmarkService;
-    /**
-     * Mandatory service (but {@link org.apache.isis.core.metamodel.services.bookmarks.BookmarkServiceDefault}
-     * implementation is part of core and annotated with {@link org.apache.isis.applib.annotation.DomainService},
-     * so guaranteed to be available).
-     */
-    public void injectBookmarkService(BookmarkService bookmarkService) {
-        this.bookmarkService = bookmarkService;
-    }
 
+    @javax.inject.Inject
     private CommandContext commandContext;
-    /**
-     * Mandatory service (but {@link org.apache.isis.applib.services.command.CommandContext} implementation is part of
-     * core and annotated with {@link org.apache.isis.applib.annotation.DomainService}, so guaranteed to be available).
-     */
-    public void injectCommandContext(final CommandContext commandContext) {
-        this.commandContext = commandContext;
-    }
-    
 
-    
+    /**
+     * Checked lazily in {@link #execute(Object)}.
+     */
+    private void ensureDependenciesInjected() {
+        Ensure.ensureThatState(this.bookmarkService, is(not(nullValue())), "BookmarkService domain service must be configured");
+        Ensure.ensureThatState(this.backgroundCommandService, is(not(nullValue())), "BackgroundCommandService domain service must be configured");
+        Ensure.ensureThatState(this.commandContext, is(not(nullValue())), "CommandContext domain service must be configured");
+    }
+
     // //////////////////////////////////////
 
     protected SpecificationLoaderSpi getSpecificationLoader() {

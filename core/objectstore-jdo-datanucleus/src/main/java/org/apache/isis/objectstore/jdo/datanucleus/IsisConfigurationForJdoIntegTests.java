@@ -62,19 +62,18 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
 
         // run-in memory
         addDataNucleusProperty("javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
-        
-        // various standard properties
-        addDataNucleusProperty("datanucleus.defaultInheritanceStrategy", "TABLE_PER_CLASS");
-        addDataNucleusProperty("datanucleus.cache.level2.type","none");
-        addDataNucleusProperty("datanucleus.identifier.case", "PreserveCase");
-
-        addDataNucleusProperty("datanucleus.persistenceByReachabilityAtCommit", "false");
 
         // Don't do validations that consume setup time.
         addDataNucleusProperty("datanucleus.autoCreateSchema", "true");
         addDataNucleusProperty("datanucleus.validateTables", "false");
         addDataNucleusProperty("datanucleus.validateConstraints", "false");
-        
+
+        // other properties as per WEB-INF/persistor_datanucleus.properties
+        addDataNucleusProperty("datanucleus.persistenceByReachabilityAtCommit", "false");
+        addDataNucleusProperty("datanucleus.identifier.case", "PreserveCase");
+        addDataNucleusProperty("datanucleus.cache.level2.type","none");
+        addDataNucleusProperty("datanucleus.cache.level2.mode","ENABLE_SELECTIVE");
+
         // automatically install any fixtures that might have been registered
         add(DataNucleusObjectStore.INSTALL_FIXTURES_KEY , "true");
     }
