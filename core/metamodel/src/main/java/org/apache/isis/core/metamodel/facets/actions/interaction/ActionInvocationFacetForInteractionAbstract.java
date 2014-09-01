@@ -314,7 +314,7 @@ public abstract class ActionInvocationFacetForInteractionAbstract
                     LOG.debug(" action result " + result);
                 }
                 if (result == null) {
-                    if(targetAdapter.getSpecification().isViewModelCloneable(null)) {
+                    if(targetAdapter.getSpecification().isViewModelCloneable(targetAdapter)) {
                         // if this was a void method on a ViewModel.Cloneable, then (to save boilerplate in the domain)
                         // automatically do the clone and return the clone instead.
                         final ViewModel.Cloneable cloneable = (ViewModel.Cloneable) targetAdapter.getObject();
