@@ -27,7 +27,7 @@
     </parent>
 
 	<artifactId>isis-core-objectstore-jdo-datanucleus</artifactId>
-	<name>Isis JDO ObjectStore DataNucleus impl</name>
+	<name>Isis Core JDO ObjectStore DataNucleus impl</name>
 
     <properties>
 	    <siteBaseDir>..</siteBaseDir>

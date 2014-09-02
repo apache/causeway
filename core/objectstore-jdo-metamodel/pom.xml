@@ -27,7 +27,7 @@
     </parent>
 
 	<artifactId>isis-core-objectstore-jdo-metamodel</artifactId>
-	<name>Isis JDO ObjectStore MetaModel Support</name>
+	<name>Isis Core JDO ObjectStore MetaModel Support</name>
 
     <properties>
 	    <siteBaseDir>..</siteBaseDir>

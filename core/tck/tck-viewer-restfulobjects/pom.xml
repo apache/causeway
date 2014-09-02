@@ -28,7 +28,7 @@
 
     <artifactId>isis-core-tck-viewer-restfulobjects</artifactId>
 
-    <name>Isis RestfulObjects Viewer TCK tests</name>
+    <name>Isis Core RestfulObjects Viewer TCK tests</name>
 
     <packaging>war</packaging>
 
@@ -86,10 +86,6 @@
 
 
         <!-- isis runtime -->
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-bytecode-cglib</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-objectstore</artifactId>
