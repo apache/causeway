@@ -20,24 +20,11 @@
 package org.apache.isis.core.webserver.embedded.jetty;
 
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.Filter;
+import javax.servlet.Servlet;
 import javax.servlet.ServletContextListener;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.mortbay.jetty.Handler;
-import org.mortbay.jetty.NCSARequestLog;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.handler.ContextHandler;
-import org.mortbay.jetty.handler.HandlerList;
-import org.mortbay.jetty.handler.RequestLogHandler;
-import org.mortbay.jetty.handler.ResourceHandler;
-import org.mortbay.jetty.servlet.FilterHolder;
-import org.mortbay.jetty.servlet.FilterMapping;
-import org.mortbay.jetty.servlet.ServletHandler;
-import org.mortbay.jetty.servlet.ServletHolder;
-import org.mortbay.jetty.servlet.ServletMapping;
-import org.mortbay.jetty.servlet.SessionHandler;
 
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.runtime.viewer.web.FilterSpecification;
@@ -46,6 +33,20 @@ import org.apache.isis.core.runtime.viewer.web.WebAppSpecification;
 import org.apache.isis.core.runtime.web.EmbeddedWebServerAbstract;
 import org.apache.isis.core.webserver.WebServerConstants;
 import org.apache.isis.core.webserver.WebServerException;
+import org.eclipse.jetty.server.NCSARequestLog;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.server.handler.RequestLogHandler;
+import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.server.session.SessionHandler;
+import org.eclipse.jetty.servlet.FilterHolder;
+import org.eclipse.jetty.servlet.FilterMapping;
+import org.eclipse.jetty.servlet.ServletHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.servlet.ServletMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
     private final static Logger LOG = LoggerFactory.getLogger(EmbeddedWebServerJetty.class);
@@ -126,7 +127,7 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
     private void addServletMappings(final ServletHandler servletHandler, final WebAppSpecification webAppSpec) {
         for (final ServletSpecification servletSpec : webAppSpec.getServletSpecifications()) {
 
-            final ServletHolder servletHolder = new ServletHolder(servletSpec.getServletClass());
+            final ServletHolder servletHolder = new ServletHolder("servlet", (Class<? extends Servlet>) servletSpec.getServletClass());
             servletHolder.setInitParameters(servletSpec.getInitParams());
             servletHandler.addServlet(servletHolder);
 
@@ -141,14 +142,14 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
     private void addFilterMappings(final ServletHandler servletHandler, final WebAppSpecification webAppSpec) {
         for (final FilterSpecification filterSpec : webAppSpec.getFilterSpecifications()) {
 
-            final FilterHolder filterHolder = new FilterHolder(filterSpec.getFilterClass());
+            final FilterHolder filterHolder = new FilterHolder((Class<? extends Filter>) filterSpec.getFilterClass());
             filterHolder.setInitParameters(filterSpec.getInitParams());
             servletHandler.addFilter(filterHolder);
 
             final FilterMapping filterMapping = new FilterMapping();
             filterMapping.setFilterName(filterHolder.getName());
             filterMapping.setPathSpecs(filterSpec.getPathSpecs().toArray(new String[] {}));
-            filterMapping.setDispatches(Handler.DEFAULT);
+            filterMapping.setDispatches(FilterMapping.DEFAULT);
             servletHandler.addFilterMapping(filterMapping);
         }
     }
@@ -169,8 +170,9 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
     }
 
     private void addContextParams(final ContextHandler contextHandler) {
+        Map<String, String> initParams = contextHandler.getInitParams();
         for (final WebAppSpecification specification : getSpecifications()) {
-            contextHandler.setInitParams(specification.getContextParams());
+            initParams.putAll(specification.getContextParams());
         }
     }
 
@@ -211,7 +213,7 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
         }
         try {
             final Server server = new Server(port);
-            server.addHandler(contextHandler);
+            server.addBean(contextHandler);
             server.start();
         } catch (final RuntimeException e) {
             throw e;

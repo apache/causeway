@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
-import com.vaynberg.wicket.select2.Select2Choice;
-
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -42,7 +40,7 @@ class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> i
 
     /**
      * Necessary because {@link FormComponentPanel} overrides this as <tt>true</tt>, whereas we want to
-     * report on the state of the underlying {@link Select2Choice}.
+     * report on the state of the underlying {@link org.wicketstuff.select2.Select2Choice}.
      */
     @Override
     public boolean checkRequired() {
@@ -56,7 +54,7 @@ class EntityLinkSelect2Panel extends FormComponentPanelAbstract<ObjectAdapter> i
      * Since we override {@link #convertInput()}, it is (apparently) enough to
      * just return a value that is suitable for error reporting.
      * 
-     * @see DateField#getInput() for reference
+     * @see org.apache.wicket.extensions.markup.html.form.DateTextField#getInput() for reference
      */
     @Override
     public String getInput() {

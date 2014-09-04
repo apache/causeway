@@ -16,13 +16,12 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets;
 
-import com.vaynberg.wicket.select2.Select2Choice;
-
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.wicketstuff.select2.Select2Choice;
 
 public final class Select2ChoiceUtil  {
 

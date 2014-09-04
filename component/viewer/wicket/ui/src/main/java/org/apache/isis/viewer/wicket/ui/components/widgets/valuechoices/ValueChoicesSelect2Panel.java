@@ -22,8 +22,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import com.vaynberg.wicket.select2.ChoiceProvider;
-import com.vaynberg.wicket.select2.Select2Choice;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
@@ -40,6 +38,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.Select2ChoiceUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Select2Choice;
 
 public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements ScalarModelWithPending {
 

@@ -19,16 +19,17 @@ package org.apache.isis.viewer.wicket.ui.components.widgets;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
-import com.vaynberg.wicket.select2.TextChoiceProvider;
-
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.wicketstuff.select2.Response;
+import org.wicketstuff.select2.TextChoiceProvider;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 public abstract class ObjectAdapterMementoProviderAbstract extends TextChoiceProvider<ObjectAdapterMemento> {
 
@@ -54,7 +55,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends TextChoicePro
     }
 
     @Override
-    public void query(String term, int page, com.vaynberg.wicket.select2.Response<ObjectAdapterMemento> response) {
+    public void query(String term, int page, Response<ObjectAdapterMemento> response) {
         
         final List<ObjectAdapterMemento> mementos = Lists.newArrayList(obtainMementos(term));
         // if not mandatory, and the list doesn't contain null already, then add it in.
