@@ -165,7 +165,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns a css class name of the specification.
      *
      * <p>
-     * Corresponds to the {@link CssClass#value()) value} of {@link CssClassFacet};
+     * Corresponds to the {@link org.apache.isis.applib.annotation.CssClass#value()) value} of {@link CssClassFacet};
      */
     String getCssClass();
 

@@ -40,9 +40,9 @@ public abstract class EventBusService {
      */
     public static class Noop extends EventBusService {
         @Override
-        public void register(Object domainObject) {};
+        public void register(Object domainObject) {}
         @Override
-        public void unregister(Object domainObject) {};
+        public void unregister(Object domainObject) {}
         @Override
         public void post(Object event) {}
         @Override

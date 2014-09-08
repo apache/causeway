@@ -29,7 +29,7 @@ import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
  * <p>
  * In {@link IsisWicketApplication} there is logic to select either this 
  * {@link DeploymentType} or {@link WicketServer} depending on the value of 
- * Wicket's own {@link Application#getConfigurationType() configuration mode}. 
+ * Wicket's own {@link org.apache.wicket.Application#getConfigurationType() configuration mode}.
  */
 public class WicketServerPrototype extends DeploymentTypeWicketAbstract {
 

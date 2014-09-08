@@ -48,7 +48,7 @@ import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 /**
  * Viewer-specific implementation of {@link AuthenticatedWebSession}, which
  * delegates to the Isis' configured {@link AuthenticationManager}, and which
- * also tracks threadusage (so that multiple concurrent requests are all
+ * also tracks thread usage (so that multiple concurrent requests are all
  * associated with the same session).
  */
 public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession implements AuthenticationSessionProvider, BreadcrumbModelProvider, BookmarkedPagesModelProvider {
@@ -92,15 +92,6 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         final List<String> roles = authenticationSession.getRoles();
         return new Roles(roles.toArray(new String[] {}));
     }
-
-    /**
-     * Simply downcasts, for convenience of callers.
-     */
-    @Override
-    public WebClientInfo getClientInfo() {
-        return (WebClientInfo) super.getClientInfo();
-    }
-
     
     // /////////////////////////////////////////////////
     // Breadcrumbs and Bookmarks support

@@ -106,7 +106,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
         /**
          * Sessions will be automatically closed.
          */
-        AUTO_CLOSE;
+        AUTO_CLOSE
     }
 
     /**

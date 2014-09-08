@@ -84,7 +84,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static final String REGULAR_CASE_KEY = "isis.viewer.wicket.regularCase";
 
     /**
-     * @see  http://github.com/brandonaaron/livequery
+     * @see <a href="http://github.com/brandonaaron/livequery">livequery</a>
      */
     private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
     private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");

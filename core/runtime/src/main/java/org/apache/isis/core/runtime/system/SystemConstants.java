@@ -45,7 +45,7 @@ public final class SystemConstants {
      * {@link IsisConfiguration}.
      * 
      * <p>
-     * Use {@link DeploymentType#valueOf(String)} to decode.
+     * Use {@link DeploymentType#lookup(String)} to decode.
      */
 
     public static final String DEPLOYMENT_TYPE_KEY = ConfigurationConstants.ROOT + "deploymentType";

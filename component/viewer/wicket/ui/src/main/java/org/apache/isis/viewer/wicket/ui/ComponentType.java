@@ -140,7 +140,7 @@ public enum ComponentType {
 
     /**
      * Returns the {@link #name()} formatted as
-     * {@link Strings#camelCase(String) camel case}.
+     * {@link org.apache.isis.core.commons.lang.StringExtensions#toCamelCase(String) case}.
      * 
      * <p>
      * For example, <tt>OBJECT_EDIT</tt> becomes <tt>objectEdit</tt>.

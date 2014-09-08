@@ -40,7 +40,7 @@ public class VoidReturnPage extends PageAbstract {
     private static final String ID_ACTION_NAME = "actionName";
 
     /**
-     * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
+     * For use with {@link Component#setResponsePage(org.apache.wicket.request.component.IRequestablePage)}
      */
     public VoidReturnPage(final VoidModel model) {
         this(model, actionNameFrom(model));

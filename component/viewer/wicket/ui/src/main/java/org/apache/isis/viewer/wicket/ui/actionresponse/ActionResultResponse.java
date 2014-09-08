@@ -33,8 +33,8 @@ public class ActionResultResponse {
     private final ActionResultResponseHandlingStrategy handlingStrategy;
     private final IRequestHandler handler;
     private final PageAbstract page;
-    private AjaxRequestTarget target;
-    private URL url;
+    private final AjaxRequestTarget target;
+    private final URL url;
     
     public static ActionResultResponse withHandler(IRequestHandler handler) {
         return new ActionResultResponse(

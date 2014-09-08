@@ -64,7 +64,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
         final Select2Choice<EntityModel> breadcrumbChoice = new Select2Choice<EntityModel>(ID_BREADCRUMBS, entityModel);
 
         breadcrumbChoice.add(
-            new AjaxFormComponentUpdatingBehavior("onchange"){
+            new AjaxFormComponentUpdatingBehavior("change"){
     
                 private static final long serialVersionUID = 1L;
     

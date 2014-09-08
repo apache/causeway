@@ -36,7 +36,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory.ApplicationAdvice;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -58,7 +57,7 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
         componentFactoriesByType = Multimaps.newListMultimap(new HashMap<ComponentType, Collection<ComponentFactory>>(), new Supplier<List<ComponentFactory>>() {
             @Override
             public List<ComponentFactory> get() {
-                return Lists.<ComponentFactory> newArrayList();
+                return Lists.newArrayList();
             }
         });
 
