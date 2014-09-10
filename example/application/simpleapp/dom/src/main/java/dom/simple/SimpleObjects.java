@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.ActionSemantics.Of;
 public class SimpleObjects {
 
     //region > identification in the UI
-    // //////////////////////////////////////
 
     public String getId() {
         return "simple";
@@ -40,7 +39,6 @@ public class SimpleObjects {
     //endregion
 
     //region > listAll (action)
-    // //////////////////////////////////////
 
     @Bookmarkable
     @ActionSemantics(Of.SAFE)
@@ -52,8 +50,6 @@ public class SimpleObjects {
     //endregion
 
     //region > create (action)
-    // //////////////////////////////////////
-    
     @MemberOrder(sequence = "2")
     public SimpleObject create(
             final @Named("Name") String name) {
@@ -66,7 +62,6 @@ public class SimpleObjects {
     //endregion
 
     //region > injected services
-    // //////////////////////////////////////
 
     @javax.inject.Inject 
     DomainObjectContainer container;
