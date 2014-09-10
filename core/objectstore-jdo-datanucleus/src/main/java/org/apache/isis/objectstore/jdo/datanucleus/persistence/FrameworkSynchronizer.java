@@ -300,6 +300,9 @@ public class FrameworkSynchronizer {
             @Override
             public void run() {
                 ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+                if(adapter == null) {
+                    return;
+                }
                 if(!adapter.isDestroyed()) {
                     adapter.changeState(ResolveState.DESTROYED);
                 }
