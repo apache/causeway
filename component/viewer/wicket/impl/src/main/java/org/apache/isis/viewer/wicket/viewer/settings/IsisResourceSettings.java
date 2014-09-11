@@ -31,7 +31,7 @@ public class IsisResourceSettings extends ResourceSettings {
     private final List<IStringResourceLoader> stringResourceLoaders = Generics.newArrayList(4);
 
     /**
-     * Configures Wicket's default ResourceLoaders.<br>
+     * Configures Wicket's default ResourceLoaders.
      *
      * <p>
      * In contrast to the default lookup strategy, Isis' searches for application-specific properties first.

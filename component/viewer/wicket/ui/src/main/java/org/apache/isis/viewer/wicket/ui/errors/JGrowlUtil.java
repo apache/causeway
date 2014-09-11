@@ -18,13 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.errors;
 
+import org.apache.wicket.util.string.Strings;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 
 public class JGrowlUtil {
     
     private JGrowlUtil(){}
 
-    public static String asJGrowlCalls(MessageBroker messageBroker) {
+    public static String asJGrowlCalls(final MessageBroker messageBroker) {
         final StringBuilder buf = new StringBuilder();
         
         for (String info : messageBroker.getMessages()) {
@@ -41,9 +42,9 @@ public class JGrowlUtil {
         return buf.toString();
     }
 
-    public static void addJGrowlCall(final String origMsg, final String cssClassSuffix, boolean sticky, final StringBuilder buf) {
-        final String msg = origMsg.replaceAll("\"", "\'");
-        buf.append("$.jGrowl(\"").append(msg).append('\"');
+    private static void addJGrowlCall(final String origMsg, final String cssClassSuffix, boolean sticky, final StringBuilder buf) {
+        final CharSequence escapedMsg = escape(origMsg);
+        buf.append("$.jGrowl(\"").append(escapedMsg).append('\"');
         buf.append(", {");
         buf.append("theme: \"jgrowl-").append(cssClassSuffix).append("\"");
         if (sticky) {
@@ -51,6 +52,15 @@ public class JGrowlUtil {
         }
         buf.append("}");
         buf.append(");\n");
+    }
+
+    static String escape(String origMsg) {
+        final String escaped = Strings.escapeMarkup(origMsg).toString();
+
+        // convert (what would originally have been either) ' or " to '
+        return escaped
+                .replace("&quot;", "'")
+                .replace("&#039;", "'");
     }
 
 

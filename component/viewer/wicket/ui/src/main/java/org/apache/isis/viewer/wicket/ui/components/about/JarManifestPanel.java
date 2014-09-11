@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 public class JarManifestPanel extends Panel {
@@ -44,8 +43,12 @@ public class JarManifestPanel extends Panel {
 
     public JarManifestPanel(String id, JarManifestModel manifestModel) {
         super(id, manifestModel);
-        
-        add(new Label(ID_ABOUT_MESSAGE, manifestModel.getAboutMessage()).setEscapeModelStrings(false));
+
+        final String aboutMessage = manifestModel.getAboutMessage();
+        final Label label = new Label(ID_ABOUT_MESSAGE, aboutMessage);
+        // safe to not escape, about message is read from file (part of deployed WAR)
+        label.setEscapeModelStrings(false);
+        add(label);
 
         MarkupContainer container = new WebMarkupContainer(ID_MANIFEST_ATTRIBUTES) {
             private static final long serialVersionUID = 1L;

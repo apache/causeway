@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 public class ExceptionStackTracePanel extends Panel {
@@ -44,8 +43,15 @@ public class ExceptionStackTracePanel extends Panel {
 
     public ExceptionStackTracePanel(String id, ExceptionModel exceptionModel) {
         super(id, exceptionModel);
-        
-        add(new Label(ID_MAIN_MESSAGE, exceptionModel.getMainMessage()).setEscapeModelStrings(false));
+
+        final String mainMessage = exceptionModel.getMainMessage();
+        final Label label = new Label(ID_MAIN_MESSAGE, mainMessage);
+
+        // to avoid potential XSS attacks, no longer escape model strings
+        // (risk is low but could just happen: error message being rendered might accidentally or deliberately contain rogue Javascript)
+        // label.setEscapeModelStrings(false);
+
+        add(label);
 
         MarkupContainer container = new WebMarkupContainer(ID_EXCEPTION_DETAIL) {
             private static final long serialVersionUID = 1L;

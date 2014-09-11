@@ -79,7 +79,7 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
 
             @Override
             public String apply(String input) {
-                return prefix + "<br/><br/>" + input;
+                return prefix + ": " + input;
             }
         };
     }

@@ -64,7 +64,7 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
         }
     }
     
-    protected org.apache.isis.core.runtime.system.transaction.MessageBroker getMessageBroker() {
+    protected MessageBroker getMessageBroker() {
         return IsisContext.getMessageBroker();
     }
     

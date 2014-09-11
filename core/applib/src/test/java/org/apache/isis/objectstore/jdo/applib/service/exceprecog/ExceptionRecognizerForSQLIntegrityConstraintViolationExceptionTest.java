@@ -16,13 +16,13 @@
  */
 package org.apache.isis.objectstore.jdo.applib.service.exceprecog;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
-
 import java.sql.SQLIntegrityConstraintViolationException;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 public class ExceptionRecognizerForSQLIntegrityConstraintViolationExceptionTest {
 
@@ -38,7 +38,7 @@ public class ExceptionRecognizerForSQLIntegrityConstraintViolationExceptionTest 
         final String msg = "initial gumph: unique constraint or index violation; further details";
         final SQLIntegrityConstraintViolationException ex = new SQLIntegrityConstraintViolationException(msg);
         String recognize = exceptionRecognizer.recognize(ex);
-        assertThat(recognize, is("Data already exists<br/><br/>" + msg));
+        assertThat(recognize, is("Data already exists: " + msg));
     }
 
     @Test

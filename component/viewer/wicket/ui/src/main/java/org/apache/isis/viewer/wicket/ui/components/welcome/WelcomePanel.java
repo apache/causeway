@@ -21,9 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.welcome;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-
 import org.apache.wicket.markup.html.basic.Label;
-
 import org.apache.isis.viewer.wicket.model.models.WelcomeModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -42,9 +40,12 @@ public class WelcomePanel extends PanelAbstract<WelcomeModel> {
     @Named("welcomeMessage")
     private String welcomeMessage;
 
-    public WelcomePanel(final String id, WelcomeModel model) {
+    public WelcomePanel(final String id, final WelcomeModel model) {
         super(id, model);
         model.setObject(welcomeMessage);
-        add(new Label(ID_MESSAGE, getModel().getObject()).setEscapeModelStrings(false));
+        final Label label = new Label(ID_MESSAGE, welcomeMessage);
+        // safe to not escape, welcome message is read from file (part of deployed WAR)
+        label.setEscapeModelStrings(false);
+        add(label);
     }
 }

@@ -622,11 +622,14 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         requestRepaintPanel(target);
     }
 
-    private void addFeedbackGui(MarkupContainer markupContainer) {
+    private void addFeedbackGui(final MarkupContainer markupContainer) {
         feedback = new ComponentFeedbackPanel(ID_FEEDBACK, this);
         feedback.setOutputMarkupPlaceholderTag(true);
         markupContainer.addOrReplace(feedback);
-        feedback.setEscapeModelStrings(false);
+
+        // to avoid potential XSS attacks, no longer escape model strings
+        // (risk is low but could just happen: error message being rendered might accidentally or deliberately contain rogue Javascript)
+        // feedback.setEscapeModelStrings(false);
 
         final ObjectAdapter adapter = getEntityModel().getObject();
         if (adapter == null) {

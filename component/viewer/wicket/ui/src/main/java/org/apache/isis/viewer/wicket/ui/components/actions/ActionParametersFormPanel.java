@@ -102,7 +102,6 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             addParameters();
 
             FormFeedbackPanel formFeedback = new FormFeedbackPanel(ID_FEEDBACK);
-            formFeedback.setEscapeModelStrings(false);
             addOrReplace(formFeedback);
             addButtons();
         }
@@ -199,7 +198,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                     if(actionPromptIfAny != null) {
                         actionPromptIfAny.close(target);
                     }
-                };
+                }
             };
             // so can submit with invalid content (eg mandatory params missing)
             cancelButton.setDefaultFormProcessing(false);
