@@ -22,9 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import com.google.common.base.Joiner;
 import com.google.common.io.Resources;
 import com.google.inject.AbstractModule;
@@ -32,14 +30,10 @@ import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.google.inject.util.Modules;
 import com.google.inject.util.Providers;
-
 import org.apache.wicket.Session;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.http.WebRequest;
-
-import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
 
@@ -111,31 +105,29 @@ public class ToDoApplication extends IsisWicketApplication {
     protected Module newIsisWicketModule() {
         final Module isisDefaults = super.newIsisWicketModule();
         
-        final Module quickstartOverrides = new AbstractModule() {
+        final Module overrides = new AbstractModule() {
             @Override
             protected void configure() {
-                bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarForToDoApp.class);
-                bind(PageClassList.class).to(PageClassListForToDoApp.class);
-                
+
                 bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("ToDo App");
                 bind(String.class).annotatedWith(Names.named("applicationCss")).toInstance("css/application.css");
                 bind(String.class).annotatedWith(Names.named("applicationJs")).toInstance("scripts/application.js");
-                bind(String.class).annotatedWith(Names.named("welcomeMessage")).toInstance(readLines("welcome.html"));
+                bind(String.class).annotatedWith(Names.named("welcomeMessage")).toInstance(readLines(getClass(), "welcome.html"));
                 bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("ToDo App");
                 bind(InputStream.class).annotatedWith(Names.named("metaInfManifest")).toProvider(Providers.of(getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")));
             }
         };
 
-        return Modules.override(isisDefaults).with(quickstartOverrides);
+        return Modules.override(isisDefaults).with(overrides);
     }
 
-    private static String readLines(final String resourceName) {
+    private static String readLines(final Class<?> contextClass, final String resourceName) {
         try {
-            List<String> readLines = Resources.readLines(Resources.getResource(ToDoApplication.class, resourceName), Charset.defaultCharset());
+            List<String> readLines = Resources.readLines(Resources.getResource(contextClass, resourceName), Charset.defaultCharset());
             final String aboutText = Joiner.on("\n").join(readLines);
             return aboutText;
         } catch (IOException e) {
-            return "This is Quick Start";
+            return "This is a Todo app";
         }
     }
 

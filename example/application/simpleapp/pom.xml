@@ -37,13 +37,6 @@
         <isis.version>1.7.0-SNAPSHOT</isis.version>
         <isis-viewer-wicket.version>1.7.0-SNAPSHOT</isis-viewer-wicket.version>
 
-        <isis-module-audit.version>1.6.0</isis-module-audit.version>
-        <isis-module-command.version>1.6.0</isis-module-command.version>
-        <isis-module-devutils.version>1.6.0</isis-module-devutils.version>
-        <isis-module-publishing.version>1.6.0</isis-module-publishing.version>
-        <isis-module-publishingeventserializer.version>1.6.0</isis-module-publishingeventserializer.version>
-        <isis-module-settings.version>1.6.0</isis-module-settings.version>
-
         <!-- must be consistent with the versions defined by the JDO Objectstore -->
         <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
         <datanucleus-maven-plugin.version>3.3.2</datanucleus-maven-plugin.version>
@@ -96,6 +89,7 @@
                     <configuration>
                         <includes>
                             <include>**/*Test.java</include>
+                            <include>**/*Test$*.java</include>
                             <include>**/*Test_*.java</include>
                             <include>**/*Spec*.java</include>
                         </includes>
@@ -117,6 +111,7 @@
                     <configuration>
                         <includes>
                             <include>**/*Test.java</include>
+                            <include>**/*Test$*.java</include>
                             <include>**/*Test_*.java</include>
                             <include>**/*Spec*.java</include>
                         </includes>
@@ -347,57 +342,6 @@
                 <version>${project.version}</version>
             </dependency>
 
-            <!-- modules -->
-            <dependency>
-                <groupId>org.apache.isis.module</groupId>
-                <artifactId>isis-module-audit-jdo</artifactId>
-                <version>${isis-module-audit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.module</groupId>
-                <artifactId>isis-module-command-jdo</artifactId>
-                <version>${isis-module-command.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.module</groupId>
-                <artifactId>isis-module-devutils</artifactId>
-                <version>${isis-module-devutils.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.module</groupId>
-                <artifactId>isis-module-devutils-applib</artifactId>
-                <version>${isis-module-devutils.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.module</groupId>
-                <artifactId>isis-module-devutils-impl</artifactId>
-                <version>${isis-module-devutils.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.module</groupId>
-                <artifactId>isis-module-publishing-jdo</artifactId>
-                <version>${isis-module-publishing.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.module</groupId>
-                <artifactId>isis-module-publishingeventserializer-ro</artifactId>
-                <version>${isis-module-publishingeventserializer.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.module</groupId>
-                <artifactId>isis-module-settings</artifactId>
-                <version>${isis-module-settings.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.module</groupId>
-                <artifactId>isis-module-settings-applib</artifactId>
-                <version>${isis-module-settings.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.module</groupId>
-                <artifactId>isis-module-settings-impl-jdo</artifactId>
-                <version>${isis-module-settings.version}</version>
-            </dependency>
 
         </dependencies>
     </dependencyManagement>

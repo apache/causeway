@@ -37,11 +37,6 @@ import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bulk.AppliesTo;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
-import org.apache.isis.applib.annotation.Command.ExecuteIn;
-import org.apache.isis.applib.annotation.Optional;
-import org.apache.isis.applib.services.background.BackgroundService;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
@@ -614,24 +609,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     }
     //endregion
 
-    //region > scheduleExplicitly (action), scheduleImplicitly (background action)
-    @ActionSemantics(Of.IDEMPOTENT)
-    @Prototype
-    public ToDoItem scheduleExplicitly() {
-        backgroundService.execute(this).completeSlowly(2000);
-        container.informUser("Task '" + getDescription() + "' scheduled for completion");
-        return this;
-    }
-    
-    @ActionSemantics(Of.IDEMPOTENT)
-    @Command(executeIn=ExecuteIn.BACKGROUND)
-    @Prototype
-    public ToDoItem scheduleImplicitly() {
-        completeSlowly(3000);
-        return this;
-    }
-    //endregion
-
     //region > openSourceCodeOnGithub (action)
     @Prototype
     @ActionSemantics(Of.SAFE)
@@ -792,15 +769,15 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
             };
         }
 
-		public static Predicate<ToDoItem> thoseCompleted(
-				final boolean completed) {
+        public static Predicate<ToDoItem> thoseCompleted(
+                final boolean completed) {
             return new Predicate<ToDoItem>() {
                 @Override
                 public boolean apply(final ToDoItem t) {
                     return Objects.equal(t.isComplete(), completed);
                 }
             };
-		}
+        }
 
         public static Predicate<ToDoItem> thoseWithSimilarDescription(final String description) {
             return new Predicate<ToDoItem>() {
@@ -859,7 +836,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > toString, compareTo
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public String toString() {
         return ObjectContracts.toString(this, "description,complete,dueBy,ownedBy");
@@ -872,32 +848,19 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     public int compareTo(final ToDoItem other) {
         return ObjectContracts.compare(this, other, "complete,dueBy,description");
     }
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //endregion
 
     //region > injected services
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @javax.inject.Inject
     private DomainObjectContainer container;
 
     @javax.inject.Inject
     private ToDoItems toDoItems;
 
-    @javax.inject.Inject
-    @SuppressWarnings("unused")
-    private ClockService clockService;
-
     Bulk.InteractionContext bulkInteractionContext;
     public void injectBulkInteractionContext(Bulk.InteractionContext bulkInteractionContext) {
         this.bulkInteractionContext = bulkInteractionContext;
     }
-
-    @SuppressWarnings("unused")
-    @javax.inject.Inject
-    private CommandContext commandContext;
-
-    @javax.inject.Inject
-    private BackgroundService backgroundService;
 
     @javax.inject.Inject
     private Scratchpad scratchpad;
@@ -910,7 +873,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     @javax.inject.Inject
     private WrapperFactory wrapperFactory;
 
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //endregion
 
 }
