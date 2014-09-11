@@ -70,7 +70,7 @@ public final class SystemConstants {
     /**
      * Default for {@link #VIEWER_KEY}.
      */
-    public static final String VIEWER_DEFAULT = "dnd";
+    public static final String VIEWER_DEFAULT = "restfulobjects";
 
     /**
      * Key used to lookup {@link PersistenceSessionFactory persistor} in
@@ -83,9 +83,9 @@ public final class SystemConstants {
     // TODO: inline
     public static final String OBJECT_PERSISTOR_KEY = OBJECT_PERSISTOR_INSTALLER_KEY;
     // TODO: move to being a responsibility of DeploymentType instead
-    public static final String OBJECT_PERSISTOR_NON_PRODUCTION_DEFAULT = "in-memory";
+    public static final String OBJECT_PERSISTOR_NON_PRODUCTION_DEFAULT = "datanucleus";
     // TODO: move to being a responsibility of DeploymentType instead
-    public static final String OBJECT_PERSISTOR_PRODUCTION_DEFAULT = "xml";
+    public static final String OBJECT_PERSISTOR_PRODUCTION_DEFAULT = "datanucleus";
 
     /**
      * Key used to lookup {@link UserProfileStore user profile store} (via
@@ -100,7 +100,7 @@ public final class SystemConstants {
     // TODO: move to being a responsibility of DeploymentType instead
     public static final String USER_PROFILE_STORE_NON_PRODUCTION_DEFAULT = "in-memory";
     // TODO: move to being a responsibility of DeploymentType instead
-    public static final String USER_PROFILE_STORE_PRODUCTION_DEFAULT = "xml";
+    public static final String USER_PROFILE_STORE_PRODUCTION_DEFAULT = "in-memory";
 
     /**
      * Key used to lookup {@link AuthenticationManager authentication manager}
@@ -112,11 +112,11 @@ public final class SystemConstants {
     /**
      * Default for {@link #AUTHENTICATION_INSTALLER_KEY} if not exploring.
      */
-    public static final String AUTHENTICATION_DEFAULT = "file";
+    public static final String AUTHENTICATION_DEFAULT = "shiro";
     /**
      * Default for {@link #AUTHENTICATION_INSTALLER_KEY} if exploring.
      */
-    public static final String AUTHENTICATION_EXPLORATION_DEFAULT = "bypass";
+    public static final String AUTHENTICATION_EXPLORATION_DEFAULT = "shiro";
 
     /**
      * Key used to lookup {@link AuthorizationManager authorization manager} in
@@ -128,12 +128,12 @@ public final class SystemConstants {
     /**
      * Default for {@link #AUTHORIZATION_DEFAULT} if production.
      */
-    public static final String AUTHORIZATION_DEFAULT = "file";
+    public static final String AUTHORIZATION_DEFAULT = "shiro";
 
     /**
      * Default for {@link #AUTHORIZATION_DEFAULT} if not production.
      */
-    public static final String AUTHORIZATION_NON_PRODUCTION_DEFAULT = "bypass";
+    public static final String AUTHORIZATION_NON_PRODUCTION_DEFAULT = "shiro";
 
     /**
      * Key used to lookup {@link ServicesInstaller services installer} in
