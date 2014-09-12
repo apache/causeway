@@ -283,7 +283,7 @@ public class FrameworkSynchronizer {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
-                ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+                ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
                 
                 final IsisTransaction transaction = getCurrentTransaction();
                 transaction.enlistDeleting(adapter);
@@ -307,7 +307,15 @@ public class FrameworkSynchronizer {
                     adapter.changeState(ResolveState.DESTROYED);
                 }
 
-                CallbackFacet.Util.callCallback(adapter, RemovedCallbackFacet.class);
+
+                // previously we called the removed callback (if any).
+                // however, this is almost certainly incorrect, because DN will not allow us
+                // to "touch" the pojo once deleted.
+                //
+                // CallbackFacet.Util.callCallback(adapter, RemovedCallbackFacet.class);
+
+
+                // this is probably still ok to do, however.
                 ensureFrameworksInAgreement(pojo);
             }
         }, calledFrom);
