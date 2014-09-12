@@ -26,17 +26,16 @@ import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SER
 import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_STARTUP_MODE_DEFAULT;
 import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_STARTUP_MODE_KEY;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.google.inject.Injector;
 
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.webapp.WebAppContext;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
@@ -81,7 +80,8 @@ final class WebServerBootstrapper implements IsisBootstrapper {
         jettyServer = new Server(port);
         Connector[] connectors = jettyServer.getConnectors();
         Connector connector = connectors[0];
-        connector.setHeaderBufferSize(8192);
+        connector.setRequestHeaderSize(8192);
+        connector.setResponseHeaderSize(8192);
         final WebAppContext context = new WebAppContext(SRC_MAIN_WEBAPP, webappContextPath);
 
         copyConfigurationPrimersIntoServletContext(context);
@@ -117,8 +117,9 @@ final class WebServerBootstrapper implements IsisBootstrapper {
 
     @SuppressWarnings("unused")
     private void copyDeploymentTypeIntoInitParams(final WebAppContext context) {
-        Map<String, String> initParams = ObjectExtensions.asT(context.getInitParams());
-        initParams = new HashMap<String, String>(initParams);
-        context.setInitParams(initParams);
+        Map<String, String> initParams = context.getInitParams();
+        Map<String, String> convertedInitParams = ObjectExtensions.asT(initParams);
+        initParams.clear();
+        initParams.putAll(convertedInitParams);
     }
 }

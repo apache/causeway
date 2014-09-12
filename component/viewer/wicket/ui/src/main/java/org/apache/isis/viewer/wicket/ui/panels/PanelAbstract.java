@@ -21,12 +21,9 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.List;
 
-import com.google.inject.Inject;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -49,7 +46,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 /**
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
  */
-public abstract class PanelAbstract<T extends IModel<?>> extends Panel implements IHeaderContributor, PersistenceSessionProvider, AuthenticationSessionProvider {
+public abstract class PanelAbstract<T extends IModel<?>> extends Panel implements PersistenceSessionProvider, AuthenticationSessionProvider {
 
     private static final long serialVersionUID = 1L;
 

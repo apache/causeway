@@ -40,15 +40,15 @@
         <siteBaseDir>.</siteBaseDir>
         <relativeUrl />
 
-        <wicket.version>6.15.0</wicket.version>
-        <wicket-jquery-ui.version>6.15.0</wicket-jquery-ui.version>
-        <wicketstuff.version>6.15.0</wicketstuff.version>
+        <wicket.version>7.0.0-M3</wicket.version>
+        <wicket-jquery-ui.version>7.0.0-M3</wicket-jquery-ui.version>
+        <wicketstuff.version>${wicket.version}</wicketstuff.version>
 
-        <wicket-webjars.version>0.4.1</wicket-webjars.version>
+        <wicket-webjars.version>0.5.0-M2</wicket-webjars.version>
         <webjars-bootstrap.version>2.3.2</webjars-bootstrap.version>
-        <wicket-source.version>6.0.0.8</wicket-source.version>
+        <wicket-source.version>7.0.0</wicket-source.version>
 
-        <wicket-select2.version>2.2.2</wicket-select2.version>
+        <wicket-select2.version>${wicket.version}</wicket-select2.version>
     </properties>
 
     <!-- used in Site generation for relative references. -->
@@ -160,6 +160,10 @@
 						<groupId>org.slf4j</groupId>
 						<artifactId>slf4j-api</artifactId>
 					</exclusion>
+					<exclusion>
+						<groupId>commons-io</groupId>
+						<artifactId>commons-io</artifactId>
+					</exclusion>
 				</exclusions>
 			</dependency>
 
@@ -266,14 +270,14 @@
 
             <!-- Wicket-Select2 -->
 			<dependency>
-			    <groupId>com.vaynberg.wicket.select2</groupId>
-			    <artifactId>wicket-select2</artifactId>
+			    <groupId>org.wicketstuff</groupId>
+			    <artifactId>wicketstuff-select2</artifactId>
 			    <version>${wicket-select2.version}</version>
 				<exclusions>
 					<exclusion>
 	        			<!-- for dependency convergence -->
 						<groupId>org.apache.wicket</groupId>
-						<artifactId>wicket-core</artifactId>
+						<artifactId>wicket</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
@@ -288,6 +292,11 @@
                         <!-- for dependency convergence -->
                         <groupId>org.apache.wicket</groupId>
                         <artifactId>wicket-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <!-- for dependency convergence -->
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-request</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -306,7 +315,7 @@
                     <exclusion>
                         <!-- for dependency convergence -->
                         <groupId>org.apache.wicket</groupId>
-                        <artifactId>wicket-core</artifactId>
+                        <artifactId>wicket</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -318,7 +327,6 @@
 				<!-- NOT SURE WHY THIS ISN'T INHERITED -->
 				<version>1.7.5</version>
 			</dependency>
-
 		</dependencies>
 	</dependencyManagement>
 </project>

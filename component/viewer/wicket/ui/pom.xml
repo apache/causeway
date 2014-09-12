@@ -102,9 +102,9 @@
             <artifactId>wicket-jquery-ui-plugins</artifactId>
         </dependency>
 		<dependency>
-		    <groupId>com.vaynberg.wicket.select2</groupId>
-		    <artifactId>wicket-select2</artifactId>
-		</dependency>
+		    <groupId>org.wicketstuff</groupId>
+		    <artifactId>wicketstuff-select2</artifactId>
+        </dependency>
 
         <!-- WEBJARS -->
         <dependency>
@@ -127,6 +127,5 @@
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 		</dependency>
-
 	</dependencies>
 </project>

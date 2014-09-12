@@ -17,31 +17,24 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs;
 
 import java.util.Collection;
-import java.util.UUID;
 
-import com.google.common.base.Strings;
-import com.vaynberg.wicket.select2.Response;
-import com.vaynberg.wicket.select2.Select2Choice;
-import com.vaynberg.wicket.select2.Settings;
-import com.vaynberg.wicket.select2.TextChoiceProvider;
-
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.commons.authentication.MessageBroker;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.wicketstuff.select2.Response;
+import org.wicketstuff.select2.Select2Choice;
+import org.wicketstuff.select2.Settings;
+import org.wicketstuff.select2.TextChoiceProvider;
 
 public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
 
@@ -61,7 +54,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
         final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
         
         final IModel<EntityModel> entityModel = new Model<EntityModel>();
-        final Select2Choice<EntityModel> breadcrumbChoice = new Select2Choice<EntityModel>(ID_BREADCRUMBS, entityModel);
+        final Select2Choice<EntityModel> breadcrumbChoice = new Select2Choice<>(ID_BREADCRUMBS, entityModel);
 
         breadcrumbChoice.add(
             new AjaxFormComponentUpdatingBehavior("onchange"){

@@ -23,7 +23,6 @@ import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 import net.ftlines.wicketsource.WicketSource;
 
-import java.util.*;
 import javax.servlet.ServletContext;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
@@ -34,7 +33,11 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import org.apache.wicket.*;
+import org.apache.wicket.ConverterLocator;
+import org.apache.wicket.IConverterLocator;
+import org.apache.wicket.Page;
+import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.SharedResources;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.mapper.MountedMapper;
@@ -45,7 +48,7 @@ import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
+import org.apache.wicket.settings.RequestCycleSettings.RenderStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -93,8 +96,13 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjec
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
 import org.apache.isis.viewer.wicket.viewer.settings.IsisResourceSettings;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 /**
- * Main application, subclassing the Wicket {@link Application} and
+ * Main application, subclassing the Wicket {@link org.apache.wicket.Application} and
  * bootstrapping Isis.
  *
  * <p>
@@ -106,7 +114,7 @@ import org.apache.isis.viewer.wicket.viewer.settings.IsisResourceSettings;
  *
  * <p>
  * New {@link ComponentFactory}s can be specified in two ways. The preferred
- * approach is to use the {@link ServiceLoader} mechanism, whereby the
+ * approach is to use the {@link java.util.ServiceLoader} mechanism, whereby the
  * {@link ComponentFactory} implementation class is specified in a file under
  * <tt>META-INF/services</tt>. See <tt>views-gmaps2</tt> for an example of this.
  * Including a jar that uses this mechanism on the classpath will automatically
@@ -184,7 +192,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
     /**
      * Although there are warnings about not overriding this method, it doesn't seem possible
-     * to call {@link #setResourceSettings(org.apache.wicket.settings.IResourceSettings)} in the
+     * to call {@link #setResourceSettings(org.apache.wicket.settings.ResourceSettings)} in the
      * {@link #init()} method.
      */
     @Override

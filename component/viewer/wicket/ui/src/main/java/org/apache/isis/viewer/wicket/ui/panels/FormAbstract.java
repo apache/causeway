@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.ui.panels;
 import java.util.List;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IFormSubmitter;
 import org.apache.wicket.model.IModel;
@@ -40,7 +39,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAcc
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 
-public abstract class FormAbstract<T> extends Form<T> implements IHeaderContributor, ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider, PersistenceSessionProvider {
+public abstract class FormAbstract<T> extends Form<T> implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider, PersistenceSessionProvider {
 
     private static final long serialVersionUID = 1L;
 
