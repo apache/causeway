@@ -124,8 +124,6 @@ public class ToDoItems {
     //endregion
 
     //region > newToDo (action)
-    @Bookmarkable
-    @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "5")
     public ToDoItem newToDo(
             final @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") @Named("Description") String description, 
