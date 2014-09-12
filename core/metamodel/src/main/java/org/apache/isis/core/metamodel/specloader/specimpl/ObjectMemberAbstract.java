@@ -212,8 +212,13 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     @Override
     public boolean isAlwaysHidden() {
-        final HiddenFacet hiddenFacet = getFacet(HiddenFacet.class);
-        return hiddenFacet != null && hiddenFacet.when() == When.ALWAYS && hiddenFacet.where() == Where.ANYWHERE;
+        final HiddenFacet facet = getFacet(HiddenFacet.class);
+        return facet != null &&
+                !facet.isNoop() &&
+                facet.when() == When.ALWAYS &&
+                (facet.where() == Where.EVERYWHERE || facet.where() == Where.ANYWHERE)
+                ;
+
     }
 
     /**
