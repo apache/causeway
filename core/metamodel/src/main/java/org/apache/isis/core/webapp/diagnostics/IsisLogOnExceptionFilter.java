@@ -50,13 +50,7 @@ public class IsisLogOnExceptionFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         try {
             chain.doFilter(request, response);
-        } catch (IOException e) {
-            logRequestUrl(request, e);
-            throw e;
-        } catch (ServletException e) {
-            logRequestUrl(request, e);
-            throw e;
-        } catch (RuntimeException e) {
+        } catch (IOException | ServletException | RuntimeException e) {
             logRequestUrl(request, e);
             throw e;
         }
@@ -70,9 +64,9 @@ public class IsisLogOnExceptionFilter implements Filter {
         final StringBuffer buf = httpServletRequest.getRequestURL();
         final String queryString = httpServletRequest.getQueryString();
         if(queryString != null) {
-            buf.append("?" + queryString);
+            buf.append('?').append(queryString);
         }
         
-        LOG.error("Request caused " + e.getClass().getName() + ": " + buf.toString());
+        LOG.error("Request caused " + e.getClass().getName() + ": " + buf.toString(), e);
     }
 }

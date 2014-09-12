@@ -100,7 +100,7 @@ import org.apache.isis.viewer.wicket.viewer.settings.IsisResourceSettings;
  * <p>
  * Its main responsibility is to allow the set of {@link ComponentFactory}s used
  * to render the domain objects to be registered. This type of customisation is
- * commonplace. At a more fundamental level, also allows the {@link Page}
+ * common place. At a more fundamental level, also allows the {@link Page}
  * implementation for each {@link PageType page type} to be overridden. This is
  * probably less common, because CSS can also be used for this purpose.
  *

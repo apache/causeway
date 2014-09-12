@@ -31,7 +31,6 @@ import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.PageExpiredException;
-import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
@@ -54,7 +53,7 @@ import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
 /**
- * Isis-specific implementation of the Wicket's {@link WebRequestCycle},
+ * Isis-specific implementation of the Wicket's {@link RequestCycle},
  * automatically opening a {@link IsisSession} at the beginning of the request
  * and committing the transaction and closing the session at the end.
  */
@@ -62,15 +61,12 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebRequestCycleForIsis.class);
 
-    private AuthenticatedWebSessionForIsis getWebSession() {
-        return (AuthenticatedWebSessionForIsis) WebSession.get();
-    }
-
     @Override
     public synchronized void onBeginRequest(RequestCycle requestCycle) {
         
-        final AuthenticatedWebSessionForIsis wicketSession = getWebSession();
+        final AuthenticatedWebSessionForIsis wicketSession = AuthenticatedWebSessionForIsis.get();
         if (wicketSession == null) {
+            // FIXME Session.get() acts as getOrCreate so this will never be null
             return;
         }
         final AuthenticationSession authenticationSession = wicketSession.getAuthenticationSession();

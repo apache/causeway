@@ -31,9 +31,11 @@ import com.google.inject.name.Names;
 import com.google.inject.util.Modules;
 import com.google.inject.util.Providers;
 import org.apache.wicket.Session;
+import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.http.WebRequest;
+
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
 
@@ -77,8 +79,9 @@ public class SimpleApplication extends IsisWicketApplication {
         
         // else demo mode
         final AuthenticatedWebSessionForIsis s = (AuthenticatedWebSessionForIsis) super.newSession(request, response);
-        final org.apache.wicket.util.string.StringValue user = request.getRequestParameters().getParameterValue("user");
-        final org.apache.wicket.util.string.StringValue password = request.getRequestParameters().getParameterValue("pass");
+        IRequestParameters requestParameters = request.getRequestParameters();
+        final org.apache.wicket.util.string.StringValue user = requestParameters.getParameterValue("user");
+        final org.apache.wicket.util.string.StringValue password = requestParameters.getParameterValue("pass");
         s.signIn(user.toString(), password.toString());
         return s;
     }
