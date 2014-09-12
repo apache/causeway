@@ -180,9 +180,18 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                     super.onError(target, form);
                     if(actionPromptIfAny != null) {
                         // resize, to show any feedback messages.
-                        
-                        // ISIS-771: in Wicket 6.12.0 the var ww returns null.
-                        target.appendJavaScript("var ww = Wicket.Window.get();\n ww.autoSizeWindow();");
+
+                        target.appendJavaScript(
+                                "window.setTimeout(" +
+                                        "function() {\n " +
+                                        "  var ww = Wicket.Window.get();\n " +
+                                        "  ww.autoSizeWindow();\n " +
+                                        // the hack that works for initial rendering of dialog on Chrome
+                                        // (to manually adjust the margin) doesn't seem to work if there's an error
+                                        // so have chosen just to leave things as the are
+                                        // (really, the issue is with Wicket.Window.get().autoSizeWindow() anyway...)
+                                        "}\n, 0);\n"
+                        );
                     }
                     target.add(form);
                 }

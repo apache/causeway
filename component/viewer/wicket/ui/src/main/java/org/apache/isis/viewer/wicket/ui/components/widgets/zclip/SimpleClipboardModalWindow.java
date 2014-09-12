@@ -22,9 +22,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 
 public class SimpleClipboardModalWindow extends ModalWindow implements ActionPrompt {
@@ -103,10 +100,11 @@ public class SimpleClipboardModalWindow extends ModalWindow implements ActionPro
         builder.append("$('.first-field input').focus();\n");
         
         // ISIS-771: in Wicket 6.12.0 the var ww returns null.
-        builder.append("window.setTimeout("
-                + "function() {\n "
-                + "var ww = Wicket.Window.get();\n ww.autoSizeWindow();\n "
-                + "}\n, 0);\n");
+        builder.append("window.setTimeout(" +
+                            "function() {\n " +
+                            "  var ww = Wicket.Window.get();\n" +
+                            "  ww.autoSizeWindow();\n " +
+                            "}\n, 0);\n");
 
         target.appendJavaScript(builder.toString());
     }

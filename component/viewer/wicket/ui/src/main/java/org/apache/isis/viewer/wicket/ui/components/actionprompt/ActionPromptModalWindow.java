@@ -106,10 +106,15 @@ public class ActionPromptModalWindow extends ModalWindow implements ActionPrompt
         StringBuilder builder = new StringBuilder();
 
         // ISIS-771, WICKET-5101
-        builder.append("window.setTimeout("
-                + "function() {\n "
-                + "var ww = Wicket.Window.get();\n ww.autoSizeWindow();\n "
-                + "}\n, 0);\n");
+        builder.append(
+                "window.setTimeout(" +
+                "function() {\n " +
+                "  var ww = Wicket.Window.get();\n " +
+                "  ww.autoSizeWindow();\n " +
+                // this is a nasty hack to make dialog appear without scrollbars on Chrome (noticed in version 37.0.2062.120 m)
+                // really though this ought to be fixed in Wicket.Window.get().autoSizeWindow();
+                "  $('.actionPanel .myBlockContainer').css('margin', '19px');\n " +
+                "}\n, 0);\n");
         
         target.appendJavaScript(builder.toString());
 
