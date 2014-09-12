@@ -40,9 +40,9 @@
         <siteBaseDir>.</siteBaseDir>
         <relativeUrl />
 
-        <wicket.version>6.15.0</wicket.version>
-        <wicket-jquery-ui.version>6.15.0</wicket-jquery-ui.version>
-        <wicketstuff.version>6.15.0</wicketstuff.version>
+        <wicket.version>6.17.0</wicket.version>
+        <wicket-jquery-ui.version>6.17.0</wicket-jquery-ui.version>
+        <wicketstuff.version>6.17.0</wicketstuff.version>
 
         <wicket-webjars.version>0.4.1</wicket-webjars.version>
         <webjars-bootstrap.version>2.3.2</webjars-bootstrap.version>
