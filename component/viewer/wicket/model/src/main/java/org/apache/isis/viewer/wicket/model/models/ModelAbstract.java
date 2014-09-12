@@ -20,9 +20,8 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.List;
-
 import org.apache.wicket.model.LoadableDetachableModel;
-
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -46,6 +45,10 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> {
     // //////////////////////////////////////////////////////////////
     // Dependencies
     // //////////////////////////////////////////////////////////////
+
+    protected AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
+    }
 
     protected Persistor getPersistenceSession() {
         return IsisContext.getPersistenceSession();

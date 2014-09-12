@@ -27,6 +27,7 @@ import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -330,8 +331,32 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     }
 
     // //////////////////////////////////////////////////////////////////
-    // execute
+    // executeWithRuleChecking, execute
     // //////////////////////////////////////////////////////////////////
+
+    @Override
+    public ObjectAdapter executeWithRuleChecking(final ObjectAdapter target, final ObjectAdapter[] arguments, final AuthenticationSession authenticationSession, final Where where) {
+
+        // see it?
+        final Consent visibility = isVisible(authenticationSession, target, where);
+        if (visibility.isVetoed()) {
+            throw new AuthorizationException();
+        }
+
+        // use it?
+        final Consent usability = isUsable(authenticationSession, target, where);
+        if(usability.isVetoed()) {
+            throw new AuthorizationException();
+        }
+
+        // do it?
+        final Consent validity = isProposedArgumentSetValid(target, arguments);
+        if(validity.isVetoed()) {
+            throw new RecoverableException(validity.getReason());
+        }
+
+        return execute(target, arguments);
+    }
 
     @Override
     public ObjectAdapter execute(final ObjectAdapter target, final ObjectAdapter[] arguments) {

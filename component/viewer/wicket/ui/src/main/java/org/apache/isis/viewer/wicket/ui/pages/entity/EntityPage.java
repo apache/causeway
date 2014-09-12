@@ -19,13 +19,20 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.entity;
 
+import java.util.List;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
@@ -85,18 +92,28 @@ public class EntityPage extends PageAbstract {
 
         this.model = entityModel;
 
-
-        ObjectAdapter objectAdapter;
+        final ObjectAdapter objectAdapter;
         try {
             // check object still exists
             objectAdapter = entityModel.getObject();
         } catch(RuntimeException ex) {
             removeAnyBookmark(model);
             removeAnyBreadcrumb(model);
-            throw ex;
+
+            // we throw an authorization exception here to avoid leaking out information as to whether the object exists or not.
+            throw new ObjectMember.AuthorizationException(ex);
         }
 
-        
+        // check that at least one property of the entity can be viewed.
+        final AuthenticationSession session = getAuthenticationSession();
+        final ObjectSpecification specification = objectAdapter.getSpecification();
+        final List<ObjectAssociation> visibleAssociation = specification.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.dynamicallyVisible(session, objectAdapter, Where.NOWHERE));
+
+        if(visibleAssociation.isEmpty()) {
+            throw new ObjectMember.AuthorizationException();
+        }
+
+
         // this is a work-around for JRebel integration...
         // ... even though the IsisJRebelPlugin calls invalidateCache, it seems that there is 
         // some caching elsewhere in the Wicket viewer meaning that stale metadata is referenced.
@@ -121,6 +138,7 @@ public class EntityPage extends PageAbstract {
         // ensure the copy link holds this page.
         send(this, Broadcast.BREADTH, new IsisUiHintEvent(entityModel, null));
     }
+
 
     private void addBreadcrumb(EntityModel entityModel) {
         final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();

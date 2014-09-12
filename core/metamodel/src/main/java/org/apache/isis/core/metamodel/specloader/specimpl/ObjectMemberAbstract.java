@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -40,6 +41,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -224,10 +226,14 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
      */
     @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target, Where where) {
-        return isVisibleResult(deploymentCategory, session, target, where).createConsent();
+        final boolean isHomePage = containsDoOpFacet(HomePageFacet.class);
+        if(isHomePage) {
+            return Allow.DEFAULT;
+        }
+        return isVisibleResult(session, target, where).createConsent();
     }
 
-    private InteractionResult isVisibleResult(DeploymentCategory deploymentCategory, final AuthenticationSession session, final ObjectAdapter target, Where where) {
+    private InteractionResult isVisibleResult(final AuthenticationSession session, final ObjectAdapter target, Where where) {
         final VisibilityContext<?> ic = createVisibleInteractionContext(session, InteractionInvocationMethod.BY_USER, target, where);
         return InteractionUtils.isVisibleResult(this, ic);
     }
@@ -246,6 +252,10 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
      */
     @Override
     public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target, Where where) {
+        final boolean isHomePage = containsDoOpFacet(HomePageFacet.class);
+        if(isHomePage) {
+            return Allow.DEFAULT;
+        }
         return isUsableResult(session, target, where).createConsent();
     }
 

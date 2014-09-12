@@ -27,6 +27,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 
 public class ExceptionStackTracePanel extends Panel {
 
@@ -53,15 +54,21 @@ public class ExceptionStackTracePanel extends Panel {
 
         add(label);
 
+        final boolean authorizationException = exceptionModel.isAuthorizationException();
+        if(authorizationException) {
+            Components.permanentlyHide(this, ID_EXCEPTION_DETAIL);
+        } else {
+
         MarkupContainer container = new WebMarkupContainer(ID_EXCEPTION_DETAIL) {
-            private static final long serialVersionUID = 1L;
-            @Override
-            public void renderHead(IHeaderResponse response) {
-                response.render(JavaScriptReferenceHeaderItem.forReference(DIV_TOGGLE_JS));
-            }
-        };
-        container.add(new StackTraceListView(ID_STACK_TRACE_ELEMENT, ExceptionStackTracePanel.ID_LINE, exceptionModel.getStackTrace()));
-        add(container);
+                private static final long serialVersionUID = 1L;
+                @Override
+                public void renderHead(IHeaderResponse response) {
+                    response.render(JavaScriptReferenceHeaderItem.forReference(DIV_TOGGLE_JS));
+                }
+            };
+            container.add(new StackTraceListView(ID_STACK_TRACE_ELEMENT, ExceptionStackTracePanel.ID_LINE, exceptionModel.getStackTrace()));
+            add(container);
+        }
     }
 
     public void renderHead(final IHeaderResponse response) {

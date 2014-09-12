@@ -110,8 +110,6 @@ final class BulkActionsLinkFactory implements ActionLinkFactory {
                     if (commandContext != null) {
                         command = commandContext.getCommand();
                         command.setExecutor(Executor.USER);
-                    } else {
-                        command = null;
                     }
 
 
@@ -126,8 +124,11 @@ final class BulkActionsLinkFactory implements ActionLinkFactory {
                         if (bulkInteractionContext != null) {
                             bulkInteractionContext.setIndex(i++);
                         }
-                        lastReturnedAdapter = objectAction.execute(adapter, new ObjectAdapter[]{});
+
+                        lastReturnedAdapter = objectAction.executeWithRuleChecking(adapter, new ObjectAdapter[]{}, getAuthenticationSession(), ActionModel.WHERE_FOR_ACTION_INVOCATION);
                     }
+
+
                     
                     model.clearToggleMementosList();
                     toggleboxColumn.clearToggles();

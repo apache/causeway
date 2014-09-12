@@ -23,6 +23,7 @@ import java.util.List;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
 public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
@@ -33,32 +34,53 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
     
     private List<StackTraceDetail> stackTraceDetailList;
     private boolean recognized;
+    private boolean authorizationCause;
 
     private final String mainMessage;
-    
 
     public static ExceptionModel create(String recognizedMessageIfAny, Exception ex) {
-        return recognizedMessageIfAny != null
-                ? new ExceptionModel(recognizedMessageIfAny, true, ex)
-                : new ExceptionModel(MAIN_MESSAGE_IF_NOT_RECOGNIZED, false, ex);
+        return new ExceptionModel(recognizedMessageIfAny, ex);
     }
 
-    private ExceptionModel(String mainMessage, boolean recognized, Exception ex) {
-        this.mainMessage = mainMessage;
-        this.recognized = recognized;
-        setObject(ex);
+    /**
+     * Three cases: authorization exception, else recognized, else or not recognized.
+     * @param recognizedMessageIfAny
+     * @param ex
+     */
+    private ExceptionModel(String recognizedMessageIfAny, Exception ex) {
+
+        final ObjectMember.AuthorizationException authorizationException = causalChainOf(ex, ObjectMember.AuthorizationException.class);
+        if(authorizationException != null) {
+            this.authorizationCause = true;
+            this.mainMessage = authorizationException.getMessage();
+        } else {
+            this.authorizationCause = false;
+            if(recognizedMessageIfAny != null) {
+                this.recognized = true;
+                this.mainMessage = recognizedMessageIfAny;
+            } else {
+                this.recognized =false;
+                this.mainMessage = MAIN_MESSAGE_IF_NOT_RECOGNIZED;
+            }
+        }
+        stackTraceDetailList = asStackTrace(ex);
     }
+
 
     @Override
     protected List<StackTraceDetail> load() {
         return stackTraceDetailList;
     }
 
-    /**
-     * Not API
-     */
-    public void setObject(Exception ex) {
-        stackTraceDetailList = asStackTrace(ex);
+    private static <T extends Exception> T causalChainOf(Exception ex, Class<T> exType) {
+
+        final List<Throwable> causalChain = Throwables.getCausalChain(ex);
+        for (Throwable cause : causalChain) {
+            if(exType.isAssignableFrom(cause.getClass())) {
+                return (T)cause;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -76,7 +98,14 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
     public String getMainMessage() {
         return mainMessage;
     }
-    
+
+    /**
+     * Whether this was an authorization exception (so UI can suppress information, eg stack trace).
+     */
+    public boolean isAuthorizationException() {
+        return authorizationCause;
+    }
+
     public List<StackTraceDetail> getStackTrace() {
         return stackTraceDetailList;
     }

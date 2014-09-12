@@ -514,9 +514,17 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         }
     }
 
-    private final ExceptionRecognizer recognizer = 
+    // make not recognizable, instead show the error page...
+//    static class ExceptionRecognizerForObjectMemberAuthorizationException extends ExceptionRecognizerForType {
+//        public ExceptionRecognizerForObjectMemberAuthorizationException() {
+//            super(ObjectMember.AuthorizationException.class);
+//        }
+//    }
+
+    private final ExceptionRecognizer recognizer =
             new ExceptionRecognizerComposite(
                     new ExceptionRecognizerForConcurrencyException(),
+//                    new ExceptionRecognizerForObjectMemberAuthorizationException(),
                     new ExceptionRecognizerForRecoverableException()
                 );
     

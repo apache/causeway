@@ -28,12 +28,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
@@ -43,14 +41,15 @@ import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.resource.StringResourceStream;
-
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -447,16 +446,22 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         
         return results;
     }
-    
+
+    // REVIEW: should provide this rendering context, rather than hardcoding.
+    // the net effect currently is that class members annotated with
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly)
+    // for any other value for Where
+    public static final Where WHERE_FOR_ACTION_INVOCATION = Where.ANYWHERE;
+
     private ObjectAdapter executeAction() {
+
         final ObjectAdapter targetAdapter = getTargetAdapter();
         final ObjectAdapter[] arguments = getArgumentsAsArray();
         final ObjectAction action = getActionMemento().getAction();
 
-        // let any exceptions propogate, will be caught by UI layer 
-        // (ActionPanel at time of writing)
-        final ObjectAdapter results = action.execute(targetAdapter, arguments);
-        return results;
+        final AuthenticationSession session = getAuthenticationSession();
+        return action.executeWithRuleChecking(targetAdapter, arguments, session, WHERE_FOR_ACTION_INVOCATION);
     }
 
     public String getReasonInvalidIfAny() {

@@ -69,8 +69,7 @@ public interface ObjectMember extends ObjectFeature {
      * 
      * <p>
      * Typically it is easier to just call
-     * {@link #isVisible(AuthenticationSession, ObjectAdapter, Where)} or
-     * {@link #isVisibleResult(AuthenticationSession, ObjectAdapter)}; this is
+     * {@link #isVisible(AuthenticationSession, ObjectAdapter, Where)}; this is
      * provided as API for symmetry with interactions (such as
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
@@ -82,7 +81,6 @@ public interface ObjectMember extends ObjectFeature {
      *            may be <tt>null</tt> if just checking for authorization.
      * @param where 
      *            the member is being rendered in the UI
-     * @see #isVisibleResult(AuthenticationSession, ObjectAdapter)
      */
     Consent isVisible(AuthenticationSession session, ObjectAdapter target, Where where);
 
@@ -92,13 +90,11 @@ public interface ObjectMember extends ObjectFeature {
 
     /**
      * Create an {@link InteractionContext} to represent an attempt to
-     * {@link InteractionContextType#MEMBER_USABLE use this member} (that is, to
-     * check if it is usable or not).
+     * use this member (that is, to check if it is usable or not).
      * 
      * <p>
      * Typically it is easier to just call
-     * {@link #isUsable(AuthenticationSession, ObjectAdapter, Where)} or
-     * {@link #isUsableResult(AuthenticationSession, ObjectAdapter)}; this is
+     * {@link #isUsable(AuthenticationSession, ObjectAdapter, Where)}; this is
      * provided as API for symmetry with interactions (such as
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
@@ -158,4 +154,29 @@ public interface ObjectMember extends ObjectFeature {
 
     String debugData();
 
+    /**
+     * Thrown if the user is not authorized to access an action or any property/collection of an entity.
+     *
+     * <p>
+     *     For the former case, is thrown by
+     *     {@link ObjectAction#executeWithRuleChecking(org.apache.isis.core.metamodel.adapter.ObjectAdapter, org.apache.isis.core.metamodel.adapter.ObjectAdapter[], org.apache.isis.core.commons.authentication.AuthenticationSession, org.apache.isis.applib.annotation.Where)}
+     *     when the action being executed is not visible or not usable for the specified session.  One reason this
+     *     might occur if there was an attempt to construct a URL (eg a bookmarked action) and invoke in an unauthenticated session.
+     * </p>
+     *
+     * <p>
+     *     For the latter case, is thrown by <tt>EntityPage</tt>
+     *
+     * </p>
+     */
+    class AuthorizationException extends RuntimeException {
+
+        public AuthorizationException() {
+            this(null);
+        }
+        public AuthorizationException(final RuntimeException ex) {
+            super("Not authorized or no such object", ex);
+        }
+
+    }
 }

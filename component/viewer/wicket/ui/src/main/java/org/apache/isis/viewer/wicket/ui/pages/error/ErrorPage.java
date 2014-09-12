@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.pages.error;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -39,10 +38,11 @@ public class ErrorPage extends PageAbstract {
 
     public ErrorPage(ExceptionModel exceptionModel) {
         super(new PageParameters(), ApplicationActions.EXCLUDE, null);
-        
+
         addBookmarkedPages();
 
         themeDiv.add(new ExceptionStackTracePanel(ID_EXCEPTION_STACK_TRACE, exceptionModel));
+
     }
 
 }

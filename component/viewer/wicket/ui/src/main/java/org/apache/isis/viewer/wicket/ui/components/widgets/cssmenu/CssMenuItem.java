@@ -32,7 +32,6 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -47,6 +46,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -54,6 +54,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import static org.hamcrest.CoreMatchers.is;
 
 public class CssMenuItem implements Serializable {
+
 
     private static final long serialVersionUID = 1L;
 
@@ -246,13 +247,6 @@ public class CssMenuItem implements Serializable {
     // To add submenu items
     // //////////////////////////////////////////////////////////////
 
-    // REVIEW: should provide this rendering context, rather than hardcoding.
-    // the net effect currently is that class members annotated with 
-    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
-    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly) 
-    // for any other value for Where
-    private final Where where = Where.ANYWHERE;
-
     /**
      * Creates a {@link Builder} for a submenu item invoking an action on the provided
      * {@link ObjectAdapterMemento target adapter}.
@@ -265,7 +259,7 @@ public class CssMenuItem implements Serializable {
         // check visibility
         final AuthenticationSession session = getAuthenticationSession();
         final ObjectAdapter adapter = targetAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
-        final Consent visibility = objectAction.isVisible(session, adapter, where);
+        final Consent visibility = objectAction.isVisible(session, adapter, ActionModel.WHERE_FOR_ACTION_INVOCATION);
         if (visibility.isVetoed()) {
             return null;
         }
@@ -281,7 +275,7 @@ public class CssMenuItem implements Serializable {
         final AbstractLink link = linkAndLabel.getLink();
         final String actionLabel = linkAndLabel.getLabel();
 
-        final Consent usability = objectAction.isUsable(session, adapter, where);
+        final Consent usability = objectAction.isUsable(session, adapter, ActionModel.WHERE_FOR_ACTION_INVOCATION);
         final String reasonDisabledIfAny = usability.getReason();
         
         final DescribedAsFacet describedAsFacet = objectAction.getFacet(DescribedAsFacet.class);
