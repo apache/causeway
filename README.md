@@ -90,3 +90,6 @@ Scalar chart, being the result of an action to analyze `ToDoItem`s by their cate
 
 <img src="https://raw.github.com/danhaywood/isis-wicket-wickedcharts/master/images/piechart.png" style="width: 900px;"/>
 
+A scalar chart is simply a wrapper around a [WickedChart](http://wicked-charts.googlecode.com).
+s
+
