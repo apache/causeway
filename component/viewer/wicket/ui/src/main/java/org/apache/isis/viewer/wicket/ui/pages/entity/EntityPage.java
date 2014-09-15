@@ -88,7 +88,7 @@ public class EntityPage extends PageAbstract {
             final PageParameters pageParameters,
             final EntityModel entityModel,
             final String titleString) {
-        super(pageParameters, ApplicationActions.INCLUDE, titleString, ComponentType.ENTITY);
+        super(pageParameters, titleString, ComponentType.ENTITY);
 
         this.model = entityModel;
 

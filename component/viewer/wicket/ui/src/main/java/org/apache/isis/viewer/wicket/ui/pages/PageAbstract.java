@@ -68,7 +68,6 @@ import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.overlays.Overlays;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
-import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -145,14 +144,8 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     @Inject
     private PageClassRegistry pageClassRegistry;
 
-    protected enum ApplicationActions {
-        INCLUDE,
-        EXCLUDE
-    }
-    
     public PageAbstract(
             final PageParameters pageParameters,
-            final ApplicationActions applicationActions,
             final String title,
             final ComponentType... childComponentIds) {
         try {
@@ -167,7 +160,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
                 themeDiv.add(new CssClassAppender(asCssStyle(applicationName)));
             }
             
-            addApplicationActions(themeDiv, applicationActions);
+            addApplicationActions(themeDiv);
             this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
             this.pageParameters = pageParameters;
 
@@ -314,7 +307,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     
 
     /**
-     * As provided in the {@link #PageAbstract(org.apache.wicket.request.mapper.parameter.PageParameters, org.apache.isis.viewer.wicket.ui.pages.PageAbstract.ApplicationActions, String, org.apache.isis.viewer.wicket.ui.ComponentType...)} constructor}.
+     * As provided in the {@link #PageAbstract(org.apache.wicket.request.mapper.parameter.PageParameters, String, org.apache.isis.viewer.wicket.ui.ComponentType...)} constructor}.
      * 
      * <p>
      * This superclass doesn't do anything with this property directly, but
@@ -330,16 +323,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         return pageParameters;
     }
 
-    private void addApplicationActions(MarkupContainer container, final ApplicationActions applicationActions) {
-        if(applicationActions == ApplicationActions.INCLUDE) {
-            addActionPromptModalWindow();
-            final ApplicationActionsModel model = new ApplicationActionsModel();
-            model.setActionPromptProvider(this);
-            addComponent(container, ComponentType.APPLICATION_ACTIONS, model);
-        } else {
-            Components.permanentlyHide(container, ComponentType.APPLICATION_ACTIONS);
-            Components.permanentlyHide(container, ID_ACTION_PROMPT_MODAL_WINDOW);
-        }
+    private void addApplicationActions(MarkupContainer container) {
+        addActionPromptModalWindow();
+        final ApplicationActionsModel model = new ApplicationActionsModel();
+        model.setActionPromptProvider(this);
+        addComponent(container, ComponentType.APPLICATION_ACTIONS, model);
     }
 
     /**

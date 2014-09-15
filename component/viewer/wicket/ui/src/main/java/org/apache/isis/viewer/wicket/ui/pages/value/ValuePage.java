@@ -49,7 +49,7 @@ public class ValuePage extends PageAbstract {
 
     
     private ValuePage(ValueModel valueModel, String actionName) {
-        super(new PageParameters(), ApplicationActions.INCLUDE, actionName, ComponentType.VALUE);
+        super(new PageParameters(), actionName, ComponentType.VALUE);
         
         themeDiv.addOrReplace(new Label(ID_ACTION_NAME, actionName));
 

@@ -42,10 +42,6 @@ public final class InteractionUtils {
         return result;
     }
 
-    public static InteractionResultSet isVisibleResultSet(final FacetHolder facetHolder, final VisibilityContext<?> context, final InteractionResultSet resultSet) {
-        return resultSet.add(isVisibleResult(facetHolder, context));
-    }
-
     public static InteractionResult isUsableResult(final FacetHolder facetHolder, final UsabilityContext<?> context) {
         final InteractionResult result = new InteractionResult(context.createInteractionEvent());
         final List<Facet> facets = facetHolder.getFacets(FacetFilters.isA(DisablingInteractionAdvisor.class));
@@ -55,10 +51,6 @@ public final class InteractionUtils {
             result.advise(disables, advisor);
         }
         return result;
-    }
-
-    public static InteractionResultSet isUsableResultSet(final FacetHolder facetHolder, final UsabilityContext<?> context, final InteractionResultSet resultSet) {
-        return resultSet.add(isUsableResult(facetHolder, context));
     }
 
     public static InteractionResult isValidResult(final FacetHolder facetHolder, final ValidityContext<?> context) {

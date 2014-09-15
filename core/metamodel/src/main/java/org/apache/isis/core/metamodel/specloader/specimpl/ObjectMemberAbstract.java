@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
@@ -32,7 +31,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -41,16 +39,11 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
-import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
-import org.apache.isis.core.metamodel.interactions.InteractionUtils;
-import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.interactions.*;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -231,10 +224,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
      */
     @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target, Where where) {
-        final boolean isHomePage = containsDoOpFacet(HomePageFacet.class);
-        if(isHomePage) {
-            return Allow.DEFAULT;
-        }
         return isVisibleResult(session, target, where).createConsent();
     }
 
@@ -257,10 +246,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
      */
     @Override
     public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target, Where where) {
-        final boolean isHomePage = containsDoOpFacet(HomePageFacet.class);
-        if(isHomePage) {
-            return Allow.DEFAULT;
-        }
         return isUsableResult(session, target, where).createConsent();
     }
 

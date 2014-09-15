@@ -47,7 +47,7 @@ public class VoidReturnPage extends PageAbstract {
     }
 
     private VoidReturnPage(final VoidModel model, final String actionName) {
-        super(new PageParameters(), ApplicationActions.INCLUDE, actionName, ComponentType.VOID_RETURN);
+        super(new PageParameters(), actionName, ComponentType.VOID_RETURN);
 
         themeDiv.addOrReplace(new Label(ID_ACTION_NAME, actionName));
         

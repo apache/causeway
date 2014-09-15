@@ -37,7 +37,7 @@ public class ErrorPage extends PageAbstract {
 
 
     public ErrorPage(ExceptionModel exceptionModel) {
-        super(new PageParameters(), ApplicationActions.EXCLUDE, null);
+        super(new PageParameters(), null);
 
         addBookmarkedPages();
 

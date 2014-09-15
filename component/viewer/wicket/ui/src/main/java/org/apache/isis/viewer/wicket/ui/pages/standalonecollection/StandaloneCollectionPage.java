@@ -40,7 +40,7 @@ public class StandaloneCollectionPage extends PageAbstract {
      * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
      */
     public StandaloneCollectionPage(final EntityCollectionModel model) {
-        super(new PageParameters(), ApplicationActions.INCLUDE, actionNameFrom(model), ComponentType.STANDALONE_COLLECTION);
+        super(new PageParameters(), actionNameFrom(model), ComponentType.STANDALONE_COLLECTION);
         addChildComponents(themeDiv, model);
 
         addBookmarkedPages();

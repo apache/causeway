@@ -39,7 +39,7 @@ public class ActionPromptPage extends PageAbstract {
      * For use with {@link Component#setResponsePage(org.apache.wicket.Page)}
      */
     public ActionPromptPage(final ActionModel model) {
-        super(new PageParameters(), ApplicationActions.INCLUDE, model.getActionMemento().getAction().getName(), ComponentType.ACTION_PROMPT);
+        super(new PageParameters(), model.getActionMemento().getAction().getName(), ComponentType.ACTION_PROMPT);
         addChildComponents(themeDiv, model);
 
         if(model.isBookmarkable()) {
@@ -53,7 +53,7 @@ public class ActionPromptPage extends PageAbstract {
     }
     
     public ActionPromptPage(final PageParameters pageParameters, final ActionModel model) {
-        super(pageParameters, ApplicationActions.INCLUDE, model.getActionMemento().getAction().getName(), ComponentType.ACTION_PROMPT);
+        super(pageParameters, model.getActionMemento().getAction().getName(), ComponentType.ACTION_PROMPT);
         addChildComponents(themeDiv, model);
         
         // no need to bookmark because the ActionPanel will have done so for us
