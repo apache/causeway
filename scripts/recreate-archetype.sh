@@ -1,3 +1,4 @@
+#!/bin/bash
 JIRA=$1
 
 if [ ! "$JIRA" ]; then

@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Removes an RC tag and replaces with final one
 #
