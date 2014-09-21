@@ -113,8 +113,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
+            <groupId>de.agilecoders.wicket</groupId>
+            <artifactId>wicket-bootstrap-core</artifactId>
         </dependency>
 
 		<!-- LOGGING DEPENDENCIES - LOG4J -->

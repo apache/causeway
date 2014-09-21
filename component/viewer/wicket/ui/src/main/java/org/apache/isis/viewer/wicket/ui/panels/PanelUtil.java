@@ -18,10 +18,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.panels;
 
+import de.agilecoders.wicket.core.Bootstrap;
+
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
+import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.resource.CssResourceReference;
 
@@ -55,7 +59,12 @@ public final class PanelUtil {
         if(url == null) {
             return null;
         }
-        return new CssResourceReference(cls, url);
+        return new CssResourceReference(cls, url) {
+            @Override
+            public Iterable<? extends HeaderItem> getDependencies() {
+                return Lists.newArrayList(CssHeaderItem.forReference(Bootstrap.getSettings().getCssResourceReference()));
+            }
+        };
     }
 
     private static String cssFor(final Class<?> cls, String suffix) {

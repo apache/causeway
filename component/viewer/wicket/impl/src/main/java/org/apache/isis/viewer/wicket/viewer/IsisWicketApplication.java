@@ -19,7 +19,11 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.settings.BootstrapSettings;
+import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.webjars.WicketWebjars;
+import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 import net.ftlines.wicketsource.WicketSource;
 
@@ -209,6 +213,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             super.init();
 
             configureWebJars();
+            configureWicketBootstrap();
 
             String isisConfigDir = getServletContext().getInitParameter("isis.config.dir");
 
@@ -286,8 +291,13 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
      * </p>
      */
     protected void configureWebJars() {
-        WebjarsSettings settings = new WebjarsSettings();
+        IWebjarsSettings settings = new WebjarsSettings();
         WicketWebjars.install(this, settings);
+    }
+
+    protected void configureWicketBootstrap() {
+        IBootstrapSettings settings = new BootstrapSettings();
+        Bootstrap.install(this, settings);
     }
 
     // //////////////////////////////////////

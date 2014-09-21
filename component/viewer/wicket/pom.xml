@@ -44,8 +44,8 @@
         <wicket-jquery-ui.version>6.17.0</wicket-jquery-ui.version>
         <wicketstuff.version>6.17.0</wicketstuff.version>
 
-        <wicket-webjars.version>0.4.1</wicket-webjars.version>
-        <webjars-bootstrap.version>2.3.2</webjars-bootstrap.version>
+        <wicket-webjars.version>0.4.3</wicket-webjars.version>
+        <wicket-bootstrap.version>0.9.5</wicket-bootstrap.version>
         <wicket-source.version>6.0.0.8</wicket-source.version>
 
         <wicket-select2.version>2.2.2</wicket-select2.version>
@@ -289,13 +289,35 @@
                         <groupId>org.apache.wicket</groupId>
                         <artifactId>wicket-core</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-request</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
-    
+
             <dependency>
-                <groupId>org.webjars</groupId>
-                <artifactId>bootstrap</artifactId>
-                <version>${webjars-bootstrap.version}</version>
+                <groupId>de.agilecoders.wicket</groupId>
+                <artifactId>wicket-bootstrap-core</artifactId>
+                <version>${wicket-bootstrap.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-util</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-request</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-extensions</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
