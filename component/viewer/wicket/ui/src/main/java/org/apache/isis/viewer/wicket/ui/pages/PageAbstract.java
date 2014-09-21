@@ -260,9 +260,10 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     private void addHomePageLinkAndApplicationName() {
+        BookmarkablePageLink homePageLink = homePageLink(ID_HOME_PAGE_LINK);
         // this is a bit hacky, but it'll do...
-        ExternalLink homePageLink = new ExternalLink(ID_HOME_PAGE_LINK, "/wicket/");
-        homePageLink.setContextRelative(true);
+//        ExternalLink homePageLink = new ExternalLink(ID_HOME_PAGE_LINK, "/wicket/");
+//        homePageLink.setContextRelative(true);
         themeDiv.add(homePageLink);
         homePageLink.add(new Label(ID_APPLICATION_NAME, applicationName));
     }
@@ -284,14 +285,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     private void addAboutLink() {
-        themeDiv.add(new Link<Object>(ID_ABOUT_LINK) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onClick() {
-                setResponsePage(AboutPage.class);
-            }
-        });
+        themeDiv.add(new BookmarkablePageLink(ID_ABOUT_LINK, AboutPage.class));
     }
 
     private void addBreadcrumbs() {
