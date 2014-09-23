@@ -483,12 +483,14 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
 
     protected Set<CssResourceReference> cssResourceReferencesForAllComponents() {
-        Collection<ComponentFactory> componentFactories = getComponentFactoryRegistry().listComponentFactories();
+        // TODO mgrigorov: ISIS-537 temporary disabled to not mess up with Bootstrap styles
+//        Collection<ComponentFactory> componentFactories = getComponentFactoryRegistry().listComponentFactories();
         return Sets.newLinkedHashSet(
-                Iterables.concat(
-                        Iterables.transform(
-                                componentFactories,
-                                getCssResourceReferences)));
+//                Iterables.concat(
+//                        Iterables.transform(
+//                                componentFactories,
+//                                getCssResourceReferences))
+        );
     }
 
     // //////////////////////////////////////
