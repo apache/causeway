@@ -34,6 +34,7 @@ public final class Links {
         return new SubmitLink(linkId) {
             private static final long serialVersionUID = 1L;
             @Override
+            // TODO mgrigorov: consider overriding onAfterSubmit instead
             public void onSubmit() {
                 getForm().setResponsePage(pageClass, pageParameters);
                 super.onSubmit();
@@ -41,6 +42,7 @@ public final class Links {
         };
     }
 
+    // TODO mgrigorov: This is bad practice. Use BookmarkablePageLink for such simple logic. Avoids an HTTP redirect
     public static <T extends Page> AbstractLink newAbstractLink(final String linkId, final PageParameters pageParameters, final Class<T> pageClass) {
 
       return new Link<T>(linkId) {
@@ -53,9 +55,11 @@ public final class Links {
       };
     }
 
+    // TODO mgrigorov: what is the added value ?
     public static <T extends Page> AbstractLink newBookmarkablePageLink(
             final String linkId, final PageParameters pageParameters, final Class<T> pageClass) {
 
+        // TODO mgrigorov: <T> should really be <Void>
         return new BookmarkablePageLink<T>(linkId, pageClass, pageParameters);
     }
 
