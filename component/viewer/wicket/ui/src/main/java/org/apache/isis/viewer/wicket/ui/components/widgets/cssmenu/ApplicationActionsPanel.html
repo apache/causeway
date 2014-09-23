@@ -4,8 +4,10 @@
         <wicket:panel>
             <li class="dropdown" wicket:id="menuItems">
                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><span wicket:id="name"></span> <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu" wicket:id="subMenuItems">
-                    <li><a wicket:id="menuLink"></a></li>
+                <ul class="dropdown-menu" role="menu">
+                    <li wicket:id="subMenuItems">
+                        <a wicket:id="menuLink"></a>
+                    </li>
                 </ul>
             </li>
         </wicket:panel>
