@@ -49,6 +49,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 /**
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
  */
+// TODO mgrigorov: extend GenericPanel and make T the type of the model object, not the model
 public abstract class PanelAbstract<T extends IModel<?>> extends Panel implements IHeaderContributor, PersistenceSessionProvider, AuthenticationSessionProvider {
 
     private static final long serialVersionUID = 1L;
