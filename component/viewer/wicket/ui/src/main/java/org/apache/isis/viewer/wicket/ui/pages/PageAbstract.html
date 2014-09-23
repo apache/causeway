@@ -36,11 +36,26 @@
 
                 <header wicket:id="navbar"></header>
 
+                <div class="navbar navbar-default" style="margin-top: 51px" role="navigation">
+                    <div class="container-fluida">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav" wicket:id="applicationActions"></ul>
+                        </div><!--/.nav-collapse -->
+                    </div><!--/.container-fluid -->
+                </div>
+
                 <div class="headerContainer" style="padding-top: 100px">
 
                     <div class="clearfix"></div>
 
-                    <div wicket:id="applicationActions" id="applicationActions"></div>
                     <div id="tertiaryMenu">
                         <a wicket:id="copyLink" href="#">
                             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
