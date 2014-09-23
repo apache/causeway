@@ -22,19 +22,18 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
       xml:lang="en"  
       lang="en">
-	<head></head>
-	<body>
-		<wicket:panel>
-			<div class="javaSqlTimePanel scalarNameAndValueComponentType">
-				<label for="scalarValue" wicket:id="scalarIfRegular">
-	      			<span wicket:id="scalarName" class="scalarName">[Label text]</span>
-	      			<span class="scalarValue">
-		      			<input type="text" name="scalarValue" wicket:id="scalarValue" />
-		      			<span wicket:id="feedback"></span>
-	      			</span>
-				</label>
-				<label wicket:id="scalarIfCompact"></label>
-			</div>
-		</wicket:panel>
-	</body>
+    <body>
+        <wicket:panel>
+            <div class="javaSqlTimePanel scalarNameAndValueComponentType">
+                <label wicket:id="scalarIfRegular" style="width: 100%">
+                    <span wicket:id="scalarName" class="scalarName col-lg-3">[Label text]</span>
+                    <span class="scalarValue col-lg-9">
+                        <input type="text" class="form-control" name="scalarValue" wicket:id="scalarValue" />
+                        <span wicket:id="feedback"></span>
+                    </span>
+                </label>
+                <label wicket:id="scalarIfCompact"></label>
+            </div>
+        </wicket:panel>
+    </body>
 </html>
