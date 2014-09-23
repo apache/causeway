@@ -22,76 +22,79 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
       xml:lang="en"  
       lang="en">
-	<wicket:head>
+    <wicket:head>
         <wicket:link>
-
-    		<link href="PageAbstract.css" rel="stylesheet" type="text/css"/>
+            <!--<link href="PageAbstract.css" rel="stylesheet" type="text/css"/>-->
             <link href="isis-wicket-theme/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css"/>
             <link href="jquery.jgrowl.css" rel="stylesheet" type="text/css"/>
         </wicket:link>
-		<title wicket:id="pageTitle"></title>
-	</wicket:head>
-	<body>
-		<div id="container" class="page container-fluid">
+        <title wicket:id="pageTitle"></title>
+    </wicket:head>
+    <body>
+        <div id="container" class="page container-fluid">
             <div wicket:id="theme">
-    			<div class="headerContainer">
-    				<div>
-    					<h1>
-    						<a wicket:id="homePageLink" id="header" href="#">
-    							<span wicket:id="applicationName" class="applicationName">[application name]</span>
-    						</a>
-    					</h1>
-    				</div>
-    				
-    				<div id="secondaryMenu">
-    					<div class="links">
-    						<span wicket:id="userName">[username]</span>
-    						<a class="logout" href="#" wicket:id="logoutLink"><wicket:message key="logoutLabel">logout</wicket:message></a>
-    						<a class="about" href="#" wicket:id="aboutLink"><wicket:message key="aboutLabel">about</wicket:message></a>
-    					</div>
-    				</div>
-    
-        			<div class="clear"/>
-        
-        			<div wicket:id="applicationActions" id="applicationActions"/>
+
+                <header wicket:id="navbar"></header>
+
+                <div class="headerContainer" style="padding-top: 100px">
+
+                    <div class="clearfix"></div>
+
+                    <div wicket:id="applicationActions" id="applicationActions"></div>
                     <div id="tertiaryMenu">
                         <a wicket:id="copyLink" href="#">
                             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         </a>
                     </div>
+
                     <div id="breadcrumbsMenu">
-                        <span wicket:id="breadcrumbs"/>
+                        <span wicket:id="breadcrumbs"></span>
                     </div>
-        
-        		</div>
-    
-    			<div id="body">
-    				<wicket:child/>
-    
-    				<div class="clear"/>
-    			</div>
-    
-                <div wicket:id="actionPromptModalWindow"/>
-                
-                <div id="veil"> 
-                    <div class="imgHolder">
-                        <wicket:link>
-                            <img src="spinning-icon.gif"/>
-                        </wicket:link>
-                    </div>
+
                 </div>
-                
+
+                <div id="body">
+                    <wicket:child/>
+
+                    <div class="clearfix"></div>
+                </div>
     
-    			<div id="footer">
-    				<div class="links">
-    					powered by: <a href="http://isis.apache.org">Apache Isis</a>
-    				</div>
-    			</div>
+                <div wicket:id="actionPromptModalWindow"></div>
+                
+                <!--<div id="veil"> -->
+                    <!--<div class="imgHolder">-->
+                        <!--<wicket:link>-->
+                            <!--<img src="spinning-icon.gif"/>-->
+                        <!--</wicket:link>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+
+                <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-footer">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+
+                        <div class="collapse navbar-collapse" id="navbar-collapse-footer">
+                            <p class="navbar-text">Powered by:</p>
+                            <ul class="nav navbar-nav">
+                                <li><a href="http://isis.apache.org" target="_blank">Apache Isis</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+
             </div>
 
-		</div>
-        <div class="javascriptInFooter">
-            <wicket:container wicket:id="footerJS"></wicket:container>
         </div>
-	</body>
+        <div class="javascriptInFooter">
+            <wicket:container wicket:id="footerJS"/>
+        </div>
+    </body>
 </html>

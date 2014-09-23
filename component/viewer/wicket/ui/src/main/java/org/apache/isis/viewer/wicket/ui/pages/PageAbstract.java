@@ -20,6 +20,11 @@
 package org.apache.isis.viewer.wicket.ui.pages;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.ImmutableNavbarComponent;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarAjaxLink;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarText;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,6 +35,7 @@ import com.google.inject.name.Named;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -41,11 +47,10 @@ import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +65,13 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
-import org.apache.isis.viewer.wicket.model.models.*;
+import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
+import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
+import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -93,22 +104,20 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
     private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
     
-    //private static final JavaScriptResourceReference BOOTSTRAP_JS = new JavaScriptResourceReference(PageAbstract.class, "bootstrap/js/bootstrap.min.js");
-
     private static final String ID_THEME = "theme";
     private static final String ID_BOOKMARKED_PAGES = "bookmarks";
-    private static final String ID_HOME_PAGE_LINK = "homePageLink";
-    private static final String ID_APPLICATION_NAME = "applicationName";
-    private static final String ID_USER_NAME = "userName";
-    
+
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     
     private static final String ID_PAGE_TITLE = "pageTitle";
     
     public static final String ID_MENU_LINK = "menuLink";
+
+    // TODO mgrigorov: are those used somewhere else ? since they are public
     public static final String ID_LOGOUT_LINK = "logoutLink";
     public static final String ID_LOGOUT_TEXT = "logoutText";
     public static final String ID_ABOUT_LINK = "aboutLink";
+
     private static final String ID_COPY_LINK = "copyLink";
     private static final String ID_BREADCRUMBS = "breadcrumbs";
 
@@ -121,7 +130,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     private final List<ComponentType> childComponentIds;
     private final PageParameters pageParameters;
-    
+
     /**
      * {@link Inject}ed when {@link #init() initialized}.
      */
@@ -164,15 +173,24 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             if(applicationName != null) {
                 themeDiv.add(new CssClassAppender(asCssStyle(applicationName)));
             }
-            
+
             addApplicationActions(themeDiv);
+
+            Navbar navbar = new Navbar("navbar");
+            themeDiv.add(navbar);
+
+            navbar.setPosition(Navbar.Position.TOP);
+            navbar.fluid();
+
+            navbar.setBrandName(Model.of(applicationName));
+
+
             this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
             this.pageParameters = pageParameters;
 
-            addHomePageLinkAndApplicationName();
-            addUserName();
-            addLogoutLink();
-            addAboutLink();
+            addUserName(navbar);
+            addLogoutLink(navbar);
+            addAboutLink(navbar);
             addBreadcrumbs();
             addCopyLink();
 
@@ -214,7 +232,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         return str.toLowerCase().replaceAll("[^A-Za-z0-9 ]", "").replaceAll("\\s+", "-");
     }
 
-
+    // TODO mgrigorov this method is not used
     protected ExceptionModel recognizeException(Exception ex) {
         List<ExceptionRecognizer> exceptionRecognizers;
         try {
@@ -233,7 +251,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         super.renderHead(response);
 
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference())));
-        response.render(new PriorityHeaderItem(CssReferenceHeaderItem.forReference(new CssResourceReference(PageAbstract.class, "cssreset.css"))));
 
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
@@ -259,33 +276,27 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         }
     }
 
-    private void addHomePageLinkAndApplicationName() {
-        BookmarkablePageLink homePageLink = homePageLink(ID_HOME_PAGE_LINK);
-        // this is a bit hacky, but it'll do...
-//        ExternalLink homePageLink = new ExternalLink(ID_HOME_PAGE_LINK, "/wicket/");
-//        homePageLink.setContextRelative(true);
-        themeDiv.add(homePageLink);
-        homePageLink.add(new Label(ID_APPLICATION_NAME, applicationName));
-    }
-    
-    private void addUserName() {
-        themeDiv.add(new Label(ID_USER_NAME, getAuthenticationSession().getUserName()));
+    private void addUserName(Navbar navbar) {
+        NavbarText userName = new NavbarText(navbar.newExtraItemId(), getAuthenticationSession().getUserName());
+        userName.position(Navbar.ComponentPosition.RIGHT);
+        navbar.addComponents(userName);
     }
 
-    private void addLogoutLink() {
-        themeDiv.add(new Link<Object>(ID_LOGOUT_LINK) {
-            private static final long serialVersionUID = 1L;
+    private void addLogoutLink(Navbar navbar) {
+        NavbarAjaxLink logoutLink = new NavbarAjaxLink(new ResourceModel("logoutLabel")) {
 
             @Override
-            public void onClick() {
+            public void onClick(AjaxRequestTarget target) {
                 getSession().invalidate();
                 setResponsePage(getSignInPage());
             }
-        });
+        };
+        navbar.addComponents(new ImmutableNavbarComponent(logoutLink, Navbar.ComponentPosition.RIGHT));
     }
 
-    private void addAboutLink() {
-        themeDiv.add(new BookmarkablePageLink(ID_ABOUT_LINK, AboutPage.class));
+    private void addAboutLink(Navbar navbar) {
+        NavbarButton aboutLink = new NavbarButton(AboutPage.class, new ResourceModel("aboutLabel"));
+        navbar.addComponents(new ImmutableNavbarComponent(aboutLink, Navbar.ComponentPosition.RIGHT));
     }
 
     private void addBreadcrumbs() {
