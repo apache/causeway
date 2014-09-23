@@ -117,7 +117,7 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
             return;
         }
         subscribingLink = createSubscribingLink(uiHintContainer);
-        addOrReplace(subscribingLink);
+//        addOrReplace(subscribingLink);
         subscribingLink.setOutputMarkupId(true);
     }
 

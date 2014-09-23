@@ -37,7 +37,7 @@
                 <header wicket:id="navbar"></header>
 
                 <div class="navbar navbar-default" style="margin-top: 51px" role="navigation">
-                    <div class="container-fluida">
+                    <div class="container-fluid">
                         <div class="navbar-header">
                             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
                                 <span class="sr-only">Toggle navigation</span>
@@ -48,24 +48,16 @@
                         </div>
                         <div class="navbar-collapse collapse">
                             <ul class="nav navbar-nav" wicket:id="applicationActions"></ul>
-                        </div><!--/.nav-collapse -->
-                    </div><!--/.container-fluid -->
-                </div>
-
-                <div class="headerContainer" style="padding-top: 100px">
-
-                    <div class="clearfix"></div>
-
-                    <div id="tertiaryMenu">
-                        <a wicket:id="copyLink" href="#">
-                            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                        </a>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li>
+                                    <wicket:container wicket:id="copyLink"></wicket:container>
+                                </li>
+                            </ul>
+                            <form class="navbar-form navbar-right">
+                                <div wicket:id="breadcrumbs" style="width: 200px"></div>
+                            </form>
+                        </div>
                     </div>
-
-                    <div id="breadcrumbsMenu">
-                        <span wicket:id="breadcrumbs"></span>
-                    </div>
-
                 </div>
 
                 <div id="body">
