@@ -130,7 +130,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
      */
     @Override
     public void renderHead(final IHeaderResponse response) {
-        PanelUtil.renderHead(response, this.getClass());
+//        PanelUtil.renderHead(response, this.getClass());
     }
 
     

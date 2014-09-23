@@ -639,7 +639,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
     
     private static void addClassForSpan(final Component component, final int numGridCols) {
-        component.add(new CssClassAppender("span"+numGridCols));
+        component.add(new CssClassAppender("col-lg-"+numGridCols + " col-md-"+numGridCols));
     }
 
 
