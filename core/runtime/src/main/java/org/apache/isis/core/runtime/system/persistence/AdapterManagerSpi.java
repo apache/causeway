@@ -77,5 +77,4 @@ public interface AdapterManagerSpi extends AdapterManager, Iterable<ObjectAdapte
      */
     void removeAdapter(ObjectAdapter adapter);
 
-
 }

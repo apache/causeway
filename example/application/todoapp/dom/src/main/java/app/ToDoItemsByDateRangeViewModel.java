@@ -33,39 +33,28 @@ import dom.todo.ToDoItems;
 import org.joda.time.DateTime;
 
 import org.apache.isis.applib.AbstractViewModel;
-import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.Render.Type;
-import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.util.ObjectContracts;
 
 @Named("By Date Range")
 @Bookmarkable
-public class ToDoItemsByDateRangeViewModel 
-        extends AbstractViewModel 
+@ViewModel
+public class ToDoItemsByDateRangeViewModel
         implements Comparable<ToDoItemsByDateRangeViewModel> {
 
-    //region > viewModel implementation
-    @Override
-    public String viewModelMemento() {
-        return getDateRange().name();
+    //region > constructors
+    public ToDoItemsByDateRangeViewModel() {
     }
-
-    @Override
-    public void viewModelInit(String memento) {
-        setDateRange(DateRange.valueOf(memento));
+    public ToDoItemsByDateRangeViewModel(DateRange dateRange) {
+        setDateRange(dateRange);
     }
-
     //endregion
 
     //region > dateRange (property)
     private DateRange dateRange;
 
-    /**
-     * Used as {@link #viewModelMemento() memento}
-     */
     @Title
     public DateRange getDateRange() {
         return dateRange;

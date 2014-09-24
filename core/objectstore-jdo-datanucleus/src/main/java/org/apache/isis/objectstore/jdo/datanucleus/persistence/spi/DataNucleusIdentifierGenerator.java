@@ -30,7 +30,10 @@ import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
@@ -46,12 +49,16 @@ public class DataNucleusIdentifierGenerator implements IdentifierGenerator {
     // main api
     // //////////////////////////////////////////////////////////////
 
+    /**
+     * TODO: this is really to create a transient or view model identifier.  The responsibilities are split unhappily between this class and its caller, the OidGenerator.
+     */
     @Override
     public String createTransientIdentifierFor(ObjectSpecId objectSpecId, Object pojo) {
-        
-        if(pojo instanceof ViewModel) {
-            ViewModel viewModel = (ViewModel) pojo;
-            return viewModel.viewModelMemento();
+
+        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
+        final ViewModelFacet viewModelFacet = spec.getFacet(ViewModelFacet.class);
+        if(viewModelFacet != null) {
+            return viewModelFacet.memento(pojo);
         }
 
         return UUID.randomUUID().toString();
@@ -111,6 +118,9 @@ public class DataNucleusIdentifierGenerator implements IdentifierGenerator {
 
     protected DataNucleusObjectStore getDataNucleusObjectStore() {
         return (DataNucleusObjectStore) IsisContext.getPersistenceSession().getObjectStore();
+    }
+    protected SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
     }
 
 }

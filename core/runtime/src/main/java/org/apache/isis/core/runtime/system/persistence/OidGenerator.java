@@ -19,16 +19,11 @@
 
 package org.apache.isis.core.runtime.system.persistence;
 
-import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.adapter.oid.*;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -61,12 +56,14 @@ public class OidGenerator implements DebuggableWithTitle {
     /**
      * Create a new {@link Oid#isTransient() transient} {@link Oid} for the
      * supplied pojo, uniquely distinguishable from any other {@link Oid}.
+     *
+     * TODO: the responsibility for knowing if this pojo is a view model or not are split unhappily between this class and the {@link org.apache.isis.core.runtime.system.persistence.IdentifierGenerator} impl.
      */
     public final RootOid createTransientOrViewModelOid(final Object pojo) {
-        ObjectSpecification spec = getSpecificationLookup().loadSpecification(pojo.getClass());
+        final ObjectSpecification spec = getSpecificationLookup().loadSpecification(pojo.getClass());
         final ObjectSpecId objectSpecId = spec.getSpecId();
         final String transientIdentifier = identifierGenerator.createTransientIdentifierFor(objectSpecId, pojo);
-        final State state = spec.containsFacet(ViewModelFacet.class)? State.VIEWMODEL:State.TRANSIENT;
+        final State state = spec.containsDoOpFacet(ViewModelFacet.class)? State.VIEWMODEL:State.TRANSIENT;
         return new RootOidDefault(objectSpecId, transientIdentifier, state);
     }
 

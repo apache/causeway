@@ -42,6 +42,8 @@ public interface DomainObjectServices extends Injectable {
 
     ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento);
 
+    ObjectAdapter existingViewModelInstance(Object viewModelPojo);
+
     /**
      * Create an instance of an aggregated object that will be persisted within the
      * parent adapter.

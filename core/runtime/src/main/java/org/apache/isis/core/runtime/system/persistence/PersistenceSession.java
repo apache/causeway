@@ -334,6 +334,21 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         return objectSpec.initialize(adapter);
     }
 
+    public ObjectAdapter existingViewModelInstance(final Object viewModelPojo) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("existing view model instance of " + viewModelPojo);
+        }
+        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(viewModelPojo.getClass());
+        if(!objectSpec.containsDoOpFacet(ViewModelFacet.class)) {
+            throw new IllegalArgumentException("viewModelPojo " + viewModelPojo + " is not a view model (eg @ViewModel annotation or ViewModel interface)");
+        }
+        final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
+        final String memento = facet.memento(viewModelPojo);
+
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(viewModelPojo);
+        return adapter;
+    }
+
     @Override
     public ObjectAdapter createAggregatedInstance(final ObjectSpecification objectSpec, final ObjectAdapter parentAdapter) {
         if (LOG.isDebugEnabled()) {

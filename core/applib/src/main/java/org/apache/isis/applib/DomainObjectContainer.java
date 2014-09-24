@@ -170,6 +170,11 @@ public interface DomainObjectContainer {
     <T extends ViewModel> T newViewModelInstance(final Class<T> ofType, final String memento);
 
     /**
+     * Recognizes/registers an existing object as a view model.
+     */
+    <T> T existingViewModelInstance(final T viewModelInstance);
+
+    /**
      * Create a new instance that will be persisted as part of the specified
      * parent (ie will be a part of a larger aggregate).
      * 

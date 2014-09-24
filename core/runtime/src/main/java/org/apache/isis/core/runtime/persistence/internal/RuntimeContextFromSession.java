@@ -20,7 +20,6 @@
 package org.apache.isis.core.runtime.persistence.internal;
 
 import java.util.List;
-
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
@@ -28,18 +27,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
-import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
-import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAbstract;
-import org.apache.isis.core.metamodel.adapter.LocalizationProviderAbstract;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
-import org.apache.isis.core.metamodel.adapter.ObjectDirtierAbstract;
-import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
-import org.apache.isis.core.metamodel.adapter.ObjectPersistorAbstract;
-import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
-import org.apache.isis.core.metamodel.adapter.QuerySubmitterAbstract;
-import org.apache.isis.core.metamodel.adapter.ServicesProvider;
-import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
+import org.apache.isis.core.metamodel.adapter.*;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -61,7 +49,6 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.MessageBroker;
 import org.apache.isis.core.runtime.system.transaction.UpdateNotifier;
@@ -120,6 +107,16 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             @Override
             public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final OneToManyAssociation collection) {
                 return getRuntimeAdapterManager().adapterFor(pojo, ownerAdapter, collection);
+            }
+
+            @Override
+            public ObjectAdapter mapRecreatedPojo(Oid oid, Object recreatedPojo) {
+                return getRuntimeAdapterManager().mapRecreatedPojo(oid, recreatedPojo);
+            }
+
+            @Override
+            public void removeAdapter(ObjectAdapter adapter) {
+                getRuntimeAdapterManager().removeAdapter(adapter);
             }
 
             @Override
@@ -195,6 +192,11 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             @Override
             public ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento) {
                 return getPersistenceSession().createViewModelInstance(spec, memento);
+            }
+
+            @Override
+            public ObjectAdapter existingViewModelInstance(final Object viewModelPojo) {
+                return getPersistenceSession().existingViewModelInstance(viewModelPojo);
             }
 
             @Override

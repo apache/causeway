@@ -128,6 +128,16 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
             @Override
+            public ObjectAdapter mapRecreatedPojo(Oid oid, Object recreatedPojo) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+
+            @Override
+            public void removeAdapter(ObjectAdapter adapter) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+
+            @Override
             public ObjectAdapter adapterFor(final Object domainObject) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
@@ -189,6 +199,11 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
             @Override
             public ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+
+            @Override
+            public ObjectAdapter existingViewModelInstance(Object viewModelPojo) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
 

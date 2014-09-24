@@ -17,7 +17,6 @@
 package org.apache.isis.applib.services.memento;
 
 import java.util.Set;
-
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 

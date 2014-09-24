@@ -29,35 +29,29 @@ import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import org.apache.isis.applib.AbstractViewModel;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.util.ObjectContracts;
 
 @Named("By Category")
 @Bookmarkable
+@ViewModel
 public class ToDoItemsByCategoryViewModel 
-        extends AbstractViewModel 
         implements Comparable<ToDoItemsByCategoryViewModel> {
 
-    //region > viewModel implementation
-    @Override
-    public String viewModelMemento() {
-        return getCategory().name();
+    //region > constructors
+    public ToDoItemsByCategoryViewModel() {
     }
-
-    @Override
-    public void viewModelInit(String memento) {
-        setCategory(Category.valueOf(memento));
+    public ToDoItemsByCategoryViewModel(Category category) {
+        setCategory(category);
     }
     //endregion
+
 
     //region > category (property)
     private Category category;
 
-    /**
-     * Used as {@link #viewModelMemento() memento}
-     */
     @Title
     public Category getCategory() {
         return category;
@@ -129,7 +123,7 @@ public class ToDoItemsByCategoryViewModel
     @Named("Delete")
     public ToDoItemsByCategoryViewModel deleteCompleted() {
         for (ToDoItem item : getItemsComplete()) {
-            removeIfNotAlready(item);
+            container.removeIfNotAlready(item);
         }
         // force reload of page
         return this;
@@ -145,6 +139,8 @@ public class ToDoItemsByCategoryViewModel
     //endregion
 
     //region > injected services
+    @javax.inject.Inject
+    private DomainObjectContainer container;
     @javax.inject.Inject
     private ToDoItems toDoItems;
     //endregion
