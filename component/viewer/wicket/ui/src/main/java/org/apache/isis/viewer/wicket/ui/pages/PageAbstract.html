@@ -22,14 +22,22 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
       xml:lang="en"  
       lang="en">
-    <wicket:head>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
         <wicket:link>
             <!--<link href="PageAbstract.css" rel="stylesheet" type="text/css"/>-->
             <link href="isis-wicket-theme/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css"/>
             <link href="jquery.jgrowl.css" rel="stylesheet" type="text/css"/>
         </wicket:link>
         <title wicket:id="pageTitle"></title>
-    </wicket:head>
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    </head>
     <body>
         <div id="container" class="page container-fluid">
             <div wicket:id="theme">

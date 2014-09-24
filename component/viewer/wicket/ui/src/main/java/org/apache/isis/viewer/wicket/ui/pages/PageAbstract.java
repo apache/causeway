@@ -25,6 +25,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarAjaxLink;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
 import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarText;
+import de.agilecoders.wicket.core.markup.html.references.BootlintJavaScriptReference;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -273,6 +274,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         }
         if(applicationJs != null) {
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
+        }
+
+        // TODO mgrigorov Remove before merge to master
+        if (!getRequest().getRequestParameters().getParameterValue("bootlint").isNull()) {
+            response.render(JavaScriptHeaderItem.forReference(BootlintJavaScriptReference.INSTANCE));
         }
     }
 
