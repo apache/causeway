@@ -23,24 +23,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-
 import javax.annotation.PostConstruct;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.ViewModel;
-import org.apache.isis.applib.annotation.DescribedAs;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.MinLength;
-import org.apache.isis.applib.annotation.MultiLine;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.Optional;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Prototype;
-import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService;
 import org.apache.isis.applib.services.memento.MementoService;
@@ -219,20 +208,6 @@ public abstract class FixtureScripts extends AbstractService {
 
     // //////////////////////////////////////
 
-    String mementoFor(FixtureResult fr) {
-        return mementoService.create()
-                .set("fixtureScriptClassName", fr.getFixtureScriptClassName())
-                .set("key", fr.getKey())
-                .set("object", bookmarkService.bookmarkFor(fr.getObject()))
-                .asString();
-    }
-    void initOf(String mementoStr, FixtureResult fr) {
-        Memento memento = mementoService.parse(mementoStr);
-        fr.setFixtureScriptClassName(memento.get("fixtureScriptClassName", String.class));
-        fr.setKey(memento.get("key", String.class));
-        fr.setObject(bookmarkService.lookup(memento.get("object", Bookmark.class)));
-    }
-
     FixtureResult newFixtureResult(FixtureScript script, String subkey, Object object, boolean firstTime) {
         if(object == null) {
             return null;
@@ -248,20 +223,11 @@ public abstract class FixtureScripts extends AbstractService {
                     return null;
             }
         }
-        String mementoFor = mementoFor(script, subkey, object, firstTime);
-        return getContainer().newViewModelInstance(FixtureResult.class, mementoFor);
-    }
-
-    private String mementoFor(
-            final FixtureScript script,
-            final String subkey,
-            final Object object,
-            final boolean firstTime) {
-        final FixtureResult template = new FixtureResult();
-        template.setFixtureScriptClassName(firstTime? script.getClass().getName(): null);
-        template.setKey(script.pathWith(subkey));
-        template.setObject(object);
-        return mementoFor(template);
+        final FixtureResult fixtureResult = new FixtureResult();
+        fixtureResult.setFixtureScriptClassName(firstTime ? script.getClass().getName() : null);
+        fixtureResult.setKey(script.pathWith(subkey));
+        fixtureResult.setObject(object);
+        return fixtureResult;
     }
 
     // //////////////////////////////////////

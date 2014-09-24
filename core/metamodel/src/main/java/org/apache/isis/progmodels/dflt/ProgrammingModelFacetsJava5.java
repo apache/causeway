@@ -123,6 +123,8 @@ import org.apache.isis.core.metamodel.facets.object.typicallen.annotation.Typica
 import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationOnTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotationOrConfigurationFactory;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.DisabledFacetOnCollectionDerivedFromViewModelFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.DisabledFacetOnPropertyDerivedFromViewModelFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.annotation.ViewModelFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.iface.ViewModelFacetInterfaceFactory;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethodFactory;
@@ -370,6 +372,8 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(ViewModelFacetAnnotationFactory.class);
         addFactory(ViewModelFacetInterfaceFactory.class);
+        addFactory(DisabledFacetOnPropertyDerivedFromViewModelFacetFactory.class);
+        addFactory(DisabledFacetOnCollectionDerivedFromViewModelFacetFactory.class);
 
         addFactory(MaxLengthFacetOnTypeAnnotationFactory.class);
         addFactory(MaxLengthFacetOnPropertyAnnotationFactory.class);

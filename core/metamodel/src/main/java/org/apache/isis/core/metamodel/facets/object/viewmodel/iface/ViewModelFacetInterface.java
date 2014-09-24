@@ -41,15 +41,4 @@ public class ViewModelFacetInterface extends ViewModelFacetAbstract {
         return viewModel.viewModelMemento();
     }
 
-    @Override
-    public boolean isCloneable(Object pojo) {
-        return pojo != null && pojo instanceof ViewModel.Cloneable;
-    }
-
-    @Override
-    public Object clone(Object pojo) {
-        ViewModel.Cloneable viewModelCloneable = (ViewModel.Cloneable) pojo;
-        return viewModelCloneable.clone();
-    }
-
 }

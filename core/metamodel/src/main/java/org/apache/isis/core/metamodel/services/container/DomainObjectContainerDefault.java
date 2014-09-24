@@ -113,22 +113,6 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         }
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T existingViewModelInstance(final T viewModelPojo) {
-        final Class<?> viewModelClass = viewModelPojo.getClass();
-        final ObjectSpecification spec = getSpecificationLookup().loadSpecification(viewModelClass);
-        if (!spec.containsFacet(ViewModelFacet.class)) {
-            throw new IsisException("Type must be a ViewModel: " + viewModelClass);
-        }
-        final ObjectAdapter adapter = doExistingViewModelInstance(viewModelPojo);
-        if(adapter.getOid().isViewModel()) {
-            return (T)adapter.getObject();
-        } else {
-            throw new IsisException("Object is not a ViewModel (imple,e");
-        }
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     public <T> T newAggregatedInstance(final Object parent, final Class<T> ofClass) {
@@ -177,10 +161,6 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
 
     protected ObjectAdapter doCreateViewModelInstance(final ObjectSpecification spec, final String memento) {
         return getDomainObjectServices().createViewModelInstance(spec, memento);
-    }
-
-    protected ObjectAdapter doExistingViewModelInstance(final Object viewModelPojo) {
-        return getDomainObjectServices().existingViewModelInstance(viewModelPojo);
     }
 
     private ObjectAdapter doCreateAggregatedInstance(final ObjectSpecification spec, final Object parent) {

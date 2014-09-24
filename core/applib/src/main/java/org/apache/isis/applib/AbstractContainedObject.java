@@ -67,7 +67,6 @@ public abstract class AbstractContainedObject {
      * {@link #newAggregatedInstance(Object, Class)}.  Otherwise will be an
      * aggregate root.
      * 
-     * @see #newPersistentInstance(Class)
      * @see #newAggregatedInstance(Object, Class)
      */
     @Hidden
@@ -169,7 +168,7 @@ public abstract class AbstractContainedObject {
     /**
      * Convenience method that delegates to {@link DomainObjectContainer}.
      * 
-     * @see DomainObjectContainer#allMatches(Query, long...)
+     * @see DomainObjectContainer#allMatches(Query)
      */
     protected <T> List<T> allMatches(final Query<T> query) {
         return getContainer().allMatches(query);

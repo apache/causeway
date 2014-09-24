@@ -166,13 +166,14 @@ public interface DomainObjectContainer {
     /**
      * Create a new instance of the specified {@link ViewModel} class, initializing with the
      * specified {@link ViewModel#viewModelMemento() memento}.
+     *
+     * <p>
+     *     Rather than use this constructor it is generally preferable to simply instantiate a
+     *     class annotated with {@link org.apache.isis.applib.annotation.ViewModel annotation}.
+     *     If services need injecting into it, use {@link #injectServicesInto(Object)}.
+     * </p>
      */
     <T extends ViewModel> T newViewModelInstance(final Class<T> ofType, final String memento);
-
-    /**
-     * Recognizes/registers an existing object as a view model.
-     */
-    <T> T existingViewModelInstance(final T viewModelInstance);
 
     /**
      * Create a new instance that will be persisted as part of the specified

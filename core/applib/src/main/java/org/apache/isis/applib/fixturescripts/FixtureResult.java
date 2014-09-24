@@ -18,23 +18,12 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
-import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.annotation.*;
 
+@ViewModel
 @Paged(500)
-public class FixtureResult extends AbstractViewModel {
+public class FixtureResult {
 
-    @Override
-    public String viewModelMemento() {
-        return fixtureScripts.mementoFor(this);
-    }
-    
-    @Override
-    public void viewModelInit(String memento) {
-        fixtureScripts.initOf(memento, this);
-    }
-
-    // //////////////////////////////////////
 
     private String fixtureScriptClassName;
 

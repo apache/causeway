@@ -19,16 +19,18 @@
 
 package org.apache.isis.applib;
 
-import org.apache.isis.applib.annotation.Disabled;
-
 /**
- * Convenience super class for all view models that wish to interact with the
+ * Convenience super class for view models that wish to interact with the
  * container.
  * 
  * <p>
  * Subclassing is NOT mandatory; the methods in this superclass can be pushed
  * down into domain objects and another superclass used if required.
- * 
+ *
+ * <p>
+ *     As an alternative, consider simply annotating the view model class with {@link org.apache.isis.applib.annotation.ViewModel}.
+ * </p>
+ *
  * @see org.apache.isis.applib.DomainObjectContainer
  */
 public abstract class AbstractViewModel extends AbstractContainedObject implements ViewModel {
@@ -39,19 +41,5 @@ public abstract class AbstractViewModel extends AbstractContainedObject implemen
     @Override
     public abstract void viewModelInit(final String memento);
     
-    /**
-     * Equivalent to annotating every property and collection with {@link Disabled}.
-     */
-    public String disabled(Identifier.Type type) {
-        // cloneable view models are not read-only
-        // because the viewer can simulate them being edited
-        if(this instanceof ViewModel.Cloneable) {
-            return null;
-        }
-        if (type != Identifier.Type.PROPERTY_OR_COLLECTION) {
-            return null;
-        }
-        return "Non-cloneable view models are read-only";
-    }
-
 }
+

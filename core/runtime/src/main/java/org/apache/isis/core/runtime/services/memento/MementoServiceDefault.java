@@ -97,6 +97,14 @@ public class MementoServiceDefault implements MementoService {
             List<Element> elements = element.elements();
             return Sets.newLinkedHashSet(Iterables.transform(elements, ELEMENT_NAME));
         }
+
+        // //////////////////////////////////////
+
+        @Override
+        public String toString() {
+            return Dom4jUtil.asString(doc);
+        }
+
     }
 
     // //////////////////////////////////////
@@ -153,5 +161,4 @@ public class MementoServiceDefault implements MementoService {
         return BaseEncoding.base64Url().encode(bytes);
     }
 
-    
 }

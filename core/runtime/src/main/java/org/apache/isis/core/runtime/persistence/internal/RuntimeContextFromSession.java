@@ -195,11 +195,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
             @Override
-            public ObjectAdapter existingViewModelInstance(final Object viewModelPojo) {
-                return getPersistenceSession().existingViewModelInstance(viewModelPojo);
-            }
-
-            @Override
             public ObjectAdapter createAggregatedInstance(final ObjectSpecification spec, final ObjectAdapter parent) {
                 return getPersistenceSession().createAggregatedInstance(spec, parent);
             };

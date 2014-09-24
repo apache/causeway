@@ -27,7 +27,7 @@ public class ExternalLinksService {
 
     public static enum ExternalLink {
         ISIS_DOCUMENTATION("Apache Isis docs", "http://isis.apache.org/documentation.html"),
-        PROJECT_ON_GITHUB("Project source code on Github", "https://github.com/apache/isis/tree/master/example/application/quickstart_wicket_restful_jdo/");
+        PROJECT_ON_GITHUB("Project source code on Github", "https://github.com/apache/isis/tree/master/example/application/todoapp/");
         
         private final String title;
         private final String url;

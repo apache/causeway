@@ -86,7 +86,7 @@ public class ViewModelFacetAnnotation extends ViewModelFacetAbstract {
                 final Class<?> propertyType = property.getSpecification().getCorrespondingClass();
                 propertyValue = memento.get(propertyId, propertyType);
             } else if(mementoKeys.contains(propertyId + ".bookmark")) {
-                final Bookmark propertyValueBookmark = memento.get(propertyId, Bookmark.class);
+                final Bookmark propertyValueBookmark = memento.get(propertyId + ".bookmark", Bookmark.class);
                 propertyValue = bookmarkService.lookup(propertyValueBookmark);
             }
 
@@ -150,17 +150,6 @@ public class ViewModelFacetAnnotation extends ViewModelFacetAbstract {
                 adapterManager.removeAdapter(viewModelAdapter);
             }
         }
-    }
-
-    @Override
-    public boolean isCloneable(Object pojo) {
-        return pojo != null && pojo instanceof ViewModel.Cloneable;
-    }
-
-    @Override
-    public Object clone(Object pojo) {
-        ViewModel.Cloneable viewModelCloneable = (ViewModel.Cloneable) pojo;
-        return viewModelCloneable.clone();
     }
 
 

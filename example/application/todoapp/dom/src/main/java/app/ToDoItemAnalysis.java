@@ -58,7 +58,7 @@ public class ToDoItemAnalysis {
         return new Function<Category, ToDoItemsByCategoryViewModel>(){
              @Override
              public ToDoItemsByCategoryViewModel apply(final Category category) {
-                 return container.existingViewModelInstance(new ToDoItemsByCategoryViewModel(category));
+                 return new ToDoItemsByCategoryViewModel(category);
              }
          };
     }
@@ -88,7 +88,7 @@ public class ToDoItemAnalysis {
         return new Function<DateRange, ToDoItemsByDateRangeViewModel>(){
              @Override
              public ToDoItemsByDateRangeViewModel apply(final DateRange dateRange) {
-                 return container.existingViewModelInstance(new ToDoItemsByDateRangeViewModel(dateRange));
+                 return new ToDoItemsByDateRangeViewModel(dateRange);
              }
          };
     }
