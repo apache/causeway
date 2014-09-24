@@ -20,15 +20,16 @@
 <html xmlns:wicket="http://wicket.apache.org">
     <body>
         <wicket:panel>
-            <div class="isisBlobPanel scalarNameAndValueComponentType">
-                <label wicket:id="scalarIfRegular" style="width: 100%">
+            <div class="isisBlobPanel scalarNameAndValueComponentType row">
+
                     <span wicket:id="scalarName" class="scalarName col-lg-3">[Label text]</span>
                     <span class="col-lg-9">
+                        <label wicket:id="scalarIfRegular">
                         <img class="scalarImage text-center" width="200px" wicket:id="scalarImage"/>
                         <span class="scalarValue text-right">
 
                             <span class="uploadFile">
-                                <input type="file" name="scalarValue" id="file-upload" wicket:id="scalarValue" class="form-control" />
+                                <input type="file" name="scalarValue" wicket:id="scalarValue" class="form-control" />
                             </span>
                             <a wicket:id="scalarIfRegularClear" class="btn btn-default btn-sm"><span class="clearTitle">Clear</span></a>
 
@@ -37,8 +38,9 @@
                         </span>
                         <span wicket:id="feedback"></span>
                         <span wicket:id="additionalLinks"></span>
+                        </label>
                     </span>
-                </label>
+
 
                 <span wicket:id="scalarIfCompact">
                     <a wicket:id="scalarIfCompactDownload"><span class="fileName" wicket:id="fileNameIfCompact"></span></a>

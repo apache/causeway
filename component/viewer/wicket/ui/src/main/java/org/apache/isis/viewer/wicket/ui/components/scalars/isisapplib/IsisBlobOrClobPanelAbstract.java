@@ -88,7 +88,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         labelIfRegular.add(fileUploadField);
     
         final Label scalarName = new Label(ID_SCALAR_NAME, getModel().getName());
-        labelIfRegular.add(scalarName);
+        add(scalarName);
 
         wicketImage = asWicketImage(ID_IMAGE);
         if(wicketImage != null) {

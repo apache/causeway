@@ -69,11 +69,11 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
     protected TextField<T> createTextField(final String id) {
-        return new TextField<T>(id, newTextFieldValueModel(), cls);
+        return new TextField<>(id, newTextFieldValueModel(), cls);
     }
 
     protected TextFieldValueModel<T> newTextFieldValueModel() {
-        return new TextFieldValueModel<T>(this);
+        return new TextFieldValueModel<>(this);
     }
 
     @Override
@@ -83,6 +83,10 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
         addStandardSemantics();
         addSemantics();
+
+        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(textField));
+
+        addOrReplace(scalarName);
 
         final FormComponentLabel labelIfRegular = createFormComponentLabel();
         addOrReplace(labelIfRegular);
@@ -121,10 +125,6 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         final FormComponentLabel scalarNameAndValue = new FormComponentLabel(ID_SCALAR_IF_REGULAR, textField);
         
         scalarNameAndValue.add(textField);
-
-        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(textField));
-        
-        scalarNameAndValue.add(scalarName);
 
         return scalarNameAndValue;
     }

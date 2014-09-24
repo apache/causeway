@@ -24,15 +24,15 @@
       lang="en">
     <body>
         <wicket:panel>
-            <div class="jodaLocalDateTimePanel scalarNameAndValueComponentType">
-                <label wicket:id="scalarIfRegular" style="width: 100%">
-                    <span wicket:id="scalarName" class="scalarName col-lg-3">[Label text]</span>
-                    <span class="scalarValue col-lg-9">
+            <div class="jodaLocalDateTimePanel scalarNameAndValueComponentType row">
+                <span wicket:id="scalarName" class="scalarName col-lg-3">[Label text]</span>
+                <span class="scalarValue col-lg-9">
+                    <label wicket:id="scalarIfRegular">
                         <input type="text" class="form-control" name="scalarValue" wicket:id="scalarValue" />
                         <span wicket:id="feedback"></span>
                         <span wicket:id="additionalLinks"></span>
-                    </span>
-                </label>
+                    </label>
+                </span>
                 <input type="text" wicket:id="scalarIfCompact" class="form-control"/>
             </div>
         </wicket:panel>

@@ -277,9 +277,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         }
 
         // TODO mgrigorov Remove before merge to master
-        if (!getRequest().getRequestParameters().getParameterValue("bootlint").isNull()) {
+//        if (!getRequest().getRequestParameters().getParameterValue("bootlint").isNull()) {
             response.render(JavaScriptHeaderItem.forReference(BootlintJavaScriptReference.INSTANCE));
-        }
+//        }
     }
 
     private void addUserName(Navbar navbar) {

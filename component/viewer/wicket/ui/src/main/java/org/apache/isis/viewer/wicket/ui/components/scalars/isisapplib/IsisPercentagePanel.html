@@ -17,25 +17,24 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"  
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
       xml:lang="en"  
       lang="en">
-	<head></head>
-	<body>
-		<wicket:panel>
-			<div class="isisPercentagePanel scalarNameAndValueComponentType">
-				<label for="scalarValue" wicket:id="scalarIfRegular">
-	      			<span wicket:id="scalarName" class="scalarName">[Label text]</span>
-	      			<span class="scalarValue">
-	      				<input type="text" name="scalarValue" wicket:id="scalarValue" />
-		      			<span wicket:id="feedback"></span>
-                        <span wicket:id="additionalLinks"/>
-	      			</span>
-				</label>
-				<label wicket:id="scalarIfCompact"></label>
-			</div>
-		</wicket:panel>
-	</body>
+    <body>
+        <wicket:panel>
+            <div class="isisPercentagePanel scalarNameAndValueComponentType row">
+                <span wicket:id="scalarName" class="scalarName col-lg-3">[Label text]</span>
+                <span class="scalarValue col-lg-9">
+                    <label wicket:id="scalarIfRegular">
+                        <input type="text" name="scalarValue" class="form-control" wicket:id="scalarValue" />
+                        <span wicket:id="feedback" class="help-block"></span>
+                        <span wicket:id="additionalLinks"></span>
+                    </label>
+                </span>
+                <label wicket:id="scalarIfCompact"></label>
+            </div>
+        </wicket:panel>
+    </body>
 </html>
