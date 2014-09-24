@@ -19,8 +19,8 @@
 package org.apache.isis.viewer.restfulobjects.server.util;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRecreationException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 
 public final class OidUtils {
@@ -64,13 +65,19 @@ public final class OidUtils {
         }
 
         // TODO: the logic to figure out which PersistenceSession API to call should be pushed down into PersistenceSession itself.
+        final PersistenceSession persistenceSession = resourceContext.getPersistenceSession();
+
         if(spec.containsFacet(ViewModelFacet.class)) {
-            if(!rootOid.getIdentifier().startsWith(OidMarshaller.VIEWMODEL_INDICATOR)) {
-                // TODO: this bodge to ensure that the "*" (view model indicator) is probably not required; but leaving it in until have better test coverage
-                rootOid = RootOidDefault.create(rootOid.getObjectSpecId(), OidMarshaller.VIEWMODEL_INDICATOR + rootOid.getIdentifier());
+
+            // this is a hack; the RO viewer when rendering the URL for the view model loses the "view model" indicator
+            // ("*") from the specId, meaning that the marshalling logic above in RootOidDefault.deString() creates an
+            // oid in the wrong state.  The code below checks for this and recreates the oid with the current state of 'view model'
+            if(!rootOid.isViewModel()) {
+                rootOid = new RootOidDefault(rootOid.getObjectSpecId(), rootOid.getIdentifier(), Oid.State.VIEWMODEL);
             }
+
             try {
-                return resourceContext.getPersistenceSession().getAdapterManager().adapterFor(rootOid);
+                return persistenceSession.getAdapterManager().adapterFor(rootOid);
             } catch(final ObjectNotFoundException ex) {
                 return null;
             } catch(final PojoRecreationException ex) {
@@ -78,7 +85,7 @@ public final class OidUtils {
             }
         } else {
             try {
-                ObjectAdapter objectAdapter = resourceContext.getPersistenceSession().loadObject(rootOid);
+                ObjectAdapter objectAdapter = persistenceSession.loadObject(rootOid);
                 return objectAdapter.isTransient() ? null : objectAdapter;
             } catch(final ObjectNotFoundException ex) {
                 return null;
