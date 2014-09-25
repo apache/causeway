@@ -24,7 +24,7 @@
       lang="en">
     <head>
         <wicket:link>
-            <link href="ExceptionStackTracePanel.css" rel="stylesheet" type="text/css"/>
+            <!--<link href="ExceptionStackTracePanel.css" rel="stylesheet" type="text/css"/>-->
         </wicket:link>
     </head>
     <body>
@@ -32,9 +32,9 @@
             <div class="exceptionStackTracePanel">
                 <div class="errorInfo clear">
                     <span wicket:id="mainMessage" class="mainMessage">[main message text]</span>
-                    <div class="errorDetail" wicket:id="exceptionDetail">
-                        <div class="heading"><span>Show detail</span></div>
-                        <div class="content">
+                    <div class="errorDetail panel panel-default" wicket:id="exceptionDetail">
+                        <div class="heading panel-heading"><span class="panel-title">Show detail</span></div>
+                        <div class="content panel-body">
                             <div class="exceptionStackTrace">
                                 <h3>Stack trace:</h3>
                                 <ul>
