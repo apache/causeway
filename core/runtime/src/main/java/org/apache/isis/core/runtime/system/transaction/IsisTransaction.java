@@ -19,30 +19,22 @@
 
 package org.apache.isis.core.runtime.system.transaction;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-
 import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
-
+import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
@@ -51,16 +43,11 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.Command2;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
-import org.apache.isis.applib.services.publish.EventMetadata;
-import org.apache.isis.applib.services.publish.EventPayload;
-import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
-import org.apache.isis.applib.services.publish.EventPayloadForObjectChanged;
-import org.apache.isis.applib.services.publish.EventSerializer;
-import org.apache.isis.applib.services.publish.EventType;
-import org.apache.isis.applib.services.publish.ObjectStringifier;
-import org.apache.isis.applib.services.publish.PublishingService;
+import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+import org.apache.isis.applib.services.publish.*;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -75,6 +62,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInvocationFacet.CurrentInvocation;
+import org.apache.isis.core.metamodel.facets.actions.interaction.CommandUtil;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -83,16 +71,17 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext.TransactionS
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.facets.actions.interaction.CommandUtil;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
+import org.apache.isis.core.runtime.persistence.PersistenceConstants;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.*;
 import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 /**
  * Used by the {@link IsisTransactionManager} to captures a set of changes to be
@@ -108,6 +97,13 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
  */
 public class IsisTransaction implements TransactionScopedComponent {
 
+
+    public static final Predicate<ObjectAdapter> IS_COMMAND = new Predicate<ObjectAdapter>() {
+        @Override
+        public boolean apply(ObjectAdapter input) {
+            return Command.class.isAssignableFrom(input.getSpecification().getCorrespondingClass());
+        }
+    };
 
     public static enum State {
         /**
@@ -295,11 +291,6 @@ public class IsisTransaction implements TransactionScopedComponent {
         final PublishingService publishingService = servicesInjector.lookupService(PublishingService.class);
         if(publishingService == null) {
             return null;
-        }
-
-        EventSerializer eventSerializer = servicesInjector.lookupService(EventSerializer.class);
-        if(eventSerializer == null) {
-            eventSerializer = newSimpleEventSerializer();
         }
 
         PublishedObject.PayloadFactory objectPayloadFactory = servicesInjector.lookupService(PublishedObject.PayloadFactory.class);
@@ -723,7 +714,10 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
 
         try {
-            preCommitServices();
+            final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties = getChangedObjectProperties();
+
+            ensureAnySafeSemanticsHonoured(changedObjectProperties);
+            preCommitServices(changedObjectProperties);
         } catch (final RuntimeException ex) {
             setAbortCause(new IsisTransactionManagerException(ex));
             clearCommandServiceIfConfigured();
@@ -731,9 +725,69 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
+    private void ensureAnySafeSemanticsHonoured(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
+        final CommandContext commandContext = getServiceOrNull(CommandContext.class);
 
-    private void preCommitServices() {
-        doAudit(getChangedObjectProperties());
+        // playing it safe, but the following guards are almost certainly not necessary.
+        if (commandContext == null) {
+            return;
+        }
+        final Command command = commandContext.getCommand();
+        if (!(command instanceof Command2)) {
+            return;
+        }
+        final Command2 command2 = (Command2) command;
+        final ActionInteractionEvent<?> event = command2.getActionInteractionEvent();
+        if (event == null) {
+            return;
+        }
+        final ActionSemantics.Of actionSemantics = event.getActionSemantics();
+        if(actionSemantics == null) {
+            return;
+        }
+        if (!actionSemantics.isSafe()) {
+            return;
+        }
+
+        final Set<ObjectAdapter> changedAdapters = findChangedAdapters(changedObjectProperties);
+        if(!changedAdapters.isEmpty()) {
+            final String msg = "Action '" + event.getIdentifier().toFullIdentityString() + "'" +
+                    " (with safe semantics)" +
+                    " caused " + changedAdapters.size() + " object" + (changedAdapters.size() != 1 ? "s" : "") +
+                    " to be modified";
+            LOG.error(msg);
+            for (ObjectAdapter changedAdapter : changedAdapters) {
+                final StringBuilder builder = new StringBuilder("  > ")
+                        .append(changedAdapter.getSpecification().getFullIdentifier())
+                        .append(": ");
+                if(!changedAdapter.isDestroyed()) {
+                    builder.append(changedAdapter.titleString(null));
+                } else {
+                    builder.append("(deleted object)");
+                }
+                LOG.error(builder.toString());
+            }
+
+            final boolean enforceSafeSemantics = IsisContext.getConfiguration().getBoolean(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, PersistenceConstants.ENFORCE_SAFE_SEMANTICS_DEFAULT);
+            if(enforceSafeSemantics) {
+                throw new RecoverableException(msg);
+            }
+        }
+    }
+
+    private static Set<ObjectAdapter> findChangedAdapters(
+            final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
+        return Sets.newHashSet(
+                Iterables.filter(
+                        Iterables.transform(
+                                changedObjectProperties,
+                                AdapterAndProperty.Functions.GET_ADAPTER),
+                        Predicates.not(IS_COMMAND)));
+    }
+
+
+    private void preCommitServices(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties1) {
+        doAudit(changedObjectProperties1);
         
         final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
         final Timestamp endTimestamp = Clock.getTimeAsJavaSqlTimestamp();
@@ -1025,6 +1079,20 @@ public class IsisTransaction implements TransactionScopedComponent {
             ObjectAdapter referencedAdapter = property.get(objectAdapter);
             return referencedAdapter == null ? null : referencedAdapter.getObject();
         }
+
+        static class Functions {
+            private Functions(){}
+
+            static final Function<Entry<AdapterAndProperty, PreAndPostValues>, ObjectAdapter> GET_ADAPTER = new Function<Entry<AdapterAndProperty, PreAndPostValues>, ObjectAdapter>() {
+                @Override
+                public ObjectAdapter apply(Entry<AdapterAndProperty, PreAndPostValues> input) {
+                    final AdapterAndProperty aap = input.getKey();
+                    return aap.getAdapter();
+                }
+            };
+
+        }
+
     }
 
     
@@ -1033,14 +1101,16 @@ public class IsisTransaction implements TransactionScopedComponent {
     ////////////////////////////////////////////////////////////////////////
 
     public static class PreAndPostValues {
-        
-        private final static Predicate<Entry<?, PreAndPostValues>> CHANGED = new Predicate<Entry<?, PreAndPostValues>>(){
-            @Override
-            public boolean apply(Entry<?, PreAndPostValues> input) {
-                final PreAndPostValues papv = input.getValue();
-                return papv.differ();
-            }};
-            
+
+        static class Predicates {
+            final static Predicate<Entry<?, PreAndPostValues>> CHANGED = new Predicate<Entry<?, PreAndPostValues>>(){
+                @Override
+                public boolean apply(Entry<?, PreAndPostValues> input) {
+                    final PreAndPostValues papv = input.getValue();
+                    return papv.differ();
+                }};
+        }
+
         private final Object pre;
         /**
          * Eagerly calculated because it could be that the object referenced ends up being deleted by the time that the xactn completes.
@@ -1199,7 +1269,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     private Set<Entry<AdapterAndProperty, PreAndPostValues>> getChangedObjectProperties() {
         updatePostValues(changedObjectProperties.entrySet());
 
-        return Collections.unmodifiableSet(Sets.filter(changedObjectProperties.entrySet(), PreAndPostValues.CHANGED));
+        return Collections.unmodifiableSet(Sets.filter(changedObjectProperties.entrySet(), PreAndPostValues.Predicates.CHANGED));
     }
 
     private static void updatePostValues(Set<Entry<AdapterAndProperty, PreAndPostValues>> entrySet) {

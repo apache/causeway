@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.eventbus.*;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 
 public class InteractionHelper {
@@ -74,6 +75,13 @@ public class InteractionHelper {
                 final Identifier identifier = identified.getIdentifier();
                 event = newActionInteractionEvent(eventType, identifier, source, arguments);
             }
+
+            if(identified instanceof ObjectAction) {
+                // should always be the case...
+                final ObjectAction objectAction = (ObjectAction) identified;
+                event.setActionSemantics(objectAction.getSemantics());
+            }
+
             event.setPhase(phase);
             getEventBusService().post(event);
             return event;

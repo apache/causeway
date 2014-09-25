@@ -50,7 +50,7 @@ import org.apache.isis.core.runtime.system.DeploymentType;
  * be:
  * 
  * <pre>
- * &amp;lt:userName&gt; [:&lt;role&gt;[|&lt;role&gt;]...], &lt;userName&gt;...
+ * &lt;:userName&gt; [:&lt;role&gt;[|&lt;role&gt;]...], &lt;userName&gt;...
  * </pre>
  */
 public class ExplorationAuthenticator extends AuthenticatorAbstractForDfltRuntime {

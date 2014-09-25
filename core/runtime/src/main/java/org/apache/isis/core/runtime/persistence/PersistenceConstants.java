@@ -29,6 +29,13 @@ import org.apache.isis.core.runtime.system.persistence.ObjectFactory;
 public final class PersistenceConstants {
 
 
+    public static final String ENFORCE_SAFE_SEMANTICS = "isis.persistor.enforceSafeSemantics";
+    /**
+     * Default is <code>false</code> only for backward compatibility (to avoid lots of breakages in existing code);
+     * in future might change to <code>true</code>.
+     */
+    public static final boolean ENFORCE_SAFE_SEMANTICS_DEFAULT = false;
+
     /**
      * Default implementation to use as {@link ObjectFactory}.
      */

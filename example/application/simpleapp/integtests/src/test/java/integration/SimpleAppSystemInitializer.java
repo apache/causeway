@@ -18,6 +18,7 @@ package integration;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
+import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
 
@@ -59,6 +60,10 @@ public class SimpleAppSystemInitializer {
 
         private static IsisConfiguration testConfiguration() {
             final IsisConfigurationForJdoIntegTests testConfiguration = new IsisConfigurationForJdoIntegTests();
+
+            // enable stricter checking
+            testConfiguration.put(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, "true");
+
             testConfiguration.addRegisterEntitiesPackagePrefix("dom");
             return testConfiguration;
         }

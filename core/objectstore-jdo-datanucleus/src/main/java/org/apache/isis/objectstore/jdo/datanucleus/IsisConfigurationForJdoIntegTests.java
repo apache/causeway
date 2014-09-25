@@ -26,10 +26,11 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
 public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault {
-    
+
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(IsisConfigurationForJdoIntegTests.class);
 
@@ -76,6 +77,8 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
 
         // automatically install any fixtures that might have been registered
         add(DataNucleusObjectStore.INSTALL_FIXTURES_KEY , "true");
+
+        add(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, ""+PersistenceConstants.ENFORCE_SAFE_SEMANTICS_DEFAULT);
     }
 
     public final IsisConfigurationForJdoIntegTests addDataNucleusProperty(final String key, final String value) {

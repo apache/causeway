@@ -84,6 +84,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
         public void setUp() throws Exception {
             final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
             toDoItem = wrap(all.get(0));
+            nextTransaction();
 
             dueBy = toDoItem.getDueBy();
         }

@@ -66,6 +66,7 @@ public class ToDoItemsIntegTest extends AbstractToDoIntegTest {
 
             // when
             toDoItem.completed();
+            nextTransaction();
 
             // then
             assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(notYetCompletedSize-1));
@@ -73,6 +74,7 @@ public class ToDoItemsIntegTest extends AbstractToDoIntegTest {
 
             // and when
             toDoItem.notYetCompleted();
+            nextTransaction();
 
             // then
             assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(notYetCompletedSize));
@@ -92,20 +94,24 @@ public class ToDoItemsIntegTest extends AbstractToDoIntegTest {
 
             // given
             int size = wrap(toDoItems).notYetComplete().size();
+            nextTransaction();
 
             // when
             final ToDoItem newToDo = toDoItems.newToDo("new todo", ToDoItem.Category.Professional, ToDoItem.Subcategory.OpenSource, null, null);
+            nextTransaction();
 
             // then
             assertThat(newToDo.getDescription(), is("new todo"));
             assertThat(newToDo.getCategory(), is(ToDoItem.Category.Professional));
-            assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(size+1));
+            assertThat(wrap(toDoItems).notYetComplete().size(), is(size+1));
+            nextTransaction();
 
             // when
             newToDo.delete();
+            nextTransaction();
 
             // then
-            assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(size));
+            assertThat(wrap(toDoItems).notYetComplete().size(), is(size));
         }
 
     }

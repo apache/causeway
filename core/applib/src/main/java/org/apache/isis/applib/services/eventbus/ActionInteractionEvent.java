@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.util.ObjectContracts;
 
@@ -91,6 +92,22 @@ public abstract class ActionInteractionEvent<S> extends AbstractInteractionEvent
     public void setCommand(Command command) {
         this.command = command;
     }
+    //endregion
+
+
+    //region > actionSemantics
+    private ActionSemantics.Of actionSemantics;
+    public ActionSemantics.Of getActionSemantics() {
+        return actionSemantics;
+    }
+
+    /**
+     * Not API - set by the framework.
+     */
+    public void setActionSemantics(ActionSemantics.Of actionSemantics) {
+        this.actionSemantics = actionSemantics;
+    }
+
     //endregion
 
     //region > arguments
