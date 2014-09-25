@@ -20,16 +20,14 @@ import java.sql.Timestamp;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import com.google.common.collect.Maps;
-
 import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.command.spi.CommandService;
+import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public class CommandDefault implements Command {
+public class CommandDefault implements Command2 {
 
     public CommandDefault() {
         setExecutor(Executor.OTHER);
@@ -182,6 +180,23 @@ public class CommandDefault implements Command {
         this.user = user;
     }
 
+
+    // //////////////////////////////////////
+    // actionInteractionEvent (property)
+    // //////////////////////////////////////
+
+    private ActionInteractionEvent actionInteractionEvent;
+    @Override
+    public ActionInteractionEvent<?> getActionInteractionEvent() {
+        return actionInteractionEvent;
+    }
+
+    @Override
+    public void setActionInteractionEvent(ActionInteractionEvent<?> event) {
+        this.actionInteractionEvent = event;
+    }
+
+
     // //////////////////////////////////////
     // executor (property)
     // //////////////////////////////////////
@@ -220,7 +235,7 @@ public class CommandDefault implements Command {
         this.executionType = executionType;
     }
 
-    
+
     // //////////////////////////////////////
     // parent (property)
     // //////////////////////////////////////

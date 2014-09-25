@@ -17,12 +17,10 @@
 package org.apache.isis.applib.services.command;
 
 import java.sql.Timestamp;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.applib.annotation.Disabled;
-import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
@@ -31,7 +29,7 @@ import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.command.spi.CommandService;
+import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 
 public interface Command extends HasTransactionId {
 
@@ -208,9 +206,31 @@ public interface Command extends HasTransactionId {
      */
     public void setExecuteIn(final ExecuteIn executeIn);
 
-    
 
-    
+    // //////////////////////////////////////
+    // actionInteractionEvent (property)
+    // //////////////////////////////////////
+
+    /**
+     * The corresponding {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}.
+     *
+     * <p>
+     *     Note that the {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent} itself is mutable, 
+     *     as its {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent#getPhase() phase} changes from
+     *     {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTING executing} to
+     *     {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTED executed}.  The
+     *     event returned from this method will always be in one or other of these phases.
+     * </p>
+     * @return
+     */
+    ActionInteractionEvent<?> getActionInteractionEvent();
+
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     */
+    void setActionInteractionEvent(ActionInteractionEvent<?> event);
+
+
     // //////////////////////////////////////
     // executor (property)
     // //////////////////////////////////////

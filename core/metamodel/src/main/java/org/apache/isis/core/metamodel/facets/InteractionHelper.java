@@ -25,6 +25,7 @@ import java.util.Arrays;
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.Command2;
 import org.apache.isis.applib.services.eventbus.*;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -62,6 +63,10 @@ public class InteractionHelper {
                 event.setArguments(Arrays.asList(arguments));
                 if(phase.isExecutingOrLater()) {
                     event.setCommand(command);
+                    if(command != null && command instanceof Command2) {
+                        final Command2 command2 = (Command2) command;
+                        command2.setActionInteractionEvent(event);
+                    }
                 }
             } else {
                 final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
