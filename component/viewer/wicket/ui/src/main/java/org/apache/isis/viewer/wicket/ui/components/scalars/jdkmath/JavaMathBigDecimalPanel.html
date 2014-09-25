@@ -24,16 +24,18 @@
       lang="en">
     <body>
         <wicket:panel>
-            <div class="javaMathBigDecimalPanel scalarNameAndValueComponentType row">
-                <span wicket:id="scalarName" class="scalarName col-lg-3">[Label text]</span>
-                <span class="scalarValue col-lg-9">
-                    <label wicket:id="scalarIfRegular">
-                        <input type="text" name="scalarValue" class="form-control" wicket:id="scalarValue" />
-                        <span wicket:id="feedback" class="help-block"></span>
-                        <span wicket:id="additionalLinks"></span>
-                    </label>
-                </span>
-                <input type="text" wicket:id="scalarIfCompact"/>
+            <div class="javaMathBigDecimalPanel scalarNameAndValueComponentType">
+                <div class="row">
+                    <span wicket:id="scalarName" class="scalarName col-lg-3">[Label text]</span>
+                    <span class="scalarValue col-lg-9">
+                        <label wicket:id="scalarIfRegular">
+                            <input type="text" name="scalarValue" class="form-control" wicket:id="scalarValue" />
+                            <span wicket:id="feedback" class="help-block"></span>
+                            <span wicket:id="additionalLinks"></span>
+                        </label>
+                    </span>
+                </div>
+                <input type="text" wicket:id="scalarIfCompact" class="form-control"/>
             </div>
         </wicket:panel>
     </body>

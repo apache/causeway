@@ -128,7 +128,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         }
         
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(entityLink));
-        labelIfRegular.add(scalarName);
+        addOrReplace(scalarName);
         
         addOrReplace(labelIfRegular);
         

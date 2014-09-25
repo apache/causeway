@@ -24,15 +24,17 @@
       lang="en">
     <body>
         <wicket:panel>
-            <div class="characterPanel scalarNameAndValueComponentType row">
-                <span wicket:id="scalarName" class="scalarName col-lg-3">[Label text]</span>
-                <span class="scalarValue col-lg-9">
-                    <label wicket:id="scalarIfRegular">
-                        <input type="text" name="scalarValue" class="form-control" wicket:id="scalarValue" />
-                        <span wicket:id="feedback" class="help-block"></span>
-                        <span wicket:id="additionalLinks"></span>
-                    </label>
-                </span>
+            <div class="characterPanel scalarNameAndValueComponentType">
+                <div class="row">
+                    <span wicket:id="scalarName" class="scalarName col-lg-3">[Label text]</span>
+                    <span class="scalarValue col-lg-9">
+                        <label wicket:id="scalarIfRegular">
+                            <input type="text" name="scalarValue" class="form-control" wicket:id="scalarValue" />
+                            <span wicket:id="feedback" class="help-block"></span>
+                            <span wicket:id="additionalLinks"></span>
+                        </label>
+                    </span>
+                </div>
                 <label wicket:id="scalarIfCompact"></label>
             </div>
         </wicket:panel>

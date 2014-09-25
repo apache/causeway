@@ -24,25 +24,27 @@
       lang="en">
     <body>
         <wicket:panel>
-            <div class="referencePanel scalarNameAndValueComponentType row">
-                <span wicket:id="scalarName" class="scalarName col-lg-3">[Label text]</span>
-                <span class="scalarValue col-lg-9">
-                    <label wicket:id="scalarIfRegular" class="scalarIfRegular">
-                        <span class="entityLink">
-                            <div class="entityLinkSelect2Panel entityLinkComponentType">
-                                <div class="wrapper">
-                                    <span class="autoCompletePlaceholder">
-                                        <span wicket:id="entityLink">link or drop down</span>
-                                        <span wicket:id="entityIconAndTitle">[icon and title]</span>
-                                    </span>
-                                    <div class="clearfix"></div>
+            <div class="referencePanel scalarNameAndValueComponentType">
+                <div class="row">
+                    <span wicket:id="scalarName" class="scalarName col-lg-3">[Label text]</span>
+                    <span class="scalarValue col-lg-9">
+                        <label wicket:id="scalarIfRegular" class="scalarIfRegular">
+                            <span class="entityLink">
+                                <div class="entityLinkSelect2Panel entityLinkComponentType">
+                                    <div class="wrapper">
+                                        <span class="autoCompletePlaceholder">
+                                            <span wicket:id="entityLink">link or drop down</span>
+                                            <span wicket:id="entityIconAndTitle">[icon and title]</span>
+                                        </span>
+                                        <div class="clearfix"></div>
+                                    </div>
                                 </div>
-                            </div>
-                        </span>
-                        <span wicket:id="feedback" class="help-block"></span>
-                        <span wicket:id="additionalLinks"></span>
-                    </label>
-                </span>
+                            </span>
+                            <span wicket:id="feedback" class="help-block"></span>
+                            <span wicket:id="additionalLinks"></span>
+                        </label>
+                    </span>
+                </div>
                 <label wicket:id="scalarIfCompact" class="scalarIfCompact">
                     <span class="scalarValue">
                         <span class="entityLink" wicket:id="entityLink">[property or parameter value]</span>

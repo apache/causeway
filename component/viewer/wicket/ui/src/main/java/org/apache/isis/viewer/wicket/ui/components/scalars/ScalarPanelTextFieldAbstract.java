@@ -84,15 +84,15 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         addStandardSemantics();
         addSemantics();
 
-        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(textField));
-
-        addOrReplace(scalarName);
-
         final FormComponentLabel labelIfRegular = createFormComponentLabel();
         addOrReplace(labelIfRegular);
         if(getModel().isRequired()) {
             labelIfRegular.add(new CssClassAppender("mandatory"));
         }
+
+        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(textField));
+
+        addOrReplace(scalarName);
 
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {

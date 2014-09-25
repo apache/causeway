@@ -20,27 +20,27 @@
 <html xmlns:wicket="http://wicket.apache.org">
     <body>
         <wicket:panel>
-            <div class="isisBlobPanel scalarNameAndValueComponentType row">
-
+            <div class="isisBlobPanel scalarNameAndValueComponentType">
+                <div class="row">
                     <span wicket:id="scalarName" class="scalarName col-lg-3">[Label text]</span>
                     <span class="col-lg-9">
                         <label wicket:id="scalarIfRegular">
-                        <img class="scalarImage text-center" width="200px" wicket:id="scalarImage"/>
-                        <span class="scalarValue text-right">
+                            <img class="scalarImage text-center" width="200px" wicket:id="scalarImage"/>
+                            <span class="scalarValue text-right">
 
-                            <span class="uploadFile">
-                                <input type="file" name="scalarValue" wicket:id="scalarValue" class="form-control" />
+                                <span class="uploadFile">
+                                    <input type="file" name="scalarValue" wicket:id="scalarValue" class="form-control" />
+                                </span>
+                                <a wicket:id="scalarIfRegularClear" class="btn btn-default btn-sm"><span class="clearTitle">Clear</span></a>
+
+                                <a class="download btn btn-xs btn-default" wicket:id="scalarIfRegularDownload"><span class="downloadTitle">Download</span></a>
+                                <span class="fileName" wicket:id="fileName"></span>
                             </span>
-                            <a wicket:id="scalarIfRegularClear" class="btn btn-default btn-sm"><span class="clearTitle">Clear</span></a>
-
-                            <a class="download btn btn-xs btn-default" wicket:id="scalarIfRegularDownload"><span class="downloadTitle">Download</span></a>
-                            <span class="fileName" wicket:id="fileName"></span>
-                        </span>
-                        <span wicket:id="feedback"></span>
-                        <span wicket:id="additionalLinks"></span>
+                            <span wicket:id="feedback"></span>
+                            <span wicket:id="additionalLinks"></span>
                         </label>
                     </span>
-
+                </div>
 
                 <span wicket:id="scalarIfCompact">
                     <a wicket:id="scalarIfCompactDownload"><span class="fileName" wicket:id="fileNameIfCompact"></span></a>

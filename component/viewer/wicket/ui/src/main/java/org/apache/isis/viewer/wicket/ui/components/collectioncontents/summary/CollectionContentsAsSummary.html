@@ -17,13 +17,13 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<html>
-	<body>
-		<wicket:panel>
-			<div class="collectionContentsAsSummary">
-		        <div wicket:id="feedback"></div>
+<html xmlns:wicket="http://wicket.apache.org">
+    <body>
+        <wicket:panel>
+            <div class="collectionContentsAsSummary">
+                <div wicket:id="feedback"></div>
 
-                <table cellspacing="0">
+                <table class="table table-condensed table-bordered table-striped">
                     <tr wicket:id="repeatingSummary">
                         <td class="propertyNameCell">
                             <span class="propertyName" wicket:id="propertyName">[propertyName]</span>
@@ -31,16 +31,16 @@
                         <td class="aggregatesCell">
                             <table cellspacing="0">
                                 <tr>
-                                    <td class="aggregateName">Sum:</td><td><input class="numberValue" type="text" disabled="true" wicket:id="sum"></input></td>
-                                    <td class="aggregateName">Avg:</td><td><input class="numberValue" type="text" disabled="true" wicket:id="avg"></input></td>
-                                    <td class="aggregateName">Min:</td><td><input class="numberValue" type="text" disabled="true" wicket:id="min"></input></td>
-                                    <td class="aggregateName">Max:</td><td><input class="numberValue" type="text" disabled="true" wicket:id="max"></input></td>
+                                    <td class="aggregateName">Sum:</td><td><input class="numberValue form-control" type="text" disabled="true" wicket:id="sum"/></td>
+                                    <td class="aggregateName">Avg:</td><td><input class="numberValue form-control" type="text" disabled="true" wicket:id="avg"/></td>
+                                    <td class="aggregateName">Min:</td><td><input class="numberValue form-control" type="text" disabled="true" wicket:id="min"/></td>
+                                    <td class="aggregateName">Max:</td><td><input class="numberValue form-control" type="text" disabled="true" wicket:id="max"/></td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
                 </table>
-			</div>
-		</wicket:panel>
-	</body>
+            </div>
+        </wicket:panel>
+    </body>
 </html>
