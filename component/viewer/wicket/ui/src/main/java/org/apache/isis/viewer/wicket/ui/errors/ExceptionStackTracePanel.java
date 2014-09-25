@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
 public class ExceptionStackTracePanel extends Panel {
@@ -69,10 +68,6 @@ public class ExceptionStackTracePanel extends Panel {
             container.add(new StackTraceListView(ID_STACK_TRACE_ELEMENT, ExceptionStackTracePanel.ID_LINE, exceptionModel.getStackTrace()));
             add(container);
         }
-    }
-
-    public void renderHead(final IHeaderResponse response) {
-        PanelUtil.renderHead(response, this.getClass());
     }
 
 }
