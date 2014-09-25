@@ -19,16 +19,11 @@ package org.apache.isis.core.metamodel.specloader;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-
 import com.google.common.collect.Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 
@@ -44,7 +39,7 @@ public class ServiceInitializer {
 
     // //////////////////////////////////////
 
-    public void validate(final IsisConfiguration configuration, DomainObjectContainer container, final List<Object> services) {
+    public void validate(final IsisConfiguration configuration, final List<Object> services) {
         
         this.props = configuration.asMap();
         
@@ -111,7 +106,7 @@ public class ServiceInitializer {
         for (final Map.Entry<Object, Method> entry : postConstructMethodsByService.entrySet()) {
             final Object service = entry.getKey();
             final Method method = entry.getValue();
-            
+
             LOG.info("... calling @PostConstruct method: " + service.getClass().getName() + ": " + method.getName());
             
             final int numParams = method.getParameterTypes().length;

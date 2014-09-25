@@ -102,7 +102,7 @@ public class ServiceInitializerTest {
     public void postConstruct() {
         final DomainServiceWithPostConstruct d1 = new DomainServiceWithPostConstruct();
         final DomainServiceWithPostConstructWithProperties d2 = new DomainServiceWithPostConstructWithProperties();
-        serviceInitializer.validate(configuration, container, listOf(d1, d2));
+        serviceInitializer.validate(configuration, listOf(d1, d2));
         serviceInitializer.postConstruct();
         assertThat(d1.called, is(true));
         assertThat(d2.called, is(true));
@@ -122,7 +122,7 @@ public class ServiceInitializerTest {
     public void preDestroy() {
         final DomainServiceWithPreDestroy d1 = new DomainServiceWithPreDestroy();
         final DomainServiceWithPreDestroy d2 = new DomainServiceWithPreDestroy();
-        serviceInitializer.validate(configuration, container, listOf(d1, d2));
+        serviceInitializer.validate(configuration, listOf(d1, d2));
         serviceInitializer.preDestroy();
         assertThat(d1.called, is(true));
         assertThat(d2.called, is(true));
@@ -146,7 +146,7 @@ public class ServiceInitializerTest {
         expectedException.expectMessage(
                 containsString(
                 "Found more than one @PostConstruct method; service is: org.apache.isis.core.metamodel.specloader.ServiceInitializerTest$DomainServiceWithMultiplePostConstruct, found"));
-        serviceInitializer.validate(configuration, container, listOf(d1));
+        serviceInitializer.validate(configuration, listOf(d1));
     }
 
     public static class DomainServiceWithMultiplePreDestroy {
@@ -167,7 +167,7 @@ public class ServiceInitializerTest {
         expectedException.expectMessage(
                 containsString(
                 "Found more than one @PreDestroy method; service is: org.apache.isis.core.metamodel.specloader.ServiceInitializerTest$DomainServiceWithMultiplePreDestroy, found"));
-        serviceInitializer.validate(configuration, container, listOf(d1));
+        serviceInitializer.validate(configuration, listOf(d1));
     }
 
     public static class DomainServiceWithPostConstructOneArgWrongType {
@@ -183,7 +183,7 @@ public class ServiceInitializerTest {
         final DomainServiceWithPostConstructOneArgWrongType d1 = new DomainServiceWithPostConstructOneArgWrongType();
         expectedException.expectMessage(
                 "@PostConstruct method must be no-arg or 1-arg accepting java.util.Map; method is: org.apache.isis.core.metamodel.specloader.ServiceInitializerTest$DomainServiceWithPostConstructOneArgWrongType#y");
-        serviceInitializer.validate(configuration, container, listOf(d1));
+        serviceInitializer.validate(configuration, listOf(d1));
     }
 
     public static class DomainServiceWithPostConstructTwoArgs {
@@ -199,7 +199,7 @@ public class ServiceInitializerTest {
         final DomainServiceWithPostConstructTwoArgs d1 = new DomainServiceWithPostConstructTwoArgs();
         expectedException.expectMessage(
                 "@PostConstruct method must be no-arg or 1-arg accepting java.util.Map; method is: org.apache.isis.core.metamodel.specloader.ServiceInitializerTest$DomainServiceWithPostConstructTwoArgs#y");
-        serviceInitializer.validate(configuration, container, listOf(d1));
+        serviceInitializer.validate(configuration, listOf(d1));
     }
 
     public static class DomainServiceWithPreDestroyOneArgs {
@@ -216,7 +216,7 @@ public class ServiceInitializerTest {
         final DomainServiceWithPreDestroyOneArgs d1 = new DomainServiceWithPreDestroyOneArgs();
         expectedException.expectMessage(
                 "@PreDestroy method must be no-arg; method is: org.apache.isis.core.metamodel.specloader.ServiceInitializerTest$DomainServiceWithPreDestroyOneArgs#y");
-        serviceInitializer.validate(configuration, container, listOf(d1));
+        serviceInitializer.validate(configuration, listOf(d1));
     }
 
 

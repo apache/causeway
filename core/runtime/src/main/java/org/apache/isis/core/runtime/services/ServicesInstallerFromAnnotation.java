@@ -99,16 +99,22 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
         if(initialized) {
             return;
         }
-        if(packagePrefixes != null) {
-            return;
-        }
 
+        if(getConfiguration() == null) {
+            throw new IllegalStateException("No IsisConfiguration injected - aborting");
+        }
         try {
-            String packagePrefixes = getConfiguration().getString(PACKAGE_PREFIX_KEY);
-            if(Strings.isNullOrEmpty(packagePrefixes)) {
-                throw new IllegalStateException("Could not locate '" + PACKAGE_PREFIX_KEY + "' key in property files - aborting");
+
+            // lazily copy over the configuration to the instantiator
+            serviceInstantiator.setConfiguration(getConfiguration());
+
+            if(packagePrefixes == null) {
+                String packagePrefixes = getConfiguration().getString(PACKAGE_PREFIX_KEY);
+                if(Strings.isNullOrEmpty(packagePrefixes)) {
+                    throw new IllegalStateException("Could not locate '" + PACKAGE_PREFIX_KEY + "' key in property files - aborting");
+                }
+                this.packagePrefixes = packagePrefixes + PACKAGE_PREFIX_STANDARD;
             }
-            this.packagePrefixes = packagePrefixes + PACKAGE_PREFIX_STANDARD;
 
         } finally {
             initialized = true;

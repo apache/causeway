@@ -19,11 +19,8 @@
 package org.apache.isis.applib.services.scratchpad;
 
 import java.util.Map;
-
 import javax.enterprise.context.RequestScoped;
-
 import com.google.common.collect.Maps;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 

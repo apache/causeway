@@ -199,9 +199,12 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                 throw new IllegalArgumentException("Specify packagePrefixes to search for @DomainService-annotated services");
             }
             final ServicesInstallerFromAnnotation installer = new ServicesInstallerFromAnnotation();
+            installer.setConfiguration(configuration);
             installer.withPackagePrefixes(packagePrefixes);
             final List<Object> serviceList = installer.getServices(null);
             this.services.addAll(serviceList);
+
+            installer.init();
             return this;
         }
 

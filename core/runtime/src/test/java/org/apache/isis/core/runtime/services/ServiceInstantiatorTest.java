@@ -16,23 +16,16 @@
  */
 package org.apache.isis.core.runtime.services;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
-
 import javax.enterprise.context.RequestScoped;
-
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.services.memento.MementoService.Memento;
-import org.apache.isis.core.commons.matchers.IsisMatchers;
-import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ServiceInstantiatorTest {
 
@@ -41,6 +34,7 @@ public class ServiceInstantiatorTest {
     @Before
     public void setUp() throws Exception {
         serviceInstantiator = new ServiceInstantiator();
+        serviceInstantiator.setConfiguration(new IsisConfigurationDefault());
     }
     
     @Test

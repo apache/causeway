@@ -54,6 +54,7 @@ import org.apache.isis.core.runtime.system.internal.SplashWindow;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 
@@ -171,22 +172,22 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
 
         // validate 
         final ServiceInitializer serviceInitializer = new ServiceInitializer();
-        serviceInitializer.validate(getConfiguration(), container, services);
+        serviceInitializer.validate(getConfiguration(), services);
 
         // call @PostConstruct (in a session)
         IsisContext.openSession(new InitialisationSession());
         try {
-            IsisContext.getTransactionManager().startTransaction();
+            getTransactionManager().startTransaction();
             try {
                 serviceInitializer.postConstruct();
                 
                 return serviceInitializer;
             } catch(RuntimeException ex) {
-                IsisContext.getTransactionManager().getTransaction().setAbortCause(new IsisTransactionManagerException(ex));
+                getTransactionManager().getTransaction().setAbortCause(new IsisTransactionManagerException(ex));
                 return serviceInitializer;
             } finally {
                 // will commit or abort
-                IsisContext.getTransactionManager().endTransaction();
+                getTransactionManager().endTransaction();
             }
         } finally {
             IsisContext.closeSession();
@@ -211,15 +212,15 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
         // call @PostDestroy (in a session)
         IsisContext.openSession(new InitialisationSession());
         try {
-            IsisContext.getTransactionManager().startTransaction();
+            getTransactionManager().startTransaction();
             try {
                 serviceInitializer.preDestroy();
                 
             } catch(RuntimeException ex) {
-                IsisContext.getTransactionManager().getTransaction().setAbortCause(new IsisTransactionManagerException(ex));
+                getTransactionManager().getTransaction().setAbortCause(new IsisTransactionManagerException(ex));
             } finally {
                 // will commit or abort
-                IsisContext.getTransactionManager().endTransaction();
+                getTransactionManager().endTransaction();
             }
         } finally {
             IsisContext.closeSession();
@@ -360,7 +361,7 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
     * {@link IsisConfiguration} using
     * {@link PersistenceConstants#DOMAIN_OBJECT_CONTAINER_CLASS_NAME}. If no
     * implementation is specified, then defaults to
-    * {@value PersistenceConstants#DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT}.
+    * {@link PersistenceConstants#DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT}.
      */
     protected DomainObjectContainer obtainContainer() {
         return createContainer(getConfiguration());
@@ -495,5 +496,10 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
             debug.appendException(e);
         }
     }
+
+    IsisTransactionManager getTransactionManager() {
+        return IsisContext.getTransactionManager();
+    }
+
 
 }

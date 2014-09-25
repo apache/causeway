@@ -19,19 +19,28 @@
 
 package org.apache.isis.core.runtime.services;
 
-import java.lang.reflect.Method;
-
 import javassist.util.proxy.MethodFilter;
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Set;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
-
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceCreationClassException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
+import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.JavassistEnhanced;
 
 /**
@@ -58,12 +67,34 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.JavassistEnhan
  */
 public final class ServiceInstantiator {
 
+    private final static Logger LOG = LoggerFactory.getLogger(ServiceInstantiator.class);
+
+
     public ServiceInstantiator() {
     }
 
     // //////////////////////////////////////
+
+    /**
+     * initially null, but checked before first use that has been set (through {@link #setConfiguration(org.apache.isis.core.commons.config.IsisConfiguration)}).
+     */
+    private Map<String, String> props;
+
+    public void setConfiguration(IsisConfiguration configuration) {
+        this.props = configuration.asMap();
+    }
+
+    private void ensureInitialized() {
+        if(props == null) {
+            throw new IllegalStateException("IsisConfiguration properties not set on ServiceInstantiator prior to first-use");
+        }
+    }
+
+
+    // //////////////////////////////////////
     
     public <T> T createInstance(final Class<T> cls) {
+        ensureInitialized();
         if(cls.isAnnotationPresent(RequestScoped.class)) {
             return instantiateRequestScopedProxy(cls);
         } else {
@@ -104,11 +135,22 @@ public final class ServiceInstantiator {
                 
                 @Override
                 public Object invoke(final Object proxied, final Method proxyMethod, final Method proxiedMethod, final Object[] args) throws Throwable {
+
+                    cacheMethodsIfNecessary(cls);
+
                     if(proxyMethod.getName().equals("__isis_startRequest")) {
                         T service = instantiate(cls);
+
+                        callPostConstructIfPresent(service);
+
                         serviceByThread.set(service);
                         return null;
                     } else if(proxyMethod.getName().equals("__isis_endRequest")) {
+
+                        final T service = serviceByThread.get();
+
+                        callPreDestroyIfPresent(service);
+
                         serviceByThread.set(null);
                         return null;
                     } else {
@@ -127,6 +169,118 @@ public final class ServiceInstantiator {
             throw new IsisException(e);
         } catch (final IllegalAccessException e) {
             throw new IsisException(e);
+        }
+    }
+
+    private Set<Class<?>> cached = Sets.newHashSet();
+    private Map<Class<?>, Method> postConstructMethodsByServiceClass = Maps.newLinkedHashMap();
+    private Map<Class<?>, Method> preDestroyMethodsByServiceClass = Maps.newLinkedHashMap();
+
+    <T> void callPostConstructIfPresent(T service) {
+
+        final Class<?> serviceClass = service.getClass();
+        final Method postConstructMethod = postConstructMethodsByServiceClass.get(serviceClass);
+        if(postConstructMethod == null) {
+            return;
+        }
+        final int numParams = postConstructMethod.getParameterTypes().length;
+
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("... calling @PostConstruct method: " + serviceClass.getName() + ": " + postConstructMethod.getName());
+        }
+        // unlike shutdown, we don't swallow exceptions; would rather fail early
+        if(numParams == 0) {
+            MethodExtensions.invoke(postConstructMethod, service);
+        } else {
+            MethodExtensions.invoke(postConstructMethod, service, new Object[]{props});
+        }
+    }
+
+    <T> void callPreDestroyIfPresent(T service) throws InvocationTargetException, IllegalAccessException {
+
+        final Class<?> serviceClass = service.getClass();
+        final Method preDestroyMethod = preDestroyMethodsByServiceClass.get(serviceClass);
+        if(preDestroyMethod == null) {
+            return;
+        }
+
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("... calling @PreDestroy method: " + serviceClass.getName() + ": " + preDestroyMethod.getName());
+        }
+        try {
+            MethodExtensions.invoke(preDestroyMethod, service);
+        } catch(Exception ex) {
+            // do nothing
+            LOG.warn("... @PreDestroy method threw exception - continuing anyway", ex);
+        }
+    }
+
+
+    private void cacheMethodsIfNecessary(Class<?> serviceClass) {
+        if(cached.contains(serviceClass)) {
+            return;
+        }
+        cacheMethods(serviceClass);
+        cached.add(serviceClass);
+    }
+
+    private void cacheMethods(Class<?> serviceClass) {
+        final Method[] methods = serviceClass.getMethods();
+
+        // @PostConstruct
+        Method postConstructMethod = null;
+        for (final Method method : methods) {
+
+            final PostConstruct postConstructAnnotation = method.getAnnotation(PostConstruct.class);
+            if (postConstructAnnotation == null) {
+                continue;
+            }
+            if (postConstructMethod != null) {
+                throw new RuntimeException("Found more than one @PostConstruct method; service is: " + serviceClass.getName() + ", found " + postConstructMethod.getName() + " and " + method.getName());
+            }
+
+            final Class<?>[] parameterTypes = method.getParameterTypes();
+            switch (parameterTypes.length) {
+                case 0:
+                    break;
+                case 1:
+                    if (Map.class != parameterTypes[0]) {
+                        throw new RuntimeException("@PostConstruct method must be no-arg or 1-arg accepting java.util.Map; method is: " + serviceClass.getName() + "#" + method.getName());
+                    }
+                    break;
+                default:
+                    throw new RuntimeException("@PostConstruct method must be no-arg or 1-arg accepting java.util.Map; method is: " + serviceClass.getName() + "#" + method.getName());
+            }
+            postConstructMethod = method;
+        }
+
+        // @PreDestroy
+        Method preDestroyMethod = null;
+        for (final Method method : methods) {
+
+            final PreDestroy preDestroyAnnotation = method.getAnnotation(PreDestroy.class);
+            if(preDestroyAnnotation == null) {
+                continue;
+            }
+            if(preDestroyMethod != null) {
+                throw new RuntimeException("Found more than one @PreDestroy method; service is: " + serviceClass.getName() + ", found " + preDestroyMethod.getName() + " and " + method.getName());
+            }
+
+            final Class<?>[] parameterTypes = method.getParameterTypes();
+            switch(parameterTypes.length) {
+                case 0:
+                    break;
+                default:
+                    throw new RuntimeException("@PreDestroy method must be no-arg; method is: " + serviceClass.getName() + "#" + method.getName());
+            }
+            preDestroyMethod = method;
+        }
+
+        if(postConstructMethod != null) {
+            postConstructMethodsByServiceClass.put(serviceClass, postConstructMethod);
+        }
+        if(preDestroyMethod != null) {
+            preDestroyMethodsByServiceClass.put(serviceClass, preDestroyMethod);
         }
     }
 

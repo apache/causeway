@@ -56,10 +56,34 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
 
     private Map<DeploymentType, List<Object>> servicesByDeploymentType = Maps.newHashMap();
 
+    public void init() {
+        initIfRequired();
+    }
+
+    private boolean initialized = false;
+
+    protected void initIfRequired() {
+        if(initialized) {
+            return;
+        }
+
+        try {
+            // lazily copy over the configuration to the instantiator
+            serviceInstantiator.setConfiguration(getConfiguration());
+
+        } finally {
+            initialized = true;
+        }
+    }
+
+
     @Override
     public List<Object> getServices(final DeploymentType deploymentType) {
 
         LOG.info("installing " + this.getClass().getName());
+
+        // rather nasty, lazily copy over the configuration to the instantiator
+        serviceInstantiator.setConfiguration(getConfiguration());
 
         List<Object> serviceList = servicesByDeploymentType.get(deploymentType);
         if(serviceList == null) {

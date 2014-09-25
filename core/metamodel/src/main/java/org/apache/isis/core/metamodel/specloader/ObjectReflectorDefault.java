@@ -19,24 +19,12 @@
 
 package org.apache.isis.core.metamodel.specloader;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import java.util.*;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
@@ -60,15 +48,7 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
-import org.apache.isis.core.metamodel.spec.FreeStandingList;
-import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationContext;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
+import org.apache.isis.core.metamodel.spec.*;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
@@ -85,6 +65,10 @@ import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverse
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
+
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 
 /**
  * Builds the meta-model.
@@ -148,9 +132,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     private final FacetProcessor facetProcessor;
 
     /**
-     * Defaulted in the constructor, so can be added to via
-     * {@link #setFacetDecorators(FacetDecoratorSet)} or
-     * {@link #addFacetDecorator(FacetDecorator)}.
+     * Initialized in the constructor.
      * 
      * <p>
      * {@link FacetDecorator}s must be added prior to {@link #init()
@@ -182,7 +164,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     private final MetaModelValidator metaModelValidator;
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
-    private final ServiceInitializer serviceInitializer = new ServiceInitializer();
 
     private boolean initialized = false;
 

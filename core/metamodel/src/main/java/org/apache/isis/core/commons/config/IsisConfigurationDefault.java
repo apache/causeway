@@ -92,35 +92,35 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     
     /**
      * Add the properties from an existing Properties object; if the key exists in the configuration then will be ignored.
-     * 
-     * @see #add(Properties, ContainsPolicy)
+     *
+     * @see #addPerPolicy(Properties, ContainsPolicy)
      * @see #put(Properties)
      */
     public void add(final Properties properties) {
-        add(properties, ContainsPolicy.IGNORE);
+        addPerPolicy(properties, ContainsPolicy.IGNORE);
     }
-    
+
     /**
      * Add the properties from an existing Properties object; if the key exists in the configuration then will be overwritten.
-     * 
+     *
      * @see #add(Properties)
-     * @see #add(Properties, ContainsPolicy)
+     * @see #addPerPolicy(Properties, ContainsPolicy)
      */
     public void put(final Properties properties) {
-        add(properties, ContainsPolicy.OVERWRITE);
+        addPerPolicy(properties, ContainsPolicy.OVERWRITE);
     }
-    
+
     /**
      * Add the properties from an existing Properties object; if the key exists in the configuration then the
      * {@link ContainsPolicy} will be applied.
-     * 
+     *
      * @see #add(Properties)
      * @see #put(Properties)
      */
-    public void add(final Properties properties, final ContainsPolicy policy) {
+    private void addPerPolicy(final Properties properties, final ContainsPolicy policy) {
         for(Object key: properties.keySet()) {
             Object value = properties.get(key);
-            add((String)key, (String)value);
+            addPerPolicy((String) key, (String) value, policy);
         }
     }
     
@@ -128,11 +128,11 @@ public class IsisConfigurationDefault implements IsisConfiguration {
      * Adds a key-value pair to this set of properties; if the key exists in the configuration then will be ignored.
      * 
      * <p>
-     * @see #add(String, String, ContainsPolicy)
+     * @see #addPerPolicy(String, String, ContainsPolicy)
      * @see #put(String, String)
      */
     public void add(final String key, final String value) {
-        add(key, value, ContainsPolicy.IGNORE);
+        addPerPolicy(key, value, ContainsPolicy.IGNORE);
     }
 
     /**
@@ -140,10 +140,10 @@ public class IsisConfigurationDefault implements IsisConfiguration {
      * 
      * <p>
      * @see #add(String, String)
-     * @see #add(String, String, ContainsPolicy)
+     * @see #addPerPolicy(String, String, ContainsPolicy)
      */
     public void put(final String key, final String value) {
-        add(key, value, ContainsPolicy.OVERWRITE);
+        addPerPolicy(key, value, ContainsPolicy.OVERWRITE);
     }
 
     /**
@@ -153,7 +153,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
      * @see #add(String, String)
      * @see #put(String, String)
      */
-    public void add(final String key, final String value, final ContainsPolicy policy) {
+    private void addPerPolicy(final String key, final String value, final ContainsPolicy policy) {
         if (value == null) {
             LOG.debug("ignoring " + key + " as value is null");
             return;
