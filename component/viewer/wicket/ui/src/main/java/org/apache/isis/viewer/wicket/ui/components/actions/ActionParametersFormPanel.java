@@ -205,7 +205,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                 @Override
                 public void onSubmit(final AjaxRequestTarget target, Form<?> form) {
                     if(actionPromptIfAny != null) {
-                        actionPromptIfAny.close(target);
+                        actionPromptIfAny.closePrompt(target);
                     }
                 }
             };

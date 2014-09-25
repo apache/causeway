@@ -217,7 +217,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             }
             
             if(actionPrompt != null) {
-                actionPrompt.close(target);
+                actionPrompt.closePrompt(target);
                 // cos will be reused next time, so mustn't cache em.
                 actionModel.clearArguments();
             }

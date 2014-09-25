@@ -117,6 +117,11 @@
             <artifactId>wicket-bootstrap-core</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>de.agilecoders.wicket</groupId>
+            <artifactId>wicket-bootstrap-extensions</artifactId>
+        </dependency>
+
 		<!-- LOGGING DEPENDENCIES - LOG4J -->
 
 		<dependency>

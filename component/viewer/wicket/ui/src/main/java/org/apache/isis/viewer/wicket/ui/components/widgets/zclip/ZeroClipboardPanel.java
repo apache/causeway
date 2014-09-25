@@ -103,7 +103,7 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
                 textField.setOutputMarkupId(true);
                 
                 simpleClipboardModalWindow.setPanel(panel, target);
-                simpleClipboardModalWindow.show(target);
+                simpleClipboardModalWindow.showPrompt(target);
                 
                 target.focusComponent(textField);
             }

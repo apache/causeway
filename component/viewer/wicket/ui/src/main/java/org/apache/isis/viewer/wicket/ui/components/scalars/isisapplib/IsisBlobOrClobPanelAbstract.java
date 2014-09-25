@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -179,7 +181,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     }
 
     private FileUploadField createFileUploadField(String componentId) {
-        final FileUploadField fileUploadField = new FileUploadField(componentId, new IModel<List<FileUpload>>() {
+        final FileUploadField fileUploadField = new BootstrapFileInputField(componentId, new IModel<List<FileUpload>>() {
     
             private static final long serialVersionUID = 1L;
     
