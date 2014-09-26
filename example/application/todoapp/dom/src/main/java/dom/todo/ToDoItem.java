@@ -37,9 +37,11 @@ import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bulk.AppliesTo;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
+import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
+import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
@@ -112,8 +114,13 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         if (isComplete()) {
             buf.append("- Completed!");
         } else {
-            if (getDueBy() != null) {
-                buf.append(" due by", getDueBy());
+            try {
+                final LocalDate dueBy = wrapperFactory.wrap(this).getDueBy();
+                if (dueBy != null) {
+                    buf.append(" due by", dueBy);
+                }
+            } catch(HiddenException ex) {
+                // ignore
             }
         }
         return buf.toString();
@@ -152,6 +159,11 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     @javax.jdo.annotations.Column(allowsNull="true")
     public LocalDate getDueBy() {
         return dueBy;
+    }
+
+    public boolean hideDueBy() {
+        final UserMemento user = container.getUser();
+        return user.hasRole("realm1:noDueBy_role");
     }
 
     public void setDueBy(final LocalDate dueBy) {
@@ -650,34 +662,34 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //region > lifecycle callbacks
 
     public void created() {
-        LOG.debug("lifecycle callback: created: " + container.titleOf(this));
+        LOG.debug("lifecycle callback: created: " + this.toString());
     }
 
     public void loaded() {
-        LOG.debug("lifecycle callback: loaded: " + container.titleOf(this));
+        LOG.debug("lifecycle callback: loaded: " + this.toString());
     }
 
     public void persisting() {
-        LOG.debug("lifecycle callback: persisting: " + container.titleOf(this));
+        LOG.debug("lifecycle callback: persisting: " + this.toString());
     }
 
     public void persisted() {
-        LOG.debug("lifecycle callback: persisted: " + container.titleOf(this));
+        LOG.debug("lifecycle callback: persisted: " + this.toString());
     }
 
     public void updating() {
-        LOG.debug("lifecycle callback: updating: " + container.titleOf(this));
+        LOG.debug("lifecycle callback: updating: " + this.toString());
     }
     public void updated() {
-        LOG.debug("lifecycle callback: updated: " + container.titleOf(this));
+        LOG.debug("lifecycle callback: updated: " + this.toString());
     }
 
     public void removing() {
-        LOG.debug("lifecycle callback: removing: " + container.titleOf(this));
+        LOG.debug("lifecycle callback: removing: " + this.toString());
     }
 
     public void removed() {
-        LOG.debug("lifecycle callback: removed: " + container.titleOf(this));
+        LOG.debug("lifecycle callback: removed: " + this.toString());
     }
     //endregion
 

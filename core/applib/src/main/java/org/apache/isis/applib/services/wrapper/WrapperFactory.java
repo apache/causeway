@@ -207,12 +207,15 @@ public interface WrapperFactory {
      * Whether the supplied object has been wrapped.
      * 
      * @param <T>
-     * @param possibleWrapper
+     * @param possibleWrappedDomainObject
      *            - object that might or might not be a wrapper.
      * @return
      */
     @Programmatic
     <T> boolean isWrapper(T possibleWrappedDomainObject);
+
+
+
 
     /**
      * All {@link InteractionListener}s that have been registered using

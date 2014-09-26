@@ -115,7 +115,7 @@ public class ToDoItemSubscriptions {
             case EXECUTING:
                 break;
             case EXECUTED:
-                LOG.info("Received ToDoItem.CompletedEvent for : " + container.titleOf(ev.getSource()));
+                LOG.info("Received ToDoItem.CompletedEvent for : " + ev.getSource().toString());
                 break;
         }
     }
@@ -151,7 +151,7 @@ public class ToDoItemSubscriptions {
             case EXECUTING:
                 break;
             case EXECUTED:
-                LOG.info("Received ActionInteractionEvent, " + container.titleOf(ev.getSource()) + ", invoked " + ev.getIdentifier().getMemberName());
+                LOG.info("Received ActionInteractionEvent, " + ev.getSource().toString() + ", invoked " + ev.getIdentifier().getMemberName());
                 onExecutedVetoIfRequired();
                 break;
         }
@@ -183,7 +183,7 @@ public class ToDoItemSubscriptions {
             case EXECUTING:
                 break;
             case EXECUTED:
-                LOG.info("Received PropertyInteractionEvent, " + container.titleOf(ev.getSource()) + ", changed " + ev.getIdentifier().getMemberName() + " : " + ev.getOldValue() + " -> " + ev.getNewValue());
+                LOG.info("Received PropertyInteractionEvent, " + ev.getSource().toString() + ", changed " + ev.getIdentifier().getMemberName() + " : " + ev.getOldValue() + " -> " + ev.getNewValue());
                 onExecutedVetoIfRequired();
 
                 if(ev.getIdentifier().getMemberName().contains("description")) {
@@ -233,9 +233,9 @@ public class ToDoItemSubscriptions {
                 break;
             case EXECUTED:
                 if(ev.getOf() == CollectionInteractionEvent.Of.ADD_TO) {
-                    LOG.info("Received CollectionInteractionEvent, " + container.titleOf(ev.getSource()) + ", added to " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
+                    LOG.info("Received CollectionInteractionEvent, " + ev.getSource().toString() + ", added to " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
                 } else {
-                    LOG.info("Received CollectionInteractionEvent, " + container.titleOf(ev.getSource()) + ", removed from " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
+                    LOG.info("Received CollectionInteractionEvent, " + ev.getSource().toString() + ", removed from " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
                 }
                 onExecutedVetoIfRequired();
                 break;
