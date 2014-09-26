@@ -48,7 +48,8 @@
         <wicket-bootstrap.version>0.9.6-SNAPSHOT</wicket-bootstrap.version>
         <wicket-source.version>6.0.0.8</wicket-source.version>
 
-        <wicket-select2.version>2.2.2</wicket-select2.version>
+        <wicket-select2.version>2.2.3</wicket-select2.version>
+        <select2.version>3.5.1</select2.version>
     </properties>
 
     <!-- used in Site generation for relative references. -->
@@ -277,6 +278,12 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
+
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>select2</artifactId>
+                <version>${select2.version}</version>
+            </dependency>
 
             <!-- Webjars -->
             <dependency>

@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.widgets;
+package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 
 import com.vaynberg.wicket.select2.Select2Choice;
 
@@ -30,12 +30,12 @@ public final class Select2ChoiceUtil  {
 
     // a guesstimate to convert a single character into 'em' units
     private static final double CHAR_TO_EM_MULTIPLIER = 0.8;
-    
+
     // a further fudge, add some additional characters prior to multiplication.
     private static final int ADDITIONAL_CHARS = 3;
-    
+
     public static Select2Choice<ObjectAdapterMemento> newSelect2Choice(String id, final IModel<ObjectAdapterMemento> modelObject, ScalarModel scalarModel) {
-        Select2Choice<ObjectAdapterMemento> select2Choice = new Select2Choice<ObjectAdapterMemento>(id, modelObject);
+        Select2Choice<ObjectAdapterMemento> select2Choice = new Select2Choice<>(id, modelObject);
         int typicalLength = scalarModel.getTypicalLength();
         select2Choice.add(new AttributeAppender("style", asCssStyleWidth(typicalLength)));
         select2Choice.setRequired(scalarModel.isRequired());

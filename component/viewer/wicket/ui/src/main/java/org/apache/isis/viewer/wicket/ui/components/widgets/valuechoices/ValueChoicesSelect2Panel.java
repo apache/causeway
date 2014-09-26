@@ -38,7 +38,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.Select2ChoiceUtil;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2ChoiceUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements ScalarModelWithPending {

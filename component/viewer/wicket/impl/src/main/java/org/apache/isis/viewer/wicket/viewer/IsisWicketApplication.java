@@ -38,6 +38,7 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.vaynberg.wicket.select2.ApplicationSettings;
 import org.apache.wicket.*;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -86,6 +87,8 @@ import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityPrope
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItemPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssSubMenuItemsPanel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2BootstrapCssReference;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2JsReference;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -214,6 +217,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
             configureWebJars();
             configureWicketBootstrap();
+            configureWicketSelect2();
 
             String isisConfigDir = getServletContext().getInitParameter("isis.config.dir");
 
@@ -272,6 +276,13 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
                 throw ex;
             }
         }
+    }
+
+    private void configureWicketSelect2() {
+        ApplicationSettings select2Settings = ApplicationSettings.get();
+        select2Settings.setCssReference(new Select2BootstrapCssReference());
+        select2Settings.setJavaScriptReference(new Select2JsReference());
+        select2Settings.setIncludeJqueryUI(false);
     }
 
     private void configureWicketSourcePlugin() {
