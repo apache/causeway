@@ -16,22 +16,25 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
+import de.agilecoders.wicket.core.util.Attributes;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IStyledColumn;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
@@ -45,6 +48,9 @@ import org.apache.wicket.util.string.Strings;
 public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
 {
     private static final long serialVersionUID = 1L;
+
+    private static final String CLASS_SORT_UP = "glyphicon glyphicon-chevron-up";
+    private static final String CLASS_SORT_DOWN = "glyphicon glyphicon-chevron-down";
 
     static abstract class CssAttributeBehavior extends Behavior
     {
@@ -102,7 +108,7 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
             {
                 final IColumn<T, S> column = item.getModelObject();
 
-                WebMarkupContainer header = null;
+                WebMarkupContainer header;
 
                 if (column.isSortable())
                 {
@@ -131,13 +137,43 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
 
                 item.add(header);
                 item.setRenderBodyOnly(true);
-                Component label = new Label("label");
-                
-                label = column.getHeader("label");
-                header.add(label);
+                Component label = column.getHeader("label");
+                Component sortIcon = newSortIcon("sortIcon", column, stateLocator);
+                header.add(label, sortIcon);
             }
         };
         add(headers);
+    }
+
+    /**
+     * Factory method for the sort icon
+     *
+     * @param id
+     *          the component id
+     * @param column
+     *          the column for which a sort icon is needed
+     * @param stateLocator
+     *          locator for the ISortState implementation used by sortable headers
+     * @param <T>
+     *          The model object type of the data table
+     * @return A component that should be used as a sort icon
+     */
+    protected <T> Component newSortIcon(String id, final IColumn<T, S> column, final ISortStateLocator<S> stateLocator) {
+        return new WebComponent(id) {
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+
+                ISortState<S> sortState = stateLocator.getSortState();
+                S sortProperty = column.getSortProperty();
+                SortOrder sortOrder = sortProperty == null ? SortOrder.NONE : sortState.getPropertySortOrder(sortProperty);
+                if (sortOrder == SortOrder.ASCENDING) {
+                    Attributes.addClass(tag, CLASS_SORT_UP);
+                } else if (sortOrder == SortOrder.DESCENDING) {
+                    Attributes.addClass(tag, CLASS_SORT_DOWN);
+                }
+            }
+        };
     }
 
     /**
