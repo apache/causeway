@@ -1,5 +1,7 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
+
 import java.util.List;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -30,6 +32,9 @@ public class ApplicationActionsPanel extends Panel {
                         CssMenuItem subMenuItem = listItem.getModelObject();
                         AbstractLink subMenuItemLink = subMenuItem.getLink();
                         subMenuItemLink.setBody(Model.of(subMenuItem.getName()));
+                        if (!subMenuItem.isEnabled()) {
+                            listItem.add(new CssClassNameAppender("disabled"));
+                        }
                         listItem.add(subMenuItemLink);
                     }
                 };
