@@ -173,8 +173,8 @@ public final class ServiceInstantiator {
     }
 
     private Set<Class<?>> cached = Sets.newHashSet();
-    private Map<Class<?>, Method> postConstructMethodsByServiceClass = Maps.newLinkedHashMap();
-    private Map<Class<?>, Method> preDestroyMethodsByServiceClass = Maps.newLinkedHashMap();
+    private Map<Class<?>, Method> postConstructMethodsByServiceClass = Maps.newConcurrentMap();
+    private Map<Class<?>, Method> preDestroyMethodsByServiceClass = Maps.newConcurrentMap();
 
     <T> void callPostConstructIfPresent(T service) {
 
