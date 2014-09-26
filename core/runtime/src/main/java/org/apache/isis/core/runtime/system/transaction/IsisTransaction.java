@@ -426,13 +426,14 @@ public class IsisTransaction implements TransactionScopedComponent {
     // ////////////////////////////////////////////////////////////////
 
     public synchronized final void flush() {
-        // have removed the guard below because not every objectstore necessarily 
-        // wraps up every change inside a command.
-        
-        // for example, the JDO object store just lets DataNucleus do the change tracking
-        // itself
-        
-        ensureThatState(getState().canFlush(), is(true), "state is: " + getState());
+
+        // have removed THIS guard because we hit a situation where a xactn is aborted
+        // from a no-arg action, the Wicket viewer attempts to render a new page that (of course)
+        // contains the service menu items, and some of the 'disableXxx()' methods of those
+        // service actions perform repository queries (while xactn is still in a state of ABORTED)
+        //
+        // ensureThatState(getState().canFlush(), is(true), "state is: " + getState());
+        //
         if (LOG.isDebugEnabled()) {
             LOG.debug("flush transaction " + this);
         }

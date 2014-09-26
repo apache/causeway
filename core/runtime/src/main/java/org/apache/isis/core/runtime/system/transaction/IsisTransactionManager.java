@@ -372,10 +372,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
             LOG.debug("flushTransaction");
         }
 
-        if(getTransaction().getState().mustAbort()) {
-            throw getTransaction().getAbortCause();
-        }
-
         if (getTransaction() != null) {
             persistenceSession.objectChangedAllDirty();
             getTransaction().flush();
