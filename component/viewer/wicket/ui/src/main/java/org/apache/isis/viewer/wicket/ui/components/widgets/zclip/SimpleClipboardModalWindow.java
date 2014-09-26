@@ -43,7 +43,7 @@ public class SimpleClipboardModalWindow extends Modal<Void> implements ActionPro
         setUseCloseHandler(true);
         setUseKeyboard(true);
         setDisableEnforceFocus(true);
-        setOutputMarkupPlaceholderTag(true);
+        setOutputMarkupId(true);
         WebMarkupContainer emptyComponent = new WebMarkupContainer(getContentId());
         add(emptyComponent);
     }
@@ -55,7 +55,6 @@ public class SimpleClipboardModalWindow extends Modal<Void> implements ActionPro
 
     @Override
     public void showPrompt(AjaxRequestTarget target) {
-        setVisible(true);
         target.add(this);
         show(target);
     }
@@ -67,8 +66,6 @@ public class SimpleClipboardModalWindow extends Modal<Void> implements ActionPro
 
     @Override
     public void closePrompt(AjaxRequestTarget target) {
-        setVisible(false);
-        target.add(this);
         show(target);
     }
 }

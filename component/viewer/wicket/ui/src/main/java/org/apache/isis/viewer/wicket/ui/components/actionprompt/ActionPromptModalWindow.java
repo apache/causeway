@@ -54,7 +54,7 @@ public class ActionPromptModalWindow extends Modal<Void> implements ActionPrompt
         super(id);
         setUseCloseHandler(true);
         setUseKeyboard(true);
-        setOutputMarkupPlaceholderTag(true);
+        setOutputMarkupId(true);
         WebMarkupContainer emptyComponent = new WebMarkupContainer(getContentId());
         add(emptyComponent);
     }
@@ -66,7 +66,6 @@ public class ActionPromptModalWindow extends Modal<Void> implements ActionPrompt
 
     @Override
     public void showPrompt(AjaxRequestTarget target) {
-        setVisible(true);
         target.add(this);
         show(target);
     }
@@ -78,8 +77,6 @@ public class ActionPromptModalWindow extends Modal<Void> implements ActionPrompt
 
     @Override
     public void closePrompt(AjaxRequestTarget target) {
-        setVisible(false);
-        target.add(this);
         close(target);
     }
 }
