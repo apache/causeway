@@ -85,25 +85,6 @@
 }
 
 
-.bookmarkedPagesPanel .bookmarkDepth0 {
-    padding-left: 0;
-}
-.bookmarkedPagesPanel .bookmarkDepth1 {
-    padding-left: 20px;  
-}
-.bookmarkedPagesPanel .bookmarkDepth2 {
-    padding-left: 40px;  
-}
-.bookmarkedPagesPanel .bookmarkDepth3 {
-    padding-left: 60px;  
-}
-.bookmarkedPagesPanel .bookmarkDepth4 {
-    padding-left: 80px;  
-}
-.bookmarkedPagesPanel .bookmarkDepth5 {
-    padding-left: 100px;  
-}
-
 .bookmarkedPagesPanel .clearBookmarkPlaceHolder {
     position: relative;
     top: -7px;
@@ -117,15 +98,47 @@
 	padding-left: 25px;
 }
 
-.content>.list-group .list-group-item:first-child {border-top-right-radius: 0;border-top-left-radius: 0;}
-.content>.list-group .list-group-item {border-width: 0 0;}
-.content>.list-group {margin-bottom: 0;}
-.content .list-group-item {border-radius:0;background-color: inherit;}
+.content>.list-group .list-group-item:first-child {
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+}
+.content>.list-group .list-group-item {
+    border-width: 0 0;
+}
+.content>.list-group {
+    margin-bottom: 0;
+}
+.content .list-group-item {
+    border-radius:0;
+    /*background-color: inherit;*/
+}
 
-.content .list-group .list-group {margin: 0;margin-top: 10px;}
+.content .list-group .list-group {
+    margin: 10px 0 0;
+}
 .content .list-group-item li.list-group-item {margin: 0 -15px;border-top: 1px solid #ddd;border-bottom: 0;padding-left: 30px;}
 .content .list-group-item li.list-group-item:last-child {padding-bottom: 0;}
 
 .content div.list-group div.list-group{margin: 0;}
 .content div.list-group .list-group a.list-group-item {border-top: 1px solid #ddd;border-bottom: 0;padding-left: 30px;}
 #bookmarkedPagesSlidingDiv .panel-group {margin-bottom: 0}
+
+
+.content .list-group-item li.list-group-item.bookmarkDepth0 {
+    padding-left: 0;
+}
+.content .list-group-item li.list-group-item.bookmarkDepth1 {
+    padding-left: 20px;
+}
+.content .list-group-item li.list-group-item.bookmarkDepth2 {
+    padding-left: 40px;
+}
+.content .list-group-item li.list-group-item.bookmarkDepth3 {
+    padding-left: 60px;
+}
+.content .list-group-item li.list-group-item.bookmarkDepth4 {
+    padding-left: 80px;
+}
+.content .list-group-item li.list-group-item.bookmarkDepth5 {
+    padding-left: 100px;
+}

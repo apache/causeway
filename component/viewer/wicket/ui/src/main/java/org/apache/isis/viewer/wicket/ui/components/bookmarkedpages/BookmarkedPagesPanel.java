@@ -177,7 +177,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
                     link.add(label);
                     item.add(link);
                     if(bookmarkedPagesModel.isCurrent(pageParameters)) {
-                        item.add(new CssClassAppender("currentBookmark"));
+                        item.add(new CssClassAppender("disabled"));
                     }
                     item.add(new CssClassAppender("bookmarkDepth" + node.getDepth()));
                 } catch(ObjectNotFoundException ex) {
