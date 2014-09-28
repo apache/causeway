@@ -19,25 +19,25 @@
 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns:wicket="http://wicket.apache.org">
-	<body>
-		<wicket:panel>
-			<div class="linksSelectorPanel">
-				<span wicket:id="views" class="viewLinks">
-					<ul wicket:id="viewList" class="viewList">
-				  		<li wicket:id="viewItem" class="viewItem">
-				  			<a href="#" wicket:id="viewLink">
-				  				<span wicket:id="viewTitle" class="ViewLinkItem">[link title]</span>
-			  				</a>
-			  	  		</li>
-					</ul>
-				</span>
+    <body>
+        <wicket:panel>
+            <div class="linksSelectorPanel">
+                <span wicket:id="views" class="viewLinks">
+                    <ul wicket:id="viewList" class="viewList">
+                        <li wicket:id="viewItem" class="viewItem">
+                            <a href="#" wicket:id="viewLink">
+                                <span wicket:id="viewTitle" class="ViewLinkItem">[link title]</span>
+                            </a>
+                        </li>
+                    </ul>
+                </span>
                 <span wicket:id="additionalLinks"></span>
-				<span class="clearfix"></span>
+                <span class="clearfix"></span>
 
-				<div class="views">
-					<wicket:child/>
-				</div>
-			</div>
-		</wicket:panel>
-	</body>
+                <div class="views">
+                    <wicket:child/>
+                </div>
+            </div>
+        </wicket:panel>
+    </body>
 </html>
