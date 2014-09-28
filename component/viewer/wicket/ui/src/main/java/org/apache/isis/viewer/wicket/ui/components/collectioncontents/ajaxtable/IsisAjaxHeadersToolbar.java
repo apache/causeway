@@ -49,8 +49,8 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
 {
     private static final long serialVersionUID = 1L;
 
-    private static final String CLASS_SORT_UP = "glyphicon glyphicon-chevron-up";
-    private static final String CLASS_SORT_DOWN = "glyphicon glyphicon-chevron-down";
+    private static final String CLASS_SORT_UP = "fa fa-chevron-up";
+    private static final String CLASS_SORT_DOWN = "fa fa-chevron-down";
 
     static abstract class CssAttributeBehavior extends Behavior
     {
