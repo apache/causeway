@@ -33,6 +33,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.Links;
+import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -45,10 +46,13 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.util.string.Strings;
 
 import com.google.inject.Inject;
 
@@ -57,6 +61,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
     private static final long serialVersionUID = 1L;
     
     private static final String ID_BOOKMARK_LIST = "bookmarkList";
+    private static final String ID_BOOKMARKS_HELP_TEXT = "helpText";
     private static final String ID_BOOKMARKED_PAGE_LINK = "bookmarkedPageLink";
     private static final String ID_CLEAR_BOOKMARK_LINK = "clearBookmarkLink";
     private static final String ID_BOOKMARKED_PAGE_ITEM = "bookmarkedPageItem";
@@ -65,6 +70,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
     private static final String ID_BOOKMARKED_PAGE_ICON = "bookmarkedPageImage";
     
     private static final String CLEAR_BOOKMARKS = "clearBookmarks";
+
 
     private static final JavaScriptResourceReference SLIDE_PANEL_JS = new JavaScriptResourceReference(BookmarkedPagesPanel.class, "slide-panel.js");
 
@@ -78,6 +84,11 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
 
     private void buildGui() {
 
+        final BookmarkedPagesModel bookmarkedPagesModel = getModel();
+
+        Component helpText = addHelpText(bookmarkedPagesModel);
+        addOrReplace(helpText);
+
         final WebMarkupContainer container = new WebMarkupContainer(ID_BOOKMARK_LIST) {
             private static final long serialVersionUID = 1L;
             @Override
@@ -89,8 +100,6 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
         // allow to be updated by AjaxLink
         container.setOutputMarkupId(true); 
         add(container);
-
-        final BookmarkedPagesModel bookmarkedPagesModel = getModel();
 
         final AjaxLink<Void> clearAllBookmarksLink = new AjaxLink<Void>(CLEAR_BOOKMARKS){
 
@@ -181,7 +190,28 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
         };
         container.add(listView);
     }
-    
+
+    protected Component addHelpText(final BookmarkedPagesModel bookmarkedPagesModel) {
+
+        IModel<String> helpTextModel = new AbstractReadOnlyModel<String>() {
+            @Override
+            public String getObject() {
+                return bookmarkedPagesModel.isEmpty() ? "You have no bookmarks!" : "";
+            }
+        };
+
+        Label helpText = new Label(ID_BOOKMARKS_HELP_TEXT, helpTextModel) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+
+                setVisible(!Strings.isEmpty(getDefaultModelObjectAsString()));
+            }
+        };
+        helpText.setOutputMarkupPlaceholderTag(true);
+        return helpText;
+    }
+
     // ///////////////////////////////////////////////
     // Dependency Injection
     // ///////////////////////////////////////////////

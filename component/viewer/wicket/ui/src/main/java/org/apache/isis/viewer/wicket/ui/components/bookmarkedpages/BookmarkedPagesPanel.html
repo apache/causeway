@@ -35,8 +35,8 @@
                                         <h4 class="panel-title"><span class="fa fa-bookmark"></span> Bookmarks</h4>
                                     </div>
 
-                                    <div class="panel-body">
-                                        <wicket:remove>Put help text here is needed</wicket:remove>
+                                    <div class="panel-body" wicket:enclosure="helpText">
+                                        <span wicket:id="helpText"></span>
                                     </div>
 
                                     <div class="content ">
@@ -61,7 +61,7 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <div class="panel-footer">
+                                    <div class="panel-footer" wicket:enclosure="clearBookmarks">
                                         <a href="#" wicket:id="clearBookmarks" class="clearBookmarksA" title="Clear Bookmarks">
                                             <div>
                                                 <span>&nbsp;</span>
