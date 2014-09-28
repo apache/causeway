@@ -20,35 +20,35 @@ $(document).ready(function(){
  
     var showBookmarks = function(){
         $('#bookmarkedPagesSlidingDiv').stop().animate(
-            {width:"500px", opacity:0.95}, 100, 
+            {width:"500px", opacity:1}, 100,
             function() {
                 $('.content').fadeIn('50');
             });
-        $('.showPanelTab').animate({opacity: 0.5});
+        $('.bookmarkRibbon').animate({opacity:0}, 50);
     };
 
     var hideBookmarks = function(){
         $('.content').fadeOut('0', 
             function() { 
-                $('#bookmarkedPagesSlidingDiv').stop().animate({width:"0", opacity:0.1}, 0);
+                $('#bookmarkedPagesSlidingDiv').stop().animate({width:"0", opacity:0}, 0);
             });
-        $('.showPanelTab').animate({opacity: 1.0});
+        $('.bookmarkRibbon').animate({opacity:1}, 50);
      };
 
      var hideBookmarksQuickly = function(){
          $('.content').hide();
-         $('#bookmarkedPagesSlidingDiv').css({width:"0"}, 0);
-         $('.showPanelTab').css({opacity: 1.0});
+         $('#bookmarkedPagesSlidingDiv').css({width:"0", opacity: 0}, 0);
+         $('.bookmarkRibbon').css({opacity: 1.0});
       };
 
-    $('.showPanelTab').mouseenter(showBookmarks);
+    $('.bookmarkRibbon').mouseenter(showBookmarks);
     $('#bookmarkedPagesSlidingDiv').mouseleave(hideBookmarks);
     
     $('body').keydown(function(e) {
         
         // alt+[
         if(e.which === 219 && e.altKey) {
-            if($('#bookmarkedPagesSlidingDiv .content').is(":visible")) {
+            if($('#bookmarkedPagesSlidingDiv').find('.content').is(":visible")) {
                 hideBookmarksQuickly();
             } else {
                 showBookmarks();

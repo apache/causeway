@@ -26,6 +26,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+        <wicket:header-items/>
         <wicket:link>
             <!--<link href="PageAbstract.css" rel="stylesheet" type="text/css"/>-->
             <link href="isis-wicket-theme/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css"/>
@@ -43,9 +44,9 @@
         <div id="container" class="page container-fluid">
             <div wicket:id="theme">
 
-                <header wicket:id="navbar"></header>
+                <header wicket:id="navbar" style="margin-bottom: 0"></header>
 
-                <div class="navbar navbar-default" style="margin-top: 51px" role="navigation">
+                <header class="navbar navbar-default" role="navigation">
                     <div class="container-fluid">
                         <div class="navbar-header">
                             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
@@ -67,14 +68,14 @@
                             </form>
                         </div>
                     </div>
-                </div>
+                </header>
 
                 <div id="body">
                     <wicket:child/>
 
                     <div class="clearfix" style="margin-bottom: 100px"></div>
                 </div>
-    
+
                 <div wicket:id="actionPromptModalWindow"></div>
 
 

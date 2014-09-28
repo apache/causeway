@@ -36,6 +36,7 @@ import org.apache.isis.viewer.wicket.ui.util.Links;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -45,6 +46,7 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
@@ -80,6 +82,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
             private static final long serialVersionUID = 1L;
             @Override
             public void renderHead(IHeaderResponse response) {
+                response.render(CssHeaderItem.forReference(new CssResourceReference(BookmarkedPagesPanel.class, "BookmarkedPagesPanel.css")));
                 response.render(JavaScriptReferenceHeaderItem.forReference(SLIDE_PANEL_JS));
             }
         };

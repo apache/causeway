@@ -17,17 +17,8 @@
  *  under the License.
  */
 
-.bookmarkedPagesPanel .bookmarkedPagesPanelHolder {
-	font-size: 0.7em;
-	text-transform:uppercase;
-	font-weight:bold;
-	width:100%;
-	margin-bottom:5px;
-}
-
 .bookmarkedPagesPanel .bookmarkedPagesPanelHolder .bookmarkedPagesList {
     margin-top:30px;
-	
 }
 
 .bookmarkedPagesPanel .bookmarkedPagesPanelHolder .bookmarkedPageItem {
@@ -35,39 +26,14 @@
     margin-bottom:10px;
 }
 
-.bookmarkedPagesPanel .bookmarkedPagesPanelHolder span.bookmarkedPageImageAndTitle {
-    margin-right: 5px;
-    margin-bottom:5px;
-
-    border-radius:4px;
-    -moz-border-radius:4px;
-    -webkit-border-radius:4px;
-    background-color:#F0EFEA;
-
-    padding:10px 10px 3px 10px;
-}
-
 .bookmarkedPagesPanel .bookmarkedPagesPanelHolder span.bookmarkedPageImageAndTitle:hover {
     background-color:#FFFFFF;
 }
 
 .bookmarkedPagesPanel .bookmarkedPagesPanelHolder .bookmarkedPagesList a img.bookmarkedPageImage {
-    /*float:left;*/
     background-color: transparent;
     width: 16px;
     height: 16px;
-    /*padding:3px 0px 0px 3px;*/
-}
-
-.bookmarkedPagesPanel .bookmarkedPagesPanelHolder .bookmarkedPagesList span.bookmarkedPageTitle {
-	font-style:normal !important;
-    
-    vertical-align: top;
-    padding-left: 5px;
-}
-
-.bookmarkedPagesPanel .bookmarkedPagesPanelHolder span.bookmarkedPageTitle {
-	background-color:#F0EFEA;
 }
 
 .bookmarkedPagesPanel .bookmarkedPagesPanelHolder .bookmarkedPagesList a:hover span.bookmarkedPageTitle {
@@ -76,17 +42,7 @@
 }
 
 .bookmarkedPagesPanel .bookmarkedPagesPanelHolder .clearBookmarks {
-	color: rgb(128,0,0);
-}
-
-.bookmarkedPagesPanel .bookmarkedPagesPanelHolder .clearBookmarks {
-	border-radius: 4px 4px 4px 4px;
-	color: #46413B;
-	display: block;
-	font-style: normal !important;
 	margin-top: 30px;
-	margin-bottom: 10px;
-	margin-right: 5px;
 }
 
 .bookmarkedPagesPanel .bookmarkedPagesPanelHolder .currentBookmark span.bookmarkedPageImageAndTitle,
@@ -94,44 +50,42 @@
     background-color:#FFFFFF;
 }
 
-.bookmarkedPagesPanel .showPanelTab {
-    border-radius: 0px 8px 8px 0px;
-	width:10px;
+.bookmarkedPagesPanel .bookmarkRibbon {
+    width:10px;
     margin-top: -120px;
-    height:100px;
+    height:120px;
     position:fixed;
     left:0px;
     top:120px;
     display:block;
     cursor:pointer;
-    background-color: #40C0CB;
     z-index: 999;
     
     text-transform:uppercase;
     font-weight:bold;
+
+    border-right:6px solid transparent;
+    border-left:6px solid transparent;
+    border-bottom:6px solid white;
 }
 
 .bookmarkedPagesPanel #bookmarkedPagesSlidingDiv {
-    border-radius: 0px 8px 8px 0px;
     position:fixed;
-    left:0px;
-    top:80px;
+    left:0;
+    top:0;
     background-color:#F0EFEA;
-    margin-top: -100px;
-    height:800px;
     width:0;/*new line*/
     z-index: 998;
+    opacity: 0;
 }
 
 .bookmarkedPagesPanel #bookmarkedPagesSlidingDiv .content {
     width:490px;
-    margin-left:30px;
-    display: none;
 }
 
 
 .bookmarkedPagesPanel .bookmarkDepth0 {
-    padding-left: 0px;	
+    padding-left: 0;
 }
 .bookmarkedPagesPanel .bookmarkDepth1 {
     padding-left: 20px;  
@@ -150,18 +104,27 @@
 }
 
 .bookmarkedPagesPanel .clearBookmarkPlaceHolder {
-	position: relative;
-	top: -7px;
+    position: relative;
+    top: -7px;
     width: 20px;
     padding-right: 20px;
     padding-bottom: 40px;
 }
 
-.bookmarkedPagesPanel .clearBookmark,
-.bookmarkedPagesPanel .clearBookmarks {
-    background: url('../org.apache.isis.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanel/images/clear_bookmarks.png') no-repeat;
-}
 
 .bookmarkedPagesPanel .clearBookmarks span {
 	padding-left: 25px;
 }
+
+.content>.list-group .list-group-item:first-child {border-top-right-radius: 0;border-top-left-radius: 0;}
+.content>.list-group .list-group-item {border-width: 0 0;}
+.content>.list-group {margin-bottom: 0;}
+.content .list-group-item {border-radius:0;background-color: inherit;}
+
+.content .list-group .list-group {margin: 0;margin-top: 10px;}
+.content .list-group-item li.list-group-item {margin: 0 -15px;border-top: 1px solid #ddd;border-bottom: 0;padding-left: 30px;}
+.content .list-group-item li.list-group-item:last-child {padding-bottom: 0;}
+
+.content div.list-group div.list-group{margin: 0;}
+.content div.list-group .list-group a.list-group-item {border-top: 1px solid #ddd;border-bottom: 0;padding-left: 30px;}
+#bookmarkedPagesSlidingDiv .panel-group {margin-bottom: 0}
