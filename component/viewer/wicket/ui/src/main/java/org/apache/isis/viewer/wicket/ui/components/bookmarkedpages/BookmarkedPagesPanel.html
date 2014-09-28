@@ -35,16 +35,12 @@
                                         <h4 class="panel-title"><span class="fa fa-bookmark"></span> Bookmarks</h4>
                                     </div>
 
-                                    <div class="content panel-body">
+                                    <div class="panel-body">
+                                        <wicket:remove>Put help text here is needed</wicket:remove>
+                                    </div>
+
+                                    <div class="content ">
                                         <ul id="bookmarkedPagesA" class="bookmarkedPagesPanelHolderA bookmarkedPagesComponentTypeA list-group">
-                                            <li class="list-group-item">
-                                                <div>
-                                                    <a href="#" wicket:id="clearBookmarks" class="clearBookmarksA" title="Clear Bookmarks">
-                                                       <span>Clear all</span>
-                                                        <span class="fa fa-ban text-danger pull-right"></span>
-                                                    </a>
-                                                </div>
-                                            </li>
                                             <li class="list-group-item">
                                                 <ul wicket:id="bookmarkList" class="bookmarkedPagesListA list-group">
                                                     <li wicket:id="bookmarkedPageItem" class="bookmarkedPageItemA list-group-item">
@@ -64,7 +60,15 @@
                                                 </ul>
                                             </li>
                                         </ul>
-                                   </div>
+                                    </div>
+                                    <div class="panel-footer">
+                                        <a href="#" wicket:id="clearBookmarks" class="clearBookmarksA" title="Clear Bookmarks">
+                                            <div>
+                                                <span>&nbsp;</span>
+                                                <span class="text-danger pull-right">Clear all</span>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
