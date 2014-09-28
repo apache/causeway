@@ -19,26 +19,18 @@
 $(document).ready(function(){
  
     var showBookmarks = function(){
-        $('#bookmarkedPagesSlidingDiv').stop().animate(
-            {width:"500px", opacity:1}, 100,
-            function() {
-                $('.content').fadeIn('50');
-            });
-        $('.bookmarkRibbon').animate({opacity:0}, 50);
+        $('#bookmarkedPagesSlidingDiv').stop().fadeIn('50');
+        $('.bookmarkRibbon').fadeOut(50);
     };
 
     var hideBookmarks = function(){
-        $('.content').fadeOut('0', 
-            function() { 
-                $('#bookmarkedPagesSlidingDiv').stop().animate({width:"0", opacity:0}, 0);
-            });
-        $('.bookmarkRibbon').animate({opacity:1}, 50);
+        $('#bookmarkedPagesSlidingDiv').stop().fadeOut(50);
+        $('.bookmarkRibbon').fadeIn(50);
      };
 
-     var hideBookmarksQuickly = function(){
-         $('.content').hide();
-         $('#bookmarkedPagesSlidingDiv').css({width:"0", opacity: 0}, 0);
-         $('.bookmarkRibbon').css({opacity: 1.0});
+     var hideBookmarksQuickly = function() {
+         $('#bookmarkedPagesSlidingDiv').hide();
+         $('.bookmarkRibbon').show();
       };
 
     $('.bookmarkRibbon').mouseenter(showBookmarks);

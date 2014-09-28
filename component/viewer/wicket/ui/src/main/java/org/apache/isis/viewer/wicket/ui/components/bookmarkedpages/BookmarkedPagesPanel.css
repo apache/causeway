@@ -74,9 +74,9 @@
     left:0;
     top:0;
     background-color:#F0EFEA;
-    width:0;/*new line*/
+    width:500px;
     z-index: 998;
-    opacity: 0;
+    display: none;
 }
 
 .bookmarkedPagesPanel #bookmarkedPagesSlidingDiv .content {
