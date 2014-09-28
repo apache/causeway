@@ -20,15 +20,11 @@
 <html xmlns:wicket="http://wicket.apache.org">
     <body>
         <wicket:panel>
-            <div class="panel panel-default">
-                 <div wicket:id="entityLinkWrapper" class="entityIconAndTitlePanel entityIconAndTitleComponentType panel-heading">
-                     <span class="panel-title">
-                         <a href="#" wicket:id="entityLink" class="entityUrlSource">
-                             <img wicket:id="entityImage" class="entityImage"/>
-                             <span wicket:id="entityTitle" class="entityTitle">[title]</span>
-                         </a>
-                     </span>
-                </div>
+             <div wicket:id="entityLinkWrapper" class="entityIconAndTitlePanel entityIconAndTitleComponentType">
+                 <a href="#" wicket:id="entityLink" class="entityUrlSource">
+                     <img wicket:id="entityImage" class="entityImage"/>
+                     <span wicket:id="entityTitle" class="entityTitle">[title]</span>
+                 </a>
             </div>
         </wicket:panel>
     </body>
