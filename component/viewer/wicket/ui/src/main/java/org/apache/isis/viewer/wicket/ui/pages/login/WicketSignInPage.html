@@ -23,26 +23,49 @@
       xml:lang="en"  
       lang="en">
 	<head>
-		<title wicket:id="pageTitle"></title>
-		<wicket:link>
-			<link href="../cssreset.css" rel="stylesheet" type="text/css"/>
-			<link href="WicketSignInPage.css" rel="stylesheet" />
-			<link href="../PageAbstract.css" rel="stylesheet" />
-		</wicket:link>
-	</head>
-	<body>
-		<div id="container" class="wicketSignInPanel">
-			<div class="headerContainer">
-				<div id="header">
-					<h1><span wicket:id="applicationName" class="applicationName">[application name]</span></h1>
-				</div>
-				<div class="clearfix"></div>
-			</div>
-			<div class="loginPanel">
-		    	<h2><wicket:message key="loginHeader">Login</wicket:message></h2>
-			<span wicket:id="signInPanel"></span>
-		    </div>
+        <wicket:header-items/>
+        <title wicket:id="pageTitle"></title>
+        <wicket:link>
+            <!--<link href="../cssreset.css" rel="stylesheet" type="text/css"/>-->
+            <!--<link href="WicketSignInPage.css" rel="stylesheet" />-->
+            <!--<link href="../PageAbstract.css" rel="stylesheet" />-->
+        </wicket:link>
+    </head>
+    <body>
+        <div id="container" class="wicketSignInPanel container-fluid">
+            <div class="jumbotron" style="background-color: transparent">
+
+                <div class="row">
+                    <div class="col-sm-12">&#160;</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">&#160;</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">&#160;</div>
+                </div>
+
+                <div class="row">
+                    <div class="headerContainer col-sm-offset-4 col-sm-4">
+                        <h1 wicket:id="applicationName" class="applicationName">[application name]</h1>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">&#160;</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">&#160;</div>
+                </div>
+
+                <div class="row">
+                    <div class="loginPanel col-sm-offset-4 col-sm-4">
+                        <h2><wicket:message key="loginHeader">Login</wicket:message></h2>
+                        <div wicket:id="signInPanel"></div>
+                    </div>
+                </div>
+            </div>
             <div wicket:id="exceptionStackTrace" class="exceptionStackTrace"></div>
-	    </div>
-	</body>
+        </div>
+    </body>
 </html>

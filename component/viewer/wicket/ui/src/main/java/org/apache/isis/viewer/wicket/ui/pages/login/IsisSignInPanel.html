@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<html xmlns:wicket="http://wicket.apache.org">
+    <body>
+        <wicket:panel>
+            <span wicket:id="feedback"></span>
+
+            <form wicket:id="signInForm" role="form">
+                <div class="form-group">
+                    <label wicket:for="username">Username</label>
+                    <input type="text" class="form-control" wicket:id="username" placeholder="Enter username"/>
+                </div>
+                <div class="form-group">
+                    <label wicket:for="password">Password</label>
+                    <input type="password" class="form-control" wicket:id="password" placeholder="Enter password"/>
+                </div>
+                <div class="checkbox" wicket:id="rememberMeRow">
+                    <label>
+                        <input type="checkbox" wicket:id="rememberMe"/> Remember me
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Sign in</button>
+                <button type="reset" class="btn btn-default">Reset</button>
+            </form>
+
+        </wicket:panel>
+    </body>
+</html>

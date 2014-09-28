@@ -19,18 +19,38 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.login;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 
+/**
+ * An extension of Wicket's default SignInPanel that provides
+ * custom markup, based on Bootstrap, and uses
+ * {@link de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel}
+ * to Bootstrap styled error messages
+ */
 public class IsisSignInPanel extends SignInPanel {
 
     private final boolean clearOriginalDestination;
 
+    /**
+     * Constructor
+     *
+     * @param id
+     *            the component id
+     * @param rememberMe
+     *            True if form should include a remember-me checkbox
+     * @param continueToOriginalDestination
+     *            A flag indicating whether to continue to the originally requested destination
+     */
     public IsisSignInPanel(
             final String id,
             final boolean rememberMe,
             final boolean continueToOriginalDestination) {
         super(id, rememberMe);
         this.clearOriginalDestination = !continueToOriginalDestination;
+
+        addOrReplace(new NotificationPanel("feedback"));
     }
 
     @Override
