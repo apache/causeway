@@ -16,14 +16,16 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
-import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
+import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
+
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 
 
-public class IsisAjaxPagingNavigator extends AjaxPagingNavigator {
+public class IsisAjaxPagingNavigator extends BootstrapAjaxPagingNavigator {
 
     private static final long serialVersionUID = 1L;
 
@@ -48,5 +50,12 @@ public class IsisAjaxPagingNavigator extends AjaxPagingNavigator {
     @Override
     protected PagingNavigation newNavigation(String id, IPageable pageable, IPagingLabelProvider labelProvider) {
         return new IsisAjaxPagingNavigation(id, pageable, labelProvider);
+    }
+
+    @Override
+    protected void onComponentTag(ComponentTag tag) {
+        tag.setName("ul");
+
+        super.onComponentTag(tag);
     }
 }
