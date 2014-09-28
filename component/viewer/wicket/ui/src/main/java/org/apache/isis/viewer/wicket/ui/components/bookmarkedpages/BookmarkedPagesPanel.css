@@ -55,11 +55,12 @@
     margin-top: -120px;
     height:120px;
     position:fixed;
-    left:0px;
+    left:0;
     top:120px;
     display:block;
     cursor:pointer;
     z-index: 999;
+    margin-left: 1px;
     
     text-transform:uppercase;
     font-weight:bold;

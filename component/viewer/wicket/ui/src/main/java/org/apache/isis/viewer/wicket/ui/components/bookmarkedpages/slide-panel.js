@@ -19,12 +19,12 @@
 $(document).ready(function(){
  
     var showBookmarks = function(){
-        $('#bookmarkedPagesSlidingDiv').stop().fadeIn('50');
+        $('#bookmarkedPagesSlidingDiv').slideDown('50');
         $('.bookmarkRibbon').fadeOut(50);
     };
 
     var hideBookmarks = function(){
-        $('#bookmarkedPagesSlidingDiv').stop().fadeOut(50);
+        $('#bookmarkedPagesSlidingDiv').slideUp('50');
         $('.bookmarkRibbon').fadeIn(50);
      };
 
