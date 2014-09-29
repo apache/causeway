@@ -65,6 +65,9 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
         }
         addSubscribingLink(getModel());
         addSimpleClipboardModalWindow();
+
+        EntityModel.RenderingHint renderingHint = getModel().getRenderingHint();
+        setVisible(renderingHint == EntityModel.RenderingHint.REGULAR);
     }
 
     private AjaxLink<ObjectAdapter> createLink(String linkId) {
