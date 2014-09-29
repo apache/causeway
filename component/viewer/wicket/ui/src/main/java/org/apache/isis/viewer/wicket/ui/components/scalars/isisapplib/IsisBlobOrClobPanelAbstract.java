@@ -181,7 +181,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     }
 
     private FileUploadField createFileUploadField(String componentId) {
-        final FileUploadField fileUploadField = new BootstrapFileInputField(componentId, new IModel<List<FileUpload>>() {
+        final BootstrapFileInputField fileUploadField = new BootstrapFileInputField(componentId, new IModel<List<FileUpload>>() {
     
             private static final long serialVersionUID = 1L;
     
@@ -207,6 +207,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
             }
             
         });
+        fileUploadField.getConfig().showUpload(false);
         return fileUploadField;
     }
 

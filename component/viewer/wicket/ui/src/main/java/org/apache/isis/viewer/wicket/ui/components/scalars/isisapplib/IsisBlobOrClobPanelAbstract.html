@@ -23,15 +23,15 @@
             <div class="isisBlobPanel scalarNameAndValueComponentType">
                 <div class="row">
                     <span wicket:id="scalarName" class="scalarName col-xs-3">[Label text]</span>
-                    <span class="col-xs-9">
+                    <div class="col-xs-9">
                         <label wicket:id="scalarIfRegular" style="width: 100%">
                             <img class="scalarImage text-center" width="200px" wicket:id="scalarImage"/>
                             <span class="scalarValue text-right">
 
-                                <span class="uploadFile">
+                                <span class="uploadFile help-block">
                                     <input type="file" name="scalarValue" wicket:id="scalarValue" class="form-control" />
                                 </span>
-                                <a wicket:id="scalarIfRegularClear" class="btn btn-default btn-sm"><span class="clearTitle">Clear</span></a>
+                                <a wicket:id="scalarIfRegularClear" class="btn btn-default btn-xs"><span class="clearTitle">Clear</span></a>
 
                                 <a class="download btn btn-xs btn-default" wicket:id="scalarIfRegularDownload"><span class="downloadTitle">Download</span></a>
                                 <span class="fileName" wicket:id="fileName"></span>
@@ -39,7 +39,7 @@
                             <span wicket:id="feedback" class="help-block"></span>
                             <span wicket:id="additionalLinks"></span>
                         </label>
-                    </span>
+                    </div>
                 </div>
 
                 <span wicket:id="scalarIfCompact">
