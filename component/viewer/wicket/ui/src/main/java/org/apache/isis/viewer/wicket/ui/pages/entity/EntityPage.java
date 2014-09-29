@@ -135,6 +135,9 @@ public class EntityPage extends PageAbstract {
 
         addBookmarkedPages();
 
+        // TODO mgrigorov: Zero Clipboard has been moved to EntityIconAndTitlePanel where the entity model is available.
+        // Is this still needed for something else ?!
+        //
         // ensure the copy link holds this page.
         send(this, Broadcast.BREADTH, new IsisUiHintEvent(entityModel, null));
     }

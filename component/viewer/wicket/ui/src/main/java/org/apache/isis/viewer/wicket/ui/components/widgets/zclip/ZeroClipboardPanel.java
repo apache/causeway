@@ -51,8 +51,8 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
     private AjaxLink<ObjectAdapter> copyLink;
     private SimpleClipboardModalWindow simpleClipboardModalWindow;
 
-    public ZeroClipboardPanel(String id) {
-        super(id);
+    public ZeroClipboardPanel(String id, EntityModel entityModel) {
+        super(id, entityModel);
     }
     
     @Override
@@ -63,7 +63,7 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
             copyLink = createLink(ID_COPY_LINK);
             addOrReplace(copyLink);
         }
-        addSubscribingLink(null);
+        addSubscribingLink(getModel());
         addSimpleClipboardModalWindow();
     }
 

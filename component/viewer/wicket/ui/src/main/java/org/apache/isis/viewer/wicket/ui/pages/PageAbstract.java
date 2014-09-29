@@ -194,7 +194,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             addLogoutLink(navbar);
             addAboutLink(navbar);
             addBreadcrumbs();
-            addCopyLink();
 
             // ensure that all collected JavaScript contributions are loaded at the page footer
             add(new HeaderResponseContainer("footerJS", "footerJS"));
@@ -311,12 +310,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         BreadcrumbPanel breadcrumbPanel = new BreadcrumbPanel(ID_BREADCRUMBS);
         themeDiv.addOrReplace(breadcrumbPanel);
     }
-    
-    private void addCopyLink() {
-        ZeroClipboardPanel zClipCopyLink = new ZeroClipboardPanel(ID_COPY_LINK);
-        themeDiv.addOrReplace(zClipCopyLink);
-    }
-    
 
     /**
      * As provided in the {@link #PageAbstract(org.apache.wicket.request.mapper.parameter.PageParameters, String, org.apache.isis.viewer.wicket.ui.ComponentType...)} constructor}.
@@ -411,7 +404,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     // ///////////////////////////////////////////////////////////////////
 
     /**
-     * Propogates all {@link org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract letter} events down to
+     * Propagates all {@link org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract letter} events down to
      * all child components, wrapped in an {@link org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent envelope} event.
      */
     public void onEvent(org.apache.wicket.event.IEvent<?> event) {
