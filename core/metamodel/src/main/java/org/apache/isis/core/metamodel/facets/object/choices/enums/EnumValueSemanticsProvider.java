@@ -42,7 +42,9 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
     private static <T extends Enum<T>> int typicalLengthFor(final Class<T> adaptedClass) {
         int max = Integer.MIN_VALUE;
         for(T e: adaptedClass.getEnumConstants()) {
-            max = Math.max(max, e.name().length());
+            final int nameLength = e.name().length();
+            final int toStringLength = e.toString().length();
+            max = Math.max(max, Math.max(nameLength, toStringLength));
         }
         return max;
     }
