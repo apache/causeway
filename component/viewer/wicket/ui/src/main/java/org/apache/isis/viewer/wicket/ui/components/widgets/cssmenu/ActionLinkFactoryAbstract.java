@@ -23,6 +23,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
@@ -144,6 +145,14 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     if(actionPanelFirstParam != null) {
                         target.focusComponent(actionPanelFirstParam);
                     }
+                }
+
+                @Override
+                protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+                    super.updateAjaxAttributes(attributes);
+
+                    // allow the event to bubble so the menu is hidden after click on an item
+                    attributes.setEventPropagation(AjaxRequestAttributes.EventPropagation.BUBBLE);
                 }
             };
 
