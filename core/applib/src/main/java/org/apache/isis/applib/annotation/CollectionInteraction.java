@@ -27,7 +27,7 @@ import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
 
 /**
  * Indicates that a member is (the accessor of) a collection that should use a custom (subclass of)
- * {@link org.apache.isis.applib.services.eventbus.CollectionInteractionEvent} to propogate the phases of the
+ * {@link org.apache.isis.applib.services.eventbus.CollectionInteractionEvent} to propagate the phases of the
  * interaction with collaborators over the registered {@link org.apache.isis.applib.services.eventbus.EventBusService}.
  *
  * <p>For example:

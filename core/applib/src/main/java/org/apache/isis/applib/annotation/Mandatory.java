@@ -44,7 +44,7 @@ import java.lang.annotation.Target;
  * annotation, so that Isis can apply the constraint even though the objectstore
  * is unable to do so.
  * 
- *  @see Optional
+ * @see Optional
  */
 @Inherited
 @Target({ ElementType.METHOD })

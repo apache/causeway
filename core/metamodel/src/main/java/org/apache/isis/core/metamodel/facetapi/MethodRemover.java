@@ -46,9 +46,9 @@ public interface MethodRemover {
      * that match the criteria and remove them from the implementation's list so
      * that they are not considered for subsequent scans.
      * 
-     * @param forClass
-     *            - if <tt>true</tt>, then looking for <tt>static</tt> methods
-     *            (otherwise instance methods).
+     * @param methodScope
+     *            - whether looking for <tt>static</tt> (class) or
+     *            instance-level methods.
      */
     void removeMethod(MethodScope methodScope, String methodName, Class<?> returnType, Class<?>[] parameterTypes);
 

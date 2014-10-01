@@ -29,9 +29,9 @@ import java.lang.annotation.Target;
  * Indicates that an instance cannot be changed.
  * 
  * <p>
- * To make something always immutable used the form <tt>@Immutable</tt>. To make
+ * To make something always immutable use the form <tt>@Immutable</tt>. To make
  * something immutable only once persisted use the form
- * <tt>@Immutable(Immutable.ONCE_PERSISTED)</tt>.
+ * <tt>@Immutable(When.ONCE_PERSISTED)</tt>.
  * 
  * <p>
  * By default any {@link Value value} types are assumed to be immutable, though

@@ -27,7 +27,7 @@ import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
 
 /**
  * Indicates that a member is (the accessor of) a property that should use a custom (subclass of)
- * {@link org.apache.isis.applib.services.eventbus.PropertyInteractionEvent} to propogate the phases of the
+ * {@link org.apache.isis.applib.services.eventbus.PropertyInteractionEvent} to propagate the phases of the
  * interaction with collaborators over the registered {@link org.apache.isis.applib.services.eventbus.EventBusService}.
 
  * Applies only to properties; any changes should be propagated as events to subscribers.
@@ -47,6 +47,7 @@ import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
  * load them using a repository, and then to delegate to the event to them.
  *
  * @see org.apache.isis.applib.annotation.PostsPropertyChangedEvent
+ * @see com.google.common.eventbus.Subscribe
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
