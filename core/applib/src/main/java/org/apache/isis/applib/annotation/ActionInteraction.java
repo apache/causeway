@@ -27,7 +27,7 @@ import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 
 /**
  * Indicates that a member is an action that should use a custom
- * (subclass of) {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent} to propogate the phases
+ * (subclass of) {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent} to propagate the phases
  * of the interaction with collaborators over the registered
  * {@link org.apache.isis.applib.services.eventbus.EventBusService}.
  *
