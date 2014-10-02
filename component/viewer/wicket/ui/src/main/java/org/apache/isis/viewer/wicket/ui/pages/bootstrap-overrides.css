@@ -35,3 +35,7 @@
     text-align: left;
     vertical-align: middle;
 }
+
+.navbar {
+    border-radius: 0;
+}
