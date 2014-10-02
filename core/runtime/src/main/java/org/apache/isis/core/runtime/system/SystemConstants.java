@@ -190,7 +190,7 @@ public final class SystemConstants {
      * Key by which requested fixture (eg via command line) is made available in
      * {@link IsisConfiguration}.
      */
-    public final static String FIXTURE_KEY = ConfigurationConstants.ROOT + "fixture";
+    public final static String FIXTURE_KEY = ConfigurationConstants.ROOT + "fixtures";
 
     /**
      * Key by which requested user (eg via command line) is made available in
