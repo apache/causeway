@@ -21,3 +21,17 @@
     width: 16px;
     height: 16px;
 }
+
+.table.contents .form-control:disabled {
+    background-color: transparent;
+    border: none;
+    text-align: center;
+    height: 23px;
+    padding: 1px 0;
+    cursor: default;
+}
+
+.table > thead > tr > th, td {
+    text-align: center;
+    vertical-align: middle;
+}
