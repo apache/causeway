@@ -32,6 +32,6 @@
 }
 
 .table > thead > tr > th, td {
-    text-align: center;
+    text-align: left;
     vertical-align: middle;
 }
