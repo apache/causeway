@@ -30,6 +30,7 @@ import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -79,14 +80,23 @@ public class DataNucleusIdentifierGenerator implements IdentifierGenerator {
             return "1";
         }
         
-        if(pojo instanceof ViewModel) {
-            ViewModel viewModel = (ViewModel) pojo;
-            return viewModel.viewModelMemento();
+        final ObjectSpecification spec = getSpecificationLookup().lookupBySpecId(objectSpecId);
+        if(spec.containsFacet(ViewModelFacet.class)) {
+            ViewModelFacet viewModelFacet = spec.getFacet(ViewModelFacet.class);
+            return viewModelFacet.memento(pojo);
         }
         final Object jdoOid = getJdoPersistenceManager().getObjectId(pojo);
         return JdoObjectIdSerializer.toOidIdentifier(jdoOid);
     }
 
+
+    //////////////////////////////////////////////////////////////////
+    // context
+    //////////////////////////////////////////////////////////////////
+
+    protected SpecificationLoader getSpecificationLookup() {
+        return IsisContext.getSpecificationLoader();
+    }
 
 
     // //////////////////////////////////////////////////////////////
