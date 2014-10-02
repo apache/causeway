@@ -63,6 +63,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureFromInitParameters;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -387,11 +388,16 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
     @SuppressWarnings("unchecked")
     private static void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
-        final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers = (List<IsisConfigurationBuilderPrimer>) servletContext.getAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY);
-        if (isisConfigurationBuilderPrimers == null) {
-            return;
+        LOG.info("loading properties from option handlers");
+        final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers = Lists.newArrayList();
+        final List<IsisConfigurationBuilderPrimer> primers = (List<IsisConfigurationBuilderPrimer>) servletContext.getAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY);
+        if(primers != null) {
+            isisConfigurationBuilderPrimers.addAll(primers);
         }
+        // also support loading from init parameters (specifically, to support simplericity's jetty-console)
+        isisConfigurationBuilderPrimers.add(new OptionHandlerFixtureFromInitParameters(servletContext));
         for (final IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
+            LOG.info("priming configurations for " + isisConfigurationBuilderPrimer);
             isisConfigurationBuilderPrimer.primeConfigurationBuilder(isisConfigurationBuilder);
         }
     }

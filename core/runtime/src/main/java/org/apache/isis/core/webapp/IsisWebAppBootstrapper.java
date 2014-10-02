@@ -20,17 +20,14 @@
 package org.apache.isis.core.webapp;
 
 import java.util.List;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-
+import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
@@ -41,6 +38,7 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureFromInitParameters;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
@@ -133,13 +131,15 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
     }
 
     @SuppressWarnings("unchecked")
-    private void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
+    private static void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
         LOG.info("loading properties from option handlers");
-        final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers =
-                (List<IsisConfigurationBuilderPrimer>) servletContext.getAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY);
-        if (isisConfigurationBuilderPrimers == null) {
-            return;
+        final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers = Lists.newArrayList();
+        final List<IsisConfigurationBuilderPrimer> primers = (List<IsisConfigurationBuilderPrimer>) servletContext.getAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY);
+        if(primers != null) {
+            isisConfigurationBuilderPrimers.addAll(primers);
         }
+        // also support loading from init parameters (specifically, to support simplericity's jetty-console)
+        isisConfigurationBuilderPrimers.add(new OptionHandlerFixtureFromInitParameters(servletContext));
         for (final IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
             LOG.debug("priming configurations for " + isisConfigurationBuilderPrimer);
             isisConfigurationBuilderPrimer.primeConfigurationBuilder(isisConfigurationBuilder);
@@ -153,8 +153,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
      * {@value WebAppConstants#DEPLOYMENT_TYPE_KEY} and also
      * {@value SystemConstants#DEPLOYMENT_TYPE_KEY}.
      * <p>
-     * If no setting is found, defaults to
-     * {@value WebAppConstants#DEPLOYMENT_TYPE_DEFAULT}.
+     * If no setting is found, defaults to {@link WebAppConstants#DEPLOYMENT_TYPE_DEFAULT}.
      */
     private DeploymentType determineDeploymentType(final IsisConfigurationBuilder isisConfigurationBuilder, final ServletContext servletContext) {
         String deploymentTypeStr = null;

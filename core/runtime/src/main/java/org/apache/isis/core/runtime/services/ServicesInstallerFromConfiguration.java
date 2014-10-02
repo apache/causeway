@@ -37,6 +37,11 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
 
     private static final String SERVICES = "services";
     private static final String EXPLORATION_OBJECTS = "exploration-objects";
+
+    /**
+     * @deprecated - just adds to the cognotive load...
+     */
+    @Deprecated
     private static final String SERVICES_PREFIX = "services.prefix";
 
     private final static Pattern regex = Pattern.compile("((\\d+):)(.*)");

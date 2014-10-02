@@ -228,10 +228,9 @@ public class IsisRunner {
         addOptionHandler(optionHandlerDeploymentType);
         addOptionHandler(new OptionHandlerConfiguration());
 
-        OptionHandlerPersistor optionHandlerPersistor;
         OptionHandlerViewer optionHandlerViewer;
 
-        addOptionHandler(optionHandlerPersistor = new OptionHandlerPersistor(installerLookup));
+        addOptionHandler(new OptionHandlerPersistor(installerLookup));
         addOptionHandler(optionHandlerViewer = new OptionHandlerViewer(installerLookup));
 
         addOptionHandler(new OptionHandlerReflector(installerLookup));
@@ -240,6 +239,8 @@ public class IsisRunner {
         addOptionHandler(new OptionHandlerFixture());
         addOptionHandler(new OptionHandlerNoSplash());
         addOptionHandler(new OptionHandlerAdditionalProperty());
+        addOptionHandler(new OptionHandlerFixtureFromEnvironmentVariable());
+        addOptionHandler(new OptionHandlerSystemProperties());
 
         addOptionHandler(new OptionHandlerDebug());
         addOptionHandler(new OptionHandlerDiagnostics());

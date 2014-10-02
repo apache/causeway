@@ -18,48 +18,33 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatContext;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-
 import java.sql.Connection;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
-
 import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.spi.PersistenceCapable;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.adapter.oid.*;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -81,14 +66,13 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchron
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusUpdateObjectCommand;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindByPatternProcessor;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindByTitleProcessor;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.QueryUtil;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.*;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoNamedQuery;
+
+import static org.apache.isis.core.commons.ensure.Ensure.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 
 public class DataNucleusObjectStore implements ObjectStoreSpi {
 
@@ -171,12 +155,12 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
      * {@inheritDoc}
      * <p>
      * Automatically {@link IsisTransactionManager#endTransaction() ends
-     * (commits)} the current (Isis) {@link Transaction}. This in turn
+     * (commits)} the current (Isis) {@link IsisTransaction}. This in turn
      * {@link DataNucleusObjectStore#commitJdoTransaction() commits the underlying
-     * JPA transaction}.
+     * JDO transaction}.
+     *
      * <p>
-     * The corresponding DataNucleus {@link Entity} is then
-     * {@link EntityManager#close() close}d.
+     * The corresponding DataNucleus entity is then closed.
      */
     public void close() {
         ensureOpened();
@@ -223,7 +207,9 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
      * the fly during bootstrapping if required.
      */
     public boolean isFixturesInstalled() {
-        return ! getConfiguration().getBoolean(INSTALL_FIXTURES_KEY, INSTALL_FIXTURES_DEFAULT);
+        final boolean installFixtures = getConfiguration().getBoolean(INSTALL_FIXTURES_KEY, INSTALL_FIXTURES_DEFAULT);
+        LOG.info("isFixturesInstalled: " + INSTALL_FIXTURES_KEY + " = " + installFixtures);
+        return !installFixtures;
     }
 
 
@@ -430,18 +416,6 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
 
 
 
-    /**
-     * Will do nothing if object is already resolved or if object is transient.
-     * <p>
-     * TODO:
-     * The final {@link ResolveState} of the adapter is set using
-     * {@link NakedLoadPostEventListener#onPostLoad(org.hibernate.event.PostLoadEvent)}
-     * Note: this is the same behaviour as MemoryObjectStore, XmlObjectStore
-     * and HibernateObjectStore.
-     * <p>
-     * REVIEW: if the initial state is RESOLVING_PART, then the
-     * {@link ResolveState} is not changed. Is this right?
-     */
     public void resolveImmediately(final ObjectAdapter adapter) {
         ensureOpened();
         ensureInTransaction();

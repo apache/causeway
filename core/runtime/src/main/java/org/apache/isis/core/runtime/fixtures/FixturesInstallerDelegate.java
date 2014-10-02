@@ -69,8 +69,6 @@ public class FixturesInstallerDelegate {
      */
     private LogonFixture logonFixture;
 
-    private boolean override;
-
     // /////////////////////////////////////////////////////////
     // Constructor
     // /////////////////////////////////////////////////////////
@@ -93,18 +91,6 @@ public class FixturesInstallerDelegate {
         this.persistenceSession = persistenceSession;
     }
     
-    /**
-     * Force the ability to install the fixtures (outside of initial bootstrapping).
-     * 
-     * 
-     * <p>
-     * Intended for programmatic reuse of installation of fixtures within the
-     * running application (eg for demo purposes).
-     */
-    public FixturesInstallerDelegate withOverride() {
-        this.override = true;
-        return this;
-    }
 
     // /////////////////////////////////////////////////////////
     // addFixture, getFixtures, clearFixtures
@@ -149,8 +135,9 @@ public class FixturesInstallerDelegate {
      * 
      * <p>
      * The set of fixtures (as per {@link #getFixtures()}) is <i>not</i> cleared
-     * after installation; this allows the {@link FixtureBuilderAbstract} to be
-     * reused across multiple tests.
+     * after installation; the intention being to allow the
+     * {@link org.apache.isis.core.runtime.fixtures.FixturesInstallerAbstract} to be
+     * reused across multiple tests (REVIEW: does that make sense?)
      */
     public final void installFixtures() {
         preInstallFixtures(getPersistenceSession());
@@ -235,12 +222,7 @@ public class FixturesInstallerDelegate {
     }
 
     private boolean shouldInstallFixture(final InstallableFixture installableFixture) {
-        if(override) {
-            return true;
-        }
-        
         final FixtureType fixtureType = installableFixture.getType();
-
         if (fixtureType == FixtureType.DOMAIN_OBJECTS) {
             return !IsisContext.getPersistenceSession().isFixturesInstalled();
         }
@@ -292,9 +274,7 @@ public class FixturesInstallerDelegate {
 
     /**
      * Returns either the {@link IsisContext#getPersistenceSession() singleton }
-     * persistor or the persistor
-     * {@link #AbstractFixtureBuilder(PersistenceSession) specified by the
-     * constructor} if specified.
+     * persistor or the persistor specified in the constructor.
      * 
      * <p>
      * Note: if a {@link PersistenceSession persistor} was specified via the
