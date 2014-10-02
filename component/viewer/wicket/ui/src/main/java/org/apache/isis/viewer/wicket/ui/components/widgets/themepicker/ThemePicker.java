@@ -47,20 +47,20 @@ public class ThemePicker extends Panel {
         allThemes.add(bootstrapTheme);
 
         ListView<ITheme> themesView = new ListView<ITheme>("themes", allThemes) {
-            ActiveThemeProvider activeThemeProvider = Bootstrap.getSettings().getActiveThemeProvider();
 
             @Override
             protected void populateItem(ListItem<ITheme> item) {
                 final ITheme theme = item.getModelObject();
-                if (theme.equals(activeThemeProvider.getActiveTheme())) {
+
+                if (theme.equals(getActiveThemeProvider().getActiveTheme())) {
                     item.add(AttributeModifier.append("class", "active"));
                 }
                 item.add(new AjaxLink<Void>("themeLink") {
+                    // use Ajax link because Link's url looks like /ENTITY:3 and this confuses the browser
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         IBootstrapSettings bootstrapSettings = Bootstrap.getSettings();
-                        ActiveThemeProvider activeThemeProvider = bootstrapSettings.getActiveThemeProvider();
-                        activeThemeProvider.setActiveTheme(theme);
+                        getActiveThemeProvider().setActiveTheme(theme);
                         if (theme instanceof BootstrapThemeTheme) {
                             bootstrapSettings.setThemeProvider(new SingleThemeProvider(theme));
                         } else if (theme instanceof BootswatchTheme) {
@@ -74,6 +74,10 @@ public class ThemePicker extends Panel {
             }
         };
         add(themesView);
+    }
+
+    private ActiveThemeProvider getActiveThemeProvider() {
+        return Bootstrap.getSettings().getActiveThemeProvider();
     }
 
     @Override
