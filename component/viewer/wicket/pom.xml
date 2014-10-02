@@ -360,6 +360,13 @@
             </dependency>
 
             <dependency>
+                <groupId>de.agilecoders.wicket</groupId>
+                <artifactId>wicket-bootstrap-themes</artifactId>
+                <version>${wicket-bootstrap.version}</version>
+            </dependency>
+
+
+            <dependency>
                 <groupId>net.ftlines.wicket-source</groupId>
                 <artifactId>wicket-source</artifactId>
                 <version>${wicket-source.version}</version>

@@ -82,7 +82,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardPanel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemePicker;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.overlays.Overlays;
@@ -116,6 +116,8 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static final String ID_PAGE_TITLE = "pageTitle";
     
     public static final String ID_MENU_LINK = "menuLink";
+
+    private static final String ID_THEME_PICKER = "themePicker";
 
     // TODO mgrigorov: are those used somewhere else ? since they are public
     public static final String ID_LOGOUT_LINK = "logoutLink";
@@ -195,6 +197,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             addLogoutLink(navbar);
             addAboutLink(navbar);
             addBreadcrumbs();
+            addThemePicker();
 
             // ensure that all collected JavaScript contributions are loaded at the page footer
             add(new HeaderResponseContainer("footerJS", "footerJS"));
@@ -218,6 +221,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
             throw new RestartResponseAtInterceptPageException(getSignInPage());
         }
+    }
+
+    private void addThemePicker() {
+        ThemePicker themePicker = new ThemePicker(ID_THEME_PICKER);
+        themeDiv.addOrReplace(themePicker);
     }
 
 
