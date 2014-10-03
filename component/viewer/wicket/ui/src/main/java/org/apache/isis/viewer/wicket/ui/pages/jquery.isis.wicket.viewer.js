@@ -20,43 +20,41 @@ $(document).ready(function() {
 
     var isisVeilTimeoutId;
     
-    isisShowVeil = function() {
+    var isisShowVeil = function() {
         if(isisVeilTimeoutId) {
             clearTimeout(isisVeilTimeoutId);
             isisVeilTimeoutId = null;
         }
-        $("#veil").stop().show();
+        $("#veil").stop().fadeIn(1000)/*show()*/;
     }
-    isisFadeInVeil = function(attributes, jqxhr, settings) {
+    var isisFadeInVeil = function(attributes, jqxhr, settings) {
         // use timeouts because JQuery's delay(...) cannot be stopped. 
-        var activeEl = attributes.currentTarget.activeElement;
+        //var activeEl = attributes.currentTarget.activeElement;
         isisVeilTimeoutId = setTimeout(function() {
             $("#veil").fadeIn(750);
         }, 250);
         
     }
-    isisHideVeil = function(attributes, jqXHR, settings) {
+    var isisHideVeil = function(attributes, jqXHR, settings) {
         if(isisVeilTimeoutId) {
             clearTimeout(isisVeilTimeoutId);
             isisVeilTimeoutId = null;
         }
         $("#veil").stop().hide();
     }
-    
-    isisOpenInNewTab = function(url){
+
+    var isisOpenInNewTab = function(url){
     	var win=window.open(url, '_blank'); 
     	if(win) { win.focus(); }
 	}
 
     /* for modal dialogs */
-    Wicket.Event.subscribe(
-            '/ajax/call/beforeSend', function(attributes, jqXHR, settings) {
-                isisFadeInVeil(attributes, jqXHR, settings);
-            });
-    Wicket.Event.subscribe(
-            '/ajax/call/complete', function(attributes, jqXHR, settings) {
-                isisHideVeil(attributes, jqXHR, settings);
-            });
+    Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_BEFORE_SEND, function(attributes, jqXHR, settings) {
+        isisShowVeil(attributes, jqXHR, settings);
+    });
+    Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_COMPLETE, function(attributes, jqXHR, settings) {
+        isisHideVeil(attributes, jqXHR, settings);
+    });
     
 
     

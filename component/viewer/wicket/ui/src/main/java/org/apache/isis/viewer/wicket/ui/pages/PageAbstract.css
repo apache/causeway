@@ -907,35 +907,6 @@ div.wicket-mask-dark {
 }
 
 
-/* veil */
-
-#veil {
-    z-index: 40000; 
-    background-image: none; 
-	background-color: black;
-	
-	display: none;
-	position:absolute;
-	top:0;
-	left:0;
-	height: 100%;
-	width: 100%;
-	opacity: 0.4;
-    filter: alpha(opacity=40);
-}
-
-#veil div.imgHolder {
-	display: relative;
-}
-
-#veil img {
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    margin-top: 3em;
-} 
-
-
 /* action buttons in properties */
 
 .properties .property .additionalLinkList {
