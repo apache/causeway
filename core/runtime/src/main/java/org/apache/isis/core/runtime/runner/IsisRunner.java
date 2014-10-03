@@ -51,8 +51,6 @@ public class IsisRunner {
     private final OptionHandlerDeploymentType optionHandlerDeploymentType;
     private final InstallerLookup installerLookup;
 
-    private final OptionHandlerViewer optionHandlerViewer;
-
     private final List<OptionHandler> optionHandlers = Lists.newArrayList();
     private final List<OptionValidator> validators = Lists.newArrayList();
     private IsisConfigurationBuilder isisConfigurationBuilder;
@@ -71,7 +69,7 @@ public class IsisRunner {
         loggingConfigurer.configureLogging(determineConfigDirectory(), args);
         this.installerLookup = new InstallerLookup();
 
-        this.optionHandlerViewer = addStandardOptionHandlersAndValidators(this.installerLookup);
+        addStandardOptionHandlersAndValidators(this.installerLookup);
     }
 
     // REVIEW is this something that IsisConfigBuilder should know about?
@@ -212,7 +210,6 @@ public class IsisRunner {
 
     private Injector createGuiceInjector(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder, final InstallerLookup installerLookup, final List<OptionHandler> optionHandlers) {
         final IsisInjectModule isisModule = new IsisInjectModule(deploymentType, isisConfigurationBuilder, installerLookup);
-        isisModule.addViewerNames(optionHandlerViewer.getViewerNames());
         return Guice.createInjector(isisModule);
     }
 
@@ -224,14 +221,11 @@ public class IsisRunner {
         return Collections.unmodifiableList(optionHandlers);
     }
 
-    private OptionHandlerViewer addStandardOptionHandlersAndValidators(final InstallerLookup installerLookup) {
+    private void addStandardOptionHandlersAndValidators(final InstallerLookup installerLookup) {
         addOptionHandler(optionHandlerDeploymentType);
         addOptionHandler(new OptionHandlerConfiguration());
 
-        OptionHandlerViewer optionHandlerViewer;
-
         addOptionHandler(new OptionHandlerPersistor(installerLookup));
-        addOptionHandler(optionHandlerViewer = new OptionHandlerViewer(installerLookup));
 
         addOptionHandler(new OptionHandlerReflector(installerLookup));
         addOptionHandler(new OptionHandlerUserProfileStore(installerLookup));
@@ -249,11 +243,6 @@ public class IsisRunner {
 
         addOptionHandler(new OptionHandlerHelp());
         addOptionHandler(new OptionHandlerVersion());
-
-        // validators
-        addValidator(new OptionValidatorForViewers(optionHandlerViewer));
-
-        return optionHandlerViewer;
     }
 
 }

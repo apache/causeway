@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtime.runner;
 
-import java.util.Collections;
 import java.util.List;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
@@ -29,12 +28,10 @@ import com.google.inject.Singleton;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
-import org.apache.isis.core.runtime.installerregistry.installerapi.IsisViewerInstaller;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.IsisSystemFactory;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisSystemThatUsesInstallersFactory;
-import org.apache.isis.core.runtime.viewer.IsisViewer;
 
 public class IsisInjectModule extends AbstractModule {
 
@@ -135,36 +132,6 @@ public class IsisInjectModule extends AbstractModule {
         final IsisSystem system = systemFactory.createSystem(deploymentType);
         system.init();
         return system;
-    }
-
-    public static class ViewerList {
-        private final List<IsisViewer> viewers;
-
-        public ViewerList(final List<IsisViewer> viewers) {
-            this.viewers = Collections.unmodifiableList(viewers);
-        }
-
-        public List<IsisViewer> getViewers() {
-            return viewers;
-        }
-    }
-
-    @SuppressWarnings("unused")
-    @Provides
-    @Inject
-    @Singleton
-    private ViewerList lookupViewers(final InstallerLookup installerLookup, final DeploymentType deploymentType) {
-
-        final List<String> viewersToStart = Lists.newArrayList(viewerNames);
-        deploymentType.addDefaultViewer(viewersToStart);
-
-        final List<IsisViewer> viewers = Lists.newArrayList();
-        for (final String requestedViewer : viewersToStart) {
-            final IsisViewerInstaller viewerInstaller = installerLookup.viewerInstaller(requestedViewer);
-            final IsisViewer viewer = viewerInstaller.createViewer();
-            viewers.add(viewer);
-        }
-        return new ViewerList(viewers);
     }
 
 }

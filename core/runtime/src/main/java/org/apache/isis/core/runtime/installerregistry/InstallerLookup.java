@@ -54,8 +54,6 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstalle
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoaderInstaller;
-import org.apache.isis.core.runtime.installerregistry.installerapi.EmbeddedWebServerInstaller;
-import org.apache.isis.core.runtime.installerregistry.installerapi.IsisViewerInstaller;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -65,9 +63,7 @@ import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInj
 import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInjectorAware;
 import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 
 /**
  * The installers correspond more-or-less to the configurable top-level
@@ -240,18 +236,6 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
     public UserProfileStoreInstaller userProfilePersistenceMechanismInstaller(final String requested, final DeploymentType deploymentType) {
         final String profileStoreDefault = deploymentType.isExploring() || deploymentType.isPrototyping() ? SystemConstants.USER_PROFILE_STORE_NON_PRODUCTION_DEFAULT : SystemConstants.USER_PROFILE_STORE_PRODUCTION_DEFAULT;
         return getInstaller(UserProfileStoreInstaller.class, requested, SystemConstants.USER_PROFILE_STORE_KEY, profileStoreDefault);
-    }
-
-    public EmbeddedWebServerInstaller embeddedWebServerInstaller(final String requested) {
-        return getInstaller(EmbeddedWebServerInstaller.class, requested, SystemConstants.WEBSERVER_KEY, SystemConstants.WEBSERVER_DEFAULT);
-    }
-
-    public IsisViewerInstaller viewerInstaller(final String name) {
-        final IsisViewerInstaller installer = getInstaller(IsisViewerInstaller.class, name);
-        if (installer == null) {
-            throw new IsisException("No viewer installer of type " + name);
-        }
-        return installer;
     }
 
     public ServicesInstaller servicesInstaller(final String requestedImplementationName) {
