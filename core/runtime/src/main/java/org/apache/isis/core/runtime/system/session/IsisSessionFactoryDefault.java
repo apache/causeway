@@ -40,7 +40,6 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
-import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -71,7 +70,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     
     private final DeploymentType deploymentType;
     private final IsisConfiguration configuration;
-    private final TemplateImageLoader templateImageLoader;
     private final SpecificationLoaderSpi specificationLoaderSpi;
     private final AuthenticationManager authenticationManager;
     private final AuthorizationManager authorizationManager;
@@ -82,22 +80,20 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     private final OidMarshaller oidMarshaller;
 
     public IsisSessionFactoryDefault(
-            final DeploymentType deploymentType, 
-            final IsisConfiguration configuration, 
-            final SpecificationLoaderSpi specificationLoader, 
-            final TemplateImageLoader templateImageLoader, 
+            final DeploymentType deploymentType,
+            final IsisConfiguration configuration,
+            final SpecificationLoaderSpi specificationLoader,
             final AuthenticationManager authenticationManager,
-            final AuthorizationManager authorizationManager, 
-            final UserProfileLoader userProfileLoader, 
-            final PersistenceSessionFactory persistenceSessionFactory, 
-            final DomainObjectContainer container, 
-            final List<Object> serviceList, 
+            final AuthorizationManager authorizationManager,
+            final UserProfileLoader userProfileLoader,
+            final PersistenceSessionFactory persistenceSessionFactory,
+            final DomainObjectContainer container,
+            final List<Object> serviceList,
             final OidMarshaller oidMarshaller) {
 
         ensureThatArg(deploymentType, is(not(nullValue())));
         ensureThatArg(configuration, is(not(nullValue())));
         ensureThatArg(specificationLoader, is(not(nullValue())));
-        ensureThatArg(templateImageLoader, is(not(nullValue())));
         ensureThatArg(authenticationManager, is(not(nullValue())));
         ensureThatArg(authorizationManager, is(not(nullValue())));
         ensureThatArg(userProfileLoader, is(not(nullValue())));
@@ -106,7 +102,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         this.deploymentType = deploymentType;
         this.configuration = configuration;
-        this.templateImageLoader = templateImageLoader;
         this.specificationLoaderSpi = specificationLoader;
         this.authenticationManager = authenticationManager;
         this.authorizationManager = authorizationManager;
@@ -199,8 +194,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
      */
     @Override
     public void init() {
-        templateImageLoader.init();
-
         specificationLoaderSpi.setContainer(container);
         specificationLoaderSpi.setServices(serviceList);
         specificationLoaderSpi.init();
@@ -225,7 +218,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         persistenceSessionFactory.shutdown();
         authenticationManager.shutdown();
         specificationLoaderSpi.shutdown();
-        templateImageLoader.shutdown();
         userProfileLoader.shutdown();
     }
 
@@ -263,11 +255,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     @Override
     public SpecificationLoaderSpi getSpecificationLoader() {
         return specificationLoaderSpi;
-    }
-
-    @Override
-    public TemplateImageLoader getTemplateImageLoader() {
-        return templateImageLoader;
     }
 
     @Override

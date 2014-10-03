@@ -22,10 +22,8 @@ package org.apache.isis.core.runtime.system;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -42,15 +40,12 @@ import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.exploration.ExplorationSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
-import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
-import org.apache.isis.core.runtime.imageloader.awt.TemplateImageLoaderAwt;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
-import org.apache.isis.core.runtime.system.internal.SplashWindow;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -66,13 +61,9 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
 
     public static final Logger LOG = LoggerFactory.getLogger(IsisSystemFixturesHookAbstract.class);
 
-    private static final int SPLASH_DELAY_DEFAULT = 6;
-
     private final IsisLocaleInitializer localeInitializer;
     private final IsisTimeZoneInitializer timeZoneInitializer;
     private final DeploymentType deploymentType;
-
-    private SplashWindow splashWindow;
 
     private boolean initialized = false;
 
@@ -123,12 +114,7 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
         localeInitializer.initLocale(getConfiguration());
         timeZoneInitializer.initTimeZone(getConfiguration());
 
-        int splashDelay = SPLASH_DELAY_DEFAULT;
         try {
-            final TemplateImageLoader splashLoader = obtainTemplateImageLoader();
-            splashLoader.init();
-            showSplash(splashLoader);
-
             sessionFactory = doCreateSessionFactory(deploymentType);
 
             // temporarily make a configuration available
@@ -145,10 +131,7 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
 
         } catch (final IsisSystemException ex) {
             LOG.error("failed to initialise", ex);
-            splashDelay = 0;
             throw new RuntimeException(ex);
-        } finally {
-            removeSplash(splashDelay);
         }
     }
 
@@ -262,17 +245,6 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
     @Override
     public abstract IsisConfiguration getConfiguration();
 
-    // ///////////////////////////////////////////
-    // TemplateImageLoader
-    // ///////////////////////////////////////////
-
-    /**
-     * Just returns a {@link TemplateImageLoaderAwt}; subclasses may override if
-     * required.
-     */
-    protected TemplateImageLoader obtainTemplateImageLoader() {
-        return new TemplateImageLoaderAwt(getConfiguration());
-    }
 
     // ///////////////////////////////////////////
     // OidMarshaller
@@ -374,28 +346,6 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
 
     protected abstract List<Object> obtainServices();
 
-    // ///////////////////////////////////////////
-    // Splash
-    // ///////////////////////////////////////////
-
-    private void showSplash(final TemplateImageLoader imageLoader) {
-
-        final boolean vetoSplashFromConfig = getConfiguration().getBoolean(SystemConstants.NOSPLASH_KEY, SystemConstants.NOSPLASH_DEFAULT);
-        if (!vetoSplashFromConfig && getDeploymentType().shouldShowSplash()) {
-            splashWindow = new SplashWindow(imageLoader);
-        }
-    }
-
-    private void removeSplash(final int delay) {
-        if (splashWindow != null) {
-            if (delay == 0) {
-                splashWindow.removeImmediately();
-            } else {
-                splashWindow.toFront();
-                splashWindow.removeAfterDelay(delay);
-            }
-        }
-    }
 
     // ///////////////////////////////////////////
     // debugging

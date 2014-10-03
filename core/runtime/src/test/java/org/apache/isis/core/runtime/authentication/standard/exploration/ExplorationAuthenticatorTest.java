@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.runtime.authentication.standard.exploration;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -29,7 +26,6 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
 import org.apache.isis.core.runtime.authentication.exploration.AuthenticationRequestExploration;
@@ -37,6 +33,9 @@ import org.apache.isis.core.runtime.authentication.exploration.ExplorationAuthen
 import org.apache.isis.core.runtime.authentication.exploration.ExplorationAuthenticatorConstants;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.SystemConstants;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 @RunWith(JMock.class)
 public class ExplorationAuthenticatorTest {
@@ -63,7 +62,7 @@ public class ExplorationAuthenticatorTest {
         mockery.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString(ExplorationAuthenticatorConstants.USERS);
-                will(returnValue(DeploymentType.EXPLORATION.name()));
+                will(returnValue(DeploymentType.UNIT_TESTING.name()));
             }
         });
 
@@ -88,7 +87,7 @@ public class ExplorationAuthenticatorTest {
         mockery.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
-                will(returnValue(DeploymentType.EXPLORATION.name()));
+                will(returnValue(DeploymentType.SERVER_EXPLORATION.name()));
             }
         });
         assertThat(authenticator.isValid(explorationRequest), is(true));
@@ -99,7 +98,7 @@ public class ExplorationAuthenticatorTest {
         mockery.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
-                will(returnValue(DeploymentType.PROTOTYPE.name()));
+                will(returnValue(DeploymentType.UNIT_TESTING.name()));
             }
         });
         assertThat(authenticator.isValid(explorationRequest), is(false));
@@ -121,7 +120,7 @@ public class ExplorationAuthenticatorTest {
         mockery.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
-                will(returnValue(DeploymentType.EXPLORATION.name()));
+                will(returnValue(DeploymentType.UNIT_TESTING.name()));
             }
         });
         assertThat(authenticator.canAuthenticate(someOtherRequest.getClass()), is(false));

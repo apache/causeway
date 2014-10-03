@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.runtime.authentication.standard;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -29,11 +26,13 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticatorAbstractForDfltRuntime;
 import org.apache.isis.core.runtime.system.DeploymentType;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 @RunWith(JMock.class)
 public class AuthenticatorAbstractForDfltRuntimeTest {
@@ -68,7 +67,7 @@ public class AuthenticatorAbstractForDfltRuntimeTest {
 
     @Test
     public void getDeploymentTypeForExploration() throws Exception {
-        final DeploymentType deploymentType = DeploymentType.EXPLORATION;
+        final DeploymentType deploymentType = DeploymentType.SERVER_EXPLORATION;
         mockery.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.deploymentType");
@@ -80,7 +79,7 @@ public class AuthenticatorAbstractForDfltRuntimeTest {
 
     @Test
     public void getDeploymentTypeForPrototype() throws Exception {
-        final DeploymentType deploymentType = DeploymentType.PROTOTYPE;
+        final DeploymentType deploymentType = DeploymentType.SERVER_PROTOTYPE;
         mockery.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.deploymentType");

@@ -39,7 +39,6 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
-import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.context.IsisContextStatic;
@@ -65,8 +64,6 @@ public class IsisContextTest {
     @Mock
     private SpecificationLoaderSpi mockSpecificationLoader;
 
-    @Mock
-    protected TemplateImageLoader mockTemplateImageLoader;
     @Mock
     protected PersistenceSessionFactory mockPersistenceSessionFactory;
     @Mock
@@ -110,13 +107,12 @@ public class IsisContextTest {
                 ignoring(mockUserProfileLoader);
                 ignoring(mockAuthenticationManager);
                 ignoring(mockAuthorizationManager);
-                ignoring(mockTemplateImageLoader);
-                
+
                 ignoring(mockContainer);
             }
         });
 
-        sessionFactory = new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, mockSpecificationLoader, mockTemplateImageLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, mockContainer, servicesList, oidMarshaller);
+        sessionFactory = new IsisSessionFactoryDefault(DeploymentType.UNIT_TESTING, configuration, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, mockContainer, servicesList, oidMarshaller);
         authSession = new SimpleSession("tester", Collections.<String>emptyList());
         
         IsisContext.setConfiguration(configuration);

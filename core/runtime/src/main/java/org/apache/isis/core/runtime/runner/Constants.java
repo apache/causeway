@@ -20,7 +20,6 @@
 package org.apache.isis.core.runtime.runner;
 
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
-import org.apache.isis.core.runtime.installerregistry.installerapi.IsisViewerInstaller;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.logging.LoggingConstants;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -33,9 +32,6 @@ public final class Constants {
 
     public static final String TYPE_OPT = "t";
     public static final String TYPE_LONG_OPT = "type";
-    public static final String TYPE_EXPLORATION = DeploymentType.EXPLORATION.friendlyName();
-    public static final String TYPE_PROTOTYPE = DeploymentType.PROTOTYPE.friendlyName();
-    public static final String TYPE_SINGLE_USER = DeploymentType.SINGLE_USER.friendlyName();
     public static final String TYPE_SERVER_EXPLORATION = DeploymentType.SERVER_EXPLORATION.friendlyName();
     public static final String TYPE_SERVER_PROTOTYPE = DeploymentType.SERVER_PROTOTYPE.friendlyName();
     public static final String TYPE_SERVER = DeploymentType.SERVER.friendlyName();
@@ -48,9 +44,6 @@ public final class Constants {
 
     public static final String USER_PROFILE_STORE_OPT = "e";
     public static final String USER_PROFILE_STORE_LONG_OPT = UserProfileStoreInstaller.TYPE;
-
-    public static final String VIEWER_OPT = "v";
-    public static final String VIEWER_LONG_OPT = IsisViewerInstaller.TYPE;
 
     public static final String CONFIGURATION_OPT = "c";
     public static final String CONFIGURATION_LONG_OPT = "config";

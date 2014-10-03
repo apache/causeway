@@ -33,17 +33,8 @@ import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.system.DeploymentType;
 
 /**
- * Creates a session suitable for {@link DeploymentType#EXPLORATION exploration}
+ * Creates a session suitable for {@link DeploymentType#SERVER_EXPLORATION exploration}
  * mode.
- * 
- * <p>
- * If the {@link IsisConfiguration} contains the key
- * {@value ExplorationAuthenticatorConstants#USERS} then returns a
- * {@link MultiUserExplorationSession} which encapsulates the details of several
- * users (and their roles). Viewers that are aware of this capability can offer
- * the convenient ability to switch between these users. For viewers that are
- * not aware, the {@link MultiUserExplorationSession} appears as a regular
- * {@link SimpleSession session}, with the Id of the first user listed.
  * 
  * <p>
  * The format of the {@value ExplorationAuthenticatorConstants#USERS} key should
@@ -126,9 +117,7 @@ public class ExplorationAuthenticator extends AuthenticatorAbstractForDfltRuntim
         if (!authenticationRequestExploration.isDefaultUser()) {
             registeredSessions.add(createSimpleSession(authenticationRequestExploration.getName(), authenticationRequestExploration.getRoles()));
         }
-        if (registeredSessions.size() > 1) {
-            return new MultiUserExplorationSession(registeredSessions, code);
-        } else if (registeredSessions.size() == 1) {
+        if (registeredSessions.size() >= 1) {
             return registeredSessions.iterator().next();
         } else {
             return new ExplorationSession(code);

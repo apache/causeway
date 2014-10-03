@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
-import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
@@ -91,8 +90,6 @@ public abstract class IsisContext implements DebuggableWithTitle {
 
     /**
      * Resets the singleton, so another can created.
-     * 
-     * @see #Isis()
      */
     public static void testReset() {
         singleton = null;
@@ -367,24 +364,6 @@ public abstract class IsisContext implements DebuggableWithTitle {
         return getSessionFactory().getAuthenticationManager();
     }
 
-    /**
-     * Convenience method.
-     * 
-     * @see IsisSessionFactory#getAuthorizationManager()
-     */
-    public static AuthorizationManager getAuthorizationManager() {
-        return getSessionFactory().getAuthorizationManager();
-    }
-
-    /**
-     * Convenience method.
-     * 
-     * @see IsisSessionFactory#getTemplateImageLoader()
-     */
-    public static TemplateImageLoader getTemplateImageLoader() {
-        return getSessionFactory().getTemplateImageLoader();
-    }
-
     public static UserProfileLoader getUserProfileLoader() {
         return getSessionFactory().getUserProfileLoader();
     }
@@ -531,7 +510,6 @@ public abstract class IsisContext implements DebuggableWithTitle {
         debugList.add("User profile loader", getUserProfileLoader());
 
         debugList.add("Reflector", getSpecificationLoader());
-        debugList.add("Template image loader", getTemplateImageLoader());
 
         debugList.add("Deployment type", getDeploymentType().getDebug());
         debugList.add("Configuration", getConfiguration());

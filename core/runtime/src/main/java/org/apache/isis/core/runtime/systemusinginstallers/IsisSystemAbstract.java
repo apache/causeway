@@ -40,7 +40,6 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.exploration.ExplorationSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
-import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -175,10 +174,9 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         final IsisConfiguration configuration = getConfiguration();
         final AuthenticationManager authenticationManager = obtainAuthenticationManager(deploymentType);
         final AuthorizationManager authorizationManager = obtainAuthorizationManager(deploymentType);
-        final TemplateImageLoader templateImageLoader = obtainTemplateImageLoader();
         final OidMarshaller oidMarshaller = obtainOidMarshaller();
         
-        final Collection<MetaModelRefiner> metaModelRefiners = refiners(authenticationManager, authorizationManager, templateImageLoader, persistenceSessionFactory);
+        final Collection<MetaModelRefiner> metaModelRefiners = refiners(authenticationManager, authorizationManager, persistenceSessionFactory);
         final SpecificationLoaderSpi reflector = obtainSpecificationLoaderSpi(deploymentType, persistenceSessionFactory, metaModelRefiners);
 
         final DomainObjectContainer container = obtainContainer();
@@ -188,15 +186,29 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         final RuntimeContextFromSession runtimeContext = obtainRuntimeContextFromSession();
         runtimeContext.injectInto(reflector);
 
-        return newIsisSessionFactory(deploymentType, userProfileLoader, persistenceSessionFactory, configuration, authenticationManager, authorizationManager, templateImageLoader, oidMarshaller, reflector, container, services);
+        return newIsisSessionFactory(
+                deploymentType, userProfileLoader,
+                persistenceSessionFactory,
+                configuration,
+                authenticationManager, authorizationManager,
+                oidMarshaller,
+                reflector,
+                container, services);
     }
 
     protected RuntimeContextFromSession obtainRuntimeContextFromSession() {
         return new RuntimeContextFromSession();
     }
 
-    protected IsisSessionFactoryDefault newIsisSessionFactory(DeploymentType deploymentType, UserProfileLoader userProfileLoader, PersistenceSessionFactory persistenceSessionFactory, IsisConfiguration configuration, AuthenticationManager authenticationManager, AuthorizationManager authorizationManager, TemplateImageLoader templateImageLoader, OidMarshaller oidMarshaller, SpecificationLoaderSpi reflector, DomainObjectContainer container, List<Object> services) {
-        return new IsisSessionFactoryDefault(deploymentType, configuration, reflector, templateImageLoader, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, container, services, oidMarshaller);
+    protected IsisSessionFactoryDefault newIsisSessionFactory(
+            final DeploymentType deploymentType, final UserProfileLoader userProfileLoader,
+            final PersistenceSessionFactory persistenceSessionFactory,
+            final IsisConfiguration configuration,
+            final AuthenticationManager authenticationManager, final AuthorizationManager authorizationManager,
+            final OidMarshaller oidMarshaller,
+            final SpecificationLoaderSpi reflector,
+            final DomainObjectContainer container, final List<Object> services) {
+        return new IsisSessionFactoryDefault(deploymentType, configuration, reflector, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, container, services, oidMarshaller);
     }
 
     private static Collection<MetaModelRefiner> refiners(Object... possibleRefiners ) {

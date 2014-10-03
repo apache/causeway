@@ -30,14 +30,13 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
-import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 
 /**
- * Analogous to a Hibernate <tt>SessionFactory</tt>.
+ * Analogous (and in essence a wrapper for) a JDO <code>PersistenceManagerFactory</code>
  * 
  * @see IsisSession
  */
@@ -65,12 +64,6 @@ public interface IsisSessionFactory extends ApplicationScopedComponent {
      * {@link SpecificationLoaderSpi}.
      */
     public SpecificationLoaderSpi getSpecificationLoader();
-
-    /**
-     * The {@link ApplicationScopedComponent application-scoped}
-     * {@link TemplateImageLoader}.
-     */
-    public TemplateImageLoader getTemplateImageLoader();
 
     /**
      * The {@link AuthenticationManager} that will be used to authenticate and

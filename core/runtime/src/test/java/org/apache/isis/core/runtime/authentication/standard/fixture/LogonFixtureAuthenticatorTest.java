@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.runtime.authentication.standard.fixture;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -29,13 +26,15 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
 import org.apache.isis.core.runtime.authentication.fixture.LogonFixtureAuthenticator;
 import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
 import org.apache.isis.core.runtime.system.DeploymentType;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 @RunWith(JMock.class)
 public class LogonFixtureAuthenticatorTest {
@@ -79,7 +78,7 @@ public class LogonFixtureAuthenticatorTest {
         mockery.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.deploymentType");
-                will(returnValue(DeploymentType.EXPLORATION.name()));
+                will(returnValue(DeploymentType.SERVER_EXPLORATION.name()));
             }
         });
         assertThat(authenticator.isValid(logonFixtureRequest), is(true));
@@ -90,7 +89,7 @@ public class LogonFixtureAuthenticatorTest {
         mockery.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.deploymentType");
-                will(returnValue(DeploymentType.PROTOTYPE.name()));
+                will(returnValue(DeploymentType.SERVER_PROTOTYPE.name()));
             }
         });
         assertThat(authenticator.isValid(logonFixtureRequest), is(true));
@@ -123,7 +122,7 @@ public class LogonFixtureAuthenticatorTest {
         mockery.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString("isis.deploymentType");
-                will(returnValue(DeploymentType.EXPLORATION.name()));
+                will(returnValue(DeploymentType.SERVER_EXPLORATION.name()));
             }
         });
         assertThat(authenticator.canAuthenticate(SomeOtherAuthenticationRequest.class), is(false));

@@ -20,24 +20,21 @@
 package org.apache.isis.core.runtime.system.session;
 
 import com.google.common.eventbus.EventBus;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 
 /**
- * Analogous to a Hibernate <tt>Session</tt>, holds the current set of
- * components for a specific execution context (such as on a thread).
+ * Analogous to (and in essence a wrapper for) a JDO <code>PersistenceManager</code>;
+ * holds the current set of components for a specific execution context (such as on a thread).
  * 
  * <p>
- * The <tt>IsisContext</tt> class (in <tt>nof-core</tt>) is responsible for
- * locating the current execution context.
+ * The <code>IsisContext</code> class is responsible for locating the current execution context.
  * 
  * @see IsisSessionFactory
  */
@@ -48,12 +45,7 @@ public interface IsisSession extends SessionScopedComponent {
     // //////////////////////////////////////////////////////
 
     /**
-     * The creating {@link IsisSessionFactory factory}.
-     * 
-     * <p>
-     * Note that from the factory we can
-     * {@link IsisSessionFactory#getIsisSystem() get to} the {@link IsisSystem},
-     * and thus other {@link ApplicationScopedComponent}s.
+     * The {@link IsisSessionFactory factory} that created this session.
      */
     public IsisSessionFactory getSessionFactory();
 

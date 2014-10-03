@@ -37,7 +37,6 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
@@ -64,7 +63,7 @@ public class IsisSessionDefault implements IsisSession {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM HH:mm:ss,SSS");
     private static int nextId = 1;
 
-    private final IsisSessionFactory executionContextFactory;
+    private final IsisSessionFactory isisSessionFactory;
 
     private final AuthenticationSession authenticationSession;
     private PersistenceSession persistenceSession; // only non-final so can be
@@ -87,7 +86,7 @@ public class IsisSessionDefault implements IsisSession {
         ensureThatArg(persistenceSession, is(not(nullValue())), "persistence session is required");
         ensureThatArg(userProfile, is(not(nullValue())), "user profile is required");
 
-        this.executionContextFactory = sessionFactory;
+        this.isisSessionFactory = sessionFactory;
 
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
@@ -166,35 +165,28 @@ public class IsisSessionDefault implements IsisSession {
 
     @Override
     public IsisSessionFactory getSessionFactory() {
-        return executionContextFactory;
+        return isisSessionFactory;
     }
 
     /**
      * Convenience method.
      */
     public DeploymentType getDeploymentType() {
-        return executionContextFactory.getDeploymentType();
+        return isisSessionFactory.getDeploymentType();
     }
 
     /**
      * Convenience method.
      */
     public IsisConfiguration getConfiguration() {
-        return executionContextFactory.getConfiguration();
+        return isisSessionFactory.getConfiguration();
     }
 
     /**
      * Convenience method.
      */
     public SpecificationLoaderSpi getSpecificationLoader() {
-        return executionContextFactory.getSpecificationLoader();
-    }
-
-    /**
-     * Convenience method.
-     */
-    public TemplateImageLoader getTemplateImageLoader() {
-        return executionContextFactory.getTemplateImageLoader();
+        return isisSessionFactory.getSpecificationLoader();
     }
 
     // //////////////////////////////////////////////////////

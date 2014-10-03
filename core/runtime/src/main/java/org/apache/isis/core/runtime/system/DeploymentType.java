@@ -58,15 +58,11 @@ public class DeploymentType implements DeploymentCategoryProvider {
 
     private static List<DeploymentType> deploymentTypes = Lists.newArrayList();
 
-    public static DeploymentType EXPLORATION = new DeploymentType("EXPLORATION", DeploymentCategory.EXPLORING, ContextCategory.STATIC_RELAXED, SystemConstants.VIEWER_DEFAULT, Splash.SHOW);
-    public static DeploymentType PROTOTYPE = new DeploymentType("PROTOTYPE", DeploymentCategory.PROTOTYPING, ContextCategory.STATIC_RELAXED, SystemConstants.VIEWER_DEFAULT, Splash.SHOW);
-    public static DeploymentType UNIT_TESTING = new DeploymentType("UNIT_TESTING", DeploymentCategory.PRODUCTION, ContextCategory.STATIC_RELAXED, null, Splash.NO_SHOW);
-    public static DeploymentType CLIENT = new DeploymentType("CLIENT", DeploymentCategory.PRODUCTION, ContextCategory.STATIC, SystemConstants.VIEWER_DEFAULT, Splash.SHOW);
-    public static DeploymentType SERVER = new DeploymentType("SERVER", DeploymentCategory.PRODUCTION, ContextCategory.THREADLOCAL, null, Splash.NO_SHOW);
-    public static DeploymentType SERVER_EXPLORATION = new DeploymentType("SERVER_EXPLORATION", DeploymentCategory.EXPLORING, ContextCategory.THREADLOCAL, null, Splash.NO_SHOW);
-    public static DeploymentType SERVER_PROTOTYPE = new DeploymentType("SERVER_PROTOTYPE", DeploymentCategory.PROTOTYPING, ContextCategory.THREADLOCAL, null, Splash.NO_SHOW);
-    public static DeploymentType SINGLE_USER = new DeploymentType("SINGLE_USER", DeploymentCategory.PRODUCTION, ContextCategory.STATIC, SystemConstants.VIEWER_DEFAULT, Splash.NO_SHOW);
-    public static DeploymentType UTILITY = new DeploymentType("UTILITY", DeploymentCategory.EXPLORING, ContextCategory.STATIC, null, Splash.NO_SHOW);
+    public static DeploymentType SERVER = new DeploymentType("SERVER", DeploymentCategory.PRODUCTION, ContextCategory.THREADLOCAL);
+    public static DeploymentType SERVER_EXPLORATION = new DeploymentType("SERVER_EXPLORATION", DeploymentCategory.EXPLORING, ContextCategory.THREADLOCAL);
+    public static DeploymentType SERVER_PROTOTYPE = new DeploymentType("SERVER_PROTOTYPE", DeploymentCategory.PROTOTYPING, ContextCategory.THREADLOCAL);
+    public static DeploymentType UNIT_TESTING = new DeploymentType("UNIT_TESTING", DeploymentCategory.EXPLORING, ContextCategory.STATIC);
+    public static DeploymentType UTILITY = new DeploymentType("UTILITY", DeploymentCategory.EXPLORING, ContextCategory.STATIC);
 
     /**
      * Look up {@link DeploymentType} by their {@link #name()}.
@@ -90,14 +86,11 @@ public class DeploymentType implements DeploymentCategoryProvider {
     private final String name;
     private final DeploymentCategory deploymentCategory;
     private final ContextCategory contextCategory;
-    private final String defaultViewer;
-    private final Splash splash;
 
-    public DeploymentType(final String name, final DeploymentCategory category, final ContextCategory contextCategory, final String defaultViewer, final Splash splash) {
+    public DeploymentType(
+            final String name, final DeploymentCategory category, final ContextCategory contextCategory) {
         this.deploymentCategory = category;
         this.contextCategory = contextCategory;
-        this.defaultViewer = defaultViewer;
-        this.splash = splash;
         this.name = name;
         deploymentTypes.add(this);
     }
@@ -109,8 +102,6 @@ public class DeploymentType implements DeploymentCategoryProvider {
             public void debugData(final DebugBuilder debug) {
                 debug.appendln("Category", deploymentCategory);
                 debug.appendln("Context", contextCategory);
-                debug.appendln("Default viewer", defaultViewer == null ? "none" : defaultViewer);
-                debug.appendln("Show splash", splash);
                 debug.appendln();
                 debug.appendln("Name", friendlyName());
                 debug.appendln("Should monitor", shouldMonitor());
@@ -125,20 +116,6 @@ public class DeploymentType implements DeploymentCategoryProvider {
 
     public void initContext(final IsisSessionFactory sessionFactory) {
         contextCategory.initContext(sessionFactory);
-    }
-
-    /**
-     * Whether the list of viewers names provided is compatible with this
-     * {@link DeploymentType}.
-     * 
-     * @see ContextCategory#canSpecifyViewers(List)
-     */
-    public boolean canSpecifyViewers(final List<String> viewers) {
-        return contextCategory.canSpecifyViewers(viewers);
-    }
-
-    public boolean shouldShowSplash() {
-        return splash.isShow();
     }
 
     public boolean shouldMonitor() {
@@ -160,12 +137,6 @@ public class DeploymentType implements DeploymentCategoryProvider {
 
     public boolean isProduction() {
         return deploymentCategory.isProduction();
-    }
-
-    public void addDefaultViewer(final List<String> requestedViewers) {
-        if (requestedViewers.size() == 0 && defaultViewer != null) {
-            requestedViewers.add(defaultViewer);
-        }
     }
 
     public String friendlyName() {

@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.viewer.integration.isis;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.system.ContextCategory;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.Splash;
 
 /**
  * Simple adapter for Isis' {@link DeploymentType} class, specifying that the
@@ -32,7 +31,7 @@ import org.apache.isis.core.runtime.system.Splash;
 public abstract class DeploymentTypeAbstract extends DeploymentType {
 
     public DeploymentTypeAbstract(final String name, final DeploymentCategory category) {
-        super(name, category, ContextCategory.THREADLOCAL, null, Splash.NO_SHOW);
+        super(name, category, ContextCategory.THREADLOCAL);
     }
 
 }

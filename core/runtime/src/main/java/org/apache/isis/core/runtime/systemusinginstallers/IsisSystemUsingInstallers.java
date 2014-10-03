@@ -19,21 +19,11 @@
 
 package org.apache.isis.core.runtime.systemusinginstallers;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import java.util.Collection;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -43,11 +33,8 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstalle
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
-import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
-import org.apache.isis.core.runtime.imageloader.TemplateImageLoaderInstaller;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
-import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
@@ -57,6 +44,10 @@ import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInj
 import org.apache.isis.core.runtime.transaction.facetdecorator.standard.TransactionFacetDecoratorInstaller;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
+
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
+import static org.hamcrest.CoreMatchers.*;
 
 public class IsisSystemUsingInstallers extends IsisSystemAbstract {
 
@@ -177,25 +168,6 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
     @Override
     protected FixturesInstaller obtainFixturesInstaller() throws IsisSystemException {
         return fixtureInstaller;
-    }
-
-    // ///////////////////////////////////////////
-    // Template Image Loader
-    // ///////////////////////////////////////////
-
-    /**
-     * Uses the {@link TemplateImageLoader} configured in
-     * {@link InstallerLookup}, if available, else falls back to that of the
-     * superclass.
-     */
-    @Override
-    protected TemplateImageLoader obtainTemplateImageLoader() {
-        final TemplateImageLoaderInstaller templateImageLoaderInstaller = installerLookup.templateImageLoaderInstaller(null);
-        if (templateImageLoaderInstaller != null) {
-            return templateImageLoaderInstaller.createLoader();
-        } else {
-            return super.obtainTemplateImageLoader();
-        }
     }
 
     // ///////////////////////////////////////////

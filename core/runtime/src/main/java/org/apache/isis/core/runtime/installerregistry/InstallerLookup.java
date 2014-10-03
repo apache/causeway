@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtime.installerregistry;
 
-import java.awt.Canvas;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,7 +52,6 @@ import org.apache.isis.core.runtime.about.ComponentDetails;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
-import org.apache.isis.core.runtime.imageloader.TemplateImageLoaderInstaller;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -207,25 +205,6 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
 
     public FixturesInstaller fixturesInstaller(final String requested) {
         return getInstaller(FixturesInstaller.class, requested, SystemConstants.FIXTURES_INSTALLER_KEY, SystemConstants.FIXTURES_INSTALLER_DEFAULT);
-    }
-
-    public TemplateImageLoaderInstaller templateImageLoaderInstaller(final String requested) {
-        try {
-            if(requested == null) {
-                // fail early if the default (which uses AWT) cannot be used.
-                // this is a workaround to force the fallback of Noop; ie for Google App Engine.
-                @SuppressWarnings("unused")
-                Canvas canvas = new java.awt.Canvas();
-            }
-            return templateImageLoaderInstaller(requested, SystemConstants.IMAGE_LOADER_DEFAULT);
-        } catch (NoClassDefFoundError e) {
-            // to support running on Google App Engine
-            return templateImageLoaderInstaller(requested, SystemConstants.IMAGE_LOADER_NOOP);
-        }
-    }
-
-    private TemplateImageLoaderInstaller templateImageLoaderInstaller(final String requested, final String fallback) {
-        return getInstaller(TemplateImageLoaderInstaller.class, requested, SystemConstants.IMAGE_LOADER_KEY, fallback);
     }
 
     public PersistenceMechanismInstaller persistenceMechanismInstaller(final String requested, final DeploymentType deploymentType) {
