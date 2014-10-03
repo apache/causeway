@@ -37,22 +37,13 @@ public class ThemePicker extends Panel {
     public ThemePicker(String id) {
         super(id);
 
-        final BootstrapThemeTheme bootstrapTheme = new BootstrapThemeTheme();
-        List<BootswatchTheme> bootswatchThemes = Arrays.asList(BootswatchTheme.values());
-        List<VegibitTheme> vegibitThemes = Arrays.asList(VegibitTheme.values());
-
-        List<ITheme> allThemes = new ArrayList<>();
-        allThemes.addAll(bootswatchThemes);
-        allThemes.addAll(vegibitThemes);
-        allThemes.add(bootstrapTheme);
-
-        ListView<ITheme> themesView = new ListView<ITheme>("themes", allThemes) {
+        ListView<String> themesView = new ListView<String>("themes", getThemeNames()) {
 
             @Override
-            protected void populateItem(ListItem<ITheme> item) {
-                final ITheme theme = item.getModelObject();
+            protected void populateItem(ListItem<String> item) {
+                final String themeName = item.getModelObject();
 
-                if (theme.equals(getActiveThemeProvider().getActiveTheme())) {
+                if (themeName.equals(getActiveThemeProvider().getActiveTheme().name())) {
                     item.add(AttributeModifier.append("class", "active"));
                 }
                 item.add(new AjaxLink<Void>("themeLink") {
@@ -60,6 +51,7 @@ public class ThemePicker extends Panel {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         IBootstrapSettings bootstrapSettings = Bootstrap.getSettings();
+                        ITheme theme = getTheme(themeName);
                         getActiveThemeProvider().setActiveTheme(theme);
                         if (theme instanceof BootstrapThemeTheme) {
                             bootstrapSettings.setThemeProvider(new SingleThemeProvider(theme));
@@ -70,10 +62,22 @@ public class ThemePicker extends Panel {
                         }
                         target.add(getPage()); // repaint the whole page
                     }
-                }.setBody(Model.of(theme.name())));
+                }.setBody(Model.of(themeName)));
             }
         };
         add(themesView);
+    }
+
+    private ITheme getTheme(String themeName) {
+        ITheme theme;
+        if ("bootstrap-theme".equals(themeName)) {
+            theme = new BootstrapThemeTheme();
+        } else if (themeName.startsWith("veg")) {
+            theme = VegibitTheme.valueOf(themeName);
+        } else {
+            theme = BootswatchTheme.valueOf(themeName);
+        }
+        return theme;
     }
 
     private ActiveThemeProvider getActiveThemeProvider() {
@@ -86,5 +90,23 @@ public class ThemePicker extends Panel {
 
         tag.setName("li");
         Attributes.addClass(tag, "dropdown");
+    }
+
+    private List<String> getThemeNames() {
+        final BootstrapThemeTheme bootstrapTheme = new BootstrapThemeTheme();
+        List<BootswatchTheme> bootswatchThemes = Arrays.asList(BootswatchTheme.values());
+        List<VegibitTheme> vegibitThemes = Arrays.asList(VegibitTheme.values());
+
+        List<String> allThemes = new ArrayList<>();
+        for (ITheme theme : bootswatchThemes) {
+            allThemes.add(theme.name());
+        }
+        for (ITheme theme : vegibitThemes) {
+            allThemes.add(theme.name());
+        }
+        allThemes.add(bootstrapTheme.name());
+
+
+        return allThemes;
     }
 }
