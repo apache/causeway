@@ -25,7 +25,7 @@
     <head>
         <title wicket:id="pageTitle"></title>
     </head>
-    <body>
+    <body style="background-color: #d3d3d3">
         <div id="container" class="container-fluid">
             <div class="jumbotron" style="background-color: transparent">
 
@@ -54,15 +54,13 @@
                 </div>
 
                 <div id="body" class="row">
-                    <div class="validationErrorsPanel col-sm-offset-4 col-sm-4">
+                    <div class="validationErrorsPanel col-sm-offset-1 col-sm-10">
                         <div class="errorInfo clear">
-                            <span class="mainMessage">The application failed to start due to a number of metamodel validation errors.</span>
+                            <h2 class="mainMessage">The application failed to start due to a number of metamodel validation errors.</h2>
                             <div class="errorDetail">
-                                <ul class="list-group">
-                                    <li wicket:id="error" class="list-group-item list-group-item-danger">
-                                        <span wicket:id="errorMessage">[error message]</span>
-                                    </li>
-                                </ul>
+                                <wicket:container wicket:id="error">
+                                    <div wicket:id="errorMessage" class="alert alert-danger" role="alert">[error message]</div>
+                                </wicket:container>
                             </div>
                         </div>
                     </div>
