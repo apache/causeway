@@ -22,41 +22,52 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
       xml:lang="en"  
       lang="en">
-	<head>
-		<title wicket:id="pageTitle"></title>
-		<wicket:link>
-			<link href="MmvErrorPage.css" rel="stylesheet" />
-			<link href="../PageAbstract.css" rel="stylesheet" />
-		</wicket:link>
-	</head>
-	<body>
-		<div id="container">
-        
-			<div class="headerContainer">
-				<div id="header">
-					<h1>
-                        <span wicket:id="applicationName" class="applicationName">[application name]</span>
-                    </h1>
-				</div>
-				<div class="clearfix"></div>
-			</div>
+    <head>
+        <title wicket:id="pageTitle"></title>
+    </head>
+    <body>
+        <div id="container" class="container-fluid">
+            <div class="jumbotron" style="background-color: transparent">
 
-            <div id="body">
-                <div class="validationErrorsPanel">
-                    <div class="errorInfo clear">
-                        <span class="mainMessage">The application failed to start due to a number of metamodel validation errors.</span>
-                        <div class="errorDetail">
-                            <ul>
-                                <li wicket:id="error">
-                                    <span wicket:id="errorMessage">[error message]</span>
-                                </li>
-                            </ul>
+                <div class="row">
+                    <div class="col-sm-12">&#160;</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">&#160;</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">&#160;</div>
+                </div>
+
+                <div class="headerContainer row">
+                    <div id="header" class="col-sm-offset-4 col-sm-4">
+                        <h1 wicket:id="applicationName" class="applicationName">[application name]</h1>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">&#160;</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">&#160;</div>
+                </div>
+
+                <div id="body" class="row">
+                    <div class="validationErrorsPanel col-sm-offset-4 col-sm-4">
+                        <div class="errorInfo clear">
+                            <span class="mainMessage">The application failed to start due to a number of metamodel validation errors.</span>
+                            <div class="errorDetail">
+                                <ul class="list-group">
+                                    <li wicket:id="error" class="list-group-item list-group-item-danger">
+                                        <span wicket:id="errorMessage">[error message]</span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="clearfix"></div>
             </div>
-
-	    </div>
-	</body>
+        </div>
+    </body>
 </html>

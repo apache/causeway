@@ -95,23 +95,14 @@ public class MmvErrorPage extends WebPage {
     }
 
     private void addValidationErrors() {
-        class ValidationErrorListView extends ListView<String> {
-            
-            private static final long serialVersionUID = 1L;
-            private final String idLine;
-
-            public ValidationErrorListView(String id, String idLine, final IModel<List<? extends String>> model) {
-                super(id, model);
-                this.idLine = idLine;
-            }
-
+        ListView<String> validationErrorsView = new ListView<String>(ID_ERROR, getModel()) {
             @Override
             protected void populateItem(ListItem<String> item) {
                 final String validationError = item.getModelObject();
-                item.add(new Label(idLine, validationError));
+                item.add(new Label(ID_ERROR_MESSAGE, validationError));
             }
-        }
-        add(new ValidationErrorListView(ID_ERROR, ID_ERROR_MESSAGE, getModel()));
+        };
+        add(validationErrorsView);
     }
 
     @Override
