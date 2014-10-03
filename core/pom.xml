@@ -59,8 +59,8 @@
 
 
         <!-- remaining properties should not need to be overridden -->
-        <compileSource>1.7</compileSource>
-        <compileTarget>1.7</compileTarget>
+        <compileSource>1.6</compileSource>
+        <compileTarget>1.6</compileTarget>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <dependency.locations.enabled>false</dependency.locations.enabled>

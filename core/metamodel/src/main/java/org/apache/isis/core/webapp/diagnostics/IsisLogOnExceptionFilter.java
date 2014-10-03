@@ -50,9 +50,15 @@ public class IsisLogOnExceptionFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         try {
             chain.doFilter(request, response);
-        } catch (IOException | ServletException | RuntimeException e) {
-            logRequestUrl(request, e);
-            throw e;
+        } catch (IOException ex) {
+            logRequestUrl(request, ex);
+            throw ex;
+        } catch (ServletException ex) {
+            logRequestUrl(request, ex);
+            throw ex;
+        } catch (RuntimeException ex) {
+            logRequestUrl(request, ex);
+            throw ex;
         }
     }
 
