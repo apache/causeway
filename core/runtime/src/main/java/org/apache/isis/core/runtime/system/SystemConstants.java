@@ -28,15 +28,11 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstalle
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
-import org.apache.isis.core.runtime.imageloader.TemplateImageLoaderInstaller;
-import org.apache.isis.core.runtime.installerregistry.installerapi.EmbeddedWebServerInstaller;
-import org.apache.isis.core.runtime.installerregistry.installerapi.IsisViewerInstaller;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
-import org.apache.isis.core.runtime.viewer.IsisViewer;
 
 public final class SystemConstants {
 
@@ -61,16 +57,6 @@ public final class SystemConstants {
      */
     public static final String REFLECTOR_DEFAULT = "java";
 
-    /**
-     * Key used to lookup {@link IsisViewer viewer} in {@link IsisConfiguration}
-     * , and root for any {@link IsisViewerInstaller viewer}-specific
-     * configuration keys.
-     */
-    public final static String VIEWER_KEY = ConfigurationConstants.ROOT + IsisViewerInstaller.TYPE;
-    /**
-     * Default for {@link #VIEWER_KEY}.
-     */
-    public static final String VIEWER_DEFAULT = "restfulobjects";
 
     /**
      * Key used to lookup {@link PersistenceSessionFactory persistor} in
@@ -158,35 +144,6 @@ public final class SystemConstants {
     public static final String FIXTURES_INSTALLER_DEFAULT = "configuration";
 
     /**
-     * Key used to lookup {@link TemplateImageLoaderInstaller template image
-     * loader} in {@link IsisConfiguration}, and root for any
-     * {@link TemplateImageLoaderInstaller template image loader}-specific
-     * configuration keys.
-     */
-    public static final String IMAGE_LOADER_KEY = ConfigurationConstants.ROOT + TemplateImageLoaderInstaller.TYPE;
-    /**
-     * Default for {@link #IMAGE_LOADER_KEY} and not running on Google App Engine.
-     */
-    public static final String IMAGE_LOADER_DEFAULT = "awt";
-    /**
-     * Default if running on Google App Engine, see {@link org.apache.isis.core.runtime.installerregistry.InstallerLookup#templateImageLoaderInstaller(String)}
-     */
-    public static final String IMAGE_LOADER_NOOP = "noop";
-
-
-    /**
-     * Key used to lookup {@link EmbeddedWebServerInstaller embedded web
-     * installer} in {@link IsisConfiguration}, and root for any
-     * {@link EmbeddedWebServerInstaller embedded web server installer}-specific
-     * configuration keys.
-     */
-    public static final String WEBSERVER_KEY = ConfigurationConstants.ROOT + EmbeddedWebServerInstaller.TYPE;
-    /**
-     * Default for {@link #WEBSERVER_KEY}
-     */
-    public static final String WEBSERVER_DEFAULT = "jetty";
-
-    /**
      * Key by which requested fixture (eg via command line) is made available in
      * {@link IsisConfiguration}.
      */
@@ -212,7 +169,6 @@ public final class SystemConstants {
      * Use {@link Splash#valueOf(String)} to decode.
      */
     public static final String NOSPLASH_KEY = ConfigurationConstants.ROOT + "nosplash";
-    public static final boolean NOSPLASH_DEFAULT = false;
 
     public static final String LOCALE_KEY = ConfigurationConstants.ROOT + "locale";
 

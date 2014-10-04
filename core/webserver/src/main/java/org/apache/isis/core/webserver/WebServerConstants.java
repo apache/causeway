@@ -20,12 +20,11 @@
 package org.apache.isis.core.webserver;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.runtime.installerregistry.installerapi.EmbeddedWebServerInstaller;
 import org.apache.isis.core.webserver.WebServer.StartupMode;
 
 public final class WebServerConstants {
 
-    private static final String ROOT = ConfigurationConstants.ROOT + EmbeddedWebServerInstaller.TYPE + ".";
+    private static final String ROOT = ConfigurationConstants.ROOT + "embedded-web-server" + ".";
 
     public static final String EMBEDDED_WEB_SERVER_PORT_KEY = ROOT + "port";
     public static final int EMBEDDED_WEB_SERVER_PORT_DEFAULT = 8080;
