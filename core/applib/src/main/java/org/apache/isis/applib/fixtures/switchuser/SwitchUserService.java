@@ -20,9 +20,7 @@
 package org.apache.isis.applib.fixtures.switchuser;
 
 import java.util.List;
-
 import org.apache.isis.applib.fixtures.AbstractFixture;
-import org.apache.isis.applib.fixtures.userprofile.UserProfileService;
 
 /**
  * Not intended to be used directly; decouples the {@link AbstractFixture},
@@ -32,8 +30,6 @@ import org.apache.isis.applib.fixtures.userprofile.UserProfileService;
  * <p>
  * A suitable implementation is injected into {@link AbstractFixture} when
  * installed.
- * 
- * @see UserProfileService
  */
 public interface SwitchUserService {
 

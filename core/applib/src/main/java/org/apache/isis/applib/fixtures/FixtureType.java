@@ -17,11 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.fixtures;
-
-import org.apache.isis.applib.fixtures.userprofile.UserProfileService;
-import org.apache.isis.applib.profiles.Perspective;
-import org.apache.isis.applib.profiles.Profile;
+    package org.apache.isis.applib.fixtures;
 
 /**
  * Enumerates the different types of {@link InstallableFixture fixture}s
@@ -43,16 +39,7 @@ public enum FixtureType {
      */
     DOMAIN_OBJECTS,
     /**
-     * Analogous to {@link FixtureType#DATA}, but for fixtures (in particular,
-     * the {@link PerspectiveFixture}) that are used to setup {@link Profile}s
-     * and their {@link Perspective}s.
-     * 
-     * @see UserProfileService
-     */
-    USER_PROFILES,
-    /**
-     * A fixture that neither installs data into the object store nor
-     * perspectives into the {@link UserProfileService}.
+     * A fixture that does not installs data into the object store.
      * 
      * <p>
      * Fixtures of this type are always installed. Typical examples are:

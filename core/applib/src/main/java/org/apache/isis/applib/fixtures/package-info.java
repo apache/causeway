@@ -33,7 +33,6 @@
  * the current user while fixtures are being installed (eg so that a workflow
  * can be picked up midway through)</p></li>  
  * <li><p>specifying the {@link org.apache.isis.applib.fixtures.LogonFixture currently logged on} user once the fixtures have been installed</p></li>
- * <li><p>setting up objects within the persistent {@link org.apache.isis.applib.fixtures.UserProfileFixture user profile}</p></li>
  * </ul>
  * 
  * <p>

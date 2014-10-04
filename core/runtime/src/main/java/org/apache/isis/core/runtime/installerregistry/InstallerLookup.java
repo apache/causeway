@@ -59,7 +59,6 @@ import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInjector;
 import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInjectorAware;
-import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
 
 import static org.hamcrest.CoreMatchers.*;
 
@@ -210,11 +209,6 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
     public PersistenceMechanismInstaller persistenceMechanismInstaller(final String requested, final DeploymentType deploymentType) {
         final String persistorDefault = deploymentType.isExploring() || deploymentType.isPrototyping() ? SystemConstants.OBJECT_PERSISTOR_NON_PRODUCTION_DEFAULT : SystemConstants.OBJECT_PERSISTOR_PRODUCTION_DEFAULT;
         return getInstaller(PersistenceMechanismInstaller.class, requested, SystemConstants.OBJECT_PERSISTOR_KEY, persistorDefault);
-    }
-
-    public UserProfileStoreInstaller userProfilePersistenceMechanismInstaller(final String requested, final DeploymentType deploymentType) {
-        final String profileStoreDefault = deploymentType.isExploring() || deploymentType.isPrototyping() ? SystemConstants.USER_PROFILE_STORE_NON_PRODUCTION_DEFAULT : SystemConstants.USER_PROFILE_STORE_PRODUCTION_DEFAULT;
-        return getInstaller(UserProfileStoreInstaller.class, requested, SystemConstants.USER_PROFILE_STORE_KEY, profileStoreDefault);
     }
 
     public ServicesInstaller servicesInstaller(final String requestedImplementationName) {

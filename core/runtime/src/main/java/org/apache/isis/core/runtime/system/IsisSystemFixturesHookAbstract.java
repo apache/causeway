@@ -51,7 +51,6 @@ import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
-import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 
 /**
  * An implementation of {@link IsisSystem} that has a hook for installing
@@ -285,9 +284,9 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
      * The {@link LogonFixture}, if any, obtained by running fixtures.
      * 
      * <p>
-     * Intended to be used when for {@link DeploymentType#EXPLORATION
+     * Intended to be used when for {@link DeploymentType#SERVER_EXPLORATION
      * exploration} (instead of an {@link ExplorationSession}) or
-     * {@link DeploymentType#PROTOTYPE prototype} deployments (saves logging
+     * {@link DeploymentType#SERVER_PROTOTYPE prototype} deployments (saves logging
      * in). Should be <i>ignored</i> in other {@link DeploymentType}s.
      * 
      * <p>
@@ -314,12 +313,6 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
     protected abstract AuthenticationManager obtainAuthenticationManager(DeploymentType deploymentType) throws IsisSystemException;
 
     protected abstract AuthorizationManager obtainAuthorizationManager(final DeploymentType deploymentType);
-
-    // ///////////////////////////////////////////
-    // UserProfileLoader
-    // ///////////////////////////////////////////
-
-    protected abstract UserProfileStore obtainUserProfileStore();
 
     // ///////////////////////////////////////////
     // Container & Services

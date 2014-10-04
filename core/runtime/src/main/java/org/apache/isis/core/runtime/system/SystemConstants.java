@@ -31,8 +31,6 @@ import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.userprofile.UserProfileStore;
-import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
 
 public final class SystemConstants {
 
@@ -73,20 +71,6 @@ public final class SystemConstants {
     // TODO: move to being a responsibility of DeploymentType instead
     public static final String OBJECT_PERSISTOR_PRODUCTION_DEFAULT = "datanucleus";
 
-    /**
-     * Key used to lookup {@link UserProfileStore user profile store} (via
-     * command line) in {@link IsisConfiguration}, and root for any
-     * {@link UserProfileStoreInstaller user profile store} -specific
-     * configuration keys.
-     */
-    public final static String PROFILE_PERSISTOR_INSTALLER_KEY = ConfigurationConstants.ROOT + UserProfileStoreInstaller.TYPE;
-
-    // TODO: inline
-    public static final String USER_PROFILE_STORE_KEY = PROFILE_PERSISTOR_INSTALLER_KEY;
-    // TODO: move to being a responsibility of DeploymentType instead
-    public static final String USER_PROFILE_STORE_NON_PRODUCTION_DEFAULT = "in-memory";
-    // TODO: move to being a responsibility of DeploymentType instead
-    public static final String USER_PROFILE_STORE_PRODUCTION_DEFAULT = "in-memory";
 
     /**
      * Key used to lookup {@link AuthenticationManager authentication manager}

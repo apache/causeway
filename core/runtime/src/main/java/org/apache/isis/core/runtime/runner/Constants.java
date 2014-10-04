@@ -23,7 +23,6 @@ import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.logging.LoggingConstants;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
 
 public final class Constants {
 
@@ -41,9 +40,6 @@ public final class Constants {
 
     public static final String OBJECT_PERSISTENCE_OPT = "r";
     public static final String OBJECT_PERSISTENCE_LONG_OPT = PersistenceMechanismInstaller.TYPE;
-
-    public static final String USER_PROFILE_STORE_OPT = "e";
-    public static final String USER_PROFILE_STORE_LONG_OPT = UserProfileStoreInstaller.TYPE;
 
     public static final String CONFIGURATION_OPT = "c";
     public static final String CONFIGURATION_LONG_OPT = "config";

@@ -52,8 +52,6 @@ import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryDefault;
-import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
-import org.apache.isis.core.runtime.userprofile.UserProfileLoaderDefault;
 
 /**
  * 
@@ -132,9 +130,9 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
      * The {@link LogonFixture}, if any, obtained by running fixtures.
      * 
      * <p>
-     * Intended to be used when for {@link DeploymentType#EXPLORATION
+     * Intended to be used when for {@link DeploymentType#SERVER_EXPLORATION
      * exploration} (instead of an {@link ExplorationSession}) or
-     * {@link DeploymentType#PROTOTYPE prototype} deployments (saves logging
+     * {@link DeploymentType#SERVER_PROTOTYPE prototype} deployments (saves logging
      * in). Should be <i>ignored</i> in other {@link DeploymentType}s.
      */
     @Override
@@ -156,8 +154,7 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
     @Override
     public IsisSessionFactory doCreateSessionFactory(final DeploymentType deploymentType) throws IsisSystemException {
         final PersistenceSessionFactory persistenceSessionFactory = obtainPersistenceSessionFactory(deploymentType);
-        final UserProfileLoader userProfileLoader = new UserProfileLoaderDefault(obtainUserProfileStore());
-        return createSessionFactory(deploymentType, userProfileLoader, persistenceSessionFactory);
+        return createSessionFactory(deploymentType, persistenceSessionFactory);
     }
 
     /**
@@ -169,7 +166,9 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
      * <i>from</i> the {@link #doCreateSessionFactory(DeploymentType) hook
      * method}.
      */
-    protected final IsisSessionFactory createSessionFactory(final DeploymentType deploymentType, final UserProfileLoader userProfileLoader, final PersistenceSessionFactory persistenceSessionFactory) throws IsisSystemException {
+    protected final IsisSessionFactory createSessionFactory(
+            final DeploymentType deploymentType,
+            final PersistenceSessionFactory persistenceSessionFactory) throws IsisSystemException {
 
         final IsisConfiguration configuration = getConfiguration();
         final AuthenticationManager authenticationManager = obtainAuthenticationManager(deploymentType);
@@ -187,7 +186,7 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         runtimeContext.injectInto(reflector);
 
         return newIsisSessionFactory(
-                deploymentType, userProfileLoader,
+                deploymentType,
                 persistenceSessionFactory,
                 configuration,
                 authenticationManager, authorizationManager,
@@ -201,14 +200,14 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
     }
 
     protected IsisSessionFactoryDefault newIsisSessionFactory(
-            final DeploymentType deploymentType, final UserProfileLoader userProfileLoader,
+            final DeploymentType deploymentType,
             final PersistenceSessionFactory persistenceSessionFactory,
             final IsisConfiguration configuration,
             final AuthenticationManager authenticationManager, final AuthorizationManager authorizationManager,
             final OidMarshaller oidMarshaller,
             final SpecificationLoaderSpi reflector,
             final DomainObjectContainer container, final List<Object> services) {
-        return new IsisSessionFactoryDefault(deploymentType, configuration, reflector, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory, container, services, oidMarshaller);
+        return new IsisSessionFactoryDefault(deploymentType, configuration, reflector, authenticationManager, authorizationManager, persistenceSessionFactory, container, services, oidMarshaller);
     }
 
     private static Collection<MetaModelRefiner> refiners(Object... possibleRefiners ) {

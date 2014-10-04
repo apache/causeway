@@ -31,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.applib.profiles.Perspective;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -286,9 +285,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     /**
      * Services are allowed to have one association, called 'id'.
-     * 
-     * <p>
-     * This is used for {@link Perspective}s (user profiles).
      */
     private boolean isValidAssociationForService(final String associationId) {
         return "id".indexOf(associationId) != -1;

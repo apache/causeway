@@ -226,9 +226,7 @@ public class IsisRunner {
         addOptionHandler(new OptionHandlerConfiguration());
 
         addOptionHandler(new OptionHandlerPersistor(installerLookup));
-
         addOptionHandler(new OptionHandlerReflector(installerLookup));
-        addOptionHandler(new OptionHandlerUserProfileStore(installerLookup));
 
         addOptionHandler(new OptionHandlerFixture());
         addOptionHandler(new OptionHandlerNoSplash());

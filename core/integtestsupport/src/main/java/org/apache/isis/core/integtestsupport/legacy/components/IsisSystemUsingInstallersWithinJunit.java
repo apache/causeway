@@ -20,9 +20,7 @@
 package org.apache.isis.core.integtestsupport.legacy.components;
 
 import org.junit.internal.runners.TestClass;
-
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.profilestore.InMemoryUserProfileStoreInstaller;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisSystemUsingInstallers;
@@ -45,8 +43,6 @@ public class IsisSystemUsingInstallersWithinJunit extends IsisSystemUsingInstall
             setAuthorizationInstaller(getInstallerLookup().injectDependenciesInto(installer.addAuthorizerAnnotatedOn(this.testClass.getJavaClass())));
 
             setPersistenceMechanismInstaller(getInstallerLookup().injectDependenciesInto(installer.addPersistorAnnotatedOn(this.testClass.getJavaClass())));
-
-            setUserProfileStoreInstaller(getInstallerLookup().injectDependenciesInto(new InMemoryUserProfileStoreInstaller()));
 
             // fixture installer
             final FixtureInstallerAnnotatedClass fixtureInstaller = new FixtureInstallerAnnotatedClass();

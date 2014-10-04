@@ -41,7 +41,6 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.userprofile.UserProfile;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.*;
@@ -68,15 +67,16 @@ public class IsisSessionDefault implements IsisSession {
     private final AuthenticationSession authenticationSession;
     private PersistenceSession persistenceSession; // only non-final so can be
                                                    // replaced in tests.
-    private final UserProfile userProfile;
-
     private final int id;
     private long accessTime;
     private String debugSnapshot;
 
     private EventBus eventBus;
 
-    public IsisSessionDefault(final IsisSessionFactory sessionFactory, final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession, final UserProfile userProfile) {
+    public IsisSessionDefault(
+            final IsisSessionFactory sessionFactory,
+            final AuthenticationSession authenticationSession,
+            final PersistenceSession persistenceSession) {
 
         // global context
         ensureThatArg(sessionFactory, is(not(nullValue())), "execution context factory is required");
@@ -84,13 +84,11 @@ public class IsisSessionDefault implements IsisSession {
         // session
         ensureThatArg(authenticationSession, is(not(nullValue())), "authentication session is required");
         ensureThatArg(persistenceSession, is(not(nullValue())), "persistence session is required");
-        ensureThatArg(userProfile, is(not(nullValue())), "user profile is required");
 
         this.isisSessionFactory = sessionFactory;
 
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
-        this.userProfile = userProfile;
 
         setSessionOpenTime(System.currentTimeMillis());
 
@@ -227,14 +225,6 @@ public class IsisSessionDefault implements IsisSession {
         return persistenceSession;
     }
 
-    // //////////////////////////////////////////////////////
-    // Perspective
-    // //////////////////////////////////////////////////////
-
-    @Override
-    public UserProfile getUserProfile() {
-        return userProfile;
-    }
 
     // //////////////////////////////////////////////////////
     // Session Open Time

@@ -20,10 +20,8 @@
 package org.apache.isis.core.runtime.system.context;
 
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
@@ -33,10 +31,10 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugList;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.metamodel.adapter.LocalizationDefault;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
@@ -45,8 +43,6 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.MessageBroker;
 import org.apache.isis.core.runtime.system.transaction.UpdateNotifier;
-import org.apache.isis.core.runtime.userprofile.UserProfile;
-import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 
 /**
  * Provides singleton <i>access to</i> the current (session scoped)
@@ -364,10 +360,6 @@ public abstract class IsisContext implements DebuggableWithTitle {
         return getSessionFactory().getAuthenticationManager();
     }
 
-    public static UserProfileLoader getUserProfileLoader() {
-        return getSessionFactory().getUserProfileLoader();
-    }
-
     public static List<Object> getServices() {
         return getSessionFactory().getServices();
     }
@@ -430,21 +422,9 @@ public abstract class IsisContext implements DebuggableWithTitle {
 
     /**
      * Convenience method.
-     * 
-     * @see IsisSession#getUserProfile()
-     */
-    public static UserProfile getUserProfile() {
-        return getSession().getUserProfile();
-    }
-
-    /**
-     * Convenience method.
-     * 
-     * @see IsisSession#getUserProfile()
-     * @see UserProfile#getLocalization()
      */
     public static Localization getLocalization() {
-        return getUserProfile().getLocalization();
+        return new LocalizationDefault();
     }
 
     /**
@@ -507,7 +487,6 @@ public abstract class IsisContext implements DebuggableWithTitle {
         debugList.add("  Authentication manager", getSessionFactory().getAuthenticationManager());
         debugList.add("  Authorization manager", getSessionFactory().getAuthorizationManager());
         debugList.add("  Persistence session factory", getSessionFactory().getPersistenceSessionFactory());
-        debugList.add("User profile loader", getUserProfileLoader());
 
         debugList.add("Reflector", getSpecificationLoader());
 
@@ -522,7 +501,6 @@ public abstract class IsisContext implements DebuggableWithTitle {
         final DebugList debugList = new DebugList("Apache Isis Session");
         debugList.add("Apache Isis session", getSession());
         debugList.add("Authentication session", getAuthenticationSession());
-        debugList.add("User profile", getUserProfile());
 
         debugList.add("Persistence Session", getPersistenceSession());
         debugList.add("Transaction Manager", getTransactionManager());

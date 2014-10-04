@@ -21,9 +21,6 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import java.util.Locale;
 import java.util.TimeZone;
-
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.userprofile.UserLocalization;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
@@ -52,7 +49,7 @@ public class SetLocalization extends AbstractElementProcessor {
         
         Locale l = new Locale(language, country);
         TimeZone t = TimeZone.getTimeZone(timeZone);
-        IsisContext.getUserProfile().setLocalization(new UserLocalization(l, t));
+        // IsisContext.getUserProfile().setLocalization(new UserLocalization(l, t));
 
     }
 

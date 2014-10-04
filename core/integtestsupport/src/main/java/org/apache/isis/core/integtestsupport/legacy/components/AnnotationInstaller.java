@@ -91,6 +91,4 @@ public class AnnotationInstaller {
     }
     // }}
 
-    // new InMemoryUserProfileStoreInstaller();
-
 }

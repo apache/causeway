@@ -22,16 +22,12 @@ package org.apache.isis.core.runtime.fixtures;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.fixtures.CompositeFixture;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.applib.fixtures.userprofile.UserProfileService;
-import org.apache.isis.applib.fixtures.userprofile.UserProfileServiceAware;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -55,7 +51,6 @@ public class FixturesInstallerDelegate {
 
     protected final List<Object> fixtures = new ArrayList<Object>();
     private final SwitchUserServiceImpl switchUserService = new SwitchUserServiceImpl();
-    private final UserProfileService perspectivePersistenceService = new ProfileServiceImpl();
 
     private final PersistenceSession persistenceSession;
 
@@ -204,10 +199,6 @@ public class FixturesInstallerDelegate {
 
     private void installFixture(final Object fixture) {
         switchUserService.injectInto(fixture);
-        if (fixture instanceof UserProfileServiceAware) {
-            final UserProfileServiceAware serviceAware = (UserProfileServiceAware) fixture;
-            serviceAware.setService(perspectivePersistenceService);
-        }
 
         if (fixture instanceof InstallableFixture) {
             final InstallableFixture installableFixture = (InstallableFixture) fixture;
@@ -225,10 +216,6 @@ public class FixturesInstallerDelegate {
         final FixtureType fixtureType = installableFixture.getType();
         if (fixtureType == FixtureType.DOMAIN_OBJECTS) {
             return !IsisContext.getPersistenceSession().isFixturesInstalled();
-        }
-
-        if (fixtureType == FixtureType.USER_PROFILES) {
-            return !IsisContext.getUserProfileLoader().isFixturesInstalled();
         }
 
         // fixtureType is OTHER; always install.
@@ -262,7 +249,7 @@ public class FixturesInstallerDelegate {
      * The {@link LogonFixture}, if any.
      * 
      * <p>
-     * Used to automatically logon if in {@link DeploymentType#PROTOTYPE} mode.
+     * Used to automatically logon if in {@link DeploymentType#SERVER_PROTOTYPE} mode.
      */
     public LogonFixture getLogonFixture() {
         return logonFixture;

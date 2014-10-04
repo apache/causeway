@@ -68,7 +68,6 @@ public class IsisSystemThatUsesInstallersFactory implements IsisSystemFactory {
         final IsisSystemUsingInstallers system = new IsisSystemUsingInstallers(deploymentType, installerLookup);
 
         system.lookupAndSetAuthenticatorAndAuthorization(deploymentType);
-        system.lookupAndSetUserProfileFactoryInstaller();
         system.lookupAndSetFixturesInstaller();
         return system;
     }

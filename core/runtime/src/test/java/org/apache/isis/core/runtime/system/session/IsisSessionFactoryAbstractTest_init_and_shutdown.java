@@ -33,7 +33,6 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -59,8 +58,6 @@ public class IsisSessionFactoryAbstractTest_init_and_shutdown {
     @Mock
     private AuthorizationManager mockAuthorizationManager;
     @Mock
-    private UserProfileLoader mockUserProfileLoader;
-    @Mock
     private PersistenceSessionFactory mockPersistenceSessionFactory;
     @Mock
     private OidMarshaller mockOidMarshaller;
@@ -79,7 +76,7 @@ public class IsisSessionFactoryAbstractTest_init_and_shutdown {
         configuration.add("foo", "bar");
         
         serviceList = Lists.newArrayList();
-        context.ignoring(mockDeploymentType, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockContainer, mockPersistenceSessionFactory, mockOidMarshaller);
+        context.ignoring(mockDeploymentType, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockContainer, mockPersistenceSessionFactory, mockOidMarshaller);
     }
     
 
@@ -87,7 +84,7 @@ public class IsisSessionFactoryAbstractTest_init_and_shutdown {
     public void validate_DomainServicesWithDuplicateIds() {
         serviceList.add(new DomainServiceWithSomeId());
         serviceList.add(new DomainServiceWithDuplicateId());
-        isf = new IsisSessionFactoryDefault(mockDeploymentType, configuration, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockUserProfileLoader, mockPersistenceSessionFactory, mockContainer, serviceList, mockOidMarshaller) {
+        isf = new IsisSessionFactoryDefault(mockDeploymentType, configuration, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockPersistenceSessionFactory, mockContainer, serviceList, mockOidMarshaller) {
         };
     }
 }

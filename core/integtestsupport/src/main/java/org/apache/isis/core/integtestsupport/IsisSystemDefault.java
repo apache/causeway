@@ -22,24 +22,21 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.objectstore.InMemoryPersistenceMechanismInstaller;
-import org.apache.isis.core.profilestore.InMemoryUserProfileStore;
-import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.core.runtime.authentication.standard.Authenticator;
@@ -54,7 +51,6 @@ import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisSystemAbstract;
 import org.apache.isis.core.runtime.transaction.facetdecorator.standard.StandardTransactionFacetDecorator;
-import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 import org.apache.isis.core.security.authentication.AuthenticatorBypass;
 import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
@@ -141,8 +137,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
 
  
     /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, ClassSubstitutorFactory, MetaModelRefiner)}.
-     * @return
+     * Optional hook method.
      */
     protected CollectionTypeRegistry obtainReflectorCollectionTypeRegistry() {
         return new CollectionTypeRegistryDefault();
@@ -150,24 +145,21 @@ public class IsisSystemDefault extends IsisSystemAbstract {
 
 
     /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, ClassSubstitutorFactory, MetaModelRefiner)}.
-     * @return
+     * Optional hook method.
      */
     protected ProgrammingModel obtainReflectorProgrammingModel() {
         return new ProgrammingModelFacetsJava5();
     }
 
     /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, ClassSubstitutorFactory, MetaModelRefiner)}.
-     * @return
+     * Optional hook method.
      */
     protected Set<FacetDecorator> obtainReflectorFacetDecoratorSet() {
         return Sets.newHashSet((FacetDecorator)new StandardTransactionFacetDecorator(getConfiguration()));
     }
 
     /**
-     * Optional hook method, called from {@link #obtainSpecificationLoaderSpi(DeploymentType, ClassSubstitutorFactory, MetaModelRefiner)}.
-     * @return
+     * Optional hook method.
      */
     protected MetaModelValidator obtainReflectorMetaModelValidator() {
         return new MetaModelValidatorDefault();
@@ -190,14 +182,6 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     @Override
     protected AuthorizationManager obtainAuthorizationManager(DeploymentType deploymentType) {
         return new AuthorizationManagerStandard(getConfiguration());
-    }
-
-    /**
-     * The in-memory user profile store.
-     */
-    @Override
-    protected UserProfileStore obtainUserProfileStore() {
-        return new InMemoryUserProfileStore();
     }
 
     /**

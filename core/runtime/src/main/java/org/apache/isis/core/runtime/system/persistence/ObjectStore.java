@@ -20,10 +20,7 @@
 package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.List;
-
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -49,9 +46,8 @@ public interface ObjectStore extends DebuggableWithTitle, SessionScopedComponent
      * up objects.
      * 
      * <p>
-     * This method is called only once after the {@link #openSession(TestProxyReflector, IsisConfiguration, TestProxyPersistenceSessionFactory, TestProxyPersistenceSession, TestUserProfileStore, AuthenticationSession)} has been
-     * called. If it returns <code>false</code> then the framework will run the
-     * fixtures to initialise the object store.
+     * This method is called only once after the session is opened called. If it returns <code>false</code> then the
+     * framework will run the fixtures to initialise the object store.
      */
     boolean isFixturesInstalled();
 

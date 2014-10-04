@@ -24,10 +24,8 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.core.runtime.userprofile.UserProfile;
 
 /**
  * Analogous to (and in essence a wrapper for) a JDO <code>PersistenceManager</code>;
@@ -94,16 +92,6 @@ public interface IsisSession extends SessionScopedComponent {
      */
     public PersistenceSession getPersistenceSession();
 
-    // //////////////////////////////////////////////////////
-    // Perspective
-    // //////////////////////////////////////////////////////
-
-    /**
-     * Returns the {@link ObjectAdapter adapted} <tt>Perspective</tt> for the
-     * user who is using this {@link IsisSession} .
-     */
-
-    public UserProfile getUserProfile();
 
     
     // //////////////////////////////////////////////////////

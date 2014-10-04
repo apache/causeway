@@ -42,8 +42,6 @@ import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInjector;
 import org.apache.isis.core.runtime.transaction.facetdecorator.standard.TransactionFacetDecoratorInstaller;
-import org.apache.isis.core.runtime.userprofile.UserProfileStore;
-import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -59,7 +57,6 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
     private AuthorizationManagerInstaller authorizationInstaller;
     private ObjectReflectorInstaller reflectorInstaller;
     private ServicesInstaller servicesInstaller;
-    private UserProfileStoreInstaller userProfileStoreInstaller;
     private PersistenceMechanismInstaller persistenceMechanismInstaller;
     private FixturesInstaller fixtureInstaller;
 
@@ -210,29 +207,6 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
         return servicesInstaller.getServices(getDeploymentType());
     }
 
-
-// ///////////////////////////////////////////
-    // User Profile Loader/Store
-    // ///////////////////////////////////////////
-
-    public void lookupAndSetUserProfileFactoryInstaller() {
-        final IsisConfiguration configuration = getConfiguration();
-        final String persistor = configuration.getString(SystemConstants.PROFILE_PERSISTOR_INSTALLER_KEY);
-
-        final UserProfileStoreInstaller userProfilePersistenceMechanismInstaller = installerLookup.userProfilePersistenceMechanismInstaller(persistor, getDeploymentType());
-        if (userProfilePersistenceMechanismInstaller != null) {
-            setUserProfileStoreInstaller(userProfilePersistenceMechanismInstaller);
-        }
-    }
-
-    public void setUserProfileStoreInstaller(final UserProfileStoreInstaller userProfilestoreInstaller) {
-        this.userProfileStoreInstaller = userProfilestoreInstaller;
-    }
-
-    @Override
-    protected UserProfileStore obtainUserProfileStore() {
-        return userProfileStoreInstaller.createUserProfileStore(getConfiguration());
-    }
 
     // ///////////////////////////////////////////
     // PersistenceSessionFactory

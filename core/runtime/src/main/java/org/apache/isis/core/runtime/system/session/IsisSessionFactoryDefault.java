@@ -44,8 +44,6 @@ import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.userprofile.UserProfile;
-import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.*;
@@ -74,7 +72,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     private final AuthenticationManager authenticationManager;
     private final AuthorizationManager authorizationManager;
     private final PersistenceSessionFactory persistenceSessionFactory;
-    private final UserProfileLoader userProfileLoader;
     private final DomainObjectContainer container;
     private final List<Object> serviceList;
     private final OidMarshaller oidMarshaller;
@@ -85,7 +82,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             final SpecificationLoaderSpi specificationLoader,
             final AuthenticationManager authenticationManager,
             final AuthorizationManager authorizationManager,
-            final UserProfileLoader userProfileLoader,
             final PersistenceSessionFactory persistenceSessionFactory,
             final DomainObjectContainer container,
             final List<Object> serviceList,
@@ -96,7 +92,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         ensureThatArg(specificationLoader, is(not(nullValue())));
         ensureThatArg(authenticationManager, is(not(nullValue())));
         ensureThatArg(authorizationManager, is(not(nullValue())));
-        ensureThatArg(userProfileLoader, is(not(nullValue())));
         ensureThatArg(persistenceSessionFactory, is(not(nullValue())));
         ensureThatArg(serviceList, is(not(nullValue())));
 
@@ -105,7 +100,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         this.specificationLoaderSpi = specificationLoader;
         this.authenticationManager = authenticationManager;
         this.authorizationManager = authorizationManager;
-        this.userProfileLoader = userProfileLoader;
         this.persistenceSessionFactory = persistenceSessionFactory;
         this.container = container;
         this.serviceList = serviceList;
@@ -202,7 +196,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         specificationLoaderSpi.injectInto(persistenceSessionFactory);
         persistenceSessionFactory.setContainer(container);
         persistenceSessionFactory.setServices(serviceList);
-        userProfileLoader.setServices(serviceList);
 
         authenticationManager.init();
         authorizationManager.init();
@@ -218,7 +211,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         persistenceSessionFactory.shutdown();
         authenticationManager.shutdown();
         specificationLoaderSpi.shutdown();
-        userProfileLoader.shutdown();
     }
 
 
@@ -227,19 +219,18 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         final PersistenceSession persistenceSession = persistenceSessionFactory.createPersistenceSession();
         ensureThatArg(persistenceSession, is(not(nullValue())));
 
-        final UserProfile userProfile = userProfileLoader.getProfile(authenticationSession);
-        ensureThatArg(userProfile, is(not(nullValue())));
-
         // inject into persistenceSession any/all application-scoped components
         // that it requires
         getSpecificationLoader().injectInto(persistenceSession);
 
-        final IsisSessionDefault isisSessionDefault = newIsisSessionDefault(authenticationSession, persistenceSession, userProfile);
+        final IsisSessionDefault isisSessionDefault = newIsisSessionDefault(authenticationSession, persistenceSession);
         return isisSessionDefault;
     }
 
-    protected IsisSessionDefault newIsisSessionDefault(AuthenticationSession authenticationSession, PersistenceSession persistenceSession, UserProfile userProfile) {
-        return new IsisSessionDefault(this, authenticationSession, persistenceSession, userProfile);
+    protected IsisSessionDefault newIsisSessionDefault(
+            final AuthenticationSession authenticationSession,
+            final PersistenceSession persistenceSession) {
+        return new IsisSessionDefault(this, authenticationSession, persistenceSession);
     }
 
     @Override
@@ -270,11 +261,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     @Override
     public PersistenceSessionFactory getPersistenceSessionFactory() {
         return persistenceSessionFactory;
-    }
-
-    @Override
-    public UserProfileLoader getUserProfileLoader() {
-        return userProfileLoader;
     }
 
     public DomainObjectContainer getContainer() {

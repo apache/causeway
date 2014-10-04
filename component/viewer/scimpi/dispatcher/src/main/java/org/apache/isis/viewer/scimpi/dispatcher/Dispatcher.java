@@ -55,7 +55,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.userprofile.UserLocalization;
 import org.apache.isis.viewer.scimpi.dispatcher.action.ActionAction;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Debug;
@@ -103,7 +102,7 @@ public class Dispatcher {
         if (language != null) {
             Locale locale = Util.locale(language);
             TimeZone timeZone = Util.timeZone((String) context.getVariable("user-time-zone"));
-            IsisContext.getUserProfile().setLocalization(new UserLocalization(locale, timeZone));
+            // IsisContext.getUserProfile().setLocalization(new UserLocalization(locale, timeZone));
          } 
         
         IsisContext.getPersistenceSession().getTransactionManager().startTransaction();

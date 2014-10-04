@@ -1226,14 +1226,6 @@ ${license.additional-notes}
             </dependency>
 
 
-            <!-- profile store -->
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-profilestore</artifactId>
-                <version>1.7.0-SNAPSHOT</version>
-            </dependency>
-
-
             <!-- TCK -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
@@ -1945,8 +1937,6 @@ ${license.additional-notes}
         <module>objectstore-inmemory</module>
         <module>objectstore-jdo-metamodel</module>
         <module>objectstore-jdo-datanucleus</module>
-
-        <module>profilestore-inmemory</module>
 
         <module>security-noop</module>
         <module>security-shiro</module>

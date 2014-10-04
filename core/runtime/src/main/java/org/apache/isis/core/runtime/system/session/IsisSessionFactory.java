@@ -33,7 +33,6 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 
 /**
  * Analogous (and in essence a wrapper for) a JDO <code>PersistenceManagerFactory</code>
@@ -85,8 +84,6 @@ public interface IsisSessionFactory extends ApplicationScopedComponent {
      * within} the {@link IsisSession}.
      */
     public PersistenceSessionFactory getPersistenceSessionFactory();
-
-    public UserProfileLoader getUserProfileLoader();
 
     public DomainObjectContainer getContainer();
     public List<Object> getServices();
