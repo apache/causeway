@@ -196,14 +196,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         });
 
         for (final Field field : injectFields) {
-            for (final Object service : services) {
-                final Class<?> serviceClass = service.getClass();
-                boolean isInjectorField = isInjectorFieldFor(field, serviceClass);
-                if(isInjectorField) {
-                    field.setAccessible(true);
-                    invokeInjectorField(field, object, service);
-                }
-            }
+            autowire(object, field, services);
         }
         
         // recurse up the hierarchy
@@ -212,7 +205,19 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
             autowireViaFields(object, services, superclass);
         }
     }
-    
+
+    private static void autowire(Object object, Field field, List<Object> services) {
+        for (final Object service : services) {
+            final Class<?> serviceClass = service.getClass();
+            boolean canInject = isInjectorFieldFor(field, serviceClass);
+            if(canInject) {
+                field.setAccessible(true);
+                invokeInjectorField(field, object, service);
+                return;
+            }
+        }
+    }
+
     private static void autowireViaPrefixedMethods(final Object object, final List<Object> services, final Class<?> cls, final String prefix) {
         final List<Method> methods = Arrays.asList(cls.getMethods());
         final Iterable<Method> prefixedMethods = Iterables.filter(methods, new Predicate<Method>(){
@@ -223,13 +228,18 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         });
         
         for (final Method prefixedMethod : prefixedMethods) {
-            for (final Object service : services) {
-                final Class<?> serviceClass = service.getClass();
-                boolean isInjectorMethod = isInjectorMethodFor(prefixedMethod, serviceClass);
-                if(isInjectorMethod) {
-                    prefixedMethod.setAccessible(true);
-                    invokeInjectorMethod(prefixedMethod, object, service);
-                }
+            autowire(object, prefixedMethod, services);
+        }
+    }
+
+    private static void autowire(Object object, Method prefixedMethod, List<Object> services) {
+        for (final Object service : services) {
+            final Class<?> serviceClass = service.getClass();
+            boolean isInjectorMethod = isInjectorMethodFor(prefixedMethod, serviceClass);
+            if(isInjectorMethod) {
+                prefixedMethod.setAccessible(true);
+                invokeInjectorMethod(prefixedMethod, object, service);
+                return;
             }
         }
     }

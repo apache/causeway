@@ -105,7 +105,9 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
 
     // //////////////////////////////////////
 
-    public void appendServices(DeploymentType deploymentType, final SortedMap<String, SortedSet<String>> positionedServices) {
+    public void appendServices(
+            final DeploymentType deploymentType,
+            final SortedMap<String, SortedSet<String>> positionedServices) {
 
         appendConfiguredServices(null, positionedServices);
         appendConfiguredServices(deploymentType, positionedServices);
@@ -113,7 +115,9 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
         appendObjectFixtureService(null, positionedServices);
     }
 
-    private void appendConfiguredServices(final DeploymentType deploymentType, final SortedMap<String, SortedSet<String>> positionedServices) {
+    private void appendConfiguredServices(
+            final DeploymentType deploymentType,
+            final SortedMap<String, SortedSet<String>> positionedServices) {
         String group = deploymentType != null? deploymentType.name(): null;
         final String root = ConfigurationConstants.ROOT + (group == null ? "" : group.toLowerCase() + ".");
 
@@ -140,7 +144,8 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
                 serviceName = matcher.group(3);
             }
 
-            ServicesInstallerUtils.appendInPosition(positionedServices, "" + order, ServicesInstallerUtils.fullyQualifiedServiceName(servicePrefix, serviceName));
+            final String service = ServicesInstallerUtils.fullyQualifiedServiceName(servicePrefix, serviceName);
+            ServicesInstallerUtils.appendInPosition(positionedServices, "" + order, service);
         }
     }
 

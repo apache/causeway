@@ -87,8 +87,8 @@ public class ServicesInstallerFromConfigurationAndAnnotation extends InstallerAb
         if(serviceList == null) {
 
             final SortedMap<String,SortedSet<String>> positionedServices = Maps.newTreeMap(new DeweyOrderComparator());
-            servicesInstallerFromAnnotation.appendServices(deploymentType, positionedServices);
             servicesInstallerFromConfiguration.appendServices(deploymentType, positionedServices);
+            servicesInstallerFromAnnotation.appendServices(deploymentType, positionedServices);
 
             serviceList = ServicesInstallerUtils.instantiateServicesFrom(positionedServices, serviceInstantiator);
 
