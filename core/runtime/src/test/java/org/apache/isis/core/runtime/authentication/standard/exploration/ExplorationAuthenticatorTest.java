@@ -98,7 +98,7 @@ public class ExplorationAuthenticatorTest {
         mockery.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
-                will(returnValue(DeploymentType.UNIT_TESTING.name()));
+                will(returnValue(DeploymentType.SERVER_PROTOTYPE.name()));
             }
         });
         assertThat(authenticator.isValid(explorationRequest), is(false));
@@ -120,7 +120,7 @@ public class ExplorationAuthenticatorTest {
         mockery.checking(new Expectations() {
             {
                 allowing(mockConfiguration).getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
-                will(returnValue(DeploymentType.UNIT_TESTING.name()));
+                will(returnValue(DeploymentType.SERVER_PROTOTYPE.name()));
             }
         });
         assertThat(authenticator.canAuthenticate(someOtherRequest.getClass()), is(false));

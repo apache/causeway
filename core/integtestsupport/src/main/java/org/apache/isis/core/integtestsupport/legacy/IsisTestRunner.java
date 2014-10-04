@@ -91,7 +91,7 @@ public class IsisTestRunner extends JUnit4ClassRunner {
         try {
             // init the system; cf similar code in Isis and
             // IsisServletContextInitializer
-            final DeploymentType deploymentType = DeploymentType.SERVER_PROTOTYPE;
+            final DeploymentType deploymentType = DeploymentType.UNIT_TESTING;
 
             // TODO: replace with regular IsisSystem and remove this subclass.
             system = new IsisSystemUsingInstallersWithinJunit(deploymentType, installerLookup, testClass);
