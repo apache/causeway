@@ -66,7 +66,22 @@ public class InteractionHelper {
                     event.setCommand(command);
                     if(command != null && command instanceof Command2) {
                         final Command2 command2 = (Command2) command;
-                        command2.setActionInteractionEvent(event);
+
+                        // don't overwrite any existing event.
+                        // this can happen when a bulk action is performed.
+
+                        // if the last action invoked returns null (or is void)
+                        // then the Wicket viewer's BulkActionsLinkFactory will attempt to
+                        // re-run the action that generated the list.
+                        //
+                        // we don't want to overwrite the event; it would be valid to invoke
+                        // an action that is non-idempotent, then run a query afterwards.
+                        // but if the event is overwritten, then will trip up the
+                        // 'ensureSafeSemantics' check at the end of the xactn.
+
+                        if(command2.getActionInteractionEvent() == null) {
+                            command2.setActionInteractionEvent(event);
+                        }
                     }
                 }
             } else {
