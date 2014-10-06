@@ -19,28 +19,16 @@
 
 package org.apache.isis.core.metamodel.app;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
+import java.util.*;
 import com.google.common.collect.Lists;
-
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -53,7 +41,11 @@ import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverse
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
-import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
+
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 
 /**
  * Facade for the entire Isis metamodel and supporting components.
@@ -83,25 +75,17 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     private Set<FacetDecorator> facetDecorators;
     private MetaModelValidator metaModelValidator;
 
-    private DomainObjectContainer container;
-
     private ValidationFailures validationFailures;
 
     
     public static class Builder {
         private final RuntimeContext runtimeContext;
         private final ProgrammingModel programmingModel;
-        private DomainObjectContainer container = new DomainObjectContainerDefault();
         private List<Object> services = Lists.newArrayList();
         
         private Builder(RuntimeContext embeddedContext, ProgrammingModel programmingModel) {
             this.runtimeContext = embeddedContext;
             this.programmingModel = programmingModel;
-        }
-        
-        public Builder with(DomainObjectContainer container) {
-            this.container = container;
-            return this;
         }
         
         public Builder withServices(Object... services) {
@@ -114,11 +98,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         }
         
         public IsisMetaModel build() {
-            final IsisMetaModel isisMetaModel = new IsisMetaModel(runtimeContext, programmingModel, services);
-            if(container != null) {
-                isisMetaModel.setContainer(container);
-            }
-            return isisMetaModel;
+            return new IsisMetaModel(runtimeContext, programmingModel, services);
         }
     }
     
@@ -133,8 +113,9 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     public IsisMetaModel(final RuntimeContext runtimeContext, ProgrammingModel programmingModel, final Object... services) {
         this.runtimeContext = runtimeContext;
 
-        setContainer(new DomainObjectContainerDefault());
+        this.services.add(new DomainObjectContainerDefault());
         this.services.addAll(Arrays.asList(services));
+
         setConfiguration(new IsisConfigurationDefault());
         setClassSubstitutor(new ClassSubstitutorAbstract() {});
         setCollectionTypeRegistry(new CollectionTypeRegistryDefault());
@@ -145,18 +126,8 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         setMetaModelValidator(new MetaModelValidatorDefault());
     }
 
-    private void setContainer(final DomainObjectContainer container) {
-        this.container = container;
-    }
-
     /**
-     * The list of classes representing services, as specified in the
-     * {@link #IsisMetaModel(EmbeddedContext, Class...) constructor}.
-     * 
-     * <p>
-     * To obtain the instantiated services, use the
-     * {@link ServicesInjectorSpi#getRegisteredServices()} (available from
-     * {@link #getServicesInjector()}).
+     * The list of classes representing services.
      */
     public List<Object> getServices() {
         return Collections.unmodifiableList(services);
@@ -171,11 +142,8 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         ensureNotInitialized();
         reflector = new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, programmingModel, facetDecorators, metaModelValidator);
 
-        reflector.setContainer(container);
         reflector.setServices(services);
         
-        runtimeContext.injectInto(container);
-        runtimeContext.setContainer(container);
         runtimeContext.injectInto(reflector);
         reflector.injectInto(runtimeContext);
 
@@ -211,17 +179,6 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         return reflector;
     }
 
-    // ///////////////////////////////////////////////////////
-    // DomainObjectContainer
-    // ///////////////////////////////////////////////////////
-
-    /**
-     * Available once {@link #init() initialized}.
-     */
-    public DomainObjectContainer getDomainObjectContainer() {
-        ensureInitialized();
-        return container;
-    }
 
     // ///////////////////////////////////////////////////////
     // DependencyInjector

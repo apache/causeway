@@ -22,23 +22,13 @@ package org.apache.isis.core.metamodel.runtimecontext;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
-
 import com.google.common.collect.Lists;
+import org.apache.isis.core.metamodel.spec.*;
 
-import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.core.metamodel.services.container.DomainObjectContainerAware;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderDelegator;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
-
-public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderSpiAware, DomainObjectContainerAware {
+public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderSpiAware {
 
     private final SpecificationLoaderDelegator specificationLookupDelegator = new SpecificationLoaderDelegator();
     
-    private DomainObjectContainer container;
     private Properties properties;
 
 
@@ -80,8 +70,7 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
     }
 
     /**
-     * Is injected into when the reflector is
-     * {@link ObjectReflectorAbstract#init() initialized}.
+     * Is injected into when the reflector is reflector isinitialized.
      */
     @Override
     public void setSpecificationLoaderSpi(final SpecificationLoaderSpi specificationLoader) {
@@ -147,19 +136,6 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
                 specificationLoader.invalidateCache(domainClass);
             }
         });
-    }
-
-    protected DomainObjectContainer getContainer() {
-        return container;
-    }
-
-    /**
-     * So that {@link #injectServicesInto(Object)} can also inject the
-     * {@link DomainObjectContainer}.
-     */
-    @Override
-    public void setContainer(final DomainObjectContainer container) {
-        this.container = container;
     }
 
     public void setProperties(final Properties properties) {

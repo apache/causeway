@@ -78,10 +78,8 @@ public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
 
 
     // ///////////////////////////////////////////
-    // container
+    // transaction state
     // ///////////////////////////////////////////
-
-    public void setContainer(DomainObjectContainer container);
 
     public TransactionState getTransactionState();
 
@@ -95,19 +93,15 @@ public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
          * Started, still in progress.
          * 
          * <p>
-         * May {@link IsisTransaction#flush() flush},
-         * {@link IsisTransaction#commit() commit} or
-         * {@link IsisTransaction#abort() abort}.
+         * May flush, commit or abort.
          */
         IN_PROGRESS,
         /**
          * Started, but has hit an exception.
          * 
          * <p>
-         * May not {@link IsisTransaction#flush()} or
-         * {@link IsisTransaction#commit() commit} (will throw an
-         * {@link IllegalStateException}), but can only
-         * {@link IsisTransaction#abort() abort}.
+         * May not flush or commit (will throw an {@link IllegalStateException}),
+         * can only abort.
          * 
          * <p>
          * Similar to <tt>setRollbackOnly</tt> in EJBs.
@@ -117,52 +111,42 @@ public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
          * Completed, having successfully committed.
          * 
          * <p>
-         * May not {@link IsisTransaction#flush()} or
-         * {@link IsisTransaction#abort() abort} or
-         * {@link IsisTransaction#commit() commit} (will throw
-         * {@link IllegalStateException}).
+         * May not flush or abort or commit (will throw {@link IllegalStateException}).
          */
         COMMITTED,
         /**
          * Completed, having aborted.
          * 
          * <p>
-         * May not {@link IsisTransaction#flush()},
-         * {@link IsisTransaction#commit() commit} or
-         * {@link IsisTransaction#abort() abort} (will throw
-         * {@link IllegalStateException}).
+         * May not flush, commit or abort (will throw {@link IllegalStateException}).
          */
         ABORTED;
 
         private TransactionState(){}
 
         /**
-         * Whether it is valid to {@link IsisTransaction#flush() flush} this
-         * {@link IsisTransaction transaction}.
+         * Whether it is valid to flush the transaction.
          */
         public boolean canFlush() {
             return this == IN_PROGRESS;
         }
 
         /**
-         * Whether it is valid to {@link IsisTransaction#commit() commit} this
-         * {@link IsisTransaction transaction}.
+         * Whether it is valid to commit the transaction.
          */
         public boolean canCommit() {
             return this == IN_PROGRESS;
         }
 
         /**
-         * Whether it is valid to {@link IsisTransaction#markAsAborted() abort} this
-         * {@link IsisTransaction transaction}.
+         * Whether it is valid to mark as aborted this transaction}.
          */
         public boolean canAbort() {
             return this == IN_PROGRESS || this == MUST_ABORT;
         }
 
         /**
-         * Whether the {@link IsisTransaction transaction} is complete (and so a
-         * new one can be started).
+         * Whether the transaction is complete (and so a new one can be started).
          */
         public boolean isComplete() {
             return this == COMMITTED || this == ABORTED;

@@ -19,17 +19,13 @@
 
 package org.apache.isis.core.runtime.persistence.objectstore;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-
 import java.util.Collections;
-
 import org.jmock.Expectations;
 import org.jmock.Sequence;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
@@ -38,34 +34,26 @@ import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.app.IsisMetaModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.app.IsisMetaModel;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreatorDefault;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.*;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
-import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
-import org.apache.isis.core.runtime.system.persistence.IdentifierGeneratorDefault;
-import org.apache.isis.core.runtime.system.persistence.ObjectFactory;
-import org.apache.isis.core.runtime.system.persistence.OidGenerator;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.core.runtime.system.persistence.*;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
+
+import static org.hamcrest.CoreMatchers.equalTo;
 
 public class PersistenceSessionObjectStoreTest {
 
@@ -163,10 +151,8 @@ public class PersistenceSessionObjectStoreTest {
         final DomainObjectContainerDefault container = new DomainObjectContainerDefault();
 
         runtimeContext.injectInto(container);
-        runtimeContext.setContainer(container);
 
         servicesInjector = new ServicesInjectorDefault();
-        servicesInjector.setContainer(container);
 
         adapterManager = new AdapterManagerDefault(new PojoRecreatorDefault());
         adapterFactory = new PojoAdapterFactory();
@@ -178,7 +164,7 @@ public class PersistenceSessionObjectStoreTest {
             
         };
         
-        servicesInjector.setServices(Collections.emptyList());
+        servicesInjector.setServices(Collections.<Object>singletonList(container));
         
         context.checking(new Expectations(){{
             allowing(mockAuthenticationSession).getUserName();

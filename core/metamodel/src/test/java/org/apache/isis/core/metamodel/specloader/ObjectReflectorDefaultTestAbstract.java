@@ -85,8 +85,7 @@ public abstract class ObjectReflectorDefaultTestAbstract {
                         new HashSet<FacetDecorator>(),
                         new MetaModelValidatorDefault());
         reflector.setRuntimeContext(runtimeContext);
-        reflector.setContainer(new DomainObjectContainerDefault());
-        reflector.setServices(Collections.emptyList());
+        reflector.setServices(Collections.<Object>singletonList(new DomainObjectContainerDefault()));
         reflector.init();
         
         specification = loadSpecification(reflector);

@@ -51,7 +51,12 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
      *
      * <p>
      * It's important that any services annotated {@link org.apache.isis.applib.annotation.DomainService} and residing
-     * in any of these packages must have no side-effects and must have only one implementation.
+     * in any of these packages must have no side-effects.
+     *
+     * <p>
+     *     Services are ordered according to the {@link org.apache.isis.applib.annotation.DomainService#menuOrder() menuOrder},
+     *     with the first service found used.
+     * </p>
      */
     public final static String PACKAGE_PREFIX_STANDARD =
                                          ",org.apache.isis.applib" +

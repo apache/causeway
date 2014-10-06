@@ -21,19 +21,12 @@ package org.apache.isis.core.integtestsupport;
 
 import java.util.Arrays;
 import java.util.List;
-
 import com.google.common.collect.Lists;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -57,11 +50,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
-import org.apache.isis.core.tck.dom.refs.AggregatedEntity;
-import org.apache.isis.core.tck.dom.refs.ParentEntity;
-import org.apache.isis.core.tck.dom.refs.ParentEntityRepository;
-import org.apache.isis.core.tck.dom.refs.ReferencingEntity;
-import org.apache.isis.core.tck.dom.refs.SimpleEntity;
+import org.apache.isis.core.tck.dom.refs.*;
 import org.apache.isis.core.tck.dom.scalars.ApplibValuedEntity;
 import org.apache.isis.core.tck.dom.scalars.JdkValuedEntity;
 import org.apache.isis.core.tck.dom.scalars.PrimitiveValuedEntity;
@@ -74,6 +63,7 @@ import org.apache.isis.core.tck.dom.scalars.WrapperValuedEntity;
  * TODO: need to make inherit from the {@link IsisSystemForTest}.
  */
 public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
+
 
     public interface Listener {
 
@@ -228,6 +218,7 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         private Object[] services;
 
 
+
         public Builder with(IsisConfiguration configuration) {
             this.configuration = configuration;
             return this;
@@ -312,11 +303,11 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
         boolean firstTime = isisSystem == null;
-        if(fireListeners.shouldFire()) {
+        if (fireListeners.shouldFire()) {
             fireInitAndPreSetupSystem(firstTime);
         }
-        
-        if(firstTime) {
+
+        if (firstTime) {
             isisSystem = createIsisSystem(services);
             isisSystem.init();
             IsisContext.closeSession();
@@ -326,15 +317,26 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         authenticationSession = authenticationManager.authenticate(authenticationRequest);
 
         IsisContext.openSession(authenticationSession);
-        
-        container = getContainer();
-        if(firstTime && fixturesInitialization == Fixtures.Initialization.INIT) {
+
+        DomainObjectContainer container = lookupContainer();
+        if (firstTime && fixturesInitialization == Fixtures.Initialization.INIT) {
             fixtures.init(container);
         }
-        if(fireListeners.shouldFire()) {
+        if (fireListeners.shouldFire()) {
             firePostSetupSystem(firstTime);
         }
+
     }
+
+    private DomainObjectContainer lookupContainer() {
+        for (Object service : services) {
+            if(service instanceof DomainObjectContainer) {
+                return (DomainObjectContainer) service;
+            }
+        }
+        throw new IllegalStateException("Could not locate DomainObjectContainer");
+    }
+
 
     private enum FireListeners {
         FIRE,
@@ -344,9 +346,6 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         }
     }
     
-    private DomainObjectContainer getContainer() {
-        return getPersistenceSession().getServicesInjector().getContainer();
-    }
 
     /**
      * Intended to be called from a test's {@link After} method.
@@ -463,9 +462,6 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
 
     /**
      * The {@link IsisSystemDefault} created during {@link #setUpSystem()}.
-     * 
-     * <p>
-     * Can fine-tune the actual implementation using the hook {@link #createIsisSystem()}.
      */
     public IsisSystemDefault getIsisSystem() {
         return isisSystem;
@@ -473,9 +469,6 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
 
     /**
      * The {@link AuthenticationSession} created during {@link #setUpSystem()}.
-     * 
-     * <p>
-     * Can fine-tune before hand using {@link #createAuthenticationRequest()}.
      */
     public AuthenticationSession getAuthenticationSession() {
         return authenticationSession;

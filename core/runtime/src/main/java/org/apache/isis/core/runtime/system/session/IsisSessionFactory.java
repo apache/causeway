@@ -85,7 +85,6 @@ public interface IsisSessionFactory extends ApplicationScopedComponent {
      */
     public PersistenceSessionFactory getPersistenceSessionFactory();
 
-    public DomainObjectContainer getContainer();
     public List<Object> getServices();
 
     /**

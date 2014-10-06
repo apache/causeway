@@ -108,7 +108,7 @@ public class IsisContextTest {
             }
         });
 
-        sessionFactory = new IsisSessionFactoryDefault(DeploymentType.UNIT_TESTING, configuration, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockPersistenceSessionFactory, mockContainer, servicesList, oidMarshaller);
+        sessionFactory = new IsisSessionFactoryDefault(DeploymentType.UNIT_TESTING, configuration, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockPersistenceSessionFactory, servicesList, oidMarshaller);
         authSession = new SimpleSession("tester", Collections.<String>emptyList());
         
         IsisContext.setConfiguration(configuration);

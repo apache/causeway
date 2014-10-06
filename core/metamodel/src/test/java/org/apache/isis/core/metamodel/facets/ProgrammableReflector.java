@@ -129,11 +129,6 @@ public class ProgrammableReflector implements SpecificationLoaderSpi, Applicatio
     }
 
     @Override
-    public void setContainer(DomainObjectContainer container) {
-        throw new NotYetImplementedException();
-    }
-
-    @Override
     public void setServices(final List<Object> services) {
         throw new NotYetImplementedException();
     }

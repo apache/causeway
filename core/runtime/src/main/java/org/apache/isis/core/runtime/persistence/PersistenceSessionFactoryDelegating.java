@@ -19,15 +19,7 @@
 
 package org.apache.isis.core.runtime.persistence;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import java.util.List;
-
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -46,6 +38,9 @@ import org.apache.isis.core.runtime.system.persistence.ObjectFactory;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
+import static org.hamcrest.CoreMatchers.*;
+
 /**
  * Implementation that just delegates to a supplied
  * {@link PersistenceSessionFactory}.
@@ -56,10 +51,6 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     private final IsisConfiguration configuration;
     private final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate;
 
-    /**
-     * @see #setContainer(DomainObjectContainer)
-     */
-    private DomainObjectContainer container;
     /**
      * @see #setServices(List)
      */
@@ -101,7 +92,6 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     public final void init() {
 
         // check prereq dependencies injected
-        ensureThatState(container, is(not(nullValue())));
         ensureThatState(serviceList, is(notNullValue()));
 
         // a bit of a workaround, but required if anything in the metamodel (for
@@ -136,13 +126,10 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
         // wire up components
 
         getSpecificationLoader().injectInto(runtimeContext);
-        runtimeContext.injectInto(container);
-        runtimeContext.setContainer(container);
         for (Object service : serviceList) {
             runtimeContext.injectInto(service);
         }
 
-        servicesInjector.setContainer(container);
         servicesInjector.setServices(serviceList);
         servicesInjector.init();
     }
@@ -234,10 +221,6 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     // //////////////////////////////////////////////////////
     // Dependencies (injected via setters)
     // //////////////////////////////////////////////////////
-
-    public void setContainer(DomainObjectContainer container) {
-        this.container = container;
-    }
 
     @Override
     public void setServices(final List<Object> serviceList) {

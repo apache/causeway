@@ -72,7 +72,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     private final AuthenticationManager authenticationManager;
     private final AuthorizationManager authorizationManager;
     private final PersistenceSessionFactory persistenceSessionFactory;
-    private final DomainObjectContainer container;
     private final List<Object> serviceList;
     private final OidMarshaller oidMarshaller;
 
@@ -83,7 +82,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             final AuthenticationManager authenticationManager,
             final AuthorizationManager authorizationManager,
             final PersistenceSessionFactory persistenceSessionFactory,
-            final DomainObjectContainer container,
             final List<Object> serviceList,
             final OidMarshaller oidMarshaller) {
 
@@ -101,7 +99,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         this.authenticationManager = authenticationManager;
         this.authorizationManager = authorizationManager;
         this.persistenceSessionFactory = persistenceSessionFactory;
-        this.container = container;
         this.serviceList = serviceList;
         this.oidMarshaller = oidMarshaller;
         
@@ -188,13 +185,11 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
      */
     @Override
     public void init() {
-        specificationLoaderSpi.setContainer(container);
         specificationLoaderSpi.setServices(serviceList);
         specificationLoaderSpi.init();
 
         // must come after init of spec loader.
         specificationLoaderSpi.injectInto(persistenceSessionFactory);
-        persistenceSessionFactory.setContainer(container);
         persistenceSessionFactory.setServices(serviceList);
 
         authenticationManager.init();
@@ -263,9 +258,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         return persistenceSessionFactory;
     }
 
-    public DomainObjectContainer getContainer() {
-        return container;
-    }
     @Override
     public List<Object> getServices() {
         return serviceList;

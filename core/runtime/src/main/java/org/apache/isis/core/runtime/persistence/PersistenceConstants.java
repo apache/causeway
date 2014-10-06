@@ -19,10 +19,6 @@
 
 package org.apache.isis.core.runtime.persistence;
 
-import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.runtime.system.persistence.ObjectFactory;
 
@@ -46,12 +42,6 @@ public final class PersistenceConstants {
      */
     public static final String CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT = "org.apache.isis.core.bytecode.cglib.CglibClassSubstitutor";
 
-    /**
-     * Key used to lookup implementation of {@link DomainObjectContainer} in
-     * {@link IsisConfiguration}.
-     */
-    public static final String DOMAIN_OBJECT_CONTAINER_CLASS_NAME = ConfigurationConstants.ROOT + "persistor.domain-object-container";
-    public static final String DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT = DomainObjectContainerDefault.class.getName();
 
     private PersistenceConstants() {
     }

@@ -30,40 +30,13 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
  * The repository of services, also able to inject into any object.
  * 
  * <p>
- * The {@link #getContainer() domain object container} is always injected but is
- * not a {@link #getRegisteredServices() registered service}.
- * 
- * <p>
  * Can be considered a mutable SPI to the {@link ServicesInjector} immutable API.
  */
 public interface ServicesInjectorSpi extends ApplicationScopedComponent, Injectable, ServicesInjector {
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // Container
-    // ///////////////////////////////////////////////////////////////////////////
-
-    DomainObjectContainer getContainer();
-
-    /**
-     * Container to inject.
-     * 
-     * <p>
-     * This itself is injected.
-     */
-    public void setContainer(final DomainObjectContainer container);
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // Services
-    // ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Services to be injected.
-     * 
-     * <p>
-     * Should automatically inject all services into each other (though calling
-     * {@link #open()} will also do this).
-     * 
-     * @param services
      */
     void setServices(List<Object> services);
 

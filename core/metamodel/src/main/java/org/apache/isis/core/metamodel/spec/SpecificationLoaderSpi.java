@@ -30,20 +30,12 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 public interface SpecificationLoaderSpi extends ApplicationScopedComponent, DebuggableWithTitle, SpecificationLoader {
 
     /**
-     * Specify the {@link DomainObjectContainer} as part of initializing the services.
-     * 
-     * @see #setServices(List)
-     */
-    void setContainer(DomainObjectContainer container);
-    /**
      * Specify the services to pro-actively prime the cache, and to initialize them also.
-     * 
-     * @see #setContainer(DomainObjectContainer)
      */
     void setServices(List<Object> services);
 
     /**
-     * Populated as a result of running {@link MetaModelValidator#validate() validation} after all specs have been loaded. 
+     * Populated as a result of running metamodel validation after all specs have been loaded.
      * @param validationFailures 
      */
     void validateSpecifications(ValidationFailures validationFailures);

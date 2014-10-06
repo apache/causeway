@@ -20,17 +20,13 @@
 package org.apache.isis.core.metamodel.app;
 
 import java.util.TreeSet;
-
 import com.google.common.collect.Lists;
-
 import org.jmock.Expectations;
 import org.jmock.Sequence;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -73,9 +69,6 @@ public class IsisMetaModelTest_init {
             {
                 allowing(mockRuntimeContext).injectInto(with(any(Object.class)));
                 will(IsisActions.injectInto());
-                
-                oneOf(mockRuntimeContext).setContainer(with(any(DomainObjectContainer.class)));
-                inSequence(initSequence);
                 
                 oneOf(mockProgrammingModelFacets).init();
                 inSequence(initSequence);

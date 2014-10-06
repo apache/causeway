@@ -33,15 +33,11 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
-
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.hamcrest.CoreMatchers.*;
 
 /**
  * Must be a thread-safe.
@@ -56,7 +52,6 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
      */
     private final Map<Class<?>, List<Object>> servicesByType = Maps.newHashMap();
 
-    private DomainObjectContainer container;
     private final List<Object> services = Lists.newArrayList();
 
     
@@ -72,22 +67,6 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
     @Override
     public void shutdown() {
-    }
-
-    // /////////////////////////////////////////////////////////
-    // Container
-    // /////////////////////////////////////////////////////////
-
-    @Override
-    public DomainObjectContainer getContainer() {
-        return container;
-    }
-
-    @Override
-    public void setContainer(final DomainObjectContainer container) {
-        ensureThatArg(container, is(not(nullValue())));
-        this.container = container;
-        autowireServicesAndContainer();
     }
 
     // /////////////////////////////////////////////////////////
@@ -142,12 +121,9 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
     @Override
     public void injectServicesInto(final Object object) {
-        Assert.assertNotNull("no container", container);
         Assert.assertNotNull("no services", services);
 
-        final List<Object> servicesCopy = Lists.newArrayList(services);
-        servicesCopy.add(container);
-        injectServices(object, servicesCopy);
+        injectServices(object, Collections.unmodifiableList(services));
     }
 
     @Override
@@ -303,7 +279,6 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
     
     private void autowireServicesAndContainer() {
         injectServicesInto(this.services);
-        injectServicesInto(this.container);
     }
 
     @Override
@@ -326,13 +301,8 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
         List<Object> matchingServices = Lists.newArrayList();
         addAssignableTo(serviceClass, services, matchingServices);
-        addAssignableTo(serviceClass, singletonListFor(container), matchingServices);
-        
-        servicesByType.put(serviceClass, matchingServices);
-    }
 
-    private static List<Object> singletonListFor(Object obj) {
-        return obj!=null? Collections.singletonList(obj): Collections.emptyList();
+        servicesByType.put(serviceClass, matchingServices);
     }
 
     private static void addAssignableTo(Class<?> type, List<Object> candidates, List<Object> filteredServicesAndContainer) {

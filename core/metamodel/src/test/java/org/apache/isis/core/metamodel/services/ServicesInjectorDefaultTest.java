@@ -78,8 +78,7 @@ public class ServicesInjectorDefaultTest {
 
     @Test
     public void shouldInjectContainer() {
-        injector.setContainer(mockContainer);
-        final Object[] services = { mockService1, mockService2 };
+        final Object[] services = { mockContainer, mockService1, mockService2 };
         injector.setServices(Arrays.asList(services));
 
         context.checking(new Expectations() {

@@ -26,6 +26,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import com.google.common.base.Predicate;
 import org.apache.isis.applib.*;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.query.Query;
@@ -53,6 +55,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
+@DomainService
 public class  DomainObjectContainerDefault implements DomainObjectContainer, QuerySubmitterAware, ObjectDirtierAware, DomainObjectServicesAware, ObjectPersistorAware, SpecificationLoaderAware, AuthenticationSessionProviderAware, AdapterManagerAware, LocalizationProviderAware, ExceptionRecognizer {
 
     private ObjectDirtier objectDirtier;
@@ -71,6 +74,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     // titleOf
     // //////////////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     public String titleOf(final Object domainObject) {
         final ObjectAdapter objectAdapter = adapterManager.adapterFor(domainObject);
@@ -86,6 +90,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     // newInstance, disposeInstance
     // //////////////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     @SuppressWarnings("unchecked")
     public <T> T newTransientInstance(final Class<T> ofClass) {
@@ -98,6 +103,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         }
     }
 
+    @Programmatic
     @SuppressWarnings("unchecked")
     @Override
     public <T extends ViewModel> T newViewModelInstance(Class<T> ofClass, String memento) {
@@ -113,6 +119,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         }
     }
 
+    @Programmatic
     @Override
     @SuppressWarnings("unchecked")
     public <T> T newAggregatedInstance(final Object parent, final Class<T> ofClass) {
@@ -132,6 +139,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
      * Returns a new instance of the specified class that will have been
      * persisted.
      */
+    @Programmatic
     @Override
     public <T> T newPersistentInstance(final Class<T> ofClass) {
         final T newInstance = newTransientInstance(ofClass);
@@ -143,6 +151,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
      * Returns a new instance of the specified class that has the same persisted
      * state as the specified object.
      */
+    @Programmatic
     @Override
     public <T> T newInstance(final Class<T> ofClass, final Object object) {
         if (isPersistent(object)) {
@@ -168,6 +177,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return getDomainObjectServices().createAggregatedInstance(spec, parentAdapter);
     }
 
+    @Programmatic
     @Override
     public void remove(final Object persistentObject) {
         if (persistentObject == null) {
@@ -181,6 +191,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         getObjectPersistor().remove(adapter);
     }
 
+    @Programmatic
     @Override
     public void removeIfNotAlready(final Object object) {
         if (!isPersistent(object)) {
@@ -194,6 +205,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     // injectServicesInto
     // //////////////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     public <T> T injectServicesInto(T domainObject) {
         getDomainObjectServices().injectServicesInto(domainObject);
@@ -204,16 +216,19 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     // resolve, objectChanged
     // //////////////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     public void resolve(final Object parent) {
         getDomainObjectServices().resolve(parent);
     }
 
+    @Programmatic
     @Override
     public void resolve(final Object parent, final Object field) {
         getDomainObjectServices().resolve(parent, field);
     }
 
+    @Programmatic
     @Override
     public void objectChanged(final Object object) {
         getObjectDirtier().objectChanged(object);
@@ -223,11 +238,13 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     // flush, commit
     // //////////////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     public boolean flush() {
         return getDomainObjectServices().flush();
     }
 
+    @Programmatic
     @Override
     public void commit() {
         getDomainObjectServices().commit();
@@ -237,11 +254,13 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     // isValid, validate
     // //////////////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     public boolean isValid(final Object domainObject) {
         return validate(domainObject) == null;
     }
 
+    @Programmatic
     @Override
     public String validate(final Object domainObject) {
         final ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
@@ -253,6 +272,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     // persistence
     // //////////////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     public boolean isPersistent(final Object domainObject) {
         final ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
@@ -262,6 +282,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     /**
      * {@inheritDoc}
      */
+    @Programmatic
     @Override
     public void persist(final Object domainObject) {
         final ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
@@ -282,6 +303,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     /**
      * {@inheritDoc}
      */
+    @Programmatic
     @Override
     public void persistIfNotAlready(final Object object) {
         if (isPersistent(object)) {
@@ -294,6 +316,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     // security
     // //////////////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     public UserMemento getUser() {
         final AuthenticationSession session = getAuthenticationSessionProvider().getAuthenticationSession();
@@ -305,7 +328,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return user;
     }
 
-    private List<RoleMemento> asRoleMementos(final List<String> roles) {
+    private static List<RoleMemento> asRoleMementos(final List<String> roles) {
         final List<RoleMemento> mementos = new ArrayList<RoleMemento>();
         if (roles != null) {
             for (final String role : roles) {
@@ -319,17 +342,20 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     // properties
     // //////////////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     public String getProperty(final String name) {
         return getDomainObjectServices().getProperty(name);
     }
 
+    @Programmatic
     @Override
     public String getProperty(final String name, final String defaultValue) {
         final String value = getProperty(name);
         return value == null ? defaultValue : value;
     }
 
+    @Programmatic
     @Override
     public List<String> getPropertyNames() {
         return getDomainObjectServices().getPropertyNames();
@@ -339,16 +365,19 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     // info, warn, error messages
     // //////////////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     public void informUser(final String message) {
         getDomainObjectServices().informUser(message);
     }
 
+    @Programmatic
     @Override
     public void raiseError(final String message) {
         getDomainObjectServices().raiseError(message);
     }
 
+    @Programmatic
     @Override
     public void warnUser(final String message) {
         getDomainObjectServices().warnUser(message);
@@ -358,6 +387,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     // allInstances
     // //////////////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     public <T> List<T> allInstances(final Class<T> type, long... range) {
         return allMatches(new QueryFindAllInstances<T>(type, range));
@@ -366,7 +396,8 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     // //////////////////////////////////////////////////////////////////
     // allMatches
     // //////////////////////////////////////////////////////////////////
-    
+
+    @Programmatic
     @Override
     public <T> List<T> allMatches(final Class<T> cls, final Predicate<? super T> predicate, long... range) {
         final List<T> allInstances = allInstances(cls, range);
@@ -379,23 +410,27 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return filtered;
     }
 
+    @Programmatic
     @Deprecated
     @Override
     public <T> List<T> allMatches(final Class<T> cls, final Filter<? super T> filter, long... range) {
         return allMatches(cls, Filters.asPredicate(filter), range);
     }
-    
+
+    @Programmatic
     @Override
     public <T> List<T> allMatches(final Class<T> type, final T pattern, long... range) {
         Assert.assertTrue("pattern not compatible with type", type.isAssignableFrom(pattern.getClass()));
         return allMatches(new QueryFindByPattern<T>(type, pattern, range));
     }
 
+    @Programmatic
     @Override
     public <T> List<T> allMatches(final Class<T> type, final String title, long... range) {
         return allMatches(new QueryFindByTitle<T>(type, title, range));
     }
 
+    @Programmatic
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
         flush(); // auto-flush any pending changes
@@ -407,6 +442,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     // firstMatch
     // //////////////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     public <T> T firstMatch(final Class<T> cls, final Predicate<T> predicate) {
         final List<T> allInstances = allInstances(cls); // Have to fetch all, as matching is done in next loop
@@ -418,24 +454,28 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return null;
     }
 
+    @Programmatic
     @Deprecated
     @Override
     public <T> T firstMatch(final Class<T> cls, final Filter<T> filter) {
         return firstMatch(cls, Filters.asPredicate(filter));
     }
-    
+
+    @Programmatic
     @Override
     public <T> T firstMatch(final Class<T> type, final T pattern) {
         final List<T> instances = allMatches(type, pattern, 0, 1); // No need to fetch more than 1
         return firstInstanceElseNull(instances);
     }
 
+    @Programmatic
     @Override
     public <T> T firstMatch(final Class<T> type, final String title) {
         final List<T> instances = allMatches(type, title, 0, 1); // No need to fetch more than 1
         return firstInstanceElseNull(instances);
     }
 
+    @Programmatic
     @Override
     @SuppressWarnings("unchecked")
     public <T> T firstMatch(final Query<T> query) {
@@ -448,6 +488,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     // uniqueMatch
     // //////////////////////////////////////////////////////////////////
 
+    @Programmatic
     @Override
     public <T> T uniqueMatch(final Class<T> type, final Predicate<T> predicate) {
         final List<T> instances = allMatches(type, predicate, 0, 2); // No need to fetch more than 2.
@@ -457,6 +498,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return firstInstanceElseNull(instances);
     }
 
+    @Programmatic
     @Deprecated
     @Override
     public <T> T uniqueMatch(final Class<T> type, final Filter<T> filter) {
@@ -466,7 +508,8 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         }
         return firstInstanceElseNull(instances);
     }
-    
+
+    @Programmatic
     @Override
     public <T> T uniqueMatch(final Class<T> type, final T pattern) {
         final List<T> instances = allMatches(type, pattern, 0, 2); // No need to fetch more than 2.
@@ -476,6 +519,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return firstInstanceElseNull(instances);
     }
 
+    @Programmatic
     @Override
     public <T> T uniqueMatch(final Class<T> type, final String title) {
         final List<T> instances = allMatches(type, title, 0, 2); // No need to fetch more than 2.
@@ -485,6 +529,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return firstInstanceElseNull(instances);
     }
 
+    @Programmatic
     @Override
     public <T> T uniqueMatch(final Query<T> query) {
         final List<T> instances = allMatches(query); // No need to fetch more than 2. 
@@ -494,7 +539,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return firstInstanceElseNull(instances);
     }
 
-    private <T> T firstInstanceElseNull(final List<T> instances) {
+    private static <T> T firstInstanceElseNull(final List<T> instances) {
         return instances.size() == 0 ? null : instances.get(0);
     }
 
@@ -514,17 +559,10 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         }
     }
 
-    // make not recognizable, instead show the error page...
-//    static class ExceptionRecognizerForObjectMemberAuthorizationException extends ExceptionRecognizerForType {
-//        public ExceptionRecognizerForObjectMemberAuthorizationException() {
-//            super(ObjectMember.AuthorizationException.class);
-//        }
-//    }
 
     private final ExceptionRecognizer recognizer =
             new ExceptionRecognizerComposite(
                     new ExceptionRecognizerForConcurrencyException(),
-//                    new ExceptionRecognizerForObjectMemberAuthorizationException(),
                     new ExceptionRecognizerForRecoverableException()
                 );
     
@@ -533,21 +571,25 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
      * which will automatically recognize any {@link org.apache.isis.applib.RecoverableException}s or
      * any {@link ConcurrencyException}s.
      */
+    @Programmatic
     @Override
     public String recognize(Throwable ex) {
         return recognizer.recognize(ex);
     }
-    
-    ExceptionRecognizer getRecognizer() {
-        return recognizer;
-    }
 
+
+    // //////////////////////////////////////////////////////////////////
+    // init, shutdown
+    // //////////////////////////////////////////////////////////////////
+
+    @Programmatic
     @PostConstruct
     @Override
     public void init(Map<String, String> properties) {
         recognizer.init(properties);
     }
 
+    @Programmatic
     @PreDestroy
     @Override
     public void shutdown() {
@@ -562,6 +604,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return querySubmitter;
     }
 
+    @Programmatic
     @Override
     public void setQuerySubmitter(final QuerySubmitter querySubmitter) {
         this.querySubmitter = querySubmitter;
@@ -571,6 +614,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return domainObjectServices;
     }
 
+    @Programmatic
     @Override
     public void setDomainObjectServices(final DomainObjectServices domainObjectServices) {
         this.domainObjectServices = domainObjectServices;
@@ -580,6 +624,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return specificationLookup;
     }
 
+    @Programmatic
     @Override
     public void setSpecificationLookup(final SpecificationLoader specificationLookup) {
         this.specificationLookup = specificationLookup;
@@ -589,6 +634,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return authenticationSessionProvider;
     }
 
+    @Programmatic
     @Override
     public void setAuthenticationSessionProvider(final AuthenticationSessionProvider authenticationSessionProvider) {
         this.authenticationSessionProvider = authenticationSessionProvider;
@@ -598,6 +644,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return adapterManager;
     }
 
+    @Programmatic
     @Override
     public void setAdapterManager(final AdapterManager adapterManager) {
         this.adapterManager = adapterManager;
@@ -607,6 +654,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return objectDirtier;
     }
 
+    @Programmatic
     @Override
     public void setObjectDirtier(final ObjectDirtier objectDirtier) {
         this.objectDirtier = objectDirtier;
@@ -616,6 +664,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return objectPersistor;
     }
 
+    @Programmatic
     @Override
     public void setObjectPersistor(final ObjectPersistor objectPersistor) {
         this.objectPersistor = objectPersistor;
@@ -625,8 +674,6 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     public void setLocalizationProvider(final LocalizationProvider localizationProvider) {
         this.localizationProvider = localizationProvider;
     }
-
-
 
 
 }

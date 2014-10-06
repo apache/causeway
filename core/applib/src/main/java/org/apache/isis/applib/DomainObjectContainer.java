@@ -24,6 +24,7 @@ import java.util.List;
 import com.google.common.base.Predicate;
 
 import org.apache.isis.applib.annotation.Aggregated;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
@@ -43,6 +44,7 @@ public interface DomainObjectContainer {
      * Return the title of the object, as rendered in the UI by the 
      * Isis viewers.
      */
+    @Programmatic
     String titleOf(Object domainObject);
 
     // ////////////////////////////////////////////////////////////////
@@ -62,6 +64,7 @@ public interface DomainObjectContainer {
      * 
      * @deprecated
      */
+    @Programmatic
     @Deprecated
     void resolve(Object domainObject);
 
@@ -79,6 +82,7 @@ public interface DomainObjectContainer {
      * 
      * @deprecated
      */
+    @Programmatic
     @Deprecated
     void resolve(Object domainObject, Object field);
 
@@ -92,6 +96,7 @@ public interface DomainObjectContainer {
      * 
      * @deprecated
      */
+    @Programmatic
     @Deprecated
     void objectChanged(Object domainObject);
 
@@ -108,6 +113,7 @@ public interface DomainObjectContainer {
      * 
      * @return  - is never used, always returns <tt>false</tt>. 
      */
+    @Programmatic
     boolean flush();
 
     /**
@@ -120,6 +126,7 @@ public interface DomainObjectContainer {
      * 
      * @deprecated
      */
+    @Programmatic
     @Deprecated
     void commit();
 
@@ -160,6 +167,7 @@ public interface DomainObjectContainer {
      * @see #newPersistentInstance(Class)
      * @see #newAggregatedInstance(Object, Class)
      */
+    @Programmatic
     <T> T newTransientInstance(final Class<T> ofType);
 
     
@@ -173,6 +181,7 @@ public interface DomainObjectContainer {
      *     If services need injecting into it, use {@link #injectServicesInto(Object)}.
      * </p>
      */
+    @Programmatic
     <T extends ViewModel> T newViewModelInstance(final Class<T> ofType, final String memento);
 
     /**
@@ -183,6 +192,7 @@ public interface DomainObjectContainer {
      * <b>Note:</b> not every objectstore implementation supports the concept
      * of aggregated instances.
      */
+    @Programmatic
     <T> T newAggregatedInstance(Object parent, Class<T> ofType);
 
     /**
@@ -199,6 +209,7 @@ public interface DomainObjectContainer {
      *  
      * @deprecated
      */
+    @Programmatic
     @Deprecated
     <T> T newPersistentInstance(final Class<T> ofType);
 
@@ -212,6 +223,7 @@ public interface DomainObjectContainer {
      * 
      * @deprecated
      */
+    @Programmatic
     @Deprecated
     <T> T newInstance(final Class<T> ofType, final Object object);
 
@@ -219,6 +231,7 @@ public interface DomainObjectContainer {
     // injectServicesInto
     // ////////////////////////////////////////////////////////////////
 
+    @Programmatic
     <T> T injectServicesInto(final T domainObject);
 
     // ////////////////////////////////////////////////////////////////
@@ -231,6 +244,7 @@ public interface DomainObjectContainer {
      * 
      * @see #validate(Object)
      */
+    @Programmatic
     boolean isValid(Object domainObject);
 
     /**
@@ -242,6 +256,7 @@ public interface DomainObjectContainer {
      * 
      * @see #isValid(Object)
      */
+    @Programmatic
     String validate(Object domainObject);
 
     // ////////////////////////////////////////////////////////////////
@@ -252,6 +267,7 @@ public interface DomainObjectContainer {
      * Determines if the specified object is persistent (that it is stored
      * permanently outside of the virtual machine).
      */
+    @Programmatic
     boolean isPersistent(Object domainObject);
 
     /**
@@ -271,6 +287,7 @@ public interface DomainObjectContainer {
      * @see #isPersistent(Object)
      * @see #persistIfNotAlready(Object)
      */
+    @Programmatic
     void persist(Object domainObject);
 
     /**
@@ -286,6 +303,7 @@ public interface DomainObjectContainer {
      * @see #isPersistent(Object)
      * @see #persist(Object)
      */
+    @Programmatic
     void persistIfNotAlready(Object domainObject);
 
     /**
@@ -293,6 +311,7 @@ public interface DomainObjectContainer {
      * 
      * @param persistentDomainObject
      */
+    @Programmatic
     void remove(Object persistentDomainObject);
 
     /**
@@ -300,6 +319,7 @@ public interface DomainObjectContainer {
      * 
      * @param domainObject
      */
+    @Programmatic
     void removeIfNotAlready(Object domainObject);
 
     // ////////////////////////////////////////////////////////////////
@@ -314,6 +334,7 @@ public interface DomainObjectContainer {
      * @see #warnUser(String)
      * @see #raiseError(String)
      */
+    @Programmatic
     void informUser(String message);
 
     /**
@@ -324,6 +345,7 @@ public interface DomainObjectContainer {
      * @see #raiseError(String)
      * @see #informUser(String)
      */
+    @Programmatic
     void warnUser(String message);
 
     /**
@@ -335,6 +357,7 @@ public interface DomainObjectContainer {
      * @see #warnUser(String)
      * @see #informUser(String)
      */
+    @Programmatic
     void raiseError(String message);
 
     // ////////////////////////////////////////////////////////////////
@@ -344,17 +367,20 @@ public interface DomainObjectContainer {
     /**
      * Get the configuration property with the specified name.
      */
+    @Programmatic
     String getProperty(String name);
 
     /**
      * Get the configuration property with the specified name and if it doesn't
      * exist then return the specified default value.
      */
+    @Programmatic
     String getProperty(String name, String defaultValue);
 
     /**
      * Get the names of all the available properties.
      */
+    @Programmatic
     List<String> getPropertyNames();
 
     // ////////////////////////////////////////////////////////////////
@@ -364,6 +390,7 @@ public interface DomainObjectContainer {
     /**
      * Get the details about the current user.
      */
+    @Programmatic
     UserMemento getUser();
 
     // ////////////////////////////////////////////////////////////////
@@ -387,6 +414,7 @@ public interface DomainObjectContainer {
      * 
      * @param range 2 longs, specifying 0-based start and count.
      */
+    @Programmatic
     public <T> List<T> allInstances(Class<T> ofType, long... range);
 
     /**
@@ -407,6 +435,7 @@ public interface DomainObjectContainer {
      * 
      * @param range 2 longs, specifying 0-based start and count.
      */
+    @Programmatic
     public <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range);
     
     /**
@@ -429,6 +458,7 @@ public interface DomainObjectContainer {
      * 
      * @deprecated - use {@link #allMatches(Class, Predicate, long...)} instead.
      */
+    @Programmatic
     @Deprecated
     public <T> List<T> allMatches(final Class<T> ofType, final Filter<? super T> filter, long... range);
 
@@ -450,6 +480,7 @@ public interface DomainObjectContainer {
      * 
      * @param range 2 longs, specifying 0-based start and count.
      */
+    @Programmatic
     public <T> List<T> allMatches(Class<T> ofType, String title, long... range);
 
     /**
@@ -471,6 +502,7 @@ public interface DomainObjectContainer {
      * 
      * @param range 2 longs, specifying 0-based start and count.
      */
+    @Programmatic
     <T> List<T> allMatches(Class<T> ofType, T pattern, long... range);
 
     /**
@@ -482,6 +514,7 @@ public interface DomainObjectContainer {
      * use or modify the returned {@link List}, but the changes will not be
      * reflected back to the repository.
      */
+    @Programmatic
     <T> List<T> allMatches(Query<T> query);
 
     // //////////////////////////////////////
@@ -494,6 +527,7 @@ public interface DomainObjectContainer {
      * This method is useful during exploration/prototyping, but you may want to
      * use {@link #firstMatch(Query)} for production code.
      */
+    @Programmatic
     public <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate);
     
     /**
@@ -506,6 +540,7 @@ public interface DomainObjectContainer {
      * 
      * @deprecated - use {@link #firstMatch(Class, Predicate)}
      */
+    @Programmatic
     @Deprecated
     public <T> T firstMatch(final Class<T> ofType, final Filter<T> filter);
 
@@ -517,6 +552,7 @@ public interface DomainObjectContainer {
      * This method is useful during exploration/prototyping, but you may want to
      * use {@link #firstMatch(Query)} for production code.
      */
+    @Programmatic
     <T> T firstMatch(Class<T> ofType, String title);
 
     /**
@@ -527,12 +563,14 @@ public interface DomainObjectContainer {
      * This method is useful during exploration/prototyping, but you may want to
      * use {@link #firstMatch(Query)} for production code.
      */
+    @Programmatic
     <T> T firstMatch(Class<T> ofType, T pattern);
 
     /**
      * Returns the first instance that matches the supplied query, or
      * <tt>null</tt> if none.
      */
+    @Programmatic
     <T> T firstMatch(Query<T> query);
 
     // //////////////////////////////////////
@@ -549,6 +587,7 @@ public interface DomainObjectContainer {
      * This method is useful during exploration/prototyping, but you may want to
      * use {@link #uniqueMatch(Query)} for production code.
      */
+    @Programmatic
     public <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
 
     /**
@@ -565,6 +604,7 @@ public interface DomainObjectContainer {
      * 
      * @deprecated - use {@link #uniqueMatch(Class, Predicate)}
      */
+    @Programmatic
     @Deprecated
     public <T> T uniqueMatch(final Class<T> ofType, final Filter<T> filter);
     
@@ -580,6 +620,7 @@ public interface DomainObjectContainer {
      * This method is useful during exploration/prototyping, but you may want to
      * use {@link #uniqueMatch(Query)} for production code.
      */
+    @Programmatic
     <T> T uniqueMatch(Class<T> ofType, String title);
 
     /**
@@ -596,15 +637,17 @@ public interface DomainObjectContainer {
      * This method is useful during exploration/prototyping, but you may want to
      * use {@link #uniqueMatch(Query)} for production code.
      */
+    @Programmatic
     <T> T uniqueMatch(Class<T> ofType, T pattern);
 
     /**
      * Find the only instance that matches the provided query.
-     * 
+     *
      * <p>
      * If no instance is found then null will be return, while if there is more
      * that one instances a run-time exception will be thrown.
      */
+    @Programmatic
     <T> T uniqueMatch(Query<T> query);
 
 }

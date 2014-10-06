@@ -26,9 +26,6 @@ public interface ServicesInjector extends Injectable {
 
     /**
      * All registered services, as an immutable {@link List}.
-     * 
-     * <p>
-     * Does not include the {@link #getContainer() container}.
      */
     List<Object> getRegisteredServices();
 

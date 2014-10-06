@@ -19,24 +19,18 @@
 
 package org.apache.isis.core.metamodel.services;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
-
 import java.util.Arrays;
-
 import javax.inject.Inject;
-
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ServicesInjectorDefaultTest_usingFields {
 
@@ -92,15 +86,12 @@ public class ServicesInjectorDefaultTest_usingFields {
 
     @Test
     public void shouldInjectContainer() {
-        injector.setContainer(container);
-        injector.setServices(Arrays.asList(service1, service3, service2));
+        injector.setServices(Arrays.asList(container, service1, service3, service2));
 
-        injector.injectServicesInto(container);
         injector.injectServicesInto(service1);
         injector.injectServicesInto(service2);
         injector.injectServicesInto(service3);
         
-        assertThat(service1.getContainer(), is(container));
         assertThat(service1.getSomeDomainService2(), is((SomeDomainService2Abstract)service2));
         
         assertThat(service2.getSomeDomainService1(), is(service1));

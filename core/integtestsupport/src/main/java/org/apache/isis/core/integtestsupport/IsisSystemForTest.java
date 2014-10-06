@@ -363,9 +363,14 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             return this == FIRE;
         }
     }
-    
+
     public DomainObjectContainer getContainer() {
-        return getPersistenceSession().getServicesInjector().getContainer();
+        for (Object service : services) {
+            if(service instanceof DomainObjectContainer) {
+                return (DomainObjectContainer) service;
+            }
+        }
+        throw new IllegalStateException("Could not locate DomainObjectContainer");
     }
 
     /**
@@ -505,9 +510,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     /**
      * The {@link AuthenticationSession} created during {@link #setUpSystem()}.
-     * 
-     * <p>
-     * Can fine-tune before hand using {@link #createAuthenticationRequest()}.
      */
     public AuthenticationSession getAuthenticationSession() {
         return authenticationSession;

@@ -154,10 +154,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     private final SpecificationTraverser specificationTraverser;
 
     /**
-     * @see #setContainer(DomainObjectContainer)
-     */
-    private DomainObjectContainer container;
-    /**
      * @see #setServices(List)
      */
     private List<Object> services;
@@ -676,11 +672,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     private List<Object> getServices() {
         return services;
-    }
-    
-    @Override
-    public void setContainer(final DomainObjectContainer container) {
-        this.container = container;
     }
     
     @Override

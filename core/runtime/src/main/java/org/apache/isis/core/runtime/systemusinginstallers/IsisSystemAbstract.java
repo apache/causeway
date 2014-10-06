@@ -178,7 +178,6 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         final Collection<MetaModelRefiner> metaModelRefiners = refiners(authenticationManager, authorizationManager, persistenceSessionFactory);
         final SpecificationLoaderSpi reflector = obtainSpecificationLoaderSpi(deploymentType, persistenceSessionFactory, metaModelRefiners);
 
-        final DomainObjectContainer container = obtainContainer();
         final List<Object> services = obtainServices();
 
         // bind metamodel to the (runtime) framework
@@ -192,7 +191,7 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
                 authenticationManager, authorizationManager,
                 oidMarshaller,
                 reflector,
-                container, services);
+                services);
     }
 
     protected RuntimeContextFromSession obtainRuntimeContextFromSession() {
@@ -206,8 +205,8 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
             final AuthenticationManager authenticationManager, final AuthorizationManager authorizationManager,
             final OidMarshaller oidMarshaller,
             final SpecificationLoaderSpi reflector,
-            final DomainObjectContainer container, final List<Object> services) {
-        return new IsisSessionFactoryDefault(deploymentType, configuration, reflector, authenticationManager, authorizationManager, persistenceSessionFactory, container, services, oidMarshaller);
+            final List<Object> services) {
+        return new IsisSessionFactoryDefault(deploymentType, configuration, reflector, authenticationManager, authorizationManager, persistenceSessionFactory, services, oidMarshaller);
     }
 
     private static Collection<MetaModelRefiner> refiners(Object... possibleRefiners ) {
