@@ -115,7 +115,7 @@ public class Get_thenRepresentation_ok {
         assertThat(repr.getLinkWithRel(Rel.DELETE), is(nullValue()));
         
         assertThat(repr.getExtensions(), isMap());
-        assertThat(repr.getOid(), matches("JdkValuedEntities:27"));
+        assertThat(repr.getOid(), matches("JdkValuedEntities:28"));
     }
 
 

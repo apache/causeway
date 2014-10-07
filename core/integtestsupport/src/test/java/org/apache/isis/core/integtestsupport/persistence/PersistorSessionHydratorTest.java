@@ -19,14 +19,9 @@
 
 package org.apache.isis.core.integtestsupport.persistence;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import org.jmock.Expectations;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures.Fixtures.Initialization;
@@ -35,6 +30,7 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.objectstore.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.system.persistence.IdentifierGenerator;
@@ -42,6 +38,10 @@ import org.apache.isis.core.tck.dom.refs.ParentEntityRepository;
 import org.apache.isis.core.tck.dom.refs.SimpleEntity;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class PersistorSessionHydratorTest {
 
@@ -54,15 +54,23 @@ public class PersistorSessionHydratorTest {
     {
         context.checking(new Expectations() {
             {
-                allowing(mockIdentifierGenerator).createTransientIdentifierFor(with(equalTo(ObjectSpecId.of("ParentEntities"))), with(an(ParentEntityRepository.class)));
+                final ObjectSpecId docdSpecId = ObjectSpecId.of(DomainObjectContainerDefault.class.getName());
+                allowing(mockIdentifierGenerator).createTransientIdentifierFor(with(equalTo(docdSpecId)), with(an(DomainObjectContainerDefault.class)));
                 will(returnValue("1"));
-                allowing(mockIdentifierGenerator).createPersistentIdentifierFor(with(equalTo(ObjectSpecId.of("ParentEntities"))), with(an(ParentEntityRepository.class)), with(any(RootOid.class)));
+                allowing(mockIdentifierGenerator).createPersistentIdentifierFor(with(equalTo(docdSpecId)), with(an(DomainObjectContainerDefault.class)), with(any(RootOid.class)));
                 will(returnValue("1"));
-                
-                allowing(mockIdentifierGenerator).createTransientIdentifierFor(with(equalTo(ObjectSpecId.of("SMPL"))), with(an(SimpleEntity.class)));
+
+                final ObjectSpecId peSpecId = ObjectSpecId.of("ParentEntities");
+                allowing(mockIdentifierGenerator).createTransientIdentifierFor(with(equalTo(peSpecId)), with(an(ParentEntityRepository.class)));
+                will(returnValue("1"));
+                allowing(mockIdentifierGenerator).createPersistentIdentifierFor(with(equalTo(peSpecId)), with(an(ParentEntityRepository.class)), with(any(RootOid.class)));
+                will(returnValue("1"));
+
+                final ObjectSpecId smplSpecId = ObjectSpecId.of("SMPL");
+                allowing(mockIdentifierGenerator).createTransientIdentifierFor(with(equalTo(smplSpecId)), with(an(SimpleEntity.class)));
                 will(returnValue("-999"));
                 
-                allowing(mockIdentifierGenerator).createPersistentIdentifierFor(with(equalTo(ObjectSpecId.of("SMPL"))), with(an(SimpleEntity.class)), with(any(RootOid.class)));
+                allowing(mockIdentifierGenerator).createPersistentIdentifierFor(with(equalTo(smplSpecId)), with(an(SimpleEntity.class)), with(any(RootOid.class)));
                 will(returnValue("1"));
             }
         });

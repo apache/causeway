@@ -59,7 +59,7 @@ public class Get_thenRepresentation_ok {
     public void representation() throws Exception {
 
         // when
-        final Response actionPromptResp = domainObjectResource.actionPrompt("RTNE", "76", "contains");
+        final Response actionPromptResp = domainObjectResource.actionPrompt("RTNE", "77", "contains");
         final RestfulResponse<ObjectActionRepresentation> actionPromptJsonResp = RestfulResponse.ofT(actionPromptResp);
         assertThat(actionPromptJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
 
@@ -72,14 +72,14 @@ public class Get_thenRepresentation_ok {
         final LinkRepresentation selfLink = actionPromptRepr.getLinkWithRel(Rel.SELF);
         assertThat(selfLink, isLink(client)
                                 .httpMethod(RestfulHttpMethod.GET)
-                                .href(endsWith("/objects/RTNE/76/actions/contains"))
+                                .href(endsWith("/objects/RTNE/77/actions/contains"))
                                 .returning(HttpStatusCode.OK));
 
         // up link
         final LinkRepresentation upLink = actionPromptRepr.getLinkWithRel(Rel.UP);
         assertThat(upLink, isLink(client)
                                 .httpMethod(RestfulHttpMethod.GET)
-                                .href(endsWith("/objects/RTNE/76"))
+                                .href(endsWith("/objects/RTNE/77"))
                                 .returning(HttpStatusCode.OK)
                                 .type(RepresentationType.DOMAIN_OBJECT.getMediaType())
                                 .title("Untitled Actions Entity"));
@@ -88,7 +88,7 @@ public class Get_thenRepresentation_ok {
         final LinkRepresentation invokeLink = actionPromptRepr.getLinkWithRel(Rel.INVOKE);
         assertThat(invokeLink, isLink(client)
                                 .httpMethod(RestfulHttpMethod.GET)
-                                .href(endsWith("/objects/RTNE/76/actions/contains/invoke")));
+                                .href(endsWith("/objects/RTNE/77/actions/contains/invoke")));
 
         assertThat(invokeLink.getArguments(), is(not(nullValue())));
         assertThat(invokeLink.getArguments().isArray(), is(false));

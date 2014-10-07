@@ -398,16 +398,10 @@ public abstract class AbstractContainedObject {
 
     // //////////////////////////////////////
 
-    /**
-     * @uml.property name="container"
-     * @uml.associationEnd
-     */
     private DomainObjectContainer container;
 
     /**
      * This field is not persisted, nor displayed to the user.
-     * 
-     * @uml.property name="container"
      */
     @Hidden
     protected DomainObjectContainer getContainer() {
@@ -416,12 +410,9 @@ public abstract class AbstractContainedObject {
 
     /**
      * Injected by the application container itself.
-     * 
-     * @uml.property name="container"
      */
     public void setContainer(final DomainObjectContainer container) {
         this.container = container;
     }
-    // }}
 
 }

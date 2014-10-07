@@ -77,12 +77,14 @@ public class ScenarioExecutionForIntegration extends ScenarioExecution  {
         } else {
             isft.abortTran();
         }
+
     }
 
     @Override
     public void openSession() {
         try {
             isft.openSession();
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

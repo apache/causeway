@@ -79,7 +79,7 @@ public class Put_then_200_ok {
 
         // given
         final int i = 999999;
-        final Response domainObjectResp = domainObjectResource.propertyDetails("PRMV", "41", "intProperty");
+        final Response domainObjectResp = domainObjectResource.propertyDetails("PRMV", "42", "intProperty");
         final RestfulResponse<ObjectPropertyRepresentation> domainObjectJsonResp = RestfulResponse.ofT(domainObjectResp);
         assertThat(domainObjectJsonResp.getStatus().getFamily(), is(Response.Status.Family.SUCCESSFUL));
 

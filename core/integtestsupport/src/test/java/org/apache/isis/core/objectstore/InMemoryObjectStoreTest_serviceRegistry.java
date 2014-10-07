@@ -19,12 +19,9 @@
 
 package org.apache.isis.core.objectstore;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -34,6 +31,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.tck.dom.refs.ParentEntityRepository;
 import org.apache.isis.core.tck.dom.refs.SimpleEntity;
+
+import static org.junit.Assert.assertEquals;
 
 public class InMemoryObjectStoreTest_serviceRegistry {
 
@@ -56,7 +55,7 @@ public class InMemoryObjectStoreTest_serviceRegistry {
     @Test
     public void getOidForServices() throws Exception {
         final Oid oidForService = getStore().getOidForService(iswf.loadSpecification(ParentEntityRepository.class));
-        assertEquals(RootOidDefault.create(ObjectSpecId.of("ParentEntities"), "1"), oidForService);
+        assertEquals(RootOidDefault.create(ObjectSpecId.of("ParentEntities"), "2"), oidForService);
     }
 
 

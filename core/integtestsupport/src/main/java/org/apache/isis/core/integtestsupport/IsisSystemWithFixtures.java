@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.objectstore.InMemoryPersistenceMechanismInstaller;
@@ -215,9 +216,11 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         private ProgrammingModel programmingModel;
 
         private final List <Listener> listeners = Lists.newArrayList();
-        private Object[] services;
+        private final List<Object> services = Lists.newArrayList();
 
-
+        public Builder() {
+            withServices(new DomainObjectContainerDefault());
+        }
 
         public Builder with(IsisConfiguration configuration) {
             this.configuration = configuration;
@@ -240,13 +243,12 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         }
 
         public Builder withServices(Object... services) {
-            this.services = services;
+            this.services.addAll(0, Arrays.asList(services));
             return this;
         }
         
         public IsisSystemWithFixtures build() {
-            final List<Object> servicesIfAny = services != null? Arrays.asList(services): null;
-            return new IsisSystemWithFixtures(fixturesInitialization, configuration, programmingModel, metaModelValidator, persistenceMechanismInstaller, authenticationRequest, servicesIfAny, listeners);
+            return new IsisSystemWithFixtures(fixturesInitialization, configuration, programmingModel, metaModelValidator, persistenceMechanismInstaller, authenticationRequest, services, listeners);
         }
 
         public Builder with(Listener listener) {
@@ -279,11 +281,14 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
         this.persistenceMechanismInstaller = persistenceMechanismInstaller;
         this.authenticationRequest = authenticationRequest;
         this.fixtures = new Fixtures();
-        if(services == null) {
-            services = Arrays.asList((Object)fixtures.associatedEntitiesRepository);
-        }
+
+        // hacky
+        services.add(fixtures.associatedEntitiesRepository);
         this.services = services;
+
         this.listeners = listeners;
+
+        this.container = lookupContainer();
     }
 
 
@@ -329,7 +334,11 @@ public class IsisSystemWithFixtures implements org.junit.rules.TestRule {
     }
 
     private DomainObjectContainer lookupContainer() {
-        for (Object service : services) {
+        return lookupContainerIn(services);
+    }
+
+    private static DomainObjectContainer lookupContainerIn(List<Object> services1) {
+        for (Object service : services1) {
             if(service instanceof DomainObjectContainer) {
                 return (DomainObjectContainer) service;
             }

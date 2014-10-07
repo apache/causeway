@@ -56,7 +56,7 @@ public class Get_givenEntityWithCollections_thenRepresentation_ok_TODO {
     public void thenCollections() throws Exception {
 
         // when
-        final Response jaxrsResponse = domainObjectResource.object("PRMV","41");
+        final Response jaxrsResponse = domainObjectResource.object("PRMV","42");
         final RestfulResponse<DomainObjectRepresentation> restfulResponse = RestfulResponse.ofT(jaxrsResponse);
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
 

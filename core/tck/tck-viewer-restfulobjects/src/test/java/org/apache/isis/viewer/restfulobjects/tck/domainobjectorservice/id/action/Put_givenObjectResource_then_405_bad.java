@@ -55,7 +55,7 @@ public class Put_givenObjectResource_then_405_bad {
     public void representation() throws Exception {
 
         // given
-        final Response actionPromptResp = domainObjectResource.actionPrompt("RTNE", "76", "contains");
+        final Response actionPromptResp = domainObjectResource.actionPrompt("RTNE", "77", "contains");
         final RestfulResponse<ObjectActionRepresentation> actionPromptJsonResp = RestfulResponse.ofT(actionPromptResp);
         final ObjectActionRepresentation actionPromptRepr = actionPromptJsonResp.getEntity();
         final LinkRepresentation selfLink = actionPromptRepr.getLinkWithRel(Rel.SELF);

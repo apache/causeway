@@ -22,8 +22,10 @@ package org.apache.isis.core.integtestsupport.legacy.components;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.integtestsupport.legacy.Service;
 import org.apache.isis.core.integtestsupport.legacy.Services;
+import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.runtime.services.ServicesInstallerAbstract;
 
 public class ServicesInstallerAnnotatedClass extends ServicesInstallerAbstract {
@@ -35,8 +37,25 @@ public class ServicesInstallerAnnotatedClass extends ServicesInstallerAbstract {
     public void addServicesAnnotatedOn(final Class<?> javaClass) throws InstantiationException, IllegalAccessException {
         final List<Object> services = new ArrayList<Object>();
         addServicesAnnotatedOn(javaClass, services);
+
+        final DomainObjectContainer doc = lookupContainerIn(services);
+        if(doc == null) {
+            services.add(new DomainObjectContainerDefault());
+        }
+
         addServices(services);
+
     }
+
+    private static DomainObjectContainer lookupContainerIn(List<Object> services1) {
+        for (Object service : services1) {
+            if(service instanceof DomainObjectContainer) {
+                return (DomainObjectContainer) service;
+            }
+        }
+        return null;
+    }
+
 
     private void addServicesAnnotatedOn(final Class<?> testClass, final List<Object> services) throws InstantiationException, IllegalAccessException {
         final Services servicesAnnotation = testClass.getAnnotation(Services.class);
