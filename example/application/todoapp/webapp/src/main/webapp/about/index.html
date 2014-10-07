@@ -128,7 +128,7 @@ th, td {
               </li>
               <li><tt><a href="https://github.com/apache/isis/blob/master/example/application/todo%61pp/webapp/src/main/webapp/WEB-INF/web.xml" target="_blank">WEB-INF/web.xml</a></tt> (in <tt>webapp</tt> module)
                 <ul>
-                  <li><tt><a href="https://github.com/apache/isis/blob/master/example/application/todo%61pp/webapp/src/main/webapp/WEB-INF/web.xml#L98" target="_blank">ResourceCachingFilter</a></tt> and <tt><a href="https://github.com/apache/isis/blob/master/example/application/quickstart_wicket_restful_jdo/webapp/src/main/webapp/WEB-INF/web.xml#L134" target="_blank">ResourceServlet</a></tt> - filter and servlet for serving up static resources.
+                  <li><tt><a href="https://github.com/apache/isis/blob/master/example/application/todo%61pp/webapp/src/main/webapp/WEB-INF/web.xml#L98" target="_blank">ResourceCachingFilter</a></tt> and <tt><a href="https://github.com/apache/isis/blob/master/example/application/todo%61pp/webapp/src/main/webapp/WEB-INF/web.xml#L134" target="_blank">ResourceServlet</a></tt> - filter and servlet for serving up static resources.
                   </li>
                   <li><tt><a href="https://github.com/apache/isis/blob/master/example/application/todo%61pp/webapp/src/main/webapp/WEB-INF/web.xml#L174" target="_blank">WicketFilter</a></tt> - filter for the wicket application, mapped to <tt>/wicket/*</tt>
                   </li>
@@ -142,24 +142,24 @@ th, td {
               </li>
               <li><tt><a href="https://github.com/apache/isis/blob/master/example/application/todo%61pp/webapp/src/main/webapp/WEB-INF/isis.properties" target="_blank">WEB-INF/isis.properties</a></tt> (in <tt>webapp</tt> module)
                 <ul>
-                  <li><tt>isis.services</tt> - specifies the two domain services described above (<tt>ToDoItems</tt> and <tt>ToDoItemsFixtureService</tt>), appearing on the menu bar in the Wicket viewer, 
-                  along with a number of hidden framework-provided domain services demonstrating Isis' support for publishing, auditing and customizable error handling 
+                  <li><tt>isis.services</tt> - explicitly loaded framework-provide domain services.  Other services (including <tt>ToDoItems</tt> and <tt>ToDoItemsFixtureService</tt> described above),
+                      are loaded automatically from the classpath.
                   </li>
-                  <li><tt>isis.persistor</tt> - specifies to use the JDO object store
+                  <li><tt>isis.persistor</tt> - specifies to use Isis' integration with <a href="http://datanucleus.org">DataNucleus</a> for (JDO-based) persistence.
                   </li>
-                  <li><tt>isis.authentication</tt> and <tt>isis.authorization</tt> - security mechanism to use (<tt>bypass</tt> effectively disables) 
+                  <li><tt>isis.authentication</tt> and <tt>isis.authorization</tt> - specifies to use Isis' integration with <a href="http://shiro.apache.org">Apache Shiro</a> for security.
                   </li>
                 </ul>
               </li>
               <li><tt><a href="https://github.com/apache/isis/blob/master/example/application/todo%61pp/webapp/src/main/webapp/WEB-INF/persistor_datanucleus.properties" target="_blank">WEB-INF/persistor_datanucleus.properties</a></tt> (in <tt>webapp</tt> module)
                 <ul>
-                  <li>configuration for JDO object store 
+                  <li>configuration for the DataNucleus (JDO) object store
                   </li>
                 </ul>
               </li>
               <li><tt><a href="https://github.com/apache/isis/blob/master/example/application/todo%61pp/webapp/src/main/webapp/WEB-INF/persistor.properties" target="_blank">WEB-INF/persistor.properties</a></tt> (in <tt>webapp</tt> module)
                 <ul>
-                  <li>JDBC URL for JDO object store 
+                  <li>JDBC URL for DataNucleus (JDO) object store
                   </li>
                 </ul>
               </li>
