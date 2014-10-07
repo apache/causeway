@@ -185,7 +185,7 @@ public abstract class ActionInvocationFacetForInteractionAbstract
                             owningAction, targetAdapter, arguments);
 
             // ... invoke the action
-            final InvocationResult invocationResult = internalInvoke(owningAction, targetAdapter, arguments);
+            final InvocationResult invocationResult = internalInvoke(command, owningAction, targetAdapter, arguments);
 
             // ... post the executed event
             if (invocationResult.getWhetherInvoked()) {
@@ -200,7 +200,11 @@ public abstract class ActionInvocationFacetForInteractionAbstract
 
         } finally {
 
-            // clean up
+            // clean up event on thread
+
+            // note that if the action invoked some other action via a wrapper then this will already have been cleared
+            // out.  That isn't a problem; we only need to pass the event from validate to pre-execute, not to formally
+            // "nest" the events.
             actionInteractionFacet.currentInteraction.set(null);
         }
     }
@@ -214,13 +218,12 @@ public abstract class ActionInvocationFacetForInteractionAbstract
     }
 
     protected InvocationResult internalInvoke(
+            final Command command,
             final ObjectAction owningAction,
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] arguments) {
 
         final Bulk.InteractionContext bulkInteractionContext = getServicesInjector().lookupService(Bulk.InteractionContext.class);
-        final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
-        final Command command = commandContext != null ? commandContext.getCommand() : null;
 
         try {
             final Object[] executionParameters = new Object[arguments.length];

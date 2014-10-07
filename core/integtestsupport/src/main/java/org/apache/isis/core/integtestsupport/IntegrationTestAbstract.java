@@ -62,20 +62,44 @@ public abstract class IntegrationTestAbstract {
     /**
      * Intended to be called whenever there is a logically distinct interaction
      * with the system.
+     *
+     * <p>
+     *     Each transaction has its own instances of request-scoped services, most notably
+     *     the {@link org.apache.isis.applib.services.command.Command}.
+     * </p>
      * 
      * <p>
-     * Simply {@link ScenarioExecution#endTran(boolean) ends any existing transaction} and
-     * then {@link ScenarioExecution#beginTran() starts a new one}.
-     * 
-     * <p>
-     * Typically there is no need to call this method, because (thanks to
-     * {@link IsisTransactionRule}) every test is called within its own transaction.
+     *     (Unlike {@link #nextSession()}), it <i>is</i> valid to hold references to objects across transactions.
+     * </p>
+     *
+     * @see #nextRequest()
+     * @see #nextSession()
      */
     protected void nextTransaction() {
         scenarioExecution().endTran(true);
         scenarioExecution().beginTran();
     }
 
+    /**
+     * Synonym for {@link #nextTransaction()}.
+     *
+     * @see #nextTransaction()
+     * @see #nextSession()
+     */
+    protected void nextRequest() {
+        nextTransaction();
+    }
+
+    /**
+     * Completes the transaction and session, then opens another session and transaction.
+     *
+     * <p>
+     *     Note that any references to objects must be discarded and reacquired.
+     * </p>
+     *
+     * @see #nextTransaction()
+     * @see #nextRequest()
+     */
     protected void nextSession() {
         scenarioExecution().endTran(true);
         scenarioExecution().closeSession();

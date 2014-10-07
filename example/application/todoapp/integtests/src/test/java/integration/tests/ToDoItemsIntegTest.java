@@ -61,24 +61,26 @@ public class ToDoItemsIntegTest extends AbstractToDoIntegTest {
         public void complete_and_notYetComplete() throws Exception {
 
             // given
-            List<ToDoItem> notYetCompleteItems = wrap(service(ToDoItems.class)).notYetComplete();
+            List<ToDoItem> notYetCompleteItems = wrap(toDoItems).notYetComplete();
             final ToDoItem toDoItem = wrap(notYetCompleteItems.get(0));
+            nextTransaction();
 
             // when
             toDoItem.completed();
             nextTransaction();
 
             // then
-            assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(notYetCompletedSize-1));
-            assertThat(wrap(service(ToDoItems.class)).complete().size(), is(completedSize+1));
+            assertThat(wrap(toDoItems).notYetComplete().size(), is(notYetCompletedSize-1));
+            assertThat(wrap(toDoItems).complete().size(), is(completedSize+1));
+            nextTransaction();
 
             // and when
             toDoItem.notYetCompleted();
             nextTransaction();
 
             // then
-            assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(notYetCompletedSize));
-            assertThat(wrap(service(ToDoItems.class)).complete().size(), is(completedSize));
+            assertThat(wrap(toDoItems).notYetComplete().size(), is(notYetCompletedSize));
+            assertThat(wrap(toDoItems).complete().size(), is(completedSize));
         }
     }
 

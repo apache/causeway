@@ -50,6 +50,7 @@ import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.services.publish.*;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
@@ -519,15 +520,21 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     protected void doAudit(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
-        if(auditingService3 == null) {
-            return;
-        }
-        
-        // else
-        final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
-        final java.sql.Timestamp currentTime = Clock.getTimeAsJavaSqlTimestamp();
-        for (Entry<AdapterAndProperty, PreAndPostValues> auditEntry : changedObjectProperties) {
-            auditChangedProperty(currentTime, currentUser, auditEntry);
+        try {
+            if(auditingService3 == null) {
+                return;
+            }
+
+            // else
+            final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
+            final java.sql.Timestamp currentTime = Clock.getTimeAsJavaSqlTimestamp();
+            for (Entry<AdapterAndProperty, PreAndPostValues> auditEntry : changedObjectProperties) {
+                auditChangedProperty(currentTime, currentUser, auditEntry);
+            }
+
+        } finally {
+            // not needed in production, but is required for integration testing
+            this.changedObjectProperties.clear();
         }
     }
 
@@ -742,37 +749,46 @@ public class IsisTransaction implements TransactionScopedComponent {
         if (event == null) {
             return;
         }
-        final ActionSemantics.Of actionSemantics = event.getActionSemantics();
-        if(actionSemantics == null) {
-            return;
-        }
-        if (!actionSemantics.isSafe()) {
-            return;
-        }
+        try {
+            final ActionSemantics.Of actionSemantics = event.getActionSemantics();
+            if(actionSemantics == null) {
+                return;
+            }
+            if (!actionSemantics.isSafe()) {
+                return;
+            }
 
-        final Set<ObjectAdapter> changedAdapters = findChangedAdapters(changedObjectProperties);
-        if(!changedAdapters.isEmpty()) {
-            final String msg = "Action '" + event.getIdentifier().toFullIdentityString() + "'" +
-                    " (with safe semantics)" +
-                    " caused " + changedAdapters.size() + " object" + (changedAdapters.size() != 1 ? "s" : "") +
-                    " to be modified";
-            LOG.error(msg);
-            for (ObjectAdapter changedAdapter : changedAdapters) {
-                final StringBuilder builder = new StringBuilder("  > ")
-                        .append(changedAdapter.getSpecification().getFullIdentifier())
-                        .append(": ");
-                if(!changedAdapter.isDestroyed()) {
-                    builder.append(changedAdapter.titleString(null));
-                } else {
-                    builder.append("(deleted object)");
+            final Set<ObjectAdapter> changedAdapters = findChangedAdapters(changedObjectProperties);
+            if(!changedAdapters.isEmpty()) {
+                final String msg = "Action '" + event.getIdentifier().toFullIdentityString() + "'" +
+                        " (with safe semantics)" +
+                        " caused " + changedAdapters.size() + " object" + (changedAdapters.size() != 1 ? "s" : "") +
+                        " to be modified";
+                LOG.error(msg);
+                for (ObjectAdapter changedAdapter : changedAdapters) {
+                    final StringBuilder builder = new StringBuilder("  > ")
+                            .append(changedAdapter.getSpecification().getFullIdentifier())
+                            .append(": ");
+                    if(!changedAdapter.isDestroyed()) {
+                        builder.append(changedAdapter.titleString(null));
+                    } else {
+                        builder.append("(deleted object)");
+                    }
+                    LOG.error(builder.toString());
                 }
-                LOG.error(builder.toString());
-            }
 
-            final boolean enforceSafeSemantics = IsisContext.getConfiguration().getBoolean(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, PersistenceConstants.ENFORCE_SAFE_SEMANTICS_DEFAULT);
-            if(enforceSafeSemantics) {
-                throw new RecoverableException(msg);
+                final boolean enforceSafeSemantics = getConfiguration().getBoolean(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, PersistenceConstants.ENFORCE_SAFE_SEMANTICS_DEFAULT);
+                if(enforceSafeSemantics) {
+                    throw new RecoverableException(msg);
+                }
             }
+        } finally {
+            // irrespective of outcome, clear out the event.
+            // this has no effect in the production app, but benefits integration tests
+            // where otherwise the event from a preceding xactn (eg the action in the 'when') can "leak" into
+            // pertaining to the next phase (eg the assertions in the 'then').
+
+            command2.setActionInteractionEvent(null);
         }
     }
 
@@ -787,8 +803,8 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
 
-    private void preCommitServices(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties1) {
-        doAudit(changedObjectProperties1);
+    private void preCommitServices(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
+        doAudit(changedObjectProperties);
         
         final String currentUser = getTransactionManager().getAuthenticationSession().getUserName();
         final Timestamp endTimestamp = Clock.getTimeAsJavaSqlTimestamp();
@@ -838,6 +854,11 @@ public class IsisTransaction implements TransactionScopedComponent {
             if(commandService != null) {
                 final Command command = commandContext.getCommand();
                 commandService.complete(command);
+
+                if(command instanceof Command2) {
+                    final Command2 command2 = (Command2) command;
+                    command2.setActionInteractionEvent(null);
+                }
             }
         }
     }
@@ -1301,7 +1322,9 @@ public class IsisTransaction implements TransactionScopedComponent {
         return IsisContext.getOidMarshaller();
     }
 
+    protected IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
+    }
 
 
-    
 }

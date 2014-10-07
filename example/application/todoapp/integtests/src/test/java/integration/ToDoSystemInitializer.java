@@ -66,7 +66,11 @@ public class ToDoSystemInitializer {
             testConfiguration.addRegisterEntitiesPackagePrefix("dom");
 
             // enable stricter checking
+            //
+            // the consequence of this is having to call 'nextTransaction()' between most of the given/when/then's
+            // because the command2 only ever refers to the event of the originating action.
             testConfiguration.put(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, "true");
+
             return testConfiguration;
         }
     }

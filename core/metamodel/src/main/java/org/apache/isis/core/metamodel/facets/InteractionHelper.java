@@ -63,23 +63,23 @@ public class InteractionHelper {
                 final Object[] arguments = ObjectAdapter.Util.unwrap(argumentAdapters);
                 event.setArguments(Arrays.asList(arguments));
                 if(phase.isExecutingOrLater()) {
+
+                    // current event always references the command (originally created by the xactn)
                     event.setCommand(command);
                     if(command != null && command instanceof Command2) {
                         final Command2 command2 = (Command2) command;
 
                         // don't overwrite any existing event.
-                        // this can happen when a bulk action is performed.
-
-                        // if the last action invoked returns null (or is void)
-                        // then the Wicket viewer's BulkActionsLinkFactory will attempt to
-                        // re-run the action that generated the list.
                         //
-                        // we don't want to overwrite the event; it would be valid to invoke
-                        // an action that is non-idempotent, then run a query afterwards.
-                        // but if the event is overwritten, then will trip up the
-                        // 'ensureSafeSemantics' check at the end of the xactn.
+                        // this can happen when one action invokes another (wrapped), and can also occur if a
+                        // bulk action is performed (when the query that produced the list is automatically re-executed).
+                        // (This logic is in the Wicket viewer's BulkActionsLinkFactory).
+                        //
+                        // This also means that the command could refer to a different event (the one of the original
+                        // outer-most action that started the xactn) compared to the event that references it.
 
-                        if(command2.getActionInteractionEvent() == null) {
+                        final ActionInteractionEvent<?> actionInteractionEvent = command2.getActionInteractionEvent();
+                        if(actionInteractionEvent == null) {
                             command2.setActionInteractionEvent(event);
                         }
                     }

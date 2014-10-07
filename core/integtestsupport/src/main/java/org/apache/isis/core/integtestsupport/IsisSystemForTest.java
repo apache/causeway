@@ -21,18 +21,17 @@ package org.apache.isis.core.integtestsupport;
 
 import java.util.Arrays;
 import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
-
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixtures.InstallableFixture;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -341,9 +340,10 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         final AuthenticationManager authenticationManager = isisSystem.getSessionFactory().getAuthenticationManager();
         authenticationSession = authenticationManager.authenticate(authenticationRequest);
 
-        IsisContext.openSession(authenticationSession);
         setContainer(getContainer());
-        
+
+        openSession();
+
         wireAndInstallFixtures();
         if(fireListeners.shouldFire()) {
             firePostSetupSystem(firstTime);
@@ -399,6 +399,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     public void openSession() throws Exception {
         openSession(authenticationSession);
+
     }
 
     public void openSession(AuthenticationSession authenticationSession) throws Exception {
@@ -619,7 +620,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         final IsisTransaction transaction = transactionManager.getTransaction();
 
         if(transaction == null) {
-            transactionManager.startTransaction();
+            startTransactionForUser(transactionManager);
             return;
         } 
 
@@ -627,7 +628,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         switch(state) {
             case COMMITTED:
             case ABORTED:
-                transactionManager.startTransaction();
+                startTransactionForUser(transactionManager);
                 break;
             case IN_PROGRESS:
                 // nothing to do
@@ -639,6 +640,18 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                 Assert.fail("Unknown transaction state '" + state + "'");
         }
         
+    }
+
+    private void startTransactionForUser(IsisTransactionManager transactionManager) {
+        transactionManager.startTransaction();
+
+        // specify that this command (if any) is being executed by a 'USER'
+        final CommandContext commandContext = getService(CommandContext.class);
+        Command command;
+        if (commandContext != null) {
+            command = commandContext.getCommand();
+            command.setExecutor(Command.Executor.USER);
+        }
     }
 
     /**
