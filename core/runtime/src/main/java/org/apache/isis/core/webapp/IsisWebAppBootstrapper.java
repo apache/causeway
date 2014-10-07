@@ -38,7 +38,7 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureFromInitParameters;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerInitParameters;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
@@ -139,7 +139,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             isisConfigurationBuilderPrimers.addAll(primers);
         }
         // also support loading from init parameters (specifically, to support simplericity's jetty-console)
-        isisConfigurationBuilderPrimers.add(new OptionHandlerFixtureFromInitParameters(servletContext));
+        isisConfigurationBuilderPrimers.add(new OptionHandlerInitParameters(servletContext));
         for (final IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
             LOG.debug("priming configurations for " + isisConfigurationBuilderPrimer);
             isisConfigurationBuilderPrimer.primeConfigurationBuilder(isisConfigurationBuilder);

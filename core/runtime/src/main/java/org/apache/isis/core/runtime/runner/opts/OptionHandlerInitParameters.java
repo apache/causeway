@@ -31,14 +31,14 @@ import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 
-public class OptionHandlerFixtureFromInitParameters extends OptionHandlerAbstract {
+public class OptionHandlerInitParameters extends OptionHandlerAbstract {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OptionHandlerFixtureFromInitParameters.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OptionHandlerInitParameters.class);
     private final ServletContext servletContext;
 
 
 
-    public OptionHandlerFixtureFromInitParameters(ServletContext servletContext) {
+    public OptionHandlerInitParameters(ServletContext servletContext) {
         this.servletContext = servletContext;
     }
 

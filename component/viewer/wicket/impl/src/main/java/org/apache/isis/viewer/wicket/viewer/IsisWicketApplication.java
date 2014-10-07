@@ -63,7 +63,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureFromInitParameters;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerInitParameters;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -395,7 +395,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             isisConfigurationBuilderPrimers.addAll(primers);
         }
         // also support loading from init parameters (specifically, to support simplericity's jetty-console)
-        isisConfigurationBuilderPrimers.add(new OptionHandlerFixtureFromInitParameters(servletContext));
+        isisConfigurationBuilderPrimers.add(new OptionHandlerInitParameters(servletContext));
         for (final IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
             LOG.info("priming configurations for " + isisConfigurationBuilderPrimer);
             isisConfigurationBuilderPrimer.primeConfigurationBuilder(isisConfigurationBuilder);
