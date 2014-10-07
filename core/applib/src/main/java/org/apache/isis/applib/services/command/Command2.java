@@ -24,12 +24,17 @@ import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
  */
 public interface Command2 extends Command {
 
-    // //////////////////////////////////////
-    // actionInteractionEvent (property)
-    // //////////////////////////////////////
-
     /**
      * The corresponding {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}.
+     *
+     * <p>
+     *     Note that the {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent} itself is mutable,
+     *     as its {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent#getPhase() phase} changes from
+     *     {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTING executing} to
+     *     {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTED executed}.  The
+     *     event returned from this method will always be in one or other of these phases.
+     * </p>
+     * @return
      */
     ActionInteractionEvent<?> getActionInteractionEvent();
 
@@ -37,6 +42,8 @@ public interface Command2 extends Command {
      * <b>NOT API</b>: intended to be called only by the framework.
      */
     void setActionInteractionEvent(ActionInteractionEvent<?> event);
+
+
 
 
 }

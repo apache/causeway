@@ -724,7 +724,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         try {
             final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties = getChangedObjectProperties();
 
-            ensureAnySafeSemanticsHonoured(changedObjectProperties);
+            ensureCommandsPersistedIfDirtyXactnAndAnySafeSemanticsHonoured(changedObjectProperties);
             preCommitServices(changedObjectProperties);
         } catch (final RuntimeException ex) {
             setAbortCause(new IsisTransactionManagerException(ex));
@@ -733,14 +733,27 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     }
 
-    private void ensureAnySafeSemanticsHonoured(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
-        final CommandContext commandContext = getServiceOrNull(CommandContext.class);
+    private void ensureCommandsPersistedIfDirtyXactnAndAnySafeSemanticsHonoured(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
 
-        // playing it safe, but the following guards are almost certainly not necessary.
+        final CommandContext commandContext = getServiceOrNull(CommandContext.class);
         if (commandContext == null) {
             return;
         }
         final Command command = commandContext.getCommand();
+        if(command == null) {
+            return;
+        }
+
+        // ensure that any changed objects means that the command should be persisted
+        final Set<ObjectAdapter> changedAdapters = findChangedAdapters(changedObjectProperties);
+        if(!changedAdapters.isEmpty()) {
+            command.setPersistHint(true);
+        }
+
+        ensureSafeSemanticsHonoured(command, changedAdapters);
+    }
+
+    private void ensureSafeSemanticsHonoured(Command command, Set<ObjectAdapter> changedAdapters) {
         if (!(command instanceof Command2)) {
             return;
         }
@@ -758,7 +771,6 @@ public class IsisTransaction implements TransactionScopedComponent {
                 return;
             }
 
-            final Set<ObjectAdapter> changedAdapters = findChangedAdapters(changedObjectProperties);
             if(!changedAdapters.isEmpty()) {
                 final String msg = "Action '" + event.getIdentifier().toFullIdentityString() + "'" +
                         " (with safe semantics)" +
