@@ -56,7 +56,7 @@ public class Post_then_405_bad {
     public void representation() throws Exception {
 
         // given
-        final Response idPropertyResp = domainObjectResource.propertyDetails("org.apache.isis.core.tck.dom.defaults.WithDefaultsEntity","67", "anInt");
+        final Response idPropertyResp = domainObjectResource.propertyDetails("org.apache.isis.core.tck.dom.defaults.WithDefaultsEntity","68", "anInt");
         final RestfulResponse<ObjectPropertyRepresentation> idPropertyJsonResp = RestfulResponse.ofT(idPropertyResp);
         final ObjectPropertyRepresentation propertyRepr = idPropertyJsonResp.getEntity();
         final LinkRepresentation selfLink = propertyRepr.getLinkWithRel(Rel.SELF);

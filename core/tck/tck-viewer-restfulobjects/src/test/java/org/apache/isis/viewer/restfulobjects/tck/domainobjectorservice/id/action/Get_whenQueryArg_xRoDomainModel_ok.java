@@ -46,7 +46,7 @@ public class Get_whenQueryArg_xRoDomainModel_ok {
     public void setUp() throws Exception {
         final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
-        request = client.createRequest(RestfulHttpMethod.GET, "/objects/RTNE/77/actions/contains");
+        request = client.createRequest(RestfulHttpMethod.GET, "/objects/RTNE/78/actions/contains");
     }
 
     @Test

@@ -73,7 +73,7 @@ public class Post_whenInvokeArgWithObjectReference_thenOK {
 
         // given
         RestfulResponse<ObjectCollectionRepresentation> childrenRestfulResponse = 
-                RestfulResponse.ofT(objectResource.accessCollection("PRNT", "52", "children"));
+                RestfulResponse.ofT(objectResource.accessCollection("PRNT", "53", "children"));
         ObjectCollectionRepresentation childrenRepr = childrenRestfulResponse.getEntity();
 
         JsonRepresentation collValue = childrenRepr.getValue();
@@ -85,7 +85,7 @@ public class Post_whenInvokeArgWithObjectReference_thenOK {
         
         // when
         final RestfulResponse<ObjectActionRepresentation> removeChildRestfulResponse = 
-                RestfulResponse.ofT(objectResource.actionPrompt("PRNT", "52", "removeChild"));
+                RestfulResponse.ofT(objectResource.actionPrompt("PRNT", "53", "removeChild"));
         final ObjectActionRepresentation removeChildRepr = removeChildRestfulResponse.getEntity();
         
         LinkRepresentation invokeLinkRepr = removeChildRepr.getLinkWithRel(Rel.INVOKE);
@@ -100,7 +100,7 @@ public class Post_whenInvokeArgWithObjectReference_thenOK {
 
         // then
         childrenRestfulResponse = 
-                RestfulResponse.ofT(objectResource.accessCollection("PRNT", "52", "children"));
+                RestfulResponse.ofT(objectResource.accessCollection("PRNT", "53", "children"));
         childrenRepr = childrenRestfulResponse.getEntity();
 
         collValue = childrenRepr.getValue();

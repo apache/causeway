@@ -45,7 +45,7 @@ public class Get_whenQueryArg_xRoDomainModel_ok {
     public void setUp() throws Exception {
         final WebServer webServer = webServerRule.getWebServer();
         client = new RestfulClient(webServer.getBase());
-        request = client.createRequest(RestfulHttpMethod.GET, "/objects/org.apache.isis.core.tck.dom.defaults.WithDefaultsEntity/67/properties/anInt");
+        request = client.createRequest(RestfulHttpMethod.GET, "/objects/org.apache.isis.core.tck.dom.defaults.WithDefaultsEntity/68/properties/anInt");
     }
 
     @Test

@@ -76,7 +76,7 @@ public class Put_whenArgsValid_thenMultiplePropertyUpdate {
     @Test
     public void primitivePropertiesUpdated() throws Exception {
         
-        final DomainObjectRepresentation domainObjectRepr = getObjectRepr("PRMV", "42");
+        final DomainObjectRepresentation domainObjectRepr = getObjectRepr("PRMV", "43");
         
         final LinkRepresentation updateLink = domainObjectRepr.getLinkWithRel(Rel.UPDATE);
         
@@ -156,7 +156,7 @@ public class Put_whenArgsValid_thenMultiplePropertyUpdate {
     @Test
     public void jodaPropertiesUpdated() throws Exception {
         
-        final DomainObjectRepresentation domainObjectRepr = getObjectRepr("JODA", "82");
+        final DomainObjectRepresentation domainObjectRepr = getObjectRepr("JODA", "83");
         
         final LinkRepresentation updateLink = domainObjectRepr.getLinkWithRel(Rel.UPDATE);
         

@@ -54,7 +54,7 @@ public class Get_then_200_ok {
     public void propertyDetails() throws Exception {
 
         // when
-        final Response idPropertyResp = domainObjectResource.propertyDetails("org.apache.isis.core.tck.dom.defaults.WithDefaultsEntity","67", "anInt");
+        final Response idPropertyResp = domainObjectResource.propertyDetails("org.apache.isis.core.tck.dom.defaults.WithDefaultsEntity","68", "anInt");
         final RestfulResponse<ObjectPropertyRepresentation> idPropertyJsonResp = RestfulResponse.ofT(idPropertyResp);
         assertThat(idPropertyJsonResp.getStatus(), is(HttpStatusCode.OK));
 

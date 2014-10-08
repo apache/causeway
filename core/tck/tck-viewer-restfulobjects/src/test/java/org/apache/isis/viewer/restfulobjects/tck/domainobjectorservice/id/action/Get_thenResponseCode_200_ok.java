@@ -52,7 +52,7 @@ public class Get_thenResponseCode_200_ok {
     public void actionPrompt() throws Exception {
 
         // when
-        final Response actionPromptResp = domainObjectResource.actionPrompt("RTNE", "77", "contains");
+        final Response actionPromptResp = domainObjectResource.actionPrompt("RTNE", "78", "contains");
         final RestfulResponse<ObjectActionRepresentation> actionPromptJsonResp = RestfulResponse.ofT(actionPromptResp);
         assertThat(actionPromptJsonResp.getStatus(), is(HttpStatusCode.OK));
     }

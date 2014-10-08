@@ -58,7 +58,7 @@ public class Get_givenDisabledMembers_thenRepresentation_ok {
     public void domainObjectWithDisabledMembers() throws Exception {
 
         // given, when
-        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("BSRL","74");
+        final DomainObjectRepresentation domainObjectRepr = givenDomainObjectRepresentationFor("BSRL","75");
 
         // property ('visibleButNotEditableProperty')
         final JsonRepresentation properties = domainObjectRepr.getProperties();

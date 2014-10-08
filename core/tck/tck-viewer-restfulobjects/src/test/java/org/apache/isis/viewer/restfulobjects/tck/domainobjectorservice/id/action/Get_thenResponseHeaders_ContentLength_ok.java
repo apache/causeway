@@ -52,7 +52,7 @@ public class Get_thenResponseHeaders_ContentLength_ok {
     @Test
     public void ok() throws Exception {
         // given
-    	final Response actionPromptResp = domainObjectResource.actionPrompt("RTNE", "77", "contains");
+    	final Response actionPromptResp = domainObjectResource.actionPrompt("RTNE", "78", "contains");
 
         // when
     	final RestfulResponse<ObjectActionRepresentation> actionPromptJsonResp = RestfulResponse.ofT(actionPromptResp);
