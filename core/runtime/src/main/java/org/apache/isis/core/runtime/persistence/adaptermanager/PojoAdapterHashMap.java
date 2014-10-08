@@ -33,10 +33,8 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.services.RequestScopedService;
 
-/**
- * TODO: an alternative might be to use {@link IdentityMap}.
- */
 public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectAdapter>, SessionScopedComponent, Resettable {
 
     private static class IdentityHashKey {
@@ -117,15 +115,19 @@ public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectA
 
     public void add(final Object pojo, final ObjectAdapter adapter) {
         adapterByPojoMap.put(key(pojo), adapter);
+
         if(LOG.isDebugEnabled()) {
-            LOG.debug("add adapter: #" + Long.toHexString(pojo.hashCode()) + " -> #" + Long.toHexString(adapter.hashCode()));
-        }
-        // log at end so that if toString needs adapters they're in maps.
-        if (adapter.isResolved()) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("add " + new ToString(pojo) + " as " + adapter);
+            LOG.debug("add adapter: #" + key(pojo) + " -> #" + Long.toHexString(adapter.hashCode()));
+
+            if (adapter.isResolved()) {
+                if (pojo instanceof RequestScopedService) {
+                    // avoid touching the service
+                } else {
+                    LOG.debug("add " + new ToString(pojo) + " as " + adapter);
+                }
             }
         }
+
     }
 
     public void remove(final ObjectAdapter object) {
