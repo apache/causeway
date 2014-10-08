@@ -58,11 +58,7 @@ public class ResponseGeneratorService {
 
         final ResourceContext resourceContext = responseContext.getResourceContext();
         final ObjectAdapter objectAdapter = responseContext.getObjectAdapter();
-        final ObjectAdapterLinkTo adapterLinkTo = responseContext.getAdapterLinkTo();
 
-        ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(resourceContext, objectAdapter);
-
-        resourceContext.canEagerlyRender(null);
         final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.with(objectAdapter).includesSelf();
 
