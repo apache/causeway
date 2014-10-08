@@ -56,6 +56,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
 
 public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends PanelAbstract<T> implements UiHintPathSignificant {
 
@@ -205,13 +206,23 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                             target.add(selectorPanel, views);
                         }
                     };
+
                     String name = nameFor(componentFactory);
+                    boolean isEnabled = componentFactory != selectorPanel.selectedComponentFactory;
+                    if (isEnabled) {
+                        item.add(new CssClassAppender("bg-success"));
+                        item.add(new CssClassRemover("bg-info"));
+                        link.add(AttributeModifier.replace("title", "Show as " + name));
+                    } else {
+                        item.add(new CssClassAppender("bg-info"));
+                        item.add(new CssClassRemover("bg-success"));
+                    }
                     Label viewTitleLabel = new Label(ID_VIEW_TITLE, name);
                     viewTitleLabel.add(new CssClassAppender(StringExtensions.asLowerDashed(name)));
                     link.add(viewTitleLabel);
                     item.add(link);
-                    
-                    link.setEnabled(componentFactory != selectorPanel.selectedComponentFactory);
+
+                    link.setEnabled(isEnabled);
                 }
 
                 private String nameFor(final ComponentFactory componentFactory) {

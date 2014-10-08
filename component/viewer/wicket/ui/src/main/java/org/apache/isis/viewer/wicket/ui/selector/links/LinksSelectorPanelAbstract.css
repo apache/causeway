@@ -28,7 +28,7 @@
 .linksSelectorPanel ul.viewList li.viewItem {
 	float:left;
 	display:block;
-	height:30px;
+	height:20px;
 	line-height:30px;
 	position:relative;
 }
@@ -47,20 +47,18 @@
 
 .linksSelectorPanel a span.ViewLinkItem {
 	color:#46423C;
-	background-color:#F0EFEA;
 	float:left;
 	display:block;
-	height:30px;
-	line-height:30px;
+	height:20px;
+	line-height:20px;
 }
 
 .linksSelectorPanel span.ViewLinkItem {
 	color:#FFFFFF;
-	background-color:#20B5C2;
 	float:left;
 	display:block;
-	height:30px;
-	line-height:30px;
+	height:20px;
+	line-height:20px;
 	font-style:normal;
 	width:12px;
 	text-indent:-999em;
