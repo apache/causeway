@@ -20,27 +20,12 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.EntityTag;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
-
+import javax.ws.rs.core.*;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -49,7 +34,6 @@ import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -59,7 +43,6 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;
 import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.server.util.OidUtils;
@@ -130,7 +113,7 @@ public abstract class ResourceAbstract {
             final RepresentationType representationType,
             final Where where,
             final InputStream arguments) {
-        final String urlDecodedQueryString = DomainResourceHelper.asStringUtf8(arguments);
+        final String urlDecodedQueryString = Util.asStringUtf8(arguments);
         init(representationType, where, urlDecodedQueryString);
     }
 
@@ -204,42 +187,6 @@ public abstract class ResourceAbstract {
         throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, "Could not locate service '%s'", serviceId);
     }
 
-
-    // //////////////////////////////////////////////////////////////
-    // Responses
-    // //////////////////////////////////////////////////////////////
-
-    public static ResponseBuilder responseOfNoContent() {
-        return responseOf(HttpStatusCode.NO_CONTENT);
-    }
-
-    public static ResponseBuilder responseOfOk(final ReprRenderer<?, ?> renderer, final Caching caching) {
-        return responseOfOk(renderer, caching, null);
-    }
-
-    public static ResponseBuilder responseOfOk(final ReprRenderer<?, ?> renderer, final Caching caching, final Version version) {
-        final MediaType mediaType = renderer.getMediaType();
-        final ResponseBuilder response = responseOf(HttpStatusCode.OK).type(mediaType).cacheControl(caching.getCacheControl()).entity(jsonFor(renderer.render()));
-        return addLastModifiedAndETagIfAvailable(response, version);
-    }
-
-    protected static ResponseBuilder responseOf(final HttpStatusCode httpStatusCode) {
-        return Response.status(httpStatusCode.getJaxrsStatusType()).type(MediaType.APPLICATION_JSON_TYPE);
-    }
-
-    public static ResponseBuilder addLastModifiedAndETagIfAvailable(final ResponseBuilder responseBuilder, final Version version) {
-        if (version != null && version.getTime() != null) {
-            final Date time = version.getTime();
-            responseBuilder.lastModified(time);
-            responseBuilder.tag(asETag(time));
-        }
-        return responseBuilder;
-    }
-
-    private static EntityTag asETag(final Date time) {
-        final String utcTime = ISODateTimeFormat.basicDateTime().print(new DateTime(time));
-        return new EntityTag(utcTime, true);
-    }
 
     // //////////////////////////////////////////////////////////////
     // Dependencies (from singletons)

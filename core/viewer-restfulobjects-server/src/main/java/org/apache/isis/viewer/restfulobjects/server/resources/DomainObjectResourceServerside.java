@@ -17,21 +17,10 @@
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.io.InputStream;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import org.jboss.resteasy.annotations.ClientResponseType;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -47,8 +36,6 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
-import org.apache.isis.viewer.restfulobjects.server.resources.DomainResourceHelper.Intent;
-import org.apache.isis.viewer.restfulobjects.server.resources.DomainResourceHelper.MemberMode;
 
 @Path("/objects")
 public class DomainObjectResourceServerside extends ResourceAbstract implements DomainObjectResource {
@@ -67,8 +54,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS);
 
-        final String objectStr = DomainResourceHelper.asStringUtf8(object);
-        final JsonRepresentation objectRepr = DomainResourceHelper.readAsMap(objectStr);
+        final String objectStr = Util.asStringUtf8(object);
+        final JsonRepresentation objectRepr = Util.readAsMap(objectStr);
         if (!objectRepr.isMap()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", objectRepr);
         }
@@ -80,11 +67,14 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final ObjectAdapter objectAdapter = getResourceContext().getPersistenceSession().createTransientInstance(domainTypeSpec);
 
+        final ObjectAdapterUpdateHelper updateHelper = new ObjectAdapterUpdateHelper(getResourceContext(), objectAdapter);
+
         final JsonRepresentation propertiesList = objectRepr.getArrayEnsured("members[objectMemberType=property]");
         if (propertiesList == null) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not find properties list (no members[objectMemberType=property]); got %s", objectRepr);
         }
-        if (!DomainResourceHelper.copyOverProperties(getResourceContext(), objectAdapter, propertiesList)) {
+
+        if (!updateHelper.copyOverProperties(propertiesList)) {
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, "Illegal property value");
         }
 
@@ -94,7 +84,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         }
         getResourceContext().getPersistenceSession().makePersistent(objectAdapter);
 
-        return new DomainResourceHelper(getResourceContext(), objectAdapter).objectRepresentation();
+        return getDomainResourceHelper(objectAdapter).objectRepresentation();
     }
 
     // //////////////////////////////////////////////////////////
@@ -110,8 +100,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
 
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
         return helper.objectRepresentation();
+    }
+
+    private DomainResourceHelper getDomainResourceHelper(ObjectAdapter objectAdapter) {
+        return new DomainResourceHelper(getResourceContext(), objectAdapter);
     }
 
     @Override
@@ -123,15 +117,16 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS);
 
-        final String objectStr = DomainResourceHelper.asStringUtf8(object);
-        final JsonRepresentation argRepr = DomainResourceHelper.readAsMap(objectStr);
+        final String objectStr = Util.asStringUtf8(object);
+        final JsonRepresentation argRepr = Util.readAsMap(objectStr);
         if (!argRepr.isMap()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", argRepr);
         }
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+        final ObjectAdapterUpdateHelper updateHelper = new ObjectAdapterUpdateHelper(getResourceContext(), objectAdapter);
 
-        if (!DomainResourceHelper.copyOverProperties(getResourceContext(), objectAdapter, argRepr)) {
+        if (!updateHelper.copyOverProperties(argRepr)) {
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, argRepr, "Illegal property value");
         }
 
@@ -140,7 +135,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, argRepr, validity.getReason());
         }
 
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
         return helper.objectRepresentation();
     }
 
@@ -166,9 +161,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         init(RepresentationType.OBJECT_PROPERTY, Where.OBJECT_FORMS);
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
 
-        return helper.propertyDetails(propertyId, MemberMode.NOT_MUTATING, Caching.NONE, getResourceContext().getWhere());
+        return helper.propertyDetails(propertyId, ResponseGeneratorService.MemberMode.NOT_MUTATING, Caching.NONE);
     }
 
     @Override
@@ -180,14 +175,15 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         init(Where.OBJECT_FORMS);
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
 
-        final OneToOneAssociation property = helper.getPropertyThatIsVisibleForIntent(propertyId, Intent.MUTATE, getResourceContext().getWhere());
+        final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId, ObjectAdapterAccessHelper.Intent.MUTATE);
 
         final ObjectSpecification propertySpec = property.getSpecification();
-        final String bodyAsString = DomainResourceHelper.asStringUtf8(body);
+        final String bodyAsString = Util.asStringUtf8(body);
 
-        final ObjectAdapter argAdapter = helper.parseAsMapWithSingleValue(propertySpec, bodyAsString);
+        final ObjectAdapter argAdapter = new JsonParserHelper(getResourceContext(), propertySpec).parseAsMapWithSingleValue(bodyAsString);
 
         final Consent consent = property.isAssociationValid(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -196,7 +192,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         property.set(objectAdapter, argAdapter);
 
-        return helper.propertyDetails(propertyId, MemberMode.MUTATING, Caching.NONE, getResourceContext().getWhere());
+        return helper.propertyDetails(propertyId, ResponseGeneratorService.MemberMode.MUTATING, Caching.NONE);
     }
 
     @Override
@@ -207,9 +203,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         init(Where.OBJECT_FORMS);
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
 
-        final OneToOneAssociation property = helper.getPropertyThatIsVisibleForIntent(propertyId, Intent.MUTATE, getResourceContext().getWhere());
+        final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(
+                propertyId, ObjectAdapterAccessHelper.Intent.MUTATE);
 
         final Consent consent = property.isAssociationValid(objectAdapter, null);
         if (consent.isVetoed()) {
@@ -218,7 +216,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         property.set(objectAdapter, null);
 
-        return helper.propertyDetails(propertyId, MemberMode.MUTATING, Caching.NONE, getResourceContext().getWhere());
+        return helper.propertyDetails(propertyId, ResponseGeneratorService.MemberMode.MUTATING, Caching.NONE);
     }
 
     @Override
@@ -238,9 +236,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         init(RepresentationType.OBJECT_COLLECTION, Where.PARENTED_TABLES);
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
 
-        return helper.collectionDetails(collectionId, MemberMode.NOT_MUTATING, Caching.NONE, getResourceContext().getWhere());
+        return helper.collectionDetails(collectionId, ResponseGeneratorService.MemberMode.NOT_MUTATING, Caching.NONE);
     }
 
     @Override
@@ -252,17 +250,19 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         init(Where.PARENTED_TABLES);
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
 
-        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleForIntent(collectionId, Intent.MUTATE, getResourceContext().getWhere());
+        final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
+                collectionId, ObjectAdapterAccessHelper.Intent.MUTATE);
 
         if (!collection.getCollectionSemantics().isSet()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Collection '%s' does not have set semantics", collectionId);
         }
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
-        final String bodyAsString = DomainResourceHelper.asStringUtf8(body);
-        final ObjectAdapter argAdapter = helper.parseAsMapWithSingleValue(collectionSpec, bodyAsString);
+        final String bodyAsString = Util.asStringUtf8(body);
+        final ObjectAdapter argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(bodyAsString);
 
         final Consent consent = collection.isValidToAdd(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -271,7 +271,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         collection.addElement(objectAdapter, argAdapter);
 
-        return helper.collectionDetails(collectionId, MemberMode.MUTATING, Caching.NONE, getResourceContext().getWhere());
+        return helper.collectionDetails(collectionId, ResponseGeneratorService.MemberMode.MUTATING, Caching.NONE);
     }
 
     @Override
@@ -283,17 +283,19 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         init(Where.PARENTED_TABLES);
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
 
-        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleForIntent(collectionId, Intent.MUTATE, getResourceContext().getWhere());
+        final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
+                collectionId, ObjectAdapterAccessHelper.Intent.MUTATE);
 
         if (!collection.getCollectionSemantics().isListOrArray()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.METHOD_NOT_ALLOWED, "Collection '%s' does not have list or array semantics", collectionId);
         }
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
-        final String bodyAsString = DomainResourceHelper.asStringUtf8(body);
-        final ObjectAdapter argAdapter = helper.parseAsMapWithSingleValue(collectionSpec, bodyAsString);
+        final String bodyAsString = Util.asStringUtf8(body);
+        final ObjectAdapter argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(bodyAsString);
 
         final Consent consent = collection.isValidToAdd(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -302,7 +304,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         collection.addElement(objectAdapter, argAdapter);
 
-        return helper.collectionDetails(collectionId, MemberMode.MUTATING, Caching.NONE, getResourceContext().getWhere());
+        return helper.collectionDetails(collectionId, ResponseGeneratorService.MemberMode.MUTATING, Caching.NONE);
     }
 
     @Override
@@ -313,12 +315,14 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         init(Where.PARENTED_TABLES);
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
+        final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
 
-        final OneToManyAssociation collection = helper.getCollectionThatIsVisibleForIntent(collectionId, Intent.MUTATE, getResourceContext().getWhere());
+        final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(
+                collectionId, ObjectAdapterAccessHelper.Intent.MUTATE);
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
-        final ObjectAdapter argAdapter = helper.parseAsMapWithSingleValue(collectionSpec, getResourceContext().getUrlUnencodedQueryString());
+        final ObjectAdapter argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(getResourceContext().getUrlUnencodedQueryString());
 
         final Consent consent = collection.isValidToRemove(objectAdapter, argAdapter);
         if (consent.isVetoed()) {
@@ -327,7 +331,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         collection.removeElement(objectAdapter, argAdapter);
 
-        return helper.collectionDetails(collectionId, MemberMode.MUTATING, Caching.NONE, getResourceContext().getWhere());
+        return helper.collectionDetails(collectionId, ResponseGeneratorService.MemberMode.MUTATING, Caching.NONE);
     }
 
     // //////////////////////////////////////////////////////////
@@ -342,9 +346,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         init(RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS);
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
 
-        return helper.actionPrompt(actionId, getResourceContext().getWhere());
+        return helper.actionPrompt(actionId);
     }
 
     @Override
@@ -382,9 +386,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
 
-        return helper.invokeActionQueryOnly(actionId, arguments, getResourceContext().getWhere());
+        return helper.invokeActionQueryOnly(actionId, arguments);
     }
 
     @Override
@@ -403,9 +407,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
         
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
 
-        return helper.invokeActionIdempotent(actionId, arguments, getResourceContext().getWhere());
+        return helper.invokeActionIdempotent(actionId, arguments);
     }
 
     @Override
@@ -419,10 +423,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final JsonRepresentation arguments = getResourceContext().getQueryStringAsJsonRepr();
         
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), objectAdapter);
+        final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
 
         Where where = getResourceContext().getWhere();
-        return helper.invokeAction(actionId, arguments, where);
+        return helper.invokeAction(actionId, arguments);
     }
 
     @Override

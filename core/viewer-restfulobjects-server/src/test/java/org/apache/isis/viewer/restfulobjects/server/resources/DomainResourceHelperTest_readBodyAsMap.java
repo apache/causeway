@@ -32,7 +32,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
 
     @Test
     public void whenNull() throws Exception {
-        representation = DomainResourceHelper.readAsMap(null);
+        representation = Util.readAsMap(null);
 
         assertThat(representation.isMap(), is(true));
         assertThat(representation.size(), is(0));
@@ -40,7 +40,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
 
     @Test
     public void whenEmptyString() throws Exception {
-        representation = DomainResourceHelper.readAsMap("");
+        representation = Util.readAsMap("");
 
         assertThat(representation.isMap(), is(true));
         assertThat(representation.size(), is(0));
@@ -48,7 +48,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
 
     @Test
     public void whenWhitespaceOnlyString() throws Exception {
-        representation = DomainResourceHelper.readAsMap(" \t ");
+        representation = Util.readAsMap(" \t ");
 
         assertThat(representation.isMap(), is(true));
         assertThat(representation.size(), is(0));
@@ -56,7 +56,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
 
     @Test
     public void emptyMap() throws Exception {
-        representation = DomainResourceHelper.readAsMap("{}");
+        representation = Util.readAsMap("{}");
 
         assertThat(representation.isMap(), is(true));
         assertThat(representation.size(), is(0));
@@ -64,7 +64,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
 
     @Test
     public void map() throws Exception {
-        representation = DomainResourceHelper.readAsMap("{\"foo\":\"bar\"}");
+        representation = Util.readAsMap("{\"foo\":\"bar\"}");
 
         assertThat(representation.isMap(), is(true));
         assertThat(representation.size(), is(1));
@@ -72,7 +72,7 @@ public class DomainResourceHelperTest_readBodyAsMap {
 
     @Test(expected = RestfulObjectsApplicationException.class)
     public void whenArray() throws Exception {
-        DomainResourceHelper.readAsMap("[]");
+        Util.readAsMap("[]");
     }
 
 }

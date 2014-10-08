@@ -41,7 +41,7 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.Domain
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.server.resources.DomainResourceHelper;
+import org.apache.isis.viewer.restfulobjects.server.resources.Util;
 
 public class ResourceContext implements RendererContext {
 
@@ -190,7 +190,7 @@ public class ResourceContext implements RendererContext {
             return map;
         } else {
             final String queryString = getUrlUnencodedQueryString();
-            return DomainResourceHelper.readQueryStringAsMap(queryString);
+            return Util.readQueryStringAsMap(queryString);
         }
     }
 

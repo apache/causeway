@@ -40,7 +40,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
         final UserReprRenderer renderer = new UserReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.includesSelf().with(getAuthenticationSession());
 
-        return responseOfOk(renderer, Caching.ONE_HOUR).build();
+        return Responses.ofOk(renderer, Caching.ONE_HOUR).build();
     }
 
     @Override

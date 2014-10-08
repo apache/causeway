@@ -81,7 +81,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final TypeListReprRenderer renderer = new TypeListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(allSpecifications).includesSelf();
 
-        return responseOfOk(renderer, Caching.ONE_DAY).build();
+        return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
     @Override
@@ -97,7 +97,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(objectSpec).includesSelf();
 
-        return responseOfOk(renderer, Caching.ONE_DAY).build();
+        return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
     @Override
@@ -122,7 +122,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final PropertyDescriptionReprRenderer renderer = new PropertyDescriptionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndProperty(parentSpec, property)).includesSelf();
 
-        return responseOfOk(renderer, Caching.ONE_DAY).build();
+        return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
     @Override
@@ -147,7 +147,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final CollectionDescriptionReprRenderer renderer = new CollectionDescriptionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndCollection(parentSpec, collection)).includesSelf();
 
-        return responseOfOk(renderer, Caching.ONE_DAY).build();
+        return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
     @Override
@@ -172,7 +172,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final ActionDescriptionReprRenderer renderer = new ActionDescriptionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndAction(parentSpec, action)).includesSelf();
 
-        return responseOfOk(renderer, Caching.ONE_DAY).build();
+        return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
     @Override
@@ -199,7 +199,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final ActionParameterDescriptionReprRenderer renderer = new ActionParameterDescriptionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(new ParentSpecAndActionParam(parentSpec, actionParam)).includesSelf();
 
-        return responseOfOk(renderer, Caching.ONE_DAY).build();
+        return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
     // //////////////////////////////////////////////////////////
@@ -232,7 +232,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final boolean value = domainTypeSpec.isOfType(supertypeSpec);
         renderer.with(domainTypeSpec).withSelf(selfLink).withValue(value);
 
-        return responseOfOk(renderer, Caching.ONE_DAY).build();
+        return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
 
@@ -263,7 +263,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final boolean value = subtypeSpec.isOfType(domainTypeSpec);
         renderer.with(domainTypeSpec).withSelf(selfLink).withValue(value);
 
-        return responseOfOk(renderer, Caching.ONE_DAY).build();
+        return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
     private static String domainTypeFor(
@@ -284,7 +284,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     }
 
     private static String linkFromFormalArgs(final String argumentsAsQueryString, final String paramName) {
-        final JsonRepresentation arguments = DomainResourceHelper.readQueryStringAsMap(argumentsAsQueryString);
+        final JsonRepresentation arguments = Util.readQueryStringAsMap(argumentsAsQueryString);
         if (!arguments.isLink(paramName)) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Args should contain a link '%s'", paramName);
         }

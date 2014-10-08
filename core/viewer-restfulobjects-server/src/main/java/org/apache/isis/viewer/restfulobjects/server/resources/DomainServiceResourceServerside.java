@@ -50,7 +50,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
             .includesSelf()
             .with(serviceAdapters);
 
-        return responseOfOk(renderer, Caching.ONE_DAY).build();
+        return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
     @Override
@@ -86,7 +86,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
             .with(serviceAdapter)
             .includesSelf();
 
-        return responseOfOk(renderer, Caching.ONE_DAY).build();
+        return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
     @Override
@@ -119,7 +119,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
 
-        return helper.actionPrompt(actionId, getResourceContext().getWhere());
+        return helper.actionPrompt(actionId);
     }
 
     @Override
@@ -160,7 +160,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
 
-        return helper.invokeActionQueryOnly(actionId, arguments, getResourceContext().getWhere());
+        return helper.invokeActionQueryOnly(actionId, arguments);
     }
 
 
@@ -181,7 +181,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
 
-        return helper.invokeActionIdempotent(actionId, arguments, getResourceContext().getWhere());
+        return helper.invokeActionIdempotent(actionId, arguments);
     }
 
 
@@ -199,7 +199,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         final ObjectAdapter serviceAdapter = getServiceAdapter(serviceId);
         final DomainResourceHelper helper = new DomainResourceHelper(getResourceContext(), serviceAdapter).using(new DomainServiceLinkTo());
 
-        return helper.invokeAction(actionId, arguments, getResourceContext().getWhere());
+        return helper.invokeAction(actionId, arguments);
     }
 
     @Override

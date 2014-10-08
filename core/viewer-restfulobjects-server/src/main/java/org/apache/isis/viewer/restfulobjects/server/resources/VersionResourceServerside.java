@@ -52,7 +52,7 @@ public class VersionResourceServerside extends ResourceAbstract implements Versi
         final VersionReprRenderer renderer = new VersionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.includesSelf();
 
-        return responseOfOk(renderer, Caching.ONE_DAY).build();
+        return Responses.ofOk(renderer, Caching.ONE_DAY).build();
     }
 
     @Override

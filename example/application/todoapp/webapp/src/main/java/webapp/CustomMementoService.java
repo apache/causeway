@@ -39,7 +39,7 @@ import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
  *     that is, with a menuOrder of 1.
  * </p>
  */
-public class MyMementoService extends MementoServiceDefault {
+public class CustomMementoService extends MementoServiceDefault {
 
     @Programmatic
     @Override

@@ -64,6 +64,7 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
                                          ",org.apache.isis.core.metamodel.services" +
                                          ",org.apache.isis.core.runtime.services" +
                                          ",org.apache.isis.objectstore.jdo.applib.service" +
+                                         ",org.apache.isis.viewer.restfulobjects.server.resources" +
                                          ",org.apache.isis.viewer.restfulobjects.rendering.eventserializer" +
                                          ",org.apache.isis.objectstore.jdo.datanucleus.service.support" +
                                          ",org.apache.isis.objectstore.jdo.datanucleus.service.eventbus";
