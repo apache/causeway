@@ -210,12 +210,12 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                     boolean isEnabled = componentFactory != selectorPanel.selectedComponentFactory;
                     if (isEnabled) {
                         item.add(new CssClassAppender("bg-success"));
-                        item.add(new CssClassRemover("bg-info"));
+                        item.add(new CssClassRemover("bg-primary"));
                         TooltipConfig tooltipConfig = new TooltipConfig();
                         tooltipConfig.withPlacement(TooltipConfig.Placement.left);
                         item.add(new TooltipBehavior(Model.of("Show as " + name), tooltipConfig));
                     } else {
-                        item.add(new CssClassAppender("bg-info"));
+                        item.add(new CssClassAppender("bg-primary"));
                         item.add(new CssClassRemover("bg-success"));
                     }
                     Label viewTitleLabel = new Label(ID_VIEW_TITLE, name);
