@@ -61,6 +61,10 @@ public enum ComponentType {
      */
     ENTITY_ICON_AND_TITLE,
     /**
+     * Icon, title and a copy link for a single entity.
+     */
+    ENTITY_ICON_TITLE_AND_COPYLINK,
+    /**
      * Title, icon and action list for a single entity.
      */
     ENTITY_SUMMARY,

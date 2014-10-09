@@ -218,7 +218,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
                 entityModelForLink.setRenderingHint(getModel().getRenderingHint());
                 
                 final ComponentFactory componentFactory = 
-                        getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
+                        getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, entityModelForLink);
                 final Component component = componentFactory.createComponent(entityModelForLink);
                 
                 ((MarkupContainer)getComponentForRegular()).addOrReplace(component);

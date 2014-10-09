@@ -142,6 +142,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
 
     public static Entry<Integer, String> parse(final String paramContext) {
+        // TODO mgrigorov Extract the Pattern as a constant. No need to re-compile it again and again
         final Pattern compile = Pattern.compile("([^=]+)=(.+)");
         final Matcher matcher = compile.matcher(paramContext);
         if (!matcher.matches()) {

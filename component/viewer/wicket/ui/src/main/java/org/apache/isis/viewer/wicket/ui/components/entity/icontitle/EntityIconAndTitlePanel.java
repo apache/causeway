@@ -57,7 +57,6 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     private static final String ID_ENTITY_LINK = "entityLink";
     private static final String ID_ENTITY_TITLE = "entityTitle";
     private static final String ID_ENTITY_ICON = "entityImage";
-    private static final String ID_COPY_LINK = "copyLink";
 
     @SuppressWarnings("unused")
     private Label label;
@@ -90,12 +89,9 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
         EntityModel entityModel = getModel();
         final WebMarkupContainer entityLinkWrapper = addOrReplaceLinkWrapper(entityModel);
         addOrReplace(entityLinkWrapper);
-
-        ZeroClipboardPanel zClipCopyLink = new ZeroClipboardPanel(ID_COPY_LINK, entityModel);
-        entityLinkWrapper.add(zClipCopyLink);
     }
 
-    private WebMarkupContainer addOrReplaceLinkWrapper(final EntityModel entityModel) {
+    protected WebMarkupContainer addOrReplaceLinkWrapper(final EntityModel entityModel) {
         final ObjectAdapter adapter = entityModel.getObject();
 
         final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);
