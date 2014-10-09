@@ -22,7 +22,7 @@
     height: 16px;
 }
 
-.table.contents .form-control:disabled {
+.table .form-control:disabled {
     background-color: transparent;
     border: none;
     text-align: center;
