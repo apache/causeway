@@ -19,19 +19,19 @@
 
 package org.apache.isis.viewer.wicket.ui.selector.links;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
+
 import java.util.ArrayList;
 import java.util.List;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -41,7 +41,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -212,7 +211,9 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                     if (isEnabled) {
                         item.add(new CssClassAppender("bg-success"));
                         item.add(new CssClassRemover("bg-info"));
-                        link.add(AttributeModifier.replace("title", "Show as " + name));
+                        TooltipConfig tooltipConfig = new TooltipConfig();
+                        tooltipConfig.withPlacement(TooltipConfig.Placement.left);
+                        item.add(new TooltipBehavior(Model.of("Show as " + name), tooltipConfig));
                     } else {
                         item.add(new CssClassAppender("bg-info"));
                         item.add(new CssClassRemover("bg-success"));
@@ -237,7 +238,7 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
             Component component = underlyingViews[i];
             if(component != null) {
                 if(i != selected) {
-                    component.add(new AttributeAppender("class", " " + INVISIBLE_CLASS));
+                    component.add(new CssClassAppender(INVISIBLE_CLASS));
                 } else {
                     selectedComponent = component;
                 }
@@ -272,11 +273,7 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
         if(component == null) {
             return;
         }
-        final AttributeModifier modifier =  
-                visible 
-                    ? new AttributeModifier("class", String.valueOf(component.getMarkupAttributes().get("class")).replaceFirst(INVISIBLE_CLASS, "")) 
-                    : new AttributeAppender("class", " " +
-                    		INVISIBLE_CLASS);
+        AttributeModifier modifier = visible ? new CssClassRemover(INVISIBLE_CLASS) : new CssClassAppender(INVISIBLE_CLASS);
         component.add(modifier);
     }
 
