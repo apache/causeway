@@ -41,7 +41,7 @@
 .menuh a,.menuh p {
 	text-align: left;
 	display: block;
-	border: 1px #00477F solid;
+	/*border: 1px #00477F solid;*/
 	white-space: nowrap;
 	margin: 0em;
 	padding: 1px;
@@ -53,14 +53,14 @@
 
 .cssMenuPanel .menuh a:link,.cssMenuPanel .menuh a:visited,.cssMenuPanel .menuh a:active,.cssMenuPanel .menuh p
 	{
-	color: #00477F;
-	background-color: #EEEEEE;
-	text-decoration: none;
+	/*color: #00477F;*/
+	/*background-color: #EEEEEE;*/
+	/*text-decoration: none;*/
 }
 
 .cssMenuPanel .menuh a:hover,.cssMenuPanel .menuh p:hover {
-	color: #D7E7F5;
-	background-color: #407098;
+	/*color: #D7E7F5;*/
+	/*background-color: #407098;*/
 }
 
 .cssMenuPanel .menuh a:hover {
@@ -128,12 +128,12 @@
 }
 
 .cssMenuPanel li.cssSubMenuItem p.disabled {
-	color: lightgray;
+	/*color: lightgray;*/
     cursor: not-allowed;
 }
 
 .cssMenuPanel li.cssSubMenuItem {
-    margin-left:0px;
+    margin-left:0;
 }
 
 /******** overrides for grouped actions and entity actions ***************/
@@ -145,16 +145,16 @@
 	position: relative;
 	display: block;
 	float: right;
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 }
 
 .groupedActions .cssMenuPanel .menuh ul ul {
 	position: relative;
 	display: block;
 	float: right;
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 }
 
 .groupedActions .cssMenuPanel .menuh li,
@@ -174,8 +174,8 @@
 .groupedActions .cssMenuPanel .menuh a:visited,
 .groupedActions .cssMenuPanel .menuh a:active,
 .groupedActions .cssMenuPanel .menuh p {
-    background-color: #F0EFEA;
-    color: #46423C;
+    /*background-color: #F0EFEA;*/
+    /*color: #46423C;*/
     display: block;
     float: left;
     height: 30px;
@@ -192,8 +192,8 @@
 
 .groupedActions .cssMenuPanel .menuh a:hover,.groupedActions .cssMenuPanel .menuh p:hover
 	{
-	color: #000;
-	background-color:#FFFFFF;
+	/*color: #000;*/
+	/*background-color:#FFFFFF;*/
 }
 
 .entityActions .cssMenuPanel li.cssMenuItemPanel>p.top-parent {
@@ -204,16 +204,16 @@
 	position: relative;
 	display: block;
 	float: right;
-	margin: 0px 0px 10px;
-	padding: 0px;
+	margin: 0 0 10px;
+	padding: 0;
 }
 
 .entityActions .cssMenuPanel .menuh ul ul {
 	position: relative;
 	display: block;
 	float: right;
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 }
 
 .entityActions .cssMenuPanel .menuh li {
@@ -231,15 +231,15 @@
 .entityActions .cssMenuPanel .menuh a,
 .entityActions .cssMenuPanel .menuh p {
 	display: inline-block;
-	border: none;
+	/*border: none;*/
 }
 
 .entityActions .cssMenuPanel .menuh a:link,
 .entityActions .cssMenuPanel .menuh a:visited,
 .entityActions .cssMenuPanel .menuh a:active,
 .entityActions .cssMenuPanel .menuh p {
-    background-color: #F0EFEA;
-    color: #46423C;
+    /*background-color: #F0EFEA;*/
+    /*color: #46423C;*/
     display: block;
     float: left;
     height: 30px;
@@ -255,22 +255,22 @@
 }
 
 .entityActions .cssMenuPanel .menuh a:focus {
-	text-decoration: underline;
+	/*text-decoration: underline;*/
 }
 
 .entityActions .cssMenuPanel .menuh a:hover,.entityActions .cssMenuPanel .menuh p:hover {
-	color: #000;
+	/*color: #000;*/
 }
 
 .entityActions .cssMenuPanel .menuh a:hover,.entityActions .cssMenuPanel .menuh p:hover:not(.disabled) {
-    color: #FFF;
-    background-color:#20B5C2;
+    /*color: #FFF;*/
+    /*background-color:#20B5C2;*/
 }
 
 .additionalLinkList {
 	float:right;
-	margin:0px;
-	padding:0px;
+	margin:0;
+	padding:0;
 	list-style:none;
 }
 
@@ -285,7 +285,7 @@
 
 .additionalLinkList li a,
 .additionalLinkList li em {
-    background-color: #F0EFEA;
+    /*background-color: #F0EFEA;*/
     border-radius: 4px 4px 4px 4px;
     display: block;
     float: left;
@@ -299,27 +299,27 @@
 }
 
 .additionalLinkList li a {
-    color: #46423C;
+    /*color: #46423C;*/
 }
 
 
 .additionalLinkList li a:hover {
-	background-color:#20B5C2;
-	color:#FFFFFF;
+	/*background-color:#20B5C2;*/
+	/*color:#FFFFFF;*/
 }
 
 /* em = disabled */
 .additionalLinkList li em {
-    color: lightgrey;
+    /*color: lightgrey;*/
 }
 
 .additionalLinkList li em:hover {
-    color: black;
+    /*color: black;*/
     cursor: default;
 }
 
 .entityActions a.prototype span {
-	color: #DBDB4D;
+	/*color: #DBDB4D;*/
 	font-style: italic;
 }
 .entityActions a.prototype {
