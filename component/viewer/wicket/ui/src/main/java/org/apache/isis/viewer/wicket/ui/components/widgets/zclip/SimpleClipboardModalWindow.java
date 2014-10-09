@@ -29,7 +29,6 @@ public class SimpleClipboardModalWindow extends Modal<Void> implements ActionPro
 
     public static SimpleClipboardModalWindow newModalWindow(String id) {
         SimpleClipboardModalWindow modalWindow = new SimpleClipboardModalWindow(id);
-//        modalWindow.setCssClassName("w_isis_zclip");
         return modalWindow;
     }
 
