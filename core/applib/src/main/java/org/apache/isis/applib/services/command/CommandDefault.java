@@ -17,12 +17,13 @@
 package org.apache.isis.applib.services.command;
 
 import java.sql.Timestamp;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Command.Persistence;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -185,15 +186,32 @@ public class CommandDefault implements Command2 {
     // actionInteractionEvent (property)
     // //////////////////////////////////////
 
-    private ActionInteractionEvent actionInteractionEvent;
+    private final LinkedList<ActionInteractionEvent<?>> actionInteractionEvents = Lists.newLinkedList();
+
     @Override
-    public ActionInteractionEvent<?> getActionInteractionEvent() {
-        return actionInteractionEvent;
+    public ActionInteractionEvent<?> peekActionInteractionEvent() {
+        return actionInteractionEvents.isEmpty()? null: actionInteractionEvents.getLast();
     }
 
     @Override
-    public void setActionInteractionEvent(ActionInteractionEvent<?> event) {
-        this.actionInteractionEvent = event;
+    public void pushActionInteractionEvent(ActionInteractionEvent<?> event) {
+        if(peekActionInteractionEvent() == event) {
+            return;
+        }
+        this.actionInteractionEvents.add(event);
+    }
+
+    @Override
+    public ActionInteractionEvent popActionInteractionEvent() {
+        return !actionInteractionEvents.isEmpty() ? actionInteractionEvents.removeLast() : null;
+    }
+
+    @Programmatic
+    public List<ActionInteractionEvent<?>> flushActionInteractionEvents() {
+        final List<ActionInteractionEvent<?>> events =
+                Collections.unmodifiableList(Lists.newArrayList(actionInteractionEvents));
+        actionInteractionEvents.clear();
+        return events;
     }
 
 

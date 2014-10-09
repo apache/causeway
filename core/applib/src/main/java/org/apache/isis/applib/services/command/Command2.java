@@ -16,6 +16,8 @@
  */
 package org.apache.isis.applib.services.command;
 
+import java.util.List;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 
 /**
@@ -25,7 +27,7 @@ import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 public interface Command2 extends Command {
 
     /**
-     * The corresponding {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}.
+     * The current (most recently pushed) {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}.
      *
      * <p>
      *     Note that the {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent} itself is mutable,
@@ -36,14 +38,35 @@ public interface Command2 extends Command {
      * </p>
      * @return
      */
-    ActionInteractionEvent<?> getActionInteractionEvent();
+    @Programmatic
+    ActionInteractionEvent<?> peekActionInteractionEvent();
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
+     *
+     * <p>
+     * Push a new {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}
+     * onto the stack of events held by the command.
+     * </p>
      */
-    void setActionInteractionEvent(ActionInteractionEvent<?> event);
+    @Programmatic
+    void pushActionInteractionEvent(ActionInteractionEvent<?> event);
 
+    /**
+     * <b>NOT API</b>: intended to be called only by the framework.
+     *
+     * <p>
+     * Push a new {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}
+     * onto the stack of events held by the command.
+     * </p>
+     */
+    @Programmatic
+    ActionInteractionEvent<?> popActionInteractionEvent();
 
-
-
+    /**
+     * Returns the {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}s in the order that they
+     * were {@link #pushActionInteractionEvent(org.apache.isis.applib.services.eventbus.ActionInteractionEvent) pushed}.
+     */
+    @Programmatic
+    List<ActionInteractionEvent<?>> flushActionInteractionEvents();
 }

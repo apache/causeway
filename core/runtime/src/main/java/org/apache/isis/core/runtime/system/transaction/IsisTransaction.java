@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
@@ -113,7 +112,7 @@ public class IsisTransaction implements TransactionScopedComponent {
          * <p>
          * May {@link IsisTransaction#flush() flush},
          * {@link IsisTransaction#commit() commit} or
-         * {@link IsisTransaction#abort() abort}.
+         * {@link IsisTransaction#markAsAborted() abort}.
          */
         IN_PROGRESS(TransactionState.IN_PROGRESS),
         /**
@@ -123,7 +122,7 @@ public class IsisTransaction implements TransactionScopedComponent {
          * May not {@link IsisTransaction#flush()} or
          * {@link IsisTransaction#commit() commit} (will throw an
          * {@link IllegalStateException}), but can only
-         * {@link IsisTransaction#abort() abort}.
+         * {@link IsisTransaction#markAsAborted() abort}.
          * 
          * <p>
          * Similar to <tt>setRollbackOnly</tt> in EJBs.
@@ -134,7 +133,7 @@ public class IsisTransaction implements TransactionScopedComponent {
          * 
          * <p>
          * May not {@link IsisTransaction#flush()} or
-         * {@link IsisTransaction#abort() abort} or
+         * {@link IsisTransaction#markAsAborted() abort}.
          * {@link IsisTransaction#commit() commit} (will throw
          * {@link IllegalStateException}).
          */
@@ -145,7 +144,7 @@ public class IsisTransaction implements TransactionScopedComponent {
          * <p>
          * May not {@link IsisTransaction#flush()},
          * {@link IsisTransaction#commit() commit} or
-         * {@link IsisTransaction#abort() abort} (will throw
+         * {@link IsisTransaction#markAsAborted() abort} (will throw
          * {@link IllegalStateException}).
          */
         ABORTED(TransactionState.ABORTED);
@@ -754,53 +753,63 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     private void ensureSafeSemanticsHonoured(Command command, Set<ObjectAdapter> changedAdapters) {
+
+        if(true) {
+
+            // ISIS-921: disabling this functionality...
+            //
+            // ... the issue is that an edit (which mutates state, obviously), can cause a contributed property to
+            // be evaluated, which has safe semantics.
+            //
+            // the solution, I think, is to set up some sort of "dummy" action to represent the edit.
+            // this needs to be installed pretty early up in the stack trace.  ISIS-922 raised for this.
+            //
+
+            return;
+        }
+
         if (!(command instanceof Command2)) {
             return;
         }
         final Command2 command2 = (Command2) command;
-        final ActionInteractionEvent<?> event = command2.getActionInteractionEvent();
-        if (event == null) {
+        final List<ActionInteractionEvent<?>> events = command2.flushActionInteractionEvents();
+        if (events.isEmpty()) {
             return;
         }
-        try {
-            final ActionSemantics.Of actionSemantics = event.getActionSemantics();
-            if(actionSemantics == null) {
+
+        // are all safe?
+        for (ActionInteractionEvent<?> event : events) {
+            if(!event.getActionSemantics().isSafe()) {
+                // found at least one non-safe action, so all bets are off.
                 return;
             }
-            if (!actionSemantics.isSafe()) {
-                return;
+        }
+
+        // all actions invoked had safe semantics; were any objects changed?
+        if (changedAdapters.isEmpty()) {
+            return;
+        }
+
+        final String msg = "Action '" + events.get(0).getIdentifier().toFullIdentityString() + "'" +
+                " (with safe semantics)" +
+                " caused " + changedAdapters.size() + " object" + (changedAdapters.size() != 1 ? "s" : "") +
+                " to be modified";
+        LOG.error(msg);
+        for (ObjectAdapter changedAdapter : changedAdapters) {
+            final StringBuilder builder = new StringBuilder("  > ")
+                    .append(changedAdapter.getSpecification().getFullIdentifier())
+                    .append(": ");
+            if(!changedAdapter.isDestroyed()) {
+                builder.append(changedAdapter.titleString(null));
+            } else {
+                builder.append("(deleted object)");
             }
+            LOG.error(builder.toString());
+        }
 
-            if(!changedAdapters.isEmpty()) {
-                final String msg = "Action '" + event.getIdentifier().toFullIdentityString() + "'" +
-                        " (with safe semantics)" +
-                        " caused " + changedAdapters.size() + " object" + (changedAdapters.size() != 1 ? "s" : "") +
-                        " to be modified";
-                LOG.error(msg);
-                for (ObjectAdapter changedAdapter : changedAdapters) {
-                    final StringBuilder builder = new StringBuilder("  > ")
-                            .append(changedAdapter.getSpecification().getFullIdentifier())
-                            .append(": ");
-                    if(!changedAdapter.isDestroyed()) {
-                        builder.append(changedAdapter.titleString(null));
-                    } else {
-                        builder.append("(deleted object)");
-                    }
-                    LOG.error(builder.toString());
-                }
-
-                final boolean enforceSafeSemantics = getConfiguration().getBoolean(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, PersistenceConstants.ENFORCE_SAFE_SEMANTICS_DEFAULT);
-                if(enforceSafeSemantics) {
-                    throw new RecoverableException(msg);
-                }
-            }
-        } finally {
-            // irrespective of outcome, clear out the event.
-            // this has no effect in the production app, but benefits integration tests
-            // where otherwise the event from a preceding xactn (eg the action in the 'when') can "leak" into
-            // pertaining to the next phase (eg the assertions in the 'then').
-
-            command2.setActionInteractionEvent(null);
+        final boolean enforceSafeSemantics = getConfiguration().getBoolean(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, PersistenceConstants.ENFORCE_SAFE_SEMANTICS_DEFAULT);
+        if(enforceSafeSemantics) {
+            throw new RecoverableException(msg);
         }
     }
 
@@ -869,7 +878,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
                 if(command instanceof Command2) {
                     final Command2 command2 = (Command2) command;
-                    command2.setActionInteractionEvent(null);
+                    command2.flushActionInteractionEvents();
                 }
             }
         }

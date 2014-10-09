@@ -69,19 +69,7 @@ public class InteractionHelper {
                     if(command != null && command instanceof Command2) {
                         final Command2 command2 = (Command2) command;
 
-                        // don't overwrite any existing event.
-                        //
-                        // this can happen when one action invokes another (wrapped), and can also occur if a
-                        // bulk action is performed (when the query that produced the list is automatically re-executed).
-                        // (This logic is in the Wicket viewer's BulkActionsLinkFactory).
-                        //
-                        // This also means that the command could refer to a different event (the one of the original
-                        // outer-most action that started the xactn) compared to the event that references it.
-
-                        final ActionInteractionEvent<?> actionInteractionEvent = command2.getActionInteractionEvent();
-                        if(actionInteractionEvent == null) {
-                            command2.setActionInteractionEvent(event);
-                        }
+                        command2.pushActionInteractionEvent(event);
                     }
                 }
             } else {
