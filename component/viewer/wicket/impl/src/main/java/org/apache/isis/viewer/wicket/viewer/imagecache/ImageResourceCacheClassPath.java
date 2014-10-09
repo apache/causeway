@@ -23,18 +23,17 @@ import images.Images;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Singleton;
-
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 
@@ -43,7 +42,7 @@ import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
  * class).
  * 
  * <p>
- * Searches for a fixed set of suffixes: {@value #IMAGE_SUFFICES}.
+ * Searches for a fixed set of suffixes: {@link #IMAGE_SUFFICES}.
  */
 @Singleton
 public class ImageResourceCacheClassPath implements ImageResourceCache {
@@ -52,81 +51,202 @@ public class ImageResourceCacheClassPath implements ImageResourceCache {
     
     private static final List<String> IMAGE_SUFFICES = Arrays.asList("png", "gif", "jpeg", "jpg");
     private static final String FALLBACK_IMAGE = "Default.png";
-    
-    private final Map<ObjectSpecId, ResourceReference> resourceReferenceBySpec = Maps.newHashMap();
-    private PackageResourceReference fallbackResourceReference;
 
+    private final Map<Key, ResourceReference> resourceReferenceByKey = Maps.newConcurrentMap();
+
+    static final class Key implements Serializable {
+
+        private final Class<?> resourceClass;
+        private final String iconName;
+        private final String toString;
+
+        public Key(
+                final Class<?> correspondingClass,
+                final String iconName) {
+            this.iconName = iconName;
+            this.resourceClass = correspondingClass;
+            this.toString = calcToString();
+        }
+
+        //region > getResourceClass, getIconName
+
+        public final Class<?> getResourceClass() {
+            return resourceClass;
+        }
+
+        public final String getResourceName() {
+            return iconName;
+        }
+        //endregion
+
+        //region > superKey
+
+        Key superKey() {
+            if(resourceClass == null) {
+                return null;
+            }
+            final Class<?> superclass = resourceClass.getSuperclass();
+            if(superclass == Object.class) {
+                return null;
+            }
+            return new Key(superclass, iconName);
+        }
+
+        //endregion
+
+        //region > resourcePaths
+
+        List<Key> resourcePaths(final String... suffices) {
+            return resourcePaths(Arrays.asList(suffices));
+        }
+
+        List<Key> resourcePaths(final List<String> suffices) {
+
+            Key key;
+            final List<Key> resourcePaths = Lists.newArrayList();
+
+            if(resourceClass != null) {
+                // with the iconName
+                if(iconName != null) {
+                    key = this;
+                    do {
+                        for (String suffix : suffices) {
+                            resourcePaths.add(new Key(key.getResourceClass(), key.getResourceClass().getSimpleName() + "-" + iconName + "." + suffix));
+                        }
+                        for (String suffix : suffices) {
+                            resourcePaths.add(new Key(key.getResourceClass(), iconName + "." + suffix));
+                        }
+                    } while ((key = key.superKey()) != null);
+                    key = this;
+                    do {
+                        for (String suffix : suffices) {
+                            resourcePaths.add(new Key(null, key.getResourceClass().getSimpleName() + "-" + iconName + "." + suffix));
+                        }
+                    } while ((key = key.superKey()) != null);
+                    for (String suffix : suffices) {
+                        resourcePaths.add(new Key(null, iconName + "." + suffix));
+                    }
+                }
+
+                // without the iconName
+                key = this;
+                do {
+                    for (String suffix : suffices) {
+                        resourcePaths.add(new Key(key.getResourceClass(), key.getResourceClass().getSimpleName() + "." + suffix));
+                    }
+                } while ((key = key.superKey()) != null);
+                key = this;
+                do {
+                    for (String suffix : suffices) {
+                        resourcePaths.add(new Key(null, key.getResourceClass().getSimpleName() + "." + suffix));
+                    }
+                } while ((key = key.superKey()) != null);
+
+
+            } else {
+
+                if(iconName != null) {
+                    for (String suffix : suffices) {
+                        resourcePaths.add(new Key(null, iconName + "." + suffix));
+                    }
+                }
+            }
+
+            // fallback
+            for (String suffix : suffices) {
+                resourcePaths.add(new Key(null, "Default" + "." + suffix));
+            }
+
+
+            return Collections.unmodifiableList(resourcePaths);
+        }
+
+        //endregion
+
+        //region > equals, hashCode, toString
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Key key = (Key) o;
+            if (toString != null ? !toString.equals(key.toString) : key.toString != null) return false;
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            return toString != null ? toString.hashCode() : 0;
+        }
+
+        @Override
+        public String toString() {
+            return toString;
+        }
+
+        private String calcToString() {
+            final StringBuilder buf = new StringBuilder();
+            if(resourceClass != null) {
+                buf.append(resourceClass.getName()).append("/").append(resourceClass.getSimpleName());
+            }
+            if(buf.length() > 0) {
+                buf.append("-");
+            }
+            if(iconName != null) {
+                buf.append(iconName);
+            }
+            return buf.toString();
+        }
+        //endregion
+    }
+
+    public ImageResourceCacheClassPath() {
+        resourceReferenceByKey.put(new Key(null, null), new PackageResourceReference(Images.class, FALLBACK_IMAGE));
+    }
 
     @Override
-    public ResourceReference resourceReferenceFor(ObjectAdapter adapter) {
-        String adapterIconName = adapter.getIconName();
-        if (adapterIconName != null) {
-            return resourceReferenceFor(adapter.getIconName());
-        }
-        return resourceReferenceForSpec(adapter.getSpecification());
+    public ResourceReference resourceReferenceFor(final ObjectAdapter adapter) {
+        return resourceReferenceFor(adapter.getSpecification(), adapter.getIconName());
     }
 
     @Override
     public ResourceReference resourceReferenceForSpec(final ObjectSpecification spec) {
-        if(spec == null) {
-            return fallbackResourceReference(); 
+        return resourceReferenceFor(spec, null);
+    }
+
+    private ResourceReference resourceReferenceFor(
+            final ObjectSpecification specification,
+            final String iconNameIfAny) {
+
+        final Class<?> correspondingClassIfAny = specification != null? specification.getCorrespondingClass(): null;
+        final Key key = new Key(correspondingClassIfAny, iconNameIfAny);
+
+        ResourceReference resourceReference = resourceReferenceByKey.get(key);
+        if(resourceReference == null) {
+            resourceReference = findResourceReferenceFor(key);
+            resourceReferenceByKey.put(key, resourceReference);
         }
-        ResourceReference resourceReference = resourceReferenceBySpec.get(spec);
-        if(resourceReference != null) {
-            return resourceReference;
-        }
-        
-        resourceReference = lookupResourceReferenceFor(spec);
-        
-        final ObjectSpecId specId = spec.getSpecId();
-        resourceReferenceBySpec.put(specId, resourceReference);
+
         return resourceReference;
     }
 
-    private ResourceReference lookupResourceReferenceFor(final ObjectSpecification spec) {
-        final Class<?> correspondingClass = spec.getCorrespondingClass();
-        final String specName = correspondingClass.getSimpleName();
-        
-        final ResourceReference resourceReference = resourceReferenceFor(specName);
-        if(resourceReference != null) {
-            return resourceReference;
-        }
-        
-        // search up hierarchy
-        final ObjectSpecification superSpec = spec.superclass();
-        if(superSpec != null) {
-            return resourceReferenceForSpec(superSpec);
-        } 
+    private ResourceReference findResourceReferenceFor(final Key key) {
 
-        return fallbackResourceReference();
-    }
-
-    
-    private ResourceReference fallbackResourceReference() {
-        if(fallbackResourceReference == null) {
-            fallbackResourceReference = newPackageResourceReference(FALLBACK_IMAGE);
-        }
-        return fallbackResourceReference;
-    }
-
-    private static ResourceReference resourceReferenceFor(final String specName) {
-        for(String imageSuffix: IMAGE_SUFFICES) {
-            final String imageName = specName + "." + imageSuffix;
-
-            InputStream resourceAsStream = null;
-            resourceAsStream = Images.class.getResourceAsStream(imageName);
-            if(resourceAsStream == null) {
-                continue;
-            } else {
-                closeSafely(resourceAsStream);
+        final List<Key> keys = key.resourcePaths(IMAGE_SUFFICES);
+        for (Key resourceKey : keys) {
+            Class<?> resourceClass = resourceKey.getResourceClass();
+            if(resourceClass == null) {
+                resourceClass = Images.class;
             }
-            return newPackageResourceReference(imageName);
+            final String iconName = resourceKey.iconName;
+
+            final InputStream resourceAsStream = resourceClass.getResourceAsStream(iconName);
+            if (resourceAsStream != null) {
+                closeSafely(resourceAsStream);
+                return new PackageResourceReference(resourceClass, iconName);
+            }
         }
         return null;
-    }
-
-    private static PackageResourceReference newPackageResourceReference(final String imageFile) {
-        return new PackageResourceReference(Images.class, imageFile);
     }
 
     private static void closeSafely(InputStream resourceAsStream) {
