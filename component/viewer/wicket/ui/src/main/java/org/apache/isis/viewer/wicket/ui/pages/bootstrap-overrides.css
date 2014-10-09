@@ -29,6 +29,10 @@
     height: 23px;
     padding: 1px 0;
     cursor: default;
+    outline: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
 }
 
 .table > thead > tr > th, td {
@@ -53,4 +57,8 @@
     width: 100%;
     opacity: 0.4;
     filter: alpha(opacity=40);
+}
+
+.table .table td {
+    border: none;
 }
