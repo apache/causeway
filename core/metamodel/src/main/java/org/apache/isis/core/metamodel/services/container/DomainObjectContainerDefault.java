@@ -93,7 +93,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     @Programmatic
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends ViewModel> T newViewModelInstance(Class<T> ofClass, String memento) {
+    public <T> T newViewModelInstance(Class<T> ofClass, String memento) {
         final ObjectSpecification spec = getSpecificationLookup().loadSpecification(ofClass);
         if (!spec.containsFacet(ViewModelFacet.class)) {
             throw new IsisException("Type must be a ViewModel: " + ofClass);

@@ -171,8 +171,8 @@ public interface DomainObjectContainer {
 
     
     /**
-     * Create a new instance of the specified {@link ViewModel} class, initializing with the
-     * specified {@link ViewModel#viewModelMemento() memento}.
+     * Create a new instance of the specified view model class, initializing with the
+     * specified memento.
      *
      * <p>
      *     Rather than use this constructor it is generally preferable to simply instantiate a
@@ -181,7 +181,7 @@ public interface DomainObjectContainer {
      * </p>
      */
     @Programmatic
-    <T extends ViewModel> T newViewModelInstance(final Class<T> ofType, final String memento);
+    <T> T newViewModelInstance(final Class<T> ofType, final String memento);
 
     /**
      * Create a new instance that will be persisted as part of the specified
