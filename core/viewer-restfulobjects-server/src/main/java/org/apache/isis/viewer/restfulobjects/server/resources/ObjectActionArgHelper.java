@@ -26,8 +26,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
-import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
 /**
  * Utility class that encapsulates the logic for parsing arguments to be invoked by an 
@@ -35,15 +35,15 @@ import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationExc
  */
 public class ObjectActionArgHelper {
 
-    private final ResourceContext resourceContext;
+    private final RendererContext rendererContext;
     private final ObjectAdapter objectAdapter;
     private final ObjectAction action;
 
     public ObjectActionArgHelper(
-            final ResourceContext resourceContext,
+            final RendererContext rendererContext,
             final ObjectAdapter objectAdapter,
             final ObjectAction action) {
-        this.resourceContext = resourceContext;
+        this.rendererContext = rendererContext;
         this.objectAdapter = objectAdapter;
         this.action = action;
     }
@@ -58,7 +58,7 @@ public class ObjectActionArgHelper {
             final JsonRepresentation argRepr = argList.get(i);
             final ObjectSpecification paramSpec = parameters.get(i).getSpecification();
             try {
-                final ObjectAdapter argAdapter = new JsonParserHelper(resourceContext, paramSpec).objectAdapterFor(argRepr);
+                final ObjectAdapter argAdapter = new JsonParserHelper(rendererContext, paramSpec).objectAdapterFor(argRepr);
                 argAdapters.add(argAdapter);
 
                 // validate individual arg

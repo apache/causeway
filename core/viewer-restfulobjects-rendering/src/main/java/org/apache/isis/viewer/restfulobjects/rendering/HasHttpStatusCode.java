@@ -16,22 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server;
+package org.apache.isis.viewer.restfulobjects.rendering;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 
-/**
- * For backward compatibility only.
- */
-@Deprecated
-public class RestfulObjectsApplicationException extends org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException {
+public interface HasHttpStatusCode {
 
-    public RestfulObjectsApplicationException(
-            final RestfulResponse.HttpStatusCode httpStatusCode,
-            final String message,
-            final Throwable cause,
-            final JsonRepresentation body) {
-        super(httpStatusCode, message, cause, body);
-    }
+    HttpStatusCode getHttpStatusCode();
 }

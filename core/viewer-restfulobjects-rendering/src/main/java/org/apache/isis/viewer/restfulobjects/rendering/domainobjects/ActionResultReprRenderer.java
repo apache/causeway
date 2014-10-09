@@ -50,6 +50,10 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         INCLUDED, EXCLUDED
     }
 
+    public ActionResultReprRenderer(final RendererContext rendererContext, final SelfLink selfLink) {
+        this(rendererContext, null, selfLink, JsonRepresentation.newMap());
+    }
+
     public ActionResultReprRenderer(final RendererContext rendererContext, final LinkFollowSpecs linkFollower, final SelfLink selfLink, final JsonRepresentation representation) {
         super(rendererContext, linkFollower, RepresentationType.ACTION_RESULT, representation);
         this.selfLink = selfLink;

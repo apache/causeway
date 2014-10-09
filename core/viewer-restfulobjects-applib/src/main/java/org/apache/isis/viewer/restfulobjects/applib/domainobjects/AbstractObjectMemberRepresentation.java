@@ -18,8 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
-import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.codehaus.jackson.JsonNode;
+import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 
 public abstract class AbstractObjectMemberRepresentation extends DomainRepresentation {
 

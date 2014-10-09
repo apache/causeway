@@ -39,22 +39,27 @@ public final class OidUtils {
     /**
      * @return {@code null} if not persistent and not a view model.
      */
-    public static ObjectAdapter getObjectAdapterElseNull(final RendererContext resourceContext,
-                                                         final String domainType, final String instanceIdEncoded) {
+    public static ObjectAdapter getObjectAdapterElseNull(
+            final RendererContext rendererContext,
+            final String domainType, final String instanceIdEncoded) {
         final String instanceIdUnencoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
         String oidStrUnencoded = getOidMarshaller().joinAsOid(domainType, instanceIdUnencoded);
-        return getObjectAdapter(resourceContext, oidStrUnencoded);
+        return getObjectAdapter(rendererContext, oidStrUnencoded);
     }
 
     /**
      * see {@link #getObjectAdapterElseNull(org.apache.isis.viewer.restfulobjects.rendering.RendererContext, String, String)}
      */
-    public static ObjectAdapter getObjectAdapterElseNull(final RendererContext resourceContext, final String oidStrEncoded) {
+    public static ObjectAdapter getObjectAdapterElseNull(
+            final RendererContext rendererContext,
+            final String oidStrEncoded) {
         String oidStrUnencoded = UrlDecoderUtils.urlDecode(oidStrEncoded);
-        return getObjectAdapter(resourceContext, oidStrUnencoded);
+        return getObjectAdapter(rendererContext, oidStrUnencoded);
     }
 
-    private static ObjectAdapter getObjectAdapter(RendererContext resourceContext, String oidStrUnencoded) {
+    private static ObjectAdapter getObjectAdapter(
+            final RendererContext rendererContext,
+            final String oidStrUnencoded) {
         RootOidDefault rootOid = RootOidDefault.deString(oidStrUnencoded, getOidMarshaller());
         final ObjectSpecId specId = rootOid.getObjectSpecId();
 
@@ -65,7 +70,7 @@ public final class OidUtils {
         }
 
         // TODO: the logic to figure out which PersistenceSession API to call should be pushed down into PersistenceSession itself.
-        final PersistenceSession persistenceSession = resourceContext.getPersistenceSession();
+        final PersistenceSession persistenceSession = rendererContext.getPersistenceSession();
 
         if(spec.containsFacet(ViewModelFacet.class)) {
 

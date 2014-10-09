@@ -24,7 +24,8 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 
 public class DomainResourceHelperTest_readBodyAsMap {
 

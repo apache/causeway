@@ -16,25 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server.util;
+package org.apache.isis.viewer.restfulobjects.server.resources;
 
-import javax.servlet.http.HttpServletRequest;
+import org.junit.Test;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
+import static org.junit.Assert.assertEquals;
 
-public final class PathUtils {
+public class JsonParserHelpTest {
 
-    private PathUtils() {
-    }
-
-    public static String combine(final HttpServletRequest request, final String... pathElements) {
-        final StringBuilder buf = new StringBuilder(request.getContextPath());
-        for (final String pathElement : pathElements) {
-            if (!pathElement.startsWith("/")) {
-                buf.append("/");
-            }
-            buf.append(pathElement);
-        }
-        return buf.toString();
+    @Test
+    public void oidFromLink() throws Exception {
+        final JsonRepresentation link = JsonRepresentation.newMap();
+        link.mapPut("href", "http://localhost/objects/OID/1");
+        final String oidFromHref = JsonParserHelper.encodedOidFromLink(link);
+        assertEquals("OID:1", oidFromHref);
     }
 
 }

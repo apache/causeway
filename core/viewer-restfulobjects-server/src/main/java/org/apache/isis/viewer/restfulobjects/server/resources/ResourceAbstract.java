@@ -18,14 +18,11 @@
  */
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.*;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -35,45 +32,18 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
-import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
+import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
-import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.server.util.OidUtils;
 import org.apache.isis.viewer.restfulobjects.server.util.UrlDecoderUtils;
 
 public abstract class ResourceAbstract {
-
-
-    protected final static JsonMapper jsonMapper = JsonMapper.instance();
-
-    public enum Caching {
-        ONE_DAY(24 * 60 * 60), ONE_HOUR(60 * 60), NONE(0);
-
-        private final CacheControl cacheControl;
-
-        private Caching(final int maxAge) {
-            this.cacheControl = new CacheControl();
-            if (maxAge > 0) {
-                cacheControl.setMaxAge(maxAge);
-            } else {
-                cacheControl.setNoCache(true);
-            }
-        }
-
-        public CacheControl getCacheControl() {
-            return cacheControl;
-        }
-    }
-
-    // nb: SET is excluded; we simply flatten contributed actions.
-    public final static ActionType[] ACTION_TYPES = { ActionType.USER, ActionType.DEBUG, ActionType.EXPLORATION };
 
     @Context
     HttpHeaders httpHeaders;
@@ -138,28 +108,8 @@ public abstract class ResourceAbstract {
     }
 
     // //////////////////////////////////////////////////////////////
-    // Rendering
-    // //////////////////////////////////////////////////////////////
-
-    protected static String jsonFor(final Object object) {
-        try {
-            return jsonMapper.write(object);
-        } catch (final JsonGenerationException e) {
-            throw new RuntimeException(e);
-        } catch (final JsonMappingException e) {
-            throw new RuntimeException(e);
-        } catch (final IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    // //////////////////////////////////////////////////////////////
     // Isis integration
     // //////////////////////////////////////////////////////////////
-
-    protected ObjectSpecification getSpecification(final String specFullName) {
-        return getSpecificationLoader().loadSpecification(specFullName);
-    }
 
     protected ObjectAdapter getObjectAdapterElseThrowNotFound(String domainType, final String instanceId) {
         ObjectAdapter objectAdapter = getObjectAdapterElseNull(domainType, instanceId);

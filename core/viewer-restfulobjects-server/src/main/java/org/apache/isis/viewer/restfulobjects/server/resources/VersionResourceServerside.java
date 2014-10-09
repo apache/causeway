@@ -32,7 +32,9 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionResource;
-import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.Caching;
+import org.apache.isis.viewer.restfulobjects.rendering.Responses;
+import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation

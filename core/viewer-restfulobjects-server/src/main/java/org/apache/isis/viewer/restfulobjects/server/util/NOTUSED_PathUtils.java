@@ -16,22 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server;
+package org.apache.isis.viewer.restfulobjects.server.util;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import javax.servlet.http.HttpServletRequest;
 
-/**
- * For backward compatibility only.
- */
-@Deprecated
-public class RestfulObjectsApplicationException extends org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException {
 
-    public RestfulObjectsApplicationException(
-            final RestfulResponse.HttpStatusCode httpStatusCode,
-            final String message,
-            final Throwable cause,
-            final JsonRepresentation body) {
-        super(httpStatusCode, message, cause, body);
+public final class NOTUSED_PathUtils {
+
+    private NOTUSED_PathUtils() {
     }
+
+    public static String combine(final HttpServletRequest request, final String... pathElements) {
+        final StringBuilder buf = new StringBuilder(request.getContextPath());
+        for (final String pathElement : pathElements) {
+            if (!pathElement.startsWith("/")) {
+                buf.append("/");
+            }
+            buf.append(pathElement);
+        }
+        return buf.toString();
+    }
+
 }

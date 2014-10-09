@@ -33,6 +33,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
 public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbstract<R, ObjectAndMember<T>>, T extends ObjectMember> extends ReprRendererAbstract<R, ObjectAndMember<T>> {
 
+
     protected enum Mode {
         INLINE, FOLLOWED, STANDALONE, MUTATED, ARGUMENTS, EVENT_SERIALIZATION;
 
@@ -176,6 +177,14 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
             putExtensionsIsisProprietary();
             addLinksToFormalDomainModel();
             addLinksIsisProprietary();
+        }
+    }
+
+    public void withMemberMode(MemberReprMode memberMode) {
+        if(memberMode == MemberReprMode.WRITE) {
+            this.asMutated();
+        } else {
+            this.asStandalone();
         }
     }
 

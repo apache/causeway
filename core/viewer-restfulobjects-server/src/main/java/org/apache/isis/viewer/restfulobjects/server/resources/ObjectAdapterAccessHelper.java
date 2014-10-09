@@ -23,15 +23,20 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.*;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberType;
-import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
-import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
 /**
  * Utility class that encapsulates the logic for checking access to the specified
  * {@link org.apache.isis.core.metamodel.adapter.ObjectAdapter object}'s members.
  */
 public class ObjectAdapterAccessHelper {
+
+    public static void throwNotFoundException(final String memberId, final MemberType memberType) {
+        final String memberTypeStr = memberType.name().toLowerCase();
+        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.NOT_FOUND, "%s '%s' either does not exist or is not visible", memberTypeStr, memberId);
+    }
 
     static enum Intent {
         ACCESS, MUTATE;
@@ -42,17 +47,17 @@ public class ObjectAdapterAccessHelper {
     }
 
     private final ObjectAdapter objectAdapter;
-    private final ResourceContext resourceContext;
+    private final RendererContext rendererContext;
 
-    public ObjectAdapterAccessHelper(ResourceContext resourceContext, ObjectAdapter objectAdapter) {
+    public ObjectAdapterAccessHelper(RendererContext rendererContext, ObjectAdapter objectAdapter) {
         this.objectAdapter = objectAdapter;
-        this.resourceContext = resourceContext;
+        this.rendererContext = rendererContext;
     }
 
     public OneToOneAssociation getPropertyThatIsVisibleForIntent(
             final String propertyId, final Intent intent) {
 
-        final Where where = resourceContext.getWhere();
+        final Where where = rendererContext.getWhere();
 
         final ObjectAssociation association;
         try {
@@ -60,12 +65,12 @@ public class ObjectAdapterAccessHelper {
             association = specification.getAssociation(propertyId);
         } catch(Exception ex) {
             // fall through
-            Util.throwNotFoundException(propertyId, MemberType.PROPERTY);
+            throwNotFoundException(propertyId, MemberType.PROPERTY);
             return null; // to keep compiler happy.
         }
 
         if (association == null || !association.isOneToOneAssociation()) {
-            Util.throwNotFoundException(propertyId, MemberType.PROPERTY);
+            throwNotFoundException(propertyId, MemberType.PROPERTY);
         }
 
         final OneToOneAssociation property = (OneToOneAssociation) association;
@@ -75,18 +80,18 @@ public class ObjectAdapterAccessHelper {
     public OneToManyAssociation getCollectionThatIsVisibleForIntent(
             final String collectionId, final Intent intent) {
 
-        final Where where = resourceContext.getWhere();
+        final Where where = rendererContext.getWhere();
         final ObjectAssociation association;
         try {
             final ObjectSpecification specification = objectAdapter.getSpecification();
             association = specification.getAssociation(collectionId);
         } catch(Exception ex) {
             // fall through
-            Util.throwNotFoundException(collectionId, MemberType.COLLECTION);
+            throwNotFoundException(collectionId, MemberType.COLLECTION);
             return null; // to keep compiler happy.
         }
         if (association == null || !association.isOneToManyAssociation()) {
-            Util.throwNotFoundException(collectionId, MemberType.COLLECTION);
+            throwNotFoundException(collectionId, MemberType.COLLECTION);
         }
         final OneToManyAssociation collection = (OneToManyAssociation) association;
         return memberThatIsVisibleForIntent(collection, MemberType.COLLECTION, intent);
@@ -95,18 +100,18 @@ public class ObjectAdapterAccessHelper {
     public ObjectAction getObjectActionThatIsVisibleForIntent(
             final String actionId, final Intent intent) {
 
-        final Where where = resourceContext.getWhere();
+        final Where where = rendererContext.getWhere();
 
         final ObjectAction action;
         try {
             final ObjectSpecification specification = objectAdapter.getSpecification();
             action = specification.getObjectAction(actionId);
         } catch(Exception ex) {
-            Util.throwNotFoundException(actionId, MemberType.ACTION);
+            throwNotFoundException(actionId, MemberType.ACTION);
             return null; // to keep compiler happy.
         }
         if (action == null) {
-            Util.throwNotFoundException(actionId, MemberType.ACTION);
+            throwNotFoundException(actionId, MemberType.ACTION);
         }
         return memberThatIsVisibleForIntent(action, MemberType.ACTION, intent);
     }
@@ -114,12 +119,12 @@ public class ObjectAdapterAccessHelper {
     public <T extends ObjectMember> T memberThatIsVisibleForIntent(
             final T objectMember, final MemberType memberType, final Intent intent) {
 
-        final Where where = resourceContext.getWhere();
+        final Where where = rendererContext.getWhere();
 
         final String memberId = objectMember.getId();
-        final AuthenticationSession authenticationSession = resourceContext.getAuthenticationSession();
+        final AuthenticationSession authenticationSession = rendererContext.getAuthenticationSession();
         if (objectMember.isVisible(authenticationSession, objectAdapter, where).isVetoed()) {
-            Util.throwNotFoundException(memberId, memberType);
+            throwNotFoundException(memberId, memberType);
         }
         if (intent.isMutate()) {
             final Consent usable = objectMember.isUsable(authenticationSession, objectAdapter, where);

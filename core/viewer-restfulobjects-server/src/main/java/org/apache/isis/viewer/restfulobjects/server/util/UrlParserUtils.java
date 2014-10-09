@@ -20,26 +20,13 @@ package org.apache.isis.viewer.restfulobjects.server.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public final class UrlParserUtils {
 
-    private final static Pattern OBJECT_OID = Pattern.compile(".*objects\\/([^/]+)\\/(.+)");;
-    private final static Pattern DOMAIN_TYPE = Pattern.compile(".*domain-types\\/([^/]+).*");;
+    private UrlParserUtils(){}
 
-    public final static String encodedOidFromLink(final JsonRepresentation link) {
-        final String href = link.getString("href");
-        
-        final Matcher matcher = OBJECT_OID.matcher(href);
-        if (!matcher.matches()) {
-            return null;
-        }
-        String domainType = matcher.group(1);
-        String instanceId = matcher.group(2);
-        return getOidMarshaller().joinAsOid(domainType, instanceId);
-    }
+    private final static Pattern DOMAIN_TYPE = Pattern.compile(".*domain-types\\/([^/]+).*");;
 
     public final static String domainTypeFrom(final JsonRepresentation link) {
         return domainTypeFrom(link.getString("href"));
@@ -53,8 +40,5 @@ public final class UrlParserUtils {
         return matcher.group(1);
     }
 
-    private static OidMarshaller getOidMarshaller() {
-        return new OidMarshaller();
-    }
 
 }

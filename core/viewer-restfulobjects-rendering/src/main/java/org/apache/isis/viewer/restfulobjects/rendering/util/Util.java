@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server.resources;
+package org.apache.isis.viewer.restfulobjects.rendering.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,12 +23,10 @@ import com.google.common.base.Charsets;
 import com.google.common.io.ByteStreams;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberType;
-import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
 public final class Util {
 
@@ -106,19 +104,4 @@ public final class Util {
     }
 
 
-    // //////////////////////////////////////////////////////////////
-    // misc
-    // //////////////////////////////////////////////////////////////
-
-    static String resourceFor(final ObjectSpecification objectSpec) {
-        // TODO: should return a string in the form
-        // http://localhost:8080/types/xxx
-        return objectSpec.getFullIdentifier();
-    }
-
-
-    public static void throwNotFoundException(final String memberId, final MemberType memberType) {
-        final String memberTypeStr = memberType.name().toLowerCase();
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.NOT_FOUND, "%s '%s' either does not exist or is not visible", memberTypeStr, memberId);
-    }
 }

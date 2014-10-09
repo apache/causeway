@@ -35,7 +35,9 @@ import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
-import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
+import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 
 @Path("/objects")
 public class DomainObjectResourceServerside extends ResourceAbstract implements DomainObjectResource {
@@ -163,7 +165,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
 
-        return helper.propertyDetails(propertyId, ResponseGeneratorService.MemberMode.NOT_MUTATING, Caching.NONE);
+        return helper.propertyDetails(
+                propertyId,
+                MemberReprMode.READ
+        );
     }
 
     @Override
@@ -192,7 +197,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         property.set(objectAdapter, argAdapter);
 
-        return helper.propertyDetails(propertyId, ResponseGeneratorService.MemberMode.MUTATING, Caching.NONE);
+        return helper.propertyDetails(
+                propertyId,
+                MemberReprMode.WRITE
+        );
     }
 
     @Override
@@ -216,7 +224,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         property.set(objectAdapter, null);
 
-        return helper.propertyDetails(propertyId, ResponseGeneratorService.MemberMode.MUTATING, Caching.NONE);
+        return helper.propertyDetails(
+                propertyId,
+                MemberReprMode.WRITE
+        );
     }
 
     @Override
@@ -238,7 +249,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
 
-        return helper.collectionDetails(collectionId, ResponseGeneratorService.MemberMode.NOT_MUTATING, Caching.NONE);
+        return helper.collectionDetails(collectionId, MemberReprMode.READ);
     }
 
     @Override
@@ -271,7 +282,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         collection.addElement(objectAdapter, argAdapter);
 
-        return helper.collectionDetails(collectionId, ResponseGeneratorService.MemberMode.MUTATING, Caching.NONE);
+        return helper.collectionDetails(collectionId, MemberReprMode.WRITE);
     }
 
     @Override
@@ -304,7 +315,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         collection.addElement(objectAdapter, argAdapter);
 
-        return helper.collectionDetails(collectionId, ResponseGeneratorService.MemberMode.MUTATING, Caching.NONE);
+        return helper.collectionDetails(collectionId, MemberReprMode.WRITE);
     }
 
     @Override
@@ -331,7 +342,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         collection.removeElement(objectAdapter, argAdapter);
 
-        return helper.collectionDetails(collectionId, ResponseGeneratorService.MemberMode.MUTATING, Caching.NONE);
+        return helper.collectionDetails(collectionId, MemberReprMode.WRITE);
     }
 
     // //////////////////////////////////////////////////////////

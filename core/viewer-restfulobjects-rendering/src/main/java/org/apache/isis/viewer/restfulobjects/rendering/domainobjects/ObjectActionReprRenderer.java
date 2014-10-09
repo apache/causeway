@@ -18,7 +18,9 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
 import java.util.Map;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.codehaus.jackson.node.NullNode;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -32,12 +34,11 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.ActionDescriptionReprRenderer;
 
-import org.codehaus.jackson.node.NullNode;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectActionReprRenderer, ObjectAction> {
+
+    public ObjectActionReprRenderer(RendererContext rendererContext) {
+        this(rendererContext, null, null, JsonRepresentation.newMap());
+    }
 
     public ObjectActionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollowSpecs, String actionId, final JsonRepresentation representation) {
         super(resourceContext, linkFollowSpecs, actionId, RepresentationType.OBJECT_ACTION, representation, Where.OBJECT_FORMS);

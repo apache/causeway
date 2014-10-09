@@ -19,9 +19,9 @@
 package webapp;
 
 import javax.ws.rs.core.Response;
-import org.apache.isis.viewer.restfulobjects.server.resources.ResponseGeneratorService;
+import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceForRestfulObjects;
 
-public class CustomResponseGeneratorService extends ResponseGeneratorService {
+public class CustomRepresentationService extends RepresentationServiceForRestfulObjects {
 
     @Override
     protected Response buildResponse(Response.ResponseBuilder responseBuilder) {

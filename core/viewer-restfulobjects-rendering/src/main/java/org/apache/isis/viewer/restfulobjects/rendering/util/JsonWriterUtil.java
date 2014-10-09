@@ -16,22 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server;
+package org.apache.isis.viewer.restfulobjects.rendering.util;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import java.io.IOException;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 
-/**
- * For backward compatibility only.
- */
-@Deprecated
-public class RestfulObjectsApplicationException extends org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException {
+public final class JsonWriterUtil {
 
-    public RestfulObjectsApplicationException(
-            final RestfulResponse.HttpStatusCode httpStatusCode,
-            final String message,
-            final Throwable cause,
-            final JsonRepresentation body) {
-        super(httpStatusCode, message, cause, body);
+    private JsonWriterUtil(){}
+
+    public static String jsonFor(final Object object) {
+        try {
+            return JsonMapper.instance().write(object);
+        } catch (final JsonGenerationException e) {
+            throw new RuntimeException(e);
+        } catch (final JsonMappingException e) {
+            throw new RuntimeException(e);
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

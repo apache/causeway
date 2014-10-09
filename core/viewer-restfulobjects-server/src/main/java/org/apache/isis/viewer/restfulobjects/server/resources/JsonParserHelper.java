@@ -16,15 +16,18 @@
  */
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
-import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
-import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.server.util.OidUtils;
-import org.apache.isis.viewer.restfulobjects.server.util.UrlParserUtils;
 
 /**
  * Utility class that encapsulates the logic for parsing some content (JSON, or a simple string that is JSON)
@@ -33,26 +36,21 @@ import org.apache.isis.viewer.restfulobjects.server.util.UrlParserUtils;
  */
 public class JsonParserHelper {
 
-    static enum Intent {
-        ACCESS, MUTATE;
+    private final static Pattern OBJECT_OID = Pattern.compile(".*objects\\/([^/]+)\\/(.+)");
 
-        public boolean isMutate() {
-            return this == MUTATE;
-        }
-    }
-
-    private final ResourceContext resourceContext;
+    private final RendererContext rendererContext;
     private final ObjectSpecification objectSpec;
 
-    public JsonParserHelper(ResourceContext resourceContext, ObjectSpecification objectSpecification) {
+    public JsonParserHelper(
+            final RendererContext rendererContext, ObjectSpecification objectSpecification) {
         this.objectSpec = objectSpecification;
-        this.resourceContext = resourceContext;
+        this.rendererContext = rendererContext;
     }
 
 
     /**
      * @param bodyAsString
-     *            - as per {@link Util#asStringUtf8(java.io.InputStream)}
+     *            - as per {@link org.apache.isis.viewer.restfulobjects.rendering.util.Util#asStringUtf8(java.io.InputStream)}
      * @return
      */
     ObjectAdapter parseAsMapWithSingleValue(final String bodyAsString) {
@@ -63,7 +61,7 @@ public class JsonParserHelper {
     ObjectAdapter parseAsMapWithSingleValue(final JsonRepresentation arguments) {
         final JsonRepresentation representation = arguments.getRepresentation("value");
         if (arguments.size() != 1 || representation == null) {
-            throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, "Body should be a map with a single key 'value' whose value represents an instance of type '%s'", Util.resourceFor(objectSpec));
+            throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, "Body should be a map with a single key 'value' whose value represents an instance of type '%s'", resourceFor(objectSpec));
         }
 
         return objectAdapterFor(arguments);
@@ -122,20 +120,42 @@ public class JsonParserHelper {
             argRepr.mapPut("invalidReason", reason);
             throw new IllegalArgumentException(reason);
         }
-        final String oidFromHref = UrlParserUtils.encodedOidFromLink(argValueRepr);
+        final String oidFromHref = encodedOidFromLink(argValueRepr);
         if (oidFromHref == null) {
             final String reason = "Could not parse 'href' to identify the object's OID";
             argRepr.mapPut("invalidReason", reason);
             throw new IllegalArgumentException(reason);
         }
 
-        final ObjectAdapter objectAdapter = OidUtils.getObjectAdapterElseNull(resourceContext, oidFromHref);
+        final ObjectAdapter objectAdapter = OidUtils.getObjectAdapterElseNull(rendererContext, oidFromHref);
         if (objectAdapter == null) {
             final String reason = "'href' does not reference a known entity";
             argRepr.mapPut("invalidReason", reason);
             throw new IllegalArgumentException(reason);
         }
         return objectAdapter;
+    }
+
+    static String encodedOidFromLink(final JsonRepresentation link) {
+        final String href = link.getString("href");
+
+        final Matcher matcher = OBJECT_OID.matcher(href);
+        if (!matcher.matches()) {
+            return null;
+        }
+        String domainType = matcher.group(1);
+        String instanceId = matcher.group(2);
+        return getOidMarshaller().joinAsOid(domainType, instanceId);
+    }
+
+    private static String resourceFor(final ObjectSpecification objectSpec) {
+        // TODO: should return a string in the form
+        // http://localhost:8080/types/xxx
+        return objectSpec.getFullIdentifier();
+    }
+
+    private static OidMarshaller getOidMarshaller() {
+        return new OidMarshaller();
     }
 
 }

@@ -18,21 +18,12 @@
  */
 package org.apache.isis.viewer.restfulobjects.server.util;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
-
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
-public class UrlParserUtilsTest {
+import static org.junit.Assert.assertEquals;
 
-    @Test
-    public void oidFromLink() throws Exception {
-        final JsonRepresentation link = JsonRepresentation.newMap();
-        link.mapPut("href", "http://localhost/objects/OID/1");
-        final String oidFromHref = UrlParserUtils.encodedOidFromLink(link);
-        assertEquals("OID:1", oidFromHref);
-    }
+public class UrlParserUtilsTest {
 
     @Test
     public void domainTypeFromLink() throws Exception {

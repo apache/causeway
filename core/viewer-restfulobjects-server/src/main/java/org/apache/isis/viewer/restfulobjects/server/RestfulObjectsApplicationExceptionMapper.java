@@ -33,6 +33,8 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
+import org.apache.isis.viewer.restfulobjects.rendering.HasHttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
 //@Path("/") // FIXME: workaround for TomEE ... but breaks the RestEasy TCK tests so commented out:-(
 @Provider

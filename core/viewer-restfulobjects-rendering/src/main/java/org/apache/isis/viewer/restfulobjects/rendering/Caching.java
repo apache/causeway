@@ -16,11 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server;
+package org.apache.isis.viewer.restfulobjects.rendering;
 
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
+import javax.ws.rs.core.CacheControl;
 
-public interface HasHttpStatusCode {
+public enum Caching {
 
-    HttpStatusCode getHttpStatusCode();
+    ONE_DAY(24 * 60 * 60),
+    ONE_HOUR(60 * 60),
+    NONE(0);
+
+    private final CacheControl cacheControl;
+
+    Caching(final int maxAge) {
+        this.cacheControl = new CacheControl();
+        if (maxAge > 0) {
+            cacheControl.setMaxAge(maxAge);
+        } else {
+            cacheControl.setNoCache(true);
+        }
+    }
+
+    public CacheControl getCacheControl() {
+        return cacheControl;
+    }
 }

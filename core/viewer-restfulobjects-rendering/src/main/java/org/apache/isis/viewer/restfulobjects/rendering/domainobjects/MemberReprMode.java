@@ -16,22 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server;
-
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
+package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 /**
- * For backward compatibility only.
- */
-@Deprecated
-public class RestfulObjectsApplicationException extends org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException {
-
-    public RestfulObjectsApplicationException(
-            final RestfulResponse.HttpStatusCode httpStatusCode,
-            final String message,
-            final Throwable cause,
-            final JsonRepresentation body) {
-        super(httpStatusCode, message, cause, body);
-    }
+ * Some representations may vary according to whether the member is to be represented for read
+ * (render the state of the property or collection) or for write (render additional hypermedia controls to allow
+ * the property to be modified/cleared, or the collection to be added to/removed from).
+*/
+public enum MemberReprMode {
+    READ,
+    WRITE;
 }

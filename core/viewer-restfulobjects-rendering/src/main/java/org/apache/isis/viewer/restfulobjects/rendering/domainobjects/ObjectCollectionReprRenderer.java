@@ -18,7 +18,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
 import java.util.Map;
-
+import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -34,12 +34,19 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.CollectionDescriptionReprRenderer;
 
-import com.google.common.collect.Lists;
-
 public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectCollectionReprRenderer, OneToManyAssociation> {
 
-    public ObjectCollectionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final String collectionId, final JsonRepresentation representation) {
-        super(resourceContext, linkFollower, collectionId, RepresentationType.OBJECT_COLLECTION, representation, Where.PARENTED_TABLES);
+    public ObjectCollectionReprRenderer(
+            final RendererContext resourceContext) {
+        this(resourceContext, null, null, JsonRepresentation.newMap());
+    }
+
+    public ObjectCollectionReprRenderer(
+            final RendererContext resourceContext,
+            final LinkFollowSpecs linkFollowSpecs,
+            final String collectionId,
+            final JsonRepresentation representation) {
+        super(resourceContext, linkFollowSpecs, collectionId, RepresentationType.OBJECT_COLLECTION, representation, Where.PARENTED_TABLES);
     }
 
     @Override

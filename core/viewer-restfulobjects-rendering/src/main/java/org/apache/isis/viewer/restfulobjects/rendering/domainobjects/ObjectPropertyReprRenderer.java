@@ -41,7 +41,16 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.PropertyDescr
 
 public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer<ObjectPropertyReprRenderer, OneToOneAssociation> {
 
-    public ObjectPropertyReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final String propertyId, final JsonRepresentation representation) {
+    public ObjectPropertyReprRenderer(
+            final RendererContext resourceContext) {
+        this(resourceContext, null, null, JsonRepresentation.newMap());
+    }
+
+    public ObjectPropertyReprRenderer(
+            final RendererContext resourceContext,
+            final LinkFollowSpecs linkFollower,
+            final String propertyId,
+            final JsonRepresentation representation) {
         super(resourceContext, linkFollower, propertyId, RepresentationType.OBJECT_PROPERTY, representation, Where.OBJECT_FORMS);
     }
 
@@ -210,5 +219,6 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     protected void putExtensionsIsisProprietary() {
         // none
     }
+
 
 }

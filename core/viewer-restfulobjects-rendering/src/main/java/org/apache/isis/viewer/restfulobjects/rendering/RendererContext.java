@@ -19,14 +19,12 @@
 package org.apache.isis.viewer.restfulobjects.rendering;
 
 import java.util.List;
-
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 
@@ -38,13 +36,11 @@ public interface RendererContext {
     
     public IsisConfiguration getConfiguration();
     
-    public AdapterManager getAdapterManager();
-
     public PersistenceSession getPersistenceSession();
-    
-    public List<List<String>> getFollowLinks();
-    
+
     public Where getWhere();
+
+    public List<List<String>> getFollowLinks();
     
     public Localization getLocalization();
     

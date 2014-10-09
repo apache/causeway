@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server.resources;
+package org.apache.isis.viewer.restfulobjects.rendering;
 
 import java.util.Date;
 import javax.ws.rs.core.EntityTag;
@@ -24,7 +24,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.rendering.ReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.util.JsonWriterUtil;
 
 public final class Responses {
 
@@ -34,13 +34,13 @@ public final class Responses {
         return of(RestfulResponse.HttpStatusCode.NO_CONTENT);
     }
 
-    public static Response.ResponseBuilder ofOk(final ReprRenderer<?, ?> renderer, final ResourceAbstract.Caching caching) {
+    public static Response.ResponseBuilder ofOk(final ReprRenderer<?, ?> renderer, final Caching caching) {
         return ofOk(renderer, caching, null);
     }
 
-    public static Response.ResponseBuilder ofOk(final ReprRenderer<?, ?> renderer, final ResourceAbstract.Caching caching, final Version version) {
+    public static Response.ResponseBuilder ofOk(final ReprRenderer<?, ?> renderer, final Caching caching, final Version version) {
         final MediaType mediaType = renderer.getMediaType();
-        final Response.ResponseBuilder response = of(RestfulResponse.HttpStatusCode.OK).type(mediaType).cacheControl(caching.getCacheControl()).entity(ResourceAbstract.jsonFor(renderer.render()));
+        final Response.ResponseBuilder response = of(RestfulResponse.HttpStatusCode.OK).type(mediaType).cacheControl(caching.getCacheControl()).entity(JsonWriterUtil.jsonFor(renderer.render()));
         return addLastModifiedAndETagIfAvailable(response, version);
     }
 

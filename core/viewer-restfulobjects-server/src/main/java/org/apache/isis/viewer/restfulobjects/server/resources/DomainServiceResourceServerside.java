@@ -29,9 +29,11 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
+import org.apache.isis.viewer.restfulobjects.rendering.Caching;
+import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
-import org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements DomainServiceResource {

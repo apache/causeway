@@ -41,7 +41,8 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.Domain
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.server.resources.Util;
+import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 
 public class ResourceContext implements RendererContext {
 
@@ -118,8 +119,8 @@ public class ResourceContext implements RendererContext {
     private void ensureDomainModelQueryParamSupported() {
         final DomainModel domainModel = getArg(RequestParameter.DOMAIN_MODEL);
         if(domainModel != DomainModel.FORMAL) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST,  
-                                           "x-ro-domain-model of '%s' is not supported", domainModel);
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST,
+                    "x-ro-domain-model of '%s' is not supported", domainModel);
         }
     }
 
@@ -238,7 +239,6 @@ public class ResourceContext implements RendererContext {
     }
 
 
-    
     public Localization getLocalization() {
         return localization;
     }
