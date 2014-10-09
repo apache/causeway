@@ -429,7 +429,10 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
 
                     @Override
                     public CharSequence getSuccessHandler(Component component) {
-                        return "$('.first-field input').focus();";
+                        // scroll to the top of the entity panel
+                        return "$('html, body').animate({"
+                               + "        scrollTop: $('.entityIconAndTitlePanel').offset().top"
+                               + "    }, 1000);";
                     }
                 });
             }
