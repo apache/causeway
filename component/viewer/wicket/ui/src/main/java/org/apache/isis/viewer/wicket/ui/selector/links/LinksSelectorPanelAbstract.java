@@ -227,7 +227,7 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                 }
 
                 private String nameFor(final ComponentFactory componentFactory) {
-                    return componentFactory instanceof CollectionContentsAsUnresolvedPanelFactory ? "hide" : componentFactory.getName();
+                    return componentFactory instanceof CollectionContentsAsUnresolvedPanelFactory ? "hideIcon" : componentFactory.getName();
                 }
             };
             container.add(listView);
