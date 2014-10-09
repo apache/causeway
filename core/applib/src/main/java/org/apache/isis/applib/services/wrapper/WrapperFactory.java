@@ -197,7 +197,7 @@ public interface WrapperFactory {
      * 
      * <p>
      * If the object {@link #isWrapper(Object) is not wrapped}, then
-     * should just return the obejct back unchanged.
+     * should just return the object back unchanged.
      */
     @Programmatic
     <T> T unwrap(T possibleWrappedDomainObject);

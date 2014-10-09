@@ -106,6 +106,9 @@ public class ToDoItemsIntegTest extends AbstractToDoIntegTest {
             assertThat(newToDo.getDescription(), is("new todo"));
             assertThat(newToDo.getCategory(), is(ToDoItem.Category.Professional));
             assertThat(wrap(toDoItems).notYetComplete().size(), is(size+1));
+            assertThat(container().isPersistent(newToDo), is(true));
+            assertThat(container().isPersistent(wrap(newToDo)), is(true));
+
             nextTransaction();
 
             // when

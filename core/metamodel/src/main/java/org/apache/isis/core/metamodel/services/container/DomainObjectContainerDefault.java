@@ -37,6 +37,7 @@ import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
@@ -58,26 +59,12 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 @DomainService
 public class  DomainObjectContainerDefault implements DomainObjectContainer, QuerySubmitterAware, ObjectDirtierAware, DomainObjectServicesAware, ObjectPersistorAware, SpecificationLoaderAware, AuthenticationSessionProviderAware, AdapterManagerAware, LocalizationProviderAware, ExceptionRecognizer {
 
-    private ObjectDirtier objectDirtier;
-    private ObjectPersistor objectPersistor;
-    private QuerySubmitter querySubmitter;
-    private SpecificationLoader specificationLookup;
-    private DomainObjectServices domainObjectServices;
-    private AuthenticationSessionProvider authenticationSessionProvider;
-    private AdapterManager adapterManager;
-    private LocalizationProvider localizationProvider;
-
-    public DomainObjectContainerDefault() {
-    }
-
-    // //////////////////////////////////////////////////////////////////
-    // titleOf
-    // //////////////////////////////////////////////////////////////////
+    //region > titleOf
 
     @Programmatic
     @Override
     public String titleOf(final Object domainObject) {
-        final ObjectAdapter objectAdapter = adapterManager.adapterFor(domainObject);
+        final ObjectAdapter objectAdapter = adapterManager.adapterFor(unwrapped(domainObject));
         final boolean destroyed = objectAdapter.isDestroyed();
         if(!destroyed) {
             return objectAdapter.getSpecification().getTitle(objectAdapter, localizationProvider.getLocalization());
@@ -86,9 +73,9 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         }
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // newInstance, disposeInstance
-    // //////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > newXxxInstance, remove
 
     @Programmatic
     @Override
@@ -139,6 +126,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
      * Returns a new instance of the specified class that will have been
      * persisted.
      */
+    @Deprecated
     @Programmatic
     @Override
     public <T> T newPersistentInstance(final Class<T> ofClass) {
@@ -153,6 +141,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
      */
     @Programmatic
     @Override
+    @Deprecated
     public <T> T newInstance(final Class<T> ofClass, final Object object) {
         if (isPersistent(object)) {
             return newPersistentInstance(ofClass);
@@ -183,7 +172,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         if (persistentObject == null) {
             throw new IllegalArgumentException("Must specify a reference for disposing an object");
         }
-        final ObjectAdapter adapter = getAdapterManager().adapterFor(persistentObject);
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(unwrapped(persistentObject));
         if (!isPersistent(persistentObject)) {
             throw new RepositoryException("Object not persistent: " + adapter);
         }
@@ -200,43 +189,54 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         remove(object);
     }
 
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////
-    // injectServicesInto
-    // //////////////////////////////////////////////////////////////////
+    //region > injectServicesInto
 
     @Programmatic
     @Override
     public <T> T injectServicesInto(T domainObject) {
-        getDomainObjectServices().injectServicesInto(domainObject);
+        getDomainObjectServices().injectServicesInto(unwrapped(domainObject));
         return domainObject;
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // resolve, objectChanged
-    // //////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > resolve, objectChanged (deprecated)
+
+    /**
+     * Deprecated because all supported objectstores provide lazy loading and dirty object tracking.
+     */
+    @Deprecated
     @Programmatic
     @Override
     public void resolve(final Object parent) {
-        getDomainObjectServices().resolve(parent);
+        getDomainObjectServices().resolve(unwrapped(parent));
     }
 
+    /**
+     * Deprecated because all supported objectstores provide lazy loading and dirty object tracking.
+     */
+    @Deprecated
     @Programmatic
     @Override
     public void resolve(final Object parent, final Object field) {
-        getDomainObjectServices().resolve(parent, field);
+        getDomainObjectServices().resolve(unwrapped(parent), field);
     }
 
+    /**
+     * Deprecated because all supported objectstores provide lazy loading and dirty object tracking.
+     */
+    @Deprecated
     @Programmatic
     @Override
     public void objectChanged(final Object object) {
-        getObjectDirtier().objectChanged(object);
+        getObjectDirtier().objectChanged(unwrapped(object));
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // flush, commit
-    // //////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > flush, commit
 
     @Programmatic
     @Override
@@ -250,9 +250,9 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         getDomainObjectServices().commit();
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // isValid, validate
-    // //////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > isValid, validate
 
     @Programmatic
     @Override
@@ -263,19 +263,19 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     @Programmatic
     @Override
     public String validate(final Object domainObject) {
-        final ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(unwrapped(domainObject));
         final InteractionResult validityResult = adapter.getSpecification().isValidResult(adapter);
         return validityResult.getReason();
     }
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////
-    // persistence
-    // //////////////////////////////////////////////////////////////////
+    //region > persistence
+
 
     @Programmatic
     @Override
     public boolean isPersistent(final Object domainObject) {
-        final ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(unwrapped(domainObject));
         return adapter.representsPersistent();
     }
 
@@ -285,7 +285,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     @Programmatic
     @Override
     public void persist(final Object domainObject) {
-        final ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(unwrapped(domainObject));
 
         if(adapter == null) {
             throw new PersistFailedException("Object not known to framework; instantiate using newTransientInstance(...) rather than simply new'ing up.");
@@ -312,9 +312,9 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         persist(object);
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // security
-    // //////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > security
 
     @Programmatic
     @Override
@@ -338,9 +338,9 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return mementos;
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // properties
-    // //////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > properties
 
     @Programmatic
     @Override
@@ -361,9 +361,9 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return getDomainObjectServices().getPropertyNames();
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // info, warn, error messages
-    // //////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > info, warn, error messages
 
     @Programmatic
     @Override
@@ -383,9 +383,9 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         getDomainObjectServices().warnUser(message);
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // allInstances
-    // //////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > allInstances, allMatches, uniqueMatch, firstMatch
 
     @Programmatic
     @Override
@@ -393,8 +393,6 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return allMatches(new QueryFindAllInstances<T>(type, range));
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // allMatches
     // //////////////////////////////////////////////////////////////////
 
     @Programmatic
@@ -439,8 +437,6 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     }
 
     // //////////////////////////////////////////////////////////////////
-    // firstMatch
-    // //////////////////////////////////////////////////////////////////
 
     @Programmatic
     @Override
@@ -484,8 +480,6 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return (T) ObjectAdapter.Util.unwrap(firstMatching);
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // uniqueMatch
     // //////////////////////////////////////////////////////////////////
 
     @Programmatic
@@ -543,10 +537,9 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return instances.size() == 0 ? null : instances.get(0);
     }
 
-    
-    ///////////////////////////////////////////////////////////////
-    // ExceptionRecognizer
-    ///////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > ExceptionRecognizer
 
     static class ExceptionRecognizerForConcurrencyException extends ExceptionRecognizerForType {
         public ExceptionRecognizerForConcurrencyException() {
@@ -577,10 +570,9 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         return recognizer.recognize(ex);
     }
 
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////
-    // init, shutdown
-    // //////////////////////////////////////////////////////////////////
+    //region > init, shutdown
 
     @Programmatic
     @PostConstruct
@@ -596,9 +588,25 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         recognizer.shutdown();
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // Dependencies
-    // //////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > helpers
+
+    private Object unwrapped(Object domainObject) {
+        return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
+    }
+    //endregion
+
+    //region > framework dependencies
+
+    private ObjectDirtier objectDirtier;
+    private ObjectPersistor objectPersistor;
+    private QuerySubmitter querySubmitter;
+    private SpecificationLoader specificationLookup;
+    private DomainObjectServices domainObjectServices;
+    private AuthenticationSessionProvider authenticationSessionProvider;
+    private AdapterManager adapterManager;
+    private LocalizationProvider localizationProvider;
 
     protected QuerySubmitter getQuerySubmitter() {
         return querySubmitter;
@@ -674,6 +682,13 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     public void setLocalizationProvider(final LocalizationProvider localizationProvider) {
         this.localizationProvider = localizationProvider;
     }
+    //endregion
 
+    //region > service dependencies
+
+    @javax.inject.Inject
+    private WrapperFactory wrapperFactory;
+
+    //endregion
 
 }

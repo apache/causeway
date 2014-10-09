@@ -36,9 +36,7 @@ import org.apache.isis.applib.security.UserMemento;
  */
 public interface DomainObjectContainer {
 
-    // ////////////////////////////////////////////////////////////////
-    // titleOf
-    // ////////////////////////////////////////////////////////////////
+    //region > titleOf
 
     /**
      * Return the title of the object, as rendered in the UI by the 
@@ -47,9 +45,9 @@ public interface DomainObjectContainer {
     @Programmatic
     String titleOf(Object domainObject);
 
-    // ////////////////////////////////////////////////////////////////
-    // resolve, objectChanged
-    // ////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > resolve, objectChanged
 
     /**
      * Ensure that the specified object is completely loaded into memory.
@@ -100,9 +98,10 @@ public interface DomainObjectContainer {
     @Deprecated
     void objectChanged(Object domainObject);
 
-    // ////////////////////////////////////////////////////////////////
-    // flush, commit
-    // ////////////////////////////////////////////////////////////////
+
+    //endregion
+
+    //region > flush, commit
 
     /**
      * Flush all changes to the object store.
@@ -130,9 +129,9 @@ public interface DomainObjectContainer {
     @Deprecated
     void commit();
 
-    // ////////////////////////////////////////////////////////////////
-    // new{Transient/Persistent}Instance
-    // ////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > new{Transient/Persistent}Instance
 
     /**
      * Create a new instance of the specified class, but do not persist it.
@@ -227,16 +226,16 @@ public interface DomainObjectContainer {
     @Deprecated
     <T> T newInstance(final Class<T> ofType, final Object object);
 
-    // ////////////////////////////////////////////////////////////////
-    // injectServicesInto
-    // ////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > injectServicesInto
 
     @Programmatic
     <T> T injectServicesInto(final T domainObject);
 
-    // ////////////////////////////////////////////////////////////////
-    // isValid, validate
-    // ////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > isValid, validate
 
     /**
      * Whether the object is in a valid state, that is that none of the
@@ -259,9 +258,9 @@ public interface DomainObjectContainer {
     @Programmatic
     String validate(Object domainObject);
 
-    // ////////////////////////////////////////////////////////////////
-    // isPersistent, persist, remove
-    // ////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > isPersistent, persist, remove
 
     /**
      * Determines if the specified object is persistent (that it is stored
@@ -322,9 +321,9 @@ public interface DomainObjectContainer {
     @Programmatic
     void removeIfNotAlready(Object domainObject);
 
-    // ////////////////////////////////////////////////////////////////
-    // info, warn, error
-    // ////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > info, warn, error
 
     /**
      * Make the specified message available to the user. Note this will probably
@@ -360,9 +359,9 @@ public interface DomainObjectContainer {
     @Programmatic
     void raiseError(String message);
 
-    // ////////////////////////////////////////////////////////////////
-    // properties
-    // ////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > properties
 
     /**
      * Get the configuration property with the specified name.
@@ -383,9 +382,9 @@ public interface DomainObjectContainer {
     @Programmatic
     List<String> getPropertyNames();
 
-    // ////////////////////////////////////////////////////////////////
-    // security
-    // ////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > security
 
     /**
      * Get the details about the current user.
@@ -393,9 +392,9 @@ public interface DomainObjectContainer {
     @Programmatic
     UserMemento getUser();
 
-    // ////////////////////////////////////////////////////////////////
-    // allInstances, allMatches, firstMatch, uniqueMatch
-    // ////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > allInstances, allMatches, firstMatch, uniqueMatch
 
     /**
      * Returns all the instances of the specified type (including subtypes).
@@ -649,5 +648,7 @@ public interface DomainObjectContainer {
      */
     @Programmatic
     <T> T uniqueMatch(Query<T> query);
+
+    //endregion
 
 }
