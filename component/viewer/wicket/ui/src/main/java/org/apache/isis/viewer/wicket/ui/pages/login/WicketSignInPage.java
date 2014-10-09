@@ -21,20 +21,14 @@ package org.apache.isis.viewer.wicket.ui.pages.login;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
-import org.apache.wicket.markup.head.CssReferenceHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
-import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.head.*;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
@@ -113,12 +107,17 @@ public class WicketSignInPage extends WebPage {
 
     protected SignInPanel addSignInPanel() {
         final boolean suppressRememberMe = getConfiguration().getBoolean("isis.viewer.wicket.suppressRememberMe", false);
+        final boolean clearOriginalDestination = getConfiguration().getBoolean("isis.viewer.wicket.clearOriginalDestination", false);
         final boolean rememberMe = !suppressRememberMe;
-        return addSignInPanel(rememberMe);
+        final boolean continueToOriginalDestination = !clearOriginalDestination;
+        return addSignInPanel(rememberMe, continueToOriginalDestination);
     }
 
-    private SignInPanel addSignInPanel(boolean rememberMe) {
-        final SignInPanel signInPanel = new SignInPanel("signInPanel", rememberMe);
+
+    private SignInPanel addSignInPanel(
+            final boolean rememberMe,
+            final boolean continueToOriginalDestination) {
+        final SignInPanel signInPanel = new IsisSignInPanel("signInPanel", rememberMe, continueToOriginalDestination);
         add(signInPanel);
         return signInPanel;
     }
@@ -135,6 +134,7 @@ public class WicketSignInPage extends WebPage {
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         }
     }
+
 
  
     // ///////////////////////////////////////////////////
