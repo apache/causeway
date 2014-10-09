@@ -154,6 +154,7 @@ import org.apache.isis.core.metamodel.facets.properties.choices.method.PropertyC
 import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromTypeFactory;
 import org.apache.isis.core.metamodel.facets.properties.defaults.method.PropertyDefaultFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutableFactory;
+import org.apache.isis.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferredFactory;
 import org.apache.isis.core.metamodel.facets.properties.interaction.PropertyInteractionFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.mandatory.MandatoryFacetOnPropertyMandatoryAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.optional.MandatoryFacetOnPropertyInvertedByOptionalAnnotationFactory;
@@ -258,9 +259,9 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // properties
         addFactory(PropertyAccessorFacetViaAccessorFactory.class);
         addFactory(PropertySetAndClearFacetFactory.class);
-        // must come after PropertySetAndClearFacetFactory
+        // must come after PropertySetAndClearFacetFactory (replaces setter facet with modify if need be)
         addFactory(PropertyModifyFacetFactory.class);
-        
+
         addFactory(PropertyValidateFacetViaMethodFactory.class);
         addFactory(PropertyChoicesFacetViaMethodFactory.class);
         addFactory(PropertyAutoCompleteFacetMethodFactory.class);
@@ -486,6 +487,9 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // so we can dogfood the NO applib "value" types
         addFactory(ValueFacetAnnotationOrConfigurationFactory.class);
 
+
+        // should come near the end, after any facets that install PropertySetterFacet have run.
+        addFactory(DisabledFacetOnPropertyInferredFactory.class);
 
         //
         // services

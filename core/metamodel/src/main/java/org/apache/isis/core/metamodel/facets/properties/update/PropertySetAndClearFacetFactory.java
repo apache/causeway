@@ -20,22 +20,21 @@
 package org.apache.isis.core.metamodel.facets.properties.update;
 
 import java.lang.reflect.Method;
-
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAlwaysEverywhere;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaClearMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
-import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAlwaysEverywhere;
 
 public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -77,7 +76,12 @@ public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFacto
             FacetUtil.addFacet(new PropertyInitializationFacetViaSetterMethod(setMethod, property));
         } else {
             FacetUtil.addFacet(new NotPersistableFacetInferred(property));
-            FacetUtil.addFacet(new DisabledFacetAlwaysEverywhere(property));
+
+            // previously we also added the DisabledFacetAlwaysEverywhere facet here.
+            // however, the PropertyModifyFacetFactory (which comes next) might install a PropertySetterFacet instead.
+            // so, have introduced a new facet factory, to be run "near the end", to install this facet if no
+            // setter facet is found to have been installed.
+
         }
 
         return setMethod;

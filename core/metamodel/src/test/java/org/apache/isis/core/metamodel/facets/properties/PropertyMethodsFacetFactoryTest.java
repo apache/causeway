@@ -20,62 +20,62 @@
 package org.apache.isis.core.metamodel.facets.properties;
 
 import java.lang.reflect.Method;
-
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethod;
 import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAlwaysEverywhere;
+import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.staticmethod.DisabledFacetStaticMethodFacetFactory;
+import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAlwaysEverywhere;
+import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacet;
+import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacet;
+import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethod;
 import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
 import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.method.PropertyAutoCompleteFacetMethod;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.method.PropertyAutoCompleteFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
+import org.apache.isis.core.metamodel.facets.properties.choices.method.PropertyChoicesFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.properties.choices.method.PropertyChoicesFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.facets.properties.defaults.method.PropertyDefaultFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
-import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacet;
-import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAlwaysEverywhere;
-import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacet;
-import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacet;
-import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAlwaysEverywhere;
-import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
-import org.apache.isis.core.metamodel.facets.properties.choices.method.PropertyChoicesFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.properties.defaults.method.PropertyDefaultFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.properties.defaults.method.PropertyDefaultFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferredFactory;
 import org.apache.isis.core.metamodel.facets.properties.update.NotPersistableFacetInferred;
-import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaClearMethod;
-import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod;
-import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.PropertyModifyFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.update.PropertySetAndClearFacetFactory;
+import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaClearMethod;
+import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod;
+import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
+import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaModifyMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
-import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
 
 public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -213,11 +213,13 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyModifyMethod));
     }
 
-    public void testModifyMethodWithNoSetterStillInstallsDisabledAndDerivedFacets() {
+    public void testModifyMethodWithNoSetterInstallsNotPersistedFacetButDoesNotInstallADisabledFacets() {
         final PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
         facetFactory.setSpecificationLookup(reflector);
         final PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
         facetFactoryForModify.setSpecificationLookup(reflector);
+        final DisabledFacetOnPropertyInferredFactory disabledFacetOnPropertyInferredFactory = new DisabledFacetOnPropertyInferredFactory();
+        disabledFacetOnPropertyInferredFactory.setSpecificationLookup(reflector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -234,14 +236,14 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod);
         facetFactory.process(processMethodContext);
         facetFactoryForModify.process(processMethodContext);
+        disabledFacetOnPropertyInferredFactory.process(processMethodContext);
 
         Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof NotPersistableFacetInferred);
 
         facet = facetedMethod.getFacet(DisabledFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof DisabledFacetAlwaysEverywhere);
+        assertNull(facet);
     }
 
     public void testIfHaveSetterAndModifyFacetThenTheModifyFacetWinsOut() {
