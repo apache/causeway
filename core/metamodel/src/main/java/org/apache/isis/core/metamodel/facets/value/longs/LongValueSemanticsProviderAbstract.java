@@ -39,12 +39,13 @@ public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsP
     }
 
     private static final Long DEFAULT_VALUE = Long.valueOf(0L);
-    private static final int TYPICAL_LENGTH = 18;
+    private static final int MAX_LENGTH = 18;
+    private static final int TYPICAL_LENGTH = MAX_LENGTH;
 
     private final NumberFormat format;
 
     public LongValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Long> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
         format = determineNumberFormat("value.format.long");
     }
 

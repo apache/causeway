@@ -39,12 +39,13 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
     }
 
     private static final Short DEFAULT_VALUE = Short.valueOf((short) 0);
-    private static final int TYPICAL_LENGTH = 6;
+    private static final int MAX_LENGTH = 6; // allowing for -ve sign
+    private static final int TYPICAL_LENGTH = MAX_LENGTH;
 
     private final NumberFormat format;
 
     public ShortValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Short> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
         format = determineNumberFormat("value.format.short");
     }
 

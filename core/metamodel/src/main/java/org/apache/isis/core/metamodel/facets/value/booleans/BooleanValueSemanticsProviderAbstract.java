@@ -35,10 +35,11 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
         return BooleanValueFacet.class;
     }
 
-    private static final int TYPICAL_LENGTH = 5;
+    private static final int MAX_LENGTH = 5;
+    private static final int TYPICAL_LENGTH = MAX_LENGTH;
 
     public BooleanValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Boolean> adaptedClass, final Boolean defaultValue, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue, configuration, context);
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, defaultValue, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////

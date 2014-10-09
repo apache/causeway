@@ -59,7 +59,7 @@ public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemant
 
     @SuppressWarnings("unchecked")
     public ImageValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(ImageValueFacet.class, holder, adaptedClass, TYPICAL_LENGTH, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE, configuration, context);
+        super(ImageValueFacet.class, holder, adaptedClass, TYPICAL_LENGTH, null, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, (T) DEFAULT_VALUE, configuration, context);
     }
 
     /**

@@ -39,7 +39,7 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
         return adaptedClass.getEnumConstants()[0];
     }
 
-    private static <T extends Enum<T>> int typicalLengthFor(final Class<T> adaptedClass) {
+    private static <T extends Enum<T>> int maxLengthFor(final Class<T> adaptedClass) {
         int max = Integer.MIN_VALUE;
         for(T e: adaptedClass.getEnumConstants()) {
             final int nameLength = e.name().length();
@@ -59,8 +59,8 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
     public EnumValueSemanticsProvider(final FacetHolder holder, final Class<T> adaptedClass, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(
                 type(), holder,  adaptedClass, 
-                typicalLengthFor(adaptedClass), 
-                Immutability.IMMUTABLE, 
+                maxLengthFor(adaptedClass),
+                maxLengthFor(adaptedClass), Immutability.IMMUTABLE,
                 EqualByContent.HONOURED, 
                 defaultFor(adaptedClass), 
                 configuration, context);

@@ -33,10 +33,12 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
 
 public class URLValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<java.net.URL> implements URLValueFacet {
 
+
     public static Class<? extends Facet> type() {
         return URLValueFacet.class;
     }
 
+    public static final int MAX_LENGTH = 2083;
     private static final int TYPICAL_LENGTH = 100;
     private static final java.net.URL DEFAULT_VALUE = null; // no default
 
@@ -53,7 +55,7 @@ public class URLValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbs
             final IsisConfiguration configuration, 
             final ValueSemanticsProviderContext context) {
         super(type(), holder, java.net.URL.class, 
-                TYPICAL_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, 
+                TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE,
                 configuration, context);
     }
 

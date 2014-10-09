@@ -54,7 +54,7 @@ public class BlobValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
     }
 
     public BlobValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, Blob.class, TYPICAL_LENGTH, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, configuration, context);
+        super(type(), holder, Blob.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, configuration, context);
     }
 
     @Override

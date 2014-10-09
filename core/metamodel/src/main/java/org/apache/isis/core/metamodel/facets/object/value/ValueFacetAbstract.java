@@ -19,10 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.value;
 
-import org.apache.isis.applib.adapters.DefaultsProvider;
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+import org.apache.isis.applib.adapters.*;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -105,13 +102,13 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
         // An immutable value is not aggregated, it is shared.
 
         // ImmutableFacet, if appropriate
-        final boolean immutable = semanticsProvider != null ? semanticsProvider.isImmutable() : true;
+        final boolean immutable = semanticsProvider == null || semanticsProvider.isImmutable();
         if (immutable) {
             facetHolder.addFacet(new ImmutableFacetViaValueSemantics(holder));
         }
 
         // EqualByContentFacet, if appropriate
-        final boolean equalByContent = semanticsProvider != null ? semanticsProvider.isEqualByContent() : true;
+        final boolean equalByContent = semanticsProvider == null || semanticsProvider.isEqualByContent();
         if (equalByContent) {
             facetHolder.addFacet(new EqualByContentFacetViaValueSemantics(holder));
         }
@@ -131,6 +128,13 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
                 facetHolder.addFacet(new ParseableFacetUsingParser(parser, holder, getDeploymentCategory(context), getAuthenticationSessionProvider(), getDependencyInjector(), getAdapterMap()));
                 facetHolder.addFacet(new TitleFacetUsingParser(parser, holder, getDependencyInjector()));
                 facetHolder.addFacet(new TypicalLengthFacetUsingParser(parser, holder, getDependencyInjector()));
+                if(parser instanceof Parser2) {
+                    final Parser2 parser2 = (Parser2) parser;
+                    final Integer maxLength = parser2.maxLength();
+                    if(maxLength != null) {
+                        facetHolder.addFacet(new MaxLengthFacetUsingParser2(parser2, holder, getDependencyInjector()));
+                    }
+                }
             }
 
             // install the DefaultedFacet if we've been given a DefaultsProvider

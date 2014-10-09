@@ -44,7 +44,9 @@ import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProv
 
 public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<LocalDateTime> implements JodaLocalDateTimeValueFacet {
 
-    
+    public static final int MAX_LENGTH = 36;
+    public static final int TYPICAL_LENGTH = 22;
+
     /**
      * Introduced to allow BDD tests to provide a different format string "mid-flight".
      * 
@@ -147,7 +149,7 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
      */
     public JodaLocalDateTimeValueSemanticsProvider(
             final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, LocalDateTime.class, 12, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
+        super(type(), holder, LocalDateTime.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
 
         String configuredNameOrPattern = getConfiguration().getString(CFG_FORMAT_KEY, "medium").toLowerCase().trim();
         updateTitleStringFormatter(configuredNameOrPattern);

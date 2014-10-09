@@ -23,11 +23,7 @@ import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.Locale;
-
-import org.apache.isis.applib.adapters.DefaultsProvider;
-import org.apache.isis.applib.adapters.EncoderDecoder;
-import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+import org.apache.isis.applib.adapters.*;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -47,10 +43,11 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbstract implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProvider<T> {
+public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbstract implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser2<T>, DefaultsProvider<T> {
 
     private final Class<T> adaptedClass;
     private final int typicalLength;
+    private final Integer maxLength;
     private final boolean immutable;
     private final boolean equalByContent;
     private final T defaultValue;
@@ -81,11 +78,21 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     private final IsisConfiguration configuration;
     private final ValueSemanticsProviderContext context;
 
-    public ValueSemanticsProviderAndFacetAbstract(final Class<? extends Facet> adapterFacetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue, final IsisConfiguration configuration,
+    public ValueSemanticsProviderAndFacetAbstract(
+            final Class<? extends Facet> adapterFacetType,
+            final FacetHolder holder,
+            final Class<T> adaptedClass,
+            final int typicalLength,
+            final Integer maxLength,
+            final Immutability immutability,
+            final EqualByContent equalByContent,
+            final T defaultValue,
+            final IsisConfiguration configuration,
             final ValueSemanticsProviderContext context) {
         super(adapterFacetType, holder, Derivation.NOT_DERIVED);
         this.adaptedClass = adaptedClass;
         this.typicalLength = typicalLength;
+        this.maxLength = maxLength;
         this.immutable = (immutability == Immutability.IMMUTABLE);
         this.equalByContent = (equalByContent == EqualByContent.HONOURED);
         this.defaultValue = defaultValue;
@@ -236,6 +243,11 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     @Override
     public final int typicalLength() {
         return this.typicalLength;
+    }
+
+    @Override
+    public final Integer maxLength() {
+        return this.maxLength;
     }
 
     // ///////////////////////////////////////////////////////////////////////////

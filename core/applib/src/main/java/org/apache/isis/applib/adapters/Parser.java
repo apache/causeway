@@ -49,7 +49,7 @@ import org.apache.isis.applib.profiles.Localization;
  * be applied to types, only to properties and parameters.
  * 
  * <p>
- * For third-party value types, eg {@link http://timeandmoney.sourceforge.net/
+ * For third-party value types, eg {@see http://timeandmoney.sourceforge.net/
  * Time-and-Money} there is no ability to write <tt>title()</tt> methods or
  * annotated with {@link TypicalLength}; so this is the main reason that this
  * interface has to deal with titles and lengths.
@@ -84,8 +84,7 @@ public interface Parser<T> {
      * 
      * <p>
      * Note that here the implementing class is acting as a factory for itself.
-     * @param localization TODO
-     * @param context
+     * @param contextPojo
      *            - the context domain object for which the text is being
      *            parsed. For example +3 might mean add 3 to the current number.
      */
@@ -108,13 +107,12 @@ public interface Parser<T> {
 
     /**
      * A title for the object that is valid but which may be easier to edit than
-     * the title provided by a
-     * {@link org.apache.isis.metamodel.facets.object.ident.TitleFacet}.
-     * 
+     * the title provided by a <code>TitleFacet</code>.
+     *
      * <p>
      * The idea here is that the viewer can display a parseable title for an
      * existing object when, for example, the user initially clicks in the
-     * field. So, a date might be rendered via a {@link TitleFacet} as
+     * field. So, a date might be rendered via a <code>TitleFacet</code> as
      * <tt>May 2, 2007</tt>, but its editable form might be <tt>20070502</tt>.
      */
     String parseableTitleOf(T existing);

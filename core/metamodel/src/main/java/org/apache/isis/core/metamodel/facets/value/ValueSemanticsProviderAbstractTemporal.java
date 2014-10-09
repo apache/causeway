@@ -113,7 +113,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
      */
     public ValueSemanticsProviderAbstractTemporal(final String propertyType, final Class<? extends Facet> facetType, final FacetHolder holder, final Class<T> adaptedClass, final int typicalLength, final Immutability immutability, final EqualByContent equalByContent, final T defaultValue,
             final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(facetType, holder, adaptedClass, typicalLength, immutability, equalByContent, defaultValue, configuration, context);
+        super(facetType, holder, adaptedClass, typicalLength, null, immutability, equalByContent, defaultValue, configuration, context);
         configureFormats();
 
         this.propertyType = propertyType;

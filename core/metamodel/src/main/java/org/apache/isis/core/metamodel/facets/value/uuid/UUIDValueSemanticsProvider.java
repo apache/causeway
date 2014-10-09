@@ -37,7 +37,8 @@ public class UUIDValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
         return UUIDValueFacet.class;
     }
 
-    public static final int TYPICAL_LENGTH = 36;
+    public static final int MAX_LENGTH = 36;
+    public static final int TYPICAL_LENGTH = MAX_LENGTH;
     private static final UUID DEFAULT_VALUE = null; // no default
 
     /**
@@ -49,7 +50,7 @@ public class UUIDValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
     }
 
     public UUIDValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, UUID.class, TYPICAL_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
+        super(type(), holder, UUID.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////

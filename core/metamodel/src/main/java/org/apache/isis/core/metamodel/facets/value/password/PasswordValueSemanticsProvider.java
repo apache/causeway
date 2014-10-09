@@ -49,7 +49,7 @@ public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFac
 
     public PasswordValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration,
         final ValueSemanticsProviderContext context) {
-        super(type(), holder, Password.class, TYPICAL_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE,
+        super(type(), holder, Password.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE,
             configuration, context);
     }
 

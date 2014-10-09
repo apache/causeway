@@ -52,7 +52,7 @@ public class ClobValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
     }
 
     public ClobValueSemanticsProvider(final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
-        super(type(), holder, Clob.class, TYPICAL_LENGTH, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, configuration, context);
+        super(type(), holder, Clob.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, configuration, context);
     }
 
     @Override
