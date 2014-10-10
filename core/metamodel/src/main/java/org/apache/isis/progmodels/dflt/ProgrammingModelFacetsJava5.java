@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInteracti
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.annotation.NotContributedFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method.NotInServiceMenuFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.actions.paged.annotation.PagedFacetOnActionFactory;
 import org.apache.isis.core.metamodel.facets.actions.prototype.annotation.PrototypeFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.publish.annotation.PublishedActionFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.semantics.annotations.actionsemantics.ActionSemanticsFacetAnnotationFactory;
@@ -38,6 +39,7 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.annotations.query
 import org.apache.isis.core.metamodel.facets.actions.semantics.fallback.ActionSemanticsFacetFallbackToNonIdempotentFactory;
 import org.apache.isis.core.metamodel.facets.actions.typeof.annotation.TypeOfFacetOnActionAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.actions.validating.maxlenannot.MaxLengthFacetOnActionAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.collection.CollectionFacetFactory;
@@ -379,6 +381,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(MaxLengthFacetOnTypeAnnotationFactory.class);
         addFactory(MaxLengthFacetOnPropertyAnnotationFactory.class);
         addFactory(MaxLengthFacetOnParameterAnnotationFactory.class);
+        addFactory(MaxLengthFacetOnActionAnnotationFactory.class);
 
         addFactory(MustSatisfySpecificationOnTypeFacetFactory.class);
         addFactory(MustSatisfySpecificationOnPropertyFacetFactory.class);
@@ -406,6 +409,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(PluralAnnotationFacetFactory.class);
         addFactory(PagedFacetOnTypeAnnotationFactory.class);
         addFactory(PagedFacetOnCollectionFactory.class);
+        addFactory(PagedFacetOnActionFactory.class);
 
         addFactory(AutoCompleteFacetAnnotationFactory.class);
 
