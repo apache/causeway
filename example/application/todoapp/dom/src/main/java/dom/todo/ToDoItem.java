@@ -127,7 +127,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     }
     
     public String iconName() {
-        return "ToDoItem-" + (!isComplete() ? "todo" : "done");
+        return !isComplete() ? "todo" : "done";
     }
     //endregion
 
