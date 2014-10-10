@@ -67,7 +67,7 @@ public class ClassDiscoveryServiceUsingReflections
      */
     public static List<Vfs.UrlType> getUrlTypes() {
         final List<Vfs.UrlType> urlTypes = Lists.newArrayList();
-        urlTypes.add(new EmptyIfFileEndingsUrlType("pom", "jnilib"));
+        urlTypes.add(new EmptyIfFileEndingsUrlType(".pom", ".jnilib", "QTJava.zip"));
         urlTypes.add(new JettyConsoleUrlType());
         urlTypes.addAll(Arrays.asList(Vfs.DefaultUrlTypes.values()));
 
@@ -89,7 +89,7 @@ public class ClassDiscoveryServiceUsingReflections
                 return false;
             }
             for (String fileEnding : fileEndings) {
-                if (externalForm.endsWith("." + fileEnding))
+                if (externalForm.endsWith(fileEnding))
                     return true;
             }
             return false;
