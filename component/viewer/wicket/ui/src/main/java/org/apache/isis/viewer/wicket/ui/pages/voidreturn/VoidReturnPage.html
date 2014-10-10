@@ -22,22 +22,17 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
       xml:lang="en"  
       lang="en">
-	<wicket:head>
-		<wicket:link>
-			<link href="VoidReturnPage.css" rel="stylesheet" type="text/css"/>
-		</wicket:link>
-	</wicket:head>
-	<body>
-		<wicket:extend>
-			<div class="voidReturnPage">
-				<div wicket:id="bookmarks"/>
+    <body>
+        <wicket:extend>
+            <div class="voidReturnPage">
+                <div wicket:id="bookmarks"></div>
                 <div class="myBlockContainer">
                     <div class="iconAndTitle panel actionPanelHeaderNew">
-                         <p wicket:id="actionName" class="actionName">[action name]</p>
+                         <h3 wicket:id="actionName" class="actionName">[action name]</h3>
                     </div>
-    				<div wicket:id="voidReturn"/>
+                    <div wicket:id="voidReturn"></div>
                 </div>
-			</div>
-		</wicket:extend>
-	</body>
+            </div>
+        </wicket:extend>
+    </body>
 </html>
