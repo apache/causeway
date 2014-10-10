@@ -238,7 +238,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             injector.injectMembers(this);
             
             final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
-            this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(deploymentType, configuration));
+            this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(configuration));
     
             initWicketComponentInjection(injector);
 
@@ -586,15 +586,14 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     // //////////////////////////////////////
 
     /**
-     * Whether Wicket tags should be stripped from the markup, as specified by configuration settings (otherwise 
-     * depends on the {@link #deploymentType deployment type}. 
+     * Whether Wicket tags should be stripped from the markup, as specified by configuration settings..
      * 
      * <p>
      * If the <tt>isis.viewer.wicket.stripWicketTags</tt> is set, then this is used, otherwise the default is to strip 
-     * tags if in {@link DeploymentType#isProduction() production} mode, but not to strip if in prototyping mode.
+     * the tags because they may break some CSS rules.
      */
-    private boolean determineStripWicketTags(final DeploymentType deploymentType, IsisConfiguration configuration) {
-        final boolean strip = configuration.getBoolean(STRIP_WICKET_TAGS_KEY, deploymentType.isProduction());
+    private boolean determineStripWicketTags(IsisConfiguration configuration) {
+        final boolean strip = configuration.getBoolean(STRIP_WICKET_TAGS_KEY, true);
         return strip;
     }
 
