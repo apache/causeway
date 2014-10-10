@@ -356,6 +356,31 @@
                         <groupId>org.webjars</groupId>
                         <artifactId>jquery</artifactId>
                     </exclusion>
+                    <!-- exclude unused extensions -->
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>jquerypp</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>jquery-ui</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>typeaheadjs</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>x-editable-bootstrap</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>spin-js</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.javascript</groupId>
+                        <artifactId>closure-compiler</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
 
