@@ -19,19 +19,19 @@
 package org.apache.isis.applib.services.classdiscovery;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
+import java.net.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.jar.JarFile;
 import com.google.common.collect.Lists;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.vfs.SystemDir;
 import org.reflections.vfs.Vfs;
+import org.reflections.vfs.ZipDir;
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.DomainService;
 
@@ -72,8 +72,84 @@ public class ClassDiscoveryServiceUsingReflections
         final List<Vfs.UrlType> urlTypes = Lists.newArrayList();
         urlTypes.add(new PomUrlType());
         urlTypes.add(new JettyConsoleUrlType());
-        urlTypes.addAll(Arrays.asList(Vfs.DefaultUrlTypes.values()));
+        urlTypes.addAll(Arrays.asList(CustomizedUrlTypes.values()));
+
+
+
+
         return urlTypes;
+    }
+
+    /**
+     * Adapted and tweaked from {@link org.reflections.vfs.Vfs.DefaultUrlTypes}.
+     */
+    public static enum CustomizedUrlTypes implements Vfs.UrlType {
+        jarFile {
+            public boolean matches(URL url) {
+                return url.getProtocol().equals("file") && url.toExternalForm().contains(".jar");
+            }
+
+            public Vfs.Dir createDir(final URL url) throws Exception {
+                return new ZipDir(new JarFile(getFile(url)));
+            }
+        },
+
+        jarUrl {
+            public boolean matches(URL url) {
+                return "jar".equals(url.getProtocol());
+            }
+
+            public Vfs.Dir createDir(URL url) throws Exception {
+                URLConnection urlConnection = url.openConnection();
+                return urlConnection instanceof JarURLConnection ?
+                        new ZipDir(((JarURLConnection) urlConnection).getJarFile()) : null;
+            }
+        },
+
+        directory {
+            public boolean matches(URL url) {
+                return url.getProtocol().equals("file") && !url.toExternalForm().contains(".jar") && !url.toExternalForm().contains(".jnilib");
+            }
+
+            public Vfs.Dir createDir(final URL url) throws Exception {
+                return new SystemDir(getFile(url));
+            }
+        }
+    }
+
+    /**try to get {@link java.io.File} from url*/
+    static java.io.File getFile(URL url) {
+        java.io.File file;
+        String path;
+
+        try {
+            path = url.toURI().getSchemeSpecificPart();
+            if ((file = new java.io.File(path)).exists()) return file;
+        } catch (URISyntaxException e) {
+        }
+
+        try {
+            path = URLDecoder.decode(url.getPath(), "UTF-8");
+            if (path.contains(".jar!")) path = path.substring(0, path.lastIndexOf(".jar!") + ".jar".length());
+            if ((file = new java.io.File(path)).exists()) return file;
+
+        } catch (UnsupportedEncodingException e) {
+        }
+
+        try {
+            path = url.toExternalForm();
+            if (path.startsWith("jar:")) path = path.substring("jar:".length());
+            if (path.startsWith("file:")) path = path.substring("file:".length());
+            if (path.contains(".jar!")) path = path.substring(0, path.indexOf(".jar!") + ".jar".length());
+            if ((file = new java.io.File(path)).exists()) return file;
+
+            path = path.replace("%20", " ");
+            if ((file = new java.io.File(path)).exists()) return file;
+
+        } catch (Exception e) {
+        }
+
+        return null;
     }
 
     private static class PomUrlType implements Vfs.UrlType {
