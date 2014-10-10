@@ -208,7 +208,7 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
      */
     public boolean isFixturesInstalled() {
         final boolean installFixtures = getConfiguration().getBoolean(INSTALL_FIXTURES_KEY, INSTALL_FIXTURES_DEFAULT);
-        LOG.info("isFixturesInstalled: " + INSTALL_FIXTURES_KEY + " = " + installFixtures);
+        LOG.info("isFixturesInstalled: {} = {}", INSTALL_FIXTURES_KEY, installFixtures);
         return !installFixtures;
     }
 

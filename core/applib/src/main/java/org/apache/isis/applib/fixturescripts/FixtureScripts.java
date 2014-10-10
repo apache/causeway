@@ -38,6 +38,8 @@ import org.apache.isis.applib.util.ObjectContracts;
 
 public abstract class FixtureScripts extends AbstractService {
 
+    //region > nonPersistedObjectsStrategy, multipleExecutionStrategy enums
+
     /**
      * How to handle objects that are to be
      * {@link FixtureScripts#newFixtureResult(FixtureScript, String, Object, boolean) added}
@@ -48,34 +50,138 @@ public abstract class FixtureScripts extends AbstractService {
         IGNORE
     }
 
-    private final String packagePrefix;
-    private final NonPersistedObjectsStrategy nonPersistedObjectsStrategy;
+    /**
+     * How to handle fixture scripts that are submitted to be executed more than once.
+     */
+    public enum MultipleExecutionStrategy {
+        /**
+         * Any given fixture script (or more precisely, any fixture script instance for a particular fixture script
+         * class) can only be run once.
+         *
+         * <p>
+         *     This strategy represents the original design of fixture scripts service.  Specifically,it allows an
+         *     arbitrary graph of fixture scripts (eg A -> B -> C, A -> B -> D, A -> C -> D) to be created each
+         *     specifying its dependencies, and without having to worry or co-ordinate whether those prerequisite
+         *     fixture scripts have already been run.
+         * </p>
+         * <p>
+         *     The most obvious example is a global teardown script; every fixture script can require this to be
+         *     called, but it will only be run once.
+         * </p>
+         * <p>
+         *     Note that this strategy treats fixture scripts as combining both the 'how' (which business action(s) to
+         *     call) and the also the 'what' (what the arguments are to those actions).
+         * </p>
+         */
+        IGNORE,
+        /**
+         * Allow fixture scripts to run as requested, even if that another instance of the fixture script's class
+         * has already been invoked.
+         *
+         * <p>
+         *     This strategy is conceptually the simplest; all fixtures are run as requested.  However, it is then
+         *     the responsibility of the programmer to ensure that fixtures do not interfere with each other.  For
+         *     example, if fixture A calls fixture B which calls teardown, and fixture A also calls fixture C that
+         *     itself calls teardown, then fixture B's setup will get removed.
+         * </p>
+         * <p>
+         *     The workaround to the teardown issue is of course to call the teardown fixture only once in the test
+         *     itself; however even then this strategy cannot cope with arbitrary graphs of fixtures.  The solution
+         *     is for the fixture list to be flat, one level high.
+         * </p>
+         */
+        EXECUTE;
+
+        public boolean isIgnore() {
+            return this == IGNORE;
+        }
+        public boolean isExecute() {
+            return this == EXECUTE;
+        }
+    }
+
+    //endregion
+
+    //region > constructors
 
     /**
      * Defaults to {@link org.apache.isis.applib.fixturescripts.FixtureScripts.NonPersistedObjectsStrategy#PERSIST persist}
-     * strategy if non-persisted objects are {@link #newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link org.apache.isis.applib.fixturescripts.FixtureResultList}.
+     * strategy (if non-persisted objects are {@link #newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link org.apache.isis.applib.fixturescripts.FixtureResultList}),
+     * defaults {@link #getMultipleExecutionStrategy()} to {@link org.apache.isis.applib.fixturescripts.FixtureScripts.MultipleExecutionStrategy#IGNORE ignore}
+     * if multiple instances of the same fixture script class are encountered.
      *
      * @param packagePrefix - to search for fixture script implementations, eg "com.mycompany"
      */
-    public FixtureScripts(String packagePrefix) {
-        this(packagePrefix, NonPersistedObjectsStrategy.PERSIST);
+    public FixtureScripts(final String packagePrefix) {
+        this(packagePrefix, NonPersistedObjectsStrategy.PERSIST, MultipleExecutionStrategy.IGNORE);
+    }
+
+    /**
+     * Defaults to {@link org.apache.isis.applib.fixturescripts.FixtureScripts.NonPersistedObjectsStrategy#PERSIST persist}
+     * strategy (if non-persisted objects are {@link #newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link org.apache.isis.applib.fixturescripts.FixtureResultList}).
+     *
+     * @param packagePrefix - to search for fixture script implementations, eg "com.mycompany"
+     * @param multipleExecutionStrategy - whether more than one instance of the same fixture script class can be run multiple times
+     */
+    public FixtureScripts(
+            final String packagePrefix,
+            final MultipleExecutionStrategy multipleExecutionStrategy) {
+        this(packagePrefix, NonPersistedObjectsStrategy.PERSIST, multipleExecutionStrategy);
+    }
+
+    /**
+     * Defaults {@link #getMultipleExecutionStrategy()} to {@link org.apache.isis.applib.fixturescripts.FixtureScripts.MultipleExecutionStrategy#IGNORE ignore}
+     * if multiple instances of the same fixture script class are encountered.
+     *
+     * @param packagePrefix  - to search for fixture script implementations, eg "com.mycompany"
+     * @param nonPersistedObjectsStrategy - how to handle any non-persisted objects that are {@link #newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link org.apache.isis.applib.fixturescripts.FixtureResultList}.
+     */
+    public FixtureScripts(
+            final String packagePrefix, NonPersistedObjectsStrategy nonPersistedObjectsStrategy) {
+        this(packagePrefix, nonPersistedObjectsStrategy, MultipleExecutionStrategy.IGNORE);
     }
 
     /**
      * @param packagePrefix  - to search for fixture script implementations, eg "com.mycompany"
      * @param nonPersistedObjectsStrategy - how to handle any non-persisted objects that are {@link #newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link org.apache.isis.applib.fixturescripts.FixtureResultList}.
+     * @param multipleExecutionStrategy - whether more than one instance of the same fixture script class can be run multiple times
      */
-    public FixtureScripts(String packagePrefix, NonPersistedObjectsStrategy nonPersistedObjectsStrategy) {
+    public FixtureScripts(
+            final String packagePrefix,
+            final NonPersistedObjectsStrategy nonPersistedObjectsStrategy,
+            final MultipleExecutionStrategy multipleExecutionStrategy) {
         this.packagePrefix = packagePrefix;
         this.nonPersistedObjectsStrategy = nonPersistedObjectsStrategy;
+        this.multipleExecutionStrategy = multipleExecutionStrategy;
     }
+
+    //endregion
+
+    //region > packagePrefix, nonPersistedObjectsStrategy, multipleExecutionStrategy
+
+    private final String packagePrefix;
+
+    @Programmatic
+    public String getPackagePrefix() {
+        return packagePrefix;
+    }
+
+    private final NonPersistedObjectsStrategy nonPersistedObjectsStrategy;
+    private final FixtureScripts.MultipleExecutionStrategy multipleExecutionStrategy;
 
     @Programmatic
     public NonPersistedObjectsStrategy getNonPersistedObjectsStrategy() {
         return nonPersistedObjectsStrategy;
     }
 
-    // //////////////////////////////////////
+    @Programmatic
+    public MultipleExecutionStrategy getMultipleExecutionStrategy() {
+        return multipleExecutionStrategy;
+    }
+
+    //endregion
+
+    //region > init
 
     private final List<FixtureScript> fixtureScriptList = Lists.newArrayList();
     
@@ -118,16 +224,10 @@ public abstract class FixtureScripts extends AbstractService {
         }
     }
 
-    /**
-     * For subclasses to instantiate .
-     * @param parameters
-     */
-    protected FixtureScript.ExecutionContext newExecutionContext(String parameters) {
-        return new FixtureScript.ExecutionContext(parameters, this);
-    }
+    //endregion
 
-    // //////////////////////////////////////
-    
+    //region > runFixtureScript (prototype action)
+
     /**
      * To make this action usable in the UI, override either {@link #choices0RunFixtureScript()} or 
      * {@link #autoComplete0RunFixtureScript(String)} with <tt>public</tt> visibility</tt>.
@@ -174,6 +274,13 @@ public abstract class FixtureScripts extends AbstractService {
         return fixtureScript.validateRun(parameters);
     }
 
+    //endregion
+
+    //region > hooks
+
+    /**
+     * Optional hook.
+     */
     protected FixtureScript findFixtureScriptFor(String qualifiedName) {
         List<FixtureScript> fixtureScripts = fixtureScriptList;
         for (FixtureScript fs : fixtureScripts) {
@@ -183,6 +290,9 @@ public abstract class FixtureScripts extends AbstractService {
         }
         return null;
     }
+    /**
+     * Optional hook.
+     */
     protected FixtureScript findFixtureScriptFor(Class<? extends FixtureScript> fixtureScriptClass) {
         List<FixtureScript> fixtureScripts = fixtureScriptList;
         for (FixtureScript fs : fixtureScripts) {
@@ -193,8 +303,17 @@ public abstract class FixtureScripts extends AbstractService {
         return null;
     }
 
+    /**
+     * Optional hook.
+     */
+    protected FixtureScript.ExecutionContext newExecutionContext(String parameters) {
+        return new FixtureScript.ExecutionContext(parameters, this);
+    }
 
-    // //////////////////////////////////////
+    //endregion
+
+    //region > memento support for FixtureScript
+
 
     String mementoFor(final FixtureScript fs) {
         return mementoService.create()
@@ -206,7 +325,9 @@ public abstract class FixtureScripts extends AbstractService {
         fs.setParentPath(memento.get("path", String.class));
     }
 
-    // //////////////////////////////////////
+    //endregion
+
+    //region > helpers (package level)
 
     FixtureResult newFixtureResult(FixtureScript script, String subkey, Object object, boolean firstTime) {
         if(object == null) {
@@ -230,8 +351,10 @@ public abstract class FixtureScripts extends AbstractService {
         return fixtureResult;
     }
 
-    // //////////////////////////////////////
-    
+    //endregion
+
+    //region > injected services
+
     @javax.inject.Inject
     private MementoService mementoService;
     
@@ -240,5 +363,7 @@ public abstract class FixtureScripts extends AbstractService {
 
     @javax.inject.Inject
     private ClassDiscoveryService classDiscoveryService;
+
+    //endregion
 
 }
