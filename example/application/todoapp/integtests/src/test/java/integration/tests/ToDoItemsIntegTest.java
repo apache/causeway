@@ -28,19 +28,26 @@ import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class ToDoItemsIntegTest extends AbstractToDoIntegTest {
 
     @Inject
+    FixtureScripts fixtureScripts;
+    @Inject
     ToDoItems toDoItems;
 
     public static class Finders extends ToDoItemsIntegTest {
 
+        ToDoItemsIntegTestFixture fixture;
+
         @Before
         public void setUpData() throws Exception {
-            scenarioExecution().install(new ToDoItemsIntegTestFixture());
+            // executing the fixtures directly allows us to look up the results later.
+            fixtureScripts.runFixtureScript(fixture = new ToDoItemsIntegTestFixture(), null);
         }
 
         private int notYetCompletedSize;
@@ -48,6 +55,8 @@ public class ToDoItemsIntegTest extends AbstractToDoIntegTest {
 
         @Before
         public void setUp() throws Exception {
+
+            // could use fixture#lookup(...), but can also just search directly.
             final List<ToDoItem> notYetCompleteItems = wrap(toDoItems).notYetComplete();
             final List<ToDoItem> completedItems = wrap(toDoItems).complete();
 

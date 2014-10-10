@@ -62,7 +62,7 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
                 delegate.addFixture(new ObjectLoaderFixture());
             }
             if (!fixtureLoaded) {
-                LOG.warn("No fixtures loaded from configuration");
+                LOG.debug("No fixtures loaded from configuration");
             }
         } catch (final IllegalArgumentException e) {
             throw new IsisException(e);

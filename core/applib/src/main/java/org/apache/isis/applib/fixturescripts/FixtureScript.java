@@ -25,6 +25,7 @@ import java.util.Map;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import org.apache.isis.applib.AbstractViewModel;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -78,6 +79,9 @@ public abstract class FixtureScript
         this.friendlyName = friendlyNameElseDerived(friendlyName);
         this.parentPath = "";
         this.discoverability = discoverability;
+
+        // enable tracing by default, to stdout
+        withTracing();
     }
     protected String localNameElseDerived(String str) {
         return str != null ? str : StringUtil.asLowerDashed(friendlyNameElseDerived(str));
@@ -252,11 +256,11 @@ public abstract class FixtureScript
 
         private final String parameters;
         private final FixtureScripts fixtureScripts;
-        private final FixtureResultList fixtureResults;
+        private final FixtureResultList fixtureResultList;
 
         public ExecutionContext(final String parameters, final FixtureScripts fixtureScripts) {
             this.fixtureScripts = fixtureScripts;
-            fixtureResults = new FixtureResultList(fixtureScripts);
+            fixtureResultList = new FixtureResultList(fixtureScripts, this);
             this.parameters = parameters;
         }
 
@@ -264,15 +268,21 @@ public abstract class FixtureScript
             return parameters;
         }
         public List<FixtureResult> getResults() {
-            return fixtureResults.getResults();
+            return fixtureResultList.getResults();
         }
 
         public <T> T add(final FixtureScript script, final T object) {
-            return fixtureResults.add(script, object);
+            fixtureResultList.add(script, object);
+            return object;
         }
 
         public <T> T add(final FixtureScript script, final String key, final T object) {
-            return fixtureResults.add(script, key, object);
+            fixtureResultList.add(script, key, object);
+            return object;
+        }
+
+        <T> T lookup(final String key, final Class<T> cls) {
+            return fixtureResultList.lookup(key, cls);
         }
 
         static enum As { EXEC, SKIP }
@@ -300,6 +310,7 @@ public abstract class FixtureScript
         //region > shouldExecute
 
         private final Map<String,Class> fixtureScriptClasses = Maps.newLinkedHashMap();
+
         private boolean shouldExecute(FixtureScript fixtureScript) {
             final boolean alreadyExecuted = fixtureScriptClasses.values().contains(fixtureScript.getClass());
             if(!alreadyExecuted) {
@@ -311,35 +322,42 @@ public abstract class FixtureScript
 
         //region > tracing
 
+        private int traceHighwatermark = 40;
         private PrintStream tracePrintStream;
-        private void trace(FixtureScript fixtureScript, As as) {
-            if(tracePrintStream == null) {
-                return;
-            }
-            final String qualifiedName = fixtureScript.getQualifiedName();
-            final String paddedQualifiedName = pad(qualifiedName, maxQualifiedNameLength());
-            final String trace = paddedQualifiedName + ": " + as + " " + fixtureScript.getClass().getName() + "\n";
-            tracePrintStream.print(trace);
-            tracePrintStream.flush();
-        }
 
         public ExecutionContext withTracing(PrintStream tracePrintStream) {
             this.tracePrintStream = tracePrintStream;
             return this;
         }
 
+        private void trace(FixtureScript fixtureScript, As as) {
+            if(tracePrintStream == null) {
+                return;
+            }
+            final String qualifiedName = fixtureScript.getQualifiedName();
+            final String trace = String.format("%1s: %2s %3s\n", pad(qualifiedName), as, fixtureScript.getClass().getName());
+            tracePrintStream.print(trace);
+            tracePrintStream.flush();
+        }
+
+        void trace(final FixtureResult fixtureResult) {
+            if(tracePrintStream == null) {
+                return;
+            }
+            final String key = fixtureResult.getKey();
+            final String trace = String.format("%1s: %2s\n", pad(key), fixtureScripts.titleOf(fixtureResult));
+            tracePrintStream.print(trace);
+            tracePrintStream.flush();
+        }
+
+        private String pad(String key) {
+            traceHighwatermark = Math.max(key.length(), traceHighwatermark);
+            return pad(key, roundup(traceHighwatermark, 20));
+        }
         //endregion
 
         private static String pad(String str, int padTo) {
             return Strings.padEnd(str, padTo, ' ');
-        }
-
-        private int maxQualifiedNameLength() {
-            int max = 40;
-            for (final String qualifiedName : this.fixtureScriptClasses.keySet()) {
-                max = Math.max(max, qualifiedName.length());
-            }
-            return roundup(max, 20);
         }
 
         static int roundup(int n, int roundTo) {
@@ -353,6 +371,11 @@ public abstract class FixtureScript
     //region > run (entry point for FixtureScripts service to call)
 
     /**
+     * It's a bit nasty to hold onto this as a field, but required in order to support
+     */
+    private ExecutionContext executionContext;
+
+    /**
      * Entry point for {@link org.apache.isis.applib.fixturescripts.FixtureScripts} service to call.
      *
      * <p>
@@ -361,11 +384,17 @@ public abstract class FixtureScript
      */
     @Programmatic
     public final List<FixtureResult> run(final String parameters) {
-        final ExecutionContext executionContext = fixtureScripts.newExecutionContext(parameters).withTracing(this.tracePrintStream);
+        executionContext = fixtureScripts.newExecutionContext(parameters).withTracing(this.tracePrintStream);
         executionContext.executeChildIfNotAlready(this);
         return executionContext.getResults();
     }
 
+    public <T> T lookup(final String key, Class<T> cls) {
+        if(executionContext == null) {
+            throw new IllegalStateException("This fixture has not yet been run.");
+        }
+        return executionContext.lookup(key, cls);
+    }
 
     /**
      * Optional hook to validate parameters.
@@ -489,6 +518,9 @@ public abstract class FixtureScript
 
     @javax.inject.Inject
     protected FixtureScripts fixtureScripts;
+
+    @javax.inject.Inject
+    protected DomainObjectContainer container;
 
     //endregion
 }

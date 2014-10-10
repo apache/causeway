@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -32,19 +33,42 @@ import com.google.common.collect.Maps;
  */
 public class FixtureResultList {
 
-    private final FixtureScripts fixtureScripts;
+
+    //region > constructor
+
+    FixtureResultList(
+            final FixtureScripts fixtureScripts,
+            final FixtureScript.ExecutionContext executionContext) {
+        this.fixtureScripts = fixtureScripts;
+        this.executionContext = executionContext;
+    }
+    //endregion
+
+
+    //region > list of FixtureResults
+
+    private final List<FixtureResult> list = Lists.newArrayList();
+
     /**
+     * Irrespective of the setting for {@link FixtureScripts#getMultipleExecutionStrategy()}, this list ensures
+     * that any given fixture script instance is only executed once.
+     *
+     * <p>
+     *     (The {@link org.apache.isis.applib.fixturescripts.FixtureScripts.MultipleExecutionStrategy} in contrast
+     *     controls whether two instances of the same class can be executed).
+     * </p>
+     *
+     * <p>
+     *     REVIEW: I think this should probably be removed; it certainly does nothing if
+     *     {@link org.apache.isis.applib.fixturescripts.FixtureScripts.MultipleExecutionStrategy#IGNORE} is set,
+     *     and is arguably counter to the spirit of
+     *     {@link org.apache.isis.applib.fixturescripts.FixtureScripts.MultipleExecutionStrategy#EXECUTE} being set.
+     * </p>
      * {@link org.apache.isis.applib.fixturescripts.FixtureScript}s used to generate this result list.
      */
     private final List<FixtureScript> fixtureScriptList = Lists.newArrayList();
 
-    FixtureResultList(FixtureScripts fixtureScripts) {
-        this.fixtureScripts = fixtureScripts;
-    }
-
-    // //////////////////////////////////////
-
-    private final List<FixtureResult> list = Lists.newArrayList();
+    private final Map<String, FixtureResult> fixtureResultByKey = Maps.newHashMap();
 
     public <T> T add(final FixtureScript script, final T object) {
         return add(script, nextItemFor(script), object);
@@ -61,9 +85,11 @@ public class FixtureResultList {
      */
     public <T> T add(final FixtureScript fixtureScript, final String key, final T object) {
         final boolean firstTime = !fixtureScriptList.contains(fixtureScript);
-        final FixtureResult fr = fixtureScripts.newFixtureResult(fixtureScript, key, object, firstTime);
-        if(fr != null) {
-            list.add(fr);
+        final FixtureResult fixtureResult = fixtureScripts.newFixtureResult(fixtureScript, key, object, firstTime);
+        if(fixtureResult != null) {
+            list.add(fixtureResult);
+            fixtureResultByKey.put(fixtureResult.getKey(), fixtureResult);
+            executionContext.trace(fixtureResult);
             if(firstTime) {
                 fixtureScriptList.add(fixtureScript);
             }
@@ -72,10 +98,12 @@ public class FixtureResultList {
     }
 
     public List<FixtureResult> getResults() {
-        return list;
+        return Collections.unmodifiableList(list);
     }
 
-    // //////////////////////////////////////
+    //endregion
+
+    //region > nextItemFor
 
     private final Map<FixtureScript, AtomicInteger> itemNumberByScript = Maps.newHashMap();
 
@@ -88,4 +116,37 @@ public class FixtureResultList {
         return "item-"+atomicInteger.incrementAndGet();
     }
 
+    //endregion
+
+
+    //region > lookup
+
+    <T> T lookup(final String key, Class<T> cls) {
+        final FixtureResult fixtureResult = fixtureResultByKey.get(key);
+        if(fixtureResult == null) {
+            return null;
+        }
+        final Object object = fixtureResult.getObject();
+        if(object == null) {
+            throw new IllegalStateException("Fixture result exists but has NULL object");
+        }
+        if (!cls.isAssignableFrom(object.getClass())) {
+            throw new IllegalStateException(String.format("Fixture result exists and contains object but is of type %s, not %s", object.getClass().getName(), cls.getName()));
+        }
+        return (T) object;
+    }
+
+    //endregion
+
+    //region > injected services 
+
+    /**
+     * Injected in {@link #FixtureResultList(FixtureScripts, org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext) constructor}.
+     */
+    private final FixtureScripts fixtureScripts;
+    /**
+     * Injected in {@link #FixtureResultList(FixtureScripts, org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext) constructor}.
+     */
+    private final FixtureScript.ExecutionContext executionContext;
+    //endregion
 }

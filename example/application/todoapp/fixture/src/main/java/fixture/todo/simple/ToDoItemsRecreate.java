@@ -48,7 +48,7 @@ public class ToDoItemsRecreate extends FixtureScript {
         final String ownedBy = Util.coalesce(user, executionContext.getParameters(), getContainer().getUser().getName());
 
         // prereqs
-        execute(new ToDoItemsDelete(null), executionContext);
+        executeChild(new ToDoItemsDelete(null), executionContext);
 
         // this fixture
         createToDoItem("Buy milk", Category.Domestic, Subcategory.Shopping, ownedBy, nowPlusDays(0), new BigDecimal("0.75"), executionContext);

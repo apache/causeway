@@ -177,7 +177,6 @@ public class FacetedMethodsBuilder {
 
 
     public Properties introspectClass() {
-        LOG.info("introspecting " + getClassName());
         if (LOG.isDebugEnabled()) {
             LOG.debug("introspecting " + getClassName() + ": class-level details");
         }
@@ -481,15 +480,12 @@ public class FacetedMethodsBuilder {
                 return false;
             }
             if (recognisedHelpersStrategy.skip()) {
-                LOG.info("  skipping possible helper method " + actionMethod);
+                LOG.debug("  skipping possible helper method {0}", actionMethod);
                 return false;
             }
         }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("  identified action " + actionMethod);
-        }
-
+        LOG.debug("  identified action {0}", actionMethod);
         return true;
     }
 
@@ -516,7 +512,7 @@ public class FacetedMethodsBuilder {
 
     public void introspectClassPostProcessing(final Properties metadataProperties) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("introspecting " + getClassName() + ": class-level post-processing");
+            LOG.debug("introspecting {0}: class-level post-processing", getClassName());
         }
 
         getFacetProcessor().processPost(introspectedClass, metadataProperties, methodRemover, spec);
@@ -527,9 +523,8 @@ public class FacetedMethodsBuilder {
     // ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * As per
-     * {@link #findAndRemovePrefixedNonVoidMethods(boolean, String, Class, int)}
-     * , but appends to provided {@link List} (collecting parameter pattern).
+     * As per {@link #findAndRemovePrefixedNonVoidMethods(org.apache.isis.core.metamodel.methodutils.MethodScope, String, Class, int, java.util.List)},
+     * but appends to provided {@link List} (collecting parameter pattern).
      */
     private void findAndRemovePrefixedNonVoidMethods(
             final MethodScope methodScope, 
@@ -544,11 +539,6 @@ public class FacetedMethodsBuilder {
     /**
      * Searches for all methods matching the prefix and returns them, also
      * removing it from the {@link #methods array of methods} if found.
-     * 
-     * @param objectFactory
-     * 
-     * @see MethodUtil#removeMethods(Method[], boolean, String, Class,
-     *      boolean, int, ClassSubstitutor)
      */
     private List<Method> findAndRemovePrefixedMethods(
             final MethodScope methodScope, 

@@ -42,6 +42,7 @@ import org.junit.Test;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.eventbus.*;
 import org.apache.isis.applib.value.Blob;
@@ -52,11 +53,16 @@ import static org.junit.Assert.assertTrue;
 
 public class ToDoItemIntegTest extends AbstractToDoIntegTest {
 
+    ToDoItemsIntegTestFixture fixture;
+
     @Before
     public void setUpData() throws Exception {
-        scenarioExecution().install(new ToDoItemsIntegTestFixture());
+        // executing the fixtures directly allows us to look up the results later.
+        fixtureScripts.runFixtureScript(fixture = new ToDoItemsIntegTestFixture(), null);
     }
 
+    @Inject
+    FixtureScripts fixtureScripts;
     @Inject
     ToDoItems toDoItems;
     @Inject
@@ -85,6 +91,9 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             super.setUp();
             final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
             toDoItem = wrap(all.get(0));
+
+            toDoItem = wrap(fixture.lookup("integ-test/complete-current/create-current/item-2", ToDoItem.class));
+
             nextTransaction();
 
             dueBy = toDoItem.getDueBy();

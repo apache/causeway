@@ -38,6 +38,7 @@ import org.apache.isis.applib.util.ObjectContracts;
 
 public abstract class FixtureScripts extends AbstractService {
 
+
     //region > nonPersistedObjectsStrategy, multipleExecutionStrategy enums
 
     /**
@@ -329,6 +330,7 @@ public abstract class FixtureScripts extends AbstractService {
 
     //region > helpers (package level)
 
+    @Programmatic
     FixtureResult newFixtureResult(FixtureScript script, String subkey, Object object, boolean firstTime) {
         if(object == null) {
             return null;
@@ -346,9 +348,16 @@ public abstract class FixtureScripts extends AbstractService {
         }
         final FixtureResult fixtureResult = new FixtureResult();
         fixtureResult.setFixtureScriptClassName(firstTime ? script.getClass().getName() : null);
+        fixtureResult.setFixtureScriptQualifiedName(script.getQualifiedName());
         fixtureResult.setKey(script.pathWith(subkey));
         fixtureResult.setObject(object);
         return fixtureResult;
+    }
+
+    @Programmatic
+    String titleOf(final FixtureResult fixtureResult) {
+        final Object object = fixtureResult.getObject();
+        return object != null? getContainer().titleOf(object): "(null)";
     }
 
     //endregion

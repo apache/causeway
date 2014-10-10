@@ -45,7 +45,7 @@ public class ToDoItemsRecreateAndCompleteSeveral extends FixtureScript {
         final String ownedBy = Util.coalesce(user, executionContext.getParameters(), getContainer().getUser().getName());
 
         // prereqs
-        execute(new ToDoItemsRecreate(null), executionContext);
+        executeChild(new ToDoItemsRecreate(null), executionContext);
 
         // this fixture
         complete(ownedBy, "Buy stamps", executionContext);
