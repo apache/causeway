@@ -31,18 +31,6 @@ import org.apache.isis.applib.annotation.Named;
 @DomainService(menuOrder = "10", repositoryFor = SimpleObject.class)
 public class SimpleObjects {
 
-    //region > identification in the UI
-
-    public String getId() {
-        return "simple";
-    }
-
-    public String iconName() {
-        return "SimpleObject";
-    }
-
-    //endregion
-
     //region > listAll (action)
 
     @Bookmarkable

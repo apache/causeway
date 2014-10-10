@@ -35,16 +35,6 @@ import org.apache.isis.applib.services.clock.ClockService;
 @DomainService(menuOrder = "10", repositoryFor = ToDoItem.class)
 public class ToDoItems {
 
-    //region > identification in the UI
-    public String getId() {
-        return "toDoItems";
-    }
-
-    public String iconName() {
-        return "ToDoItem";
-    }
-    //endregion
-
     //region > notYetComplete (action)
     @Bookmarkable
     @ActionSemantics(Of.SAFE)

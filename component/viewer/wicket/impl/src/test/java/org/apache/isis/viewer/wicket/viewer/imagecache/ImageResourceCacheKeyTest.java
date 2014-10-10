@@ -7,26 +7,27 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-public class KeyTest {
+public class ImageResourceCacheKeyTest {
 
-    ImageResourceCacheClassPath.Key key;
+    ImageResourceCacheKey key;
 
     public static class SomeSuperclass {
-
     }
 
     public static class SomeSubclass extends SomeSuperclass {
+    }
 
+    public static class SomeOtherContextClass extends SomeSuperclass {
     }
 
 
-    public static class SuperKey extends KeyTest {
+    public static class SuperKey extends ImageResourceCacheKeyTest {
 
         @Test
         public void whenSubclass() throws Exception {
 
-            key = new ImageResourceCacheClassPath.Key(SomeSubclass.class, "foo");
-            final ImageResourceCacheClassPath.Key superKey = key.superKey();
+            key = new ImageResourceCacheKey(SomeSubclass.class, "foo");
+            final ImageResourceCacheKey superKey = key.superKey();
 
             assertEquals(SomeSuperclass.class, superKey.getResourceClass());
             assertEquals("foo", key.getResourceName());
@@ -35,23 +36,23 @@ public class KeyTest {
         @Test
         public void whenSuperClass() throws Exception {
 
-            key = new ImageResourceCacheClassPath.Key(SomeSuperclass.class, null);
-            final ImageResourceCacheClassPath.Key superKey = key.superKey();
+            key = new ImageResourceCacheKey(SomeSuperclass.class, null);
+            final ImageResourceCacheKey superKey = key.superKey();
 
             assertNull(superKey);
         }
 
     }
 
-    public static class ResourcePaths extends KeyTest {
+    public static class ResourcePaths extends ImageResourceCacheKeyTest {
 
         @Test
         public void withIconName() throws Exception {
-            key = new ImageResourceCacheClassPath.Key(SomeSubclass.class, "foo");
+            key = new ImageResourceCacheKey(SomeSubclass.class, "foo");
 
-            final List<ImageResourceCacheClassPath.Key> keys = key.resourcePaths("png", "jpg", "jpeg");
+            final List<ImageResourceCacheKey> keys = key.resourcePaths("png", "jpg", "jpeg");
 
-            final Iterator<ImageResourceCacheClassPath.Key> iterator = keys.iterator();
+            final Iterator<ImageResourceCacheKey> iterator = keys.iterator();
 
             assertNext(iterator, SomeSubclass.class, "SomeSubclass-foo.png");
             assertNext(iterator, SomeSubclass.class, "SomeSubclass-foo.jpg");
@@ -105,11 +106,11 @@ public class KeyTest {
 
         @Test
         public void withoutIconName() throws Exception {
-            key = new ImageResourceCacheClassPath.Key(SomeSubclass.class, null);
+            key = new ImageResourceCacheKey(SomeSubclass.class, null);
 
-            final List<ImageResourceCacheClassPath.Key> keys = key.resourcePaths("png", "jpg", "jpeg");
+            final List<ImageResourceCacheKey> keys = key.resourcePaths("png", "jpg", "jpeg");
 
-            final Iterator<ImageResourceCacheClassPath.Key> iterator = keys.iterator();
+            final Iterator<ImageResourceCacheKey> iterator = keys.iterator();
 
             assertNext(iterator, SomeSubclass.class, "SomeSubclass.png");
             assertNext(iterator, SomeSubclass.class, "SomeSubclass.jpg");
@@ -135,11 +136,11 @@ public class KeyTest {
 
         @Test
         public void withoutClass() throws Exception {
-            key = new ImageResourceCacheClassPath.Key(null, "foo");
+            key = new ImageResourceCacheKey(null, "foo");
 
-            final List<ImageResourceCacheClassPath.Key> keys = key.resourcePaths("png", "jpg", "jpeg");
+            final List<ImageResourceCacheKey> keys = key.resourcePaths("png", "jpg", "jpeg");
 
-            final Iterator<ImageResourceCacheClassPath.Key> iterator = keys.iterator();
+            final Iterator<ImageResourceCacheKey> iterator = keys.iterator();
 
             assertNext(iterator, null, "foo.png");
             assertNext(iterator, null, "foo.jpg");
@@ -148,12 +149,50 @@ public class KeyTest {
             assertNext(iterator, null, "Default.png");
             assertNext(iterator, null, "Default.jpg");
             assertNext(iterator, null, "Default.jpeg");
+        }
+
+        /**
+         * This what we see for repositories (using <code></code>@DomainService(repositoryFor=...))
+         */
+        @Test
+        public void withoutClassButIconNameSpecifyingADifferentContextClassAndClassName() throws Exception {
+            key = new ImageResourceCacheKey(SomeOtherContextClass.class, SomeSuperclass.class.getName());
+
+            final List<ImageResourceCacheKey> keys = key.resourcePaths("png", "jpg", "jpeg");
+
+            final Iterator<ImageResourceCacheKey> iterator = keys.iterator();
+
+            assertNext(iterator, SomeSuperclass.class, "SomeSuperclass.png");
+            assertNext(iterator, SomeSuperclass.class, "SomeSuperclass.jpg");
+            assertNext(iterator, SomeSuperclass.class, "SomeSuperclass.jpeg");
+
+            assertNext(iterator, null, "Default.png");
+            assertNext(iterator, null, "Default.jpg");
+            assertNext(iterator, null, "Default.jpeg");
 
         }
 
-        private static void assertNext(Iterator<ImageResourceCacheClassPath.Key> iterator, Class<?> resourceClass, String resourceName) {
+        @Test
+        public void withoutClassButIconNameSpecifyingAClassName() throws Exception {
+            key = new ImageResourceCacheKey(null, SomeSuperclass.class.getName());
+
+            final List<ImageResourceCacheKey> keys = key.resourcePaths("png", "jpg", "jpeg");
+
+            final Iterator<ImageResourceCacheKey> iterator = keys.iterator();
+
+            assertNext(iterator, SomeSuperclass.class, "SomeSuperclass.png");
+            assertNext(iterator, SomeSuperclass.class, "SomeSuperclass.jpg");
+            assertNext(iterator, SomeSuperclass.class, "SomeSuperclass.jpeg");
+
+            assertNext(iterator, null, "Default.png");
+            assertNext(iterator, null, "Default.jpg");
+            assertNext(iterator, null, "Default.jpeg");
+
+        }
+
+        private static void assertNext(Iterator<ImageResourceCacheKey> iterator, Class<?> resourceClass, String resourceName) {
             assertThat(iterator.hasNext(), is(true));
-            final ImageResourceCacheClassPath.Key next = iterator.next();
+            final ImageResourceCacheKey next = iterator.next();
             assertEquals(resourceClass, next.getResourceClass());
             assertEquals(resourceName, next.getResourceName());
         }

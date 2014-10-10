@@ -43,6 +43,12 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract {
                 new DomainServiceFacetAnnotation(
                         processClassContext.getFacetHolder(), 
                         annotation.menuOrder(), annotation.repositoryFor()));
+        if(annotation.repositoryFor() != null) {
+            FacetUtil.addFacet(
+                    new IconFacetDerivedFromDomainServiceAnnotation(
+                            processClassContext.getFacetHolder(),
+                            annotation.repositoryFor()));
+        }
         return;
     }
 
