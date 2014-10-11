@@ -24,6 +24,7 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -72,6 +73,11 @@ public class DomainResourceHelper {
         @Override
         public PersistenceSession getPersistenceSession() {
             return rendererContext.getPersistenceSession();
+        }
+
+        @Override
+        public AdapterManager getAdapterManager() {
+            return rendererContext.getAdapterManager();
         }
 
         @Override
