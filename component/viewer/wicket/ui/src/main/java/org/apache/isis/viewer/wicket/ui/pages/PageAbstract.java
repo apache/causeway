@@ -48,7 +48,6 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -203,9 +202,10 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         return pageClassRegistry.getPageClass(PageType.SIGN_IN);
     }
 
-    private static String asCssStyle(final String str) {
-        return StringExtensions.asLowerDashed(str);
+    static String asCssStyle(final String str) {
+        return str.toLowerCase().replaceAll("[^A-Za-z0-9 ]", "").replaceAll("\\s+", "-");
     }
+
 
     protected ExceptionModel recognizeException(Exception ex) {
         List<ExceptionRecognizer> exceptionRecognizers;
