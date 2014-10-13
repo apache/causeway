@@ -29,13 +29,13 @@
 
     <groupId>org.apache.isis.viewer</groupId>
 	<artifactId>isis-viewer-wicket-tck</artifactId>
-    <version>1.7.0</version>
+    <version>1.8.0-SNAPSHOT</version>
 
 	<name>Isis Wicket Viewer TCK tests</name>
 
 
 	<properties>
-        <isis-viewer-wicket.version>1.7.0</isis-viewer-wicket.version>
+        <isis-viewer-wicket.version>1.8.0-SNAPSHOT</isis-viewer-wicket.version>
 		<siteBaseDir>..</siteBaseDir>
 		<relativeUrl>wicket-tck/</relativeUrl>
 		<!-- until someone comes up with a better solution -->
@@ -110,8 +110,4 @@
         </dependency>
 
 	</dependencies>
-
-  <scm>
-    <tag>isis-viewer-wicket-1.7.0-RC1</tag>
-  </scm>
 </project>

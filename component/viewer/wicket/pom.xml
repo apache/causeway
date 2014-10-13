@@ -30,7 +30,7 @@
 
 	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>isis-viewer-wicket</artifactId>
-    <version>1.7.0</version>
+    <version>1.8.0-SNAPSHOT</version>
 
 	<name>Isis Wicket Viewer</name>
 
@@ -101,41 +101,41 @@
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-applib</artifactId>
-                <version>1.7.0</version>
+                <version>1.8.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-model</artifactId>
-                <version>1.7.0</version>
+                <version>1.8.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-model</artifactId>
-                <version>1.7.0</version>
+                <version>1.8.0-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-ui</artifactId>
-                <version>1.7.0</version>
+                <version>1.8.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-ui</artifactId>
-                <version>1.7.0</version>
+                <version>1.8.0-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-impl</artifactId>
-                <version>1.7.0</version>
+                <version>1.8.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>isis-viewer-wicket-impl</artifactId>
-                <version>1.7.0</version>
+                <version>1.8.0-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
@@ -321,8 +321,4 @@
 
 		</dependencies>
 	</dependencyManagement>
-
-  <scm>
-    <tag>isis-viewer-wicket-1.7.0-RC1</tag>
-  </scm>
 </project>
