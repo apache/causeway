@@ -21,6 +21,7 @@ package integration;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
+import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
 
@@ -66,6 +67,13 @@ public class ToDoSystemInitializer {
         private static IsisConfiguration testConfiguration() {
             final IsisConfigurationForJdoIntegTests testConfiguration = new IsisConfigurationForJdoIntegTests();
             testConfiguration.addRegisterEntitiesPackagePrefix("dom");
+
+            // enable stricter checking
+            //
+            // the consequence of this is having to call 'nextTransaction()' between most of the given/when/then's
+            // because the command2 only ever refers to the event of the originating action.
+            testConfiguration.put(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, "true");
+
             return testConfiguration;
         }
     }

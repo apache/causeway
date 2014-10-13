@@ -35,10 +35,6 @@ public class ToDoAppDashboard extends AbstractViewModel {
     public String title() {
         return "Dashboard";
     }
-    
-    public String iconName() {
-        return "Dashboard";
-    }
     //endregion
 
     //region > ViewModel contract

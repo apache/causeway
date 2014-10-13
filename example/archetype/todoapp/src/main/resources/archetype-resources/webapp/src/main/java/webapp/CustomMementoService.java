@@ -19,25 +19,46 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package webapp;
 
-package fixture.todo.integtests;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 
-import fixture.todo.simple.ToDoItemsRecreateAndCompleteSeveral;
-
-import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 /**
- * Refactored to reuse the newer {@link FixtureScript} API.
+ * Demonstrates how to register a replacement for one of the default framework-provided services.
+ *
+ * <p>
+ *     In <code>isis.properties</code>, is registered using:
+ * </p>
+ *
+ * <pre>
+ *     isis.services = ${symbol_escape}
+ *                     ...,
+ *                     1:webapp.MyMementoService,
+ *                     ...,
+ * </pre>
+ * <p>
+ *     that is, with a menuOrder of 1.
+ * </p>
  */
-public class ToDoItemsIntegTestFixture extends FixtureScript {
+public class CustomMementoService extends MementoServiceDefault {
 
-    public ToDoItemsIntegTestFixture() {
-        super(null, "integ-test");
-    }
-
+    @Programmatic
     @Override
-    protected void execute(ExecutionContext executionContext) {
-        executeChild(new ToDoItemsRecreateAndCompleteSeveral(null), executionContext);
+    public Memento create() {
+        return super.create();
     }
 
+    @Programmatic
+    @Override
+    public Memento parse(String str) {
+        return super.parse(str);
+    }
+
+    @Programmatic
+    @Override
+    public boolean canSet(Object input) {
+        return super.canSet(input);
+    }
 }

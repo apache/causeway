@@ -31,6 +31,7 @@
         <fileSet encoding="UTF-8">
           <directory>src/main/java</directory>
           <includes>
+            <include>**/*.png</include>
             <include>**/*.json</include>
           </includes>
         </fileSet>
@@ -38,12 +39,6 @@
           <directory>src/main/resources</directory>
           <includes>
             <include>**/*.xml</include>
-          </includes>
-        </fileSet>
-        <fileSet encoding="UTF-8">
-          <directory>src/main/resources</directory>
-          <includes>
-            <include>**/*.png</include>
           </includes>
         </fileSet>
         <fileSet filtered="true" encoding="UTF-8">
@@ -118,7 +113,6 @@
           <directory>src/main/resources</directory>
           <includes>
             <include>**/*.html</include>
-            <include>**/*.xml</include>
             <include>**/*.properties</include>
           </includes>
         </fileSet>
@@ -132,8 +126,6 @@
         <fileSet encoding="UTF-8">
           <directory>src/main/webapp</directory>
           <includes>
-            <include>**/*.passwords</include>
-            <include>**/*.allow</include>
             <include>**/*.png</include>
             <include>**/*.js</include>
             <include>**/*.ini</include>
