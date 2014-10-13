@@ -17,22 +17,22 @@
   specific language governing permissions and limitations
   under the License.
 --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
-    	<groupId>${groupId}</groupId>
+        <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}</artifactId>
         <version>${version}</version>
     </parent>
 
-	<artifactId>${artifactId}</artifactId>
-	<name>Simple App Fixtures</name>
+    <artifactId>${artifactId}</artifactId>
+    <name>Simple App Fixtures</name>
 
-	<dependencies>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>${rootArtifactId}-dom</artifactId>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>${rootArtifactId}-dom</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

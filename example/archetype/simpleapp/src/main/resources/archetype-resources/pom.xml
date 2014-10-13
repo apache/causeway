@@ -32,8 +32,8 @@
     </prerequisites>
 
 	<properties>
-        <isis.version>1.6.0</isis.version>
-        <isis-viewer-wicket.version>1.6.0</isis-viewer-wicket.version>
+        <isis.version>1.7.0</isis.version>
+        <isis-viewer-wicket.version>1.7.0</isis-viewer-wicket.version>
 
         <!-- must be consistent with the versions defined by the JDO Objectstore -->
         <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
@@ -86,6 +86,7 @@
                     <configuration>
                         <includes>
                             <include>**/*Test.java</include>
+                            <include>**/*Test$*.java</include>
                             <include>**/*Test_*.java</include>
                             <include>**/*Spec*.java</include>
                         </includes>
@@ -107,6 +108,7 @@
                     <configuration>
                         <includes>
                             <include>**/*Test.java</include>
+                            <include>**/*Test$*.java</include>
                             <include>**/*Test_*.java</include>
                             <include>**/*Spec*.java</include>
                         </includes>
@@ -201,6 +203,8 @@
                             <exclude>**/.classpath</exclude>
                             <exclude>**/.settings/**</exclude>
                             <exclude>**/*.launch</exclude>
+                            <exclude>**/ide/eclipse/launch/**</exclude>
+                            <exclude>**/ide/intellij/launch/**</exclude>
                             <exclude>src/site/resources/ide/eclipse/**</exclude>
 
                             <exclude>**/rebel.xml</exclude>
@@ -329,6 +333,8 @@
                 <artifactId>${rootArtifactId}-webapp</artifactId>
                 <version>${version}</version>
             </dependency>
+
+
         </dependencies>
     </dependencyManagement>
     

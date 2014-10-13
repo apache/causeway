@@ -37,7 +37,7 @@ public class SimpleObjectsFixture extends FixtureScript {
     protected void execute(ExecutionContext executionContext) {
 
         // prereqs
-        execute(new SimpleObjectsTearDownFixture(), executionContext);
+        executeChild(new SimpleObjectsTearDownFixture(), executionContext);
 
         // create
         create("Foo", executionContext);

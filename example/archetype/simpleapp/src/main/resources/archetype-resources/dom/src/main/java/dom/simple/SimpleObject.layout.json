@@ -15,30 +15,30 @@
  *  limitations under the License.
  */
 {
-    columns: [
-	    {
-	        span: 6,
-	        memberGroups: {
-	            General: {
-	                members: {
-	                    name: {}
-	                }
-	            }
-	        }
-	    },
-	    {
-	        span: 0,
-	        memberGroups: {}
-	    },
-	    {
-	        span: 0,
-	        memberGroups: {}
-	    },
-	    {
-	        span: 6,
-	        collections: {}
-	    }
-    ],
-    actions: {}
+  "columns": [
+    {
+      "span": 6,
+      "memberGroups": {
+        "General": {
+          "members": {
+            "name": {}
+          }
+        }
+      }
+    },
+    {
+      "span": 0,
+      "memberGroups": {}
+    },
+    {
+      "span": 0,
+      "memberGroups": {}
+    },
+    {
+      "span": 6,
+      "collections": {}
+    }
+  ],
+  "actions": {}
 }
  
