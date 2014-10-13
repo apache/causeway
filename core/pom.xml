@@ -435,6 +435,7 @@
 
                             <exclude>**/xml/objects/**</exclude>
                             <exclude>**/test.data</exclude>
+                            <exclude>**/fixture-data/**</exclude>
 
                             <exclude>**/src/main/appended-resources/supplemental-models.xml</exclude>
                             <exclude>**/datanucleus.log</exclude>
