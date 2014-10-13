@@ -21,7 +21,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.isis.archetype</groupId>
   <artifactId>todoapp-archetype</artifactId>
-  <version>1.7.0</version>
+  <version>1.8.0-SNAPSHOT</version>
   <packaging>maven-archetype</packaging>
   <name>todoapp-archetype</name>
   <build>
@@ -47,8 +47,4 @@
     <version>1.7.0</version>
     <relativePath>../../../core/pom.xml</relativePath>
   </parent>
-
-  <scm>
-    <tag>todoapp-archetype-1.7.0-RC1</tag>
-  </scm>
 </project>
