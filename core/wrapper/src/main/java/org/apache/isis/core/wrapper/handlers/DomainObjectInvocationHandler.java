@@ -125,8 +125,10 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             __isis_executionMode = WrapperObject.class.getMethod("__isis_executionMode", new Class[]{});
             saveMethod = WrapperObject.class.getMethod("save", new Class[] {});
             wrappedMethod = WrapperObject.class.getMethod("wrapped", new Class[] {});
-        } catch (final NoSuchMethodException e) {
-            throw new IllegalStateException("Could not locate reserved declared methods in the WrappingObject and WrappedObject interfaces");
+        } catch (final NoSuchMethodException nsme) {
+            throw new IllegalStateException(
+                    "Could not locate reserved declared methods in the WrappingObject and WrappedObject interfaces",
+                    nsme);
         }
     }
 

@@ -597,7 +597,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         container.informUser("Deleted " + container.titleOf(this));
         
         // invalid to return 'this' (cannot render a deleted object)
-        return toDoItems.notYetComplete(); 
+        return toDoItems.notYetComplete();
     }
     //endregion
 

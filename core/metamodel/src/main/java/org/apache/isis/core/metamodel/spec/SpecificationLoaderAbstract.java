@@ -16,6 +16,10 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
+import java.lang.reflect.Method;
+import java.util.Map;
+import com.google.common.collect.Maps;
+
 public abstract class SpecificationLoaderAbstract implements SpecificationLoader {
 
     @Override
@@ -25,5 +29,37 @@ public abstract class SpecificationLoaderAbstract implements SpecificationLoader
             cast.setSpecificationLookup(this);
         }
     }
+
+    //region > isInjectorMethodFor
+
+    private final Map<Method, Map<Class<?>, Boolean>> isInjectorMethod = Maps.newConcurrentMap();
+
+    public boolean isInjectorMethodFor(Method method, final Class<?> serviceClass) {
+        Map<Class<?>, Boolean> classBooleanMap = isInjectorMethod.get(method);
+        if(classBooleanMap == null) {
+            synchronized (isInjectorMethod) {
+                classBooleanMap = Maps.newConcurrentMap();
+                isInjectorMethod.put(method, classBooleanMap);
+            }
+        }
+        Boolean result = classBooleanMap.get(serviceClass);
+        if(result == null) {
+            result = determineIsInjectorMethodFor(method, serviceClass);
+            classBooleanMap.put(serviceClass, result);
+        }
+        return result;
+    }
+
+    private static boolean determineIsInjectorMethodFor(Method method, Class<?> serviceClass) {
+        final String methodName = method.getName();
+        if (methodName.startsWith("set") || methodName.startsWith("inject")) {
+            final Class<?>[] parameterTypes = method.getParameterTypes();
+            if (parameterTypes.length == 1 && parameterTypes[0] != Object.class && parameterTypes[0].isAssignableFrom(serviceClass)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    //endregion
 
 }

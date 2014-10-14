@@ -38,13 +38,17 @@ import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
 /**
  * Must be a thread-safe.
  */
-public class ServicesInjectorDefault implements ServicesInjectorSpi {
+public class ServicesInjectorDefault implements ServicesInjectorSpi, SpecificationLoaderAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServicesInjectorDefault.class);
+
+    private final List<Object> services = Lists.newArrayList();
 
     /**
      * If no key, not yet searched for type; otherwise the {@link List} indicates
@@ -52,13 +56,9 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
      */
     private final Map<Class<?>, List<Object>> servicesByType = Maps.newHashMap();
 
-    private final List<Object> services = Lists.newArrayList();
 
-    
-    // /////////////////////////////////////////////////////////
-    // Constructor, init, shutdown
-    // /////////////////////////////////////////////////////////
 
+    //region > init, shutdown
 
     @Override
     public void init() {
@@ -69,9 +69,9 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
     public void shutdown() {
     }
 
-    // /////////////////////////////////////////////////////////
-    // Services
-    // /////////////////////////////////////////////////////////
+    //endregion
+
+    //region > setServices, replaceServices
 
     @Override
     public void setServices(final List<Object> services) {
@@ -115,9 +115,9 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         return services.add(service);
     }
 
-    // /////////////////////////////////////////////////////////
-    // Inject Dependencies
-    // /////////////////////////////////////////////////////////
+    //endregion
+
+    //region > injectServicesInto
 
     @Override
     public void injectServicesInto(final Object object) {
@@ -133,9 +133,9 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         }
     }
 
-    // ////////////////////////////////////////////////////////////////////
-    // injectInto
-    // ////////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > injectInto
 
     /**
      * That is, injecting this injector...
@@ -148,12 +148,11 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         }
     }
 
+    //endregion
 
-    // /////////////////////////////////////////////////////////
-    // Helpers
-    // /////////////////////////////////////////////////////////
+    //region > helpers
 
-    private static void injectServices(final Object object, final List<Object> services) {
+    private void injectServices(final Object object, final List<Object> services) {
         final Class<?> cls = object.getClass();
 
         autowireViaFields(object, services, cls);
@@ -161,7 +160,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         autowireViaPrefixedMethods(object, services, cls, "inject");
     }
 
-    private static void autowireViaFields(final Object object, final List<Object> services, final Class<?> cls) {
+    private void autowireViaFields(final Object object, final List<Object> services, final Class<?> cls) {
         final List<Field> fields = Arrays.asList(cls.getDeclaredFields());
         final Iterable<Field> injectFields = Iterables.filter(fields, new Predicate<Field>() {
             @Override
@@ -182,7 +181,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         }
     }
 
-    private static void autowire(Object object, Field field, List<Object> services) {
+    private void autowire(Object object, Field field, List<Object> services) {
         for (final Object service : services) {
             final Class<?> serviceClass = service.getClass();
             boolean canInject = isInjectorFieldFor(field, serviceClass);
@@ -194,7 +193,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         }
     }
 
-    private static void autowireViaPrefixedMethods(final Object object, final List<Object> services, final Class<?> cls, final String prefix) {
+    private void autowireViaPrefixedMethods(final Object object, final List<Object> services, final Class<?> cls, final String prefix) {
         final List<Method> methods = Arrays.asList(cls.getMethods());
         final Iterable<Method> prefixedMethods = Iterables.filter(methods, new Predicate<Method>(){
             public boolean apply(Method method) {
@@ -208,10 +207,10 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         }
     }
 
-    private static void autowire(Object object, Method prefixedMethod, List<Object> services) {
+    private void autowire(Object object, Method prefixedMethod, List<Object> services) {
         for (final Object service : services) {
             final Class<?> serviceClass = service.getClass();
-            boolean isInjectorMethod = isInjectorMethodFor(prefixedMethod, serviceClass);
+            boolean isInjectorMethod = specificationLoader.isInjectorMethodFor(prefixedMethod, serviceClass);
             if(isInjectorMethod) {
                 prefixedMethod.setAccessible(true);
                 invokeInjectorMethod(prefixedMethod, object, service);
@@ -220,23 +219,13 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         }
     }
 
-    private static boolean isInjectorFieldFor(final Field field, final Class<?> serviceClass) {
+    private boolean isInjectorFieldFor(final Field field, final Class<?> serviceClass) {
         final Class<?> type = field.getType();
         // don't think that type can ever be null, but Javadoc for java.lang.reflect.Field doesn't say
         return type != null && type.isAssignableFrom(serviceClass);
     }
 
-    public static boolean isInjectorMethodFor(Method method, final Class<?> serviceClass) {
-        final String methodName = method.getName();
-        if (methodName.startsWith("set") || methodName.startsWith("inject")) {
-            final Class<?>[] parameterTypes = method.getParameterTypes();
-            if (parameterTypes.length == 1 && parameterTypes[0] != Object.class && parameterTypes[0].isAssignableFrom(serviceClass)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
+
     private static void invokeMethod(final Method method, final Object target, final Object[] parameters) {
         try {
             method.invoke(target, parameters);
@@ -281,6 +270,11 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         injectServicesInto(this.services);
     }
 
+
+    //endregion
+
+    //region > lookupService, lookupServices
+
     @Override
     public <T> T lookupService(Class<T> serviceClass) {
         List<T> services = lookupServices(serviceClass);
@@ -319,4 +313,15 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         };
     }
 
+    //endregion
+
+    //region > injected dependencies
+
+    private SpecificationLoader specificationLoader;
+
+    public void setSpecificationLookup(SpecificationLoader specificationLoader) {
+        this.specificationLoader = specificationLoader;
+    }
+
+    //endregion
 }

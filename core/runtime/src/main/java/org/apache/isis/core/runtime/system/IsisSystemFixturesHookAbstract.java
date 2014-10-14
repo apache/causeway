@@ -31,7 +31,6 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.runtime.about.AboutIsis;
@@ -142,10 +141,11 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
 
         final List<Object> services = sessionFactory.getServices();
         
-        // autowire
-        final ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault();
-        servicesInjector.setServices(services);
-        servicesInjector.init();
+//        // autowire
+//        final ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault();
+//        servicesInjector.setSpecificationLookup(sessionFactory.getSpecificationLoader());
+//        servicesInjector.setServices(services);
+//        servicesInjector.init();
 
         // validate 
         final ServiceInitializer serviceInitializer = new ServiceInitializer();

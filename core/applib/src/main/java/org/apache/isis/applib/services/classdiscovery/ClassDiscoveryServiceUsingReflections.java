@@ -45,7 +45,7 @@ import org.apache.isis.applib.annotation.DomainService;
 @DomainService
 public class ClassDiscoveryServiceUsingReflections
             extends AbstractService 
-            implements ClassDiscoveryService {
+            implements ClassDiscoveryService2 {
 
 
     @Override
@@ -55,6 +55,19 @@ public class ClassDiscoveryServiceUsingReflections
         final Reflections reflections = new Reflections(
                 ClasspathHelper.forClassLoader(Thread.currentThread().getContextClassLoader()),
                 ClasspathHelper.forClass(Object.class),
+                new SubTypesScanner(false)
+        );
+        return reflections.getSubTypesOf(type);
+    }
+
+    @Override
+    public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type, String packagePrefix) {
+        Vfs.setDefaultURLTypes(getUrlTypes());
+
+        final Reflections reflections = new Reflections(
+                ClasspathHelper.forClassLoader(Thread.currentThread().getContextClassLoader()),
+                ClasspathHelper.forClass(Object.class),
+                ClasspathHelper.forPackage(packagePrefix),
                 new SubTypesScanner(false)
         );
         return reflections.getSubTypesOf(type);
@@ -73,6 +86,7 @@ public class ClassDiscoveryServiceUsingReflections
 
         return urlTypes;
     }
+
 
     private static class EmptyIfFileEndingsUrlType implements Vfs.UrlType {
 

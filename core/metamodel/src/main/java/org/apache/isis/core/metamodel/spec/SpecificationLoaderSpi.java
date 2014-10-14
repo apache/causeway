@@ -20,11 +20,8 @@
 package org.apache.isis.core.metamodel.spec;
 
 import java.util.List;
-
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 public interface SpecificationLoaderSpi extends ApplicationScopedComponent, DebuggableWithTitle, SpecificationLoader {

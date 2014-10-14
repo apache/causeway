@@ -17,7 +17,7 @@
 package org.apache.isis.core.metamodel.runtimecontext;
 
 import java.util.List;
-
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.core.commons.components.Injectable;
@@ -53,6 +53,7 @@ public interface ServicesInjector extends Injectable {
      * 
      * @see #lookupServices(Class)
      */
+    @Programmatic
     <T> T lookupService(Class<T> serviceClass);
     
     /**
@@ -66,5 +67,6 @@ public interface ServicesInjector extends Injectable {
      * 
      * @see #lookupService(Class)
      */
+    @Programmatic
     <T> List<T> lookupServices(Class<T> serviceClass);
 }

@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.runtimecontext;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
@@ -70,7 +71,7 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
     }
 
     /**
-     * Is injected into when the reflector is reflector isinitialized.
+     * Is injected into when the reflector is initialized.
      */
     @Override
     public void setSpecificationLoaderSpi(final SpecificationLoaderSpi specificationLoader) {
@@ -134,6 +135,11 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
             @Override
             public void invalidateCache(Class<?> domainClass) {
                 specificationLoader.invalidateCache(domainClass);
+            }
+
+            @Override
+            public boolean isInjectorMethodFor(Method method, Class<? extends Object> serviceClass) {
+                return specificationLoader.isInjectorMethodFor(method, serviceClass);
             }
         });
     }

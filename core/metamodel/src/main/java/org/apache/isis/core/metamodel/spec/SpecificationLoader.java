@@ -16,6 +16,7 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 
@@ -80,5 +81,8 @@ public interface SpecificationLoader extends Injectable {
 
 
     void invalidateCache(Class<?> domainClass);
+
+    boolean isInjectorMethodFor(Method method, Class<? extends Object> serviceClass);
+
 
 }

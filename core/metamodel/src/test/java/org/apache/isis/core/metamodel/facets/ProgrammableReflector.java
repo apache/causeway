@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.util.Collection;
 import java.util.List;
-
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
@@ -30,11 +28,12 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderAbstract;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-public class ProgrammableReflector implements SpecificationLoaderSpi, ApplicationScopedComponent, RuntimeContextAware {
+public class ProgrammableReflector extends SpecificationLoaderAbstract implements SpecificationLoaderSpi, ApplicationScopedComponent, RuntimeContextAware {
 
     @Override
     public void init() {

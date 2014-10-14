@@ -19,13 +19,13 @@
 
 package org.apache.isis.core.metamodel.specloader;
 
+import java.lang.reflect.Method;
 import java.util.*;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -359,6 +359,11 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             }
             spec = spec.superclass(); 
         }
+    }
+
+    @Override
+    public boolean isInjectorMethodFor(Method method, Class<? extends Object> serviceClass) {
+        return false;
     }
 
     private void recache(final ObjectSpecification newSpec) {

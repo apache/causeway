@@ -20,12 +20,10 @@
 package org.apache.isis.core.metamodel.facets.object.ignore.javalang;
 
 import java.lang.reflect.Method;
-
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 
-public class RemoveInjectMethodsFacetFactory extends FacetFactoryAbstract {
+public class RemoveInjectMethodsFacetFactory extends FacetFactoryAbstract  {
 
     public RemoveInjectMethodsFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -36,12 +34,11 @@ public class RemoveInjectMethodsFacetFactory extends FacetFactoryAbstract {
         for (Class<? extends Object> serviceClass : getSpecificationLoader().getServiceClasses()) {
             Method[] methods = processClassContext.getCls().getMethods();
             for (Method method : methods) {
-                if(ServicesInjectorDefault.isInjectorMethodFor(method, serviceClass)) {
+                if(getSpecificationLoader().isInjectorMethodFor(method, serviceClass)) {
                     processClassContext.removeMethod(method);
                 }
             }
         }
     }
-
 
 }

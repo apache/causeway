@@ -304,7 +304,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             public <T> List<T> lookupServices(Class<T> serviceClass) {
                 return getPersistenceSession().getServicesInjector().lookupServices(serviceClass);
             }
-            
+
             @Override
             public void injectInto(Object candidate) {
                 if (ServicesInjectorAware.class.isAssignableFrom(candidate.getClass())) {

@@ -32,6 +32,7 @@ import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService;
+import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService2;
 import org.apache.isis.applib.services.memento.MementoService;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -192,7 +193,8 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     private void findAndInstantiateFixtureScripts(List<FixtureScript> fixtureScriptList) {
-        final Set<Class<? extends FixtureScript>> classes = classDiscoveryService.findSubTypesOfClasses(FixtureScript.class);
+        final Set<Class<? extends FixtureScript>> classes =
+                findSubTypesOfClasses();
         for (final Class<? extends FixtureScript> fixtureScriptCls : classes) {
             final String packageName = fixtureScriptCls.getPackage().getName();
             if(!packageName.startsWith(packagePrefix)) {
@@ -209,6 +211,15 @@ public abstract class FixtureScripts extends AbstractService {
                 return ObjectContracts.compare(o1, o2, "friendlyName,qualifiedName");
             }
         }); 
+    }
+
+    private Set<Class<? extends FixtureScript>> findSubTypesOfClasses() {
+        if(classDiscoveryService instanceof ClassDiscoveryService2) {
+            final ClassDiscoveryService2 classDiscoveryService2 = (ClassDiscoveryService2) classDiscoveryService;
+            return classDiscoveryService2.findSubTypesOfClasses(FixtureScript.class, packagePrefix);
+        } else {
+            return classDiscoveryService.findSubTypesOfClasses(FixtureScript.class);
+        }
     }
 
     private FixtureScript newFixtureScript(Class<? extends FixtureScript> fixtureScriptCls) {

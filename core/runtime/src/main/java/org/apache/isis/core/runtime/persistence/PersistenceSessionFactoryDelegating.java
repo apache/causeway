@@ -122,6 +122,8 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
         runtimeContext = persistenceSessionFactoryDelegate.createRuntimeContext(getConfiguration());
         ensureThatState(runtimeContext, is(not(nullValue())));
 
+        // inject the specification loader etc.
+        runtimeContext.injectInto(servicesInjector);
         
         // wire up components
 
