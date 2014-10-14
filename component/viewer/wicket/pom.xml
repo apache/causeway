@@ -44,8 +44,8 @@
         <wicket-jquery-ui.version>6.17.0</wicket-jquery-ui.version>
         <wicketstuff.version>6.17.0</wicketstuff.version>
 
-        <wicket-webjars.version>0.4.3</wicket-webjars.version>
-        <wicket-bootstrap.version>0.9.6</wicket-bootstrap.version>
+        <wicket-webjars.version>0.4.4-SNAPSHOT</wicket-webjars.version>
+        <wicket-bootstrap.version>0.9.7-SNAPSHOT</wicket-bootstrap.version>
         <wicket-source.version>6.0.0.8</wicket-source.version>
 
         <wicket-select2.version>2.2.3</wicket-select2.version>

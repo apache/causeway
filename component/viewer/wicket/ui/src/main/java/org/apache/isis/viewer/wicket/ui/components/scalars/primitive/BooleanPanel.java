@@ -19,11 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.model.Model;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -37,6 +39,14 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  */
 public class BooleanPanel extends ScalarPanelAbstract {
 
+    private static final CheckBoxXConfig THREE_STATE_CONFIG = new CheckBoxXConfig()
+        .withSize(CheckBoxXConfig.Sizes.xs)
+        .withLabelClickEvent(false)
+        .withIconChecked("<i class='fa fa-check'></i>")
+        .withIconNull("<i class='fa fa-square'></i>");
+
+    private static final CheckBoxXConfig TWO_STATE_CONFIG = new CheckBoxXConfig(THREE_STATE_CONFIG).withThreeState(false);
+
     private static final long serialVersionUID = 1L;
 
     private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
@@ -45,7 +55,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
     private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
-    private CheckBox checkBox;
+    private CheckBoxX checkBox;
 
     public BooleanPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
@@ -88,20 +98,20 @@ public class BooleanPanel extends ScalarPanelAbstract {
      */
     @Override
     protected Component addComponentForCompact() {
-        final CheckBox component = createCheckBox(ID_SCALAR_IF_COMPACT);
+        final CheckBoxX component = createCheckBox(ID_SCALAR_IF_COMPACT);
         addOrReplace(component);
         return component;
     }
 
-    private CheckBox createCheckBox(final String id) {
-        final CheckBox checkBox = new CheckBox(id, new Model<Boolean>() {
+    private CheckBoxX createCheckBox(final String id) {
+        final CheckBoxX checkBox = new CheckBoxX(id, new Model<Boolean>() {
             private static final long serialVersionUID = 1L;
 
             @Override
             public Boolean getObject() {
                 final ScalarModel model = getModel();
                 final ObjectAdapter adapter = model.getObject();
-                return adapter != null? (Boolean) adapter.getObject(): false;
+                return adapter != null? (Boolean) adapter.getObject(): null;
             }
 
             @Override
@@ -109,7 +119,14 @@ public class BooleanPanel extends ScalarPanelAbstract {
                 final ObjectAdapter adapter = getAdapterManager().adapterFor(object);
                 getModel().setObject(adapter);
             }
-        });
+        }) {
+            @Override
+            public CheckBoxXConfig getConfig() {
+                return BooleanPanel.this.getModel().isRequired()
+                    ? TWO_STATE_CONFIG
+                    : THREE_STATE_CONFIG;
+            }
+        };
         checkBox.setOutputMarkupId(true);
         checkBox.setEnabled(false); // will be enabled before rendering if
                                     // required
