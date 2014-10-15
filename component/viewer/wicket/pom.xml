@@ -41,7 +41,6 @@
         <relativeUrl />
 
         <wicket.version>6.17.0</wicket.version>
-        <wicket-jquery-ui.version>6.17.0</wicket-jquery-ui.version>
         <wicketstuff.version>6.17.0</wicketstuff.version>
 
         <wicket-webjars.version>0.4.4-SNAPSHOT</wicket-webjars.version>
@@ -270,32 +269,14 @@
 				</exclusions>
 			</dependency>
 
-
-            <!-- Wicket-JQuery-UI -->
-            <dependency>
-                <groupId>com.googlecode.wicket-jquery-ui</groupId>
-                <artifactId>wicket-jquery-ui-core</artifactId>
-                <version>${wicket-jquery-ui.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.googlecode.wicket-jquery-ui</groupId>
-                <artifactId>wicket-jquery-ui</artifactId>
-                <version>${wicket-jquery-ui.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.googlecode.wicket-jquery-ui</groupId>
-                <artifactId>wicket-jquery-ui-plugins</artifactId>
-                <version>${wicket-jquery-ui.version}</version>
-            </dependency>
-
             <!-- Wicket-Select2 -->
 			<dependency>
-			    <groupId>com.vaynberg.wicket.select2</groupId>
-			    <artifactId>wicket-select2</artifactId>
-			    <version>${wicket-select2.version}</version>
+				<groupId>com.vaynberg.wicket.select2</groupId>
+				<artifactId>wicket-select2</artifactId>
+				<version>${wicket-select2.version}</version>
 				<exclusions>
 					<exclusion>
-	        			<!-- for dependency convergence -->
+						<!-- for dependency convergence -->
 						<groupId>org.apache.wicket</groupId>
 						<artifactId>wicket-core</artifactId>
 					</exclusion>

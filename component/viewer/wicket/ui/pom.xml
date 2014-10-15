@@ -95,21 +95,9 @@
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-guice</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>com.googlecode.wicket-jquery-ui</groupId>
-            <artifactId>wicket-jquery-ui-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.wicket-jquery-ui</groupId>
-            <artifactId>wicket-jquery-ui</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.wicket-jquery-ui</groupId>
-            <artifactId>wicket-jquery-ui-plugins</artifactId>
-        </dependency>
 		<dependency>
-		    <groupId>com.vaynberg.wicket.select2</groupId>
-		    <artifactId>wicket-select2</artifactId>
+			<groupId>com.vaynberg.wicket.select2</groupId>
+			<artifactId>wicket-select2</artifactId>
 		</dependency>
 
         <dependency>
