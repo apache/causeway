@@ -22,15 +22,30 @@
     <body>
         <wicket:panel>
             <div class="linksSelectorPanel">
-                <span wicket:id="views" class="viewLinks">
-                    <ul wicket:id="viewList" class="viewList">
+                <div class="btn-group viewLinks" wicket:id="views">
+                    <button type="button" class="btn btn-xs btn-default">View as</button>
+                    <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul wicket:id="viewList" class="dropdown-menu" role="menu">
                         <li wicket:id="viewItem" class="viewItem">
                             <a href="#" wicket:id="viewLink">
-                                <span wicket:id="viewTitle" class="ViewLinkItem">[link title]</span>
+                                <span wicket:id="viewTitle" class="ViewLinkItemA">[link title]</span>
                             </a>
                         </li>
                     </ul>
-                </span>
+                </div>
+
+                <!--<span wicket:id="views" class="viewLinks">-->
+                    <!--<ul wicket:id="viewList" class="viewList">-->
+                        <!--<li wicket:id="viewItem" class="viewItem">-->
+                            <!--<a href="#" wicket:id="viewLink">-->
+                                <!--<span wicket:id="viewTitle" class="ViewLinkItem">[link title]</span>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</span>-->
+                <span class="clearfix"></span>
                 <span wicket:id="additionalLinks"></span>
                 <span class="clearfix"></span>
 

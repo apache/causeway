@@ -19,8 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.selector.links;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +32,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -204,22 +204,20 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                             selectorPanel.onSelect(target);
                             target.add(selectorPanel, views);
                         }
+
+                        @Override
+                        protected void onComponentTag(ComponentTag tag) {
+                            super.onComponentTag(tag);
+                            Buttons.fixDisabledState(this, tag);
+                        }
                     };
 
                     String name = nameFor(componentFactory);
                     boolean isEnabled = componentFactory != selectorPanel.selectedComponentFactory;
-                    if (isEnabled) {
-                        item.add(new CssClassAppender("bg-success"));
-                        item.add(new CssClassRemover("bg-primary"));
-                        TooltipConfig tooltipConfig = new TooltipConfig();
-                        tooltipConfig.withPlacement(TooltipConfig.Placement.left);
-                        item.add(new TooltipBehavior(Model.of("Show as " + name), tooltipConfig));
-                    } else {
-                        item.add(new CssClassAppender("bg-primary"));
-                        item.add(new CssClassRemover("bg-success"));
+                    if (!isEnabled) {
+                        item.add(new CssClassAppender("active"));
                     }
                     Label viewTitleLabel = new Label(ID_VIEW_TITLE, name);
-                    viewTitleLabel.add(new CssClassAppender(StringExtensions.asLowerDashed(name)));
                     link.add(viewTitleLabel);
                     item.add(link);
 
@@ -227,7 +225,7 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                 }
 
                 private String nameFor(final ComponentFactory componentFactory) {
-                    return componentFactory instanceof CollectionContentsAsUnresolvedPanelFactory ? "hideIcon" : componentFactory.getName();
+                    return componentFactory instanceof CollectionContentsAsUnresolvedPanelFactory ? "Hide" : componentFactory.getName();
                 }
             };
             container.add(listView);

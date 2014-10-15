@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-.linksSelectorPanel ul.viewList {
+.linksSelectorPanel .viewLinks {
 	float:right;
 	display:block;
 }
