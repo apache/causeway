@@ -92,7 +92,6 @@ public final class EntityActionUtil {
             final EntityModel entityModel,
             final ObjectAssociation association,
             final List<ObjectAction> associatedActions) {
-        final ObjectSpecification adapterSpec = entityModel.getTypeOfSpecification();
         final ObjectAdapter adapter = entityModel.load(ConcurrencyChecking.NO_CHECK);
 
         final AuthenticationSessionProvider asa = (AuthenticationSessionProvider) Session.get();
@@ -106,7 +105,7 @@ public final class EntityActionUtil {
                     ObjectAction.Filters.notBulkOnly(),
                     ObjectAction.Filters.excludeWizardActions(objectSpecification));
 
-        final List<ObjectAction> userActions = adapterSpec.getObjectActions(type, Contributed.INCLUDED, filter);
+        final List<ObjectAction> userActions = objectSpecification.getObjectActions(type, Contributed.INCLUDED, filter);
         associatedActions.addAll(userActions);
         return userActions;
     }

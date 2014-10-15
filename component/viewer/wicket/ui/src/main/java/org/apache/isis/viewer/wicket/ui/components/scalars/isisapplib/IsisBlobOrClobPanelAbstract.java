@@ -28,8 +28,6 @@ import javax.activation.MimeType;
 import javax.imageio.ImageIO;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.markup.html.image.resource.ThumbnailImageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -65,7 +63,6 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     private static final String ID_SCALAR_IF_REGULAR_DOWNLOAD = "scalarIfRegularDownload";
     private static final String ID_FILE_NAME = "fileName";
-    private static final String ID_SCALAR_IF_REGULAR_CLEAR = "scalarIfRegularClear";
     private static final String ID_SCALAR_NAME = "scalarName";
     private static final String ID_SCALAR_VALUE = "scalarValue";
     private static final String ID_IMAGE = "scalarImage";
@@ -229,8 +226,6 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         
         fileNameLabel = updateFileNameLabel(ID_FILE_NAME, formComponent);
 
-        updateClearLink(visibility);
-
         // the visibility of download link is intentionally 'backwards';
         // if in edit mode then do NOT show
         final MarkupContainer downloadLink = updateDownloadLink(ID_SCALAR_IF_REGULAR_DOWNLOAD, formComponent);
@@ -257,29 +252,6 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         formComponent.addOrReplace(fileNameLabel);
         fileNameLabel.setOutputMarkupId(true);
         return fileNameLabel;
-    }
-
-    private void updateClearLink(InputFieldVisibility visibility) {
-        final MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
-        formComponent.setOutputMarkupId(true); // enable ajax link
-    
-        final AjaxLink<Void> ajaxLink = new AjaxLink<Void>(ID_SCALAR_IF_REGULAR_CLEAR){
-            private static final long serialVersionUID = 1L;
-    
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                setEnabled(false);
-                ScalarModel model = IsisBlobOrClobPanelAbstract.this.getModel();
-                model.setObject(null);
-                target.add(formComponent);
-                target.add(fileNameLabel);
-            }
-        };
-        ajaxLink.setOutputMarkupId(true);
-        formComponent.addOrReplace(ajaxLink);
-    
-        final T blobOrClob = getBlobOrClobFromModel();
-        formComponent.get(ID_SCALAR_IF_REGULAR_CLEAR).setVisible(blobOrClob != null && visibility == InputFieldVisibility.VISIBLE);
     }
 
     private MarkupContainer updateDownloadLink(String downloadId, MarkupContainer container) {
