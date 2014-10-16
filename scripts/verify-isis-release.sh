@@ -31,7 +31,7 @@ _download(){
     do
         echo 'Downloading '$fil
         _execmustpass $download_cmd $fil
-        _execmayfail $download_cmd $fil.asc
+        _execmustpass $download_cmd $fil.asc
     done
 }
 
@@ -39,7 +39,7 @@ _verify(){
     for zip in *.zip
     do 
         echo 'Verifying '$zip   
-        _execmayfail gpg --verify $zip.asc $zip 
+        _execmustpass gpg --verify $zip.asc $zip 
     done
 }
 
@@ -51,19 +51,14 @@ _unpack(){
 }
 
 _fetch_dependencies(){
-    _execmustpass mvn dependency:go-offline
+    _execmayfail mvn dependency:go-offline
 }
 
 _build(){
     echo 'Removing Isis from local repo '$module
     rm -rf ~/.m2/repository/org/apache/isis
-    COUNTER=0
     for module in ./*/
     do
-        # Surely better to check if "core" is in name?
-        COUNTER=$[COUNTER+1]
-        #if [ $COUNTER -eq 1 ]
-        #if [[ $module == "*core*" ]]
         cd $module
         grep -q "Isis Core" pom.xml
         retcode=$?
@@ -72,23 +67,31 @@ _build(){
             echo 'Building Core '$module
             _fetch_dependencies
             _execmustpass mvn clean install -o
-            cd ..
         else
             echo 'Building Module '$module
-            # _execmustpass mvn clean install
-            cd ..
+            _execmustpass mvn clean install $offline
         fi
+		cd ..
     done
 }
+
+if [[ $@ == *offline* ]]
+then
+    echo "enabling offline mode"
+	offline=-o
+else
+	offline=
+fi
+
 # check the environment
 # Check for curl or wget
 download_cmd=
-curl --version
+curl --version > /dev/null 2>&1
 if [[ $? -eq 0 ]]; then
-    download_cmd=curl -O
+    download_cmd=curl -L -O
 fi 
 if [[ -z "$download_cmd" ]]; then
-    wget --version
+    wget --version > /dev/null 2>&1
     if [[ $? -eq 0 ]]; then
         download_cmd=wget
     else
@@ -96,7 +99,6 @@ if [[ -z "$download_cmd" ]]; then
         exit 11
     fi 
 fi
-
 
 # The work starts here 
 _download
