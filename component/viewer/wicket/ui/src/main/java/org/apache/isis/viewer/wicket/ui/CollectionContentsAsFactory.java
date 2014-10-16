@@ -27,8 +27,8 @@ import org.apache.wicket.model.IModel;
  * for their representation in {@link org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract}.
  * </p>
  * <p>
- * If the {@link org.apache.isis.viewer.wicket.ui.ComponentFactory} doesn't implement this interface then
- * {@link ComponentFactory#getName()} will be used as title and its
+ * If the {@link org.apache.isis.viewer.wicket.ui.ComponentFactory} doesn't implement this interface or the implementation
+ * of any of its methods return {@code null} then {@link ComponentFactory#getName()} will be used as title and its
  * {@link org.apache.isis.core.commons.lang.StringExtensions#asLowerDashed(java.lang.String) dashed representation}
  * as CSS class for the optional image.
  * </p>
