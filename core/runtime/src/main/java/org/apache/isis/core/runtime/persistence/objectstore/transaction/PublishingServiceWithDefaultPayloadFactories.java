@@ -49,6 +49,9 @@ public class PublishingServiceWithDefaultPayloadFactories {
 
     private final static Function<ObjectAdapter, ObjectAdapter> NOT_DESTROYED_ELSE_EMPTY = new Function<ObjectAdapter, ObjectAdapter>() {
         public ObjectAdapter apply(ObjectAdapter adapter) {
+            if(adapter == null) {
+                return null;
+            }
             if (!adapter.isDestroyed()) {
                 return adapter;
             }

@@ -745,7 +745,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
         // ensure that any changed objects means that the command should be persisted
         final Set<ObjectAdapter> changedAdapters = findChangedAdapters(changedObjectProperties);
-        if(!changedAdapters.isEmpty()) {
+        if(!changedAdapters.isEmpty() && command.getMemberIdentifier() != null) {
             command.setPersistHint(true);
         }
 

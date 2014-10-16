@@ -73,6 +73,7 @@ public class ToDoItemSubscriptions {
     @Prototype
     @MemberOrder(name = "Prototyping", sequence = "80")
     @Named("Set subscriber behaviour")
+    @NotInServiceMenu
     @ActionSemantics(ActionSemantics.Of.IDEMPOTENT)
     public ToDoItem subscriberBehaviour(ToDoItem toDoItem, @Named("Behaviour") Behaviour behaviour) {
         this.behaviour = behaviour;

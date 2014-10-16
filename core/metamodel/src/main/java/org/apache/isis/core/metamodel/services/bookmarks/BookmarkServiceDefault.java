@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAware;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -74,7 +75,11 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
         if(domainObject == null) {
             return null;
         }
-        return domainObjectServices.bookmarkFor(domainObject);
+        return domainObjectServices.bookmarkFor(unwrapped(domainObject));
+    }
+
+    private Object unwrapped(Object domainObject) {
+        return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
     }
 
     @Override
@@ -90,5 +95,7 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
     }
 
 
+    @javax.inject.Inject
+    private WrapperFactory wrapperFactory;
 
 }
