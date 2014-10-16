@@ -75,12 +75,13 @@ _build(){
     done
 }
 
-if [[ $@ == *offline* ]]
+if [[ $@ == *online* ]]
 then
-    echo "enabling offline mode"
-	offline=-o
-else
+    echo "Enabling online mode."
 	offline=
+else
+    echo "Enabling offline mode. Use '$0 --online' to use online mode."
+	offline=-o
 fi
 
 # check the environment
