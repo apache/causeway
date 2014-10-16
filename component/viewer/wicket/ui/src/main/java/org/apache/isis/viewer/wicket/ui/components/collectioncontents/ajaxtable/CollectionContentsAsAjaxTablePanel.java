@@ -317,6 +317,4 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     protected MessageBroker getMessageBroker() {
         return getAuthenticationSession().getMessageBroker();
     }
-
-
 }

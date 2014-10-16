@@ -253,8 +253,10 @@ public abstract class LinksSelectorPanelAbstract<T extends IModel<?>> extends Pa
                     if (cssClass == null) {
                         String name = componentFactory.getName();
                         cssClass = Model.of(StringExtensions.asLowerDashed(name));
-                        // Small hack: if there is no specific CSS class then
-                        viewIcon.setDefaultModelObject("&#160;&#160;&#160;&#160;&#160;&#160;");
+                        // Small hack: if there is no specific CSS class then we assume that background-image is used
+                        // the span.ViewItemLink should have some content to show it
+                        // FIX: find a way to do this with CSS (width and height don't seems to help)
+                        viewIcon.setDefaultModelObject("&#160;&#160;&#160;&#160;&#160;");
                         viewIcon.setEscapeModelStrings(false);
                     }
                     return cssClass;

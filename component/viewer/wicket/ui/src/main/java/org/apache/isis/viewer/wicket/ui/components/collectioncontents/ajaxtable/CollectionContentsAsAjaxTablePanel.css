@@ -120,7 +120,7 @@
 	display: inline;
 }
 
-.collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigator > div {
+.collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigator > ul {
 	display: inline;
 	float: right;
 }
