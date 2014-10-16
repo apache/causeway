@@ -23,31 +23,24 @@
         <wicket:panel>
             <div class="linksSelectorPanel">
                 <div class="btn-group viewLinks" wicket:id="views">
-                    <button type="button" class="btn btn-xs btn-default">View as</button>
+                    <button type="button" class="btn btn-xs btn-default">
+                        <span wicket:id="viewButtonIcon" class="ViewLinkItem"></span>
+                        <span wicket:id="viewButtonTitle" class="ViewLinkItemTitle"></span>
+                    </button>
                     <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
                         <span class="caret"></span>
                     </button>
                     <ul wicket:id="viewList" class="dropdown-menu" role="menu">
                         <li wicket:id="viewItem" class="viewItem">
                             <a href="#" wicket:id="viewLink">
-                                <span wicket:id="viewTitle" class="ViewLinkItemA">[link title]</span>
+                                <span wicket:id="viewItemIcon" class="ViewLinkItem"></span> <span wicket:id="viewItemTitle" class="ViewLinkItemTitle">[link title]</span>
                             </a>
                         </li>
                     </ul>
                 </div>
 
-                <!--<span wicket:id="views" class="viewLinks">-->
-                    <!--<ul wicket:id="viewList" class="viewList">-->
-                        <!--<li wicket:id="viewItem" class="viewItem">-->
-                            <!--<a href="#" wicket:id="viewLink">-->
-                                <!--<span wicket:id="viewTitle" class="ViewLinkItem">[link title]</span>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                    <!--</ul>-->
-                <!--</span>-->
-                <span class="clearfix"></span>
                 <span wicket:id="additionalLinks"></span>
-                <span class="clearfix"></span>
+                <div class="clearfix"></div>
 
                 <div class="views">
                     <wicket:child/>
