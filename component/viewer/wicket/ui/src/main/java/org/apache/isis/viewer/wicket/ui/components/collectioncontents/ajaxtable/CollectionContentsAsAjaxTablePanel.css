@@ -101,7 +101,7 @@
 	/*background-color:#FFFFFF !important;*/
 }
 
-.collectionContentsAsAjaxTablePanel .actions {
+.collectionContentsAsAjaxTablePanel .entityActions {
 	margin-top: -1px;
     margin-bottom: -10px;
     float: left;

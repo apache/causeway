@@ -21,11 +21,11 @@
 }
 
 .cssMenuPanel .menuh {
-	font-family: arial, helvetica, sans-serif;
-	float: left;
-	margin-top: 0.1em;
-	background: repeat-x scroll center center;
-	width: 100%;
+	/*font-family: arial, helvetica, sans-serif;*/
+	/*float: left;*/
+	/*margin-top: 0.1em;*/
+	/*background: repeat-x scroll center center;*/
+	/*width: 100%;*/
 }
 
 .cssMenuPanel .menuh .small {
@@ -323,5 +323,5 @@
 	font-style: italic;
 }
 .entityActions a.prototype {
-    background-color: #20B5C2;
+    /*background-color: #20B5C2;*/
 }

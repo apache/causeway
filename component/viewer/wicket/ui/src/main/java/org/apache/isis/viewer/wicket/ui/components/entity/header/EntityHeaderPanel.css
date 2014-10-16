@@ -24,12 +24,15 @@
 
 div.entityHeaderPanel .iconAndTitle{
 	float: left;
-    padding:0em;
+    padding:0;
+	width: 100%;
 }
 
-div.entityHeaderPanel .actions {
+div.entityHeaderPanel .entityActions {
+	margin-top: -1px;
+	margin-bottom: -10px;
 	float: left;
-    padding:0em 0em;
+	padding:0 0;
 }
 
 .entityHeaderPanel .entityImage {
@@ -42,7 +45,6 @@ div.entityHeaderPanel .actions {
 .entityHeaderPanel .entityTitle {
 	font-size: 1.8em;
 	font-weight:normal;
-	color:#413D37;
 	text-decoration:none;
 }
 

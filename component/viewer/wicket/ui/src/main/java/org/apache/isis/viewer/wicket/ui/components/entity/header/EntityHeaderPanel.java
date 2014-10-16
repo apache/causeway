@@ -23,6 +23,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
@@ -46,6 +47,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 /**
  * {@link PanelAbstract Panel} representing the summary details (title, icon and
@@ -142,6 +144,12 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> {
         topLevelActions.addAll(userActions);
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+
+        PanelUtil.renderHead(response, getClass());
+    }
 
     // ///////////////////////////////////////////////////////////////////
     // Convenience
