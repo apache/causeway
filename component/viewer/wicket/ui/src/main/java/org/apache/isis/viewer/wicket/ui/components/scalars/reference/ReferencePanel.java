@@ -67,7 +67,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
     private static final String ID_SCALAR_NAME = "scalarName";
 
     private static final String ID_AUTO_COMPLETE = "autoComplete";
-    private static final String ID_ENTITY_ICON_TITLE_AND_COPYLINK = "entityIconTitleAndCopylink";
+    private static final String ID_ENTITY_ICON_TITLE = "entityIconAndTitle";
+//    private static final String ID_ENTITY_ICON_TITLE_AND_COPYLINK = "entityIconTitleAndCopylink";
 
     private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
@@ -218,7 +219,9 @@ public class ReferencePanel extends ScalarPanelAbstract {
                 entityModelForLink.setRenderingHint(getModel().getRenderingHint());
                 
                 final ComponentFactory componentFactory = 
-                        getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, entityModelForLink);
+                        getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
+//                final ComponentFactory componentFactory =
+//                        getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, entityModelForLink);
                 final Component component = componentFactory.createComponent(entityModelForLink);
                 
                 ((MarkupContainer)getComponentForRegular()).addOrReplace(component);
@@ -283,7 +286,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
     // called by syncWithInput
     private void permanentlyHideEntityIconAndTitleIfInRegularMode() {
         if(getComponentForRegular() != null) {
-            Components.permanentlyHide((MarkupContainer)getComponentForRegular(), ID_ENTITY_ICON_TITLE_AND_COPYLINK);
+            Components.permanentlyHide((MarkupContainer)getComponentForRegular(), ID_ENTITY_ICON_TITLE);
         }
     }
 

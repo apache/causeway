@@ -33,7 +33,8 @@ public class EntityIconTitleAndCopyLinkPanelFactory extends EntityComponentFacto
     private static final long serialVersionUID = 1L;
 
     public EntityIconTitleAndCopyLinkPanelFactory() {
-        super(ComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, EntityIconTitleAndCopyLinkPanel.class);
+        //super(ComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, EntityIconTitleAndCopyLinkPanel.class);
+        super(ComponentType.ENTITY_ICON_AND_TITLE, EntityIconTitleAndCopyLinkPanel.class);
     }
 
     @Override

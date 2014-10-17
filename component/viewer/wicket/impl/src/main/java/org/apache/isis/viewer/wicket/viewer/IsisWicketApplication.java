@@ -131,7 +131,10 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     private static final Logger LOG = LoggerFactory.getLogger(IsisWicketApplication.class);
 
     private static final String STRIP_WICKET_TAGS_KEY = "isis.viewer.wicket.stripWicketTags";
-    
+    private static final boolean STRIP_WICKET_TAGS_DEFAULT = true;
+    private static final String AJAX_DEBUG_MODE_KEY = "isis.viewer.wicket.ajaxDebugMode";
+    private static final boolean AJAX_DEBUG_MODE_DEFAULT = false;
+
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 
     /**
@@ -228,7 +231,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             getRequestCycleListeners().add(newWebRequestCycleForIsis());
     
             getResourceSettings().setParentFolderPlaceholder("$up$");
-            
+
             determineDeploymentTypeIfRequired();
             
             final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
@@ -239,7 +242,9 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             
             final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
             this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(configuration));
-    
+
+            getDebugSettings().setAjaxDebugModeEnabled(determineAjaxDebugModeEnabled(configuration));
+
             initWicketComponentInjection(injector);
 
             // must be done after injected componentFactoryRegistry into the app itself
@@ -593,8 +598,21 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
      * the tags because they may break some CSS rules.
      */
     private boolean determineStripWicketTags(IsisConfiguration configuration) {
-        final boolean strip = configuration.getBoolean(STRIP_WICKET_TAGS_KEY, true);
+        final boolean strip = configuration.getBoolean(STRIP_WICKET_TAGS_KEY, STRIP_WICKET_TAGS_DEFAULT);
         return strip;
+    }
+
+    // //////////////////////////////////////
+
+    /**
+     * Whether the Ajax debug should be shown, as specified by configuration settings.
+     *
+     * <p>
+     * If the <tt>isis.viewer.wicket.ajaxDebugMode</tt> is set, then this is used, otherwise the default is to disable.
+     */
+    private boolean determineAjaxDebugModeEnabled(IsisConfiguration configuration) {
+        final boolean debugMode = configuration.getBoolean(AJAX_DEBUG_MODE_KEY, AJAX_DEBUG_MODE_DEFAULT);
+        return debugMode;
     }
 
     // //////////////////////////////////////
