@@ -31,7 +31,6 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCs
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.wicket.MarkupContainer;
@@ -44,7 +43,6 @@ import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -84,7 +82,7 @@ import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModa
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemePicker;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
-import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.overlays.Overlays;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -99,7 +97,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     private static final long serialVersionUID = 1L;
 
-    private static final JavaScriptResourceReference JQUERY_JGROWL_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.jgrowl.js");
     private static final String REGULAR_CASE_KEY = "isis.viewer.wicket.regularCase";
 
     /**
@@ -264,17 +261,12 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
         response.render(CssHeaderItem.forReference(new CssResourceReference(PageAbstract.class, "bootstrap-overrides.css")));
 
-        response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_ISIS_WICKET_VIEWER_JS));
-        
-        final String feedbackMsg = JGrowlUtil.asJGrowlCalls(getMessageBroker());
-        if (!Strings.isNullOrEmpty(feedbackMsg)) {
-            final OnDomReadyHeaderItem forScript = OnDomReadyHeaderItem.forScript(feedbackMsg);
-            response.render(forScript);
-        }
-        
-        
+
+        JGrowlBehaviour jGrowlBehaviour = new JGrowlBehaviour();
+        jGrowlBehaviour.renderFeedbackMessages(response);
+
         // overlays
         if(getConfiguration().getBoolean(REGULAR_CASE_KEY, false)) {
             response.render(CssReferenceHeaderItem.forReference(PanelUtil.cssResourceReferenceFor(Overlays.class, "regular-case")));

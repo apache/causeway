@@ -103,6 +103,8 @@
 							<exclude>**/moment.min.js</exclude>
 							<exclude>**/bootstrap-datetimepicker.js</exclude>
 							<exclude>**/bootstrap-datetimepicker.min.js</exclude>
+							<exclude>**/bootstrap-growl.js</exclude>
+							<exclude>**/bootstrap-growl.min.js</exclude>
 						</excludes>
 					</configuration>
 					<executions>
