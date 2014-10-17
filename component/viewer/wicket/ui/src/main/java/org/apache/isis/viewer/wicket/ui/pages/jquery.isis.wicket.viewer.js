@@ -50,7 +50,9 @@ $(document).ready(function() {
 
     /* for modal dialogs */
     Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_BEFORE_SEND, function(attributes, jqXHR, settings) {
-        isisShowVeil(attributes, jqXHR, settings);
+        if (!$('#'+attributes.c).hasClass('noVeil')) {
+            isisShowVeil(attributes, jqXHR, settings);
+        }
     });
     Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_COMPLETE, function(attributes, jqXHR, settings) {
         isisHideVeil(attributes, jqXHR, settings);
