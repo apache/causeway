@@ -71,20 +71,23 @@
         <projectUrl>${project.url}</projectUrl>
 
         <license.additional-notes>In addition, Isis uses some Javascript libraries:
-* JQuery UI, licensed under the MIT license [1].
-* Twitter Bootstrap, licensed under ASL v2 [2]
-* JGrowl (JQuery plugin), licensed under MIT license [3]
-* LiveQuery (JQuery plugin), licensed under MIT license [4]
-* ZClip (JQuery plugin), licensed under MIT license [5]
-* ZeroClipboard library, licensed under MIT license [6]
+* Twitter Bootstrap, licensed under MIT [1]
+* Bootstrap-Growl (JQuery plugin), licensed under MIT license [2]
+* LiveQuery (JQuery plugin), licensed under MIT license [3]
+* ZClip (JQuery plugin), licensed under MIT license [4]
+* ZeroClipboard library, licensed under MIT license [5]
+* Wicket Bootstrap, licenced under ASL 2 [6]
+* Bootstrap Datetimepicker, licenced under MIT licence [7]
+* Moment.js, licenced under MIT licence [8]
 
-[1] http://jquery.org/license/
-[2] http://getbootstrap.com/
-[3] https://github.com/stanlemon/jGrowl/blob/master/jquery.jgrowl.js
-[4] https://github.com/brandonaaron/livequery#license
-[5] http://www.steamdev.com/zclip/
-[6] https://github.com/zeroclipboard/ZeroClipboard</license.additional-notes>        
-
+[1] https://github.com/twbs/bootstrap/blob/master/LICENSE
+[2] https://github.com/mouse0270/bootstrap-growl/blob/master/LICENSE
+[3] https://github.com/brandonaaron/livequery#license
+[4] http://www.steamdev.com/zclip/
+[5] https://github.com/zeroclipboard/ZeroClipboard
+[6] https://github.com/l0rdn1kk0n/wicket-bootstrap
+[7] https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
+[8] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
 
         <!-- from Datanucleus Objectstore -->
         <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
@@ -454,14 +457,6 @@
                             <notes />
                             <patterns>
                               <pattern>Dual licensed under the MIT</pattern>
-                            </patterns>
-                          </license>
-                          <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-                            <licenseFamilyCategory>JQRYUI</licenseFamilyCategory>
-                            <licenseFamilyName>MIT  </licenseFamilyName>
-                            <notes />
-                            <patterns>
-                              <pattern>jQuery Foundation and other contributors Licensed MIT</pattern>
                             </patterns>
                           </license>
                           <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
