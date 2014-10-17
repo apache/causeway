@@ -160,9 +160,6 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                             // (normally would be flushed when traverse to next page).
                             String errorMessagesIfAny = JGrowlUtil.asJGrowlCalls(IsisContext.getMessageBroker());
                             builder.append(errorMessagesIfAny);
-                            
-                            // resize, to show any feedback messages.
-                            builder.append("Wicket.Window.get().autoSizeWindow();\n");
 
                             // append the JS to the response. 
                             String buf = builder.toString();
@@ -178,21 +175,6 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
                     super.onError(target, form);
-                    if(actionPromptIfAny != null) {
-                        // resize, to show any feedback messages.
-
-                        target.appendJavaScript(
-                                "window.setTimeout(" +
-                                        "function() {\n " +
-                                        "  var ww = Wicket.Window.get();\n " +
-                                        "  ww.autoSizeWindow();\n " +
-                                        // the hack that works for initial rendering of dialog on Chrome
-                                        // (to manually adjust the margin) doesn't seem to work if there's an error
-                                        // so have chosen just to leave things as the are
-                                        // (really, the issue is with Wicket.Window.get().autoSizeWindow() anyway...)
-                                        "}\n, 0);\n"
-                        );
-                    }
                     target.add(form);
                 }
             };
