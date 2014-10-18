@@ -74,20 +74,16 @@
 * Twitter Bootstrap, licensed under MIT [1]
 * Bootstrap-Growl (JQuery plugin), licensed under MIT license [2]
 * LiveQuery (JQuery plugin), licensed under MIT license [3]
-* ZClip (JQuery plugin), licensed under MIT license [4]
-* ZeroClipboard library, licensed under MIT license [5]
-* Wicket Bootstrap, licenced under ASL 2 [6]
-* Bootstrap Datetimepicker, licenced under MIT licence [7]
-* Moment.js, licenced under MIT licence [8]
+* Wicket Bootstrap, licenced under ASL 2 [4]
+* Bootstrap Datetimepicker, licenced under MIT licence [5]
+* Moment.js, licenced under MIT licence [6]
 
 [1] https://github.com/twbs/bootstrap/blob/master/LICENSE
 [2] https://github.com/mouse0270/bootstrap-growl/blob/master/LICENSE
 [3] https://github.com/brandonaaron/livequery#license
-[4] http://www.steamdev.com/zclip/
-[5] https://github.com/zeroclipboard/ZeroClipboard
-[6] https://github.com/l0rdn1kk0n/wicket-bootstrap
-[7] https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
-[8] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
+[4] https://github.com/l0rdn1kk0n/wicket-bootstrap
+[5] https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
+[6] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
 
         <!-- from Datanucleus Objectstore -->
         <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
