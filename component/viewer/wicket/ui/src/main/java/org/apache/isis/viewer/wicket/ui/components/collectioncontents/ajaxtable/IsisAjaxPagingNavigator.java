@@ -29,12 +29,14 @@ public class IsisAjaxPagingNavigator extends BootstrapAjaxPagingNavigator {
 
     private static final long serialVersionUID = 1L;
 
-    public IsisAjaxPagingNavigator(String id, IPageable pageable, IPagingLabelProvider labelProvider) {
-        super(id, pageable, labelProvider);
+    public IsisAjaxPagingNavigator(String id, IPageable pageable) {
+        this(id, pageable, null);
     }
 
-    public IsisAjaxPagingNavigator(String id, IPageable pageable) {
-        super(id, pageable);
+    public IsisAjaxPagingNavigator(String id, IPageable pageable, IPagingLabelProvider labelProvider) {
+        super(id, pageable, labelProvider);
+
+        setSize(Size.Small);
     }
 
     @Override
