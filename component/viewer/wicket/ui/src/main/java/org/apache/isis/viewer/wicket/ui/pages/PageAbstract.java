@@ -20,11 +20,6 @@
 package org.apache.isis.viewer.wicket.ui.pages;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.ImmutableNavbarComponent;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarAjaxLink;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarText;
 import de.agilecoders.wicket.core.markup.html.references.BootlintJavaScriptReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
 
@@ -36,7 +31,6 @@ import com.google.inject.name.Named;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
@@ -48,6 +42,8 @@ import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
@@ -182,20 +178,13 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
             addApplicationActions(themeDiv);
 
-            Navbar navbar = new Navbar("navbar");
-            themeDiv.add(navbar);
-
-            navbar.fluid();
-
-            navbar.setBrandName(Model.of(applicationName));
-
-
             this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
             this.pageParameters = pageParameters;
 
-            addUserName(navbar);
-            addLogoutLink(navbar);
-            addAboutLink(navbar);
+            addApplicationName(themeDiv);
+            addUserName(themeDiv);
+            addLogoutLink(themeDiv);
+            addAboutLink(themeDiv);
             addBreadcrumbs();
             addThemePicker();
 
@@ -221,6 +210,12 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
             throw new RestartResponseAtInterceptPageException(getSignInPage());
         }
+    }
+
+    private void addApplicationName(MarkupContainer themeDiv) {
+        BookmarkablePageLink<Void> applicationNameLink = homePageLink("applicationName");
+        applicationNameLink.setBody(Model.of(applicationName));
+        themeDiv.add(applicationNameLink);
     }
 
     private void addThemePicker() {
@@ -291,27 +286,28 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         }
     }
 
-    private void addUserName(Navbar navbar) {
-        NavbarText userName = new NavbarText(navbar.newExtraItemId(), getAuthenticationSession().getUserName());
-        userName.position(Navbar.ComponentPosition.RIGHT);
-        navbar.addComponents(userName);
+    private void addUserName(MarkupContainer themeDiv) {
+        Label userName = new Label("userName", getAuthenticationSession().getUserName());
+        themeDiv.add(userName);
     }
 
-    private void addLogoutLink(Navbar navbar) {
-        NavbarAjaxLink logoutLink = new NavbarAjaxLink(new ResourceModel("logoutLabel")) {
+    private void addLogoutLink(MarkupContainer themeDiv) {
+        Link logoutLink = new Link("logoutLink") {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick() {
                 getSession().invalidate();
                 setResponsePage(getSignInPage());
             }
         };
-        navbar.addComponents(new ImmutableNavbarComponent(logoutLink, Navbar.ComponentPosition.RIGHT));
+        logoutLink.setBody(new ResourceModel("logoutLabel"));
+        themeDiv.add(logoutLink);
     }
 
-    private void addAboutLink(Navbar navbar) {
-        NavbarButton aboutLink = new NavbarButton(AboutPage.class, new ResourceModel("aboutLabel"));
-        navbar.addComponents(new ImmutableNavbarComponent(aboutLink, Navbar.ComponentPosition.RIGHT));
+    private void addAboutLink(MarkupContainer themeDiv) {
+        BookmarkablePageLink<Void> aboutLink = new BookmarkablePageLink<>("aboutLink", AboutPage.class);
+        aboutLink.setBody(new ResourceModel("aboutLabel"));
+        themeDiv.add(aboutLink);
     }
 
     private void addBreadcrumbs() {
