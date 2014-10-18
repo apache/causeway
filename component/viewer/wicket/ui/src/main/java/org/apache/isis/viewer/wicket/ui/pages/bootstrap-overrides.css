@@ -62,3 +62,7 @@
 .table .table td {
     border: none;
 }
+
+.pagination {
+    margin: 0;
+}
