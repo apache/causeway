@@ -85,10 +85,16 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         this.actionPrompt = actionPrompt;
     }
 
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+
+        buildGui(getModel());
+    }
 
     private void buildGui(final ActionModel actionModel) {
         if (actionModel.hasParameters()) {
-            buildGuiForParameters(actionModel);
+            buildGuiForParameters();
         } else {
             executeActionAndProcessResults(null, null);
         }
@@ -98,8 +104,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         return super.getModel();
     }
 
-    private void buildGuiForParameters(ActionModel actionModel) {
-
+    private void buildGuiForParameters() {
 
         ObjectAdapter targetAdapter = null;
         try {

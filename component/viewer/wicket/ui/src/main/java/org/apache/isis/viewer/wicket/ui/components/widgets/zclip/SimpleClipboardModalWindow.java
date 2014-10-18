@@ -65,6 +65,8 @@ public class SimpleClipboardModalWindow extends Modal<Void> implements ActionPro
 
     @Override
     public void closePrompt(AjaxRequestTarget target) {
-        show(target);
+        if (target != null) {
+            close(target);
+        }
     }
 }
