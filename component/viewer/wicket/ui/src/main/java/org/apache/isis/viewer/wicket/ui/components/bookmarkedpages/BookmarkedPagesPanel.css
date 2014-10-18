@@ -30,24 +30,10 @@
     background-color:#FFFFFF;
 }
 
-.bookmarkedPagesPanel .bookmarkedPagesPanelHolder .bookmarkedPagesList a img.bookmarkedPageImage {
+.bookmarkedPagesPanel .bookmarkedPagesList a img.bookmarkedPageImage {
     background-color: transparent;
     width: 16px;
     height: 16px;
-}
-
-.bookmarkedPagesPanel .bookmarkedPagesPanelHolder .bookmarkedPagesList a:hover span.bookmarkedPageTitle {
-	text-decoration:none;
-    background-color:#FFFFFF;
-}
-
-.bookmarkedPagesPanel .bookmarkedPagesPanelHolder .clearBookmarks {
-	margin-top: 30px;
-}
-
-.bookmarkedPagesPanel .bookmarkedPagesPanelHolder .currentBookmark span.bookmarkedPageImageAndTitle,
-.bookmarkedPagesPanel .bookmarkedPagesPanelHolder .currentBookmark span.bookmarkedPageTitle {
-    background-color:#FFFFFF;
 }
 
 .bookmarkedPagesPanel .bookmarkRibbon {
@@ -59,7 +45,7 @@
     top:120px;
     display:block;
     cursor:pointer;
-    z-index: 999;
+    z-index: 1997;
     margin-left: 1px;
     
     text-transform:uppercase;
@@ -74,28 +60,13 @@
     position:fixed;
     left:0;
     top:0;
-    background-color:#F0EFEA;
     width:500px;
-    z-index: 998;
+    z-index: 1998;
     display: none;
 }
 
 .bookmarkedPagesPanel #bookmarkedPagesSlidingDiv .content {
     width:490px;
-}
-
-
-.bookmarkedPagesPanel .clearBookmarkPlaceHolder {
-    position: relative;
-    top: -7px;
-    width: 20px;
-    padding-right: 20px;
-    padding-bottom: 40px;
-}
-
-
-.bookmarkedPagesPanel .clearBookmarks span {
-	padding-left: 25px;
 }
 
 .content>.list-group .list-group-item:first-child {

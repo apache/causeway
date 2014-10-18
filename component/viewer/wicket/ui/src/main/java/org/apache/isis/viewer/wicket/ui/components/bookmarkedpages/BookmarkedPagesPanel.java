@@ -40,6 +40,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
@@ -80,6 +81,13 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
     public BookmarkedPagesPanel(final String id, final BookmarkedPagesModel bookmarkedPagesModel) {
         super(id, bookmarkedPagesModel);
         buildGui();
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+
+        response.render(OnDomReadyHeaderItem.forScript("$('.bookmarkRibbon').height($('.navbar.navbar-fixed-top').height()-5);"));
     }
 
     private void buildGui() {

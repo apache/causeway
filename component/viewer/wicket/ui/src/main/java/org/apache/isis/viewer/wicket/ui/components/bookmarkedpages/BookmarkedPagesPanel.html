@@ -25,12 +25,12 @@
 	<body>
         <wicket:panel>
             <div class="bookmarkedPagesPanel">
-                <div class="showPanelTab bookmarkRibbon navbar-default"></div>
+                <div class="showPanelTab bookmarkRibbon navbar-inverse"></div>
                 <div id="bookmarkedPagesSlidingDiv">
                     <div class="row">
-                        <div class="col-xs-12 col-md-12">
+                        <div class="col-xs-12">
                             <div class="panel-group">
-                                <div class="panel panel-info">
+                                <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h4 class="panel-title"><span class="fa fa-bookmark"></span> Bookmarks</h4>
                                     </div>
@@ -39,34 +39,31 @@
                                         <span wicket:id="helpText"></span>
                                     </div>
 
-                                    <div class="content ">
-                                        <ul id="bookmarkedPagesA" class="bookmarkedPagesPanelHolderA bookmarkedPagesComponentTypeA list-group">
-                                            <li class="list-group-item">
-                                                <ul wicket:id="bookmarkList" class="bookmarkedPagesListA list-group">
-                                                    <li wicket:id="bookmarkedPageItem" class="bookmarkedPageItemA list-group-item">
-                                                        <div>
-                                                            <a href="#" wicket:id="bookmarkedPageLink">
-                                                                <div class="bookmarkedPageImageAndTitleA" style="display: inline-block">
-                                                                    <img wicket:id="bookmarkedPageImage" class="bookmarkedPageImageA"/>
-                                                                    <span wicket:id="bookmarkedPageTitle" class="bookmarkedPageTitleA">[link title]</span>
-                                                                </div>
-                                                            </a>
+                                    <ul id="bookmarkedPages" class="list-group">
+                                        <li class="list-group-item">
+                                            <ul wicket:id="bookmarkList" class="bookmarkedPagesList list-group">
+                                                <li wicket:id="bookmarkedPageItem" class="bookmarkedPageItem list-group-item">
+                                                    <div>
+                                                        <a href="#" wicket:id="bookmarkedPageLink">
+                                                            <div class="bookmarkedPageImageAndTitle" style="display: inline-block">
+                                                                <img wicket:id="bookmarkedPageImage" class="bookmarkedPageImage"/>
+                                                                <span wicket:id="bookmarkedPageTitle" class="bookmarkedPageTitle">[link title]</span>
+                                                            </div>
+                                                        </a>
 
-                                                            <a href="#" wicket:id="clearBookmarkLink" class="clearBookmarkPlaceHolderA pull-right">
-                                                                <span class="fa fa-ban text-danger"></span>
-                                                            </a>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                                        <a href="#" wicket:id="clearBookmarkLink" class="clearBookmarkPlaceHolder pull-right">
+                                                            <span class="fa fa-ban text-danger"></span>
+                                                        </a>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+
                                     <div class="panel-footer" wicket:enclosure="clearBookmarks">
-                                        <a href="#" wicket:id="clearBookmarks" class="clearBookmarksA" title="Clear Bookmarks">
-                                            <div>
-                                                <span>&nbsp;</span>
-                                                <span class="text-danger pull-right">Clear all</span>
-                                            </div>
+                                        <span>&nbsp;</span>
+                                        <a href="#" wicket:id="clearBookmarks" class="clearBookmarksA btn-link pull-right" title="Clear Bookmarks">
+                                            <span class="text-danger">Clear all</span>
                                         </a>
                                     </div>
                                 </div>
