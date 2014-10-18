@@ -51,6 +51,9 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.protocol.http.ClientProperties;
+import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -280,9 +283,12 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         }
 
         // TODO mgrigorov Remove before merge to master
-//        if (!getRequest().getRequestParameters().getParameterValue("bootlint").isNull()) {
+        WebClientInfo clientInfo = WebSession.get().getClientInfo();
+        ClientProperties properties = clientInfo.getProperties();
+        if (!(properties.isBrowserInternetExplorer() && properties.getBrowserVersionMajor() < 9)) {
+            // use BootLint for any browser but IE 6-8
             response.render(JavaScriptHeaderItem.forReference(BootlintJavaScriptReference.INSTANCE));
-//        }
+        }
     }
 
     private void addUserName(Navbar navbar) {
