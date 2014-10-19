@@ -31,19 +31,26 @@ import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class ToDoItemsIntegTest extends AbstractToDoIntegTest {
 
     @Inject
+    FixtureScripts fixtureScripts;
+    @Inject
     ToDoItems toDoItems;
 
     public static class Finders extends ToDoItemsIntegTest {
 
+        ToDoItemsIntegTestFixture fixture;
+
         @Before
         public void setUpData() throws Exception {
-            scenarioExecution().install(new ToDoItemsIntegTestFixture());
+            // executing the fixtures directly allows us to look up the results later.
+            fixtureScripts.runFixtureScript(fixture = new ToDoItemsIntegTestFixture(), null);
         }
 
         private int notYetCompletedSize;
@@ -51,6 +58,8 @@ public class ToDoItemsIntegTest extends AbstractToDoIntegTest {
 
         @Before
         public void setUp() throws Exception {
+
+            // could use fixture${symbol_pound}lookup(...), but can also just search directly.
             final List<ToDoItem> notYetCompleteItems = wrap(toDoItems).notYetComplete();
             final List<ToDoItem> completedItems = wrap(toDoItems).complete();
 
@@ -64,22 +73,26 @@ public class ToDoItemsIntegTest extends AbstractToDoIntegTest {
         public void complete_and_notYetComplete() throws Exception {
 
             // given
-            List<ToDoItem> notYetCompleteItems = wrap(service(ToDoItems.class)).notYetComplete();
+            List<ToDoItem> notYetCompleteItems = wrap(toDoItems).notYetComplete();
             final ToDoItem toDoItem = wrap(notYetCompleteItems.get(0));
+            nextTransaction();
 
             // when
             toDoItem.completed();
+            nextTransaction();
 
             // then
-            assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(notYetCompletedSize-1));
-            assertThat(wrap(service(ToDoItems.class)).complete().size(), is(completedSize+1));
+            assertThat(wrap(toDoItems).notYetComplete().size(), is(notYetCompletedSize-1));
+            assertThat(wrap(toDoItems).complete().size(), is(completedSize+1));
+            nextTransaction();
 
             // and when
             toDoItem.notYetCompleted();
+            nextTransaction();
 
             // then
-            assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(notYetCompletedSize));
-            assertThat(wrap(service(ToDoItems.class)).complete().size(), is(completedSize));
+            assertThat(wrap(toDoItems).notYetComplete().size(), is(notYetCompletedSize));
+            assertThat(wrap(toDoItems).complete().size(), is(completedSize));
         }
     }
 
@@ -95,20 +108,27 @@ public class ToDoItemsIntegTest extends AbstractToDoIntegTest {
 
             // given
             int size = wrap(toDoItems).notYetComplete().size();
+            nextTransaction();
 
             // when
             final ToDoItem newToDo = toDoItems.newToDo("new todo", ToDoItem.Category.Professional, ToDoItem.Subcategory.OpenSource, null, null);
+            nextTransaction();
 
             // then
             assertThat(newToDo.getDescription(), is("new todo"));
             assertThat(newToDo.getCategory(), is(ToDoItem.Category.Professional));
-            assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(size+1));
+            assertThat(wrap(toDoItems).notYetComplete().size(), is(size+1));
+            assertThat(container().isPersistent(newToDo), is(true));
+            assertThat(container().isPersistent(wrap(newToDo)), is(true));
+
+            nextTransaction();
 
             // when
             newToDo.delete();
+            nextTransaction();
 
             // then
-            assertThat(wrap(service(ToDoItems.class)).notYetComplete().size(), is(size));
+            assertThat(wrap(toDoItems).notYetComplete().size(), is(size));
         }
 
     }

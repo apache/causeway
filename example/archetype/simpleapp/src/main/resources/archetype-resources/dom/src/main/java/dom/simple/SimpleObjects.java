@@ -22,28 +22,19 @@
 package dom.simple;
 
 import java.util.List;
+
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.Bookmarkable;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
 
 @DomainService(menuOrder = "10", repositoryFor = SimpleObject.class)
 public class SimpleObjects {
 
-    //region > identification in the UI
-    // //////////////////////////////////////
-
-    public String getId() {
-        return "simple";
-    }
-
-    public String iconName() {
-        return "SimpleObject";
-    }
-
-    //endregion
-
     //region > listAll (action)
-    // //////////////////////////////////////
 
     @Bookmarkable
     @ActionSemantics(Of.SAFE)
@@ -55,8 +46,6 @@ public class SimpleObjects {
     //endregion
 
     //region > create (action)
-    // //////////////////////////////////////
-    
     @MemberOrder(sequence = "2")
     public SimpleObject create(
             final @Named("Name") String name) {
@@ -69,7 +58,6 @@ public class SimpleObjects {
     //endregion
 
     //region > injected services
-    // //////////////////////////////////////
 
     @javax.inject.Inject 
     DomainObjectContainer container;

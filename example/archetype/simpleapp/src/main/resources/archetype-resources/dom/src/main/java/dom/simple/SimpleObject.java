@@ -42,8 +42,7 @@ import org.apache.isis.applib.util.ObjectContracts;
 public class SimpleObject implements Comparable<SimpleObject> {
 
     //region > name (property)
-    // //////////////////////////////////////
-    
+
     private String name;
 
     @javax.jdo.annotations.Column(allowsNull="false")
@@ -59,9 +58,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
 
     //endregion
 
-
     //region > compareTo
-    // //////////////////////////////////////
 
     @Override
     public int compareTo(SimpleObject other) {
@@ -71,7 +68,6 @@ public class SimpleObject implements Comparable<SimpleObject> {
     //endregion
 
     //region > injected services
-    // //////////////////////////////////////
 
     @javax.inject.Inject
     @SuppressWarnings("unused")

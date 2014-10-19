@@ -92,8 +92,6 @@ import org.apache.isis.applib.value.Clob;
                     + "description.indexOf(:description) >= 0")
 })
 @ObjectType("TODO")
-@Audited
-@PublishedObject(ToDoItemChangedPayloadFactory.class)
 @AutoComplete(repository=ToDoItems.class, action="autoComplete") // default unless overridden by autoCompleteNXxx() method
 //@Bounded - if there were a small number of instances only (overrides autoComplete functionality)
 @Bookmarkable
@@ -292,8 +290,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     }
 
     @ActionInteraction(CompletedEvent.class)
-    @Command
-    @PublishedAction
     @Bulk
     public ToDoItem completed() {
         setComplete(true);
@@ -320,8 +316,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     }
 
     @ActionInteraction(NoLongerCompletedEvent.class)
-    @Command
-    @PublishedAction
     @Bulk
     public ToDoItem notYetCompleted() {
         setComplete(false);
@@ -493,7 +487,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         getDependencies().remove(toDoItem);
     }
 
-    @PublishedAction
     public ToDoItem add(
             @TypicalLength(20)
             final ToDoItem toDoItem) {
@@ -625,7 +618,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     @Prototype
     @ActionSemantics(Of.SAFE)
     public URL openSourceCodeOnGithub() throws MalformedURLException {
-        return new URL("https://github.com/apache/isis/tree/master/example/application/quickstart_wicket_restful_jdo/dom/src/main/java/dom/todo/ToDoItem.java");
+        return new URL("https://github.com/apache/isis/tree/master/example/application/todoapp/dom/src/main/java/dom/todo/ToDoItem.java");
     }
     //endregion
 

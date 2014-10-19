@@ -17,16 +17,16 @@
   specific language governing permissions and limitations
   under the License.
 --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
-    	<groupId>${groupId}</groupId>
+        <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}</artifactId>
         <version>${version}</version>
     </parent>
 
-	<artifactId>${artifactId}</artifactId>
-	<name>Simple App Integration Tests</name>
+    <artifactId>${artifactId}</artifactId>
+    <name>Simple App Integration Tests</name>
 
     <build>
         <testResources>
@@ -42,15 +42,15 @@
                     <exclude>**/*.java</exclude>
                 </excludes>
             </testResource>
-        </testResources>  
+        </testResources>
     </build>
-  	<dependencies>
-	
-		<!-- other modules in this project -->
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>${rootArtifactId}-fixture</artifactId>
-		</dependency>
+    <dependencies>
+
+        <!-- other modules in this project -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>${rootArtifactId}-fixture</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>
@@ -65,7 +65,7 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-specsupport</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
@@ -105,7 +105,7 @@
             <version>0.0.4</version>
         </dependency>  
         -->
-	</dependencies>
+    </dependencies>
 
     <!-- 
     uncomment for enhanced cucumber-jvm reporting
@@ -117,6 +117,6 @@
         </repository>  
     </repositories>  
      -->
-  
+
 
 </project>

@@ -184,78 +184,8 @@
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-profilestore</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-security</artifactId>
         </dependency>
-
-
-        <!-- isis modules -->
-        <dependency>
-            <groupId>org.apache.isis.module</groupId>
-            <artifactId>isis-module-devutils-impl</artifactId>
-        </dependency>
-        <!--
-        uncomment to enable auditing (@Audited),
-        persisted to database
-        -->
-        <!--
-        <dependency>
-            <groupId>org.apache.isis.module</groupId>
-            <artifactId>isis-module-audit-jdo</artifactId>
-        </dependency>
-        -->
-
-        <!--
-        uncomment to enable BackgroundService;
-        depends on: an implementation of BackgroundCommandService to persist commands
-        (see isis-module-command-jdo)
-        -->
-        <!--
-        <dependency>
-            <groupId>org.apache.isis.module</groupId>
-            <artifactId>isis-module-background</artifactId>
-        </dependency>
-        -->
-        <!--
-        uncomment to enable commands (@Command annotation)
-        persisted to database, also enabling the ability to run commands in the background
-        (eg using the Quartz scheduler)
-        -->
-        <!--
-        <dependency>
-            <groupId>org.apache.isis.module</groupId>
-            <artifactId>isis-module-command-jdo</artifactId>
-        </dependency>
-        -->
-
-        <!--
-        uncomment to enable publishing (@PublishedObject, @PublishedAction annotations)
-        persisted to database, and using the Restful Objects (JSON) serialization of the event.
-        -->
-        <!--
-        <dependency>
-            <groupId>org.apache.isis.module</groupId>
-            <artifactId>isis-module-publishing-jdo</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.module</groupId>
-            <artifactId>isis-module-publishingeventserializer-ro</artifactId>
-        </dependency>
-        -->
-
-        <!--
-        uncomment to use the AppSettings or UserSettings services
-        (see also declaration of its applib in dom module)
-        -->
-        <!--
-        <dependency>
-            <groupId>org.apache.isis.module</groupId>
-            <artifactId>isis-module-settings-impl-jdo</artifactId>
-        </dependency>
-        -->
 
 
         <!-- to run using WebServer (optional) -->

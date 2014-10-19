@@ -57,8 +57,11 @@ public class SimpleObjectsTest_listAll_and_create extends SimpleAppIntegTest {
     @Test
     public void create() throws Exception {
 
+        // when
         wrap(simpleObjects).create("Faz");
-        
+        nextTransaction();
+
+        // then
         final List<SimpleObject> all = wrap(simpleObjects).listAll();
         assertThat(all.size(), is(4));
     }

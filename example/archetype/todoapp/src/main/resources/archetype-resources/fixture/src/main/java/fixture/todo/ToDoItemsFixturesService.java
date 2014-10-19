@@ -43,7 +43,7 @@ public class ToDoItemsFixturesService extends FixtureScripts {
         super("fixture.todo");
     }
 
-    //@Override // compatibility with core 1.5.0
+    @Override
     public FixtureScript default0RunFixtureScript() {
         return findFixtureScriptFor(RecreateToDoItemsAndCompleteSeveralForCurrent.class);
     }

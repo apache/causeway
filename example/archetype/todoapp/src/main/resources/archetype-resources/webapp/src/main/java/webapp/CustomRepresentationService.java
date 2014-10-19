@@ -21,16 +21,15 @@
  */
 package webapp;
 
-import com.google.inject.Singleton;
+import javax.ws.rs.core.Response;
+import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationServiceForRestfulObjects;
 
-import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
-
-@Singleton
-public class ComponentFactoryRegistrarForToDoApp extends ComponentFactoryRegistrarDefault {
+public class CustomRepresentationService extends RepresentationServiceForRestfulObjects {
 
     @Override
-    public void addComponentFactories(ComponentFactoryList componentFactories) {
-        super.addComponentFactories(componentFactories);
-        // currently no replacements
+    protected Response buildResponse(Response.ResponseBuilder responseBuilder) {
+        responseBuilder.header("X-ResponseGeneratedBy", getClass().getCanonicalName());
+        return super.buildResponse(responseBuilder);
     }
+
 }

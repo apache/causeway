@@ -40,14 +40,11 @@ import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bulk.AppliesTo;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
-import org.apache.isis.applib.annotation.Command.ExecuteIn;
-import org.apache.isis.applib.annotation.Optional;
-import org.apache.isis.applib.services.background.BackgroundService;
-import org.apache.isis.applib.services.clock.ClockService;
-import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
+import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
@@ -98,8 +95,6 @@ import org.apache.isis.applib.value.Clob;
                     + "description.indexOf(:description) >= 0")
 })
 @ObjectType("TODO")
-@Audited
-@PublishedObject(ToDoItemChangedPayloadFactory.class)
 @AutoComplete(repository=ToDoItems.class, action="autoComplete") // default unless overridden by autoCompleteNXxx() method
 //@Bounded - if there were a small number of instances only (overrides autoComplete functionality)
 @Bookmarkable
@@ -120,15 +115,20 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         if (isComplete()) {
             buf.append("- Completed!");
         } else {
-            if (getDueBy() != null) {
-                buf.append(" due by", getDueBy());
+            try {
+                final LocalDate dueBy = wrapperFactory.wrap(this).getDueBy();
+                if (dueBy != null) {
+                    buf.append(" due by", dueBy);
+                }
+            } catch(HiddenException ex) {
+                // ignore
             }
         }
         return buf.toString();
     }
     
     public String iconName() {
-        return "ToDoItem-" + (!isComplete() ? "todo" : "done");
+        return !isComplete() ? "todo" : "done";
     }
     //endregion
 
@@ -160,6 +160,11 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     @javax.jdo.annotations.Column(allowsNull="true")
     public LocalDate getDueBy() {
         return dueBy;
+    }
+
+    public boolean hideDueBy() {
+        final UserMemento user = container.getUser();
+        return user.hasRole("realm1:noDueBy_role");
     }
 
     public void setDueBy(final LocalDate dueBy) {
@@ -288,8 +293,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     }
 
     @ActionInteraction(CompletedEvent.class)
-    @Command
-    @PublishedAction
     @Bulk
     public ToDoItem completed() {
         setComplete(true);
@@ -316,8 +319,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     }
 
     @ActionInteraction(NoLongerCompletedEvent.class)
-    @Command
-    @PublishedAction
     @Bulk
     public ToDoItem notYetCompleted() {
         setComplete(false);
@@ -489,7 +490,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         getDependencies().remove(toDoItem);
     }
 
-    @PublishedAction
     public ToDoItem add(
             @TypicalLength(20)
             final ToDoItem toDoItem) {
@@ -617,29 +617,11 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     }
     //endregion
 
-    //region > scheduleExplicitly (action), scheduleImplicitly (background action)
-    @ActionSemantics(Of.IDEMPOTENT)
-    @Prototype
-    public ToDoItem scheduleExplicitly() {
-        backgroundService.execute(this).completeSlowly(2000);
-        container.informUser("Task '" + getDescription() + "' scheduled for completion");
-        return this;
-    }
-    
-    @ActionSemantics(Of.IDEMPOTENT)
-    @Command(executeIn=ExecuteIn.BACKGROUND)
-    @Prototype
-    public ToDoItem scheduleImplicitly() {
-        completeSlowly(3000);
-        return this;
-    }
-    //endregion
-
     //region > openSourceCodeOnGithub (action)
     @Prototype
     @ActionSemantics(Of.SAFE)
     public URL openSourceCodeOnGithub() throws MalformedURLException {
-        return new URL("https://github.com/apache/isis/tree/master/example/application/quickstart_wicket_restful_jdo/dom/src/main/java/dom/todo/ToDoItem.java");
+        return new URL("https://github.com/apache/isis/tree/master/example/application/${parentArtifactId}/dom/src/main/java/dom/todo/ToDoItem.java");
     }
     //endregion
 
@@ -676,34 +658,34 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //region > lifecycle callbacks
 
     public void created() {
-        LOG.debug("lifecycle callback: created: " + container.titleOf(this));
+        LOG.debug("lifecycle callback: created: " + this.toString());
     }
 
     public void loaded() {
-        LOG.debug("lifecycle callback: loaded: " + container.titleOf(this));
+        LOG.debug("lifecycle callback: loaded: " + this.toString());
     }
 
     public void persisting() {
-        LOG.debug("lifecycle callback: persisting: " + container.titleOf(this));
+        LOG.debug("lifecycle callback: persisting: " + this.toString());
     }
 
     public void persisted() {
-        LOG.debug("lifecycle callback: persisted: " + container.titleOf(this));
+        LOG.debug("lifecycle callback: persisted: " + this.toString());
     }
 
     public void updating() {
-        LOG.debug("lifecycle callback: updating: " + container.titleOf(this));
+        LOG.debug("lifecycle callback: updating: " + this.toString());
     }
     public void updated() {
-        LOG.debug("lifecycle callback: updated: " + container.titleOf(this));
+        LOG.debug("lifecycle callback: updated: " + this.toString());
     }
 
     public void removing() {
-        LOG.debug("lifecycle callback: removing: " + container.titleOf(this));
+        LOG.debug("lifecycle callback: removing: " + this.toString());
     }
 
     public void removed() {
-        LOG.debug("lifecycle callback: removed: " + container.titleOf(this));
+        LOG.debug("lifecycle callback: removed: " + this.toString());
     }
     //endregion
 
@@ -795,15 +777,15 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
             };
         }
 
-		public static Predicate<ToDoItem> thoseCompleted(
-				final boolean completed) {
+        public static Predicate<ToDoItem> thoseCompleted(
+                final boolean completed) {
             return new Predicate<ToDoItem>() {
                 @Override
                 public boolean apply(final ToDoItem t) {
                     return Objects.equal(t.isComplete(), completed);
                 }
             };
-		}
+        }
 
         public static Predicate<ToDoItem> thoseWithSimilarDescription(final String description) {
             return new Predicate<ToDoItem>() {
@@ -862,7 +844,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > toString, compareTo
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public String toString() {
         return ObjectContracts.toString(this, "description,complete,dueBy,ownedBy");
@@ -875,32 +856,19 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     public int compareTo(final ToDoItem other) {
         return ObjectContracts.compare(this, other, "complete,dueBy,description");
     }
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //endregion
 
     //region > injected services
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @javax.inject.Inject
     private DomainObjectContainer container;
 
     @javax.inject.Inject
     private ToDoItems toDoItems;
 
-    @javax.inject.Inject
-    @SuppressWarnings("unused")
-    private ClockService clockService;
-
     Bulk.InteractionContext bulkInteractionContext;
     public void injectBulkInteractionContext(Bulk.InteractionContext bulkInteractionContext) {
         this.bulkInteractionContext = bulkInteractionContext;
     }
-
-    @SuppressWarnings("unused")
-    @javax.inject.Inject
-    private CommandContext commandContext;
-
-    @javax.inject.Inject
-    private BackgroundService backgroundService;
 
     @javax.inject.Inject
     private Scratchpad scratchpad;
@@ -913,7 +881,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     @javax.inject.Inject
     private WrapperFactory wrapperFactory;
 
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //endregion
 
 }

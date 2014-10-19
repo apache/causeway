@@ -21,16 +21,44 @@
  */
 package webapp;
 
-import com.google.inject.Singleton;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 
-import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
 
-@Singleton
-public class ComponentFactoryRegistrarForSimpleApp extends ComponentFactoryRegistrarDefault {
+/**
+ * Demonstrates how to register a replacement for one of the default framework-provided services.
+ *
+ * <p>
+ *     In <code>isis.properties</code>, is registered using:
+ * </p>
+ *
+ * <pre>
+ *     isis.services = ${symbol_escape}
+ *                     ...,
+ *                     1:webapp.MyMementoService,
+ *                     ...,
+ * </pre>
+ * <p>
+ *     that is, with a menuOrder of 1.
+ * </p>
+ */
+public class CustomMementoService extends MementoServiceDefault {
 
+    @Programmatic
     @Override
-    public void addComponentFactories(ComponentFactoryList componentFactories) {
-        super.addComponentFactories(componentFactories);
-        // currently no replacements
+    public Memento create() {
+        return super.create();
+    }
+
+    @Programmatic
+    @Override
+    public Memento parse(String str) {
+        return super.parse(str);
+    }
+
+    @Programmatic
+    @Override
+    public boolean canSet(Object input) {
+        return super.canSet(input);
     }
 }

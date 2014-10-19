@@ -30,6 +30,7 @@ import java.util.List;
 import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -37,11 +38,16 @@ import static org.junit.Assert.assertThat;
 
 public abstract class ToDoItemContributionsIntegTest extends AbstractToDoIntegTest {
 
+    ToDoItemsIntegTestFixture fixture;
+
     @Before
     public void setUpData() throws Exception {
-        scenarioExecution().install(new ToDoItemsIntegTestFixture().withTracing());
+        // executing the fixtures directly allows us to look up the results later.
+        fixtureScripts.runFixtureScript(fixture = new ToDoItemsIntegTestFixture(), null);
     }
 
+    @Inject
+    FixtureScripts fixtureScripts;
     @Inject
     ToDoItems toDoItems;
     @Inject
@@ -52,8 +58,8 @@ public abstract class ToDoItemContributionsIntegTest extends AbstractToDoIntegTe
 
     @Before
     public void setUp() throws Exception {
-        final List<ToDoItem> all = toDoItems.notYetComplete();
-        toDoItem = wrap(all.get(0));
+
+        toDoItem = wrap(fixture.lookup("integ-test/complete-current/create-current/item-2", ToDoItem.class));
 
         toDoItemContributionsWrapped = wrap(toDoItemContributions);
     }

@@ -61,10 +61,7 @@ public class ToDoItemAnalysis {
         return new Function<Category, ToDoItemsByCategoryViewModel>(){
              @Override
              public ToDoItemsByCategoryViewModel apply(final Category category) {
-                 final ToDoItemsByCategoryViewModel byCategory = 
-                     container.newViewModelInstance(ToDoItemsByCategoryViewModel.class, category.name());
-                 byCategory.setCategory(category);
-                 return byCategory;
+                 return new ToDoItemsByCategoryViewModel(category);
              }
          };
     }
@@ -94,10 +91,7 @@ public class ToDoItemAnalysis {
         return new Function<DateRange, ToDoItemsByDateRangeViewModel>(){
              @Override
              public ToDoItemsByDateRangeViewModel apply(final DateRange dateRange) {
-                 final ToDoItemsByDateRangeViewModel byDateRange = 
-                     container.newViewModelInstance(ToDoItemsByDateRangeViewModel.class, dateRange.name());
-                 byDateRange.setDateRange(dateRange);
-                 return byDateRange;
+                 return new ToDoItemsByDateRangeViewModel(dateRange);
              }
          };
     }
