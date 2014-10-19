@@ -22,16 +22,14 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
       xml:lang="en"  
       lang="en">
-	<head></head>
-	<body>
-		<wicket:panel>
-			<div class="standaloneCollectionPanel actionComponentType myBlockContainer">
-				<div class="iconAndTitle panel actionPanelHeaderNew">
-			         <p wicket:id="actionName" class="actionName">[action name]</p>
+    <body>
+        <wicket:panel>
+            <div class="standaloneCollectionPanel actionComponentType myBlockContainer panel panel-default">
+                <div class="iconAndTitle panel-heading actionPanelHeaderNew">
+                     <div wicket:id="actionName" class="actionName panel-title">[action name]</div>
                 </div>
-				<span wicket:id="collectionContents">
-				</span>
-			</div>
-		</wicket:panel>
-	</body>
+                <div wicket:id="collectionContents"></div>
+            </div>
+        </wicket:panel>
+    </body>
 </html>

@@ -55,6 +55,12 @@
 				</excludes>
 			</resource>
 		</resources>
+		<plugins>
+			<plugin>
+				<groupId>net.alchim31.maven</groupId>
+				<artifactId>yuicompressor-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
 	</build>
 
 	<dependencies>
@@ -89,22 +95,15 @@
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-guice</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>com.googlecode.wicket-jquery-ui</groupId>
-            <artifactId>wicket-jquery-ui-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.wicket-jquery-ui</groupId>
-            <artifactId>wicket-jquery-ui</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.wicket-jquery-ui</groupId>
-            <artifactId>wicket-jquery-ui-plugins</artifactId>
-        </dependency>
 		<dependency>
-		    <groupId>com.vaynberg.wicket.select2</groupId>
-		    <artifactId>wicket-select2</artifactId>
+			<groupId>com.vaynberg.wicket.select2</groupId>
+			<artifactId>wicket-select2</artifactId>
 		</dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>select2</artifactId>
+        </dependency>
 
         <!-- WEBJARS -->
         <dependency>
@@ -113,11 +112,22 @@
         </dependency>
 
         <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
+            <groupId>de.agilecoders.wicket</groupId>
+            <artifactId>wicket-bootstrap-core</artifactId>
         </dependency>
 
-		<!-- LOGGING DEPENDENCIES - LOG4J -->
+        <dependency>
+            <groupId>de.agilecoders.wicket</groupId>
+            <artifactId>wicket-bootstrap-extensions</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>de.agilecoders.wicket</groupId>
+            <artifactId>wicket-bootstrap-themes</artifactId>
+        </dependency>
+
+
+        <!-- LOGGING DEPENDENCIES - LOG4J -->
 
 		<dependency>
 			<groupId>org.slf4j</groupId>

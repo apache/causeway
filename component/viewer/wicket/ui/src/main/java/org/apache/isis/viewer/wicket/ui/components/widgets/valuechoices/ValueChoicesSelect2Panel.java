@@ -38,7 +38,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.Select2ChoiceUtil;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2ChoiceUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements ScalarModelWithPending {
@@ -82,6 +82,10 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         }
         
         addOrReplace(labelIfRegular);
+
+        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(select2Field));
+        addOrReplace(scalarName);
+
         addFeedbackTo(labelIfRegular, select2Field);
         addAdditionalLinksTo(labelIfRegular);
         
@@ -117,8 +121,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
             labelIfRegular.add(new AttributeModifier("title", Model.of(describedAs)));
         }
 
-        final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(select2Field));
-        labelIfRegular.add(scalarName);
         labelIfRegular.add(select2Field);
 
         return labelIfRegular;

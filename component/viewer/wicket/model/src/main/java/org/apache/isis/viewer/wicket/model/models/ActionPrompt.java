@@ -31,11 +31,9 @@ public interface ActionPrompt extends Serializable {
 
     void setPanel(Component component, AjaxRequestTarget target);
     
-    void show(AjaxRequestTarget target);
+    void showPrompt(AjaxRequestTarget target);
     
     String getContentId();
 
-    void close(AjaxRequestTarget target);
-
-
+    void closePrompt(AjaxRequestTarget target);
 }

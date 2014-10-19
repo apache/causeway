@@ -17,16 +17,17 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<html>
-	<body>
-		<wicket:panel>
-		     <span wicket:id="entityLinkWrapper" class="entityIconAndTitlePanel entityIconAndTitleComponentType">
-				<a href="#" wicket:id="entityLink" class="entityUrlSource">
-					<img wicket:id="entityImage" class="entityImage"/>
-					<span wicket:id="entityTitle" class="entityTitle">[title]</span>
-				</a>
-			</span>
-		</wicket:panel>
-	</body>
+<html xmlns:wicket="http://wicket.apache.org">
+    <body>
+        <wicket:panel>
+             <div wicket:id="entityLinkWrapper" class="entityIconAndTitlePanel entityIconAndTitleComponentType">
+                 <a href="#" wicket:id="entityLink" class="entityUrlSource">
+                     <img wicket:id="entityImage" class="entityImage"/>
+                     <span wicket:id="entityTitle" class="entityTitle">[title]</span>
+                 </a>
+                 <wicket:child/>
+            </div>
+        </wicket:panel>
+    </body>
 </html>
 

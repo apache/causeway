@@ -41,6 +41,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ApplicationActionsPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem.Builder;
@@ -90,7 +91,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         final ApplicationActionsModel applicationActionsModel = (ApplicationActionsModel) model;
-        return new CssMenuPanel(id, CssMenuPanel.Style.REGULAR, buildMenu(applicationActionsModel));
+        return new ApplicationActionsPanel(id, buildMenu(applicationActionsModel));
     }
 
     private List<CssMenuItem> buildMenu(final ApplicationActionsModel appActionsModel) {

@@ -21,8 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -30,7 +32,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 /**
  * {@link ComponentFactory} for {@link CollectionContentsAsAjaxTablePanel}.
  */
-public class CollectionContentsAsAjaxTablePanelFactory extends ComponentFactoryAbstract {
+public class CollectionContentsAsAjaxTablePanelFactory extends ComponentFactoryAbstract implements CollectionContentsAsFactory {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,6 +52,14 @@ public class CollectionContentsAsAjaxTablePanelFactory extends ComponentFactoryA
         final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
         return new CollectionContentsAsAjaxTablePanel(id, collectionModel);
     }
-    
 
+    @Override
+    public IModel<String> getTitleLabel() {
+        return Model.of("Table");
+    }
+
+    @Override
+    public IModel<String> getCssClass() {
+        return Model.of("fa fa-table");
+    }
 }

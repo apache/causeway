@@ -17,19 +17,21 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<html>
-	<body>
-		<wicket:panel>
+<html xmlns:wicket="http://wicket.apache.org">
+    <body>
+        <wicket:panel>
             <div class="simpleClipboardPanel">
-                <form wicket:id="form">
-                    <div class="inner">
-                        <p class="scalarName">Copy this URL:</p>
-                        <input wicket:id="textField" class="textField"/>
-                        <input type="submit" value="OK" class="ok"></input>
+                <form wicket:id="form" role="form">
+                    <div class="form-group">
+                        <div class="input-group" style="width: 100%">
+                            <p class="scalarName help-block">Copy this URL (Ctrl+C, Enter):</p>
+                            <input wicket:id="textField" class="form-control linkUrl"/>
+                        </div>
                     </div>
+                    <input type="submit" value="OK" class="ok btn btn-xs btn-success" onclick="$(this).closest('.modal').modal('hide'); return false;"/>
                 </form>
             </div>
-		</wicket:panel>
-	</body>
+        </wicket:panel>
+    </body>
 </html>
 

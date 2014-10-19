@@ -17,36 +17,40 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<html>
-	<body>
-		<wicket:panel>
-			<div class="entityPropertiesPanel entityPropertiesComponentType">
-                <form wicket:id="entityProperties" class="inputForm">
-                    <div class="row-fluid">
+<html xmlns:wicket="http://wicket.apache.org">
+    <body>
+        <wicket:panel>
+            <div class="entityPropertiesPanel entityPropertiesComponentType">
+                <form wicket:id="entityProperties" class="inputForm" role="form">
+                    <div class="row">
                         <div wicket:id="leftColumn">
-            		    	<div class="inputFormTable properties">
-            	    	    	<fieldset wicket:id="memberGroup" class="memberGroup myBlockContainer">
-            	    	    		<legend wicket:id="memberGroupName">[group name]</legend>
-            				    	<div wicket:id="properties">
-            			              <div wicket:id="property" class="property">[property]</div>
-            				    	</div>
-            			    	</fieldset>
-            		    	</div>
-            			    <div class="feedbackPanel">
-            			        <span wicket:id="feedback"/>
-            			    </div>
-            			    <div class="buttons">
-            			    	<input type="submit" class="edit" wicket:id="edit"/>
-            			    	<input type="submit" class="ok" wicket:id="ok"/>
-            			    	<input type="submit" class="cancel" wicket:id="cancel"/>
-            			    </div>
+                            <div class="inputFormTable properties">
+                                <fieldset wicket:id="memberGroup" class="memberGroup myBlockContainer">
+                                    <div class="panel panel-default">
+                                        <div wicket:id="memberGroupName" class="panel-heading">[group name]</div>
+                                        <div wicket:id="properties" class="panel-body">
+                                          <div wicket:id="property" class="property">[property]</div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="feedbackPanel">
+                                <span wicket:id="feedback"></span>
+                            </div>
+                            <div class="buttons">
+                                <input type="submit" class="edit btn btn-success btn-sm" wicket:id="edit"/>
+                                <input type="submit" class="ok btn-info btn-sm" wicket:id="ok"/>
+                                <input type="submit" class="cancel btn-default btn-sm" wicket:id="cancel"/>
+                            </div>
                         </div>
                         <div wicket:id="middleColumn">
                             <div class="inputFormTable properties">
-                                <fieldset wicket:id="memberGroup" class="memberGroup myBlockContainer">
-                                    <legend wicket:id="memberGroupName">[group name]</legend>
-                                    <div wicket:id="properties">
-                                      <div wicket:id="property" class="property">[property]</div>
+                                <fieldset wicket:id="memberGroup" class="memberGroup myBlockContainer panel panel-default">
+                                    <div class="DANH-REMOVE-panel">
+                                        <div wicket:id="memberGroupName" class="panel-heading">[group name]</div>
+                                        <div wicket:id="properties" class="panel-body">
+                                          <div wicket:id="property" class="property">[property]</div>
+                                        </div>
                                     </div>
                                 </fieldset>
                             </div>
@@ -54,21 +58,23 @@
                         <div wicket:id="rightColumn">
                             <div class="inputFormTable properties">
                                 <fieldset wicket:id="memberGroup" class="memberGroup myBlockContainer">
-                                    <legend wicket:id="memberGroupName">[group name]</legend>
-                                    <div wicket:id="properties">
-                                      <div wicket:id="property" class="property">[property]</div>
+                                    <div class="panel panel-default">
+                                        <div wicket:id="memberGroupName" class="panel-heading">[group name]</div>
+                                        <div wicket:id="properties" class="panel-body">
+                                          <div wicket:id="property" class="property">[property]</div>
+                                        </div>
                                     </div>
                                 </fieldset>
                             </div>
                         </div>
-                        <div wicket:id="entityCollections"/>
+                        <div wicket:id="entityCollections"></div>
                     </div>
-                    <div class="row-fluid">
-                        <div wicket:id="entityCollectionsOverflow"/>
+                    <div class="row">
+                        <div wicket:id="entityCollectionsOverflow"></div>
                     </div>
 
                 </form>
-			</div>
-		</wicket:panel>
-	</body>
+            </div>
+        </wicket:panel>
+    </body>
 </html>

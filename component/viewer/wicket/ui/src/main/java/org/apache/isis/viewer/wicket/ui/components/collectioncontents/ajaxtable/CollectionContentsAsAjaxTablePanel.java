@@ -32,6 +32,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
@@ -64,6 +65,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFac
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
@@ -305,6 +307,12 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         return true;
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+
+        PanelUtil.renderHead(response, getClass());
+    }
 
     // //////////////////////////////////////
 
@@ -317,6 +325,4 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     protected MessageBroker getMessageBroker() {
         return getAuthenticationSession().getMessageBroker();
     }
-
-
 }

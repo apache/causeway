@@ -17,32 +17,35 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<html>
-	<body>
-		<wicket:panel>
-			<div class="isisBlobPanel scalarNameAndValueComponentType">
-				<label for="scalarValue" wicket:id="scalarIfRegular">
-	      			<span wicket:id="scalarName" class="scalarName">[Label text]</span>
-                    <img class="scalarImage" width="200px" wicket:id="scalarImage"></img>
-	      			<span class="scalarValue">
-                    
-                        <span class="uploadFile">
-                            <input type="file" name="scalarValue" id="file-upload" wicket:id="scalarValue" />
-                        </span>
-                        <a wicket:id="scalarIfRegularClear"><span class="clearTitle">Clear</span></a>
+<html xmlns:wicket="http://wicket.apache.org">
+    <body>
+        <wicket:panel>
+            <div class="isisBlobPanel scalarNameAndValueComponentType">
+                <div class="row">
+                    <span wicket:id="scalarName" class="scalarName col-xs-3">[Label text]</span>
+                    <div class="col-xs-9">
+                        <label wicket:id="scalarIfRegular" style="width: 100%">
+                            <img class="scalarImage text-center" width="200px" wicket:id="scalarImage"/>
+                            <span class="scalarValue text-right">
 
-	                    <a class="download" wicket:id="scalarIfRegularDownload"><span class="downloadTitle">Download</span></a>
-                        <span class="fileName" wicket:id="fileName"></span>                        
-	      			</span>
-	                <span wicket:id="feedback"></span>
-                    <span wicket:id="additionalLinks"/>
-				</label>
+                                <span class="uploadFile help-block">
+                                    <input type="file" name="scalarValue" wicket:id="scalarValue" />
+                                </span>
+
+                                <a class="download btn btn-xs btn-default" wicket:id="scalarIfRegularDownload"><span class="downloadTitle">Download</span></a>
+                                <span class="fileName" wicket:id="fileName"></span>
+                            </span>
+                            <span wicket:id="feedback" class="help-block"></span>
+                            <span wicket:id="additionalLinks"></span>
+                        </label>
+                    </div>
+                </div>
 
                 <span wicket:id="scalarIfCompact">
-                	<a wicket:id="scalarIfCompactDownload"><span class="fileName" wicket:id="fileNameIfCompact"></span></a>
+                    <a wicket:id="scalarIfCompactDownload"><span class="fileName" wicket:id="fileNameIfCompact"></span></a>
                 </span>
 
-			</div>
-		</wicket:panel>
-	</body>
+            </div>
+        </wicket:panel>
+    </body>
 </html>

@@ -17,16 +17,18 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<html>
+<html xmlns:wicket="http://wicket.apache.org">
 	<body>
 		<wicket:panel>
-            <div class="zeroClipboardPanel">
-                <a wicket:id="copyLink" href="#" class="copyLink">
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                </a>
-                <a wicket:id="subscribingLink" id="subscribingLink" class="subscribingLink" href="#">&nbsp;</a>
-                <div wicket:id="simpleClipboardModalWindow"/>
-            </div>
+            <a wicket:id="copyLink" href="#" class="copyLink">
+                <i class="fa fa-link fa-lg"></i>
+            </a>
+            <wicket:remove>
+                TODO reenable the subscribing link after figuring out what it is.
+                Can we have a separate <li></li> for it ?
+            </wicket:remove>
+            <!--<a wicket:id="subscribingLink" id="subscribingLink" class="subscribingLink" href="#">&nbsp;</a>-->
+            <div wicket:id="simpleClipboardModalWindow"></div>
 		</wicket:panel>
 	</body>
 </html>

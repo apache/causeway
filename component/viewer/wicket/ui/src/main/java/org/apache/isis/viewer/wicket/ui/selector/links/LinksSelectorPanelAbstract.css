@@ -17,84 +17,33 @@
  *  under the License.
  */
 
-.linksSelectorPanel ul.viewList {
+.linksSelectorPanel .viewLinks {
 	float:right;
 	display:block;
 }
 
-.linksSelectorPanel ul.viewList span {
+.linksSelectorPanel ul.dropdown-menu {
+	min-width: 0;
 }
 
-.linksSelectorPanel ul.viewList li.viewItem {
-	float:left;
-	display:block;
-	height:30px;
-	line-height:30px;
-	position:relative;
+.linksSelectorPanel ul.dropdown-menu li.viewItem {
+	min-width: 0;
 }
 
 .linksSelectorPanel ul.viewList li.viewItem:first-child span {
-	border-radius:4px 0px 0px 4px;
-	-moz-border-radius:4px 0px 0px 4px;
-	-webkit-border-radius:4px 0px 0px 4px;
+	border-radius:4px 0 0 4px;
+	-moz-border-radius:4px 0 0 4px;
+	-webkit-border-radius:4px 0 0 4px;
 }
 
 .linksSelectorPanel ul.viewList li.viewItem:last-child span {
-	border-radius:0px 4px 4px 0px;
-	-moz-border-radius:0px 4px 4px 0px;
-	-webkit-border-radius:0px 4px 4px 0px;
+	border-radius:0 4px 4px 0;
+	-moz-border-radius:0 4px 4px 0;
+	-webkit-border-radius:0 4px 4px 0;
 }
 
-.linksSelectorPanel a span.ViewLinkItem {
-	color:#46423C;
-	background-color:#F0EFEA;
-	float:left;
-	display:block;
-	height:30px;
-	line-height:30px;
-}
-
-.linksSelectorPanel span.ViewLinkItem {
-	color:#FFFFFF;
-	background-color:#20B5C2;
-	float:left;
-	display:block;
-	height:30px;
-	line-height:30px;
-	font-style:normal;
-	width:12px;
-	text-indent:-999em;
-}
-
-.linksSelectorPanel span.ViewLinkItem.hide {
-	background-image:url('images/icon_hide_on.png');
-	background-position: center center;
-	background-repeat:no-repeat;
-}
-
-.linksSelectorPanel span.ViewLinkItem.table {
-	background-image:url('images/icon_table_on.png');
-	background-position: center center;
-	background-repeat:no-repeat;
-}
-
-.linksSelectorPanel a span.ViewLinkItem.hide {
-	background-image:url('images/icon_hide_off.png');
-	background-position: center center;
-	background-repeat:no-repeat;
-}
-
-.linksSelectorPanel a span.ViewLinkItem.table {
-	background-image:url('images/icon_table_off.png');
-	background-position: center center;
-	background-repeat:no-repeat;
-}
-
-.linksSelectorPanel .ViewLinkItem {
-	padding:0px 10px;
-	font-weight:bold;
-	text-transform:uppercase;
-	font-size:0.85em;
+.linksSelectorPanel span.ViewLinkItemTitle {
+	text-transform: capitalize;
 }
 
 .linksSelectorPanel .link-selector-panel-invisible {

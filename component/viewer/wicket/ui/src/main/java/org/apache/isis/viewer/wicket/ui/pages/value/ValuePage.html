@@ -22,22 +22,17 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
       xml:lang="en"  
       lang="en">
-	<wicket:head>
-		<wicket:link>
-			<link href="ValuePage.css" rel="stylesheet" type="text/css"/>
-		</wicket:link>
-	</wicket:head>
-	<body>
-		<wicket:extend>
-			<div class="valuePage">
-				<div wicket:id="bookmarks"/>
-				<div class="myBlockContainer">
-                    <div class="iconAndTitle panel actionPanelHeaderNew">
-                         <p wicket:id="actionName" class="actionName">[action name]</p>
+    <body>
+        <wicket:extend>
+            <div class="valuePage">
+                <div wicket:id="bookmarks"></div>
+                <div class="myBlockContainer">
+                    <div class="iconAndTitle panel panel-default actionPanelHeaderNew">
+                         <h3 wicket:id="actionName" class="actionName">[action name]</h3>
                     </div>
-				    <div wicket:id="value"/>
+                    <div wicket:id="value"></div>
                 </div>
-			</div>
-		</wicket:extend>
-	</body>
+            </div>
+        </wicket:extend>
+    </body>
 </html>

@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.propparam.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDatePicker;
 
 /**
  * Panel for rendering scalars representing dates, along with a date picker.
@@ -45,7 +46,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
 
     private static final long serialVersionUID = 1L;
 
-    private DateConverter<T> converter;
+    protected DateConverter<T> converter;
 
     public ScalarPanelTextFieldDatePickerAbstract(final String id, final ScalarModel scalarModel, final Class<T> cls) {
         super(id, scalarModel, cls);
@@ -67,7 +68,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     }
 
     protected TextField<T> createTextField(final String id) {
-        return new TextFieldWithDatePicker<T>(id, new TextFieldValueModel<T>(this), cls, converter);
+        return new TextFieldWithDatePicker<>(id, new TextFieldValueModel<T>(this), cls, converter);
     }
 
     @Override
@@ -81,7 +82,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     protected Component addComponentForCompact() {
         final AbstractTextComponent<T> textField = createTextField(ID_SCALAR_IF_COMPACT);
         final IModel<T> model = textField.getModel();
-        final T object = (T) model.getObject();
+        final T object = model.getObject();
         model.setObject(object);
         
         textField.setEnabled(false);

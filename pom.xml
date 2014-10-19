@@ -36,11 +36,11 @@
         <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/isis.git</developerConnection>
         <url>https://git-wip-us.apache.org/repos/asf?p=isis.git</url>
       <tag>HEAD</tag>
-  </scm>
+    </scm>
   
-  <prerequisites>
-    <maven>3.0.4</maven>
-  </prerequisites>
+    <prerequisites>
+        <maven>3.0.4</maven>
+    </prerequisites>
 
     
     <profiles>

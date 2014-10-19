@@ -22,16 +22,17 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
       xml:lang="en"  
       lang="en">
-	<wicket:head>
-		<wicket:link>
-			<link href="ActionPromptPage.css" rel="stylesheet" type="text/css"/>
-		</wicket:link>
-	</wicket:head>
 	<body>
 		<wicket:extend>
 			<div class="actionPromptPage">
-				<div wicket:id="bookmarks"/>
-				<div wicket:id="actionPrompt"/>
+				<div wicket:id="bookmarks"></div>
+				<div class="row">
+					<div class="col-xs-2"></div>
+					<div class="col-xs-8">
+						<div wicket:id="actionPrompt"></div>
+					</div>
+					<div class="col-xs-2"></div>
+				</div>
 			</div>
 		</wicket:extend>
 	</body>

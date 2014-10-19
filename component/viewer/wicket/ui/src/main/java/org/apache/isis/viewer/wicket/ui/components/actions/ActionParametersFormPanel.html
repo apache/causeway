@@ -17,26 +17,25 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<html>
-	<body>
-		<wicket:panel>
-			<div class="actionParametersForm inputForm">
-			    <form wicket:id="inputForm" 
-			    	method="post"> 
-			    	<fieldset class="inputFormTable parameters">
-				    	<div wicket:id="parameters" class="parameter">
-			              <div wicket:id="scalarNameAndValue">[scalar]</div>
-				    	</div>
-	   	      			<span wicket:id="feedback"></span>
-				    	<div class="buttons">
-				    		<input type="submit" wicket:id="okButton" value="OK" class="ok"/>
-                            <input type="submit" wicket:id="cancelButton" value="Cancel" class="cancel"/>
-				    	</div>
-			    	</fieldset>
-				</form>
-			</div>
-		</wicket:panel>
-	</body>
+<html xmlns:wicket="http://wicket.apache.org">
+    <body>
+        <wicket:panel>
+            <div class="actionParametersForm inputForm">
+                <form wicket:id="inputForm" method="post">
+                    <fieldset class="inputFormTable parameters">
+                        <div wicket:id="parameters" class="parameter">
+                          <div wicket:id="scalarNameAndValue">[scalar]</div>
+                        </div>
+                        <span wicket:id="feedback"></span>
+                        <div class="buttons">
+                            <input type="submit" wicket:id="okButton" value="OK" class="ok btn btn-sm btn-success"/>
+                            <input type="submit" wicket:id="cancelButton" value="Cancel" class="cancel btn btn-sm btn-default"/>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </wicket:panel>
+    </body>
 </html>
 
 

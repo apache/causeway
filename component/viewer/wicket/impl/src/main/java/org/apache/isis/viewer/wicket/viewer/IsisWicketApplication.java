@@ -19,7 +19,11 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.settings.BootstrapSettings;
+import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.webjars.WicketWebjars;
+import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 import net.ftlines.wicketsource.WicketSource;
 
@@ -34,6 +38,7 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.vaynberg.wicket.select2.ApplicationSettings;
 import org.apache.wicket.*;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -82,6 +87,8 @@ import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityPrope
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItemPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssSubMenuItemsPanel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2BootstrapCssReference;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2JsReference;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -124,7 +131,10 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     private static final Logger LOG = LoggerFactory.getLogger(IsisWicketApplication.class);
 
     private static final String STRIP_WICKET_TAGS_KEY = "isis.viewer.wicket.stripWicketTags";
-    
+    private static final boolean STRIP_WICKET_TAGS_DEFAULT = true;
+    private static final String AJAX_DEBUG_MODE_KEY = "isis.viewer.wicket.ajaxDebugMode";
+    private static final boolean AJAX_DEBUG_MODE_DEFAULT = false;
+
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 
     /**
@@ -209,6 +219,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             super.init();
 
             configureWebJars();
+            configureWicketBootstrap();
+            configureWicketSelect2();
 
             String isisConfigDir = getServletContext().getInitParameter("isis.config.dir");
 
@@ -219,7 +231,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             getRequestCycleListeners().add(newWebRequestCycleForIsis());
     
             getResourceSettings().setParentFolderPlaceholder("$up$");
-            
+
             determineDeploymentTypeIfRequired();
             
             final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
@@ -229,8 +241,10 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             injector.injectMembers(this);
             
             final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
-            this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(deploymentType, configuration));
-    
+            this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(configuration));
+
+            getDebugSettings().setAjaxDebugModeEnabled(determineAjaxDebugModeEnabled(configuration));
+
             initWicketComponentInjection(injector);
 
             // must be done after injected componentFactoryRegistry into the app itself
@@ -269,6 +283,13 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         }
     }
 
+    private void configureWicketSelect2() {
+        ApplicationSettings select2Settings = ApplicationSettings.get();
+        select2Settings.setCssReference(new Select2BootstrapCssReference());
+        select2Settings.setJavaScriptReference(new Select2JsReference());
+        select2Settings.setIncludeJqueryUI(false);
+    }
+
     private void configureWicketSourcePlugin() {
         if(!deploymentType.isProduction()) {
             WicketSource.configure(this);
@@ -286,8 +307,13 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
      * </p>
      */
     protected void configureWebJars() {
-        WebjarsSettings settings = new WebjarsSettings();
+        IWebjarsSettings settings = new WebjarsSettings();
         WicketWebjars.install(this, settings);
+    }
+
+    protected void configureWicketBootstrap() {
+        IBootstrapSettings settings = new BootstrapSettings();
+        Bootstrap.install(this, settings);
     }
 
     // //////////////////////////////////////
@@ -473,12 +499,14 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
 
     protected Set<CssResourceReference> cssResourceReferencesForAllComponents() {
-        Collection<ComponentFactory> componentFactories = getComponentFactoryRegistry().listComponentFactories();
+        // TODO mgrigorov: ISIS-537 temporary disabled to not mess up with Bootstrap styles
+//        Collection<ComponentFactory> componentFactories = getComponentFactoryRegistry().listComponentFactories();
         return Sets.newLinkedHashSet(
-                Iterables.concat(
-                        Iterables.transform(
-                                componentFactories,
-                                getCssResourceReferences)));
+//                Iterables.concat(
+//                        Iterables.transform(
+//                                componentFactories,
+//                                getCssResourceReferences))
+        );
     }
 
     // //////////////////////////////////////
@@ -563,16 +591,28 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     // //////////////////////////////////////
 
     /**
-     * Whether Wicket tags should be stripped from the markup, as specified by configuration settings (otherwise 
-     * depends on the {@link #deploymentType deployment type}. 
+     * Whether Wicket tags should be stripped from the markup, as specified by configuration settings..
      * 
      * <p>
      * If the <tt>isis.viewer.wicket.stripWicketTags</tt> is set, then this is used, otherwise the default is to strip 
-     * tags if in {@link DeploymentType#isProduction() production} mode, but not to strip if in prototyping mode.
+     * the tags because they may break some CSS rules.
      */
-    private boolean determineStripWicketTags(final DeploymentType deploymentType, IsisConfiguration configuration) {
-        final boolean strip = configuration.getBoolean(STRIP_WICKET_TAGS_KEY, deploymentType.isProduction());
+    private boolean determineStripWicketTags(IsisConfiguration configuration) {
+        final boolean strip = configuration.getBoolean(STRIP_WICKET_TAGS_KEY, STRIP_WICKET_TAGS_DEFAULT);
         return strip;
+    }
+
+    // //////////////////////////////////////
+
+    /**
+     * Whether the Ajax debug should be shown, as specified by configuration settings.
+     *
+     * <p>
+     * If the <tt>isis.viewer.wicket.ajaxDebugMode</tt> is set, then this is used, otherwise the default is to disable.
+     */
+    private boolean determineAjaxDebugModeEnabled(IsisConfiguration configuration) {
+        final boolean debugMode = configuration.getBoolean(AJAX_DEBUG_MODE_KEY, AJAX_DEBUG_MODE_DEFAULT);
+        return debugMode;
     }
 
     // //////////////////////////////////////

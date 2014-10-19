@@ -20,9 +20,7 @@ import org.apache.wicket.ajax.attributes.IAjaxCallListener;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackHeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 
 

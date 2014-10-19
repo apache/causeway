@@ -50,7 +50,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.Select2ChoiceUtil;
+import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2ChoiceUtil;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -67,7 +67,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
     private static final String ID_SCALAR_NAME = "scalarName";
 
     private static final String ID_AUTO_COMPLETE = "autoComplete";
-    private static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
+    private static final String ID_ENTITY_ICON_TITLE = "entityIconAndTitle";
+//    private static final String ID_ENTITY_ICON_TITLE_AND_COPYLINK = "entityIconTitleAndCopylink";
 
     private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
@@ -128,7 +129,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         }
         
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(entityLink));
-        labelIfRegular.add(scalarName);
+        addOrReplace(scalarName);
         
         addOrReplace(labelIfRegular);
         
@@ -219,6 +220,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
                 
                 final ComponentFactory componentFactory = 
                         getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
+//                final ComponentFactory componentFactory =
+//                        getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, entityModelForLink);
                 final Component component = componentFactory.createComponent(entityModelForLink);
                 
                 ((MarkupContainer)getComponentForRegular()).addOrReplace(component);
@@ -283,7 +286,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
     // called by syncWithInput
     private void permanentlyHideEntityIconAndTitleIfInRegularMode() {
         if(getComponentForRegular() != null) {
-            Components.permanentlyHide((MarkupContainer)getComponentForRegular(), ID_ENTITY_ICON_AND_TITLE);
+            Components.permanentlyHide((MarkupContainer)getComponentForRegular(), ID_ENTITY_ICON_TITLE);
         }
     }
 

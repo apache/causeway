@@ -18,26 +18,34 @@
   under the License.
 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-	<body>
-		<wicket:panel>
-			<div class="linksSelectorPanel">
-				<span wicket:id="views" class="viewLinks">
-					<ul wicket:id="viewList" class="viewList">
-				  		<li wicket:id="viewItem" class="viewItem">
-				  			<a href="#" wicket:id="viewLink">
-				  				<span wicket:id="viewTitle" class="ViewLinkItem">[link title]</span>
-			  				</a>
-			  	  		</li>
-					</ul>
-				</span>
-                <span wicket:id="additionalLinks"/>
-				<span class="clear"/>
-				
-				<div class="views">
-					<wicket:child/>
-				</div>
-			</div>
-		</wicket:panel>
-	</body>
+<html xmlns:wicket="http://wicket.apache.org">
+    <body>
+        <wicket:panel>
+            <div class="linksSelectorPanel">
+                <div class="btn-group viewLinks" wicket:id="views">
+                    <button type="button" class="btn btn-xs btn-default">
+                        <span wicket:id="viewButtonIcon" class="ViewLinkItem"></span>
+                        <span wicket:id="viewButtonTitle" class="ViewLinkItemTitle"></span>
+                    </button>
+                    <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul wicket:id="viewList" class="dropdown-menu dropdown-menu-right" role="menu">
+                        <li wicket:id="viewItem" class="viewItem">
+                            <a href="#" wicket:id="viewLink">
+                                <span wicket:id="viewItemIcon" class="ViewLinkItem"></span> <span wicket:id="viewItemTitle" class="ViewLinkItemTitle">[link title]</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <span wicket:id="additionalLinks"></span>
+                <div class="clearfix"></div>
+
+                <div class="views">
+                    <wicket:child/>
+                </div>
+            </div>
+        </wicket:panel>
+    </body>
 </html>

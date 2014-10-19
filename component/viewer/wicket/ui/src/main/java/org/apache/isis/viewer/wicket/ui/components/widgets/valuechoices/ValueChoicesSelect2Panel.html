@@ -22,29 +22,28 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
       xml:lang="en"  
       lang="en">
-	<head>
-		<wicket:link>
-			<link href="ValueChoicesSelect2Panel.css" rel="stylesheet" type="text/css"/>
-		</wicket:link>
-	</head>
-	<body>
-		<wicket:panel>
-			<div class="valueChoicesSelect2Panel scalarNameAndValueComponentType">
-				<label for="scalarValue" wicket:id="scalarIfRegular">
-					
-					<span wicket:id="scalarName" class="scalarName">[Label text]</span>
-	      			<span class="scalarValue">
-                        <span class="choicesPlaceholder">
-    	      				<input wicket:id="valueId" type="hidden" class="choices" />
-                        </span>
-              			<span wicket:id="feedback"></span>
-                        <span wicket:id="additionalLinks"/>
-					</span>
-				</label>
-			
-				<label wicket:id="scalarIfCompact"></label>
-				
-			</div>
-		</wicket:panel>
-	</body>
+    <head>
+        <wicket:link>
+            <!--<link href="ValueChoicesSelect2Panel.css" rel="stylesheet" type="text/css"/>-->
+        </wicket:link>
+    </head>
+    <body>
+        <wicket:panel>
+            <div class="valueChoicesSelect2Panel scalarNameAndValueComponentType">
+                <div class="row">
+                    <span wicket:id="scalarName" class="scalarName col-xs-3">[Label text]</span>
+                    <div class="scalarValue col-xs-9">
+                        <label wicket:id="scalarIfRegular" style="width: 100%">
+                            <div class="choicesPlaceholder">
+                                <input wicket:id="valueId" type="hidden" class="choices form-control select2-remote" style="width: 100%"/>
+                            </div>
+                            <span wicket:id="feedback" class="help-block"></span>
+                            <span wicket:id="additionalLinks"></span>
+                        </label>
+                    </div>
+                </div>
+                <label wicket:id="scalarIfCompact"></label>
+            </div>
+        </wicket:panel>
+    </body>
 </html>

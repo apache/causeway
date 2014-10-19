@@ -19,16 +19,12 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
-
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -80,7 +76,6 @@ public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkT
         }
 
         trim(rootNodes, getMaxSize());
-        return;
     }
 
     private int getMaxSize() {

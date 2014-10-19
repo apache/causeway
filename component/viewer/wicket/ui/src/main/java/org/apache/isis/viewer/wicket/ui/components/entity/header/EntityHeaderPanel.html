@@ -17,27 +17,17 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<html>
-	<body>
-		<wicket:panel>
-			<div class="entityHeaderPanel">
-			     <div class="iconAndTitle panel">
-			         <span wicket:id="entityIconAndTitle">[icon and title]</span>
-                 </div>
-                <div class="actions panel">				
-    				<table>
-        	   			<tbody>
-        	      			<tr>
-        						<td>
-        			      			<span class="entityActions" wicket:id="entityActions"/>
-        		      			</td>
-        	     			</tr>
-             			</tbody>
-      			   </table>
-  			   </div>
-  			   <div class="clear"/>
-			</div>
-		</wicket:panel>
-	</body>
+<html xmlns:wicket="http://wicket.apache.org">
+    <body>
+        <wicket:panel>
+            <div class="entityHeaderPanel panel">
+                <div class="iconAndTitle panel-heading">
+                    <div wicket:id="entityIconAndTitle" class="panel-title">[icon and title]</div>
+                </div>
+                <span class="entityActions" wicket:id="entityActions"></span>
+                <div class="clearfix"></div>
+            </div>
+        </wicket:panel>
+    </body>
 </html>
 

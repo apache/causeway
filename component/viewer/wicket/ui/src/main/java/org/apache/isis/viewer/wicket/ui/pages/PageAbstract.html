@@ -22,79 +22,85 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
       xml:lang="en"  
       lang="en">
-	<wicket:head>
-        <wicket:link>
-        
-            <!--  using our own copy rather than a webjars vanilla copy; see comments in PageAbstract#renderHead -->
-            <link href="bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-
-    		<link href="PageAbstract.css" rel="stylesheet" type="text/css"/>
-            <link href="isis-wicket-theme/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css"/>
-            <link href="jquery.jgrowl.css" rel="stylesheet" type="text/css"/>
-        </wicket:link>
-		<title wicket:id="pageTitle"></title>
-	</wicket:head>
-	<body>
-		<div id="container" class="page container-fluid">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+        <title wicket:id="pageTitle"></title>
+        <wicket:header-items/>
+    </head>
+    <body>
+        <div id="container" class="page container-fluid">
             <div wicket:id="theme">
-    			<div class="headerContainer">
-    				<div>
-    					<h1>
-    						<a wicket:id="homePageLink" id="header" href="#">
-    							<span wicket:id="applicationName" class="applicationName">[application name]</span>
-    						</a>
-    					</h1>
-    				</div>
-    				
-    				<div id="secondaryMenu">
-    					<div class="links">
-    						<span wicket:id="userName">[username]</span>
-    						<a class="logout" href="#" wicket:id="logoutLink"><wicket:message key="logoutLabel">logout</wicket:message></a>
-    						<a class="about" href="#" wicket:id="aboutLink"><wicket:message key="aboutLabel">about</wicket:message></a>
-    					</div>
-    				</div>
-    
-        			<div class="clear"/>
-        
-        			<div wicket:id="applicationActions" id="applicationActions"/>
-                    <div id="tertiaryMenu">
-                        <a wicket:id="copyLink" href="#">
-                            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                        </a>
+
+                <header class="navbar navbar-default navbar-fixed-top" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse.app-actions">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" wicket:id="applicationName"></a>
+                        </div>
+                        <div class="navbar-collapse app-actions collapse">
+                            <ul class="nav navbar-nav" wicket:id="applicationActions"></ul>
+                            <ul class="nav navbar-nav navbar-right">
+                                <p class="navbar-text" wicket:id="userName"></p>
+                                <li><a wicket:id="logoutLink">Logout</a></li>
+                                <li><a wicket:id="aboutLink">About</a></li>
+                            </ul>
+                            <form class="navbar-form navbar-right">
+                                <div wicket:id="breadcrumbs" style="width: 200px"></div>
+                            </form>
+                        </div>
                     </div>
-                    <div id="breadcrumbsMenu">
-                        <span wicket:id="breadcrumbs"/>
-                    </div>
-        
-        		</div>
-    
-    			<div id="body">
-    				<wicket:child/>
-    
-    				<div class="clear"/>
-    			</div>
-    
-                <div wicket:id="actionPromptModalWindow"/>
-                
-                <div id="veil"> 
-                    <div class="imgHolder">
-                        <wicket:link>
-                            <img src="spinning-icon.gif"/>
-                        </wicket:link>
-                    </div>
+                </header>
+
+                <div id="body">
+
+                    <wicket:child/>
+
+                    <div class="clearfix" style="margin-bottom: 100px"></div>
                 </div>
-                
-    
-    			<div id="footer">
-    				<div class="links">
-    					powered by: <a href="http://isis.apache.org">Apache Isis</a>
-    				</div>
-    			</div>
+
+                <div wicket:id="actionPromptModalWindow"></div>
+
+
+                <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-footer">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+
+                        <div class="collapse navbar-collapse" id="navbar-collapse-footer">
+                            <p class="navbar-text">Powered by:</p>
+                            <ul class="nav navbar-nav">
+                                <li><a href="http://isis.apache.org" target="_blank">Apache Isis</a></li>
+                            </ul>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li wicket:id="themePicker"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+
             </div>
 
-		</div>
-        <div class="javascriptInFooter">
-            <wicket:container wicket:id="footerJS"></wicket:container>
         </div>
-	</body>
+        <div class="javascriptInFooter">
+            <wicket:container wicket:id="footerJS"/>
+        </div>
+        <div id="veil">
+            <div class="text-center">
+                <i class="fa fa-spinner fa-spin fa-5x"></i>
+            </div>
+        </div>
+    </body>
 </html>

@@ -138,6 +138,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         
         // lower-level
         componentFactories.add(new EntityIconAndTitlePanelFactory());
+        // componentFactories.add(new EntityIconTitleAndCopyLinkPanelFactory());
         componentFactories.add(new EntityHeaderPanelFactory());
         componentFactories.add(new EntityPropertiesPanelFactory());
         componentFactories.add(new EntityCollectionsPanelFactory());

@@ -26,21 +26,6 @@
 
 .collectionContentsAsAjaxTablePanel table.contents caption { text-align: left; }
 .collectionContentsAsAjaxTablePanel table.contents tr { 
-	}
-
-.collectionContentsAsAjaxTablePanel table.contents tr.even { background-color: #FFFFFF; }
-.collectionContentsAsAjaxTablePanel table.contents tr.odd { background-color: #F0EFEA; }
-
-.collectionContentsAsAjaxTablePanel table.contents tr:hover td {
-	background-color:#D2F0F3;
-}
-
-.collectionContentsAsAjaxTablePanel table.contents tr.reloaded-after-concurrency-exception {
-    background-color: yellow;
-}
-
-.collectionContentsAsAjaxTablePanel table.contents tr.reloaded-after-concurrency-exception:hover td {
-    background-color: orange;
 }
 
 
@@ -52,41 +37,14 @@
 }
 .collectionContentsAsAjaxTablePanel table.contents tr th,
 .collectionContentsAsAjaxTablePanel table.contents tr th a span { 
-	color: #FFFFFF;
-	background-color: #46423C;
+	/*color: #FFFFFF;*/
+	/*background-color: #46423C;*/
 	text-align: left; 
 	white-space: nowrap; 
 	text-transform:uppercase;
 	font-weight:bold;
 }
 
-.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderUp a span ,
-.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderDown a span {
-    background-color: #20B5C2;
-}
-
-.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderUp a:hover,
-.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderDown a:hover {
-    color: #46423C;
-}
-
-.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderDown {
-	background-color: #20B5C2; 
-	background-image: url("../org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel/images/arrow_down.png"); 
-    background-position: right;
-    background-repeat: no-repeat;
-}
-.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderUp {
-	background-color: #20B5C2; 
-	background-image: url("../org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel/images/arrow_up.png");
-    background-position: right;
-    background-repeat: no-repeat;
-}
-.collectionContentsAsAjaxTablePanel table.contents tr th.wicket_orderNone {
-	background-image: url("../org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel/images/arrow_off.png");
-	background-position: right;
-    background-repeat: no-repeat;
-}
 .collectionContentsAsAjaxTablePanel table.contents tr th a {
 	font-weight: normal;
 }
@@ -109,19 +67,11 @@
 }
 
 .collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigatorLabel {
-	display: inline;
+	float: left;
 }
 
-.collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigatorLabel > div {
-	display: inline;
-}
 
 .collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigator {
-	display: inline;
-}
-
-.collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigator > div {
-	display: inline;
 	float: right;
 }
 
@@ -134,40 +84,8 @@
     min-width: 20px;
 }
 
-.collectionContentsAsAjaxTablePanel table.contents .navigator  a.first,
-.collectionContentsAsAjaxTablePanel table.contents .navigator  a.prev,
-.collectionContentsAsAjaxTablePanel table.contents .navigator  a.next, 
-.collectionContentsAsAjaxTablePanel table.contents .navigator  a.last,
-.collectionContentsAsAjaxTablePanel table.contents .navigator  .goto a,
-.collectionContentsAsAjaxTablePanel table.contents .navigator  .goto em,
-.collectionContentsAsAjaxTablePanel table.contents .navigator  .first em,
-.collectionContentsAsAjaxTablePanel table.contents .navigator  .prev em,
-.collectionContentsAsAjaxTablePanel table.contents .navigator  .next em,
-.collectionContentsAsAjaxTablePanel table.contents .navigator  .last em {
-	margin-left: 5px;
-	border-radius:4px;
-	-moz-border-radius:4px;
-	-webkit-border-radius:4px;
-	background-color:#F0EFEA;
-	width:20px;
-	height:20px;
-	line-height:20px;
-	float:left;
-	text-align:center;
-}
-
-.collectionContentsAsAjaxTablePanel table.contents .navigator .goto em {
-	background-color: #20B5C2;
-	color:#FFFFFF;
-}
-
-.collectionContentsAsAjaxTablePanel table.contents a {
-	color:#46423C;
-}
-
 .collectionContentsAsAjaxTablePanel table.contents a:hover {
 	text-decoration:underline;
-	color:#20B5C2;
 }
 
 .collectionContentsAsAjaxTablePanel table.contents .entityLinkSelect2Panel .entityImage {
@@ -179,32 +97,22 @@
 }
 
 .collectionContentsAsAjaxTablePanel table tfoot tr td {
-	padding:20px 4px 0px;
-	background-color:#FFFFFF !important;
+	padding:20px 4px 0;
+	/*background-color:#FFFFFF !important;*/
 }
 
-.collectionContentsAsAjaxTablePanel .actions {
+.collectionContentsAsAjaxTablePanel .entityActions {
 	margin-top: -1px;
     margin-bottom: -10px;
     float: left;
-    padding:0em 0em;
-}
-
-.collectionContentsAsAjaxTablePanel .entityActions .cssMenuPanel .menuh a:hover
-    {
-    color: #000;
-    background-color:#E3E3D9;
+    padding:0 0;
 }
 
 /* bootstrap seems to set to 'pointer' */
 .collectionContentsAsAjaxTablePanel label:hover {
-	cursor: default;
-}
-
-.collectionContentsAsAjaxTablePanel td div {
-    display: table-cell;
+	/*cursor: default;*/
 }
 
 .collectionContentsAsAjaxTablePanel div input[type=text][disabled] {
-    padding: 0px;
+    padding: 0;
 }

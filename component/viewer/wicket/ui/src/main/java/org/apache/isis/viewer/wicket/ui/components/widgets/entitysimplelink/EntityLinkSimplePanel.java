@@ -70,6 +70,7 @@ public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdap
             entityModelForLink.setRenderingHint(getEntityModel().getRenderingHint());
             
             final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
+            //final ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, entityModelForLink);
             final Component component = componentFactory.createComponent(entityModelForLink);
             addOrReplace(component);
             

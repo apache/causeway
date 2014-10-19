@@ -22,20 +22,24 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
       xml:lang="en"  
       lang="en">
-	<head></head>
 	<body>
-		<wicket:panel>
-			<div class="javaSqlDatePanel scalarNameAndValueComponentType">
-				<label for="scalarValue" wicket:id="scalarIfRegular">
-	      			<span wicket:id="scalarName" class="scalarName">[Label text]</span>
-	      			<span class="scalarValue">
-		      			<input type="text" name="scalarValue" wicket:id="scalarValue" />
-		      			<span wicket:id="feedback"></span>
-                        <span wicket:id="additionalLinks"/>
-	      			</span>
-				</label>
-				<input type="text" wicket:id="scalarIfCompact"></input>
-			</div>
-		</wicket:panel>
-	</body>
+        <wicket:panel>
+            <div class="javaSqlDatePanel scalarNameAndValueComponentType">
+                <div class="row">
+                    <span wicket:id="scalarName" class="scalarName col-xs-3">[Label text]</span>
+                    <span class="scalarValue col-xs-9">
+                        <label wicket:id="scalarIfRegular" style="width: 100%">
+                            <div class="input-group date">
+                                <input type="text" name="scalarValue" wicket:id="scalarValue" class="form-control"/>
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            </div>
+                            <span wicket:id="feedback" class="help-block"></span>
+                            <span wicket:id="additionalLinks"></span>
+                        </label>
+                    </span>
+                </div>
+                <input type="text" wicket:id="scalarIfCompact" class="form-control"/>
+            </div>
+        </wicket:panel>
+    </body>
 </html>

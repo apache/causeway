@@ -22,18 +22,13 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
       xml:lang="en"  
       lang="en">
-    <head>
-        <wicket:link>
-            <link href="JarManifestPanel.css" rel="stylesheet" type="text/css"/>
-        </wicket:link>
-    </head>
     <body>
         <wicket:panel>
             <div class="jarManifestPanel">
                 <div class="aboutInfo clear">
-                    <span wicket:id="aboutMessage" class="aboutMessage">[about message text]</span>
+                    <h2 wicket:id="aboutMessage" class="aboutMessage">[about message text]</h2>
                     <div class="manifestAttributes" wicket:id="manifestAttributes">
-                        <div class="heading"><span>Jar manifest attributes</span></div>
+                        <h4 class="heading well">Jar manifest attributes</h4>
                         <div class="content">
                             <div class="manifestAttributesList">
                                 <ul>

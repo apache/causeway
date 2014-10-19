@@ -17,9 +17,7 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs;
 
 import java.util.Collection;
-import java.util.UUID;
 
-import com.google.common.base.Strings;
 import com.vaynberg.wicket.select2.Response;
 import com.vaynberg.wicket.select2.Select2Choice;
 import com.vaynberg.wicket.select2.Settings;
@@ -34,9 +32,6 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;

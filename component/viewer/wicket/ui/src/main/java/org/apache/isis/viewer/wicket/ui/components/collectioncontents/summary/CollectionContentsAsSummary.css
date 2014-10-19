@@ -17,28 +17,9 @@
  *  under the License.
  */
 
-.collectionContentsAsSummary {
-	width: 99%;
-	margin-top: 20px;
-}
-
-.collectionContentsAsSummary .propertyNameCell {
-	margin-top: 10px;
-	margin-bottom: 10px;
-	padding-top: 20px;
-}
-
 .collectionContentsAsSummary .propertyNameCell,
 .collectionContentsAsSummary .aggregatesCell {
 	vertical-align: middle;
-}
-
-.collectionContentsAsSummary .propertyName {
-    color: #423D37;
-    font-size: 1.6em;
-    margin-bottom: 10px;
-    margin-right: 20px;
-    line-height: 120%;
 }
 
 .collectionContentsAsSummary .aggregateName {
@@ -48,15 +29,13 @@
 	text-transform: uppercase;
 	font-weight: bold !important;
 	font-size: 0.9em;
-	color: #46413B;
-	padding-top: 24px;
 	padding-left: 20px;
 	padding-right: 10px;
+    vertical-align: middle;
 }
 
 .collectionContentsAsSummary .numberValue {
     text-align: right;
-    margin: 5px 10px 5px 0px;
     width: 80px;
 }
 
@@ -65,7 +44,6 @@
     display: inline-block;
     min-width: 720px;
 }
-
 
 a span.ViewLinkItem.summary {
     background-image:url("icon_summary_on.png");

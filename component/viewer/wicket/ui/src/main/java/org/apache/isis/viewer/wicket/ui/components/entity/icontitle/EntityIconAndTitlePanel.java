@@ -39,6 +39,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityActionLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardPanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -85,11 +86,12 @@ public class EntityIconAndTitlePanel extends PanelAbstract<EntityModel> {
     }
 
     private void addOrReplaceLinkWrapper() {
-        final WebMarkupContainer entityLinkWrapper = addOrReplaceLinkWrapper(getModel());
+        EntityModel entityModel = getModel();
+        final WebMarkupContainer entityLinkWrapper = addOrReplaceLinkWrapper(entityModel);
         addOrReplace(entityLinkWrapper);
     }
 
-    private WebMarkupContainer addOrReplaceLinkWrapper(final EntityModel entityModel) {
+    protected WebMarkupContainer addOrReplaceLinkWrapper(final EntityModel entityModel) {
         final ObjectAdapter adapter = entityModel.getObject();
 
         final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);

@@ -19,25 +19,37 @@
 
 package org.apache.isis.viewer.wicket.ui.pages;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
+import de.agilecoders.wicket.core.markup.html.references.BootlintJavaScriptReference;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.head.*;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.CssReferenceHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.protocol.http.ClientProperties;
+import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -54,16 +66,22 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
-import org.apache.isis.viewer.wicket.model.models.*;
+import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
+import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
+import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardPanel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemePicker;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
-import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.overlays.Overlays;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -78,7 +96,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     private static final long serialVersionUID = 1L;
 
-    private static final JavaScriptResourceReference JQUERY_JGROWL_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.jgrowl.js");
     private static final String REGULAR_CASE_KEY = "isis.viewer.wicket.regularCase";
 
     /**
@@ -87,22 +104,22 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
     private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
     
-    //private static final JavaScriptResourceReference BOOTSTRAP_JS = new JavaScriptResourceReference(PageAbstract.class, "bootstrap/js/bootstrap.min.js");
-
     private static final String ID_THEME = "theme";
     private static final String ID_BOOKMARKED_PAGES = "bookmarks";
-    private static final String ID_HOME_PAGE_LINK = "homePageLink";
-    private static final String ID_APPLICATION_NAME = "applicationName";
-    private static final String ID_USER_NAME = "userName";
-    
+
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     
     private static final String ID_PAGE_TITLE = "pageTitle";
     
     public static final String ID_MENU_LINK = "menuLink";
+
+    private static final String ID_THEME_PICKER = "themePicker";
+
+    // TODO mgrigorov: are those used somewhere else ? since they are public
     public static final String ID_LOGOUT_LINK = "logoutLink";
     public static final String ID_LOGOUT_TEXT = "logoutText";
     public static final String ID_ABOUT_LINK = "aboutLink";
+
     private static final String ID_COPY_LINK = "copyLink";
     private static final String ID_BREADCRUMBS = "breadcrumbs";
 
@@ -115,7 +132,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     private final List<ComponentType> childComponentIds;
     private final PageParameters pageParameters;
-    
+
     /**
      * {@link Inject}ed when {@link #init() initialized}.
      */
@@ -158,21 +175,24 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             if(applicationName != null) {
                 themeDiv.add(new CssClassAppender(asCssStyle(applicationName)));
             }
-            
+
             addApplicationActions(themeDiv);
+
             this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
             this.pageParameters = pageParameters;
 
-            addHomePageLinkAndApplicationName();
-            addUserName();
-            addLogoutLink();
-            addAboutLink();
+            addApplicationName(themeDiv);
+            addUserName(themeDiv);
+            addLogoutLink(themeDiv);
+            addAboutLink(themeDiv);
             addBreadcrumbs();
-            addCopyLink();
+            addThemePicker();
 
             // ensure that all collected JavaScript contributions are loaded at the page footer
             add(new HeaderResponseContainer("footerJS", "footerJS"));
-            
+
+            BootstrapBaseBehavior.addTo(this);
+
         } catch(RuntimeException ex) {
 
             LOG.error("Failed to construct page, going back to sign in page", ex);
@@ -192,6 +212,17 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         }
     }
 
+    private void addApplicationName(MarkupContainer themeDiv) {
+        BookmarkablePageLink<Void> applicationNameLink = homePageLink("applicationName");
+        applicationNameLink.setBody(Model.of(applicationName));
+        themeDiv.add(applicationNameLink);
+    }
+
+    private void addThemePicker() {
+        ThemePicker themePicker = new ThemePicker(ID_THEME_PICKER);
+        themeDiv.addOrReplace(themePicker);
+    }
+
 
     protected void setTitle(final String title) {
         addOrReplace(new Label(ID_PAGE_TITLE, title != null? title: applicationName));
@@ -206,7 +237,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         return str.toLowerCase().replaceAll("[^A-Za-z0-9 ]", "").replaceAll("\\s+", "-");
     }
 
-
+    // TODO mgrigorov this method is not used
     protected ExceptionModel recognizeException(Exception ex) {
         List<ExceptionRecognizer> exceptionRecognizers;
         try {
@@ -224,29 +255,16 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         
         super.renderHead(response);
 
-        response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
-        response.render(new PriorityHeaderItem(CssReferenceHeaderItem.forReference(new CssResourceReference(PageAbstract.class, "cssreset.css"))));
-        
-        // the following line, using wicket-webjars, does work, but renders slightly differently 
-        // (even though the link is rendered in same place as when having the link directly in PageAbstract.html)
-        // I'm guessing that our bootstrap is customized (was not a 'vanilla' installation).
-        // Am therefore continuing to use our own copy, linked from PageAbstract.html, and have commented the line below out.
-        //
-        // NB: the use of 'current' in the link means to use the version referenced in the pom.xml.
-        
-        //response.render(new PriorityHeaderItem(CssHeaderItem.forReference(new WebjarsCssResourceReference("bootstrap/current/css/bootstrap.css"))));
-        
-        response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_JGROWL_JS));
+        response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference())));
+        response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
+        response.render(CssHeaderItem.forReference(new CssResourceReference(PageAbstract.class, "bootstrap-overrides.css")));
+
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_ISIS_WICKET_VIEWER_JS));
-        
-        final String feedbackMsg = JGrowlUtil.asJGrowlCalls(getMessageBroker());
-        if (!Strings.isNullOrEmpty(feedbackMsg)) {
-            final OnDomReadyHeaderItem forScript = OnDomReadyHeaderItem.forScript(feedbackMsg);
-            response.render(forScript);
-        }
-        
-        
+
+        JGrowlBehaviour jGrowlBehaviour = new JGrowlBehaviour();
+        jGrowlBehaviour.renderFeedbackMessages(response);
+
         // overlays
         if(getConfiguration().getBoolean(REGULAR_CASE_KEY, false)) {
             response.render(CssReferenceHeaderItem.forReference(PanelUtil.cssResourceReferenceFor(Overlays.class, "regular-case")));
@@ -258,53 +276,44 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         if(applicationJs != null) {
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         }
+
+        // TODO mgrigorov Remove before merge to master
+        WebClientInfo clientInfo = WebSession.get().getClientInfo();
+        ClientProperties properties = clientInfo.getProperties();
+        if (!(properties.isBrowserInternetExplorer() && properties.getBrowserVersionMajor() < 9)) {
+            // use BootLint for any browser but IE 6-8
+            response.render(JavaScriptHeaderItem.forReference(BootlintJavaScriptReference.INSTANCE));
+        }
     }
 
-    private void addHomePageLinkAndApplicationName() {
-        // this is a bit hacky, but it'll do...
-        ExternalLink homePageLink = new ExternalLink(ID_HOME_PAGE_LINK, "/wicket/");
-        homePageLink.setContextRelative(true);
-        themeDiv.add(homePageLink);
-        homePageLink.add(new Label(ID_APPLICATION_NAME, applicationName));
-    }
-    
-    private void addUserName() {
-        themeDiv.add(new Label(ID_USER_NAME, getAuthenticationSession().getUserName()));
+    private void addUserName(MarkupContainer themeDiv) {
+        Label userName = new Label("userName", getAuthenticationSession().getUserName());
+        themeDiv.add(userName);
     }
 
-    private void addLogoutLink() {
-        themeDiv.add(new Link<Object>(ID_LOGOUT_LINK) {
-            private static final long serialVersionUID = 1L;
+    private void addLogoutLink(MarkupContainer themeDiv) {
+        Link logoutLink = new Link("logoutLink") {
 
             @Override
             public void onClick() {
                 getSession().invalidate();
                 setResponsePage(getSignInPage());
             }
-        });
+        };
+        logoutLink.setBody(new ResourceModel("logoutLabel"));
+        themeDiv.add(logoutLink);
     }
 
-    private void addAboutLink() {
-        themeDiv.add(new Link<Object>(ID_ABOUT_LINK) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onClick() {
-                setResponsePage(AboutPage.class);
-            }
-        });
+    private void addAboutLink(MarkupContainer themeDiv) {
+        BookmarkablePageLink<Void> aboutLink = new BookmarkablePageLink<>("aboutLink", AboutPage.class);
+        aboutLink.setBody(new ResourceModel("aboutLabel"));
+        themeDiv.add(aboutLink);
     }
 
     private void addBreadcrumbs() {
         BreadcrumbPanel breadcrumbPanel = new BreadcrumbPanel(ID_BREADCRUMBS);
         themeDiv.addOrReplace(breadcrumbPanel);
     }
-    
-    private void addCopyLink() {
-        ZeroClipboardPanel zClipCopyLink = new ZeroClipboardPanel(ID_COPY_LINK);
-        themeDiv.addOrReplace(zClipCopyLink);
-    }
-    
 
     /**
      * As provided in the {@link #PageAbstract(org.apache.wicket.request.mapper.parameter.PageParameters, String, org.apache.isis.viewer.wicket.ui.ComponentType...)} constructor}.
@@ -399,7 +408,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     // ///////////////////////////////////////////////////////////////////
 
     /**
-     * Propogates all {@link org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract letter} events down to
+     * Propagates all {@link org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract letter} events down to
      * all child components, wrapped in an {@link org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent envelope} event.
      */
     public void onEvent(org.apache.wicket.event.IEvent<?> event) {

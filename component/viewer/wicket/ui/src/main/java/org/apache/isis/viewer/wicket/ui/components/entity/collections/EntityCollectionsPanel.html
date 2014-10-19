@@ -17,19 +17,19 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<html>
-	<body>
-		<wicket:panel>
-			<div class="entityCollectionsPanel entityCollectionsComponentType">
-		    	<div wicket:id="collections" class="myBlockContainer">
-		    		<fieldset wicket:id="collectionGroup" class="memberGroup">
-		    			<legend wicket:id="collectionName">[collection name]</legend>
-                		<div wicket:id="collection" class="collection">
-	                		[collection]
-                		</div>
-                	</fieldset>
-		    	</div>
-			</div>
-		</wicket:panel>
-	</body>
+<html xmlns:wicket="http://wicket.apache.org">
+    <body>
+        <wicket:panel>
+            <div class="entityCollectionsPanel entityCollectionsComponentType">
+                <div wicket:id="collections" class="myBlockContainer">
+                    <div wicket:id="collectionGroup" class="panel panel-default">
+                        <div wicket:id="collectionName" class="panel-heading">[collection name]</div>
+                        <div wicket:id="collection" class="collection panel-body">
+                            [collection]
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </wicket:panel>
+    </body>
 </html>

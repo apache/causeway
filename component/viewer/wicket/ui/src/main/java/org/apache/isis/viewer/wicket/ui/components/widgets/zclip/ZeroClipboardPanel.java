@@ -16,6 +16,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.zclip;
 
+import de.agilecoders.wicket.jquery.util.Strings2;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -49,8 +51,8 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
     private AjaxLink<ObjectAdapter> copyLink;
     private SimpleClipboardModalWindow simpleClipboardModalWindow;
 
-    public ZeroClipboardPanel(String id) {
-        super(id);
+    public ZeroClipboardPanel(String id, EntityModel entityModel) {
+        super(id, entityModel);
     }
     
     @Override
@@ -61,8 +63,13 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
             copyLink = createLink(ID_COPY_LINK);
             addOrReplace(copyLink);
         }
-        addSubscribingLink(null);
+        EntityModel model = getModel();
+        addSubscribingLink(model);
         addSimpleClipboardModalWindow();
+
+        EntityModel.RenderingHint renderingHint = model.getRenderingHint();
+        EntityModel.Mode mode = model.getMode();
+        setVisible(renderingHint == EntityModel.RenderingHint.REGULAR && mode == EntityModel.Mode.VIEW);
     }
 
     private AjaxLink<ObjectAdapter> createLink(String linkId) {
@@ -101,9 +108,13 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
                 form.add(textField);
                 
                 textField.setOutputMarkupId(true);
-                
+
+                CharSequence modalId = Strings2.escapeMarkupId(simpleClipboardModalWindow.getMarkupId());
+                CharSequence textFieldId = Strings2.escapeMarkupId(textField.getMarkupId());
+                target.appendJavaScript(String.format("$('#%s').one('shown.bs.modal', function(){Wicket.$('%s').select();});", modalId, textFieldId));
+
                 simpleClipboardModalWindow.setPanel(panel, target);
-                simpleClipboardModalWindow.show(target);
+                simpleClipboardModalWindow.showPrompt(target);
                 
                 target.focusComponent(textField);
             }
@@ -117,7 +128,7 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
             return;
         }
         subscribingLink = createSubscribingLink(uiHintContainer);
-        addOrReplace(subscribingLink);
+//        addOrReplace(subscribingLink);
         subscribingLink.setOutputMarkupId(true);
     }
 

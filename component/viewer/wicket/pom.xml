@@ -41,14 +41,14 @@
         <relativeUrl />
 
         <wicket.version>6.17.0</wicket.version>
-        <wicket-jquery-ui.version>6.17.0</wicket-jquery-ui.version>
         <wicketstuff.version>6.17.0</wicketstuff.version>
 
-        <wicket-webjars.version>0.4.1</wicket-webjars.version>
-        <webjars-bootstrap.version>2.3.2</webjars-bootstrap.version>
+        <wicket-webjars.version>0.4.3</wicket-webjars.version>
+        <wicket-bootstrap.version>0.9.7</wicket-bootstrap.version>
         <wicket-source.version>6.0.0.8</wicket-source.version>
 
-        <wicket-select2.version>2.2.2</wicket-select2.version>
+        <wicket-select2.version>2.2.3</wicket-select2.version>
+        <select2.version>3.5.1</select2.version>
     </properties>
 
     <!-- used in Site generation for relative references. -->
@@ -84,12 +84,35 @@
 	                        <exclude>**/.settings/**</exclude>
                             <exclude>**/*.pdn</exclude>
                             <exclude>**/jquery.zclip.js</exclude>
-                            
-                            <!-- not released code, so excluded -->
-                            <exclude>jquery-ui/**</exclude>
+
 	                    </excludes>
                     </configuration>
 	            </plugin>
+				<plugin>
+					<groupId>net.alchim31.maven</groupId>
+					<artifactId>yuicompressor-maven-plugin</artifactId>
+					<version>1.4.0</version>
+					<configuration>
+						<statistics>true</statistics>
+						<jswarn>false</jswarn>
+						<suffix>.min</suffix>
+						<excludes>
+							<exclude>**/moment.js</exclude>
+							<exclude>**/moment.min.js</exclude>
+							<exclude>**/bootstrap-datetimepicker.js</exclude>
+							<exclude>**/bootstrap-datetimepicker.min.js</exclude>
+							<exclude>**/bootstrap-growl.js</exclude>
+							<exclude>**/bootstrap-growl.min.js</exclude>
+						</excludes>
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>compress</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -246,37 +269,25 @@
 				</exclusions>
 			</dependency>
 
-
-            <!-- Wicket-JQuery-UI -->
-            <dependency>
-                <groupId>com.googlecode.wicket-jquery-ui</groupId>
-                <artifactId>wicket-jquery-ui-core</artifactId>
-                <version>${wicket-jquery-ui.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.googlecode.wicket-jquery-ui</groupId>
-                <artifactId>wicket-jquery-ui</artifactId>
-                <version>${wicket-jquery-ui.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.googlecode.wicket-jquery-ui</groupId>
-                <artifactId>wicket-jquery-ui-plugins</artifactId>
-                <version>${wicket-jquery-ui.version}</version>
-            </dependency>
-
             <!-- Wicket-Select2 -->
 			<dependency>
-			    <groupId>com.vaynberg.wicket.select2</groupId>
-			    <artifactId>wicket-select2</artifactId>
-			    <version>${wicket-select2.version}</version>
+				<groupId>com.vaynberg.wicket.select2</groupId>
+				<artifactId>wicket-select2</artifactId>
+				<version>${wicket-select2.version}</version>
 				<exclusions>
 					<exclusion>
-	        			<!-- for dependency convergence -->
+						<!-- for dependency convergence -->
 						<groupId>org.apache.wicket</groupId>
 						<artifactId>wicket-core</artifactId>
 					</exclusion>
 				</exclusions>
 			</dependency>
+
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>select2</artifactId>
+                <version>${select2.version}</version>
+            </dependency>
 
             <!-- Webjars -->
             <dependency>
@@ -289,14 +300,100 @@
                         <groupId>org.apache.wicket</groupId>
                         <artifactId>wicket-core</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-request</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
-    
+
             <dependency>
-                <groupId>org.webjars</groupId>
-                <artifactId>bootstrap</artifactId>
-                <version>${webjars-bootstrap.version}</version>
+                <groupId>de.agilecoders.wicket</groupId>
+                <artifactId>wicket-bootstrap-core</artifactId>
+                <version>${wicket-bootstrap.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-util</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-request</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-extensions</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
+
+            <dependency>
+                <groupId>de.agilecoders.wicket</groupId>
+                <artifactId>wicket-bootstrap-extensions</artifactId>
+                <version>${wicket-bootstrap.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-util</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-request</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-extensions</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>bootstrap</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>jquery</artifactId>
+                    </exclusion>
+                    <!-- exclude unused extensions -->
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>jquerypp</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>jquery-ui</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>typeaheadjs</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>x-editable-bootstrap</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>spin-js</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.javascript</groupId>
+                        <artifactId>closure-compiler</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>de.agilecoders.wicket</groupId>
+                <artifactId>wicket-bootstrap-themes</artifactId>
+                <version>${wicket-bootstrap.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>net.ftlines.wicket-source</groupId>
@@ -310,14 +407,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
-			<!-- Other -->
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<!-- NOT SURE WHY THIS ISN'T INHERITED -->
-				<version>1.7.5</version>
-			</dependency>
 
 		</dependencies>
 	</dependencyManagement>

@@ -16,21 +16,19 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.zclip;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 
-public class SimpleClipboardModalWindow extends ModalWindow implements ActionPrompt {
+public class SimpleClipboardModalWindow extends Modal<Void> implements ActionPrompt {
 
     private static final long serialVersionUID = 1L;
 
     public static SimpleClipboardModalWindow newModalWindow(String id) {
         SimpleClipboardModalWindow modalWindow = new SimpleClipboardModalWindow(id);
-        modalWindow.setCssClassName("w_isis_zclip");
         return modalWindow;
     }
 
@@ -40,73 +38,35 @@ public class SimpleClipboardModalWindow extends ModalWindow implements ActionPro
     
     public SimpleClipboardModalWindow(String id) {
         super(id);
-        setMaskType(MaskType.SEMI_TRANSPARENT);
-        add(new CloseOnEscapeKeyBehavior(this));
+
+        setUseCloseHandler(true);
+        setUseKeyboard(true);
+        setDisableEnforceFocus(true);
+        setOutputMarkupId(true);
+        WebMarkupContainer emptyComponent = new WebMarkupContainer(getContentId());
+        add(emptyComponent);
     }
 
-    private static class CloseOnEscapeKeyBehavior extends AbstractDefaultAjaxBehavior {
-        private static final long serialVersionUID = 1L;
-        private final ModalWindow modal;
-        public CloseOnEscapeKeyBehavior(ModalWindow modal) {
-            this.modal = modal;
-        }    
-        @Override
-        protected void respond(AjaxRequestTarget target) {
-            if(modal.isShown()) {
-                modal.close(target);
-            }
-        }    
-        @Override
-        public void renderHead(Component component, IHeaderResponse response) {
-            String javaScript = ""
-                + "$(document).ready(function() {\n"
-                + "\n"
-                + "  // close with escape or OK\n" 
-                + "  $(document).bind('keyup', function(evt) {\n"
-                + "    if (evt.keyCode == 27 || evt.keyCode == 13) {\n"
-                + getCallbackScript() + "\n"
-                + "        evt.preventDefault();\n"
-                + "    }\n"
-                + "  });\n"
-                + "     \n"
-                + "     \n"
-                + "  // open with alt+]    \n"
-                + "  $(document).bind('keyup', function(evt) {\n"
-                + "    if (evt.keyCode == 221 && evt.altKey) {\n"
-                + "      $('.zeroClipboardPanel a.copyLink').click();\n"
-                + "    }\n"
-                + "  });\n"
-                + "});";
-            String id ="closeSimpleClipboardModal";
-            response.render(JavaScriptHeaderItem.forScript(javaScript, id));
-        }
-    }
-    
     @Override
     public void setPanel(Component component, AjaxRequestTarget target) {
-        setContent(component);
+        addOrReplace(component);
     }
 
-    
     @Override
-    public void show(AjaxRequestTarget target) {
-        
-        // http://stackoverflow.com/questions/8013364/how-to-defeat-browser-dialog-popup-when-calling-wicket-setresponsepage-from-mo/8679946#8679946
-        target.prependJavaScript("Wicket.Window.unloadConfirmation = false;");
-        
-        super.show(target);
-        
-        StringBuilder builder = new StringBuilder();
-        builder.append("$('.first-field input').focus();\n");
-        
-        // ISIS-771: in Wicket 6.12.0 the var ww returns null.
-        builder.append("window.setTimeout(" +
-                            "function() {\n " +
-                            "  var ww = Wicket.Window.get();\n" +
-                            "  ww.autoSizeWindow();\n " +
-                            "}\n, 0);\n");
-
-        target.appendJavaScript(builder.toString());
+    public void showPrompt(AjaxRequestTarget target) {
+        target.add(this);
+        show(target);
     }
 
+    @Override
+    public String getContentId() {
+        return "content";
+    }
+
+    @Override
+    public void closePrompt(AjaxRequestTarget target) {
+        if (target != null) {
+            close(target);
+        }
+    }
 }

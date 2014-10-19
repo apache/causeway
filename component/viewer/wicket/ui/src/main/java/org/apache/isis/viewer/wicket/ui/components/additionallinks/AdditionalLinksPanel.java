@@ -38,7 +38,8 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
- * Panel for rendering scalars of type {@link String}.
+ * Panel for rendering additional links like <em>update</em> and <em>clear</em>
+ * next to a scalar.
  */
 public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
@@ -47,13 +48,11 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
     private static final String ID_ADDITIONAL_LINK_LIST = "additionalLinkList";
     private static final String ID_ADDITIONAL_LINK_ITEM = "additionalLinkItem";
     private static final String ID_ADDITIONAL_LINK_TITLE = "additionalLinkTitle";
-    
-    private List<LinkAndLabel> linkAndLabels;
-    
+
     public AdditionalLinksPanel(final String id, final List<LinkAndLabel> links) {
         super(id, new ListOfLinksModel(links));
 
-        this.linkAndLabels = getModel().getObject();
+        List<LinkAndLabel> linkAndLabels = getModel().getObject();
         
         final WebMarkupContainer container = new WebMarkupContainer(ID_ADDITIONAL_LINK_LIST);
         addOrReplace(container);
@@ -62,7 +61,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
         
         setOutputMarkupId(true);
         
-        final ListView<LinkAndLabel> listView = new ListView<LinkAndLabel>(ID_ADDITIONAL_LINK_ITEM, this.linkAndLabels) {
+        final ListView<LinkAndLabel> listView = new ListView<LinkAndLabel>(ID_ADDITIONAL_LINK_ITEM, linkAndLabels) {
 
             private static final long serialVersionUID = 1L;
 

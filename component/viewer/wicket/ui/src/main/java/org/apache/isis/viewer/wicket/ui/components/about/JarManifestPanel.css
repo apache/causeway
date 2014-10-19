@@ -40,11 +40,6 @@
 }
 
 .jarManifestPanel .heading {
-    border-radius:4px;
-    -moz-border-radius:4px;
-    -webkit-border-radius:4px;
-    background-color:#F0EFEA;
-
     display:block;
     font-style:normal !important;
 
@@ -96,4 +91,3 @@
 .jarManifestPanel .manifestAttributesList .manifest_attribute{
     margin-left: 30px;
 }
- 

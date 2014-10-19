@@ -24,7 +24,9 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.core.commons.authentication.MessageBroker;
@@ -58,12 +60,20 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
         super.renderHead(component, response);
+
+        renderFeedbackMessages(response);
+    }
+
+    public void renderFeedbackMessages(IHeaderResponse response) {
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(JGrowlBehaviour.class, "js/bootstrap-growl.js")));
+
         String feedbackMsg = JGrowlUtil.asJGrowlCalls(getMessageBroker());
         if(!Strings.isNullOrEmpty(feedbackMsg)) {
             response.render(OnDomReadyHeaderItem.forScript(feedbackMsg));
         }
     }
-    
+
+
     protected MessageBroker getMessageBroker() {
         return IsisContext.getMessageBroker();
     }

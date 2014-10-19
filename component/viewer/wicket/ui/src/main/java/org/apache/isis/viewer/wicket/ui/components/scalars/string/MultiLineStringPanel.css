@@ -16,14 +16,3 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-.multiLineStringPanel textarea {
-	width: 97%;
-	resize: none;
-	
-	font-size:14px;
-    font-family: Arial,'Sans-serif',  'Helvetica', 'Sans-serif', 'sans';
-}
-
-.multiLineStringPanel span.scalarValue {
-	width: 70%;
-}

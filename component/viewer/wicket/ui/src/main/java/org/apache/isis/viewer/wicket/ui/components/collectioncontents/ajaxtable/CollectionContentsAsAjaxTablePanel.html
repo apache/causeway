@@ -17,25 +17,17 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<html>
-	<body>
-		<wicket:panel>
-			<div class="collectionContentsAsAjaxTablePanel collectionContentsComponentType">
-				<div class="actions panel">				
-	  				<table>
-	      	   			<tbody>
-	      	      			<tr>
-	      						<td>
-	      			      			<span class="entityActions" wicket:id="entityActions"/>
-	      		      			</td>
-	      	     			</tr>
-	           			</tbody>
-	   			   </table>
-			    </div>
-                <div class="clear"/>
-				<table class="contents" cellspacing="0" wicket:id="table">[table]</table>
-                <div wicket:id="actionPromptModalWindow"/>
-			</div>
-		</wicket:panel>
-	</body>
+<html xmlns:wicket="http://wicket.apache.org">
+    <body>
+        <wicket:panel>
+            <div class="collectionContentsAsAjaxTablePanel collectionContentsComponentType">
+                <div class="entityActions" wicket:id="entityActions"></div>
+                <div class="clearfix"></div>
+                <div class="table-responsive">
+                    <table class="contents table table-striped table-condensed table-bordered" cellspacing="0" wicket:id="table">[table]</table>
+                </div>
+                <div wicket:id="actionPromptModalWindow"></div>
+            </div>
+        </wicket:panel>
+    </body>
 </html>

@@ -19,36 +19,28 @@
 $(document).ready(function(){
  
     var showBookmarks = function(){
-        $('#bookmarkedPagesSlidingDiv').stop().animate(
-            {width:"500px", opacity:0.95}, 100, 
-            function() {
-                $('.content').fadeIn('50');
-            });
-        $('.showPanelTab').animate({opacity: 0.5});
+        $('#bookmarkedPagesSlidingDiv').slideDown('50');
+        $('.bookmarkRibbon').fadeOut(50);
     };
 
     var hideBookmarks = function(){
-        $('.content').fadeOut('0', 
-            function() { 
-                $('#bookmarkedPagesSlidingDiv').stop().animate({width:"0", opacity:0.1}, 0);
-            });
-        $('.showPanelTab').animate({opacity: 1.0});
+        $('#bookmarkedPagesSlidingDiv').slideUp('50');
+        $('.bookmarkRibbon').fadeIn(50);
      };
 
-     var hideBookmarksQuickly = function(){
-         $('.content').hide();
-         $('#bookmarkedPagesSlidingDiv').css({width:"0"}, 0);
-         $('.showPanelTab').css({opacity: 1.0});
+     var hideBookmarksQuickly = function() {
+         $('#bookmarkedPagesSlidingDiv').hide();
+         $('.bookmarkRibbon').show();
       };
 
-    $('.showPanelTab').mouseenter(showBookmarks);
+    $('.bookmarkRibbon').mouseenter(showBookmarks);
     $('#bookmarkedPagesSlidingDiv').mouseleave(hideBookmarks);
     
     $('body').keydown(function(e) {
         
         // alt+[
         if(e.which === 219 && e.altKey) {
-            if($('#bookmarkedPagesSlidingDiv .content').is(":visible")) {
+            if($('#bookmarkedPagesSlidingDiv').find('.content').is(":visible")) {
                 hideBookmarksQuickly();
             } else {
                 showBookmarks();

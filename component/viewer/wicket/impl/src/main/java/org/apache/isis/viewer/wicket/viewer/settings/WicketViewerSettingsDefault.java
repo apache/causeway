@@ -24,7 +24,7 @@ import com.google.inject.Singleton;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldWithDatePicker;
+import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDatePicker;
 
 @Singleton
 public class WicketViewerSettingsDefault implements WicketViewerSettings {

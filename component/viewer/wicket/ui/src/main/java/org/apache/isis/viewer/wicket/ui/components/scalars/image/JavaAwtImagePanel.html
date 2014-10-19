@@ -17,18 +17,18 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<html>
-	<body>
-		<wicket:panel>
-			<div class="javaAwtImagePanel image scalarPanel">
-				<label for="scalarValue">
-	      			<span wicket:id="scalarName" class="scalarName">[Label text]</span>
-	      			<span class="scalarValue">
-		      			<img wicket:id="scalarValue"/>
-	      			</span>
-				</label>
-      			<span wicket:id="feedback"></span>
-			</div>
-		</wicket:panel>
-	</body>
+<html xmlns:wicket="http://wicket.apache.org">
+    <body>
+        <wicket:panel>
+            <div class="javaAwtImagePanel image scalarPanel">
+                <label wicket:for="scalarValue">
+                    <span wicket:id="scalarName" class="scalarName">[Label text]</span>
+                    <span class="scalarValue">
+                        <img wicket:id="scalarValue"/>
+                    </span>
+                </label>
+                <span wicket:id="feedback"></span>
+            </div>
+        </wicket:panel>
+    </body>
 </html>
