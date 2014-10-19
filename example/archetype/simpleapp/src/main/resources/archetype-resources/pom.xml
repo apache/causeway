@@ -32,8 +32,8 @@
     </prerequisites>
 
 	<properties>
-        <isis.version>1.7.0</isis.version>
-        <isis-viewer-wicket.version>1.7.0</isis-viewer-wicket.version>
+        <isis.version>1.8.0-SNAPSHOT</isis.version>
+        <isis-viewer-wicket.version>1.8.0-SNAPSHOT</isis-viewer-wicket.version>
 
         <!-- must be consistent with the versions defined by the JDO Objectstore -->
         <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
