@@ -49,8 +49,9 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
 {
     private static final long serialVersionUID = 1L;
 
-    private static final String CLASS_SORT_UP = "fa fa-chevron-up";
-    private static final String CLASS_SORT_DOWN = "fa fa-chevron-down";
+    private static final String CLASS_SORT_NONE = "fa fa-sort";
+    private static final String CLASS_SORT_UP = "fa fa-sort-up";
+    private static final String CLASS_SORT_DOWN = "fa fa-sort-down";
 
     static abstract class CssAttributeBehavior extends Behavior
     {
@@ -171,6 +172,8 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
                     Attributes.addClass(tag, CLASS_SORT_UP);
                 } else if (sortOrder == SortOrder.DESCENDING) {
                     Attributes.addClass(tag, CLASS_SORT_DOWN);
+                } else {
+                    Attributes.addClass(tag, CLASS_SORT_NONE);
                 }
             }
         };
