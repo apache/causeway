@@ -35,7 +35,13 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverter;
 
 import static de.agilecoders.wicket.jquery.JQuery.$;
 
-
+/**
+ * A text input field that is used as a date picker.
+ * It uses <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime picker</a>
+ * JavaScript widget
+ *
+ * @param <T> The type of the date/time
+ */
 public class TextFieldWithDatePicker<T> extends TextField<T> implements IConverter<T> {
 
     private static final long serialVersionUID = 1L;

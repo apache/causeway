@@ -88,12 +88,13 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
      * The pattern used for rendering dates chosen by the {@link TextFieldWithDatePicker}.
      * 
      * <p>
-     * This pattern is different from {@link #getDatePattern()} because it is interpreted by a
-     * <a href="http://jqueryui.com/datepicker/">JQuery UI DatePicker</a> component, rather
+     * This pattern is different from {@link #getDatePattern()} because it is interpreted by
+     * <a href="https://github.com/Eonasdan/bootstrap-datetimepicker">Bootstrap Datetime Picker</a> component
+     * that uses <a href="http://momentjs.com/docs/#/parsing/string-format/">Moment.js formats</a>, rather
      * than by Java code. 
      */
     @Override
     public String getDatePickerPattern() {
-        return getConfiguration().getString("isis.viewer.wicket.datePickerPattern", "dd-MM-yyyy");
+        return getConfiguration().getString("isis.viewer.wicket.datePickerPattern", "DD-MM-YYYY");
     }
 }
