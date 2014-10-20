@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -29,6 +31,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
@@ -259,7 +262,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     protected abstract Component addComponentForCompact();
 
     protected void addFeedbackTo(MarkupContainer markupContainer, Component component) {
-        markupContainer.addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, component));
+        markupContainer.addOrReplace(new NotificationPanel(ID_FEEDBACK, component, new ComponentFeedbackMessageFilter(component)));
     }
     
     protected void addAdditionalLinksTo(final FormComponentLabel labelIfRegular) {

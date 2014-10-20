@@ -258,6 +258,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference())));
         response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
         response.render(CssHeaderItem.forReference(new CssResourceReference(PageAbstract.class, "bootstrap-overrides.css")));
+        PanelUtil.renderHead(response, PageAbstract.class);
 
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_ISIS_WICKET_VIEWER_JS));

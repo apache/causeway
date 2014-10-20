@@ -1,0 +1,962 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+ 
+ 
+/*
+TODO mgrigorov: Remove this file once the new styling based on Bootstrap is finished
+
+
+colors
+------
+
+#E4E4DB - page background
+
+#00477F   rich blue
+          h1,h2,h3 {color}
+          a {color}
+
+#20B5C2 - light blue
+          .ok {background-color}
+          .links{color}
+
+#40C0CB - highlight blue
+          .a:hover {background-color}
+
+#F0EFEA   light (bookmark background)
+          .select2-choice {background-color}
+
+#407098   muted blue
+          th {color}
+
+
+#454545   dark brown/grey
+          body {color}
+
+#413D37   dark brown/banner
+          legend {color}
+
+#E4E4DB   very pale beige
+.cancel {background-color}
+
+#46423C   dark brown
+          .cancel {color}
+
+#888      medium grey
+          p.disabled {color}
+
+#F0EFEA   very light grey
+          p.disabled {background-color}
+
+#E3E3D9   light grey
+          body {background-color}
+
+
+#BF0B0B - jgrowl error
+
+
+
+#46413B   dark brown
+          .scalarName {color}
+
+#7F7F7F   (medium grey)
+          .select2-choice {color}
+
+#46423C - dark (writing?)
+
+
+#CCCBC7   (medium)
+          input[disabled]  {border-top}
+
+#EEEEEE   light grey
+          th{background}
+
+#FFFFFF   white
+          .ok {color}
+
+*/
+ 
+/********** ID's **********/
+
+#header {
+	width: 73%;
+	float: left;
+	height: 60px;
+	margin-left: 5px;
+	background: transparent url("images/logo.png") left center no-repeat;
+}
+
+#header .applicationName {
+	display:none;
+}
+.headerContainer {
+	background: url("images/bg_header_brown.png") left top repeat;
+	height: 100px;
+}
+
+.headerContainer .links>span:first-child {
+	background: url("/images/icon_appuser.png") no-repeat scroll left
+		center transparent;
+	line-height: 30px;
+	padding: 5px 0 5px 20px;
+	margin-left: 10px;
+}
+
+.headerContainer .links {
+	font-size: 0.9em;
+}
+
+.headerContainer .links a {
+	margin-left: 10px;
+}
+
+#secondaryMenu {
+    width: 25%;
+}
+
+#tertiaryMenu {
+    width: 3%;
+    float: right;
+    padding-right: 20px;
+}
+#breadcrumbsMenu {
+    width: 18%;
+    float: right;
+}
+#tertiaryMenu .imgLinks {
+	line-height: 30px;
+	font-size: 3em;
+	margin-right:20px;
+}
+
+#tertiaryMenu  a.copyLink:hover,
+#tertiaryMenu  a.copyLink.hover {
+    cursor: pointer;
+}
+
+#tertiaryMenu  a.copyLink:active,
+#tertiaryMenu  a.copyLink.active {
+    cursor: pointer;
+}
+
+
+#secondaryMenu,
+#tertiaryMenu {
+	display: inline-block;
+	float: right;
+	text-align: right;
+    margin-right: 5px;
+}
+
+#tertiaryMenu a {
+	font-size:3em;
+	line-height: 30px;
+}
+
+#header h1 {
+	margin: 10px 10px 10px 0px;
+	font-size: xx-large;
+}
+
+.clear {
+	clear: both; 
+}
+
+.links {
+	clear: both;
+	height: 60px;
+	line-height:60px;
+	color:#20B5C2;
+	text-transform: uppercase;
+	font-size:1.0em;
+    font-weight:bold;
+    padding:0px 20px 0px 0px;
+}
+
+	.links a {
+		color:#FFFFFF;
+    	font-weight:bold;
+	}
+	
+		
+#container {
+	/*width: 800px;*/
+}
+
+
+/* Buttons */
+
+.edit,
+.ok,
+.okButton {
+	display:inline-block;
+	background-color:#20B5C2;
+	color:#FFFFFF;
+	text-transform:uppercase;
+	font-size:0.9em;
+	border:0px;
+	padding:5px 10px;
+	border-radius:4px;
+	cursor:pointer;
+}
+
+.edit:focus,
+.ok:focus,
+.okButton:focus {
+	background-color: #40C0CB;
+	font-style: italic;
+}
+
+.cancel {
+	display:inline-block;
+	background-color:#E4E4DB;
+	color:#46423C;
+	text-transform:uppercase;
+	font-size:0.9em;
+	border:0px;
+	padding:5px 10px;
+	border-radius:4px;
+	cursor:pointer;	
+}
+
+.cancel:focus {
+    font-style: italic;
+}
+
+
+/********** CLASSes **********/
+
+.feedbackPanel li {
+	list-style: none;	
+}
+
+.leftSide {
+	float: left;
+	width: 220px;
+	height: 500px;
+}
+
+.rightSide {
+	float: right;
+	width: 520px;
+}
+
+/**************** APPLICATION MENU **************/
+
+#applicationActions {
+    padding-left: 10px;
+    height:40px;
+    margin-left: 10px;
+    width: 73%;
+    float: left;
+}
+
+#applicationActions .menuh {
+	background-color: transparent;
+	position:relative;
+	z-index:501;
+}
+
+#applicationActions .menuh ul.cssMenuItems {
+	line-height:30px;
+}
+
+#applicationActions .cssMenuPanel .menuh a:link, 
+#applicationActions .cssMenuPanel .menuh a:visited, 
+#applicationActions .cssMenuPanel .menuh a:active, 
+#applicationActions .cssMenuPanel .menuh p {
+	background-color: transparent;
+   	color: #FFFFFF;
+   	text-decoration: none;
+   	text-transform:uppercase;
+   	font-size:0.9em;
+   	font-weight:bold;
+}
+
+#applicationActions .cssMenuPanel .menuh a.prototype span {
+    color: #DBDB4D;
+    font-style: italic;
+}
+
+
+#applicationActions .cssMenuPanel .menuh li a:link, 
+#applicationActions .cssMenuPanel .menuh li a:visited, 
+#applicationActions .cssMenuPanel .menuh li a:active, 
+#applicationActions .cssMenuPanel .menuh li p {
+	border-radius:4px 4px 0px 0px;
+   	-moz-border-radius:4px 4px 0px 0px;
+   	-webkit-border-radius:4px 4px 0px 0px;
+}
+
+#applicationActions .cssMenuPanel .menuh li li a:link, 
+#applicationActions .cssMenuPanel .menuh li li a:visited, 
+#applicationActions .cssMenuPanel .menuh li li a:active, 
+#applicationActions .cssMenuPanel .menuh li li p {
+	border-radius:0px;
+   	-moz-border-radius:0px;
+   	-webkit-border-radius:0px;
+	background-color: #20B5C2;
+}
+
+#applicationActions .cssMenuPanel .menuh li li:last-child a:link, 
+#applicationActions .cssMenuPanel .menuh li li:last-child a:visited, 
+#applicationActions .cssMenuPanel .menuh li li:last-child a:active, 
+#applicationActions .cssMenuPanel .menuh li li:last-child p {
+	border-radius:0px 0px 4px 4px;
+	-webkit-border-radius:0px 0px 4px 4px;
+	-moz-border-radius:0px 0px 4px 4px;
+	background-color: #20B5C2;
+}
+
+#applicationActions .cssMenuPanel .menuh li li:first-child a:link, 
+#applicationActions .cssMenuPanel .menuh li li:first-child a:visited, 
+#applicationActions .cssMenuPanel .menuh li li:first-child a:active, 
+#applicationActions .cssMenuPanel .menuh li li:first-child p {
+	border-radius:0px 4px 0px 0px;
+	-webkit-border-radius:0px 4px 0px 0px;
+	-moz-border-radius:0px 4px 0px 0px;
+	background-color: #20B5C2;
+}
+
+#applicationActions .cssMenuPanel .menuh li li:first-child:last-child a:link, 
+#applicationActions .cssMenuPanel .menuh li li:first-child:last-child a:visited, 
+#applicationActions .cssMenuPanel .menuh li li:first-child:last-child a:active, 
+#applicationActions .cssMenuPanel .menuh li li:first-child:last-child p {
+	border-radius:0px 4px 4px 4px;
+	-webkit-border-radius:0px 4px 4px 4px;
+	-moz-border-radius:0px 4px 4px 4px;
+	background-color: #20B5C2;
+}
+
+
+#applicationActions .menuh a, 
+#applicationActions .menuh p {
+    border: 0px solid #00477F;
+    padding: 0px 1em 0px 1em;
+    background-image:none !important;
+}
+
+#applicationActions .cssMenuPanel .menuh li:hover a, 
+#applicationActions .cssMenuPanel .menuh li:hover p {
+	color: #FFFFFF;
+	background-color: #20B5C2;
+}
+
+#applicationActions .cssMenuPanel .menuh a:hover, 
+#applicationActions .cssMenuPanel .menuh p:hover {
+	color: #FFFFFF;
+	background-color: #20B5C2;
+}
+
+#applicationActions .cssMenuPanel .menuh li li a:hover, 
+#applicationActions .cssMenuPanel .menuh li li p:hover {
+	color: #FFFFFF;
+	background-color: #40C0CB !important;
+}
+
+#applicationActions ul.cssSubMenuItemsPanel {
+	min-width:220px;
+}
+
+   #applicationActions ul.cssSubMenuItemsPanel li.cssSubMenuItem p.disabled {
+       color: lightgray;
+       /*background-color: #F0EFEA;*/
+       
+   } 
+
+
+/**************** ELEMENTS **************/
+
+body {
+	background-color: #E3E3D9;
+	color: #454545;
+	font-family: Arial,'Sans-serif',  'Helvetica', 'Sans-serif', 'sans';
+	font-size: 0.8em;
+	line-height: 1.4em;
+	padding: 0px;
+	margin:0px;
+}
+
+.panel, fieldset {
+	margin: 3px 0px;
+}
+
+.scalarNameAndValueComponentType .panel {
+	padding: 4px;
+}
+
+
+div {
+	margin: 0;
+	padding: 0;
+}
+
+#body {
+	min-height: 400px;
+	margin:20px;
+}
+
+#footer {
+}
+
+	#footer .links {
+		height:auto;
+		padding:0px 20px;
+		line-height:20px;
+		height:20px;
+		color:#46423C;
+	}
+	
+	#footer .links a {
+		color:#20B5C2;
+		text-decoration:none;
+	}
+
+h3 {
+	margin-top: 9px;
+	margin-bottom: 0px;
+}
+
+p {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+form fieldset .okButton {
+	margin-top: 2em;
+}
+
+.myBlockContainer {
+	background-color:#FFFFFF;
+	padding:10px;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	margin-bottom:1%;
+	position:relative;
+	clear:both;
+}
+
+.myBlockContainer fieldset {
+	border:0px;
+	margin:0px;
+	padding:0px;
+}
+.myBlockContainer fieldset:not(:first-child) {
+    margin-top: 30px
+}
+
+
+.myBlockContainer legend {
+	color:#423D37;
+	font-size:1.6em;
+	margin-bottom:10px;
+	line-height:120%;
+	padding:0px;
+	float:left;
+	display:block;
+}
+
+
+/************************************************************ *********/
+
+
+
+h1,h2,h3,h4,h5,h6,h7,h8 {
+	color: #00477F;
+	font-weight: normal;
+}
+
+h1,h2 {
+	letter-spacing: -1px;
+}
+
+#extitle {
+	font-size: 12pt;
+	font-weight: bold;
+	color: #454545;
+	padding: 10px 10px 10px 10px;
+}
+
+.mark {
+	background-color: yellow;
+	margin: 5px;	
+}
+
+.nospam {
+	display : none;
+}
+
+.block {
+	padding: 10px;
+}
+
+
+h2 {
+	font-size: 1.25em;
+}
+
+h3 {
+	font-size: 1em;
+}
+
+a {
+	color: #00477F;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+img {
+	border: none;
+}
+
+pre {
+	font-family: 'Lucida Sans', 'Helvetica', 'Sans serif', 'sans';
+}
+
+th {
+	background: #EEEEEE;
+	color: #407098;
+	font-weight: bold;
+}
+
+tr.b {
+	background: #EEEEEE;
+}
+
+tr.a {
+	background: #E6E6E5;
+}
+
+tr.none {
+	background: transparent;
+}
+
+a.none {
+	background: transparent;
+	padding-right: 0px;
+}
+
+.inputForm label.non {
+	display: inline !important;
+}
+
+.inputFormTable td {
+	padding: 2px;
+}
+
+div.tabRowContent {
+	border-style: solid;
+	border-width: 1px;
+	margin: 4px;
+	padding: 4px;
+}
+
+tr.section td {
+	padding-top: 0.75em;
+}
+
+table.contents td,
+table.contents th {
+	border-left: 1px solid #DDD;
+	border-right: 1px solid #DDD;
+}
+
+/*************** Styling Entity Forms and Parameters ********************/
+
+
+
+
+.property, .propertyOrCollection, .parameter {
+	clear: both;
+}
+
+.scalarNameAndValueComponentType {
+}
+
+.scalarName {
+	padding:6px 0px;
+	margin-bottom:5px;
+}
+
+
+
+.scalarValue {
+	margin-bottom:10px;
+}
+
+.collectionName, 
+.collectionContents {
+
+}
+
+.scalarName, .collectionName {
+	float: left;
+	font-style: normal;
+	text-align: left;
+	text-transform:uppercase;
+	font-weight:bold !important;
+	font-size:0.9em;
+	color:#46413B;
+}
+
+.mandatory .scalarName:after, 
+.mandatory  .collectionName:after {
+	content: " *";
+	font-weight:bold;
+	color:#20B5C2;
+}
+
+.scalarValue,.collectionContents  {
+	float: left;
+}
+
+.scalarValue  {
+}
+
+.collectionContents {
+	width: 100%;
+}
+
+.scalarName {
+	width: 160px;
+}
+.scalarValue {
+}
+
+div.scalarPanel {
+	display: inline;
+}
+	
+.buttons {
+	padding: 1em 0em 1em 0em;
+	clear: both;
+	display: block;
+}	
+
+.mandatory {
+	font-weight: bold;
+}
+
+.number input {
+ 	text-align: right;
+}
+
+
+
+/********************* Select2 component styling *****************************/
+
+
+.actionPromptPage .select2-container .select2-choice,
+.entityPage       .select2-container .select2-choice {
+    padding: 4px;
+}
+
+
+
+.actionPromptPage .select2-container .select2-choice,
+.entityPage       .select2-container .select2-choice {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+	height: 20px;
+    line-height: 20px;
+	color:#7F7F7F;
+	background:#FFFFFF none;
+	border:1px solid #F0EFEA;
+	border-top:1px solid #CCCBC7;
+}
+
+.actionPromptPage .select2-container .select2-choice span,
+.entityPage       .select2-container .select2-choice span {
+    font-size:13px;
+}
+
+.actionPromptPage .select2-container.select2-drop-above .select2-choice,
+.entityPage       .select2-container.select2-drop-above .select2-choice {
+    -webkit-border-radius:0px;
+    -moz-border-radius:0px;
+    border-radius:0px;
+}
+
+.actionPromptPage .select2-drop,
+.entityPage       .select2-drop {
+    -webkit-border-radius:0px;
+    -moz-border-radius:0px;
+    border-radius:0px;
+}
+
+.actionPromptPage .select2-drop.select2-drop-above,
+.entityPage       .select2-drop.select2-drop-above {
+    -webkit-border-radius:0px;
+    -moz-border-radius:0px;
+    border-radius:0px;
+}
+
+.actionPromptPage .select2-container .select2-choice div,
+.entityPage       .select2-container .select2-choice div {
+    -webkit-border-radius:0px;
+    -moz-border-radius:0px;
+    border-radius:0px;
+    background: #EBEBE4;
+}
+
+.actionPromptPage .select2-container.select2-container-disabled .select2-choice,
+.entityPage       .select2-container.select2-container-disabled .select2-choice {
+	background-color:#F0EFEA;
+	border:1px solid #F0EFEA;
+	border-top:1px solid #CCCBC7;
+}
+
+.actionPromptPage .select2-container a,
+.entityPage       .select2-container a {
+	font-weight: normal;
+}
+
+/******** fix for select2 on ModalWindow ********/
+/* http://osdir.com/ml/users-wicket.apache.org/2013-09/msg00165.html */
+
+div.select2-drop {
+	z-index: 30001
+}
+
+.select2-drop-mask {
+    z-index: 30000
+}
+
+
+/******** action prompt modal dialog ********/
+
+
+.wicket-modal .w_content_container {
+  background-color: #E4E4DB;
+}
+
+.actionPanel {
+    width: 680px;
+}
+
+.actionPanel .myBlockContainer {
+    margin:19px;
+    padding: 20px;
+    width: 600px;
+    min-height: 200px;
+}
+
+.wicket-modal .w_caption {
+	display: none;
+}
+
+div.wicket-modal div.w_content_3 {
+	border: 0px;
+}
+
+div.wicket-modal div.w_content_3,
+div.wicket-modal div.w_content_2,
+div.wicket-modal div.w_content_1,
+div.wicket-modal div.w_content,
+.wicket-modal .w_content_container,
+.w_isis,
+.actionPanel {
+  border-radius:4px;
+  -moz-border-radius:4px;
+  -webkit-border-radius:4px;
+}
+
+/******** FORM STYLES ********/
+
+form input[type=text][disabled] {
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	padding:6px;
+	background-color:#F0EFEA;
+	border:1px solid #F0EFEA;
+	border-top:1px solid #CCCBC7;
+}
+
+form input[type=text] {
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	padding:6px;
+	background-color:#FFFFFF;
+	border:1px solid #F0EFEA;
+	border-top:1px solid #CCCBC7;
+}
+
+
+
+.inputForm {
+	clear:both;
+}
+
+.actionPanelHeaderNew {
+	clear:both;
+	display:block;
+}
+
+.actionPanelHeaderNew .entityIconAndTitlePanel {
+	padding-bottom:10px;
+	line-height:150%;
+	float:left;
+}
+
+div.actionPanelHeaderNew .iconAndTitle {
+	float: left;
+    padding:0em;
+}
+
+div.actionPanelHeaderNew .actions {
+	float: right;
+    padding:0em 0em;
+}
+
+.actionPanelHeaderNew .entityImage {
+	width: 32px;
+	height: 32px;
+	vertical-align:text-bottom;
+	padding-right:5px;
+}
+
+.actionPanelHeaderNew .entityTitle  {
+	font-size: 1.8em;
+	font-weight:normal;
+	color:#413D37;
+	text-decoration:none;
+}
+
+/* Feedback Error Styling */
+
+.feedbackPanel {
+	clear:both;
+	display:block;
+	color:#990000;
+	font-weight:normal;
+	font-size:12px;
+	line-height:150%;
+}
+
+
+.feedbackPanelERROR {
+	color:#CC0000;
+	list-style: none;
+	font-weight: normal;
+}
+
+.feedbackPanelINFO {
+	color: green;
+	list-style: none;
+	font-weight: normal;
+}
+
+
+
+div#jGrowl {
+ margin-top: 55px;
+ margin-right: 25px;
+ color: white;
+ font-size: larger;
+ opacity: .90;
+ filter: alpha(opacity = 90);
+}
+
+div#jGrowl div.jgrowl-ERROR {
+ background-color: #BF0B0B;
+}
+div#jGrowl div.jgrowl-WARNING {
+ background-color: orange;
+}
+div#jGrowl div.jgrowl-INFO {
+ background-color: #20B5C2;
+}
+div#jGrowl div.jgrowl-WARNING {
+ background-color: orange;
+}
+div#jGrowl div.jGrowl-closer {
+ background-color: #F0EFEA;
+ color: #46423C;
+ font-size: small;
+}
+
+
+
+
+/* ModalWindow tweaks */
+
+div.wicket-mask-dark {  
+    filter: alpha(opacity=40);
+    opacity: 0.4; 
+}
+
+
+/* action buttons in properties */
+
+.properties .property .additionalLinkList {
+    float:none;
+    padding-top: 5px;
+    padding-bottom: 20px;
+}
+
+.properties .property .isisBlobPanel .additionalLinkList {
+    padding-top: 0px;
+}
+
+
+
+/** general **/
+
+.hidden {
+	display: none;
+}
+
+
+
+
+/**
+zero clipboard
+(for some reason - perhaps to do with Flash - this CSS doesn't seem to 
+ do anything if within the ZeroClipboard.css)
+*/
+.zeroClipboardPanel a {
+    background-image: url("copy-26.png"); 
+    background-position: right;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+
+/**
+for some reason the containedToggleboxPanel.css is not being picked up...
+*/
+.containedToggleboxPanel .containedToggleboxPanelForm {
+    display: inline;
+}
+
+
+
+
+.collectionContentsAsAjaxTablePanel table.contents tbody td div.FixtureResult-className label,
+.collectionContentsAsAjaxTablePanel table.contents tbody td div.FixtureResult-fixtureScriptClassName label {
+    text-transform: none;
+}
