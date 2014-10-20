@@ -20,7 +20,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 
 import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import org.apache.wicket.util.convert.ConversionException;
