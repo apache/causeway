@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.viewer;
 
 import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.webjars.WicketWebjars;
@@ -46,6 +47,7 @@ import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.guice.GuiceComponentInjector;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
+import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
@@ -312,8 +314,16 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     }
 
     protected void configureWicketBootstrap() {
-        IBootstrapSettings settings = new BootstrapSettings();
+        final IBootstrapSettings settings = new BootstrapSettings();
         Bootstrap.install(this, settings);
+
+        getHeaderContributorListenerCollection().add(new IHeaderContributor() {
+            @Override
+            public void renderHead(IHeaderResponse response) {
+                BootstrapBaseBehavior bootstrapBaseBehavior = new BootstrapBaseBehavior();
+                bootstrapBaseBehavior.renderHead(settings, response);
+            }
+        });
     }
 
     // //////////////////////////////////////
