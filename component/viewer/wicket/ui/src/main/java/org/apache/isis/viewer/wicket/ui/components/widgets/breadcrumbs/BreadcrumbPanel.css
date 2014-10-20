@@ -17,7 +17,8 @@
  *  under the License.
  */
 
-.zeroClipboardPanel .subscribingLink {
-	display: none;
+.breadcrumbPanel {
+	display: inline-block;
+	width: 200px;
 }
 

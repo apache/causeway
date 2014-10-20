@@ -301,7 +301,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
                 setResponsePage(getSignInPage());
             }
         };
-        logoutLink.setBody(new ResourceModel("logoutLabel"));
         themeDiv.add(logoutLink);
     }
 

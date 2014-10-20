@@ -25,6 +25,7 @@ import com.vaynberg.wicket.select2.TextChoiceProvider;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -37,6 +38,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
 
@@ -114,6 +116,13 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
             
         });
         addOrReplace(breadcrumbChoice);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+
+        PanelUtil.renderHead(response, BreadcrumbPanel.class);
     }
 
     // //////////////////////////////////////

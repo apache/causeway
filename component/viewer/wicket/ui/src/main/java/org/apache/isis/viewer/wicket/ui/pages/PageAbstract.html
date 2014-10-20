@@ -44,16 +44,18 @@
                             </button>
                             <a class="navbar-brand" wicket:id="applicationName"></a>
                         </div>
+                        <div class="navbar-header navbar-right">
+                            <form class="navbar-form navbar-left">
+                                <span wicket:id="breadcrumbs"></span>
+                            </form>
+                            <p class="navbar-text"><i class="fa fa-user"></i> <span wicket:id="userName"></span></p>
+                            <ul class="nav navbar-nav">
+                                <li><a wicket:id="logoutLink" class="navbar-right"><i class="fa fa-sign-out"></i> <wicket:message key="logoutLabel"></wicket:message> </a></li>
+                                <li><a wicket:id="aboutLink" class="navbar-right">About</a></li>
+                            </ul>
+                        </div>
                         <div class="navbar-collapse app-actions collapse">
                             <ul class="nav navbar-nav" wicket:id="applicationActions"></ul>
-                            <ul class="nav navbar-nav navbar-right">
-                                <p class="navbar-text" wicket:id="userName"></p>
-                                <li><a wicket:id="logoutLink">Logout</a></li>
-                                <li><a wicket:id="aboutLink">About</a></li>
-                            </ul>
-                            <form class="navbar-form navbar-right">
-                                <div wicket:id="breadcrumbs" style="width: 200px"></div>
-                            </form>
                         </div>
                     </div>
                 </header>
