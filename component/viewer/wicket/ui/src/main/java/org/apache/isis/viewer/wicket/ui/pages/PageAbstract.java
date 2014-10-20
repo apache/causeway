@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.pages;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
 import de.agilecoders.wicket.core.markup.html.references.BootlintJavaScriptReference;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
 
@@ -51,7 +50,6 @@ import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -191,8 +189,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             // ensure that all collected JavaScript contributions are loaded at the page footer
             add(new HeaderResponseContainer("footerJS", "footerJS"));
 
-            BootstrapBaseBehavior.addTo(this);
-
         } catch(RuntimeException ex) {
 
             LOG.error("Failed to construct page, going back to sign in page", ex);
@@ -257,7 +253,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference())));
         response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
-        response.render(CssHeaderItem.forReference(new CssResourceReference(PageAbstract.class, "bootstrap-overrides.css")));
+        response.render(CssHeaderItem.forReference(new BootstrapOverridesCssResourceReference()));
         PanelUtil.renderHead(response, PageAbstract.class);
 
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
