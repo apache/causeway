@@ -34,6 +34,7 @@ import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactory
  * Either this selector, or {@link EntityDropDownSelectorPanelFactory} should be registered;
  * but not both.
  */
+// TODO mgrigorov: EntityDropDownSelectorPanelFactory doesn't seem to exist anymore. Update the javadoc
 public class EntityLinksSelectorPanelFactory extends EntityComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
