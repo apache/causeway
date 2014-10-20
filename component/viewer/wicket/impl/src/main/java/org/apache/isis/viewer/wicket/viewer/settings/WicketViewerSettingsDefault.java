@@ -94,6 +94,6 @@ public class WicketViewerSettingsDefault implements WicketViewerSettings {
      */
     @Override
     public String getDatePickerPattern() {
-        return getConfiguration().getString("isis.viewer.wicket.datePickerPattern", "dd-mm-yy");
+        return getConfiguration().getString("isis.viewer.wicket.datePickerPattern", "dd-MM-yyyy");
     }
 }
