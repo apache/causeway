@@ -116,3 +116,20 @@
 .collectionContentsAsAjaxTablePanel div input[type=text][disabled] {
     padding: 0;
 }
+
+
+
+
+.collectionContentsAsAjaxTablePanel table {
+    border: none;
+}
+
+.collectionContentsAsAjaxTablePanel table tr td:first-child,
+.collectionContentsAsAjaxTablePanel table tr th:first-child {
+    border-left: none;
+}
+
+.collectionContentsAsAjaxTablePanel table tr th:last-child,
+.collectionContentsAsAjaxTablePanel table tr td:last-child {
+    border-right: none;
+}
