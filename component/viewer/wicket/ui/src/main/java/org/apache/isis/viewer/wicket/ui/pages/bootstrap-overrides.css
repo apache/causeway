@@ -73,7 +73,9 @@
     margin: 0;
 }
 
-body { padding-top: 161px; }
+body {
+    padding-top: 80px;
+}
 
 label {
     font-weight: normal;

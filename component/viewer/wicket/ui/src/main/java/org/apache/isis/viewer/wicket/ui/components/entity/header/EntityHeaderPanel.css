@@ -28,18 +28,16 @@ div.entityHeaderPanel .iconAndTitle{
 	width: 100%;
 }
 
-div.entityHeaderPanel .entityActions {
-	margin-top: -1px;
-	margin-bottom: -10px;
-	float: left;
-	padding:0 0;
+div.entityHeaderPanel .entityActions .cssMenuPanel .cssMenuItems:first-child {
+    float: left;
+    margin-top: 3px;
+    margin-left: 20px;
 }
 
 .entityHeaderPanel .entityImage {
 	width: 32px;
 	height: 32px;
 	vertical-align:text-bottom;
-	padding-right:5px;
 }
 
 .entityHeaderPanel .entityTitle {
@@ -49,3 +47,6 @@ div.entityHeaderPanel .entityActions {
 }
 
 
+div.entityHeaderPanel .iconAndTitleLabel {
+    float: left;
+}
