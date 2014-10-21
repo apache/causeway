@@ -63,6 +63,12 @@
     border: none;
 }
 
+/** added here because looks lke EntityPropertiesPanel.css is currently excluded ...? */
+.entityPropertiesPanel .property {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
 .pagination {
     margin: 0;
 }
