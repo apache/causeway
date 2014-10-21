@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
 
+import com.google.common.base.Strings;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
@@ -90,7 +91,10 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(textField));
 
         if(getModel().isRequired()) {
-            scalarName.add(new CssClassAppender("mandatory"));
+            final String label = scalarName.getDefaultModelObjectAsString();
+            if(!Strings.isNullOrEmpty(label)) {
+                scalarName.add(new CssClassAppender("mandatory"));
+            }
         }
 
         addOrReplace(scalarName);
