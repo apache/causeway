@@ -17,18 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.annotation;
+package org.apache.isis.core.metamodel.facets.object.cssclassfa.annotation.annotation;
 
-import java.lang.annotation.*;
+import org.apache.isis.applib.annotation.CssClassFa;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.CssClassFaFacetAbstract;
 
-/**
- * Indicates the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class to decorate an
- * action (button or menu item).
- */
-@Inherited
-@Target({ ElementType.METHOD, ElementType.TYPE })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface CssClassFa {
-    String value();
+public class CssClassFaFacetOnTypeAnnotation extends CssClassFaFacetAbstract {
+
+    public CssClassFaFacetOnTypeAnnotation(final CssClassFa cssClassFa, final FacetHolder holder) {
+        super(cssClassFa.value(), holder);
+    }
 }
-

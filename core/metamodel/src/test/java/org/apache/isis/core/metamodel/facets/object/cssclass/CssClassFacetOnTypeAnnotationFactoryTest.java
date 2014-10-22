@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.object.cssclass.annotation.CssClass
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
-public class CssClassFaFacetOnTypeAnnotationFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
+public class CssClassFacetOnTypeAnnotationFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
     @Test
     public void testCssClassAnnotationPickedUpOnClass() {

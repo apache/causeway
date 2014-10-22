@@ -84,6 +84,7 @@ import org.apache.isis.core.metamodel.facets.object.choices.boundedannot.Choices
 import org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc.ChoicesFacetFromBoundedMarkerInterfaceFactory;
 import org.apache.isis.core.metamodel.facets.object.choices.enums.EnumFacetUsingValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.object.cssclass.annotation.CssClassFacetOnTypeAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.object.cssclassfa.annotation.annotation.CssClassFaFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.describedas.annotation.DescribedAsFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.dirty.method.DirtyMethodsFacetFactory;
@@ -355,8 +356,11 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(HiddenFacetOnTypeAnnotationFactory.class);
         // must come after the TitleAnnotationFacetFactory, because can act as an override
         addFactory(HiddenFacetOnMemberFactory.class);
+
         addFactory(CssClassFacetOnTypeAnnotationFactory.class);
         addFactory(CssClassFacetOnMemberFactory.class);
+
+        addFactory(CssClassFaFacetOnTypeAnnotationFactory.class);
         addFactory(CssClassFaFacetOnMemberFactory.class);
 
         addFactory(HiddenObjectFacetViaMethodFactory.class);
