@@ -27,11 +27,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IStyledColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.*;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -114,27 +110,29 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
                 if (column.isSortable())
                 {
                     header = newSortableHeader("header", column.getSortProperty(), stateLocator);
+
+                    if (column instanceof IStyledColumn)
+                    {
+                        CssAttributeBehavior cssAttributeBehavior = new CssAttributeBehavior()
+                        {
+                            private static final long serialVersionUID = 1L;
+
+                            @Override
+                            protected String getCssClass()
+                            {
+                                return ((IStyledColumn<?, S>)column).getCssClass();
+                            }
+                        };
+
+                        header.add(cssAttributeBehavior);
+                    }
+
                 }
                 else
                 {
                     header = new WebMarkupContainer("header");
                 }
 
-                if (column instanceof IStyledColumn)
-                {
-                    CssAttributeBehavior cssAttributeBehavior = new CssAttributeBehavior()
-                    {
-                        private static final long serialVersionUID = 1L;
-
-                        @Override
-                        protected String getCssClass()
-                        {
-                            return ((IStyledColumn<?, S>)column).getCssClass();
-                        }
-                    };
-
-                    header.add(cssAttributeBehavior);
-                }
 
                 item.add(header);
                 item.setRenderBodyOnly(true);
@@ -165,15 +163,17 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
 
-                ISortState<S> sortState = stateLocator.getSortState();
-                S sortProperty = column.getSortProperty();
-                SortOrder sortOrder = sortProperty == null ? SortOrder.NONE : sortState.getPropertySortOrder(sortProperty);
-                if (sortOrder == SortOrder.ASCENDING) {
-                    Attributes.addClass(tag, CLASS_SORT_UP);
-                } else if (sortOrder == SortOrder.DESCENDING) {
-                    Attributes.addClass(tag, CLASS_SORT_DOWN);
-                } else {
-                    Attributes.addClass(tag, CLASS_SORT_NONE);
+                if(column.isSortable()) {
+                    ISortState<S> sortState = stateLocator.getSortState();
+                    S sortProperty = column.getSortProperty();
+                    SortOrder sortOrder = sortProperty == null ? SortOrder.NONE : sortState.getPropertySortOrder(sortProperty);
+                    if (sortOrder == SortOrder.ASCENDING) {
+                        Attributes.addClass(tag, CLASS_SORT_UP);
+                    } else if (sortOrder == SortOrder.DESCENDING) {
+                        Attributes.addClass(tag, CLASS_SORT_DOWN);
+                    } else {
+                        Attributes.addClass(tag, CLASS_SORT_NONE);
+                    }
                 }
             }
         };
