@@ -27,10 +27,18 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.adapter.ServicesProvider;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.unittestsupport.jmocking.IsisActions;
@@ -46,6 +54,20 @@ public class IsisMetaModelTest_init {
     private IsisConfiguration mockConfiguration;
     @Mock
     private ProgrammingModel mockProgrammingModelFacets;
+    @Mock
+    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock
+    private SpecificationLoader mockSpecificationLoader;
+    @Mock
+    private ServicesProvider mockServicesProvider;
+    @Mock
+    private ObjectInstantiator mockObjectInstantiator;
+    @Mock
+    private AdapterManager mockAdapterManager;
+    @Mock
+    private QuerySubmitter mockQuerySubmitter;
+    @Mock
+    private ServicesInjector mockDependencyInjector;
     @Mock
     private FacetDecorator mockFacetDecorator;
     @Mock
@@ -70,6 +92,30 @@ public class IsisMetaModelTest_init {
                 allowing(mockRuntimeContext).injectInto(with(any(Object.class)));
                 will(IsisActions.injectInto());
                 
+                allowing(mockRuntimeContext).getAuthenticationSessionProvider();
+                will(returnValue(mockAuthenticationSessionProvider));
+
+                allowing(mockRuntimeContext).getSpecificationLoader();
+                will(returnValue(mockSpecificationLoader));
+
+                allowing(mockRuntimeContext).getAdapterManager();
+                will(returnValue(mockAdapterManager));
+
+                allowing(mockRuntimeContext).getQuerySubmitter();
+                will(returnValue(mockQuerySubmitter));
+
+                allowing(mockRuntimeContext).getDependencyInjector();
+                will(returnValue(mockDependencyInjector));
+
+                allowing(mockRuntimeContext).getServicesProvider();
+                will(returnValue(mockServicesProvider));
+
+                allowing(mockRuntimeContext).getObjectInstantiator();
+                will(returnValue(mockObjectInstantiator));
+
+                allowing(mockRuntimeContext).getDeploymentCategory();
+                will(returnValue(DeploymentCategory.PRODUCTION));
+
                 oneOf(mockProgrammingModelFacets).init();
                 inSequence(initSequence);
                 

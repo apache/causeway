@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.additionallinks;
 
 import java.util.List;
 
+import com.google.common.base.Strings;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -35,6 +36,7 @@ import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -47,6 +49,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
     private static final String ID_ADDITIONAL_LINK_LIST = "additionalLinkList";
     private static final String ID_ADDITIONAL_LINK_ITEM = "additionalLinkItem";
+    private static final String ID_ADDITIONAL_LINK_FONT_AWESOME = "additionalLinkFontAwesome";
     private static final String ID_ADDITIONAL_LINK_TITLE = "additionalLinkTitle";
 
     public AdditionalLinksPanel(final String id, final List<LinkAndLabel> links) {
@@ -70,6 +73,15 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 final LinkAndLabel linkAndLabel = item.getModelObject();
                 
                 final AbstractLink link = linkAndLabel.getLink();
+
+                String cssClassFa = linkAndLabel.getCssClassFa();
+                if(Strings.isNullOrEmpty(cssClassFa)) {
+                    Components.permanentlyHide(link, ID_ADDITIONAL_LINK_FONT_AWESOME);
+                } else {
+                    Label dummy = new Label(ID_ADDITIONAL_LINK_FONT_AWESOME, "");
+                    link.addOrReplace(dummy);
+                    dummy.add(new CssClassAppender(cssClassFa));
+                }
 
                 Label viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
                 String disabledReasonIfAny = linkAndLabel.getDisabledReasonIfAny();

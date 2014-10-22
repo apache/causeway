@@ -17,6 +17,16 @@
  *  under the License.
  */
 
-span .fa {
-    padding-right: 2px;
+package org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass;
+
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
+
+/**
+ * The <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> css class(es) for an action.
+ *
+ * <p>
+ * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * member with <tt>@CssClassFA</tt>.
+ */
+public interface CssClassFaFacet extends SingleStringValueFacet {
 }

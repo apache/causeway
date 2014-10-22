@@ -17,13 +17,7 @@
 package org.apache.isis.core.metamodel.layoutmetadata.json;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
+import java.util.*;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
@@ -33,7 +27,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Render.Type;
@@ -43,30 +36,18 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetImpl;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
-import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
-import org.apache.isis.core.metamodel.layoutmetadata.ActionRepr;
-import org.apache.isis.core.metamodel.layoutmetadata.ColumnRepr;
-import org.apache.isis.core.metamodel.layoutmetadata.CssClassFacetRepr;
-import org.apache.isis.core.metamodel.layoutmetadata.DescribedAsFacetRepr;
-import org.apache.isis.core.metamodel.layoutmetadata.DisabledFacetRepr;
-import org.apache.isis.core.metamodel.layoutmetadata.HiddenFacetRepr;
-import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadata;
-import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
-import org.apache.isis.core.metamodel.layoutmetadata.MemberGroupRepr;
-import org.apache.isis.core.metamodel.layoutmetadata.MemberRepr;
-import org.apache.isis.core.metamodel.layoutmetadata.MultiLineFacetRepr;
-import org.apache.isis.core.metamodel.layoutmetadata.NamedFacetRepr;
-import org.apache.isis.core.metamodel.layoutmetadata.PagedFacetRepr;
-import org.apache.isis.core.metamodel.layoutmetadata.RenderFacetRepr;
-import org.apache.isis.core.metamodel.layoutmetadata.TypicalLengthFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.*;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
@@ -74,8 +55,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayou
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetImpl;
 
 public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
 
@@ -250,6 +229,10 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         final CssClassFacetRepr cssClass = actionRepr.cssClass;
         if(cssClass!= null) {
             props.setProperty(prefix +"." + actionName + ".cssClass.value", cssClass.value);
+        }
+        final CssClassFaFacetRepr cssClassFa = actionRepr.cssClassFa;
+        if(cssClassFa != null) {
+            props.setProperty(prefix +"." + actionName + ".cssClassFa.value", cssClassFa.value);
         }
     }
 

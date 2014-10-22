@@ -74,7 +74,7 @@ public class ToDoItemAnalysis {
         Later,
         Unknown,
     }
-    
+
     @Named("By Date Range")
     @Bookmarkable
     @ActionSemantics(Of.SAFE)

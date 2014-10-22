@@ -115,7 +115,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     }
 
     // //////////////////////////////////////
-    
+
     @DescribedAs("The previous item not yet completed")
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)

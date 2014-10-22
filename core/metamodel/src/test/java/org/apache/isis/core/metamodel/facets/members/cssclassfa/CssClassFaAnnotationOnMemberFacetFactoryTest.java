@@ -16,44 +16,49 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.members.cssclass;
+package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
+import java.lang.reflect.Method;
 import org.junit.Test;
-import org.apache.isis.applib.annotation.CssClass;
+import org.apache.isis.applib.annotation.CssClassFa;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnMemberFactory;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.CssClassFaFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.annotprop.CssClassFaFacetOnMemberFactory;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
-public class CssClassAnnotationOnMemberFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
+public class CssClassFaAnnotationOnMemberFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
     @Test
     public void testCssClassAnnotationPickedUpOnClass() {
 
-        final CssClassFacetOnMemberFactory facetFactory = new CssClassFacetOnMemberFactory();
+        final CssClassFaFacetOnMemberFactory facetFactory = new CssClassFaFacetOnMemberFactory();
         facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
 
         class Customer {
 
-            @CssClass(value = "user")
-            public String getName() {
+            @CssClassFa(value = "fa fa-foo")
+            public String foo() {
                 return "Joe";
             }
         }
 
         expectNoMethodsRemoved();
 
-        facetedMethod = FacetedMethod.createForProperty(Customer.class, "name");
+        final Method actionMethod = findMethod(Customer.class, "foo", new Class[] { });
+
+        facetedMethod = FacetedMethod.createForAction(Customer.class, actionMethod);
         facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(CssClassFacet.class);
+        final Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
         assertThat(facet, is(not(nullValue())));
-        assertThat(facet instanceof CssClassFacetAbstract, is(true));
-        final CssClassFacetAbstract cssClassFacetAbstract = (CssClassFacetAbstract) facet;
-        assertThat(cssClassFacetAbstract.value(), equalTo("user"));
+        assertThat(facet instanceof CssClassFaFacetAbstract, is(true));
+        final CssClassFaFacetAbstract cssClassFacetAbstract = (CssClassFaFacetAbstract) facet;
+        assertThat(cssClassFacetAbstract.value(), equalTo("fa fa-foo"));
     }
 }

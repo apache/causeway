@@ -68,3 +68,21 @@
     -moz-border-radius: 6px 0 6px 6px;
     border-radius: 6px 0 6px 6px;
 }
+
+.dropdown-menu > li > a.menuLink {
+    display: inline-block;
+    padding-left: 0px;
+}
+
+.dropdown-menu > li > span.fa {
+    padding-left: 3px;
+}
+
+.dropdown-menu .fontAwesomeIcon {
+    min-width: 20px;
+}
+
+.dropdown-menu > li > a.menuLink.menuLinkSpacer {
+    padding-left: 24px;
+}
+

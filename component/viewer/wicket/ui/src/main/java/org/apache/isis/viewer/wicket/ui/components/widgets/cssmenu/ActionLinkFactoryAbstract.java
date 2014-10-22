@@ -260,13 +260,15 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
     }
 
     protected LinkAndLabel newLinkAndLabel(final ObjectAction action, final AbstractLink link, final String disabledReasonIfAny) {
+
         final String label = ObjectAction.Utils.nameFor(action);
         final boolean blobOrClob = CssMenuItem.returnsBlobOrClob(action);
         final boolean prototype = CssMenuItem.isExplorationOrPrototype(action);
         final String actionIdentifier = CssMenuItem.actionIdentifierFor(action);
         final String cssClass = CssMenuItem.cssClassFor(action);
-        
-        return new LinkAndLabel(link, label, disabledReasonIfAny, blobOrClob, prototype, actionIdentifier, cssClass);
+        final String cssClassFa = CssMenuItem.cssClassFaFor(action);
+
+        return new LinkAndLabel(link, label, disabledReasonIfAny, blobOrClob, prototype, actionIdentifier, cssClass, cssClassFa);
     }
 
 

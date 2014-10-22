@@ -17,6 +17,18 @@
  *  under the License.
  */
 
-span .fa {
-    padding-right: 2px;
+package org.apache.isis.applib.annotation;
+
+import java.lang.annotation.*;
+
+/**
+ * Indicates the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class to decorate an
+ * action (button or menu item).
+ */
+@Inherited
+@Target({ ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface CssClassFa {
+    String value();
 }
+

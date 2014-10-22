@@ -17,6 +17,19 @@
  *  under the License.
  */
 
-span .fa {
-    padding-right: 2px;
+package org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.annotprop;
+
+import java.util.Properties;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.CssClassFaFacetAbstract;
+
+public class CssClassFaFacetOnMemberFromProperties extends CssClassFaFacetAbstract {
+
+    public CssClassFaFacetOnMemberFromProperties(final Properties properties, final FacetHolder holder) {
+        super(valueFrom(properties), holder);
+    }
+
+    private static String valueFrom(Properties properties) {
+        return properties.getProperty("value");
+    }
 }

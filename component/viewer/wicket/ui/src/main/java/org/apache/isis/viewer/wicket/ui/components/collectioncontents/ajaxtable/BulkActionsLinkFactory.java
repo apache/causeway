@@ -207,8 +207,9 @@ final class BulkActionsLinkFactory implements ActionLinkFactory {
         final boolean explorationOrPrototype = CssMenuItem.isExplorationOrPrototype(objectAction);
         final String actionIdentifier = CssMenuItem.actionIdentifierFor(objectAction);
         final String cssClass = CssMenuItem.cssClassFor(objectAction);
+        final String cssClassFa = CssMenuItem.cssClassFaFor(objectAction);
 
-        return new LinkAndLabel(link, objectAction.getName(), null, false, explorationOrPrototype, actionIdentifier, cssClass);
+        return new LinkAndLabel(link, objectAction.getName(), null, false, explorationOrPrototype, actionIdentifier, cssClass, cssClassFa);
     }
     
     

@@ -19,20 +19,18 @@
 
 package org.apache.isis.core.metamodel.app;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.List;
-
 import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class IsisMetaModelTest_constructWithServices {
 
@@ -65,7 +63,7 @@ public class IsisMetaModelTest_constructWithServices {
     public void shouldBeAbleToRegisterServices() {
         metaModel = new IsisMetaModel(mockContext, mockProgrammingModel, mockService1, mockService2);
         final List<Object> services = metaModel.getServices();
-        assertThat(services.size(), is(2));
+        assertThat(services.size(), is(3));
         assertThat(services, IsisMatchers.containsObjectOfType(SomeRepo.class));
         assertThat(services, IsisMatchers.containsObjectOfType(SomeOtherRepo.class));
     }

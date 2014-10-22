@@ -19,6 +19,7 @@ package org.apache.isis.core.metamodel.facets;
 import java.util.Set;
 import org.junit.Test;
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
 
@@ -60,7 +61,7 @@ public class InteractionHelper_newCollectionInteractionEvent_forAdd {
         final Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
 
         final CollectionInteractionEvent<Object, Object> ev = new InteractionHelper(null).newCollectionInteractionEvent(
-                CollectionAddedToEvent.Default.class, null, identifier, sdo, CollectionInteractionEvent.Of.ADD_TO, other);
+                CollectionAddedToEvent.Default.class, AbstractInteractionEvent.Phase.EXECUTED, identifier, sdo, CollectionInteractionEvent.Of.ADD_TO, other);
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOf(), is(CollectionInteractionEvent.Of.ADD_TO));
@@ -74,7 +75,7 @@ public class InteractionHelper_newCollectionInteractionEvent_forAdd {
         final Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
         
         final CollectionInteractionEvent<SomeDomainObject, SomeReferencedObject> ev = new InteractionHelper(null).newCollectionInteractionEvent(
-                SomeDomainObjectCollectionEvent.class, null, identifier, sdo, CollectionInteractionEvent.Of.ADD_TO, other);
+                SomeDomainObjectCollectionEvent.class, AbstractInteractionEvent.Phase.EXECUTED, identifier, sdo, CollectionInteractionEvent.Of.ADD_TO, other);
         assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOf(), is(CollectionInteractionEvent.Of.ADD_TO));

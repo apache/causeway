@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -41,6 +42,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.CssClassFaFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -59,10 +61,6 @@ public class CssMenuItem implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final String ID_MENU_LINK = "menuLink";
-
-    public void setCssClass(String cssClass) {
-        this.cssClass = cssClass;
-    }
 
     public static class Builder {
         private final CssMenuItem cssMenuItem;
@@ -122,8 +120,14 @@ public class CssMenuItem implements Serializable {
             return this;
         }
 
-        public void withCssClass(String cssClass) {
+        public Builder withCssClass(String cssClass) {
             cssMenuItem.setCssClass(cssClass);
+            return this;
+        }
+
+        public Builder withCssClassFa(String cssClassFa) {
+            cssMenuItem.setCssClassFa(cssClassFa);
+            return this;
         }
 
         /**
@@ -155,6 +159,7 @@ public class CssMenuItem implements Serializable {
 
     private String actionIdentifier;
     private String cssClass;
+    private String cssClassFa;
 
     private String description;
 
@@ -225,6 +230,19 @@ public class CssMenuItem implements Serializable {
         this.blobOrClob = blobOrClob;
     }
 
+    public void setCssClass(String cssClass) {
+        this.cssClass = cssClass;
+    }
+
+    public void setCssClassFa(String cssClassFa) {
+        this.cssClassFa = cssClassFa;
+    }
+
+    public String getCssClassFa() {
+        return cssClassFa;
+    }
+
+
     /**
      * Only populated if not {@link #isEnabled() enabled}.
      */
@@ -280,23 +298,17 @@ public class CssMenuItem implements Serializable {
         
         final DescribedAsFacet describedAsFacet = objectAction.getFacet(DescribedAsFacet.class);
         final String descriptionIfAny = describedAsFacet != null? describedAsFacet.value(): null;
-        
-        final CssClassFacet cssClassFacet = objectAction.getFacet(CssClassFacet.class);
-
-        final boolean blobOrClob = returnsBlobOrClob(objectAction);
-        final boolean prototype = isExplorationOrPrototype(objectAction);
-        final String actionIdentifier = actionIdentifierFor(objectAction);
 
         Builder builder = newSubMenuItem(actionLabel)
                 .link(link)
                 .describedAs(descriptionIfAny)
                 .enabled(reasonDisabledIfAny)
-                .returnsBlobOrClob(blobOrClob)
-                .prototyping(prototype)
-                .withActionIdentifier(actionIdentifier);
-        if (cssClassFacet != null) {
-            builder.withCssClass(cssClassFacet.value());
-        }
+                .returnsBlobOrClob(returnsBlobOrClob(objectAction))
+                .prototyping(isExplorationOrPrototype(objectAction))
+                .withActionIdentifier(actionIdentifierFor(objectAction))
+                .withCssClass(cssClassFor(objectAction))
+                .withCssClassFa(cssClassFaFor(objectAction));
+
         return builder;
     }
 
@@ -316,7 +328,7 @@ public class CssMenuItem implements Serializable {
         return action.getType().isExploration() || action.getType().isPrototype();
     }
 
-    public static String actionIdentifierFor(ObjectAction action) {
+    public static String actionIdentifierFor(final ObjectAction action) {
         @SuppressWarnings("unused")
         final Identifier identifier = action.getIdentifier();
         
@@ -325,9 +337,14 @@ public class CssMenuItem implements Serializable {
         return className + "-" + actionId;
     }
 
-    public static String cssClassFor(ObjectAction action) {
+    public static String cssClassFor(final ObjectAction action) {
         CssClassFacet cssClassFacet = action.getFacet(CssClassFacet.class);
         return cssClassFacet != null ? cssClassFacet.value() : null;
+    }
+
+    public static String cssClassFaFor(final ObjectAction action) {
+        CssClassFaFacet cssClassFaFacet = action.getFacet(CssClassFaFacet.class);
+        return cssClassFaFacet != null ? cssClassFaFacet.value() : null;
     }
 
     /**
@@ -381,9 +398,18 @@ public class CssMenuItem implements Serializable {
                 link.add(new CssClassAppender("prototype"));
             }
             if(this.cssClass != null) {
-                markupContainer.add(new CssClassAppender(this.cssClass));
+                link.add(new CssClassAppender(this.cssClass));
             }
             link.add(new CssClassAppender(this.actionIdentifier));
+
+            String cssClassFa = getCssClassFa();
+            if (Strings.isNullOrEmpty(cssClassFa)) {
+                Components.permanentlyHide(link, "menuLinkFontAwesome");
+            } else {
+                Label dummy = new Label("menuLinkFontAwesome", "");
+                dummy.add(new CssClassAppender(cssClassFa));
+                link.add(dummy);
+            }
 
             // .. and hide label
             Components.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);

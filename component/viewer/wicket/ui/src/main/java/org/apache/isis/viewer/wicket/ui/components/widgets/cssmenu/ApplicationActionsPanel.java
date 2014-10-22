@@ -4,6 +4,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameApp
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAutoOpenJavaScriptReference;
 
 import java.util.List;
+import com.google.common.base.Strings;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -16,6 +17,7 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -102,13 +104,26 @@ public class ApplicationActionsPanel extends Panel {
 
     private void addLeafItem(CssMenuItem menuItem, ListItem<CssMenuItem> listItem) {
         Fragment leafItem = new Fragment("content", "leafItem", ApplicationActionsPanel.this);
+
         AbstractLink subMenuItemLink = menuItem.getLink();
+
         subMenuItemLink.setBody(Model.of(menuItem.getName()));
         if (!menuItem.isEnabled()) {
             listItem.add(new CssClassNameAppender("disabled"));
         }
         leafItem.add(subMenuItemLink);
         listItem.add(leafItem);
+
+        String cssClassFa = menuItem.getCssClassFa();
+        if (Strings.isNullOrEmpty(cssClassFa)) {
+            Components.permanentlyHide(leafItem, "menuLinkFontAwesome");
+            subMenuItemLink.add(new CssClassAppender("menuLinkSpacer"));
+        } else {
+            Label dummy = new Label("menuLinkFontAwesome", "");
+            dummy.add(new CssClassAppender(cssClassFa));
+            leafItem.add(dummy);
+        }
+
     }
 
     @Override

@@ -36,6 +36,7 @@ import org.apache.isis.applib.services.clock.ClockService;
 public class ToDoItems {
 
     //region > notYetComplete (action)
+    @CssClassFa("fa-list")
     @Bookmarkable
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "10")
@@ -57,6 +58,7 @@ public class ToDoItems {
     //endregion
 
     //region > complete (action)
+    @CssClassFa("fa-check-square-o")
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "20")
     public List<ToDoItem> complete() {
@@ -114,6 +116,7 @@ public class ToDoItems {
     //endregion
 
     //region > newToDo (action)
+    @CssClassFa("fa-plus")
     @MemberOrder(sequence = "5")
     public ToDoItem newToDo(
             final @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") @Named("Description") String description, 

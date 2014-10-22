@@ -18,17 +18,18 @@
   under the License.
 -->
 <html xmlns:wicket="http://wicket.apache.org">
-	<body>
-		<wicket:panel>
-			<ul class="cssSubMenuItemsPanel">
-				<li wicket:id="subMenuItems" class="cssSubMenuItem">
-					<a wicket:id="menuLink" class="btn btn-xs btn-default">
-						<span wicket:id="menuLabel">[menu label]</span>
-					</a>
-					<p wicket:id="menuLabel">[menu label]</p>
-					<span wicket:id="subMenuItems">[subMenuItems]</span>
-				</li>
-			</ul>
-		</wicket:panel>
-	</body>
+<body>
+<wicket:panel>
+    <ul class="cssSubMenuItemsPanel">
+        <li wicket:id="subMenuItems" class="cssSubMenuItem">
+            <a wicket:id="menuLink" class="btn btn-xs btn-default">
+                <span class="fontAwesomeIcon" wicket:id="menuLinkFontAwesome"/>
+                <span wicket:id="menuLabel">[menu label]</span>
+            </a>
+            <p wicket:id="menuLabel">[menu label]</p>
+            <span wicket:id="subMenuItems">[subMenuItems]</span>
+        </li>
+    </ul>
+</wicket:panel>
+</body>
 </html>
