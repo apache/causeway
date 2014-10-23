@@ -86,3 +86,8 @@ label {
     padding-right: 10px;
 }
 
+/* fix for Firefox */
+th > a > div > strong {
+    float: left;
+}
+
