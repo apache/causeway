@@ -21,31 +21,29 @@
     <body>
         <wicket:panel>
             <div class="isisBlobPanel scalarNameAndValueComponentType">
-                <div class="row">
-                    <span wicket:id="scalarName" class="scalarName col-xs-3">[Label text]</span>
-                    <div class="col-xs-9">
-                        <label wicket:id="scalarIfRegular" style="width: 100%">
-                            <img class="scalarImage text-center" width="200px" wicket:id="scalarImage"/>
-                            <span class="scalarValue text-right">
+                <div class="form-group" wicket:id="scalarIfRegular">
+                    <label wicket:id="scalarName" class="scalarName control-label">[Label text]</label>
+                    <span class="scalarValueWrapper">
+                        <img class="scalarImage text-center" width="200px" wicket:id="scalarImage"/>
+                        <span class="scalarValue text-right">
 
-                                <span class="uploadFile help-block">
-                                    <input type="file" name="scalarValue" wicket:id="scalarValue" />
-                                </span>
-
-                                <a class="download btn btn-xs btn-default" wicket:id="scalarIfRegularDownload"><span class="downloadTitle">Download</span></a>
-                                <span class="fileName" wicket:id="fileName"></span>
+                            <span class="uploadFile help-block">
+                                <input type="file" name="scalarValue" wicket:id="scalarValue" />
                             </span>
-                            <span wicket:id="feedback" class="help-block"></span>
-                            <span wicket:id="additionalLinks"></span>
-                        </label>
-                    </div>
+
+                            <a class="download btn btn-xs btn-default" wicket:id="scalarIfRegularDownload"><span class="downloadTitle">Download</span></a>
+                            <span class="fileName" wicket:id="fileName"></span>
+                        </span>
+                        <span wicket:id="feedback" class="help-block"></span>
+                        <span wicket:id="additionalLinks"></span>
+                    </span>
                 </div>
 
                 <span wicket:id="scalarIfCompact">
                     <a wicket:id="scalarIfCompactDownload"><span class="fileName" wicket:id="fileNameIfCompact"></span></a>
                 </span>
-
             </div>
+
         </wicket:panel>
     </body>
 </html>

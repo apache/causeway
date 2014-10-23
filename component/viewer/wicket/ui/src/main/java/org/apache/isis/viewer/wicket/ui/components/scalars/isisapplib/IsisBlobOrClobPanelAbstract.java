@@ -32,7 +32,6 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.markup.html.image.resource.ThumbnailImageResource;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
@@ -50,6 +49,7 @@ import org.apache.isis.core.commons.lang.CloseableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
 public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> extends ScalarPanelAbstract {
@@ -72,22 +72,21 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     private Image wicketImage;
 
     private FileUploadField fileUploadField;
-    private Label fileNameLabel;
 
     protected enum InputFieldVisibility {
             VISIBLE, NOT_VISIBLE;
         }
 
     @Override
-    protected FormComponentLabel addComponentForRegular() {
+    protected FormGroup addComponentForRegular() {
         fileUploadField = createFileUploadField(ID_SCALAR_VALUE);
         fileUploadField.setLabel(Model.of(getModel().getName()));
         
-        final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, fileUploadField);
+        final FormGroup labelIfRegular = new FormGroup(ID_SCALAR_IF_REGULAR, fileUploadField);
         labelIfRegular.add(fileUploadField);
     
         final Label scalarName = new Label(ID_SCALAR_NAME, getModel().getName());
-        add(scalarName);
+        labelIfRegular.add(scalarName);
 
         wicketImage = asWicketImage(ID_IMAGE);
         if(wicketImage != null) {
@@ -223,8 +222,8 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     private void updateRegularFormComponents(final InputFieldVisibility visibility) {
         MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
         formComponent.get(ID_SCALAR_VALUE).setVisible(visibility == InputFieldVisibility.VISIBLE);
-        
-        fileNameLabel = updateFileNameLabel(ID_FILE_NAME, formComponent);
+
+        Label fileNameLabel = updateFileNameLabel(ID_FILE_NAME, formComponent);
 
         // the visibility of download link is intentionally 'backwards';
         // if in edit mode then do NOT show

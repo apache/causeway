@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -142,7 +143,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         final String name = getModel().getName();
         textField.setLabel(Model.of(name));
         
-        final WebMarkupContainer scalarNameAndValue = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
+        final FormGroup scalarNameAndValue = new FormGroup(ID_SCALAR_IF_REGULAR, textField);
 
         textFieldFragment.add(textField);
         scalarNameAndValue.add(textFieldFragment);

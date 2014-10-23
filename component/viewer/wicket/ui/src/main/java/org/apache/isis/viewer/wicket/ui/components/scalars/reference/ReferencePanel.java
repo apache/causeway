@@ -50,6 +50,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2ChoiceUtil;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -63,14 +64,9 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
-    private static final String ID_SCALAR_NAME = "scalarName";
-
     private static final String ID_AUTO_COMPLETE = "autoComplete";
     private static final String ID_ENTITY_ICON_TITLE = "entityIconAndTitle";
 //    private static final String ID_ENTITY_ICON_TITLE_AND_COPYLINK = "entityIconTitleAndCopylink";
-
-    private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
     private EntityLinkSelect2Panel entityLink;
     Select2Choice<ObjectAdapterMemento> select2Field;
@@ -109,7 +105,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
     // First called as a side-effect of {@link #beforeRender()}
     @Override
-    protected FormComponentLabel addComponentForRegular() {
+    protected FormGroup addComponentForRegular() {
         final ScalarModel scalarModel = getModel();
         final String name = scalarModel.getName();
         
@@ -120,7 +116,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         entityLink.setOutputMarkupId(true);
         entityLink.setLabel(Model.of(name));
 
-        final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, entityLink);
+        final FormGroup labelIfRegular = new FormGroup(ID_SCALAR_IF_REGULAR, entityLink);
         labelIfRegular.add(entityLink);
         
         final String describedAs = getModel().getDescribedAs();
@@ -129,7 +125,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         }
         
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(entityLink));
-        addOrReplace(scalarName);
+        labelIfRegular.add(scalarName);
         
         addOrReplace(labelIfRegular);
         

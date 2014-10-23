@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -63,8 +64,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
         checkBox.setLabel(Model.of(name));
 
-        final MarkupContainer labelIfRegular = new MarkupContainer(ID_SCALAR_IF_REGULAR) {
-        };
+        final FormGroup labelIfRegular = new FormGroup(ID_SCALAR_IF_REGULAR, checkBox);
         labelIfRegular.add(checkBox);
         if(getModel().isRequired()) {
             labelIfRegular.add(new CssClassAppender("mandatory"));

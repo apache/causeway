@@ -28,7 +28,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -39,6 +38,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2ChoiceUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -108,7 +108,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         final String name = getModel().getName();
         select2Field.setLabel(Model.of(name));
 
-        final MarkupContainer labelIfRegular = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
+        final FormGroup labelIfRegular = new FormGroup(ID_SCALAR_IF_REGULAR, select2Field);
 
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
