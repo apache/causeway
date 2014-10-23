@@ -120,8 +120,22 @@ public class CssMenuItem implements Serializable {
             return this;
         }
 
+        public Builder withFacet(CssClassFacet facet) {
+            if(facet != null) {
+                withCssClass(facet.value());
+            }
+            return this;
+        }
+
         public Builder withCssClass(String cssClass) {
             cssMenuItem.setCssClass(cssClass);
+            return this;
+        }
+
+        public Builder withFacet(CssClassFaFacet facet) {
+            if(facet != null) {
+                withCssClassFa(facet.value());
+            }
             return this;
         }
 
@@ -358,12 +372,12 @@ public class CssMenuItem implements Serializable {
 
         final AbstractLink link = linkAndLabel.getLink();
         final String actionLabel = linkAndLabel.getLabel();
-        Builder builder = this.newSubMenuItem(actionLabel).link(link).prototyping(linkAndLabel.isPrototype()).returnsBlobOrClob(linkAndLabel.isBlobOrClob());
-
-        CssClassFacet cssClassFacet = objectAction.getFacet(CssClassFacet.class);
-        if (cssClassFacet != null) {
-            builder.withCssClass(cssClassFacet.value());
-        }
+        Builder builder = this.newSubMenuItem(actionLabel)
+                              .link(link)
+                              .prototyping(linkAndLabel.isPrototype())
+                              .returnsBlobOrClob(linkAndLabel.isBlobOrClob())
+                              .withFacet(objectAction.getFacet(CssClassFacet.class))
+                              .withFacet(objectAction.getFacet(CssClassFaFacet.class));
         return builder;
     }
 

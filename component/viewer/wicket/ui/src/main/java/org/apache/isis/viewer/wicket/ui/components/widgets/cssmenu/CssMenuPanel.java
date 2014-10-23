@@ -21,12 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
 import java.util.Arrays;
 import java.util.List;
-
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.util.ListModel;
-
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -83,6 +81,7 @@ public class CssMenuPanel extends PanelAbstract<CssMenuPanel.MyModel> {
 
     private final StyleAppender styleAppender;
     static final String ID_MENU_ITEMS = "menuItems";
+    static final String ID_MENU_ITEM_FONT_AWESOME = "menuItemFontAwesome";
     static final String ID_MENU_ITEM = "menuItem";
 
     public CssMenuPanel(final String id, final Style style, final List<CssMenuItem> topLevelMenuItems) {
