@@ -689,6 +689,23 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //region > object-level validation
 
     /**
+     * Prevent user from viewing another user's data.
+     */
+    public boolean hidden() {
+        // uncomment to enable.  As things stand, the disabled() method below instead will make object "read-only".
+        //return !Objects.equal(getOwnedBy(), container.getUser().getName());
+        return false;
+    }
+
+    /**
+     * Prevent user from modifying any other user's data.
+     */
+    public String disabled(Identifier.Type type){
+        if(Objects.equal(getOwnedBy(), container.getUser().getName())) { return null; }
+        return "This object is owned by '" + getOwnedBy() + "' and cannot be modified by you";
+    }
+
+    /**
      * In a real app, if this were actually a rule, then we'd expect that
      * invoking the {@link #completed() done} action would clear the {@link #getDueBy() dueBy}
      * property (rather than require the user to have to clear manually).
@@ -699,7 +716,10 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         }
         return null;
     }
+
+
     //endregion
+
 
     //region > programmatic helpers
     @Programmatic // excluded from the framework's metamodel
