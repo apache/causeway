@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.entity.properties;
 
+import de.agilecoders.wicket.core.util.Attributes;
+
 import java.util.List;
 import java.util.Map;
 import org.apache.wicket.Component;
@@ -26,6 +28,7 @@ import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -256,6 +259,12 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         return Filters.and(ObjectAssociation.Filters.PROPERTIES, ObjectAssociation.Filters.dynamicallyVisible(getAuthenticationSession(), adapter, where));
     }
 
+    @Override
+    protected void onComponentTag(ComponentTag tag) {
+        super.onComponentTag(tag);
+
+        Attributes.addClass(tag, "form-inline");
+    }
 
     abstract class AjaxButtonWithOnError extends AjaxButton {
 

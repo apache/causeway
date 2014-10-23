@@ -58,5 +58,4 @@ public class BytePanel extends ScalarPanelTextFieldNumeric<Byte> {
     protected IModel<String> getScalarPanelType() {
         return Model.of("bytePanel");
     }
-
 }

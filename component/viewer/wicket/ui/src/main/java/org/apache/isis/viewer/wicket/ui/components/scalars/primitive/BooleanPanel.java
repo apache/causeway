@@ -24,9 +24,9 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.Che
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.model.Model;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -49,12 +49,6 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
-    private static final String ID_SCALAR_NAME = "scalarName";
-    private static final String ID_SCALAR_VALUE = "scalarValue";
-
-    private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
-
     private CheckBoxX checkBox;
 
     public BooleanPanel(final String id, final ScalarModel scalarModel) {
@@ -62,14 +56,15 @@ public class BooleanPanel extends ScalarPanelAbstract {
     }
 
     @Override
-    protected FormComponentLabel addComponentForRegular() {
+    protected MarkupContainer addComponentForRegular() {
         final String name = getModel().getName();
 
         checkBox = createCheckBox(ID_SCALAR_VALUE);
 
         checkBox.setLabel(Model.of(name));
 
-        final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, checkBox);
+        final MarkupContainer labelIfRegular = new MarkupContainer(ID_SCALAR_IF_REGULAR) {
+        };
         labelIfRegular.add(checkBox);
         if(getModel().isRequired()) {
             labelIfRegular.add(new CssClassAppender("mandatory"));
@@ -81,7 +76,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
         }
         
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(checkBox));
-        addOrReplace(scalarName);
+        labelIfRegular.add(scalarName);
 
         addOrReplace(labelIfRegular);
         
@@ -90,7 +85,6 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
         return labelIfRegular;
     }
-
 
     /**
      * Mandatory hook method to build the component to render the model when in

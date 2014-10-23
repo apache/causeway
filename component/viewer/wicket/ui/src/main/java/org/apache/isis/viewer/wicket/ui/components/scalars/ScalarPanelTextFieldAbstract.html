@@ -23,16 +23,24 @@
       xml:lang="en"
       lang="en">
     <body>
-        <wicket:panel>
-            <div class="scalarNameAndValueComponentType" wicket:id="scalarTypeContainer">
-                <div class="form-group" wicket:id="scalarIfRegular">
-                    <label wicket:id="scalarName" class="scalarName">[Label text]</label>
-                    <input type="text" name="scalarValue" class="form-control scalarValue" wicket:id="scalarValue" />
-                    <span wicket:id="feedback" class="help-block"></span>
-                    <span wicket:id="additionalLinks"></span>
+        <wicket:extend>
+            <wicket:container wicket:id="scalarValueContainer"/>
+
+            <wicket:fragment wicket:id="text">
+                <input type="text" name="scalarValue" class="form-control scalarValue" wicket:id="scalarValue" />
+            </wicket:fragment>
+
+            <wicket:fragment wicket:id="textarea">
+                <textarea name="scalarValue" class="form-control scalarValue" wicket:id="scalarValue"></textarea>
+            </wicket:fragment>
+
+            <wicket:fragment wicket:id="date">
+                <div class="input-group date">
+                    <input type="text" name="scalarValue" wicket:id="scalarValue" class="form-control"/>
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
-                <span wicket:id="scalarIfCompact"></span>
-            </div>
-        </wicket:panel>
+            </wicket:fragment>
+
+        </wicket:extend>
     </body>
 </html>

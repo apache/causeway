@@ -34,6 +34,7 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
@@ -63,9 +64,22 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> implements ScalarModelProvider {
 
     private static final long serialVersionUID = 1L;
-    
+
+    protected static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
+    protected static final String ID_SCALAR_NAME = "scalarName";
+    protected static final String ID_SCALAR_VALUE = "scalarValue";
+
+    protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
+
     private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
     private static final String ID_FEEDBACK = "feedback";
+
+    public enum CompactType {
+        INPUT_TEXT,
+        INPUT_CHECKBOX,
+        LABEL,
+        SPAN
+    }
 
     public enum Rendering {
         /**
@@ -126,6 +140,26 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     public ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
         this.scalarModel = scalarModel;
+    }
+
+    protected Fragment getCompactFragment(CompactType type) {
+        Fragment compactFragment;
+        switch (type) {
+            case INPUT_TEXT:
+                compactFragment = new Fragment("scalarIfCompact", "compactAsInputText", ScalarPanelAbstract.this);
+                break;
+            case INPUT_CHECKBOX:
+                compactFragment = new Fragment("scalarIfCompact", "compactAsInputCheckbox", ScalarPanelAbstract.this);
+                break;
+            case LABEL:
+                compactFragment = new Fragment("scalarIfCompact", "compactAsLabel", ScalarPanelAbstract.this);
+                break;
+            case SPAN:
+            default:
+                compactFragment = new Fragment("scalarIfCompact", "compactAsSpan", ScalarPanelAbstract.this);
+                break;
+        }
+        return compactFragment;
     }
 
     protected Rendering getRendering() {

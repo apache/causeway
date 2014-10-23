@@ -26,9 +26,10 @@ import com.vaynberg.wicket.select2.ChoiceProvider;
 import com.vaynberg.wicket.select2.Select2Choice;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -45,13 +46,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
-    private static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
-
-    private static final String ID_SCALAR_NAME = "scalarName";
-
-    private static final String ID_VALUE_ID = "valueId";
-
     private Select2Choice<ObjectAdapterMemento> select2Field;
     private ObjectAdapterMemento pending;
 
@@ -61,14 +55,14 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
     }
 
     @Override
-    protected FormComponentLabel addComponentForRegular() {
+    protected MarkupContainer addComponentForRegular() {
 
         final IModel<ObjectAdapterMemento> modelObject = ScalarModelWithPending.Util.createModel(this);
         final ObjectAdapter[] actionArgsHint = getScalarModel().getActionArgsHint();
         
         // same pattern as in EntityLinkSelect2Panel
         if(select2Field == null) {
-            select2Field = Select2ChoiceUtil.newSelect2Choice(ID_VALUE_ID, modelObject, getScalarModel());
+            select2Field = Select2ChoiceUtil.newSelect2Choice(ID_SCALAR_VALUE, modelObject, getScalarModel());
             setChoices(actionArgsHint);
             addStandardSemantics();
         } else {
@@ -76,7 +70,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         }
 
 
-        final FormComponentLabel labelIfRegular = createFormComponentLabel();
+        final MarkupContainer labelIfRegular = createFormComponentLabel();
         if(getModel().isRequired()) {
             labelIfRegular.add(new CssClassAppender("mandatory"));
         }
@@ -84,7 +78,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         addOrReplace(labelIfRegular);
 
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(select2Field));
-        addOrReplace(scalarName);
+        labelIfRegular.addOrReplace(scalarName);
 
         addFeedbackTo(labelIfRegular, select2Field);
         addAdditionalLinksTo(labelIfRegular);
@@ -110,11 +104,11 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         select2Field.setRequired(required);
     }
 
-    protected FormComponentLabel createFormComponentLabel() {
+    protected MarkupContainer createFormComponentLabel() {
         final String name = getModel().getName();
         select2Field.setLabel(Model.of(name));
 
-        final FormComponentLabel labelIfRegular = new FormComponentLabel(ID_SCALAR_IF_REGULAR, select2Field);
+        final MarkupContainer labelIfRegular = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
 
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {

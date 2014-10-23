@@ -30,6 +30,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -49,16 +50,10 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     private static final long serialVersionUID = 1L;
 
     private static final String ID_SCALAR_TYPE_CONTAINER = "scalarTypeContainer";
-    private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
-    private static final String ID_SCALAR_NAME = "scalarName";
-    
-    protected static final String ID_SCALAR_VALUE = "scalarValue";
-
-    protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
     protected final Class<T> cls;
 
-    private WebMarkupContainer scalarTypeContainer;
+    protected WebMarkupContainer scalarTypeContainer;
     private AbstractTextComponent<T> textField;
 
     public ScalarPanelTextFieldAbstract(final String id, final ScalarModel scalarModel, final Class<T> cls) {
@@ -142,15 +137,21 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
 
     private MarkupContainer createFormComponentLabel() {
+        Fragment textFieldFragment = createTextFieldFragment("scalarValueContainer");
         final AbstractTextComponent<T> textField = getTextField();
         final String name = getModel().getName();
         textField.setLabel(Model.of(name));
         
         final WebMarkupContainer scalarNameAndValue = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
-        
-        scalarNameAndValue.add(textField);
+
+        textFieldFragment.add(textField);
+        scalarNameAndValue.add(textFieldFragment);
 
         return scalarNameAndValue;
+    }
+
+    protected Fragment createTextFieldFragment(String id) {
+        return new Fragment(id, "text", ScalarPanelTextFieldAbstract.this);
     }
 
     protected void addStandardSemantics() {
@@ -191,8 +192,10 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
      */
     @Override
     protected Component addComponentForCompact() {
+        Fragment compactFragment = getCompactFragment(CompactType.SPAN);
         final Label labelIfCompact = new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
-        scalarTypeContainer.addOrReplace(labelIfCompact);
+        compactFragment.add(labelIfCompact);
+        scalarTypeContainer.addOrReplace(compactFragment);
         return labelIfCompact;
     }
 

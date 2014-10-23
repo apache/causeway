@@ -27,6 +27,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
@@ -72,6 +73,11 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     }
 
     @Override
+    protected Fragment createTextFieldFragment(String id) {
+        return new Fragment(id, "date", ScalarPanelTextFieldDatePickerAbstract.this);
+    }
+
+    @Override
     protected void addSemantics() {
         super.addSemantics();
 
@@ -80,22 +86,24 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
 
     
     protected Component addComponentForCompact() {
+        Fragment compactFragment = getCompactFragment(CompactType.INPUT_TEXT);
         final AbstractTextComponent<T> textField = createTextField(ID_SCALAR_IF_COMPACT);
         final IModel<T> model = textField.getModel();
         final T object = model.getObject();
         model.setObject(object);
         
         textField.setEnabled(false);
-        
-        
+
         // adding an amount because seemed to truncate in tables in certain circumstances
         final int lengthAdjust = 
                 getLengthAdjustHint() != null ? getLengthAdjustHint() : 1; 
         final String dateTimePattern = converter.getDateTimePattern(getLocale());
         final int length = dateTimePattern.length() + lengthAdjust; 
         textField.add(new AttributeModifier("size", Model.of("" + length)));
-        
-        addOrReplace(textField);
+
+        compactFragment.add(textField);
+
+        scalarTypeContainer.addOrReplace(compactFragment);
         return textField;
     }
     

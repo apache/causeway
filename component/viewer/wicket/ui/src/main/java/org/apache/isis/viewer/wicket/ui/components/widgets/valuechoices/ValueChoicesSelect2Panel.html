@@ -25,16 +25,14 @@
     <body>
         <wicket:panel>
             <div class="valueChoicesSelect2Panel scalarNameAndValueComponentType">
-                <div class="row">
-                    <span wicket:id="scalarName" class="scalarName col-xs-3">[Label text]</span>
-                    <div class="scalarValue col-xs-9">
-                        <label wicket:id="scalarIfRegular" style="width: 100%">
-                            <div class="choicesPlaceholder">
-                                <input wicket:id="valueId" type="hidden" class="choices form-control select2-remote" style="width: 100%"/>
-                            </div>
-                            <span wicket:id="feedback" class="help-block"></span>
-                            <span wicket:id="additionalLinks"></span>
-                        </label>
+                <div class="form-group" wicket:id="scalarIfRegular">
+                    <label wicket:id="scalarName" class="scalarName">[Label text]</label>
+                    <div class="scalarValueWrapper">
+                        <div class="choicesPlaceholder">
+                            <input wicket:id="scalarValue" type="hidden" class="choices form-control select2-remote" style="width: 100%"/>
+                        </div>
+                        <span wicket:id="feedback" class="help-block"></span>
+                        <span wicket:id="additionalLinks"></span>
                     </div>
                 </div>
                 <span wicket:id="scalarIfCompact"></span>

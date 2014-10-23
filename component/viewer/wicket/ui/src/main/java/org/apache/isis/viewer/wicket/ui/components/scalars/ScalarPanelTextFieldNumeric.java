@@ -23,6 +23,7 @@ import java.io.Serializable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -49,15 +50,17 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
     }
 
     protected Component addComponentForCompact() {
+        Fragment compactFragment = getCompactFragment(CompactType.INPUT_TEXT);
         final AbstractTextComponent<T> textField = createTextField(ID_SCALAR_IF_COMPACT);
         final IModel<T> model = textField.getModel();
-        final T object = (T) model.getObject();
+        final T object = model.getObject();
         model.setObject(object);
         
         textField.setEnabled(false);
         setTextFieldSizeAndMaxLengthIfSpecified(textField);
-        
-        addOrReplace(textField);
+
+        compactFragment.add(textField);
+        scalarTypeContainer.addOrReplace(compactFragment);
         return textField;
     }
 

@@ -21,9 +21,9 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.string;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -39,8 +39,6 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldP
 public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract {
 
     private static final long serialVersionUID = 1L;
-    
-    private static final String ID_SCALAR_VALUE = "scalarValue";
     
     public MultiLineStringPanel(final String id, final ScalarModel scalarModel) {
         super(id, ID_SCALAR_VALUE, scalarModel);
@@ -64,15 +62,7 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
                     getModel().setObjectAsString(object);
                 }
             }
-        }) {
-            @Override
-            protected void onComponentTag(ComponentTag tag) {
-                tag.setName("textarea");
-                tag.remove("type");
-                super.onComponentTag(tag);
-            }
-        };
-        
+        });
 
         final MultiLineFacet multiLineFacet = getModel().getFacet(MultiLineFacet.class);
         setAttribute(textField, "rows", multiLineFacet.numberOfLines());
@@ -86,6 +76,11 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
         }
 
         return textField;
+    }
+
+    @Override
+    protected Fragment createTextFieldFragment(String id) {
+        return new Fragment(id, "textarea", MultiLineStringPanel.this);
     }
 
     @Override
