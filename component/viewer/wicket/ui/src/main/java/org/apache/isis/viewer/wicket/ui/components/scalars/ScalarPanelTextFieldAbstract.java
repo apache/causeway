@@ -24,11 +24,13 @@ import java.io.Serializable;
 import com.google.common.base.Strings;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
-import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
@@ -46,6 +48,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     private static final long serialVersionUID = 1L;
 
+    private static final String ID_SCALAR_TYPE_CONTAINER = "scalarTypeContainer";
     private static final String ID_SCALAR_IF_REGULAR = "scalarIfRegular";
     private static final String ID_SCALAR_NAME = "scalarName";
     
@@ -54,12 +57,23 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
     protected final Class<T> cls;
-    
+
+    private WebMarkupContainer scalarTypeContainer;
     private AbstractTextComponent<T> textField;
 
     public ScalarPanelTextFieldAbstract(final String id, final ScalarModel scalarModel, final Class<T> cls) {
         super(id, scalarModel);
         this.cls = cls;
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+
+        scalarTypeContainer = new WebMarkupContainer(ID_SCALAR_TYPE_CONTAINER);
+        scalarTypeContainer.add(new CssClassAppender(getScalarPanelType()));
+        addOrReplace(scalarTypeContainer);
+
     }
 
     protected AbstractTextComponent<T> getTextField() {
@@ -79,15 +93,15 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
     @Override
-    protected FormComponentLabel addComponentForRegular() {
+    protected MarkupContainer addComponentForRegular() {
         textField = createTextFieldForRegular();
         textField.setOutputMarkupId(true);
 
         addStandardSemantics();
         addSemantics();
 
-        final FormComponentLabel labelIfRegular = createFormComponentLabel();
-        addOrReplace(labelIfRegular);
+        final MarkupContainer labelIfRegular = createFormComponentLabel();
+        scalarTypeContainer.add(labelIfRegular);
 
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(textField));
 
@@ -102,7 +116,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
             }
         }
 
-        addOrReplace(scalarName);
+        labelIfRegular.add(scalarName);
 
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
@@ -114,8 +128,8 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         
         return labelIfRegular;
     }
-    
-    
+
+    protected abstract IModel<String> getScalarPanelType();
 
     /**
      * Optional hook method
@@ -127,12 +141,12 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
 
 
-    private FormComponentLabel createFormComponentLabel() {
+    private MarkupContainer createFormComponentLabel() {
         final AbstractTextComponent<T> textField = getTextField();
         final String name = getModel().getName();
         textField.setLabel(Model.of(name));
         
-        final FormComponentLabel scalarNameAndValue = new FormComponentLabel(ID_SCALAR_IF_REGULAR, textField);
+        final WebMarkupContainer scalarNameAndValue = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
         
         scalarNameAndValue.add(textField);
 
@@ -178,7 +192,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     @Override
     protected Component addComponentForCompact() {
         final Label labelIfCompact = new Label(ID_SCALAR_IF_COMPACT, getModel().getObjectAsString());
-        addOrReplace(labelIfCompact);
+        scalarTypeContainer.addOrReplace(labelIfCompact);
         return labelIfCompact;
     }
 

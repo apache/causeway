@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 
 import java.sql.Time;
 
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
@@ -34,6 +36,11 @@ public class JavaSqlTimePanel extends ScalarPanelTextFieldParseableAbstract {
 
     public JavaSqlTimePanel(final String id, final ScalarModel scalarModel) {
         super(id, ID_SCALAR_VALUE, scalarModel);
+    }
+
+    @Override
+    protected IModel<String> getScalarPanelType() {
+        return Model.of("javaSqlTimePanel");
     }
 
     @Override

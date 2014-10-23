@@ -20,6 +20,8 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.isis.applib.value.DateTime;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
@@ -41,5 +43,10 @@ public class IsisDateTimePanel extends ScalarPanelTextFieldDatePickerAbstract<or
     @Override
     protected TextField<org.apache.isis.applib.value.DateTime> createTextField(final String id) {
         return new TextFieldWithDateTimePicker<>(id, new TextFieldValueModel<org.apache.isis.applib.value.DateTime>(this), cls, converter);
+    }
+
+    @Override
+    protected IModel<String> getScalarPanelType() {
+        return Model.of("isisDateTimePanel");
     }
 }

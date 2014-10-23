@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.ShortConverter;
 
@@ -51,6 +53,11 @@ public class ShortPanel extends ScalarPanelTextFieldNumeric<Short> {
                 return (IConverter<C>) (type == Short.class? ShortConverter.INSTANCE: super.getConverter(type));
             }
         };
+    }
+
+    @Override
+    protected IModel<String> getScalarPanelType() {
+        return Model.of("shortPanel");
     }
 
 }

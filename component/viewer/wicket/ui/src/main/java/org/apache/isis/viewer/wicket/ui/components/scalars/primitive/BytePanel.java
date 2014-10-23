@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.ByteConverter;
 
@@ -50,6 +52,11 @@ public class BytePanel extends ScalarPanelTextFieldNumeric<Byte> {
                 return (IConverter<C>) (type == Byte.class? ByteConverter.INSTANCE: super.getConverter(type));
             }
         };
+    }
+
+    @Override
+    protected IModel<String> getScalarPanelType() {
+        return Model.of("bytePanel");
     }
 
 }

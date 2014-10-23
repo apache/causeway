@@ -33,9 +33,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
-import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
@@ -257,7 +255,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
      * Mandatory hook method to build the component to render the model when in
      * {@link Rendering#REGULAR regular} format.
      */
-    protected abstract FormComponentLabel addComponentForRegular();
+    protected abstract MarkupContainer addComponentForRegular();
 
     protected abstract Component addComponentForCompact();
 
@@ -265,7 +263,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         markupContainer.addOrReplace(new NotificationPanel(ID_FEEDBACK, component, new ComponentFeedbackMessageFilter(component)));
     }
     
-    protected void addAdditionalLinksTo(final FormComponentLabel labelIfRegular) {
+    protected void addAdditionalLinksTo(final MarkupContainer labelIfRegular) {
         final List<LinkAndLabel> entityActions;
         if(scalarModel.getKind() == ScalarModel.Kind.PROPERTY) {
             final ObjectAdapterMemento parentMemento = scalarModel.getParentObjectAdapterMemento();

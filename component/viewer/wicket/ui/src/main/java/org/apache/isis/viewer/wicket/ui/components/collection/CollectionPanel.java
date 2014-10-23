@@ -87,11 +87,9 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
     }
 
     private void buildGui() {
-        final WebMarkupContainer markupContainer = new WebMarkupContainer(ID_COLLECTION);
-        collectionContents = getComponentFactoryRegistry().addOrReplaceComponent(markupContainer, ComponentType.COLLECTION_CONTENTS, getModel());
+        collectionContents = getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.COLLECTION_CONTENTS, getModel());
 
         addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, collectionContents));
-        addOrReplace(markupContainer);
     }
 
     public Label createLabel(final String id, final String collectionName) {

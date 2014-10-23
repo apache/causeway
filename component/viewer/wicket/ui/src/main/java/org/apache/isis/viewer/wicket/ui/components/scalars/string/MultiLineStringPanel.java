@@ -21,8 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.string;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
@@ -62,7 +64,14 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
                     getModel().setObjectAsString(object);
                 }
             }
-        });
+        }) {
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                tag.setName("textarea");
+                tag.remove("type");
+                super.onComponentTag(tag);
+            }
+        };
         
 
         final MultiLineFacet multiLineFacet = getModel().getFacet(MultiLineFacet.class);
@@ -77,6 +86,11 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
         }
 
         return textField;
+    }
+
+    @Override
+    protected IModel<String> getScalarPanelType() {
+        return Model.of("multiLineStringPanel");
     }
 
     private Component setAttribute(final TextArea<String> textField, final String attributeName, final int i) {

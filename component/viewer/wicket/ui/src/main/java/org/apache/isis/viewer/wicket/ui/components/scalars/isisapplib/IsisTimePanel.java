@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib;
 
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
 
@@ -32,6 +34,11 @@ public class IsisTimePanel extends ScalarPanelTextFieldParseableAbstract {
 
     public IsisTimePanel(final String id, final ScalarModel scalarModel) {
         super(id, ID_SCALAR_VALUE, scalarModel);
+    }
+
+    @Override
+    protected IModel<String> getScalarPanelType() {
+        return Model.of("isisTimePanel");
     }
 
     @Override

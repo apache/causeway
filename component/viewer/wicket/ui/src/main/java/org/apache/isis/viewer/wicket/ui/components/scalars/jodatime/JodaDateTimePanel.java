@@ -20,6 +20,8 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.jodatime;
 
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -42,5 +44,10 @@ public class JodaDateTimePanel extends ScalarPanelTextFieldDatePickerAbstract<Da
     @Override
     protected TextField<DateTime> createTextField(final String id) {
         return new TextFieldWithDateTimePicker<>(id, new TextFieldValueModel<DateTime>(this), cls, converter);
+    }
+
+    @Override
+    protected IModel<String> getScalarPanelType() {
+        return Model.of("jodaDateTimePanel");
     }
 }
