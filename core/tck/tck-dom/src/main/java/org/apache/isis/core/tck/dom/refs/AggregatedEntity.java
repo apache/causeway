@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.ObjectType;
 
 @javax.jdo.annotations.PersistenceCapable
 @javax.jdo.annotations.EmbeddedOnly
-@javax.jdo.annotations.Discriminator("RFCG")
+@javax.jdo.annotations.Discriminator("AGGR")
 @Aggregated
 @ObjectType("AGGR")
 public class AggregatedEntity extends BaseEntity {
