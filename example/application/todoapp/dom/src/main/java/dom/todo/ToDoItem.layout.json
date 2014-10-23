@@ -50,11 +50,11 @@
                                 "describedAs": {
                                     "value": "Mark this todo item as having been completed"
                                 },
-                                "cssClassFa": { "value": "fa fa-check-square" }
+                                "cssClassFa": { "value": "fa fa-thumbs-up" }
                             },
                             "notYetCompleted": {
                                 "named": { "value": "Not done" },
-                              "cssClassFa": { "value": "fa-reply fa-flip-vertical" }
+                              "cssClassFa": { "value": "fa fa-thumbs-down" }
                             },
                             "scheduleExplicitly": {
                             },

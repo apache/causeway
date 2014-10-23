@@ -36,7 +36,7 @@ import org.apache.isis.applib.services.clock.ClockService;
 public class ToDoItems {
 
     //region > notYetComplete (action)
-    @CssClassFa("fa-list")
+    @CssClassFa("fa fa-thumbs-down")
     @Bookmarkable
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "10")
@@ -58,7 +58,7 @@ public class ToDoItems {
     //endregion
 
     //region > complete (action)
-    @CssClassFa("fa-check-square-o")
+    @CssClassFa("fa fa-thumbs-up")
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "20")
     public List<ToDoItem> complete() {
@@ -83,6 +83,7 @@ public class ToDoItems {
 	@Bookmarkable
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "40")
+    @CssClassFa("fa-question")
     public List<ToDoItem> categorized(
     		@Named("Category") final Category category,
     		@Named("Subcategory") final Subcategory subcategory,
@@ -148,6 +149,7 @@ public class ToDoItems {
     //endregion
 
     //region > allToDos (action)
+    @CssClassFa("fa fa-globe")
     @Prototype
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "50")

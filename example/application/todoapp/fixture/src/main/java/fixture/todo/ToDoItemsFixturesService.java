@@ -61,6 +61,7 @@ public class ToDoItemsFixturesService extends FixtureScripts {
 
 
     @Prototype
+    @CssClassFa("fa-list")
     @MemberOrder(sequence="20")
     public Object recreateToDoItemsReturnFirst() {
         final List<FixtureResult> run = findFixtureScriptFor(RecreateToDoItemsAndCompleteSeveralForCurrent.class).run(null);
