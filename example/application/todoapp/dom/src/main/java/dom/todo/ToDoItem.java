@@ -701,7 +701,9 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
      * Prevent user from modifying any other user's data.
      */
     public String disabled(Identifier.Type type){
-        if(Objects.equal(getOwnedBy(), container.getUser().getName())) { return null; }
+        final UserMemento currentUser = container.getUser();
+        final String currentUserName = currentUser.getName();
+        if(Objects.equal(getOwnedBy(), currentUserName)) { return null; }
         return "This object is owned by '" + getOwnedBy() + "' and cannot be modified by you";
     }
 

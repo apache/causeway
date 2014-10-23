@@ -292,7 +292,11 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 scenarioExecution().replaceService(originalEventBusService, mockEventBusService);
                 scenarioExecution().closeSession();
                 scenarioExecution().openSession();
+
+                final List<ToDoItem> all = toDoItems.notYetComplete();
+                toDoItem = wrap(all.get(0));
             }
+
 
             @After
             public void reinstateOriginalEventBusService() throws Exception {
