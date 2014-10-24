@@ -30,6 +30,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.model.IModel;
@@ -94,7 +95,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         entitySimpleLink.setOutputMarkupId(true);
         entitySimpleLink.setLabel(Model.of(name));
         
-        final FormComponentLabel labelIfCompact = new FormComponentLabel(ID_SCALAR_IF_COMPACT, entitySimpleLink);
+        final WebMarkupContainer labelIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
         labelIfCompact.add(entitySimpleLink);
         
         addOrReplace(labelIfCompact);
