@@ -27,7 +27,10 @@ import java.lang.annotation.Target;
 
 /**
  * Indicates the an action should be only available in exploration mode
+ * 
+ * @deprecated - very similar to {@link org.apache.isis.applib.annotation.Prototype}.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
