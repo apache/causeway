@@ -19,28 +19,35 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass;
 
+import java.util.Set;
+import java.util.regex.Pattern;
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Sets;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 
 public class CssClassFaFacetAbstract extends SingleStringValueFacetAbstract implements CssClassFaFacet {
 
+    private static final Pattern WHITESPACE = Pattern.compile("\\s+");
+
     public CssClassFaFacetAbstract(final String value, final FacetHolder holder) {
         super(type(), holder, sanitize(value));
     }
 
+    /**
+     * Adds the optional <em>fa</em> and <em>fa-fw</em> FontAwesome classes
+     *
+     * @param value The original CSS classes defined with {@literal @}{@link org.apache.isis.applib.annotation.CssClassFa CssClassFa}
+     * @return The original CSS classes plus <em>fa</em> and <em>fa-fw</em> if not already provided
+     */
     static String sanitize(String value) {
-        return containsFa(value)? value: "fa " + value;
-    }
-
-    private static boolean containsFa(String value) {
-        final String[] split = value.split("\\s");
-        for (String s : split) {
-            if(s.trim().equals("fa")) {
-                return true;
-            }
-        }
-        return false;
+        Iterable<String> classes = Splitter.on(WHITESPACE).split(value);
+        Set<String> cssClassesSet = Sets.newHashSet(classes);
+        cssClassesSet.add("fa");
+        cssClassesSet.add("fa-fw");
+        return Joiner.on(' ').join(cssClassesSet);
     }
 
     public static Class<? extends Facet> type() {

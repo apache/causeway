@@ -12,8 +12,9 @@
             </li>
 
             <wicket:fragment wicket:id="leafItem">
-                <span class="fontAwesomeIcon" wicket:id="menuLinkFontAwesome"/>
-                <a class="menuLink" wicket:id="menuLink"></a>
+                <a class="menuLink" wicket:id="menuLink">
+                    <span class="fontAwesomeIcon" wicket:id="menuLinkFontAwesome"></span> <span wicket:id="menuLinkLabel"></span>
+                </a>
             </wicket:fragment>
 
             <wicket:fragment wicket:id="folderItem">

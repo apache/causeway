@@ -15,7 +15,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -107,7 +106,9 @@ public class ApplicationActionsPanel extends Panel {
 
         AbstractLink subMenuItemLink = menuItem.getLink();
 
-        subMenuItemLink.setBody(Model.of(menuItem.getName()));
+        Label menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
+        subMenuItemLink.add(menuItemLabel);
+
         if (!menuItem.isEnabled()) {
             listItem.add(new CssClassNameAppender("disabled"));
         }
@@ -119,12 +120,12 @@ public class ApplicationActionsPanel extends Panel {
 
         String cssClassFa = menuItem.getCssClassFa();
         if (Strings.isNullOrEmpty(cssClassFa)) {
-            Components.permanentlyHide(leafItem, "menuLinkFontAwesome");
+            Components.permanentlyHide(subMenuItemLink, "menuLinkFontAwesome");
             subMenuItemLink.add(new CssClassAppender("menuLinkSpacer"));
         } else {
             Label dummy = new Label("menuLinkFontAwesome", "");
             dummy.add(new CssClassAppender(cssClassFa));
-            leafItem.add(dummy);
+            subMenuItemLink.add(dummy);
         }
 
     }
