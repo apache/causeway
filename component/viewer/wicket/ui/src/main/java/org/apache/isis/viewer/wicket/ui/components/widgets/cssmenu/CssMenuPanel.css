@@ -20,14 +20,6 @@
 	line-height: 3px;
 }
 
-.cssMenuPanel .menuh {
-	/*font-family: arial, helvetica, sans-serif;*/
-	/*float: left;*/
-	/*margin-top: 0.1em;*/
-	/*background: repeat-x scroll center center;*/
-	/*width: 100%;*/
-}
-
 .cssMenuPanel .menuh .small {
 	float: none;
 	display: inline;
@@ -41,26 +33,13 @@
 .menuh a,.menuh p {
 	text-align: left;
 	display: block;
-	/*border: 1px #00477F solid;*/
 	white-space: nowrap;
-	margin: 0em;
+	margin: 0;
 	padding: 1px;
 	padding-right: 1.6em;
 	padding-left: 0.4em;
 	font-weight: normal;
 	cursor: default;
-}
-
-.cssMenuPanel .menuh a:link,.cssMenuPanel .menuh a:visited,.cssMenuPanel .menuh a:active,.cssMenuPanel .menuh p
-	{
-	/*color: #00477F;*/
-	/*background-color: #EEEEEE;*/
-	/*text-decoration: none;*/
-}
-
-.cssMenuPanel .menuh a:hover,.cssMenuPanel .menuh p:hover {
-	/*color: #D7E7F5;*/
-	/*background-color: #407098;*/
 }
 
 .cssMenuPanel .menuh a:hover {
@@ -128,7 +107,6 @@
 }
 
 .cssMenuPanel li.cssSubMenuItem p.disabled {
-	/*color: lightgray;*/
     cursor: not-allowed;
 }
 
@@ -174,13 +152,11 @@
 .groupedActions .cssMenuPanel .menuh a:visited,
 .groupedActions .cssMenuPanel .menuh a:active,
 .groupedActions .cssMenuPanel .menuh p {
-    /*background-color: #F0EFEA;*/
-    /*color: #46423C;*/
     display: block;
     float: left;
     height: 30px;
     line-height: 30px;
-	padding:0px 10px;
+	padding:0 10px;
 	font-weight:bold;
 	/*text-transform:uppercase;*/
 	font-size:0.85em;
@@ -188,12 +164,6 @@
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
 	text-decoration:none;
-}
-
-.groupedActions .cssMenuPanel .menuh a:hover,.groupedActions .cssMenuPanel .menuh p:hover
-	{
-	/*color: #000;*/
-	/*background-color:#FFFFFF;*/
 }
 
 .entityActions .cssMenuPanel li.cssMenuItemPanel>p.top-parent {
@@ -225,7 +195,7 @@
 .entityActions .cssMenuPanel .menuh li p {
     float:left;
     display:block;
-    margin-left:0px;
+    margin-left:0;
 }
 
 .entityActions .cssMenuPanel .menuh a,
@@ -238,13 +208,11 @@
 .entityActions .cssMenuPanel .menuh a:visited,
 .entityActions .cssMenuPanel .menuh a:active,
 .entityActions .cssMenuPanel .menuh p {
-    /*background-color: #F0EFEA;*/
-    /*color: #46423C;*/
     display: block;
     float: left;
     height: 30px;
     line-height: 30px;
-	padding:0px 10px;
+	padding:0 10px;
 	font-weight:bold;
 	/*text-transform:uppercase;*/
 	font-size:0.85em;
@@ -252,19 +220,6 @@
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
 	text-decoration:none;
-}
-
-.entityActions .cssMenuPanel .menuh a:focus {
-	/*text-decoration: underline;*/
-}
-
-.entityActions .cssMenuPanel .menuh a:hover,.entityActions .cssMenuPanel .menuh p:hover {
-	/*color: #000;*/
-}
-
-.entityActions .cssMenuPanel .menuh a:hover,.entityActions .cssMenuPanel .menuh p:hover:not(.disabled) {
-    /*color: #FFF;*/
-    /*background-color:#20B5C2;*/
 }
 
 .additionalLinkList {
@@ -286,7 +241,6 @@
 
 .additionalLinkList li a,
 .additionalLinkList li em {
-    /*background-color: #F0EFEA;*/
     border-radius: 4px 4px 4px 4px;
     display: block;
     float: left;
@@ -299,30 +253,10 @@
     /*text-transform: uppercase;*/
 }
 
-.additionalLinkList li a {
-    /*color: #46423C;*/
-}
-
-
-.additionalLinkList li a:hover {
-	/*background-color:#20B5C2;*/
-	/*color:#FFFFFF;*/
-}
-
-/* em = disabled */
-.additionalLinkList li em {
-    /*color: lightgrey;*/
-}
-
 .additionalLinkList li em:hover {
-    /*color: black;*/
     cursor: default;
 }
 
 .entityActions a.prototype span {
-	/*color: #DBDB4D;*/
 	font-style: italic;
-}
-.entityActions a.prototype {
-    /*background-color: #20B5C2;*/
 }
