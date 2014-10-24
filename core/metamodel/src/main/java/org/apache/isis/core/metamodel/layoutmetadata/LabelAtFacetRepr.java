@@ -16,25 +16,7 @@
  */
 package org.apache.isis.core.metamodel.layoutmetadata;
 
-import java.util.Map;
 
-/**
- * Representation of properties, collections or free-standing actions.
- * 
- * <p>
- * Actions associated with members are represented by {@link ActionRepr}. 
- */
-public class MemberRepr {
-    
-    public Map<String,ActionRepr> actions;
-    public PagedFacetRepr paged;
-    public RenderFacetRepr render;
-    public HiddenFacetRepr hidden;
-    public DisabledFacetRepr disabled;
-    public NamedFacetRepr named;
-    public DescribedAsFacetRepr describedAs;
-    public CssClassFacetRepr cssClass;
-    public TypicalLengthFacetRepr typicalLength;
-    public MultiLineFacetRepr multiLine;
-    public LabelAtFacetRepr labelAt;
+public class LabelAtFacetRepr {
+    public String value;
 }

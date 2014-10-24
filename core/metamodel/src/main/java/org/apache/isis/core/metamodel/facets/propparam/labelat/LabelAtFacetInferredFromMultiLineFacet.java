@@ -17,26 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.defaults.fallback;
+package org.apache.isis.core.metamodel.facets.propparam.labelat;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.applib.annotation.LabelAt;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacetAbstract;
 
-public class ActionDefaultsFacetNone extends ActionDefaultsFacetAbstract {
+/**
+ * If multi-line then position the label at the top.
+ *
+ * <p>
+ *     This can still be overridden using the {@link org.apache.isis.applib.annotation.LabelAt} annotation / layout.json.
+ * </p>
+ */
+public class LabelAtFacetInferredFromMultiLineFacet extends LabelAtFacetAbstract {
 
-    public ActionDefaultsFacetNone(final FacetHolder holder) {
-        super(holder, Derivation.NOT_DERIVED);
-    }
-
-    @Override
-    public Object[] getDefaults(final ObjectAdapter inObject) {
-        return null;
-    }
-
-    @Override
-    public boolean isNoop() {
-        return true;
+    public LabelAtFacetInferredFromMultiLineFacet(final FacetHolder holder) {
+        super(LabelAt.Position.TOP, holder);
     }
 
 }

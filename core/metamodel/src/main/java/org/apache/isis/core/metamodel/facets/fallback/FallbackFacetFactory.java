@@ -16,15 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.fallback;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import com.google.common.collect.Lists;
+import org.apache.isis.applib.annotation.LabelAt;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -34,16 +33,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.facets.actions.defaults.fallback.ActionDefaultsFacetNone;
-import org.apache.isis.core.metamodel.facets.all.describedas.fallback.DescribedAsFacetNone;
-import org.apache.isis.core.metamodel.facets.all.help.fallback.HelpFacetNone;
-import org.apache.isis.core.metamodel.facets.all.named.fallback.NamedFacetNone;
-import org.apache.isis.core.metamodel.facets.object.notpersistable.fallback.NotPersistableFacetNull;
-import org.apache.isis.core.metamodel.facets.object.paged.fallback.PagedFacetDefault;
-import org.apache.isis.core.metamodel.facets.object.title.fallback.TitleFacetNone;
-import org.apache.isis.core.metamodel.facets.param.choices.fallback.ActionChoicesFacetNone;
-import org.apache.isis.core.metamodel.facets.propparam.fallback.MaxLengthFacetUnlimited;
-import org.apache.isis.core.metamodel.facets.propparam.fallback.MultiLineFacetNone;
 
 /**
  * Central point for providing some kind of default for any {@link Facet}s
@@ -81,19 +70,17 @@ public class FallbackFacetFactory extends FacetFactoryAbstract implements IsisCo
         super(FeatureType.EVERYTHING);
     }
 
-    public boolean recognizes(final Method method) {
-        return false;
-    }
-
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        final FacetHolder facetHolder = processClassContaxt.getFacetHolder();
+    public void process(final ProcessClassContext processClassContext) {
+        final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final DescribedAsFacetNone describedAsFacet = new DescribedAsFacetNone(facetHolder);
         final NotPersistableFacetNull notPersistableFacet = new NotPersistableFacetNull(facetHolder);
         final TitleFacetNone titleFacet = new TitleFacetNone(facetHolder);
-        final PagedFacetDefault pagedFacet = new PagedFacetDefault(facetHolder, getConfiguration().getInteger("isis.viewers.paged.standalone", PAGE_SIZE_STANDALONE_DEFAULT));
-        
+
+        final int pagedStandalone = getPagedConfigSetting("standalone", PAGE_SIZE_STANDALONE_DEFAULT);
+        final PagedFacetFromConfiguration pagedFacet = new PagedFacetFromConfiguration(pagedStandalone, facetHolder);
+
         final Facet[] facets = new Facet[] { describedAsFacet,
                 // commenting these out, think this whole isNoop business is a little bogus
                 // new ImmutableFacetNever(holder),
@@ -103,27 +90,29 @@ public class FallbackFacetFactory extends FacetFactoryAbstract implements IsisCo
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final List<Facet> facets = new ArrayList<Facet>();
+        final List<Facet> facets = Lists.newArrayList();
 
-        final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
+        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
         
         
-        facets.add(new NamedFacetNone(facetedMethod));
-        facets.add(new DescribedAsFacetNone(facetedMethod));
-        facets.add(new HelpFacetNone(facetedMethod));
+        facets.add(new NamedFacetNone(facetHolder));
+        facets.add(new DescribedAsFacetNone(facetHolder));
+        facets.add(new HelpFacetNone(facetHolder));
 
-        
-        final FeatureType featureType = facetedMethod.getFeatureType();
+
+        final FeatureType featureType = facetHolder.getFeatureType();
         if (featureType.isProperty()) {
-            facets.add(new MaxLengthFacetUnlimited(facetedMethod));
-            facets.add(new MultiLineFacetNone(true, facetedMethod));
+            facets.add(new MaxLengthFacetUnlimited(facetHolder));
+            facets.add(new MultiLineFacetNone(true, facetHolder));
+
+            facets.add(newLabelAtFacetIfAny(facetHolder, "properties", "property", "props", "prop"));
         }
         if (featureType.isAction()) {
-            facets.add(new ActionDefaultsFacetNone(facetedMethod));
-            facets.add(new ActionChoicesFacetNone(facetedMethod));
+            facets.add(new ActionDefaultsFacetNone(facetHolder));
+            facets.add(new ActionChoicesFacetNone(facetHolder));
         }
         if (featureType.isCollection()) {
-            facets.add(new PagedFacetDefault(facetedMethod, getConfiguration().getInteger("isis.viewers.paged.parented", PAGE_SIZE_PARENTED_DEFAULT)));
+            facets.add(new PagedFacetFromConfiguration(getPagedConfigSetting("parented", PAGE_SIZE_PARENTED_DEFAULT), facetHolder));
         }
 
         FacetUtil.addFacets(facets);
@@ -141,9 +130,38 @@ public class FallbackFacetFactory extends FacetFactoryAbstract implements IsisCo
             facets.add(new MultiLineFacetNone(false, typedHolder));
 
             facets.add(new MaxLengthFacetUnlimited(typedHolder));
+
+            facets.add(newLabelAtFacetIfAny(typedHolder, "parameters", "parameter", "params", "param"));
         }
 
         FacetUtil.addFacets(facets);
+    }
+
+    private Facet newLabelAtFacetIfAny(FacetHolder facetHolder, final String... propOrParam) {
+        final String labelAt = getLabelAtConfigSetting(propOrParam);
+        if(labelAt != null) {
+            try {
+                final LabelAt.Position position = LabelAt.Position.valueOf(labelAt);
+                return new LabelAtFacetFromConfiguration(position, facetHolder);
+            } catch(IllegalArgumentException ex) {
+                // ignore
+            }
+        }
+        return null;
+    }
+
+    private int getPagedConfigSetting(final String subkey, final int defaultValue) {
+        return getConfiguration().getInteger("isis.viewers.paged." + subkey, defaultValue);
+    }
+
+    private String getLabelAtConfigSetting(String... subkeys) {
+        for (String subkey : subkeys) {
+            final String value = getConfiguration().getString("isis.viewers.labelAt." + subkey);
+            if(value != null) {
+                return value;
+            }
+        }
+        return null;
     }
 
     @Override

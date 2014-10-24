@@ -17,18 +17,23 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.all.describedas.fallback;
+package org.apache.isis.core.metamodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.help.HelpFacetAbstract;
 
 /**
- * Has a description of the empty string.
+ * Has a description of <tt>null</tt>.
  */
-public class DescribedAsFacetNone extends DescribedAsFacetAbstract {
+public class HelpFacetNone extends HelpFacetAbstract {
 
-    public DescribedAsFacetNone(final FacetHolder holder) {
-        super("", holder);
+    public HelpFacetNone(final FacetHolder holder) {
+        super(null, holder);
+    }
+
+    @Override
+    public String value() {
+        return "No help available";
     }
 
     @Override

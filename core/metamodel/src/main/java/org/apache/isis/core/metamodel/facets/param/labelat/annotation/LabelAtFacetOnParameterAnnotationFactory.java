@@ -17,21 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.param.multiline.annotation;
+package org.apache.isis.core.metamodel.facets.param.labelat.annotation;
 
 import java.lang.annotation.Annotation;
-import org.apache.isis.applib.annotation.MultiLine;
+import org.apache.isis.applib.annotation.LabelAt;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacetInferredFromMultiLineFacet;
-import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
 
-public class MultiLineFacetOnParameterAnnotationFactory extends FacetFactoryAbstract {
+public class LabelAtFacetOnParameterAnnotationFactory extends FacetFactoryAbstract {
 
-    public MultiLineFacetOnParameterAnnotationFactory() {
+    public LabelAtFacetOnParameterAnnotationFactory() {
         super(FeatureType.PARAMETERS_ONLY);
     }
 
@@ -47,33 +46,16 @@ public class MultiLineFacetOnParameterAnnotationFactory extends FacetFactoryAbst
         }
         final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
         for (final Annotation parameterAnnotation : parameterAnnotations) {
-            if (parameterAnnotation instanceof MultiLine) {
-                process(processParameterContext, (MultiLine) parameterAnnotation);
+            if (parameterAnnotation instanceof LabelAt) {
+                final LabelAt annotation = (LabelAt) parameterAnnotation;
+                FacetUtil.addFacet(create(annotation, processParameterContext.getFacetHolder()));
                 return;
             }
         }
     }
 
-    private void process(ProcessParameterContext processParameterContext, MultiLine parameterAnnotation) {
-        final MultiLine annotation = (MultiLine) parameterAnnotation;
-        final MultiLineFacet facet = create(annotation, processParameterContext.getFacetHolder());
-
-        // no-op if null
-        FacetUtil.addFacet(facet);
-
-        // no-op if null
-        inferLabelAtFacet(facet);
-    }
-
-    private static void inferLabelAtFacet(MultiLineFacet facet) {
-        if (facet == null) {
-            return;
-        }
-        FacetUtil.addFacet(new LabelAtFacetInferredFromMultiLineFacet(facet.getFacetHolder()));
-    }
-
-    private MultiLineFacet create(final MultiLine annotation, final FacetHolder holder) {
-        return (annotation != null) ? new MultiLineFacetOnParameterAnnotation(annotation.numberOfLines(), annotation.preventWrapping(), holder) : null;
+    private LabelAtFacet create(final LabelAt annotation, final FacetHolder holder) {
+        return (annotation != null) ? new LabelAtFacetOnParameterAnnotation(annotation.value(), holder) : null;
     }
 
 }

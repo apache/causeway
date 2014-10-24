@@ -17,20 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.propparam.fallback;
+package org.apache.isis.core.metamodel.facets.propparam.labelat;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacetAbstract;
+import org.apache.isis.applib.annotation.LabelAt;
+import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
 
-public class MultiLineFacetNone extends MultiLineFacetAbstract {
+/**
+ * The positioning of a property or action parameter's label.
+ */
+public interface LabelAtFacet extends MultipleValueFacet {
 
-    public MultiLineFacetNone(final boolean preventWrapping, final FacetHolder holder) {
-        super(1, preventWrapping, holder);
-    }
-
-    @Override
-    public boolean isNoop() {
-        return true;
-    }
+    public LabelAt.Position value();
 
 }

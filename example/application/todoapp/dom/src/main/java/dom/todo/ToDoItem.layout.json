@@ -118,7 +118,8 @@
                         },
                         "hidden": {
                             "where": "ALL_TABLES"
-                        }
+                        },
+                        "labelAt": { "value": "LEFT" }
                     },
                     "attachment": {
                         "hidden": {

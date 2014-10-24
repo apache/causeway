@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.object.multiline.annotation.MultiLi
 import org.apache.isis.core.metamodel.facets.object.multiline.annotation.MultiLineFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.param.multiline.annotation.MultiLineFacetOnParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.multiline.annotation.MultiLineFacetOnParameterAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.properties.multiline.annotation.MultiLineOnPropertyFacetFactory;
+import org.apache.isis.core.metamodel.facets.properties.multiline.annotation.MultiLineFacetOnPropertyFactory;
 import org.apache.isis.core.metamodel.facets.properties.multiline.annotation.MultiLineFacetOnPropertyAnnotation;
 
 public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -54,7 +54,7 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     }
 
     public void testMultiLineAnnotationPickedUpOnProperty() {
-        final MultiLineOnPropertyFacetFactory facetFactory = new MultiLineOnPropertyFacetFactory();
+        final MultiLineFacetOnPropertyFactory facetFactory = new MultiLineFacetOnPropertyFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -111,7 +111,7 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     }
 
     public void testMultiLineAnnotationIgnoredForNonStringProperties() {
-        final MultiLineOnPropertyFacetFactory facetFactory = new MultiLineOnPropertyFacetFactory();
+        final MultiLineFacetOnPropertyFactory facetFactory = new MultiLineFacetOnPropertyFactory();
 
         class Customer {
             @SuppressWarnings("unused")

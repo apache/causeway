@@ -17,28 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.all.help.fallback;
+package org.apache.isis.applib.annotation;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.help.HelpFacetAbstract;
+import java.lang.annotation.*;
 
 /**
- * Has a description of <tt>null</tt>.
+ * Indicates where a property or action parameter's label should be rendered.
  */
-public class HelpFacetNone extends HelpFacetAbstract {
-
-    public HelpFacetNone(final FacetHolder holder) {
-        super(null, holder);
+@Inherited
+@Target({ ElementType.METHOD, ElementType.PARAMETER })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface LabelAt {
+    public enum Position {
+        LEFT,
+        TOP,
+        NONE
     }
-
-    @Override
-    public String value() {
-        return "No help available";
-    }
-
-    @Override
-    public boolean isNoop() {
-        return true;
-    }
-
+    Position value();
 }
+

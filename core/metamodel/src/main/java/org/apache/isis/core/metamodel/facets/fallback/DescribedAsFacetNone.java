@@ -17,21 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.all.named.fallback;
+package org.apache.isis.core.metamodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
 /**
- * Has a name of <tt>null</tt>.
- * 
- * <p>
- * TODO: should this instead be the empty string?
+ * Has a description of the empty string.
  */
-public class NamedFacetNone extends NamedFacetAbstract {
+public class DescribedAsFacetNone extends DescribedAsFacetAbstract {
 
-    public NamedFacetNone(final FacetHolder holder) {
-        super(null, holder);
+    public DescribedAsFacetNone(final FacetHolder holder) {
+        super("", holder);
     }
 
     @Override

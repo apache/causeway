@@ -182,7 +182,7 @@
     line-height: 30px;
 	padding:0px 10px;
 	font-weight:bold;
-	text-transform:uppercase;
+	/*text-transform:uppercase;*/
 	font-size:0.85em;
 	border-radius:4px;
 	-moz-border-radius:4px;
@@ -246,7 +246,7 @@
     line-height: 30px;
 	padding:0px 10px;
 	font-weight:bold;
-	text-transform:uppercase;
+	/*text-transform:uppercase;*/
 	font-size:0.85em;
 	border-radius:4px;
 	-moz-border-radius:4px;
@@ -295,7 +295,7 @@
     line-height: 30px;
     padding: 0 10px;
     text-decoration: none;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
 }
 
 .additionalLinkList li a {

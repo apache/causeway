@@ -17,30 +17,30 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.notpersistable.fallback;
+package org.apache.isis.core.metamodel.facets.fallback;
 
-import org.apache.isis.applib.events.UsabilityEvent;
+import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
-import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacetAbstract;
-import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacetAbstract;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
-/**
- * Installed by the {@link org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory}, and means that this class
- * <i>is</i> persistable (ie not {@link NotPersistableFacet not persistable}).
- */
-public class NotPersistableFacetNull extends NotPersistableFacetAbstract {
+public class MaxLengthFacetUnlimited extends MaxLengthFacetAbstract {
 
-    public NotPersistableFacetNull(final FacetHolder holder) {
-        super(null, holder);
+    public MaxLengthFacetUnlimited(final FacetHolder holder) {
+        super(Integer.MAX_VALUE, holder);
     }
 
     /**
-     * Always returns <tt>null</tt> (that is, does <i>not</i> disable).
+     * No limit to maximum length.
      */
     @Override
-    public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
+    public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
         return null;
+    }
+
+    @Override
+    public boolean isNoop() {
+        return true;
     }
 
 }

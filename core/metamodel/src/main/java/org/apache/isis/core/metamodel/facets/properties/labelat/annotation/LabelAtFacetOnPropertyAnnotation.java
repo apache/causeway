@@ -17,27 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.title.fallback;
+package org.apache.isis.core.metamodel.facets.properties.labelat.annotation;
 
-import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.applib.annotation.LabelAt;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacetAbstract;
 
-public class TitleFacetNone extends TitleFacetAbstract {
+public class LabelAtFacetOnPropertyAnnotation extends LabelAtFacetAbstract {
 
-    public TitleFacetNone(final FacetHolder holder) {
-        super(holder);
-    }
-
-    @Override
-    public String title(final ObjectAdapter object, final Localization localization) {
-        return null;
-    }
-
-    @Override
-    public boolean isNoop() {
-        return true;
+    public LabelAtFacetOnPropertyAnnotation(final LabelAt.Position value, final FacetHolder holder) {
+        super(value, holder);
     }
 
 }

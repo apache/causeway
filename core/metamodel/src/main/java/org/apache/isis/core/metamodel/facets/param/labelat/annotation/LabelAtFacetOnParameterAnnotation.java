@@ -17,26 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.param.choices.fallback;
+package org.apache.isis.core.metamodel.facets.param.labelat.annotation;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.applib.annotation.LabelAt;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacetAbstract;
 
-public class ActionChoicesFacetNone extends ActionChoicesFacetAbstract {
+public class LabelAtFacetOnParameterAnnotation extends LabelAtFacetAbstract {
 
-    public ActionChoicesFacetNone(final FacetHolder holder) {
-        super(holder);
-    }
-
-    @Override
-    public Object[][] getChoices(final ObjectAdapter inObject) {
-        return new ObjectAdapter[0][0];
-    }
-
-    @Override
-    public boolean isNoop() {
-        return true;
+    public LabelAtFacetOnParameterAnnotation(final LabelAt.Position value, final FacetHolder holder) {
+        super(value, holder);
     }
 
 }

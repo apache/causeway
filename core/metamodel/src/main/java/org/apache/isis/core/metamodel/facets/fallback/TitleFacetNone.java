@@ -16,14 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.paged.fallback;
 
+package org.apache.isis.core.metamodel.facets.fallback;
+
+import org.apache.isis.applib.profiles.Localization;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 
-public class PagedFacetDefault extends PagedFacetAbstract {
+public class TitleFacetNone extends TitleFacetAbstract {
 
-    public PagedFacetDefault(FacetHolder holder, int value) {
-        super(holder, value);
+    public TitleFacetNone(final FacetHolder holder) {
+        super(holder);
     }
+
+    @Override
+    public String title(final ObjectAdapter object, final Localization localization) {
+        return null;
+    }
+
+    @Override
+    public boolean isNoop() {
+        return true;
+    }
+
 }

@@ -17,25 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.propparam.fallback;
+package org.apache.isis.core.metamodel.facets.fallback;
 
-import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacetAbstract;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacetAbstract;
 
-public class MaxLengthFacetUnlimited extends MaxLengthFacetAbstract {
+public class MultiLineFacetNone extends MultiLineFacetAbstract {
 
-    public MaxLengthFacetUnlimited(final FacetHolder holder) {
-        super(Integer.MAX_VALUE, holder);
-    }
-
-    /**
-     * No limit to maximum length.
-     */
-    @Override
-    public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
-        return null;
+    public MultiLineFacetNone(final boolean preventWrapping, final FacetHolder holder) {
+        super(1, preventWrapping, holder);
     }
 
     @Override

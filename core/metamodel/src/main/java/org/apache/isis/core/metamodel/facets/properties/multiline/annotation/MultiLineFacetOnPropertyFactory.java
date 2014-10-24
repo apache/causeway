@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.properties.multiline.annotation;
 
 import java.util.Properties;
-
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -28,11 +27,12 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacetInferredFromMultiLineFacet;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 
-public class MultiLineOnPropertyFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class MultiLineFacetOnPropertyFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
-    public MultiLineOnPropertyFacetFactory() {
+    public MultiLineFacetOnPropertyFactory() {
         super(FeatureType.PROPERTIES_ONLY);
     }
 
@@ -45,6 +45,16 @@ public class MultiLineOnPropertyFacetFactory extends FacetFactoryAbstract implem
         
         // no-op if null
         FacetUtil.addFacet(facet);
+
+        // no-op if null
+        inferLabelAtFacet(facet);
+    }
+
+    private static void inferLabelAtFacet(MultiLineFacet facet) {
+        if (facet == null) {
+            return;
+        }
+        FacetUtil.addFacet(new LabelAtFacetInferredFromMultiLineFacet(facet.getFacetHolder()));
     }
 
     @Override
