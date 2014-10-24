@@ -103,7 +103,7 @@ public class ThemePicker extends Panel {
         for (ITheme theme : bootswatchThemes) {
             allThemes.add(theme.name());
         }
-        
+
 //        for (ITheme theme : vegibitThemes) {
 //            allThemes.add(theme.name());
 //        }

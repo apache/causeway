@@ -40,7 +40,7 @@ $(document).ready(function(){
         
         // alt+[
         if(e.which === 219 && e.altKey) {
-            if($('#bookmarkedPagesSlidingDiv').find('.content').is(":visible")) {
+            if($('#bookmarkedPagesSlidingDiv').is(":visible")) {
                 hideBookmarksQuickly();
             } else {
                 showBookmarks();
