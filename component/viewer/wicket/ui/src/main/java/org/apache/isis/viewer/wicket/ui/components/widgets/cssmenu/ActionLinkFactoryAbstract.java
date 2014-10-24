@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
@@ -27,6 +29,7 @@ import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
@@ -153,6 +156,13 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                     // allow the event to bubble so the menu is hidden after click on an item
                     attributes.setEventPropagation(AjaxRequestAttributes.EventPropagation.BUBBLE);
+                }
+
+                @Override
+                protected void onComponentTag(ComponentTag tag) {
+                    super.onComponentTag(tag);
+
+                    Buttons.fixDisabledState(this, tag);
                 }
             };
 
