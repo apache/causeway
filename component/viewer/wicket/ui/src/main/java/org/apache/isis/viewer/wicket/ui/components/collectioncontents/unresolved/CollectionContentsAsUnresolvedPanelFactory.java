@@ -64,6 +64,6 @@ public class CollectionContentsAsUnresolvedPanelFactory extends ComponentFactory
 
     @Override
     public IModel<String> getCssClass() {
-        return Model.of("fa fa-eye-slash");
+        return Model.of("fa fa-fw fa-eye-slash");
     }
 }

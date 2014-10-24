@@ -60,6 +60,6 @@ public class CollectionContentsAsAjaxTablePanelFactory extends ComponentFactoryA
 
     @Override
     public IModel<String> getCssClass() {
-        return Model.of("fa fa-table");
+        return Model.of("fa fa-fw fa-table");
     }
 }

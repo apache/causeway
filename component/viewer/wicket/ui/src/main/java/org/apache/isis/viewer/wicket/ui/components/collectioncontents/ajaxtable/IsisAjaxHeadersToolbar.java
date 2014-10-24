@@ -45,9 +45,9 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
 {
     private static final long serialVersionUID = 1L;
 
-    private static final String CLASS_SORT_NONE = "fa fa-sort";
-    private static final String CLASS_SORT_UP = "fa fa-sort-up";
-    private static final String CLASS_SORT_DOWN = "fa fa-sort-down";
+    private static final String CLASS_SORT_NONE = "fa fa-fw fa-sort";
+    private static final String CLASS_SORT_UP = "fa fa-fw fa-sort-up";
+    private static final String CLASS_SORT_DOWN = "fa fa-fw fa-sort-down";
 
     static abstract class CssAttributeBehavior extends Behavior
     {
