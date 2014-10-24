@@ -42,9 +42,9 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
     private static final CheckBoxXConfig THREE_STATE_CONFIG = new CheckBoxXConfig()
         .withSize(CheckBoxXConfig.Sizes.xs)
-        .withEnclosedLabel(true)
-        .withIconChecked("<i class='fa fa-check'></i>")
-        .withIconNull("<i class='fa fa-square'></i>");
+        .withEnclosedLabel(false)
+        .withIconChecked("<i class='fa fa-fw fa-check'></i>")
+        .withIconNull("<i class='fa fa-fw fa-square'></i>");
 
     private static final CheckBoxXConfig TWO_STATE_CONFIG = new CheckBoxXConfig(THREE_STATE_CONFIG).withThreeState(false);
 
