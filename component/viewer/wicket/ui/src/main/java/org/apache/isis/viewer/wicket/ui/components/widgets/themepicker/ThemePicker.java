@@ -95,16 +95,18 @@ public class ThemePicker extends Panel {
     private List<String> getThemeNames() {
         final BootstrapThemeTheme bootstrapTheme = new BootstrapThemeTheme();
         List<BootswatchTheme> bootswatchThemes = Arrays.asList(BootswatchTheme.values());
-        List<VegibitTheme> vegibitThemes = Arrays.asList(VegibitTheme.values());
+//        List<VegibitTheme> vegibitThemes = Arrays.asList(VegibitTheme.values());
 
         List<String> allThemes = new ArrayList<>();
+        allThemes.add(bootstrapTheme.name());
+
         for (ITheme theme : bootswatchThemes) {
             allThemes.add(theme.name());
         }
-        for (ITheme theme : vegibitThemes) {
-            allThemes.add(theme.name());
-        }
-        allThemes.add(bootstrapTheme.name());
+        
+//        for (ITheme theme : vegibitThemes) {
+//            allThemes.add(theme.name());
+//        }
 
 
         return allThemes;
