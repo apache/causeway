@@ -107,7 +107,7 @@ public class ApplicationActionsPanel extends Panel {
         AbstractLink subMenuItemLink = menuItem.getLink();
 
         Label menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
-        subMenuItemLink.add(menuItemLabel);
+        subMenuItemLink.addOrReplace(menuItemLabel);
 
         if (!menuItem.isEnabled()) {
             listItem.add(new CssClassNameAppender("disabled"));
