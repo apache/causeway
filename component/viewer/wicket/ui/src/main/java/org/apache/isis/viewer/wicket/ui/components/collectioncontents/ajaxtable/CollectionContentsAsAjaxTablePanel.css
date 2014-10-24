@@ -37,9 +37,7 @@
 }
 .collectionContentsAsAjaxTablePanel table.contents tr th,
 .collectionContentsAsAjaxTablePanel table.contents tr th a span { 
-	/*color: #FFFFFF;*/
-	/*background-color: #46423C;*/
-	text-align: left; 
+	text-align: left;
 	white-space: nowrap; 
 	text-transform:uppercase;
 	font-weight:bold;
@@ -117,9 +115,6 @@
     padding: 0;
 }
 
-
-
-
 .collectionContentsAsAjaxTablePanel table {
     border: none;
 }
@@ -132,4 +127,8 @@
 .collectionContentsAsAjaxTablePanel table tr th:last-child,
 .collectionContentsAsAjaxTablePanel table tr td:last-child {
     border-right: none;
+}
+
+.collectionContentsAsAjaxTablePanel .table-responsive {
+	overflow-x: auto;
 }
