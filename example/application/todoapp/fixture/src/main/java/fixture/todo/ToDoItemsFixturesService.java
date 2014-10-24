@@ -37,7 +37,7 @@ public class ToDoItemsFixturesService extends FixtureScripts {
         super("fixture.todo");
     }
 
-    @CssClassFa("fa-bolt")
+    @CssClassFa("fa fa-bolt")
     @Override
     public List<FixtureResult> runFixtureScript(FixtureScript fixtureScript, @Named("Parameters") @DescribedAs("Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)") @MultiLine(numberOfLines = 10) @Optional String parameters) {
         return super.runFixtureScript(fixtureScript, parameters);
@@ -61,7 +61,7 @@ public class ToDoItemsFixturesService extends FixtureScripts {
 
 
     @Prototype
-    @CssClassFa("fa-list")
+    @CssClassFa("fa fa-list")
     @MemberOrder(sequence="20")
     public Object recreateToDoItemsReturnFirst() {
         final List<FixtureResult> run = findFixtureScriptFor(RecreateToDoItemsAndCompleteSeveralForCurrent.class).run(null);

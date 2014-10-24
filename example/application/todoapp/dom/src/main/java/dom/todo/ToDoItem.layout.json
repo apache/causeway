@@ -35,7 +35,7 @@
                             },
                             "analyseCategory": {
                                 "cssClassFa": {
-                                     "value": "fa-pie-chart"
+                                     "value": "fa fa-pie-chart"
                                 }
                             }
                         }
@@ -90,10 +90,10 @@
                      "relativePriority": {
                         "actions": {
                             "previous": {
-                                "cssClassFa": { "value": "fa-step-backward" }
+                                "cssClassFa": { "value": "fa fa-step-backward" }
                             },
                             "next": {
-                                "cssClassFa": { "value": "fa-step-forward" }
+                                "cssClassFa": { "value": "fa fa-step-forward" }
                             }
                         }
                     },
@@ -108,7 +108,7 @@
                         "actions": {
                             "updateCost":{
                                 "named": { "value": "Update" },
-                                "cssClassFa": { "value": "fa-dollar" }
+                                "cssClassFa": { "value": "fa fa-dollar" }
                             }
                         }
                     },
@@ -144,11 +144,11 @@
                 "disabled": {},
                 "actions": {
                     "add":{
-                        "cssClassFa": { "value": "fa-plus-square" }
+                        "cssClassFa": { "value": "fa fa-plus-square" }
                     },
                     "remove": {
                         "cssClass": { "value": "x-caution" },
-                        "cssClassFa": { "value": "fa-minus-square" }
+                        "cssClassFa": { "value": "fa fa-minus-square" }
                     }
                 },
                 "paged": {
@@ -174,7 +174,7 @@
         "totalCost": {},
         "delete": {
             "cssClass": { "value": "btn btn-danger" },
-            "cssClassFa": { "value": "fa-trash fa-lg" }
+            "cssClassFa": { "value": "fa fa-trash fa-lg" }
         },
         "duplicate": {
 	          "named": {
@@ -183,7 +183,7 @@
             "describedAs": {
                 "value": "Create a new todo item from this one"
             },
-            "cssClassFa": { "value": "fa-copy fa-lg" }
+            "cssClassFa": { "value": "fa fa-copy fa-lg" }
         }
     }
 }

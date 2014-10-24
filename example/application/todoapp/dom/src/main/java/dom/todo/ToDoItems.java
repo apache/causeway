@@ -83,7 +83,7 @@ public class ToDoItems {
 	@Bookmarkable
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "40")
-    @CssClassFa("fa-question")
+    @CssClassFa("fa fa-question")
     public List<ToDoItem> categorized(
     		@Named("Category") final Category category,
     		@Named("Subcategory") final Subcategory subcategory,
@@ -117,7 +117,7 @@ public class ToDoItems {
     //endregion
 
     //region > newToDo (action)
-    @CssClassFa("fa-plus")
+    @CssClassFa("fa fa-plus")
     @MemberOrder(sequence = "5")
     public ToDoItem newToDo(
             final @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") @Named("Description") String description, 
