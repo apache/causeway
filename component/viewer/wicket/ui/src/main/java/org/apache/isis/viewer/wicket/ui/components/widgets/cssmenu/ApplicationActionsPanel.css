@@ -70,8 +70,7 @@
 }
 
 .dropdown-menu > li > a.menuLink {
-    display: inline-block;
-    padding-left: 0px;
+    padding-left: 0;
 }
 
 .dropdown-menu > li > span.fa {
