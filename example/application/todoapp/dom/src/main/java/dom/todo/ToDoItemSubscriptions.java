@@ -146,7 +146,7 @@ public class ToDoItemSubscriptions {
             case VALIDATE:
                 if(getSubscriberBehaviour() == Behaviour.UpdateCostActionInvalidate &&
                         ev.getIdentifier().getMemberName().equals("updateCost")) {
-                    ev.disable("ToDoItemSubscriptions says: can't invoke updateCostaction with these args!");
+                    ev.invalidate("ToDoItemSubscriptions says: can't invoke updateCost action with these args!");
                 }
                 break;
             case EXECUTING:
