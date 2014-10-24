@@ -193,7 +193,10 @@ public class CssMenuItem implements Serializable {
 
     public void setPrototyping(boolean prototype) {
         this.prototype = prototype;
-        
+    }
+
+    public boolean isPrototyping() {
+        return prototype;
     }
 
     private CssMenuItem(final String name) {
