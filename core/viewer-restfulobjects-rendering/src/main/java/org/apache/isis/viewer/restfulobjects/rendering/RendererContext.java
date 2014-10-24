@@ -46,7 +46,18 @@ public interface RendererContext {
     public List<List<String>> getFollowLinks();
     
     public Localization getLocalization();
-    
+
+    boolean honorUiHints();
+
+    boolean objectPropertyValuesOnly();
+
+    boolean suppressDescribedByLinks();
+    boolean suppressUpdateLink();
+    boolean suppressMemberId();
+    boolean suppressMemberLinks();
+    boolean suppressMemberExtensions();
+    boolean suppressMemberDisabledReason();
+
     /**
      * To avoid infinite loops when {@link Render.Type#EAGERLY eagerly} rendering graphs
      * of objects as {@link DomainObjectReprRenderer#asEventSerialization() events}.

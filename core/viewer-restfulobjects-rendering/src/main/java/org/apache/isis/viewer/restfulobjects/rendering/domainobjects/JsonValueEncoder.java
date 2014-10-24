@@ -82,9 +82,11 @@ public final class JsonValueEncoder {
          */
         public abstract ObjectAdapter asAdapter(JsonRepresentation repr, String format);
         
-        public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
-            repr.mapPut("value", unwrapAsObjectElseNullNode(objectAdapter));
-            appendFormats(repr, this.format, this.xIsisFormat);
+        public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
+            final Object value = unwrapAsObjectElseNullNode(objectAdapter);
+            repr.mapPut("value", value);
+            appendFormats(repr, this.format, this.xIsisFormat, suppressExtensions);
+            return value;
         }
 
         public Object asObject(ObjectAdapter objectAdapter, String format) {
@@ -111,7 +113,7 @@ public final class JsonValueEncoder {
                 return null;
             }
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof String) {
                     final String str = (String) obj;
@@ -119,7 +121,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, this.format, xIsisFormat);
+                appendFormats(repr, this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
 
@@ -132,7 +135,7 @@ public final class JsonValueEncoder {
                 return null;
             }
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof Boolean) {
                     final Boolean b = (Boolean) obj;
@@ -140,7 +143,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, this.format, xIsisFormat);
+                appendFormats(repr, this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
         
@@ -162,7 +166,7 @@ public final class JsonValueEncoder {
                 return null;
             }
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof Byte) {
                     final Byte b = (Byte) obj;
@@ -170,7 +174,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, this.format, xIsisFormat);
+                appendFormats(repr, this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
         
@@ -192,7 +197,7 @@ public final class JsonValueEncoder {
                 return null;
             }
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof Short) {
                     final Short s = (Short) obj;
@@ -200,7 +205,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, this.format, xIsisFormat);
+                appendFormats(repr, this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
         
@@ -222,7 +228,7 @@ public final class JsonValueEncoder {
                 return null;
             }
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof Integer) {
                     final Integer i = (Integer) obj;
@@ -230,7 +236,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, this.format, xIsisFormat);
+                appendFormats(repr, this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
         
@@ -252,7 +259,7 @@ public final class JsonValueEncoder {
                 return null;
             }
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof Long) {
                     final Long l = (Long) obj;
@@ -260,7 +267,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, this.format, xIsisFormat);
+                appendFormats(repr, this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
         
@@ -285,7 +293,7 @@ public final class JsonValueEncoder {
                 return null;
             }
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof Float) {
                     final Float f = (Float) obj;
@@ -293,7 +301,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, this.format, xIsisFormat);
+                appendFormats(repr, this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
         
@@ -321,7 +330,7 @@ public final class JsonValueEncoder {
                 return null;
             }
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof Double) {
                     final Double d = (Double) obj;
@@ -329,7 +338,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, this.format, xIsisFormat);
+                appendFormats(repr, this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
         
@@ -353,7 +363,7 @@ public final class JsonValueEncoder {
                 return null;
             }
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof Character) {
                     final Character c = (Character) obj;
@@ -361,7 +371,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, this.format, xIsisFormat);
+                appendFormats(repr, this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
         
@@ -386,7 +397,7 @@ public final class JsonValueEncoder {
                 return null;
             }
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof BigInteger) {
                     final BigInteger bi = (BigInteger) obj;
@@ -394,7 +405,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, format != null? format: this.format, xIsisFormat);
+                appendFormats(repr, format != null? format: this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
         
@@ -422,7 +434,7 @@ public final class JsonValueEncoder {
                 return null;
             }
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof BigDecimal) {
                     final BigDecimal bd = (BigDecimal) obj;
@@ -430,7 +442,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, format != null ? format : this.format, xIsisFormat);
+                appendFormats(repr, format != null ? format : this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
 
@@ -461,7 +474,7 @@ public final class JsonValueEncoder {
             }
 
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof LocalDate) {
                     final LocalDate date = (LocalDate) obj;
@@ -470,7 +483,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, this.format, xIsisFormat);
+                appendFormats(repr, this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
 
@@ -501,7 +515,7 @@ public final class JsonValueEncoder {
             }
 
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof LocalDateTime) {
                     final LocalDateTime date = (LocalDateTime) obj;
@@ -510,7 +524,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, this.format, xIsisFormat);
+                appendFormats(repr, this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
 
@@ -541,7 +556,7 @@ public final class JsonValueEncoder {
             }
 
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof DateTime) {
                     final DateTime date = (DateTime) obj;
@@ -550,7 +565,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, this.format, xIsisFormat);
+                appendFormats(repr, this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
 
@@ -581,7 +597,7 @@ public final class JsonValueEncoder {
             }
 
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof java.util.Date) {
                     final java.util.Date date = (java.util.Date) obj;
@@ -591,7 +607,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, this.format, xIsisFormat);
+                appendFormats(repr, this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
 
@@ -620,7 +637,7 @@ public final class JsonValueEncoder {
             }
 
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof java.sql.Date) {
                     final java.sql.Date date = (java.sql.Date) obj;
@@ -629,7 +646,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, this.format, xIsisFormat);
+                appendFormats(repr, this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
 
@@ -659,7 +677,7 @@ public final class JsonValueEncoder {
             }
 
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof java.sql.Time) {
                     final java.sql.Time date = (java.sql.Time) obj;
@@ -668,7 +686,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, this.format, xIsisFormat);
+                appendFormats(repr, this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
 
@@ -695,7 +714,7 @@ public final class JsonValueEncoder {
             }
 
             @Override
-            public void appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr) {
+            public Object appendValueAndFormat(ObjectAdapter objectAdapter, String format, JsonRepresentation repr, boolean suppressExtensions) {
                 final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof java.sql.Timestamp) {
                     final java.sql.Timestamp date = (java.sql.Timestamp) obj;
@@ -704,7 +723,8 @@ public final class JsonValueEncoder {
                 } else {
                     repr.mapPut("value", obj);
                 }
-                appendFormats(repr, this.format, xIsisFormat);
+                appendFormats(repr, this.format, xIsisFormat, suppressExtensions);
+                return obj;
             }
         });
     }
@@ -757,11 +777,11 @@ public final class JsonValueEncoder {
         throw new IllegalArgumentException("Could not parse value '" + argValueRepr.asString() + "' as a " + objectSpec.getFullIdentifier());
     }
 
-    public static void appendValueAndFormat(ObjectSpecification objectSpec, ObjectAdapter objectAdapter, JsonRepresentation repr, String format) {
+    public static Object appendValueAndFormat(ObjectSpecification objectSpec, ObjectAdapter objectAdapter, JsonRepresentation repr, String format, boolean suppressExtensions) {
 
         final JsonValueConverter jvc = converterBySpec.get(objectSpec.getSpecId());
         if(jvc != null) {
-            jvc.appendValueAndFormat(objectAdapter, format, repr);
+            return jvc.appendValueAndFormat(objectAdapter, format, repr, suppressExtensions);
         } else {
             final EncodableFacet encodableFacet = objectSpec.getFacet(EncodableFacet.class);
             if (encodableFacet == null) {
@@ -769,7 +789,8 @@ public final class JsonValueEncoder {
             }
             Object value = objectAdapter != null? encodableFacet.toEncodedString(objectAdapter): NullNode.getInstance();
             repr.mapPut("value", value);
-            appendFormats(repr, "string", "string");
+            appendFormats(repr, "string", "string", suppressExtensions);
+            return value;
         }
     }
     
@@ -793,11 +814,11 @@ public final class JsonValueEncoder {
     }
 
 
-    private static void appendFormats(JsonRepresentation repr, String format, String xIsisFormat) {
+    private static void appendFormats(JsonRepresentation repr, String format, String xIsisFormat, boolean suppressExtensions) {
         if(format != null) {
             repr.mapPut("format", format);
         }
-        if(xIsisFormat != null) {
+        if(!suppressExtensions && xIsisFormat != null) {
             repr.mapPut("extensions.x-isis-format", xIsisFormat);
         }
     }

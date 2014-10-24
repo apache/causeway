@@ -54,7 +54,6 @@ public class ResourceContext implements RendererContext {
     private final SecurityContext securityContext;
     private final Localization localization;
 
-    @SuppressWarnings("unused")
     private final IsisConfiguration configuration;
     private final AuthenticationSession authenticationSession;
     private final PersistenceSession persistenceSession;
@@ -67,9 +66,7 @@ public class ResourceContext implements RendererContext {
     private final String urlUnencodedQueryString;
     private JsonRepresentation readQueryStringAsMap;
 
-    //////////////////////////////////////////////////////////////////
-    // constructor and init
-    //////////////////////////////////////////////////////////////////
+    //region > constructor and init
 
     public ResourceContext(
             final RepresentationType representationType, 
@@ -145,13 +142,10 @@ public class ResourceContext implements RendererContext {
         }
     }
 
+    //endregion
 
     
-    //////////////////////////////////////////////////////////////////
-    //
-    //////////////////////////////////////////////////////////////////
-    
-    
+
     public HttpHeaders getHttpHeaders() {
         return httpHeaders;
     }
@@ -233,11 +227,9 @@ public class ResourceContext implements RendererContext {
         return securityContext;
     }
 
-
     public List<List<String>> getFollowLinks() {
         return followLinks;
     }
-
 
     public Localization getLocalization() {
         return localization;
@@ -267,26 +259,81 @@ public class ResourceContext implements RendererContext {
     public IsisConfiguration getConfiguration() {
         return configuration;
     }
-    
+
+
     public Where getWhere() {
         return where;
     }
 
+
+    //region > canEagerlyRender
     private Set<Oid> rendered = Sets.newHashSet();
     @Override
     public boolean canEagerlyRender(ObjectAdapter objectAdapter) {
         final Oid oid = objectAdapter.getOid();
         return rendered.add(oid);
     }
+    //endregion
 
-    //////////////////////////////////////////////////////////////////
-    //
-    //////////////////////////////////////////////////////////////////
+    //region > configuration settings
 
+    private static final boolean HONOR_UI_HINTS_DEFAULT = false;
+
+    private static final boolean OBJECT_PROPERTY_VALUES_ONLY_DEFAULT = false;
+
+    private static final boolean SUPPRESS_DESCRIBED_BY_LINKS_DEFAULT = false;
+    private static final boolean SUPPRESS_UPDATE_LINK_DEFAULT = false;
+    private static final boolean SUPPRESS_MEMBER_ID_DEFAULT = false;
+    private static final boolean SUPPRESS_MEMBER_LINKS_DEFAULT = false;
+    private static final boolean SUPPRESS_MEMBER_EXTENSIONS_DEFAULT = false;
+    private static final boolean SUPPRESS_MEMBER_DISABLED_REASON_DEFAULT = false;
+
+    @Override
+    public boolean honorUiHints() {
+        return getConfiguration().getBoolean("isis.viewer.restfulobjects.honorUiHints", HONOR_UI_HINTS_DEFAULT);
+    }
+
+    @Override
+    public boolean objectPropertyValuesOnly() {
+        return getConfiguration().getBoolean("isis.viewer.restfulobjects.objectPropertyValuesOnly", OBJECT_PROPERTY_VALUES_ONLY_DEFAULT);
+    }
+
+    @Override
+    public boolean suppressDescribedByLinks() {
+        return getConfiguration().getBoolean("isis.viewer.restfulobjects.suppressDescribedByLinks", SUPPRESS_DESCRIBED_BY_LINKS_DEFAULT);
+    }
+
+    @Override
+    public boolean suppressUpdateLink() {
+        return getConfiguration().getBoolean("isis.viewer.restfulobjects.suppressUpdateLink", SUPPRESS_UPDATE_LINK_DEFAULT);
+    }
+
+    @Override
+    public boolean suppressMemberId() {
+        return getConfiguration().getBoolean("isis.viewer.restfulobjects.suppressMemberId", SUPPRESS_MEMBER_ID_DEFAULT);
+    }
+
+    @Override
+    public boolean suppressMemberLinks() {
+        return getConfiguration().getBoolean("isis.viewer.restfulobjects.suppressMemberLinks", SUPPRESS_MEMBER_LINKS_DEFAULT);
+    }
+
+    @Override
+    public boolean suppressMemberExtensions() {
+        return getConfiguration().getBoolean("isis.viewer.restfulobjects.suppressMemberExtensions", SUPPRESS_MEMBER_EXTENSIONS_DEFAULT);
+    }
+
+    @Override
+    public boolean suppressMemberDisabledReason() {
+        return getConfiguration().getBoolean("isis.viewer.restfulobjects.suppressMemberDisabledReason", SUPPRESS_MEMBER_DISABLED_REASON_DEFAULT);
+    }
+    //endregion
+
+
+    @Override
     public String urlFor(final String url) {
         return getUriInfo().getBaseUri().toString() + url;
     }
-
 
 
 }

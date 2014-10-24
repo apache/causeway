@@ -99,6 +99,46 @@ public class DomainResourceHelper {
         public boolean canEagerlyRender(ObjectAdapter objectAdapter) {
             return rendererContext.canEagerlyRender(objectAdapter);
         }
+
+        @Override
+        public boolean honorUiHints() {
+            return rendererContext.honorUiHints();
+        }
+
+        @Override
+        public boolean objectPropertyValuesOnly() {
+            return rendererContext.objectPropertyValuesOnly();
+        }
+
+        @Override
+        public boolean suppressDescribedByLinks() {
+            return rendererContext.suppressDescribedByLinks();
+        }
+
+        @Override
+        public boolean suppressUpdateLink() {
+            return rendererContext.suppressUpdateLink();
+        }
+
+        @Override
+        public boolean suppressMemberId() {
+            return rendererContext.suppressMemberId();
+        }
+
+        @Override
+        public boolean suppressMemberLinks() {
+            return rendererContext.suppressMemberLinks();
+        }
+
+        @Override
+        public boolean suppressMemberExtensions() {
+            return rendererContext.suppressMemberExtensions();
+        }
+
+        @Override
+        public boolean suppressMemberDisabledReason() {
+            return rendererContext.suppressMemberDisabledReason();
+        }
     }
 
     private final RepresentationService representationService;

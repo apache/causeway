@@ -23,7 +23,12 @@ import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.*;
 
 /**
+ * Configure the Restful Objects viewer to emit custom representations (rather than the
+ * standard representations defined in the RO spec).
+ *
+ * <p>
  * This interface is EXPERIMENTAL and may change in the future.
+ * </p>
  */
 public interface RepresentationService {
 

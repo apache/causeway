@@ -37,26 +37,25 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.CollectionDes
 public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectCollectionReprRenderer, OneToManyAssociation> {
 
     public ObjectCollectionReprRenderer(
-            final RendererContext resourceContext) {
-        this(resourceContext, null, null, JsonRepresentation.newMap());
+            final RendererContext rendererContext) {
+        this(rendererContext, null, null, JsonRepresentation.newMap());
     }
 
     public ObjectCollectionReprRenderer(
-            final RendererContext resourceContext,
+            final RendererContext rendererContext,
             final LinkFollowSpecs linkFollowSpecs,
             final String collectionId,
             final JsonRepresentation representation) {
-        super(resourceContext, linkFollowSpecs, collectionId, RepresentationType.OBJECT_COLLECTION, representation, Where.PARENTED_TABLES);
+        super(rendererContext, linkFollowSpecs, collectionId, RepresentationType.OBJECT_COLLECTION, representation, Where.PARENTED_TABLES);
     }
 
     @Override
     public JsonRepresentation render() {
 
         renderMemberContent();
-        
-        final RenderFacet renderFacet = objectMember.getFacet(RenderFacet.class);
-        boolean eagerlyRender = renderFacet != null && renderFacet.value() == Type.EAGERLY;
-        
+
+        boolean eagerlyRender = rendererContext.honorUiHints() && renderEagerly();
+
         if ((mode.isInline() && eagerlyRender) || mode.isStandalone() || mode.isMutated() || mode.isEventSerialization() || !objectAdapter.representsPersistent()) {
             addValue();
         }
@@ -71,6 +70,11 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         return representation;
     }
 
+    private boolean renderEagerly() {
+        final RenderFacet renderFacet = objectMember.getFacet(RenderFacet.class);
+        return renderFacet != null && renderFacet.value() == Type.EAGERLY;
+    }
+
     // ///////////////////////////////////////////////////
     // value
     // ///////////////////////////////////////////////////
@@ -80,9 +84,8 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         if (valueAdapter == null) {
             return;
         }
-        
-        final RenderFacet renderFacet = objectMember.getFacet(RenderFacet.class);
-        boolean eagerlyRender = renderFacet != null && renderFacet.value() == Type.EAGERLY && rendererContext.canEagerlyRender(valueAdapter);
+
+        boolean eagerlyRender = rendererContext.honorUiHints() && renderEagerly(valueAdapter);
 
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(valueAdapter);
         final List<JsonRepresentation> list = Lists.newArrayList();
@@ -105,6 +108,11 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         representation.mapPut("value", list);
     }
 
+    private boolean renderEagerly(ObjectAdapter valueAdapter) {
+        final RenderFacet renderFacet = objectMember.getFacet(RenderFacet.class);
+        return renderFacet != null && renderFacet.value() == Type.EAGERLY && rendererContext.canEagerlyRender(valueAdapter);
+    }
+
     // ///////////////////////////////////////////////////
     // details link
     // ///////////////////////////////////////////////////
@@ -124,7 +132,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     // ///////////////////////////////////////////////////
 
     @Override
-    protected void addMutatorsIfEnabled() {
+    protected void addMutatorLinksIfEnabled() {
         if (usability().isVetoed()) {
             return;
         }
@@ -148,8 +156,11 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        final LinkBuilder linkBuilder = CollectionDescriptionReprRenderer.newLinkToBuilder(rendererContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember);
-        getLinks().arrayAdd(linkBuilder.build());
+        if(rendererContext.suppressDescribedByLinks()) {
+            return;
+        }
+        final JsonRepresentation link = CollectionDescriptionReprRenderer.newLinkToBuilder(rendererContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
+        getLinks().arrayAdd(link);
     }
 
     @Override

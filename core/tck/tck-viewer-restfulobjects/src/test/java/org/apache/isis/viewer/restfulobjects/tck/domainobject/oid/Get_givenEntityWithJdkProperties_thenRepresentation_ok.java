@@ -86,7 +86,7 @@ public class Get_givenEntityWithJdkProperties_thenRepresentation_ok {
 
         property = domainObjectRepr.getProperty("bigIntegerProperty");
         assertThat(property.getMemberType(), is("property"));
-        assertThat(property.getFormat(), is("big-integer(18)"));
+        assertThat(property.getFormat(), is("big-integer"));
         assertThat(property.getXIsisFormat(), is("javamathbiginteger"));
         scalarRepr = property.getRepresentation("value").as(ScalarValueRepresentation.class);
         assertThat(scalarRepr.isString(), is(true));
@@ -95,7 +95,7 @@ public class Get_givenEntityWithJdkProperties_thenRepresentation_ok {
 
         property = domainObjectRepr.getProperty("bigIntegerProperty2");
         assertThat(property.getMemberType(), is("property"));
-        assertThat(property.getFormat(), is("big-integer(18)"));
+        assertThat(property.getFormat(), is("big-integer"));
         scalarRepr = property.getRepresentation("value").as(ScalarValueRepresentation.class);
         assertThat(scalarRepr.isString(), is(true));
         BigInteger bigInteger2 = scalarRepr.asBigInteger(property.getFormat());

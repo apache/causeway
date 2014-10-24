@@ -103,7 +103,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
     /**
      * Override the default {@link ObjectAdapterLinkTo} (that is used for
-     * generating links in {@link #linkTo(ObjectAdapter)}).
+     * generating links.
      */
     public DomainObjectReprRenderer usingLinkToBuilder(final ObjectAdapterLinkTo objectAdapterLinkToBuilder) {
         this.linkToBuilder = objectAdapterLinkToBuilder.usingUrlBase(rendererContext);
@@ -155,14 +155,14 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         withMembers(objectAdapter);
 
         // described by
-        if (mode.includeDescribedBy()) {
+        if (mode.includeDescribedBy() && !rendererContext.suppressDescribedByLinks()) {
             addLinkToDescribedBy();
         }
         if(isService && mode.includeUp()) {
             addLinkToUp();
         }
 
-        if (!mode.isArgs()) {
+        if (!mode.isArgs() && !rendererContext.objectPropertyValuesOnly()) {
             // update/persist
             addPersistLinkIfTransientAndPersistable();
             addUpdatePropertiesLinkIfRequired();
@@ -220,12 +220,19 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     private DomainObjectReprRenderer withMembers(final ObjectAdapter objectAdapter) {
         final JsonRepresentation appendTo = 
                 mode.isUpdatePropertiesLinkArgs() ? representation : JsonRepresentation.newMap();
-        final List<ObjectAssociation> associations = objectAdapter.getSpecification().getAssociations(Contributed.EXCLUDED);
-        addAssociations(objectAdapter, appendTo, associations);
+        final List<ObjectAssociation> associations = objectAdapter.getSpecification().getAssociations(Contributed.INCLUDED);
 
-        if (mode.isRegular()) {
-            final List<ObjectAction> actions = objectAdapter.getSpecification().getObjectActions(Contributed.INCLUDED);
-            addActions(objectAdapter, actions, appendTo);
+        addProperties(objectAdapter, appendTo, associations);
+
+        if(!rendererContext.objectPropertyValuesOnly()) {
+            if (!mode.isArgs()) {
+                addCollections(objectAdapter, appendTo, associations);
+            }
+
+            if (mode.isRegular()) {
+                final List<ObjectAction> actions = objectAdapter.getSpecification().getObjectActions(Contributed.INCLUDED);
+                addActions(objectAdapter, actions, appendTo);
+            }
         }
         if(!mode.isUpdatePropertiesLinkArgs()) {
             representation.mapPut("members", appendTo);
@@ -233,7 +240,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         return this;
     }
 
-    private void addAssociations(final ObjectAdapter objectAdapter, final JsonRepresentation members, final List<ObjectAssociation> associations) {
+    private void addProperties(final ObjectAdapter objectAdapter, final JsonRepresentation members, final List<ObjectAssociation> associations) {
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("members");
         for (final ObjectAssociation assoc : associations) {
 
@@ -243,38 +250,54 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
                     continue;
                 }
             }
-            if (assoc instanceof OneToOneAssociation) {
-                final OneToOneAssociation property = (OneToOneAssociation) assoc;
-
-                final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getRendererContext(), linkFollower, property.getId(), JsonRepresentation.newMap());
-
-                renderer.with(new ObjectAndProperty(objectAdapter, property)).usingLinkTo(linkToBuilder);
-
-                if (mode.isArgs()) {
-                    renderer.asArguments();
-                }
-                if(mode.isEventSerialization()) {
-                    renderer.asEventSerialization();
-                }
-
-                members.mapPut(assoc.getId(), renderer.render());
-            }
-
-            if (mode.isArgs()) {
+            if (!(assoc instanceof OneToOneAssociation)) {
                 continue;
             }
-            if (assoc instanceof OneToManyAssociation) {
-                final OneToManyAssociation collection = (OneToManyAssociation) assoc;
 
-                final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getRendererContext(), linkFollower, collection.getId(), JsonRepresentation.newMap());
+            final OneToOneAssociation property = (OneToOneAssociation) assoc;
+            final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getRendererContext(), linkFollower, property.getId(), JsonRepresentation.newMap());
+            renderer.with(new ObjectAndProperty(objectAdapter, property)).usingLinkTo(linkToBuilder);
 
-                renderer.with(new ObjectAndCollection(objectAdapter, collection)).usingLinkTo(linkToBuilder);
-                if(mode.isEventSerialization()) {
-                    renderer.asEventSerialization();
-                }
-
-                members.mapPut(assoc.getId(), renderer.render());
+            if (mode.isArgs()) {
+                renderer.asArguments();
             }
+            if(mode.isEventSerialization()) {
+                renderer.asEventSerialization();
+            }
+
+            final JsonRepresentation propertyValueRepresentation = renderer.render();
+            final JsonRepresentation propertyRepr = rendererContext.objectPropertyValuesOnly()
+                    ? propertyValueRepresentation.getRepresentation("value")
+                    : propertyValueRepresentation;
+            members.mapPut(assoc.getId(), propertyRepr);
+        }
+    }
+
+    private void addCollections(final ObjectAdapter objectAdapter, final JsonRepresentation members, final List<ObjectAssociation> associations) {
+        final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("members");
+        for (final ObjectAssociation assoc : associations) {
+
+            if (mode.checkVisibility()) {
+                final Consent visibility = assoc.isVisible(getRendererContext().getAuthenticationSession(), objectAdapter, rendererContext.getWhere());
+                if (!visibility.isAllowed()) {
+                    continue;
+                }
+            }
+
+            if (!(assoc instanceof OneToManyAssociation)) {
+                continue;
+            }
+
+            final OneToManyAssociation collection = (OneToManyAssociation) assoc;
+
+            final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getRendererContext(), linkFollower, collection.getId(), JsonRepresentation.newMap());
+
+            renderer.with(new ObjectAndCollection(objectAdapter, collection)).usingLinkTo(linkToBuilder);
+            if(mode.isEventSerialization()) {
+                renderer.asEventSerialization();
+            }
+
+            members.mapPut(assoc.getId(), renderer.render());
         }
     }
 
@@ -341,8 +364,10 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asUpdatePropertiesLinkArguments().render();
 
-        final LinkBuilder updateLinkBuilder = LinkBuilder.newBuilder(getRendererContext(), Rel.UPDATE.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s/%s", getDomainType(), getInstanceId()).withHttpMethod(RestfulHttpMethod.PUT).withArguments(domainObjectRepr);
-        getLinks().arrayAdd(updateLinkBuilder.build());
+        if(!rendererContext.suppressUpdateLink()) {
+            final LinkBuilder updateLinkBuilder = LinkBuilder.newBuilder(getRendererContext(), Rel.UPDATE.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s/%s", getDomainType(), getInstanceId()).withHttpMethod(RestfulHttpMethod.PUT).withArguments(domainObjectRepr);
+            getLinks().arrayAdd(updateLinkBuilder.build());
+        }
     }
 
     // ///////////////////////////////////////////////////////////////////

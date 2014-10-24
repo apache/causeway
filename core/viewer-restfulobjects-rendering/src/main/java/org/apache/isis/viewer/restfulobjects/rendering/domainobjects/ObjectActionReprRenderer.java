@@ -76,7 +76,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     // ///////////////////////////////////////////////////
 
     @Override
-    protected void addMutatorsIfEnabled() {
+    protected void addMutatorLinksIfEnabled() {
         if (usability().isVetoed()) {
             return;
         }
@@ -200,11 +200,16 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        getLinks().arrayAdd(ActionDescriptionReprRenderer.newLinkToBuilder(rendererContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
+        if(rendererContext.suppressDescribedByLinks()) {
+            return;
+        }
+        final JsonRepresentation link = ActionDescriptionReprRenderer.newLinkToBuilder(rendererContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
+        getLinks().arrayAdd(link);
     }
 
     @Override
     protected void addLinksIsisProprietary() {
+        // umm...
         if (false /*objectMember.isContributed() */) {
             final ObjectAdapter serviceAdapter = contributingServiceAdapter();
             final JsonRepresentation contributedByLink = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.CONTRIBUTED_BY, serviceAdapter).build();

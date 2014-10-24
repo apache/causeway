@@ -153,13 +153,16 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
      * For subclasses to call from their {@link #render()} method.
      */
     protected void renderMemberContent() {
-        representation.mapPut("id", objectMember.getId());
-        
+
+        if(!rendererContext.suppressMemberId()) {
+            representation.mapPut("id", objectMember.getId());
+        }
+
         if(!mode.isArguments()) {
             representation.mapPut("memberType", objectMemberType.getName());
         }
 
-        if (mode.isInline()) {
+        if (mode.isInline() && !rendererContext.suppressMemberLinks()) {
             addDetailsLinkIfPersistent();
         }
 
@@ -172,9 +175,11 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         }
 
         if (mode.isFollowed() || mode.isStandalone() || mode.isMutated()) {
-            addMutatorsIfEnabled();
+            addMutatorLinksIfEnabled();
 
-            putExtensionsIsisProprietary();
+            if(!mode.isInline() || !rendererContext.suppressUpdateLink()) {
+                putExtensionsIsisProprietary();
+            }
             addLinksToFormalDomainModel();
             addLinksIsisProprietary();
         }
@@ -196,10 +201,10 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         getLinks().arrayAdd(linkTo.builder(Rel.UP).build());
     }
 
-    protected abstract void addMutatorsIfEnabled();
+    protected abstract void addMutatorLinksIfEnabled();
 
     /**
-     * For subclasses to call back to when {@link #addMutatorsIfEnabled() adding
+     * For subclasses to call back to when {@link #addMutatorLinksIfEnabled() adding
      * mutators}.
      */
     protected void addLinkFor(final MutatorSpec mutatorSpec) {
@@ -260,6 +265,9 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     protected abstract void followDetailsLink(JsonRepresentation detailsLink);
 
     protected final void putDisabledReasonIfDisabled() {
+        if(rendererContext.suppressMemberDisabledReason()) {
+            return;
+        }
         final String disabledReasonRep = usability().getReason();
         representation.mapPut("disabledReason", disabledReasonRep);
     }

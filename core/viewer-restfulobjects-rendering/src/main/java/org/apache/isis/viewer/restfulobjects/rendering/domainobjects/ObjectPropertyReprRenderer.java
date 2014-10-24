@@ -28,9 +28,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
+import org.apache.isis.core.metamodel.facets.value.biginteger.BigIntegerValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -74,7 +75,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     // value
     // ///////////////////////////////////////////////////
 
-    private void addValue() {
+    private Object addValue() {
         final ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
         
         // use the runtime type if we have a value, else the compile time type of the member otherwise
@@ -96,17 +97,25 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
                     format = String.format("big-decimal(%d,%d)", precision, scale);
                 }
             } else if(specClass == java.math.BigInteger.class) {
-                // TODO: need to extend BigIntegerValueFacet similar to BigDecimalValueFacet
+                // look for facet on member, else on the value's spec
+                final BigIntegerValueFacet bigIntegerValueFacet =
+                        getFacet(BigIntegerValueFacet.class,
+                                objectMember,
+                                valueAdapter != null? valueAdapter.getSpecification(): null);
+                if(bigIntegerValueFacet != null) {
+                    format = String.format("big-integer");
+                }
             }
-            JsonValueEncoder.appendValueAndFormat(spec, valueAdapter, representation, format);
-            return;
+            return JsonValueEncoder.appendValueAndFormat(spec, valueAdapter, representation, format, rendererContext.suppressMemberExtensions());
         }
 
         final RenderFacet renderFacet = objectMember.getFacet(RenderFacet.class);
         boolean eagerlyRender = renderFacet != null && renderFacet.value() == Type.EAGERLY && rendererContext.canEagerlyRender(valueAdapter);
 
         if(valueAdapter == null) {
-            representation.mapPut("value", NullNode.getInstance());
+            final NullNode value = NullNode.getInstance();
+            representation.mapPut("value", value);
+            return value;
         } else {
             final TitleFacet titleFacet = spec.getFacet(TitleFacet.class);
             final String title = titleFacet.title(valueAdapter, rendererContext.getLocalization());
@@ -122,7 +131,9 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
                 valueLinkBuilder.withValue(renderer.render());
             }
 
-            representation.mapPut("value", valueLinkBuilder.build());
+            final JsonRepresentation valueJsonRepr = valueLinkBuilder.build();
+            representation.mapPut("value", valueJsonRepr);
+            return valueJsonRepr;
         }
     }
 
@@ -160,7 +171,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     // ///////////////////////////////////////////////////
 
     @Override
-    protected void addMutatorsIfEnabled() {
+    protected void addMutatorLinksIfEnabled() {
         if (usability().isVetoed()) {
             return;
         }
@@ -207,7 +218,11 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        getLinks().arrayAdd(PropertyDescriptionReprRenderer.newLinkToBuilder(getRendererContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build());
+        if(rendererContext.suppressDescribedByLinks()) {
+            return;
+        }
+        final JsonRepresentation link = PropertyDescriptionReprRenderer.newLinkToBuilder(getRendererContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
+        getLinks().arrayAdd(link);
     }
 
     @Override
