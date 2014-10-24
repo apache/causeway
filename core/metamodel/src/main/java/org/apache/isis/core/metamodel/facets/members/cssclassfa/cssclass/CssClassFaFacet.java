@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
  *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
- * member with <tt>@CssClassFA</tt>.
+ * member with <tt>{@literal @}{@link org.apache.isis.applib.annotation.CssClassFa CssClassFa}</tt>.
  */
 public interface CssClassFaFacet extends SingleStringValueFacet {
 }
