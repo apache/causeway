@@ -412,7 +412,9 @@ public class CssMenuItem implements Serializable {
                 link.add(new CssClassAppender("noVeil"));
             }
             if(this.prototype) {
-                link.add(new CssClassAppender("prototype"));
+                link.add(new CssClassAppender("btn-warning"));
+            } else {
+                link.add(new CssClassAppender("btn-default"));
             }
             if(this.cssClass != null) {
                 link.add(new CssClassAppender(this.cssClass));
