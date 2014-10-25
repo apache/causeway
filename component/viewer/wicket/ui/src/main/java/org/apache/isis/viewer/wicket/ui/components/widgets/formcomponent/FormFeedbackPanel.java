@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -29,7 +31,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
  * {@link FeedbackMessage}s from {@link FormComponent}s (the idea being that
  * they will have their own {@link FeedbackPanel}s.
  */
-public class FormFeedbackPanel extends FeedbackPanel {
+public class FormFeedbackPanel extends NotificationPanel {
     private static final long serialVersionUID = 1L;
 
     public FormFeedbackPanel(final String id) {

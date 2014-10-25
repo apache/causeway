@@ -19,12 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.image;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+
 import java.awt.Graphics2D;
 
+import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.resource.RenderedDynamicImageResource;
-import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.value.image.ImageValueFacet;
@@ -67,7 +69,7 @@ public class JavaAwtImagePanel extends PanelAbstract<ScalarModel> {
             };
             final Image image = new Image(ID_SCALAR_VALUE, imageResource);
             addOrReplace(image);
-            addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, image));
+            addOrReplace(new NotificationPanel(ID_FEEDBACK, image, new ComponentFeedbackMessageFilter(image)));
         } else {
             permanentlyHide(ID_SCALAR_VALUE, ID_FEEDBACK);
         }

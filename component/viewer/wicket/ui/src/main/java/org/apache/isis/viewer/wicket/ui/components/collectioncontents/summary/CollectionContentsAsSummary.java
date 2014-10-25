@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.summary;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collections;
@@ -31,7 +33,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.AbstractItem;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
 
@@ -80,7 +81,7 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
 
         final ObjectSpecification elementSpec = model.getTypeOfSpecification();
 
-        final FeedbackPanel feedback = new FeedbackPanel(ID_FEEDBACK);
+        final NotificationPanel feedback = new NotificationPanel(ID_FEEDBACK);
         feedback.setOutputMarkupId(true);
         addOrReplace(feedback);
 

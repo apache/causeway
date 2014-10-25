@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.entity.properties;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.util.Attributes;
 
 import java.util.List;
@@ -28,13 +29,13 @@ import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
@@ -635,7 +636,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     }
 
     private void addFeedbackGui(final MarkupContainer markupContainer) {
-        feedback = new ComponentFeedbackPanel(ID_FEEDBACK, this);
+        feedback = new NotificationPanel(ID_FEEDBACK, this, new ComponentFeedbackMessageFilter(this));
         feedback.setOutputMarkupPlaceholderTag(true);
         markupContainer.addOrReplace(feedback);
 

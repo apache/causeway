@@ -19,13 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collection;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+
 import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -89,7 +90,7 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
     private void buildGui() {
         collectionContents = getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.COLLECTION_CONTENTS, getModel());
 
-        addOrReplace(new ComponentFeedbackPanel(ID_FEEDBACK, collectionContents));
+        addOrReplace(new NotificationPanel(ID_FEEDBACK, collectionContents, new ComponentFeedbackMessageFilter(collectionContents)));
     }
 
     public Label createLabel(final String id, final String collectionName) {
