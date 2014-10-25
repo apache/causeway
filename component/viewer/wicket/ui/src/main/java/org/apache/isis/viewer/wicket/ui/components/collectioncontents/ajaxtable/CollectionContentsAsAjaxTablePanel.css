@@ -58,6 +58,10 @@
 	border: none;
 }
 
+.collectionContentsAsAjaxTablePanel table.contents input.date:disabled {
+	text-align: left;
+}
+
 .collectionContentsAsAjaxTablePanel table.contents tbody td,
 .collectionContentsAsAjaxTablePanel table.contents thead th {
 	padding:5px;

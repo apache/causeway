@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.facets.propparam.renderedadjusted.Rendered
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDatePicker;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * Panel for rendering scalars representing dates, along with a date picker.
@@ -88,6 +89,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     protected Component addComponentForCompact() {
         Fragment compactFragment = getCompactFragment(CompactType.INPUT_TEXT);
         final AbstractTextComponent<T> textField = createTextField(ID_SCALAR_IF_COMPACT);
+        textField.add(new CssClassAppender("date"));
         final IModel<T> model = textField.getModel();
         final T object = model.getObject();
         model.setObject(object);
