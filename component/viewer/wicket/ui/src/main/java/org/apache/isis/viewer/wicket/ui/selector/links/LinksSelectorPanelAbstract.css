@@ -55,5 +55,9 @@
 }
 
 .linksSelectorPanel .list-inline {
+	margin-left: 0;
+}
+
+.linksSelectorPanel .list-inline li {
 	padding-left: 0;
 }

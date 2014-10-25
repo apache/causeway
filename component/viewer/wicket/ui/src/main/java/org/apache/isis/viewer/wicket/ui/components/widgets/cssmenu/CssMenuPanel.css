@@ -234,29 +234,3 @@
 	margin-right:10px;
 	margin-bottom: 2px;
 }
-
-.additionalLinkList li em {
-    font-style: normal;
-}
-
-.additionalLinkList li a,
-.additionalLinkList li em {
-    border-radius: 4px 4px 4px 4px;
-    display: block;
-    float: left;
-    font-size: 0.85em;
-    font-weight: bold;
-    height: 30px;
-    line-height: 30px;
-    padding: 0 10px;
-    text-decoration: none;
-    /*text-transform: uppercase;*/
-}
-
-.additionalLinkList li em:hover {
-    cursor: default;
-}
-
-.entityActions a.prototype span {
-	font-style: italic;
-}
