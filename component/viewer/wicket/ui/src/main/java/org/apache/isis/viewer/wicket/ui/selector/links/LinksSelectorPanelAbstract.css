@@ -53,3 +53,7 @@
 .linksSelectorPanel ul.additionalLinkList {
 /*	margin-bottom:10px;*/
 }
+
+.linksSelectorPanel .list-inline {
+	padding-left: 0;
+}
