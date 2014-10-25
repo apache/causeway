@@ -77,7 +77,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemePicker;
+import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChooser;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.overlays.Overlays;
@@ -215,8 +215,8 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     private void addThemePicker() {
-        ThemePicker themePicker = new ThemePicker(ID_THEME_PICKER);
-        themeDiv.addOrReplace(themePicker);
+        ThemeChooser themeChooser = new ThemeChooser(ID_THEME_PICKER);
+        themeDiv.addOrReplace(themeChooser);
     }
 
 

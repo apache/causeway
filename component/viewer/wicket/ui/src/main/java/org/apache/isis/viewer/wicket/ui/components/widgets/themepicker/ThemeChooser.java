@@ -14,7 +14,12 @@ import de.agilecoders.wicket.themes.markup.html.vegibit.VegibitThemeProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -23,18 +28,24 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 /**
  * A panel used as a Navbar item to change the application theme/skin
  */
-public class ThemePicker extends Panel {
+public class ThemeChooser extends Panel {
+
+    private static final String SHOW_THEME_PICKER_KEY = "isis.viewer.wicket.themes.showChooser";
+    private static final boolean SHOW_THEME_PICKER_DEFAULT = false;
+    public static final String ENABLED_THEMES_KEY  = "isis.viewer.wicket.themes.enabled";
 
     /**
      * Constructor
      *
      * @param id component id
      */
-    public ThemePicker(String id) {
+    public ThemeChooser(String id) {
         super(id);
 
         ListView<String> themesView = new ListView<String>("themes", getThemeNames()) {
@@ -108,7 +119,49 @@ public class ThemePicker extends Panel {
 //            allThemes.add(theme.name());
 //        }
 
+        allThemes = filterThemes(allThemes);
 
         return allThemes;
+    }
+
+    /**
+     * Filters which theme to show in the drop up by using the provided values
+     * in {@value #ENABLED_THEMES_KEY}
+     *
+     * @param allThemes All available themes
+     * @return A list of all enabled themes
+     */
+    private List<String> filterThemes(List<String> allThemes) {
+        List<String> enabledThemes;
+
+        final String[] enabledThemesArray = getConfiguration().getList(ENABLED_THEMES_KEY);
+        if (enabledThemesArray.length > 0) {
+            final HashSet<String> enabledThemesSet = Sets.newHashSet(enabledThemesArray);
+
+            Iterable<String> enabled = Iterables.filter(allThemes, new Predicate<String>() {
+                @Override
+                public boolean apply(String themeName) {
+                    return enabledThemesSet.contains(themeName);
+                }
+            });
+
+            enabledThemes = Lists.newArrayList(enabled);
+        } else {
+            enabledThemes = allThemes;
+        }
+
+        return enabledThemes;
+    }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+
+        boolean shouldShow = getConfiguration().getBoolean(SHOW_THEME_PICKER_KEY, SHOW_THEME_PICKER_DEFAULT);
+        setVisible(shouldShow);
+    }
+
+    private IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
     }
 }
