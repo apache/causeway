@@ -62,8 +62,6 @@
 	text-align: left;
 }
 
-/* numbers are right aligned in compact mode START */
-
 .collectionContentsAsAjaxTablePanel table.contents .javaMathBigDecimalPanel input:disabled,
 .collectionContentsAsAjaxTablePanel table.contents .javaMathBigIntegerPanel input:disabled,
 .collectionContentsAsAjaxTablePanel table.contents .bytePanel input:disabled,
@@ -74,8 +72,6 @@
 .collectionContentsAsAjaxTablePanel table.contents .doublePanel input:disabled {
 	text-align: right;
 }
-
-/* numbers are right aligned in compact mode END */
 
 .collectionContentsAsAjaxTablePanel table.contents tbody td,
 .collectionContentsAsAjaxTablePanel table.contents thead th {
