@@ -125,7 +125,7 @@ public class ApplicationActionsPanel extends Panel {
         } else {
             Label dummy = new Label("menuLinkFontAwesome", "");
             dummy.add(new CssClassAppender(cssClassFa));
-            subMenuItemLink.add(dummy);
+            subMenuItemLink.addOrReplace(dummy);
         }
 
     }
