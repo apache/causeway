@@ -31,12 +31,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.CssReferenceHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
-import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.head.*;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -64,13 +59,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
-import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
-import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.model.models.*;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -80,7 +69,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.Breadcrum
 import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChooser;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
-import org.apache.isis.viewer.wicket.ui.overlays.Overlays;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -93,8 +81,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static Logger LOG = LoggerFactory.getLogger(PageAbstract.class);
 
     private static final long serialVersionUID = 1L;
-
-    private static final String REGULAR_CASE_KEY = "isis.viewer.wicket.regularCase";
 
     /**
      * @see <a href="http://github.com/brandonaaron/livequery">livequery</a>
@@ -261,11 +247,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
         JGrowlBehaviour jGrowlBehaviour = new JGrowlBehaviour();
         jGrowlBehaviour.renderFeedbackMessages(response);
-
-        // overlays
-        if(getConfiguration().getBoolean(REGULAR_CASE_KEY, false)) {
-            response.render(CssReferenceHeaderItem.forReference(PanelUtil.cssResourceReferenceFor(Overlays.class, "regular-case")));
-        }
 
         if(applicationCss != null) {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
