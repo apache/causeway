@@ -25,9 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.CssClassFaFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.CssClassFaFacetAbstract;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.annotprop.CssClassFaFacetOnMemberFactory;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberFactory;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -35,7 +33,7 @@ import static org.junit.Assert.assertThat;
 public class CssClassFaAnnotationOnMemberFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
     @Test
-    public void testCssClassAnnotationPickedUpOnClass() {
+    public void testCssClassFaAnnotationPickedUpOnClass() {
 
         final CssClassFaFacetOnMemberFactory facetFactory = new CssClassFaFacetOnMemberFactory();
         facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);

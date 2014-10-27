@@ -53,7 +53,7 @@ import org.apache.isis.core.metamodel.facets.collections.sortedby.annotation.Sor
 import org.apache.isis.core.metamodel.facets.collections.typeof.annotation.TypeOfFacetOnCollectionAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnMemberFactory;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.annotprop.CssClassFaFacetOnMemberFactory;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.annotprop.DisabledFacetFactory;

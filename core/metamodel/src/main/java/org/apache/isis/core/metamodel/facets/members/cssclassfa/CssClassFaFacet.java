@@ -17,14 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.annotprop;
+package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.CssClassFaFacetAbstract;
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 
-public class CssClassFaFacetOnMemberAnnotation extends CssClassFaFacetAbstract {
-
-    public CssClassFaFacetOnMemberAnnotation(final String value, final FacetHolder holder) {
-        super(value, holder);
-    }
+/**
+ * The <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> css class(es) for an action.
+ *
+ * <p>
+ * In the standard Apache Isis Programming Model, corresponds to annotating the
+ * member with <tt>{@literal @}{@link org.apache.isis.applib.annotation.CssClassFa CssClassFa}</tt>.
+ */
+public interface CssClassFaFacet extends SingleStringValueFacet {
 }

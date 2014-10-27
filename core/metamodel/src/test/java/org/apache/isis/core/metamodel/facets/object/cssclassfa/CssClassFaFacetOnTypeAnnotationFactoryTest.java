@@ -23,8 +23,8 @@ import org.apache.isis.applib.annotation.CssClassFa;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.CssClassFaFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.CssClassFaFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.cssclassfa.annotation.annotation.CssClassFaFacetOnTypeAnnotationFactory;
 
 import static org.hamcrest.CoreMatchers.*;

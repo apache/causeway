@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.cssclassfa.annotation.annot
 
 import org.apache.isis.applib.annotation.CssClassFa;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.CssClassFaFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
 
 public class CssClassFaFacetOnTypeAnnotation extends CssClassFaFacetAbstract {
 

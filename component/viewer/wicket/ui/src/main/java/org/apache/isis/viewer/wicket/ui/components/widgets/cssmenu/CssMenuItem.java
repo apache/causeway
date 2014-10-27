@@ -40,9 +40,10 @@ import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -54,6 +55,8 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import static org.hamcrest.CoreMatchers.is;
+
+;
 
 public class CssMenuItem implements Serializable {
 
@@ -355,13 +358,16 @@ public class CssMenuItem implements Serializable {
     }
 
     public static String cssClassFor(final ObjectAction action) {
-        CssClassFacet cssClassFacet = action.getFacet(CssClassFacet.class);
-        return cssClassFacet != null ? cssClassFacet.value() : null;
+        return facetValueIfAnyFor(action, CssClassFacet.class);
     }
 
     public static String cssClassFaFor(final ObjectAction action) {
-        CssClassFaFacet cssClassFaFacet = action.getFacet(CssClassFaFacet.class);
-        return cssClassFaFacet != null ? cssClassFaFacet.value() : null;
+        return facetValueIfAnyFor(action, CssClassFaFacet.class);
+    }
+
+    private static String facetValueIfAnyFor(ObjectAction action, Class<? extends SingleStringValueFacet> x) {
+        final SingleStringValueFacet singleStringValueFacet = action.getFacet(x);
+        return singleStringValueFacet != null ? singleStringValueFacet.value() : null;
     }
 
     /**

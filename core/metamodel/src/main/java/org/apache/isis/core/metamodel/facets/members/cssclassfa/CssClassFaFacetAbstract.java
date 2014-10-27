@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass;
+package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
 import java.util.Set;
 import java.util.regex.Pattern;

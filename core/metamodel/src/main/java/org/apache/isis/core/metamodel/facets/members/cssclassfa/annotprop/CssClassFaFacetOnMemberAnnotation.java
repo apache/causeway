@@ -17,19 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.annotprop;
+package org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop;
 
-import java.util.Properties;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass.CssClassFaFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
 
-public class CssClassFaFacetOnMemberFromProperties extends CssClassFaFacetAbstract {
+public class CssClassFaFacetOnMemberAnnotation extends CssClassFaFacetAbstract {
 
-    public CssClassFaFacetOnMemberFromProperties(final Properties properties, final FacetHolder holder) {
-        super(valueFrom(properties), holder);
-    }
-
-    private static String valueFrom(Properties properties) {
-        return properties.getProperty("value");
+    public CssClassFaFacetOnMemberAnnotation(final String value, final FacetHolder holder) {
+        super(value, holder);
     }
 }

@@ -1,4 +1,4 @@
-package org.apache.isis.core.metamodel.facets.members.cssclassfa.cssclass;
+package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
 import org.junit.Test;
 
