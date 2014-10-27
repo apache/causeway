@@ -156,14 +156,13 @@
     float: left;
     height: 30px;
     line-height: 30px;
-	padding:0 10px;
-	font-weight:bold;
-	/*text-transform:uppercase;*/
-	font-size:0.85em;
-	border-radius:4px;
-	-moz-border-radius:4px;
-	-webkit-border-radius:4px;
-	text-decoration:none;
+    padding: 0 10px;
+    font-weight: bold;
+    font-size: 0.85em;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    text-decoration: none;
 }
 
 .entityActions .cssMenuPanel li.cssMenuItemPanel>p.top-parent {
@@ -212,21 +211,20 @@
     float: left;
     height: 30px;
     line-height: 30px;
-	padding:0 10px;
-	font-weight:bold;
-	/*text-transform:uppercase;*/
-	font-size:0.85em;
-	border-radius:4px;
-	-moz-border-radius:4px;
-	-webkit-border-radius:4px;
-	text-decoration:none;
+    padding:0 10px;
+    font-weight:bold;
+    font-size:0.85em;
+    border-radius:4px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    text-decoration:none;
 }
 
 .additionalLinkList {
-	float:left;
-	margin:0;
-	padding:0;
-	list-style:none;
+    float:left;
+    margin:0;
+    padding:0;
+    list-style:none;
 }
 
 .additionalLinkList li {

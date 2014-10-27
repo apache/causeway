@@ -19,18 +19,16 @@
 
 .collectionContentsAsSummary .propertyNameCell,
 .collectionContentsAsSummary .aggregatesCell {
-	vertical-align: middle;
+    vertical-align: middle;
 }
 
 .collectionContentsAsSummary .aggregateName {
-	
-	font-style: normal;
-	text-align: left;
-	text-transform: uppercase;
-	font-weight: bold !important;
-	font-size: 0.9em;
-	padding-left: 20px;
-	padding-right: 10px;
+    font-style: normal;
+    text-align: left;
+    font-weight: bold !important;
+    font-size: 0.9em;
+    padding-left: 20px;
+    padding-right: 10px;
     vertical-align: middle;
 }
 

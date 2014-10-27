@@ -77,7 +77,6 @@
     display: inline-block;
     font-size: 0.9em;
     padding: 5px 10px;
-    text-transform: uppercase;
 }
 
 .loginPanel form input[type=reset] {

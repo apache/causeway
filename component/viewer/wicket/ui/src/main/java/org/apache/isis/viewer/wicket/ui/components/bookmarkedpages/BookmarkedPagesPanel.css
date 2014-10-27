@@ -47,10 +47,7 @@
     cursor:pointer;
     z-index: 1997;
     margin-left: 1px;
-    
-    text-transform:uppercase;
     font-weight:bold;
-
     border-right:6px solid transparent;
     border-left:6px solid transparent;
     border-bottom:6px solid white;

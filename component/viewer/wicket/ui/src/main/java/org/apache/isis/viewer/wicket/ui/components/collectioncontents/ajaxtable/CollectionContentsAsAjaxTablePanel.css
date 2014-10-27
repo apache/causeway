@@ -29,18 +29,15 @@
 }
 
 
-.collectionContentsAsAjaxTablePanel table.contents tr td { 
-	padding-left: 8px; 
-	padding-right: 10px; 
-	padding-left: 4px;
-	padding-right: 4px;
+.collectionContentsAsAjaxTablePanel table.contents tr td {
+    padding-left: 4px;
+    padding-right: 4px;
 }
 .collectionContentsAsAjaxTablePanel table.contents tr th,
-.collectionContentsAsAjaxTablePanel table.contents tr th a span { 
-	text-align: left;
-	white-space: nowrap; 
-	text-transform:uppercase;
-	font-weight:bold;
+.collectionContentsAsAjaxTablePanel table.contents tr th a span {
+    text-align: left;
+    white-space: nowrap;
+    font-weight: bold;
 }
 
 .collectionContentsAsAjaxTablePanel table.contents tr th a {
@@ -66,13 +63,12 @@
 .collectionContentsAsAjaxTablePanel table.contents .longPanel,
 .collectionContentsAsAjaxTablePanel table.contents .floatPanel,
 .collectionContentsAsAjaxTablePanel table.contents .doublePanel {
-	text-align: right;
+    text-align: right;
 }
 
 .collectionContentsAsAjaxTablePanel table.contents tbody td,
 .collectionContentsAsAjaxTablePanel table.contents thead th {
-	padding:5px;
-	text-transform:uppercase;
+    padding:5px;
 }
 
 .collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigatorLabel {

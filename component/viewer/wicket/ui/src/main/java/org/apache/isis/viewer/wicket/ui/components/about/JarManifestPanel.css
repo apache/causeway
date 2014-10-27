@@ -51,7 +51,6 @@
     font-style:normal !important;
     padding:3px 3px 3px 3px;
     font-size: 0.8em;
-    text-transform:uppercase;
     font-weight:bold;
 }
 
@@ -68,7 +67,6 @@
     margin-top: 30px;
     font-style:normal !important;
     font-size: 0.8em;
-    text-transform:uppercase;
     font-weight:bold;
     color: #46423C;
 }
