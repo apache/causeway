@@ -85,3 +85,8 @@
     padding-left: 24px;
 }
 
+.dropdown-menu > li > a.btn.btn-warning {
+    text-align: start;
+    border-radius: 0;
+    color: initial;
+}

@@ -113,7 +113,7 @@ public class ApplicationActionsPanel extends Panel {
             listItem.add(new CssClassNameAppender("disabled"));
         }
         if (menuItem.isPrototyping()) {
-            listItem.add(new CssClassNameAppender("bg-warning"));
+            subMenuItemLink.add(new CssClassNameAppender("btn btn-warning"));
         }
         leafItem.add(subMenuItemLink);
         listItem.add(leafItem);
