@@ -27,9 +27,11 @@
             <div class="booleanPanel scalarNameAndValueComponentType">
                 <div class="form-group" wicket:id="scalarIfRegular">
                     <label wicket:id="scalarName" class="scalarName">[Label text]</label>
-                    <input type="checkbox" name="scalarValue" class="form-control scalarValue" wicket:id="scalarValue" />
-                    <span wicket:id="feedback" class="help-block"></span>
-                    <span wicket:id="additionalLinks"></span>
+                    <span class="scalarValueWrapper">
+                        <input type="checkbox" name="scalarValue" class="form-control scalarValue" wicket:id="scalarValue" />
+                        <span wicket:id="feedback" class="help-block"></span>
+                        <span wicket:id="additionalLinks"></span>
+                    </span>
                 </div>
                 <input type="checkbox" wicket:id="scalarIfCompact" />
             </div>
