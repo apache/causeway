@@ -22,9 +22,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import java.io.Serializable;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.form.AbstractTextComponent;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.model.IModel;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
@@ -39,29 +38,15 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
         super(id, scalarModel, cls);
     }
 
-    @Override
-    protected void addSemantics() {
-        super.addSemantics();
-    }
-
-    @Override
-    protected AbstractTextComponent<T> createTextFieldForRegular() {
-        return createTextField(ID_SCALAR_VALUE);
-    }
-
     protected Component addComponentForCompact() {
-        Fragment compactFragment = getCompactFragment(CompactType.INPUT_TEXT);
-        final AbstractTextComponent<T> textField = createTextField(ID_SCALAR_IF_COMPACT);
-        final IModel<T> model = textField.getModel();
-        final T object = model.getObject();
-        model.setObject(object);
-        
-        textField.setEnabled(false);
-        setTextFieldSizeAndMaxLengthIfSpecified(textField);
+        Fragment compactFragment = getCompactFragment(CompactType.SPAN);
+        final Label label = new Label(ID_SCALAR_IF_COMPACT, newTextFieldValueModel());
 
-        compactFragment.add(textField);
+        label.setEnabled(false);
+
+        compactFragment.add(label);
         scalarTypeContainer.addOrReplace(compactFragment);
-        return textField;
+        return label;
     }
 
 }

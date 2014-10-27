@@ -16,11 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-/*
-.table.contents img {
-    width: 16px;
-    height: 16px;
-}*/
 
 .table .form-control:disabled {
     background-color: transparent;
@@ -75,10 +70,6 @@
 
 body {
     padding-top: 80px;
-}
-
-label {
-    font-weight: normal;
 }
 
 .nav > li > a {

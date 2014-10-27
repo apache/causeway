@@ -75,9 +75,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     private static final String ID_FEEDBACK = "feedback";
 
     public enum CompactType {
-        INPUT_TEXT,
         INPUT_CHECKBOX,
-        LABEL,
         SPAN
     }
 
@@ -145,14 +143,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     protected Fragment getCompactFragment(CompactType type) {
         Fragment compactFragment;
         switch (type) {
-            case INPUT_TEXT:
-                compactFragment = new Fragment("scalarIfCompact", "compactAsInputText", ScalarPanelAbstract.this);
-                break;
             case INPUT_CHECKBOX:
                 compactFragment = new Fragment("scalarIfCompact", "compactAsInputCheckbox", ScalarPanelAbstract.this);
-                break;
-            case LABEL:
-                compactFragment = new Fragment("scalarIfCompact", "compactAsLabel", ScalarPanelAbstract.this);
                 break;
             case SPAN:
             default:

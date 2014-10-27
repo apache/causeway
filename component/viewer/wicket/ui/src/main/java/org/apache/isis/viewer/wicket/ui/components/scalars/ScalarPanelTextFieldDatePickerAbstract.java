@@ -25,6 +25,7 @@ import com.google.inject.Inject;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -70,7 +71,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     }
 
     protected TextField<T> createTextField(final String id) {
-        return new TextFieldWithDatePicker<>(id, new TextFieldValueModel<T>(this), cls, converter);
+        return new TextFieldWithDatePicker<>(id, newTextFieldValueModel(), cls, converter);
     }
 
     @Override
@@ -87,26 +88,21 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
 
     
     protected Component addComponentForCompact() {
-        Fragment compactFragment = getCompactFragment(CompactType.INPUT_TEXT);
-        final AbstractTextComponent<T> textField = createTextField(ID_SCALAR_IF_COMPACT);
-        textField.add(new CssClassAppender("date"));
-        final IModel<T> model = textField.getModel();
-        final T object = model.getObject();
-        model.setObject(object);
-        
-        textField.setEnabled(false);
+        Fragment compactFragment = getCompactFragment(CompactType.SPAN);
+        final Label label = new Label(ID_SCALAR_IF_COMPACT, newTextFieldValueModel());
+        label.setEnabled(false);
 
         // adding an amount because seemed to truncate in tables in certain circumstances
         final int lengthAdjust = 
                 getLengthAdjustHint() != null ? getLengthAdjustHint() : 1; 
         final String dateTimePattern = converter.getDateTimePattern(getLocale());
         final int length = dateTimePattern.length() + lengthAdjust; 
-        textField.add(new AttributeModifier("size", Model.of("" + length)));
+        label.add(new AttributeModifier("size", Model.of("" + length)));
 
-        compactFragment.add(textField);
+        compactFragment.add(label);
 
         scalarTypeContainer.addOrReplace(compactFragment);
-        return textField;
+        return label;
     }
     
     /**

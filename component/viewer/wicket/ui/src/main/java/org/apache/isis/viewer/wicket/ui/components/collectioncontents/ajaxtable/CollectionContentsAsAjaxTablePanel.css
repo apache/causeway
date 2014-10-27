@@ -58,18 +58,14 @@
 	border: none;
 }
 
-.collectionContentsAsAjaxTablePanel table.contents input.date:disabled {
-	text-align: left;
-}
-
-.collectionContentsAsAjaxTablePanel table.contents .javaMathBigDecimalPanel input:disabled,
-.collectionContentsAsAjaxTablePanel table.contents .javaMathBigIntegerPanel input:disabled,
-.collectionContentsAsAjaxTablePanel table.contents .bytePanel input:disabled,
-.collectionContentsAsAjaxTablePanel table.contents .shortPanel input:disabled,
-.collectionContentsAsAjaxTablePanel table.contents .integerPanel input:disabled,
-.collectionContentsAsAjaxTablePanel table.contents .longPanel input:disabled,
-.collectionContentsAsAjaxTablePanel table.contents .floatPanel input:disabled,
-.collectionContentsAsAjaxTablePanel table.contents .doublePanel input:disabled {
+.collectionContentsAsAjaxTablePanel table.contents .javaMathBigDecimalPanel,
+.collectionContentsAsAjaxTablePanel table.contents .javaMathBigIntegerPanel,
+.collectionContentsAsAjaxTablePanel table.contents .bytePanel,
+.collectionContentsAsAjaxTablePanel table.contents .shortPanel,
+.collectionContentsAsAjaxTablePanel table.contents .integerPanel,
+.collectionContentsAsAjaxTablePanel table.contents .longPanel,
+.collectionContentsAsAjaxTablePanel table.contents .floatPanel,
+.collectionContentsAsAjaxTablePanel table.contents .doublePanel {
 	text-align: right;
 }
 
