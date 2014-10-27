@@ -52,6 +52,7 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.AjaxDeferredBehaviour.OpenUrlStrategy;
@@ -104,10 +105,14 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     if(ajaxDeferredBehaviour != null) {
                         ajaxDeferredBehaviour.initiate(target);
                     } else {
+                        ActionPromptHeaderPanel titlePanel = new ActionPromptHeaderPanel(actionPrompt.getTitleId(), actionModel);
                         final ActionPanel actionPanel =
                                 (ActionPanel) getComponentFactoryRegistry().createComponent(
                                         ComponentType.ACTION_PROMPT, actionPrompt.getContentId(), actionModel);
-                        
+
+                        actionPanel.setShowHeader(false);
+
+                        actionPrompt.setTitle(titlePanel, target);
                         actionPrompt.setPanel(actionPanel, target);
                         actionPanel.setActionPrompt(actionPrompt);
                         actionPrompt.showPrompt(target);

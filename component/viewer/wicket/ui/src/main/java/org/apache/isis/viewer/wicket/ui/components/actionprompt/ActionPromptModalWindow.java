@@ -16,16 +16,11 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actionprompt;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.ModalDialog;
 
-public class ActionPromptModalWindow extends Modal<Void> implements ActionPrompt {
+public class ActionPromptModalWindow extends ModalDialog<Void> {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,8 +37,7 @@ public class ActionPromptModalWindow extends Modal<Void> implements ActionPrompt
     }
 
     public static ActionPromptModalWindow newModalWindow(String id) {
-        ActionPromptModalWindow modalWindow = new ActionPromptModalWindow(id);
-        return modalWindow;
+        return new ActionPromptModalWindow(id);
     }
 
 
@@ -52,35 +46,5 @@ public class ActionPromptModalWindow extends Modal<Void> implements ActionPrompt
     
     public ActionPromptModalWindow(String id) {
         super(id);
-        setUseKeyboard(true);
-        setOutputMarkupPlaceholderTag(true);
-        setVisible(false);
-        WebMarkupContainer emptyComponent = new WebMarkupContainer(getContentId());
-        add(emptyComponent);
-    }
-    
-    @Override
-    public void setPanel(Component component, AjaxRequestTarget target) {
-        addOrReplace(component);
-    }
-
-    @Override
-    public void showPrompt(AjaxRequestTarget target) {
-        setVisible(true);
-        target.add(this);
-        show(target);
-    }
-
-    @Override
-    public String getContentId() {
-        return "content";
-    }
-
-    @Override
-    public void closePrompt(AjaxRequestTarget target) {
-        if (target != null) {
-            close(target);
-        }
-        setVisible(false);
     }
 }

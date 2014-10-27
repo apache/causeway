@@ -29,11 +29,43 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
  */
 public interface ActionPrompt extends Serializable {
 
+    /**
+     * Sets the component that should be used as a title for the modal window
+     *
+     * @param component The title component
+     * @param target The current Ajax request handler
+     */
+    void setTitle(Component component, AjaxRequestTarget target);
+
+    /**
+     * Sets the component that should be used as a body for the modal window
+     *
+     * @param component The body component
+     * @param target The current Ajax request handler
+     */
     void setPanel(Component component, AjaxRequestTarget target);
-    
+
+    /**
+     * Shows the modal window
+     *
+     * @param target The current Ajax request handler
+     */
     void showPrompt(AjaxRequestTarget target);
-    
+
+    /**
+     * @return the component id for the title component
+     */
+    String getTitleId();
+
+    /**
+     * @return the component id for the body component
+     */
     String getContentId();
 
+    /**
+     * Closes the modal window
+     *
+     * @param target The current Ajax request handler
+     */
     void closePrompt(AjaxRequestTarget target);
 }

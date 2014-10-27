@@ -24,6 +24,7 @@ import java.util.List;
 import com.google.common.base.Throwables;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
@@ -68,9 +69,16 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
     private static final long serialVersionUID = 1L;
 
+    private static final String ID_HEADER = "header";
+
     static final String ID_ACTION_NAME = "actionName";
 
     private ActionPrompt actionPrompt;
+
+    /**
+     * Gives a chance to hide the header part of this action panel, e.g. when shown in an action prompt
+     */
+    private boolean showHeader = true;
 
     public ActionPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
@@ -104,17 +112,32 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         return super.getModel();
     }
 
+    public ActionPanel setShowHeader(boolean showHeader) {
+        this.showHeader = showHeader;
+        return this;
+    }
+
     private void buildGuiForParameters() {
+
+        WebMarkupContainer header = new WebMarkupContainer(ID_HEADER) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+
+                setVisible(showHeader);
+            }
+        };
+        addOrReplace(header);
 
         ObjectAdapter targetAdapter = null;
         try {
             targetAdapter = getActionModel().getTargetAdapter();
             
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
-            getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
+            getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
 
             final String actionName = getActionModel().getActionMemento().getAction().getName();
-            addOrReplace(new Label(ID_ACTION_NAME, Model.of(actionName)));
+            header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));
             
         } catch (final ConcurrencyException ex) {
 

@@ -16,20 +16,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.zclip;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.ModalDialog;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-
-public class SimpleClipboardModalWindow extends Modal<Void> implements ActionPrompt {
+public class SimpleClipboardModalWindow extends ModalDialog<Void> {
 
     private static final long serialVersionUID = 1L;
 
     public static SimpleClipboardModalWindow newModalWindow(String id) {
-        SimpleClipboardModalWindow modalWindow = new SimpleClipboardModalWindow(id);
-        return modalWindow;
+        return new SimpleClipboardModalWindow(id);
     }
 
 
@@ -38,35 +32,5 @@ public class SimpleClipboardModalWindow extends Modal<Void> implements ActionPro
     
     public SimpleClipboardModalWindow(String id) {
         super(id);
-
-        setUseCloseHandler(true);
-        setUseKeyboard(true);
-        setDisableEnforceFocus(true);
-        setOutputMarkupId(true);
-        WebMarkupContainer emptyComponent = new WebMarkupContainer(getContentId());
-        add(emptyComponent);
-    }
-
-    @Override
-    public void setPanel(Component component, AjaxRequestTarget target) {
-        addOrReplace(component);
-    }
-
-    @Override
-    public void showPrompt(AjaxRequestTarget target) {
-        target.add(this);
-        show(target);
-    }
-
-    @Override
-    public String getContentId() {
-        return "content";
-    }
-
-    @Override
-    public void closePrompt(AjaxRequestTarget target) {
-        if (target != null) {
-            close(target);
-        }
     }
 }
