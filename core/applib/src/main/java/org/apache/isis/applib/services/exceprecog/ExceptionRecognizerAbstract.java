@@ -45,7 +45,7 @@ import org.apache.isis.applib.annotation.Hidden;
  * then the message can be altered.  Otherwise the exception's {@link Throwable#getMessage() message} is returned as-is.
  */
 @Hidden
-public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer {
+public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer2 {
 
     public static final Logger LOG = LoggerFactory.getLogger(ExceptionRecognizerAbstract.class);
 
@@ -56,6 +56,7 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
      * This key is primarily for diagnostic purposes, to log the exception regardless.
      */
     private static final String KEY_LOG_RECOGNIZED_EXCEPTIONS = "isis.services.exceprecog.logRecognizedExceptions";
+
 
     /**
      * Convenience for subclass implementations that always return a fixed message.
@@ -86,7 +87,8 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
     
     // //////////////////////////////////////
 
-    
+
+    private final Category category;
     private final Predicate<Throwable> predicate;
     private final Function<String,String> messageParser;
     
@@ -94,16 +96,25 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
 
     // //////////////////////////////////////
 
-    public ExceptionRecognizerAbstract(Predicate<Throwable> predicate, final Function<String,String> messageParser) {
+    public ExceptionRecognizerAbstract(final Category category, Predicate<Throwable> predicate, final Function<String,String> messageParser) {
+        this.category = category;
         this.predicate = predicate;
         this.messageParser = messageParser != null? messageParser: Functions.<String>identity();
     }
 
-    public ExceptionRecognizerAbstract(Predicate<Throwable> predicate) {
-        this(predicate, null);
+    public ExceptionRecognizerAbstract(Predicate<Throwable> predicate, final Function<String,String> messageParser) {
+        this(Category.OTHER, predicate, messageParser);
     }
 
-    
+    public ExceptionRecognizerAbstract(Category category, Predicate<Throwable> predicate) {
+        this(category, predicate, null);
+    }
+
+    public ExceptionRecognizerAbstract(Predicate<Throwable> predicate) {
+        this(Category.OTHER, predicate);
+    }
+
+
     @PostConstruct
     public void init(Map<String, String> properties) {
         final String prop = properties.get(KEY_LOG_RECOGNIZED_EXCEPTIONS);
@@ -131,4 +142,10 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
         }
         return null;
     }
+
+    @Override
+    public Recognition recognize2(Throwable ex) {
+        return Recognition.of(category, recognize(ex));
+    }
+
 }

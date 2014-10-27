@@ -25,7 +25,10 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import com.google.common.base.Predicate;
-import org.apache.isis.applib.*;
+import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.PersistFailedException;
+import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.RepositoryException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filter;
@@ -541,14 +544,15 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
 
     //region > ExceptionRecognizer
 
-    static class ExceptionRecognizerForConcurrencyException extends ExceptionRecognizerForType {
+    static class ExceptionRecognizerForConcurrencyException
+            extends ExceptionRecognizerForType {
         public ExceptionRecognizerForConcurrencyException() {
-            super(ConcurrencyException.class, prefix("Another user has just changed this data"));
+            super(Category.CONCURRENCY, ConcurrencyException.class, prefix("Another user has just changed this data"));
         }
     }
     static class ExceptionRecognizerForRecoverableException extends ExceptionRecognizerForType {
         public ExceptionRecognizerForRecoverableException() {
-            super(RecoverableException.class);
+            super(Category.CLIENT_ERROR, RecoverableException.class);
         }
     }
 

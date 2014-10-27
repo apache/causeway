@@ -23,7 +23,8 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 public class ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException extends ExceptionRecognizerForType {
 
     public ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException() {
-        super(ofTypeIncluding(java.sql.SQLIntegrityConstraintViolationException.class, "unique constraint or index violation"), 
+        super(Category.SERVER_ERROR,
+              ofTypeIncluding(java.sql.SQLIntegrityConstraintViolationException.class, "unique constraint or index violation"),
                 prefix("Data already exists"));
     }
 

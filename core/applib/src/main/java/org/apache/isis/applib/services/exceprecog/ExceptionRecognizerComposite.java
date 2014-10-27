@@ -43,7 +43,7 @@ import org.apache.isis.applib.annotation.Hidden;
  * set through the use of this class.
  */
 @Hidden
-public class ExceptionRecognizerComposite implements ExceptionRecognizer {
+public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
 
     private final List<ExceptionRecognizer> services = Lists.newArrayList();
 
@@ -59,7 +59,7 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
 
     /**
      * Register an {@link ExceptionRecognizer} to be consulted when
-     * {@link #recognize(Exception)} is called.
+     * {@link #recognize(Throwable)} is called.
      * 
      * <p>
      * The most specific {@link ExceptionRecognizer recognizer}s should be registered
@@ -83,7 +83,32 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
         }
         return null;
     }
-    
+
+    /**
+     * Returns the non-<tt>null</tt> recognition of the first {@link #add(ExceptionRecognizer) add}ed
+     * (that is also an {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2}).
+     *
+     * <p>
+     *     If none (as {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2}) recognize
+     *     the exception, then falls back to using {@link #recognize(Throwable)}, returning a
+     *     {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2.Recognition} with a
+     *     category of {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2.Category#CLIENT_ERROR}.
+     * </p>
+     */
+    public final Recognition recognize2(Throwable ex) {
+        for (ExceptionRecognizer ers : services) {
+            if(ers instanceof ExceptionRecognizer2) {
+                final ExceptionRecognizer2 recognizer2 = (ExceptionRecognizer2) ers;
+                final Recognition recognition = recognizer2.recognize2(ex);
+                if(recognition != null) {
+                    return recognition;
+                }
+            }
+        }
+        // backward compatible so far as possible.
+        return Recognition.of(Category.OTHER, recognize(ex));
+    }
+
     @PostConstruct
     @Override
     public final void init(Map<String, String> properties) {

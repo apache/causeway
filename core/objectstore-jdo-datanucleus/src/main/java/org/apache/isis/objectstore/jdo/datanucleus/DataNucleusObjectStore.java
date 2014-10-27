@@ -31,6 +31,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -396,6 +399,20 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
             fetchPlan.addGroup(FetchGroup.DEFAULT);
             result = pm.getObjectById(cls, jdoObjectId);
         } catch (final RuntimeException e) {
+
+            final List<ExceptionRecognizer> exceptionRecognizers = getPersistenceSession().getServicesInjector().lookupServices(ExceptionRecognizer.class);
+            for (ExceptionRecognizer exceptionRecognizer : exceptionRecognizers) {
+                if(exceptionRecognizer instanceof ExceptionRecognizer2) {
+                    final ExceptionRecognizer2 recognizer = (ExceptionRecognizer2) exceptionRecognizer;
+                    final ExceptionRecognizer2.Recognition recognition = recognizer.recognize2(e);
+                    if(recognition != null) {
+                        if(recognition.getCategory() == ExceptionRecognizer2.Category.NOT_FOUND) {
+                            throw new ObjectNotFoundException(oid);
+                        }
+                    }
+                }
+            }
+
             throw e;
         }
 

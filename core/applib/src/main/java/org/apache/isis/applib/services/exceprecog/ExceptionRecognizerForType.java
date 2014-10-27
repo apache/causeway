@@ -109,16 +109,28 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
         };
     }
 
+    public ExceptionRecognizerForType(Category category, final Class<? extends Exception> exceptionType, final Function<String,String> messageParser) {
+        this(category, ofType(exceptionType), messageParser);
+    }
+    
+    public ExceptionRecognizerForType(Category category, final Predicate<Throwable> predicate, final Function<String,String> messageParser) {
+        super(category, predicate, messageParser);
+    }
+    
+    public ExceptionRecognizerForType(Category category, Class<? extends Exception> exceptionType) {
+        this(category, exceptionType, null);
+    }
+
     public ExceptionRecognizerForType(final Class<? extends Exception> exceptionType, final Function<String,String> messageParser) {
-        this(ofType(exceptionType), messageParser);
+        this(Category.OTHER, exceptionType, messageParser);
     }
-    
+
     public ExceptionRecognizerForType(final Predicate<Throwable> predicate, final Function<String,String> messageParser) {
-        super(predicate, messageParser);
+        this(Category.OTHER, predicate, messageParser);
     }
-    
+
     public ExceptionRecognizerForType(Class<? extends Exception> exceptionType) {
-        this(exceptionType, null);
+        this(Category.OTHER, exceptionType);
     }
 
 }

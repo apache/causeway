@@ -20,12 +20,14 @@ package org.apache.isis.objectstore.jdo.applib.service.exceprecog;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 
-public class ExceptionRecognizerForJDOObjectNotFoundException extends ExceptionRecognizerForType {
+public class ExceptionRecognizerForJDOObjectNotFoundException
+        extends ExceptionRecognizerForType {
 
     public ExceptionRecognizerForJDOObjectNotFoundException() {
-        super(javax.jdo.JDOObjectNotFoundException.class, 
-            prefix("Unable to load object.  " +
-            	   "Has it been deleted by someone else?"));
+        super(Category.NOT_FOUND,
+              javax.jdo.JDOObjectNotFoundException.class,
+              prefix("Unable to load object.  " +
+                   "Has it been deleted by someone else?"));
     }
 
 }
