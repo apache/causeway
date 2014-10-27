@@ -21,6 +21,8 @@ package org.apache.isis.viewer.restfulobjects.rendering.util;
 import java.io.IOException;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 
 public final class JsonWriterUtil {
@@ -28,8 +30,9 @@ public final class JsonWriterUtil {
     private JsonWriterUtil(){}
 
     public static String jsonFor(final Object object) {
+        final JsonMapper.PrettyPrinting prettyPrinting = inferPrettyPrinting(IsisContext.getDeploymentType());
         try {
-            return JsonMapper.instance().write(object);
+            return JsonMapper.instance(prettyPrinting).write(object);
         } catch (final JsonGenerationException e) {
             throw new RuntimeException(e);
         } catch (final JsonMappingException e) {
@@ -37,5 +40,9 @@ public final class JsonWriterUtil {
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static JsonMapper.PrettyPrinting inferPrettyPrinting(final DeploymentType deploymentType) {
+        return deploymentType.isProduction() ? JsonMapper.PrettyPrinting.DISABLE : JsonMapper.PrettyPrinting.ENABLE;
     }
 }

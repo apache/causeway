@@ -24,35 +24,24 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.concurrent.ConcurrentHashMap;
 import javax.ws.rs.core.Response;
-
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.Version;
-import org.codehaus.jackson.map.BeanProperty;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.DeserializerProvider;
-import org.codehaus.jackson.map.JsonDeserializer;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.JsonSerializer;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
-import org.codehaus.jackson.map.SerializerProvider;
+import org.codehaus.jackson.*;
+import org.codehaus.jackson.map.*;
 import org.codehaus.jackson.map.deser.BeanDeserializerFactory;
 import org.codehaus.jackson.map.deser.JsonNodeDeserializer;
 import org.codehaus.jackson.map.deser.StdDeserializerProvider;
 import org.codehaus.jackson.map.module.SimpleModule;
 import org.codehaus.jackson.type.JavaType;
 import org.jboss.resteasy.client.ClientResponse;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public final class JsonMapper {
+
+    public enum PrettyPrinting {
+        ENABLE,
+        DISABLE
+    }
 
     /**
      * Provides polymorphic deserialization to any subtype of
@@ -107,7 +96,7 @@ public final class JsonMapper {
         }
     }
 
-    private static ObjectMapper createObjectMapper() {
+    private static ObjectMapper createObjectMapper(PrettyPrinting prettyPrinting) {
         // it's a shame that the serialization and deserialization mechanism
         // used aren't symmetric... but it works.
         final DeserializerProvider deserializerProvider = new StdDeserializerProvider(new JsonRepresentationDeserializerFactory());
@@ -116,22 +105,38 @@ public final class JsonMapper {
         jsonModule.addSerializer(JsonRepresentation.class, new JsonRepresentationSerializer());
         objectMapper.registerModule(jsonModule);
 
-        objectMapper.configure(SerializationConfig.Feature.INDENT_OUTPUT, true);
+        if(prettyPrinting == PrettyPrinting.ENABLE) {
+            objectMapper.configure(SerializationConfig.Feature.INDENT_OUTPUT, true);
+        }
         objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return objectMapper;
     }
 
-    private static JsonMapper instance = new JsonMapper();
+    private static Map<PrettyPrinting, JsonMapper> instanceByConfig = new ConcurrentHashMap();
 
-    // threadsafe
+    /**
+     * Returns a {@link org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper.PrettyPrinting#ENABLE pretty-printing enabled} JSON mapper.
+     */
     public final static JsonMapper instance() {
-        return instance;
+        return instance(PrettyPrinting.ENABLE);
+    }
+
+    public final static JsonMapper instance(final PrettyPrinting prettyPrinting) {
+        final JsonMapper jsonMapper = instanceByConfig.get(prettyPrinting);
+        if (jsonMapper != null) {
+            return jsonMapper;
+        }
+        // there could be a race-condition here, but it doesn't matter; last one wins.
+        final JsonMapper mapper = new JsonMapper(prettyPrinting);
+        instanceByConfig.put(prettyPrinting, mapper);
+
+        return mapper;
     }
 
     private final ObjectMapper objectMapper;
 
-    private JsonMapper() {
-        objectMapper = createObjectMapper();
+    private JsonMapper(PrettyPrinting prettyPrinting) {
+        objectMapper = createObjectMapper(prettyPrinting);
     }
 
     @SuppressWarnings("unchecked")
@@ -152,23 +157,11 @@ public final class JsonMapper {
     }
 
     public <T> T read(final Response response, final Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
-        final ClientResponse<?> clientResponse = (ClientResponse<?>) response; // a
-                                                                               // shame,
-                                                                               // but
-                                                                               // needed
-                                                                               // if
-                                                                               // calling
-                                                                               // resources
-                                                                               // directly
-        final Object entityObj = clientResponse.getEntity(String.class);
-        if (entityObj == null) {
+        final ClientResponse<?> clientResponse = (ClientResponse<?>) response; // a shame, but needed if calling resources directly.
+        final String entity = clientResponse.getEntity(String.class);
+        if (entity == null) {
             return null;
         }
-        if (!(entityObj instanceof String)) {
-            throw new IllegalArgumentException("response entity must be a String (was " + entityObj.getClass().getName() + ")");
-        }
-        final String entity = (String) entityObj;
-
         return read(entity, requiredType);
     }
 
