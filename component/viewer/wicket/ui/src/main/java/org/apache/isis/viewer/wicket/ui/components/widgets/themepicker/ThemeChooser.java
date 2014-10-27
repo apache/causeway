@@ -28,6 +28,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.cookies.CookieUtils;
+import org.apache.wicket.util.string.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
@@ -36,9 +40,23 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
  */
 public class ThemeChooser extends Panel {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ThemeChooser.class);
+
+    /**
+     * A configuration setting which value determines whether the theme chooser should be available in the footer
+     */
     private static final String SHOW_THEME_PICKER_KEY = "isis.viewer.wicket.themes.showChooser";
     private static final boolean SHOW_THEME_PICKER_DEFAULT = false;
-    public static final String ENABLED_THEMES_KEY  = "isis.viewer.wicket.themes.enabled";
+
+    /**
+     * A configuration setting which value could be a comma separated list of enabled theme names
+     */
+    private static final String ENABLED_THEMES_KEY  = "isis.viewer.wicket.themes.enabled";
+
+    /**
+     * The name of the cookie that stores the last user selection
+     */
+    private static final String ISIS_THEME_COOKIE_NAME = "isis.themeChooser.theme";
 
     /**
      * Constructor
@@ -47,6 +65,8 @@ public class ThemeChooser extends Panel {
      */
     public ThemeChooser(String id) {
         super(id);
+
+        initializeActiveThemeFromCookie();
 
         ListView<String> themesView = new ListView<String>("themes", getThemeNames()) {
 
@@ -61,16 +81,8 @@ public class ThemeChooser extends Panel {
                     // use Ajax link because Link's url looks like /ENTITY:3 and this confuses the browser
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        IBootstrapSettings bootstrapSettings = Bootstrap.getSettings();
-                        ITheme theme = getTheme(themeName);
-                        getActiveThemeProvider().setActiveTheme(theme);
-                        if (theme instanceof BootstrapThemeTheme) {
-                            bootstrapSettings.setThemeProvider(new SingleThemeProvider(theme));
-                        } else if (theme instanceof BootswatchTheme) {
-                            bootstrapSettings.setThemeProvider(new BootswatchThemeProvider((BootswatchTheme) theme));
-                        } else if (theme instanceof VegibitTheme) {
-                            bootstrapSettings.setThemeProvider(new VegibitThemeProvider((VegibitTheme) theme));
-                        }
+                        setActiveTheme(themeName);
+                        saveActiveThemeToCookie(themeName);
                         target.add(getPage()); // repaint the whole page
                     }
                 }.setBody(Model.of(themeName)));
@@ -79,14 +91,46 @@ public class ThemeChooser extends Panel {
         add(themesView);
     }
 
-    private ITheme getTheme(String themeName) {
+    private void saveActiveThemeToCookie(String themeName) {
+        CookieUtils cookieUtils = new CookieUtils();
+        cookieUtils.save(ISIS_THEME_COOKIE_NAME, themeName);
+    }
+
+    private void initializeActiveThemeFromCookie() {
+        CookieUtils cookieUtils = new CookieUtils();
+        String activeTheme = cookieUtils.load(ISIS_THEME_COOKIE_NAME);
+        if (!Strings.isEmpty(activeTheme)) {
+            setActiveTheme(activeTheme);
+        }
+    }
+
+    private void setActiveTheme(String activeTheme) {
+        IBootstrapSettings bootstrapSettings = Bootstrap.getSettings();
+        ITheme theme = getThemeByName(activeTheme);
+        getActiveThemeProvider().setActiveTheme(theme);
+        if (theme instanceof BootstrapThemeTheme) {
+            bootstrapSettings.setThemeProvider(new SingleThemeProvider(theme));
+        } else if (theme instanceof BootswatchTheme) {
+            bootstrapSettings.setThemeProvider(new BootswatchThemeProvider((BootswatchTheme) theme));
+        } else if (theme instanceof VegibitTheme) {
+            bootstrapSettings.setThemeProvider(new VegibitThemeProvider((VegibitTheme) theme));
+        }
+    }
+
+    private ITheme getThemeByName(String themeName) {
         ITheme theme;
-        if ("bootstrap-theme".equals(themeName)) {
+        try {
+            if ("bootstrap-theme".equals(themeName)) {
+                theme = new BootstrapThemeTheme();
+            } else if (themeName.startsWith("veg")) {
+                theme = VegibitTheme.valueOf(themeName);
+            } else {
+                theme = BootswatchTheme.valueOf(themeName);
+            }
+        } catch (Exception x) {
+            LOG.warn("Cannot find a theme with name '"+themeName+"' in all available theme providers: " + x.getMessage());
+            // fallback to Bootstrap default theme if the parsing by name failed somehow
             theme = new BootstrapThemeTheme();
-        } else if (themeName.startsWith("veg")) {
-            theme = VegibitTheme.valueOf(themeName);
-        } else {
-            theme = BootswatchTheme.valueOf(themeName);
         }
         return theme;
     }
@@ -125,7 +169,7 @@ public class ThemeChooser extends Panel {
     }
 
     /**
-     * Filters which theme to show in the drop up by using the provided values
+     * Filters which themes to show in the drop up by using the provided values
      * in {@value #ENABLED_THEMES_KEY}
      *
      * @param allThemes All available themes
