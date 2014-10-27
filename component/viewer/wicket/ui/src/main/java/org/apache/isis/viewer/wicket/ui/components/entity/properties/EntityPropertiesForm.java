@@ -264,7 +264,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     protected void onComponentTag(ComponentTag tag) {
         super.onComponentTag(tag);
 
-        Attributes.addClass(tag, "form-inline");
+        Attributes.addClass(tag, "form-horizontal");
     }
 
     abstract class AjaxButtonWithOnError extends AjaxButton {

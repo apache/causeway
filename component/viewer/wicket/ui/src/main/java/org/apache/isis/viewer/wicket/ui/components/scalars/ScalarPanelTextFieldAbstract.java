@@ -35,7 +35,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
-import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -101,9 +100,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(textField));
 
-        final LabelAtFacet facet = getModel().getFacet(LabelAtFacet.class);
-        scalarName.add(new AttributeModifier("title", "labelAt=" + (facet != null? facet.value(): "(null)")));
-
+        applyLabelAtRule(scalarName, labelIfRegular);
 
         if(getModel().isRequired()) {
             final String label = scalarName.getDefaultModelObjectAsString();

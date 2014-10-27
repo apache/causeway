@@ -41,9 +41,7 @@ public class LabelAtFacetOnParameterAnnotationFactory extends FacetFactoryAbstra
             // ignore
             return;
         }
-        if (!Annotations.isString(parameterTypes[processParameterContext.getParamNum()])) {
-            return;
-        }
+        
         final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof LabelAt) {

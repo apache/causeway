@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -33,6 +34,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
@@ -40,6 +42,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -330,6 +333,39 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
      * Optional hook.
      */
     protected void onBeforeRenderWhenEnabled() {
+    }
+
+    /**
+     * Applies the {@literal @}{@link org.apache.isis.applib.annotation.LabelAt LabelAt} facet
+     *
+     * @param scalarName The label for the input
+     * @param formGroup The form group element
+     */
+    protected void applyLabelAtRule(Label scalarName, MarkupContainer formGroup) {
+
+        final LabelAtFacet facet = getModel().getFacet(LabelAtFacet.class);
+
+        // TODO mgrigorov: Remove this. It is for debugging
+        scalarName.add(new AttributeModifier("title", "labelAt=" + (facet != null? facet.value(): "(null)")));
+
+        if (facet != null) {
+            switch (facet.value()) {
+                case LEFT:
+                    formGroup.add(new CssClassAppender("label-left"));
+                    break;
+                case NONE:
+                    scalarName.setVisible(false);
+                    break;
+                case TOP:
+                    formGroup.add(new CssClassAppender("label-top"));
+                    break;
+                default:
+                    break;
+
+            }
+        } else {
+            formGroup.add(new CssClassAppender("label-left"));
+        }
     }
 
     // //////////////////////////////////////

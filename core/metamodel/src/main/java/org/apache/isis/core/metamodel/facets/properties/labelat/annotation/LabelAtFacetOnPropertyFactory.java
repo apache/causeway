@@ -60,13 +60,7 @@ public class LabelAtFacetOnPropertyFactory extends FacetFactoryAbstract implemen
     }
 
     private static LabelAtFacetOnPropertyAnnotation createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
-        final Class<?> returnType = processMethodContext.getMethod().getReturnType();
-        if (!Annotations.isString(returnType)) {
-            return null;
-        }
         final LabelAt annotation = Annotations.getAnnotation(processMethodContext.getMethod(), LabelAt.class);
         return (annotation != null) ? new LabelAtFacetOnPropertyAnnotation(annotation.value(), processMethodContext.getFacetHolder()) : null;
     }
-
-
 }

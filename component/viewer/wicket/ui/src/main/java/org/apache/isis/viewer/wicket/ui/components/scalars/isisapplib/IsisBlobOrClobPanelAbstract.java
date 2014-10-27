@@ -74,7 +74,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     private FileUploadField fileUploadField;
 
     protected enum InputFieldVisibility {
-            VISIBLE, NOT_VISIBLE;
+            VISIBLE, NOT_VISIBLE
         }
 
     @Override
@@ -87,6 +87,8 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     
         final Label scalarName = new Label(ID_SCALAR_NAME, getModel().getName());
         labelIfRegular.add(scalarName);
+
+        applyLabelAtRule(scalarName, labelIfRegular);
 
         wicketImage = asWicketImage(ID_IMAGE);
         if(wicketImage != null) {
@@ -223,7 +225,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
         formComponent.get(ID_SCALAR_VALUE).setVisible(visibility == InputFieldVisibility.VISIBLE);
 
-        Label fileNameLabel = updateFileNameLabel(ID_FILE_NAME, formComponent);
+        updateFileNameLabel(ID_FILE_NAME, formComponent);
 
         // the visibility of download link is intentionally 'backwards';
         // if in edit mode then do NOT show

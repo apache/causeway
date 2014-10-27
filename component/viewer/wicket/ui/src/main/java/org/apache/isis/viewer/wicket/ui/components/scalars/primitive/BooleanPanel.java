@@ -78,6 +78,8 @@ public class BooleanPanel extends ScalarPanelAbstract {
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(checkBox));
         labelIfRegular.add(scalarName);
 
+        applyLabelAtRule(scalarName, labelIfRegular);
+
         addOrReplace(labelIfRegular);
         
         addFeedbackTo(labelIfRegular, checkBox);

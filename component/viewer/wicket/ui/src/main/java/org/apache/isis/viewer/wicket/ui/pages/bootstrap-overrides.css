@@ -83,46 +83,58 @@ th > a > div > strong {
 }
 
 /* Labels on the left START */
-.form-inline .form-group {
+div.label-left.form-group {
     width: 100%;
 }
 
-.form-inline label {
+div.label-left label.control-label {
     width: 30%;
     float: left;
     padding-top: 9px;
+    padding-left: 10px;
+    text-align: justify;
 }
 
-.form-inline .scalarValueWrapper {
+div.label-top label.control-label {
+    padding-left: 10px;
+}
+
+div.label-left .scalarValueWrapper {
     width: 70%;
     float: right;
 }
 
-.form-inline .scalarValueWrapper .form-control {
+div.label-top .scalarValueWrapper {
+    width: 99%;
+    display: block;
+    padding-left: 8px;
+    padding-right: 18px;
+}
+
+div.label-left .scalarValueWrapper .form-control {
     width: 100%;
 }
 
-.form-inline .scalarValueWrapper .form-control.file-caption {
+div.label-left .scalarValueWrapper .form-control.file-caption {
     width: 69%;
 }
 
-.form-inline .scalarValueWrapper .file-input .input-group-btn {
+div.label-left .scalarValueWrapper .file-input .input-group-btn {
     display: inline;
 }
 
-.form-inline .scalarValueWrapper .input-group {
+div.label-left .scalarValueWrapper .input-group {
     width: 100%;
 }
 
-.form-inline .scalarValueWrapper .input-group .input-group-addon {
+div.label-left .scalarValueWrapper .input-group .input-group-addon {
     width: 1%;
 }
 
-.form-inline .choicesPlaceholder {
+div.label-left .choicesPlaceholder {
     display: inline-block;
     width: 100%;
     vertical-align: -webkit-baseline-middle;
     vertical-align: middle;
 }
-
 /* Labels on the right END */

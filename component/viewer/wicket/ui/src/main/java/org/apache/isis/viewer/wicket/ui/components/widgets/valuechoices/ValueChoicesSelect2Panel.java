@@ -82,6 +82,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(select2Field));
         labelIfRegular.addOrReplace(scalarName);
 
+        applyLabelAtRule(scalarName, labelIfRegular);
+
         addFeedbackTo(labelIfRegular, select2Field);
         addAdditionalLinksTo(labelIfRegular);
         

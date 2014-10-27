@@ -32,7 +32,6 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
@@ -127,7 +126,9 @@ public class ReferencePanel extends ScalarPanelAbstract {
         
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(entityLink));
         labelIfRegular.add(scalarName);
-        
+
+        applyLabelAtRule(scalarName, labelIfRegular);
+
         addOrReplace(labelIfRegular);
         
         addFeedbackTo(labelIfRegular, entityLink);
