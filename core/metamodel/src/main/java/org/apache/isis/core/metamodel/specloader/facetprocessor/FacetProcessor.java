@@ -19,48 +19,34 @@
 
 package org.apache.isis.core.metamodel.specloader.facetprocessor;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
+import java.util.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.*;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
-import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
-import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactory;
-import org.apache.isis.core.metamodel.facets.MethodRemoverConstants;
-import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContributee;
+
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 
 public class FacetProcessor implements RuntimeContextAware {
 
+    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
+
     private final IsisConfiguration configuration;
-    private final CollectionTypeRegistry collectionTypeRegistry;
     private final ProgrammingModel programmingModel;
 
     private RuntimeContext runtimeContext;
@@ -130,14 +116,14 @@ public class FacetProcessor implements RuntimeContextAware {
      */
     private Map<FeatureType, List<FacetFactory>> factoryListByFeatureType = null;
 
-    public FacetProcessor(final IsisConfiguration configuration, final CollectionTypeRegistry collectionTypeRegistry, final ProgrammingModel programmingModel) {
+    public FacetProcessor(
+            final IsisConfiguration configuration,
+            final ProgrammingModel programmingModel) {
         ensureThatState(configuration, is(notNullValue()));
-        ensureThatState(collectionTypeRegistry, is(notNullValue()));
         ensureThatState(programmingModel, is(notNullValue()));
 
         this.configuration = configuration;
         this.programmingModel = programmingModel;
-        this.collectionTypeRegistry = collectionTypeRegistry;
     }
 
     // //////////////////////////////////////////////////
@@ -168,7 +154,6 @@ public class FacetProcessor implements RuntimeContextAware {
      * processing.
      */
     public void injectDependenciesInto(final FacetFactory factory) {
-        getCollectionTypeRepository().injectInto(factory);
         getIsisConfiguration().injectInto(factory);
 
         // cascades all the subcomponents also
@@ -208,12 +193,7 @@ public class FacetProcessor implements RuntimeContextAware {
      * property accessors, and append them to the supplied methodList.
      * 
      * <p>
-     * Intended to be called after
-     * {@link #findAndRemoveValuePropertyAccessors(MethodRemover, List)} once
-     * only reference properties remain.
-     * 
-     * @see PropertyOrCollectionIdentifyingFacetFactory#findAndRemoveValuePropertyAccessors(MethodRemover,
-     *      List)
+     * Intended to be called after {@link #findAndRemovePropertyAccessors(org.apache.isis.core.metamodel.facetapi.MethodRemover, java.util.List)} once only reference properties remain.
      */
     public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
         cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired();
@@ -279,7 +259,7 @@ public class FacetProcessor implements RuntimeContextAware {
      * object}) to the supplied {@link FacetHolder}.
      * 
      * <p>
-     * Delegates to {@link FacetFactory#process(Class, FacetHolder)} for each
+     * Delegates to {@link FacetFactory#process(org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext)} for each
      * appropriate factory.
      * 
      * @see FacetFactory#process(ProcessClassContext)
@@ -316,10 +296,8 @@ public class FacetProcessor implements RuntimeContextAware {
      * feature} to the supplied {@link FacetHolder}.
      * 
      * <p>
-     * Delegates to {@link FacetFactory#process(Method, FacetHolder)} for each
+     * Delegates to {@link FacetFactory#process(org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext)} for each
      * appropriate factory.
-     * 
-     * @see FacetFactory#process(Method, FacetHolder)
      * 
      * @param cls
      *            - class in which introspect; allowing the helper methods to be
@@ -460,9 +438,7 @@ public class FacetProcessor implements RuntimeContextAware {
             return;
         }
         cachedPropertyOrCollectionIdentifyingFactories = Lists.newArrayList();
-        final Iterator<FacetFactory> iter = factories.iterator();
-        while (iter.hasNext()) {
-            final FacetFactory factory = iter.next();
+        for (FacetFactory factory : factories) {
             if (factory instanceof PropertyOrCollectionIdentifyingFacetFactory) {
                 final PropertyOrCollectionIdentifyingFacetFactory identifyingFacetFactory = (PropertyOrCollectionIdentifyingFacetFactory) factory;
                 cachedPropertyOrCollectionIdentifyingFactories.add(identifyingFacetFactory);

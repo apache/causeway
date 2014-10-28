@@ -31,16 +31,16 @@ public class ObjectMemberContext {
     private final SpecificationLoader specificationLookup;
     private final AdapterManager adapterManager;
     private final QuerySubmitter querySubmitter;
-    private final CollectionTypeRegistry collectionTypeRegistry;
     private final ServicesProvider servicesProvider;
 
+    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
+
     public ObjectMemberContext(
-            final DeploymentCategory deploymentCategory, 
-            final AuthenticationSessionProvider authenticationSessionProvider, 
-            final SpecificationLoader specificationLookup, 
-            final AdapterManager adapterManager, 
-            final QuerySubmitter querySubmitter, 
-            final CollectionTypeRegistry collectionTypeRegistry,
+            final DeploymentCategory deploymentCategory,
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final SpecificationLoader specificationLookup,
+            final AdapterManager adapterManager,
+            final QuerySubmitter querySubmitter,
             final ServicesProvider servicesProvider) {
 
         this.deploymentCategory = deploymentCategory;
@@ -48,7 +48,7 @@ public class ObjectMemberContext {
         this.specificationLookup = specificationLookup;
         this.adapterManager = adapterManager;
         this.querySubmitter = querySubmitter;
-        this.collectionTypeRegistry = collectionTypeRegistry;
+
         this.servicesProvider = servicesProvider;
     }
 

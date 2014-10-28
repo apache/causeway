@@ -94,7 +94,7 @@ public class OneToManyAssociationImplTest {
         allowingPeerToReturnCollectionType();
         allowingPeerToReturnIdentifier();
         allowingSpecLoaderToReturnSpecs();
-        association = new OneToManyAssociationImpl(mockPeer, new ObjectMemberContext(DeploymentCategory.PRODUCTION, mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter, mockCollectionTypeRegistry, mockServicesProvider));
+        association = new OneToManyAssociationImpl(mockPeer, new ObjectMemberContext(DeploymentCategory.PRODUCTION, mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter, mockServicesProvider));
     }
 
     private void allowingSpecLoaderToReturnSpecs() {

@@ -25,14 +25,13 @@ import java.util.List;
 import java.util.Set;
 import org.apache.isis.applib.annotation.TypeOf;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.collections.typeof.annotation.TypeOfFacetOnCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.typeof.annotation.TypeOfFacetOnCollectionAnnotationFactory;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 
 public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -41,9 +40,7 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-
         facetFactory = new TypeOfFacetOnCollectionAnnotationFactory();
-        facetFactory.setCollectionTypeRegistry(new CollectionTypeRegistryDefault());
     }
 
     @Override

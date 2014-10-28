@@ -77,7 +77,7 @@ public class ObjectActionImplTest {
             }
         });
 
-        action = new ObjectActionImpl(mockFacetedMethod, new ObjectMemberContext(DeploymentCategory.PRODUCTION, mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter, mockCollectionTypeRegistry, mockServicesProvider));
+        action = new ObjectActionImpl(mockFacetedMethod, new ObjectMemberContext(DeploymentCategory.PRODUCTION, mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter, mockServicesProvider));
     }
 
 

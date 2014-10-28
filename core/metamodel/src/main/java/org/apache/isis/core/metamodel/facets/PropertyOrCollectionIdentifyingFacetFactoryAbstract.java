@@ -20,14 +20,12 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.util.List;
-
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
 
-public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract extends MethodPrefixBasedFacetFactoryAbstract implements PropertyOrCollectionIdentifyingFacetFactory, CollectionTypeRegistryAware {
+public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract extends MethodPrefixBasedFacetFactoryAbstract implements PropertyOrCollectionIdentifyingFacetFactory {
 
-    private CollectionTypeRegistry collectionTypeRegistry;
+    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
 
     public PropertyOrCollectionIdentifyingFacetFactoryAbstract(final List<FeatureType> featureTypes, final String... prefixes) {
         super(featureTypes, OrphanValidation.DONT_VALIDATE, prefixes);
@@ -37,22 +35,9 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract extend
         return getCollectionTypeRepository().isCollectionType(cls) || getCollectionTypeRepository().isArrayType(cls);
     }
 
-    // /////////////////////////////////////////////////////////////////////////
-    // Injected: CollectionTypeRegistry
-    // /////////////////////////////////////////////////////////////////////////
-
     protected CollectionTypeRegistry getCollectionTypeRepository() {
         return collectionTypeRegistry;
     }
 
-    /**
-     * Injected so can propogate to any {@link #registerFactory(FacetFactory)
-     * registered} {@link FacetFactory} s that are also
-     * {@link CollectionTypeRegistryAware}.
-     */
-    @Override
-    public void setCollectionTypeRegistry(final CollectionTypeRegistry collectionTypeRegistry) {
-        this.collectionTypeRegistry = collectionTypeRegistry;
-    }
 
 }

@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-
 import org.apache.isis.applib.annotation.TypeOf;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -32,10 +31,9 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
 
-public class TypeOfFacetOnCollectionAnnotationFactory extends FacetFactoryAbstract implements CollectionTypeRegistryAware {
-    private CollectionTypeRegistry collectionTypeRegistry;
+public class TypeOfFacetOnCollectionAnnotationFactory extends FacetFactoryAbstract {
+    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
 
     public TypeOfFacetOnCollectionAnnotationFactory() {
         super(FeatureType.COLLECTIONS_ONLY);
@@ -86,12 +84,6 @@ public class TypeOfFacetOnCollectionAnnotationFactory extends FacetFactoryAbstra
             // TODO: what to do here?
             return;
         }
-
-    }
-
-    @Override
-    public void setCollectionTypeRegistry(final CollectionTypeRegistry collectionTypeRegistry) {
-        this.collectionTypeRegistry = collectionTypeRegistry;
     }
 
 }

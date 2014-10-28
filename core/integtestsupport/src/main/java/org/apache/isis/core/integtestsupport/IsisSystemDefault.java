@@ -32,8 +32,6 @@ import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.objectstore.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -135,13 +133,6 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     }
 
  
-    /**
-     * Optional hook method.
-     */
-    protected CollectionTypeRegistry obtainReflectorCollectionTypeRegistry() {
-        return new CollectionTypeRegistryDefault();
-    }
-
 
     /**
      * Optional hook method.

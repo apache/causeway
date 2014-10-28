@@ -47,7 +47,6 @@ import org.apache.isis.core.metamodel.facets.properties.validating.method.Proper
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationImpl;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
@@ -113,7 +112,7 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject {
     @Before
     public void setUp() {
 
-        objectMemberContext = new ObjectMemberContext(DeploymentCategory.PRODUCTION, mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter, new CollectionTypeRegistryDefault(), mockServicesProvider);
+        objectMemberContext = new ObjectMemberContext(DeploymentCategory.PRODUCTION, mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter, mockServicesProvider);
         
         employeeRepository = new EmployeeRepositoryImpl();
 

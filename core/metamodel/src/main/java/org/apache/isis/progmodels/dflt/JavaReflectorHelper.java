@@ -21,19 +21,14 @@ package org.apache.isis.progmodels.dflt;
 
 import java.util.Collection;
 import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -52,10 +47,9 @@ public final class JavaReflectorHelper  {
             final Set<FacetDecorator> facetDecorators,
             final MetaModelValidator mmv,
             final IsisConfiguration configuration) {
+
         final SpecificationTraverser specificationTraverser = new SpecificationTraverserDefault();
-        final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistryDefault();
-        final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
-        
+
         MetaModelValidatorComposite metaModelValidator = MetaModelValidatorComposite.asComposite(mmv);
         for (MetaModelRefiner metaModelRefiner : metaModelRefiners) {
             metaModelRefiner.refineProgrammingModel(programmingModel, configuration);
@@ -67,7 +61,7 @@ public final class JavaReflectorHelper  {
             programmingModel.refineMetaModelValidator(metaModelValidator, configuration);
         }
         
-        return new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, programmingModel, facetDecorators, metaModelValidator);
+        return new ObjectReflectorDefault(configuration, specificationTraverser, programmingModel, facetDecorators, metaModelValidator);
     }
 
 }

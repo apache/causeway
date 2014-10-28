@@ -73,7 +73,7 @@ public class ObjectAssociationAbstractTest {
     public void setup() {
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
         
-        objectAssociation = new ObjectAssociationAbstract(facetedMethod, FeatureType.PROPERTY, objectSpecification, new ObjectMemberContext(DeploymentCategory.PRODUCTION, null, null, null, null, null, null)) {
+        objectAssociation = new ObjectAssociationAbstract(facetedMethod, FeatureType.PROPERTY, objectSpecification, new ObjectMemberContext(DeploymentCategory.PRODUCTION, null, null, null, null, null)) {
 
             @Override
             public ObjectAdapter get(final ObjectAdapter fromObject) {

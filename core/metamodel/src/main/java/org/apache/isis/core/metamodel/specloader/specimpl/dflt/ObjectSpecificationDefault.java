@@ -37,7 +37,6 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -62,6 +61,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.*;
 public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements DebuggableWithTitle, FacetHolder {
 
     private final static Logger LOG = LoggerFactory.getLogger(ObjectSpecificationDefault.class);
+    private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
     private static String determineShortName(final Class<?> introspectedClass) {
         final String name = introspectedClass.getName();
@@ -79,7 +79,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
      */
     private Map<Method, ObjectMember> membersByMethod = null;
     
-    private final IntrospectionContext introspectionContext;
     private final CreateObjectContext createObjectContext;
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
@@ -91,16 +90,13 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     public ObjectSpecificationDefault(
             final Class<?> correspondingClass,
-            final FacetedMethodsBuilderContext facetedMethodsBuilderContext, 
-            final IntrospectionContext introspectionContext, 
-            final SpecificationContext specContext, 
+            final FacetedMethodsBuilderContext facetedMethodsBuilderContext,
+            final SpecificationContext specContext,
             final ObjectMemberContext objectMemberContext,
             final CreateObjectContext createObjectContext) {
         super(correspondingClass, determineShortName(correspondingClass), specContext, objectMemberContext);
 
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetedMethodsBuilderContext);
-
-        this.introspectionContext = introspectionContext;
         this.createObjectContext = createObjectContext;
     }
 
@@ -146,7 +142,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         final Class<?>[] interfaceTypes = getCorrespondingClass().getInterfaces();
         final List<ObjectSpecification> interfaceSpecList = Lists.newArrayList();
         for (final Class<?> interfaceType : interfaceTypes) {
-            final Class<?> substitutedInterfaceType = getClassSubstitutor().getClass(interfaceType);
+            final Class<?> substitutedInterfaceType = classSubstitutor.getClass(interfaceType);
             if (substitutedInterfaceType != null) {
                 final ObjectSpecification interfaceSpec = getSpecificationLookup().loadSpecification(substitutedInterfaceType);
                 interfaceSpecList.add(interfaceSpec);
@@ -504,16 +500,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // Dependencies (from constructor)
     // //////////////////////////////////////////////////////////////////
 
-    protected AdapterManager getAdapterMap() {
-        return createObjectContext.getAdapterManager();
-    }
-
     protected ServicesInjector getDependencyInjector() {
         return createObjectContext.getDependencyInjector();
-    }
-
-    private ClassSubstitutor getClassSubstitutor() {
-        return introspectionContext.getClassSubstitutor();
     }
 
 

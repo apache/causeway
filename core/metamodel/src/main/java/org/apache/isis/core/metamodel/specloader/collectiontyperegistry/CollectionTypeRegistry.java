@@ -19,8 +19,10 @@
 
 package org.apache.isis.core.metamodel.specloader.collectiontyperegistry;
 
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.components.Injectable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyFeature.CollectionSemantics;
 
 /**
@@ -31,20 +33,53 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyFeature.CollectionSe
  * specified using <tt>@Value</tt>. However, we need to maintain a repository of
  * these collection types once nominated so that when we introspect classes we
  * look for collections first, and then properties second.
- * 
- * <p>
- * TODO: plan is to allow new collection types to be installed dynamically,
- * allowing the domain programmer to declare custom classes to have collection
- * semantics.
  */
-public interface CollectionTypeRegistry extends Injectable, ApplicationScopedComponent {
+public class CollectionTypeRegistry {
 
-    public boolean isCollectionType(Class<?> cls);
+    private final List<Class<?>> collectionTypes = new ArrayList<Class<?>>();
+    private Class<?>[] collectionTypesAsArray = new Class[0];
 
-    public boolean isArrayType(Class<?> cls);
+    /**
+     * Inbuilt support for {@link java.util.Collection} as a collection type.
+     *
+     * <p>
+     * Note that this includes any subclasses.
+     */
+    public CollectionTypeRegistry() {
+        addCollectionType(Collection.class);
+    }
 
-    public Class<?>[] getCollectionType();
+    /**
+     * Plan is for this to be promoted to API at some stage.
+     */
+    private void addCollectionType(final Class<?> collectionType) {
+        collectionTypes.add(collectionType);
+        collectionTypesAsArray = collectionTypes.toArray(new Class[0]);
+    }
 
-    public CollectionSemantics semanticsOf(Class<?> cls);
+    public boolean isCollectionType(final Class<?> cls) {
+        return java.util.Collection.class.isAssignableFrom(cls);
+    }
+
+    public boolean isArrayType(final Class<?> cls) {
+        return cls.isArray();
+    }
+
+    public Class<?>[] getCollectionType() {
+        return collectionTypesAsArray;
+    }
+
+    public CollectionSemantics semanticsOf(final Class<?> underlyingClass) {
+        if (!Collection.class.isAssignableFrom(underlyingClass)) {
+            return CollectionSemantics.ARRAY;
+        }
+        if (List.class.isAssignableFrom(underlyingClass)) {
+            return CollectionSemantics.LIST;
+        }
+        if (Set.class.isAssignableFrom(underlyingClass)) {
+            return CollectionSemantics.SET;
+        }
+        return CollectionSemantics.OTHER;
+    }
 
 }

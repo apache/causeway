@@ -40,8 +40,6 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.unittestsupport.jmocking.InjectIntoJMockAction;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -77,10 +75,8 @@ public abstract class ObjectReflectorDefaultTestAbstract {
         runtimeContext = new RuntimeContextNoRuntime();
         final ObjectReflectorDefault reflector = 
                 new ObjectReflectorDefault(
-                        mockConfiguration, 
-                        new ClassSubstitutor(),
-                        new CollectionTypeRegistryDefault(), 
-                        new SpecificationTraverserDefault(), 
+                        mockConfiguration,
+                        new SpecificationTraverserDefault(),
                         new ProgrammingModelFacetsJava5(),
                         new HashSet<FacetDecorator>(),
                         new MetaModelValidatorDefault());

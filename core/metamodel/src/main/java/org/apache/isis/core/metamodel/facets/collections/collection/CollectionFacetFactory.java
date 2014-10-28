@@ -29,11 +29,10 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultTo
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
 
-public class CollectionFacetFactory extends FacetFactoryAbstract implements CollectionTypeRegistryAware, AdapterManagerAware {
+public class CollectionFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware {
 
-    private CollectionTypeRegistry collectionTypeRegistry;
+    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
     private AdapterManager adapterManager;
 
     public CollectionFacetFactory() {
@@ -77,14 +76,6 @@ public class CollectionFacetFactory extends FacetFactoryAbstract implements Coll
     // //////////////////////////////////////////////////////////////
     // Dependencies (injected)
     // //////////////////////////////////////////////////////////////
-
-    /**
-     * Injected since {@link CollectionTypeRegistryAware}.
-     */
-    @Override
-    public void setCollectionTypeRegistry(final CollectionTypeRegistry collectionTypeRegistry) {
-        this.collectionTypeRegistry = collectionTypeRegistry;
-    }
 
     public AdapterManager getAdapterManager() {
         return adapterManager;

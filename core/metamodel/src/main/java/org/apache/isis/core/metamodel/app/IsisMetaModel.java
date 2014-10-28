@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -119,8 +118,9 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 
         this.classSubstitutor = new ClassSubstitutor();
 
-        setCollectionTypeRegistry(new CollectionTypeRegistryDefault());
+        this.collectionTypeRegistry = new CollectionTypeRegistry();
         setSpecificationTraverser(new SpecificationTraverserDefault());
+
         setFacetDecorators(new TreeSet<FacetDecorator>());
         setProgrammingModelFacets(programmingModel);
 
@@ -141,7 +141,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     @Override
     public void init() {
         ensureNotInitialized();
-        reflector = new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, programmingModel, facetDecorators, metaModelValidator);
+        reflector = new ObjectReflectorDefault(configuration, specificationTraverser, programmingModel, facetDecorators, metaModelValidator);
 
         reflector.setServices(services);
         

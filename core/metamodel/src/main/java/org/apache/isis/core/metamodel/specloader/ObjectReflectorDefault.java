@@ -52,11 +52,9 @@ import org.apache.isis.core.metamodel.spec.*;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.CreateObjectContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
-import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
@@ -84,12 +82,6 @@ import static org.hamcrest.CoreMatchers.notNullValue;
  * allows the class to be loaded to be substituted if required. This is used in
  * conjunction with some <tt>PersistenceMechanism</tt>s that do class
  * enhancement.
- * <li>The {@link CollectionTypeRegistry} specifies the types that should be
- * considered as collections. If not specified then will
- * {@link CollectionTypeRegistryDefault default}. (Note: this extension point
- * has not been tested, so should be considered more of a &quot;statement of
- * intent&quot; than actual API. Also, we may use annotations (similar to the
- * way in which Values are specified) as an alternative mechanism).
  * </ul>
  * 
  * <p>
@@ -109,18 +101,13 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     private final static Logger LOG = LoggerFactory.getLogger(ObjectReflectorDefault.class);
 
+    private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
+    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
+
     /**
      * Injected in the constructor.
      */
     private final IsisConfiguration configuration;
-    /**
-     * Injected in the constructor.
-     */
-    private final ClassSubstitutor classSubstitutor;
-    /**
-     * Injected in the constructor.
-     */
-    private final CollectionTypeRegistry collectionTypeRegistry;
     /**
      * Injected in the constructor.
      */
@@ -169,25 +156,19 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     // /////////////////////////////////////////////////////////////
 
     public ObjectReflectorDefault(
-            final IsisConfiguration configuration, 
-            final ClassSubstitutor classSubstitutor, 
-            final CollectionTypeRegistry collectionTypeRegistry, 
+            final IsisConfiguration configuration,
             final SpecificationTraverser specificationTraverser,
-            final ProgrammingModel programmingModel, 
-            final Set<FacetDecorator> facetDecorators, 
+            final ProgrammingModel programmingModel,
+            final Set<FacetDecorator> facetDecorators,
             final MetaModelValidator metaModelValidator) {
 
         ensureThatArg(configuration, is(notNullValue()));
-        ensureThatArg(classSubstitutor, is(notNullValue()));
-        ensureThatArg(collectionTypeRegistry, is(notNullValue()));
         ensureThatArg(specificationTraverser, is(notNullValue()));
         ensureThatArg(programmingModel, is(notNullValue()));
         ensureThatArg(facetDecorators, is(notNullValue()));
         ensureThatArg(metaModelValidator, is(notNullValue()));
 
         this.configuration = configuration;
-        this.classSubstitutor = classSubstitutor;
-        this.collectionTypeRegistry = collectionTypeRegistry;
         this.programmingModel = programmingModel;
         this.specificationTraverser = specificationTraverser;
 
@@ -197,7 +178,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         }
 
         this.metaModelValidator = metaModelValidator;
-        this.facetProcessor = new FacetProcessor(configuration, collectionTypeRegistry, programmingModel);
+        this.facetProcessor = new FacetProcessor(configuration, programmingModel);
     }
 
     @Override
@@ -252,7 +233,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
         // initialize subcomponents
         facetDecoratorSet.init();
-        collectionTypeRegistry.init();
         specificationTraverser.init();
         programmingModel.init();
         facetProcessor.init();
@@ -341,7 +321,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             // just ignore.
             return;
         }
-        final Class<?> substitutedType = getClassSubstitutor().getClass(cls);
+        final Class<?> substitutedType = classSubstitutor.getClass(cls);
         
         if(substitutedType.isAnonymousClass()) {
             // JRebel plugin might call us... just ignore 'em.
@@ -420,7 +400,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     }
 
     private ObjectSpecification internalLoadSpecification(final Class<?> type) {
-        final Class<?> substitutedType = getClassSubstitutor().getClass(type);
+        final Class<?> substitutedType = classSubstitutor.getClass(type);
         return substitutedType != null ? loadSpecificationForSubstitutedClass(substitutedType) : null;
     }
 
@@ -488,18 +468,17 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         final SpecificationContext specContext = new SpecificationContext(getDeploymentCategory(), authenticationSessionProvider, servicesProvider, objectInstantiator, specificationLookup, facetProcessor);
 
         final AdapterManager adapterMap = getRuntimeContext().getAdapterManager();
-        final ObjectMemberContext objectMemberContext = new ObjectMemberContext(getDeploymentCategory(), authenticationSessionProvider, specificationLookup, adapterMap, getRuntimeContext().getQuerySubmitter(), collectionTypeRegistry, servicesProvider);
+        final ObjectMemberContext objectMemberContext = new ObjectMemberContext(getDeploymentCategory(), authenticationSessionProvider, specificationLookup, adapterMap, getRuntimeContext().getQuerySubmitter(), servicesProvider);
 
         // ... and create the specs
         if (FreeStandingList.class.isAssignableFrom(cls)) {
             return new ObjectSpecificationOnStandaloneList(specContext, objectMemberContext);
         } else {
             final SpecificationLoaderSpi specificationLoader = this;
-            final IntrospectionContext introspectionContext = new IntrospectionContext(getClassSubstitutor());
             final ServicesInjector dependencyInjector = getRuntimeContext().getDependencyInjector();
             final CreateObjectContext createObjectContext = new CreateObjectContext(adapterMap, dependencyInjector);
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext = new FacetedMethodsBuilderContext(specificationLoader, classSubstitutor, specificationTraverser, facetProcessor);
-            return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext, introspectionContext, specContext, objectMemberContext, createObjectContext);
+            return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext, specContext, objectMemberContext, createObjectContext);
         }
     }
 
@@ -588,8 +567,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             final SpecificationLoaderAware cast = SpecificationLoaderAware.class.cast(candidate);
             cast.setSpecificationLookup(this);
         }
-
-        getCollectionTypeRegistry().injectInto(candidate);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -605,7 +582,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         final List<ObjectSpecification> specs = Lists.newArrayList(allSpecifications());
         Collections.sort(specs, ObjectSpecification.COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE);
         for (final ObjectSpecification spec : specs) {
-            StringBuffer str = new StringBuffer();
+            StringBuilder str = new StringBuilder();
             str.append(spec.isAbstract() ? "A" : ".");
             str.append(spec.isService() ? "S" : ".");
             str.append(ChoicesFacetUtils.hasChoices(spec) ? "B" : ".");
