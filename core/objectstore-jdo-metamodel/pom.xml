@@ -38,6 +38,12 @@
     <url>http://isis.apache.org/${relativeUrl}</url>
 
 	<dependencies>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-unittestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-applib</artifactId>
@@ -63,11 +69,6 @@
             <type>test-jar</type>
         </dependency>
         
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-unittestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
 
 	</dependencies>
 </project>

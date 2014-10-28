@@ -167,6 +167,7 @@
     <modules>
         <module>tck-dom</module>
         <module>tck-fixture</module>
+        <module>tck-integtests</module>
         <module>tck-viewer-restfulobjects</module>
     </modules>
 
