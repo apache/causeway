@@ -20,10 +20,11 @@
 package org.apache.isis.core.objectstore;
 
 import java.lang.reflect.Modifier;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.core.runtime.bytecode.dflt.ClassSubstitutorDefault;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectFactoryAbstract;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
@@ -69,6 +70,13 @@ public class InMemoryPersistenceMechanismInstaller extends PersistenceMechanismI
     public ObjectFactory createObjectFactory(IsisConfiguration configuration) {
         return new ObjectFactoryBasic();
     }
+
+    @Override
+    public ClassSubstitutor createClassSubstitutor(IsisConfiguration configuration) {
+        return new ClassSubstitutorDefault();
+    }
+
+
 }
 
 

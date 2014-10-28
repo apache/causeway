@@ -1093,18 +1093,6 @@ ${license.additional-notes}
                 <version>1.8.0-SNAPSHOT</version>
             </dependency>
 
-            <!-- bytecode components -->
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-bytecode-cglib</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-bytecode-javassist</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
-            </dependency>
-
             <!-- webserver -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
@@ -1874,9 +1862,6 @@ ${license.additional-notes}
         <module>wrapper</module>
         <module>webserver</module>
 
-        <module>bytecode-cglib</module>
-        <module>bytecode-javassist</module>
-        
         <module>objectstore-inmemory</module>
 
         <module>security-noop</module>

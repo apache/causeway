@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtime.persistence;
 
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.runtime.system.persistence.ObjectFactory;
 
 public final class PersistenceConstants {
@@ -35,17 +34,6 @@ public final class PersistenceConstants {
      * disabled in ISIS-921, to reinstate in ISIS-922
      */
     public static final boolean ENFORCE_SAFE_SEMANTICS_DEFAULT = false;
-
-    /**
-     * Default implementation to use as {@link ObjectFactory}.
-     */
-    public static final String OBJECT_FACTORY_CLASS_NAME_DEFAULT = "org.apache.isis.core.bytecode.cglib.CglibObjectFactory";
-    
-    /**
-     * Default implementation to use as {@link ClassSubstitutor}.
-     */
-    public static final String CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT = "org.apache.isis.core.bytecode.cglib.CglibClassSubstitutor";
-
 
     private PersistenceConstants() {
     }

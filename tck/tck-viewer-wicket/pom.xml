@@ -65,31 +65,27 @@
       </plugins>
 	</build>
 
-	<dependencies>
-	
-		<!-- other modules in this project -->
-		<dependency>
+    <dependencies>
+
+        <!-- other modules in this project -->
+        <dependency>
             <groupId>org.apache.isis.tck</groupId>
-			<artifactId>isis-tck-dom</artifactId>
-		</dependency>
-        
+            <artifactId>isis-tck-dom</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.isis.tck</groupId>
             <artifactId>isis-tck-fixture</artifactId>
         </dependency>
 
         <!-- isis viewer -->
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-wicket-impl</artifactId>
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>isis-viewer-wicket-impl</artifactId>
             <version>${isis-viewer-wicket.version}</version>
-		</dependency>
+        </dependency>
 
         <!-- isis runtime -->
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-bytecode-cglib</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-objectstore</artifactId>

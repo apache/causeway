@@ -67,34 +67,15 @@
         </dependency>
 
 
-		<!-- isis non-core components -->
-		<dependency>
-	        <groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-scimpi-servlet</artifactId>
+        <!-- isis non-core components -->
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>isis-viewer-scimpi-servlet</artifactId>
             <version>${isis-viewer-scimpi.version}</version>
-		</dependency>
-        <dependency>
-            <groupId>org.apache.isis.objectstore</groupId>
-            <artifactId>isis-objectstore-xml</artifactId>
-            <version>${isis-objectstore-xml.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.profilestore</groupId>
-            <artifactId>isis-profilestore-xml</artifactId>
-            <version>${isis-profilestore-xml.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.security</groupId>
-            <artifactId>isis-security-file</artifactId>
-            <version>${isis-security-file.version}</version>
         </dependency>
 
 
         <!-- isis runtime -->
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-bytecode-cglib</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-objectstore</artifactId>

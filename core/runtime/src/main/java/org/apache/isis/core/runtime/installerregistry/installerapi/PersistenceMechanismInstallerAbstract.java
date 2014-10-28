@@ -19,28 +19,18 @@
 
 package org.apache.isis.core.runtime.installerregistry.installerapi;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import java.util.List;
 import java.util.Properties;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
@@ -59,24 +49,17 @@ import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlg
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
-import org.apache.isis.core.runtime.system.persistence.IdentifierGenerator;
-import org.apache.isis.core.runtime.system.persistence.IdentifierGeneratorDefault;
-import org.apache.isis.core.runtime.system.persistence.ObjectFactory;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.core.runtime.system.persistence.*;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInjector;
+
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.hamcrest.CoreMatchers.*;
 
 /**
  * An abstract implementation of {@link PersistenceMechanismInstaller} that will
  * lookup the {@link ObjectAdapterFactory} and {@link ObjectFactory} from the
  * supplied {@link IsisConfiguration}.
- * 
- * <p>
- * If none can be found, then will default to the {@link PojoAdapterFactory} and
- * {@link PersistenceConstants#OBJECT_FACTORY_CLASS_NAME_DEFAULT default}link
- * ObjectFactory} (cglib at time of writing). respectively.
  */
 public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbstract implements PersistenceMechanismInstaller, InstallerLookupAware {
 
@@ -197,11 +180,6 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     }
 
 
-    @Override
-    public ClassSubstitutor createClassSubstitutor(IsisConfiguration configuration) {
-        return InstanceUtil.createInstance(PersistenceConstants.CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT, ClassSubstitutor.class);
-    }
-
     /**
      * Hook method to refine the {@link ProgrammingModel}.
      * 
@@ -238,18 +216,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         return new PojoAdapterFactory();
     }
     
-    /**
-     * Hook method to allow subclasses to specify a different implementation of
-     * {@link ObjectFactory}.
-     * 
-     * <p>
-     * By default, returns <tt>org.apache.isis.runtimes.dflt.bytecode.dflt.objectfactory.CglibObjectFactory</tt>.  Note that this requires that
-     * the <tt>org.apache.isis.runtimes.dflt.bytecode:dflt</tt> module is added to the classpath. 
-     */
-    public ObjectFactory createObjectFactory(final IsisConfiguration configuration) {
-        return InstanceUtil.createInstance(PersistenceConstants.OBJECT_FACTORY_CLASS_NAME_DEFAULT, ObjectFactory.class);
-    }
-    
+
     /**
      * Hook method to allow subclasses to specify a different implementation of
      * {@link ServicesInjectorSpi}

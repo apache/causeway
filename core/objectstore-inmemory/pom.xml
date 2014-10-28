@@ -76,16 +76,11 @@
             <scope>test</scope>
         </dependency>
 
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>isis-core-runtime</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-runtime</artifactId>
+        </dependency>
 
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>isis-core-bytecode-cglib</artifactId>
-		</dependency>
-
-	</dependencies>
+    </dependencies>
 
 </project>
