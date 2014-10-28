@@ -21,14 +21,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.core</groupId>
-        <artifactId>isis-core-tck</artifactId>
+        <groupId>org.apache.isis.tck</groupId>
+        <artifactId>isis-tck</artifactId>
         <version>1.8.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>isis-core-tck-viewer-restfulobjects</artifactId>
-
-    <name>Isis Core RestfulObjects Viewer TCK tests</name>
+    <artifactId>isis-tck-viewer-restfulobjects</artifactId>
+    <name>Isis RestfulObjects Viewer TCK tests</name>
 
     <packaging>war</packaging>
 
@@ -71,13 +70,13 @@
 
         <!-- other modules in this project -->
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-tck-dom</artifactId>
+            <groupId>org.apache.isis.tck</groupId>
+            <artifactId>isis-tck-dom</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-tck-fixture</artifactId>
+            <groupId>org.apache.isis.tck</groupId>
+            <artifactId>isis-tck-fixture</artifactId>
         </dependency>
 
         <!-- isis viewer -->

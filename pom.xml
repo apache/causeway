@@ -51,10 +51,9 @@
             </activation>
             <modules>
                 <module>core</module>
-
-                <module>component/viewer/scimpi</module>
                 <module>component/viewer/wicket</module>
-        
+                <module>tck</module>
+
                 <module>example/application/todoapp</module>
                 <module>example/application/simpleapp</module>
                 
@@ -62,6 +61,8 @@
                 <module>example/archetype/simpleapp</module>
         
                 <module>tool/maven-plugin</module>
+
+                <module>component/viewer/scimpi</module>
             </modules>
         </profile>
         
@@ -69,7 +70,6 @@
             <id>released</id>
             <modules>
                 <module>core</module>
-
                 <module>component/viewer/wicket</module>
         
                 <module>example/application/todoapp</module>

@@ -24,11 +24,13 @@
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
         <version>1.8.0-SNAPSHOT</version>
+        <relativePath>../core/pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-core-tck</artifactId>
+    <groupId>org.apache.isis.tck</groupId>
+    <artifactId>isis-tck</artifactId>
 
-    <name>Isis Core TCK App</name>
+    <name>Isis TCK App</name>
 
     <packaging>pom</packaging>
 
@@ -160,6 +162,33 @@
                 <version>${datanucleus-jodatime.version}</version>
             </dependency>
 
+            <!-- TCK -->
+            <dependency>
+                <groupId>org.apache.isis.tck</groupId>
+                <artifactId>isis-tck</artifactId>
+                <version>1.8.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.tck</groupId>
+                <artifactId>isis-tck-dom</artifactId>
+                <version>1.8.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.tck</groupId>
+                <artifactId>isis-tck-fixture</artifactId>
+                <version>1.8.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.tck</groupId>
+                <artifactId>isis-tck-integtests</artifactId>
+                <version>1.8.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.tck</groupId>
+                <artifactId>isis-tck-viewer-restfulobjects</artifactId>
+                <version>1.8.0-SNAPSHOT</version>
+            </dependency>
+
         </dependencies>
 
     </dependencyManagement>
@@ -169,6 +198,7 @@
         <module>tck-fixture</module>
         <module>tck-integtests</module>
         <module>tck-viewer-restfulobjects</module>
+        <module>tck-viewer-wicket</module>
     </modules>
 
 </project>

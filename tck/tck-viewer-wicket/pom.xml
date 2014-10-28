@@ -21,17 +21,15 @@
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.core</groupId>
-        <artifactId>isis-core-tck</artifactId>
+        <groupId>org.apache.isis.tck</groupId>
+        <artifactId>isis-tck</artifactId>
         <version>1.8.0-SNAPSHOT</version>
-        <relativePath>../../../../core/tck/pom.xml</relativePath>
     </parent>
 
-    <groupId>org.apache.isis.viewer</groupId>
-	<artifactId>isis-viewer-wicket-tck</artifactId>
+	<artifactId>isis-tck-viewer-wicket</artifactId>
     <version>1.8.0-SNAPSHOT</version>
 
-	<name>Isis Wicket Viewer TCK tests</name>
+	<name>Isis TCK Wicket Viewer tests</name>
 
 
 	<properties>
@@ -71,13 +69,13 @@
 	
 		<!-- other modules in this project -->
 		<dependency>
-            <groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-tck-dom</artifactId>
+            <groupId>org.apache.isis.tck</groupId>
+			<artifactId>isis-tck-dom</artifactId>
 		</dependency>
         
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-tck-fixture</artifactId>
+            <groupId>org.apache.isis.tck</groupId>
+            <artifactId>isis-tck-fixture</artifactId>
         </dependency>
 
         <!-- isis viewer -->

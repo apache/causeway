@@ -19,17 +19,11 @@
 
 package org.apache.isis.core.integtestsupport.tck;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-
 import java.util.Date;
 import java.util.List;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -40,6 +34,8 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitl
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.tck.dom.refs.SimpleEntity;
+
+import static org.junit.Assert.*;
 
 public abstract class ObjectStoreContractTest_persist {
 
