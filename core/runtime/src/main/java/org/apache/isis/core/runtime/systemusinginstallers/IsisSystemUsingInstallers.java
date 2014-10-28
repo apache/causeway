@@ -24,7 +24,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
@@ -176,7 +175,7 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
     }
 
     @Override
-    protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(final DeploymentType deploymentType, final ClassSubstitutorFactory classSubstitutorFactory, final Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
+    protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(final DeploymentType deploymentType, final Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
         if (reflectorInstaller == null) {
             final String fromCmdLine = getConfiguration().getString(SystemConstants.REFLECTOR_KEY);
             reflectorInstaller = installerLookup.reflectorInstaller(fromCmdLine);
@@ -186,7 +185,7 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
         // add in transaction support (if already in set then will be ignored)
         reflectorInstaller.addFacetDecoratorInstaller(installerLookup.getInstaller(TransactionFacetDecoratorInstaller.class));
 
-        return reflectorInstaller.createReflector(classSubstitutorFactory, metaModelRefiners);
+        return reflectorInstaller.createReflector(metaModelRefiners);
     }
 
     // ///////////////////////////////////////////

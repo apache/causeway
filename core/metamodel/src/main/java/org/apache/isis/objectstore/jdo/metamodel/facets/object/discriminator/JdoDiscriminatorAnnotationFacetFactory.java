@@ -20,21 +20,18 @@
 package org.apache.isis.objectstore.jdo.metamodel.facets.object.discriminator;
 
 import javax.jdo.annotations.Discriminator;
-
 import com.google.common.base.Strings;
-
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAware;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 
-public class JdoDiscriminatorAnnotationFacetFactory extends FacetFactoryAbstract implements ClassSubstitutorAware  {
+public class JdoDiscriminatorAnnotationFacetFactory extends FacetFactoryAbstract {
 
-    private ClassSubstitutor classSubstitutor;
+    private ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
     public JdoDiscriminatorAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -58,11 +55,6 @@ public class JdoDiscriminatorAnnotationFacetFactory extends FacetFactoryAbstract
         }
 
         FacetUtil.addFacet(new JdoDiscriminatorFacetDefault(annotationValueAttribute, processClassContext.getFacetHolder()));
-    }
-
-    @Override
-    public void setClassSubstitutor(ClassSubstitutor classSubstitutor) {
-        this.classSubstitutor = classSubstitutor;
     }
 
 }

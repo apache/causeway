@@ -19,19 +19,18 @@
 
 package org.apache.isis.core.metamodel.specloader.classsubstitutor;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 
-public class ClassSubstitutorAbstract_getClass {
+import static org.junit.Assert.assertEquals;
 
-    private ClassSubstitutorAbstract classSubstitutorAbstract;
+public class ClassSubstitutor_getClass {
+
+    private ClassSubstitutor classSubstitutor;
 
     @Before
     public void setUp() throws Exception {
-        classSubstitutorAbstract = new ClassSubstitutorAbstract() {
-        };
+        classSubstitutor = new ClassSubstitutor();
     }
     
     public static class SomeDomainObject {
@@ -48,19 +47,19 @@ public class ClassSubstitutorAbstract_getClass {
     
     @Test
     public void regularDomainObject() throws Exception {
-        Class<?> cls = classSubstitutorAbstract.getClass(SomeDomainObject.class);
+        Class<?> cls = classSubstitutor.getClass(SomeDomainObject.class);
         assertEquals(SomeDomainObject.class, cls);
     }
 
     @Test
     public void someEnum() throws Exception {
-        Class<?> cls = classSubstitutorAbstract.getClass(SomeDomainObject.SomeEnum.class);
+        Class<?> cls = classSubstitutor.getClass(SomeDomainObject.SomeEnum.class);
         assertEquals(SomeDomainObject.SomeEnum.class, cls);
     }
 
     @Test
     public void someAnonymousSubtypeOfEnum() throws Exception {
-        Class<?> cls = classSubstitutorAbstract.getClass(SomeDomainObject.SomeEnum.Foo.getClass());
+        Class<?> cls = classSubstitutor.getClass(SomeDomainObject.SomeEnum.Foo.getClass());
         assertEquals(SomeDomainObject.SomeEnum.class, cls);
     }
 

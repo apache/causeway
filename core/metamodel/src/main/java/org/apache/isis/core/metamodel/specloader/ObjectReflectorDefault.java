@@ -252,7 +252,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
         // initialize subcomponents
         facetDecoratorSet.init();
-        classSubstitutor.init();
         collectionTypeRegistry.init();
         specificationTraverser.init();
         programmingModel.init();
@@ -590,7 +589,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             cast.setSpecificationLookup(this);
         }
 
-        getClassSubstitutor().injectInto(candidate);
         getCollectionTypeRegistry().injectInto(candidate);
     }
 

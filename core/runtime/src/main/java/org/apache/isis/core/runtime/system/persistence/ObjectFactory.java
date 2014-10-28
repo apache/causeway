@@ -19,15 +19,79 @@
 
 package org.apache.isis.core.runtime.system.persistence;
 
-import org.apache.isis.core.commons.components.SessionScopedComponent;
+import java.lang.reflect.Modifier;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
-public interface ObjectFactory extends SessionScopedComponent {
+public class ObjectFactory {
+
+    private final Mode mode;
+
+    public enum Mode {
+        /**
+         * Fail if no {@link ObjectFactory#getServicesInjector() services injector} has been injected.
+         */
+        STRICT,
+        /**
+         * Ignore if no {@link ObjectFactory#getServicesInjector() services injector} has been injected
+         * (intended for testing only).
+         */
+        RELAXED
+    }
+
+    public ObjectFactory() {
+        this(Mode.STRICT);
+    }
+
+    public ObjectFactory(final Mode mode) {
+        this.mode = mode;
+    }
+
+    public <T> T instantiate(final Class<T> cls) throws ObjectInstantiationException {
+
+        if (mode == Mode.STRICT && getServicesInjector() == null) {
+            throw new IllegalStateException("ServicesInjector is not available (no open session)");
+        }
+        if (Modifier.isAbstract(cls.getModifiers())) {
+            throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
+        }
+        final T newInstance = doInstantiate(cls);
+
+        if (getServicesInjector() != null) {
+            getServicesInjector().injectServicesInto(newInstance);
+        }
+        return newInstance;
+    }
+
+
+    //region > doInstantiate
 
     /**
-     * Should instantiate the object, and in addition initialize the domain
-     * object (for example, inject any services and repositories into it).
-     * 
+     * Simply instantiates reflectively.
      */
-    <T> T instantiate(Class<T> cls) throws ObjectInstantiationException;
+    protected <T> T doInstantiate(final Class<T> cls) throws ObjectInstantiationException {
+        if (Modifier.isAbstract(cls.getModifiers())) {
+            throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
+        }
+        try {
+            return cls.newInstance();
+        } catch (final IllegalAccessException | InstantiationException e) {
+            throw new ObjectInstantiationException(e);
+        }
+    }
+    //endregion
+
+    //region > dependencies (looked up from context)
+
+    private PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+    protected ServicesInjectorSpi getServicesInjector() {
+        return getPersistenceSession().getServicesInjector();
+    }
+
+    //endregion
+
 }

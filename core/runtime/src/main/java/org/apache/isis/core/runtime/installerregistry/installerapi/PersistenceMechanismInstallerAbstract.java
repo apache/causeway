@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookupAware;
-import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegating;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
@@ -110,7 +109,6 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         }
 
         ObjectAdapterFactory adapterFactory = persistenceSessionFactory.getAdapterFactory();
-        ObjectFactory objectFactory = persistenceSessionFactory.getObjectFactory();
         PojoRecreator pojoRecreator = persistenceSessionFactory.getPojoRecreator();
         IdentifierGenerator identifierGenerator = persistenceSessionFactory.getIdentifierGenerator();
         ServicesInjectorSpi servicesInjector = persistenceSessionFactory.getServicesInjector();
@@ -129,7 +127,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         }
         
         final PersistenceSession persistenceSession = 
-                new PersistenceSession(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, identifierGenerator, adapterManager, persistAlgorithm, objectStore);
+                new PersistenceSession(persistenceSessionFactory, adapterFactory, servicesInjector, identifierGenerator, adapterManager, persistAlgorithm, objectStore);
         
         final IsisTransactionManager transactionManager = createTransactionManager(persistenceSession, objectStore, servicesInjector);
         
@@ -274,7 +272,6 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         }
         return properties;
     }
-
 
 
     // /////////////////////////////////////////////////////

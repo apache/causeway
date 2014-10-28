@@ -22,7 +22,6 @@ package org.apache.isis.core.runtime.system.persistence;
 import java.util.List;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegate;
@@ -32,7 +31,7 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 /**
  * @see PersistenceSessionFactoryDelegate
  */
-public interface PersistenceSessionFactory extends ClassSubstitutorFactory, MetaModelRefiner, ApplicationScopedComponent {
+public interface PersistenceSessionFactory extends MetaModelRefiner, ApplicationScopedComponent {
 
     DeploymentType getDeploymentType();
 
@@ -42,7 +41,6 @@ public interface PersistenceSessionFactory extends ClassSubstitutorFactory, Meta
     // //////////////////////////////////////////////////////
 
     ObjectAdapterFactory getAdapterFactory();
-    ObjectFactory getObjectFactory();
     PojoRecreator getPojoRecreator();
     IdentifierGenerator getIdentifierGenerator();
     ServicesInjectorSpi getServicesInjector();

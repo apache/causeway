@@ -26,7 +26,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.components.Noop;
@@ -176,7 +175,7 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         final OidMarshaller oidMarshaller = obtainOidMarshaller();
         
         final Collection<MetaModelRefiner> metaModelRefiners = refiners(authenticationManager, authorizationManager, persistenceSessionFactory);
-        final SpecificationLoaderSpi reflector = obtainSpecificationLoaderSpi(deploymentType, persistenceSessionFactory, metaModelRefiners);
+        final SpecificationLoaderSpi reflector = obtainSpecificationLoaderSpi(deploymentType, metaModelRefiners);
 
         final List<Object> services = obtainServices();
 

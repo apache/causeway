@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -48,15 +47,14 @@ public final class JavaReflectorHelper  {
     private JavaReflectorHelper(){}
     
     public static SpecificationLoaderSpi createObjectReflector(
-                                                           final ProgrammingModel programmingModel,
-                                                           final ClassSubstitutorFactory classSubstitutorFactory,
-                                                           final Collection<MetaModelRefiner> metaModelRefiners,
-                                                           final Set<FacetDecorator> facetDecorators,
-                                                           final MetaModelValidator mmv, 
-                                                           final IsisConfiguration configuration) {
+            final ProgrammingModel programmingModel,
+            final Collection<MetaModelRefiner> metaModelRefiners,
+            final Set<FacetDecorator> facetDecorators,
+            final MetaModelValidator mmv,
+            final IsisConfiguration configuration) {
         final SpecificationTraverser specificationTraverser = new SpecificationTraverserDefault();
         final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistryDefault();
-        final ClassSubstitutor classSubstitutor = classSubstitutorFactory.createClassSubstitutor(configuration);
+        final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
         
         MetaModelValidatorComposite metaModelValidator = MetaModelValidatorComposite.asComposite(mmv);
         for (MetaModelRefiner metaModelRefiner : metaModelRefiners) {

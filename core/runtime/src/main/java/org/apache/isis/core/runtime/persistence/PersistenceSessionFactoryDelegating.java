@@ -28,13 +28,11 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreator;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.IdentifierGenerator;
-import org.apache.isis.core.runtime.system.persistence.ObjectFactory;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
@@ -57,10 +55,9 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     private List<Object> serviceList;
 
     private Boolean fixturesInstalled;
-    
+
     private PojoRecreator pojoRecreator;
     private ObjectAdapterFactory adapterFactory;
-    private ObjectFactory objectFactory;
     private IdentifierGenerator identifierGenerator;
     private ServicesInjectorSpi servicesInjector;
     private RuntimeContext runtimeContext;
@@ -107,12 +104,10 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
 
         pojoRecreator = persistenceSessionFactoryDelegate.createPojoRecreator(getConfiguration());
         adapterFactory = persistenceSessionFactoryDelegate.createAdapterFactory(getConfiguration());
-        objectFactory = persistenceSessionFactoryDelegate.createObjectFactory(getConfiguration());
         identifierGenerator = persistenceSessionFactoryDelegate.createIdentifierGenerator(getConfiguration());
 
         ensureThatState(pojoRecreator, is(not(nullValue())));
         ensureThatState(adapterFactory, is(not(nullValue())));
-        ensureThatState(objectFactory, is(not(nullValue())));
         ensureThatState(identifierGenerator, is(not(nullValue())));
 
         servicesInjector = persistenceSessionFactoryDelegate.createServicesInjector(getConfiguration());
@@ -162,10 +157,6 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
         return identifierGenerator;
     }
     
-    public ObjectFactory getObjectFactory() {
-        return objectFactory;
-    }
-    
     public PojoRecreator getPojoRecreator() {
         return pojoRecreator;
     }
@@ -181,11 +172,6 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     // //////////////////////////////////////////////////////
     // MetaModelAdjuster impl
     // //////////////////////////////////////////////////////
-
-    @Override
-    public ClassSubstitutor createClassSubstitutor(final IsisConfiguration configuration) {
-        return persistenceSessionFactoryDelegate.createClassSubstitutor(configuration);
-    }
 
     @Override
     public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {

@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
-import org.apache.isis.core.metamodel.facets.object.callbacks.*;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
@@ -72,9 +71,10 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
+    private final ObjectFactory objectFactory = new ObjectFactory();
+
     private final PersistenceSessionFactory persistenceSessionFactory;
     private final ObjectAdapterFactory objectAdapterFactory;
-    private final ObjectFactory objectFactory;
     private final ServicesInjectorSpi servicesInjector;
     private final OidGenerator oidGenerator;
     private final AdapterManagerSpi adapterManager;
@@ -100,23 +100,22 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
      * Initialize the object store so that calls to this object store access
      * persisted objects and persist changes to the object that are saved.
      */
-    public PersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final ServicesInjectorSpi servicesInjector, final IdentifierGenerator identifierGenerator, final AdapterManagerSpi adapterManager,
-            final PersistAlgorithm persistAlgorithm, final ObjectStore objectStore) {
+    public PersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ServicesInjectorSpi servicesInjector, final IdentifierGenerator identifierGenerator, final AdapterManagerSpi adapterManager,
+                              final PersistAlgorithm persistAlgorithm, final ObjectStore objectStore) {
 
-        this(persistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, new OidGenerator(identifierGenerator), adapterManager, persistAlgorithm, objectStore);
+        this(persistenceSessionFactory, adapterFactory, servicesInjector, new OidGenerator(identifierGenerator), adapterManager, persistAlgorithm, objectStore);
     }
 
     /**
      * Initialize the object store so that calls to this object store access
      * persisted objects and persist changes to the object that are saved.
      */
-    public PersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ObjectFactory objectFactory, final ServicesInjectorSpi servicesInjector, final OidGenerator oidGenerator, final AdapterManagerSpi adapterManager,
-            final PersistAlgorithm persistAlgorithm, final ObjectStore objectStore) {
+    public PersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ServicesInjectorSpi servicesInjector, final OidGenerator oidGenerator, final AdapterManagerSpi adapterManager,
+                              final PersistAlgorithm persistAlgorithm, final ObjectStore objectStore) {
 
         ensureThatArg(persistenceSessionFactory, is(not(nullValue())), "persistence session factory required");
 
         ensureThatArg(adapterFactory, is(not(nullValue())), "adapter factory required");
-        ensureThatArg(objectFactory, is(not(nullValue())), "object factory required");
         ensureThatArg(servicesInjector, is(not(nullValue())), "services injector required");
         ensureThatArg(oidGenerator, is(not(nullValue())), "OID generator required");
         ensureThatArg(adapterManager, is(not(nullValue())), "adapter manager required");
@@ -126,7 +125,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
 
         // session scope
         this.objectAdapterFactory = adapterFactory;
-        this.objectFactory = objectFactory;
         this.servicesInjector = servicesInjector;
         this.oidGenerator = oidGenerator;
         this.adapterManager = adapterManager;
@@ -161,10 +159,8 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     // ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * Injects components, calls {@link #doOpen()}, and then creates service
+     * Injects components, calls  {@link org.apache.isis.core.commons.components.SessionScopedComponent#open()} on subcomponents, and then creates service
      * adapters.
-     * 
-     * @see #doOpen()
      */
     @Override
     public void open() {
@@ -183,7 +179,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         // wire dependencies into adapterManager
         servicesInjector.injectInto(adapterManager);
 
-        objectFactory.open();
         adapterManager.open();
 
         // doOpen..
@@ -211,7 +206,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
 
     /**
      * Creates (or recreates following a {@link #testReset()})
-     * {@link ObjectAdapter adapters} for the {@link #serviceList}.
+     * {@link ObjectAdapter adapters} for the service list.
      */
     private void createServiceAdapters(final List<Object> registeredServices) {
         for (final Object service : registeredServices) {
@@ -248,9 +243,8 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
 
 
     /**
-     * Calls {@link #doClose()}, then closes all components.
-     * 
-     * @see #doClose()
+     * Calls {@link org.apache.isis.core.commons.components.SessionScopedComponent#close()}
+     * on the subcomponents.
      */
     @Override
     public void close() {
@@ -274,12 +268,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         } catch(RuntimeException ex) {
             // ignore
         }
-        
-        try {
-            objectFactory.close();
-        } catch(RuntimeException ex) {
-            // ignore
-        }
 
         setState(State.CLOSED);
     }
@@ -300,12 +288,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     protected void ensureNotOpened() {
         if (getState() != State.NOT_INITIALIZED) {
             throw new IllegalStateException("Persistence session has already been initialized");
-        }
-    }
-
-    protected void ensureOpen() {
-        if (getState() != State.OPEN) {
-            throw new IllegalStateException("Persistence session is not open");
         }
     }
 

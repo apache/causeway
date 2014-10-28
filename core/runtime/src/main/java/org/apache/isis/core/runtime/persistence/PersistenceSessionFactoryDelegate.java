@@ -22,7 +22,6 @@ package org.apache.isis.core.runtime.persistence;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
@@ -36,7 +35,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory
  * Creates a {@link PersistenceSession} on behalf of a
  * {@link PersistenceSessionFactory}.
  */
-public interface PersistenceSessionFactoryDelegate extends IsisConfigurationBuilderAware, ClassSubstitutorFactory, MetaModelRefiner {
+public interface PersistenceSessionFactoryDelegate extends IsisConfigurationBuilderAware, MetaModelRefiner {
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -46,8 +45,6 @@ public interface PersistenceSessionFactoryDelegate extends IsisConfigurationBuil
     PojoRecreator createPojoRecreator(IsisConfiguration configuration);
 
     ObjectAdapterFactory createAdapterFactory(IsisConfiguration configuration);
-
-    ObjectFactory createObjectFactory(IsisConfiguration configuration);
 
     IdentifierGenerator createIdentifierGenerator(IsisConfiguration configuration);
 

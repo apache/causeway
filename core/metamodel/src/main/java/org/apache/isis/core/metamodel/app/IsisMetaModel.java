@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
@@ -117,7 +116,9 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         this.services.addAll(Arrays.asList(services));
 
         setConfiguration(new IsisConfigurationDefault());
-        setClassSubstitutor(new ClassSubstitutorAbstract() {});
+
+        this.classSubstitutor = new ClassSubstitutor();
+
         setCollectionTypeRegistry(new CollectionTypeRegistryDefault());
         setSpecificationTraverser(new SpecificationTraverserDefault());
         setFacetDecorators(new TreeSet<FacetDecorator>());
@@ -222,18 +223,6 @@ public class IsisMetaModel implements ApplicationScopedComponent {
      */
     public ClassSubstitutor getClassSubstitutor() {
         return classSubstitutor;
-    }
-
-    /**
-     * Optionally specify the {@link ClassSubstitutor}.
-     * 
-     * <p>
-     * Call prior to {@link #init()}.
-     */
-    public void setClassSubstitutor(final ClassSubstitutor classSubstitutor) {
-        ensureNotInitialized();
-        ensureThatArg(classSubstitutor, is(notNullValue()));
-        this.classSubstitutor = classSubstitutor;
     }
 
     /**

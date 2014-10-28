@@ -19,19 +19,86 @@
 
 package org.apache.isis.core.metamodel.specloader.classsubstitutor;
 
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.components.Injectable;
+import java.util.Set;
+import com.google.common.collect.Sets;
+import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.core.commons.lang.ClassUtil;
 
 /**
  * Provides capability to translate or ignore classes.
- * 
- * <p>
- * The class strategy is typically required when either an underlying object
- * store (such as Hibernate); it then allows the enhancement artifacts can be
- * ignored or interpreted correctly.
  */
-public interface ClassSubstitutor extends Injectable, ApplicationScopedComponent {
+public class ClassSubstitutor {
 
-    Class<?> getClass(Class<?> cls);
+    //region > constructor
+
+    public ClassSubstitutor() {
+        ignore(DomainObjectContainer.class);
+
+        // ignore cglib
+        ignore("net.sf.cglib.proxy.Factory");
+        ignore("net.sf.cglib.proxy.MethodProxy");
+        ignore("net.sf.cglib.proxy.Callback");
+
+        // ignore javassist
+        ignore("javassist.util.proxy.ProxyObject");
+        ignore("javassist.util.proxy.MethodHandler");
+
+    }
+    //endregion
+
+    //region > getClass(Class)
+
+    public Class<?> getClass(final Class<?> cls) {
+
+        // ignore datanucleus proxies
+        if(cls.getName().startsWith("org.datanucleus")) {
+            return getClass(cls.getSuperclass());
+        }
+
+        if (shouldIgnore(cls)) {
+            return null;
+        }
+        final Class<?> superclass = cls.getSuperclass();
+        if(superclass != null && superclass.isEnum()) {
+            return superclass;
+        }
+        if (ClassUtil.directlyImplements(cls, JavassistEnhanced.class)) {
+            return getClass(cls.getSuperclass());
+        }
+        return cls;
+    }
+
+    //endregion
+
+    //region > helpers
+
+    private final Set<Class<?>> classesToIgnore = Sets.newHashSet();
+    private final Set<String> classNamesToIgnore = Sets.newHashSet();
+
+    /**
+     * For any classes registered as ignored, {@link #getClass(Class)} will
+     * return <tt>null</tt>.
+     */
+    private boolean ignore(final Class<?> q) {
+        return classesToIgnore.add(q);
+    }
+
+    /**
+     * For any classes registered as ignored, {@link #getClass(Class)} will
+     * return <tt>null</tt>.
+     */
+    private boolean ignore(final String className) {
+        return classNamesToIgnore.add(className);
+    }
+
+    private boolean shouldIgnore(final Class<?> cls) {
+        if (cls.isArray()) {
+            return shouldIgnore(cls.getComponentType());
+        }
+        return classesToIgnore.contains(cls) || classNamesToIgnore.contains(cls.getCanonicalName());
+    }
+
+    //endregion
+
 
 }

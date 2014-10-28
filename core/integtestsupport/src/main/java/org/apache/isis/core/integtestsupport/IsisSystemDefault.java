@@ -27,7 +27,6 @@ import com.google.common.collect.Sets;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
-import org.apache.isis.core.metamodel.facetapi.ClassSubstitutorFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
@@ -126,13 +125,13 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      * @see #obtainReflectorProgrammingModel()
      */
     @Override
-    protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(DeploymentType deploymentType, ClassSubstitutorFactory classSubstitutorFactory, Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
+    protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(DeploymentType deploymentType, Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
         
         final ProgrammingModel programmingModel = obtainReflectorProgrammingModel();
         final Set<FacetDecorator> facetDecorators = obtainReflectorFacetDecoratorSet();
         final MetaModelValidator mmv = obtainReflectorMetaModelValidator();
         
-        return JavaReflectorHelper.createObjectReflector(programmingModel, classSubstitutorFactory, metaModelRefiners, facetDecorators, mmv, getConfiguration());
+        return JavaReflectorHelper.createObjectReflector(programmingModel, metaModelRefiners, facetDecorators, mmv, getConfiguration());
     }
 
  

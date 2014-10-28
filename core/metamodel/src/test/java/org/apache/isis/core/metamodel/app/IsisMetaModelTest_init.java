@@ -71,11 +71,11 @@ public class IsisMetaModelTest_init {
     @Mock
     private FacetDecorator mockFacetDecorator;
     @Mock
-    private ClassSubstitutor mockClassSubstitutor;
-    @Mock
     private CollectionTypeRegistry mockCollectionTypeRegistry;
     @Mock
     private RuntimeContext mockRuntimeContext;
+
+    private ClassSubstitutor classSubstitutor;
 
     private IsisMetaModel metaModel;
 
@@ -83,6 +83,7 @@ public class IsisMetaModelTest_init {
     public void setUp() {
         expectingMetaModelToBeInitialized();
         metaModel = new IsisMetaModel(mockRuntimeContext, mockProgrammingModelFacets);
+        classSubstitutor = new ClassSubstitutor();
     }
 
     private void expectingMetaModelToBeInitialized() {
@@ -150,12 +151,6 @@ public class IsisMetaModelTest_init {
     public void shouldNotBeAbleToChangeCollectionTypeRegistry() {
         metaModel.init();
         metaModel.setCollectionTypeRegistry(mockCollectionTypeRegistry);
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void shouldNotBeAbleToChangeClassSubstitutor() {
-        metaModel.init();
-        metaModel.setClassSubstitutor(mockClassSubstitutor);
     }
 
     @Test(expected = IllegalStateException.class)

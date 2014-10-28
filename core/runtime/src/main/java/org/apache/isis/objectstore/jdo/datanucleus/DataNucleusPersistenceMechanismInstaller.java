@@ -37,17 +37,13 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.runtime.bytecode.dflt.ObjectFactoryBasic;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.core.runtime.system.persistence.IdentifierGenerator;
-import org.apache.isis.core.runtime.system.persistence.ObjectFactory;
-import org.apache.isis.objectstore.jdo.datanucleus.bytecode.DataNucleusTypesClassSubstitutor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.adaptermanager.DataNucleusPojoRecreator;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.DataNucleusIdentifierGenerator;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.DataNucleusSimplePersistAlgorithm;
@@ -209,11 +205,6 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     }
 
     @Override
-    public ClassSubstitutor createClassSubstitutor(IsisConfiguration configuration) {
-        return new DataNucleusTypesClassSubstitutor();
-    }
-
-    @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel, IsisConfiguration configuration) {
         programmingModel.addFactory(JdoPersistenceCapableAnnotationFacetFactory.class);
         programmingModel.addFactory(JdoDatastoreIdentityAnnotationFacetFactory.class);
@@ -240,11 +231,6 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         metaModelValidator.add(new JdoMetaModelValidator());
     }
 
-
-    @Override
-    public ObjectFactory createObjectFactory(IsisConfiguration configuration) {
-        return new ObjectFactoryBasic();
-    }
 
     @Override
     public DataNucleusPojoRecreator createPojoRecreator(IsisConfiguration configuration) {

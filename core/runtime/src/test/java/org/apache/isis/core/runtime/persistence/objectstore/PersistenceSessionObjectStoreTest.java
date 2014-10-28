@@ -157,7 +157,7 @@ public class PersistenceSessionObjectStoreTest {
 
         adapterManager = new AdapterManagerDefault(new PojoRecreatorDefault());
         adapterFactory = new PojoAdapterFactory();
-        persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, adapterFactory, objectFactory, servicesInjector, new OidGenerator(new IdentifierGeneratorDefault()), adapterManager, mockPersistAlgorithm, mockObjectStore) {
+        persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, adapterFactory, servicesInjector, new OidGenerator(new IdentifierGeneratorDefault()), adapterManager, mockPersistAlgorithm, mockObjectStore) {
             @Override
             protected SpecificationLoaderSpi getSpecificationLoader() {
                 return isisMetaModel.getSpecificationLoader();

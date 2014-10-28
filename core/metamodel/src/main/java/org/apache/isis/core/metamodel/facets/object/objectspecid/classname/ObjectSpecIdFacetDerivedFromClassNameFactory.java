@@ -25,11 +25,10 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAware;
 
-public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAbstract implements ClassSubstitutorAware {
+public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAbstract {
 
-    private ClassSubstitutor classSubstitutor;
+    private ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
     public ObjectSpecIdFacetDerivedFromClassNameFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -45,11 +44,6 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAb
         final Class<?> originalClass = processClassContaxt.getCls();
         final Class<?> substitutedClass = classSubstitutor.getClass(originalClass);
         FacetUtil.addFacet(new ObjectSpecIdFacetDerivedFromClassName(substitutedClass.getCanonicalName(), facetHolder));
-    }
-
-    @Override
-    public void setClassSubstitutor(ClassSubstitutor classSubstitutor) {
-        this.classSubstitutor = classSubstitutor;
     }
 
 }
