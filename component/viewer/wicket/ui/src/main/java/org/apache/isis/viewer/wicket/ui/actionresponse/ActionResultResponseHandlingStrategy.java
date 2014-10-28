@@ -62,7 +62,7 @@ public enum ActionResultResponseHandlingStrategy {
             RequestCycle requestCycle = component.getRequestCycle();
 
             final String fullUrl = expanded(requestCycle, url);
-            target.appendJavaScript("setTimeout(function(){isisOpenInNewTab('" + fullUrl + "')}, 100);");
+            target.appendJavaScript("setTimeout(function(){Wicket.Event.publish(Isis.Topic.OPEN_IN_NEW_TAB, '" + fullUrl + "');}, 100);");
         }
 
     };

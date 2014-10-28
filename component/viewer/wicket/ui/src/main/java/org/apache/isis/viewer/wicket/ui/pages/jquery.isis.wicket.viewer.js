@@ -16,7 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-$(document).ready(function() {
+$(function() {
+
+    'use strict';
+
+    if (typeof(Isis) === 'object' && typeof(Isis.openInNewTab) === 'function') {
+        return;
+    }
+
+    window.Isis = {
+        Topic: {
+            OPEN_IN_NEW_TAB: 'openInNewTab'
+        }
+    };
 
     var isisVeilTimeoutId;
     
@@ -26,7 +38,8 @@ $(document).ready(function() {
             isisVeilTimeoutId = null;
         }
         $("#veil").stop().fadeIn(1000)/*show()*/;
-    }
+    };
+
     var isisFadeInVeil = function(attributes, jqxhr, settings) {
         // use timeouts because JQuery's delay(...) cannot be stopped. 
         //var activeEl = attributes.currentTarget.activeElement;
@@ -34,27 +47,29 @@ $(document).ready(function() {
             $("#veil").fadeIn(750);
         }, 250);
         
-    }
-    var isisHideVeil = function(attributes, jqXHR, settings) {
+    };
+
+    var isisHideVeil = function() {
         if(isisVeilTimeoutId) {
             clearTimeout(isisVeilTimeoutId);
             isisVeilTimeoutId = null;
         }
         $("#veil").stop().hide();
-    }
+    };
 
-    var isisOpenInNewTab = function(url){
-    	var win=window.open(url, '_blank'); 
-    	if(win) { win.focus(); }
-	}
+    Wicket.Event.subscribe(Isis.Topic.OPEN_IN_NEW_TAB, function(jqEvent, url) {
+        var win=window.open(url, '_blank');
+        if(win) { win.focus(); }
+    });
 
     /* for modal dialogs */
-    Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_BEFORE_SEND, function(attributes, jqXHR, settings) {
+    Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_BEFORE_SEND, function(jqEvent, attributes, jqXHR, settings) {
         if (!$('#'+attributes.c).hasClass('noVeil')) {
             isisShowVeil(attributes, jqXHR, settings);
         }
     });
-    Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_COMPLETE, function(attributes, jqXHR, settings) {
+
+    Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_COMPLETE, function(jqEvent, attributes, jqXHR, status) {
         isisHideVeil(attributes, jqXHR, settings);
     });
     
@@ -67,7 +82,7 @@ $(document).ready(function() {
 
     $('div.collectionContentsAsAjaxTablePanel > table.contents > tbody > tr.reloaded-after-concurrency-exception') 
         .livequery(function(){
-            x=$(this);
+            var x = $(this);
             $(this).animate({ "backgroundColor": "#FFF" }, 1000, "linear", function() {
                 $(x).css('background-color','').removeClass("reloaded-after-concurrency-exception");
             }); 
