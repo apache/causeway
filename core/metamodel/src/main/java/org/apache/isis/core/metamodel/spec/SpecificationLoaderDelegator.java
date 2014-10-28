@@ -16,6 +16,7 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 
@@ -79,7 +80,6 @@ public class SpecificationLoaderDelegator extends SpecificationLoaderAbstract {
         return specificationLoaderDelegate.introspectIfRequired(spec);
     }
 
-    
     @Override
     public List<Class<?>> getServiceClasses() {
         return specificationLoaderDelegate.getServiceClasses();
@@ -88,6 +88,11 @@ public class SpecificationLoaderDelegator extends SpecificationLoaderAbstract {
     @Override
     public void invalidateCache(Class<?> domainClass) {
         specificationLoaderDelegate.invalidateCache(domainClass);
+    }
+
+    @Override
+    public boolean isInjectorMethodFor(Method method, Class<? extends Object> serviceClass) {
+        return specificationLoaderDelegate.isInjectorMethodFor(method, serviceClass);
     }
 
     @Override

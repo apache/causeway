@@ -16,15 +16,13 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
-
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 
-public interface SpecificationLoader extends Injectable {
+public interface SpecificationLoader extends Injectable, InjectorMethodEvaluator {
 
     ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId);
 
@@ -33,7 +31,8 @@ public interface SpecificationLoader extends Injectable {
      * 
      * <p>
      * It is possible for this method to return <tt>null</tt>, for example if
-     * the configured {@link #getClassSubstitutor()} has filtered out the class.
+     * the configured {@link org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor}
+     * has filtered out the class.
      */
     ObjectSpecification loadSpecification(String fullyQualifiedClassName);
 
@@ -82,7 +81,6 @@ public interface SpecificationLoader extends Injectable {
 
     void invalidateCache(Class<?> domainClass);
 
-    boolean isInjectorMethodFor(Method method, Class<? extends Object> serviceClass);
 
 
 }

@@ -38,6 +38,7 @@ import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
+import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
@@ -56,9 +57,24 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
      */
     private final Map<Class<?>, List<Object>> servicesByType = Maps.newHashMap();
 
+    public ServicesInjectorDefault() {
+        this(null);
+    }
 
+    /**
+     * For testing.  
+     * 
+     * <p>
+     *     In production code, {@link #setSpecificationLookup(org.apache.isis.core.metamodel.spec.SpecificationLoader)}
+     *     Pis used instead.
+     * </p>
+     * @param injectorMethodEvaluator
+     */
+    public ServicesInjectorDefault(InjectorMethodEvaluator injectorMethodEvaluator) {
+        this.injectorMethodEvaluator = injectorMethodEvaluator;
+    }
 
-    //region > init, shutdown
+//region > init, shutdown
 
     @Override
     public void init() {
@@ -210,7 +226,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
     private void autowire(Object object, Method prefixedMethod, List<Object> services) {
         for (final Object service : services) {
             final Class<?> serviceClass = service.getClass();
-            boolean isInjectorMethod = specificationLoader.isInjectorMethodFor(prefixedMethod, serviceClass);
+            boolean isInjectorMethod = injectorMethodEvaluator.isInjectorMethodFor(prefixedMethod, serviceClass);
             if(isInjectorMethod) {
                 prefixedMethod.setAccessible(true);
                 invokeInjectorMethod(prefixedMethod, object, service);
@@ -317,10 +333,11 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
 
     //region > injected dependencies
 
-    private SpecificationLoader specificationLoader;
+    private InjectorMethodEvaluator injectorMethodEvaluator;
 
-    public void setSpecificationLookup(SpecificationLoader specificationLoader) {
-        this.specificationLoader = specificationLoader;
+    @Override
+    public void setSpecificationLookup(SpecificationLoader specificationLookup) {
+        injectorMethodEvaluator = specificationLookup;
     }
 
     //endregion

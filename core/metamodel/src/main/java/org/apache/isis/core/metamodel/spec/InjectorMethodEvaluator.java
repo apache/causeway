@@ -17,18 +17,10 @@
 package org.apache.isis.core.metamodel.spec;
 
 import java.lang.reflect.Method;
-import java.util.Map;
-import com.google.common.collect.Maps;
 
-public abstract class SpecificationLoaderAbstract implements SpecificationLoader {
+public interface InjectorMethodEvaluator {
 
-    @Override
-    public void injectInto(final Object candidate) {
-        if (SpecificationLoaderAware.class.isAssignableFrom(candidate.getClass())) {
-            final SpecificationLoaderAware cast = SpecificationLoaderAware.class.cast(candidate);
-            cast.setSpecificationLookup(this);
-        }
-    }
+    boolean isInjectorMethodFor(Method method, Class<? extends Object> serviceClass);
 
 
 }

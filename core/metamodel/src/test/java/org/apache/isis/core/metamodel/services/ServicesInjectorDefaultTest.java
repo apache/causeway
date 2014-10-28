@@ -20,15 +20,14 @@
 package org.apache.isis.core.metamodel.services;
 
 import java.util.Arrays;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -45,8 +44,8 @@ public class ServicesInjectorDefaultTest {
     private Service2 mockService2;
     @Mock
     private SomeDomainObject mockDomainObject;
-    
-    private ServicesInjectorSpi injector;
+
+    private ServicesInjectorDefault injector;
 
     public static interface Service1 {
     }
@@ -69,7 +68,7 @@ public class ServicesInjectorDefaultTest {
 
     @Before
     public void setUp() throws Exception {
-        injector = new ServicesInjectorDefault();
+        injector = new ServicesInjectorDefault(new InjectorMethodEvaluatorDefault());
     }
 
     @After

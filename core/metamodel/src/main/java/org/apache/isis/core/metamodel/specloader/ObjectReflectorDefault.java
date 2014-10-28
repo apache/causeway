@@ -361,10 +361,13 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         }
     }
 
-    @Override
-    public boolean isInjectorMethodFor(Method method, Class<? extends Object> serviceClass) {
-        return false;
+    //region > isInjectorMethodFor
+    private InjectorMethodEvaluator injectorMethodEvaluator = new InjectorMethodEvaluatorDefault();
+
+    public boolean isInjectorMethodFor(Method method, final Class<?> serviceClass) {
+        return injectorMethodEvaluator.isInjectorMethodFor(method, serviceClass);
     }
+    //endregion
 
     private void recache(final ObjectSpecification newSpec) {
         getCache().recache(newSpec);

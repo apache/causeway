@@ -19,8 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import com.google.common.collect.Maps;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
@@ -97,6 +100,15 @@ public class ProgrammableReflector extends SpecificationLoaderAbstract implement
     @Override
     public void injectInto(final Object candidate) {
     }
+
+    //region > isInjectorMethodFor
+
+    private final Map<Method, Map<Class<?>, Boolean>> isInjectorMethod = Maps.newConcurrentMap();
+
+    public boolean isInjectorMethodFor(Method method, final Class<?> serviceClass) {
+        return false;
+    }
+    //endregion
 
     @Override
     public void setRuntimeContext(final RuntimeContext runtimeContext) {

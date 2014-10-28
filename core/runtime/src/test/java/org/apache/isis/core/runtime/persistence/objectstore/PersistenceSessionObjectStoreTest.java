@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
@@ -152,7 +153,7 @@ public class PersistenceSessionObjectStoreTest {
 
         runtimeContext.injectInto(container);
 
-        servicesInjector = new ServicesInjectorDefault();
+        servicesInjector = new ServicesInjectorDefault(new InjectorMethodEvaluatorDefault());
 
         adapterManager = new AdapterManagerDefault(new PojoRecreatorDefault());
         adapterFactory = new PojoAdapterFactory();

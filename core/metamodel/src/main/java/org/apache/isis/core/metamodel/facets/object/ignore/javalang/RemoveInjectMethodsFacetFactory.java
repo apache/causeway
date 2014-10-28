@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.ignore.javalang;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
@@ -31,7 +32,8 @@ public class RemoveInjectMethodsFacetFactory extends FacetFactoryAbstract  {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        for (Class<? extends Object> serviceClass : getSpecificationLoader().getServiceClasses()) {
+        final List<Class<?>> serviceClasses = getSpecificationLoader().getServiceClasses();
+        for (Class<? extends Object> serviceClass : serviceClasses) {
             Method[] methods = processClassContext.getCls().getMethods();
             for (Method method : methods) {
                 if(getSpecificationLoader().isInjectorMethodFor(method, serviceClass)) {
