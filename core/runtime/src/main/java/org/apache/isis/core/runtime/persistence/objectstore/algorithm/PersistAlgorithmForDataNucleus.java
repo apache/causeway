@@ -16,24 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.datanucleus.persistence.spi;
+package org.apache.isis.core.runtime.persistence.objectstore.algorithm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
-import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithmAbstract;
-import org.apache.isis.core.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
 
 
 /**
  * A {@link PersistAlgorithm} which simply saves the object made persistent.
  */
-public class DataNucleusSimplePersistAlgorithm extends PersistAlgorithmAbstract {
+class PersistAlgorithmForDataNucleus extends PersistAlgorithmAbstract {
     
     private static final Logger LOG = LoggerFactory
-            .getLogger(DataNucleusSimplePersistAlgorithm.class);
+            .getLogger(PersistAlgorithmForDataNucleus.class);
+
+    public PersistAlgorithmForDataNucleus() {
+
+    }
 
 
     // ////////////////////////////////////////////////////////////////

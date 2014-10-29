@@ -1,3 +1,7 @@
+package org.apache.isis.core.runtime;
+
+import org.apache.isis.core.commons.config.IsisConfiguration;
+
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -16,15 +20,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.core.runtime.persistence.objectstore.algorithm;
-
-
-public class DefaultPersistAlgorithmContractTest extends PersistAlgorithmContractTest {
-
-    @Override
-    protected PersistAlgorithm createPersistAlgorithm() {
-        return new PersistAlgorithmDefault();
+public enum PersistorImplementation {
+    DATANUCLEUS,
+    INMEMORY;
+    public static PersistorImplementation from(final IsisConfiguration configuration) {
+        final String persistor = configuration.getString("isis.persistor", "datanucleus");
+        return "datanucleus".equalsIgnoreCase(persistor)? DATANUCLEUS: INMEMORY;
     }
-
 }

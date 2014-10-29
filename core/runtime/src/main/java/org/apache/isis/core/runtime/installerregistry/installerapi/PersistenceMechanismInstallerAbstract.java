@@ -43,8 +43,6 @@ import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreatorDefa
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.persistence.objectstore.IsisObjectStoreLogger;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
-import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
-import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithmDefault;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -113,12 +111,10 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         IdentifierGenerator identifierGenerator = persistenceSessionFactory.getIdentifierGenerator();
         ServicesInjectorSpi servicesInjector = persistenceSessionFactory.getServicesInjector();
         
-        final PersistAlgorithm persistAlgorithm = createPersistAlgorithm(getConfiguration());
         final AdapterManagerDefault adapterManager = new AdapterManagerDefault(pojoRecreator);
         
         ObjectStoreSpi objectStore = createObjectStore(getConfiguration(), adapterFactory, adapterManager);
         
-        ensureThatArg(persistAlgorithm, is(not(nullValue())));
         ensureThatArg(objectStore, is(not(nullValue())));
         
         if (getConfiguration().getBoolean(LOGGING_PROPERTY, false)) {
@@ -127,7 +123,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         }
         
         final PersistenceSession persistenceSession = 
-                new PersistenceSession(persistenceSessionFactory, adapterFactory, servicesInjector, identifierGenerator, adapterManager, persistAlgorithm, objectStore);
+                new PersistenceSession(persistenceSessionFactory, adapterFactory, servicesInjector, identifierGenerator, adapterManager, objectStore, getConfiguration());
         
         final IsisTransactionManager transactionManager = createTransactionManager(persistenceSession, objectStore, servicesInjector);
         
@@ -157,23 +153,15 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     // ///////////////////////////////////////////
 
     /**
-     * Hook method to create {@link PersistAlgorithm}.
-     * 
-     * <p>
-     * By default returns a {@link PersistAlgorithmDefault}.
-     */
-    protected PersistAlgorithm createPersistAlgorithm(final IsisConfiguration configuration) {
-        return new PersistAlgorithmDefault();
-    }
-
-
-    /**
      * Hook method to return an {@link IsisTransactionManager}.
      * 
      * <p>
      * By default returns a {@link IsisTransactionManager}.
      */
-    protected IsisTransactionManager createTransactionManager(final PersistenceSession persistenceSession, final TransactionalResource transactionalResource, ServicesInjectorSpi servicesInjectorSpi) {
+    protected IsisTransactionManager createTransactionManager(
+            final PersistenceSession persistenceSession,
+            final TransactionalResource transactionalResource,
+            final ServicesInjectorSpi servicesInjectorSpi) {
         return new IsisTransactionManager(persistenceSession, transactionalResource,  servicesInjectorSpi);
     }
 

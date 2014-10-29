@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 
-public class PersistAlgorithmDefault extends PersistAlgorithmAbstract {
+class PersistAlgorithmDefault extends PersistAlgorithmAbstract {
     private static final Logger LOG = LoggerFactory.getLogger(PersistAlgorithmDefault.class);
 
     @Override

@@ -19,15 +19,12 @@
 
 package org.apache.isis.core.runtime.system.persistence;
 
-import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.core.commons.components.Resettable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 
 /**
  * Responsible for managing the {@link ObjectAdapter adapter}s and {@link Oid
@@ -46,35 +43,9 @@ import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlg
 public interface AdapterManagerSpi extends AdapterManager, Iterable<ObjectAdapter>,
     RecreatedPojoRemapper,
     AdapterLifecycleTransitioner,
-    SessionScopedComponent, 
+    SessionScopedComponent,
     DebuggableWithTitle,  
     Resettable {
 
-
-
-    /**
-     * Remaps the {@link ObjectAdapter adapter} and any associated 
-     * (collection) adapters (ie, those that wrap the List/Set instances).
-     * 
-     * <p>
-     * Note that it isn't necessary to remap any aggregated adapters (as per
-     * {@link Aggregated} annotation; the {@link PersistAlgorithm} calls this
-     * method and takes responsibility for locating the graph of transient
-     * objects that needs to be remapped.
-     * 
-     * <p>
-     * As a consequence of this call, the adapter's {@link Oid} will be
-     * {@link ObjectAdapter#replaceOid(Oid) replaced} (Oids are now immutable).
-     * The same is true of the associated collection adapters.
-     * 
-     * @param hintRootOid - primarily for testing purposes, to set the adapter with a specific rootOid.  Is passed through to the {@link OidGenerator}.
-     */
-    void remapAsPersistent(ObjectAdapter adapter, RootOid hintRootOid);
-
-    /**
-     * Removes the specified {@link ObjectAdapter adapter} from the identity
-     * maps.
-     */
-    void removeAdapter(ObjectAdapter adapter);
 
 }

@@ -31,6 +31,7 @@ import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -55,6 +56,7 @@ import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
+import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithmUnified;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -79,7 +81,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     private final OidGenerator oidGenerator;
     private final AdapterManagerSpi adapterManager;
 
-    private final PersistAlgorithm persistAlgorithm;
+    private final PersistAlgorithm persistAlgorithm ;
     private final ObjectStore objectStore;
     private final Map<ObjectSpecId, RootOid> servicesByObjectType = Maps.newHashMap();
 
@@ -100,18 +102,30 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
      * Initialize the object store so that calls to this object store access
      * persisted objects and persist changes to the object that are saved.
      */
-    public PersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ServicesInjectorSpi servicesInjector, final IdentifierGenerator identifierGenerator, final AdapterManagerSpi adapterManager,
-                              final PersistAlgorithm persistAlgorithm, final ObjectStore objectStore) {
+    public PersistenceSession(
+            final PersistenceSessionFactory persistenceSessionFactory,
+            final ObjectAdapterFactory adapterFactory,
+            final ServicesInjectorSpi servicesInjector,
+            final IdentifierGenerator identifierGenerator,
+            final AdapterManagerSpi adapterManager,
+            final ObjectStore objectStore,
+            final IsisConfiguration configuration) {
 
-        this(persistenceSessionFactory, adapterFactory, servicesInjector, new OidGenerator(identifierGenerator), adapterManager, persistAlgorithm, objectStore);
+        this(persistenceSessionFactory, adapterFactory, servicesInjector, new OidGenerator(identifierGenerator), adapterManager, objectStore, configuration);
     }
 
     /**
      * Initialize the object store so that calls to this object store access
      * persisted objects and persist changes to the object that are saved.
      */
-    public PersistenceSession(final PersistenceSessionFactory persistenceSessionFactory, final ObjectAdapterFactory adapterFactory, final ServicesInjectorSpi servicesInjector, final OidGenerator oidGenerator, final AdapterManagerSpi adapterManager,
-                              final PersistAlgorithm persistAlgorithm, final ObjectStore objectStore) {
+    public PersistenceSession(
+            final PersistenceSessionFactory persistenceSessionFactory,
+            final ObjectAdapterFactory adapterFactory,
+            final ServicesInjectorSpi servicesInjector,
+            final OidGenerator oidGenerator,
+            final AdapterManagerSpi adapterManager,
+            final ObjectStore objectStore,
+            final IsisConfiguration configuration) {
 
         ensureThatArg(persistenceSessionFactory, is(not(nullValue())), "persistence session factory required");
 
@@ -135,10 +149,10 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
             LOG.debug("creating " + this);
         }
 
-        ensureThatArg(persistAlgorithm, is(not(nullValue())), "persist algorithm required");
+        this.persistAlgorithm = new PersistAlgorithmUnified(configuration);
+
         ensureThatArg(objectStore, is(not(nullValue())), "object store required");
 
-        this.persistAlgorithm = persistAlgorithm;
         this.objectStore = objectStore;
     }
 
@@ -1085,12 +1099,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         return objectStore;
     }
 
-    /**
-     * Injected by constructor.
-     */
-    public PersistAlgorithm getPersistAlgorithm() {
-        return persistAlgorithm;
-    }
 
     private UpdateNotifier getUpdateNotifier() {
         return getTransactionManager().getTransaction().getUpdateNotifier();

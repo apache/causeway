@@ -45,7 +45,6 @@ import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreatorDefault;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
-import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.*;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
 import org.apache.isis.core.runtime.system.persistence.*;
@@ -80,8 +79,6 @@ public class PersistenceSessionObjectStoreTest {
 
     @Mock
     private ObjectStoreSpi mockObjectStore;
-    @Mock
-    private PersistAlgorithm mockPersistAlgorithm;
     @Mock
     private AuditingService3 mockAuditingService3;
     @Mock
@@ -134,8 +131,8 @@ public class PersistenceSessionObjectStoreTest {
                 ignoring(mockObjectStore).open();
                 ignoring(mockObjectStore).close();
                 ignoring(mockObjectStore).name();
-                ignoring(mockPersistAlgorithm).name();
-                
+                ignoring(mockConfiguration);
+
                 ignoring(createObjectCommand);
                 ignoring(saveObjectCommand);
                 ignoring(destroyObjectCommand);
@@ -155,7 +152,7 @@ public class PersistenceSessionObjectStoreTest {
 
         adapterManager = new AdapterManagerDefault(new PojoRecreatorDefault());
         adapterFactory = new PojoAdapterFactory();
-        persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, adapterFactory, servicesInjector, new OidGenerator(new IdentifierGeneratorDefault()), adapterManager, mockPersistAlgorithm, mockObjectStore) {
+        persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, adapterFactory, servicesInjector, new OidGenerator(new IdentifierGeneratorDefault()), adapterManager, mockObjectStore, mockConfiguration) {
             @Override
             protected SpecificationLoaderSpi getSpecificationLoader() {
                 return isisMetaModel.getSpecificationLoader();
@@ -250,8 +247,6 @@ public class PersistenceSessionObjectStoreTest {
                 oneOf(mockObjectStore).startTransaction();
                 inSequence(tran);
 
-                oneOf(mockPersistAlgorithm).makePersistent(transientAdapter, persistenceSession);
-                inSequence(tran);
                 oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
                 inSequence(tran);
                 // second flush after publish

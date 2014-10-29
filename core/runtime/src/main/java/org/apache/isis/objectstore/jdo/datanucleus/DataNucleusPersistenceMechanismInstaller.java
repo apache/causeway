@@ -22,15 +22,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-
-import javax.jdo.PersistenceManagerFactory;
-
 import com.google.common.collect.Sets;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
@@ -40,13 +34,11 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
-import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.core.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.adaptermanager.DataNucleusPojoRecreator;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.DataNucleusIdentifierGenerator;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.DataNucleusSimplePersistAlgorithm;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableAnnotationInJdoApplibFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableMarkerInterfaceInJdoApplibFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
@@ -195,11 +187,6 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     ////////////////////////////////////////////////////////////////////////
 
     @Override
-    protected PersistAlgorithm createPersistAlgorithm(IsisConfiguration configuration) {
-        return new DataNucleusSimplePersistAlgorithm();
-    }
-    
-    @Override
     public IdentifierGenerator createIdentifierGenerator(IsisConfiguration configuration) {
         return new DataNucleusIdentifierGenerator();
     }
@@ -235,12 +222,6 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     @Override
     public DataNucleusPojoRecreator createPojoRecreator(IsisConfiguration configuration) {
         return new DataNucleusPojoRecreator();
-    }
-
-    ////////////////////////////////////////////////////////////////////////
-
-    public PersistenceManagerFactory getPersistenceManagerFactory() {
-        return this.applicationComponents.getPersistenceManagerFactory();
     }
 
     ////////////////////////////////////////////////////////////////////////
