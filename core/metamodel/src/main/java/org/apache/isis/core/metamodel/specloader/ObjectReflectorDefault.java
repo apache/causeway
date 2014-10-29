@@ -233,7 +233,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
         // initialize subcomponents
         facetDecoratorSet.init();
-        specificationTraverser.init();
         programmingModel.init();
         facetProcessor.init();
         metaModelValidator.init();
@@ -271,7 +270,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     }
 
     private void loadAllSpecifications() {
-        List<Class<?>> newlyDiscoveredClasses = newlyDiscoveredClasses();
+        List<Class<?>> newlyDiscoveredClasses = Lists.newArrayList();
 
         while (newlyDiscoveredClasses.size() > 0) {
             for (final Class<?> newClass : newlyDiscoveredClasses) {
@@ -282,17 +281,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     }
 
     private List<Class<?>> newlyDiscoveredClasses() {
-        final List<Class<?>> newlyDiscoveredClasses = new ArrayList<Class<?>>();
-
-        final Collection<ObjectSpecification> noSpecs = allSpecifications();
-        try {
-            for (final ObjectSpecification noSpec : noSpecs) {
-                getSpecificationTraverser().traverseReferencedClasses(noSpec, newlyDiscoveredClasses);
-            }
-        } catch (final ClassNotFoundException ex) {
-            throw new IsisException(ex);
-        }
-        return newlyDiscoveredClasses;
+        return Lists.newArrayList();
     }
 
     

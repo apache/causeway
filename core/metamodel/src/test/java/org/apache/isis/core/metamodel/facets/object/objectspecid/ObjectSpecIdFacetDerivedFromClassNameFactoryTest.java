@@ -19,8 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.objectspecid;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
+import org.datanucleus.testing.dom.CustomerAsProxiedByDataNucleus;
 import org.junit.Before;
 import org.junit.Test;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -28,15 +27,11 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 public class ObjectSpecIdFacetDerivedFromClassNameFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
-
-    @Mock
-    private ClassSubstitutor mockClassSubstitutor;
 
     private ObjectSpecIdFacetDerivedFromClassNameFactory facetFactory;
 
@@ -46,25 +41,14 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactoryTest extends AbstractFa
         facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
     }
 
-    static class Customer {
-    }
-    
-    static class CustomerAsManufacturedByCglibByteCodeEnhancer extends Customer {
+    public static class Customer {
     }
 
     @Test
-    public void installsFacet_andDelegatesToClassSubstitutor() {
-
-        
+    public void installsFacet_passedThroughClassSubstitutor() {
         expectNoMethodsRemoved();
-        context.checking(new Expectations() {
-            {
-                one(mockClassSubstitutor).getClass(CustomerAsManufacturedByCglibByteCodeEnhancer.class);
-                will(returnValue(Customer.class));
-            }
-        });
-        
-        facetFactory.process(new ProcessClassContext(CustomerAsManufacturedByCglibByteCodeEnhancer.class, mockMethodRemover, facetHolderImpl));
+
+        facetFactory.process(new ProcessClassContext(CustomerAsProxiedByDataNucleus.class, mockMethodRemover, facetHolderImpl));
 
         final ObjectSpecIdFacet facet = facetHolderImpl.getFacet(ObjectSpecIdFacet.class);
         

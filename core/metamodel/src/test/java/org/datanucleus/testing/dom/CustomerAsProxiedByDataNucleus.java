@@ -16,26 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.datanucleus.testing.dom;
 
-package org.apache.isis.core.metamodel.specloader.traverser;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetDerivedFromClassNameFactoryTest;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
-public class SpecificationTraverser {
-
-    /**
-     * Traverses the return types of each method.
-     *
-     * <p>
-     * It's possible for there to be multiple return types: the generic type,
-     * and the parameterized type.
-     */
-    public void traverseTypes(final Method method, final List<Class<?>> discoveredTypes) {
-        final TypeExtractorMethodReturn returnTypes = new TypeExtractorMethodReturn(method);
-        for (final Class<?> returnType : returnTypes) {
-            discoveredTypes.add(returnType);
-        }
-    }
-
+public class CustomerAsProxiedByDataNucleus extends ObjectSpecIdFacetDerivedFromClassNameFactoryTest.Customer {
 }

@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
-import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
@@ -119,7 +118,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         this.classSubstitutor = new ClassSubstitutor();
 
         this.collectionTypeRegistry = new CollectionTypeRegistry();
-        setSpecificationTraverser(new SpecificationTraverserDefault());
+        this.specificationTraverser = new SpecificationTraverser();
 
         setFacetDecorators(new TreeSet<FacetDecorator>());
         setProgrammingModelFacets(programmingModel);
