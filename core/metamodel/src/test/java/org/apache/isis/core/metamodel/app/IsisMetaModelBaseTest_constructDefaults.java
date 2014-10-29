@@ -57,18 +57,8 @@ public class IsisMetaModelBaseTest_constructDefaults {
     }
 
     @Test
-    public void shouldDefaultClassSubstitutor() {
-        assertThat(metaModel.getClassSubstitutor(), is(notNullValue()));
-    }
-
-    @Test
     public void shouldDefaultProgrammingModelFacets() {
         assertThat(metaModel.getProgrammingModelFacets(), is(notNullValue()));
-    }
-
-    @Test
-    public void shouldDefaultCollectionTypeRegistry() {
-        assertThat(metaModel.getCollectionTypeRegistry(), is(notNullValue()));
     }
 
     @Test

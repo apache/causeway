@@ -128,9 +128,8 @@ public class FacetedMethodsBuilder {
 
     private final FacetProcessor facetProcessor;
 
-    private final SpecificationTraverser specificationTraverser;
-
-    private final ClassSubstitutor classSubstitutor;
+    private final SpecificationTraverser specificationTraverser = new SpecificationTraverser();
+    private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
     private final SpecificationLoaderSpi specificationLoader;
 
@@ -150,8 +149,6 @@ public class FacetedMethodsBuilder {
         this.methodRemover = new FacetedMethodsMethodRemover(methods);
 
         this.facetProcessor = facetedMethodsBuilderContext.facetProcessor;
-        this.specificationTraverser = facetedMethodsBuilderContext.specificationTraverser;
-        this.classSubstitutor = facetedMethodsBuilderContext.classSubstitutor;
         this.specificationLoader = facetedMethodsBuilderContext.specificationLoader;
     }
 
@@ -260,7 +257,7 @@ public class FacetedMethodsBuilder {
         // Ensure all return types are known
         final List<Class<?>> typesToLoad = Lists.newArrayList();
         for (final Method method : associationCandidateMethods) {
-            getSpecificationTraverser().traverseTypes(method, typesToLoad);
+            specificationTraverser.traverseTypes(method, typesToLoad);
         }
         getSpecificationLoader().loadSpecifications(typesToLoad, introspectedClass);
 
@@ -313,7 +310,7 @@ public class FacetedMethodsBuilder {
             facetedMethod.setType(elementType);
 
             // skip if class substitutor says so.
-            if (getClassSubstitutor().getClass(elementType) == null) {
+            if (classSubstitutor.getClass(elementType) == null) {
                 continue;
             }
 
@@ -329,7 +326,7 @@ public class FacetedMethodsBuilder {
             final Class<?> returnType = accessorMethod.getReturnType();
 
             // skip if class strategy says so.
-            if (getClassSubstitutor().getClass(returnType) == null) {
+            if (classSubstitutor.getClass(returnType) == null) {
                 continue;
             }
 
@@ -463,7 +460,7 @@ public class FacetedMethodsBuilder {
         }
 
         final List<Class<?>> typesToLoad = new ArrayList<Class<?>>();
-        getSpecificationTraverser().traverseTypes(actionMethod, typesToLoad);
+        specificationTraverser.traverseTypes(actionMethod, typesToLoad);
 
         final boolean anyLoadedAsNull = getSpecificationLoader().loadSpecifications(typesToLoad);
         if (anyLoadedAsNull) {
@@ -568,16 +565,8 @@ public class FacetedMethodsBuilder {
         return specificationLoader;
     }
 
-    private SpecificationTraverser getSpecificationTraverser() {
-        return specificationTraverser;
-    }
-
     private FacetProcessor getFacetProcessor() {
         return facetProcessor;
-    }
-
-    private ClassSubstitutor getClassSubstitutor() {
-        return classSubstitutor;
     }
 
 }

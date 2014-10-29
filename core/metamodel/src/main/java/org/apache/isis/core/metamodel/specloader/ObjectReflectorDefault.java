@@ -138,7 +138,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
      */
     private RuntimeContext runtimeContext;
 
-    private final SpecificationTraverser specificationTraverser;
+    private final SpecificationTraverser specificationTraverser = new SpecificationTraverser();
 
     /**
      * @see #setServices(List)
@@ -157,20 +157,17 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     public ObjectReflectorDefault(
             final IsisConfiguration configuration,
-            final SpecificationTraverser specificationTraverser,
             final ProgrammingModel programmingModel,
             final Set<FacetDecorator> facetDecorators,
             final MetaModelValidator metaModelValidator) {
 
         ensureThatArg(configuration, is(notNullValue()));
-        ensureThatArg(specificationTraverser, is(notNullValue()));
         ensureThatArg(programmingModel, is(notNullValue()));
         ensureThatArg(facetDecorators, is(notNullValue()));
         ensureThatArg(metaModelValidator, is(notNullValue()));
 
         this.configuration = configuration;
         this.programmingModel = programmingModel;
-        this.specificationTraverser = specificationTraverser;
 
         this.facetDecoratorSet = new FacetDecoratorSet();
         for (final FacetDecorator facetDecorator : facetDecorators) {
@@ -258,34 +255,15 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 	}
 
     /**
-     * load the service specifications and then, using the
-     * {@link #getSpecificationTraverser() traverser}, keep loading all
-     * referenced specifications until we can find no more.
+     * load the service specifications.
      */
     private void primeCache() {
         for (final Class<?> serviceClass : getServiceClasses()) {
             internalLoadSpecification(serviceClass);
         }
-        loadAllSpecifications();
     }
 
-    private void loadAllSpecifications() {
-        List<Class<?>> newlyDiscoveredClasses = Lists.newArrayList();
 
-        while (newlyDiscoveredClasses.size() > 0) {
-            for (final Class<?> newClass : newlyDiscoveredClasses) {
-                internalLoadSpecification(newClass);
-            }
-            newlyDiscoveredClasses = newlyDiscoveredClasses();
-        }
-    }
-
-    private List<Class<?>> newlyDiscoveredClasses() {
-        return Lists.newArrayList();
-    }
-
-    
-    
     @Override
     public void shutdown() {
         LOG.info("shutting down " + this);
@@ -330,7 +308,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     }
 
     //region > isInjectorMethodFor
-    private InjectorMethodEvaluator injectorMethodEvaluator = new InjectorMethodEvaluatorDefault();
+    private final InjectorMethodEvaluator injectorMethodEvaluator = new InjectorMethodEvaluatorDefault();
 
     public boolean isInjectorMethodFor(Method method, final Class<?> serviceClass) {
         return injectorMethodEvaluator.isInjectorMethodFor(method, serviceClass);
@@ -466,7 +444,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             final SpecificationLoaderSpi specificationLoader = this;
             final ServicesInjector dependencyInjector = getRuntimeContext().getDependencyInjector();
             final CreateObjectContext createObjectContext = new CreateObjectContext(adapterMap, dependencyInjector);
-            final FacetedMethodsBuilderContext facetedMethodsBuilderContext = new FacetedMethodsBuilderContext(specificationLoader, classSubstitutor, specificationTraverser, facetProcessor);
+            final FacetedMethodsBuilderContext facetedMethodsBuilderContext = new FacetedMethodsBuilderContext(specificationLoader, facetProcessor);
             return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext, specContext, objectMemberContext, createObjectContext);
         }
     }
@@ -655,32 +633,8 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     // Dependencies (injected from constructor)
     // ////////////////////////////////////////////////////////////////////
 
-    protected IsisConfiguration getIsisConfiguration() {
-        return configuration;
-    }
-
-    protected CollectionTypeRegistry getCollectionTypeRegistry() {
-        return collectionTypeRegistry;
-    }
-
-    protected ClassSubstitutor getClassSubstitutor() {
-        return classSubstitutor;
-    }
-
-    protected SpecificationTraverser getSpecificationTraverser() {
-        return specificationTraverser;
-    }
-
-    protected ProgrammingModel getProgrammingModelFacets() {
-        return programmingModel;
-    }
-
     protected MetaModelValidator getMetaModelValidator() {
         return metaModelValidator;
-    }
-
-    protected Set<FacetDecorator> getFacetDecoratorSet() {
-        return facetDecoratorSet.getFacetDecorators();
     }
 
     @Override

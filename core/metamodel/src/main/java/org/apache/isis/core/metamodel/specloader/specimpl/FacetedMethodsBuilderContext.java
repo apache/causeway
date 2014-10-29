@@ -17,20 +17,16 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
-import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 
 public class FacetedMethodsBuilderContext {
     public final SpecificationLoaderSpi specificationLoader;
-    public final SpecificationTraverser specificationTraverser;
     public final FacetProcessor facetProcessor;
-    public final ClassSubstitutor classSubstitutor;
 
-    public FacetedMethodsBuilderContext(final SpecificationLoaderSpi specificationLoader, final ClassSubstitutor classSubstitutor, final SpecificationTraverser specificationTraverser, final FacetProcessor facetProcessor) {
+    public FacetedMethodsBuilderContext(
+            final SpecificationLoaderSpi specificationLoader,
+            final FacetProcessor facetProcessor) {
         this.specificationLoader = specificationLoader;
-        this.classSubstitutor = classSubstitutor;
-        this.specificationTraverser = specificationTraverser;
         this.facetProcessor = facetProcessor;
     }
 }

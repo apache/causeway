@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
-import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 
@@ -47,8 +46,6 @@ public final class JavaReflectorHelper  {
             final MetaModelValidator mmv,
             final IsisConfiguration configuration) {
 
-        final SpecificationTraverser specificationTraverser = new SpecificationTraverser();
-
         MetaModelValidatorComposite metaModelValidator = MetaModelValidatorComposite.asComposite(mmv);
         for (MetaModelRefiner metaModelRefiner : metaModelRefiners) {
             metaModelRefiner.refineProgrammingModel(programmingModel, configuration);
@@ -60,7 +57,7 @@ public final class JavaReflectorHelper  {
             programmingModel.refineMetaModelValidator(metaModelValidator, configuration);
         }
         
-        return new ObjectReflectorDefault(configuration, specificationTraverser, programmingModel, facetDecorators, metaModelValidator);
+        return new ObjectReflectorDefault(configuration, programmingModel, facetDecorators, metaModelValidator);
     }
 
 }

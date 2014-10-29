@@ -148,12 +148,6 @@ public class IsisMetaModelTest_init {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void shouldNotBeAbleToChangeCollectionTypeRegistry() {
-        metaModel.init();
-        metaModel.setCollectionTypeRegistry(mockCollectionTypeRegistry);
-    }
-
-    @Test(expected = IllegalStateException.class)
     public void shouldNotBeAbleToChangeFacetDecorators() {
         metaModel.init();
         metaModel.setFacetDecorators(new TreeSet<FacetDecorator>());

@@ -33,9 +33,6 @@ import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDe
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
@@ -65,10 +62,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     private RuntimeContext runtimeContext;
 
     private IsisConfiguration configuration;
-    private ClassSubstitutor classSubstitutor;
-    private CollectionTypeRegistry collectionTypeRegistry;
     private ProgrammingModel programmingModel;
-    private SpecificationTraverser specificationTraverser;
     private Set<FacetDecorator> facetDecorators;
     private MetaModelValidator metaModelValidator;
 
@@ -107,23 +101,21 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         this(runtimeContext, programmingModel, services.toArray());
     }
     
-    public IsisMetaModel(final RuntimeContext runtimeContext, ProgrammingModel programmingModel, final Object... services) {
+    public IsisMetaModel(
+            final RuntimeContext runtimeContext,
+            final ProgrammingModel programmingModel,
+            final Object... services) {
         this.runtimeContext = runtimeContext;
 
         this.services.add(new DomainObjectContainerDefault());
         this.services.addAll(Arrays.asList(services));
 
-        setConfiguration(new IsisConfigurationDefault());
+        this.configuration = new IsisConfigurationDefault();
 
-        this.classSubstitutor = new ClassSubstitutor();
-
-        this.collectionTypeRegistry = new CollectionTypeRegistry();
-        this.specificationTraverser = new SpecificationTraverser();
-
-        setFacetDecorators(new TreeSet<FacetDecorator>());
+        this.facetDecorators = new TreeSet<>();
         setProgrammingModelFacets(programmingModel);
 
-        setMetaModelValidator(new MetaModelValidatorDefault());
+        this.metaModelValidator = new MetaModelValidatorDefault();
     }
 
     /**
@@ -140,7 +132,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     @Override
     public void init() {
         ensureNotInitialized();
-        reflector = new ObjectReflectorDefault(configuration, specificationTraverser, programmingModel, facetDecorators, metaModelValidator);
+        reflector = new ObjectReflectorDefault(configuration, programmingModel, facetDecorators, metaModelValidator);
 
         reflector.setServices(services);
         
@@ -214,51 +206,6 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         ensureNotInitialized();
         ensureThatArg(configuration, is(notNullValue()));
         this.configuration = configuration;
-    }
-
-    /**
-     * The {@link ClassSubstitutor} in force, either defaulted or specified
-     * {@link #setClassSubstitutor(ClassSubstitutor) explicitly}.
-     */
-    public ClassSubstitutor getClassSubstitutor() {
-        return classSubstitutor;
-    }
-
-    /**
-     * The {@link CollectionTypeRegistry} in force, either defaulted or
-     * specified {@link #setCollectionTypeRegistry(CollectionTypeRegistry)
-     * explicitly.}
-     */
-    public CollectionTypeRegistry getCollectionTypeRegistry() {
-        return collectionTypeRegistry;
-    }
-
-    /**
-     * Optionally specify the {@link CollectionTypeRegistry}.
-     * 
-     * <p>
-     * Call prior to {@link #init()}.
-     */
-    public void setCollectionTypeRegistry(final CollectionTypeRegistry collectionTypeRegistry) {
-        ensureNotInitialized();
-        ensureThatArg(collectionTypeRegistry, is(notNullValue()));
-        this.collectionTypeRegistry = collectionTypeRegistry;
-    }
-
-    /**
-     * The {@link SpecificationTraverser} in force, either defaulted or
-     * specified {@link #setSpecificationTraverser(SpecificationTraverser)
-     * explicitly}.
-     */
-    public SpecificationTraverser getSpecificationTraverser() {
-        return specificationTraverser;
-    }
-
-    /**
-     * Optionally specify the {@link SpecificationTraverser}.
-     */
-    public void setSpecificationTraverser(final SpecificationTraverser specificationTraverser) {
-        this.specificationTraverser = specificationTraverser;
     }
 
     /**
