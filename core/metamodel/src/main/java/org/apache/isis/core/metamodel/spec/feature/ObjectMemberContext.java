@@ -22,7 +22,6 @@ import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 
 public class ObjectMemberContext {
 
@@ -32,8 +31,6 @@ public class ObjectMemberContext {
     private final AdapterManager adapterManager;
     private final QuerySubmitter querySubmitter;
     private final ServicesProvider servicesProvider;
-
-    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
 
     public ObjectMemberContext(
             final DeploymentCategory deploymentCategory,
@@ -74,9 +71,5 @@ public class ObjectMemberContext {
     
     public QuerySubmitter getQuerySubmitter() {
         return querySubmitter;
-    }
-
-    public CollectionTypeRegistry getCollectionTypeRegistry() {
-        return collectionTypeRegistry;
     }
 }

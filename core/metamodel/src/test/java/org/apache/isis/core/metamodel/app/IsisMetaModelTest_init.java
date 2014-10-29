@@ -39,8 +39,6 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.unittestsupport.jmocking.IsisActions;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -71,11 +69,7 @@ public class IsisMetaModelTest_init {
     @Mock
     private FacetDecorator mockFacetDecorator;
     @Mock
-    private CollectionTypeRegistry mockCollectionTypeRegistry;
-    @Mock
     private RuntimeContext mockRuntimeContext;
-
-    private ClassSubstitutor classSubstitutor;
 
     private IsisMetaModel metaModel;
 
@@ -83,7 +77,6 @@ public class IsisMetaModelTest_init {
     public void setUp() {
         expectingMetaModelToBeInitialized();
         metaModel = new IsisMetaModel(mockRuntimeContext, mockProgrammingModelFacets);
-        classSubstitutor = new ClassSubstitutor();
     }
 
     private void expectingMetaModelToBeInitialized() {

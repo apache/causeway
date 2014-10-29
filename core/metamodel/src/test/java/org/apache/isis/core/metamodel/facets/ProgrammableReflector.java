@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAbstract;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 public class ProgrammableReflector extends SpecificationLoaderAbstract implements SpecificationLoaderSpi, ApplicationScopedComponent, RuntimeContextAware {
@@ -42,28 +41,11 @@ public class ProgrammableReflector extends SpecificationLoaderAbstract implement
     public void init() {
     }
 
-    public void installServiceSpecification(final Class<?> cls) {
-    }
-
     private Collection<ObjectSpecification> allSpecificationsReturn;
-
-    public void setAllSpecificationsReturn(final Collection<ObjectSpecification> allSpecificationsReturn) {
-        this.allSpecificationsReturn = allSpecificationsReturn;
-    }
 
     @Override
     public Collection<ObjectSpecification> allSpecifications() {
         return allSpecificationsReturn;
-    }
-
-    private CollectionTypeRegistry getCollectionTypeRegistryReturn;
-
-    public void setGetCollectionTypeRegistryReturn(final CollectionTypeRegistry getCollectionTypeRegistryReturn) {
-        this.getCollectionTypeRegistryReturn = getCollectionTypeRegistryReturn;
-    }
-
-    public CollectionTypeRegistry getCollectionTypeRegistry() {
-        return getCollectionTypeRegistryReturn;
     }
 
     @Override
@@ -85,7 +67,6 @@ public class ProgrammableReflector extends SpecificationLoaderAbstract implement
     @Override
     public void shutdown() {
     }
-
 
     @Override
     public boolean loaded(final Class<?> cls) {

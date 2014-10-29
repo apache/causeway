@@ -64,8 +64,6 @@ public class ObjectActionImplTest {
     private ServicesProvider mockServicesProvider;
     @Mock
     private QuerySubmitter mockQuerySubmitter;
-    @Mock
-    private CollectionTypeRegistry mockCollectionTypeRegistry;
 
     @Before
     public void setUp() throws Exception {

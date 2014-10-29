@@ -191,12 +191,10 @@ public class FacetedMethodsBuilder {
         if (facetsFacet != null) {
             final Class<? extends FacetFactory>[] facetFactories = facetsFacet.facetFactories();
             for (final Class<? extends FacetFactory> facetFactorie : facetFactories) {
-                FacetFactory facetFactory = null;
+                FacetFactory facetFactory;
                 try {
                     facetFactory = facetFactorie.newInstance();
-                } catch (final InstantiationException e) {
-                    throw new IsisException(e);
-                } catch (final IllegalAccessException e) {
+                } catch (final InstantiationException | IllegalAccessException e) {
                     throw new IsisException(e);
                 }
                 getFacetProcessor().injectDependenciesInto(facetFactory);

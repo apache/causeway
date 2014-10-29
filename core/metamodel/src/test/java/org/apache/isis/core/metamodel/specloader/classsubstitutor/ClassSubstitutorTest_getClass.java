@@ -24,7 +24,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class ClassSubstitutor_getClass {
+public class ClassSubstitutorTest_getClass {
 
     private ClassSubstitutor classSubstitutor;
 
@@ -62,6 +62,5 @@ public class ClassSubstitutor_getClass {
         Class<?> cls = classSubstitutor.getClass(SomeDomainObject.SomeEnum.Foo.getClass());
         assertEquals(SomeDomainObject.SomeEnum.class, cls);
     }
-
 
 }

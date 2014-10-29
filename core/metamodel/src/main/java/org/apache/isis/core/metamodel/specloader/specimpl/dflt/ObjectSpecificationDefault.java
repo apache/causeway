@@ -61,6 +61,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.*;
 public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements DebuggableWithTitle, FacetHolder {
 
     private final static Logger LOG = LoggerFactory.getLogger(ObjectSpecificationDefault.class);
+
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
     private static String determineShortName(final Class<?> introspectedClass) {

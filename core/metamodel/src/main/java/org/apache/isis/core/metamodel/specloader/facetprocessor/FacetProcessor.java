@@ -44,8 +44,6 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 
 public class FacetProcessor implements RuntimeContextAware {
 
-    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
-
     private final IsisConfiguration configuration;
     private final ProgrammingModel programmingModel;
 
@@ -459,21 +457,13 @@ public class FacetProcessor implements RuntimeContextAware {
         return methodRemover != null ? methodRemover : MethodRemoverConstants.NULL;
     }
 
-    // ////////////////////////////////////////////////////////////////////
-    // Dependencies (injected in constructor)
-    // ////////////////////////////////////////////////////////////////////
+
+    //region > dependencies
 
     private IsisConfiguration getIsisConfiguration() {
         return configuration;
     }
 
-    private CollectionTypeRegistry getCollectionTypeRepository() {
-        return collectionTypeRegistry;
-    }
-
-    // ////////////////////////////////////////////////////////////////////
-    // Dependencies (injected via setter due to *Aware)
-    // ////////////////////////////////////////////////////////////////////
 
     private RuntimeContext getRuntimeContext() {
         return runtimeContext;
@@ -489,5 +479,6 @@ public class FacetProcessor implements RuntimeContextAware {
         this.runtimeContext = runtimeContext;
     }
 
+    //endregion
 
 }

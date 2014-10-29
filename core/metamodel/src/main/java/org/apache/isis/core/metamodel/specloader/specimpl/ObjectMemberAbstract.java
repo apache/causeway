@@ -56,6 +56,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return type == null ? null : specificationLookup.loadSpecification(type);
     }
 
+    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
+
     protected final String defaultName;
     private final String id;
     private final FacetedMethod facetedMethod;
@@ -65,7 +67,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     private final AdapterManager adapterManager;
     private final ServicesProvider servicesProvider;
     private final QuerySubmitter querySubmitter;
-    private final CollectionTypeRegistry collectionTypeRegistry;
     private final DeploymentCategory deploymentCategory;
 
     protected ObjectMemberAbstract(final FacetedMethod facetedMethod, final FeatureType featureType, final ObjectMemberContext objectMemberContext) {
@@ -84,7 +85,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.adapterManager = objectMemberContext.getAdapterManager();
         this.servicesProvider = objectMemberContext.getServicesProvider();
         this.querySubmitter = objectMemberContext.getQuerySubmitter();
-        this.collectionTypeRegistry = objectMemberContext.getCollectionTypeRegistry();
     }
 
     // /////////////////////////////////////////////////////////////

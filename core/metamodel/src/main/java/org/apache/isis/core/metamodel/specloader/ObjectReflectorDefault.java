@@ -51,7 +51,6 @@ import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoR
 import org.apache.isis.core.metamodel.spec.*;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.CreateObjectContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
@@ -102,7 +101,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     private final static Logger LOG = LoggerFactory.getLogger(ObjectReflectorDefault.class);
 
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
-    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
 
     /**
      * Injected in the constructor.

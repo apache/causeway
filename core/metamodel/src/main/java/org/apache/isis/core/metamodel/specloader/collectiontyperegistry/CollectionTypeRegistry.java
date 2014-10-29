@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyFeature.CollectionSe
  */
 public class CollectionTypeRegistry {
 
-    private final List<Class<?>> collectionTypes = new ArrayList<Class<?>>();
+    private final List<Class<?>> collectionTypes = new ArrayList<>();
     private Class<?>[] collectionTypesAsArray = new Class[0];
 
     /**

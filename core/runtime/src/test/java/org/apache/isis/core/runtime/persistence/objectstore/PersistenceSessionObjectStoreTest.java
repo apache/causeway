@@ -81,8 +81,6 @@ public class PersistenceSessionObjectStoreTest {
     @Mock
     private ObjectStoreSpi mockObjectStore;
     @Mock
-    private ObjectFactory objectFactory;
-    @Mock
     private PersistAlgorithm mockPersistAlgorithm;
     @Mock
     private AuditingService3 mockAuditingService3;

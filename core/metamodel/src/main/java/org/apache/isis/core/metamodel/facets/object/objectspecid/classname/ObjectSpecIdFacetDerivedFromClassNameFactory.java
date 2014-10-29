@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitut
 
 public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAbstract {
 
-    private ClassSubstitutor classSubstitutor = new ClassSubstitutor();
+    private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
     public ObjectSpecIdFacetDerivedFromClassNameFactory() {
         super(FeatureType.OBJECTS_ONLY);

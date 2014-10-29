@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitut
 
 public class JdoDiscriminatorAnnotationFacetFactory extends FacetFactoryAbstract {
 
-    private ClassSubstitutor classSubstitutor = new ClassSubstitutor();
+    private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
     public JdoDiscriminatorAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
