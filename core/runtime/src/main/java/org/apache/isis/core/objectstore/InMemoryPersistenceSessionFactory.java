@@ -49,8 +49,8 @@ public class InMemoryPersistenceSessionFactory extends PersistenceSessionFactory
         if (persistedObjects != null) {
             final OidGenerator oidGenerator = persistenceSession.getOidGenerator();
             final IdentifierGenerator identifierGenerator = oidGenerator.getIdentifierGenerator();
-            if (identifierGenerator instanceof IdentifierGeneratorDefault) {
-                final IdentifierGeneratorDefault identifierGeneratorDefault = (IdentifierGeneratorDefault) identifierGenerator;
+            final IdentifierGeneratorDefault identifierGeneratorDefault = identifierGenerator.underlying(IdentifierGeneratorDefault.class);
+            if(identifierGeneratorDefault != null) {
                 identifierGeneratorDefault.resetTo(persistedObjects.getOidGeneratorMemento());
             }
         }
@@ -73,10 +73,13 @@ public class InMemoryPersistenceSessionFactory extends PersistenceSessionFactory
     public void attach(final PersistenceSession persistenceSession, final ObjectStorePersistedObjects persistedObjects) {
         final OidGenerator oidGenerator = persistenceSession.getOidGenerator();
         final IdentifierGenerator identifierGenerator = oidGenerator.getIdentifierGenerator();
-        if (identifierGenerator instanceof IdentifierGeneratorDefault) {
-            final IdentifierGeneratorDefault identifierGeneratorDefault = (IdentifierGeneratorDefault) identifierGenerator;
+
+        final IdentifierGeneratorDefault identifierGeneratorDefault = identifierGenerator.underlying(IdentifierGeneratorDefault.class);
+        if(identifierGeneratorDefault != null) {
+            identifierGeneratorDefault.resetTo(persistedObjects.getOidGeneratorMemento());
             persistedObjects.saveOidGeneratorMemento(identifierGeneratorDefault.getMemento());
         }
+
         this.persistedObjects = persistedObjects;
     }
 

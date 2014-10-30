@@ -187,8 +187,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
         if(lazilyLoadedAdapter != null) {
             return lazilyLoadedAdapter;
         }
-        
-        
+
         // need to create (and possibly map) the adapter.
         final ObjectSpecification objSpec = getSpecificationLoader().loadSpecification(pojo.getClass());
         

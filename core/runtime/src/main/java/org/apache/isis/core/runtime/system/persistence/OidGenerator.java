@@ -35,10 +35,6 @@ public class OidGenerator implements DebuggableWithTitle {
 
     private final IdentifierGenerator identifierGenerator;
     
-    public OidGenerator() {
-        this(new IdentifierGeneratorDefault());
-    }
-    
     public OidGenerator(final IdentifierGenerator identifierGenerator) {
         this.identifierGenerator = identifierGenerator;
     }

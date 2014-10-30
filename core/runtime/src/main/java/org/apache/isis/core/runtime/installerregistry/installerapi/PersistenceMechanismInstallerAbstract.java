@@ -39,11 +39,10 @@ import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegat
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreator;
-import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreatorDefault;
+import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreatorUnified;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.persistence.objectstore.IsisObjectStoreLogger;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.*;
@@ -107,8 +106,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         }
 
         ObjectAdapterFactory adapterFactory = persistenceSessionFactory.getAdapterFactory();
-        PojoRecreator pojoRecreator = persistenceSessionFactory.getPojoRecreator();
-        IdentifierGenerator identifierGenerator = persistenceSessionFactory.getIdentifierGenerator();
+        PojoRecreator pojoRecreator = new PojoRecreatorUnified(getConfiguration());
         ServicesInjectorSpi servicesInjector = persistenceSessionFactory.getServicesInjector();
         
         final AdapterManagerDefault adapterManager = new AdapterManagerDefault(pojoRecreator);
@@ -123,12 +121,9 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         }
         
         final PersistenceSession persistenceSession = 
-                new PersistenceSession(persistenceSessionFactory, adapterFactory, servicesInjector, identifierGenerator, adapterManager, objectStore, getConfiguration());
-        
-        final IsisTransactionManager transactionManager = createTransactionManager(persistenceSession, objectStore, servicesInjector);
-        
-        ensureThatArg(persistenceSession, is(not(nullValue())));
-        ensureThatArg(transactionManager, is(not(nullValue())));
+                new PersistenceSession(persistenceSessionFactory, adapterFactory, servicesInjector, adapterManager, objectStore, getConfiguration());
+
+        final IsisTransactionManager transactionManager = new IsisTransactionManager(persistenceSession, objectStore, servicesInjector);
         
         persistenceSession.setDirtiableSupport(true);
         persistenceSession.setTransactionManager(transactionManager);
@@ -151,19 +146,6 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     // ///////////////////////////////////////////
     // Optional hook methods
     // ///////////////////////////////////////////
-
-    /**
-     * Hook method to return an {@link IsisTransactionManager}.
-     * 
-     * <p>
-     * By default returns a {@link IsisTransactionManager}.
-     */
-    protected IsisTransactionManager createTransactionManager(
-            final PersistenceSession persistenceSession,
-            final TransactionalResource transactionalResource,
-            final ServicesInjectorSpi servicesInjectorSpi) {
-        return new IsisTransactionManager(persistenceSession, transactionalResource,  servicesInjectorSpi);
-    }
 
 
     /**
@@ -214,26 +196,6 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         return new ServicesInjectorDefault();
     }
 
-    /**
-     * Hook method to allow subclasses to specify a different implementation of
-     * {@link IdentifierGenerator}
-     * 
-     * <p>
-     * By default, returns {@link IdentifierGeneratorDefault}.
-     */
-    public IdentifierGenerator createIdentifierGenerator(final IsisConfiguration configuration) {
-        return new IdentifierGeneratorDefault();
-    }
-
-    /**
-     * Hook method to return {@link PojoRecreator}.
-     * 
-     * <p>
-     * By default, returns {@link PojoRecreatorDefault}.
-     */
-    public PojoRecreator createPojoRecreator(final IsisConfiguration configuration) {
-        return new PojoRecreatorDefault();
-    }
 
     // ///////////////////////////////////////////
     // Non overridable.

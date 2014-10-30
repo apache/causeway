@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.datanucleus.persistence.spi;
+package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.UUID;
 
@@ -26,23 +26,21 @@ import javax.jdo.spi.PersistenceCapable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
 
-public class DataNucleusIdentifierGenerator implements IdentifierGenerator {
+class IdentifierGeneratorForDataNucleus implements IdentifierGenerator {
 
     @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(DataNucleusIdentifierGenerator.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IdentifierGeneratorForDataNucleus.class);
     
 
 
@@ -90,6 +88,12 @@ public class DataNucleusIdentifierGenerator implements IdentifierGenerator {
     }
 
 
+
+    @Override
+    public <T extends IdentifierGenerator> T underlying(Class<T> cls) {
+        return cls == IdentifierGeneratorForDataNucleus.class? (T) this : null;
+    }
+
     //////////////////////////////////////////////////////////////////
     // context
     //////////////////////////////////////////////////////////////////
@@ -114,7 +118,9 @@ public class DataNucleusIdentifierGenerator implements IdentifierGenerator {
         
     }
 
-    
+
+
+
     // //////////////////////////////////////////////////////////////
     // Dependencies (from context)
     // //////////////////////////////////////////////////////////////

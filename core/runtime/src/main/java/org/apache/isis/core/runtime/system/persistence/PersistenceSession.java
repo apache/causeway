@@ -106,12 +106,11 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
             final PersistenceSessionFactory persistenceSessionFactory,
             final ObjectAdapterFactory adapterFactory,
             final ServicesInjectorSpi servicesInjector,
-            final IdentifierGenerator identifierGenerator,
             final AdapterManagerSpi adapterManager,
             final ObjectStore objectStore,
             final IsisConfiguration configuration) {
 
-        this(persistenceSessionFactory, adapterFactory, servicesInjector, new OidGenerator(identifierGenerator), adapterManager, objectStore, configuration);
+        this(persistenceSessionFactory, adapterFactory, servicesInjector, new OidGenerator(new IdentifierGeneratorUnified(configuration)), adapterManager, objectStore, configuration);
     }
 
     /**

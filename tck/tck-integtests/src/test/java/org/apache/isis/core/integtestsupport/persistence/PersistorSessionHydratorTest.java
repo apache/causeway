@@ -22,7 +22,6 @@ package org.apache.isis.core.integtestsupport.persistence;
 import org.jmock.Expectations;
 import org.junit.Rule;
 import org.junit.Test;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures.Fixtures.Initialization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -79,11 +78,7 @@ public class PersistorSessionHydratorTest {
     @Rule
     public IsisSystemWithFixtures iswf = IsisSystemWithFixtures.builder()
         .with(Initialization.NO_INIT)
-        .with(new InMemoryPersistenceMechanismInstaller() {
-            public IdentifierGenerator createIdentifierGenerator(IsisConfiguration configuration) {
-                return mockIdentifierGenerator;
-            };
-        })
+        .with(new InMemoryPersistenceMechanismInstaller())
         .build();
 
     

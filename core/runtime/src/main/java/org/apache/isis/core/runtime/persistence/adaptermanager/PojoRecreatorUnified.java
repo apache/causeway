@@ -16,20 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.system.persistence;
+package org.apache.isis.core.runtime.persistence.adaptermanager;
 
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.runtime.PersistorImplementation;
 
-public interface IdentifierGenerator extends DebuggableWithTitle {
+public class PojoRecreatorUnified implements PojoRecreator {
 
-    public String createTransientIdentifierFor(ObjectSpecId objectSpecId, final Object pojo);
+    private final PojoRecreator pojoRecreator;
 
-    public String createAggregateLocalId(ObjectSpecId objectSpecId, final Object pojo, final ObjectAdapter parentAdapter);
+    public PojoRecreatorUnified(final IsisConfiguration configuration) {
+        this.pojoRecreator =
+                PersistorImplementation.from(configuration).isDataNucleus()
+                    ? new PojoRecreatorForDataNucleus()
+                    : new PojoRecreatorDefault();
+    }
 
-    public String createPersistentIdentifierFor(ObjectSpecId objectSpecId, Object pojo, RootOid transientRootOid);
+    public Object recreatePojo(final TypedOid oid) {
+        return pojoRecreator.recreatePojo(oid);
+    }
 
-    public <T extends IdentifierGenerator> T underlying(Class<T> cls);
+    public ObjectAdapter lazilyLoaded(Object pojo) {
+        return pojoRecreator.lazilyLoaded(pojo);
+    }
+    
 }

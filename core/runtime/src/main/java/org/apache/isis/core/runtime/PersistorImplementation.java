@@ -27,4 +27,11 @@ public enum PersistorImplementation {
         final String persistor = configuration.getString("isis.persistor", "datanucleus");
         return "datanucleus".equalsIgnoreCase(persistor)? DATANUCLEUS: INMEMORY;
     }
+
+    public boolean isDataNucleus() {
+        return this == DATANUCLEUS;
+    }
+    public boolean isInMemory() {
+        return this == INMEMORY;
+    }
 }

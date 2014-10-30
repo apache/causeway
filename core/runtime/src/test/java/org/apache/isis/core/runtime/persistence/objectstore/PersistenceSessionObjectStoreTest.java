@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
-import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreatorDefault;
+import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreatorUnified;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.*;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
@@ -150,7 +150,7 @@ public class PersistenceSessionObjectStoreTest {
 
         servicesInjector = new ServicesInjectorDefault(new InjectorMethodEvaluatorDefault());
 
-        adapterManager = new AdapterManagerDefault(new PojoRecreatorDefault());
+        adapterManager = new AdapterManagerDefault(new PojoRecreatorUnified(mockConfiguration));
         adapterFactory = new PojoAdapterFactory();
         persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, adapterFactory, servicesInjector, new OidGenerator(new IdentifierGeneratorDefault()), adapterManager, mockObjectStore, mockConfiguration) {
             @Override

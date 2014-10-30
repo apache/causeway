@@ -19,25 +19,16 @@
 
 package org.apache.isis.core.runtime.system.persistence;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.matchers.IsisMatchers.greaterThan;
-import static org.hamcrest.CoreMatchers.is;
-
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
-/**
- * Generates OIDs based on monotonically.
- * 
- * <p>
- * Specifies the {@link OidStringifierDirect} as the
- * {@link #getOidStringifier() OID stringifier} ({@link RootOidDefault} is
- * conformant)).
- */
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.matchers.IsisMatchers.greaterThan;
+import static org.hamcrest.CoreMatchers.is;
+
 public class IdentifierGeneratorDefault implements IdentifierGenerator {
 
     public static class Memento {
@@ -116,7 +107,12 @@ public class IdentifierGeneratorDefault implements IdentifierGenerator {
         return "" + (persistentSerialNumber++); // counts up
     }
 
-    
+    @Override
+    public <T extends IdentifierGenerator> T underlying(Class<T> cls) {
+        return cls == IdentifierGeneratorDefault.class? (T) this : null;
+    }
+
+
     // //////////////////////////////////////////////////////////////
     // Memento (not API)
     // //////////////////////////////////////////////////////////////

@@ -16,17 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.datanucleus.persistence.adaptermanager;
+package org.apache.isis.core.runtime.persistence.adaptermanager;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
-import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreator;
-import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreatorDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 
-public class DataNucleusPojoRecreator implements PojoRecreator {
+class PojoRecreatorForDataNucleus implements PojoRecreator {
 
     private final PojoRecreator delegate = new PojoRecreatorDefault();
     

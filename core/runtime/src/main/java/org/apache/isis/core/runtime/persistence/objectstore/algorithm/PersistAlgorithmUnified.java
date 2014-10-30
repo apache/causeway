@@ -37,7 +37,7 @@ public class PersistAlgorithmUnified extends PersistAlgorithmAbstract {
 
     public PersistAlgorithmUnified(IsisConfiguration configuration) {
         final PersistorImplementation persistorImplementation = PersistorImplementation.from(configuration);
-        persistAlgorithm = persistorImplementation == PersistorImplementation.DATANUCLEUS
+        persistAlgorithm = persistorImplementation.isDataNucleus()
                                 ? new PersistAlgorithmForDataNucleus()
                                 : new PersistAlgorithmDefault();
     }

@@ -36,9 +36,6 @@ import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMe
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
-import org.apache.isis.core.runtime.system.persistence.IdentifierGenerator;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.adaptermanager.DataNucleusPojoRecreator;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.DataNucleusIdentifierGenerator;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableAnnotationInJdoApplibFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableMarkerInterfaceInJdoApplibFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
@@ -186,10 +183,6 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     // PersistenceSessionFactoryDelegate impl
     ////////////////////////////////////////////////////////////////////////
 
-    @Override
-    public IdentifierGenerator createIdentifierGenerator(IsisConfiguration configuration) {
-        return new DataNucleusIdentifierGenerator();
-    }
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel, IsisConfiguration configuration) {
@@ -219,10 +212,6 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     }
 
 
-    @Override
-    public DataNucleusPojoRecreator createPojoRecreator(IsisConfiguration configuration) {
-        return new DataNucleusPojoRecreator();
-    }
 
     ////////////////////////////////////////////////////////////////////////
     // Dependencies

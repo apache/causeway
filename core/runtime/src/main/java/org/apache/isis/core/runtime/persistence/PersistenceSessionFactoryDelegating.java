@@ -29,10 +29,8 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreator;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
@@ -56,9 +54,7 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
 
     private Boolean fixturesInstalled;
 
-    private PojoRecreator pojoRecreator;
     private ObjectAdapterFactory adapterFactory;
-    private IdentifierGenerator identifierGenerator;
     private ServicesInjectorSpi servicesInjector;
     private RuntimeContext runtimeContext;
 
@@ -102,13 +98,9 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
             FixtureClock.initialize();
         }
 
-        pojoRecreator = persistenceSessionFactoryDelegate.createPojoRecreator(getConfiguration());
         adapterFactory = persistenceSessionFactoryDelegate.createAdapterFactory(getConfiguration());
-        identifierGenerator = persistenceSessionFactoryDelegate.createIdentifierGenerator(getConfiguration());
 
-        ensureThatState(pojoRecreator, is(not(nullValue())));
         ensureThatState(adapterFactory, is(not(nullValue())));
-        ensureThatState(identifierGenerator, is(not(nullValue())));
 
         servicesInjector = persistenceSessionFactoryDelegate.createServicesInjector(getConfiguration());
 
@@ -132,7 +124,6 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     }
 
 
-
     @Override
     public final void shutdown() {
         doShutdown();
@@ -153,18 +144,6 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
         return adapterFactory;
     }
     
-    public IdentifierGenerator getIdentifierGenerator() {
-        return identifierGenerator;
-    }
-    
-    public PojoRecreator getPojoRecreator() {
-        return pojoRecreator;
-    }
-
-    public RuntimeContext getRuntimeContext() {
-        return runtimeContext;
-    }
-    
     public ServicesInjectorSpi getServicesInjector() {
         return servicesInjector;
     }
@@ -182,7 +161,6 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     public void refineProgrammingModel(ProgrammingModel baseProgrammingModel, IsisConfiguration configuration) {
         persistenceSessionFactoryDelegate.refineProgrammingModel(baseProgrammingModel, configuration);
     }
-
 
     // //////////////////////////////////////////////////////
     // FixturesInstalledFlag impl
@@ -215,16 +193,12 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
         this.serviceList = serviceList;
     }
 
-
     // //////////////////////////////////////////////////////
     // Dependencies (from context)
     // //////////////////////////////////////////////////////
 
-    
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
-
-
 
 }

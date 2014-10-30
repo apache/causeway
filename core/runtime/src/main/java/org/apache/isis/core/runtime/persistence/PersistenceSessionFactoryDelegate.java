@@ -25,9 +25,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreator;
-import org.apache.isis.core.runtime.system.persistence.IdentifierGenerator;
-import org.apache.isis.core.runtime.system.persistence.ObjectFactory;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
@@ -42,11 +39,7 @@ public interface PersistenceSessionFactoryDelegate extends IsisConfigurationBuil
     // singleton threadsafe components created during init
     ///////////////////////////////////////////////////////////////////////////
     
-    PojoRecreator createPojoRecreator(IsisConfiguration configuration);
-
     ObjectAdapterFactory createAdapterFactory(IsisConfiguration configuration);
-
-    IdentifierGenerator createIdentifierGenerator(IsisConfiguration configuration);
 
     ServicesInjectorSpi createServicesInjector(IsisConfiguration configuration);
 

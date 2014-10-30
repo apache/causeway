@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
-public class PojoRecreatorDefault implements PojoRecreator {
+class PojoRecreatorDefault implements PojoRecreator {
 
     public Object recreatePojo(final TypedOid oid) {
         final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(oid.getObjectSpecId());

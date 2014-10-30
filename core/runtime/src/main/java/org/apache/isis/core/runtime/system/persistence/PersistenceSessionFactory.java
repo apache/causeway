@@ -25,7 +25,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegate;
-import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreator;
 import org.apache.isis.core.runtime.system.DeploymentType;
 
 /**
@@ -41,8 +40,6 @@ public interface PersistenceSessionFactory extends MetaModelRefiner, Application
     // //////////////////////////////////////////////////////
 
     ObjectAdapterFactory getAdapterFactory();
-    PojoRecreator getPojoRecreator();
-    IdentifierGenerator getIdentifierGenerator();
     ServicesInjectorSpi getServicesInjector();
 
     
