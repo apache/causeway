@@ -354,7 +354,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
                     formGroup.add(new CssClassAppender("label-left"));
                     break;
                 case NONE:
-                    scalarName.setVisible(false);
+                    formGroup.add(new CssClassAppender("label-none"));
                     break;
                 case TOP:
                     formGroup.add(new CssClassAppender("label-top"));
