@@ -81,6 +81,11 @@
     min-width: 20px;
 }
 
+.dropdown-menu > li > a.menuLink.btn-warning:hover {
+    background-color: inherit;
+    background-image: inherit;
+}
+
 .dropdown-menu > li > a.menuLink.menuLinkSpacer {
     padding-left: 24px;
 }
