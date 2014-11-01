@@ -92,7 +92,7 @@ div.label-left label.control-label {
     float: left;
     padding-top: 7px;
     padding-left: 10px;
-    text-align: justify;
+    text-align: start;
 }
 
 div.label-top label.control-label {
