@@ -34,6 +34,7 @@ public class MemberRepr {
     public NamedFacetRepr named;
     public DescribedAsFacetRepr describedAs;
     public CssClassFacetRepr cssClass;
+    // TODO mgrigorov: should we add public CssClassFaFacetRepr cssClassFa; ?
     public TypicalLengthFacetRepr typicalLength;
     public MultiLineFacetRepr multiLine;
     public LabelAtFacetRepr labelAt;
