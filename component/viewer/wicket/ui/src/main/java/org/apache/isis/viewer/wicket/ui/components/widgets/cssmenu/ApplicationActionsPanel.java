@@ -1,6 +1,7 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAutoOpenJavaScriptReference;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -111,6 +113,9 @@ public class ApplicationActionsPanel extends Panel {
 
         if (!menuItem.isEnabled()) {
             listItem.add(new CssClassNameAppender("disabled"));
+            subMenuItemLink.setEnabled(false);
+            TooltipBehavior tooltipBehavior = new TooltipBehavior(Model.of(menuItem.getDisabledReason()));
+            listItem.add(tooltipBehavior);
         }
         if (menuItem.isPrototyping()) {
             subMenuItemLink.add(new CssClassNameAppender("btn btn-warning"));
