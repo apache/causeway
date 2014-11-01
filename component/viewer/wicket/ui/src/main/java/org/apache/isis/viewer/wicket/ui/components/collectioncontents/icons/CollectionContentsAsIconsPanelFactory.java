@@ -32,6 +32,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 /**
  * {@link ComponentFactory} for {@link CollectionContentsAsIconsPanel}.
  */
+// TODO mgrigorov: Is this still needed ? It seems it is not used.
 public class CollectionContentsAsIconsPanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
