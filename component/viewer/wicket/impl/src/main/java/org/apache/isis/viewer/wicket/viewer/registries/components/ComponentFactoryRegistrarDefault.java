@@ -40,6 +40,7 @@ import org.apache.isis.viewer.wicket.ui.components.entity.collections.EntityColl
 import org.apache.isis.viewer.wicket.ui.components.entity.combined.EntityCombinedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.header.EntityHeaderPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconTitleAndCopyLinkPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityPropertiesPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.selector.links.EntityLinksSelectorPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.*;
@@ -138,7 +139,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         
         // lower-level
         componentFactories.add(new EntityIconAndTitlePanelFactory());
-        // componentFactories.add(new EntityIconTitleAndCopyLinkPanelFactory());
+        componentFactories.add(new EntityIconTitleAndCopyLinkPanelFactory());
         componentFactories.add(new EntityHeaderPanelFactory());
         componentFactories.add(new EntityPropertiesPanelFactory());
         componentFactories.add(new EntityCollectionsPanelFactory());
