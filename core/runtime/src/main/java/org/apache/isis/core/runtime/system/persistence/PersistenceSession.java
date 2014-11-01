@@ -54,6 +54,9 @@ import org.apache.isis.core.metamodel.spec.*;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
+import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
+import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
+import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreatorUnified;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithmUnified;
@@ -104,53 +107,30 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
      */
     public PersistenceSession(
             final PersistenceSessionFactory persistenceSessionFactory,
-            final ObjectAdapterFactory adapterFactory,
             final ServicesInjectorSpi servicesInjector,
-            final AdapterManagerSpi adapterManager,
-            final ObjectStore objectStore,
-            final IsisConfiguration configuration) {
-
-        this(persistenceSessionFactory, adapterFactory, servicesInjector, new OidGenerator(new IdentifierGeneratorUnified(configuration)), adapterManager, objectStore, configuration);
-    }
-
-    /**
-     * Initialize the object store so that calls to this object store access
-     * persisted objects and persist changes to the object that are saved.
-     */
-    public PersistenceSession(
-            final PersistenceSessionFactory persistenceSessionFactory,
-            final ObjectAdapterFactory adapterFactory,
-            final ServicesInjectorSpi servicesInjector,
-            final OidGenerator oidGenerator,
-            final AdapterManagerSpi adapterManager,
             final ObjectStore objectStore,
             final IsisConfiguration configuration) {
 
         ensureThatArg(persistenceSessionFactory, is(not(nullValue())), "persistence session factory required");
-
-        ensureThatArg(adapterFactory, is(not(nullValue())), "adapter factory required");
         ensureThatArg(servicesInjector, is(not(nullValue())), "services injector required");
-        ensureThatArg(oidGenerator, is(not(nullValue())), "OID generator required");
-        ensureThatArg(adapterManager, is(not(nullValue())), "adapter manager required");
+        ensureThatArg(objectStore, is(not(nullValue())), "object store required");
 
         // owning, application scope
         this.persistenceSessionFactory = persistenceSessionFactory;
 
         // session scope
-        this.objectAdapterFactory = adapterFactory;
         this.servicesInjector = servicesInjector;
-        this.oidGenerator = oidGenerator;
-        this.adapterManager = adapterManager;
+
+        this.objectAdapterFactory = new PojoAdapterFactory();
+        this.oidGenerator = new OidGenerator(new IdentifierGeneratorUnified(configuration));
+        this.adapterManager = new AdapterManagerDefault(new PojoRecreatorUnified(configuration));
+        this.persistAlgorithm = new PersistAlgorithmUnified(configuration);
 
         setState(State.NOT_INITIALIZED);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating " + this);
         }
-
-        this.persistAlgorithm = new PersistAlgorithmUnified(configuration);
-
-        ensureThatArg(objectStore, is(not(nullValue())), "object store required");
 
         this.objectStore = objectStore;
     }

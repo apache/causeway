@@ -31,7 +31,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
@@ -49,6 +48,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
+import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -122,7 +122,10 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
     private TransactionMode transactionMode;
     
 
-    public DataNucleusObjectStore(ObjectAdapterFactory adapterFactory, DataNucleusApplicationComponents applicationComponents) {
+    public DataNucleusObjectStore(
+            final DataNucleusApplicationComponents applicationComponents) {
+
+        final ObjectAdapterFactory adapterFactory = new PojoAdapterFactory();
         ensureThatArg(adapterFactory, is(notNullValue()));
         ensureThatArg(applicationComponents, is(notNullValue()));
 

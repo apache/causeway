@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.persistence.objectstore;
+package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.Collections;
 import org.jmock.Expectations;
@@ -45,9 +45,9 @@ import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreatorUnified;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
+import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.*;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
-import org.apache.isis.core.runtime.system.persistence.*;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -55,7 +55,7 @@ import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 
-public class PersistenceSessionObjectStoreTest {
+public class PersistenceSessionTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
@@ -152,7 +152,7 @@ public class PersistenceSessionObjectStoreTest {
 
         adapterManager = new AdapterManagerDefault(new PojoRecreatorUnified(mockConfiguration));
         adapterFactory = new PojoAdapterFactory();
-        persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, adapterFactory, servicesInjector, new OidGenerator(new IdentifierGeneratorDefault()), adapterManager, mockObjectStore, mockConfiguration) {
+        persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, servicesInjector, mockObjectStore, mockConfiguration) {
             @Override
             protected SpecificationLoaderSpi getSpecificationLoader() {
                 return isisMetaModel.getSpecificationLoader();

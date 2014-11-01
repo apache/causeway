@@ -21,43 +21,16 @@ package org.apache.isis.core.runtime.persistence;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
 /**
- * Creates a {@link PersistenceSession} on behalf of a
+ * Creates an {@link org.apache.isis.core.runtime.system.persistence.ObjectStore} on behalf of a
  * {@link PersistenceSessionFactory}.
  */
 public interface PersistenceSessionFactoryDelegate extends IsisConfigurationBuilderAware, MetaModelRefiner {
 
+    ObjectStoreSpi createObjectStore(final IsisConfiguration configuration);
 
-    ///////////////////////////////////////////////////////////////////////////
-    // singleton threadsafe components created during init
-    ///////////////////////////////////////////////////////////////////////////
-    
-    ObjectAdapterFactory createAdapterFactory(IsisConfiguration configuration);
-
-    ServicesInjectorSpi createServicesInjector(IsisConfiguration configuration);
-
-    RuntimeContext createRuntimeContext(IsisConfiguration configuration);
-
-    
-    ///////////////////////////////////////////////////////////////////////////
-    // created for each session
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * As per {@link PersistenceSessionFactory#createPersistenceSession()}, but
-     * passing a {@link PersistenceSessionFactory} to act as the
-     * {@link PersistenceSession}'s
-     * {@link PersistenceSession#getPersistenceSessionFactory() owning factory}.
-     */
-    PersistenceSession createPersistenceSession(PersistenceSessionFactory persistenceSessionFactory);
-
-    
-    
 }

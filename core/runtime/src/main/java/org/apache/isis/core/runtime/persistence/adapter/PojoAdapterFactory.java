@@ -30,12 +30,10 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 public class PojoAdapterFactory implements ObjectAdapterFactory {
 
     @Override
-    public PojoAdapter createAdapter(final Object pojo, final Oid oid, AdapterManager adapterManager) {
+    public PojoAdapter createAdapter(final Object pojo, final Oid oid, final AdapterManager adapterManager) {
         return new PojoAdapter(pojo, oid, getSpecificationLoader(), adapterManager, getLocalization(), getAuthenticationSession());
     }
 
-    
-    
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }

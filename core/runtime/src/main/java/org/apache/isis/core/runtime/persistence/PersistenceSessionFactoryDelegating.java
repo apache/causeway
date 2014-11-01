@@ -20,28 +20,37 @@
 package org.apache.isis.core.runtime.persistence;
 
 import java.util.List;
+import java.util.Properties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
+import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.*;
 
 /**
  * Implementation that just delegates to a supplied
- * {@link PersistenceSessionFactory}.
+ * {@link PersistenceSessionFactoryDelegate}.
  */
 public class PersistenceSessionFactoryDelegating implements PersistenceSessionFactory, FixturesInstalledFlag {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PersistenceSessionFactoryDelegating.class);
 
     private final DeploymentType deploymentType;
     private final IsisConfiguration configuration;
@@ -54,8 +63,7 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
 
     private Boolean fixturesInstalled;
 
-    private ObjectAdapterFactory adapterFactory;
-    private ServicesInjectorSpi servicesInjector;
+    private final ServicesInjectorSpi servicesInjector = new ServicesInjectorDefault();
     private RuntimeContext runtimeContext;
 
     public PersistenceSessionFactoryDelegating(
@@ -78,7 +86,25 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
 
     @Override
     public PersistenceSession createPersistenceSession() {
-        return persistenceSessionFactoryDelegate.createPersistenceSession(this);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("installing " + this.getClass().getName());
+        }
+
+        ServicesInjectorSpi servicesInjector = getServicesInjector();
+
+        final ObjectStoreSpi objectStore = persistenceSessionFactoryDelegate.createObjectStore(getConfiguration());
+
+        ensureThatArg(objectStore, is(not(nullValue())));
+
+        final PersistenceSession persistenceSession =new PersistenceSession(this, servicesInjector, objectStore, getConfiguration());
+
+        final IsisTransactionManager transactionManager = new IsisTransactionManager(persistenceSession, objectStore, servicesInjector);
+
+        persistenceSession.setDirtiableSupport(true);
+        persistenceSession.setTransactionManager(transactionManager);
+
+        return persistenceSession;
     }
 
     @Override
@@ -98,15 +124,7 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
             FixtureClock.initialize();
         }
 
-        adapterFactory = persistenceSessionFactoryDelegate.createAdapterFactory(getConfiguration());
-
-        ensureThatState(adapterFactory, is(not(nullValue())));
-
-        servicesInjector = persistenceSessionFactoryDelegate.createServicesInjector(getConfiguration());
-
-        ensureThatState(servicesInjector, is(not(nullValue())));
-
-        runtimeContext = persistenceSessionFactoryDelegate.createRuntimeContext(getConfiguration());
+        runtimeContext = createRuntimeContext(getConfiguration());
         ensureThatState(runtimeContext, is(not(nullValue())));
 
         // inject the specification loader etc.
@@ -122,6 +140,25 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
         servicesInjector.setServices(serviceList);
         servicesInjector.init();
     }
+
+    private RuntimeContext createRuntimeContext(final IsisConfiguration configuration) {
+        final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
+        final Properties properties = applicationPropertiesFrom(configuration);
+        runtimeContext.setProperties(properties);
+        return runtimeContext;
+    }
+
+    private static Properties applicationPropertiesFrom(final IsisConfiguration configuration) {
+        final Properties properties = new Properties();
+        final IsisConfiguration applicationConfiguration = configuration.getProperties("application");
+        for (final String key : applicationConfiguration) {
+            final String value = applicationConfiguration.getString(key);
+            final String newKey = key.substring("application.".length());
+            properties.setProperty(newKey, value);
+        }
+        return properties;
+    }
+
 
 
     @Override
@@ -140,10 +177,6 @@ public class PersistenceSessionFactoryDelegating implements PersistenceSessionFa
     // Components (setup during init...)
     // //////////////////////////////////////////////////////
 
-    public ObjectAdapterFactory getAdapterFactory() {
-        return adapterFactory;
-    }
-    
     public ServicesInjectorSpi getServicesInjector() {
         return servicesInjector;
     }

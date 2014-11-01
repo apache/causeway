@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -35,7 +34,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorCom
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableAnnotationInJdoApplibFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableMarkerInterfaceInJdoApplibFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
@@ -79,37 +77,42 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
 
     private static final String ISIS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl";
 
-    private DataNucleusApplicationComponents applicationComponents = null;
-
     public DataNucleusPersistenceMechanismInstaller() {
         super(NAME);
     }
 
 
-    ////////////////////////////////////////////////////////////////////////
-    // createObjectStore
-    ////////////////////////////////////////////////////////////////////////
-    
+    //region > createObjectStore
+
     @Override
-    protected ObjectStoreSpi createObjectStore(IsisConfiguration configuration, ObjectAdapterFactory adapterFactory, AdapterManagerSpi adapterManager) {
-        createDataNucleusApplicationComponentsIfRequired(configuration);
-        return new DataNucleusObjectStore(adapterFactory, applicationComponents);
+    public ObjectStoreSpi createObjectStore(final IsisConfiguration configuration) {
+        final DataNucleusApplicationComponents applicationComponents = createDataNucleusApplicationComponentsIfRequired(configuration);
+        return new DataNucleusObjectStore(applicationComponents);
     }
 
-    private void createDataNucleusApplicationComponentsIfRequired(IsisConfiguration configuration) {
-        // this is, perhaps doing more work than necessary...
-        // maybe retain the applicationComponents and just tell it to discard its PMF?
-        // (doubt will make much different in terms of the amount of time to process, though)
-        if(applicationComponents != null && !applicationComponents.isStale()) {
-            return;
-        }
-        
-        final IsisConfiguration dataNucleusConfig = configuration.createSubset(ISIS_CONFIG_PREFIX);
-        final Map<String, String> props = dataNucleusConfig.asMap();
-        addDataNucleusPropertiesIfRequired(props);
+    //endregion
 
-        final Set<String> classesToBePersisted = catalogClassesToBePersisted(configuration, getSpecificationLoader().allSpecifications());
-        applicationComponents = new DataNucleusApplicationComponents(props, classesToBePersisted);
+    //region > createDataNucleusApplicationComponentsIfRequired
+    
+    private DataNucleusApplicationComponents applicationComponents = null;
+
+    private DataNucleusApplicationComponents createDataNucleusApplicationComponentsIfRequired(IsisConfiguration configuration) {
+
+        if (applicationComponents == null || applicationComponents.isStale()) {
+
+            // this is, perhaps doing more work than necessary...
+            // maybe retain the applicationComponents and just tell it to discard its PMF?
+            // (doubt will make much different in terms of the amount of time to process, though)
+
+            final IsisConfiguration dataNucleusConfig = configuration.createSubset(ISIS_CONFIG_PREFIX);
+            final Map<String, String> props = dataNucleusConfig.asMap();
+            addDataNucleusPropertiesIfRequired(props);
+
+            final Set<String> classesToBePersisted = catalogClassesToBePersisted(configuration, getSpecificationLoader().allSpecifications());
+            applicationComponents = new DataNucleusApplicationComponents(props, classesToBePersisted);
+        }
+
+        return applicationComponents;
     }
 
     private static Set<String> catalogClassesToBePersisted(final IsisConfiguration configuration, Collection<ObjectSpecification> objectSpecs) {
@@ -178,10 +181,9 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
             props.put(key, value);
         }
     }
+    //endregion
 
-    ////////////////////////////////////////////////////////////////////////
-    // PersistenceSessionFactoryDelegate impl
-    ////////////////////////////////////////////////////////////////////////
+    //region > PersistenceSessionFactoryDelegate impl
 
 
     @Override
@@ -211,14 +213,13 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         metaModelValidator.add(new JdoMetaModelValidator());
     }
 
+    //endregion
 
+    //region > dependencies
 
-    ////////////////////////////////////////////////////////////////////////
-    // Dependencies
-    ////////////////////////////////////////////////////////////////////////
-    
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 
+    //endregion
 }

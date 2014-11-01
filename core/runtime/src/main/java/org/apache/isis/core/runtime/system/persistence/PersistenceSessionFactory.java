@@ -21,14 +21,12 @@ package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.List;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegate;
 import org.apache.isis.core.runtime.system.DeploymentType;
 
 /**
- * @see PersistenceSessionFactoryDelegate
+ * @see org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegate
  */
 public interface PersistenceSessionFactory extends MetaModelRefiner, ApplicationScopedComponent {
 
@@ -39,7 +37,6 @@ public interface PersistenceSessionFactory extends MetaModelRefiner, Application
     // Singleton threadsafe components
     // //////////////////////////////////////////////////////
 
-    ObjectAdapterFactory getAdapterFactory();
     ServicesInjectorSpi getServicesInjector();
 
     
