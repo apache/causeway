@@ -121,12 +121,8 @@ div.label-left .scalarValueWrapper .form-control {
     width: 100%;
 }
 
-div.label-left .scalarValueWrapper .form-control.file-caption {
-    width: 69%;
-}
-
-div.label-left .scalarValueWrapper .file-input .input-group-btn {
-    display: inline;
+.file-preview-thumbnails {
+    overflow: auto;
 }
 
 div.label-left .scalarValueWrapper .input-group {
