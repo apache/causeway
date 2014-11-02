@@ -50,8 +50,8 @@
     left:0;
     height: 100%;
     width: 100%;
-    opacity: 0.4;
-    filter: alpha(opacity=40);
+    opacity: 0.5;
+    filter: alpha(opacity=50);
 }
 
 .table .table td {
