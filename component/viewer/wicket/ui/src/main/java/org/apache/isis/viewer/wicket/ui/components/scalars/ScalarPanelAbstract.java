@@ -238,29 +238,32 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         addCssForMetaModel();
         
         if(!subscribers.isEmpty()) {
-            addFormComponentBehavior(new AjaxFormComponentUpdatingBehavior("change"){
-
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                protected void onUpdate(AjaxRequestTarget target) {
-                    for (ScalarModelSubscriber subscriber : subscribers) {
-                        subscriber.onUpdate(target, ScalarPanelAbstract.this);
-                    }
-                }
-                
-                @Override
-                protected void onError(AjaxRequestTarget target, RuntimeException e) {
-                    super.onError(target, e);
-                    for (ScalarModelSubscriber subscriber : subscribers) {
-                        subscriber.onError(target, ScalarPanelAbstract.this);
-                    }
-
-                }
-            });
+            addFormComponentBehavior(new ScalarUpdatingBehavior());
         }
     }
 
+    protected class ScalarUpdatingBehavior extends AjaxFormComponentUpdatingBehavior {
+        private static final long serialVersionUID = 1L;
+
+        private ScalarUpdatingBehavior() {
+            super("change");
+        }
+
+        @Override
+        protected void onUpdate(AjaxRequestTarget target) {
+            for (ScalarModelSubscriber subscriber : subscribers) {
+                subscriber.onUpdate(target, ScalarPanelAbstract.this);
+            }
+        }
+
+        @Override
+        protected void onError(AjaxRequestTarget target, RuntimeException e) {
+            super.onError(target, e);
+            for (ScalarModelSubscriber subscriber : subscribers) {
+                subscriber.onError(target, ScalarPanelAbstract.this);
+            }
+        }
+    }
 
     /**
      * Mandatory hook.

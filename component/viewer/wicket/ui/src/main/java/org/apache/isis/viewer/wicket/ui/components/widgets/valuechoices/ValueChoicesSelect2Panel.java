@@ -214,6 +214,9 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
     
     @Override
     protected void addFormComponentBehavior(Behavior behavior) {
+        for (Behavior b : select2Field.getBehaviors(ScalarUpdatingBehavior.class)) {
+            select2Field.remove(b);
+        }
         select2Field.add(behavior);
     }
 
