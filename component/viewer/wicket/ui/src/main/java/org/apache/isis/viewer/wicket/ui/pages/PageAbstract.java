@@ -19,12 +19,16 @@
 
 package org.apache.isis.viewer.wicket.ui.pages;
 
+import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.references.BootlintJavaScriptReference;
+import de.agilecoders.wicket.core.settings.IBootstrapSettings;
+import de.agilecoders.wicket.core.settings.ITheme;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.wicket.MarkupContainer;
@@ -45,7 +49,10 @@ import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.PackageResource;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
@@ -240,6 +247,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference())));
         response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
         response.render(CssHeaderItem.forReference(new BootstrapOverridesCssResourceReference()));
+        contributeThemeSpecificOverrides(response);
         PanelUtil.renderHead(response, PageAbstract.class);
 
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
@@ -261,6 +269,22 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         if (!(properties.isBrowserInternetExplorer() && properties.getBrowserVersionMajor() < 9)) {
             // use BootLint for any browser but IE 6-8
             response.render(JavaScriptHeaderItem.forReference(BootlintJavaScriptReference.INSTANCE));
+        }
+    }
+
+    /**
+     * Contributes theme specific Bootstrap CSS overrides if there is such resource
+     *
+     * @param response The header response to contribute to
+     */
+    private void contributeThemeSpecificOverrides(IHeaderResponse response) {
+        IBootstrapSettings bootstrapSettings = Bootstrap.getSettings(getApplication());
+        ITheme activeTheme = bootstrapSettings.getActiveThemeProvider().getActiveTheme();
+        String name = activeTheme.name().toLowerCase(Locale.ENGLISH);
+        String themeSpecificOverride = "bootstrap-overrides-" + name + ".css";
+        ResourceReference.Key themeSpecificOverrideKey = new ResourceReference.Key(PageAbstract.class.getName(), themeSpecificOverride, null, null, null);
+        if (PackageResource.exists(themeSpecificOverrideKey)) {
+            response.render(CssHeaderItem.forReference(new CssResourceReference(themeSpecificOverrideKey)));
         }
     }
 
