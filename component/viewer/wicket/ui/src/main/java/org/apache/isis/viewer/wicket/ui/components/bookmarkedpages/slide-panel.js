@@ -16,8 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-$(document).ready(function(){
- 
+$(function(){
+
+    'use strict';
+
     var showBookmarks = function(){
         $('#bookmarkedPagesSlidingDiv').slideDown('50');
         $('.bookmarkRibbon').fadeOut(50);
@@ -37,7 +39,6 @@ $(document).ready(function(){
     $('#bookmarkedPagesSlidingDiv').mouseleave(hideBookmarks);
     
     $('body').keydown(function(e) {
-        
         // alt+[
         if(e.which === 219 && e.altKey) {
             if($('#bookmarkedPagesSlidingDiv').is(":visible")) {
@@ -45,10 +46,8 @@ $(document).ready(function(){
             } else {
                 showBookmarks();
             }
+        } else if (e.which === 27) {
+            hideBookmarksQuickly();
         }
-        
-        if(e.which === 27) {
-        	hideBookmarksQuickly();
-        }
-      });
+    });
 });
