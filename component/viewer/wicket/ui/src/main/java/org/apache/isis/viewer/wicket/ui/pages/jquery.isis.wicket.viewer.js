@@ -86,8 +86,15 @@ $(function() {
             $(this).animate({ "backgroundColor": "#FFF" }, 1000, "linear", function() {
                 $(x).css('background-color','').removeClass("reloaded-after-concurrency-exception");
             }); 
-        }); 
-    
+        });
+
+
+    $('body').keydown(function(e) {
+        // ctrl+]
+        if(e.which === 221 && e.ctrlKey) {
+            $('.copyLink').click();
+        }
+    });
 });
 
 /**
