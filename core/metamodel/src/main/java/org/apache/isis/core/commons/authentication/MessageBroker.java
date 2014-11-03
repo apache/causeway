@@ -20,26 +20,107 @@
 package org.apache.isis.core.commons.authentication;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import com.google.common.collect.Lists;
+import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 
-/**
- * Moving from runtime, so that can preserve messages between interactions that
- * correspond to the same session.
- */
-public interface MessageBroker extends Serializable {
+public class MessageBroker implements Serializable, DebuggableWithTitle {
 
-    void addMessage(String message);
-    List<String> getMessages();
-    String getMessagesCombined();
+    private static final long serialVersionUID = 1L;
+    
+    private final List<String> messages = Lists.newArrayList();
+    private final List<String> warnings = Lists.newArrayList();
 
-    void addWarning(String message);
-    List<String> getWarnings();
-    String getWarningsCombined();
+    //region > acquire (factory method)
 
+    public static MessageBroker acquire(final AuthenticationSession authenticationSession) {
+        MessageBroker messageBroker;
+        synchronized (authenticationSession) {
+            messageBroker = authenticationSession.getMessageBroker();
+            if(messageBroker == null) {
+                messageBroker = new MessageBroker();
+                authenticationSession.setMessageBroker(messageBroker);
+            }
+        }
+        return messageBroker;
+    }
 
-    void setApplicationError(String message);
-    String getApplicationError();
+    private MessageBroker() {
+    }
+    //endregion
 
-    void ensureEmpty();
+    //region > reset
+
+    public void reset() {
+        warnings.clear();
+        messages.clear();
+    }
+
+    //endregion
+
+    //region > messages
+
+    public List<String> getMessages() {
+        return copyAndClear(messages);
+    }
+
+    public void addMessage(final String message) {
+        messages.add(message);
+    }
+
+    //endregion
+
+    //region > warnings
+
+    public List<String> getWarnings() {
+        return copyAndClear(warnings);
+    }
+
+    public void addWarning(final String message) {
+        warnings.add(message);
+    }
+
+    //endregion
+
+    //region > debugging
+
+    @Override
+    public void debugData(final DebugBuilder debug) {
+        debugArray(debug, "Messages", messages);
+        debugArray(debug, "Warnings", messages);
+    }
+
+    private void debugArray(final DebugBuilder debug, final String title, final List<String> vector) {
+        debug.appendln(title);
+        debug.indent();
+        if (vector.size() == 0) {
+            debug.appendln("none");
+        } else {
+            for (final String text : vector) {
+                debug.appendln(text);
+            }
+        }
+        debug.unindent();
+    }
+
+    @Override
+    public String debugTitle() {
+        return "Simple Message Broker";
+    }
+
+    //endregion
+
+    //region > helpers
+
+    private List<String> copyAndClear(final List<String> messages) {
+        final List<String> copy = Collections.unmodifiableList(new ArrayList<>(messages));
+        messages.clear();
+        return copy;
+    }
+    //endregion
+
 
 }

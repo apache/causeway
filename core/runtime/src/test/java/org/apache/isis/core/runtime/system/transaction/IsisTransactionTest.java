@@ -34,6 +34,7 @@ import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.publish.EventSerializer;
 import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;

@@ -48,6 +48,7 @@ import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.services.publish.*;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -203,7 +204,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     private final TransactionalResource objectStore;
     private final List<PersistenceCommand> commands = Lists.newArrayList();
     private final IsisTransactionManager transactionManager;
-    private final org.apache.isis.core.commons.authentication.MessageBroker messageBroker;
+    private final MessageBroker messageBroker;
 
     private final ServicesInjector servicesInjector;
 
@@ -238,7 +239,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     public IsisTransaction(
             final IsisTransactionManager transactionManager,
-            final org.apache.isis.core.commons.authentication.MessageBroker messageBroker,
+            final MessageBroker messageBroker,
             final TransactionalResource objectStore,
             final ServicesInjector servicesInjector) {
         
@@ -1031,16 +1032,15 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     /**
-     * The {@link MessageBroker} for this transaction.
+     * The {@link org.apache.isis.core.commons.authentication.MessageBroker} for this transaction.
      * 
      * <p>
      * Injected in constructor
      *
      * @deprecated - obtain the {@link org.apache.isis.core.commons.authentication.MessageBroker} instead from the {@link AuthenticationSession}.
      */
-    @Deprecated
     public MessageBroker getMessageBroker() {
-        return (MessageBroker) messageBroker;
+        return messageBroker;
     }
 
     public static class AdapterAndProperty {

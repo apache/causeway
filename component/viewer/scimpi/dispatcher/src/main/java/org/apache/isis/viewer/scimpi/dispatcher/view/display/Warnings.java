@@ -20,9 +20,8 @@
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import java.util.List;
-
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.transaction.MessageBroker;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 

@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.CommandDefault;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -119,10 +120,10 @@ public class IsisTransactionManager implements SessionScopedComponent {
     
 
     /**
-     * Convenience method returning the {@link MessageBroker} of the
+     * Convenience method returning the {@link org.apache.isis.core.commons.authentication.MessageBroker} of the
      * {@link #getTransaction() current transaction}.
      */
-    protected org.apache.isis.core.commons.authentication.MessageBroker getMessageBroker() {
+    protected MessageBroker getMessageBroker() {
         return getTransaction().getMessageBroker();
     }
 
@@ -219,20 +220,20 @@ public class IsisTransactionManager implements SessionScopedComponent {
      * {@link #getTransaction()}.
      */
     protected final IsisTransaction createTransaction() {
-        org.apache.isis.core.commons.authentication.MessageBroker messageBroker = createMessageBroker();
+        MessageBroker messageBroker = createMessageBroker();
         return this.transaction = createTransaction(messageBroker, transactionalResource);
     }
 
 
     /**
-     * The provided {@link MessageBroker} is
+     * The provided {@link org.apache.isis.core.commons.authentication.MessageBroker} is
      * obtained from the {@link #createMessageBroker()} hook method.
      * @param transactionalResource
      *
      * @see #createMessageBroker()
      */
     private IsisTransaction createTransaction(
-            final org.apache.isis.core.commons.authentication.MessageBroker messageBroker,
+            final MessageBroker messageBroker,
             final TransactionalResource transactionalResource) {
         ensureThatArg(messageBroker, is(not(nullValue())));
 
@@ -533,8 +534,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
      * 
      * <p> Called when a new {@link IsisTransaction} is created.
      */
-    protected org.apache.isis.core.commons.authentication.MessageBroker createMessageBroker() {
-        return MessageBrokerDefault.acquire(getAuthenticationSession());
+    protected MessageBroker createMessageBroker() {
+        return MessageBroker.acquire(getAuthenticationSession());
     }
 
     // ////////////////////////////////////////////////////////////////

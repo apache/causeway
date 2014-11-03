@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationException;
@@ -41,7 +42,6 @@ import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.MessageBroker;
 
 /**
  * Provides singleton <i>access to</i> the current (session scoped)
@@ -460,11 +460,11 @@ public abstract class IsisContext implements DebuggableWithTitle {
     }
 
     /**
-     * Convenience method, returning the {@link MessageBroker} of the
+     * Convenience method, returning the {@link org.apache.isis.core.commons.authentication.MessageBroker} of the
      * {@link #getCurrentTransaction() current transaction}.
      */
     public static MessageBroker getMessageBroker() {
-        return (MessageBroker) getCurrentTransaction().getMessageBroker();
+        return getCurrentTransaction().getMessageBroker();
     }
 
     // ///////////////////////////////////////////////////////////
