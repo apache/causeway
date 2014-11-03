@@ -20,12 +20,11 @@
 package org.apache.isis.viewer.scimpi.dispatcher.view.collection;
 
 import java.util.Iterator;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
+import org.apache.isis.viewer.scimpi.dispatcher.ResolveFieldUtil;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
@@ -48,7 +47,7 @@ public class Collection extends AbstractElementProcessor {
             if (!objectField.isOneToManyAssociation()) {
                 throw new ScimpiException("Field " + objectField.getId() + " is not a collection");
             }
-            IsisContext.getPersistenceSession().resolveField(object, objectField);
+            ResolveFieldUtil.resolveField(object, objectField);
             collection = objectField.get(object);
         } else {
             final String id = request.getOptionalProperty(COLLECTION);

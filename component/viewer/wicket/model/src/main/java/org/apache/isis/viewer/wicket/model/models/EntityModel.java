@@ -357,16 +357,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
         adapterMemento = ObjectAdapterMemento.createOrNull(adapter);
     }
 
-    @Override
-    public void detach() {
-        if (isAttached()) {
-            if (adapterMemento != null) {
-                adapterMemento.captureTitleHintIfPossible();
-            }
-        }
-        super.detach();
-    }
-
 
     // //////////////////////////////////////////////////////////
     // PropertyModels

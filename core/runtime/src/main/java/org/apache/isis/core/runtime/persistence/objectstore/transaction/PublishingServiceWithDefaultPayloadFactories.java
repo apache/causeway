@@ -58,7 +58,7 @@ public class PublishingServiceWithDefaultPayloadFactories {
             // objectstores such as JDO prevent the underlying pojo from being touched once it has been deleted.
             // we therefore replace that pojo with an 'empty' one.
             Object replacementObject = adapter.getSpecification().createObject();
-            getPersistenceSession().remapRecreatedPojo(adapter, replacementObject);
+            getPersistenceSession().getAdapterManager().remapRecreatedPojo(adapter, replacementObject);
             return adapter;
         }
         protected PersistenceSession getPersistenceSession() {

@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetU
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 class PersistAlgorithmDefault extends PersistAlgorithmAbstract {
     private static final Logger LOG = LoggerFactory.getLogger(PersistAlgorithmDefault.class);
@@ -40,7 +41,7 @@ class PersistAlgorithmDefault extends PersistAlgorithmAbstract {
     }
 
     @Override
-    public void makePersistent(final ObjectAdapter adapter, final ToPersistObjectSet toPersistObjectSet) {
+    public void makePersistent(final ObjectAdapter adapter, final PersistenceSession toPersistObjectSet) {
         if (adapter.getSpecification().isParentedOrFreeCollection()) {
             if(LOG.isDebugEnabled()) {
                 LOG.debug("persist " + adapter);
@@ -61,7 +62,7 @@ class PersistAlgorithmDefault extends PersistAlgorithmAbstract {
         }
     }
 
-    protected void persist(final ObjectAdapter adapter, final ToPersistObjectSet toPersistObjectSet) {
+    protected void persist(final ObjectAdapter adapter, final PersistenceSession toPersistObjectSet) {
         if (alreadyPersistedOrNotPersistableOrServiceOrStandalone(adapter)) {
             return;
         }

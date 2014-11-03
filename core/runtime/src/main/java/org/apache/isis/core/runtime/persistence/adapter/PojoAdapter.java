@@ -234,13 +234,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return aggregateResolveState().canTransitionToResolving();
     }
 
-
-    @Override
-    public boolean isTitleAvailable() {
-        final ResolveState resolveState = aggregateResolveState();
-        return resolveState.isValue() || resolveState.isResolved();
-    }
-
     /**
      * If {@link #isGhost()}, then will become resolved.
      */

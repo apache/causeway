@@ -25,7 +25,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.Persistor;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 /**
  * Adapter for {@link LoadableDetachableModel}s, providing access to some of the
@@ -50,7 +50,7 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> {
         return IsisContext.getAuthenticationSession();
     }
 
-    protected Persistor getPersistenceSession() {
+    protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

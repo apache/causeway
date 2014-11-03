@@ -33,7 +33,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.Persistor;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
@@ -134,12 +134,8 @@ public abstract class FormAbstract<T> extends Form<T> implements IHeaderContribu
     // Dependencies (from IsisContext)
     // ///////////////////////////////////////////////////////////////////
 
-    public IsisContext getIsisContext() {
-        return IsisContext.getInstance();
-    }
-
     @Override
-    public Persistor getPersistenceSession() {
+    public PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

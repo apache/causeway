@@ -236,7 +236,6 @@ public class ObjectAdapterMemento implements Serializable {
         final ObjectSpecification specification = adapter.getSpecification();
         objectSpecId = specification.getSpecId();
         init(adapter);
-        captureTitleHintIfPossible();
     }
 
     private void init(final ObjectAdapter adapter) {
@@ -266,26 +265,6 @@ public class ObjectAdapterMemento implements Serializable {
         type.resetVersion(this);
     }
     
-
-    
-    public void captureTitleHintIfPossible() {
-        if (this.titleHint != null) {
-            return;
-        } 
-        
-        // REVIEW: this check is because Wicket 6.0.0 seems to call onEndRequest prior to onDetach
-        // so by the time we get here, there is no session to use...
-        if(IsisContext.inSession()) {
-            ObjectAdapter objectAdapter = this.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-            if (objectAdapter.isTitleAvailable()) {
-                this.titleHint = objectAdapter.titleString();
-            }
-        }
-    }
-
-    public String getTitleHint() {
-        return titleHint;
-    }
 
     /**
      * Lazily looks up {@link ObjectAdapter} if required.

@@ -19,20 +19,15 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
+import java.util.*;
+import com.google.common.collect.Maps;
+
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RepresentsPersistent.DOES_NOT_REPRESENT_PERSISTENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RepresentsPersistent.REPRESENTS_PERSISTENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RespondsToChanges.DOES_NOT_RESPOND_TO_CHANGES;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.RespondsToChanges.RESPONDS_TO_CHANGES;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.TransitionFrom.CANNOT_TRANSITION_FROM;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.TransitionFrom.CAN_TRANSITION_FROM;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
-import com.google.common.collect.Maps;
 
 public final class ResolveState {
     private static final Map<String, ResolveState> statesByName = Maps.newHashMap();
@@ -61,40 +56,6 @@ public final class ResolveState {
     public static final ResolveState DESTROYED = new ResolveState("Destroyed", "D~~", null,      CANNOT_TRANSITION_FROM, RESPONDS_TO_CHANGES,         DOES_NOT_REPRESENT_PERSISTENT);
     public static final ResolveState VALUE     = new ResolveState("Value",     "V~~", null,      CANNOT_TRANSITION_FROM, RESPONDS_TO_CHANGES,         DOES_NOT_REPRESENT_PERSISTENT);
 
-    // 20120709: used only in <tt>Memento</tt>, when recreating a transient object.
-    // however, analysis is that could equally set to TRANSIENT, rendering this state
-    // surplus to requirements.
-    // public static final ResolveState SERIALIZING_TRANSIENT = new ResolveState("Serializing Transient", "T~S", TRANSIENT, CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, REPRESENTS_TRANSIENT,         DOES_NOT_REPRESENT_PERSISTENT);
-
-    // no longer seem to be used
-
-    // public static final ResolveState PART_RESOLVED = new
-    // ResolveState("Part Resolved", "Pr~~", null, RESOLVABLE_FROM,
-    // NOT_RESOLVABLE_INTO, RESPONDS_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT,
-    // REPRESENTS_PERSISTENT, DOES_NOT_REPRESENT_RESOLVING, COULD_RESOLVE);
-    // public static final ResolveState RESOLVING_PART = new
-    // ResolveState("Resolving Part", "P~r~", PART_RESOLVED,
-    // NOT_RESOLVABLE_FROM, RESOLVABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES,
-    // DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT,
-    // REPRESENTS_RESOLVING, COULD_RESOLVE);
-
-    // no longer appear to be needed following the removal of remoting support.
-
-    // public static final ResolveState SERIALIZING_GHOST = new
-    // ResolveState("Serializing Ghost", "PG~S", GHOST, NOT_RESOLVABLE_FROM,
-    // NOT_RESOLVABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES,
-    // DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT,
-    // DOES_NOT_REPRESENT_RESOLVING, COULD_RESOLVE);
-    // public static final ResolveState SERIALIZING_PART_RESOLVED = new
-    // ResolveState("Serializing Part Resolved", "Pr~S", PART_RESOLVED,
-    // NOT_RESOLVABLE_FROM, NOT_RESOLVABLE_INTO, DOES_NOT_RESPOND_TO_CHANGES,
-    // DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT,
-    // DOES_NOT_REPRESENT_RESOLVING,
-    // COULD_RESOLVE);
-
-    // 20120709: only used in <tt>DefaultPersistAlgorithm</tt>
-    // able to remove because, after refactoring simplifications, ended up as equivalent to UPDATING.
-    // public static final ResolveState SERIALIZING_RESOLVED  = new ResolveState("Serializing Resolved",   "PRS", RESOLVED,  CANNOT_TRANSITION_FROM, DOES_NOT_RESPOND_TO_CHANGES, DOES_NOT_REPRESENT_TRANSIENT, REPRESENTS_PERSISTENT);
 
 
     /**
@@ -104,28 +65,14 @@ public final class ResolveState {
     public static Map<ResolveState, ResolveState[]> changeToStatesByState = new HashMap<ResolveState, ResolveState[]>() {
         private static final long serialVersionUID = 1L;
         {
-            // previously also RESOLVING_PART and SERIALIZING_GHOST
             put(GHOST, new ResolveState[] { DESTROYED, RESOLVING, UPDATING });
             put(NEW, new ResolveState[] { TRANSIENT, GHOST, VALUE });
-            // previously also SERIALIZING_TRANSIENT
             put(TRANSIENT, new ResolveState[] { RESOLVED });
             put(RESOLVING, new ResolveState[] { RESOLVED });
-            // previously also SERIALIZING_RESOLVED
             put(RESOLVED, new ResolveState[] { GHOST, UPDATING, DESTROYED });
-            //put(SERIALIZING_RESOLVED, new ResolveState[] { RESOLVED });
-            //put(SERIALIZING_TRANSIENT, new ResolveState[] { TRANSIENT });
             put(UPDATING, new ResolveState[] { RESOLVED });
             put(DESTROYED, new ResolveState[] {});
             put(VALUE, new ResolveState[] {});
-
-            // put(PART_RESOLVED, new ResolveState[] { RESOLVING , UPDATING,
-            // DESTROYED , RESOLVING_PART, SERIALIZING_PART_RESOLVED });
-            // put(RESOLVING_PART, new ResolveState[] { PART_RESOLVED, RESOLVED
-            // });
-            // put(SERIALIZING_GHOST, new ResolveState[] { GHOST });
-            // put(SERIALIZING_PART_RESOLVED, new ResolveState[] { PART_RESOLVED
-            // });
-
         }
     };
 

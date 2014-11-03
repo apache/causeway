@@ -167,7 +167,8 @@ public class PersistenceSessionTest {
         }});
 
         
-        transactionManager = new IsisTransactionManager(persistenceSession, mockObjectStore, servicesInjector) {
+        transactionManager = persistenceSession.getTransactionManager();
+        new IsisTransactionManager(persistenceSession, mockObjectStore, servicesInjector) {
             @Override
             public AuthenticationSession getAuthenticationSession() {
                 return mockAuthenticationSession;

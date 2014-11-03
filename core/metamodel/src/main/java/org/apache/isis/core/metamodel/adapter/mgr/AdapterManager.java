@@ -121,7 +121,7 @@ public interface AdapterManager extends Injectable {
                 ConcurrencyChecking.concurrencyChecking.set(prior);
             }
         }
-        
+
         /**
          * Allows a caller to temporarily disable concurrency checking for the current thread.
          */
@@ -140,7 +140,7 @@ public interface AdapterManager extends Injectable {
 
     /**
      * As per {@link #adapterFor(TypedOid, ConcurrencyChecking)}, with
-     * {@value org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking#NO_CHECK no checking}.
+     * {@link org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking#NO_CHECK no checking}.
      *
      * <p>
      * This method  will <i>always</i> return an object, possibly indicating it is persistent; so make sure that you
@@ -162,7 +162,7 @@ public interface AdapterManager extends Injectable {
      * {@link Oid#isTransient() transient} object.
      * 
      * <p>
-     * The pojo itself is recreated by delegating to a {@link PojoRecreator} implementation.
+     * The pojo itself is recreated by delegating to a {@link org.apache.isis.core.metamodel.adapter.mgr.AdapterManager}.
      * The default impl just uses the {@link ObjectSpecification#createObject()};
      * however object stores (eg JDO/DataNucleus) can provide alternative implementations
      * in order to ensure that the created pojo is attached to a persistence context.
@@ -182,7 +182,7 @@ public interface AdapterManager extends Injectable {
      * will be {@link TypedOid#setVersion(org.apache.isis.core.metamodel.adapter.version.Version) set} to the current 
      * value.  This allows the client to retry if they wish.
      * 
-     * @throws {@link ObjectNotFoundException} if the object does not exist.
+     * @throws {@link org.apache.isis.core.runtime.persistence.ObjectNotFoundException} if the object does not exist.
      */
     ObjectAdapter adapterFor(TypedOid oid, ConcurrencyChecking concurrencyChecking);
 

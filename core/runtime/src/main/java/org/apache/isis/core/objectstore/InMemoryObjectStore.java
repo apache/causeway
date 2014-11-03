@@ -128,7 +128,7 @@ public class InMemoryObjectStore implements ObjectStore {
                 // this could happen if we rehydrate a persisted object that
                 // depends on another persisted object
                 // not yet rehydrated.
-                getPersistenceSession().removeAdapter(existingAdapterLookedUpByPojo);
+                getPersistenceSession().getAdapterManager().removeAdapter(existingAdapterLookedUpByPojo);
             }
 
             final ObjectAdapter existingAdapterLookedUpByOid = getAdapterManager().getAdapterFor(oid);
@@ -136,7 +136,7 @@ public class InMemoryObjectStore implements ObjectStore {
                 throw new IsisException("A mapping already exists for " + oid + ": " + existingAdapterLookedUpByOid);
             }
 
-            final ObjectAdapter recreatedAdapter = getPersistenceSession().mapRecreatedPojo(oid, pojo);
+            final ObjectAdapter recreatedAdapter = getPersistenceSession().getAdapterManager().mapRecreatedPojo(oid, pojo);
 
             final Version version = objectStoreInstances.getVersion(oid);
             recreatedAdapter.setVersion(version);
@@ -265,13 +265,6 @@ public class InMemoryObjectStore implements ObjectStore {
         
         adapter.markAsResolvedIfPossible();
     }
-
-    @Override
-    public void resolveField(final ObjectAdapter object, final ObjectAssociation field) throws ObjectPersistenceException {
-        final ObjectAdapter referenceAdapter = field.get(object);
-        referenceAdapter.markAsResolvedIfPossible();
-    }
-
 
 
     // ///////////////////////////////////////////////////////

@@ -20,20 +20,18 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent;
 
 import java.util.List;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.Persistor;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -51,18 +49,6 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
     private static final long serialVersionUID = 1L;
 
     private ComponentType componentType;
-
-    public FormComponentPanelAbstract(final ComponentType componentType) {
-        this(componentType, null);
-    }
-
-    public FormComponentPanelAbstract(final String id) {
-        this(id, null);
-    }
-
-    public FormComponentPanelAbstract(final ComponentType componentType, final IModel<T> model) {
-        this(componentType.getWicketId(), model);
-    }
 
     public FormComponentPanelAbstract(final String id, final IModel<T> model) {
         super(id, model);
@@ -156,19 +142,15 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
     // ///////////////////////////////////////////////////////////////////
 
     @Override
-    public Persistor getPersistenceSession() {
+    public PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
     protected List<ObjectAdapter> getServices() {
-        return IsisContext.getPersistenceSession().getServices();
+        return getPersistenceSession().getServices();
     }
 
-    protected List<ObjectAdapter> getServiceAdapters() {
-        return IsisContext.getPersistenceSession().getServices();
-    }
 
-    
     // /////////////////////////////////////////////////
     // *Provider impl.
     // /////////////////////////////////////////////////

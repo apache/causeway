@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.google.common.collect.Lists;
@@ -26,8 +25,6 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.query.QueryDefault;
-import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -48,10 +45,7 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
-import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
-import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
 import org.apache.isis.core.metamodel.spec.*;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
@@ -59,19 +53,19 @@ import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDef
 import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreatorUnified;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithmUnified;
-import org.apache.isis.core.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
-import org.apache.isis.core.runtime.persistence.query.*;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.transaction.*;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturnAbstract;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.*;
 
-public class PersistenceSession implements Persistor, EnlistedObjectDirtying, ToPersistObjectSet, RecreatedPojoRemapper, SessionScopedComponent, DebuggableWithTitle {
+public class PersistenceSession implements SessionScopedComponent, DebuggableWithTitle {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
@@ -87,12 +81,13 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     private final ObjectStore objectStore;
     private final Map<ObjectSpecId, RootOid> servicesByObjectType = Maps.newHashMap();
 
-    private boolean dirtiableSupport;
+    private final PersistenceQueryFactory persistenceQueryFactory;
 
-    /**
-     * Injected using setter-based injection.
-     */
     private IsisTransactionManager transactionManager;
+
+    private boolean dirtiableSupport = true;
+
+
 
     private static enum State {
         NOT_INITIALIZED, OPEN, CLOSED
@@ -124,6 +119,10 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         this.oidGenerator = new OidGenerator(new IdentifierGeneratorUnified(configuration));
         this.adapterManager = new AdapterManagerDefault(new PojoRecreatorUnified(configuration));
         this.persistAlgorithm = new PersistAlgorithmUnified(configuration);
+        this.objectStore = objectStore;
+
+        this.persistenceQueryFactory = new PersistenceQueryFactory(getSpecificationLoader(), adapterManager);
+        this.transactionManager = new IsisTransactionManager(this, objectStore, servicesInjector);
 
         setState(State.NOT_INITIALIZED);
 
@@ -131,7 +130,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
             LOG.debug("creating " + this);
         }
 
-        this.objectStore = objectStore;
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -208,7 +206,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
             ObjectAdapter serviceAdapter = 
                     existingOid == null
                             ? getAdapterManager().adapterFor(service) 
-                            : mapRecreatedPojo(existingOid, service);
+                            : getAdapterManager().mapRecreatedPojo(existingOid, service);
             if (serviceAdapter.getOid().isTransient()) {
                 adapterManager.remapAsPersistent(serviceAdapter, null);
             }
@@ -287,7 +285,27 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     // Factory
     // ///////////////////////////////////////////////////////////////////////////
 
-    @Override
+    /**
+     * Create a root or standalone {@link ObjectAdapter adapter}.
+     *
+     * <p>
+     * Creates a new instance of the specified type and returns it in an adapter
+     * whose resolved state set to {@link ResolveState#TRANSIENT} (except if the
+     * type is marked as {@link ObjectSpecification#isValueOrIsParented()
+     * aggregated} in which case it will be set to {@link ResolveState#VALUE}).
+     *
+     * <p>
+     * The returned object will be initialised (had the relevant callback
+     * lifecycle methods invoked).
+     *
+     * <p>
+     * While creating the object it will be initialised with default values and
+     * its created lifecycle method (its logical constructor) will be invoked.
+     *
+     * <p>
+     * This method is ultimately delegated to by the
+     * {@link org.apache.isis.applib.DomainObjectContainer}.
+     */
     public ObjectAdapter createTransientInstance(final ObjectSpecification objectSpec) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating transient instance of " + objectSpec);
@@ -308,7 +326,20 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         return objectSpec.initialize(adapter);
     }
 
-    @Override
+    /**
+     * Creates a new instance of the specified type and returns an adapter with
+     * an aggregated OID that show that this new object belongs to the specified
+     * parent. The new object's resolved state is set to
+     * {@link ResolveState#RESOLVED} as it state is part of it parent.
+     *
+     * <p>
+     * While creating the object it will be initialised with default values and
+     * its created lifecycle method (its logical constructor) will be invoked.
+     *
+     * <p>
+     * This method is ultimately delegated to by the
+     * {@link org.apache.isis.applib.DomainObjectContainer}.
+     */
     public ObjectAdapter createAggregatedInstance(final ObjectSpecification objectSpec, final ObjectAdapter parentAdapter) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating aggregated instance of " + objectSpec);
@@ -328,7 +359,16 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     // findInstances, getInstances
     // ///////////////////////////////////////////////////////////////////////////
 
-    @Override
+    /**
+     * Finds and returns instances that match the specified query.
+     *
+     * <p>
+     * The {@link QueryCardinality} determines whether all instances or just the
+     * first matching instance is returned.
+     *
+     * @throws org.apache.isis.core.runtime.persistence.UnsupportedFindException
+     *             if the criteria is not support by this persistor
+     */
     public <T> ObjectAdapter findInstances(final Query<T> query, final QueryCardinality cardinality) {
         final PersistenceQuery persistenceQuery = createPersistenceQueryFor(query, cardinality);
         if (persistenceQuery == null) {
@@ -337,7 +377,19 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         return findInstances(persistenceQuery);
     }
 
-    @Override
+    /**
+     * Finds and returns instances that match the specified
+     * {@link PersistenceQuery}.
+     *
+     * <p>
+     * Compared to {@link #findInstances(Query, QueryCardinality)}, not that
+     * there is no {@link QueryCardinality} parameter. That's because
+     * {@link PersistenceQuery} intrinsically carry the knowledge as to how many
+     * rows they return.
+     *
+     * @throws org.apache.isis.core.runtime.persistence.UnsupportedFindException
+     *             if the criteria is not support by this persistor
+     */
     public ObjectAdapter findInstances(final PersistenceQuery persistenceQuery) {
         final List<ObjectAdapter> instances = getInstances(persistenceQuery);
         final ObjectSpecification specification = persistenceQuery.getSpecification();
@@ -350,53 +402,9 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
      * {@link PersistenceQuery NOF-internal representation}.
      */
     protected final PersistenceQuery createPersistenceQueryFor(final Query<?> query, final QueryCardinality cardinality) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("createPersistenceQueryFor: " + query.getDescription());
-        }
-        final ObjectSpecification noSpec = specFor(query);
-        if (query instanceof QueryFindAllInstances) {
-            final QueryFindAllInstances<?> queryFindAllInstances = (QueryFindAllInstances<?>) query;
-            return new PersistenceQueryFindAllInstances(noSpec, queryFindAllInstances.getStart(), queryFindAllInstances.getCount());
-        }
-        if (query instanceof QueryFindByTitle) {
-            final QueryFindByTitle<?> queryByTitle = (QueryFindByTitle<?>) query;
-            final String title = queryByTitle.getTitle();
-            return new PersistenceQueryFindByTitle(noSpec, title, queryByTitle.getStart(), queryByTitle.getCount());
-        }
-        if (query instanceof QueryFindByPattern) {
-            final QueryFindByPattern<?> queryByPattern = (QueryFindByPattern<?>) query;
-            final Object pattern = queryByPattern.getPattern();
-            final ObjectAdapter patternAdapter = getAdapterManager().adapterFor(pattern);
-            return new PersistenceQueryFindByPattern(noSpec, patternAdapter, queryByPattern.getStart(), queryByPattern.getCount());
-        }
-        if (query instanceof QueryDefault) {
-            final QueryDefault<?> queryDefault = (QueryDefault<?>) query;
-            final String queryName = queryDefault.getQueryName();
-            final Map<String, ObjectAdapter> argumentsAdaptersByParameterName = wrap(queryDefault.getArgumentsByParameterName());
-            return new PersistenceQueryFindUsingApplibQueryDefault(noSpec, queryName, argumentsAdaptersByParameterName, cardinality, queryDefault.getStart(), queryDefault.getCount());
-        }
-        // fallback; generic serializable applib query.
-        return new PersistenceQueryFindUsingApplibQuerySerializable(noSpec, query, cardinality);
+        return persistenceQueryFactory.createPersistenceQueryFor(query, cardinality);
     }
 
-    private ObjectSpecification specFor(final Query<?> query) {
-        return getSpecificationLoader().loadSpecification(query.getResultType());
-    }
-
-    /**
-     * Converts a map of pojos keyed by string to a map of adapters keyed by the
-     * same strings.
-     */
-    private Map<String, ObjectAdapter> wrap(final Map<String, Object> argumentsByParameterName) {
-        final Map<String, ObjectAdapter> argumentsAdaptersByParameterName = new HashMap<String, ObjectAdapter>();
-        for (final Map.Entry<String, Object> entry : argumentsByParameterName.entrySet()) {
-            final String parameterName = entry.getKey();
-            final Object argument = argumentsByParameterName.get(parameterName);
-            final ObjectAdapter argumentAdapter = argument != null ? getAdapterManager().adapterFor(argument) : null;
-            argumentsAdaptersByParameterName.put(parameterName, argumentAdapter);
-        }
-        return argumentsAdaptersByParameterName;
-    }
 
     protected List<ObjectAdapter> getInstances(final PersistenceQuery persistenceQuery) {
         if (LOG.isDebugEnabled()) {
@@ -423,19 +431,10 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     // Manual dirtying support
     // ///////////////////////////////////////////////////////////////////////////
 
-    /**
-     * @see #setDirtiableSupport(boolean)
-     */
     public boolean isCheckObjectsForDirtyFlag() {
         return dirtiableSupport;
     }
 
-    /**
-     * Whether to notice {@link Dirtiable manually-dirtied} objects.
-     */
-    public void setDirtiableSupport(final boolean checkObjectsForDirtyFlag) {
-        this.dirtiableSupport = checkObjectsForDirtyFlag;
-    }
 
     /**
      * Mark as {@link #objectChanged(ObjectAdapter) changed } all
@@ -451,7 +450,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
      * <p>
      * Called by the {@link IsisTransactionManager}.
      */
-    @Override
     public void objectChangedAllDirty() {
         if (!dirtiableSupport) {
             return;
@@ -471,7 +469,10 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         }
     }
 
-    @Override
+    /**
+     * Set as {@link Dirtiable#clearDirty(ObjectAdapter) clean} any
+     * {@link Dirtiable} objects.
+     */
     public synchronized void clearAllDirty() {
         if (!isCheckObjectsForDirtyFlag()) {
             return;
@@ -510,18 +511,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         objectStore.registerService(rootOid);
     }
 
-    public ObjectAdapter getService(final String id) {
-        for (final Object service : servicesInjector.getRegisteredServices()) {
-            // TODO this (ServiceUtil) uses reflection to access the service
-            // object; it should use the
-            // reflector, ie call allServices first and use the returned array
-            if (id.equals(ServiceUtil.id(service))) {
-                return getService(service);
-            }
-        }
-        return null;
-    }
-
     // REVIEW why does this get called multiple times when starting up
     public List<ObjectAdapter> getServices() {
         final List<Object> services = servicesInjector.getRegisteredServices();
@@ -535,17 +524,10 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     private ObjectAdapter getService(final Object servicePojo) {
         final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(servicePojo.getClass());
         final RootOid oid = getOidForService(serviceSpecification);
-        final ObjectAdapter serviceAdapter = mapRecreatedPojo(oid, servicePojo);
+        final ObjectAdapter serviceAdapter = getAdapterManager().mapRecreatedPojo(oid, servicePojo);
 
         serviceAdapter.markAsResolvedIfPossible();
         return serviceAdapter;
-    }
-
-    /**
-     * Has any services.
-     */
-    public boolean hasServices() {
-        return servicesInjector.getRegisteredServices().size() > 0;
     }
 
     private RootOid getOidForServiceFromPersistenceLayer(ObjectSpecification serviceSpecification) {
@@ -587,15 +569,10 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
      */
     public boolean isFixturesInstalled() {
         final PersistenceSessionFactory persistenceSessionFactory = getPersistenceSessionFactory();
-        if (persistenceSessionFactory instanceof FixturesInstalledFlag) {
-            final FixturesInstalledFlag fixturesInstalledFlag = (FixturesInstalledFlag) persistenceSessionFactory;
-            if (fixturesInstalledFlag.isFixturesInstalled() == null) {
-                fixturesInstalledFlag.setFixturesInstalled(objectStore.isFixturesInstalled());
-            }
-            return fixturesInstalledFlag.isFixturesInstalled();
-        } else {
-            return objectStore.isFixturesInstalled();
+        if (persistenceSessionFactory.isFixturesInstalled() == null) {
+            persistenceSessionFactory.setFixturesInstalled(objectStore.isFixturesInstalled());
         }
+        return persistenceSessionFactory.isFixturesInstalled();
     }
 
     @Override
@@ -608,7 +585,10 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     // loadObject, reload
     // ///////////////////////////////////////////////////////////////////////////
 
-    @Override
+    /**
+     * Loads the object identified by the specified {@link TypedOid} from the
+     * persisted set of objects.
+     */
     public ObjectAdapter loadObject(final TypedOid oid) {
         
         // REVIEW: 
@@ -642,7 +622,11 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     // resolveImmediately, resolveField
     // ///////////////////////////////////////////////////////////////////////////
 
-    @Override
+    /**
+     * Re-initialises the fields of an object. If the object is unresolved then
+     * the object's missing data should be retrieved from the persistence
+     * mechanism and be used to set up the value objects and associations.
+     */
     public void resolveImmediately(final ObjectAdapter adapter) {
         // synchronize on the current session because getting race
         // conditions, I think between different UI threads when running
@@ -695,49 +679,28 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         });
     }
 
-    @Override
-    public void resolveField(final ObjectAdapter objectAdapter, final ObjectAssociation field) {
-        if (field.isNotPersisted()) {
-            return;
-        }
-        if (field.isOneToManyAssociation()) {
-            return;
-        }
-        if (field.getSpecification().isParented()) {
-            return;
-        }
-        if (field.getSpecification().isValue()) {
-            return;
-        }
-        final ObjectAdapter referenceAdapter = field.get(objectAdapter);
-        if (referenceAdapter == null || referenceAdapter.isResolved()) {
-            return;
-        }
-        if (!referenceAdapter.representsPersistent()) {
-            return;
-        }
-        if (LOG.isInfoEnabled()) {
-            // don't log object - it's toString() may use the unresolved field
-            // or unresolved collection
-            LOG.info("resolve field " + objectAdapter.getSpecification().getShortIdentifier() + "." + field.getId() + ": " + referenceAdapter.getSpecification().getShortIdentifier() + " " + referenceAdapter.getResolveState().code() + " " + referenceAdapter.getOid());
-        }
-        resolveFieldFromPersistenceLayer(objectAdapter, field);
-    }
-
-    private void resolveFieldFromPersistenceLayer(final ObjectAdapter objectAdapter, final ObjectAssociation field) {
-        getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
-            @Override
-            public void execute() {
-                objectStore.resolveField(objectAdapter, field);
-            }
-        });
-    }
-
     // ////////////////////////////////////////////////////////////////
     // makePersistent
     // ////////////////////////////////////////////////////////////////
 
-    @Override
+    /**
+     * Makes an {@link ObjectAdapter} persistent. The specified object should be
+     * stored away via this object store's persistence mechanism, and have an
+     * new and unique OID assigned to it. The object, should also be added to
+     * the {@link org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault} as the object is implicitly 'in use'.
+     *
+     * <p>
+     * If the object has any associations then each of these, where they aren't
+     * already persistent, should also be made persistent by recursively calling
+     * this method.
+     *
+     * <p>
+     * If the object to be persisted is a collection, then each element of that
+     * collection, that is not already persistent, should be made persistent by
+     * recursively calling this method.
+     *
+     * @see #remapAsPersistent(ObjectAdapter)
+     */
     public void makePersistent(final ObjectAdapter adapter) {
         if (adapter.representsPersistent()) {
             throw new NotPersistableException("Object already persistent: " + adapter);
@@ -784,7 +747,10 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     // objectChanged
     // ///////////////////////////////////////////////////////////////////////////
 
-    @Override
+    /**
+     * Mark the {@link ObjectAdapter} as changed, and therefore requiring
+     * flushing to the persistence mechanism.
+     */
     public void objectChanged(final ObjectAdapter adapter) {
 
         if (adapter.isTransient() || (adapter.isParented() && adapter.getAggregateRoot().isTransient())) {
@@ -842,7 +808,10 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     // destroyObject
     // ///////////////////////////////////////////////////////////////////////////
 
-    @Override
+    /**
+     * Removes the specified object from the system. The specified object's data
+     * should be removed from the persistence mechanism.
+     */
     public void destroyObject(final ObjectAdapter adapter) {
         ObjectSpecification spec = adapter.getSpecification();
         if (spec.isParented()) {
@@ -879,52 +848,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         });
     }
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // hasInstances
-    // ///////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public boolean hasInstances(final ObjectSpecification specification) {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("hasInstances of " + specification.getShortIdentifier());
-        }
-        return hasInstancesFromPersistenceLayer(specification);
-    }
-
-    private boolean hasInstancesFromPersistenceLayer(final ObjectSpecification specification) {
-        return getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<Boolean>() {
-            @Override
-            public Boolean execute() {
-                return objectStore.hasInstances(specification);
-            }
-        });
-    }
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // RecreatedPojoRemapper
-    // ///////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public ObjectAdapter mapRecreatedPojo(Oid oid, Object recreatedPojo) {
-        return adapterManager.mapRecreatedPojo(oid, recreatedPojo);
-    }
-
-    @Override
-    public void remapRecreatedPojo(ObjectAdapter adapter, Object recreatedPojo) {
-        adapterManager.remapRecreatedPojo(adapter, recreatedPojo);
-    }
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // AdapterLifecycleTransitioner
-    // ///////////////////////////////////////////////////////////////////////////
-
-    public void remapAsPersistent(ObjectAdapter adapter, RootOid hintRootOid) {
-        adapterManager.remapAsPersistent(adapter, hintRootOid);
-    }
-
-    public void removeAdapter(ObjectAdapter adapter) {
-        adapterManager.removeAdapter(adapter);
-    }
 
     // ///////////////////////////////////////////////////////////////////////////
     // ToPersistObjectSet
@@ -950,7 +873,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
      * 
      * @see #remapAsPersistent(ObjectAdapter)
      */
-    @Override
     public void remapAsPersistent(final ObjectAdapter adapter) {
         final Oid transientOid = adapter.getOid();
         adapterManager.remapAsPersistent(adapter, null);
@@ -958,7 +880,10 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         persistentByTransient.put(transientOid, persistentOid);
     }
 
-    @Override
+    /**
+     * To support ISIS-234; keep track, for the duration of the transaction only,
+     * of the old transient {@link Oid}s and their corresponding persistent {@link Oid}s.
+     */
     public Oid remappedFrom(Oid transientOid) {
         return persistentByTransient.get(transientOid);
     }
@@ -969,7 +894,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
      * {@link CreateObjectCommand}, and adds to the
      * {@link IsisTransactionManager}.
      */
-    @Override
     public void addCreateObjectCommand(final ObjectAdapter object) {
         getTransactionManager().addCommand(objectStore.createCreateObjectCommand(object));
     }
@@ -1086,11 +1010,16 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
 
     /**
      * The configured {@link AdapterManager}.
-     * 
+     *
+     * Access to looking up (and possibly lazily loading) adapters.
+     *
+     * <p>
+     * However, manipulating of adapters is not part of this interface.
+     *
      * <p>
      * Injected in constructor.
      */
-    public final AdapterManager getAdapterManager() {
+    public final AdapterManagerDefault getAdapterManager() {
         return adapterManager;
     }
 
@@ -1116,26 +1045,15 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     // ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * Inject the {@link IsisTransactionManager}.
-     * 
-     * <p>
-     * This must be injected using setter-based injection rather than through
-     * the constructor because there is a bidirectional relationship between the
-     * this class and the {@link IsisTransactionManager}.
-     * 
-     * @see #getTransactionManager()
-     */
-    public void setTransactionManager(final IsisTransactionManager transactionManager) {
-        this.transactionManager = transactionManager;
-    }
-
-    /**
      * The configured {@link IsisTransactionManager}.
-     * 
-     * @see #setTransactionManager(IsisTransactionManager)
      */
     public IsisTransactionManager getTransactionManager() {
         return transactionManager;
+    }
+
+    // for testing only
+    void setTransactionManager(IsisTransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
     }
 
     // ///////////////////////////////////////////////////////////////////////////

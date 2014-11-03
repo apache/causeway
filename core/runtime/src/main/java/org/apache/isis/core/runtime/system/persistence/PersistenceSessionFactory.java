@@ -39,7 +39,6 @@ import org.apache.isis.core.runtime.persistence.ObjectStoreFactory;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -96,12 +95,8 @@ public class PersistenceSessionFactory implements MetaModelRefiner, ApplicationS
 
         ensureThatArg(objectStore, is(not(nullValue())));
 
-        final PersistenceSession persistenceSession =new PersistenceSession(this, servicesInjector, objectStore, getConfiguration());
+        final PersistenceSession persistenceSession = new PersistenceSession(this, servicesInjector, objectStore, getConfiguration());
 
-        final IsisTransactionManager transactionManager = new IsisTransactionManager(persistenceSession, objectStore, servicesInjector);
-
-        persistenceSession.setDirtiableSupport(true);
-        persistenceSession.setTransactionManager(transactionManager);
 
         return persistenceSession;
     }

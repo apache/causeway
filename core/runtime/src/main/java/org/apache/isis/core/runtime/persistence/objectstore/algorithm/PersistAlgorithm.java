@@ -20,10 +20,11 @@
 package org.apache.isis.core.runtime.persistence.objectstore.algorithm;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 public interface PersistAlgorithm {
     
-    public void makePersistent(final ObjectAdapter object, final ToPersistObjectSet adders);
+    public void makePersistent(final ObjectAdapter object, final PersistenceSession adders);
 
     public String name();
 }

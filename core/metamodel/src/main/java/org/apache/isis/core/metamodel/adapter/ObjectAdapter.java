@@ -208,10 +208,8 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
 
 
     boolean canTransitionToResolving();
-    boolean isTitleAvailable();
     void markAsResolvedIfPossible();
 
-    
     
     Version getVersion();
 

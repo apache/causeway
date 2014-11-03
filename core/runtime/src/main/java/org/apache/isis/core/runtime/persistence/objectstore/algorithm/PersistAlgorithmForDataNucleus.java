@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 
 /**
@@ -51,7 +52,7 @@ class PersistAlgorithmForDataNucleus extends PersistAlgorithmAbstract {
     // ////////////////////////////////////////////////////////////////
 
     public void makePersistent(final ObjectAdapter adapter,
-            final ToPersistObjectSet toPersistObjectSet) {
+            final PersistenceSession persistenceSession) {
         if (alreadyPersistedOrNotPersistable(adapter)) {
             return;
         }
@@ -68,7 +69,7 @@ class PersistAlgorithmForDataNucleus extends PersistAlgorithmAbstract {
         if (alreadyPersistedOrNotPersistable(adapter)) {
             return;
         }
-        toPersistObjectSet.addCreateObjectCommand(adapter);
+        persistenceSession.addCreateObjectCommand(adapter);
     }
 
 

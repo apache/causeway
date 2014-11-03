@@ -19,10 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.panels;
 
-import java.util.List;
-
-import com.google.inject.Inject;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -30,14 +26,12 @@ import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.Persistor;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -160,25 +154,18 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
     }
 
     // ///////////////////////////////////////////////////////////////////
-    // Dependencies (from IsisContext
+    // Dependencies (from IsisContext)
     // ///////////////////////////////////////////////////////////////////
 
-    public IsisContext getIsisContext() {
-        return IsisContext.getInstance();
-    }
-
     @Override
-    public Persistor getPersistenceSession() {
+    public PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 
     public AdapterManager getAdapterManager() {
-        return IsisContext.getPersistenceSession().getAdapterManager();
+        return getPersistenceSession().getAdapterManager();
     }
 
-    protected List<ObjectAdapter> getServiceAdapters() {
-        return IsisContext.getPersistenceSession().getServices();
-    }
 
     // /////////////////////////////////////////////////
     // Dependency Injection

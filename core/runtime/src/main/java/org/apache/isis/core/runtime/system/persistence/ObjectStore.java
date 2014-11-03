@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.*;
 
 public interface ObjectStore extends TransactionalResource, DebuggableWithTitle, SessionScopedComponent {
@@ -121,8 +120,7 @@ public interface ObjectStore extends TransactionalResource, DebuggableWithTitle,
 
     /**
      * Retrieves the object identified by the specified {@link TypedOid} from the object
-     * store, {@link RecreatedPojoRemapper#mapRecreatedPojo(org.apache.isis.core.metamodel.adapter.oid.Oid, Object) mapped} into
-     * the {@link AdapterManager}.
+     * store, {@link AdapterManager#mapRecreatedPojo(org.apache.isis.core.metamodel.adapter.oid.Oid, Object) mapped by the adapter manager}.
      * 
      * <p>The cache should be checked first and, if the object is cached,
      * the cached version should be returned. It is important that if this
@@ -163,7 +161,7 @@ public interface ObjectStore extends TransactionalResource, DebuggableWithTitle,
 
 
     // ///////////////////////////////////////////////////////
-    // resolveField, resolveImmediately
+    // resolveImmediately
     // ///////////////////////////////////////////////////////
 
     /**
@@ -173,12 +171,6 @@ public interface ObjectStore extends TransactionalResource, DebuggableWithTitle,
      */
     void resolveImmediately(ObjectAdapter object);
 
-    /**
-     * Called by the resolveEagerly method in ObjectAdapterManager.
-     * 
-     * @see PersistenceSession#resolveField(ObjectAdapter, ObjectAssociation)
-     */
-    void resolveField(ObjectAdapter object, ObjectAssociation field);
 
     // ///////////////////////////////////////////////////////
     // Services

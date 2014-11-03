@@ -52,7 +52,6 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.persistence.Persistor;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -547,7 +546,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     public ObjectAdapter reload(RootOid oid) {
         ensureSessionInProgress();
-        final Persistor persistenceSession = getPersistenceSession();
+        final PersistenceSession persistenceSession = getPersistenceSession();
         return persistenceSession.loadObject(oid);
     }
 
@@ -560,7 +559,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         ensureSessionInProgress();
         ensureObjectIsNotPersistent(pojo);
         final ObjectAdapter adapter = adapterFor(pojo);
-        getPersistenceSession().remapAsPersistent(adapter, persistentOid);
+        getPersistenceSession().getAdapterManager().remapAsPersistent(adapter, persistentOid);
         return adapter;
     }
 
@@ -803,7 +802,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         return getPersistenceSession().getTransactionManager();
     }
     
-    public Persistor getPersistor() {
+    public PersistenceSession getPersistor() {
     	return getPersistenceSession();
     }
     

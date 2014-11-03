@@ -140,7 +140,7 @@ public class ObjectStoreInstances {
         if (adapterLookedUpByOid != null) {
             return adapterLookedUpByOid;
         }
-        return getPersistenceSession().mapRecreatedPojo(oid, pojo);
+        return getPersistenceSession().getAdapterManager().mapRecreatedPojo(oid, pojo);
     }
 
     // ///////////////////////////////////////////////////////

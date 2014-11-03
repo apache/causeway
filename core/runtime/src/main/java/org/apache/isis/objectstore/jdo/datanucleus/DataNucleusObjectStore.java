@@ -44,7 +44,6 @@ import org.apache.isis.core.metamodel.adapter.oid.*;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
@@ -375,7 +374,7 @@ public class DataNucleusObjectStore implements ObjectStore {
         }
 
         final Object pojo = loadPojo(oid);
-        return getPersistenceSession().mapRecreatedPojo(oid, pojo);
+        return getPersistenceSession().getAdapterManager().mapRecreatedPojo(oid, pojo);
     }
 
     
@@ -497,32 +496,7 @@ public class DataNucleusObjectStore implements ObjectStore {
         frameworkSynchronizer.postLoadProcessingFor((PersistenceCapable) domainObject, CalledFrom.OS_RESOLVE);
     }
 
-    /**
-     * Walking the graph.
-     */
-    public void resolveField(final ObjectAdapter object, final ObjectAssociation association) {
-        ensureOpened();
-        ensureInTransaction();
 
-        final ObjectAdapter referencedCollectionAdapter = association.get(object);
-
-        // this code originally brought in from the JPA impl, but seems reasonable.
-        if (association.isOneToManyAssociation()) {
-            ensureThatState(referencedCollectionAdapter, is(notNullValue()));
-
-            final Object referencedCollection = referencedCollectionAdapter.getObject();
-            ensureThatState(referencedCollection, is(notNullValue()));
-
-            // if a proxy collection, then force it to initialize.  just 'touching' the object is sufficient.
-            // REVIEW: I wonder if this is actually needed; does JDO use proxy collections?
-            referencedCollection.hashCode();
-        }
-
-        // the JPA impl used to also call its lifecycle listener on the referenced collection object, eg List,
-        // itself.  I don't think this makes sense to do for JDO (the collection is not a PersistenceCapable).
-    }
-
-    
     // ///////////////////////////////////////////////////////////////////////
     // getInstances, hasInstances
     // ///////////////////////////////////////////////////////////////////////

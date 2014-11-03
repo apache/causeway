@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.object.callbacks.*;
 import org.apache.isis.core.runtime.persistence.PersistorUtil;
+import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -89,7 +90,7 @@ public class FrameworkSynchronizer {
                     final Version originalVersion = adapter.getVersion();
 
                     // sync the pojo held by the adapter with that just loaded
-                    getPersistenceSession().remapRecreatedPojo(adapter, pojo);
+                    getPersistenceSession().getAdapterManager() .remapRecreatedPojo(adapter, pojo);
                     
                     // since there was already an adapter, do concurrency check
                     // (but don't set abort cause if checking is suppressed through thread-local)
@@ -119,9 +120,9 @@ public class FrameworkSynchronizer {
                     // ie from ObjectStore#resolveImmediately()
                     adapter = getAdapterManager().getAdapterFor(originalOid);
                     if(adapter != null) {
-                        getPersistenceSession().remapRecreatedPojo(adapter, pojo);
+                        getPersistenceSession().getAdapterManager() .remapRecreatedPojo(adapter, pojo);
                     } else {
-                        adapter = getPersistenceSession().mapRecreatedPojo(originalOid, pojo);
+                        adapter = getPersistenceSession().getAdapterManager().mapRecreatedPojo(originalOid, pojo);
                         CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
                     }
                 }
@@ -201,7 +202,7 @@ public class FrameworkSynchronizer {
                     // persisting
                     final RootOid persistentOid = getOidGenerator().createPersistentOrViewModelOid(pojo, isisOid);
 
-                    getPersistenceSession().remapAsPersistent(adapter, persistentOid);
+                    getPersistenceSession().getAdapterManager().remapAsPersistent(adapter, persistentOid);
 
                     CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
 
@@ -272,7 +273,7 @@ public class FrameworkSynchronizer {
                     return null;
                 }
                 final RootOid oid = getPersistenceSession().getOidGenerator().createPersistentOrViewModelOid(pojo, null);
-                final ObjectAdapter adapter = getPersistenceSession().mapRecreatedPojo(oid, pojo);
+                final ObjectAdapter adapter = getPersistenceSession().getAdapterManager().mapRecreatedPojo(oid, pojo);
                 return adapter;
             }
         }, calledFrom);
@@ -431,7 +432,7 @@ public class FrameworkSynchronizer {
     // Dependencies (from context)
     // /////////////////////////////////////////////////////////
 
-    protected AdapterManager getAdapterManager() {
+    protected AdapterManagerDefault getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
 

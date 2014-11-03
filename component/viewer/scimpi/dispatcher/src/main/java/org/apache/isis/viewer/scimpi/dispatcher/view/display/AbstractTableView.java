@@ -21,17 +21,17 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import java.util.Iterator;
 import java.util.List;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.Persistor;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
+import org.apache.isis.viewer.scimpi.dispatcher.ResolveFieldUtil;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
@@ -68,7 +68,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
                 throw new ScimpiException("Field " + objectField.getId() + " is not a collection");
             }
             isFieldEditable = objectField.isUsable(IsisContext.getAuthenticationSession(), object, where).isAllowed();
-            getPersistenceSession().resolveField(object, objectField);
+            ResolveFieldUtil.resolveField(object, objectField);
             collection = objectField.get(object);
             final TypeOfFacet facet = objectField.getFacet(TypeOfFacet.class);
             elementSpec = facet.valueSpec();
@@ -94,7 +94,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
 
     }
 
-    protected Persistor getPersistenceSession() {
+    protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

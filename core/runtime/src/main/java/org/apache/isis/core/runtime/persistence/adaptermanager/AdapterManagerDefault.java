@@ -57,7 +57,6 @@ import org.apache.isis.core.runtime.persistence.PojoRecreationException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.persistence.RecreatedPojoRemapper;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.*;
@@ -77,7 +76,6 @@ import static org.hamcrest.CoreMatchers.*;
  * maps to an {@link ObjectAdapter adapter} and these are reused.
  */
 public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAdapter>,
-        RecreatedPojoRemapper,
         SessionScopedComponent,
         DebuggableWithTitle,
         Resettable {
@@ -366,7 +364,6 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         return adapter;
     }
 
-    @Override
     public void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
         removeAdapter(adapter);
         adapter.replacePojo(pojo);
@@ -374,7 +371,26 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
     }
 
 
-    @Override
+    /**
+     * Either returns an existing {@link ObjectAdapter adapter} (as per
+     * {@link #getAdapterFor(Object)} or {@link #getAdapterFor(Oid)}), otherwise
+     * re-creates an adapter with the specified (persistent) {@link Oid}.
+     *
+     * <p>
+     * Typically called when the {@link Oid} is already known, that is, when
+     * resolving an already-persisted object. Is also available for
+     * <tt>Memento</tt> support however, so {@link Oid} could also represent a
+     * {@link Oid#isTransient() transient} object.
+     *
+     * <p>
+     * If the {@link ObjectAdapter adapter} is recreated, its
+     * {@link ResolveState} will be set to either
+     * {@link ResolveState#TRANSIENT} or {@link ResolveState#GHOST} based on
+     * whether the {@link Oid} is {@link Oid#isTransient() transient} or not.
+     *
+     * @param oid
+     * @param recreatedPojo - already known to the object store impl, or a service
+     */
     public ObjectAdapter mapRecreatedPojo(final Oid oid, final Object recreatedPojo) {
 
         // attempt to locate adapter for the pojo

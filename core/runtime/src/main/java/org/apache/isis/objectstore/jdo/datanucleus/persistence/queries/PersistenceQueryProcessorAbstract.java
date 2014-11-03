@@ -19,22 +19,19 @@
 package org.apache.isis.objectstore.jdo.datanucleus.persistence.queries;
 
 import java.util.List;
-
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.listener.InstanceLifecycleEvent;
 import javax.jdo.metadata.TypeMetadata;
 import javax.jdo.spi.PersistenceCapable;
-
 import com.google.common.collect.Lists;
-
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
-import org.apache.isis.core.runtime.system.persistence.Persistor;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer.CalledFrom;
@@ -98,7 +95,7 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
     // Dependencies (from context)
     // /////////////////////////////////////////////////////////////
 
-    protected Persistor getPersistenceSession() {
+    protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
 

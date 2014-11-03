@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.PersistorImplementation;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 
 /**
@@ -48,8 +49,8 @@ public class PersistAlgorithmUnified extends PersistAlgorithmAbstract {
 
     public void makePersistent(
             final ObjectAdapter adapter,
-            final ToPersistObjectSet toPersistObjectSet) {
-        persistAlgorithm.makePersistent(adapter, toPersistObjectSet);
+            final PersistenceSession persistenceSession) {
+        persistAlgorithm.makePersistent(adapter, persistenceSession);
     }
 
     @Override

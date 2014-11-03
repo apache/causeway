@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.object.choices.enums.EnumFacet;
 import org.apache.isis.core.metamodel.facets.value.booleans.BooleanValueFacet;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
+import org.apache.isis.viewer.scimpi.dispatcher.ResolveFieldUtil;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.edit.EditAction;
@@ -215,7 +216,7 @@ public class EditObject extends AbstractElementProcessor {
             final String fieldName = inputField.getName();
             final ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
             if (field.isVisible(IsisContext.getAuthenticationSession(), object, where).isAllowed()) {
-                IsisContext.getPersistenceSession().resolveField(object, field);
+                ResolveFieldUtil.resolveField(object, field);
                 final ObjectAdapter fieldValue = field.get(object);
                 if (inputField.isEditable()) {
                     final String value = getValue(context, fieldValue);

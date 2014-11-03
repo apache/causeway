@@ -20,12 +20,11 @@
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import java.util.List;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.scimpi.dispatcher.ResolveFieldUtil;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.TableView.SimpleTableBuilder;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedObject;
@@ -43,7 +42,7 @@ public class LongFormView extends AbstractFormView {
                 rowClasses = rowClassesList.split("[,|/]");
             }
             int noColumns;
-            IsisContext.getPersistenceSession().resolveField(object, field);
+            ResolveFieldUtil.resolveField(object, field);
             final ObjectAdapter collection = field.get(object);
             final ObjectSpecification elementSpec = collection.getElementSpecification();
             final List<ObjectAssociation> fields = elementSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.VISIBLE_AT_LEAST_SOMETIMES);

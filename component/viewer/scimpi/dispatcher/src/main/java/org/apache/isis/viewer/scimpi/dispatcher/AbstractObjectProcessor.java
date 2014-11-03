@@ -21,7 +21,6 @@ package org.apache.isis.viewer.scimpi.dispatcher;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public abstract class AbstractObjectProcessor extends AbstractElementProcessor {
@@ -38,7 +37,7 @@ public abstract class AbstractObjectProcessor extends AbstractElementProcessor {
             if (error != null) {
                 throw new ScimpiException("Field " + objectField.getId() + " " + error);
             }
-            IsisContext.getPersistenceSession().resolveField(object, objectField);
+            ResolveFieldUtil.resolveField(object, objectField);
             object = objectField.get(object);
         }
 

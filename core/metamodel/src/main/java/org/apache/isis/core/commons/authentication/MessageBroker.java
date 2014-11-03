@@ -33,6 +33,7 @@ public class MessageBroker implements Serializable, DebuggableWithTitle {
     
     private final List<String> messages = Lists.newArrayList();
     private final List<String> warnings = Lists.newArrayList();
+    private String applicationError;
 
     //region > acquire (factory method)
 
@@ -57,6 +58,7 @@ public class MessageBroker implements Serializable, DebuggableWithTitle {
     public void reset() {
         warnings.clear();
         messages.clear();
+        applicationError = null;
     }
 
     //endregion
@@ -84,6 +86,14 @@ public class MessageBroker implements Serializable, DebuggableWithTitle {
     }
 
     //endregion
+
+    public String getApplicationError() {
+        return applicationError;
+    }
+
+    public void setApplicationError(String applicationError) {
+        this.applicationError = applicationError;
+    }
 
     //region > debugging
 
@@ -120,6 +130,7 @@ public class MessageBroker implements Serializable, DebuggableWithTitle {
         messages.clear();
         return copy;
     }
+
     //endregion
 
 

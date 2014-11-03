@@ -22,14 +22,13 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -37,6 +36,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
+import org.apache.isis.viewer.scimpi.dispatcher.ResolveFieldUtil;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
@@ -494,7 +494,8 @@ class TestFieldSet extends Test {
     boolean test(final Request request, final String attributeName, final String targetId) {
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
         final ObjectAssociation objectField = findProperty(attributeName, object);
-        IsisContext.getPersistenceSession().resolveField(object, objectField);
+
+        ResolveFieldUtil.resolveField(object, objectField);
         final ObjectAdapter fld = objectField.get(object);
         if (fld != null) {
             final Object fieldValue = fld.getObject();
@@ -523,7 +524,7 @@ class TestFieldValue extends Test {
         
         final ObjectAdapter object = MethodsUtils.findObject(request.getContext(), targetId);
         final ObjectAssociation objectField = findProperty(fieldName, object);
-        IsisContext.getPersistenceSession().resolveField(object, objectField);
+        ResolveFieldUtil.resolveField(object, objectField);
         final ObjectAdapter fld = objectField.get(object);
         
         // TODO test for reference or value
@@ -561,3 +562,4 @@ class TestSet extends Test {
         return valuePresent;
     }
 }
+

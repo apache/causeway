@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
+import org.apache.isis.viewer.scimpi.dispatcher.ResolveFieldUtil;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
@@ -63,7 +64,7 @@ public abstract class AbstractLink extends AbstractElementProcessor {
             if (field.isVisible(IsisContext.getAuthenticationSession(), adapter, where).isVetoed()) {
                 throw new ForbiddenException(field, ForbiddenException.VISIBLE);
             }
-            IsisContext.getPersistenceSession().resolveField(adapter, field);
+            ResolveFieldUtil.resolveField(adapter, field);
             adapter = field.get(adapter);
             if (adapter != null) {
                 objectId = context.mapObject(adapter, Scope.INTERACTION);
