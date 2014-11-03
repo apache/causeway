@@ -30,7 +30,6 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
 public final class SystemConstants {
 
@@ -57,7 +56,7 @@ public final class SystemConstants {
 
 
     /**
-     * Key used to lookup {@link PersistenceSessionFactory persistor} in
+     * Key used to lookup {@link org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory persistor} in
      * {@link IsisConfiguration}, and root for any
      * {@link PersistenceMechanismInstaller persistor}-specific configuration
      * keys.

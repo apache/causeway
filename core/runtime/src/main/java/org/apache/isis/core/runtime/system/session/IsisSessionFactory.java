@@ -20,8 +20,6 @@
 package org.apache.isis.core.runtime.system.session;
 
 import java.util.List;
-
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -30,9 +28,9 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
 /**
  * Analogous (and in essence a wrapper for) a JDO <code>PersistenceManagerFactory</code>
@@ -79,7 +77,7 @@ public interface IsisSessionFactory extends ApplicationScopedComponent {
     public AuthorizationManager getAuthorizationManager();
 
     /**
-     * The {@link PersistenceSessionFactory} that will be used to create
+     * The {@link org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory} that will be used to create
      * {@link PersistenceSession} {@link IsisSession#getPersistenceSession()
      * within} the {@link IsisSession}.
      */

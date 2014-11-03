@@ -21,7 +21,6 @@ package org.apache.isis.core.objectstore.commands;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.objectstore.internal.ObjectStorePersistedObjects;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;

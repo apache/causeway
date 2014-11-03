@@ -29,9 +29,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
-import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.tck.dom.refs.SimpleEntity;
 
@@ -63,9 +63,9 @@ public abstract class ObjectStoreContractTest_persist {
     protected ObjectAdapter epv2Adapter;
     protected ObjectSpecification epvSpecification;
 
-    protected ObjectStoreSpi getStore() {
+    protected ObjectStore getStore() {
         PersistenceSession psos = IsisContext.getPersistenceSession();
-        return (ObjectStoreSpi) psos.getObjectStore();
+        return psos.getObjectStore();
     }
 
 

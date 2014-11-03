@@ -20,40 +20,38 @@
 package org.apache.isis.core.runtime.persistence.objectstore.transaction;
 
 import java.util.List;
-
-import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 /**
  * Interface for the {@link IsisTransactionManager} to interact with some
- * transactional resource (ie a {@link ObjectStoreSpi}).
+ * transactional resource (ie a {@link org.apache.isis.core.runtime.system.persistence.ObjectStore}).
  */
 public interface TransactionalResource {
 
     /**
-     * Used by the {@link ObjectStoreTransactionManager} to tell the underlying
-     * {@link ObjectStoreSpi} to start a transaction.
+     * Used by the {@link IsisTransactionManager} to tell the underlying
+     * {@link org.apache.isis.core.runtime.system.persistence.ObjectStore} to start a transaction.
      */
     void startTransaction();
 
     /**
      * Used by the current {@link IsisTransaction} to flush changes to
-     * the {@link ObjectStoreSpi} (either via a
+     * the {@link org.apache.isis.core.runtime.system.persistence.ObjectStore} (either via a
      * {@link IsisTransactionManager#flushTransaction()} or a
      * {@link IsisTransactionManager#endTransaction()}).
      */
     void execute(List<PersistenceCommand> unmodifiableList);
 
     /**
-     * Used by the {@link ObjectStoreTransactionManager} to tell the underlying
-     * {@link ObjectStoreSpi} to commit a transaction.
+     * Used by the {@link IsisTransactionManager} to tell the underlying
+     * {@link org.apache.isis.core.runtime.system.persistence.ObjectStore} to commit a transaction.
      */
     void endTransaction();
 
     /**
-     * Used by the {@link ObjectStoreTransactionManager} to tell the underlying
-     * {@link ObjectStoreSpi} to abort a transaction.
+     * Used by the {@link IsisTransactionManager} to tell the underlying
+     * {@link org.apache.isis.core.runtime.system.persistence.ObjectStore} to abort a transaction.
      */
     void abortTransaction();
 

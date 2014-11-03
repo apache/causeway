@@ -45,7 +45,6 @@ import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreatorUnified;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
-import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.*;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -61,7 +60,7 @@ public class PersistenceSessionTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     private ServicesInjectorDefault servicesInjector;
-    private AdapterManagerSpi adapterManager;
+    private AdapterManagerDefault adapterManager;
     private ObjectAdapterFactory adapterFactory;
     
     
@@ -78,7 +77,7 @@ public class PersistenceSessionTest {
     private AuthenticationSession mockAuthenticationSession;
 
     @Mock
-    private ObjectStoreSpi mockObjectStore;
+    private ObjectStore mockObjectStore;
     @Mock
     private AuditingService3 mockAuditingService3;
     @Mock

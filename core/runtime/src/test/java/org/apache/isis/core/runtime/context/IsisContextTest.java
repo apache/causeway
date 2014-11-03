@@ -21,15 +21,9 @@ package org.apache.isis.core.runtime.context;
 
 import java.util.Collections;
 import java.util.List;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
+import org.junit.*;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -39,11 +33,11 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.context.IsisContextStatic;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryDefault;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;

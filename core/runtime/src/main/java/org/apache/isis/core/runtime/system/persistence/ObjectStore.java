@@ -29,12 +29,9 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.*;
 
-public interface ObjectStore extends DebuggableWithTitle, SessionScopedComponent {
+public interface ObjectStore extends TransactionalResource, DebuggableWithTitle, SessionScopedComponent {
 
     /**
      * The name of this component.

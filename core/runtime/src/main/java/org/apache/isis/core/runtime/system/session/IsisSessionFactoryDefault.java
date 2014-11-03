@@ -30,7 +30,6 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -41,9 +40,9 @@ import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.*;

@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.runtime.persistence;
 
-import org.apache.isis.core.runtime.system.persistence.ObjectFactory;
-
 public final class PersistenceConstants {
 
 

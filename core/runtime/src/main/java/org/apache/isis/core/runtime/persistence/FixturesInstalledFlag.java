@@ -20,10 +20,9 @@
 package org.apache.isis.core.runtime.persistence;
 
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
 /**
- * For {@link PersistenceSessionFactory} implementations that can cache the
+ * For {@link org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory} implementations that can cache the
  * {@link PersistenceSession#isFixturesInstalled()} so is only called once per
  * application scope.
  */

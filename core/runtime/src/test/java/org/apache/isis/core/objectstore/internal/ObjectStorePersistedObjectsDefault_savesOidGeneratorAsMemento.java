@@ -31,7 +31,7 @@ import static org.junit.Assert.assertThat;
 
 public class ObjectStorePersistedObjectsDefault_savesOidGeneratorAsMemento {
 
-    private ObjectStorePersistedObjectsDefault persistedObjects;
+    private ObjectStorePersistedObjects persistedObjects;
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
@@ -40,7 +40,7 @@ public class ObjectStorePersistedObjectsDefault_savesOidGeneratorAsMemento {
 
     @Before
     public void setUp() throws Exception {
-        persistedObjects = new ObjectStorePersistedObjectsDefault();
+        persistedObjects = new ObjectStorePersistedObjects();
         mockMemento = context.mock(IdentifierGeneratorDefault.Memento.class);
     }
 

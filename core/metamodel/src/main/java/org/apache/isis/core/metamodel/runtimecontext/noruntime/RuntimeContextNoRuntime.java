@@ -29,7 +29,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.*;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAbstract;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -96,7 +96,15 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
         };
-        adapterManager = new AdapterManagerAbstract() {
+        adapterManager = new AdapterManager() {
+
+            @Override
+            public void injectInto(final Object candidate) {
+                if (AdapterManagerAware.class.isAssignableFrom(candidate.getClass())) {
+                    final AdapterManagerAware cast = AdapterManagerAware.class.cast(candidate);
+                    cast.setAdapterManager(this);
+                }
+            }
 
             @Override
             public ObjectAdapter getAdapterFor(final Object pojo) {

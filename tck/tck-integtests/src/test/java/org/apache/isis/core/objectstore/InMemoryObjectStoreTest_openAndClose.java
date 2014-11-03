@@ -19,19 +19,18 @@
 
 package org.apache.isis.core.objectstore;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.core.objectstore.internal.ObjectStorePersistedObjects;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers) and

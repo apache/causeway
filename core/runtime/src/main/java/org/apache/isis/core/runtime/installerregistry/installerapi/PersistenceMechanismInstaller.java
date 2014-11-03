@@ -20,15 +20,15 @@
 package org.apache.isis.core.runtime.installerregistry.installerapi;
 
 import org.apache.isis.core.commons.components.Installer;
-import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegate;
+import org.apache.isis.core.runtime.persistence.ObjectStoreFactory;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
 /**
  * Installs a {@link PersistenceSession} during system start up.
  */
-public interface PersistenceMechanismInstaller extends Installer, PersistenceSessionFactoryDelegate {
+public interface PersistenceMechanismInstaller extends Installer, ObjectStoreFactory {
 
     static String TYPE = "persistor";
 

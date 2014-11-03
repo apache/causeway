@@ -21,8 +21,8 @@ package org.apache.isis.core.objectstore;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
-import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
 /**
@@ -50,10 +50,10 @@ public class InMemoryPersistenceMechanismInstaller extends PersistenceMechanismI
     // ///////////////////////////////////////////////////////////////
 
     /**
-     * Hook method to return {@link ObjectStoreSpi}.
+     * Hook method to return {@link ObjectStore}.
      */
     @Override
-    public ObjectStoreSpi createObjectStore(
+    public ObjectStore createObjectStore(
             final IsisConfiguration configuration) {
         return new InMemoryObjectStore();
     }

@@ -40,7 +40,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.objectstore.InMemoryObjectStore;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryBuiltIn;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 /*
@@ -125,10 +124,8 @@ public class ObjectStoreInstances {
 
     /**
      * If the pojo exists in the object store, then looks up the
-     * {@link ObjectAdapter adapter} from the {@link AdapterManagerSpi}, and only
-     * if none found does it
-     * {@link PersistenceSessionHydrator#mapRecreatedPojo(Object, Object) recreate}
-     * a new {@link ObjectAdapter adapter}.
+     * {@link ObjectAdapter adapter} from the {@link org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault}, and only
+     * if none found does it recreates a new {@link ObjectAdapter adapter}.
      */
     public ObjectAdapter getObjectAndMapIfRequired(final Oid oid) {
         final Object pojo = getObjectInstances().get(oid);

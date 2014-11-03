@@ -19,6 +19,12 @@
 
 package org.apache.isis.core.objectstore.internal;
 
+import java.util.Map;
+import java.util.Set;
+
+import com.google.common.collect.Maps;
+
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -29,22 +35,60 @@ import org.apache.isis.core.runtime.system.persistence.IdentifierGeneratorDefaul
  * 
  * Attached and detached to each session.
  */
-public interface ObjectStorePersistedObjects {
+public class ObjectStorePersistedObjects {
 
-    public IdentifierGeneratorDefault.Memento getOidGeneratorMemento();
+    private final Map<ObjectSpecId, ObjectStoreInstances> instancesBySpecMap = Maps.newHashMap();
+    private final Map<ObjectSpecId, Oid> serviceOidByIdMap = Maps.newHashMap();
 
-    public void saveOidGeneratorMemento(IdentifierGeneratorDefault.Memento memento);
+    private IdentifierGeneratorDefault.Memento oidGeneratorMemento;
 
-    public void registerService(ObjectSpecId objectSpecId, Oid oid);
 
-    public Oid getService(ObjectSpecId objectSpecId);
+    public IdentifierGeneratorDefault.Memento getOidGeneratorMemento() {
+        return oidGeneratorMemento;
+    }
 
-    public Iterable<ObjectSpecId> specifications();
+    public void saveOidGeneratorMemento(final IdentifierGeneratorDefault.Memento memento) {
+        this.oidGeneratorMemento = memento;
+    }
 
-    public ObjectStoreInstances instancesFor(ObjectSpecId spec);
+    public Oid getService(final ObjectSpecId objectSpecId) {
+        return serviceOidByIdMap.get(objectSpecId);
+    }
 
-    public Iterable<ObjectStoreInstances> instances();
+    public void registerService(final ObjectSpecId objectSpecId, final Oid oid) {
+        final Oid oidLookedUpByName = serviceOidByIdMap.get(objectSpecId);
+        if (oidLookedUpByName != null) {
+            if (oidLookedUpByName.equals(oid)) {
+                throw new IsisException("Already another service registered as name: " + objectSpecId + " (existing Oid: " + oidLookedUpByName + ", " + "intended: " + oid + ")");
+            }
+        } else {
+            serviceOidByIdMap.put(objectSpecId, oid);
+        }
+    }
 
-    public void clear();
+    // TODO: this is where the clever logic needs to go to determine how to save
+    // into our custom Map.
+    // also think we shouldn't surface the entire Map, just the API we require
+    // (keySet, values etc).
+    public ObjectStoreInstances instancesFor(final ObjectSpecId specId) {
+        ObjectStoreInstances ins = instancesBySpecMap.get(specId);
+        if (ins == null) {
+            ins = new ObjectStoreInstances(specId);
+            instancesBySpecMap.put(specId, ins);
+        }
+        return ins;
+    }
+
+    public Iterable<ObjectSpecId> specifications() {
+        return instancesBySpecMap.keySet();
+    }
+
+    public void clear() {
+        instancesBySpecMap.clear();
+    }
+
+    public Iterable<ObjectStoreInstances> instances() {
+        return instancesBySpecMap.values();
+    }
 
 }

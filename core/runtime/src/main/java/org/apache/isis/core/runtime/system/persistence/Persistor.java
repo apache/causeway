@@ -187,7 +187,7 @@ public interface Persistor {
      * Makes an {@link ObjectAdapter} persistent. The specified object should be
      * stored away via this object store's persistence mechanism, and have an
      * new and unique OID assigned to it. The object, should also be added to
-     * the {@link AdapterManagerSpi} as the object is implicitly 'in use'.
+     * the {@link org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault} as the object is implicitly 'in use'.
      * 
      * <p>
      * If the object has any associations then each of these, where they aren't

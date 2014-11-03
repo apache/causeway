@@ -47,10 +47,10 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
-import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.Persistor;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
@@ -565,7 +565,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ObjectStoreSpi> T getObjectStore(Class<T> cls) {
+    public <T extends ObjectStore> T getObjectStore(Class<T> cls) {
         final PersistenceSession persistenceSession = getPersistenceSession();
         return (T) persistenceSession.getObjectStore();
     }

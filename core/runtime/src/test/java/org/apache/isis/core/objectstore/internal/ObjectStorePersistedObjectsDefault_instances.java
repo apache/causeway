@@ -31,12 +31,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 @RunWith(JMock.class)
 public class ObjectStorePersistedObjectsDefault_instances {
 
-    private ObjectStorePersistedObjectsDefault persistedObjects;
+    private ObjectStorePersistedObjects persistedObjects;
 
     private final Mockery context = new JUnit4Mockery();
 
@@ -44,7 +43,7 @@ public class ObjectStorePersistedObjectsDefault_instances {
 
     @Before
     public void setUp() throws Exception {
-        persistedObjects = new ObjectStorePersistedObjectsDefault();
+        persistedObjects = new ObjectStorePersistedObjects();
         mockSpec = context.mock(ObjectSpecId.class);
     }
 

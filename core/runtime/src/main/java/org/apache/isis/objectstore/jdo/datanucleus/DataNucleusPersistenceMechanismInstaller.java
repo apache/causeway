@@ -32,8 +32,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
-import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableAnnotationInJdoApplibFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableMarkerInterfaceInJdoApplibFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
@@ -85,7 +85,7 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     //region > createObjectStore
 
     @Override
-    public ObjectStoreSpi createObjectStore(final IsisConfiguration configuration) {
+    public ObjectStore createObjectStore(final IsisConfiguration configuration) {
         final DataNucleusApplicationComponents applicationComponents = createDataNucleusApplicationComponentsIfRequired(configuration);
         return new DataNucleusObjectStore(applicationComponents);
     }

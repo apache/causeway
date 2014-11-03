@@ -57,7 +57,6 @@ import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreatorUnified;
-import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithmUnified;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
@@ -82,7 +81,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     private final ObjectAdapterFactory objectAdapterFactory;
     private final ServicesInjectorSpi servicesInjector;
     private final OidGenerator oidGenerator;
-    private final AdapterManagerSpi adapterManager;
+    private final AdapterManagerDefault adapterManager;
 
     private final PersistAlgorithm persistAlgorithm ;
     private final ObjectStore objectStore;
@@ -574,10 +573,10 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
      * initialise the persistor.
      * 
      * <p>
-     * Returns the cached value of {@link ObjectStoreSpi#isFixturesInstalled()
+     * Returns the cached value of {@link ObjectStore#isFixturesInstalled()
      * whether fixtures are installed} from the
      * {@link PersistenceSessionFactory} (provided it implements
-     * {@link FixturesInstalledFlag}), otherwise queries {@link ObjectStoreSpi}
+     * {@link FixturesInstalledFlag}), otherwise queries {@link ObjectStore}
      * directly.
      * <p>
      * This caching is important because if we've determined, for a given run,
@@ -979,8 +978,8 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     }
 
     /**
-     * Uses the {@link ObjectStoreSpi} to
-     * {@link ObjectStoreSpi#createCreateObjectCommand(ObjectAdapter) create} a
+     * Uses the {@link ObjectStore} to
+     * {@link ObjectStore#createCreateObjectCommand(ObjectAdapter) create} a
      * {@link CreateObjectCommand}, and adds to the
      * {@link IsisTransactionManager}.
      */
@@ -1104,7 +1103,7 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     }
 
     /**
-     * The configured {@link AdapterManagerSpi}.
+     * The configured {@link AdapterManager}.
      * 
      * <p>
      * Injected in constructor.

@@ -19,16 +19,12 @@
 
 package org.apache.isis.core.runtime.system.transaction;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-
 import java.util.Collections;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
@@ -42,18 +38,14 @@ import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
-import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.*;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
+import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.CoreMatchers.equalTo;
 
 public class IsisTransactionTest {
 
@@ -69,7 +61,7 @@ public class IsisTransactionTest {
     private ObjectAdapter persistentAdapter2;
 
     @Mock
-    private ObjectStoreSpi mockObjectStore;
+    private ObjectStore mockObjectStore;
 
     @Mock
     private IsisTransactionManager mockTransactionManager;

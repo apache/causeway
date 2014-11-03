@@ -22,10 +22,8 @@ package org.apache.isis.core.runtime.systemusinginstallers;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.components.Noop;
@@ -40,6 +38,7 @@ import org.apache.isis.core.runtime.authentication.exploration.ExplorationSessio
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
@@ -48,7 +47,6 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryDefault;
 

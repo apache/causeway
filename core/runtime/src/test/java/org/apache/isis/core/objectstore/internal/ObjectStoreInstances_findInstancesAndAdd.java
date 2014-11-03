@@ -19,29 +19,25 @@
 
 package org.apache.isis.core.objectstore.internal;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryBuiltIn;
-import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
 import org.apache.isis.core.unittestsupport.jmocking.IsisActions;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ObjectStoreInstances_findInstancesAndAdd {
 
@@ -57,7 +53,7 @@ public class ObjectStoreInstances_findInstancesAndAdd {
     @Mock
     private AuthenticationSession mockAuthSession;
     @Mock
-    private AdapterManagerSpi mockAdapterManager;
+    private AdapterManagerDefault mockAdapterManager;
 
     @Mock
     private ObjectAdapter mockAdapter1;
@@ -72,7 +68,7 @@ public class ObjectStoreInstances_findInstancesAndAdd {
                 return mockAuthSession;
             }
             @Override
-            protected AdapterManagerSpi getAdapterManager() {
+            protected AdapterManagerDefault getAdapterManager() {
                 return mockAdapterManager;
             }
         };

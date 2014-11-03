@@ -42,10 +42,10 @@ import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerS
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisSystemAbstract;
 import org.apache.isis.core.runtime.transaction.facetdecorator.standard.StandardTransactionFacetDecorator;
 import org.apache.isis.core.security.authentication.AuthenticatorBypass;

@@ -27,11 +27,10 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegating;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.ObjectFactory;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
 /**
  * An abstract implementation of {@link PersistenceMechanismInstaller} that will
@@ -52,7 +51,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     
     @Override
     public PersistenceSessionFactory createPersistenceSessionFactory(final DeploymentType deploymentType) {
-        return new PersistenceSessionFactoryDelegating(deploymentType, getConfiguration(), this);
+        return new PersistenceSessionFactory(deploymentType, getConfiguration(), this);
     }
 
     //endregion

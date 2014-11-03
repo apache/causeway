@@ -22,15 +22,14 @@ package org.apache.isis.core.runtime.persistence;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 
 /**
  * Creates an {@link org.apache.isis.core.runtime.system.persistence.ObjectStore} on behalf of a
- * {@link PersistenceSessionFactory}.
+ * {@link org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory}.
  */
-public interface PersistenceSessionFactoryDelegate extends IsisConfigurationBuilderAware, MetaModelRefiner {
+public interface ObjectStoreFactory extends IsisConfigurationBuilderAware, MetaModelRefiner {
 
-    ObjectStoreSpi createObjectStore(final IsisConfiguration configuration);
+    ObjectStore createObjectStore(final IsisConfiguration configuration);
 
 }

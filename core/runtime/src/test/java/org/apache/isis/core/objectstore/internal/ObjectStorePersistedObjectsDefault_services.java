@@ -43,11 +43,11 @@ public class ObjectStorePersistedObjectsDefault_services {
     @Mock
     private Oid mockOidForBarService;
     
-    private ObjectStorePersistedObjectsDefault persistedObjects;
+    private ObjectStorePersistedObjects persistedObjects;
 
     @Before
     public void setUp() throws Exception {
-        persistedObjects = new ObjectStorePersistedObjectsDefault();
+        persistedObjects = new ObjectStorePersistedObjects();
     }
 
     @Test

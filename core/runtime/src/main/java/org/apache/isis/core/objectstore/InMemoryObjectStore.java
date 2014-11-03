@@ -23,14 +23,9 @@ import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-
 import com.google.common.collect.Lists;
-
-import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugUtils;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -52,21 +47,21 @@ import org.apache.isis.core.objectstore.commands.InMemoryDestroyObjectCommand;
 import org.apache.isis.core.objectstore.commands.InMemorySaveObjectCommand;
 import org.apache.isis.core.objectstore.internal.ObjectStoreInstances;
 import org.apache.isis.core.objectstore.internal.ObjectStorePersistedObjects;
-import org.apache.isis.core.objectstore.internal.ObjectStorePersistedObjectsDefault;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
-import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryBuiltIn;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
-public class InMemoryObjectStore implements ObjectStoreSpi {
+public class InMemoryObjectStore implements ObjectStore {
 
     private final static Logger LOG = LoggerFactory.getLogger(InMemoryObjectStore.class);
 
@@ -99,7 +94,7 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
             if (inMemoryPersistenceSessionFactory != null) {
                 persistedObjects = inMemoryPersistenceSessionFactory.createPersistedObjects();
             } else {
-                persistedObjects = new ObjectStorePersistedObjectsDefault();
+                persistedObjects = new ObjectStorePersistedObjects();
             }
         } else {
             recreateAdapters();
@@ -465,8 +460,7 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
     /**
      * Must use {@link IsisContext context}, because although this object is
      * recreated with each {@link PersistenceSession session}, the persisted
-     * objects that get
-     * {@link #attachPersistedObjects(ObjectStorePersistedObjects) attached} to
+     * objects that get attached to
      * it span multiple sessions.
      * 
      * <p>
@@ -481,9 +475,7 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
     /**
      * Must use {@link IsisContext context}, because although this object is
      * recreated with each {@link PersistenceSession session}, the persisted
-     * objects that get
-     * {@link #attachPersistedObjects(ObjectStorePersistedObjects) attached} to
-     * it span multiple sessions.
+     * objects that get attached to it span multiple sessions.
      * 
      * <p>
      * The alternative design would be to laboriously inject the session into
@@ -500,7 +492,7 @@ public class InMemoryObjectStore implements ObjectStoreSpi {
 
 
     /**
-     * Downcasts the {@link PersistenceSessionFactory} to
+     * Downcasts the {@link org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory} to
      * {@link InMemoryPersistenceSessionFactory}.
      */
     protected InMemoryPersistenceSessionFactory getInMemoryPersistenceSessionFactory() {

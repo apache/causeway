@@ -22,21 +22,20 @@ package org.apache.isis.core.objectstore;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.objectstore.internal.ObjectStoreInstances;
 import org.apache.isis.core.objectstore.internal.ObjectStorePersistedObjects;
-import org.apache.isis.core.objectstore.internal.ObjectStorePersistedObjectsDefault;
-import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegate;
-import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegating;
+import org.apache.isis.core.runtime.persistence.ObjectStoreFactory;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.IdentifierGenerator;
 import org.apache.isis.core.runtime.system.persistence.IdentifierGeneratorDefault;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
-public class InMemoryPersistenceSessionFactory extends PersistenceSessionFactoryDelegating {
+public class InMemoryPersistenceSessionFactory extends PersistenceSessionFactory {
 
     private ObjectStorePersistedObjects persistedObjects;
 
-    public InMemoryPersistenceSessionFactory(final DeploymentType deploymentType, final IsisConfiguration configuration, final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
-        super(deploymentType, configuration, persistenceSessionFactoryDelegate);
+    public InMemoryPersistenceSessionFactory(final DeploymentType deploymentType, final IsisConfiguration configuration, final ObjectStoreFactory objectStoreFactory) {
+        super(deploymentType, configuration, objectStoreFactory);
     }
 
     ObjectStorePersistedObjects getPersistedObjects() {
@@ -63,7 +62,7 @@ public class InMemoryPersistenceSessionFactory extends PersistenceSessionFactory
      * {@link InMemoryObjectStore#open() open}ed.
      */
     public ObjectStorePersistedObjects createPersistedObjects() {
-        return new ObjectStorePersistedObjectsDefault();
+        return new ObjectStorePersistedObjects();
     }
 
     /**

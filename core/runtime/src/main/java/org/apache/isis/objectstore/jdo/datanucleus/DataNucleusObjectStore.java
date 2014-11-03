@@ -49,7 +49,7 @@ import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
-import org.apache.isis.core.runtime.persistence.objectstore.ObjectStoreSpi;
+import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -59,7 +59,7 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPatt
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
+import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
@@ -77,7 +77,7 @@ import static org.apache.isis.core.commons.ensure.Ensure.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-public class DataNucleusObjectStore implements ObjectStoreSpi {
+public class DataNucleusObjectStore implements ObjectStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(DataNucleusObjectStore.class);
 
@@ -565,7 +565,7 @@ public class DataNucleusObjectStore implements ObjectStoreSpi {
     // ///////////////////////////////////////////////////////////////////////
 
     @SuppressWarnings("unused")
-    private List<ObjectAdapter> loadObjects(final ObjectSpecification specification, final List<?> listOfPojs, final AdapterManagerSpi adapterManager) {
+    private List<ObjectAdapter> loadObjects(final ObjectSpecification specification, final List<?> listOfPojs, final AdapterManagerDefault adapterManager) {
         final List<ObjectAdapter> adapters = Lists.newArrayList();
         int i = 0;
         for (final Object pojo : listOfPojs) {

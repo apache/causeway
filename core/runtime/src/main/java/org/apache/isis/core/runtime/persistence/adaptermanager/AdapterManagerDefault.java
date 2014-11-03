@@ -19,43 +19,33 @@
 
 package org.apache.isis.core.runtime.persistence.adaptermanager;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import java.util.Iterator;
-
-import org.apache.isis.core.runtime.persistence.PojoRecreationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.components.Resettable;
+import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
-import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
-import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.adapter.oid.*;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -63,12 +53,36 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.runtime.persistence.PojoRecreationException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.AdapterManagerSpi;
+import org.apache.isis.core.runtime.system.persistence.AdapterLifecycleTransitioner;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.RecreatedPojoRemapper;
 
-public class AdapterManagerDefault implements AdapterManagerSpi {
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.hamcrest.CoreMatchers.*;
+
+/**
+ * Responsible for managing the {@link ObjectAdapter adapter}s and {@link Oid
+ * identities} for each and every POJO that is being used by the framework.
+ *
+ * <p>
+ * It provides a consistent set of adapters in memory, providing an
+ * {@link ObjectAdapter adapter} for the POJOs that are in use ensuring that the
+ * same object is not loaded twice into memory.
+ *
+ * <p>
+ * Each POJO is given an {@link ObjectAdapter adapter} so that the framework can
+ * work with the POJOs even though it does not understand their types. Each POJO
+ * maps to an {@link ObjectAdapter adapter} and these are reused.
+ */
+public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAdapter>,
+        RecreatedPojoRemapper,
+        AdapterLifecycleTransitioner,
+        SessionScopedComponent,
+        DebuggableWithTitle,
+        Resettable {
 
     private static final Logger LOG = LoggerFactory.getLogger(AdapterManagerDefault.class);
 
@@ -87,7 +101,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
      * to allow transient objects to be reattached; can instead provide a
      * {@link PojoRecreator} implementation that is injected into the Adapter Manager.
      * 
-     * @see http://www.datanucleus.org/servlet/forum/viewthread_thread,7238_lastpage,yes#35976
+     * @see <a href="http://www.datanucleus.org/servlet/forum/viewthread_thread,7238_lastpage,yes#35976">this thread</a>
      */
     public AdapterManagerDefault(PojoRecreator pojoRecreator) {
         this.pojoRecreator = pojoRecreator;
@@ -292,12 +306,12 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
 
     @Override
     public ObjectAdapter adapterFor(final TypedOid typedOid) {
-        return adapterFor(typedOid, ConcurrencyChecking.NO_CHECK);
+        return adapterFor(typedOid, AdapterManager.ConcurrencyChecking.NO_CHECK);
     }
 
 
     @Override
-    public ObjectAdapter adapterFor(final TypedOid typedOid, final ConcurrencyChecking concurrencyChecking) {
+    public ObjectAdapter adapterFor(final TypedOid typedOid, final AdapterManager.ConcurrencyChecking concurrencyChecking) {
 
         // attempt to locate adapter for the Oid
         ObjectAdapter adapter = getAdapterFor(typedOid);
@@ -327,7 +341,7 @@ public class AdapterManagerDefault implements AdapterManagerSpi {
                        otherVersion != null && 
                        thisVersion.different(otherVersion)) {
                         
-                        if(isConcurrencyCheckingGloballyEnabled() && ConcurrencyChecking.isCurrentlyEnabled()) {
+                        if(isConcurrencyCheckingGloballyEnabled() && AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
                             LOG.info("concurrency conflict detected on " + recreatedOid + " (" + otherVersion + ")");
                             final String currentUser = getAuthenticationSession().getUserName();
                             throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);
