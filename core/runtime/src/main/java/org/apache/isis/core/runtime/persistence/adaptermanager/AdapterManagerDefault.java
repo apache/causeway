@@ -55,7 +55,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.persistence.PojoRecreationException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.AdapterLifecycleTransitioner;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.RecreatedPojoRemapper;
@@ -79,7 +78,6 @@ import static org.hamcrest.CoreMatchers.*;
  */
 public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAdapter>,
         RecreatedPojoRemapper,
-        AdapterLifecycleTransitioner,
         SessionScopedComponent,
         DebuggableWithTitle,
         Resettable {
@@ -464,7 +462,6 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      * 
      * @param hintRootOid - allow a different persistent root oid to be provided.
      */
-    @Override
     public void remapAsPersistent(final ObjectAdapter adapter, RootOid hintRootOid) {
         
         final ObjectAdapter rootAdapter = adapter.getAggregateRoot();  // REVIEW: think this is redundant; would seem this method is only ever called for roots anyway.

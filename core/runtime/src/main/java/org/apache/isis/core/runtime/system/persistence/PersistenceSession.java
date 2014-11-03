@@ -71,7 +71,7 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.*;
 
-public class PersistenceSession implements Persistor, EnlistedObjectDirtying, ToPersistObjectSet, RecreatedPojoRemapper, AdapterLifecycleTransitioner, SessionScopedComponent, DebuggableWithTitle {
+public class PersistenceSession implements Persistor, EnlistedObjectDirtying, ToPersistObjectSet, RecreatedPojoRemapper, SessionScopedComponent, DebuggableWithTitle {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
@@ -918,12 +918,10 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     // AdapterLifecycleTransitioner
     // ///////////////////////////////////////////////////////////////////////////
 
-    @Override
     public void remapAsPersistent(ObjectAdapter adapter, RootOid hintRootOid) {
         adapterManager.remapAsPersistent(adapter, hintRootOid);
     }
 
-    @Override
     public void removeAdapter(ObjectAdapter adapter) {
         adapterManager.removeAdapter(adapter);
     }

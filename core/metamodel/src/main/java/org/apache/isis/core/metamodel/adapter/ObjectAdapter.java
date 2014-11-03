@@ -98,7 +98,6 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
      * only <tt>PojoAdapterX</tt> provides support for this; the regular
      * <tt>PojoAdapter</tt> does not currently.
      * 
-     * @param adapter
      * @return
      */
     Instance getInstance(Specification specification);
