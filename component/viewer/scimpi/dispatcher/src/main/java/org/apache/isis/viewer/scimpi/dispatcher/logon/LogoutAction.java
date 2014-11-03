@@ -35,7 +35,6 @@ public class LogoutAction implements Action {
         if (context.isUserAuthenticated()) {
             final AuthenticationSession session = context.getSession();
             if (session != null) {
-                IsisContext.getUpdateNotifier().clear();
                 UserManager.logoffUser(session);
             }
             context.endHttpSession();

@@ -204,7 +204,6 @@ public class IsisTransaction implements TransactionScopedComponent {
     private final List<PersistenceCommand> commands = Lists.newArrayList();
     private final IsisTransactionManager transactionManager;
     private final org.apache.isis.core.commons.authentication.MessageBroker messageBroker;
-    private final UpdateNotifier updateNotifier;
 
     private final ServicesInjector servicesInjector;
 
@@ -238,20 +237,17 @@ public class IsisTransaction implements TransactionScopedComponent {
 
 
     public IsisTransaction(
-            final IsisTransactionManager transactionManager, 
-            final org.apache.isis.core.commons.authentication.MessageBroker messageBroker, 
-            final UpdateNotifier updateNotifier, 
-            final TransactionalResource objectStore, 
+            final IsisTransactionManager transactionManager,
+            final org.apache.isis.core.commons.authentication.MessageBroker messageBroker,
+            final TransactionalResource objectStore,
             final ServicesInjector servicesInjector) {
         
         ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
         ensureThatArg(messageBroker, is(not(nullValue())), "message broker is required");
-        ensureThatArg(updateNotifier, is(not(nullValue())), "update notifier is required");
         ensureThatArg(servicesInjector, is(not(nullValue())), "services injector is required");
 
         this.transactionManager = transactionManager;
         this.messageBroker = messageBroker;
-        this.updateNotifier = updateNotifier;
         this.servicesInjector = servicesInjector;
         
         this.commandContext = servicesInjector.lookupService(CommandContext.class);
@@ -1045,16 +1041,6 @@ public class IsisTransaction implements TransactionScopedComponent {
     @Deprecated
     public MessageBroker getMessageBroker() {
         return (MessageBroker) messageBroker;
-    }
-
-    /**
-     * The {@link UpdateNotifier} for this transaction.
-     * 
-     * <p>
-     * Injected in constructor
-     */
-    public UpdateNotifier getUpdateNotifier() {
-        return updateNotifier;
     }
 
     public static class AdapterAndProperty {

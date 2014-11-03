@@ -117,13 +117,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
 
     
-    /**
-     * Convenience method returning the {@link UpdateNotifier} of the
-     * {@link #getTransaction() current transaction}.
-     */
-    protected UpdateNotifier getUpdateNotifier() {
-        return getTransaction().getUpdateNotifier();
-    }
 
     /**
      * Convenience method returning the {@link MessageBroker} of the
@@ -227,28 +220,23 @@ public class IsisTransactionManager implements SessionScopedComponent {
      */
     protected final IsisTransaction createTransaction() {
         org.apache.isis.core.commons.authentication.MessageBroker messageBroker = createMessageBroker();
-        UpdateNotifier updateNotifier = createUpdateNotifier();
-        return this.transaction = createTransaction(messageBroker, updateNotifier, transactionalResource);
+        return this.transaction = createTransaction(messageBroker, transactionalResource);
     }
 
 
     /**
-     * The provided {@link MessageBroker} and {@link UpdateNotifier} are
-     * obtained from the hook methods ( {@link #createMessageBroker()} and
-     * {@link #createUpdateNotifier()}).
-     * @param transactionalResource 
-     * 
+     * The provided {@link MessageBroker} is
+     * obtained from the {@link #createMessageBroker()} hook method.
+     * @param transactionalResource
+     *
      * @see #createMessageBroker()
-     * @see #createUpdateNotifier()
      */
     private IsisTransaction createTransaction(
-            final org.apache.isis.core.commons.authentication.MessageBroker messageBroker, 
-            final UpdateNotifier updateNotifier, 
+            final org.apache.isis.core.commons.authentication.MessageBroker messageBroker,
             final TransactionalResource transactionalResource) {
         ensureThatArg(messageBroker, is(not(nullValue())));
-        ensureThatArg(updateNotifier, is(not(nullValue())));
 
-        return new IsisTransaction(this, messageBroker, updateNotifier, transactionalResource, servicesInjector);
+        return new IsisTransaction(this, messageBroker, transactionalResource, servicesInjector);
     }
     
 
@@ -541,22 +529,12 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
     /**
      * Overridable hook, used in
-     * {@link #createTransaction(org.apache.isis.core.commons.authentication.MessageBroker, UpdateNotifier, org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource)}
+     * {@link #createTransaction(org.apache.isis.core.commons.authentication.MessageBroker, org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource)}
      * 
      * <p> Called when a new {@link IsisTransaction} is created.
      */
     protected org.apache.isis.core.commons.authentication.MessageBroker createMessageBroker() {
         return MessageBrokerDefault.acquire(getAuthenticationSession());
-    }
-
-    /**
-     * Overridable hook, used in
-     * {@link #createTransaction(org.apache.isis.core.commons.authentication.MessageBroker, UpdateNotifier, org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource)}
-     * 
-     * <p> Called when a new {@link IsisTransaction} is created.
-     */
-    protected UpdateNotifier createUpdateNotifier() {
-        return new UpdateNotifierDefault();
     }
 
     // ////////////////////////////////////////////////////////////////

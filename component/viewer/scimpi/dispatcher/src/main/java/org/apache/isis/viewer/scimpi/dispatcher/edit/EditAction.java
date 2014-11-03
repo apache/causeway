@@ -155,8 +155,6 @@ public class EditAction implements Action {
         } catch (final RuntimeException e) {
             IsisContext.getMessageBroker().getMessages();
             IsisContext.getMessageBroker().getWarnings();
-            IsisContext.getUpdateNotifier().clear();
-            IsisContext.getUpdateNotifier().clear();
             throw e;
         }
     }

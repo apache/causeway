@@ -156,8 +156,6 @@ public class ActionAction implements Action {
         } catch (final RuntimeException e) {
             getMessageBroker().getMessages();
             getMessageBroker().getWarnings();
-            IsisContext.getUpdateNotifier().clear();
-            IsisContext.getUpdateNotifier().clear();
             throw e;
         }
     }

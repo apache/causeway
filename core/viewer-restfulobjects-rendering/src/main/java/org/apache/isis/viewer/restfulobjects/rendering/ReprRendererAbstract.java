@@ -20,20 +20,17 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 
 import java.util.List;
 import java.util.Map;
-
 import javax.ws.rs.core.MediaType;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.transaction.UpdateNotifier;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
-
-import com.google.common.collect.Maps;
 
 public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>, T> implements ReprRenderer<R, T> {
 
@@ -163,13 +160,20 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
      * mutate state.
      */
     protected final void addExtensionsIsisProprietaryChangedObjects() {
-        final UpdateNotifier updateNotifier = getUpdateNotifier();
 
-        addToExtensions("changed", updateNotifier.getChangedObjects());
-        addToExtensions("disposed", updateNotifier.getDisposedObjects());
+        // TODO: have removed UpdateNotifier, plan is to re-introduce using the IsisTransaction enlisted objects
+        // (which would also allow newly-created objects to be shown)
+        final List<ObjectAdapter> changedObjects = Lists.newArrayList(); // updateNotifier.getChangedObjects();
+        final List<ObjectAdapter> disposedObjects = Lists.newArrayList(); // updateNotifier.getDisposedObjects();
+
+        addToExtensions("changed", changedObjects);
+        addToExtensions("disposed", disposedObjects);
     }
 
     private void addToExtensions(final String key, final List<ObjectAdapter> adapters) {
+        if(adapters == null || adapters.isEmpty()) {
+            return;
+        }
         final JsonRepresentation adapterList = JsonRepresentation.newArray();
         getExtensions().mapPut(key, adapterList);
         for (final ObjectAdapter adapter : adapters) {
@@ -179,10 +183,6 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
 
     protected List<ObjectAdapter> getServiceAdapters() {
         return IsisContext.getPersistenceSession().getServices();
-    }
-
-    protected UpdateNotifier getUpdateNotifier() {
-        return IsisContext.getCurrentTransaction().getUpdateNotifier();
     }
 
 }

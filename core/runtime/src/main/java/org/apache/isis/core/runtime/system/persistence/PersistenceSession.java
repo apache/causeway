@@ -788,7 +788,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
     public void objectChanged(final ObjectAdapter adapter) {
 
         if (adapter.isTransient() || (adapter.isParented() && adapter.getAggregateRoot().isTransient())) {
-            addObjectChangedForPresentationLayer(adapter);
             return;
         }
 
@@ -805,19 +804,9 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
             }
 
             addObjectChangedForPersistenceLayer(adapter);
-            addObjectChangedForPresentationLayer(adapter);
-        }
-        if (adapter.respondToChangesInPersistentObjects() || adapter.isTransient()) {
-            addObjectChangedForPresentationLayer(adapter);
         }
     }
 
-    private void addObjectChangedForPresentationLayer(final ObjectAdapter adapter) {
-        if(LOG.isDebugEnabled()) {
-            LOG.debug("object change to update presentation layer " + adapter.getOid());
-        }
-        getUpdateNotifier().addChangedObject(adapter);
-    }
 
     private void addObjectChangedForPersistenceLayer(final ObjectAdapter adapter) {
         if(LOG.isDebugEnabled()) {
@@ -847,7 +836,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
                 // should we do something here?
             }
         });
-        getUpdateNotifier().addChangedObject(adapter);
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -1077,10 +1065,6 @@ public class PersistenceSession implements Persistor, EnlistedObjectDirtying, To
         return objectStore;
     }
 
-
-    private UpdateNotifier getUpdateNotifier() {
-        return getTransactionManager().getTransaction().getUpdateNotifier();
-    }
 
     /**
      * The configured {@link ObjectAdapterFactory}.

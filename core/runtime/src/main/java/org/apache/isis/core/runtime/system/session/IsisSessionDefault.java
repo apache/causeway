@@ -309,7 +309,6 @@ public class IsisSessionDefault implements IsisSession {
 
         debug(debug, getPersistenceSession());
         if (getCurrentTransaction() != null) {
-            debug(debug, getCurrentTransaction().getUpdateNotifier());
             debug(debug, getCurrentTransaction().getMessageBroker());
         }
         debugSnapshot = debug.toString();
@@ -332,10 +331,6 @@ public class IsisSessionDefault implements IsisSession {
         asString.append("authenticationSession", getAuthenticationSession());
         asString.append("persistenceSession", getPersistenceSession());
         asString.append("transaction", getCurrentTransaction());
-        if (getCurrentTransaction() != null) {
-            asString.append("messageBroker", getCurrentTransaction().getMessageBroker());
-            asString.append("updateNotifier", getCurrentTransaction().getUpdateNotifier());
-        }
     }
 
     @Override
@@ -343,10 +338,6 @@ public class IsisSessionDefault implements IsisSession {
         debug.appendln("authenticationSession", getAuthenticationSession());
         debug.appendln("persistenceSession", getPersistenceSession());
         debug.appendln("transaction", getCurrentTransaction());
-        if (getCurrentTransaction() != null) {
-            debug.appendln("messageBroker", getCurrentTransaction().getMessageBroker());
-            debug.appendln("updateNotifier", getCurrentTransaction().getUpdateNotifier());
-        }
     }
 
     // /////////////////////////////////////////////////////

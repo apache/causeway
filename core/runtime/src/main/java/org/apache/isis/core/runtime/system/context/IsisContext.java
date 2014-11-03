@@ -42,7 +42,6 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.MessageBroker;
-import org.apache.isis.core.runtime.system.transaction.UpdateNotifier;
 
 /**
  * Provides singleton <i>access to</i> the current (session scoped)
@@ -466,14 +465,6 @@ public abstract class IsisContext implements DebuggableWithTitle {
      */
     public static MessageBroker getMessageBroker() {
         return (MessageBroker) getCurrentTransaction().getMessageBroker();
-    }
-
-    /**
-     * Convenience method, returning the {@link UpdateNotifier} of the
-     * {@link #getCurrentTransaction() current transaction}.
-     */
-    public static UpdateNotifier getUpdateNotifier() {
-        return getCurrentTransaction().getUpdateNotifier();
     }
 
     // ///////////////////////////////////////////////////////////

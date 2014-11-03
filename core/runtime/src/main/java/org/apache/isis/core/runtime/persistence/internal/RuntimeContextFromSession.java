@@ -51,7 +51,6 @@ import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.MessageBroker;
-import org.apache.isis.core.runtime.system.transaction.UpdateNotifier;
 
 /**
  * Provides services to the metamodel based on the currently running
@@ -167,7 +166,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
             @Override
             public void remove(final ObjectAdapter adapter) {
-                getUpdateNotifier().addDisposedObject(adapter);
                 getPersistenceSession().destroyObject(adapter);
             }
         };
@@ -397,10 +395,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
     private static AdapterManager getRuntimeAdapterManager() {
         return getPersistenceSession().getAdapterManager();
-    }
-
-    private static UpdateNotifier getUpdateNotifier() {
-        return IsisContext.getUpdateNotifier();
     }
 
     private static IsisTransactionManager getTransactionManager() {

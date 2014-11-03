@@ -279,11 +279,9 @@ public class Dispatcher {
         try {
             request.processNextTag();
             noteIfMessagesHaveNotBeenDisplay(context);
-            IsisContext.getUpdateNotifier().clear();
         } catch (final RuntimeException e) {
             IsisContext.getMessageBroker().getMessages();
             IsisContext.getMessageBroker().getWarnings();
-            IsisContext.getUpdateNotifier().clear();
             throw e;
         }
         final String page = request.popBuffer();

@@ -70,8 +70,6 @@ public class IsisTransactionTest {
     @Mock
     private MessageBroker mockMessageBroker;
     @Mock
-    private UpdateNotifier mockUpdateNotifier;
-    @Mock
     private CommandContext mockCommandContext;
     @Mock
     private CommandService mockCommandService;
@@ -225,7 +223,7 @@ public class IsisTransactionTest {
             will(returnValue("sven"));
         }});
         
-        transaction = new IsisTransaction(mockTransactionManager, mockMessageBroker, mockUpdateNotifier, mockObjectStore, mockServicesInjector);
+        transaction = new IsisTransaction(mockTransactionManager, mockMessageBroker, mockObjectStore, mockServicesInjector);
         
         transientAdapter1 = PojoAdapterBuilder.create().with(Persistence.TRANSIENT).withIdentifier("1").build();
         transientAdapter2 = PojoAdapterBuilder.create().with(Persistence.TRANSIENT).withIdentifier("2").build();
