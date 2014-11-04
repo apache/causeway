@@ -88,7 +88,9 @@ public class MessageBroker implements Serializable, DebuggableWithTitle {
     //endregion
 
     public String getApplicationError() {
-        return applicationError;
+        final String error = applicationError;
+        setApplicationError(null);
+        return error;
     }
 
     public void setApplicationError(String applicationError) {
