@@ -28,6 +28,10 @@ div.entityHeaderPanel .iconAndTitle{
 	width: 100%;
 }
 
+div.entityHeaderPanel .iconAndTitleLabel {
+    float: left;
+}
+
 div.entityHeaderPanel .entityActions .cssMenuPanel .cssMenuItems:first-child {
     float: left;
     margin-top: 3px;
