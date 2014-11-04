@@ -90,8 +90,8 @@ $(function() {
 
 
     $('body').keydown(function(e) {
-        // ctrl+]
-        if(e.which === 221 && e.ctrlKey) {
+        // alt+]
+        if(e.which === 221 && e.altKey) {
             $('.copyLink').click();
         }
     });
