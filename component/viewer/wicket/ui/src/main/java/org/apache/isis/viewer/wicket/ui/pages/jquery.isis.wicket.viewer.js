@@ -27,7 +27,8 @@ $(function() {
     window.Isis = {
         Topic: {
             OPEN_IN_NEW_TAB: 'openInNewTab'
-        }
+        },
+        copyModalShown: false
     };
 
     var isisVeilTimeoutId;
@@ -88,11 +89,19 @@ $(function() {
             }); 
         });
 
-
+    /**
+     * Show/hide the CopyLink modal window with alt+]
+     */
     $('body').keydown(function(e) {
-        // alt+]
-        if(e.which === 221 && e.altKey) {
+        var $copyModal = $('.copyModal');
+
+        if(!Isis.copyModalShown && e.which === 221 && e.altKey) {
+            Isis.copyModalShown = true;
             $('.copyLink').click();
+        } else {
+            $copyModal.modal('hide');
+            $('.modal-backdrop').remove();
+            Isis.copyModalShown = false;
         }
     });
 });
