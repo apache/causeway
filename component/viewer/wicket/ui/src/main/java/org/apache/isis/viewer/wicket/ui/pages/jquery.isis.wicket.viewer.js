@@ -111,10 +111,10 @@ $(function() {
      */
     $('.entityIconTitleAndCopylink').hover(
         function() {
-            $('.copyLink').css({opacity: 1});
+            $('.copyLink').css({visibility: 'visible'});
         },
         function() {
-            $('.copyLink').css({opacity: 0});
+            $('.copyLink').css({visibility: 'hidden'});
         }
     );
 });

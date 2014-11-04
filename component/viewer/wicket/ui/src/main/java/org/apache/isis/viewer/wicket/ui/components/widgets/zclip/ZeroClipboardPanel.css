@@ -26,5 +26,5 @@
 }
 
 .copyLink {
-    opacity: 0;
+    visibility: hidden;
 }
