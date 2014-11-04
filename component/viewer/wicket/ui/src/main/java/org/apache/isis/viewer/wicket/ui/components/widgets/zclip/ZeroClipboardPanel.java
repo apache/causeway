@@ -22,6 +22,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -37,6 +38,7 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.Links;
 
 public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
@@ -70,6 +72,13 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
         EntityModel.RenderingHint renderingHint = model.getRenderingHint();
         EntityModel.Mode mode = model.getMode();
         setVisible(renderingHint == EntityModel.RenderingHint.REGULAR && mode == EntityModel.Mode.VIEW);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+
+        PanelUtil.renderHead(response, ZeroClipboardPanel.class);
     }
 
     private AjaxLink<ObjectAdapter> createLink(String linkId) {
@@ -175,6 +184,4 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
         final PageClassRegistryAccessor pcra = (PageClassRegistryAccessor) getApplication();
         return pcra.getPageClassRegistry();
     }
-
-    
 }

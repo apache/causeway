@@ -24,3 +24,7 @@
 .zeroClipboardPanel a:hover {
     text-decoration: none;
 }
+
+.copyLink {
+    opacity: 0;
+}

@@ -104,6 +104,18 @@ $(function() {
             Isis.copyModalShown = false;
         }
     });
+
+    /**
+     * Show/Hide the copy link only when hovering the entity icon and title
+     */
+    $('.entityIconTitleAndCopylink').hover(
+        function() {
+            $('.copyLink').css({opacity: 1});
+        },
+        function() {
+            $('.copyLink').css({opacity: 0});
+        }
+    );
 });
 
 /**
