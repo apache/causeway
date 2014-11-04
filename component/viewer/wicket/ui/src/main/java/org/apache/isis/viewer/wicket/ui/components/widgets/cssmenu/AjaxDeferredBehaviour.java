@@ -39,7 +39,7 @@ public abstract class AjaxDeferredBehaviour extends AbstractAjaxBehavior {
                 final RequestCycle requestCycle = deferredBehaviour.getComponent().getRequestCycle();
                 final UrlRenderer urlRenderer = requestCycle.getUrlRenderer();
                 String fullUrl = urlRenderer.renderFullUrl(parsedUrl);
-                return "Wicket.Event.publish(Isis.Topic.OPEN_IN_NEW_TAB, '" + fullUrl + "');";
+                return "function(){Wicket.Event.publish(Isis.Topic.OPEN_IN_NEW_TAB, '" + fullUrl + "');}";
             }
         },
         SAME_WINDOW {
