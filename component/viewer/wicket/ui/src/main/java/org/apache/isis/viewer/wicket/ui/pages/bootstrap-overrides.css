@@ -99,8 +99,7 @@ div.label-top label.control-label {
 }
 
 div.label-none label.control-label {
-    padding-left: 10px;
-    visibility: hidden;
+    display: none;
 }
 
 div.label-left .scalarValueWrapper {
