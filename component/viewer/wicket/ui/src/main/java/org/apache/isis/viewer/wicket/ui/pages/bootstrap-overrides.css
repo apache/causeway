@@ -96,6 +96,7 @@ div.label-left label.control-label {
 
 div.label-top label.control-label {
     padding-left: 10px;
+    padding-bottom: 4px;
 }
 
 div.label-none label.control-label {
