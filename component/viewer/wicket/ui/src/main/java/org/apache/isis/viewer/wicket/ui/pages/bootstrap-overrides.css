@@ -139,3 +139,13 @@ div.label-left .choicesPlaceholder {
     vertical-align: middle;
 }
 /* Labels on the left/top/none END */
+
+
+.form-horizontal.actionParametersForm .form-group {
+    margin-left: -5px;
+}
+
+.form-horizontal.inputForm .form-group {
+    margin-left: -5px;
+    margin-right: -25px;
+}
