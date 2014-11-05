@@ -116,6 +116,11 @@ div.label-none .scalarValueWrapper {
     padding-right: 20px;
 }
 
+.modal-body div.label-top .scalarValueWrapper,
+.modal-body div.label-none .scalarValueWrapper {
+    padding-right: 14px;
+}
+
 div.label-left .scalarValueWrapper .form-control {
     width: 100%;
 }
@@ -148,4 +153,8 @@ div.label-left .choicesPlaceholder {
 .form-horizontal.inputForm .form-group {
     margin-left: -5px;
     margin-right: -25px;
+}
+
+.modal-body textarea {
+    resize: none;
 }
