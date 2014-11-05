@@ -16,11 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-.entityPropertiesPanel fieldset {
-	margin: 0px 0px 10px 0px;
-	padding:10px 10px 0px 10px;
-	border-radius: 4px;
-}
-
-.entityPropertiesPanel fieldset legend {
+.entityPropertiesPanel .property {
+	padding-top: 5px;
+	padding-bottom: 5px;
 }

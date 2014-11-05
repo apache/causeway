@@ -58,12 +58,6 @@
     border: none;
 }
 
-/** added here because looks lke EntityPropertiesPanel.css is currently excluded ...? */
-.entityPropertiesPanel .property {
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-
 .pagination {
     margin: 0;
 }
@@ -82,7 +76,12 @@ th > a > div > strong {
     float: left;
 }
 
-/* Labels on the left START */
+/* Labels on the left/top/none START */
+
+.form-group {
+    margin-bottom: 0;
+}
+
 div.label-left.form-group {
     width: 100%;
 }
@@ -139,4 +138,4 @@ div.label-left .choicesPlaceholder {
     vertical-align: -webkit-baseline-middle;
     vertical-align: middle;
 }
-/* Labels on the right END */
+/* Labels on the left/top/none END */
