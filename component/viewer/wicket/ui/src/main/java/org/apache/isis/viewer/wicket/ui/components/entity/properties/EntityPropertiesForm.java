@@ -447,6 +447,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
                 });
             }
         };
+        editButton.add(new Label("editLabel", editButton.getModel()));
         markupContainer.add(editButton);
 
 
