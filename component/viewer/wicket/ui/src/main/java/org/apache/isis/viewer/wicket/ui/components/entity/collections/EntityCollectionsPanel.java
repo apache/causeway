@@ -21,8 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.entity.collections;
 
 import java.util.List;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -98,8 +96,8 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
     }
 
     private void addCollectionToForm(final EntityModel entityModel,
-			final ObjectAssociation association,
-			final WebMarkupContainer collectionRvContainer) {
+            final ObjectAssociation association,
+            final WebMarkupContainer collectionRvContainer) {
 
         final CssClassFacet facet = association.getFacet(CssClassFacet.class);
         if(facet != null) {
@@ -108,39 +106,24 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
         final WebMarkupContainer fieldset = new WebMarkupContainer(ID_COLLECTION_GROUP);
         collectionRvContainer.add(fieldset);
 
-		final OneToManyAssociation otma = (OneToManyAssociation) association;
+        final OneToManyAssociation otma = (OneToManyAssociation) association;
 
-		final CollectionPanel collectionPanel = new CollectionPanel(ID_COLLECTION, entityModel, otma);
-		
-		labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, association.getName());
-		
+        final CollectionPanel collectionPanel = new CollectionPanel(ID_COLLECTION, entityModel, otma);
+
+        labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, association.getName());
+
         fieldset.add(labelComponent);
 
-		fieldset.addOrReplace(collectionPanel);
-	}
+        fieldset.addOrReplace(collectionPanel);
+    }
 
     private List<ObjectAssociation> visibleCollections(final ObjectAdapter adapter, final ObjectSpecification noSpec) {
         return noSpec.getAssociations(Contributed.INCLUDED, visibleCollectionsFilter(adapter));
     }
 
     @SuppressWarnings("unchecked")
-	private Filter<ObjectAssociation> visibleCollectionsFilter(final ObjectAdapter adapter) {
+    private Filter<ObjectAssociation> visibleCollectionsFilter(final ObjectAdapter adapter) {
         return Filters.and(ObjectAssociation.Filters.COLLECTIONS, ObjectAssociation.Filters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.PARENTED_TABLES));
-    }
-
-    private void requestRepaintPanel(final AjaxRequestTarget target) {
-        if (target != null) {
-            target.add(this);
-        }
-    }
-
-    private EntityModel getEntityModel() {
-        return getModel();
-    }
-
-    void toViewMode(final AjaxRequestTarget target) {
-        getEntityModel().toViewMode();
-        requestRepaintPanel(target);
     }
 
 }
