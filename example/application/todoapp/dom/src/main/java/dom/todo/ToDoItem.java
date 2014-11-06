@@ -135,7 +135,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     @javax.jdo.annotations.Column(allowsNull="false", length=100)
     @PropertyInteraction()
     @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
-    @LabelAt(LabelAt.Position.TOP)
     public String getDescription() {
         return description;
     }
@@ -255,7 +254,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     @javax.jdo.annotations.Column(allowsNull="true")
     @Disabled(reason="Use action to update both category and subcategory")
-    @LabelAt(LabelAt.Position.NONE)
     public Subcategory getSubcategory() {
         return subcategory;
     }
