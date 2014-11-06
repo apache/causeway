@@ -22,11 +22,15 @@
             "General": {
                 "members": {
                     "description": {
-                        "typicalLength": { "value": 50 }
+                        "typicalLength": { "value": 50 },
+                        "labelAt": { "value": "TOP" }
                     },
                     "category": {
+                        "named": { "value": "Category/subcategory" },
+                        "labelAt": { "value": "TOP" }
                     },
                     "subcategory": {
+                        "labelAt": { "value": "NONE" },
                         "actions": {
                             "updateCategory": {
                                 "named": {
@@ -119,7 +123,7 @@
                         "hidden": {
                             "where": "ALL_TABLES"
                         },
-                        "labelAt": { "value": "LEFT" }
+                        "labelAt": { "value": "TOP" }
                     },
                     "attachment": {
                         "hidden": {
