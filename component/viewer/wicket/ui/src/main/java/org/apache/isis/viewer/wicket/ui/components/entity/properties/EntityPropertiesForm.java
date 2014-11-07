@@ -40,6 +40,8 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.Response;
+import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
@@ -277,6 +279,41 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         protected void onError(AjaxRequestTarget target, Form<?> form) {
             super.onError(target, form);
             toEditMode(target);
+        }
+
+        /**
+         * Render the 'type' attribute even for invisible buttons to avoid
+         * <a href="https://github.com/twbs/bootlint/wiki/W007">Bootlint W007</a>
+         *
+         * @param tag The component tag to render
+         * @param response The response to write to
+         */
+        // TODO mgrigorov Move this to Wicket Bootstrap project
+        @Override
+        protected void renderPlaceholderTag(ComponentTag tag, Response response) {
+            String ns = Strings.isEmpty(tag.getNamespace()) ? null : tag.getNamespace() + ':';
+
+            response.write("<");
+            if (ns != null)
+            {
+                response.write(ns);
+            }
+            response.write(tag.getName());
+            response.write(" id=\"");
+            response.write(getAjaxRegionMarkupId());
+
+            String type = tag.getAttribute("type");
+            if (!Strings.isEmpty(type)) {
+                response.write("\" type=\""+type);
+            }
+
+            response.write("\" style=\"display:none\"></");
+            if (ns != null)
+            {
+                response.write(ns);
+            }
+            response.write(tag.getName());
+            response.write(">");
         }
     }
 
