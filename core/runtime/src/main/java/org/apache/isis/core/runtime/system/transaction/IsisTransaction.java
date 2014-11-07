@@ -106,6 +106,19 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
     };
 
+    private static class Placeholder {
+        private static Placeholder NEW = new Placeholder("[NEW]");
+        private static Placeholder DELETED = new Placeholder("[DELETED]");
+        private final String str;
+        public Placeholder(String str) {
+            this.str = str;
+        }
+        @Override
+        public String toString() {
+            return str;
+        }
+    }
+
     public static enum State {
         /**
          * Started, still in progress.
@@ -1195,6 +1208,9 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
 
         public boolean differ() {
+            if(getPre() == Placeholder.NEW || getPost() == Placeholder.DELETED) {
+                return true;
+            }
             return !Objects.equal(getPre(), getPost());
         }
     }
@@ -1226,7 +1242,7 @@ public class IsisTransaction implements TransactionScopedComponent {
             if(property.isNotPersisted()) {
                 continue;
             }
-            PreAndPostValues papv = PreAndPostValues.pre("[NEW]");
+            PreAndPostValues papv = PreAndPostValues.pre(Placeholder.NEW);
             changedObjectProperties.put(aap, papv);
         }
     }
@@ -1309,7 +1325,7 @@ public class IsisTransaction implements TransactionScopedComponent {
             if(adapter.isDestroyed()) {
                 // don't touch the object!!!
                 // JDO, for example, will complain otherwise...
-                papv.setPost("[DELETED]");
+                papv.setPost(Placeholder.DELETED);
             } else {
                 papv.setPost(aap.getPropertyValue());
             }
