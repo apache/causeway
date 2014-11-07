@@ -24,12 +24,11 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
 /**
- * {@link FeedbackPanel} designed for forms; filters out any
+ * {@link NotificationPanel} designed for forms; filters out any
  * {@link FeedbackMessage}s from {@link FormComponent}s (the idea being that
- * they will have their own {@link FeedbackPanel}s.
+ * they will have their own {@link NotificationPanel}s.
  */
 public class FormFeedbackPanel extends NotificationPanel {
     private static final long serialVersionUID = 1L;

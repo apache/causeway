@@ -36,7 +36,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
@@ -107,7 +106,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
     private Button okButton;
     private Button cancelButton;
 
-    private FeedbackPanel feedback;
+    private NotificationPanel feedback;
     
     private boolean renderedFirstField;
 
