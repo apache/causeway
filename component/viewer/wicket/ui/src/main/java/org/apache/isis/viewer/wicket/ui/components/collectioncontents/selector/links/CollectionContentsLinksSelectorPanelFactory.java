@@ -29,12 +29,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 
 /**
  * {@link ComponentFactory} for {@link CollectionContentsLinksSelectorPanel}.
- * 
- * <p>
- * Either this class or {@link CollectionContentsDropDownSelectorPanelFactory} should be
- * registered, but not both.
  */
-// TODO mgrigorov: there is no more CollectionContentsDropDownSelectorPanelFactory. Fix the javadoc
 public class CollectionContentsLinksSelectorPanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
