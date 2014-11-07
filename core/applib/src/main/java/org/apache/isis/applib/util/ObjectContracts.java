@@ -16,13 +16,11 @@
  */
 package org.apache.isis.applib.util;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Objects.ToStringHelper;
@@ -73,6 +71,15 @@ public class ObjectContracts {
     }
 
     public static boolean equals(Object p, Object q, String propertyNames) {
+        if(p==null && q==null) {
+            return true;
+        }
+        if(p==null || q==null) {
+            return false;
+        }
+        if(p.getClass() != q.getClass()) {
+            return false;
+        }
         for (final Clause clause : iterable(propertyNames)) {
             final Object pValue = clause.getValueOf(p);
             final Object qValue = clause.getValueOf(q);
