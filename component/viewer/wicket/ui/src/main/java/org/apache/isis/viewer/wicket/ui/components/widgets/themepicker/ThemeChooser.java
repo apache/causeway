@@ -56,7 +56,7 @@ public class ThemeChooser extends Panel {
     /**
      * The name of the cookie that stores the last user selection
      */
-    private static final String ISIS_THEME_COOKIE_NAME = "isis.themeChooser.theme";
+    private static final String ISIS_THEME_COOKIE_NAME = "isis.viewer.wicket.themes.selected";
 
     /**
      * Constructor
