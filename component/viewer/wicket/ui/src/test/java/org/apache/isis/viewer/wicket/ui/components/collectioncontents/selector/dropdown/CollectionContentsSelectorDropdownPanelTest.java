@@ -16,25 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown;
 
 import java.util.Arrays;
 import java.util.List;
-
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 
-public class CollectionContentsLinksSelectorPanelTest {
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+public class CollectionContentsSelectorDropdownPanelTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
@@ -60,7 +58,7 @@ public class CollectionContentsLinksSelectorPanelTest {
                         one,
                         ajaxTableComponentFactory, 
                         two);
-        List<ComponentFactory> orderAjaxTableToEnd = CollectionContentsLinksSelectorPanel.orderAjaxTableToEnd(componentFactories);
+        List<ComponentFactory> orderAjaxTableToEnd = CollectionContentsSelectorDropdownPanel.orderAjaxTableToEnd(componentFactories);
         assertThat(orderAjaxTableToEnd.get(0), is(one));
         assertThat(orderAjaxTableToEnd.get(1), is(two));
         assertThat(orderAjaxTableToEnd.get(2), is(ajaxTableComponentFactory));

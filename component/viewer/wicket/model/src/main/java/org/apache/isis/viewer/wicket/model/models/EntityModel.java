@@ -132,12 +132,10 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     private final Map<PropertyMemento, ScalarModel> propertyScalarModels = Maps.newHashMap();
     private MemberGroupLayoutHint memberGroupLayoutHint;
 
-
     /**
      * Toggled by 'entityDetailsButton'.
      */
     private boolean entityDetailsVisible;
-
 
     /**
      * {@link ConcurrencyException}, if any, that might have occurred previously
@@ -479,8 +477,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
             return null;
         }
         String hintKey = hintKey(component, key);
-        String value = hints.get(hintKey);
-        return value;
+        return hints.get(hintKey);
     }
     
     @Override

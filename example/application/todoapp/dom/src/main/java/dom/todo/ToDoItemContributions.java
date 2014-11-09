@@ -159,10 +159,9 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
     @NotContributed(As.ACTION)
-    @Programmatic
     public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
         final List<ToDoItem> similarToDoItems = allMatches(
-                new QueryDefault<ToDoItem>(ToDoItem.class, 
+                new QueryDefault<ToDoItem>(ToDoItem.class,
                         "findByOwnedByAndCategory", 
                         "ownedBy", currentUserName(), 
                         "category", toDoItem.getCategory()));
