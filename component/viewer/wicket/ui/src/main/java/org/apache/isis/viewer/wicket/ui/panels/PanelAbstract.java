@@ -109,22 +109,22 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
 
     /**
      * Renders the corresponding CSS for this panel.
-     * 
+     *
      * <p>
-     * For most subclasses of {@link PanelAbstract} - specifically those that have their own {@link ComponentFactory}, 
+     * For most subclasses of {@link PanelAbstract} - specifically those that have their own {@link ComponentFactory},
      * it is additionally the responsibility (via {@link ComponentFactory#getCssResourceReference()}) of the factory
      * to declare the {@link CssResourceReference}(s) to be included.  These are then all bundled up into
      * a single unit, as part of the application bootstrapping (<tt>IsisWicketApplication#init</tt>).
-     * 
+     *
      * <p>
      * This is done because some browsers (we're looking at you, IE!) have a limit of only 31 CSS files.
-     * 
+     *
      * <p>
      * For subclasses that do not have a {@link ComponentFactory}, their CSS will simply be referenced standalone.
      */
     @Override
     public void renderHead(final IHeaderResponse response) {
-        // TODO: mgrigorov remove this stuff once happy no longer needed at all.
+        // TODO: mgrigorov remove this stuff once happy no longer needed at all, plus any CSS of panels that used to rely on this.
 //        PanelUtil.renderHead(response, this.getClass());
     }
 
