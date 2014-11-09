@@ -45,10 +45,11 @@ import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
-import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
 
 public final class EntityActionUtil {
-    
+
+    public static final String ID_ADDITIONAL_LINK = "additionalLink";
+
     private EntityActionUtil(){}
 
     private final static MemberOrderFacetComparator memberOrderFacetComparator = new MemberOrderFacetComparator(false);
@@ -83,7 +84,7 @@ public final class EntityActionUtil {
     
             @Override
             public LinkAndLabel apply(ObjectAction objectAction) {
-                return linkFactory.newLink(adapterMemento, objectAction, LinksSelectorPanelAbstract.ID_ADDITIONAL_LINK, actionPromptProvider);
+                return linkFactory.newLink(adapterMemento, objectAction, ID_ADDITIONAL_LINK, actionPromptProvider);
             }});
     }
 

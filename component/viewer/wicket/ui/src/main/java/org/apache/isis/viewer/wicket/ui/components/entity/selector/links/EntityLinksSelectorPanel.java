@@ -53,8 +53,6 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
-import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
@@ -62,10 +60,6 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
 /**
  * Provides a list of links for selecting other views that support
  * {@link ComponentType#ENTITY} with a backing {@link EntityModel}.
- * 
- * <p>
- * Most of the heavy lifting is factored out into the superclass,
- * {@link LinksSelectorPanelAbstract}.
  */
 public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel> implements UiHintPathSignificant {
 
@@ -390,7 +384,8 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel> impleme
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        PanelUtil.renderHead(response, LinksSelectorPanelAbstract.class);
+        // TODO: mgrigorov remove this stuff once happy no longer needed at all.
+        // PanelUtil.renderHead(response, LinksSelectorPanelAbstract.class);
     }
 
 

@@ -60,8 +60,6 @@ import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
-import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
@@ -70,10 +68,6 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
  * Provides a list of links for selecting other views that support
  * {@link ComponentType#COLLECTION_CONTENTS} with a backing
  * {@link EntityCollectionModel}.
- * 
- * <p>
- * Most of the heavy lifting is factored out into the superclass,
- * {@link LinksSelectorPanelAbstract}.
  */
 public class CollectionContentsLinksSelectorPanel
         extends PanelAbstract<EntityCollectionModel> implements UiHintPathSignificant,  CollectionCountProvider {
@@ -425,7 +419,8 @@ public class CollectionContentsLinksSelectorPanel
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        PanelUtil.renderHead(response, LinksSelectorPanelAbstract.class);
+        // TODO: mgrigorov remove this stuff once happy no longer needed at all.
+        // PanelUtil.renderHead(response, CollectionContentsLinksSelectorPanel.class);
     }
 
 

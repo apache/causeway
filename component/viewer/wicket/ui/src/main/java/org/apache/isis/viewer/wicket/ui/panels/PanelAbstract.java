@@ -124,6 +124,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
      */
     @Override
     public void renderHead(final IHeaderResponse response) {
+        // TODO: mgrigorov remove this stuff once happy no longer needed at all.
 //        PanelUtil.renderHead(response, this.getClass());
     }
 

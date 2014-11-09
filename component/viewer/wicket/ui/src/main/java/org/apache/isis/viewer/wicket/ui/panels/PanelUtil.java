@@ -19,13 +19,10 @@
 package org.apache.isis.viewer.wicket.ui.panels;
 
 import com.google.common.base.Strings;
-
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.resource.CssResourceReference;
-
-import org.apache.isis.viewer.wicket.ui.selector.links.LinksSelectorPanelAbstract;
 
 public final class PanelUtil {
 
@@ -33,9 +30,6 @@ public final class PanelUtil {
 
     /**
      * The contribution to the header performed implicitly by {@link PanelAbstract}.
-     * 
-     * <p>
-     * Factored out for reuse by {@link LinksSelectorPanelAbstract}.
      */
     public static void renderHead(final IHeaderResponse response, final Class<?> cls) {
         final CssResourceReference cssResourceReference = cssResourceReferenceFor(cls);
