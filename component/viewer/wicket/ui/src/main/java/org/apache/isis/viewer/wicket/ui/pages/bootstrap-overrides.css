@@ -158,3 +158,7 @@ div.label-left .choicesPlaceholder {
 .modal-body textarea {
     resize: none;
 }
+
+.entityCollectionsPanel .panel-heading {
+    padding-bottom: 15px;
+}

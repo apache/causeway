@@ -28,7 +28,6 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
@@ -48,20 +47,16 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
-import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
 
@@ -77,8 +72,6 @@ public class CollectionContentsLinksSelectorPanel
 
     private static final String INVISIBLE_CLASS = "link-selector-panel-invisible";
     private static final int MAX_NUM_UNDERLYING_VIEWS = 10;
-
-    private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
 
     private static final String ID_VIEWS = "views";
     private static final String ID_VIEW_LIST = "viewList";
@@ -114,33 +107,9 @@ public class CollectionContentsLinksSelectorPanel
     public void onInitialize() {
         super.onInitialize();
         ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactoryElseFailFast(getComponentType(), getModel());
-        addAdditionalLinks(getModel());
         addUnderlyingViews(underlyingIdPrefix, getModel(), componentFactory);
-        applyCssVisibility(additionalLinks, selectedComponent instanceof CollectionCountProvider);
     }
 
-
-    protected void addAdditionalLinks(final EntityCollectionModel model) {
-        if(!(model instanceof LinksProvider)) {
-            permanentlyHide(ID_ADDITIONAL_LINKS);
-            return;
-        }
-        LinksProvider linksProvider = (LinksProvider) model;
-        List<LinkAndLabel> links = linksProvider.getLinks();
-
-        addAdditionalLinks(this, links);
-    }
-
-    protected void addAdditionalLinks(MarkupContainer markupContainer, List<LinkAndLabel> links) {
-        if(links == null || links.isEmpty()) {
-            Components.permanentlyHide(markupContainer, ID_ADDITIONAL_LINKS);
-            return;
-        }
-        links = Lists.newArrayList(links); // copy, to serialize any lazy evaluation
-
-        additionalLinks = new AdditionalLinksPanel(ID_ADDITIONAL_LINKS, links);
-        markupContainer.addOrReplace(additionalLinks);
-    }
 
     private void addUnderlyingViews(final String underlyingIdPrefix, final EntityCollectionModel model, final ComponentFactory factory) {
         final List<ComponentFactory> componentFactories = findOtherComponentFactories(model, factory);
@@ -152,7 +121,7 @@ public class CollectionContentsLinksSelectorPanel
         // create all, hide the one not selected
         final Component[] underlyingViews = new Component[MAX_NUM_UNDERLYING_VIEWS];
         int i = 0;
-        final EntityCollectionModel emptyModel = dummyOf(model);
+        final EntityCollectionModel emptyModel = model.asDummy();
         for (ComponentFactory componentFactory : componentFactories) {
             final String underlyingId = underlyingIdPrefix + "-" + i;
 
@@ -209,7 +178,7 @@ public class CollectionContentsLinksSelectorPanel
                             CollectionContentsLinksSelectorPanel linksSelectorPanel = CollectionContentsLinksSelectorPanel.this;
                             linksSelectorPanel.setViewHintAndBroadcast(underlyingViewNum, target);
 
-                            final EntityCollectionModel dummyModel = dummyOf(model);
+                            final EntityCollectionModel dummyModel = model.asDummy();
                             for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
                                 final Component component = underlyingViews[i];
                                 if(component == null) {
@@ -423,21 +392,6 @@ public class CollectionContentsLinksSelectorPanel
         PanelUtil.renderHead(response, CollectionContentsLinksSelectorPanel.class);
     }
 
-
-
-
-
-
-
-    /**
-     * Ask for a dummy (empty) {@link Model} to pass into those components that are rendered but will be
-     * made invisible using CSS styling.
-     */
-    protected EntityCollectionModel dummyOf(EntityCollectionModel model) {
-        return model.asDummy();
-    }
-
-    
 
     static List<ComponentFactory> orderAjaxTableToEnd(List<ComponentFactory> componentFactories) {
         int ajaxTableIdx = findAjaxTable(componentFactories);

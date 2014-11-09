@@ -50,7 +50,6 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_COLLECTION = "collection";
     private static final String ID_FEEDBACK = "feedback";
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
 
@@ -77,7 +76,7 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
 
         addActionPromptModalWindow();
         
-        List<LinkAndLabel> entityActions = EntityActionUtil.entityActionsForAssociation(entityModel, otma, this, getDeploymentType());
+        List<LinkAndLabel> entityActions = EntityActionUtil.entityActionsForAssociation(entityModel, otma, this, getDeploymentType(), "additionalLink");
         collectionModel.addEntityActions(entityActions);
     }
 

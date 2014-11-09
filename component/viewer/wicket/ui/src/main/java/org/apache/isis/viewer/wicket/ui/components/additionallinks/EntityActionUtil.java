@@ -59,7 +59,17 @@ public final class EntityActionUtil {
             final ObjectAssociation association,
             final ActionPromptProvider actionPromptProvider,
             final DeploymentType deploymentType) {
-        
+
+        return entityActionsForAssociation(
+                entityModel, association, actionPromptProvider, deploymentType, ID_ADDITIONAL_LINK);
+    }
+
+    public static List<LinkAndLabel> entityActionsForAssociation(
+            final EntityModel entityModel,
+            final ObjectAssociation association,
+            final ActionPromptProvider actionPromptProvider,
+            final DeploymentType deploymentType,
+            final String linkId) {
         final List<ObjectAction> associatedActions = Lists.newArrayList();
 
         addActions(ActionType.USER, entityModel, association, associatedActions);
@@ -67,7 +77,7 @@ public final class EntityActionUtil {
             addActions(ActionType.EXPLORATION, entityModel, association, associatedActions);
             addActions(ActionType.PROTOTYPE, entityModel, association, associatedActions);
         }
-        
+
         Collections.sort(associatedActions, new Comparator<ObjectAction>() {
 
             @Override
@@ -75,16 +85,17 @@ public final class EntityActionUtil {
                 final MemberOrderFacet m1 = o1.getFacet(MemberOrderFacet.class);
                 final MemberOrderFacet m2 = o2.getFacet(MemberOrderFacet.class);
                 return memberOrderFacetComparator.compare(m1, m2);
-            }});
-        
+            }
+        });
+
         final ActionLinkFactory linkFactory = new EntityActionLinkFactory(entityModel);
-    
+
         final ObjectAdapterMemento adapterMemento = entityModel.getObjectAdapterMemento();
         return Lists.transform(associatedActions, new Function<ObjectAction, LinkAndLabel>(){
-    
+
             @Override
             public LinkAndLabel apply(ObjectAction objectAction) {
-                return linkFactory.newLink(adapterMemento, objectAction, ID_ADDITIONAL_LINK, actionPromptProvider);
+                return linkFactory.newLink(adapterMemento, objectAction, linkId, actionPromptProvider);
             }});
     }
 

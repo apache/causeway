@@ -23,9 +23,40 @@
             <div class="entityCollectionsPanel entityCollectionsComponentType">
                 <div wicket:id="collections" class="myBlockContainer">
                     <div wicket:id="collectionGroup" class="panel panel-default">
+
                         <div class="panel-heading">
                             <span wicket:id="collectionName" class="panel-title">[collection name]</span>
+                            <div class="pull-right">
+
+                                <!--
+                                <div class="btn-group">
+                                    <a href="#" class="btn btn-default btn-sm">## Lock</a>
+                                    <a href="#" class="btn btn-default btn-sm">## Delete</a>
+                                    <a href="#" class="btn btn-default btn-sm">## Move</a>
+                                </div>
+                                -->
+
+                                <div class="btn-group">
+                                    <div wicket:id="additionalLinks"></div>
+                                </div>
+
+                                <!--
+                                <div class="btn-group">
+                                    <ul xxwicket:id="viewList" class="dropdown-menu dropdown-menu-right" role="menu">
+                                        <li xxwicket:id="viewItem" class="viewItem">
+                                            <a href="#" xxwicket:id="viewLink">
+                                                <span xxwicket:id="viewItemIcon" class="ViewLinkItem"></span> <span xxwicket:id="viewItemTitle" class="ViewLinkItemTitle">[link title]</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                -->
+
+                            </div>
                         </div>
+
+
+
                         <div wicket:id="collection" class="collection panel-body">
                             [collection]
                         </div>
