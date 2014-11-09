@@ -58,7 +58,7 @@ public class CollectionContentsSelectorDropdownPanelTest {
                         one,
                         ajaxTableComponentFactory, 
                         two);
-        List<ComponentFactory> orderAjaxTableToEnd = CollectionContentsSelectorDropdownPanel.orderAjaxTableToEnd(componentFactories);
+        List<ComponentFactory> orderAjaxTableToEnd = CollectionContentsSelectorHelper.orderAjaxTableToEnd(componentFactories);
         assertThat(orderAjaxTableToEnd.get(0), is(one));
         assertThat(orderAjaxTableToEnd.get(1), is(two));
         assertThat(orderAjaxTableToEnd.get(2), is(ajaxTableComponentFactory));
