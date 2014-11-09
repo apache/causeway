@@ -16,6 +16,45 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+.linksSelectorPanel .viewLinks {
+    float:right;
+    display:block;
+}
+
+.linksSelectorPanel ul.dropdown-menu {
+    min-width: 0;
+}
+
+.linksSelectorPanel ul.dropdown-menu li.viewItem {
+    min-width: 0;
+}
+
+.linksSelectorPanel ul.viewList li.viewItem:first-child span {
+    border-radius:4px 0 0 4px;
+    -moz-border-radius:4px 0 0 4px;
+    -webkit-border-radius:4px 0 0 4px;
+}
+
+.linksSelectorPanel ul.viewList li.viewItem:last-child span {
+    border-radius:0 4px 4px 0;
+    -moz-border-radius:0 4px 4px 0;
+    -webkit-border-radius:0 4px 4px 0;
+}
+
+
+.linksSelectorPanel .link-selector-panel-invisible {
+    display:none;
+}
+
+.linksSelectorPanel .list-inline {
+    margin-left: 0;
+}
+
+.linksSelectorPanel .list-inline li {
+    padding-left: 0;
+}
+
+
 .collectionContentsLinksSelectorPanel select {
 	margin-bottom: 1em;
 }

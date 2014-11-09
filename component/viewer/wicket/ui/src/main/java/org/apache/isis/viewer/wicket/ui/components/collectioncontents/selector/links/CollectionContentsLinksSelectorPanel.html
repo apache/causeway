@@ -7,9 +7,9 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
          http://www.apache.org/licenses/LICENSE-2.0
-         
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -17,12 +17,31 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<html xmlns="http://www.w3.org/1999/xhtml"  
-      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
-      xml:lang="en"  
-      lang="en">
-    <body>
-        <wicket:extend>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:wicket="http://wicket.apache.org">
+<body>
+<wicket:panel>
+    <div class="linksSelectorPanel">
+        <div class="btn-group viewLinks" wicket:id="views">
+            <button type="button" class="btn btn-xs btn-info">
+                <span wicket:id="viewButtonIcon" class="ViewLinkItem"></span>
+                <span wicket:id="viewButtonTitle" class="ViewLinkItemTitle"></span>
+            </button>
+            <button type="button" class="btn btn-xs btn-info dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+            </button>
+            <ul wicket:id="viewList" class="dropdown-menu dropdown-menu-right" role="menu">
+                <li wicket:id="viewItem" class="viewItem">
+                    <a href="#" wicket:id="viewLink">
+                        <span wicket:id="viewItemIcon" class="ViewLinkItem"></span> <span wicket:id="viewItemTitle" class="ViewLinkItemTitle">[link title]</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <span wicket:id="additionalLinks"></span>
+
+        <div class="views">
             <div wicket:id="collectionContents-0" class="collectionContentsLinksSelectorPanel collectionContentsComponentType"></div>
             <div wicket:id="collectionContents-1" class="collectionContentsLinksSelectorPanel collectionContentsComponentType"></div>
             <div wicket:id="collectionContents-2" class="collectionContentsLinksSelectorPanel collectionContentsComponentType"></div>
@@ -33,7 +52,8 @@
             <div wicket:id="collectionContents-7" class="collectionContentsLinksSelectorPanel collectionContentsComponentType"></div>
             <div wicket:id="collectionContents-8" class="collectionContentsLinksSelectorPanel collectionContentsComponentType"></div>
             <div wicket:id="collectionContents-9" class="collectionContentsLinksSelectorPanel collectionContentsComponentType"></div>
-        </wicket:extend>
-    </body>
+        </div>
+    </div>
+</wicket:panel>
+</body>
 </html>
-
