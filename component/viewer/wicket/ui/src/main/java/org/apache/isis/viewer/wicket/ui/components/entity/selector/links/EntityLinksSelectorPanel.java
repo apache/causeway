@@ -53,6 +53,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
@@ -384,8 +385,7 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel> impleme
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        // TODO: mgrigorov remove this stuff once happy no longer needed at all.
-        // PanelUtil.renderHead(response, LinksSelectorPanelAbstract.class);
+        PanelUtil.renderHead(response, EntityLinksSelectorPanel.class);
     }
 
 

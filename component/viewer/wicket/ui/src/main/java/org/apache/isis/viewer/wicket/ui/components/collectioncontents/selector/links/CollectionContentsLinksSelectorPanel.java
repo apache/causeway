@@ -60,6 +60,7 @@ import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
@@ -419,8 +420,7 @@ public class CollectionContentsLinksSelectorPanel
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        // TODO: mgrigorov remove this stuff once happy no longer needed at all.
-        // PanelUtil.renderHead(response, CollectionContentsLinksSelectorPanel.class);
+        PanelUtil.renderHead(response, CollectionContentsLinksSelectorPanel.class);
     }
 
 
