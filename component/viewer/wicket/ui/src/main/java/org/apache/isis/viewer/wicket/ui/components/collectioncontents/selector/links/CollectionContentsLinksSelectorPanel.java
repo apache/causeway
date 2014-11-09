@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
-
 import java.util.ArrayList;
 import java.util.List;
 import com.google.common.base.Predicate;
@@ -29,31 +27,23 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.Render.Type;
-import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionCountProvider;
-import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.CollectionContentsSelectorDropdownPanel;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -73,16 +63,20 @@ public class CollectionContentsLinksSelectorPanel
     private static final String INVISIBLE_CLASS = "link-selector-panel-invisible";
     private static final int MAX_NUM_UNDERLYING_VIEWS = 10;
 
-    private static final String ID_VIEWS = "views";
-    private static final String ID_VIEW_LIST = "viewList";
-    private static final String ID_VIEW_LINK = "viewLink";
-    private static final String ID_VIEW_ITEM = "viewItem";
-    private static final String ID_VIEW_ITEM_TITLE = "viewItemTitle";
-    private static final String ID_VIEW_ITEM_ICON = "viewItemIcon";
+    private static final String ID_SELECTOR_DROPDOWN = "selectorDropdown";
+
+//    private static final String ID_VIEWS = "views";
+//    private static final String ID_VIEW_LIST = "viewList";
+//    private static final String ID_VIEW_LINK = "viewLink";
+//    private static final String ID_VIEW_ITEM = "viewItem";
+//    private static final String ID_VIEW_ITEM_TITLE = "viewItemTitle";
+//    private static final String ID_VIEW_ITEM_ICON = "viewItemIcon";
 
     private static final String UIHINT_VIEW = "view";
-    private static final String ID_VIEW_BUTTON_TITLE = "viewButtonTitle";
-    private static final String ID_VIEW_BUTTON_ICON = "viewButtonIcon";
+//    private static final String ID_VIEW_BUTTON_TITLE = "viewButtonTitle";
+//    private static final String ID_VIEW_BUTTON_ICON = "viewButtonIcon";
+
+    private final ComponentFactory componentFactory;
 
     private final ComponentType componentType;
     private final String underlyingIdPrefix;
@@ -90,13 +84,21 @@ public class CollectionContentsLinksSelectorPanel
     private ComponentFactory selectedComponentFactory;
     protected Component selectedComponent;
 
-    /**
-     * May be <tt>null</tt>, depending upon the model implementation.
-     */
-    protected WebMarkupContainer additionalLinks;
+//    /**
+//     * May be <tt>null</tt>, depending upon the model implementation.
+//     */
+//    protected WebMarkupContainer additionalLinks;
 
-    public CollectionContentsLinksSelectorPanel(final String id, final EntityCollectionModel model, final ComponentFactory factory) {
+    private Component[] underlyingViews;
+    private List<ComponentFactory> componentFactories;
+    private CollectionContentsSelectorDropdownPanel selectorDropdownPanel;
+
+    public CollectionContentsLinksSelectorPanel(
+            final String id,
+            final EntityCollectionModel model,
+            final ComponentFactory factory) {
         super(id, model);
+        componentFactory = factory;
         this.underlyingIdPrefix = ComponentType.COLLECTION_CONTENTS.toString();
         this.componentType = factory.getComponentType();
     }
@@ -107,19 +109,20 @@ public class CollectionContentsLinksSelectorPanel
     public void onInitialize() {
         super.onInitialize();
         ComponentFactory componentFactory = getComponentFactoryRegistry().findComponentFactoryElseFailFast(getComponentType(), getModel());
-        addUnderlyingViews(underlyingIdPrefix, getModel(), componentFactory);
+        addUnderlyingViews(componentFactory);
     }
 
 
-    private void addUnderlyingViews(final String underlyingIdPrefix, final EntityCollectionModel model, final ComponentFactory factory) {
-        final List<ComponentFactory> componentFactories = findOtherComponentFactories(model, factory);
+    private void addUnderlyingViews(final ComponentFactory factory) {
+        final EntityCollectionModel model = getModel();
+        componentFactories = findOtherComponentFactories(model, factory);
 
         final int selected = honourViewHintElseDefault(componentFactories, model);
 
         final CollectionContentsLinksSelectorPanel selectorPanel = this;
 
         // create all, hide the one not selected
-        final Component[] underlyingViews = new Component[MAX_NUM_UNDERLYING_VIEWS];
+        underlyingViews = new Component[MAX_NUM_UNDERLYING_VIEWS];
         int i = 0;
         final EntityCollectionModel emptyModel = model.asDummy();
         for (ComponentFactory componentFactory : componentFactories) {
@@ -139,124 +142,130 @@ public class CollectionContentsLinksSelectorPanel
 
         // selector
         if (componentFactories.size() <= 1) {
-            permanentlyHide(ID_VIEWS);
+            //permanentlyHide(ID_VIEWS);
+
+            permanentlyHide(ID_SELECTOR_DROPDOWN);
         } else {
             final Model<ComponentFactory> componentFactoryModel = new Model<>();
 
             selectorPanel.selectedComponentFactory = componentFactories.get(selected);
             componentFactoryModel.setObject(selectorPanel.selectedComponentFactory);
 
-            final WebMarkupContainer views = new WebMarkupContainer(ID_VIEWS);
-
-            final Label viewButtonTitle = new Label(ID_VIEW_BUTTON_TITLE, "Hidden");
-            views.addOrReplace(viewButtonTitle);
-
-            final Label viewButtonIcon = new Label(ID_VIEW_BUTTON_ICON, "");
-            views.addOrReplace(viewButtonIcon);
-
-            final WebMarkupContainer container = new WebMarkupContainer(ID_VIEW_LIST);
-
-            views.addOrReplace(container);
-            views.setOutputMarkupId(true);
+            selectorDropdownPanel = new CollectionContentsSelectorDropdownPanel(ID_SELECTOR_DROPDOWN, getModel(), componentFactory);
 
             this.setOutputMarkupId(true);
 
-            final ListView<ComponentFactory> listView = new ListView<ComponentFactory>(ID_VIEW_ITEM, componentFactories) {
+//            final WebMarkupContainer views = new WebMarkupContainer(ID_VIEWS);
+//
+//            final Label viewButtonTitle = new Label(ID_VIEW_BUTTON_TITLE, "Hidden");
+//            views.addOrReplace(viewButtonTitle);
+//
+//            final Label viewButtonIcon = new Label(ID_VIEW_BUTTON_ICON, "");
+//            views.addOrReplace(viewButtonIcon);
+//
+//            final WebMarkupContainer container = new WebMarkupContainer(ID_VIEW_LIST);
+//
+//            views.addOrReplace(container);
+//            views.setOutputMarkupId(true);
+//
+//            this.setOutputMarkupId(true);
 
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                protected void populateItem(ListItem<ComponentFactory> item) {
-
-                    final int underlyingViewNum = item.getIndex();
-
-                    final ComponentFactory componentFactory = item.getModelObject();
-                    final AbstractLink link = new AjaxLink<Void>(ID_VIEW_LINK) {
-                        private static final long serialVersionUID = 1L;
-                        @Override
-                        public void onClick(AjaxRequestTarget target) {
-                            CollectionContentsLinksSelectorPanel linksSelectorPanel = CollectionContentsLinksSelectorPanel.this;
-                            linksSelectorPanel.setViewHintAndBroadcast(underlyingViewNum, target);
-
-                            final EntityCollectionModel dummyModel = model.asDummy();
-                            for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
-                                final Component component = underlyingViews[i];
-                                if(component == null) {
-                                    continue;
-                                }
-                                final boolean isSelected = i == underlyingViewNum;
-                                applyCssVisibility(component, isSelected);
-                                component.setDefaultModel(isSelected? model: dummyModel);
-                            }
-
-                            selectorPanel.selectedComponentFactory = componentFactory;
-                            selectorPanel.selectedComponent = underlyingViews[underlyingViewNum];
-                            selectorPanel.onSelect(target);
-                            target.add(selectorPanel, views);
-                        }
-
-                        @Override
-                        protected void onComponentTag(ComponentTag tag) {
-                            super.onComponentTag(tag);
-                            Buttons.fixDisabledState(this, tag);
-                        }
-                    };
-
-                    IModel<String> title = nameFor(componentFactory);
-                    Label viewItemTitleLabel = new Label(ID_VIEW_ITEM_TITLE, title);
-                    link.add(viewItemTitleLabel);
-
-                    Label viewItemIcon = new Label(ID_VIEW_ITEM_ICON, "");
-                    link.add(viewItemIcon);
-
-                    boolean isEnabled = componentFactory != selectorPanel.selectedComponentFactory;
-                    if (!isEnabled) {
-                        viewButtonTitle.setDefaultModel(title);
-                        IModel<String> cssClass = cssClassFor(componentFactory, viewButtonIcon);
-                        viewButtonIcon.add(AttributeModifier.replace("class", "ViewLinkItem " + cssClass.getObject()));
-                        link.setVisible(false);
-                    } else {
-                        IModel<String> cssClass = cssClassFor(componentFactory, viewItemIcon);
-                        viewItemIcon.add(new CssClassAppender(cssClass));
-                    }
-
-                    item.add(link);
-                }
-
-                private IModel<String> cssClassFor(final ComponentFactory componentFactory, Label viewIcon) {
-                    IModel<String> cssClass = null;
-                    if (componentFactory instanceof CollectionContentsAsFactory) {
-                        CollectionContentsAsFactory collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
-                        cssClass = collectionContentsAsFactory.getCssClass();
-                        viewIcon.setDefaultModelObject("");
-                        viewIcon.setEscapeModelStrings(true);
-                    }
-                    if (cssClass == null) {
-                        String name = componentFactory.getName();
-                        cssClass = Model.of(StringExtensions.asLowerDashed(name));
-                        // Small hack: if there is no specific CSS class then we assume that background-image is used
-                        // the span.ViewItemLink should have some content to show it
-                        // FIX: find a way to do this with CSS (width and height don't seems to help)
-                        viewIcon.setDefaultModelObject("&#160;&#160;&#160;&#160;&#160;");
-                        viewIcon.setEscapeModelStrings(false);
-                    }
-                    return cssClass;
-                }
-
-                private IModel<String> nameFor(final ComponentFactory componentFactory) {
-                    IModel<String> name = null;
-                    if (componentFactory instanceof CollectionContentsAsFactory) {
-                        CollectionContentsAsFactory collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
-                        name = collectionContentsAsFactory.getTitleLabel();
-                    }
-                    if (name == null) {
-                        name = Model.of(componentFactory.getName());
-                    }
-                    return name;
-                }
-            };
-            container.add(listView);
-            addOrReplace(views);
+//            final ListView<ComponentFactory> listView = new ListView<ComponentFactory>(ID_VIEW_ITEM, componentFactories) {
+//
+//                private static final long serialVersionUID = 1L;
+//
+//                @Override
+//                protected void populateItem(ListItem<ComponentFactory> item) {
+//
+//                    final int underlyingViewNum = item.getIndex();
+//
+//                    final ComponentFactory componentFactory = item.getModelObject();
+//                    final AbstractLink link = new AjaxLink<Void>(ID_VIEW_LINK) {
+//                        private static final long serialVersionUID = 1L;
+//                        @Override
+//                        public void onClick(AjaxRequestTarget target) {
+//                            CollectionContentsLinksSelectorPanel linksSelectorPanel = CollectionContentsLinksSelectorPanel.this;
+//                            linksSelectorPanel.setViewHintAndBroadcast(underlyingViewNum, target);
+//
+//                            final EntityCollectionModel dummyModel = model.asDummy();
+//                            for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
+//                                final Component component = underlyingViews[i];
+//                                if(component == null) {
+//                                    continue;
+//                                }
+//                                final boolean isSelected = i == underlyingViewNum;
+//                                applyCssVisibility(component, isSelected);
+//                                component.setDefaultModel(isSelected? model: dummyModel);
+//                            }
+//
+//                            selectorPanel.selectedComponentFactory = componentFactory;
+//                            selectorPanel.selectedComponent = underlyingViews[underlyingViewNum];
+//                            selectorPanel.onSelect(target);
+//                            target.add(selectorPanel, views);
+//                        }
+//
+//                        @Override
+//                        protected void onComponentTag(ComponentTag tag) {
+//                            super.onComponentTag(tag);
+//                            Buttons.fixDisabledState(this, tag);
+//                        }
+//                    };
+//
+//                    IModel<String> title = nameFor(componentFactory);
+//                    Label viewItemTitleLabel = new Label(ID_VIEW_ITEM_TITLE, title);
+//                    link.add(viewItemTitleLabel);
+//
+//                    Label viewItemIcon = new Label(ID_VIEW_ITEM_ICON, "");
+//                    link.add(viewItemIcon);
+//
+//                    boolean isEnabled = componentFactory != selectorPanel.selectedComponentFactory;
+//                    if (!isEnabled) {
+//                        viewButtonTitle.setDefaultModel(title);
+//                        IModel<String> cssClass = cssClassFor(componentFactory, viewButtonIcon);
+//                        viewButtonIcon.add(AttributeModifier.replace("class", "ViewLinkItem " + cssClass.getObject()));
+//                        link.setVisible(false);
+//                    } else {
+//                        IModel<String> cssClass = cssClassFor(componentFactory, viewItemIcon);
+//                        viewItemIcon.add(new CssClassAppender(cssClass));
+//                    }
+//
+//                    item.add(link);
+//                }
+//
+//                private IModel<String> cssClassFor(final ComponentFactory componentFactory, Label viewIcon) {
+//                    IModel<String> cssClass = null;
+//                    if (componentFactory instanceof CollectionContentsAsFactory) {
+//                        CollectionContentsAsFactory collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
+//                        cssClass = collectionContentsAsFactory.getCssClass();
+//                        viewIcon.setDefaultModelObject("");
+//                        viewIcon.setEscapeModelStrings(true);
+//                    }
+//                    if (cssClass == null) {
+//                        String name = componentFactory.getName();
+//                        cssClass = Model.of(StringExtensions.asLowerDashed(name));
+//                        // Small hack: if there is no specific CSS class then we assume that background-image is used
+//                        // the span.ViewItemLink should have some content to show it
+//                        // FIX: find a way to do this with CSS (width and height don't seems to help)
+//                        viewIcon.setDefaultModelObject("&#160;&#160;&#160;&#160;&#160;");
+//                        viewIcon.setEscapeModelStrings(false);
+//                    }
+//                    return cssClass;
+//                }
+//
+//                private IModel<String> nameFor(final ComponentFactory componentFactory) {
+//                    IModel<String> name = null;
+//                    if (componentFactory instanceof CollectionContentsAsFactory) {
+//                        CollectionContentsAsFactory collectionContentsAsFactory = (CollectionContentsAsFactory) componentFactory;
+//                        name = collectionContentsAsFactory.getTitleLabel();
+//                    }
+//                    if (name == null) {
+//                        name = Model.of(componentFactory.getName());
+//                    }
+//                    return name;
+//                }
+//            };
+//            container.add(listView);
+            addOrReplace(selectorDropdownPanel);
         }
 
         for(i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
@@ -271,48 +280,95 @@ public class CollectionContentsLinksSelectorPanel
         }
     }
 
+    @Override
+    public void onEvent(IEvent<?> event) {
+        super.onEvent(event);
 
-
-    protected void setViewHintAndBroadcast(int viewNum, AjaxRequestTarget target) {
-        final UiHintContainer uiHintContainer = getUiHintContainer();
-        if(uiHintContainer == null) {
+        final IsisUiHintEvent uiHintEvent = IsisEnvelopeEvent.openLetter(event, IsisUiHintEvent.class);
+        if(uiHintEvent == null) {
             return;
         }
-        uiHintContainer.setHint(CollectionContentsLinksSelectorPanel.this, UIHINT_VIEW, ""+viewNum);
-        send(getPage(), Broadcast.EXACT, new IsisUiHintEvent(uiHintContainer, target));
+        final UiHintContainer uiHintContainer = uiHintEvent.getUiHintContainer();
+
+        int underlyingViewNum = 0;
+        String viewStr = uiHintContainer.getHint(this.selectorDropdownPanel, UIHINT_VIEW);
+        if(viewStr != null) {
+            try {
+                int view = Integer.parseInt(viewStr);
+                if(view >= 0 && view < componentFactories.size()) {
+                    underlyingViewNum = view;
+                }
+            } catch(NumberFormatException ex) {
+                // ignore
+            }
+        }
+
+        final EntityCollectionModel dummyModel = getModel().asDummy();
+        for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
+            final Component component = underlyingViews[i];
+            if(component == null) {
+                continue;
+            }
+            final boolean isSelected = i == underlyingViewNum;
+            applyCssVisibility(component, isSelected);
+            component.setDefaultModel(isSelected? getModel(): dummyModel);
+        }
+
+        this.selectedComponentFactory = componentFactory;
+        this.selectedComponent = underlyingViews[underlyingViewNum];
+
+
+        final AjaxRequestTarget target = uiHintEvent.getTarget();
+        if(target != null) {
+//            selectorDropdownPanel.onSelect(target);
+            target.add(this, selectorDropdownPanel);
+        }
+
+
     }
 
-    /**
-     * Iterates up the component hierarchy looking for a parent
-     * {@link org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel}, and if so adds to ajax target so that it'll
-     * be repainted.
-     *
-     * <p>
-     * Yeah, agreed, it's a little bit hacky doing it this way, because it bakes
-     * in knowledge that this component is created, somehow, by a parent {@link org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel}.
-     * Perhaps it could be refactored to use a more general purpose observer pattern?
-     *
-     * <p>
-     * In fact, I've since discovered that Wicket has an event bus, which is used by the
-     * {@link UiHintContainer hinting mechanism}.  So this ought to be relatively easy to do.
-     */
-    protected void onSelect(AjaxRequestTarget target) {
-        Component component = this;
-        while(component != null) {
-            if(component instanceof CollectionPanel) {
-                CollectionPanel collectionPanel = (CollectionPanel) component;
-                boolean hasCount = collectionPanel.hasCount();
-                if(hasCount) {
-                    collectionPanel.updateLabel(target);
-                }
-                if(additionalLinks != null) {
-                    applyCssVisibility(additionalLinks, hasCount);
-                }
-                return;
-            }
-            component = component.getParent();
-        }
-    }
+
+
+//    protected void setViewHintAndBroadcast(int viewNum, AjaxRequestTarget target) {
+//        final UiHintContainer uiHintContainer = getUiHintContainer();
+//        if(uiHintContainer == null) {
+//            return;
+//        }
+//        uiHintContainer.setHint(CollectionContentsLinksSelectorPanel.this, UIHINT_VIEW, ""+viewNum);
+//        send(getPage(), Broadcast.EXACT, new IsisUiHintEvent(uiHintContainer, target));
+//    }
+
+//    /**
+//     * Iterates up the component hierarchy looking for a parent
+//     * {@link org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel}, and if so adds to ajax target so that it'll
+//     * be repainted.
+//     *
+//     * <p>
+//     * Yeah, agreed, it's a little bit hacky doing it this way, because it bakes
+//     * in knowledge that this component is created, somehow, by a parent {@link org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel}.
+//     * Perhaps it could be refactored to use a more general purpose observer pattern?
+//     *
+//     * <p>
+//     * In fact, I've since discovered that Wicket has an event bus, which is used by the
+//     * {@link UiHintContainer hinting mechanism}.  So this ought to be relatively easy to do.
+//     */
+//    protected void onSelect(AjaxRequestTarget target) {
+//        Component component = this;
+//        while(component != null) {
+//            if(component instanceof CollectionPanel) {
+//                CollectionPanel collectionPanel = (CollectionPanel) component;
+//                boolean hasCount = collectionPanel.hasCount();
+//                if(hasCount) {
+//                    collectionPanel.updateLabel(target);
+//                }
+//                if(additionalLinks != null) {
+//                    applyCssVisibility(additionalLinks, hasCount);
+//                }
+//                return;
+//            }
+//            component = component.getParent();
+//        }
+//    }
 
 
     protected static void applyCssVisibility(final Component component, final boolean visible) {
@@ -375,7 +431,7 @@ public class CollectionContentsLinksSelectorPanel
         ArrayList<ComponentFactory> otherFactories = Lists.newArrayList(Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
             @Override
             public boolean apply(final ComponentFactory input) {
-                return input != ignoreFactory;
+                return input != ignoreFactory && input.getClass() != CollectionContentsLinksSelectorPanelFactory.class;
             }
         }));
         return ordered(otherFactories);
