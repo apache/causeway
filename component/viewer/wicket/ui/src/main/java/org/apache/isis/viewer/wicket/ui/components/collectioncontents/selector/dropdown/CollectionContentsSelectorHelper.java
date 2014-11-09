@@ -67,9 +67,6 @@ public class CollectionContentsSelectorHelper {
         return componentFactoryRegistry.findComponentFactoryElseFailFast(componentType, model);
     }
 
-
-
-
     public List<ComponentFactory> findOtherComponentFactories() {
         final List<ComponentFactory> componentFactories = componentFactoryRegistry.findComponentFactories(componentType, model);
         ArrayList<ComponentFactory> otherFactories = Lists.newArrayList(Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
@@ -80,35 +77,6 @@ public class CollectionContentsSelectorHelper {
         }));
         return ordered(otherFactories);
     }
-
-    protected List<ComponentFactory> ordered(List<ComponentFactory> componentFactories) {
-        return orderAjaxTableToEnd(componentFactories);
-    }
-
-    static List<ComponentFactory> orderAjaxTableToEnd(List<ComponentFactory> componentFactories) {
-        int ajaxTableIdx = findAjaxTable(componentFactories);
-        if(ajaxTableIdx>=0) {
-            List<ComponentFactory> orderedFactories = Lists.newArrayList(componentFactories);
-            ComponentFactory ajaxTableFactory = orderedFactories.remove(ajaxTableIdx);
-            orderedFactories.add(ajaxTableFactory);
-            return orderedFactories;
-        } else {
-            return componentFactories;
-        }
-    }
-
-    static int findAjaxTable(List<ComponentFactory> componentFactories) {
-        for(int i=0; i<componentFactories.size(); i++) {
-            if(componentFactories.get(i) instanceof CollectionContentsAsAjaxTablePanelFactory) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-
-
-
 
     public int honourViewHintElseDefault(final Component component) {
         // honour hints ...
@@ -128,7 +96,7 @@ public class CollectionContentsSelectorHelper {
         }
 
         // ... else default
-        int initialFactory = determineInitialFactory(componentFactories, model);
+        int initialFactory = determineInitialFactory();
         if(hintContainer != null) {
             hintContainer.setHint(component, UIHINT_VIEW, ""+initialFactory);
             // don't broadcast (no AjaxRequestTarget, still configuring initial setup)
@@ -136,9 +104,33 @@ public class CollectionContentsSelectorHelper {
         return initialFactory;
     }
 
-    public static UiHintContainer getUiHintContainer(final Component component) {
-        return UiHintContainer.Util.hintContainerOf(component);
+    private static List<ComponentFactory> ordered(List<ComponentFactory> componentFactories) {
+        return orderAjaxTableToEnd(componentFactories);
     }
+
+    static List<ComponentFactory> orderAjaxTableToEnd(List<ComponentFactory> componentFactories) {
+        int ajaxTableIdx = findAjaxTable(componentFactories);
+        if(ajaxTableIdx>=0) {
+            List<ComponentFactory> orderedFactories = Lists.newArrayList(componentFactories);
+            ComponentFactory ajaxTableFactory = orderedFactories.remove(ajaxTableIdx);
+            orderedFactories.add(ajaxTableFactory);
+            return orderedFactories;
+        } else {
+            return componentFactories;
+        }
+    }
+
+    private static int findAjaxTable(List<ComponentFactory> componentFactories) {
+        for(int i=0; i<componentFactories.size(); i++) {
+            if(componentFactories.get(i) instanceof CollectionContentsAsAjaxTablePanelFactory) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+
 
 
     /**
@@ -146,7 +138,7 @@ public class CollectionContentsSelectorHelper {
      * else the index of {@link org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory ajax table} if present,
      * otherwise first factory.
      */
-    protected int determineInitialFactory(final List<ComponentFactory> componentFactories, final IModel<?> model) {
+    protected int determineInitialFactory() {
         if(!hasRenderEagerlyFacet(model)) {
             for(int i=0; i<componentFactories.size(); i++) {
                 if(componentFactories.get(i) instanceof CollectionContentsAsUnresolvedPanelFactory) {
@@ -160,6 +152,11 @@ public class CollectionContentsSelectorHelper {
         }
         return 0;
     }
+
+    private static UiHintContainer getUiHintContainer(final Component component) {
+        return UiHintContainer.Util.hintContainerOf(component);
+    }
+
 
     private static boolean hasRenderEagerlyFacet(IModel<?> model) {
         if(!(model instanceof EntityCollectionModel)) {

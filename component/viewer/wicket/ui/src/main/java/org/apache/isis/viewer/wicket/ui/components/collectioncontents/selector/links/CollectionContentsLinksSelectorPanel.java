@@ -96,7 +96,7 @@ public class CollectionContentsLinksSelectorPanel
     private void addUnderlyingViews() {
         final EntityCollectionModel model = getModel();
 
-        final int selected = selectorHelper.honourViewHintElseDefault(this);
+        final int selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanel);
 
         // create all, hide the one not selected
         underlyingViews = new Component[MAX_NUM_UNDERLYING_VIEWS];
