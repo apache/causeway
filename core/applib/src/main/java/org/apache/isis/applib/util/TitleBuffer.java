@@ -32,6 +32,8 @@ import java.lang.reflect.Method;
  */
 public class TitleBuffer {
     private static final String SPACE = " ";
+    public static final Class[] NO_PARAMETER_TYPES = new Class[0];
+    public static final Object[] NO_ARGUMENTS = new Object[0];
 
     /**
      * Determines if the specified object's title (from its
@@ -41,7 +43,7 @@ public class TitleBuffer {
      */
     public static boolean isEmpty(final Object object) {
         final String title = titleFor(object);
-        return title == null || title.equals("");
+        return isEmpty(title);
     }
 
     /**
@@ -54,18 +56,12 @@ public class TitleBuffer {
         } else {
             Method method;
             try {
-                method = object.getClass().getMethod("title", new Class[0]);
-                return (String) method.invoke(object, new Object[0]);
-            } catch (final SecurityException e) {
+                method = object.getClass().getMethod("title", NO_PARAMETER_TYPES);
+                return (String) method.invoke(object, NO_ARGUMENTS);
+            } catch (final SecurityException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
                 throw new TitleBufferException(e);
             } catch (final NoSuchMethodException e) {
                 return object.toString();
-            } catch (final IllegalArgumentException e) {
-                throw new TitleBufferException(e);
-            } catch (final IllegalAccessException e) {
-                throw new TitleBufferException(e);
-            } catch (final InvocationTargetException e) {
-                throw new TitleBufferException(e);
             }
         }
     }
@@ -78,6 +74,7 @@ public class TitleBuffer {
         return text == null || text.equals("");
     }
 
+    // TODO mgrigorov: is synchronization needed here ? If NO then use StringBuilder
     private final StringBuffer title;
 
     /**
@@ -100,10 +97,11 @@ public class TitleBuffer {
      */
     public TitleBuffer(final Object object, final String defaultTitle) {
         this();
-        if (isEmpty(object)) {
+        String title = titleFor(object);
+        if (isEmpty(title)) {
             concat(defaultTitle);
         } else {
-            concat(object);
+            concat(title);
         }
     }
 
@@ -127,8 +125,9 @@ public class TitleBuffer {
      * Append the title of the specified object.
      */
     public TitleBuffer append(final Object object) {
-        if (!isEmpty(object)) {
-            appendWithSpace(object);
+        String title = titleFor(object);
+        if (!isEmpty(title)) {
+            appendWithSpace(title);
         }
         return this;
     }
@@ -146,8 +145,9 @@ public class TitleBuffer {
      * @return a reference to the called object (itself).
      */
     public TitleBuffer append(final Object object, final String defaultValue) {
-        if (!isEmpty(object)) {
-            appendWithSpace(object);
+        String title = titleFor(object);
+        if (!isEmpty(title)) {
+            appendWithSpace(title);
         } else {
             appendWithSpace(defaultValue);
         }
@@ -175,9 +175,10 @@ public class TitleBuffer {
      * @see #isEmpty(Object)
      */
     public TitleBuffer append(final String joiner, final Object object) {
-        if (!isEmpty(object)) {
+        String title = titleFor(object);
+        if (!isEmpty(title)) {
             appendJoiner(joiner);
-            appendWithSpace(object);
+            appendWithSpace(title);
         }
         return this;
     }
@@ -201,8 +202,9 @@ public class TitleBuffer {
      */
     public TitleBuffer append(final String joiner, final Object object, final String defaultTitle) {
         appendJoiner(joiner);
-        if (!isEmpty(object)) {
-            appendWithSpace(object);
+        String title = titleFor(object);
+        if (!isEmpty(title)) {
+            appendWithSpace(title);
         } else {
             appendWithSpace(defaultTitle);
         }
@@ -275,10 +277,11 @@ public class TitleBuffer {
      * @return a reference to the called object (itself).
      */
     public final TitleBuffer concat(final Object object, final String defaultValue) {
-        if (isEmpty(object)) {
-            title.append(defaultValue);
+        String title = titleFor(object);
+        if (isEmpty(title)) {
+            this.title.append(defaultValue);
         } else {
-            title.append(titleFor(object));
+            this.title.append(title);
         }
 
         return this;
@@ -320,9 +323,10 @@ public class TitleBuffer {
      * @return a reference to the called object (itself).
      */
     public final TitleBuffer concat(final String joiner, final Object object) {
-        if (!isEmpty(object)) {
+        String title = titleFor(object);
+        if (!isEmpty(title)) {
             appendJoiner(joiner);
-            concat(object, "");
+            concat(title, "");
         }
         return this;
     }
@@ -335,12 +339,13 @@ public class TitleBuffer {
      * @return a reference to the called object (itself).
      */
     public final TitleBuffer concat(final String joiner, final Object object, final String defaultValue) {
-        if (isEmpty(object)) {
+        String title = titleFor(object);
+        if (isEmpty(title)) {
             appendJoiner(joiner);
-            title.append(defaultValue);
+            this.title.append(defaultValue);
         } else {
             appendJoiner(joiner);
-            title.append(titleFor(object));
+            this.title.append(title);
         }
         return this;
     }
