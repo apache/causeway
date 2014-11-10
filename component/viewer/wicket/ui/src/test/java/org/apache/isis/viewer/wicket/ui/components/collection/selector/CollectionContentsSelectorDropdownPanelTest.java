@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown;
+package org.apache.isis.viewer.wicket.ui.components.collection.selector;
 
 import java.util.Arrays;
 import java.util.List;
@@ -58,7 +58,7 @@ public class CollectionContentsSelectorDropdownPanelTest {
                         one,
                         ajaxTableComponentFactory, 
                         two);
-        List<ComponentFactory> orderAjaxTableToEnd = CollectionContentsSelectorHelper.orderAjaxTableToEnd(componentFactories);
+        List<ComponentFactory> orderAjaxTableToEnd = CollectionSelectorHelper.orderAjaxTableToEnd(componentFactories);
         assertThat(orderAjaxTableToEnd.get(0), is(one));
         assertThat(orderAjaxTableToEnd.get(1), is(two));
         assertThat(orderAjaxTableToEnd.get(2), is(ajaxTableComponentFactory));

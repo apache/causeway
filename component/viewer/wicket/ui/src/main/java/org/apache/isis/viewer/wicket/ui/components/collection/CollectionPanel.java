@@ -22,12 +22,9 @@ package org.apache.isis.viewer.wicket.ui.components.collection;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 import java.util.List;
-
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
-
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -38,8 +35,8 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.CollectionContentsSelectorDropdownPanel;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.HasSelectorDropdownPanel;
+import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
+import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -47,7 +44,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * Panel for rendering entity collection; analogous to (any concrete subclass
  * of) {@link ScalarPanelAbstract}.
  */
-public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implements ActionPromptProvider, HasSelectorDropdownPanel {
+public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implements ActionPromptProvider, CollectionSelectorProvider {
 
 
     private static final long serialVersionUID = 1L;
@@ -57,7 +54,6 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
 
     private Component collectionContents;
 
-    private String collectionName;
     private Label label;
 
     public CollectionPanel(final String id, final EntityModel entityModel, OneToManyAssociation otma) {
@@ -95,42 +91,26 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
     }
 
     public Label createLabel(final String id, final String collectionName) {
-        this.collectionName = collectionName;
         this.label = new Label(id, collectionName);
-    	label.setOutputMarkupId(true);
-    	return this.label;
+        label.setOutputMarkupId(true);
+        return this.label;
     }
 
-    public void updateLabel(AjaxRequestTarget target) {
-        target.add(label);
-    }
+    //region > SelectorDropdownPanel (impl)
 
-    /**
-     * Returns true if a collection count is available from the rendered component 
-     * (ie an eagerly rendered/expanded view).
-     */
-    public boolean hasCount() {
-        if(label == null) {
-            return false;
-        }
-        final Integer count = getCount();
-        label.setDefaultModelObject(collectionName);
-        return count != null;
-    }
+    private CollectionSelectorPanel selectorDropdownPanel;
 
-    private Integer getCount() {
-        if(collectionContents instanceof CollectionCountProvider) {
-            final CollectionCountProvider collectionCountProvider = (CollectionCountProvider) collectionContents;
-            return collectionCountProvider.getCount();
-        } else {
-            return null;
-        }
+    @Override
+    public CollectionSelectorPanel getSelectorDropdownPanel() {
+        return selectorDropdownPanel;
     }
+    public void setSelectorDropdownPanel(CollectionSelectorPanel selectorDropdownPanel) {
+        this.selectorDropdownPanel = selectorDropdownPanel;
+    }
+    //endregion
 
-    
-    // ///////////////////////////////////////////////////////////////////
-    // ActionPromptModalWindowProvider
-    // ///////////////////////////////////////////////////////////////////
+
+    //region > ActionPromptModalWindowProvider
 
     private ActionPromptModalWindow actionPromptModalWindow;
     public ActionPromptModalWindow getActionPrompt() {
@@ -141,26 +121,15 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
         this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW);
         addOrReplace(actionPromptModalWindow);
     }
+    //endregion
 
 
-    // ///////////////////////////////////////////////////////////////////
+    //region > dependencies
 
     protected DeploymentType getDeploymentType() {
         return IsisContext.getDeploymentType();
     }
 
-
-    //region > SelectorDropdownPanel (impl)
-
-    private CollectionContentsSelectorDropdownPanel selectorDropdownPanel;
-
-    @Override
-    public CollectionContentsSelectorDropdownPanel getSelectorDropdownPanel() {
-        return selectorDropdownPanel;
-    }
-    public void setSelectorDropdownPanel(CollectionContentsSelectorDropdownPanel selectorDropdownPanel) {
-        this.selectorDropdownPanel = selectorDropdownPanel;
-    }
     //endregion
 
 }

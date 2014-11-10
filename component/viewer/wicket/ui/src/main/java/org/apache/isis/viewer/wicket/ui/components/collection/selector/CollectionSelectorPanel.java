@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown;
+package org.apache.isis.viewer.wicket.ui.components.collection.selector;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
@@ -44,7 +44,6 @@ import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -52,7 +51,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * {@link org.apache.isis.viewer.wicket.ui.ComponentType#COLLECTION_CONTENTS} with a backing
  * {@link org.apache.isis.viewer.wicket.model.models.EntityCollectionModel}.
  */
-public class CollectionContentsSelectorDropdownPanel
+public class CollectionSelectorPanel
         extends PanelAbstract<EntityCollectionModel> implements UiHintPathSignificant /*,  CollectionCountProvider*/ {
 
     private static final long serialVersionUID = 1L;
@@ -68,14 +67,14 @@ public class CollectionContentsSelectorDropdownPanel
     private static final String ID_VIEW_BUTTON_ICON = "viewButtonIcon";
 
     private final ComponentType componentType;
-    private final CollectionContentsSelectorHelper selectorHelper;
+    private final CollectionSelectorHelper selectorHelper;
 
     private ComponentFactory selectedComponentFactory;
 
-    public CollectionContentsSelectorDropdownPanel(final String id, final EntityCollectionModel model, final ComponentFactory ignoreFactory) {
+    public CollectionSelectorPanel(final String id, final EntityCollectionModel model, final ComponentFactory ignoreFactory) {
         super(id, model);
         this.componentType = ignoreFactory.getComponentType();
-        selectorHelper = new CollectionContentsSelectorHelper(model, getComponentFactoryRegistry(), ignoreFactory);
+        selectorHelper = new CollectionSelectorHelper(model, getComponentFactoryRegistry(), ignoreFactory);
     }
 
     /**
@@ -130,11 +129,11 @@ public class CollectionContentsSelectorDropdownPanel
                         private static final long serialVersionUID = 1L;
                         @Override
                         public void onClick(AjaxRequestTarget target) {
-                            CollectionContentsSelectorDropdownPanel linksSelectorPanel = CollectionContentsSelectorDropdownPanel.this;
+                            CollectionSelectorPanel linksSelectorPanel = CollectionSelectorPanel.this;
                             linksSelectorPanel.setViewHintAndBroadcast(underlyingViewNum, target);
 
-                            CollectionContentsSelectorDropdownPanel.this.selectedComponentFactory = componentFactory;
-                            target.add(CollectionContentsSelectorDropdownPanel.this, views);
+                            CollectionSelectorPanel.this.selectedComponentFactory = componentFactory;
+                            target.add(CollectionSelectorPanel.this, views);
                         }
 
                         @Override
@@ -151,7 +150,7 @@ public class CollectionContentsSelectorDropdownPanel
                     Label viewItemIcon = new Label(ID_VIEW_ITEM_ICON, "");
                     link.add(viewItemIcon);
 
-                    boolean isEnabled = componentFactory != CollectionContentsSelectorDropdownPanel.this.selectedComponentFactory;
+                    boolean isEnabled = componentFactory != CollectionSelectorPanel.this.selectedComponentFactory;
                     if (!isEnabled) {
                         viewButtonTitle.setDefaultModel(title);
                         IModel<String> cssClass = cssClassFor(componentFactory, viewButtonIcon);
@@ -203,20 +202,19 @@ public class CollectionContentsSelectorDropdownPanel
     }
 
 
-
     protected void setViewHintAndBroadcast(int viewNum, AjaxRequestTarget target) {
         final UiHintContainer uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) {
             return;
         }
-        uiHintContainer.setHint(CollectionContentsSelectorDropdownPanel.this, CollectionContentsSelectorHelper.UIHINT_VIEW, ""+viewNum);
+        uiHintContainer.setHint(CollectionSelectorPanel.this, CollectionSelectorHelper.UIHINT_EVENT_VIEW_KEY, ""+viewNum);
         send(getPage(), Broadcast.EXACT, new IsisUiHintEvent(uiHintContainer, target));
     }
 
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        PanelUtil.renderHead(response, CollectionContentsSelectorDropdownPanel.class);
+        //PanelUtil.renderHead(response, CollectionSelectorPanel.class);
     }
 
 }

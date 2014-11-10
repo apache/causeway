@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links;
+package org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -28,15 +28,15 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 
 /**
- * {@link ComponentFactory} for {@link CollectionContentsLinksSelectorPanel}.
+ * {@link ComponentFactory} for {@link CollectionContentsMultipleViewsPanel}.
  */
-public class CollectionContentsLinksSelectorPanelFactory extends ComponentFactoryAbstract {
+public class CollectionContentsMultipleViewsPanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public CollectionContentsLinksSelectorPanelFactory() {
+    public CollectionContentsMultipleViewsPanelFactory() {
         super(ComponentType.COLLECTION_CONTENTS, 
-                CollectionContentsLinksSelectorPanel.class);
+                CollectionContentsMultipleViewsPanel.class);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class CollectionContentsLinksSelectorPanelFactory extends ComponentFactor
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
-        return new CollectionContentsLinksSelectorPanel(id, collectionModel, this);
+        return new CollectionContentsMultipleViewsPanel(id, collectionModel, this);
     }
 
 }

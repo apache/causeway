@@ -24,7 +24,7 @@ import org.apache.wicket.model.IModel;
  * <p>
  * An interface for all {@link org.apache.isis.viewer.wicket.ui.ComponentFactory component factories}
  * (e.g. CollectionContentAsXyzFactory-ies) which want to provide specific title and CSS class(es)
- * for their representation in {@link org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links.CollectionContentsLinksSelectorPanel}.
+ * for their representation in {@link org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanel}.
  * </p>
  * <p>
  * If the {@link org.apache.isis.viewer.wicket.ui.ComponentFactory} doesn't implement this interface or the implementation

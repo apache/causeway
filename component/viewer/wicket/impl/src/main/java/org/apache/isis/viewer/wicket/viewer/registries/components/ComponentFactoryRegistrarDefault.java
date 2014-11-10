@@ -32,7 +32,7 @@ import org.apache.isis.viewer.wicket.ui.components.appactions.cssmenu.AppActions
 import org.apache.isis.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links.CollectionContentsLinksSelectorPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.summary.CollectionContentsAsSummaryFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.empty.EmptyCollectionPanelFactory;
@@ -96,7 +96,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
     protected void addLinksSelectorFactories(final ComponentFactoryList componentFactories) {
         componentFactories.add(new EntityLinksSelectorPanelFactory());
-        componentFactories.add(new CollectionContentsLinksSelectorPanelFactory());
+        componentFactories.add(new CollectionContentsMultipleViewsPanelFactory());
     }
 
     protected void addComponentFactoriesUsingServiceLoader(final ComponentFactoryList componentFactories) {

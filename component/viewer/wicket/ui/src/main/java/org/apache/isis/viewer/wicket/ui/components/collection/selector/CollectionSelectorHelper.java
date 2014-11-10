@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown;
+package org.apache.isis.viewer.wicket.ui.components.collection.selector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,13 +35,12 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links.CollectionContentsLinksSelectorPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 
-public class CollectionContentsSelectorHelper {
+public class CollectionSelectorHelper {
 
-    static final String UIHINT_VIEW = "view";
-    private static final long serialVersionUID = 1L;
+    static final String UIHINT_EVENT_VIEW_KEY = "view";
 
     private final ComponentType componentType;
     private final ComponentFactoryRegistry componentFactoryRegistry;
@@ -50,7 +49,7 @@ public class CollectionContentsSelectorHelper {
     private final List<ComponentFactory> componentFactories;
 
 
-    public CollectionContentsSelectorHelper(
+    public CollectionSelectorHelper(
             final EntityCollectionModel model,
             final ComponentFactoryRegistry componentFactoryRegistry,
             final ComponentFactory ignoreFactory) {
@@ -60,11 +59,6 @@ public class CollectionContentsSelectorHelper {
         this.componentType = ignoreFactory.getComponentType();
 
         componentFactories = findOtherComponentFactories();
-
-    }
-
-    public ComponentFactory getComponentFactory() {
-        return componentFactoryRegistry.findComponentFactoryElseFailFast(componentType, model);
     }
 
     public List<ComponentFactory> findOtherComponentFactories() {
@@ -72,7 +66,7 @@ public class CollectionContentsSelectorHelper {
         ArrayList<ComponentFactory> otherFactories = Lists.newArrayList(Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
             @Override
             public boolean apply(final ComponentFactory input) {
-                return input != ignoreFactory && input.getClass() != CollectionContentsLinksSelectorPanelFactory.class;
+                return input != ignoreFactory && input.getClass() != CollectionContentsMultipleViewsPanelFactory.class;
             }
         }));
         return ordered(otherFactories);
@@ -82,7 +76,7 @@ public class CollectionContentsSelectorHelper {
         // honour hints ...
         final UiHintContainer hintContainer = getUiHintContainer(component);
         if(hintContainer != null) {
-            String viewStr = hintContainer.getHint(component, UIHINT_VIEW);
+            String viewStr = hintContainer.getHint(component, UIHINT_EVENT_VIEW_KEY);
             if(viewStr != null) {
                 try {
                     int view = Integer.parseInt(viewStr);
@@ -98,11 +92,13 @@ public class CollectionContentsSelectorHelper {
         // ... else default
         int initialFactory = determineInitialFactory();
         if(hintContainer != null) {
-            hintContainer.setHint(component, UIHINT_VIEW, ""+initialFactory);
+            hintContainer.setHint(component, UIHINT_EVENT_VIEW_KEY, ""+initialFactory);
             // don't broadcast (no AjaxRequestTarget, still configuring initial setup)
         }
         return initialFactory;
     }
+
+    //region > helpers
 
     private static List<ComponentFactory> ordered(List<ComponentFactory> componentFactories) {
         return orderAjaxTableToEnd(componentFactories);
@@ -146,7 +142,7 @@ public class CollectionContentsSelectorHelper {
                 }
             }
         }
-        int ajaxTableIdx = CollectionContentsSelectorHelper.findAjaxTable(componentFactories);
+        int ajaxTableIdx = CollectionSelectorHelper.findAjaxTable(componentFactories);
         if(ajaxTableIdx>=0) {
             return ajaxTableIdx;
         }
@@ -172,5 +168,7 @@ public class CollectionContentsSelectorHelper {
         RenderFacet renderFacet = collection.getFacet(RenderFacet.class);
         return renderFacet != null && renderFacet.value() == Render.Type.EAGERLY;
     }
+
+    //endregion
 
 }

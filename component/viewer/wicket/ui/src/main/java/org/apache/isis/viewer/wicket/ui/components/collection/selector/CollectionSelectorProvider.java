@@ -16,8 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown;
+package org.apache.isis.viewer.wicket.ui.components.collection.selector;
 
-public interface HasSelectorDropdownPanel {
-    CollectionContentsSelectorDropdownPanel getSelectorDropdownPanel();
+public interface CollectionSelectorProvider {
+    CollectionSelectorPanel getSelectorDropdownPanel();
 }
