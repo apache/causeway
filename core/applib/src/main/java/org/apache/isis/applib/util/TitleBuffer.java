@@ -36,10 +36,15 @@ public class TitleBuffer {
     public static final Object[] NO_ARGUMENTS = new Object[0];
 
     /**
-     * Determines if the specified object's title (from its
-     * <code>toString</code> method) is empty. Will return true if either: the
-     * specified reference is null; the object's <code>toString</code> method
-     * returns null; or if the <code>toString</code> returns an empty string.
+     * Determines if the specified object's title is empty (or null).
+     *
+     * <p>
+     *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
+     *     annotation.  If that functionality is required, first call
+     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     string.
+     * </p>
      */
     public static boolean isEmpty(final Object object) {
         final String title = titleFor(object);
@@ -53,16 +58,18 @@ public class TitleBuffer {
     private static String titleFor(final Object object) {
         if (object == null) {
             return null;
-        } else {
-            Method method;
-            try {
-                method = object.getClass().getMethod("title", NO_PARAMETER_TYPES);
-                return (String) method.invoke(object, NO_ARGUMENTS);
-            } catch (final SecurityException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-                throw new TitleBufferException(e);
-            } catch (final NoSuchMethodException e) {
-                return object.toString();
-            }
+        }
+        if(object instanceof String) {
+            return object.toString();
+        }
+
+        try {
+            Method method = object.getClass().getMethod("title", NO_PARAMETER_TYPES);
+            return (String) method.invoke(object, NO_ARGUMENTS);
+        } catch (final SecurityException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+            throw new TitleBufferException(e);
+        } catch (final NoSuchMethodException e) {
+            return object.toString();
         }
     }
 
@@ -74,18 +81,25 @@ public class TitleBuffer {
         return text == null || text.equals("");
     }
 
-    // TODO mgrigorov: is synchronization needed here ? If NO then use StringBuilder
-    private final StringBuffer title;
+    private final StringBuilder title;
 
     /**
-     * Creates a new, empty, title object.
+     * Creates a new, empty, {@link org.apache.isis.applib.util.TitleBuffer}.
      */
     public TitleBuffer() {
-        title = new StringBuffer();
+        title = new StringBuilder();
     }
 
     /**
-     * Creates a new title object, containing the title of the specified object.
+     * Creates a new {@link org.apache.isis.applib.util.TitleBuffer}, containing the title of the specified object.
+     * 
+     * <p>
+     *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
+     *     annotation.  If that functionality is required, first call
+     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     string.
+     * </p>
      */
     public TitleBuffer(final Object object) {
         this();
@@ -94,6 +108,14 @@ public class TitleBuffer {
 
     /**
      * Creates a new title object, containing the title of the specified object.
+     *
+     * <p>
+     *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
+     *     annotation.  If that functionality is required, first call
+     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     string.
+     * </p>
      */
     public TitleBuffer(final Object object, final String defaultTitle) {
         this();
@@ -122,7 +144,15 @@ public class TitleBuffer {
     }
 
     /**
-     * Append the title of the specified object.
+     * Append the title of the specified object to this {@link org.apache.isis.applib.util.TitleBuffer}.
+     *
+     * <p>
+     *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
+     *     annotation.  If that functionality is required, first call
+     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     string.
+     * </p>
      */
     public TitleBuffer append(final Object object) {
         String title = titleFor(object);
@@ -136,7 +166,15 @@ public class TitleBuffer {
      * Appends the title of the specified object, or the specified text if the
      * objects title is null or empty. Prepends a space if there is already some
      * text in this title object.
-     * 
+     *
+     * <p>
+     *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
+     *     annotation.  If that functionality is required, first call
+     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     string.
+     * </p>
+     *
      * @param object
      *            the object whose title is to be appended to this title.
      * @param defaultValue
@@ -168,10 +206,17 @@ public class TitleBuffer {
     }
 
     /**
-     * Appends the joining string and the title of the specified object (from
-     * its <code>toString</code> method). If the object is empty then nothing
+     * Appends the joining string and the title of the specified object. If the object is empty then nothing
      * will be appended.
-     * 
+     *
+     * <p>
+     *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
+     *     annotation.  If that functionality is required, first call
+     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     string.
+     * </p>
+     *
      * @see #isEmpty(Object)
      */
     public TitleBuffer append(final String joiner, final Object object) {
@@ -185,13 +230,20 @@ public class TitleBuffer {
 
     /**
      * Append the <code>joiner</code> text, a space, and the title of the
-     * specified ObjectAdapter (<code>object</code>) (got by calling the objects
-     * title() method) to the text of this TitleString object. If the title of
+     * specified object to the text of this {@link org.apache.isis.applib.util.TitleBuffer}. If the title of
      * the specified object is null then use the <code>defaultValue</code> text.
      * If both the objects title and the default value are null or equate to a
      * zero-length string then no text will be appended ; not even the joiner
      * text.
-     * 
+     *
+     * <p>
+     *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
+     *     annotation.  If that functionality is required, first call
+     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     string.
+     * </p>
+     *
      * @param joiner
      *            text to append before the title
      * @param object
@@ -213,7 +265,7 @@ public class TitleBuffer {
 
     /**
      * Appends the joiner text, a space, and the text to the text of this
-     * TitleString object. If no text yet exists in the object then the joiner
+     * {@link org.apache.isis.applib.util.TitleBuffer}. If no text yet exists in the object then the joiner
      * text and space are omitted.
      * 
      * @return a reference to the called object (itself).
@@ -266,14 +318,22 @@ public class TitleBuffer {
     }
 
     /**
-     * Concatenate the the title value (the result of calling an objects label()
-     * method), or the specified default value if the title is equal to null or
-     * is empty, to this TitleString object.
-     * 
+     * Concatenate the title of the object value or the specified default value if the title is equal to null or
+     * is empty, to this {@link org.apache.isis.applib.util.TitleBuffer}.
+     *
+     * <p>
+     *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
+     *     annotation.  If that functionality is required, first call
+     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     string.
+     * </p>
+     *
      * @param object
-     *            the ObjectAdapter to get a title from
+     *            the object to get a title from
      * @param defaultValue
-     *            the default text to use when the ObjectAdapter is null
+     *            the default text to use when the object is null/empty
+     *
      * @return a reference to the called object (itself).
      */
     public final TitleBuffer concat(final Object object, final String defaultValue) {
@@ -289,7 +349,7 @@ public class TitleBuffer {
 
     /**
      * Concatenate the specified text on to the end of the text of this
-     * TitleString.
+     * {@link org.apache.isis.applib.util.TitleBuffer}.
      * 
      * @param text
      *            text to append
@@ -301,7 +361,7 @@ public class TitleBuffer {
     }
 
     /**
-     * Concatenate the joiner text and the text to the text of this TitleString
+     * Concatenate the joiner text and the text to the text of this {@link org.apache.isis.applib.util.TitleBuffer}
      * object. If no text yet exists in the object then the joiner text is
      * omitted.
      * 
@@ -317,9 +377,17 @@ public class TitleBuffer {
 
     /**
      * Concatenate the joiner text and the title of the object to the text of
-     * this TitleString object. If no object yet exists in the object then the
+     * this {@link org.apache.isis.applib.util.TitleBuffer}. If no object yet exists in the object then the
      * joiner text is omitted.
-     * 
+     *
+     * <p>
+     *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
+     *     annotation.  If that functionality is required, first call
+     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     string.
+     * </p>
+     *
      * @return a reference to the called object (itself).
      */
     public final TitleBuffer concat(final String joiner, final Object object) {
@@ -333,9 +401,17 @@ public class TitleBuffer {
 
     /**
      * Concatenate the joiner text and the title of the object to the text of
-     * this TitleString object. If no object yet exists in the object then
+     * this {@link org.apache.isis.applib.util.TitleBuffer} object. If no object yet exists in the object then
      * defaultValue is used instead.
-     * 
+     *
+     * <p>
+     *     Note: this method only obtains the title using either <tt>title()</tt> or <tt>toString()</tt>; it doesn't
+     *     honour other mechanisms for specifying the title, such as {@link org.apache.isis.applib.annotation.Title}
+     *     annotation.  If that functionality is required, first call
+     *     {@link org.apache.isis.applib.DomainObjectContainer#titleOf(Object)} on the object and pass in the resultant
+     *     string.
+     * </p>
+
      * @return a reference to the called object (itself).
      */
     public final TitleBuffer concat(final String joiner, final Object object, final String defaultValue) {
