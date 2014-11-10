@@ -19,10 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
-import java.util.Collections;
 import java.util.List;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.apache.wicket.Component;
@@ -40,16 +38,16 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
@@ -68,7 +66,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
-public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider, ActionPromptProvider, UiHintPathSignificant {
+public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider, ActionPromptProvider, BulkActionsProvider, UiHintPathSignificant {
 
     private static final long serialVersionUID = 1L;
 
@@ -81,9 +79,12 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     private static final Predicate<ObjectAction> BULK = Filters.asPredicate(ObjectAction.Filters.bulk());
     
     private IsisAjaxFallbackDataTable<ObjectAdapter,String> dataTable;
+    private final BulkActionsHelper bulkActionsHelper;
+
 
     public CollectionContentsAsAjaxTablePanel(final String id, final EntityCollectionModel model) {
         super(id, model);
+        bulkActionsHelper = new BulkActionsHelper(model);
     }
     
     @Override
@@ -97,23 +98,47 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
 
         final List<IColumn<ObjectAdapter,String>> columns = Lists.newArrayList();
 
-        List<ObjectAction> bulkActions = determineBulkActions();
+        List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions();
 
-        ObjectAdapterToggleboxColumn toggleboxColumn = addToggleboxColumnIfRequired(columns, bulkActions);
+        final ObjectAdapterToggleboxColumn toggleboxColumn = addToggleboxColumnIfRequired(columns, bulkActions);
+
         addTitleColumn(columns, model.getParentObjectAdapterMemento(), getSettings().getMaxTitleLengthInStandaloneTables(), getSettings().getMaxTitleLengthInStandaloneTables());
         addPropertyColumnsIfRequired(columns);
 
         final SortableDataProvider<ObjectAdapter,String> dataProvider = new CollectionContentsSortableDataProvider(model);
         dataTable = new IsisAjaxFallbackDataTable<>(ID_TABLE, columns, dataProvider, model.getPageSize());
-        
-        addActionPromptModalWindow();
-        buildEntityActionsGui(bulkActions, this, toggleboxColumn);
-
         addOrReplace(dataTable);
         dataTable.honourHints();
+
+        addActionPromptModalWindow();
+
+        // bulkactions
+        if(bulkActions.isEmpty() || getModel().isParented()) {
+            permanentlyHide(ID_ENTITY_ACTIONS);
+        } else {
+            BulkActionsLinkFactory linkFactory = new BulkActionsLinkFactory(getModel(), dataTable);
+            linkFactory.setToggleboxColumn(toggleboxColumn);
+
+            actionLinkFactoryDelegating = new ActionLinkFactoryDelegating();
+            actionPromptProviderDelegating = new ActionPromptProviderDelegating();
+
+            getBulkActionsProvider().configureBulkActionsProvider(linkFactory, this);
+
+            final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(null, bulkActions, actionLinkFactoryDelegating, actionPromptProviderDelegating, null);
+            final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
+
+            this.addOrReplace(cssMenuPanel);
+
+        }
     }
 
-    private ObjectAdapterToggleboxColumn addToggleboxColumnIfRequired(final List<IColumn<ObjectAdapter,String>> columns, List<ObjectAction> bulkActions) {
+    private BulkActionsProvider getBulkActionsProvider() {
+        return this;
+    }
+
+    private ObjectAdapterToggleboxColumn addToggleboxColumnIfRequired(
+            final List<IColumn<ObjectAdapter,String>> columns,
+            final List<ObjectAction> bulkActions) {
         final EntityCollectionModel entityCollectionModel = getModel();
         if(bulkActions.isEmpty() || entityCollectionModel.isParented()) {
             return null;
@@ -149,58 +174,6 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         return toggleboxColumn;
     }
 
-    private void buildEntityActionsGui(
-            final List<ObjectAction> bulkActions,
-            final ActionPromptProvider actionPromptProvider,
-            final ObjectAdapterToggleboxColumn toggleboxColumn) {
-        final EntityCollectionModel model = getModel();
-
-        if(bulkActions.isEmpty() || model.isParented()) {
-            permanentlyHide(ID_ENTITY_ACTIONS);
-            return;
-        }
-
-        if(!bulkActions.isEmpty()) {
-            final ActionLinkFactory linkFactory = new BulkActionsLinkFactory(model, dataTable, toggleboxColumn);
-
-            final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(null, bulkActions, linkFactory, actionPromptProvider, null);
-            // TODO: i18n
-            final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
-
-            this.addOrReplace(cssMenuPanel);
-        } else {
-            permanentlyHide(ID_ENTITY_ACTIONS);
-        }
-    }
-
-    private List<ObjectAction> determineBulkActions() {
-        final EntityCollectionModel model = getModel();
-        
-        if(model.isParented()) {
-            return Collections.emptyList();
-        }
-        
-        final ObjectSpecification typeSpec = model.getTypeOfSpecification();
-        
-        List<ObjectAction> objectActions = typeSpec.getObjectActions(ActionType.USER, Contributed.INCLUDED, Filters.<ObjectAction>any());
-        
-        if ( isExploring() || isPrototyping()) {
-            List<ObjectAction> explorationActions = typeSpec.getObjectActions(ActionType.EXPLORATION, Contributed.INCLUDED, Filters.<ObjectAction>any());
-            List<ObjectAction> prototypeActions = typeSpec.getObjectActions(ActionType.PROTOTYPE, Contributed.INCLUDED, Filters.<ObjectAction>any());
-            objectActions.addAll(explorationActions);
-            objectActions.addAll(prototypeActions);
-        }
-        if (isDebugMode()) {
-            List<ObjectAction> debugActions = typeSpec.getObjectActions(ActionType.DEBUG, Contributed.INCLUDED, Filters.<ObjectAction>any());
-            objectActions.addAll(debugActions);
-        }
-
-        List<ObjectAction> flattenedActions = objectActions;
-        
-        return Lists.newArrayList(Iterables.filter(flattenedActions, BULK));
-    }
-
-    
 
     private void addTitleColumn(final List<IColumn<ObjectAdapter,String>> columns, ObjectAdapterMemento parentAdapterMementoIfAny, int maxTitleParented, int maxTitleStandalone) {
         int maxTitleLength = getModel().isParented()? maxTitleParented: maxTitleStandalone;
@@ -270,10 +243,13 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         return model.getCount();
     }
 
-    
-    // ///////////////////////////////////////////////////////////////////
-    // ActionPromptModalWindowProvider
-    // ///////////////////////////////////////////////////////////////////
+
+    //region > BulkActionsProvider
+
+    //endregion
+
+
+    //region > ActionPromptModalWindowProvider
     
     private ActionPromptModalWindow actionPromptModalWindow;
     public ActionPromptModalWindow getActionPrompt() {
@@ -285,26 +261,10 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         addOrReplace(actionPromptModalWindow);
     }
 
+    //endregion
 
     // //////////////////////////////////////
     
-    public boolean isExploring() {
-        return IsisContext.getDeploymentType().isExploring();
-    }
-    public boolean isPrototyping() {
-        return IsisContext.getDeploymentType().isPrototyping();
-    }
-
-    /**
-     * Protected so can be overridden in testing if required.
-     */
-    protected boolean isDebugMode() {
-        // TODO: need to figure out how to switch into debug mode;
-        // probably call a Debug toggle page, and stuff into
-        // Session.getMetaData()
-        return true;
-    }
-
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
@@ -323,4 +283,60 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     protected MessageBroker getMessageBroker() {
         return getAuthenticationSession().getMessageBroker();
     }
+
+    // //////////////////////////////////////
+
+
+    private ActionPromptProviderDelegating actionPromptProviderDelegating;
+    private ActionLinkFactoryDelegating actionLinkFactoryDelegating;
+
+    @Override
+    public void configureBulkActionsProvider(
+            final ActionLinkFactory linkFactory,
+            final ActionPromptProvider actionPromptProvider) {
+        actionLinkFactoryDelegating.setDelegate(linkFactory);
+        actionPromptProviderDelegating.setDelegate(actionPromptProvider);
+    }
+
+    public static class ActionLinkFactoryDelegating implements ActionLinkFactory {
+
+        private ActionLinkFactory delegate;
+
+        public ActionLinkFactory getDelegate() {
+            return delegate;
+        }
+
+        public void setDelegate(ActionLinkFactory delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public LinkAndLabel newLink(
+                final ObjectAdapterMemento adapter,
+                final ObjectAction noAction,
+                final String linkId,
+                final ActionPromptProvider actionPromptProvider) {
+            return delegate.newLink(adapter, noAction, linkId, actionPromptProvider);
+        }
+    }
+
+    public static class ActionPromptProviderDelegating implements ActionPromptProvider {
+
+        private ActionPromptProvider delegate;
+
+        public ActionPromptProvider getDelegate() {
+            return delegate;
+        }
+
+        public void setDelegate(ActionPromptProvider delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public ActionPrompt getActionPrompt() {
+            return delegate.getActionPrompt();
+        }
+    }
+
+
 }

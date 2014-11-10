@@ -55,7 +55,10 @@ public class CssMenuBuilder {
         private final ActionPromptProvider actionPromptProvider;
         private final Predicate<ObjectAction> objectActionPredicate;
 
-        public CssMenuContext(ActionLinkFactory cssMenuLinkFactory, ActionPromptProvider actionPromptProvider, Predicate<ObjectAction> objectActionPredicate) {
+        public CssMenuContext(
+                final ActionLinkFactory cssMenuLinkFactory,
+                final ActionPromptProvider actionPromptProvider,
+                final Predicate<ObjectAction> objectActionPredicate) {
             this.cssMenuLinkFactory = cssMenuLinkFactory;
             this.actionPromptProvider = actionPromptProvider;
             this.objectActionPredicate = objectActionPredicate != null? objectActionPredicate: Predicates.<ObjectAction>alwaysTrue();

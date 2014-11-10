@@ -61,14 +61,16 @@ final class BulkActionsLinkFactory implements ActionLinkFactory {
     
     @SuppressWarnings("unused")
     private final DataTable<ObjectAdapter,String> dataTable;
-    private final ObjectAdapterToggleboxColumn toggleboxColumn;
+    private ObjectAdapterToggleboxColumn toggleboxColumn;
 
     BulkActionsLinkFactory(
             final EntityCollectionModel model, 
-            final DataTable<ObjectAdapter,String> dataTable, 
-            final ObjectAdapterToggleboxColumn toggleboxColumn) {
+            final DataTable<ObjectAdapter,String> dataTable) {
         this.model = model;
         this.dataTable = dataTable;
+    }
+
+    public void setToggleboxColumn(ObjectAdapterToggleboxColumn toggleboxColumn) {
         this.toggleboxColumn = toggleboxColumn;
     }
 
