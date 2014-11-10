@@ -70,7 +70,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
 
     @Override
     public LinkAndLabel newLink(
-            final ObjectAdapterMemento serviceAdapterMemento,
+            final ObjectAdapterMemento objectAdapterMemento,
             final ObjectAction objectAction,
             final String linkId,
             final ActionPromptProvider actionPromptProvider) {

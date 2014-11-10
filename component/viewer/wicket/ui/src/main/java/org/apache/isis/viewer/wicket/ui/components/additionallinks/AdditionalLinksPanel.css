@@ -21,3 +21,10 @@ span .fa {
     padding-right: 2px;
 }
 
+
+.additionalLinkList {
+    float:left;
+    margin:0;
+    padding:0;
+    list-style:none;
+}

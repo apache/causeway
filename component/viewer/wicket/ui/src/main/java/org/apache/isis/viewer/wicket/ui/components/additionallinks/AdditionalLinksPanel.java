@@ -98,7 +98,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));
                 String cssClass = linkAndLabel.getCssClass();
                 if(cssClass != null) {
-                    item.add(new CssClassAppender(cssClass));
+                    link.add(new CssClassAppender(cssClass));
                 }
                 viewTitleLabel.add(new CssClassAppender(StringExtensions.asLowerDashed(linkAndLabel.getLabel())));
                 link.addOrReplace(viewTitleLabel);

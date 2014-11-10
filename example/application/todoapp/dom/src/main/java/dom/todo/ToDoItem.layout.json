@@ -152,7 +152,7 @@
                         "cssClassFa": { "value": "fa fa-plus-square" }
                     },
                     "remove": {
-                        "cssClass": { "value": "x-caution" },
+                        "cssClass": { "value": "x-caution btn-danger" },
                         "cssClassFa": { "value": "fa fa-minus-square" }
                     }
                 },

@@ -159,6 +159,7 @@ div.label-left .choicesPlaceholder {
     resize: none;
 }
 
-.entityCollectionsPanel .panel-heading {
+.entityCollectionsPanel .panel-heading,
+.standaloneCollectionPanel .panel-heading {
     padding-bottom: 15px;
 }
