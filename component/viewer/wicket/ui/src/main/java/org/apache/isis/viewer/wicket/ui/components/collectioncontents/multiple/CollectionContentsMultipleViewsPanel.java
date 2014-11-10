@@ -91,12 +91,15 @@ public class CollectionContentsMultipleViewsPanel
     private void addUnderlyingViews() {
         final EntityCollectionModel model = getModel();
 
-        final int selected = selectorHelper.honourViewHintElseDefault(getSelectorDropdownPanel());
-        final List<ComponentFactory> componentFactories = selectorHelper.findOtherComponentFactories(getComponentFactoryRegistry());
+        final CollectionSelectorPanel selectorDropdownPanelIfAny = getSelectorDropdownPanel();
+        final int selected = selectorDropdownPanelIfAny != null
+                ? selectorHelper.honourViewHintElseDefault(selectorDropdownPanelIfAny)
+                : 0;
+        final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
 
         // create all, hide the one not selected
-        underlyingViews = new Component[MAX_NUM_UNDERLYING_VIEWS];
         int i = 0;
+        underlyingViews = new Component[MAX_NUM_UNDERLYING_VIEWS];
         final EntityCollectionModel emptyModel = model.asDummy();
         for (ComponentFactory componentFactory : componentFactories) {
             final String underlyingId = underlyingIdPrefix + "-" + i;
@@ -104,6 +107,12 @@ public class CollectionContentsMultipleViewsPanel
             Component underlyingView = componentFactory.createComponent(underlyingId,i==selected? model: emptyModel);
             underlyingViews[i++] = underlyingView;
             this.addOrReplace(underlyingView);
+        }
+
+        if(selectorDropdownPanelIfAny != null) {
+
+        } else {
+
         }
 
         // hide any unused placeholders
@@ -138,9 +147,15 @@ public class CollectionContentsMultipleViewsPanel
         final UiHintContainer uiHintContainer = uiHintEvent.getUiHintContainer();
 
         int underlyingViewNum = 0;
-        String viewStr = uiHintContainer.getHint(this.getSelectorDropdownPanel(), UIHINT_VIEW);
+        final CollectionSelectorPanel selectorDropdownPanel = this.getSelectorDropdownPanel();
+        if(selectorDropdownPanel == null) {
+            // not expected, because this event shouldn't be called.
+            // but no harm in simply returning...
+            return;
+        }
+        String viewStr = uiHintContainer.getHint(selectorDropdownPanel, UIHINT_VIEW);
 
-        List<ComponentFactory> componentFactories = selectorHelper.findOtherComponentFactories(getComponentFactoryRegistry());
+        List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
 
         if(viewStr != null) {
             try {
@@ -170,7 +185,7 @@ public class CollectionContentsMultipleViewsPanel
 
         final AjaxRequestTarget target = uiHintEvent.getTarget();
         if(target != null) {
-            target.add(this, getSelectorDropdownPanel());
+            target.add(this, selectorDropdownPanel);
         }
 
     }
@@ -205,18 +220,15 @@ public class CollectionContentsMultipleViewsPanel
     /**
      * Searches up the component hierarchy looking for a parent that implements
      * {@link org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider}.
-     * @return
+     *
+     * @return the panel, or null (if there are no alternative views)
      */
     private CollectionSelectorPanel getSelectorDropdownPanel() {
         Component component = this;
         while(component != null) {
             if(component instanceof CollectionSelectorProvider) {
-                final CollectionSelectorPanel selectorDropdownPanel1 = ((CollectionSelectorProvider) component).getSelectorDropdownPanel();
-                if(selectorDropdownPanel1 == null) {
-                    throw new IllegalStateException("Found parent that implements HasSelectorDropdownPanel, but no SelectorDropdownPanel available (is null)");
-
-                }
-                return selectorDropdownPanel1;
+                final CollectionSelectorPanel selectorDropdownPanelIfAny = ((CollectionSelectorProvider) component).getSelectorDropdownPanel();
+                return selectorDropdownPanelIfAny;
             }
             component = component.getParent();
         }

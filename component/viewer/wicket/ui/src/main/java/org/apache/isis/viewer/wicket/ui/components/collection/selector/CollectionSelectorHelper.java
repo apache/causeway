@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.ui.components.collection.selector;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -45,9 +44,6 @@ public class CollectionSelectorHelper implements Serializable {
 
     static final String UIHINT_EVENT_VIEW_KEY = "view";
 
-    private static final ComponentFactory ignoreFactory = new CollectionContentsMultipleViewsPanelFactory();
-    private static final ComponentType componentType = ComponentType.COLLECTION_CONTENTS; // this.ignoreFactory.getComponentType();;
-
     private final EntityCollectionModel model;
     private final List<ComponentFactory> componentFactories;
 
@@ -55,21 +51,22 @@ public class CollectionSelectorHelper implements Serializable {
             final EntityCollectionModel model,
             final ComponentFactoryRegistry componentFactoryRegistry) {
         this.model = model;
-        this.componentFactories = findOtherComponentFactories(componentFactoryRegistry);
+        this.componentFactories = locateComponentFactories(componentFactoryRegistry);
     }
 
-    public List<ComponentFactory> findOtherComponentFactories(ComponentFactoryRegistry componentFactoryRegistry) {
-        if(componentFactories != null) {
-            return componentFactories;
-        }
-        final List<ComponentFactory> componentFactories = componentFactoryRegistry.findComponentFactories(componentType, model);
-        ArrayList<ComponentFactory> otherFactories = Lists.newArrayList(Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
+    private List<ComponentFactory> locateComponentFactories(ComponentFactoryRegistry componentFactoryRegistry) {
+        final List<ComponentFactory> componentFactories = componentFactoryRegistry.findComponentFactories(ComponentType.COLLECTION_CONTENTS, model);
+        List<ComponentFactory> otherFactories = Lists.newArrayList(Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
             @Override
             public boolean apply(final ComponentFactory input) {
-                return input != ignoreFactory && input.getClass() != CollectionContentsMultipleViewsPanelFactory.class;
+                return input.getClass() != CollectionContentsMultipleViewsPanelFactory.class;
             }
         }));
         return ordered(otherFactories);
+    }
+
+    public List<ComponentFactory> getComponentFactories() {
+        return componentFactories;
     }
 
     public int honourViewHintElseDefault(final Component component) {
@@ -100,6 +97,26 @@ public class CollectionSelectorHelper implements Serializable {
 
     //region > helpers
 
+    /**
+     * return the index of {@link org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory unresolved panel} if present and not eager loading;
+     * else the index of {@link org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory ajax table} if present,
+     * otherwise first factory.
+     */
+    private int determineInitialFactory() {
+        if(!hasRenderEagerlyFacet(model)) {
+            for(int i=0; i<componentFactories.size(); i++) {
+                if(componentFactories.get(i) instanceof CollectionContentsAsUnresolvedPanelFactory) {
+                    return i;
+                }
+            }
+        }
+        int ajaxTableIdx = findAjaxTable(componentFactories);
+        if(ajaxTableIdx>=0) {
+            return ajaxTableIdx;
+        }
+        return 0;
+    }
+
     private static List<ComponentFactory> ordered(List<ComponentFactory> componentFactories) {
         return orderAjaxTableToEnd(componentFactories);
     }
@@ -125,29 +142,6 @@ public class CollectionSelectorHelper implements Serializable {
         return -1;
     }
 
-
-
-
-
-    /**
-     * return the index of {@link org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory unresolved panel} if present and not eager loading;
-     * else the index of {@link org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory ajax table} if present,
-     * otherwise first factory.
-     */
-    protected int determineInitialFactory() {
-        if(!hasRenderEagerlyFacet(model)) {
-            for(int i=0; i<componentFactories.size(); i++) {
-                if(componentFactories.get(i) instanceof CollectionContentsAsUnresolvedPanelFactory) {
-                    return i;
-                }
-            }
-        }
-        int ajaxTableIdx = CollectionSelectorHelper.findAjaxTable(componentFactories);
-        if(ajaxTableIdx>=0) {
-            return ajaxTableIdx;
-        }
-        return 0;
-    }
 
     private static UiHintContainer getUiHintContainer(final Component component) {
         return UiHintContainer.Util.hintContainerOf(component);

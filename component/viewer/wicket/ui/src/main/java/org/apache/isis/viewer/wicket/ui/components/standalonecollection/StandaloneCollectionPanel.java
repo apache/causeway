@@ -20,9 +20,13 @@
 package org.apache.isis.viewer.wicket.ui.components.standalonecollection;
 
 import java.util.List;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -34,12 +38,11 @@ import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCo
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.BulkActionsHelper;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.BulkActionsLinkFactory;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.BulkActionsProvider;
+import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsHelper;
+import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -66,30 +69,23 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         bulkActionsHelper = new BulkActionsHelper(entityCollectionModel);
     }
 
+    /**
+     * note that the bulk actions components are added in {@link #configureBulkActions(org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn)}.
+     */
     private void buildGui(final EntityCollectionModel entityCollectionModel) {
 
         ActionModel actionModel = entityCollectionModel.getActionModelHint();
         ObjectAction action = actionModel.getActionMemento().getAction();
         addOrReplace(new Label(StandaloneCollectionPanel.ID_ACTION_NAME, Model.of(action.getName())));
 
+        // action prompt
+        this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW);
+        addOrReplace(actionPromptModalWindow);
+
+        // selector
         final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry());
 
-        final List<ComponentFactory> componentFactories = selectorHelper.findOtherComponentFactories(getComponentFactoryRegistry());
-
-
-
-        addActionPromptModalWindow();
-
-        // bulkactions ... in configureBulkActionsProvider
-
-//        List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions();
-//
-//        if(bulkActions.isEmpty() || getModel().isParented()) {
-//            permanentlyHide(ID_ENTITY_ACTIONS);
-//        } else {
-//
-//        }
-
+        final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
 
         if (componentFactories.size() <= 1) {
             permanentlyHide(ID_SELECTOR_DROPDOWN);
@@ -114,19 +110,6 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         componentFactoryRegistry.addOrReplaceComponent(this, ComponentType.COLLECTION_CONTENTS, entityCollectionModel);
     }
 
-    @Override
-    public Integer getCount() {
-        final EntityCollectionModel model = getModel();
-        return model.getCount();
-    }
-
-    @Override
-    public CollectionSelectorPanel getSelectorDropdownPanel() {
-        return selectorDropdownPanel;
-    }
-
-
-
     //region > ActionPromptModalWindowProvider
 
     private ActionPromptModalWindow actionPromptModalWindow;
@@ -134,97 +117,73 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         return ActionPromptModalWindow.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
     }
 
-    private void addActionPromptModalWindow() {
-        this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW);
-        addOrReplace(actionPromptModalWindow);
-    }
-
     //endregion
 
-
-
-
-    @Override
-    public void configureBulkActionsProvider(ObjectAdapterToggleboxColumn toggleboxColumn) {
-        BulkActionsLinkFactory linkFactory = new BulkActionsLinkFactory(getModel(), toggleboxColumn);
-        configureBulkActionsProvider(linkFactory, this);
-    }
-
-    private void configureBulkActionsProvider(
-            final ActionLinkFactory linkFactory,
-            final ActionPromptProvider actionPromptProvider) {
-
-        if(linkFactory != null) {
-            final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions();
-
-            final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(null, bulkActions, linkFactory, actionPromptProvider != null? actionPromptProvider: this, null);
-            final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
-
-            addOrReplace(cssMenuPanel);
-
-        } else {
-            permanentlyHide(ID_ENTITY_ACTIONS);
-
-        }
-    }
-
-
-    private List<ObjectAction> getBulkActions() {
-        return bulkActionsHelper.getBulkActions();
-    }
-
-//    public static class ActionLinkFactoryDelegating implements ActionLinkFactory {
-//
-//        private ActionLinkFactory delegate;
-//
-//        public ActionLinkFactory getDelegate() {
-//            return delegate;
-//        }
-//
-//        public void setDelegate(ActionLinkFactory delegate) {
-//            this.delegate = delegate;
-//        }
-//
-//        @Override
-//        public LinkAndLabel newLink(
-//                final ObjectAdapterMemento adapter,
-//                final ObjectAction noAction,
-//                final String linkId,
-//                final ActionPromptProvider actionPromptProvider) {
-//            return delegate.newLink(adapter, noAction, linkId, actionPromptProvider);
-//        }
-//    }
-//
-//    public static class ActionPromptProviderDelegating implements ActionPromptProvider {
-//
-//        private ActionPromptProvider delegate;
-//
-//        public ActionPromptProvider getDelegate() {
-//            return delegate;
-//        }
-//
-//        public void setDelegate(ActionPromptProvider delegate) {
-//            this.delegate = delegate;
-//        }
-//
-//        @Override
-//        public ActionPrompt getActionPrompt() {
-//            return delegate.getActionPrompt();
-//        }
-//    }
-
+    //region > BulkActionsProvider
 
     @Override
     public ObjectAdapterToggleboxColumn createToggleboxColumn() {
 
-        final List<ObjectAction> bulkActions = getBulkActions();
+        final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions();
 
         final EntityCollectionModel entityCollectionModel = getModel();
         if(bulkActions.isEmpty() || entityCollectionModel.isParented()) {
             return null;
         }
 
-        return new ObjectAdapterToggleboxColumn();
+        final ObjectAdapterToggleboxColumn toggleboxColumn = new ObjectAdapterToggleboxColumn();
+        final OnSelectionHandler handler = new OnSelectionHandler() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onSelected(
+                    final Component context,
+                    final ObjectAdapter selectedAdapter,
+                    final AjaxRequestTarget ajaxRequestTarget) {
+                getModel().toggleSelectionOn(selectedAdapter);
+            }
+
+        };
+        toggleboxColumn.setOnSelectionHandler(handler);
+
+        return toggleboxColumn;
     }
+
+    @Override
+    public void configureBulkActions(final ObjectAdapterToggleboxColumn toggleboxColumn) {
+
+        final BulkActionsLinkFactory linkFactory =
+                new BulkActionsLinkFactory(getModel(), toggleboxColumn);
+
+        final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions();
+
+        final CssMenuBuilder cssMenuBuilder =
+                new CssMenuBuilder(null, bulkActions, linkFactory, this, null);
+        final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
+
+        addOrReplace(cssMenuPanel);
+
+    }
+    //endregion
+
+    //region > CollectionSelectorProvider
+
+    @Override
+    public CollectionSelectorPanel getSelectorDropdownPanel() {
+        return selectorDropdownPanel;
+    }
+
+    //endregion
+
+    //region > CollectionCountProvider
+
+    @Override
+    public Integer getCount() {
+        final EntityCollectionModel model = getModel();
+        return model.getCount();
+    }
+
+    //endregion
 
 }

@@ -88,7 +88,7 @@ public class CollectionSelectorPanel
 
 
     private void addDropdown() {
-        final List<ComponentFactory> componentFactories = selectorHelper.findOtherComponentFactories(getComponentFactoryRegistry());
+        final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
         final int selected = selectorHelper.honourViewHintElseDefault(this);
 
         // selector

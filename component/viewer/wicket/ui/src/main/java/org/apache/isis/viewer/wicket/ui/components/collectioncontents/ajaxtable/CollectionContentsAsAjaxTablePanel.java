@@ -40,11 +40,13 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
+import org.apache.isis.viewer.wicket.model.common.OnConcurrencyExceptionHandler;
 import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsHelper;
+import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbstract;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterPropertyColumn;
@@ -91,40 +93,12 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         ObjectAdapterToggleboxColumn toggleboxColumn = null;
         if(bulkActionsProvider != null) {
 
-//            List<ObjectAction> bulkActions = bulkActionsProvider.getBulkActions();
-//            if(!bulkActions.isEmpty()) {
-
             toggleboxColumn = bulkActionsProvider.createToggleboxColumn();
             if(toggleboxColumn != null) {
                 columns.add(toggleboxColumn);
             }
-            bulkActionsProvider.configureBulkActionsProvider(toggleboxColumn);
-
-//            }
-
+            bulkActionsProvider.configureBulkActions(toggleboxColumn);
         }
-
-//        } else {
-//        if(bulkActions.isEmpty() || getModel().isParented()) {
-//            //permanentlyHide(ID_ENTITY_ACTIONS);
-//            getBulkActionsProvider().configureBulkActionsProvider(null, null);
-//        } else {
-
-//            actionLinkFactoryDelegating = new ActionLinkFactoryDelegating();
-//            actionPromptProviderDelegating = new ActionPromptProviderDelegating();
-
-            //getBulkActionsProvider().configureBulkActionsProvider(linkFactory, this);
-//            getBulkActionsProvider().configureBulkActionsProvider(linkFactory, null);
-
-//            final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(null, bulkActions, actionLinkFactoryDelegating, actionPromptProviderDelegating, null);
-//            final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
-//
-//            this.addOrReplace(cssMenuPanel);
-
-  //      }
-
-        //List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions();
-
 
         final EntityCollectionModel model = getModel();
         addTitleColumn(columns, model.getParentObjectAdapterMemento(), getSettings().getMaxTitleLengthInStandaloneTables(), getSettings().getMaxTitleLengthInStandaloneTables());
@@ -136,17 +110,9 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         dataTable.honourHints();
 
         if(toggleboxColumn != null) {
-            final SelectionHandler handler = new SelectionHandler() {
+            final OnConcurrencyExceptionHandler handler2 = new OnConcurrencyExceptionHandler() {
 
                 private static final long serialVersionUID = 1L;
-
-                @Override
-                public void onSelected(
-                        final Component context,
-                        final ObjectAdapter selectedAdapter,
-                        final AjaxRequestTarget ajaxRequestTarget) {
-                    model.toggleSelectionOn(selectedAdapter);
-                }
 
                 @Override
                 public void onConcurrencyException(
@@ -164,11 +130,8 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
                     ajaxRequestTarget.add(dataTable);
                 }
             };
-            toggleboxColumn.setHandler(handler);
+            toggleboxColumn.setOnConcurrencyExceptionHandler(handler2);
         }
-
-        //addActionPromptModalWindow();
-
     }
 
     private BulkActionsProvider getBulkActionsProvider() {

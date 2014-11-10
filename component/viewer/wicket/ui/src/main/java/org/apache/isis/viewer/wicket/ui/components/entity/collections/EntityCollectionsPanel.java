@@ -130,7 +130,7 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
 
         final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry());
 
-        final List<ComponentFactory> componentFactories = selectorHelper.findOtherComponentFactories(getComponentFactoryRegistry());
+        final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
 
         if (componentFactories.size() <= 1) {
             permanentlyHide(ID_SELECTOR_DROPDOWN);

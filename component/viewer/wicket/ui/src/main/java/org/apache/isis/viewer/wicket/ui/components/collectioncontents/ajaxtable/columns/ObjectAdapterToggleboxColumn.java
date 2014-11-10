@@ -30,7 +30,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
-import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
+import org.apache.isis.viewer.wicket.model.common.OnConcurrencyExceptionHandler;
+import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -39,20 +40,42 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
 
     private static final long serialVersionUID = 1L;
 
-    private SelectionHandler handler;
 
     public ObjectAdapterToggleboxColumn() {
-        this(null);
+        this(null, null);
     }
     
-    public ObjectAdapterToggleboxColumn(final SelectionHandler handler) {
+    public ObjectAdapterToggleboxColumn(
+            final OnSelectionHandler onSelectionHandler,
+            final OnConcurrencyExceptionHandler onConcurrencyExceptionHandler) {
         super("");
-        this.handler = handler;
+        this.onSelectionHandler = onSelectionHandler;
+        this.onConcurrencyExceptionHandler = onConcurrencyExceptionHandler;
     }
 
-    public void setHandler(SelectionHandler handler) {
-        this.handler = handler;
+    //region > OnSelectionHandler
+    private OnSelectionHandler onSelectionHandler;
+    public OnSelectionHandler getOnSelectionHandler() {
+        return onSelectionHandler;
     }
+
+    public void setOnSelectionHandler(OnSelectionHandler onSelectionHandler) {
+        this.onSelectionHandler = onSelectionHandler;
+    }
+    //endregion
+
+    //region > OnConcurrencyExceptionHandler
+
+    private OnConcurrencyExceptionHandler onConcurrencyExceptionHandler;
+    public OnConcurrencyExceptionHandler getOnConcurrencyExceptionHandler() {
+        return onConcurrencyExceptionHandler;
+    }
+
+    public void setOnConcurrencyExceptionHandler(OnConcurrencyExceptionHandler onConcurrencyExceptionHandler) {
+        this.onConcurrencyExceptionHandler = onConcurrencyExceptionHandler;
+    }
+    //endregion
+
 
     @Override
     public Component getHeader(String componentId) {
@@ -90,15 +113,15 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
                 ObjectAdapter selectedAdapter = null;
                 try {
                     selectedAdapter = entityModel.load(ConcurrencyChecking.CHECK);
-                    if(handler != null) {
-                        handler.onSelected(this, selectedAdapter, target);
+                    if(onSelectionHandler != null) {
+                        onSelectionHandler.onSelected(this, selectedAdapter, target);
                     }
                 } catch(ConcurrencyException ex) {
 
                     // should work second time, because the previous attempt will have updated the OAM's OIDs version.
                     selectedAdapter = entityModel.load(ConcurrencyChecking.CHECK);
-                    if(handler != null) {
-                        handler.onConcurrencyException(this, selectedAdapter, ex, target);
+                    if(onConcurrencyExceptionHandler != null) {
+                        onConcurrencyExceptionHandler.onConcurrencyException(this, selectedAdapter, ex, target);
                     }
                     
                     entityModel.setException(ex);

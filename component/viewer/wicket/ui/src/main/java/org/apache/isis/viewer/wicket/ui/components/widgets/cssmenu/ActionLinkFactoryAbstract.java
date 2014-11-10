@@ -86,7 +86,8 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
      */
     protected AbstractLink newLink(
             final String linkId,
-            final ObjectAdapter objectAdapter, final ObjectAction action,
+            final ObjectAdapter objectAdapter,
+            final ObjectAction action,
             final ActionPromptProvider actionPromptProvider) {
         
         final ActionPrompt actionPrompt = actionPromptProvider.getActionPrompt();

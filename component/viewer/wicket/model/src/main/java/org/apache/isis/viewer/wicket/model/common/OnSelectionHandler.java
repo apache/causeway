@@ -16,13 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
+package org.apache.isis.viewer.wicket.model.common;
 
-public interface BulkActionsProvider {
+import java.io.Serializable;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-    void configureBulkActionsProvider(ObjectAdapterToggleboxColumn toggleboxColumn);
+/**
+ * Decouples the mechanism for selecting entities returned in collections.
+ */
+public interface OnSelectionHandler extends Serializable {
 
-    ObjectAdapterToggleboxColumn createToggleboxColumn();
+    void onSelected(
+            Component context, ObjectAdapter selectedAdapter,
+            AjaxRequestTarget ajaxRequestTarget);
+
+
 }
