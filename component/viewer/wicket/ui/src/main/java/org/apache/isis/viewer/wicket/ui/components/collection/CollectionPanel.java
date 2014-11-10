@@ -38,6 +38,8 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.CollectionContentsSelectorDropdownPanel;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.HasSelectorDropdownPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
@@ -45,7 +47,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * Panel for rendering entity collection; analogous to (any concrete subclass
  * of) {@link ScalarPanelAbstract}.
  */
-public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implements ActionPromptProvider {
+public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implements ActionPromptProvider, HasSelectorDropdownPanel {
 
 
     private static final long serialVersionUID = 1L;
@@ -147,5 +149,18 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
         return IsisContext.getDeploymentType();
     }
 
+
+    //region > SelectorDropdownPanel (impl)
+
+    private CollectionContentsSelectorDropdownPanel selectorDropdownPanel;
+
+    @Override
+    public CollectionContentsSelectorDropdownPanel getSelectorDropdownPanel() {
+        return selectorDropdownPanel;
+    }
+    public void setSelectorDropdownPanel(CollectionContentsSelectorDropdownPanel selectorDropdownPanel) {
+        this.selectorDropdownPanel = selectorDropdownPanel;
+    }
+    //endregion
 
 }

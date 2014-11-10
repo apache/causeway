@@ -25,7 +25,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.model.Model;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -36,6 +35,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.CollectionContentsSelectorDropdownPanel;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.CollectionContentsSelectorHelper;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.HasSelectorDropdownPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -54,7 +54,7 @@ public class CollectionContentsLinksSelectorPanel
     private static final String INVISIBLE_CLASS = "link-selector-panel-invisible";
     private static final int MAX_NUM_UNDERLYING_VIEWS = 10;
 
-    private static final String ID_SELECTOR_DROPDOWN = "selectorDropdown";
+//    private static final String ID_SELECTOR_DROPDOWN = "selectorDropdown";
 
     private static final String UIHINT_VIEW = "view";
 
@@ -65,10 +65,9 @@ public class CollectionContentsLinksSelectorPanel
     private final CollectionContentsSelectorHelper selectorHelper;
 
     private ComponentFactory selectedComponentFactory;
-    protected Component selectedComponent;
+    private Component selectedComponent;
 
     private Component[] underlyingViews;
-    private List<ComponentFactory> componentFactories;
     private CollectionContentsSelectorDropdownPanel selectorDropdownPanel;
 
     public CollectionContentsLinksSelectorPanel(
@@ -81,7 +80,6 @@ public class CollectionContentsLinksSelectorPanel
         this.componentType = ignoreFactory.getComponentType();
         selectorHelper = new CollectionContentsSelectorHelper(model, getComponentFactoryRegistry(), ignoreFactory);
 
-        componentFactories = selectorHelper.findOtherComponentFactories();
     }
 
     /**
@@ -96,7 +94,8 @@ public class CollectionContentsLinksSelectorPanel
     private void addUnderlyingViews() {
         final EntityCollectionModel model = getModel();
 
-        final int selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanel);
+        final int selected = selectorHelper.honourViewHintElseDefault(getSelectorDropdownPanel());
+        final List<ComponentFactory> componentFactories = selectorHelper.findOtherComponentFactories();
 
         // create all, hide the one not selected
         underlyingViews = new Component[MAX_NUM_UNDERLYING_VIEWS];
@@ -118,19 +117,20 @@ public class CollectionContentsLinksSelectorPanel
         }
 
         // selector
-        if (componentFactories.size() <= 1) {
-            permanentlyHide(ID_SELECTOR_DROPDOWN);
-        } else {
-            final Model<ComponentFactory> componentFactoryModel = new Model<>();
+//        if (componentFactories.size() <= 1) {
+//            permanentlyHide(ID_SELECTOR_DROPDOWN);
+//        } else {
+//            final Model<ComponentFactory> componentFactoryModel = new Model<>();
+//
+//            this.selectedComponentFactory = componentFactories.get(selected);
+//            componentFactoryModel.setObject(this.selectedComponentFactory);
+//
+//            selectorDropdownPanel = new CollectionContentsSelectorDropdownPanel(ID_SELECTOR_DROPDOWN, getModel(), ignoreFactory);
+//
+//            addOrReplace(selectorDropdownPanel);
+//        }
 
-            this.selectedComponentFactory = componentFactories.get(selected);
-            componentFactoryModel.setObject(this.selectedComponentFactory);
-
-            selectorDropdownPanel = new CollectionContentsSelectorDropdownPanel(ID_SELECTOR_DROPDOWN, getModel(), ignoreFactory);
-
-            this.setOutputMarkupId(true);
-            addOrReplace(selectorDropdownPanel);
-        }
+        this.setOutputMarkupId(true);
 
         for(i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
             Component component = underlyingViews[i];
@@ -155,7 +155,10 @@ public class CollectionContentsLinksSelectorPanel
         final UiHintContainer uiHintContainer = uiHintEvent.getUiHintContainer();
 
         int underlyingViewNum = 0;
-        String viewStr = uiHintContainer.getHint(this.selectorDropdownPanel, UIHINT_VIEW);
+        String viewStr = uiHintContainer.getHint(this.getSelectorDropdownPanel(), UIHINT_VIEW);
+
+        List<ComponentFactory> componentFactories = selectorHelper.findOtherComponentFactories();
+
         if(viewStr != null) {
             try {
                 int view = Integer.parseInt(viewStr);
@@ -184,7 +187,7 @@ public class CollectionContentsLinksSelectorPanel
 
         final AjaxRequestTarget target = uiHintEvent.getTarget();
         if(target != null) {
-            target.add(this, selectorDropdownPanel);
+            target.add(this, getSelectorDropdownPanel());
         }
 
     }
@@ -214,6 +217,27 @@ public class CollectionContentsLinksSelectorPanel
         } else {
             return null;
         }
+    }
+
+    /**
+     * Searches up the component hierarchy looking for a parent that implements
+     * {@link org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.HasSelectorDropdownPanel}.
+     * @return
+     */
+    private CollectionContentsSelectorDropdownPanel getSelectorDropdownPanel() {
+        Component component = this;
+        while(component != null) {
+            if(component instanceof HasSelectorDropdownPanel) {
+                final CollectionContentsSelectorDropdownPanel selectorDropdownPanel1 = ((HasSelectorDropdownPanel) component).getSelectorDropdownPanel();
+                if(selectorDropdownPanel1 == null) {
+                    throw new IllegalStateException("Found parent that implements HasSelectorDropdownPanel, but no SelectorDropdownPanel available (is null)");
+
+                }
+                return selectorDropdownPanel1;
+            }
+            component = component.getParent();
+        }
+        throw new IllegalStateException("Could not locate parent that implements HasSelectorDropdownPanel");
     }
 
 }

@@ -20,9 +20,11 @@
 package org.apache.isis.viewer.wicket.ui.components.entity.collections;
 
 import java.util.List;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
@@ -35,8 +37,12 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.CollectionContentsSelectorDropdownPanel;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.dropdown.CollectionContentsSelectorHelper;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.selector.links.CollectionContentsLinksSelectorPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPathSignificantWebMarkupContainer;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -57,11 +63,15 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
 
     private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
 
-    private Label labelComponent;
+    private static final String ID_SELECTOR_DROPDOWN = "selectorDropdown";
 
+
+    private ComponentFactory selectedComponentFactory;
+    private Component selectedComponent;
 
     public EntityCollectionsPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
+
         buildGui();
     }
 
@@ -114,13 +124,37 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
         final CollectionPanel collectionPanel = new CollectionPanel(ID_COLLECTION, entityModel, otma);
         fieldset.addOrReplace(collectionPanel);
 
-        labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, association.getName());
+        Label labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, association.getName());
+
         fieldset.add(labelComponent);
 
         final EntityCollectionModel entityCollectionModel = collectionPanel.getModel();
         List<LinkAndLabel> links = entityCollectionModel.getLinks();
         AdditionalLinksPanel additionalLinks = new AdditionalLinksPanel(ID_ADDITIONAL_LINKS, links);
         fieldset.addOrReplace(additionalLinks);
+
+        CollectionContentsSelectorHelper selectorHelper = new CollectionContentsSelectorHelper(entityCollectionModel, getComponentFactoryRegistry(), new CollectionContentsLinksSelectorPanelFactory());
+
+        final List<ComponentFactory> componentFactories = selectorHelper.findOtherComponentFactories();
+
+        if (componentFactories.size() <= 1) {
+            permanentlyHide(ID_SELECTOR_DROPDOWN);
+        } else {
+            CollectionContentsSelectorDropdownPanel selectorDropdownPanel;
+            selectorDropdownPanel = new CollectionContentsSelectorDropdownPanel(ID_SELECTOR_DROPDOWN, entityCollectionModel, new CollectionContentsLinksSelectorPanelFactory());
+
+            final Model<ComponentFactory> componentFactoryModel = new Model<>();
+
+            final int selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanel);
+            this.selectedComponentFactory = componentFactories.get(selected);
+            componentFactoryModel.setObject(this.selectedComponentFactory);
+
+            this.setOutputMarkupId(true);
+            fieldset.addOrReplace(selectorDropdownPanel);
+
+            collectionPanel.setSelectorDropdownPanel(selectorDropdownPanel);
+        }
+
     }
 
     private List<ObjectAssociation> visibleCollections(final ObjectAdapter adapter, final ObjectSpecification noSpec) {
