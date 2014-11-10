@@ -128,9 +128,9 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
         AdditionalLinksPanel additionalLinks = new AdditionalLinksPanel(ID_ADDITIONAL_LINKS, links);
         fieldset.addOrReplace(additionalLinks);
 
-        final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry(), new CollectionContentsMultipleViewsPanelFactory());
+        final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry());
 
-        final List<ComponentFactory> componentFactories = selectorHelper.findOtherComponentFactories();
+        final List<ComponentFactory> componentFactories = selectorHelper.findOtherComponentFactories(getComponentFactoryRegistry());
 
         if (componentFactories.size() <= 1) {
             permanentlyHide(ID_SELECTOR_DROPDOWN);

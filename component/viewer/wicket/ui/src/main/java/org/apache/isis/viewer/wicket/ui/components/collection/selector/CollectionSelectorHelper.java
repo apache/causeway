@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collection.selector;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import com.google.common.base.Predicate;
@@ -38,30 +39,29 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 
-public class CollectionSelectorHelper {
+public class CollectionSelectorHelper implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     static final String UIHINT_EVENT_VIEW_KEY = "view";
 
-    private final ComponentType componentType;
-    private final ComponentFactoryRegistry componentFactoryRegistry;
-    private final EntityCollectionModel model;
-    private final ComponentFactory ignoreFactory;
-    private final List<ComponentFactory> componentFactories;
+    private static final ComponentFactory ignoreFactory = new CollectionContentsMultipleViewsPanelFactory();
+    private static final ComponentType componentType = ComponentType.COLLECTION_CONTENTS; // this.ignoreFactory.getComponentType();;
 
+    private final EntityCollectionModel model;
+    private final List<ComponentFactory> componentFactories;
 
     public CollectionSelectorHelper(
             final EntityCollectionModel model,
-            final ComponentFactoryRegistry componentFactoryRegistry,
-            final ComponentFactory ignoreFactory) {
-        this.componentFactoryRegistry = componentFactoryRegistry;
+            final ComponentFactoryRegistry componentFactoryRegistry) {
         this.model = model;
-        this.ignoreFactory = ignoreFactory;
-        this.componentType = ignoreFactory.getComponentType();
-
-        componentFactories = findOtherComponentFactories();
+        this.componentFactories = findOtherComponentFactories(componentFactoryRegistry);
     }
 
-    public List<ComponentFactory> findOtherComponentFactories() {
+    public List<ComponentFactory> findOtherComponentFactories(ComponentFactoryRegistry componentFactoryRegistry) {
+        if(componentFactories != null) {
+            return componentFactories;
+        }
         final List<ComponentFactory> componentFactories = componentFactoryRegistry.findComponentFactories(componentType, model);
         ArrayList<ComponentFactory> otherFactories = Lists.newArrayList(Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
             @Override

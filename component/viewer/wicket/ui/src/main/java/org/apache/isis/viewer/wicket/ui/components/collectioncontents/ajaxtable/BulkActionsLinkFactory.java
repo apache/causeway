@@ -23,7 +23,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.apache.wicket.Session;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.isis.applib.RecoverableException;
@@ -54,25 +53,20 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFac
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 
-final class BulkActionsLinkFactory implements ActionLinkFactory {
+public final class BulkActionsLinkFactory implements ActionLinkFactory {
     
     private static final long serialVersionUID = 1L;
     private final EntityCollectionModel model;
     
-    @SuppressWarnings("unused")
-    private final DataTable<ObjectAdapter,String> dataTable;
-    private ObjectAdapterToggleboxColumn toggleboxColumn;
+    private final ObjectAdapterToggleboxColumn toggleboxColumn;
 
-    BulkActionsLinkFactory(
-            final EntityCollectionModel model, 
-            final DataTable<ObjectAdapter,String> dataTable) {
+    public BulkActionsLinkFactory(
+            final EntityCollectionModel model,
+            final ObjectAdapterToggleboxColumn toggleboxColumn) {
         this.model = model;
-        this.dataTable = dataTable;
-    }
-
-    public void setToggleboxColumn(ObjectAdapterToggleboxColumn toggleboxColumn) {
         this.toggleboxColumn = toggleboxColumn;
     }
+
 
     @Override
     public LinkAndLabel newLink(

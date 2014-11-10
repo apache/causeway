@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
 import java.util.List;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.apache.wicket.Component;
@@ -40,25 +39,17 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbstract;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterPropertyColumn;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterTitleColumn;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
@@ -66,19 +57,16 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
-public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider, ActionPromptProvider, BulkActionsProvider, UiHintPathSignificant {
+public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider /*, ActionPromptProvider, BulkActionsProvider */, UiHintPathSignificant {
 
     private static final long serialVersionUID = 1L;
 
     private static final String ID_TABLE = "table";
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
-
     private static final String ID_ENTITY_ACTIONS = "entityActions";
 
-    @SuppressWarnings("deprecation")
-    private static final Predicate<ObjectAction> BULK = Filters.asPredicate(ObjectAction.Filters.bulk());
-    
     private IsisAjaxFallbackDataTable<ObjectAdapter,String> dataTable;
+
     private final BulkActionsHelper bulkActionsHelper;
 
 
@@ -94,14 +82,51 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     }
 
     private void buildGui() {
-        final EntityCollectionModel model = getModel();
 
         final List<IColumn<ObjectAdapter,String>> columns = Lists.newArrayList();
 
-        List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions();
+        // bulkactions
+        final BulkActionsProvider bulkActionsProvider = getBulkActionsProvider();
 
-        final ObjectAdapterToggleboxColumn toggleboxColumn = addToggleboxColumnIfRequired(columns, bulkActions);
+        ObjectAdapterToggleboxColumn toggleboxColumn = null;
+        if(bulkActionsProvider != null) {
 
+//            List<ObjectAction> bulkActions = bulkActionsProvider.getBulkActions();
+//            if(!bulkActions.isEmpty()) {
+
+            toggleboxColumn = bulkActionsProvider.createToggleboxColumn();
+            if(toggleboxColumn != null) {
+                columns.add(toggleboxColumn);
+            }
+            bulkActionsProvider.configureBulkActionsProvider(toggleboxColumn);
+
+//            }
+
+        }
+
+//        } else {
+//        if(bulkActions.isEmpty() || getModel().isParented()) {
+//            //permanentlyHide(ID_ENTITY_ACTIONS);
+//            getBulkActionsProvider().configureBulkActionsProvider(null, null);
+//        } else {
+
+//            actionLinkFactoryDelegating = new ActionLinkFactoryDelegating();
+//            actionPromptProviderDelegating = new ActionPromptProviderDelegating();
+
+            //getBulkActionsProvider().configureBulkActionsProvider(linkFactory, this);
+//            getBulkActionsProvider().configureBulkActionsProvider(linkFactory, null);
+
+//            final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(null, bulkActions, actionLinkFactoryDelegating, actionPromptProviderDelegating, null);
+//            final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
+//
+//            this.addOrReplace(cssMenuPanel);
+
+  //      }
+
+        //List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions();
+
+
+        final EntityCollectionModel model = getModel();
         addTitleColumn(columns, model.getParentObjectAdapterMemento(), getSettings().getMaxTitleLengthInStandaloneTables(), getSettings().getMaxTitleLengthInStandaloneTables());
         addPropertyColumnsIfRequired(columns);
 
@@ -110,69 +135,53 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         addOrReplace(dataTable);
         dataTable.honourHints();
 
-        addActionPromptModalWindow();
+        if(toggleboxColumn != null) {
+            final SelectionHandler handler = new SelectionHandler() {
 
-        // bulkactions
-        if(bulkActions.isEmpty() || getModel().isParented()) {
-            permanentlyHide(ID_ENTITY_ACTIONS);
-        } else {
-            BulkActionsLinkFactory linkFactory = new BulkActionsLinkFactory(getModel(), dataTable);
-            linkFactory.setToggleboxColumn(toggleboxColumn);
+                private static final long serialVersionUID = 1L;
 
-            actionLinkFactoryDelegating = new ActionLinkFactoryDelegating();
-            actionPromptProviderDelegating = new ActionPromptProviderDelegating();
+                @Override
+                public void onSelected(
+                        final Component context,
+                        final ObjectAdapter selectedAdapter,
+                        final AjaxRequestTarget ajaxRequestTarget) {
+                    model.toggleSelectionOn(selectedAdapter);
+                }
 
-            getBulkActionsProvider().configureBulkActionsProvider(linkFactory, this);
+                @Override
+                public void onConcurrencyException(
+                        final Component context,
+                        final ObjectAdapter selectedAdapter,
+                        final ConcurrencyException ex,
+                        final AjaxRequestTarget ajaxRequestTarget) {
 
-            final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(null, bulkActions, actionLinkFactoryDelegating, actionPromptProviderDelegating, null);
-            final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
+                    // this causes the row to be repainted
+                    // but it isn't possible (yet) to raise any warning
+                    // because that only gets flushed on page refresh.
+                    //
 
-            this.addOrReplace(cssMenuPanel);
-
+                    // perhaps something to tackle in a separate ticket....
+                    ajaxRequestTarget.add(dataTable);
+                }
+            };
+            toggleboxColumn.setHandler(handler);
         }
+
+        //addActionPromptModalWindow();
+
     }
 
     private BulkActionsProvider getBulkActionsProvider() {
-        return this;
-    }
-
-    private ObjectAdapterToggleboxColumn addToggleboxColumnIfRequired(
-            final List<IColumn<ObjectAdapter,String>> columns,
-            final List<ObjectAction> bulkActions) {
-        final EntityCollectionModel entityCollectionModel = getModel();
-        if(bulkActions.isEmpty() || entityCollectionModel.isParented()) {
-            return null;
+        Component component = this;
+        while(component != null) {
+            if(component instanceof BulkActionsProvider) {
+                return (BulkActionsProvider) component;
+            }
+            component = component.getParent();
         }
-        
-        ObjectAdapterToggleboxColumn toggleboxColumn = new ObjectAdapterToggleboxColumn(new SelectionHandler() {
-            
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onSelected(
-                    final Component context, final ObjectAdapter selectedAdapter,
-                    AjaxRequestTarget ajaxRequestTarget) {
-                entityCollectionModel.toggleSelectionOn(selectedAdapter);
-            }
-
-            @Override
-            public void onConcurrencyException(
-                    final Component context, ObjectAdapter selectedAdapter, 
-                    ConcurrencyException ex,
-                    AjaxRequestTarget ajaxRequestTarget) {
-                
-                // this causes the row to be repainted
-                // but it isn't possible (yet) to raise any warning
-                // because that only gets flushed on page refresh.
-                //
-                
-                // perhaps something to tackle in a separate ticket....
-                ajaxRequestTarget.add(dataTable);
-            }
-        });
-        columns.add(toggleboxColumn);
-        return toggleboxColumn;
+        return null;
     }
+
 
 
     private void addTitleColumn(final List<IColumn<ObjectAdapter,String>> columns, ObjectAdapterMemento parentAdapterMementoIfAny, int maxTitleParented, int maxTitleStandalone) {
@@ -249,19 +258,19 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     //endregion
 
 
-    //region > ActionPromptModalWindowProvider
-    
-    private ActionPromptModalWindow actionPromptModalWindow;
-    public ActionPromptModalWindow getActionPrompt() {
-        return ActionPromptModalWindow.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
-    }
-    
-    private void addActionPromptModalWindow() {
-        this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW); 
-        addOrReplace(actionPromptModalWindow);
-    }
-
-    //endregion
+//    //region > ActionPromptModalWindowProvider
+//
+//    private ActionPromptModalWindow actionPromptModalWindow;
+//    public ActionPromptModalWindow getActionPrompt() {
+//        return ActionPromptModalWindow.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
+//    }
+//
+//    private void addActionPromptModalWindow() {
+//        this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW);
+//        addOrReplace(actionPromptModalWindow);
+//    }
+//
+//    //endregion
 
     // //////////////////////////////////////
     
@@ -287,56 +296,6 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     // //////////////////////////////////////
 
 
-    private ActionPromptProviderDelegating actionPromptProviderDelegating;
-    private ActionLinkFactoryDelegating actionLinkFactoryDelegating;
-
-    @Override
-    public void configureBulkActionsProvider(
-            final ActionLinkFactory linkFactory,
-            final ActionPromptProvider actionPromptProvider) {
-        actionLinkFactoryDelegating.setDelegate(linkFactory);
-        actionPromptProviderDelegating.setDelegate(actionPromptProvider);
-    }
-
-    public static class ActionLinkFactoryDelegating implements ActionLinkFactory {
-
-        private ActionLinkFactory delegate;
-
-        public ActionLinkFactory getDelegate() {
-            return delegate;
-        }
-
-        public void setDelegate(ActionLinkFactory delegate) {
-            this.delegate = delegate;
-        }
-
-        @Override
-        public LinkAndLabel newLink(
-                final ObjectAdapterMemento adapter,
-                final ObjectAction noAction,
-                final String linkId,
-                final ActionPromptProvider actionPromptProvider) {
-            return delegate.newLink(adapter, noAction, linkId, actionPromptProvider);
-        }
-    }
-
-    public static class ActionPromptProviderDelegating implements ActionPromptProvider {
-
-        private ActionPromptProvider delegate;
-
-        public ActionPromptProvider getDelegate() {
-            return delegate;
-        }
-
-        public void setDelegate(ActionPromptProvider delegate) {
-            this.delegate = delegate;
-        }
-
-        @Override
-        public ActionPrompt getActionPrompt() {
-            return delegate.getActionPrompt();
-        }
-    }
 
 
 }

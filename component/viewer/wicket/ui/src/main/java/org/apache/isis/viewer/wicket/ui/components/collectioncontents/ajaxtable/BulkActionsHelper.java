@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import com.google.common.base.Predicate;
@@ -31,9 +32,11 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 
-public class BulkActionsHelper {
+public class BulkActionsHelper implements Serializable {
 
     private final EntityCollectionModel model;
+
+    private static final long serialVersionUID = 1L;
 
     public BulkActionsHelper(final EntityCollectionModel model) {
         this.model = model;

@@ -18,11 +18,11 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 
 public interface BulkActionsProvider {
 
-    public void configureBulkActionsProvider(ActionLinkFactory linkFactory, ActionPromptProvider actionPromptProvider);
+    void configureBulkActionsProvider(ObjectAdapterToggleboxColumn toggleboxColumn);
 
+    ObjectAdapterToggleboxColumn createToggleboxColumn();
 }

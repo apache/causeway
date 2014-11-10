@@ -75,7 +75,7 @@ public class CollectionContentsMultipleViewsPanel
         this.ignoreFactory = ignoreFactory;
         this.underlyingIdPrefix = ComponentType.COLLECTION_CONTENTS.toString();
         this.componentType = ignoreFactory.getComponentType();
-        selectorHelper = new CollectionSelectorHelper(model, getComponentFactoryRegistry(), ignoreFactory);
+        selectorHelper = new CollectionSelectorHelper(model, getComponentFactoryRegistry());
 
     }
 
@@ -92,7 +92,7 @@ public class CollectionContentsMultipleViewsPanel
         final EntityCollectionModel model = getModel();
 
         final int selected = selectorHelper.honourViewHintElseDefault(getSelectorDropdownPanel());
-        final List<ComponentFactory> componentFactories = selectorHelper.findOtherComponentFactories();
+        final List<ComponentFactory> componentFactories = selectorHelper.findOtherComponentFactories(getComponentFactoryRegistry());
 
         // create all, hide the one not selected
         underlyingViews = new Component[MAX_NUM_UNDERLYING_VIEWS];
@@ -140,7 +140,7 @@ public class CollectionContentsMultipleViewsPanel
         int underlyingViewNum = 0;
         String viewStr = uiHintContainer.getHint(this.getSelectorDropdownPanel(), UIHINT_VIEW);
 
-        List<ComponentFactory> componentFactories = selectorHelper.findOtherComponentFactories();
+        List<ComponentFactory> componentFactories = selectorHelper.findOtherComponentFactories(getComponentFactoryRegistry());
 
         if(viewStr != null) {
             try {

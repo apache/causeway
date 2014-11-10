@@ -39,13 +39,21 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
 
     private static final long serialVersionUID = 1L;
 
-    private final SelectionHandler handler;
+    private SelectionHandler handler;
 
+    public ObjectAdapterToggleboxColumn() {
+        this(null);
+    }
+    
     public ObjectAdapterToggleboxColumn(final SelectionHandler handler) {
         super("");
         this.handler = handler;
     }
-    
+
+    public void setHandler(SelectionHandler handler) {
+        this.handler = handler;
+    }
+
     @Override
     public Component getHeader(String componentId) {
         
@@ -82,12 +90,16 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
                 ObjectAdapter selectedAdapter = null;
                 try {
                     selectedAdapter = entityModel.load(ConcurrencyChecking.CHECK);
-                    handler.onSelected(this, selectedAdapter, target);
+                    if(handler != null) {
+                        handler.onSelected(this, selectedAdapter, target);
+                    }
                 } catch(ConcurrencyException ex) {
 
                     // should work second time, because the previous attempt will have updated the OAM's OIDs version.
                     selectedAdapter = entityModel.load(ConcurrencyChecking.CHECK);
-                    handler.onConcurrencyException(this, selectedAdapter, ex, target);
+                    if(handler != null) {
+                        handler.onConcurrencyException(this, selectedAdapter, ex, target);
+                    }
                     
                     entityModel.setException(ex);
                 }

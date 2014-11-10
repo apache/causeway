@@ -74,7 +74,7 @@ public class CollectionSelectorPanel
     public CollectionSelectorPanel(final String id, final EntityCollectionModel model, final ComponentFactory ignoreFactory) {
         super(id, model);
         this.componentType = ignoreFactory.getComponentType();
-        selectorHelper = new CollectionSelectorHelper(model, getComponentFactoryRegistry(), ignoreFactory);
+        selectorHelper = new CollectionSelectorHelper(model, getComponentFactoryRegistry());
     }
 
     /**
@@ -88,7 +88,7 @@ public class CollectionSelectorPanel
 
 
     private void addDropdown() {
-        final List<ComponentFactory> componentFactories = selectorHelper.findOtherComponentFactories();
+        final List<ComponentFactory> componentFactories = selectorHelper.findOtherComponentFactories(getComponentFactoryRegistry());
         final int selected = selectorHelper.honourViewHintElseDefault(this);
 
         // selector
