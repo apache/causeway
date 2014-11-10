@@ -23,11 +23,8 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 import com.google.common.collect.Maps;
-import org.apache.wicket.Component;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.PrependingStringBuffer;
-import org.apache.wicket.util.string.Strings;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -46,8 +43,6 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
@@ -59,7 +54,7 @@ import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
  * So that the model is {@link Serializable}, the {@link ObjectAdapter} is
  * stored as a {@link ObjectAdapterMemento}.
  */
-public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiHintContainer {
+public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
     private static final long serialVersionUID = 1L;
     
@@ -154,7 +149,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
 
     public EntityModel(final PageParameters pageParameters) {
         this(ObjectAdapterMemento.createPersistent(rootOidFrom(pageParameters)));
-        hintPageParameterSerializer.pageParametersToHints(pageParameters, this.hints);
+        hintPageParameterSerializer.pageParametersToHints(pageParameters, getHints());
     }
     public EntityModel(final ObjectAdapter adapter) {
         this(ObjectAdapterMemento.createOrNull(adapter));
@@ -183,7 +178,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
     @Override
     public PageParameters getPageParameters() {
         PageParameters pageParameters = createPageParameters(getObject());
-        hintPageParameterSerializer.hintsToPageParameters(hints, pageParameters);
+        hintPageParameterSerializer.hintsToPageParameters(getHints(), pageParameters);
         return pageParameters;
     }
 
@@ -466,67 +461,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements UiH
 
     
     
-    // //////////////////////////////////////////////////////////
-    // Hint support
-    // //////////////////////////////////////////////////////////
-    
-    private final Map<String, String> hints = Maps.newTreeMap();
-    
-    public String getHint(final Component component, final String key) {
-        if(component == null) {
-            return null;
-        }
-        String hintKey = hintKey(component, key);
-        return hints.get(hintKey);
-    }
-    
-    @Override
-    public void setHint(Component component, String key, String value) {
-        if(component == null) {
-            return;
-        }
-        String hintKey = hintKey(component, key);
-        if(value != null) {
-            hints.put(hintKey, value);
-        } else {
-            clearHint(component, hintKey);
-        }
-    }
-
-    @Override
-    public void clearHint(Component component, String key) {
-        if(component == null) {
-            return;
-        }
-        String hintKey = hintKey(component, key);
-        hints.remove(hintKey);
-    }
-
-    
-    private static String hintKey(Component component, String key) {
-        return hintPathFor(component) + "-" + key;
-    }
-
-    private static String hintPathFor(Component component)
-    {
-        return Strings.afterFirstPathComponent(fullHintPathFor(component), Component.PATH_SEPARATOR);
-    }
-
-    private static String fullHintPathFor(Component component)
-    {
-        final PrependingStringBuffer buffer = new PrependingStringBuffer(32);
-        for (Component c = component; c != null; c = c.getParent())
-        {
-            if(c instanceof UiHintPathSignificant) {
-                if (buffer.length() > 0)
-                {
-                    buffer.prepend(Component.PATH_SEPARATOR);
-                }
-                buffer.prepend(c.getId());
-            }
-        }
-        return buffer.toString();
-    }
 
     
     // //////////////////////////////////////////////////////////
