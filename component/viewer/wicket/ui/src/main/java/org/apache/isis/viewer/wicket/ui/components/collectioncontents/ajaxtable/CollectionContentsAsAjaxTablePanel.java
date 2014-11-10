@@ -21,12 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 
 import java.util.Collections;
 import java.util.List;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
@@ -34,7 +32,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.Model;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
@@ -76,9 +73,10 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     private static final long serialVersionUID = 1L;
 
     private static final String ID_TABLE = "table";
-    private static final String ID_ENTITY_ACTIONS = "entityActions";
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
-    
+
+    private static final String ID_ENTITY_ACTIONS = "entityActions";
+
     @SuppressWarnings("deprecation")
     private static final Predicate<ObjectAction> BULK = Filters.asPredicate(ObjectAction.Filters.bulk());
     
@@ -106,7 +104,7 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
         addPropertyColumnsIfRequired(columns);
 
         final SortableDataProvider<ObjectAdapter,String> dataProvider = new CollectionContentsSortableDataProvider(model);
-        dataTable = new IsisAjaxFallbackDataTable<ObjectAdapter,String>(ID_TABLE, columns, dataProvider, model.getPageSize());
+        dataTable = new IsisAjaxFallbackDataTable<>(ID_TABLE, columns, dataProvider, model.getPageSize());
         
         addActionPromptModalWindow();
         buildEntityActionsGui(bulkActions, this, toggleboxColumn);
@@ -152,16 +150,16 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     }
 
     private void buildEntityActionsGui(
-            final List<ObjectAction> bulkActions, 
+            final List<ObjectAction> bulkActions,
             final ActionPromptProvider actionPromptProvider,
             final ObjectAdapterToggleboxColumn toggleboxColumn) {
         final EntityCollectionModel model = getModel();
-        
+
         if(bulkActions.isEmpty() || model.isParented()) {
             permanentlyHide(ID_ENTITY_ACTIONS);
             return;
         }
-        
+
         if(!bulkActions.isEmpty()) {
             final ActionLinkFactory linkFactory = new BulkActionsLinkFactory(model, dataTable, toggleboxColumn);
 
