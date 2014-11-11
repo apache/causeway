@@ -33,8 +33,8 @@ import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
-import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
+import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
@@ -163,30 +163,33 @@ public class CollectionContentsMultipleViewsPanel
                 if(view >= 0 && view < componentFactories.size()) {
                     underlyingViewNum = view;
                 }
+
+
+                final EntityCollectionModel dummyModel = getModel().asDummy();
+                for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
+                    final Component component = underlyingViews[i];
+                    if(component == null) {
+                        continue;
+                    }
+                    final boolean isSelected = i == underlyingViewNum;
+                    applyCssVisibility(component, isSelected);
+                    component.setDefaultModel(isSelected? getModel(): dummyModel);
+                }
+
+                this.selectedComponentFactory = ignoreFactory;
+                this.selectedComponent = underlyingViews[underlyingViewNum];
+
+
+                final AjaxRequestTarget target = uiHintEvent.getTarget();
+                if(target != null) {
+                    target.add(this, selectorDropdownPanel);
+                }
+
             } catch(NumberFormatException ex) {
                 // ignore
             }
         }
 
-        final EntityCollectionModel dummyModel = getModel().asDummy();
-        for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
-            final Component component = underlyingViews[i];
-            if(component == null) {
-                continue;
-            }
-            final boolean isSelected = i == underlyingViewNum;
-            applyCssVisibility(component, isSelected);
-            component.setDefaultModel(isSelected? getModel(): dummyModel);
-        }
-
-        this.selectedComponentFactory = ignoreFactory;
-        this.selectedComponent = underlyingViews[underlyingViewNum];
-
-
-        final AjaxRequestTarget target = uiHintEvent.getTarget();
-        if(target != null) {
-            target.add(this, selectorDropdownPanel);
-        }
 
     }
 

@@ -139,3 +139,16 @@
 .collectionContentsAsAjaxTablePanel .table-responsive {
 	overflow-x: auto;
 }
+
+.collectionContentsAsAjaxTablePanel table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.collectionContentsAsAjaxTablePanel table tfoot tr:first-child td {
+    border-top: none;
+    border-bottom: none;
+}
+
+.collectionContentsAsAjaxTablePanel .table {
+    margin-bottom: 0px;
+}

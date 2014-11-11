@@ -65,6 +65,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
     private final ActionPromptModalWindow actionPromptModalWindow;
     private final CollectionSelectorPanel selectorDropdownPanel;
     private final BulkActionsHelper bulkActionsHelper;
+    private AdditionalLinksPanel additionalLinks;
 
     /**
      * note that the bulk actions components are added in {@link #configureBulkActions(org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn)}.
@@ -152,6 +153,9 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
     @Override
     public void configureBulkActions(final ObjectAdapterToggleboxColumn toggleboxColumn) {
 
+        if(additionalLinks != null) {
+            return;
+        }
         final BulkActionsLinkFactory linkFactory =
                 new BulkActionsLinkFactory(getModel(), toggleboxColumn);
 
@@ -164,7 +168,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
             }
         });
 
-        AdditionalLinksPanel additionalLinks = new AdditionalLinksPanel(ID_ADDITIONAL_LINKS, links);
+        additionalLinks = new AdditionalLinksPanel(ID_ADDITIONAL_LINKS, links);
         addOrReplace(additionalLinks);
 
 

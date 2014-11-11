@@ -22,10 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 import java.util.List;
-
 import com.google.common.collect.Lists;
-
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -38,7 +35,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -47,8 +43,10 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.*;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
@@ -347,9 +345,6 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     protected void applyLabelAtRule(Label scalarName, MarkupContainer formGroup) {
 
         final LabelAtFacet facet = getModel().getFacet(LabelAtFacet.class);
-
-        // TODO mgrigorov: Remove this. It is for debugging
-        scalarName.add(new AttributeModifier("title", "labelAt=" + (facet != null? facet.value(): "(null)")));
 
         if (facet != null) {
             switch (facet.value()) {

@@ -45,7 +45,6 @@ import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsHelper;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbstract;
@@ -64,17 +63,12 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     private static final long serialVersionUID = 1L;
 
     private static final String ID_TABLE = "table";
-    private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
-    private static final String ID_ENTITY_ACTIONS = "entityActions";
 
     private IsisAjaxFallbackDataTable<ObjectAdapter,String> dataTable;
-
-    private final BulkActionsHelper bulkActionsHelper;
 
 
     public CollectionContentsAsAjaxTablePanel(final String id, final EntityCollectionModel model) {
         super(id, model);
-        bulkActionsHelper = new BulkActionsHelper(model);
     }
     
     @Override
