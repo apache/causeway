@@ -37,9 +37,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -203,7 +203,7 @@ public class CollectionSelectorPanel
 
 
     protected void setViewHintAndBroadcast(int viewNum, AjaxRequestTarget target) {
-        final UiHintContainer uiHintContainer = getUiHintContainer();
+        final EntityModel uiHintContainer = getUiHintContainer(EntityModel.class);
         if(uiHintContainer == null) {
             return;
         }
@@ -217,4 +217,8 @@ public class CollectionSelectorPanel
         //PanelUtil.renderHead(response, CollectionSelectorPanel.class);
     }
 
+
 }
+
+
+

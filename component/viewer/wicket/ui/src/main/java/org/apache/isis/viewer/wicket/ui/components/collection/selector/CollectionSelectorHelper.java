@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -144,7 +145,7 @@ public class CollectionSelectorHelper implements Serializable {
 
 
     private static UiHintContainer getUiHintContainer(final Component component) {
-        return UiHintContainer.Util.hintContainerOf(component);
+        return UiHintContainer.Util.hintContainerOf(component, EntityModel.class);
     }
 
 

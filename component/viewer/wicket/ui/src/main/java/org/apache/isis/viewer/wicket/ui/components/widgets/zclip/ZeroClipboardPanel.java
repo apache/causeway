@@ -136,9 +136,11 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
             // ignore, since has already been primed
             return;
         }
-        subscribingLink = createSubscribingLink(uiHintContainer);
-//        addOrReplace(subscribingLink);
-        subscribingLink.setOutputMarkupId(true);
+        AbstractLink subscribingLink = createSubscribingLink(uiHintContainer);
+        if(subscribingLink != null) {
+            this.subscribingLink = subscribingLink;
+            this.subscribingLink.setOutputMarkupId(true);
+        }
     }
 
     private void addSimpleClipboardModalWindow() {
@@ -149,10 +151,7 @@ public class ZeroClipboardPanel extends PanelAbstract<EntityModel> {
     private AbstractLink createSubscribingLink(UiHintContainer uiHintContainer) {
         if(uiHintContainer == null || !(uiHintContainer instanceof EntityModel)) {
             // return a no-op
-            AbstractLink link = new AbstractLink(ID_SUBSCRIBING_LINK) {
-                private static final long serialVersionUID = 1L;
-            };
-            return link;
+            return null;
         } else {
             final EntityModel entityModel = (EntityModel) uiHintContainer;
             final PageParameters pageParameters = entityModel.getPageParameters();

@@ -137,8 +137,12 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
         return UiHintContainer.Util.hintContainerOf(this);
     }
 
+    public <T extends UiHintContainer> T getUiHintContainer(final Class<T> additionalConstraint) {
+        return UiHintContainer.Util.hintContainerOf(this, additionalConstraint);
+    }
 
-    // ///////////////////////////////////////////////////////////////////
+
+        // ///////////////////////////////////////////////////////////////////
     // Convenience
     // ///////////////////////////////////////////////////////////////////
 

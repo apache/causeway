@@ -29,16 +29,23 @@ public interface UiHintContainer {
 
     public static class Util {
         private Util(){}
+
         public static UiHintContainer hintContainerOf(Component component) {
+            return hintContainerOf(component, UiHintContainer.class);
+        }
+
+        public static <T extends UiHintContainer> T hintContainerOf(
+                final Component component, final Class<T> additionalConstraint) {
 
             if(component == null) {
                 return null;
             }
             IModel<?> model = component.getDefaultModel();
-            if(model instanceof UiHintContainer) {
-                return (UiHintContainer) model;
+            if(model != null && additionalConstraint.isAssignableFrom(model.getClass())) {
+                return additionalConstraint.cast(model);
             }
-            return hintContainerOf(component.getParent());
+            return hintContainerOf(component.getParent(), additionalConstraint);
         }
+
     }
 }

@@ -22,6 +22,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLoc
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 
 /**
@@ -81,9 +82,9 @@ public class IsisAjaxFallbackHeadersToolbar<S> extends IsisAjaxHeadersToolbar<S>
             }
         }
     }
-    
-    public UiHintContainer getUiHintContainer() {
-        return UiHintContainer.Util.hintContainerOf(table);
+
+    private EntityModel getUiHintContainer() {
+        return UiHintContainer.Util.hintContainerOf(this, EntityModel.class);
     }
 
 }
