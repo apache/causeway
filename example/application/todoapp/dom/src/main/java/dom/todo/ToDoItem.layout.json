@@ -52,13 +52,16 @@
                             "completed": {
                                 "named": { "value": "Done" },
                                 "describedAs": {
-                                    "value": "Mark this todo item as having been completed"
+                                    "value": "Update this todo item as complete"
                                 },
                                 "cssClassFa": { "value": "fa fa-thumbs-up" }
                             },
                             "notYetCompleted": {
                                 "named": { "value": "Not done" },
-                              "cssClassFa": { "value": "fa fa-thumbs-down" }
+                                "describedAs": {
+                                    "value": "Update this todo item as not yet complete"
+                                },
+                                "cssClassFa": { "value": "fa fa-thumbs-down" }
                             },
                             "scheduleExplicitly": {
                             },

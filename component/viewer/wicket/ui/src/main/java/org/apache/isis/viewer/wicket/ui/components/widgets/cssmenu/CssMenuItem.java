@@ -348,6 +348,11 @@ public class CssMenuItem implements Serializable {
         return action.getType().isExploration() || action.getType().isPrototype();
     }
 
+    public static String descriptionOf(ObjectAction action) {
+        return action.getDescription();
+    }
+
+
     public static String actionIdentifierFor(final ObjectAction action) {
         @SuppressWarnings("unused")
         final Identifier identifier = action.getIdentifier();

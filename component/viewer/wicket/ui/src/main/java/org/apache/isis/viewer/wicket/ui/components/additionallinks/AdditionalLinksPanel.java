@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.ui.components.additionallinks;
 
 import java.util.List;
-
 import com.google.common.base.Strings;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -29,7 +28,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
@@ -75,7 +73,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 
                 final AbstractLink link = linkAndLabel.getLink();
 
-                String cssClassFa = linkAndLabel.getCssClassFa();
+                final String cssClassFa = linkAndLabel.getCssClassFa();
                 if(Strings.isNullOrEmpty(cssClassFa)) {
                     Components.permanentlyHide(link, ID_ADDITIONAL_LINK_FONT_AWESOME);
                 } else {
@@ -84,11 +82,12 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                     dummy.add(new CssClassAppender(cssClassFa));
                 }
 
-                Label viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
-                String disabledReasonIfAny = linkAndLabel.getDisabledReasonIfAny();
-                if(disabledReasonIfAny != null) {
-                    viewTitleLabel.add(new AttributeAppender("title", disabledReasonIfAny));
+                final String itemTitle = first(linkAndLabel.getDisabledReasonIfAny(), linkAndLabel.getDescriptionIfAny());
+                if(itemTitle != null) {
+                    item.add(new AttributeAppender("title", itemTitle));
                 }
+
+                final Label viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
                 if(linkAndLabel.isBlobOrClob()) {
                     link.add(new CssClassAppender("noVeil"));
                 }
@@ -96,16 +95,25 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                     link.add(new CssClassAppender("prototype"));
                 }
                 link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));
-                String cssClass = linkAndLabel.getCssClass();
+
+                final String cssClass = linkAndLabel.getCssClass();
                 if(cssClass != null) {
                     link.add(new CssClassAppender(cssClass));
                 }
                 viewTitleLabel.add(new CssClassAppender(StringExtensions.asLowerDashed(linkAndLabel.getLabel())));
+
                 link.addOrReplace(viewTitleLabel);
                 item.addOrReplace(link);
             }
         };
         container.addOrReplace(listView);
+    }
+
+    private static String first(String... str) {
+        for (String s : str) {
+            if(s != null) return s;
+        }
+        return null;
     }
 
     /**

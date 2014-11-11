@@ -275,16 +275,17 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         }
     }
 
-    protected LinkAndLabel newLinkAndLabel(final ObjectAction action, final AbstractLink link, final String disabledReasonIfAny) {
+    protected LinkAndLabel newLinkAndLabel(final ObjectAction objectAction, final AbstractLink link, final String disabledReasonIfAny) {
 
-        final String label = ObjectAction.Utils.nameFor(action);
-        final boolean blobOrClob = CssMenuItem.returnsBlobOrClob(action);
-        final boolean prototype = CssMenuItem.isExplorationOrPrototype(action);
-        final String actionIdentifier = CssMenuItem.actionIdentifierFor(action);
-        final String cssClass = CssMenuItem.cssClassFor(action);
-        final String cssClassFa = CssMenuItem.cssClassFaFor(action);
+        final String label = ObjectAction.Utils.nameFor(objectAction);
+        final boolean blobOrClob = CssMenuItem.returnsBlobOrClob(objectAction);
+        final boolean prototype = CssMenuItem.isExplorationOrPrototype(objectAction);
+        final String actionIdentifier = CssMenuItem.actionIdentifierFor(objectAction);
+        final String description = CssMenuItem.descriptionOf(objectAction);
+        final String cssClass = CssMenuItem.cssClassFor(objectAction);
+        final String cssClassFa = CssMenuItem.cssClassFaFor(objectAction);
 
-        return new LinkAndLabel(link, label, disabledReasonIfAny, blobOrClob, prototype, actionIdentifier, cssClass, cssClassFa);
+        return new LinkAndLabel(link, label, disabledReasonIfAny, description, blobOrClob, prototype, actionIdentifier, cssClass, cssClassFa);
     }
 
 
