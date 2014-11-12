@@ -131,21 +131,23 @@ public final class ServiceInstantiator {
             final T newInstance = proxySubclass.newInstance();
             final ProxyObject proxyObject = (ProxyObject) newInstance;
             proxyObject.setHandler(new MethodHandler() {
-                private ThreadLocal<T> serviceByThread = new ThreadLocal<T>();
+                private ThreadLocal<T> serviceByThread = new ThreadLocal<>();
                 
                 @Override
                 public Object invoke(final Object proxied, final Method proxyMethod, final Method proxiedMethod, final Object[] args) throws Throwable {
 
                     cacheMethodsIfNecessary(cls);
 
-                    if(proxyMethod.getName().equals("__isis_startRequest")) {
+                    String proxyMethodName = proxyMethod.getName();
+
+                    if(proxyMethodName.equals("__isis_startRequest")) {
                         T service = instantiate(cls);
 
                         callPostConstructIfPresent(service);
 
                         serviceByThread.set(service);
                         return null;
-                    } else if(proxyMethod.getName().equals("__isis_endRequest")) {
+                    } else if(proxyMethodName.equals("__isis_endRequest")) {
 
                         final T service = serviceByThread.get();
 
@@ -156,7 +158,13 @@ public final class ServiceInstantiator {
                     } else {
                         T service = serviceByThread.get();
                         if(service == null) {
-                            throw new IllegalStateException("No service found for thread; make sure ((RequestScopedService)service).__isis_startRequest() is called first");
+                            if (proxyMethodName.endsWith("toString")) {
+                                return proxied.getClass().getName();
+                            } else if (proxyMethodName.endsWith("hashCode")) {
+                                return 0;
+                            } else {
+                                throw new IllegalStateException("No service found for thread; make sure ((RequestScopedService)service).__isis_startRequest() is called first");
+                            }
                         }
                         final Object proxiedReturn = proxyMethod.invoke(service, args); 
                         return proxiedReturn;
@@ -165,9 +173,7 @@ public final class ServiceInstantiator {
             });
 
             return newInstance;
-        } catch (final InstantiationException e) {
-            throw new IsisException(e);
-        } catch (final IllegalAccessException e) {
+        } catch (final InstantiationException | IllegalAccessException e) {
             throw new IsisException(e);
         }
     }

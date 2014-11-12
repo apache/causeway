@@ -26,36 +26,35 @@ import org.apache.isis.core.commons.lang.ObjectExtensions;
 
 public final class ToString {
 
-
     public static ToString createAnonymous(final Object object) {
         final ToString string = new ToString();
         string.append(ObjectExtensions.classBaseName(object));
-        string.append("[");
+        string.append('[');
         return string;
     }
 
     // //////////////////////////////////////
 
     private boolean addComma = false;
-    private final StringBuffer buf;
+    private final StringBuilder buf;
     private boolean useLineBreaks;
 
     private ToString() {
-        buf = new StringBuffer();
+        buf = new StringBuilder();
     }
 
     public ToString(final Object forObject) {
-        buf = new StringBuffer();
+        buf = new StringBuilder();
         ObjectExtensions.appendToString(forObject, buf);
-        buf.append("[");
+        buf.append('[');
     }
 
     public ToString(final Object forObject, final int id) {
-        buf = new StringBuffer();
+        buf = new StringBuilder();
         buf.append(ObjectExtensions.classBaseName(forObject));
-        buf.append("#");
+        buf.append('#');
         buf.append(id);
-        buf.append("[");
+        buf.append('[');
     }
 
     public ToString(final Object forObject, final String text) {
@@ -65,6 +64,11 @@ public final class ToString {
     }
 
     // //////////////////////////////////////
+
+    public ToString append(final char c) {
+        buf.append(c);
+        return this;
+    }
 
     public ToString append(final String text) {
         buf.append(text);

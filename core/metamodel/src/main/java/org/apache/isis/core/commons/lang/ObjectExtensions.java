@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.commons.lang;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -114,10 +115,14 @@ public final class ObjectExtensions {
         return name.substring(name.lastIndexOf('.') + 1);
     }
 
-    public static void appendToString(final Object extendee, final StringBuffer buf) {
-        buf.append(classBaseName(extendee));
-        buf.append("@");
-        buf.append(Integer.toHexString(extendee.hashCode()));
+    public static void appendToString(final Object extendee, final Appendable buf) {
+        try {
+            buf.append(classBaseName(extendee));
+            buf.append('@');
+            buf.append(Integer.toHexString(extendee.hashCode()));
+        } catch (IOException iox) {
+            throw new RuntimeException("A problem occurred while appending an object to an appendable", iox);
+        }
     }
 
 }
