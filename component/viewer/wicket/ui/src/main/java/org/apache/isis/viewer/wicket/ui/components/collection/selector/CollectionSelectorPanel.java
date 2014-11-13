@@ -27,7 +27,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -39,7 +38,6 @@ import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -66,14 +64,12 @@ public class CollectionSelectorPanel
     private static final String ID_VIEW_BUTTON_TITLE = "viewButtonTitle";
     private static final String ID_VIEW_BUTTON_ICON = "viewButtonIcon";
 
-    private final ComponentType componentType;
     private final CollectionSelectorHelper selectorHelper;
 
     private ComponentFactory selectedComponentFactory;
 
     public CollectionSelectorPanel(final String id, final EntityCollectionModel model, final ComponentFactory ignoreFactory) {
         super(id, model);
-        this.componentType = ignoreFactory.getComponentType();
         selectorHelper = new CollectionSelectorHelper(model, getComponentFactoryRegistry());
     }
 
@@ -132,8 +128,8 @@ public class CollectionSelectorPanel
                             CollectionSelectorPanel linksSelectorPanel = CollectionSelectorPanel.this;
                             linksSelectorPanel.setViewHintAndBroadcast(underlyingViewNum, target);
 
-                            CollectionSelectorPanel.this.selectedComponentFactory = componentFactory;
-                            target.add(CollectionSelectorPanel.this, views);
+                            linksSelectorPanel.selectedComponentFactory = componentFactory;
+                            target.add(linksSelectorPanel, views);
                         }
 
                         @Override
@@ -203,21 +199,13 @@ public class CollectionSelectorPanel
 
 
     protected void setViewHintAndBroadcast(int viewNum, AjaxRequestTarget target) {
-        final EntityModel uiHintContainer = getUiHintContainer(EntityModel.class);
+        final EntityCollectionModel uiHintContainer = getUiHintContainer(EntityCollectionModel.class);
         if(uiHintContainer == null) {
             return;
         }
         uiHintContainer.setHint(CollectionSelectorPanel.this, CollectionSelectorHelper.UIHINT_EVENT_VIEW_KEY, ""+viewNum);
         send(getPage(), Broadcast.EXACT, new IsisUiHintEvent(uiHintContainer, target));
     }
-
-    @Override
-    public void renderHead(final IHeaderResponse response) {
-        super.renderHead(response);
-        //PanelUtil.renderHead(response, CollectionSelectorPanel.class);
-    }
-
-
 }
 
 
