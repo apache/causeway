@@ -73,17 +73,13 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> implem
         if(value != null) {
             hints.put(hintKey, value);
         } else {
-            clearHint(component, hintKey);
+            hints.remove(hintKey);
         }
     }
 
     @Override
     public void clearHint(Component component, String key) {
-        if(component == null) {
-            return;
-        }
-        String hintKey = hintKey(component, key);
-        hints.remove(hintKey);
+        setHint(component, key, null);
     }
 
 
