@@ -109,12 +109,6 @@ public class CollectionContentsMultipleViewsPanel
             this.addOrReplace(underlyingView);
         }
 
-        if(selectorDropdownPanelIfAny != null) {
-
-        } else {
-
-        }
-
         // hide any unused placeholders
         while(i<MAX_NUM_UNDERLYING_VIEWS) {
             String underlyingId = underlyingIdPrefix + "-" + i;
@@ -189,8 +183,6 @@ public class CollectionContentsMultipleViewsPanel
                 // ignore
             }
         }
-
-
     }
 
 
