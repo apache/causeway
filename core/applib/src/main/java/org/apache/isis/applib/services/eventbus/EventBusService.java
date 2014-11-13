@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.Programmatic;
  *      Only domain services (not domain entities or view models) should be registered; only they are guaranteed to be
  *      instantiated and resident in memory.
  * </p>
+ *
  * <p>
  *     It <i>is</i> possible to register request-scoped services, however they should register their proxy
  *     rather than themselves.  This ensures that the actual subscribers are all singletons.  This implementation uses
@@ -117,11 +118,8 @@ public abstract class EventBusService {
      *     @RequestScoped @DomainService
      *     public class SomeSubscribingService {
      *
-     *         private EventBusService ebs;
-     *         public void injectBus(EventBusService ebs) { this.ebs = ebs; }
-     *
-     *         private SomeSubscribingService proxy;
-     *         public void injectProxy(SomeSubscribingService proxy) { this.proxy = proxy; }
+     *         @Inject private EventBusService ebs;
+     *         @Inject private SomeSubscribingService proxy;
      *
      *         @PostConstruct
      *         public void startRequest() {
@@ -149,9 +147,14 @@ public abstract class EventBusService {
      */
     @Programmatic
     public void register(final Object domainService) {
-        if(eventBus != null) {
-            throw new IllegalStateException("Event bus has already been created; too late to register any further subscribers");
-        }
+        doRegister(domainService);
+    }
+
+    /**
+     * Extracted out only to make it easier for subclasses to override {@link #register(Object)} if there were ever a
+     * need to.
+     */
+    protected void doRegister(Object domainService) {
         subscribers.add(domainService);
     }
 
@@ -207,7 +210,7 @@ public abstract class EventBusService {
     /**
      * Lazily populated in {@link #getEventBus()}.
      */
-    private EventBus eventBus;
+    protected EventBus eventBus;
 
     /**
      * Lazily populates the event bus for the current {@link #getSubscribers() subscribers}.
