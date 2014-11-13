@@ -19,10 +19,8 @@
 package org.apache.isis.viewer.wicket.ui.errors;
 
 import java.util.List;
-
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
-
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
@@ -105,6 +103,7 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
     public boolean isAuthorizationException() {
         return authorizationCause;
     }
+
 
     public List<StackTraceDetail> getStackTrace() {
         return stackTraceDetailList;
