@@ -21,20 +21,14 @@ package org.apache.isis.core.runtime.system.session;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.SubscriberExceptionContext;
-import com.google.common.eventbus.SubscriberExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.isis.applib.NonRecoverableException;
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -71,8 +65,6 @@ public class IsisSessionDefault implements IsisSession {
     private long accessTime;
     private String debugSnapshot;
 
-    private EventBus eventBus;
-
     public IsisSessionDefault(
             final IsisSessionFactory sessionFactory,
             final AuthenticationSession authenticationSession,
@@ -102,27 +94,7 @@ public class IsisSessionDefault implements IsisSession {
 
     @Override
     public void open() {
-        this.eventBus = newEventBus();
-        
         persistenceSession.open();
-    }
-
-    protected EventBus newEventBus() {
-        return new EventBus(newEventBusSubscriberExceptionHandler());
-    }
-
-    protected SubscriberExceptionHandler newEventBusSubscriberExceptionHandler() {
-        return new SubscriberExceptionHandler(){
-            @Override
-            public void handleException(Throwable exception, SubscriberExceptionContext context) {
-                if(exception instanceof RecoverableException ||
-                   exception instanceof NonRecoverableException) {
-                    getTransactionManager().getTransaction().setAbortCause(new IsisApplicationException(exception));
-                } else {
-                    // simply ignore
-                }
-            }
-        };
     }
 
     /**
@@ -132,8 +104,6 @@ public class IsisSessionDefault implements IsisSession {
     public void close() {
         takeSnapshot();
         getPersistenceSession().close();
-        
-        eventBus = null;
     }
 
     // //////////////////////////////////////////////////////
@@ -160,11 +130,6 @@ public class IsisSessionDefault implements IsisSession {
     // //////////////////////////////////////////////////////
     // ExecutionContextFactory
     // //////////////////////////////////////////////////////
-
-    @Override
-    public IsisSessionFactory getSessionFactory() {
-        return isisSessionFactory;
-    }
 
     /**
      * Convenience method.
@@ -249,11 +214,6 @@ public class IsisSessionDefault implements IsisSession {
     @Override
     public IsisTransaction getCurrentTransaction() {
         return getTransactionManager().getTransaction();
-    }
-
-    @Override
-    public EventBus getEventBus() {
-        return eventBus;
     }
 
     // //////////////////////////////////////////////////////

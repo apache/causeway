@@ -19,20 +19,32 @@ package org.apache.isis.core.runtime.services;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import javax.enterprise.context.RequestScoped;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class ServiceInstantiatorTest {
 
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+
     private ServiceInstantiator serviceInstantiator;
-    
+
+    @JUnitRuleMockery2.Ignoring
+    @Mock
+    private ServicesInjector mockServiceInjector;
+
     @Before
     public void setUp() throws Exception {
+
         serviceInstantiator = new ServiceInstantiator();
         serviceInstantiator.setConfiguration(new IsisConfigurationDefault());
     }
@@ -53,7 +65,7 @@ public class ServiceInstantiatorTest {
     public void requestScoped_justOneThread() {
         AccumulatingCalculator calculator = serviceInstantiator.createInstance(AccumulatingCalculator.class);
         try {
-            ((RequestScopedService)calculator).__isis_startRequest();
+            ((RequestScopedService)calculator).__isis_startRequest(mockServiceInjector);
             assertThat(calculator.add(3), is(3));
             assertThat(calculator.add(4), is(7));
             assertThat(calculator.getTotal(), is(7));
@@ -88,16 +100,14 @@ public class ServiceInstantiatorTest {
             new Thread() {
                 public void run() {
                     try {
-                        ((RequestScopedService)calculator).__isis_startRequest();
+                        ((RequestScopedService)calculator).__isis_startRequest(mockServiceInjector);
                         // keep incrementing, til no more steps
                         while(steps[0]>0) {
                             try {
                                 calculator.add((j+1));
                                 totals[j] = calculator.getTotal();
                                 barrier.await();
-                            } catch (InterruptedException e) {
-                                throw new RuntimeException(e);
-                            } catch (BrokenBarrierException e) {
+                            } catch (InterruptedException | BrokenBarrierException e) {
                                 throw new RuntimeException(e);
                             }
                         }

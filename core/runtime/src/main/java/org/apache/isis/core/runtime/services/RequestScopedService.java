@@ -19,25 +19,62 @@
 
 package org.apache.isis.core.runtime.services;
 
-import com.google.common.base.Predicate;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 
+/**
+ * Interface in support of request-scoped domain services (is implemented by the Javassist proxy).
+ *
+ * <p>
+ *     Do NOT implement directly (will cause the javassist generation to fail).  Instead the request-scoped service
+ *     can provide a (conventional) <code>@PostConstruct</code> and <code>@PreDestroy</code> method.
+ * </p>
+ */
 public interface RequestScopedService {
 
-    public static final class Predicates {
-        private Predicates(){}
-        public static Predicate<Object> instanceOf() {
-            return new Predicate<Object>(){
-                @Override
-                public boolean apply(Object input) {
-                    return input instanceof RequestScopedService;
-                }
-            };
-        }
-    };
+    /**
+     * Indicates to the proxy that a new request is starting, so should instantiate a new instance of the underlying
+     * service and bind to the thread, and inject into that service using the provided {@link org.apache.isis.core.metamodel.runtimecontext.ServicesInjector}.
+     *
+     * <p>
+     *     This is done before the <code>@PostConstruct</code>, see {@link #__isis_postConstruct()}.
+     * </p>
+     */
+    @Programmatic
+    public void __isis_startRequest(ServicesInjector injector);
 
-    public void __isis_startRequest();
-    
+    /**
+     * Indicates to the proxy that <code>@PostConstruct</code> should be called on
+     * underlying instance for current thread.
+     *
+     * <p>
+     *     This is done after the request has started, see {@link #__isis_startRequest(org.apache.isis.core.metamodel.runtimecontext.ServicesInjector)}.
+     * </p>
+     */
+    @Programmatic
+    public void __isis_postConstruct();
+
+    /**
+     * Indicates to the proxy that <code>@PreDestroy</code> should be called on
+     * underlying instance for current thread.
+     *
+     * <p>
+     *     This is done prior to the request ending, see {@link #__isis_endRequest()}.
+     * </p>
+     */
+    @Programmatic
+    public void __isis_preDestroy();
+
+    /**
+     * Indicates to the proxy that request is ending, so should clean up and remove the
+     * underlying instance for current thread.
+     *
+     * <p>
+     *     This is done after the <code>@PreDestroy</code>, see {@link #__isis_preDestroy()}.
+     * </p>
+     */
+    @Programmatic
     public void __isis_endRequest();
 
 }

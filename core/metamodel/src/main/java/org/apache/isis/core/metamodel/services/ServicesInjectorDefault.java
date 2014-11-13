@@ -169,6 +169,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
     //region > helpers
 
     private void injectServices(final Object object, final List<Object> services) {
+
         final Class<?> cls = object.getClass();
 
         autowireViaFields(object, services, cls);

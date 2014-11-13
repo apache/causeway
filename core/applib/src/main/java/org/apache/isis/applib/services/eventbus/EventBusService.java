@@ -16,8 +16,13 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import com.google.common.collect.MapMaker;
+import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
-
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
 
@@ -26,10 +31,15 @@ import org.apache.isis.applib.annotation.Programmatic;
  * subscribed to.
  *  
  * <p>
- * It is highly advisable that only domain services - not domain entities - are registered as subscribers.  
- * Domain services are guaranteed to be instantiated and resident in memory, whereas the same is not true
- * of domain entities.  The typical implementation of a domain service subscriber is to identify the impacted entities,
- * load them using a repository, and then to delegate to the event to them.
+ *      Only domain services (not domain entities or view models) should be registered; only they are guaranteed to be
+ *      instantiated and resident in memory.
+ * </p>
+ * <p>
+ *     It <i>is</i> possible to register request-scoped services, however they should register their proxy
+ *     rather than themselves.  This ensures that the actual subscribers are all singletons.  This implementation uses
+ *     reference counting to keep track of whether there are any concurrent instances of a request-scoped service
+ *     (keeps things nice and symmetrical).
+ * </p>
  */
 @Hidden
 public abstract class EventBusService {
@@ -56,34 +66,47 @@ public abstract class EventBusService {
     /**
      * @return an {@link EventBus} scoped to the current session.
      */
+    @Programmatic
     protected abstract EventBus getEventBus();
-    
-    /**
-     * Register the domain object with the service.
-     * 
-     * <p>
-     * This must be called manually, but a good technique is for the domain object to call
-     * this method when the service is injected into it.
-     * 
-     * <p>
-     * For example:
-     * <pre>
-     * private EventBusService eventBusService;
-     * public void injectEventBusService(final EventBusService eventBusService) {
-     *     this.eventBusService = eventBusService;
-     *     eventBusService.register(this);
-     * }
-     * </pre>
-     */
+
+    //region > register, unregister
+
     @Programmatic
     public void register(Object domainObject) {
-        getEventBus().register(domainObject);
+        referenceCountBySubscriber.putIfAbsent(domainObject, new AtomicInteger(0));
+        referenceCountBySubscriber.get(domainObject).incrementAndGet();
     }
-    
+
     @Programmatic
     public void unregister(Object domainObject) {
-        getEventBus().unregister(domainObject);
+        final AtomicInteger atomicInteger = referenceCountBySubscriber.get(domainObject);
+        atomicInteger.decrementAndGet();
     }
+
+    //endregion
+
+    //region > subscribers
+
+    private final ConcurrentMap<Object, AtomicInteger> referenceCountBySubscriber = new MapMaker().weakKeys().makeMap();
+
+    /**
+     * Not API
+     */
+    @Programmatic
+    public Set<Object> getSubscribers() {
+
+
+
+        // only those subscribers that are "active"
+        Set<Object> subscribers = Sets.newLinkedHashSet();
+        for (Map.Entry<Object, AtomicInteger> subscriberReferenceCount : this.referenceCountBySubscriber.entrySet()) {
+            if(subscriberReferenceCount.getValue().get()>0) {
+                subscribers.add(subscriberReferenceCount.getKey());
+            }
+        }
+        return subscribers;
+    }
+    //endregion
     
     /**
      * Post an event.

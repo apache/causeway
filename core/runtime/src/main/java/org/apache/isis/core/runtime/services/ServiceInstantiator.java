@@ -41,6 +41,7 @@ import org.apache.isis.core.commons.factory.InstanceCreationClassException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.commons.lang.MethodExtensions;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.JavassistEnhanced;
 
 /**
@@ -131,7 +132,7 @@ public final class ServiceInstantiator {
             final T newInstance = proxySubclass.newInstance();
             final ProxyObject proxyObject = (ProxyObject) newInstance;
             proxyObject.setHandler(new MethodHandler() {
-                private ThreadLocal<T> serviceByThread = new ThreadLocal<T>();
+                private ThreadLocal<T> serviceByThread = new ThreadLocal<>();
                 
                 @Override
                 public Object invoke(final Object proxied, final Method proxyMethod, final Method proxiedMethod, final Object[] args) throws Throwable {
@@ -139,24 +140,58 @@ public final class ServiceInstantiator {
                     cacheMethodsIfNecessary(cls);
 
                     if(proxyMethod.getName().equals("__isis_startRequest")) {
+
                         T service = instantiate(cls);
+                        serviceByThread.set(service);
+
+                        ServicesInjector servicesInjector = (ServicesInjector) args[0];
+                        servicesInjector.injectServicesInto(service);
+
+                        return null;
+
+                    } else if(proxyMethod.getName().equals("__isis_postConstruct")) {
+
+                        final T service = serviceByThread.get();
 
                         callPostConstructIfPresent(service);
 
-                        serviceByThread.set(service);
                         return null;
-                    } else if(proxyMethod.getName().equals("__isis_endRequest")) {
+
+                    } else if(proxyMethod.getName().equals("__isis_preDestroy")) {
 
                         final T service = serviceByThread.get();
 
                         callPreDestroyIfPresent(service);
 
+                        return null;
+
+                    } else if(proxyMethod.getName().equals("__isis_endRequest")) {
+
                         serviceByThread.set(null);
                         return null;
+
+                    } else if(proxyMethod.getName().equals("hashCode") && proxyMethod.getParameterTypes().length == 0) {
+
+                        final T service = serviceByThread.get();
+                        return service != null? service.hashCode(): this.hashCode();
+
+                    } else if(proxyMethod.getName().equals("equals") && proxyMethod.getParameterTypes().length == 1 && proxyMethod.getParameterTypes()[0] == Object.class) {
+
+                        final T service = serviceByThread.get();
+                        return service != null? service.equals(args[0]): this.equals(args[0]);
+
+                    } else if(proxyMethod.getName().equals("toString") && proxyMethod.getParameterTypes().length == 0) {
+
+                        final T service = serviceByThread.get();
+                        return service != null? service.toString(): this.toString();
+
                     } else {
                         T service = serviceByThread.get();
                         if(service == null) {
-                            throw new IllegalStateException("No service found for thread; make sure ((RequestScopedService)service).__isis_startRequest() is called first");
+                            // ignore; this could potentially happen during an application-level init (PersistenceSessionFactory#init)
+                            // it has also happened in past when enabling debugging, though the
+                            // new hashCode(), equals() and toString() checks above should mitigate.
+                            return null;
                         }
                         final Object proxiedReturn = proxyMethod.invoke(service, args); 
                         return proxiedReturn;

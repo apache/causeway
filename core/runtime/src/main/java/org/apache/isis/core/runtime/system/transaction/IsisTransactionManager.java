@@ -40,7 +40,6 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.services.RequestScopedService;
-import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
@@ -251,11 +250,10 @@ public class IsisTransactionManager implements SessionScopedComponent {
         if (getTransaction() == null || getTransaction().getState().isComplete()) {
             noneInProgress = true;
 
-            final List<Object> registeredServices = servicesInjector.getRegisteredServices();
 
-            startRequestOnRequestScopedServices(registeredServices);
+            startRequestOnRequestScopedServices();
             createCommandIfConfigured();
-            initOtherApplibServicesIfConfigured(registeredServices);
+            initOtherApplibServicesIfConfigured();
             
             IsisTransaction isisTransaction = createTransaction();
             transactionLevel = 0;
@@ -273,29 +271,43 @@ public class IsisTransactionManager implements SessionScopedComponent {
     }
 
     
-    private void initOtherApplibServicesIfConfigured(final List<Object> registeredServices) {
-        
-        final EventBusServiceDefault ebsd = getServiceOrNull(EventBusServiceDefault.class);
-        if(ebsd != null) {
-            ebsd.open();
-        }
+    private void initOtherApplibServicesIfConfigured() {
         
         final Bulk.InteractionContext bic = getServiceOrNull(Bulk.InteractionContext.class);
         if(bic != null) {
             Bulk.InteractionContext.current.set(bic);
         }
-        
     }
 
-    private void startRequestOnRequestScopedServices(final List<Object> registeredServices) {
+    private void startRequestOnRequestScopedServices() {
+
+        final List<Object> registeredServices = servicesInjector.getRegisteredServices();
+
+        // tell the proxy of all request-scoped services to instantiate the underlying
+        // services, store onto the thread-local and inject into them...
         for (final Object service : registeredServices) {
             if(service instanceof RequestScopedService) {
-                ((RequestScopedService)service).__isis_startRequest();
+                ((RequestScopedService)service).__isis_startRequest(servicesInjector);
+            }
+        }
+        // ... and invoke all @PostConstruct
+        for (final Object service : registeredServices) {
+            if(service instanceof RequestScopedService) {
+                ((RequestScopedService)service).__isis_postConstruct();
             }
         }
     }
 
     private void endRequestOnRequestScopeServices() {
+        // tell the proxy of all request-scoped services to invoke @PreDestroy
+        // (if any) on all underlying services stored on their thread-locals...
+        for (final Object service : servicesInjector.getRegisteredServices()) {
+            if(service instanceof RequestScopedService) {
+                ((RequestScopedService)service).__isis_preDestroy();
+            }
+        }
+
+        // ... and then remove those underlying services from the thread-local
         for (final Object service : servicesInjector.getRegisteredServices()) {
             if(service instanceof RequestScopedService) {
                 ((RequestScopedService)service).__isis_endRequest();

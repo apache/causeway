@@ -16,57 +16,33 @@
  */
 package org.apache.isis.core.runtime.services.eventbus;
 
-import java.util.Set;
-
-import com.google.common.collect.Sets;
+import javax.inject.Inject;
 import com.google.common.eventbus.EventBus;
-
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 
 /**
  * @deprecated - because <tt>EventBusServiceJdo</tt> is annotated as the default implementation.
  */
 @Deprecated
 public class EventBusServiceDefault extends EventBusService {
-    
-    private final Set<Object> objectsToRegister = Sets.newHashSet();
-    
+
+    //region > API (getEventBus)
+
+    @Programmatic
     @Override
     protected EventBus getEventBus() {
-        return IsisContext.getSession().getEventBus();
+        return requestScopedEventBus.getEventBus();
     }
-    
-    
-    @Override
-    public void register(Object domainObject) {
-        // lazily registered
-        // (a) there may be no session initially
-        // (b) so can be unregistered at when closed
-        objectsToRegister.add(domainObject);
-    }
-    
-    @Override
-    public void unregister(Object domainObject) {
-        if(IsisContext.inSession()) {
-            getEventBus().unregister(domainObject);
-        }
-        objectsToRegister.remove(domainObject);
-    }
+    //endregion
 
-    public void open() {
-        final Set<Object> objectsToRegister = this.objectsToRegister;
-        for (final Object object : objectsToRegister) {
-            getEventBus().register(object);
-        }
-    }
 
-    public void close() {
-        final Set<Object> objectsToRegister = this.objectsToRegister;
-        for (final Object object : objectsToRegister) {
-            getEventBus().unregister(object);
-        }
-    }
+    //region > injected services
+
+    @Inject
+    private RequestScopedEventBus requestScopedEventBus;
+
+    //endregion
 
 }
 
