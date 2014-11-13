@@ -160,7 +160,7 @@ public class CssMenuBuilder {
         final ObjectAdapterMemento targetAdapterMemento = adapterMemento; // determineAdapterFor(action);
         if(targetAdapterMemento != null) {
             // against an entity or a service (if a contributed action)
-            subMenuItemBuilder = parent.newSubMenuItem(targetAdapterMemento, action, cssMenuContext);
+            subMenuItemBuilder = parent.newSubMenuItem(targetAdapterMemento, action, false, cssMenuContext);
         } else {
             if (action.containsDoOpFacet(BulkFacet.class)) {
                 // ignore fact have no target action; 

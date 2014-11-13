@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.services.exceprecog;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
 /**
  * An extension of the {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer} interface that
  * allows recognized exceptions to be {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2.Category categorize}d.
@@ -77,6 +79,7 @@ public interface ExceptionRecognizer2 extends ExceptionRecognizer {
         }
     }
 
+    @Programmatic
     public Recognition recognize2(final Throwable ex);
 
 }

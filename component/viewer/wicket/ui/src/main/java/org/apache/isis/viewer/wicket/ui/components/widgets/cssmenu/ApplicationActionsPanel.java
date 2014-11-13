@@ -6,6 +6,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAut
 
 import java.util.List;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -49,7 +50,7 @@ public class ApplicationActionsPanel extends Panel {
                 CssMenuItem menuItem = listItem.getModelObject();
                 listItem.add(new Label("name", menuItem.getName()));
 
-                List<CssMenuItem> subMenuItems = menuItem.getSubMenuItems();
+                List<CssMenuItem> subMenuItems = withSeparators(menuItem);
 
 // fake data to test multi-level menus
 
@@ -88,7 +89,9 @@ public class ApplicationActionsPanel extends Panel {
         listItem.add(folderItem);
 
         folderItem.add(new Label("folderName", subMenuItem.getName()));
-        ListView<CssMenuItem> subMenuItemsView = new ListView<CssMenuItem>("subMenuItems", subMenuItem.getSubMenuItems()) {
+        final List<CssMenuItem> menuItems = withSeparators(subMenuItem);
+        ListView<CssMenuItem> subMenuItemsView = new ListView<CssMenuItem>("subMenuItems",
+                menuItems) {
             @Override
             protected void populateItem(ListItem<CssMenuItem> listItem) {
                 CssMenuItem subMenuItem = listItem.getModelObject();
@@ -103,35 +106,63 @@ public class ApplicationActionsPanel extends Panel {
         folderItem.add(subMenuItemsView);
     }
 
-    private void addLeafItem(CssMenuItem menuItem, ListItem<CssMenuItem> listItem) {
-        Fragment leafItem = new Fragment("content", "leafItem", ApplicationActionsPanel.this);
-
-        AbstractLink subMenuItemLink = menuItem.getLink();
-
-        Label menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
-        subMenuItemLink.addOrReplace(menuItemLabel);
-
-        if (!menuItem.isEnabled()) {
-            listItem.add(new CssClassNameAppender("disabled"));
-            subMenuItemLink.setEnabled(false);
-            TooltipBehavior tooltipBehavior = new TooltipBehavior(Model.of(menuItem.getDisabledReason()));
-            listItem.add(tooltipBehavior);
+    private List<CssMenuItem> withSeparators(CssMenuItem subMenuItem) {
+        final List<CssMenuItem> subMenuItems = subMenuItem.getSubMenuItems();
+        final List<CssMenuItem> itemsWithSeparators = Lists.newArrayList();
+        for (CssMenuItem menuItem : subMenuItems) {
+            if(menuItem.isSeparator()) {
+                // nasty...
+                // ... we add it twice, but mutate it along the way
+                itemsWithSeparators.add(
+                        CssMenuItem.newMenuItem(menuItem.getName() + "-separator")
+                                .separator(menuItem.isSeparator())
+                                .prototyping(menuItem.isPrototyping())
+                                .build());
+                menuItem.setSeparator(false);
+            }
+            itemsWithSeparators.add(menuItem);
         }
-        if (menuItem.isPrototyping()) {
-            subMenuItemLink.add(new CssClassNameAppender("btn btn-warning"));
-        }
-        leafItem.add(subMenuItemLink);
-        listItem.add(leafItem);
+        return itemsWithSeparators;
+    }
 
-        String cssClassFa = menuItem.getCssClassFa();
-        if (Strings.isNullOrEmpty(cssClassFa)) {
-            Components.permanentlyHide(subMenuItemLink, "menuLinkFontAwesome");
-            subMenuItemLink.add(new CssClassAppender("menuLinkSpacer"));
+    private void addLeafItem(
+            final CssMenuItem menuItem,
+            final ListItem<CssMenuItem> listItem) {
+
+        Fragment leafItem;
+        if (!menuItem.isSeparator()) {
+            leafItem = new Fragment("content", "leafItem", ApplicationActionsPanel.this);
+
+            AbstractLink subMenuItemLink = menuItem.getLink();
+
+            Label menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
+            subMenuItemLink.addOrReplace(menuItemLabel);
+
+            if (!menuItem.isEnabled()) {
+                listItem.add(new CssClassNameAppender("disabled"));
+                subMenuItemLink.setEnabled(false);
+                TooltipBehavior tooltipBehavior = new TooltipBehavior(Model.of(menuItem.getDisabledReason()));
+                listItem.add(tooltipBehavior);
+            }
+            if (menuItem.isPrototyping()) {
+                subMenuItemLink.add(new CssClassNameAppender("prototype"));
+            }
+            leafItem.add(subMenuItemLink);
+
+            String cssClassFa = menuItem.getCssClassFa();
+            if (Strings.isNullOrEmpty(cssClassFa)) {
+                Components.permanentlyHide(subMenuItemLink, "menuLinkFontAwesome");
+                subMenuItemLink.add(new CssClassAppender("menuLinkSpacer"));
+            } else {
+                Label dummy = new Label("menuLinkFontAwesome", "");
+                dummy.add(new CssClassAppender(cssClassFa));
+                subMenuItemLink.addOrReplace(dummy);
+            }
         } else {
-            Label dummy = new Label("menuLinkFontAwesome", "");
-            dummy.add(new CssClassAppender(cssClassFa));
-            subMenuItemLink.addOrReplace(dummy);
+            leafItem = new Fragment("content", "empty", ApplicationActionsPanel.this);
+            listItem.add(new CssClassNameAppender("divider"));
         }
+        listItem.add(leafItem);
 
     }
 

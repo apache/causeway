@@ -28,6 +28,7 @@ import javax.annotation.PreDestroy;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Convenience implementation of {@link ExceptionRecognizer} that loops through a list of
@@ -66,6 +67,7 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
      * before the more general ones.  See the <i>JDO object store</i> applib for
      * an example.
      */
+    @Programmatic
     public final void add(ExceptionRecognizer ers) {
         services.add(ers);
     }
@@ -74,6 +76,7 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
      * Returns the non-<tt>null</tt> message of the first {@link #add(ExceptionRecognizer) add}ed 
      * {@link ExceptionRecognizer service} that recognizes the exception. 
      */
+    @Programmatic
     public final  String recognize(Throwable ex) {
         for (ExceptionRecognizer ers : services) {
             String message = ers.recognize(ex);
@@ -95,6 +98,7 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
      *     category of {@link org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2.Category#CLIENT_ERROR}.
      * </p>
      */
+    @Programmatic
     public final Recognition recognize2(Throwable ex) {
         for (ExceptionRecognizer ers : services) {
             if(ers instanceof ExceptionRecognizer2) {
@@ -111,6 +115,7 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
 
     @PostConstruct
     @Override
+    @Programmatic
     public final void init(Map<String, String> properties) {
         for (ExceptionRecognizer ers : services) {
             ers.init(properties);
@@ -119,6 +124,7 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
 
     @PreDestroy
     @Override
+    @Programmatic
     public final void shutdown() {
         for (ExceptionRecognizer ers : services) {
             ers.shutdown();

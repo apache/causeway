@@ -22,7 +22,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-
+import org.apache.isis.applib.annotation.Programmatic;
 
 
 /**
@@ -60,11 +60,14 @@ public interface ExceptionRecognizer {
      * 
      * @return user-friendly message to render, or <tt>null</tt> otherwise.
      */
+    @Programmatic
     public String recognize(Throwable ex);
 
+    @Programmatic
     @PostConstruct
     public void init(Map<String, String> properties);
 
+    @Programmatic
     @PreDestroy
     public void shutdown();
 

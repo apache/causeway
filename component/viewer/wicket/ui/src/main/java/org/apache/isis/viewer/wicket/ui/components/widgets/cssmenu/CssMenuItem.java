@@ -104,17 +104,13 @@ public class CssMenuItem implements Serializable {
             return this;
         }
 
-        /**
-         * Access the {@link CssMenuItem} before it is attached to its parent.
-         * 
-         * @see #build()
-         */
-        public CssMenuItem itemBeingBuilt() {
-            return cssMenuItem;
-        }
-
         public Builder prototyping(boolean prototype) {
             cssMenuItem.setPrototyping(prototype);
+            return this;
+        }
+
+        public Builder separator(boolean separator) {
+            cssMenuItem.setSeparator(separator);
             return this;
         }
 
@@ -169,6 +165,7 @@ public class CssMenuItem implements Serializable {
     private String disabledReason;
     private boolean blobOrClob = false; // unless set otherwise
     private boolean prototype = false; // unless set otherwise
+    private boolean separator = false; // unless set otherwise
 
     static final String ID_MENU_LABEL = "menuLabel";
 
@@ -200,6 +197,18 @@ public class CssMenuItem implements Serializable {
 
     public boolean isPrototyping() {
         return prototype;
+    }
+
+    public void setSeparator(boolean separator) {
+        this.separator = separator;
+    }
+
+    /**
+     * Requires a separator before it
+     * @return
+     */
+    public boolean isSeparator() {
+        return separator;
     }
 
     private CssMenuItem(final String name) {
@@ -292,6 +301,7 @@ public class CssMenuItem implements Serializable {
     public Builder newSubMenuItem(
             final ObjectAdapterMemento targetAdapterMemento,
             final ObjectAction objectAction,
+            final boolean separator,
             final CssMenuBuilder.CssMenuContext cssMenuContext) {
 
         // check visibility
@@ -325,6 +335,7 @@ public class CssMenuItem implements Serializable {
                 .enabled(reasonDisabledIfAny)
                 .returnsBlobOrClob(returnsBlobOrClob(objectAction))
                 .prototyping(isExplorationOrPrototype(objectAction))
+                .separator(separator)
                 .withActionIdentifier(actionIdentifierFor(objectAction))
                 .withCssClass(cssClassFor(objectAction))
                 .withCssClassFa(cssClassFaFor(objectAction));
@@ -388,8 +399,8 @@ public class CssMenuItem implements Serializable {
         final String actionLabel = linkAndLabel.getLabel();
         Builder builder = this.newSubMenuItem(actionLabel)
                               .link(link)
-                              .prototyping(linkAndLabel.isPrototype())
-                              .returnsBlobOrClob(linkAndLabel.isBlobOrClob())
+                .prototyping(linkAndLabel.isPrototype())
+                .returnsBlobOrClob(linkAndLabel.isBlobOrClob())
                               .withFacet(objectAction.getFacet(CssClassFacet.class))
                               .withFacet(objectAction.getFacet(CssClassFaFacet.class));
         return builder;
@@ -423,10 +434,13 @@ public class CssMenuItem implements Serializable {
                 link.add(new CssClassAppender("noVeil"));
             }
             if(this.prototype) {
-                link.add(new CssClassAppender("btn-warning"));
+                link.add(new CssClassAppender("prototype"));
+                link.add(new CssClassAppender("btn-default"));
             } else {
                 link.add(new CssClassAppender("btn-default"));
             }
+
+
             if(this.cssClass != null) {
                 link.add(new CssClassAppender(this.cssClass));
             }

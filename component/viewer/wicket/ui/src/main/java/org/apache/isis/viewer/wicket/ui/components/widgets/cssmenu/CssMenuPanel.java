@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
-import java.util.Arrays;
 import java.util.List;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -27,7 +26,6 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -39,7 +37,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * <p>
  * The {@link Style} enum allows the presentation to be altered.
  */
-public class CssMenuPanel extends PanelAbstract<CssMenuPanel.MyModel> {
+public class CssMenuPanel extends PanelAbstract<CssMenuPanel.ListOfCssMenuItemsModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -66,26 +64,21 @@ public class CssMenuPanel extends PanelAbstract<CssMenuPanel.MyModel> {
         }
     }
 
-    static class MyModel extends ListModel<CssMenuItem> {
+    static class ListOfCssMenuItemsModel extends ListModel<CssMenuItem> {
 
         private static final long serialVersionUID = 1L;
 
-        public MyModel(final List<CssMenuItem> cssMenuItems) {
+        public ListOfCssMenuItemsModel(final List<CssMenuItem> cssMenuItems) {
             super(cssMenuItems);
         }
     }
 
-    public static CssMenuItem.Builder newMenuItem(final String name) {
-        return CssMenuItem.newMenuItem(name);
-    }
-
     private final StyleAppender styleAppender;
     static final String ID_MENU_ITEMS = "menuItems";
-    static final String ID_MENU_ITEM_FONT_AWESOME = "menuItemFontAwesome";
     static final String ID_MENU_ITEM = "menuItem";
 
     public CssMenuPanel(final String id, final Style style, final List<CssMenuItem> topLevelMenuItems) {
-        super(id, new MyModel(topLevelMenuItems));
+        super(id, new ListOfCssMenuItemsModel(topLevelMenuItems));
         this.styleAppender = new StyleAppender(style);
 
         add(styleAppender);
@@ -100,10 +93,6 @@ public class CssMenuPanel extends PanelAbstract<CssMenuPanel.MyModel> {
             menuItemMarkup.add(new CssMenuItemPanel(CssMenuPanel.ID_MENU_ITEM, cssMenuItem));
         }
 
-    }
-
-    public CssMenuPanel(final ComponentType componentType, final Style style, final CssMenuItem... topLevelMenuItems) {
-        this(componentType.getWicketId(), style, Arrays.asList(topLevelMenuItems));
     }
 
     static final class StyleAppender extends CssClassAppender {

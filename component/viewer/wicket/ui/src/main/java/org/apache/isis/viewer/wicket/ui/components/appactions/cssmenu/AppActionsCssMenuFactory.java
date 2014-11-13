@@ -61,7 +61,8 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
         private final ObjectAdapter serviceAdapter;
         private final ObjectAdapterMemento serviceAdapterMemento;
         private final ObjectAction objectAction;
-        
+        public boolean separator;
+
         LogicalServiceAction(final String serviceName, final ObjectAdapter serviceAdapter, final ObjectAction objectAction) {
             this.serviceName = serviceName;
             this.serviceAdapter = serviceAdapter;
@@ -133,7 +134,8 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
                 }
                 final ObjectAdapterMemento serviceAdapterMemento = logicalServiceAction.serviceAdapterMemento;
                 final ObjectAction objectAction = logicalServiceAction.objectAction;
-                final Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, objectAction, cssMenuContext);
+                final boolean separator = logicalServiceAction.separator;
+                final Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, objectAction, separator, cssMenuContext);
                 if (subMenuItemBuilder == null) {
                     // not visible
                     continue;
@@ -201,13 +203,18 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
         final Map<String, List<LogicalServiceAction>> serviceActionsByName = Maps.newTreeMap();
         
         // map available services
+        ObjectAdapter lastServiceAdapter = null;
         for (LogicalServiceAction serviceAction : serviceActions) {
             List<LogicalServiceAction> serviceActionsForName = serviceActionsByName.get(serviceAction.serviceName);
             if(serviceActionsForName == null) {
                 serviceActionsForName = Lists.newArrayList();
                 serviceActionsByName.put(serviceAction.serviceName, serviceActionsForName);
+            } else {
+                // capture whether this action is from a different service
+                serviceAction.separator = lastServiceAdapter != serviceAction.serviceAdapter;
             }
             serviceActionsForName.add(serviceAction);
+            lastServiceAdapter = serviceAction.serviceAdapter;
         }
         
         return serviceActionsByName;

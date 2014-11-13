@@ -172,3 +172,20 @@ div.label-left .choicesPlaceholder {
     width: 20px;
     height: 20px;
 }
+
+.prototype {
+    font-style: italic;
+}
+
+/*
+not sure if this also needed, but it works...
+a.prototype span.menuLabel::before,
+a.prototype span.menuLinkLabel::before {
+    content: "[";
+}
+
+a.prototype span.menuLabel::after,
+a.prototype span.menuLinkLabel::after {
+    content: "]";
+}
+*/
