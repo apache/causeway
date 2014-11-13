@@ -110,59 +110,7 @@ public class JavassistImposteriser implements Imposteriser {
         proxyFactory.setInterfaces(ancilliaryTypes);
 
         return proxyFactory.createClass();
-
-        // original cglib code:
-
-    //        final Enhancer enhancer = new Enhancer() {
-    //            @Override
-    //            @SuppressWarnings("unchecked")
-    //            protected void filterConstructors(Class sc, List constructors) {
-    //                // Don't filter
-    //            }
-    //        };
-    //        enhancer.setClassLoader(SearchingClassLoader.combineLoadersOf(mockedType, ancilliaryTypes));
-    //        enhancer.setUseFactory(true);
-    //        if (mockedType.isInterface()) {
-    //            enhancer.setSuperclass(Object.class);
-    //            enhancer.setInterfaces(prepend(mockedType, ancilliaryTypes));
-    //        }
-    //        else {
-    //            enhancer.setSuperclass(mockedType);
-    //            enhancer.setInterfaces(ancilliaryTypes);
-    //        }
-    //        enhancer.setCallbackTypes(new Class[]{InvocationHandler.class, NoOp.class});
-    //        enhancer.setCallbackFilter(IGNORE_BRIDGE_METHODS);
-    //        if (mockedType.getSigners() != null) {
-    //            enhancer.setNamingPolicy(NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES);
-    //        }
-    //
-    //        try {
-    //            return enhancer.createClass();
-    //        }
-    //        catch (CodeGenerationException e) {
-    //            // Note: I've only been able to manually test this.  It exists to help people writing
-    //            //       Eclipse plug-ins or using other environments that have sophisticated class loader
-    //            //       structures.
-    //            throw new IllegalArgumentException("could not imposterise " + mockedType, e);
-    //        }
-
     }
-
-
-    // original cglib code:
-
-    //    private static final NamingPolicy NAMING_POLICY_THAT_ALLOWS_IMPOSTERISATION_OF_CLASSES_IN_SIGNED_PACKAGES = new DefaultNamingPolicy() {
-    //        @Override
-    //        public String getClassName(String prefix, String source, Object key, Predicate names) {
-    //            return "org.jmock.codegen." + super.getClassName(prefix, source, key, names);
-    //        }
-    //    };
-    //
-    //    private static final CallbackFilter IGNORE_BRIDGE_METHODS = new CallbackFilter() {
-    //        public int accept(Method method) {
-    //            return method.isBridge() ? 1 : 0;
-    //        }
-    //    };
 
 
     private Object proxy(Class<?> proxyClass, final Invokable mockObject) {
@@ -176,19 +124,6 @@ public class JavassistImposteriser implements Imposteriser {
         });
 
         return proxyObject;
-
-        // original cglib code:
-
-        //        final Factory proxy = (Factory)objenesis.newInstance(proxyClass);
-        //        proxy.setCallbacks(new Callback[] {
-        //            new InvocationHandler() {
-        //                public Object invoke(Object receiver, Method method, Object[] args) throws Throwable {
-        //                    return mockObject.invoke(new Invocation(receiver, method, args));
-        //                }
-        //            },
-        //            NoOp.INSTANCE
-        //        });
-        //        return proxy;
     }
 
     private static Class<?>[] combine(Class<?> first, Class<?>... rest) {
@@ -197,6 +132,4 @@ public class JavassistImposteriser implements Imposteriser {
         System.arraycopy(rest, 0, all, 1, rest.length);
         return all;
     }
-    
-    //public static class ClassWithSuperclassToWorkAroundCglibBug {}
 }
