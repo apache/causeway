@@ -16,10 +16,17 @@
  */
 package org.apache.isis.core.runtime.services.eventbus;
 
-import javax.inject.Inject;
+import java.util.List;
+import com.google.common.base.Throwables;
 import com.google.common.eventbus.EventBus;
-import org.apache.isis.applib.annotation.Programmatic;
+import com.google.common.eventbus.SubscriberExceptionContext;
+import com.google.common.eventbus.SubscriberExceptionHandler;
+import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.core.commons.exceptions.IsisApplicationException;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 /**
  * @deprecated - because <tt>EventBusServiceJdo</tt> is annotated as the default implementation.
@@ -27,22 +34,33 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 @Deprecated
 public class EventBusServiceDefault extends EventBusService {
 
-    //region > API (getEventBus)
-
-    @Programmatic
     @Override
-    protected EventBus getEventBus() {
-        return requestScopedEventBus.getEventBus();
+    protected EventBus newEventBus() {
+        return new EventBus(newEventBusSubscriberExceptionHandler());
     }
+
+    protected SubscriberExceptionHandler newEventBusSubscriberExceptionHandler() {
+        return new SubscriberExceptionHandler(){
+            @Override
+            public void handleException(Throwable exception, SubscriberExceptionContext context) {
+                final List<Throwable> causalChain = Throwables.getCausalChain(exception);
+                for (Throwable cause : causalChain) {
+                    if(cause instanceof RecoverableException || cause instanceof NonRecoverableException) {
+                        getTransactionManager().getTransaction().setAbortCause(new IsisApplicationException(exception));
+                        return;
+                    }
+                }
+                // otherwise simply ignore
+            }
+        };
+    }
+
+    protected IsisTransactionManager getTransactionManager() {
+        return IsisContext.getTransactionManager();
+    }
+
     //endregion
 
-
-    //region > injected services
-
-    @Inject
-    private RequestScopedEventBus requestScopedEventBus;
-
-    //endregion
 
 }
 

@@ -38,7 +38,6 @@ import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis.Hint;
 @DomainService
 public class EventBusServiceJdo extends EventBusServiceDefault {
 
-
     /**
      * skip if called in any way by way of the {@link JDOStateManagerForIsis}.
      * 
