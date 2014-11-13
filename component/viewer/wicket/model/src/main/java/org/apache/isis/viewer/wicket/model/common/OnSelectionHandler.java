@@ -25,7 +25,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
- * Decouples the mechanism for selecting entities returned in collections.
+ * Decouples the selecting of items (by a toggle box column) from the invocation of bulk actions on those items (by
+ * the standalone collection panel).
  */
 public interface OnSelectionHandler extends Serializable {
 

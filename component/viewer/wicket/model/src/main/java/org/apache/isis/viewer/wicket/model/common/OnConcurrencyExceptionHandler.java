@@ -26,7 +26,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 
 /**
- * Decouples the mechanism for selecting entities returned in collections.
+ * Decouples the handling of concurrency exceptions when a bulk action is invoked (between the toggle box column and the
+ * standalone collection panel).
  */
 public interface OnConcurrencyExceptionHandler extends Serializable {
 
