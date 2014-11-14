@@ -39,6 +39,7 @@ import org.apache.isis.applib.services.clock.ClockService;
 public class ToDoItems {
 
     //region > notYetComplete (action)
+    @CssClassFa("fa fa-thumbs-down")
     @Bookmarkable
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "10")
@@ -60,6 +61,7 @@ public class ToDoItems {
     //endregion
 
     //region > complete (action)
+    @CssClassFa("fa fa-thumbs-up")
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "20")
     public List<ToDoItem> complete() {
@@ -84,6 +86,7 @@ public class ToDoItems {
 	@Bookmarkable
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "40")
+    @CssClassFa("fa fa-question")
     public List<ToDoItem> categorized(
     		@Named("Category") final Category category,
     		@Named("Subcategory") final Subcategory subcategory,
@@ -117,6 +120,7 @@ public class ToDoItems {
     //endregion
 
     //region > newToDo (action)
+    @CssClassFa("fa fa-plus")
     @MemberOrder(sequence = "5")
     public ToDoItem newToDo(
             final @RegEx(validation = "${symbol_escape}${symbol_escape}w[@&:${symbol_escape}${symbol_escape}-${symbol_escape}${symbol_escape},${symbol_escape}${symbol_escape}.${symbol_escape}${symbol_escape}+ ${symbol_escape}${symbol_escape}w]*") @Named("Description") String description, 
@@ -148,6 +152,7 @@ public class ToDoItems {
     //endregion
 
     //region > allToDos (action)
+    @CssClassFa("fa fa-globe")
     @Prototype
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "50")

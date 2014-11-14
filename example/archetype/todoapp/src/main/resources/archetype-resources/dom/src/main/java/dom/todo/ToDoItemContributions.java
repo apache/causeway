@@ -118,7 +118,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     }
 
     // //////////////////////////////////////
-    
+
     @DescribedAs("The previous item not yet completed")
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
@@ -164,7 +164,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     @NotContributed(As.ACTION)
     public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
         final List<ToDoItem> similarToDoItems = allMatches(
-                new QueryDefault<ToDoItem>(ToDoItem.class, 
+                new QueryDefault<ToDoItem>(ToDoItem.class,
                         "findByOwnedByAndCategory", 
                         "ownedBy", currentUserName(), 
                         "category", toDoItem.getCategory()));

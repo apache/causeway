@@ -137,7 +137,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     @javax.jdo.annotations.Column(allowsNull="false", length=100)
     @PropertyInteraction()
-    @RegEx(validation = "${symbol_escape}${symbol_escape}w[@&:${symbol_escape}${symbol_escape}-${symbol_escape}${symbol_escape},${symbol_escape}${symbol_escape}.${symbol_escape}${symbol_escape}+ ${symbol_escape}${symbol_escape}w]*") 
+    @RegEx(validation = "${symbol_escape}${symbol_escape}w[@&:${symbol_escape}${symbol_escape}-${symbol_escape}${symbol_escape},${symbol_escape}${symbol_escape}.${symbol_escape}${symbol_escape}+ ${symbol_escape}${symbol_escape}w]*")
     public String getDescription() {
         return description;
     }
@@ -600,7 +600,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         container.informUser("Deleted " + container.titleOf(this));
         
         // invalid to return 'this' (cannot render a deleted object)
-        return toDoItems.notYetComplete(); 
+        return toDoItems.notYetComplete();
     }
     //endregion
 
@@ -692,6 +692,25 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //region > object-level validation
 
     /**
+     * Prevent user from viewing another user's data.
+     */
+    public boolean hidden() {
+        // uncomment to enable.  As things stand, the disabled() method below instead will make object "read-only".
+        //return !Objects.equal(getOwnedBy(), container.getUser().getName());
+        return false;
+    }
+
+    /**
+     * Prevent user from modifying any other user's data.
+     */
+    public String disabled(Identifier.Type type){
+        final UserMemento currentUser = container.getUser();
+        final String currentUserName = currentUser.getName();
+        if(Objects.equal(getOwnedBy(), currentUserName)) { return null; }
+        return "This object is owned by '" + getOwnedBy() + "' and cannot be modified by you";
+    }
+
+    /**
      * In a real app, if this were actually a rule, then we'd expect that
      * invoking the {@link ${symbol_pound}completed() done} action would clear the {@link ${symbol_pound}getDueBy() dueBy}
      * property (rather than require the user to have to clear manually).
@@ -702,7 +721,10 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         }
         return null;
     }
+
+
     //endregion
+
 
     //region > programmatic helpers
     @Programmatic // excluded from the framework's metamodel

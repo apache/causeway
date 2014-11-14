@@ -47,7 +47,9 @@ public class ToDoItemAnalysis {
     }
     //endregion
 
+
     //region > byCategory (action)
+    @CssClassFa("fa fa-pie-chart")
     @Named("By Category")
     @Bookmarkable
     @ActionSemantics(Of.SAFE)
@@ -77,7 +79,8 @@ public class ToDoItemAnalysis {
         Later,
         Unknown,
     }
-    
+
+    @CssClassFa("fa fa-calendar")
     @Named("By Date Range")
     @Bookmarkable
     @ActionSemantics(Of.SAFE)

@@ -48,7 +48,8 @@ public class ExternalLinksService {
             return title;
         }
     }
-    
+
+    @CssClassFa("fa-external-link")
     @Prototype
     @ActionSemantics(Of.SAFE)
     @MemberOrder(name="Prototyping", sequence="91.1")

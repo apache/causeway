@@ -22,18 +22,26 @@
             "General": {
                 "members": {
                     "description": {
-                        "typicalLength": { "value": 50 }
+                        "typicalLength": { "value": 50 },
+                        "labelAt": { "value": "TOP" }
                     },
                     "category": {
+                        "named": { "value": "Category/subcategory" },
+                        "labelAt": { "value": "TOP" }
                     },
                     "subcategory": {
+                        "labelAt": { "value": "NONE" },
                         "actions": {
                             "updateCategory": {
                                 "named": {
                                     "value": "Update"
                                 }
                             },
-                            "analyseCategory": {}
+                            "analyseCategory": {
+                                "cssClassFa": {
+                                     "value": "fa fa-pie-chart"
+                                }
+                            }
                         }
                     },
                     "ownedBy": {
@@ -44,12 +52,16 @@
                             "completed": {
                                 "named": { "value": "Done" },
                                 "describedAs": {
-                                    "value": "Mark this todo item as having been completed"
+                                    "value": "Update this todo item as complete"
                                 },
-                                "cssClass": { "value": "x-highlight" }
+                                "cssClassFa": { "value": "fa fa-thumbs-up" }
                             },
                             "notYetCompleted": {
-                                "named": { "value": "Not done" }
+                                "named": { "value": "Not done" },
+                                "describedAs": {
+                                    "value": "Update this todo item as not yet complete"
+                                },
+                                "cssClassFa": { "value": "fa fa-thumbs-down" }
                             },
                             "scheduleExplicitly": {
                             },
@@ -84,8 +96,12 @@
                 "members": {
                      "relativePriority": {
                         "actions": {
-                            "previous": {},
-                            "next": {}
+                            "previous": {
+                                "cssClassFa": { "value": "fa fa-step-backward" }
+                            },
+                            "next": {
+                                "cssClassFa": { "value": "fa fa-step-forward" }
+                            }
                         }
                     },
                     "dueBy": {
@@ -98,9 +114,8 @@
                     "cost": {
                         "actions": {
                             "updateCost":{
-                                "named": {
-                                    "value": "Update"
-                                }
+                                "named": { "value": "Update" },
+                                "cssClassFa": { "value": "fa fa-dollar" }
                             }
                         }
                     },
@@ -110,7 +125,8 @@
                         },
                         "hidden": {
                             "where": "ALL_TABLES"
-                        }
+                        },
+                        "labelAt": { "value": "TOP" }
                     },
                     "attachment": {
                         "hidden": {
@@ -135,9 +151,12 @@
             "dependencies": {
                 "disabled": {},
                 "actions": {
-                    "add":{},
+                    "add":{
+                        "cssClassFa": { "value": "fa fa-plus-square" }
+                    },
                     "remove": {
-                        "cssClass": { "value": "x-caution" }
+                        "cssClass": { "value": "x-caution btn-danger" },
+                        "cssClassFa": { "value": "fa fa-minus-square" }
                     }
                 },
                 "paged": {
@@ -162,15 +181,17 @@
     "actions": {
         "totalCost": {},
         "delete": {
-            "cssClass": { "value": "x-caution" }
+            "cssClass": { "value": "btn btn-danger" },
+            "cssClassFa": { "value": "fa fa-trash fa-lg" }
         },
         "duplicate": {
-	        "named": {
-	            "value": "Clone"
-	        },
+	          "named": {
+	              "value": "Clone"
+	          },
             "describedAs": {
                 "value": "Create a new todo item from this one"
-            }
+            },
+            "cssClassFa": { "value": "fa fa-copy fa-lg" }
         }
     }
 }

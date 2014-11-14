@@ -24,10 +24,7 @@ package fixture.todo;
 import fixture.todo.scenarios.RecreateToDoItemsAndCompleteSeveralForCurrent;
 
 import java.util.List;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.Prototype;
+import org.apache.isis.applib.annotation.*;
 import org.apache.isis.applib.fixturescripts.FixtureResult;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
@@ -41,6 +38,12 @@ public class ToDoItemsFixturesService extends FixtureScripts {
 
     public ToDoItemsFixturesService() {
         super("fixture.todo");
+    }
+
+    @CssClassFa("fa fa-bolt")
+    @Override
+    public List<FixtureResult> runFixtureScript(FixtureScript fixtureScript, @Named("Parameters") @DescribedAs("Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)") @MultiLine(numberOfLines = 10) @Optional String parameters) {
+        return super.runFixtureScript(fixtureScript, parameters);
     }
 
     @Override
@@ -61,8 +64,9 @@ public class ToDoItemsFixturesService extends FixtureScripts {
 
 
     @Prototype
+    @CssClassFa("fa fa-list")
     @MemberOrder(sequence="20")
-    public Object recreateToDoItemsForCurrentAndReturnFirst() {
+    public Object recreateToDoItemsReturnFirst() {
         final List<FixtureResult> run = findFixtureScriptFor(RecreateToDoItemsAndCompleteSeveralForCurrent.class).run(null);
         return run.get(0).getObject();
     }

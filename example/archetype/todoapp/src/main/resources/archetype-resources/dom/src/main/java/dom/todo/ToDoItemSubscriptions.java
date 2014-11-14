@@ -23,6 +23,8 @@ package dom.todo;
 
 import java.util.EventObject;
 import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
@@ -40,12 +42,54 @@ import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Lists.newArrayList;
 
+/**
+ * Subscribes to changes made to  the {@link dom.todo.ToDoItem} entity.
+ *
+ * <p>
+ *     (For demo purposes) the behaviour can be influenced using {@link ${symbol_pound}subscriberBehaviour(dom.todo.ToDoItemSubscriptions.Behaviour)}.
+ *     In particular, the subscriber can be used to hide/disable/validate actions, or just to perform pre- or post-execute
+ *     tasks.  This also includes being set to throw an exception during the execution of the action (also in effect
+ *     vetoing the change).
+ * </p>
+ */
 @DomainService
 public class ToDoItemSubscriptions {
 
     //region > LOG
     private final static org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(ToDoItemSubscriptions.class);
     //endregion
+
+    //region > postConstruct, preDestroy
+
+    /**
+     * Registers this service with the {@link org.apache.isis.applib.services.eventbus.EventBusService}.
+     *
+     * <p>
+     *     Because this service is a singleton, this is called during initial bootstrap.
+     * </p>
+     */
+    @Programmatic
+    @PostConstruct
+    public void postConstruct() {
+        LOG.info("postConstruct: registering to event bus");
+        eventBusService.register(this);
+    }
+
+    /**
+     * Unregisters this service from the {@link org.apache.isis.applib.services.eventbus.EventBusService}.
+     *
+     * <p>
+     *     Because this service is a singleton, this is only done when the system is shutdown.
+     * </p>
+     */
+    @Programmatic
+    @PreDestroy
+    public void preDestroy() {
+        LOG.info("preDestroy: unregistering from event bus");
+        eventBusService.unregister(this);
+    }
+    //endregion
+
 
     //region > on(Event)...
 
@@ -68,6 +112,10 @@ public class ToDoItemSubscriptions {
         DependenciesCollectionInvalidateRemove,
         SimilarToCollectionHide
     }
+
+    /**
+     * The desired behaviour of this service.
+     */
     private Behaviour behaviour = Behaviour.AnyExecuteAccept;
 
     /**
@@ -76,13 +124,13 @@ public class ToDoItemSubscriptions {
     @Prototype
     @MemberOrder(name = "Prototyping", sequence = "80")
     @Named("Set subscriber behaviour")
+    @NotContributed
     @ActionSemantics(ActionSemantics.Of.IDEMPOTENT)
-    public ToDoItem subscriberBehaviour(ToDoItem toDoItem, @Named("Behaviour") Behaviour behaviour) {
+    public void subscriberBehaviour(@Named("Behaviour") Behaviour behaviour) {
         this.behaviour = behaviour;
         container.informUser("Subscriber behaviour set to: " + behaviour);
-        return toDoItem;
     }
-    public Behaviour default1SubscriberBehaviour() {
+    public Behaviour default0SubscriberBehaviour() {
         return this.behaviour;
     }
 
@@ -95,7 +143,7 @@ public class ToDoItemSubscriptions {
             throw new RecoverableException("Rejecting event (recoverable exception thrown)");
         }
         if(behaviour == Behaviour.AnyExecuteVetoWithNonRecoverableException) {
-            throw new NonRecoverableException("Rejecting event (recoverable exception thrown)");
+            throw new NonRecoverableException("Rejecting event (non-recoverable exception thrown)");
         }
         if(behaviour == Behaviour.AnyExecuteVetoWithOtherException) {
             throw new RuntimeException("Throwing some other exception");
@@ -148,7 +196,7 @@ public class ToDoItemSubscriptions {
             case VALIDATE:
                 if(getSubscriberBehaviour() == Behaviour.UpdateCostActionInvalidate &&
                         ev.getIdentifier().getMemberName().equals("updateCost")) {
-                    ev.disable("ToDoItemSubscriptions says: can't invoke updateCostaction with these args!");
+                    ev.invalidate("ToDoItemSubscriptions says: can't invoke updateCost action with these args!");
                 }
                 break;
             case EXECUTING:
@@ -304,7 +352,7 @@ public class ToDoItemSubscriptions {
     @Programmatic
     public void reset() {
         receivedEvents.clear();
-        subscriberBehaviour(null, ToDoItemSubscriptions.Behaviour.AnyExecuteAccept);
+        subscriberBehaviour(ToDoItemSubscriptions.Behaviour.AnyExecuteAccept);
     }
     //endregion
 
@@ -312,12 +360,8 @@ public class ToDoItemSubscriptions {
     @javax.inject.Inject
     private DomainObjectContainer container;
 
-    @SuppressWarnings("unused")
+    @javax.inject.Inject
     private EventBusService eventBusService;
-    @Programmatic
-    public final void injectEventBusService(EventBusService eventBusService) {
-        eventBusService.register(this);
-    }
     //endregion
 
 

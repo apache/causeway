@@ -21,6 +21,11 @@
  */
 package webapp;
 
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.settings.IBootstrapSettings;
+import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
+import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -63,15 +68,23 @@ public class ToDoApplication extends IsisWicketApplication {
     private static final long serialVersionUID = 1L;
 
     /**
-     * uncomment for a (slightly hacky) way of allowing logins using query args, eg:
+     * set to true for a (slightly hacky) way of allowing logins using query args, eg:
      * 
      * <tt>?user=sven&pass=pass</tt>
      * 
      * <p>
-     * for demos only, obvious.
+     * for demos only, obviously.
      */
     private final static boolean DEMO_MODE_USING_CREDENTIALS_AS_QUERYARGS = false;
-    
+
+    @Override
+    protected void init() {
+        super.init();
+
+        IBootstrapSettings settings = Bootstrap.getSettings();
+        settings.setThemeProvider(new BootswatchThemeProvider(BootswatchTheme.Flatly));
+    }
+
     @Override
     public Session newSession(final Request request, final Response response) {
         if(!DEMO_MODE_USING_CREDENTIALS_AS_QUERYARGS) {
