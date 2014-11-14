@@ -47,4 +47,16 @@
     <version>1.8.0-SNAPSHOT</version>
     <relativePath>../../../core/pom.xml</relativePath>
   </parent>
+  <repositories>
+    <repository>
+      <id>Cloudbees snapshots</id>
+      <url>http://repository-estatio.forge.cloudbees.com/snapshot/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+  </repositories>
 </project>
