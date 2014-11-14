@@ -65,12 +65,12 @@ public class ToDoApplication extends IsisWicketApplication {
     private static final long serialVersionUID = 1L;
 
     /**
-     * uncomment for a (slightly hacky) way of allowing logins using query args, eg:
+     * set to true for a (slightly hacky) way of allowing logins using query args, eg:
      * 
      * <tt>?user=sven&pass=pass</tt>
      * 
      * <p>
-     * for demos only, obvious.
+     * for demos only, obviously.
      */
     private final static boolean DEMO_MODE_USING_CREDENTIALS_AS_QUERYARGS = false;
 

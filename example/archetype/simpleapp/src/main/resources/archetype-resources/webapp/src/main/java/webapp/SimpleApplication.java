@@ -21,6 +21,11 @@
  */
 package webapp;
 
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.settings.IBootstrapSettings;
+import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
+import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -73,7 +78,16 @@ public class SimpleApplication extends IsisWicketApplication {
      * for demos only, obvious.
      */
     private final static boolean DEMO_MODE_USING_CREDENTIALS_AS_QUERYARGS = false;
-    
+
+
+    @Override
+    protected void init() {
+        super.init();
+
+        IBootstrapSettings settings = Bootstrap.getSettings();
+        settings.setThemeProvider(new BootswatchThemeProvider(BootswatchTheme.Flatly));
+    }
+
     @Override
     public Session newSession(final Request request, final Response response) {
         if(!DEMO_MODE_USING_CREDENTIALS_AS_QUERYARGS) {

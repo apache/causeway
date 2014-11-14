@@ -77,7 +77,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-objectstore-jdo-datanucleus</artifactId>
+            <artifactId>isis-core-runtime</artifactId>
         </dependency>
 
         <dependency>
