@@ -19,7 +19,6 @@
 package app;
 
 import java.util.List;
-
 import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Named;

@@ -16,12 +16,9 @@
  */
 package integration.glue;
 
-import integration.ToDoSystemInitializer;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import integration.ToDoSystemInitializer;
 
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;

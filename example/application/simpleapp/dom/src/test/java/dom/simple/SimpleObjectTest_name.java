@@ -16,12 +16,12 @@
  */
 package dom.simple;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-
-import org.junit.Before;
-import org.junit.Test;
 
 public class SimpleObjectTest_name {
 

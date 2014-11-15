@@ -19,7 +19,6 @@ package integration.glue;
 import cucumber.api.java.Before;
 import dom.todo.ToDoItem;
 import fixture.todo.integtests.ToDoItemsIntegTestFixture;
-import fixture.todo.scenarios.RecreateToDoItemsAndCompleteSeveralForCurrent;
 
 import org.apache.isis.core.specsupport.scenarios.InMemoryDB;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;

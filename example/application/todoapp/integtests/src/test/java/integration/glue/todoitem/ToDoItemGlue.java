@@ -16,31 +16,26 @@
  */
 package integration.glue.todoitem;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.util.Collections;
-import java.util.List;
-
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItems;
 
+import java.util.List;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import org.jmock.Expectations;
 import org.junit.Assert;
-
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.Bulk.InteractionContext;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.specsupport.scenarios.InMemoryDB;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ToDoItemGlue extends CukeGlueAbstract {
 

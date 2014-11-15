@@ -18,9 +18,13 @@ package webapp.prototyping;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.CssClassFa;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.Prototype;
 
 @DomainService(menuOrder = "40.3")
 public class ExternalLinksService {

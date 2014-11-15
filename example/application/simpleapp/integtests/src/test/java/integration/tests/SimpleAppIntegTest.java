@@ -21,7 +21,6 @@ package integration.tests;
 import integration.SimpleAppSystemInitializer;
 
 import org.junit.BeforeClass;
-
 import org.apache.isis.core.integtestsupport.IntegrationTestAbstract;
 import org.apache.isis.core.integtestsupport.scenarios.ScenarioExecutionForIntegration;
 

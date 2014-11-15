@@ -16,24 +16,22 @@
  */
 package integration.glue.simple;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.util.List;
-import java.util.UUID;
-
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import dom.simple.SimpleObject;
 import dom.simple.SimpleObjects;
 
+import java.util.List;
+import java.util.UUID;
 import org.hamcrest.Description;
 import org.jmock.Expectations;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
-
 import org.apache.isis.core.specsupport.scenarios.InMemoryDB;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class SimpleObjectGlue extends CukeGlueAbstract {
 
