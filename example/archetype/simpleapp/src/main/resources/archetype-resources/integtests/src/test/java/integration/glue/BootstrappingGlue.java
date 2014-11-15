@@ -19,9 +19,9 @@ O *  Licensed to the Apache Software Foundation (ASF) under one or more
  */
 package integration.glue;
 
-import integration.SimpleAppSystemInitializer;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
+import integration.SimpleAppSystemInitializer;
 
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecutionScope;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
