@@ -513,9 +513,9 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     public ToDoItem add(
             @TypicalLength(20)
             final ToDoItem toDoItem) {
-    	// By wrapping the call, Isis will detect that the collection is modified 
-    	// and it will automatically send CollectionInteractionEvents to the Event Bus.
-    	// ToDoItemSubscriptions is a demo subscriber to this event
+        // By wrapping the call, Isis will detect that the collection is modified
+        // and it will automatically send CollectionInteractionEvents to the Event Bus.
+        // ToDoItemSubscriptions is a demo subscriber to this event
         wrapperFactory.wrapSkipRules(this).addToDependencies(toDoItem);
         return this;
     }
@@ -546,8 +546,8 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     public ToDoItem remove(
             @TypicalLength(20)
             final ToDoItem toDoItem) {
-    	// By wrapping the call, Isis will detect that the collection is modified 
-    	// and it will automatically send a CollectionInteractionEvent to the Event Bus.
+        // By wrapping the call, Isis will detect that the collection is modified
+        // and it will automatically send a CollectionInteractionEvent to the Event Bus.
         // ToDoItemSubscriptions is a demo subscriber to this event
         wrapperFactory.wrapSkipRules(this).removeFromDependencies(toDoItem);
         return this;
