@@ -19,25 +19,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package fixture.todo.scenarios;
 
-package fixture.todo.integtests;
+public final class ToDoItemsRecreateAndCompleteSeveralForJoe extends ToDoItemsRecreateAndCompleteSeveral {
 
-import fixture.todo.scenarios.ToDoItemsRecreateAndCompleteSeveral;
+    public ToDoItemsRecreateAndCompleteSeveralForJoe() {
+        withDiscoverability(Discoverability.DISCOVERABLE);
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-
-/**
- * Refactored to reuse the newer {@link FixtureScript} API.
- */
-public class ToDoItemsIntegTestFixture extends FixtureScript {
-
-    public ToDoItemsIntegTestFixture() {
-        super(null, "integ-test");
+        setOwnedBy("joe");
     }
-
-    @Override
-    protected void execute(ExecutionContext executionContext) {
-        executeChild(new ToDoItemsRecreateAndCompleteSeveral(), executionContext);
-    }
-
 }

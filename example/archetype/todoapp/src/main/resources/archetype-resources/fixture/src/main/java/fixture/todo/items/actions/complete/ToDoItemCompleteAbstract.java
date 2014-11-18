@@ -19,7 +19,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package fixture.todo.simple;
+package fixture.todo.items.actions.complete;
 
 import dom.todo.ToDoItem;
 
@@ -29,44 +29,42 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-public class ToDoItemsRecreateAndCompleteSeveral extends FixtureScript {
+public abstract class ToDoItemCompleteAbstract extends FixtureScript {
 
-    //region > constructor
-    private final String user;
-    /**
-     * @param user - if null then executes for the current user or will use any {@link ${symbol_pound}run(String) parameters} provided when run.
-     */
-    public ToDoItemsRecreateAndCompleteSeveral(final String user) {
-        super(null, Util.localNameFor("complete", user));
-        this.user = user;
-    }
-    //endregion
-
-    //region > doRun
     @Override
     protected void execute(ExecutionContext executionContext) {
-        final String ownedBy = Util.coalesce(user, executionContext.getParameters(), getContainer().getUser().getName());
+        validateParameters(executionContext);
 
-        // prereqs
-        executeChild(new ToDoItemsRecreate(null), executionContext);
 
-        // this fixture
-        complete(ownedBy, "Buy stamps", executionContext);
-        complete(ownedBy, "Write blog post", executionContext);
     }
 
-    private void complete(final String user, final String description, final ExecutionContext executionContext) {
-        final ToDoItem toDoItem = findToDoItem(description, user);
+    /**
+     * Subclasses should call from within {@link ${symbol_pound}execute(org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)}.
+     */
+    protected void validateParameters(ExecutionContext executionContext) {
+        final String ownedBy = executionContext.getParameter("ownedBy");
+        if(ownedBy == null) {
+            throw new IllegalArgumentException("'ownedBy' must be specified");
+        }
+    }
+
+    /**
+     * Looks up item from repository, and completes.
+     */
+    protected void complete(final String description, final ExecutionContext executionContext) {
+        String ownedBy = executionContext.getParameter("ownedBy");
+        final ToDoItem toDoItem = findToDoItem(description, ownedBy);
         toDoItem.setComplete(true);
         executionContext.add(this, toDoItem);
     }
 
-    private ToDoItem findToDoItem(final String description, final String user) {
+
+    private ToDoItem findToDoItem(final String description, final String ownedBy) {
         final Collection<ToDoItem> filtered = Collections2.filter(getContainer().allInstances(ToDoItem.class), new Predicate<ToDoItem>() {
             @Override
             public boolean apply(ToDoItem input) {
                 return Objects.equal(description, input.getDescription()) &&
-                       Objects.equal(user, input.getOwnedBy());
+                       Objects.equal(ownedBy, input.getOwnedBy());
             }
         });
         return filtered.isEmpty()? null: filtered.iterator().next();

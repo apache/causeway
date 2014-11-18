@@ -19,25 +19,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package fixture.todo.items.actions.complete;
 
-package fixture.todo.integtests;
+import fixture.todo.items.create.ToDoItemForBuyStamps;
 
-import fixture.todo.scenarios.ToDoItemsRecreateAndCompleteSeveral;
-
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-
-/**
- * Refactored to reuse the newer {@link FixtureScript} API.
- */
-public class ToDoItemsIntegTestFixture extends FixtureScript {
-
-    public ToDoItemsIntegTestFixture() {
-        super(null, "integ-test");
-    }
+public class ToDoItemCompleteForBuyStamps extends ToDoItemCompleteAbstract {
 
     @Override
     protected void execute(ExecutionContext executionContext) {
-        executeChild(new ToDoItemsRecreateAndCompleteSeveral(), executionContext);
+
+        // prereqs
+        executeChild(new ToDoItemForBuyStamps(), executionContext);
+
+        // this fixture
+        complete(ToDoItemForBuyStamps.DESCRIPTION, executionContext);
     }
 
 }

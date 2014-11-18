@@ -19,14 +19,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package fixture.todo.scenarios;
+package fixture.todo.util;
 
-import fixture.todo.simple.ToDoItemsRecreate;
+public final class Util {
+    
+    private Util(){}
 
-public final class RecreateToDoItemsForDick extends ToDoItemsRecreate {
-
-    public RecreateToDoItemsForDick() {
-        super("dick");
-        withDiscoverability(Discoverability.DISCOVERABLE);
+    public static String coalesce(final String... strings) {
+        for (String str : strings) {
+            if(str != null) { return str; }
+        }
+        return null;
     }
+
 }

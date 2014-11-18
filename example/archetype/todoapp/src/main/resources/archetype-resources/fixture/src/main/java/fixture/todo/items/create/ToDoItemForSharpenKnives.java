@@ -19,15 +19,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package fixture.todo.scenarios;
+package fixture.todo.items.create;
 
-import fixture.todo.simple.ToDoItemsDelete;
+import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItem.Subcategory;
 
-public final class DeleteToDoItemsForSven extends ToDoItemsDelete {
+public class ToDoItemForSharpenKnives extends ToDoItemAbstract {
 
-    public DeleteToDoItemsForSven() {
-        super("sven");
-        withDiscoverability(Discoverability.DISCOVERABLE);
+    @Override
+    protected void execute(ExecutionContext executionContext) {
 
+        createToDoItem(
+                "Sharpen knives",
+                Category.Domestic, Subcategory.Chores,
+                nowPlusDays(14),
+                null,
+                executionContext);
     }
+
 }

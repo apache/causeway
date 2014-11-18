@@ -19,14 +19,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package fixture.todo.scenarios;
+package fixture.todo.items.delete;
 
-import fixture.todo.simple.ToDoItemsRecreate;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 
-public final class RecreateToDoItemsForSven extends ToDoItemsRecreate {
+public class ToDoItemsDelete extends FixtureScript {
 
-    public RecreateToDoItemsForSven() {
-        super("sven");
-        withDiscoverability(Discoverability.DISCOVERABLE);
+    //region > ownedBy (optional)
+    private String ownedBy;
+
+    public String getOwnedBy() {
+        return ownedBy;
     }
+
+    public void setOwnedBy(String ownedBy) {
+        this.ownedBy = ownedBy;
+    }
+    //endregion
+
+    //region > execute
+    protected void execute(ExecutionContext executionContext) {
+
+        final String ownedBy = executionContext.getParameter("ownedBy");
+
+        isisJdoSupport.executeUpdate("delete from ${symbol_escape}"ToDoItem${symbol_escape}" where ${symbol_escape}"ownedBy${symbol_escape}" = '" + ownedBy + "'");
+    }
+
+    //endregion
+
+    //region > injected services
+    @javax.inject.Inject
+    private IsisJdoSupport isisJdoSupport;
+    //endregion
+
 }

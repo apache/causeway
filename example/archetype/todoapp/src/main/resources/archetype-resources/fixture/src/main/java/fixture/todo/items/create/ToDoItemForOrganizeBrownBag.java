@@ -19,21 +19,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package fixture.todo.simple;
+package fixture.todo.items.create;
 
-public final class Util {
-    
-    private Util(){}
+import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItem.Subcategory;
 
-    static String localNameFor(final String prefix, String user) {
-        return prefix + "-" + coalesce(user, "current");
-    }
+public class ToDoItemForOrganizeBrownBag extends ToDoItemAbstract {
 
-    static String coalesce(final String... strings) {
-        for (String str : strings) {
-            if(str != null) { return str; }
-        }
-        return null;
+    @Override
+    protected void execute(ExecutionContext executionContext) {
+
+        createToDoItem(
+                "Organize brown bag",
+                Category.Professional, Subcategory.Consulting,
+                nowPlusDays(14),
+                null,
+                executionContext);
     }
 
 }

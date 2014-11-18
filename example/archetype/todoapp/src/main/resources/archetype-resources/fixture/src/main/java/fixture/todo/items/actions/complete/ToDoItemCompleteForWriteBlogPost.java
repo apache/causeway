@@ -19,21 +19,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package fixture.todo.scenarios;
+package fixture.todo.items.actions.complete;
 
-import fixture.todo.simple.ToDoItemsDelete;
+import fixture.todo.items.create.ToDoItemForWriteBlogPost;
 
-import com.google.common.base.Strings;
+public class ToDoItemCompleteForWriteBlogPost extends ToDoItemCompleteAbstract {
 
-public class DeleteToDoItemsFor extends ToDoItemsDelete {
-
-    public DeleteToDoItemsFor() {
-        super(null);
-        withDiscoverability(Discoverability.DISCOVERABLE);
-    }
-    
     @Override
-    public String validateRun(final String parameters) {
-        return Strings.isNullOrEmpty(parameters) ? "Specify the owner of the ToDoItems to be deleted" : null;
+    protected void execute(ExecutionContext executionContext) {
+
+        // prereqs
+        executeChild(new ToDoItemForWriteBlogPost(), executionContext);
+
+        // this fixture
+        complete(ToDoItemForWriteBlogPost.DESCRIPTION, executionContext);
     }
+
+
 }
