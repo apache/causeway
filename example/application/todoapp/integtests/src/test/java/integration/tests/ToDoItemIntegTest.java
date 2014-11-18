@@ -101,7 +101,8 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
             toDoItem = wrap(all.get(0));
 
-            toDoItem = wrap(fixture.lookup("integ-test/complete-current/create-current/item-2", ToDoItem.class));
+            toDoItem = wrap(fixture.lookup("integ-test/to-do-items-recreate-and-complete-several/to-do-items-recreate/to-do-item-for-buy-bread/item-1", ToDoItem.class));
+            assertThat(toDoItem, is(not(nullValue())));
 
             nextTransaction();
 

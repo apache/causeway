@@ -16,29 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package fixture.todo.simple;
+package fixture.todo.items.delete;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 
 public class ToDoItemsDelete extends FixtureScript {
 
-    //region > constructor
-    private final String user;
+    //region > ownedBy (optional)
+    private String ownedBy;
 
-    /**
-     * @param user - if null then executes for the current user or will use any {@link #run(String) parameters} provided when run.
-     */
-    public ToDoItemsDelete(final String user) {
-        super(null, Util.localNameFor("delete", user));
-        this.user = user;
+    public String getOwnedBy() {
+        return ownedBy;
+    }
+
+    public void setOwnedBy(String ownedBy) {
+        this.ownedBy = ownedBy;
     }
     //endregion
 
     //region > execute
-    @Override
     protected void execute(ExecutionContext executionContext) {
-        final String ownedBy = Util.coalesce(user, executionContext.getParameters(), getContainer().getUser().getName());
+
+        final String ownedBy = executionContext.getParameter("ownedBy");
 
         isisJdoSupport.executeUpdate("delete from \"ToDoItem\" where \"ownedBy\" = '" + ownedBy + "'");
     }

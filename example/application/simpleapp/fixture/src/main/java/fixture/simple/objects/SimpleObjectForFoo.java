@@ -17,24 +17,15 @@
  *  under the License.
  */
 
-package fixture.todo.integtests;
+package fixture.simple.objects;
 
-import fixture.todo.scenarios.ToDoItemsRecreateAndCompleteSeveral;
-
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-
-/**
- * Refactored to reuse the newer {@link FixtureScript} API.
- */
-public class ToDoItemsIntegTestFixture extends FixtureScript {
-
-    public ToDoItemsIntegTestFixture() {
-        super(null, "integ-test");
-    }
+public class SimpleObjectForFoo extends SimpleObjectAbstract {
 
     @Override
     protected void execute(ExecutionContext executionContext) {
-        executeChild(new ToDoItemsRecreateAndCompleteSeveral(), executionContext);
+
+        create("Foo", executionContext);
     }
+
 
 }

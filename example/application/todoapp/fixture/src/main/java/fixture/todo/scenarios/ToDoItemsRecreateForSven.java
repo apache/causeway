@@ -18,13 +18,12 @@
  */
 package fixture.todo.scenarios;
 
-import fixture.todo.simple.ToDoItemsDelete;
+public final class ToDoItemsRecreateForSven extends ToDoItemsRecreate {
 
-public final class DeleteToDoItemsForSven extends ToDoItemsDelete {
-
-    public DeleteToDoItemsForSven() {
-        super("sven");
+    public ToDoItemsRecreateForSven() {
         withDiscoverability(Discoverability.DISCOVERABLE);
 
+        setOwnedBy("sven");
     }
+
 }

@@ -16,24 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package fixture.todo.items.create;
 
-package org.apache.isis.applib.fixturescripts;
+import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItem.Subcategory;
 
-import org.junit.Assert;
-import org.junit.Test;
+public class ToDoItemForPickUpLaundry extends ToDoItemAbstract {
 
-import static org.hamcrest.Matchers.is;
+    @Override
+    protected void execute(ExecutionContext executionContext) {
 
-public class ExecutionContextTest_roundUp {
-
-    @Test
-    public void happyCase() throws Exception {
-        Assert.assertThat(FixtureScript.ExecutionContext.roundup(5, 20), is(20));
-        Assert.assertThat(FixtureScript.ExecutionContext.roundup(19, 20), is(20));
-        Assert.assertThat(FixtureScript.ExecutionContext.roundup(20, 20), is(40));
-        Assert.assertThat(FixtureScript.ExecutionContext.roundup(21, 20), is(40));
-        Assert.assertThat(FixtureScript.ExecutionContext.roundup(39, 20), is(40));
-        Assert.assertThat(FixtureScript.ExecutionContext.roundup(40, 20), is(60));
+        createToDoItem(
+                "Pick up laundry",
+                Category.Domestic, Subcategory.Chores,
+                nowPlusDays(6),
+                BD("7.50"),
+                executionContext);
     }
 
 }

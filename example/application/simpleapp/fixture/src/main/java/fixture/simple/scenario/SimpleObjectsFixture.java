@@ -16,14 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package fixture.todo.scenarios;
 
-import fixture.todo.simple.ToDoItemsRecreate;
+package fixture.simple.scenario;
 
-public final class RecreateToDoItemsForDick extends ToDoItemsRecreate {
+import fixture.simple.SimpleObjectsTearDownFixture;
+import fixture.simple.objects.SimpleObjectForBar;
+import fixture.simple.objects.SimpleObjectForBaz;
+import fixture.simple.objects.SimpleObjectForFoo;
 
-    public RecreateToDoItemsForDick() {
-        super("dick");
+import org.apache.isis.applib.fixturescripts.FixtureScript;
+
+public class SimpleObjectsFixture extends FixtureScript {
+
+    public SimpleObjectsFixture() {
         withDiscoverability(Discoverability.DISCOVERABLE);
     }
+
+    @Override
+    protected void execute(ExecutionContext executionContext) {
+
+        executeChild(new SimpleObjectsTearDownFixture(), executionContext);
+
+        executeChild(new SimpleObjectForFoo(), executionContext);
+        executeChild(new SimpleObjectForBar(), executionContext);
+        executeChild(new SimpleObjectForBaz(), executionContext);
+    }
+
 }

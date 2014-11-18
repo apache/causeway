@@ -18,12 +18,17 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+import com.google.common.io.CharSource;
 import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Hidden;
@@ -253,20 +258,69 @@ public abstract class FixtureScript
             }
         };
 
+        private static Pattern keyEqualsValuePattern = Pattern.compile("([^=]*)=(.*)");
 
         private final String parameters;
         private final FixtureScripts fixtureScripts;
         private final FixtureResultList fixtureResultList;
+        private final Map<String, String> parameterMap;
+        ;
 
         public ExecutionContext(final String parameters, final FixtureScripts fixtureScripts) {
             this.fixtureScripts = fixtureScripts;
             fixtureResultList = new FixtureResultList(fixtureScripts, this);
             this.parameters = parameters;
+            this.parameterMap = asKeyValueMap(parameters);
+        }
+
+        public static Map<String, String> asKeyValueMap(String parameters) {
+            Map<String,String> keyValues = Maps.newLinkedHashMap();
+            if(parameters != null) {
+                try {
+                    final ImmutableList<String> lines = CharSource.wrap(parameters).readLines();
+                    for (String line : lines) {
+                        if (line == null) {
+                            continue;
+                        }
+                        final Matcher matcher = keyEqualsValuePattern.matcher(line);
+                        if (matcher.matches()) {
+                            keyValues.put(matcher.group(1).trim(), matcher.group(2).trim());
+                        }
+                    }
+                } catch (IOException e) {
+                    // ignore, shouldn't happen
+                }
+            }
+            return keyValues;
         }
 
         public String getParameters() {
             return parameters;
         }
+
+        public String getParameter(String parameterName) {
+            return getParameterMap().get(parameterName);
+        }
+
+        public Map<String,String> getParameterMap() {
+            return Collections.unmodifiableMap(parameterMap);
+        }
+
+        public void setParameterIfNotPresent(String parameterName, String parameterValue) {
+            if(parameterName == null) {
+                throw new IllegalArgumentException("parameterName required");
+            }
+            if(parameterValue == null) {
+                // ignore
+                return;
+            }
+            if(parameterMap.containsKey(parameterName)) {
+                // ignore; the supplies parameters take precedence
+                return;
+            }
+            parameterMap.put(parameterName, parameterValue);
+        }
+
         public List<FixtureResult> getResults() {
             return fixtureResultList.getResults();
         }
@@ -284,6 +338,7 @@ public abstract class FixtureScript
         <T> T lookup(final String key, final Class<T> cls) {
             return fixtureResultList.lookup(key, cls);
         }
+
 
         static enum As { EXEC, SKIP }
 
@@ -395,6 +450,7 @@ public abstract class FixtureScript
         }
         return executionContext.lookup(key, cls);
     }
+
 
     /**
      * Optional hook to validate parameters.

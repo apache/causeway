@@ -16,41 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package fixture.todo.items.create;
 
-package fixture.simple;
+import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItem.Subcategory;
 
-import dom.simple.SimpleObject;
-import dom.simple.SimpleObjects;
+public class ToDoItemForBuyStamps extends ToDoItemAbstract {
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-
-public class SimpleObjectsFixture extends FixtureScript {
-
-    public SimpleObjectsFixture() {
-        withDiscoverability(Discoverability.DISCOVERABLE);
-    }
+    public static final String DESCRIPTION = "Buy stamps";
 
     @Override
     protected void execute(ExecutionContext executionContext) {
 
-        // prereqs
-        executeChild(new SimpleObjectsTearDownFixture(), executionContext);
-
-        // create
-        create("Foo", executionContext);
-        create("Bar", executionContext);
-        create("Baz", executionContext);
+        createToDoItem(
+                DESCRIPTION,
+                Category.Domestic, Subcategory.Shopping,
+                nowPlusDays(0),
+                BD("10.00"),
+                executionContext);
     }
-
-    // //////////////////////////////////////
-
-    private SimpleObject create(final String name, ExecutionContext executionContext) {
-        return executionContext.add(this, simpleObjects.create(name));
-    }
-
-    // //////////////////////////////////////
-
-    @javax.inject.Inject
-    private SimpleObjects simpleObjects;
 
 }

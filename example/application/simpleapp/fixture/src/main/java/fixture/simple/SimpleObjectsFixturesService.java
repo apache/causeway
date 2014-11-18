@@ -18,6 +18,8 @@
  */
 package fixture.simple;
 
+import fixture.simple.scenario.SimpleObjectsFixture;
+
 import java.util.List;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -39,7 +41,7 @@ public class SimpleObjectsFixturesService extends FixtureScripts {
         super("fixture.simple");
     }
 
-    //@Override // compatibility with core 1.5.0
+    @Override
     public FixtureScript default0RunFixtureScript() {
         return findFixtureScriptFor(SimpleFixtureScript.class);
     }

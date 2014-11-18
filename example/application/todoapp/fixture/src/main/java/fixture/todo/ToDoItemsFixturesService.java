@@ -18,7 +18,7 @@
  */
 package fixture.todo;
 
-import fixture.todo.scenarios.RecreateToDoItemsAndCompleteSeveralForCurrent;
+import fixture.todo.scenarios.ToDoItemsRecreateAndCompleteSeveral;
 
 import java.util.List;
 import org.apache.isis.applib.annotation.CssClassFa;
@@ -36,7 +36,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 /**
  * Enables fixtures to be installed from the application.
  */
-@Named("Prototyping") // has the effect of defining a "Prototyping" menu item
+@Named("Prototyping")
 @DomainService(menuOrder = "40.1")
 public class ToDoItemsFixturesService extends FixtureScripts {
 
@@ -46,13 +46,18 @@ public class ToDoItemsFixturesService extends FixtureScripts {
 
     @CssClassFa("fa fa-bolt")
     @Override
-    public List<FixtureResult> runFixtureScript(FixtureScript fixtureScript, @Named("Parameters") @DescribedAs("Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)") @MultiLine(numberOfLines = 10) @Optional String parameters) {
+    public List<FixtureResult> runFixtureScript(
+            final FixtureScript fixtureScript,
+            final @Named("Parameters") @DescribedAs("Script-specific parameters (key=value) ")
+            @MultiLine(numberOfLines = 10)
+            @Optional
+            String parameters) {
         return super.runFixtureScript(fixtureScript, parameters);
     }
 
     @Override
     public FixtureScript default0RunFixtureScript() {
-        return findFixtureScriptFor(RecreateToDoItemsAndCompleteSeveralForCurrent.class);
+        return findFixtureScriptFor(ToDoItemsRecreateAndCompleteSeveral.class);
     }
 
     /**
@@ -71,7 +76,7 @@ public class ToDoItemsFixturesService extends FixtureScripts {
     @CssClassFa("fa fa-list")
     @MemberOrder(sequence="20")
     public Object recreateToDoItemsReturnFirst() {
-        final List<FixtureResult> run = findFixtureScriptFor(RecreateToDoItemsAndCompleteSeveralForCurrent.class).run(null);
+        final List<FixtureResult> run = findFixtureScriptFor(ToDoItemsRecreateAndCompleteSeveral.class).run(null);
         return run.get(0).getObject();
     }
 }

@@ -16,25 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package fixture.todo.util;
 
-package fixture.todo.integtests;
+public final class Util {
+    
+    private Util(){}
 
-import fixture.todo.scenarios.ToDoItemsRecreateAndCompleteSeveral;
-
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-
-/**
- * Refactored to reuse the newer {@link FixtureScript} API.
- */
-public class ToDoItemsIntegTestFixture extends FixtureScript {
-
-    public ToDoItemsIntegTestFixture() {
-        super(null, "integ-test");
-    }
-
-    @Override
-    protected void execute(ExecutionContext executionContext) {
-        executeChild(new ToDoItemsRecreateAndCompleteSeveral(), executionContext);
+    public static String coalesce(final String... strings) {
+        for (String str : strings) {
+            if(str != null) { return str; }
+        }
+        return null;
     }
 
 }

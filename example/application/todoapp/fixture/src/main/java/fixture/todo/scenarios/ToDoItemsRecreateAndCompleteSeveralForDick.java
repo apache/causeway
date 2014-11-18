@@ -18,12 +18,11 @@
  */
 package fixture.todo.scenarios;
 
-import fixture.todo.simple.ToDoItemsRecreate;
+public final class ToDoItemsRecreateAndCompleteSeveralForDick extends ToDoItemsRecreateAndCompleteSeveral {
 
-public final class RecreateToDoItemsForSven extends ToDoItemsRecreate {
-
-    public RecreateToDoItemsForSven() {
-        super("sven");
+    public ToDoItemsRecreateAndCompleteSeveralForDick() {
         withDiscoverability(Discoverability.DISCOVERABLE);
+
+        setOwnedBy("dick");
     }
 }

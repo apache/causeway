@@ -16,14 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package fixture.todo.scenarios;
+package fixture.todo.items.create;
 
-import fixture.todo.simple.ToDoItemsRecreate;
+import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItem.Subcategory;
 
-public final class RecreateToDoItemsForJoe extends ToDoItemsRecreate {
+public class ToDoItemForBuyBread extends ToDoItemAbstract {
 
-    public RecreateToDoItemsForJoe() {
-        super("joe");
-        withDiscoverability(Discoverability.DISCOVERABLE);
+    @Override
+    protected void execute(ExecutionContext executionContext) {
+
+        createToDoItem(
+                "Buy bread",
+                Category.Domestic, Subcategory.Shopping,
+                nowPlusDays(0),
+                BD("1.75"),
+                executionContext);
     }
+
 }

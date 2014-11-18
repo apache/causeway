@@ -16,21 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package fixture.todo.scenarios;
+package fixture.todo.items.create;
 
-import fixture.todo.simple.ToDoItemsRecreate;
+import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItem.Subcategory;
 
-import com.google.common.base.Strings;
+public class ToDoItemForWriteBlogPost extends ToDoItemAbstract {
 
-public final class RecreateToDoItemsFor extends ToDoItemsRecreate {
+    public static final String DESCRIPTION = "Write blog post";
 
-    public RecreateToDoItemsFor() {
-        super(null);
-        withDiscoverability(Discoverability.DISCOVERABLE);
-    }
-    
     @Override
-    public String validateRun(String parameters) {
-        return Strings.isNullOrEmpty(parameters) ? "Specify the owner of the ToDoItems to be recreated" : null;
+    protected void execute(ExecutionContext executionContext) {
+
+        createToDoItem(
+                DESCRIPTION,
+                Category.Professional, Subcategory.Marketing,
+                nowPlusDays(7),
+                null,
+                executionContext);
     }
+
 }

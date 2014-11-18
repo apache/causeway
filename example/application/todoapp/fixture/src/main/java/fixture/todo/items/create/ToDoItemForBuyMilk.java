@@ -16,25 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package fixture.todo.items.create;
 
-package fixture.todo.integtests;
+import dom.todo.ToDoItem.Category;
+import dom.todo.ToDoItem.Subcategory;
 
-import fixture.todo.scenarios.ToDoItemsRecreateAndCompleteSeveral;
-
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-
-/**
- * Refactored to reuse the newer {@link FixtureScript} API.
- */
-public class ToDoItemsIntegTestFixture extends FixtureScript {
-
-    public ToDoItemsIntegTestFixture() {
-        super(null, "integ-test");
-    }
+public class ToDoItemForBuyMilk extends ToDoItemAbstract {
 
     @Override
     protected void execute(ExecutionContext executionContext) {
-        executeChild(new ToDoItemsRecreateAndCompleteSeveral(), executionContext);
+
+        createToDoItem(
+                "Buy milk",
+                Category.Domestic, Subcategory.Shopping,
+                nowPlusDays(0),
+                BD("0.75"),
+                executionContext);
     }
 
 }

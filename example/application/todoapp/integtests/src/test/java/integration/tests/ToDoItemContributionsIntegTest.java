@@ -31,6 +31,8 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public abstract class ToDoItemContributionsIntegTest extends AbstractToDoIntegTest {
@@ -56,7 +58,8 @@ public abstract class ToDoItemContributionsIntegTest extends AbstractToDoIntegTe
     @Before
     public void setUp() throws Exception {
 
-        toDoItem = wrap(fixture.lookup("integ-test/complete-current/create-current/item-2", ToDoItem.class));
+        toDoItem = wrap(fixture.lookup("integ-test/to-do-items-recreate-and-complete-several/to-do-item-complete-for-buy-stamps/item-1", ToDoItem.class));
+        assertThat(toDoItem, is(not(nullValue())));
 
         toDoItemContributionsWrapped = wrap(toDoItemContributions);
     }
