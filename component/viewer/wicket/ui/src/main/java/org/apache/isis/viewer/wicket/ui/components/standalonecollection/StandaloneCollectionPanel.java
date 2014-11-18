@@ -46,7 +46,6 @@ import org.apache.isis.viewer.wicket.ui.components.collection.selector.Collectio
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionModel>
@@ -90,7 +89,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
             permanentlyHide(ID_SELECTOR_DROPDOWN);
             this.selectorDropdownPanel = null;
         } else {
-            CollectionSelectorPanel selectorDropdownPanel = new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN, entityCollectionModel, new CollectionContentsMultipleViewsPanelFactory());
+            CollectionSelectorPanel selectorDropdownPanel = new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN, entityCollectionModel);
 
             final Model<ComponentFactory> componentFactoryModel = new Model<>();
 

@@ -41,7 +41,6 @@ import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLin
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPathSignificantWebMarkupContainer;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -136,7 +135,7 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
             permanentlyHide(ID_SELECTOR_DROPDOWN);
         } else {
             CollectionSelectorPanel selectorDropdownPanel;
-            selectorDropdownPanel = new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN, entityCollectionModel, new CollectionContentsMultipleViewsPanelFactory());
+            selectorDropdownPanel = new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN, entityCollectionModel);
 
             final Model<ComponentFactory> componentFactoryModel = new Model<>();
 

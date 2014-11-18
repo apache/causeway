@@ -36,11 +36,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -50,7 +51,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * {@link org.apache.isis.viewer.wicket.model.models.EntityCollectionModel}.
  */
 public class CollectionSelectorPanel
-        extends PanelAbstract<EntityCollectionModel> implements UiHintPathSignificant /*,  CollectionCountProvider*/ {
+        extends PanelAbstract<EntityCollectionModel> implements UiHintPathSignificant {
 
     private static final long serialVersionUID = 1L;
 
@@ -68,7 +69,7 @@ public class CollectionSelectorPanel
 
     private ComponentFactory selectedComponentFactory;
 
-    public CollectionSelectorPanel(final String id, final EntityCollectionModel model, final ComponentFactory ignoreFactory) {
+    public CollectionSelectorPanel(final String id, final EntityCollectionModel model) {
         super(id, model);
         selectorHelper = new CollectionSelectorHelper(model, getComponentFactoryRegistry());
     }
@@ -199,7 +200,7 @@ public class CollectionSelectorPanel
 
 
     protected void setViewHintAndBroadcast(int viewNum, AjaxRequestTarget target) {
-        final EntityCollectionModel uiHintContainer = getUiHintContainer(EntityCollectionModel.class);
+        final UiHintContainer uiHintContainer = getUiHintContainer(getModel().isParented()? EntityModel.class: EntityCollectionModel.class);
         if(uiHintContainer == null) {
             return;
         }
