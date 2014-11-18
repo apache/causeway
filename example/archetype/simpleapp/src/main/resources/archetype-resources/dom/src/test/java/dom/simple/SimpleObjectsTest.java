@@ -19,6 +19,8 @@
  */
 package dom.simple;
 
+import java.util.List;
+import com.google.common.collect.Lists;
 import org.jmock.Expectations;
 import org.jmock.Sequence;
 import org.jmock.auto.Mock;
@@ -32,46 +34,72 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class SimpleObjectsTest_create {
+public class SimpleObjectsTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    private DomainObjectContainer mockContainer;
+    DomainObjectContainer mockContainer;
     
-    private SimpleObjects simpleObjects;
+    SimpleObjects simpleObjects;
 
     @Before
     public void setUp() throws Exception {
         simpleObjects = new SimpleObjects();
         simpleObjects.container = mockContainer;
     }
-    
-    @Test
-    public void happyCase() throws Exception {
-        
-        // given
-        final SimpleObject simpleObject = new SimpleObject();
-        
-        final Sequence seq = context.sequence("create");
-        context.checking(new Expectations() {
-            {
-                oneOf(mockContainer).newTransientInstance(SimpleObject.class);
-                inSequence(seq);
-                will(returnValue(simpleObject));
-                
-                oneOf(mockContainer).persistIfNotAlready(simpleObject);
-                inSequence(seq);
-            }
-        });
-        
-        // when
-        final SimpleObject obj = simpleObjects.create("Foobar");
-        
-        // then
-        assertThat(obj, is(simpleObject));
-        assertThat(obj.getName(), is("Foobar"));
+
+    public static class Create extends SimpleObjectsTest {
+
+        @Test
+        public void happyCase() throws Exception {
+
+            // given
+            final SimpleObject simpleObject = new SimpleObject();
+
+            final Sequence seq = context.sequence("create");
+            context.checking(new Expectations() {
+                {
+                    oneOf(mockContainer).newTransientInstance(SimpleObject.class);
+                    inSequence(seq);
+                    will(returnValue(simpleObject));
+
+                    oneOf(mockContainer).persistIfNotAlready(simpleObject);
+                    inSequence(seq);
+                }
+            });
+
+            // when
+            final SimpleObject obj = simpleObjects.create("Foobar");
+
+            // then
+            assertThat(obj, is(simpleObject));
+            assertThat(obj.getName(), is("Foobar"));
+        }
+
     }
 
+    public static class ListAll extends SimpleObjectsTest {
+
+        @Test
+        public void happyCase() throws Exception {
+
+            // given
+            final List<SimpleObject> all = Lists.newArrayList();
+
+            context.checking(new Expectations() {
+                {
+                    oneOf(mockContainer).allInstances(SimpleObject.class);
+                    will(returnValue(all));
+                }
+            });
+
+            // when
+            final List<SimpleObject> list = simpleObjects.listAll();
+
+            // then
+            assertThat(list, is(all));
+        }
+    }
 }

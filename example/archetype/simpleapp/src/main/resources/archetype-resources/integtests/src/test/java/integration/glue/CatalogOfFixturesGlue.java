@@ -21,7 +21,7 @@ package integration.glue;
 
 import cucumber.api.java.Before;
 import dom.simple.SimpleObject;
-import fixture.simple.SimpleObjectsFixture;
+import fixture.simple.scenario.SimpleObjectsFixture;
 
 import org.apache.isis.core.specsupport.scenarios.InMemoryDB;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;

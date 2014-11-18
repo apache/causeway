@@ -20,40 +20,15 @@
  *  under the License.
  */
 
-package fixture.simple;
+package fixture.simple.objects;
 
-import dom.simple.SimpleObject;
-import dom.simple.SimpleObjects;
-
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-
-public class SimpleObjectsFixture extends FixtureScript {
-
-    public SimpleObjectsFixture() {
-        withDiscoverability(Discoverability.DISCOVERABLE);
-    }
+public class SimpleObjectForFoo extends SimpleObjectAbstract {
 
     @Override
     protected void execute(ExecutionContext executionContext) {
 
-        // prereqs
-        executeChild(new SimpleObjectsTearDownFixture(), executionContext);
-
-        // create
         create("Foo", executionContext);
-        create("Bar", executionContext);
-        create("Baz", executionContext);
     }
 
-    // //////////////////////////////////////
-
-    private SimpleObject create(final String name, ExecutionContext executionContext) {
-        return executionContext.add(this, simpleObjects.create(name));
-    }
-
-    // //////////////////////////////////////
-
-    @javax.inject.Inject
-    private SimpleObjects simpleObjects;
 
 }

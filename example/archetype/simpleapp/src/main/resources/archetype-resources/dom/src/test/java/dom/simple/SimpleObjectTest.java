@@ -26,26 +26,29 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class SimpleObjectTest_name {
+public class SimpleObjectTest {
 
-    private SimpleObject simpleObject;
+    SimpleObject simpleObject;
 
     @Before
     public void setUp() throws Exception {
         simpleObject = new SimpleObject();
     }
-    
-    @Test
-    public void happyCase() throws Exception {
-        // given
-        String name = "Foobar";
-        assertThat(simpleObject.getName(), is(nullValue()));
-        
-        // when
-        simpleObject.setName(name);
-        
-        // then
-        assertThat(simpleObject.getName(), is(name));
+
+    public static class Name extends SimpleObjectTest {
+
+        @Test
+        public void happyCase() throws Exception {
+            // given
+            String name = "Foobar";
+            assertThat(simpleObject.getName(), is(nullValue()));
+
+            // when
+            simpleObject.setName(name);
+
+            // then
+            assertThat(simpleObject.getName(), is(name));
+        }
     }
-    
+
 }
