@@ -21,20 +21,22 @@ package org.apache.isis.viewer.wicket.ui.components.appactions.cssmenu;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -105,7 +107,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
             collateServiceActions(serviceAdapter, ActionType.PROTOTYPE, serviceActions);
         }
         
-        final List<String> serviceNamesInOrder = serviceNamesInOrder(serviceAdapters, serviceActions);
+        final Set<String> serviceNamesInOrder = serviceNamesInOrder(serviceAdapters, serviceActions);
         final Map<String, List<LogicalServiceAction>> serviceActionsByName = groupByServiceName(serviceActions);
         
         // prune any service names that have no service actions
@@ -118,7 +120,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
      * Builds a hierarchy of {@link CssMenuItem}s, following the provided map of {@link LogicalServiceAction}s (keyed by their service Name).
      */
     private List<CssMenuItem> buildMenuItems(
-            final List<String> serviceNamesInOrder,
+            final Set<String> serviceNamesInOrder,
             final Map<String, List<LogicalServiceAction>> serviceActionsByName,
             final CssMenuBuilder.CssMenuContext cssMenuContext) {
         
@@ -177,9 +179,9 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
      * The unique service names, as they appear in order of the provided List of {@link LogicalServiceAction}s.
      * @param serviceAdapters 
      */
-    private List<String> serviceNamesInOrder(
+    private Set<String> serviceNamesInOrder(
             final List<ObjectAdapter> serviceAdapters, final List<LogicalServiceAction> serviceActions) {
-        final List<String> serviceNameOrder = Lists.newArrayList();
+        final Set<String> serviceNameOrder = Sets.newLinkedHashSet();
 
         // first, order as defined in isis.properties
         for (ObjectAdapter serviceAdapter : serviceAdapters) {
