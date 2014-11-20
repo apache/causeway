@@ -19,8 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop;
 
+import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Properties;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
 import org.apache.isis.applib.annotation.CssClassFa;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -29,7 +39,9 @@ import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 
-public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, IsisConfigurationAware{
+
+    private IsisConfiguration configuration;
 
     public CssClassFaFacetOnMemberFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -41,7 +53,10 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
         if(cssClassFaFacet == null) {
             cssClassFaFacet = createFromAnnotationIfPossible(processMethodContext);
         }
-        
+        if(cssClassFaFacet == null) {
+            cssClassFaFacet = createFromConfiguredRegexIfPossible(processMethodContext);
+        }
+
         // no-op if null
         FacetUtil.addFacet(cssClassFaFacet);
     }
@@ -68,5 +83,80 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
         return annotation != null ? new CssClassFaFacetOnMemberAnnotation(annotation.value(), processMethodContext.getFacetHolder()) : null;
     }
 
+    //region > faIconFromPattern
+
+
+    private final static Pattern FA_ICON_REGEX_PATTERN = Pattern.compile("([^:]+):(.+)");
+
+    private CssClassFaFacet createFromConfiguredRegexIfPossible(final ProcessMethodContext processMethodContext) {
+        final Method method = processMethodContext.getMethod();
+
+        String value = faIconIfAnyFor(method);
+
+        return value != null
+                ? new CssClassFaFacetOnMemberFromConfiguredRegex(value, processMethodContext.getFacetHolder())
+                : null;
+    }
+
+    private String faIconIfAnyFor(Method method) {
+        final String name = method.getName();
+        return faIconIfAnyFor(name);
+    }
+
+    private String faIconIfAnyFor(String name) {
+        final Map<Pattern, String> faIconByPattern = getFaIconByPattern();
+
+        for (Map.Entry<Pattern, String> entry : faIconByPattern.entrySet()) {
+            final Pattern pattern = entry.getKey();
+            final String faIcon = entry.getValue();
+            if(pattern.matcher(name).matches()) {
+                return faIcon;
+            }
+        }
+        return null;
+    }
+
+    private Map<Pattern,String> faIconByPattern;
+
+    private Map<Pattern, String> getFaIconByPattern() {
+        if (faIconByPattern == null) {
+            // build lazily
+            final String cssClassFaPatterns = configuration.getString("isis.reflector.facet.cssClassFa.patterns");
+            this.faIconByPattern = buildFaIconByPattern(cssClassFaPatterns);
+        }
+        return faIconByPattern;
+    }
+
+    private static Map<Pattern, String> buildFaIconByPattern(String cssClassFaPatterns) {
+        final Map<Pattern,String> faIconByPattern = Maps.newLinkedHashMap();
+        if(cssClassFaPatterns != null) {
+            final StringTokenizer regexToFaIcons = new StringTokenizer(cssClassFaPatterns, ConfigurationConstants.LIST_SEPARATOR);
+            final Map<String,String> faIconByRegex = Maps.newLinkedHashMap();
+            while (regexToFaIcons.hasMoreTokens()) {
+                String regexToFaIcon = regexToFaIcons.nextToken().trim();
+                if (Strings.isNullOrEmpty(regexToFaIcon)) {
+                    continue;
+                }
+                final Matcher matcher = FA_ICON_REGEX_PATTERN.matcher(regexToFaIcon);
+                if(matcher.matches()) {
+                    faIconByRegex.put(matcher.group(1), matcher.group(2));
+                }
+            }
+            for (Map.Entry<String, String> entry : faIconByRegex.entrySet()) {
+                final String regex = entry.getKey();
+                final String faIcon = entry.getValue();
+                faIconByPattern.put(Pattern.compile(regex), faIcon);
+            }
+        }
+        return faIconByPattern;
+    }
+    //endregion
+
+    //region > injected
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        this.configuration = configuration;
+    }
+    //endregion
 }
 

@@ -19,10 +19,14 @@
 
 package org.apache.isis.core.runtime.services;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
 import com.google.common.base.Function;
 import com.google.common.base.Predicates;
-import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -103,18 +107,4 @@ final class ServicesInstallerUtils  {
         };
     }
 
-    static String fullyQualifiedServiceName(String servicePrefix, String serviceName) {
-        final StringBuilder buf = new StringBuilder();
-
-        if(!Strings.isNullOrEmpty(servicePrefix)) {
-            buf.append(servicePrefix);
-            if(!servicePrefix.endsWith(".")) {
-                buf.append(".");
-            }
-        }
-
-        buf.append(serviceName);
-
-        return buf.toString();
-    }
 }

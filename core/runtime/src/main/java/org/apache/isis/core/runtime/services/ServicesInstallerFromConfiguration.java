@@ -19,9 +19,14 @@
 
 package org.apache.isis.core.runtime.services;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +49,7 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
     @Deprecated
     private static final String SERVICES_PREFIX = "services.prefix";
 
-    private final static Pattern regex = Pattern.compile("((\\d+):)(.*)");
+    private final static Pattern POSITIONED_SERVICE_REGEX = Pattern.compile("((\\d+):)(.*)");
 
     private final ServiceInstantiator serviceInstantiator;
 
@@ -60,6 +65,7 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
     // //////////////////////////////////////
 
     private Map<DeploymentType, List<Object>> servicesByDeploymentType = Maps.newHashMap();
+
 
     public void init() {
         initIfRequired();
@@ -137,17 +143,32 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
             if (serviceName.equals("")) {
                 continue;
             }
-            final Matcher matcher = regex.matcher(serviceName);
+            final Matcher matcher = POSITIONED_SERVICE_REGEX.matcher(serviceName);
             Integer order = Integer.MAX_VALUE;
             if(matcher.matches()) {
                 order = Integer.parseInt(matcher.group(2));
                 serviceName = matcher.group(3);
             }
 
-            final String service = ServicesInstallerUtils.fullyQualifiedServiceName(servicePrefix, serviceName);
+            final String service = fullyQualifiedServiceName(servicePrefix, serviceName);
             ServicesInstallerUtils.appendInPosition(positionedServices, "" + order, service);
         }
     }
+
+    static String fullyQualifiedServiceName(String servicePrefix, String serviceName) {
+        final StringBuilder buf = new StringBuilder();
+
+        if(!Strings.isNullOrEmpty(servicePrefix)) {
+            buf.append(servicePrefix);
+            if(!servicePrefix.endsWith(".")) {
+                buf.append(".");
+            }
+        }
+
+        buf.append(serviceName);
+        return buf.toString();
+    }
+
 
     private void appendObjectFixtureService(DeploymentType deploymentType, final SortedMap<String, SortedSet<String>> positionedServices) {
 
@@ -160,15 +181,6 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
                 ServicesInstallerUtils.appendInPosition(positionedServices, "" + Integer.MAX_VALUE, ObjectFixtureService.class.getName());
             }
         }
-    }
-
-    // unused, I think....?
-    private static String servicePrefix(final String servicePrefix) {
-        String prefix = servicePrefix == null ? "" : servicePrefix.trim();
-        if (prefix.length() > 0 && !prefix.endsWith(ConfigurationConstants.DELIMITER)) {
-            prefix = prefix + ConfigurationConstants.DELIMITER;
-        }
-        return prefix;
     }
 
     @Override
