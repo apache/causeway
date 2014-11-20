@@ -26,10 +26,11 @@
 .entityCollectionsPanel fieldset legend {
 	position:absolute;
 	left:10px;
-	top:10px;
+	top:12px;
 }
 
 .entityCollectionsPanel .actions {
 	float: right;
 	height: 0px;
 }
+

@@ -422,7 +422,8 @@ public class CssMenuItem implements Serializable {
         final AbstractLink link = getLink();
         final Label label = new Label(CssMenuItem.ID_MENU_LABEL, Model.of(this.getName()));
 
-        if (this.isEnabled() && link != null) {
+        if (link != null) {
+
             // show link...
             markupContainer.add(link);
             link.add(label);
@@ -435,9 +436,6 @@ public class CssMenuItem implements Serializable {
             }
             if(this.prototype) {
                 link.add(new CssClassAppender("prototype"));
-                link.add(new CssClassAppender("btn-default"));
-            } else {
-                link.add(new CssClassAppender("btn-default"));
             }
 
 
@@ -453,6 +451,13 @@ public class CssMenuItem implements Serializable {
                 Label dummy = new Label("menuLinkFontAwesome", "");
                 dummy.add(new CssClassAppender(cssClassFa));
                 link.add(dummy);
+            }
+
+            if(! this.isEnabled()) {
+                link.add(new AttributeModifier("title", Model.of(this.getDisabledReason())));
+                link.add(new CssClassAppender("disabled"));
+
+                link.setEnabled(false);
             }
 
             // .. and hide label

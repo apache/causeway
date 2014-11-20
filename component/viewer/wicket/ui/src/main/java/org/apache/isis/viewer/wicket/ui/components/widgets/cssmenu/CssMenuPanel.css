@@ -203,6 +203,7 @@
 	/*border: none;*/
 }
 
+.entityActions .cssMenuPanel .menuh a,
 .entityActions .cssMenuPanel .menuh a:link,
 .entityActions .cssMenuPanel .menuh a:visited,
 .entityActions .cssMenuPanel .menuh a:active,
@@ -212,7 +213,6 @@
     height: 30px;
     line-height: 30px;
     padding:0 10px;
-    font-weight:bold;
     font-size:0.85em;
     border-radius:4px;
     -moz-border-radius:4px;

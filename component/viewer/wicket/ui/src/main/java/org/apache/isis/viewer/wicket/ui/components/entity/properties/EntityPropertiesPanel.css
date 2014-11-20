@@ -17,5 +17,6 @@
  *  under the License.
  */
 .entityPropertiesPanel .property {
-	padding-bottom: 7px;
+	padding-bottom: 0px;
+	margin-left: -3px; /* adjusting for leading pixels in front of label, to get 15px overall */
 }

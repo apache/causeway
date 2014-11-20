@@ -62,8 +62,35 @@
     margin: 0;
 }
 
+
+.entityPropertiesPanel .panel-body {
+    padding-bottom: 0px;
+}
+
+.entityCollectionsPanel .viewLinks {
+    margin-top: -10px;
+}
+
+.entityCollectionsPanel .additionalLinksAndSelectorDropDown {
+    margin-top: -2px;
+}
+
+.collection.panel-body {
+    padding-top: 0px;
+    /*
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    */
+}
+
+.collectionPanel .well {
+    background-color: transparent;
+    margin-bottom: 0px;
+}
+
 body {
-    padding-top: 80px;
+    padding-top: 60px;
 }
 
 .nav > li > a {

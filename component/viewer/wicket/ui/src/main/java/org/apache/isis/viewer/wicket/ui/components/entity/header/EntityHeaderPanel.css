@@ -25,6 +25,7 @@
 div.entityHeaderPanel .iconAndTitle{
 	float: left;
     padding:0;
+	padding-bottom: 5px;
 	width: 100%;
 }
 
