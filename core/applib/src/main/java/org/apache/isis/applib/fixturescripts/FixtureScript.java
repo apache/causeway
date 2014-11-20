@@ -258,13 +258,12 @@ public abstract class FixtureScript
             }
         };
 
-        private static Pattern keyEqualsValuePattern = Pattern.compile("([^=]*)=(.*)");
+        private final static Pattern keyEqualsValuePattern = Pattern.compile("([^=]*)=(.*)");
 
         private final String parameters;
         private final FixtureScripts fixtureScripts;
         private final FixtureResultList fixtureResultList;
         private final Map<String, String> parameterMap;
-        ;
 
         public ExecutionContext(final String parameters, final FixtureScripts fixtureScripts) {
             this.fixtureScripts = fixtureScripts;
@@ -299,7 +298,7 @@ public abstract class FixtureScript
         }
 
         public String getParameter(String parameterName) {
-            return getParameterMap().get(parameterName);
+            return parameterMap.get(parameterName);
         }
 
         public Map<String,String> getParameterMap() {
@@ -315,7 +314,7 @@ public abstract class FixtureScript
                 return;
             }
             if(parameterMap.containsKey(parameterName)) {
-                // ignore; the supplies parameters take precedence
+                // ignore; the existing parameter take precedence
                 return;
             }
             parameterMap.put(parameterName, parameterValue);
