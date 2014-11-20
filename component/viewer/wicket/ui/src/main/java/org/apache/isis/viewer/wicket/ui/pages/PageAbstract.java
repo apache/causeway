@@ -35,7 +35,12 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.head.*;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.CssReferenceHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -66,7 +71,13 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
-import org.apache.isis.viewer.wicket.model.models.*;
+import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
+import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
+import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -105,13 +116,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     public static final String ID_MENU_LINK = "menuLink";
 
     private static final String ID_THEME_PICKER = "themePicker";
-
-    // TODO mgrigorov: are those used somewhere else ? since they are public
-    public static final String ID_LOGOUT_LINK = "logoutLink";
-    public static final String ID_LOGOUT_TEXT = "logoutText";
-    public static final String ID_ABOUT_LINK = "aboutLink";
-
-    private static final String ID_COPY_LINK = "copyLink";
     private static final String ID_BREADCRUMBS = "breadcrumbs";
 
 
@@ -164,7 +168,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             themeDiv = new WebMarkupContainer(ID_THEME);
             add(themeDiv);
             if(applicationName != null) {
-                themeDiv.add(new CssClassAppender(asCssStyle(applicationName)));
+                themeDiv.add(new CssClassAppender(CssClassAppender.asCssStyle(applicationName)));
             }
 
             addApplicationActions(themeDiv);
@@ -220,23 +224,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     private Class<? extends Page> getSignInPage() {
         return pageClassRegistry.getPageClass(PageType.SIGN_IN);
-    }
-
-    static String asCssStyle(final String str) {
-        return str.toLowerCase().replaceAll("[^A-Za-z0-9 ]", "").replaceAll("\\s+", "-");
-    }
-
-    // TODO mgrigorov this method is not used
-    protected ExceptionModel recognizeException(Exception ex) {
-        List<ExceptionRecognizer> exceptionRecognizers;
-        try {
-            exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
-        } catch(Exception ex2) {
-            LOG.warn("Unable to obtain exceptionRecognizers (no session?)");
-            exceptionRecognizers = Collections.emptyList();
-        }
-        final String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
-        return ExceptionModel.create(recognizedMessageIfAny, ex);
     }
 
     @Override

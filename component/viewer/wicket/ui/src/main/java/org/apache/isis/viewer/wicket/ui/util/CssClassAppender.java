@@ -39,4 +39,7 @@ public class CssClassAppender extends AttributeAppender {
         this(Model.of(append));
     }
 
+    public static String asCssStyle(final String str) {
+        return str.toLowerCase().replaceAll("[^A-Za-z0-9- ]", "").replaceAll("\\s+", "-");
+    }
 }

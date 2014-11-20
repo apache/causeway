@@ -1,16 +1,17 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAutoOpenJavaScriptReference;
 
 import java.util.List;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -50,6 +51,10 @@ public class ApplicationActionsPanel extends Panel {
                 CssMenuItem menuItem = listItem.getModelObject();
                 listItem.add(new Label("name", menuItem.getName()));
 
+                MarkupContainer topMenu = new WebMarkupContainer("topMenu");
+
+                topMenu.add(new CssClassAppender("top-menu-" + CssClassAppender.asCssStyle(menuItem.getName())));
+                listItem.add(topMenu);
                 List<CssMenuItem> subMenuItems = withSeparators(menuItem);
 
 // fake data to test multi-level menus
@@ -75,7 +80,7 @@ public class ApplicationActionsPanel extends Panel {
                         }
                     }
                 };
-                listItem.add(subMenuItemsView);
+                topMenu.add(subMenuItemsView);
             }
         };
         add(menuItemsView);
@@ -139,13 +144,13 @@ public class ApplicationActionsPanel extends Panel {
             subMenuItemLink.addOrReplace(menuItemLabel);
 
             if (!menuItem.isEnabled()) {
-                listItem.add(new CssClassNameAppender("disabled"));
+                listItem.add(new CssClassAppender("disabled"));
                 subMenuItemLink.setEnabled(false);
                 TooltipBehavior tooltipBehavior = new TooltipBehavior(Model.of(menuItem.getDisabledReason()));
                 listItem.add(tooltipBehavior);
             }
             if (menuItem.isPrototyping()) {
-                subMenuItemLink.add(new CssClassNameAppender("prototype"));
+                subMenuItemLink.add(new CssClassAppender("prototype"));
             }
             leafItem.add(subMenuItemLink);
 
@@ -160,7 +165,7 @@ public class ApplicationActionsPanel extends Panel {
             }
         } else {
             leafItem = new Fragment("content", "empty", ApplicationActionsPanel.this);
-            listItem.add(new CssClassNameAppender("divider"));
+            listItem.add(new CssClassAppender("divider"));
         }
         listItem.add(leafItem);
 

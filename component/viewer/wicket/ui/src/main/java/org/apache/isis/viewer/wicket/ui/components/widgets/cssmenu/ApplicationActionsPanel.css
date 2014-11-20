@@ -95,3 +95,10 @@
     border-radius: 0;
     color: initial;
 }
+
+.scrollable-menu {
+    min-width: 250px;
+    height: auto;
+    max-height: 600px;
+    overflow-x: hidden;
+}
