@@ -23,7 +23,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 /**
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
@@ -47,7 +46,7 @@ public class EntityPropertiesPanel extends PanelAbstract<EntityModel> {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
 
-        PanelUtil.renderHead(response, getClass());
+        //PanelUtil.renderHead(response, getClass());
     }
 
     private void buildGui() {

@@ -158,7 +158,7 @@
     line-height: 30px;
     padding: 0 10px;
     font-weight: bold;
-    font-size: 0.85em;
+    /*font-size: 0.85em;*/
     border-radius: 4px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
@@ -211,9 +211,9 @@
     display: block;
     float: left;
     height: 30px;
-    line-height: 30px;
-    padding:0 10px;
-    font-size:0.85em;
+    /*line-height: 30px;*/
+	padding: 4px 10px 0;
+	/*font-size:0.85em;*/
     border-radius:4px;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;

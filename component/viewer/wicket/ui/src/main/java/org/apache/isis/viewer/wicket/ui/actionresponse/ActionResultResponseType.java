@@ -19,14 +19,9 @@ package org.apache.isis.viewer.wicket.ui.actionresponse;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.Url;
-import org.apache.wicket.request.cycle.RequestCycle;
-
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -70,6 +65,7 @@ public enum ActionResultResponseType {
         @Override
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
             ValueModel valueModel = new ValueModel(resultAdapter);
+            valueModel.setActionHint(model);
             final ValuePage valuePage = new ValuePage(valueModel);
             return ActionResultResponse.toPage(valuePage);
         }

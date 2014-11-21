@@ -81,7 +81,7 @@ public class CssMenuPanel extends PanelAbstract<CssMenuPanel.ListOfCssMenuItemsM
         super(id, new ListOfCssMenuItemsModel(topLevelMenuItems));
         this.styleAppender = new StyleAppender(style);
 
-        add(styleAppender);
+        //add(styleAppender);
 
         final RepeatingView menuItemRv = new RepeatingView(CssMenuPanel.ID_MENU_ITEMS);
         add(menuItemRv);

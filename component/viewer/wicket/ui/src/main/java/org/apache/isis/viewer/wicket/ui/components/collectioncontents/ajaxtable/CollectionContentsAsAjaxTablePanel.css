@@ -86,7 +86,7 @@
 }
 
 .collectionContentsAsAjaxTablePanel table.contents tbody td:first-child {
-    min-width: 20px;
+    width: 30px;
 }
 
 .collectionContentsAsAjaxTablePanel table.contents a:hover {

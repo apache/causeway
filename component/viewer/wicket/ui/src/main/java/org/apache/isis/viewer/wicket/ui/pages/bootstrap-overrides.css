@@ -63,16 +63,16 @@
 }
 
 
-.entityPropertiesPanel .panel-body {
-    padding-bottom: 0px;
+.entityPropertiesPanel .properties.panel-body {
+    padding-bottom: 5px;
+}
+.entityPropertiesPanel .collection.panel-body {
+    padding-bottom: 10px;
 }
 
-.entityCollectionsPanel .viewLinks {
-    margin-top: -10px;
-}
 
 .entityCollectionsPanel .additionalLinksAndSelectorDropDown {
-    margin-top: -2px;
+    margin-top: -4px;
 }
 
 .collection.panel-body {
@@ -117,7 +117,7 @@ div.label-left label.control-label {
     width: 30%;
     float: left;
     padding-top: 2px;
-    padding-left: 10px;
+    /*padding-left: 10px;*/
     text-align: start;
 }
 
@@ -178,7 +178,7 @@ div.label-left .choicesPlaceholder {
 }
 
 .form-horizontal.inputForm .form-group {
-    margin-left: -5px;
+    margin-left: 0px;
     margin-right: -25px;
 }
 
@@ -204,15 +204,17 @@ div.label-left .choicesPlaceholder {
     font-style: italic;
 }
 
-/*
-not sure if this also needed, but it works...
-a.prototype span.menuLabel::before,
-a.prototype span.menuLinkLabel::before {
-    content: "[";
+.actionParametersForm .buttons {
+    padding-top: 20px;
 }
 
-a.prototype span.menuLabel::after,
-a.prototype span.menuLinkLabel::after {
-    content: "]";
+.entityCollectionsPanel .panel-heading {
+    padding-bottom: 10px;
 }
-*/
+
+
+
+
+#body {
+    padding-top: 20px;
+}

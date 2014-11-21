@@ -28,9 +28,15 @@
                 <div wicket:id="bookmarks"></div>
                 <div class="myBlockContainer">
                     <div class="iconAndTitle panel panel-default actionPanelHeaderNew">
-                         <h3 wicket:id="actionName" class="actionName">[action name]</h3>
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                 <div wicket:id="actionName" class="actionName">[action name]</div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div wicket:id="voidReturn"></div>
+                        </div>
                     </div>
-                    <div wicket:id="voidReturn"></div>
                 </div>
             </div>
         </wicket:extend>

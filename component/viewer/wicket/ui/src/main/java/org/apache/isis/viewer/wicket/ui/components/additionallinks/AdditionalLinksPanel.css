@@ -32,3 +32,6 @@ ul.additionalLinkList {
     padding-bottom: 10px;
 }
 
+.entityCollectionsPanel ul.additionalLinkList {
+    padding-bottom: 0px;
+}

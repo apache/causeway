@@ -19,11 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.voidreturn;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -39,9 +37,6 @@ public class VoidReturnPage extends PageAbstract {
 
     private static final String ID_ACTION_NAME = "actionName";
 
-    /**
-     * For use with {@link Component#setResponsePage(org.apache.wicket.request.component.IRequestablePage)}
-     */
     public VoidReturnPage(final VoidModel model) {
         this(model, actionNameFrom(model));
     }
