@@ -27,8 +27,6 @@ import static org.junit.Assert.assertThat;
 import java.io.IOException;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,7 +40,7 @@ public class DomainObjectRepresentationTest_getProperty {
     }
 
     @Test
-    public void getProperty() throws JsonParseException, JsonMappingException, IOException {
+    public void getProperty() throws IOException {
         final JsonRepresentation flag = representation.getProperty("flag");
         assertThat(flag, is(not(nullValue())));
         assertThat(flag.getBoolean("value"), is(true));

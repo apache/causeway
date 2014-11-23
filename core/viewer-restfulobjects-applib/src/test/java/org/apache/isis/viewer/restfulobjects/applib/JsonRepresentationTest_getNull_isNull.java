@@ -27,8 +27,6 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,7 +40,7 @@ public class JsonRepresentationTest_getNull_isNull {
     }
 
     @Test
-    public void forNullValue() throws JsonParseException, JsonMappingException, IOException {
+    public void forNullValue() throws IOException {
         final JsonRepresentation nullValue = jsonRepresentation.getNull("aNull");
         assertThat(nullValue, is(not(nullValue())));
         assertThat(nullValue.isNull(), is(true));
@@ -52,7 +50,7 @@ public class JsonRepresentationTest_getNull_isNull {
     }
 
     @Test
-    public void isNull_forArray() throws JsonParseException, JsonMappingException, IOException {
+    public void isNull_forArray() throws IOException {
         final Boolean isNull = jsonRepresentation.isNull("anEmptyArray");
         assertThat(isNull, is(false));
     }
@@ -79,7 +77,7 @@ public class JsonRepresentationTest_getNull_isNull {
     }
 
     @Test
-    public void isNull_forMap() throws JsonParseException, JsonMappingException, IOException {
+    public void isNull_forMap() throws IOException {
         final Boolean isNull = jsonRepresentation.isNull("aSubMap");
         assertThat(isNull, is(false));
     }

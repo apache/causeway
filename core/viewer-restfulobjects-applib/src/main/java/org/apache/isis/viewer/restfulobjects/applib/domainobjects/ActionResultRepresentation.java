@@ -18,8 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.codehaus.jackson.JsonNode;
 
 public class ActionResultRepresentation extends AbstractObjectMemberRepresentation {
 

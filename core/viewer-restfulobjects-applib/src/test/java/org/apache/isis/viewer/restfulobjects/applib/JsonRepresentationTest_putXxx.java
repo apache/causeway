@@ -23,8 +23,8 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,19 +38,19 @@ public class JsonRepresentationTest_putXxx {
     }
 
     @Test
-    public void putInt() throws JsonParseException, JsonMappingException, IOException {
+    public void putInt() throws IOException {
         jsonRepresentation.mapPut("a", 123);
         assertThat(jsonRepresentation.getInt("a"), is(123));
     }
 
     @Test
-    public void putInt_multipart() throws JsonParseException, JsonMappingException, IOException {
+    public void putInt_multipart() throws IOException {
         jsonRepresentation.mapPut("a.b", 456);
         assertThat(jsonRepresentation.getInt("a.b"), is(456));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void putInt_pathBlockedByValue() throws JsonParseException, JsonMappingException, IOException {
+    public void putInt_pathBlockedByValue() throws IOException {
         // given
         jsonRepresentation.mapPut("a", 123);
 

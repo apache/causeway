@@ -18,11 +18,11 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinkToUp;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
-import org.codehaus.jackson.JsonNode;
 
 public class ListRepresentation extends DomainRepresentation implements HasLinkToUp {
 

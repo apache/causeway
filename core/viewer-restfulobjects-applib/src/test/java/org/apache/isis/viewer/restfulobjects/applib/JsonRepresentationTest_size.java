@@ -19,8 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.applib;
 
 import java.io.IOException;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
 
 import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
@@ -32,31 +30,31 @@ public class JsonRepresentationTest_size {
     private JsonRepresentation jsonRepresentation;
 
     @Test
-    public void size_forEmptyMap() throws JsonParseException, JsonMappingException, IOException {
+    public void size_forEmptyMap() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("emptyMap.json"));
         assertThat(jsonRepresentation.size(), is(0));
     }
 
     @Test
-    public void size_forNonEmptyMap() throws JsonParseException, JsonMappingException, IOException {
+    public void size_forNonEmptyMap() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
         assertThat(jsonRepresentation.size(), is(16));
     }
 
     @Test
-    public void size_forEmptyList() throws JsonParseException, JsonMappingException, IOException {
+    public void size_forEmptyList() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("emptyList.json"));
         assertThat(jsonRepresentation.size(), is(0));
     }
 
     @Test
-    public void size_forNonEmptyList() throws JsonParseException, JsonMappingException, IOException {
+    public void size_forNonEmptyList() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("list.json"));
         assertThat(jsonRepresentation.size(), is(2));
     }
 
     @Test(expected = IllegalStateException.class)
-    public void size_forValue() throws JsonParseException, JsonMappingException, IOException {
+    public void size_forValue() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
         final JsonRepresentation valueRepresentation = jsonRepresentation.getRepresentation("anInt");
         valueRepresentation.size();

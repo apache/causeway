@@ -20,13 +20,15 @@ package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.actio
 
 import java.io.IOException;
 import javax.ws.rs.core.Response;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.apache.isis.viewer.restfulobjects.applib.*;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.Header;
@@ -82,7 +84,7 @@ public class Get_givenActionSemanticsOfSafe_ok {
         then(restfulResponse);
     }
 
-    private static void then(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
+    private static void then(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws IOException {
         
         assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasMediaTypeProfile(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT));
         final ActionResultRepresentation actionResultRepr = restfulResponse.getEntity();

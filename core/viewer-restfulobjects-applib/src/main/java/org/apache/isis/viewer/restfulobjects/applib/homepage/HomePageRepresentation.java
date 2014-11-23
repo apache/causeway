@@ -18,10 +18,10 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.homepage;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainRepresentation;
-import org.codehaus.jackson.JsonNode;
 
 public class HomePageRepresentation extends DomainRepresentation {
 

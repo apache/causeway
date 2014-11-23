@@ -21,13 +21,15 @@ package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid.property;
 import java.io.IOException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.ISODateTimeFormat;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
@@ -98,7 +100,7 @@ public class Put_whenArgValid_thenJodaTimePropertyUpdated_ok_TODO {
         assertThat(followedRepr(modifyLink,argRepr).getString("value"), is(s));
     }
 
-    private ObjectPropertyRepresentation getObjectPropertyRepr(final String domainType, final String instanceId, String propertyId) throws JsonParseException, JsonMappingException, IOException {
+    private ObjectPropertyRepresentation getObjectPropertyRepr(final String domainType, final String instanceId, String propertyId) throws IOException {
         final Response domainObjectResp = domainObjectResource.propertyDetails(domainType, instanceId, propertyId);
         final RestfulResponse<ObjectPropertyRepresentation> domainObjectJsonResp = RestfulResponse.ofT(domainObjectResp);
         assertThat(domainObjectJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
@@ -107,7 +109,7 @@ public class Put_whenArgValid_thenJodaTimePropertyUpdated_ok_TODO {
         return repr;
     }
 
-    private LinkRepresentation getObjectPropertyReprModifyLink(String domainType, String instanceId, String propertyId) throws JsonParseException, JsonMappingException, IOException {
+    private LinkRepresentation getObjectPropertyReprModifyLink(String domainType, String instanceId, String propertyId) throws IOException {
         ObjectPropertyRepresentation objectPropertyRepr = getObjectPropertyRepr(domainType, instanceId, propertyId);
         return objectPropertyRepr.getLinkWithRel(Rel.MODIFY);
     }

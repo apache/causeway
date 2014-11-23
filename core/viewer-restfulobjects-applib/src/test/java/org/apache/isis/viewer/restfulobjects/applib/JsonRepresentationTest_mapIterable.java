@@ -18,26 +18,23 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import org.junit.Test;
+
 import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map.Entry;
-
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.junit.Test;
-
 public class JsonRepresentationTest_mapIterable {
 
     private JsonRepresentation jsonRepresentation;
 
     @Test
-    public void forJsonRepresentation() throws JsonParseException, JsonMappingException, IOException {
+    public void forJsonRepresentation() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
         final Iterable<Entry<String, JsonRepresentation>> mapIterable = jsonRepresentation.mapIterable();
         final Iterator<Entry<String, JsonRepresentation>> mapIterator = mapIterable.iterator();

@@ -18,16 +18,13 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
+import java.io.IOException;
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
-import java.io.IOException;
-
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.junit.Before;
-import org.junit.Test;
 
 public class JsonRepresentationTest_isArray_isMap_isValue {
 
@@ -39,14 +36,14 @@ public class JsonRepresentationTest_isArray_isMap_isValue {
     }
 
     @Test
-    public void forMap() throws JsonParseException, JsonMappingException, IOException {
+    public void forMap() throws IOException {
         assertThat(jsonRepresentation.isArray(), is(false));
         assertThat(jsonRepresentation.isMap(), is(true));
         assertThat(jsonRepresentation.isValue(), is(false));
     }
 
     @Test
-    public void forValue() throws JsonParseException, JsonMappingException, IOException {
+    public void forValue() throws IOException {
         final JsonRepresentation valueRepresentation = jsonRepresentation.getRepresentation("aString");
         assertThat(valueRepresentation.isArray(), is(false));
         assertThat(valueRepresentation.isMap(), is(false));
@@ -54,7 +51,7 @@ public class JsonRepresentationTest_isArray_isMap_isValue {
     }
 
     @Test
-    public void forList() throws JsonParseException, JsonMappingException, IOException {
+    public void forList() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("list.json"));
         assertThat(jsonRepresentation.isArray(), is(true));
         assertThat(jsonRepresentation.isMap(), is(false));

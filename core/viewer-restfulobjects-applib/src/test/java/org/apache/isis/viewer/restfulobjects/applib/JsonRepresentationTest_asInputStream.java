@@ -28,8 +28,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,7 +43,7 @@ public class JsonRepresentationTest_asInputStream {
     }
 
     @Test
-    public void asInputStream() throws JsonParseException, JsonMappingException, IOException {
+    public void asInputStream() throws IOException {
         final InputStream array = jsonRepresentation.asInputStream();
 
         final ByteArrayOutputStream to = new ByteArrayOutputStream();

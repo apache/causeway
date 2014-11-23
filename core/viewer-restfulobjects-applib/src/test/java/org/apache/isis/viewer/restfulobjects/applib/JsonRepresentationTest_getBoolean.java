@@ -26,8 +26,6 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,17 +39,17 @@ public class JsonRepresentationTest_getBoolean {
     }
 
     @Test
-    public void happyCase() throws JsonParseException, JsonMappingException, IOException {
+    public void happyCase() throws IOException {
         assertThat(jsonRepresentation.getBoolean("aBoolean"), is(true));
     }
 
     @Test
-    public void forNonExistent() throws JsonParseException, JsonMappingException, IOException {
+    public void forNonExistent() throws IOException {
         assertThat(jsonRepresentation.getBoolean("doesNotExist"), is(nullValue()));
     }
 
     @Test
-    public void forValueButNotABoolean() throws JsonParseException, JsonMappingException, IOException {
+    public void forValueButNotABoolean() throws IOException {
         try {
             jsonRepresentation.getBoolean("aString");
             fail();
@@ -61,7 +59,7 @@ public class JsonRepresentationTest_getBoolean {
     }
 
     @Test
-    public void forMap() throws JsonParseException, JsonMappingException, IOException {
+    public void forMap() throws IOException {
         try {
             jsonRepresentation.getBoolean("aSubMap");
             fail();
@@ -71,7 +69,7 @@ public class JsonRepresentationTest_getBoolean {
     }
 
     @Test
-    public void forList() throws JsonParseException, JsonMappingException, IOException {
+    public void forList() throws IOException {
         try {
             jsonRepresentation.getBoolean("aSubList");
             fail();
@@ -81,7 +79,7 @@ public class JsonRepresentationTest_getBoolean {
     }
 
     @Test
-    public void forMultipartKey() throws JsonParseException, JsonMappingException, IOException {
+    public void forMultipartKey() throws IOException {
         assertThat(jsonRepresentation.getBoolean("aSubMap.aBoolean"), is(true));
     }
 

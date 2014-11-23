@@ -21,8 +21,6 @@ package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.actio
 import java.io.IOException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
@@ -43,7 +41,9 @@ import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
 
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.*;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasMediaTypeProfile;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasStatus;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -108,7 +108,7 @@ public class Get_givenMandatorySimpleArg_whenArgNullValue_bad {
         thenResponseIsErrorWithInvalidReason(restfulResponse);
     }
 
-    private static void thenResponseIsErrorWithInvalidReason(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
+    private static void thenResponseIsErrorWithInvalidReason(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws IOException {
         assertThat(restfulResponse, hasStatus(HttpStatusCode.VALIDATION_FAILED));
         assertThat(restfulResponse.getHeader(Header.WARNING), is("Validation failed, see body for details"));
 

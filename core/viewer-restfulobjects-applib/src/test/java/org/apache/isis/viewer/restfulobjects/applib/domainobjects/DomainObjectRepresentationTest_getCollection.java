@@ -19,8 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
 import java.io.IOException;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -39,7 +37,7 @@ public class DomainObjectRepresentationTest_getCollection {
     }
 
     @Test
-    public void getCollection() throws JsonParseException, JsonMappingException, IOException {
+    public void getCollection() throws IOException {
         final JsonRepresentation flag = representation.getCollection("someCollection");
         assertThat(flag, is(not(nullValue())));
         assertThat(flag.getBoolean("value"), is(true));

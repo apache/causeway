@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasExtensions;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation.HasLinkToSelf;

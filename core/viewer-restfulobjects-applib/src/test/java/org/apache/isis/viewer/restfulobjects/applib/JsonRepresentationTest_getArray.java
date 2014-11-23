@@ -27,8 +27,6 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,26 +40,26 @@ public class JsonRepresentationTest_getArray {
     }
 
     @Test
-    public void nonEmptyArray() throws JsonParseException, JsonMappingException, IOException {
+    public void nonEmptyArray() throws IOException {
         final JsonRepresentation array = jsonRepresentation.getArray("aStringArray");
         assertThat(array, is(not(nullValue())));
         assertThat(array.size(), is(3));
     }
 
     @Test
-    public void emptyArray() throws JsonParseException, JsonMappingException, IOException {
+    public void emptyArray() throws IOException {
         final JsonRepresentation array = jsonRepresentation.getArray("anEmptyArray");
         assertThat(array, is(not(nullValue())));
         assertThat(array.size(), is(0));
     }
 
     @Test
-    public void forNonExistent() throws JsonParseException, JsonMappingException, IOException {
+    public void forNonExistent() throws IOException {
         assertThat(jsonRepresentation.getArray("doesNotExist"), is(nullValue()));
     }
 
     @Test
-    public void forValue() throws JsonParseException, JsonMappingException, IOException {
+    public void forValue() throws IOException {
         try {
             jsonRepresentation.getArray("aString");
             fail();
@@ -71,7 +69,7 @@ public class JsonRepresentationTest_getArray {
     }
 
     @Test
-    public void forMap() throws JsonParseException, JsonMappingException, IOException {
+    public void forMap() throws IOException {
         try {
             jsonRepresentation.getArray("aSubMap");
             fail();

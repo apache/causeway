@@ -19,8 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.applib;
 
 import java.io.IOException;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -45,17 +43,17 @@ public class JsonRepresentationTest_getDouble {
     }
 
     @Test
-    public void happyCase() throws JsonParseException, JsonMappingException, IOException {
+    public void happyCase() throws IOException {
         assertThat(jsonRepresentation.getDouble("aDouble"), is(12345678901234534.3242));
     }
 
     @Test
-    public void forNonExistent() throws JsonParseException, JsonMappingException, IOException {
+    public void forNonExistent() throws IOException {
         assertThat(jsonRepresentation.getDouble("doesNotExist"), is(nullValue()));
     }
 
     @Test
-    public void forValueButNotAnLong() throws JsonParseException, JsonMappingException, IOException {
+    public void forValueButNotAnLong() throws IOException {
         try {
             jsonRepresentation.getDouble("aString");
             fail();
@@ -65,7 +63,7 @@ public class JsonRepresentationTest_getDouble {
     }
 
     @Test
-    public void forMap() throws JsonParseException, JsonMappingException, IOException {
+    public void forMap() throws IOException {
         try {
             jsonRepresentation.getDouble("aSubMap");
             fail();
@@ -75,7 +73,7 @@ public class JsonRepresentationTest_getDouble {
     }
 
     @Test
-    public void forList() throws JsonParseException, JsonMappingException, IOException {
+    public void forList() throws IOException {
         try {
             jsonRepresentation.getDouble("aSubList");
             fail();
@@ -85,7 +83,7 @@ public class JsonRepresentationTest_getDouble {
     }
 
     @Test
-    public void forMultipartKey() throws JsonParseException, JsonMappingException, IOException {
+    public void forMultipartKey() throws IOException {
         assertThat(jsonRepresentation.getDouble("aSubMap.aDouble"), is(12345678901234534.4567));
     }
 

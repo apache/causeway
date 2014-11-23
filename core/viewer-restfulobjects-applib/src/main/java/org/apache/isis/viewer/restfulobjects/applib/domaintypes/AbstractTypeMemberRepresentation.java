@@ -18,8 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.domaintypes;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainRepresentation;
-import org.codehaus.jackson.JsonNode;
 
 public abstract class AbstractTypeMemberRepresentation extends DomainRepresentation {
 

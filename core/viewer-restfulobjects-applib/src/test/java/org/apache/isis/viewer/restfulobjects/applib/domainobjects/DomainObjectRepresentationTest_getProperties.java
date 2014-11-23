@@ -19,8 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
 import java.io.IOException;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -39,7 +37,7 @@ public class DomainObjectRepresentationTest_getProperties {
     }
 
     @Test
-    public void getProperties() throws JsonParseException, JsonMappingException, IOException {
+    public void getProperties() throws IOException {
         final JsonRepresentation properties = representation.getProperties();
 
         final JsonRepresentation members = representation.getMembers();
