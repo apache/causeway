@@ -66,7 +66,6 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
     private static final String ID_AUTO_COMPLETE = "autoComplete";
     private static final String ID_ENTITY_ICON_TITLE = "entityIconAndTitle";
-//    private static final String ID_ENTITY_ICON_TITLE_AND_COPYLINK = "entityIconTitleAndCopylink";
 
     private EntityLinkSelect2Panel entityLink;
     Select2Choice<ObjectAdapterMemento> select2Field;
@@ -209,8 +208,9 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final ObjectAdapter adapter = getModel().getPendingElseCurrentAdapter();
 
         // syncLinkWithInput
+        final MarkupContainer componentForRegular = (MarkupContainer) getComponentForRegular();
         if (adapter != null) {
-            if(getComponentForRegular() != null) {
+            if(componentForRegular != null) {
                 final EntityModel entityModelForLink = new EntityModel(adapter);
                 
                 entityModelForLink.setContextAdapterIfAny(getModel().getContextAdapterIfAny());
@@ -218,14 +218,22 @@ public class ReferencePanel extends ScalarPanelAbstract {
                 
                 final ComponentFactory componentFactory = 
                         getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_AND_TITLE, entityModelForLink);
-//                final ComponentFactory componentFactory =
-//                        getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, entityModelForLink);
                 final Component component = componentFactory.createComponent(entityModelForLink);
                 
-                ((MarkupContainer)getComponentForRegular()).addOrReplace(component);
+                componentForRegular.addOrReplace(component);
+
+                Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
+
             }
+
+
         } else {
-            permanentlyHideEntityIconAndTitleIfInRegularMode();
+
+            if(componentForRegular != null) {
+                componentForRegular.addOrReplace(new Label("entityTitleIfNull", "(none)"));
+                //Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
+                Components.permanentlyHide(componentForRegular, ID_ENTITY_ICON_TITLE);
+            }
         }
 
 
@@ -263,15 +271,21 @@ public class ReferencePanel extends ScalarPanelAbstract {
                 //
                 select2Field.clearInput();
             }
-        
-            permanentlyHideEntityIconAndTitleIfInRegularMode();
-            
+
+            if(getComponentForRegular() != null) {
+                Components.permanentlyHide((MarkupContainer)getComponentForRegular(), ID_ENTITY_ICON_TITLE);
+                Components.permanentlyHide(componentForRegular, "entityTitleIfNull");
+            }
+
+
+
             // syncUsability
             if(select2Field != null) {
                 final boolean mutability = entityLink.isEnableAllowed() && !getModel().isViewMode();
                 select2Field.setEnabled(mutability);
             }
 
+            Components.permanentlyHide(entityLink, "entityLinkIfNull");
         } else {
             // this is horrid; adds a label to the id
             // should instead be a 'temporary hide'
