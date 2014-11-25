@@ -73,6 +73,7 @@ import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPathSignificantWebMarkupContainer;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
@@ -216,7 +217,8 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(associations);
         
         final List<String> groupNames = ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), hint);
-        
+
+
         for(String groupName: groupNames) {
             final List<ObjectAssociation> associationsInGroup = associationsByGroup.get(groupName);
             if(associationsInGroup==null) {
@@ -227,6 +229,8 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
             memberGroupRv.add(memberGroupRvContainer);
             memberGroupRvContainer.add(new Label(ID_MEMBER_GROUP_NAME, groupName));
 
+            final List<LinkAndLabel> memberGroupActions = Lists.newArrayList();
+
             final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
             memberGroupRvContainer.add(propertyRv);
 
@@ -235,8 +239,14 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
             for (final ObjectAssociation association : associationsInGroup) {
                 final WebMarkupContainer propertyRvContainer = new UiHintPathSignificantWebMarkupContainer(propertyRv.newChildId());
                 propertyRv.add(propertyRvContainer);
-                addPropertyToForm(entityModel, association, propertyRvContainer);
+
+                addPropertyToForm(entityModel, (OneToOneAssociation) association, propertyRvContainer, memberGroupActions);
             }
+
+            // TODO: suppressing until sort out markup and figure out which should contribute etc via Facets.
+            memberGroupActions.clear();
+            AdditionalLinksPanel.addAdditionalLinks(
+                    memberGroupRvContainer, "additionalLinks", memberGroupActions);
         }
         
         addClassForSpan(markupContainer, span);
@@ -248,12 +258,10 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
     private void addPropertyToForm(
             final EntityModel entityModel,
-            final ObjectAssociation association,
-            final WebMarkupContainer container) {
-
-        final List<LinkAndLabel> entityActions = Lists.newArrayList();
-
-        final OneToOneAssociation otoa = (OneToOneAssociation) association;
+            final OneToOneAssociation association,
+            final WebMarkupContainer container,
+            final List<LinkAndLabel> entityActions) {
+        final OneToOneAssociation otoa = association;
         final PropertyMemento pm = new PropertyMemento(otoa);
 
         final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
