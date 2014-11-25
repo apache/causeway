@@ -31,7 +31,16 @@ public interface ActionPromptProvider {
             } 
             // else
             return null;
-        }}
+        }
+        public static ActionPromptProvider getFrom(Page page) {
+            if(page instanceof ActionPromptProvider) {
+                final ActionPromptProvider provider = (ActionPromptProvider) page;
+                return provider;
+            }
+            // else
+            return null;
+        }
+    }
 
     public ActionPrompt getActionPrompt();
 }

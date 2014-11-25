@@ -138,6 +138,7 @@
 
 .collectionContentsAsAjaxTablePanel .table-responsive {
 	overflow-x: auto;
+	padding-bottom: 10px;
 }
 
 .collectionContentsAsAjaxTablePanel table tbody tr:last-child td {

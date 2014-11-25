@@ -90,10 +90,12 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             final ObjectAction action,
             final ActionPromptProvider actionPromptProvider) {
         
-        final ActionPrompt actionPrompt = actionPromptProvider.getActionPrompt();
-        if(actionPrompt != null) {
+        //final ActionPrompt actionPrompt = actionPromptProvider.getActionPrompt();
+        //if(actionPrompt != null) {
+
+        if(true) {
             final ActionModel actionModel = ActionModel.create(objectAdapter, action);
-            actionModel.setActionPrompt(actionPrompt);
+            //actionModel.setActionPrompt(actionPrompt);
             
             final AjaxDeferredBehaviour ajaxDeferredBehaviour = determineDeferredBehaviour(action, actionModel);
 
@@ -103,6 +105,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
 
+                    final ActionPrompt actionPrompt = ActionPromptProvider.Util.getFrom(getPage()).getActionPrompt();
                     if(ajaxDeferredBehaviour != null) {
                         ajaxDeferredBehaviour.initiate(target);
                     } else {

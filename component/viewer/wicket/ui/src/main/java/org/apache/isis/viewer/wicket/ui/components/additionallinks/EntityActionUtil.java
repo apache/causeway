@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -38,38 +39,55 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
 
 public final class EntityActionUtil {
 
-    public static final String ID_ADDITIONAL_LINK = "additionalLink";
-
     private EntityActionUtil(){}
 
     private final static MemberOrderFacetComparator memberOrderFacetComparator = new MemberOrderFacetComparator(false);
-    
-    public static List<LinkAndLabel> entityActionsForAssociation(
-            final EntityModel entityModel,
-            final ObjectAssociation association,
-            final ActionPromptProvider actionPromptProvider,
-            final DeploymentType deploymentType) {
 
-        return entityActionsForAssociation(
-                entityModel, association, actionPromptProvider, deploymentType, ID_ADDITIONAL_LINK);
+    public static void appendAdditionalLinksForAssociation(
+            final ScalarModel scalarModel,
+            final Component owningComponent,
+            final DeploymentType deploymentType,
+            final String id,
+            final List<LinkAndLabel> entityActionLinks) {
+
+        if (scalarModel.getKind() != ScalarModel.Kind.PROPERTY) {
+            return;
+        }
+
+        final ObjectAdapterMemento parentMemento = scalarModel.getParentObjectAdapterMemento();
+        final EntityModel parentEntityModel = new EntityModel(parentMemento);
+        //final ActionPromptProvider actionPromptProvider = ActionPromptProvider.Util.getFrom(owningComponent);
+        final ActionPromptProvider actionPromptProvider = null;
+        final OneToOneAssociation oneToOneAssociation = scalarModel.getPropertyMemento().getProperty();
+
+        appendAdditionalLinksForAssociation(
+                parentEntityModel,
+                oneToOneAssociation,
+                actionPromptProvider,
+                deploymentType,
+                id,
+                entityActionLinks);
     }
 
-    public static List<LinkAndLabel> entityActionsForAssociation(
+    public static void appendAdditionalLinksForAssociation(
             final EntityModel entityModel,
             final ObjectAssociation association,
             final ActionPromptProvider actionPromptProvider,
             final DeploymentType deploymentType,
-            final String linkId) {
+            final String linkId,
+            final List<LinkAndLabel> entityActionLinks) {
         final List<ObjectAction> associatedActions = Lists.newArrayList();
 
         addActions(ActionType.USER, entityModel, association, associatedActions);
@@ -91,12 +109,14 @@ public final class EntityActionUtil {
         final ActionLinkFactory linkFactory = new EntityActionLinkFactory(entityModel);
 
         final ObjectAdapterMemento adapterMemento = entityModel.getObjectAdapterMemento();
-        return Lists.transform(associatedActions, new Function<ObjectAction, LinkAndLabel>(){
+        final List<LinkAndLabel> linkAndLabels = Lists.transform(associatedActions, new Function<ObjectAction, LinkAndLabel>() {
 
             @Override
             public LinkAndLabel apply(ObjectAction objectAction) {
                 return linkFactory.newLink(adapterMemento, objectAction, linkId, actionPromptProvider);
-            }});
+            }
+        });
+        entityActionLinks.addAll(linkAndLabels);
     }
 
     private static List<ObjectAction> addActions(

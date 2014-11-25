@@ -79,6 +79,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     private static final long serialVersionUID = 1L;
     
     private static final String NULL_ARG = "$nullArg$";
+    private static Pattern KEY_VALUE_PATTERN = Pattern.compile("([^=]+)=(.+)");
 
     /**
      * Whether we are obtaining arguments (eg in a dialog), or displaying the
@@ -142,9 +143,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
 
     public static Entry<Integer, String> parse(final String paramContext) {
-        // TODO mgrigorov Extract the Pattern as a constant. No need to re-compile it again and again
-        final Pattern compile = Pattern.compile("([^=]+)=(.+)");
-        final Matcher matcher = compile.matcher(paramContext);
+        final Matcher matcher = KEY_VALUE_PATTERN.matcher(paramContext);
         if (!matcher.matches()) {
             return null;
         }
@@ -316,7 +315,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         this.targetAdapterMemento = actionModel.targetAdapterMemento;
         this.actionMemento = actionModel.actionMemento;
         this.actionMode = actionModel.actionMode;
-        this.actionPrompt = actionModel.actionPrompt;
+        //this.actionPrompt = actionModel.actionPrompt;
         
         primeArgumentModels();
         final Map<Integer, ScalarModel> argumentModelByIdx = actionModel.arguments;
@@ -525,15 +524,15 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     
     // //////////////////////////////////////
     
-    private ActionPrompt actionPrompt;
-
-    public void setActionPrompt(ActionPrompt actionPrompt) {
-        this.actionPrompt = actionPrompt;
-    }
-
-    public ActionPrompt getActionPrompt() {
-        return actionPrompt;
-    }
+//    private ActionPrompt actionPrompt;
+//
+//    public void setActionPrompt(ActionPrompt actionPrompt) {
+//        this.actionPrompt = actionPrompt;
+//    }
+//
+//    public ActionPrompt getActionPrompt() {
+//        return actionPrompt;
+//    }
 
     // //////////////////////////////////////
     

@@ -67,7 +67,7 @@
     padding-bottom: 5px;
 }
 .entityPropertiesPanel .collection.panel-body {
-    padding-bottom: 10px;
+    padding-bottom: 0px;
 }
 
 
@@ -77,11 +77,6 @@
 
 .collection.panel-body {
     padding-top: 0px;
-    /*
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-bottom: 5px;
-    */
 }
 
 .collectionPanel .well {
@@ -117,7 +112,6 @@ div.label-left label.control-label {
     width: 30%;
     float: left;
     padding-top: 2px;
-    /*padding-left: 10px;*/
     text-align: start;
 }
 
@@ -211,9 +205,6 @@ div.label-left .choicesPlaceholder {
 .entityCollectionsPanel .panel-heading {
     padding-bottom: 10px;
 }
-
-
-
 
 #body {
     padding-top: 20px;

@@ -30,7 +30,6 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -42,16 +41,12 @@ import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -73,6 +68,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
     private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
+    public static final String ID_ADDITIONAL_LINK = "additionalLink";
+
     private static final String ID_FEEDBACK = "feedback";
 
     public enum CompactType {
@@ -294,29 +291,14 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     }
     
     protected void addAdditionalLinksTo(final MarkupContainer labelIfRegular) {
-        final List<LinkAndLabel> entityActions;
-        if(scalarModel.getKind() == ScalarModel.Kind.PROPERTY) {
-            final ObjectAdapterMemento parentMemento = scalarModel.getParentObjectAdapterMemento();
-            final EntityModel parentEntityModel = new EntityModel(parentMemento);
-            final ActionPromptProvider actionPromptProvider = ActionPromptProvider.Util.getFrom(this);
-            entityActions = EntityActionUtil.entityActionsForAssociation(
-                    parentEntityModel, scalarModel.getPropertyMemento().getProperty(), actionPromptProvider, getDeploymentType());
-        } else {
-            entityActions = null;
-        }
-        addAdditionalLinks(labelIfRegular, entityActions);
+        // find the links...
+        final List<LinkAndLabel> entityActions = Lists.newArrayList();
+
+        EntityActionUtil.appendAdditionalLinksForAssociation(this.scalarModel, this, getDeploymentType(), ID_ADDITIONAL_LINK, entityActions);
+        // ... and add them to the panel
+        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ADDITIONAL_LINKS, entityActions);
     }
 
-    private void addAdditionalLinks(MarkupContainer markupContainer, List<LinkAndLabel> links) {
-        if(links == null || links.isEmpty()) {
-            Components.permanentlyHide(markupContainer, ID_ADDITIONAL_LINKS);
-            return;
-        }
-        links = Lists.newArrayList(links); // copy, to serialize any lazy evaluation
-        
-        final WebMarkupContainer views = new AdditionalLinksPanel(ID_ADDITIONAL_LINKS, links);
-        markupContainer.addOrReplace(views);
-    }
 
     /**
      * Optional hook.

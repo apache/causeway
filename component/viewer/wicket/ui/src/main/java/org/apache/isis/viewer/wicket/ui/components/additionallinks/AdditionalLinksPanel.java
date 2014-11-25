@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.additionallinks;
 
 import java.util.List;
 import com.google.common.base.Strings;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -48,7 +49,21 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
     private static final String ID_ADDITIONAL_LINK_ITEM = "additionalLinkItem";
     private static final String ID_ADDITIONAL_LINK_FONT_AWESOME = "additionalLinkFontAwesome";
     private static final String ID_ADDITIONAL_LINK_TITLE = "additionalLinkTitle";
-    
+
+    public static void addAdditionalLinks(
+            final MarkupContainer markupContainer,
+            final String id,
+            final List<LinkAndLabel> links) {
+        if(links.isEmpty()) {
+            Components.permanentlyHide(markupContainer, id);
+            return;
+        }
+
+        final WebMarkupContainer additionalLinksPanel = new AdditionalLinksPanel(id, links);
+        markupContainer.addOrReplace(additionalLinksPanel);
+    }
+
+
     private List<LinkAndLabel> linkAndLabels;
     
     public AdditionalLinksPanel(final String id, final List<LinkAndLabel> links) {

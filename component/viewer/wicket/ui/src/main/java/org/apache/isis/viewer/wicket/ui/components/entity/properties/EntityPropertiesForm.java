@@ -23,6 +23,7 @@ import de.agilecoders.wicket.core.util.Attributes;
 
 import java.util.List;
 import java.util.Map;
+import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Session;
@@ -62,12 +63,17 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.memento.Memento;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
+import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPathSignificantWebMarkupContainer;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
@@ -77,7 +83,7 @@ import org.apache.isis.viewer.wicket.ui.panels.IFormSubmitterWithPreValidateHook
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
-public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
+public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements ActionPromptProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -237,20 +243,40 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         return !groupNames.isEmpty();
     }
 
-    private void addPropertyToForm(final EntityModel entityModel,
+    public static final String ID_ADDITIONAL_LINK = "additionalLink";
+
+
+    private void addPropertyToForm(
+            final EntityModel entityModel,
             final ObjectAssociation association,
             final WebMarkupContainer container) {
+
+        final List<LinkAndLabel> entityActions = Lists.newArrayList();
+
         final OneToOneAssociation otoa = (OneToOneAssociation) association;
         final PropertyMemento pm = new PropertyMemento(otoa);
 
         final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
         final Component component = getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
-        
+
+        EntityActionUtil.appendAdditionalLinksForAssociation(
+                entityModel, otoa,
+                this,
+                getDeploymentType(),
+                ID_ADDITIONAL_LINK,
+                entityActions);
+
         if(!renderedFirstField) {
             component.add(new CssClassAppender("first-field"));
             renderedFirstField = true;
         }
     }
+
+//    protected void addAdditionalLinksTo(final MarkupContainer labelIfRegular) {
+//        // ... and add them to the panel
+//        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ADDITIONAL_LINKS, entityActions);
+//    }
+
 
     private List<ObjectAssociation> visibleProperties(final ObjectAdapter adapter, final ObjectSpecification objSpec, Where where) {
         return objSpec.getAssociations(Contributed.INCLUDED, visiblePropertyFilter(adapter, where));
@@ -266,6 +292,11 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         super.onComponentTag(tag);
 
         Attributes.addClass(tag, "form-horizontal");
+    }
+
+    @Override
+    public ActionPrompt getActionPrompt() {
+        return ActionPromptProvider.Util.getFrom(this).getActionPrompt();
     }
 
     abstract class AjaxButtonWithOnError extends AjaxButton {
@@ -710,5 +741,8 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> {
         return getAuthenticationSession().getMessageBroker();
     }
 
+    protected DeploymentType getDeploymentType() {
+        return IsisContext.getDeploymentType();
+    }
 
 }

@@ -39,6 +39,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionExecutor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
@@ -66,7 +67,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
     private static final String ID_ACTION_PARAMETERS = "parameters";
 
     private final ActionExecutor actionExecutor;
-    private final ActionPrompt actionPromptIfAny;
+    //private final ActionPrompt actionPromptIfAny;
 
     public ActionParametersFormPanel(final String id, final ActionModel model) {
         super(id, model);
@@ -74,7 +75,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
         Ensure.ensureThatArg(model.getExecutor(), is(not(nullValue())));
 
         this.actionExecutor = model.getExecutor();
-        this.actionPromptIfAny = model.getActionPrompt();
+        //this.actionPromptIfAny = model.getActionPrompt();
         buildGui();
     }
 
@@ -152,7 +153,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
 
                         target.add(form);
                     } else {
-                        if (actionPromptIfAny != null) {
+                        //if (actionPromptIfAny != null) {
                             
                             final StringBuilder builder = new StringBuilder();
 
@@ -165,7 +166,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                             String buf = builder.toString();
                             target.appendJavaScript(buf);
                             target.add(form);
-                        }
+                        //}
                     }
                 };
 
@@ -186,6 +187,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
 
                 @Override
                 public void onSubmit(final AjaxRequestTarget target, Form<?> form) {
+                    final ActionPrompt actionPromptIfAny = ActionPromptProvider.Util.getFrom(ActionParametersFormPanel.this).getActionPrompt();
                     if(actionPromptIfAny != null) {
                         actionPromptIfAny.closePrompt(target);
                     }

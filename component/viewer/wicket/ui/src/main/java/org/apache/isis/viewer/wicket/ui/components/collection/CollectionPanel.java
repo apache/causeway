@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.collection;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 import java.util.List;
+import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
@@ -29,11 +30,11 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
@@ -65,17 +66,28 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
         return collectionModel;
     }
 
-    CollectionPanel(String id, EntityCollectionModel collectionModel) {
+    CollectionPanel(
+            final String id,
+            final EntityCollectionModel collectionModel) {
         this(id, collectionModel, new EntityModel(collectionModel.getParentObjectAdapterMemento()), collectionModel.getCollectionMemento().getCollection());
     }
 
-    CollectionPanel(final String id, final EntityCollectionModel collectionModel, final EntityModel entityModel, final OneToManyAssociation otma) {
+    CollectionPanel(
+            final String id,
+            final EntityCollectionModel collectionModel,
+            final EntityModel entityModel,
+            final OneToManyAssociation otma) {
         super(id, collectionModel);
 
-        addActionPromptModalWindow();
-        
-        List<LinkAndLabel> entityActions = EntityActionUtil.entityActionsForAssociation(entityModel, otma, this, getDeploymentType(), "additionalLink");
-        collectionModel.addEntityActions(entityActions);
+        //addActionPromptModalWindow();
+
+        final List<LinkAndLabel> entityActionLinks = Lists.newArrayList();
+
+        //EntityActionUtil.appendAdditionalLinksForAssociation(entityModel, otma, this, getDeploymentType(), "additionalLink", entityActionLinks);
+//        EntityActionUtil.appendAdditionalLinksForAssociation(entityModel, otma, ActionPromptProvider.Util.getFrom(this), getDeploymentType(), "additionalLink", entityActionLinks);
+        EntityActionUtil.appendAdditionalLinksForAssociation(entityModel, otma, null, getDeploymentType(), "additionalLink", entityActionLinks);
+
+        collectionModel.addEntityActions(entityActionLinks);
     }
 
     @Override
@@ -112,15 +124,22 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
 
     //region > ActionPromptModalWindowProvider
 
-    private ActionPromptModalWindow actionPromptModalWindow;
-    public ActionPromptModalWindow getActionPrompt() {
-        return ActionPromptModalWindow.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
+    @Override
+    public ActionPrompt getActionPrompt() {
+        return ActionPromptProvider.Util.getFrom(this).getActionPrompt();
     }
 
-    private void addActionPromptModalWindow() {
-        this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW);
-        addOrReplace(actionPromptModalWindow);
-    }
+//    private ActionPromptModalWindow actionPromptModalWindow;
+//    @Override
+//    public ActionPromptModalWindow getActionPrompt() {
+//        return ActionPromptModalWindow.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
+//    }
+//
+//    private void addActionPromptModalWindow() {
+//        this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW);
+//        addOrReplace(actionPromptModalWindow);
+//    }
+
     //endregion
 
 
