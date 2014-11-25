@@ -261,7 +261,6 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
         EntityActionUtil.appendAdditionalLinksForAssociation(
                 entityModel, otoa,
-                this,
                 getDeploymentType(),
                 ID_ADDITIONAL_LINK,
                 entityActions);

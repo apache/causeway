@@ -314,8 +314,8 @@ public class CssMenuItem implements Serializable {
 
         // build the link
         final LinkAndLabel linkAndLabel = cssMenuContext.getCssMenuLinkFactory().newLink(
-                targetAdapterMemento, objectAction, PageAbstract.ID_MENU_LINK,
-                cssMenuContext.getActionPromptProvider());
+                targetAdapterMemento, objectAction, PageAbstract.ID_MENU_LINK
+        );
         if(linkAndLabel==null) {
             // can only get a null if invisible, so this should not happen given guard above
             return null;
@@ -393,7 +393,7 @@ public class CssMenuItem implements Serializable {
             final ObjectAction objectAction,
             final CssMenuBuilder.CssMenuContext cssMenuContext) {
 
-        final LinkAndLabel linkAndLabel = cssMenuContext.getCssMenuLinkFactory().newLink(null, objectAction, PageAbstract.ID_MENU_LINK, cssMenuContext.getActionPromptProvider());
+        final LinkAndLabel linkAndLabel = cssMenuContext.getCssMenuLinkFactory().newLink(null, objectAction, PageAbstract.ID_MENU_LINK);
 
         final AbstractLink link = linkAndLabel.getLink();
         final String actionLabel = linkAndLabel.getLabel();

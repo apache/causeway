@@ -524,18 +524,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     
     // //////////////////////////////////////
     
-//    private ActionPrompt actionPrompt;
-//
-//    public void setActionPrompt(ActionPrompt actionPrompt) {
-//        this.actionPrompt = actionPrompt;
-//    }
-//
-//    public ActionPrompt getActionPrompt() {
-//        return actionPrompt;
-//    }
-
-    // //////////////////////////////////////
-    
     public static RecoverableException getApplicationExceptionIfAny(Exception ex) {
         Iterable<RecoverableException> appEx = Iterables.filter(Throwables.getCausalChain(ex), RecoverableException.class);
         Iterator<RecoverableException> iterator = appEx.iterator();

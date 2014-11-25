@@ -23,7 +23,6 @@ import java.util.Comparator;
 import java.util.List;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -43,7 +42,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityActionLinkFactory;
@@ -57,7 +55,6 @@ public final class EntityActionUtil {
 
     public static void appendAdditionalLinksForAssociation(
             final ScalarModel scalarModel,
-            final Component owningComponent,
             final DeploymentType deploymentType,
             final String id,
             final List<LinkAndLabel> entityActionLinks) {
@@ -68,14 +65,11 @@ public final class EntityActionUtil {
 
         final ObjectAdapterMemento parentMemento = scalarModel.getParentObjectAdapterMemento();
         final EntityModel parentEntityModel = new EntityModel(parentMemento);
-        //final ActionPromptProvider actionPromptProvider = ActionPromptProvider.Util.getFrom(owningComponent);
-        final ActionPromptProvider actionPromptProvider = null;
         final OneToOneAssociation oneToOneAssociation = scalarModel.getPropertyMemento().getProperty();
 
         appendAdditionalLinksForAssociation(
                 parentEntityModel,
                 oneToOneAssociation,
-                actionPromptProvider,
                 deploymentType,
                 id,
                 entityActionLinks);
@@ -84,7 +78,6 @@ public final class EntityActionUtil {
     public static void appendAdditionalLinksForAssociation(
             final EntityModel entityModel,
             final ObjectAssociation association,
-            final ActionPromptProvider actionPromptProvider,
             final DeploymentType deploymentType,
             final String linkId,
             final List<LinkAndLabel> entityActionLinks) {
@@ -113,7 +106,7 @@ public final class EntityActionUtil {
 
             @Override
             public LinkAndLabel apply(ObjectAction objectAction) {
-                return linkFactory.newLink(adapterMemento, objectAction, linkId, actionPromptProvider);
+                return linkFactory.newLink(adapterMemento, objectAction, linkId);
             }
         });
         entityActionLinks.addAll(linkAndLabels);

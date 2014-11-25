@@ -294,7 +294,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         // find the links...
         final List<LinkAndLabel> entityActions = Lists.newArrayList();
 
-        EntityActionUtil.appendAdditionalLinksForAssociation(this.scalarModel, this, getDeploymentType(), ID_ADDITIONAL_LINK, entityActions);
+        EntityActionUtil.appendAdditionalLinksForAssociation(this.scalarModel, getDeploymentType(), ID_ADDITIONAL_LINK, entityActions);
         // ... and add them to the panel
         AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ADDITIONAL_LINKS, entityActions);
     }

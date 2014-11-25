@@ -30,8 +30,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -45,13 +43,12 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * Panel for rendering entity collection; analogous to (any concrete subclass
  * of) {@link ScalarPanelAbstract}.
  */
-public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implements ActionPromptProvider, CollectionSelectorProvider {
+public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implements CollectionSelectorProvider {
 
 
     private static final long serialVersionUID = 1L;
 
     private static final String ID_FEEDBACK = "feedback";
-    private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
 
     private Component collectionContents;
 
@@ -79,13 +76,9 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
             final OneToManyAssociation otma) {
         super(id, collectionModel);
 
-        //addActionPromptModalWindow();
-
         final List<LinkAndLabel> entityActionLinks = Lists.newArrayList();
 
-        //EntityActionUtil.appendAdditionalLinksForAssociation(entityModel, otma, this, getDeploymentType(), "additionalLink", entityActionLinks);
-//        EntityActionUtil.appendAdditionalLinksForAssociation(entityModel, otma, ActionPromptProvider.Util.getFrom(this), getDeploymentType(), "additionalLink", entityActionLinks);
-        EntityActionUtil.appendAdditionalLinksForAssociation(entityModel, otma, null, getDeploymentType(), "additionalLink", entityActionLinks);
+        EntityActionUtil.appendAdditionalLinksForAssociation(entityModel, otma, getDeploymentType(), "additionalLink", entityActionLinks);
 
         collectionModel.addEntityActions(entityActionLinks);
     }
@@ -121,26 +114,6 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
     }
     //endregion
 
-
-    //region > ActionPromptModalWindowProvider
-
-    @Override
-    public ActionPrompt getActionPrompt() {
-        return ActionPromptProvider.Util.getFrom(this).getActionPrompt();
-    }
-
-//    private ActionPromptModalWindow actionPromptModalWindow;
-//    @Override
-//    public ActionPromptModalWindow getActionPrompt() {
-//        return ActionPromptModalWindow.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
-//    }
-//
-//    private void addActionPromptModalWindow() {
-//        this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW);
-//        addOrReplace(actionPromptModalWindow);
-//    }
-
-    //endregion
 
 
     //region > dependencies

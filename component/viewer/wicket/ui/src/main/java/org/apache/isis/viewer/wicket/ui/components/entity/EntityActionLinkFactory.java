@@ -49,8 +49,7 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
     public LinkAndLabel newLink(
             final ObjectAdapterMemento adapterMemento,
             final ObjectAction action,
-            final String linkId,
-            final ActionPromptProvider actionPromptProvider) {
+            final String linkId) {
 
         final ObjectAdapter adapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
         
@@ -68,7 +67,7 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
         }
 
         
-        final AbstractLink link = newLink(linkId, adapter, action, actionPromptProvider);
+        final AbstractLink link = newLink(linkId, adapter, action);
         
         final Consent usability = action.isUsable(session, adapter, Where.OBJECT_FORMS);
         final String disabledReasonIfAny = usability.getReason();
