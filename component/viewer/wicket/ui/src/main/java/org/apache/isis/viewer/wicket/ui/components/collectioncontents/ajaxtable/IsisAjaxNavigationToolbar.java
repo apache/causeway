@@ -16,6 +16,9 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
@@ -25,8 +28,23 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
 
     private static final long serialVersionUID = 1L;
 
-    public IsisAjaxNavigationToolbar(DataTable<?, ?> table) {
+    public IsisAjaxNavigationToolbar(final DataTable<?, ?> table) {
         super(table);
+
+        addShowAllButton(table);
+    }
+
+    private void addShowAllButton(final DataTable<?, ?> table) {
+        table.setOutputMarkupId(true);
+
+        ((MarkupContainer)get("span")).add(new AjaxLink("showAll") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                table.setItemsPerPage(Long.MAX_VALUE);
+                target.add(table);
+            }
+        });
     }
 
     @Override
