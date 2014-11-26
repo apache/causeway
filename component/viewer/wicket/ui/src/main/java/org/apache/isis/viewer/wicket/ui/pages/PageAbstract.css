@@ -19,7 +19,7 @@
 
 .mandatory.scalarName:after,
 .mandatory.collectionName:after {
-	content: " *";
+	content: "*";
 	font-weight:bold;
 	color: #c2270d;
 }
