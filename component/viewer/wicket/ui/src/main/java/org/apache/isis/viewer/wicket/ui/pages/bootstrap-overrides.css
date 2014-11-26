@@ -181,13 +181,14 @@ div.label-left .choicesPlaceholder {
     resize: none;
 }
 
-.entityCollectionsPanel .panel-heading,
-.standaloneCollectionPanel .panel-heading {
-    padding-bottom: 15px;
-}
 
 .standaloneCollectionPanel .additionalLinkList {
     margin-left: 50px;
+    margin-bottom: 0px;
+    margin-top: -4px;
+}
+.standaloneCollectionPanel .selectorDropdown {
+    margin-top: -4px;
 }
 
 .referencePanel .entityLinkSelect2Panel .entityImage {
@@ -205,6 +206,9 @@ div.label-left .choicesPlaceholder {
 
 .entityCollectionsPanel .panel-heading {
     padding-bottom: 10px;
+}
+.standaloneCollectionPanel .panel-heading {
+    padding-bottom: 5px; /* different from entityCollectionsPanel because of display-inline ? of additionalLinks */
 }
 
 #body {

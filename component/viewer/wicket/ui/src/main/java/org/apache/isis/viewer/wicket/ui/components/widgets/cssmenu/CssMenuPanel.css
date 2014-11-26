@@ -227,8 +227,18 @@
     list-style:none;
 }
 
+.entityCollectionsPanel .panel-heading .additionalLinkList {
+	margin-right: 10px;
+}
+
 .additionalLinkList li {
 	float:left;
 	margin-right:10px;
 /*	margin-bottom: 2px;*/
+}
+.entityPropertiesPanel .additionalLinkList li {
+	margin-right:0px;
+}
+.entityPropertiesPanel .properties .panel-heading .additionalLinkList {
+	margin-right: -5px;
 }

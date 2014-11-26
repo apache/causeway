@@ -33,6 +33,8 @@ div.additionalLinkList {
     padding-bottom: 10px;
 }
 
+.standaloneCollectionPanel div.additionalLinkList,
+.standaloneCollectionPanel ul.additionalLinkList,
 .entityCollectionsPanel div.additionalLinkList,
 .entityCollectionsPanel ul.additionalLinkList {
     padding-bottom: 0px;
