@@ -38,9 +38,6 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
-/**
- * Panel for rendering scalars of type {@link String}.
- */
 public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
     private static final long serialVersionUID = 1L;
@@ -50,23 +47,41 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
     private static final String ID_ADDITIONAL_LINK_FONT_AWESOME = "additionalLinkFontAwesome";
     private static final String ID_ADDITIONAL_LINK_TITLE = "additionalLinkTitle";
 
-    public static void addAdditionalLinks(
+    public enum Style {
+        INLINE_LIST {
+            @Override
+            AdditionalLinksPanel newPanel(String id, List<LinkAndLabel> links) {
+                return new AdditionalLinksAsInlineListPanel(id, links);
+            }
+        },
+        DROPDOWN {
+            @Override
+            AdditionalLinksPanel newPanel(String id, List<LinkAndLabel> links) {
+                return new AdditionalLinksAsDropDownPanel(id, links);
+            }
+        };
+        abstract AdditionalLinksPanel newPanel(String id, List<LinkAndLabel> links);
+    }
+
+    public static AdditionalLinksPanel addAdditionalLinks(
             final MarkupContainer markupContainer,
             final String id,
-            final List<LinkAndLabel> links) {
+            final List<LinkAndLabel> links,
+            final Style style) {
         if(links.isEmpty()) {
             Components.permanentlyHide(markupContainer, id);
-            return;
+            return null;
         }
 
-        final WebMarkupContainer additionalLinksPanel = new AdditionalLinksPanel(id, links);
+        final AdditionalLinksPanel additionalLinksPanel =  style.newPanel(id, links);
         markupContainer.addOrReplace(additionalLinksPanel);
+        return additionalLinksPanel;
     }
 
 
     private List<LinkAndLabel> linkAndLabels;
     
-    public AdditionalLinksPanel(final String id, final List<LinkAndLabel> links) {
+    protected AdditionalLinksPanel(final String id, final List<LinkAndLabel> links) {
         super(id, new ListOfLinksModel(links));
 
         this.linkAndLabels = getModel().getObject();

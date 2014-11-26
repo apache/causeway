@@ -124,8 +124,7 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
         final EntityCollectionModel entityCollectionModel = collectionPanel.getModel();
         List<LinkAndLabel> links = entityCollectionModel.getLinks();
 
-        AdditionalLinksPanel additionalLinks = new AdditionalLinksPanel(ID_ADDITIONAL_LINKS, links);
-        fieldset.addOrReplace(additionalLinks);
+        AdditionalLinksPanel.addAdditionalLinks (fieldset,ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);
 
         final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry());
 

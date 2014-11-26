@@ -61,6 +61,13 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
 /**
  * Provides a list of links for selecting other views that support
  * {@link ComponentType#ENTITY} with a backing {@link EntityModel}.
+ *
+ * <p>
+ *     TODO: this code could be simplified
+ *     (pushed down common code here and for the CollectionsSelectorPanel in order to do so);
+ *     haven't simplified this yet because currently there is only one view, so the markup
+ *     rendered by this component 'collapses' to just show that underlying view.
+ * </p>
  */
 public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel> implements UiHintPathSignificant {
 
@@ -71,7 +78,6 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel> impleme
     private static final int MAX_NUM_UNDERLYING_VIEWS = 10;
 
     private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
-    public static final String ID_ADDITIONAL_LINK = "additionalLink";
 
     private static final String ID_VIEWS = "views";
     private static final String ID_VIEW_LIST = "viewList";
@@ -89,11 +95,6 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel> impleme
 
     private ComponentFactory selectedComponentFactory;
     protected Component selectedComponent;
-
-    /**
-     * May be <tt>null</tt>, depending upon the model implementation.
-     */
-    protected WebMarkupContainer additionalLinks;
 
 
     public EntityLinksSelectorPanel(final String id, final EntityModel model, final ComponentFactory factory) {
@@ -142,8 +143,10 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel> impleme
         }
         links = Lists.newArrayList(links); // copy, to serialize any lazy evaluation
 
-        additionalLinks = new AdditionalLinksPanel(ID_ADDITIONAL_LINKS, links);
-        markupContainer.addOrReplace(additionalLinks);
+        AdditionalLinksPanel.addAdditionalLinks(
+                markupContainer, ID_ADDITIONAL_LINKS,
+                links,
+                AdditionalLinksPanel.Style.INLINE_LIST);
     }
 
     private void addUnderlyingViews(final String underlyingIdPrefix, final EntityModel model, final ComponentFactory factory) {

@@ -91,6 +91,8 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     private static final String ID_MEMBER_GROUP = "memberGroup";
     private static final String ID_MEMBER_GROUP_NAME = "memberGroupName";
 
+    public static final String ID_ADDITIONAL_LINKS = "additionalLinks";
+
     private static final String ID_LEFT_COLUMN = "leftColumn";
     private static final String ID_MIDDLE_COLUMN = "middleColumn";
     private static final String ID_RIGHT_COLUMN = "rightColumn";
@@ -246,7 +248,9 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
             // TODO: suppressing until sort out markup and figure out which should contribute etc via Facets.
             memberGroupActions.clear();
             AdditionalLinksPanel.addAdditionalLinks(
-                    memberGroupRvContainer, "additionalLinks", memberGroupActions);
+                    memberGroupRvContainer, ID_ADDITIONAL_LINKS,
+                    memberGroupActions,
+                    AdditionalLinksPanel.Style.INLINE_LIST);
         }
         
         addClassForSpan(markupContainer, span);
