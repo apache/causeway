@@ -28,10 +28,12 @@ span .fa {
     list-style:none;
 }
 
-ul.additionalLinkList {
+ul.additionalLinkList,
+div.additionalLinkList {
     padding-bottom: 10px;
 }
 
+.entityCollectionsPanel div.additionalLinkList,
 .entityCollectionsPanel ul.additionalLinkList {
     padding-bottom: 0px;
 }
