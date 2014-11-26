@@ -71,6 +71,7 @@
 }
 
 
+.entityPropertiesPanel .additionalLinks,
 .entityCollectionsPanel .additionalLinksAndSelectorDropDown {
     margin-top: -4px;
 }
