@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.properties;
 
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -42,16 +41,10 @@ public class EntityPropertiesPanel extends PanelAbstract<EntityModel> {
         form.toViewMode(null);
     }
 
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-
-        //PanelUtil.renderHead(response, getClass());
-    }
 
     private void buildGui() {
         buildEntityPropertiesAndOrCollectionsGui();
-        setOutputMarkupId(true); // so can repaint via ajax
+        setOutputMarkupId(true);
     }
 
     private void buildEntityPropertiesAndOrCollectionsGui() {
@@ -64,5 +57,4 @@ public class EntityPropertiesPanel extends PanelAbstract<EntityModel> {
             permanentlyHide(ID_ENTITY_PROPERTIES);
         }
     }
-
 }

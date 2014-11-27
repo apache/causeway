@@ -44,6 +44,7 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -91,7 +92,8 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     private static final String ID_MEMBER_GROUP = "memberGroup";
     private static final String ID_MEMBER_GROUP_NAME = "memberGroupName";
 
-    public static final String ID_ADDITIONAL_LINKS = "additionalLinks";
+    private static final String ID_ASSOCIATED_ACTION_LINKS_PANEL = "associatedActionLinksPanel";
+    private static final String ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN = "associatedActionLinksPanelDropDown";
 
     private static final String ID_LEFT_COLUMN = "leftColumn";
     private static final String ID_MIDDLE_COLUMN = "middleColumn";
@@ -245,12 +247,17 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
                 addPropertyToForm(entityModel, (OneToOneAssociation) association, propertyRvContainer, memberGroupActions);
             }
 
-            // TODO: suppressing until sort out markup and figure out which should contribute etc via Facets.
-            memberGroupActions.clear();
+            final List<LinkAndLabel> actionsPanel = LinkAndLabel.positioned(memberGroupActions, ActionLayout.Position.PANEL);
+            final List<LinkAndLabel> actionsPanelDropDown = LinkAndLabel.positioned(memberGroupActions, ActionLayout.Position.PANEL_DROPDOWN);
+
             AdditionalLinksPanel.addAdditionalLinks(
-                    memberGroupRvContainer, ID_ADDITIONAL_LINKS,
-                    memberGroupActions,
+                    memberGroupRvContainer, ID_ASSOCIATED_ACTION_LINKS_PANEL,
+                    actionsPanel,
                     AdditionalLinksPanel.Style.INLINE_LIST);
+            AdditionalLinksPanel.addAdditionalLinks(
+                    memberGroupRvContainer, ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN,
+                    actionsPanelDropDown,
+                    AdditionalLinksPanel.Style.DROPDOWN);
         }
         
         addClassForSpan(markupContainer, span);
@@ -282,11 +289,6 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
             renderedFirstField = true;
         }
     }
-
-//    protected void addAdditionalLinksTo(final MarkupContainer labelIfRegular) {
-//        // ... and add them to the panel
-//        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ADDITIONAL_LINKS, entityActions);
-//    }
 
 
     private List<ObjectAssociation> visibleProperties(final ObjectAdapter adapter, final ObjectSpecification objSpec, Where where) {

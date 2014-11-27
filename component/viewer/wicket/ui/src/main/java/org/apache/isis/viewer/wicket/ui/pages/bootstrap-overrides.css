@@ -225,4 +225,11 @@ div.label-left .choicesPlaceholder {
     padding-top: 20px;
 }
 
+.additionalLinks.pull-right {
+    margin-right: 5px;
+}
 
+.additionalLinks.pull-right div {
+    display: inline-block;
+    margin-left: 5px;
+}

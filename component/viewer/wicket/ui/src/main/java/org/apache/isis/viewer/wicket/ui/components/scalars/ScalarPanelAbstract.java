@@ -22,7 +22,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 import java.util.List;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -67,9 +66,10 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
+    private static final String ID_ASSOCIATED_ACTION_LINKS_BELOW = "associatedActionLinksBelow";
+    private static final String ID_ASSOCIATED_ACTION_LINKS_RIGHT = "associatedActionLinksRight";
+
     protected static final String ID_ADDITIONAL_LINK = "additionalLink";
-    protected static final String ID_ADDITIONAL_LINKS_BELOW = "additionalLinksBelow";
-    protected static final String ID_ADDITIONAL_LINKS_RIGHT = "additionalLinksRight";
 
     private static final String ID_FEEDBACK = "feedback";
 
@@ -324,15 +324,11 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     }
 
     protected void addEntityActionLinksBelowAndRight(final MarkupContainer labelIfRegular, final List<LinkAndLabel> entityActions) {
-        final List<LinkAndLabel> entityActionsBelow = positioned(entityActions, ActionLayout.Position.BELOW);
-        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ADDITIONAL_LINKS_BELOW, entityActionsBelow, AdditionalLinksPanel.Style.INLINE_LIST);
+        final List<LinkAndLabel> entityActionsBelow = LinkAndLabel.positioned(entityActions, ActionLayout.Position.BELOW);
+        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_BELOW, entityActionsBelow, AdditionalLinksPanel.Style.INLINE_LIST);
 
-        final List<LinkAndLabel> entityActionsRight = positioned(entityActions, ActionLayout.Position.RIGHT);
-        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ADDITIONAL_LINKS_RIGHT, entityActionsRight, AdditionalLinksPanel.Style.DROPDOWN);
-    }
-
-    private static List<LinkAndLabel> positioned(final List<LinkAndLabel> entityActionLinks, final ActionLayout.Position position) {
-        return Lists.newArrayList(Iterables.filter(entityActionLinks, LinkAndLabel.Predicates.positioned(position)));
+        final List<LinkAndLabel> entityActionsRight = LinkAndLabel.positioned(entityActions, ActionLayout.Position.RIGHT);
+        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_RIGHT, entityActionsRight, AdditionalLinksPanel.Style.DROPDOWN);
     }
 
     private static String determineLabelAtCss(ScalarModel model) {

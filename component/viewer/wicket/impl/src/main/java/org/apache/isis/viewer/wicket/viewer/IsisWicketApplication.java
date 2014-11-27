@@ -28,7 +28,10 @@ import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 import net.ftlines.wicketsource.WicketSource;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.ServiceLoader;
+import java.util.Set;
 import javax.servlet.ServletContext;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
@@ -40,7 +43,12 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.vaynberg.wicket.select2.ApplicationSettings;
-import org.apache.wicket.*;
+import org.apache.wicket.Application;
+import org.apache.wicket.ConverterLocator;
+import org.apache.wicket.IConverterLocator;
+import org.apache.wicket.Page;
+import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.SharedResources;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.mapper.MountedMapper;
@@ -85,7 +93,6 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityPropertiesForm;
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItemPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssSubMenuItemsPanel;
@@ -490,7 +497,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         references.add(PanelUtil.cssResourceReferenceFor(AdditionalLinksPanel.class));
         references.add(PanelUtil.cssResourceReferenceFor(CssSubMenuItemsPanel.class));
         references.add(PanelUtil.cssResourceReferenceFor(CssMenuItemPanel.class));
-        references.add(PanelUtil.cssResourceReferenceFor(EntityPropertiesForm.class));
 
         // non-conforming component factories
         references.add(PanelUtil.cssResourceReferenceFor(MultiLineStringPanel.class));

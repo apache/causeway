@@ -19,15 +19,24 @@
 package org.apache.isis.viewer.wicket.model.links;
 
 import java.io.Serializable;
-
+import java.util.List;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.isis.applib.annotation.ActionLayout;
 
 public class LinkAndLabel implements Serializable {
     
     private static final long serialVersionUID = 1L;
-    
+
+    public static List<LinkAndLabel> positioned(
+            final List<LinkAndLabel> entityActionLinks,
+            final ActionLayout.Position position) {
+        return Lists.newArrayList(Iterables.filter(entityActionLinks, Predicates.positioned(position)));
+    }
+
+
     private final AbstractLink link;
     private final String label;
     private final String disabledReasonIfAny;
