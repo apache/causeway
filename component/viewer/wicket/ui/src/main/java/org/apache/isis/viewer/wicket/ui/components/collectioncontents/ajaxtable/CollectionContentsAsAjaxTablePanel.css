@@ -85,8 +85,12 @@
     height: 16px;
 }
 
-.collectionContentsAsAjaxTablePanel table.contents tbody td:first-child {
-    width: 30px;
+.collectionContentsAsAjaxTablePanel table.contents tbody .togglebox-column {
+    width: 2%;
+}
+.collectionContentsAsAjaxTablePanel table.contents tbody .title-column {
+    text-align: center;
+    width: 3%;
 }
 
 .collectionContentsAsAjaxTablePanel table.contents a:hover {

@@ -30,6 +30,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
 
@@ -52,6 +53,7 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
     public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId, final IModel<ObjectAdapter> rowModel) {
         final Component component = createComponent(componentId, rowModel);
         cellItem.add(component);
+        cellItem.add(new CssClassAppender("title-column"));
     }
 
     private Component createComponent(final String id, final IModel<ObjectAdapter> rowModel) {

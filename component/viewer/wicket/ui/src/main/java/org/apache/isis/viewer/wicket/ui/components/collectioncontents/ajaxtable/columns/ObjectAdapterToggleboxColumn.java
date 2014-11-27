@@ -90,13 +90,17 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
                 }
             }
         };
-        return toggle; 
+        toggle.add(new CssClassAppender("title-column"));
+        return toggle;
     }
 
     private final List<ContainedToggleboxPanel> rowToggles = Lists.newArrayList(); 
             
     @Override
     public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId, final IModel<ObjectAdapter> rowModel) {
+
+        cellItem.add(new CssClassAppender("togglebox-column"));
+
         final MarkupContainer row = cellItem.getParent().getParent();
         row.setOutputMarkupId(true);
         final EntityModel entityModel = (EntityModel) rowModel;
