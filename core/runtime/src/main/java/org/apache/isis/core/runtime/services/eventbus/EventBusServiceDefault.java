@@ -17,13 +17,18 @@
 package org.apache.isis.core.runtime.services.eventbus;
 
 import java.util.List;
+
 import javax.enterprise.context.RequestScoped;
+
 import com.google.common.base.Throwables;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.SubscriberExceptionContext;
 import com.google.common.eventbus.SubscriberExceptionHandler;
+
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
+import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -78,14 +83,33 @@ public class EventBusServiceDefault extends EventBusService {
         return new SubscriberExceptionHandler(){
             @Override
             public void handleException(Throwable exception, SubscriberExceptionContext context) {
-                final List<Throwable> causalChain = Throwables.getCausalChain(exception);
-                for (Throwable cause : causalChain) {
-                    if(cause instanceof RecoverableException || cause instanceof NonRecoverableException) {
-                        getTransactionManager().getTransaction().setAbortCause(new IsisApplicationException(exception));
-                        return;
+                Object event = context.getEvent();
+                if(!(event instanceof AbstractInteractionEvent)) {
+                    return;
+                } 
+                final AbstractInteractionEvent<?> interactionEvent = (AbstractInteractionEvent<?>) event;
+                final Phase phase = interactionEvent.getPhase();
+                switch (phase) {
+                case HIDE:
+                    interactionEvent.hide();
+                    break;
+                case DISABLE:
+                    interactionEvent.disable(exception.getMessage()!=null?exception.getMessage(): exception.getClass().getName() + " thrown.");
+                    break;
+                case VALIDATE:
+                    interactionEvent.invalidate(exception.getMessage()!=null?exception.getMessage(): exception.getClass().getName() + " thrown.");
+                    break;
+                case EXECUTING:
+                case EXECUTED:
+                    final List<Throwable> causalChain = Throwables.getCausalChain(exception);
+                    for (Throwable cause : causalChain) {
+                        if(cause instanceof RecoverableException || cause instanceof NonRecoverableException) {
+                            getTransactionManager().getTransaction().setAbortCause(new IsisApplicationException(exception));
+                            return;
+                        }
                     }
+                    break;
                 }
-                // otherwise simply ignore
             }
         };
     }
