@@ -24,9 +24,11 @@
       lang="en">
     <body>
         <wicket:panel>
-            <div wicket:id="additionalLinkList" class="additionalLinkList">
+            <div wicket:id="additionalLinkList" class="additionalLinkList additionalLinkListDropDown">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="fa fa-ellipsis-v"></span>
+                    </button>
                     <ul class="dropdown-menu" role="menu">
                         <li wicket:id="additionalLinkItem" class="additionalLinkItem">
                             <a href="#" wicket:id="additionalLink">

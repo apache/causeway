@@ -94,8 +94,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
         addFeedbackTo(labelIfRegular, select2Field);
 
-        // ... and add them to the panel
-        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ADDITIONAL_LINKS, entityActions, AdditionalLinksPanel.Style.INLINE_LIST);
+        // ... add entity links to panel (below and to right)
+        addEntityActionLinksBelowAndRight(labelIfRegular, entityActions);
 
         return labelIfRegular;
     }

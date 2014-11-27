@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -91,11 +90,13 @@ public class BooleanPanel extends ScalarPanelAbstract {
         addOrReplace(labelIfRegular);
         addFeedbackTo(labelIfRegular, checkBox);
 
-        // ... and add them to the panel
-        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ADDITIONAL_LINKS, entityActions, AdditionalLinksPanel.Style.INLINE_LIST);
+        // ... add entity links to panel (below and to right)
+        addEntityActionLinksBelowAndRight(labelIfRegular, entityActions);
 
         return labelIfRegular;
     }
+
+
 
     /**
      * Mandatory hook method to build the component to render the model when in

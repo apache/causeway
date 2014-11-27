@@ -51,7 +51,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
         INLINE_LIST {
             @Override
             AdditionalLinksPanel newPanel(String id, List<LinkAndLabel> links) {
-                return new AdditionalLinksAsInlineListPanel(id, links);
+                return new AdditionalLinksAsListInlinePanel(id, links);
             }
         },
         DROPDOWN {

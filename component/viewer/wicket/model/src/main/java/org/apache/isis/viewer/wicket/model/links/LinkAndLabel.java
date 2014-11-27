@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.model.links;
 
 import java.io.Serializable;
 
+import com.google.common.base.Predicate;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.isis.applib.annotation.ActionLayout;
 
@@ -99,5 +100,16 @@ public class LinkAndLabel implements Serializable {
 
     public ActionLayout.Position getPosition() {
         return position;
+    }
+
+    public static class Predicates {
+        public static Predicate<LinkAndLabel> positioned(final ActionLayout.Position position) {
+            return new Predicate<LinkAndLabel>() {
+                @Override
+                public boolean apply(LinkAndLabel input) {
+                    return input.getPosition() == position;
+                }
+            };
+        }
     }
 }

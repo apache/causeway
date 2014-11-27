@@ -134,6 +134,12 @@ div.label-left.actions-right .scalarValueWrapper {
     width: 62%;
 }
 
+.actions-right .additionalLinkListDropDown {
+    float:right;
+    /*width: 3%;*/
+}
+
+
 div.label-top .scalarValueWrapper,
 div.label-none .scalarValueWrapper {
     width: 99%;
@@ -218,3 +224,5 @@ div.label-left .choicesPlaceholder {
 #body {
     padding-top: 20px;
 }
+
+

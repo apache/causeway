@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 import java.util.List;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -36,7 +37,6 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -44,6 +44,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -66,8 +67,9 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
-    protected static final String ID_ADDITIONAL_LINKS = "additionalLinks";
     protected static final String ID_ADDITIONAL_LINK = "additionalLink";
+    protected static final String ID_ADDITIONAL_LINKS_BELOW = "additionalLinksBelow";
+    protected static final String ID_ADDITIONAL_LINKS_RIGHT = "additionalLinksRight";
 
     private static final String ID_FEEDBACK = "feedback";
 
@@ -318,19 +320,19 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
      */
     protected void addPositioningCssTo(final MarkupContainer markupContainer, final List<LinkAndLabel> entityActionLinks) {
         CssClassAppender.appendCssClassTo(markupContainer, determineLabelAtCss(getModel()));
-        boolean actionsPositionedOnRight = hasActionsPositioned(entityActionLinks, ActionLayout.Position.RIGHT);
-        if(actionsPositionedOnRight) {
-            CssClassAppender.appendCssClassTo(markupContainer, "actions-right");
-        }
+        CssClassAppender.appendCssClassTo(markupContainer, determineActionLayoutPositioningCss(entityActionLinks));
     }
 
-    private static boolean hasActionsPositioned(final List<LinkAndLabel> entityActionLinks, final ActionLayout.Position position) {
-        for (LinkAndLabel entityActionLink : entityActionLinks) {
-            if(entityActionLink.getPosition() == position) {
-                return true;
-            }
-        }
-        return false;
+    protected void addEntityActionLinksBelowAndRight(final MarkupContainer labelIfRegular, final List<LinkAndLabel> entityActions) {
+        final List<LinkAndLabel> entityActionsBelow = positioned(entityActions, ActionLayout.Position.BELOW);
+        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ADDITIONAL_LINKS_BELOW, entityActionsBelow, AdditionalLinksPanel.Style.INLINE_LIST);
+
+        final List<LinkAndLabel> entityActionsRight = positioned(entityActions, ActionLayout.Position.RIGHT);
+        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ADDITIONAL_LINKS_RIGHT, entityActionsRight, AdditionalLinksPanel.Style.DROPDOWN);
+    }
+
+    private static List<LinkAndLabel> positioned(final List<LinkAndLabel> entityActionLinks, final ActionLayout.Position position) {
+        return Lists.newArrayList(Iterables.filter(entityActionLinks, LinkAndLabel.Predicates.positioned(position)));
     }
 
     private static String determineLabelAtCss(ScalarModel model) {
@@ -348,17 +350,18 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         return "label-left";
     }
 
-    private static String determineActionLayoutCss(ScalarModel model) {
-        final ActionLayoutFacet facet = model.getFacet(ActionLayoutFacet.class);
-        if (facet != null) {
-            switch (facet.position()) {
-                case BELOW:
-                    return "action-below";
-                case RIGHT:
-                    return "action-right";
+    private static String determineActionLayoutPositioningCss(List<LinkAndLabel> entityActionLinks) {
+        boolean actionsPositionedOnRight = hasActionsPositionedOn(entityActionLinks, ActionLayout.Position.RIGHT);
+        return actionsPositionedOnRight ? "actions-right" : null;
+    }
+
+    private static boolean hasActionsPositionedOn(final List<LinkAndLabel> entityActionLinks, final ActionLayout.Position position) {
+        for (LinkAndLabel entityActionLink : entityActionLinks) {
+            if(entityActionLink.getPosition() == position) {
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     // //////////////////////////////////////
