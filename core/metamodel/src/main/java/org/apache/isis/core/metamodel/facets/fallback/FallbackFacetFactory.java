@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.google.common.collect.Lists;
-import org.apache.isis.applib.annotation.LabelAt;
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -105,7 +105,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract implements IsisCo
             facets.add(new MaxLengthFacetUnlimited(facetHolder));
             facets.add(new MultiLineFacetNone(true, facetHolder));
 
-            facets.add(newLabelAtFacetIfAny(facetHolder, "properties", "property", "props", "prop"));
+            facets.add(newPropParamLayoutFacetIfAny(facetHolder, "propertyLayout"));
         }
         if (featureType.isAction()) {
             facets.add(new ActionDefaultsFacetNone(facetHolder));
@@ -131,18 +131,19 @@ public class FallbackFacetFactory extends FacetFactoryAbstract implements IsisCo
 
             facets.add(new MaxLengthFacetUnlimited(typedHolder));
 
-            facets.add(newLabelAtFacetIfAny(typedHolder, "parameters", "parameter", "params", "param"));
+            facets.add(newPropParamLayoutFacetIfAny(typedHolder, "parameterLayout"));
         }
 
         FacetUtil.addFacets(facets);
     }
 
-    private Facet newLabelAtFacetIfAny(FacetHolder facetHolder, final String... propOrParam) {
-        final String labelAt = getLabelAtConfigSetting(propOrParam);
-        if(labelAt != null) {
+    private Facet newPropParamLayoutFacetIfAny(final FacetHolder facetHolder, final String layoutKey) {
+        final String[] subKeys = new String[]{ "labelPosition", "label"};
+        final String propParamLayout = getPropParamLayoutConfigSetting(layoutKey, subKeys);
+        if(propParamLayout != null) {
             try {
-                final LabelAt.Position position = LabelAt.Position.valueOf(labelAt);
-                return new LabelAtFacetFromConfiguration(position, facetHolder);
+                final LabelPosition labelPosition = LabelPosition.valueOf(propParamLayout);
+                return new PropParamLayoutFacetFromConfiguration(labelPosition, facetHolder);
             } catch(IllegalArgumentException ex) {
                 // ignore
             }
@@ -154,9 +155,10 @@ public class FallbackFacetFactory extends FacetFactoryAbstract implements IsisCo
         return getConfiguration().getInteger("isis.viewers.paged." + subkey, defaultValue);
     }
 
-    private String getLabelAtConfigSetting(String... subkeys) {
+    private String getPropParamLayoutConfigSetting(final String layout, String... subkeys) {
         for (String subkey : subkeys) {
-            final String value = getConfiguration().getString("isis.viewers.labelAt." + subkey);
+            final String layoutKey = "isis.viewers." + layout + "." + subkey;
+            final String value = getConfiguration().getString(layoutKey);
             if(value != null) {
                 return value;
             }

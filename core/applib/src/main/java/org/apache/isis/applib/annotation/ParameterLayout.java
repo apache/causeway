@@ -16,15 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.fallback;
 
-import org.apache.isis.applib.annotation.LabelAt;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacetAbstract;
+package org.apache.isis.applib.annotation;
 
-public class LabelAtFacetFromConfiguration extends LabelAtFacetAbstract {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    public LabelAtFacetFromConfiguration(LabelAt.Position position, FacetHolder facetHolder) {
-        super(position, facetHolder);
-    }
+/**
+ * Layout hints for action parameters.
+ *
+ * @see org.apache.isis.applib.annotation.PropertyLayout
+ */
+@Inherited
+@Target({ ElementType.PARAMETER })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ParameterLayout {
+    LabelPosition labelPosition();
 }
+

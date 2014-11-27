@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacetInferredFromMultiLineFacet;
+import org.apache.isis.core.metamodel.facets.propparam.layout.PropParamLayoutFacetInferredFromMultiLineFacet;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 
 public class MultiLineFacetOnPropertyFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
@@ -47,14 +47,14 @@ public class MultiLineFacetOnPropertyFactory extends FacetFactoryAbstract implem
         FacetUtil.addFacet(facet);
 
         // no-op if null
-        inferLabelAtFacet(facet);
+        inferPropParamLayoutFacet(facet);
     }
 
-    private static void inferLabelAtFacet(MultiLineFacet facet) {
+    private static void inferPropParamLayoutFacet(MultiLineFacet facet) {
         if (facet == null) {
             return;
         }
-        FacetUtil.addFacet(new LabelAtFacetInferredFromMultiLineFacet(facet.getFacetHolder()));
+        FacetUtil.addFacet(new PropParamLayoutFacetInferredFromMultiLineFacet(facet.getFacetHolder()));
     }
 
     @Override

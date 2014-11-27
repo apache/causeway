@@ -17,37 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.annotation;
+package org.apache.isis.core.metamodel.facets.properties.layout.annotation;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.propparam.layout.PropParamLayoutFacetAbstract;
 
-/**
- * Layout hints for actions.
- */
-@Inherited
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ActionLayout {
+public class PropParamLayoutFacetForPropertyLayoutAnnotation extends PropParamLayoutFacetAbstract {
 
-    /**
-     * If associated with a property, indicates the positioning of the
-     * action's button relative to the property.
-     *
-     * <p>
-     * Ignored if the action has not been associated with a property.
-     * </p>
-     */
-    Position position() default Position.BELOW;
-
-    enum Position {
-        BELOW,
-        RIGHT,
-        PANEL,
-        PANEL_DROPDOWN
+    public PropParamLayoutFacetForPropertyLayoutAnnotation(final LabelPosition value, final FacetHolder holder) {
+        super(value, holder);
     }
 
 }

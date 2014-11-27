@@ -140,7 +140,7 @@ import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParam
 import org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetDerivedFromTypeFactory;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.describedas.annotderived.DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory;
-import org.apache.isis.core.metamodel.facets.param.labelat.annotation.LabelAtFacetOnParameterAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.param.layout.annotation.PropParamLayoutFacetForParameterLayoutAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.param.mandatory.annotation.MandatoryFacetOnParameterInvertedByOptionalAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.param.mandatory.dflt.MandatoryFacetOnParametersDefaultFactory;
 import org.apache.isis.core.metamodel.facets.param.multiline.annotation.MultiLineFacetOnParameterAnnotationFactory;
@@ -162,7 +162,7 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.method.Property
 import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutableFactory;
 import org.apache.isis.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferredFactory;
 import org.apache.isis.core.metamodel.facets.properties.interaction.PropertyInteractionFacetFactory;
-import org.apache.isis.core.metamodel.facets.properties.labelat.annotation.LabelAtFacetOnPropertyFactory;
+import org.apache.isis.core.metamodel.facets.properties.layout.annotation.PropParamLayoutFacetForPropertyLayoutAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.mandatory.MandatoryFacetOnPropertyMandatoryAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.optional.MandatoryFacetOnPropertyInvertedByOptionalAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.dflt.MandatoryFacetOnProperyDefaultFactory;
@@ -401,8 +401,8 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(MultiLineFacetOnParameterAnnotationFactory.class);
 
         // must come after MultiLine
-        addFactory(LabelAtFacetOnPropertyFactory.class);
-        addFactory(LabelAtFacetOnParameterAnnotationFactory.class);
+        addFactory(PropParamLayoutFacetForPropertyLayoutAnnotationFactory.class);
+        addFactory(PropParamLayoutFacetForParameterLayoutAnnotationFactory.class);
 
         addFactory(ActionLayoutFacetFactory.class);
 

@@ -17,16 +17,34 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.labelat.annotation;
+package org.apache.isis.core.metamodel.facets.propparam.layout;
 
-import org.apache.isis.applib.annotation.LabelAt;
+import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacetAbstract;
+import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
 
-public class LabelAtFacetOnPropertyAnnotation extends LabelAtFacetAbstract {
+public abstract class PropParamLayoutFacetAbstract extends MultipleValueFacetAbstract implements PropParamLayoutFacet {
 
-    public LabelAtFacetOnPropertyAnnotation(final LabelAt.Position value, final FacetHolder holder) {
-        super(value, holder);
+    public static Class<? extends Facet> type() {
+        return PropParamLayoutFacet.class;
+    }
+
+    private final LabelPosition value;
+
+    public PropParamLayoutFacetAbstract(final LabelPosition value, final FacetHolder holder) {
+        super(type(), holder);
+        this.value = value;
+    }
+
+    @Override
+    public LabelPosition label() {
+        return value;
+    }
+
+    @Override
+    protected String toStringValues() {
+        return "position=" + value;
     }
 
 }

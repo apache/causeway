@@ -16,23 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.annotation;
 
-import java.lang.annotation.*;
-
 /**
- * Indicates where a property or action parameter's label should be rendered.
+ * The positioning of a label for a property or action parameter.
+ *
+ * @see org.apache.isis.applib.annotation.PropertyLayout
+ * @see org.apache.isis.applib.annotation.ParameterLayout
  */
-@Inherited
-@Target({ ElementType.METHOD, ElementType.PARAMETER })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface LabelAt {
-    public enum Position {
-        LEFT,
-        TOP,
-        NONE
-    }
-    Position value();
+public enum LabelPosition {
+    LEFT,
+    TOP,
+    NONE
 }
-

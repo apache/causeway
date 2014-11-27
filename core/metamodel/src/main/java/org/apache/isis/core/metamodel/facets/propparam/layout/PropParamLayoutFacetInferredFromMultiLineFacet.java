@@ -17,37 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.annotation;
+package org.apache.isis.core.metamodel.facets.propparam.layout;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 /**
- * Layout hints for actions.
+ * If multi-line then position the label at the top.
+ *
+ * <p>
+ *     This can still be overridden using the {@link org.apache.isis.applib.annotation.PropertyLayout} annotation / layout.json.
+ * </p>
  */
-@Inherited
-@Target({ ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ActionLayout {
+public class PropParamLayoutFacetInferredFromMultiLineFacet extends PropParamLayoutFacetAbstract {
 
-    /**
-     * If associated with a property, indicates the positioning of the
-     * action's button relative to the property.
-     *
-     * <p>
-     * Ignored if the action has not been associated with a property.
-     * </p>
-     */
-    Position position() default Position.BELOW;
-
-    enum Position {
-        BELOW,
-        RIGHT,
-        PANEL,
-        PANEL_DROPDOWN
+    public PropParamLayoutFacetInferredFromMultiLineFacet(final FacetHolder holder) {
+        super(LabelPosition.TOP, holder);
     }
 
 }

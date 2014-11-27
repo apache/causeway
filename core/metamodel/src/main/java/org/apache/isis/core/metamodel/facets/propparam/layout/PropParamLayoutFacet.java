@@ -17,16 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.propparam.labelat;
+package org.apache.isis.core.metamodel.facets.propparam.layout;
 
-import org.apache.isis.applib.annotation.LabelAt;
-import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
+import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * The positioning of a property or action parameter's label.
+ * Corresponds to either {@literal @}{@link org.apache.isis.applib.annotation.PropertyLayout} (for a property) or
+ *{@literal @}{@link org.apache.isis.applib.annotation.ParameterLayout} (for an action parameter).
  */
-public interface LabelAtFacet extends MultipleValueFacet {
+public interface PropParamLayoutFacet extends Facet {
 
-    public LabelAt.Position value();
+    /**
+     * The positioning of a property or action parameter's label.
+     */
+    public LabelPosition label();
 
 }

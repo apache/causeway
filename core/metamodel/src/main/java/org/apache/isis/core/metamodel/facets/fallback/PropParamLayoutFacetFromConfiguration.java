@@ -16,23 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.fallback;
 
-package org.apache.isis.core.metamodel.facets.propparam.labelat;
-
-import org.apache.isis.applib.annotation.LabelAt;
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.propparam.layout.PropParamLayoutFacetAbstract;
 
-/**
- * If multi-line then position the label at the top.
- *
- * <p>
- *     This can still be overridden using the {@link org.apache.isis.applib.annotation.LabelAt} annotation / layout.json.
- * </p>
- */
-public class LabelAtFacetInferredFromMultiLineFacet extends LabelAtFacetAbstract {
+public class PropParamLayoutFacetFromConfiguration extends PropParamLayoutFacetAbstract {
 
-    public LabelAtFacetInferredFromMultiLineFacet(final FacetHolder holder) {
-        super(LabelAt.Position.TOP, holder);
+    public PropParamLayoutFacetFromConfiguration(LabelPosition labelPosition, FacetHolder facetHolder) {
+        super(labelPosition, facetHolder);
     }
-
 }

@@ -17,27 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.labelat.annotation;
+package org.apache.isis.core.metamodel.facets.properties.layout.annotation;
 
 import java.util.Properties;
-import org.apache.isis.applib.annotation.LabelAt;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
+import org.apache.isis.core.metamodel.facets.propparam.layout.PropParamLayoutFacet;
 
-public class LabelAtFacetOnPropertyFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class PropParamLayoutFacetForPropertyLayoutAnnotationFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
-    public LabelAtFacetOnPropertyFactory() {
+    public PropParamLayoutFacetForPropertyLayoutAnnotationFactory() {
         super(FeatureType.PROPERTIES_ONLY);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        LabelAtFacet facet = createFromMetadataPropertiesIfPossible(processMethodContext);
+        PropParamLayoutFacet facet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(facet == null) {
             facet = createFromAnnotationIfPossible(processMethodContext);
         }
@@ -50,17 +50,17 @@ public class LabelAtFacetOnPropertyFactory extends FacetFactoryAbstract implemen
     public void process(ProcessContributeeMemberContext processMemberContext) {
     }
     
-    private static LabelAtFacet createFromMetadataPropertiesIfPossible(
+    private static PropParamLayoutFacet createFromMetadataPropertiesIfPossible(
             final ProcessContextWithMetadataProperties<? extends FacetHolder> pcwmp) {
         
         final FacetHolder holder = pcwmp.getFacetHolder();
         
-        final Properties properties = pcwmp.metadataProperties("labelAt");
-        return properties != null ? new LabelAtFacetOnPropertyFromProperties(properties, holder) : null;
+        final Properties properties = pcwmp.metadataProperties("propertyLayout");
+        return properties != null ? new PropParamLayoutFacetOnPropertyFromProperties(properties, holder) : null;
     }
 
-    private static LabelAtFacetOnPropertyAnnotation createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
-        final LabelAt annotation = Annotations.getAnnotation(processMethodContext.getMethod(), LabelAt.class);
-        return (annotation != null) ? new LabelAtFacetOnPropertyAnnotation(annotation.value(), processMethodContext.getFacetHolder()) : null;
+    private static PropParamLayoutFacetForPropertyLayoutAnnotation createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
+        final PropertyLayout annotation = Annotations.getAnnotation(processMethodContext.getMethod(), PropertyLayout.class);
+        return (annotation != null) ? new PropParamLayoutFacetForPropertyLayoutAnnotation(annotation.labelPosition(), processMethodContext.getFacetHolder()) : null;
     }
 }

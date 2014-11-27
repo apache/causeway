@@ -17,21 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.labelat.annotation;
+package org.apache.isis.applib.annotation;
 
-import java.util.Properties;
-import org.apache.isis.applib.annotation.LabelAt;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacetAbstract;
+import java.lang.annotation.*;
 
-public class LabelAtFacetOnPropertyFromProperties extends LabelAtFacetAbstract {
-
-    public LabelAtFacetOnPropertyFromProperties(Properties properties, FacetHolder holder) {
-        super(valueFrom(properties), holder);
-    }
-
-    private static LabelAt.Position valueFrom(Properties properties) {
-        return LabelAt.Position.valueOf(properties.getProperty("value"));
-    }
-
+/**
+ * Layout hints for properties.
+ *
+ * @see org.apache.isis.applib.annotation.ParameterLayout
+ */
+@Inherited
+@Target({ ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface PropertyLayout {
+    LabelPosition labelPosition();
 }
+

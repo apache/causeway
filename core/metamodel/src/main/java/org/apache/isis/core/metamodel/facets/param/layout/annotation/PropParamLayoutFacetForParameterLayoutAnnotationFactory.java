@@ -17,20 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.param.labelat.annotation;
+package org.apache.isis.core.metamodel.facets.param.layout.annotation;
 
 import java.lang.annotation.Annotation;
-import org.apache.isis.applib.annotation.LabelAt;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
+import org.apache.isis.core.metamodel.facets.propparam.layout.PropParamLayoutFacet;
 
-public class LabelAtFacetOnParameterAnnotationFactory extends FacetFactoryAbstract {
+public class PropParamLayoutFacetForParameterLayoutAnnotationFactory extends FacetFactoryAbstract {
 
-    public LabelAtFacetOnParameterAnnotationFactory() {
+    public PropParamLayoutFacetForParameterLayoutAnnotationFactory() {
         super(FeatureType.PARAMETERS_ONLY);
     }
 
@@ -44,16 +44,16 @@ public class LabelAtFacetOnParameterAnnotationFactory extends FacetFactoryAbstra
         
         final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
         for (final Annotation parameterAnnotation : parameterAnnotations) {
-            if (parameterAnnotation instanceof LabelAt) {
-                final LabelAt annotation = (LabelAt) parameterAnnotation;
+            if (parameterAnnotation instanceof ParameterLayout) {
+                final ParameterLayout annotation = (ParameterLayout) parameterAnnotation;
                 FacetUtil.addFacet(create(annotation, processParameterContext.getFacetHolder()));
                 return;
             }
         }
     }
 
-    private LabelAtFacet create(final LabelAt annotation, final FacetHolder holder) {
-        return (annotation != null) ? new LabelAtFacetOnParameterAnnotation(annotation.value(), holder) : null;
+    private PropParamLayoutFacet create(final ParameterLayout annotation, final FacetHolder holder) {
+        return (annotation != null) ? new PropParamLayoutFacetForParameterLayoutAnnotation(annotation.labelPosition(), holder) : null;
     }
 
 }

@@ -33,11 +33,11 @@ public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactory
         class Customer {
             @SuppressWarnings("unused")
             @ActionLayout(position = ActionLayout.Position.PANEL)
-            public String foo() {
+            public String foz() {
                 return null;
             }
         }
-        final Method method = findMethod(Customer.class, "foo");
+        final Method method = findMethod(Customer.class, "foz");
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
 

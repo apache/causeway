@@ -23,13 +23,13 @@
                 "members": {
                     "description": {
                         "typicalLength": { "value": 50 },
-                        "labelAt": { "value": "TOP" }
+                        "propertyLayout": { "labelPosition": "TOP" }
                     },
                     "category": {
-                        "labelAt": { "value": "TOP" }
+                        "propertyLayout": { "labelPosition": "TOP" }
                     },
                     "subcategory": {
-                        "labelAt": { "value": "NONE" },
+                        "propertyLayout": { "labelPosition": "NONE" },
                         "actions": {
                             "updateCategory": {
                                 "named": {
@@ -125,7 +125,7 @@
                         "hidden": {
                             "where": "ALL_TABLES"
                         },
-                        "labelAt": { "value": "TOP" }
+                        "propertyLayout": { "labelPosition": "TOP" }
                     },
                     "attachment": {
                         "hidden": {

@@ -157,9 +157,9 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             if(multiLine!= null) {
                 props.setProperty("member." + memberName + ".multiLine.numberOfLines", ""+multiLine.numberOfLines);
             }
-            final LabelAtFacetRepr labelAt = memberRepr.labelAt;
-            if(labelAt!= null) {
-                props.setProperty("member." + memberName + ".labelAt.value", ""+labelAt.value);
+            final PropertyLayoutFacetRepr propertyLayout = memberRepr.propertyLayout;
+            if(propertyLayout!= null) {
+                props.setProperty("member." + memberName + ".propertyLayout.labelPosition", ""+propertyLayout.labelPosition);
             }
             final PagedFacetRepr paged = memberRepr.paged;
             if(paged != null) {

@@ -37,7 +37,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
+import org.apache.isis.core.metamodel.facets.propparam.layout.PropParamLayoutFacet;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -311,7 +311,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     }
 
     /**
-     * Applies the {@literal @}{@link org.apache.isis.applib.annotation.LabelAt LabelAt} facet and also CSS based on
+     * Applies the {@literal @}{@link org.apache.isis.core.metamodel.facets.propparam.layout.PropParamLayoutFacet} and also CSS based on
      * whether any of the associated actions have {@literal @}{@link org.apache.isis.applib.annotation.ActionLayout layout} positioned to
      * the {@link org.apache.isis.applib.annotation.ActionLayout.Position#RIGHT right}.
      *
@@ -319,7 +319,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
      * @param entityActionLinks
      */
     protected void addPositioningCssTo(final MarkupContainer markupContainer, final List<LinkAndLabel> entityActionLinks) {
-        CssClassAppender.appendCssClassTo(markupContainer, determineLabelAtCss(getModel()));
+        CssClassAppender.appendCssClassTo(markupContainer, determinePropParamLayoutCss(getModel()));
         CssClassAppender.appendCssClassTo(markupContainer, determineActionLayoutPositioningCss(entityActionLinks));
     }
 
@@ -331,10 +331,10 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ASSOCIATED_ACTION_LINKS_RIGHT, entityActionsRight, AdditionalLinksPanel.Style.DROPDOWN);
     }
 
-    private static String determineLabelAtCss(ScalarModel model) {
-        final LabelAtFacet facet = model.getFacet(LabelAtFacet.class);
+    private static String determinePropParamLayoutCss(ScalarModel model) {
+        final PropParamLayoutFacet facet = model.getFacet(PropParamLayoutFacet.class);
         if (facet != null) {
-            switch (facet.value()) {
+            switch (facet.label()) {
                 case LEFT:
                     return "label-left";
                 case NONE:

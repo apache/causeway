@@ -17,6 +17,6 @@
 package org.apache.isis.core.metamodel.layoutmetadata;
 
 
-public class LabelAtFacetRepr {
-    public String value;
+public class PropertyLayoutFacetRepr {
+    public String labelPosition;
 }

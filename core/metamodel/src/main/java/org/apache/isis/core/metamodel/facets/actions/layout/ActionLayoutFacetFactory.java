@@ -40,7 +40,10 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
         if(facet == null) {
             facet = createFromAnnotationIfPossible(processMethodContext);
         }
-        
+        if(facet == null) {
+            facet = new ActionLayoutFacetFallback(processMethodContext.getFacetHolder());
+        }
+
         // no-op if null
         FacetUtil.addFacet(facet);
     }
