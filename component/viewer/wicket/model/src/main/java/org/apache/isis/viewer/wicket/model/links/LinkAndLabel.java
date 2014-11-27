@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.model.links;
 import java.io.Serializable;
 
 import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.isis.applib.annotation.ActionLayout;
 
 public class LinkAndLabel implements Serializable {
     
@@ -35,6 +36,7 @@ public class LinkAndLabel implements Serializable {
     private final String actionIdentifier;
     private final String cssClass;
     private final String cssClassFa;
+    private final ActionLayout.Position position;
 
     public LinkAndLabel(
             final AbstractLink link,
@@ -45,7 +47,8 @@ public class LinkAndLabel implements Serializable {
             final boolean prototype,
             final String identifier,
             final String cssClass,
-            final String cssClassFa) {
+            final String cssClassFa,
+            final ActionLayout.Position position) {
         this.link = link;
         this.label = label;
         this.disabledReasonIfAny = disabledReasonIfAny;
@@ -55,6 +58,7 @@ public class LinkAndLabel implements Serializable {
         this.actionIdentifier = identifier;
         this.cssClass = cssClass;
         this.cssClassFa = cssClassFa;
+        this.position = position;
     }
 
     public AbstractLink getLink() {
@@ -91,5 +95,9 @@ public class LinkAndLabel implements Serializable {
 
     public String getCssClassFa() {
         return cssClassFa;
+    }
+
+    public ActionLayout.Position getPosition() {
+        return position;
     }
 }

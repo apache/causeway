@@ -84,10 +84,6 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
     // Dependencies (from IsisContext)
     // ///////////////////////////////////////////////////////////////////
 
-    protected IsisContext getIsisContext() {
-        return IsisContext.getInstance();
-    }
-
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }

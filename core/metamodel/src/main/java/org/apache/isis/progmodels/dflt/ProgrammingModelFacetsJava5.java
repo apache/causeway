@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefau
 import org.apache.isis.core.metamodel.facets.actions.exploration.annotation.ExplorationFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInteractionFacetFactory;
+import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.annotation.NotContributedFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method.NotInServiceMenuFacetViaMethodFactory;
@@ -402,6 +403,8 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // must come after MultiLine
         addFactory(LabelAtFacetOnPropertyFactory.class);
         addFactory(LabelAtFacetOnParameterAnnotationFactory.class);
+
+        addFactory(ActionLayoutFacetFactory.class);
 
         addFactory(NamedFacetOnTypeAnnotationFactory.class);
         addFactory(NamedFacetOnMemberFactory.class);

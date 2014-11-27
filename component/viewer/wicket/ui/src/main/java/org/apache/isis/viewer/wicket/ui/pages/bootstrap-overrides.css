@@ -130,6 +130,10 @@ div.label-left .scalarValueWrapper {
     float: left;
 }
 
+div.label-left.actions-right .scalarValueWrapper {
+    width: 62%;
+}
+
 div.label-top .scalarValueWrapper,
 div.label-none .scalarValueWrapper {
     width: 99%;

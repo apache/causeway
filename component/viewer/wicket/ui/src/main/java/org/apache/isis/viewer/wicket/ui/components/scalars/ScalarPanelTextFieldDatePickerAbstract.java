@@ -29,7 +29,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
@@ -40,7 +39,6 @@ import org.apache.isis.core.metamodel.facets.propparam.renderedadjusted.Rendered
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDatePicker;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * Panel for rendering scalars representing dates, along with a date picker.

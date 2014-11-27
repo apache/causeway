@@ -16,16 +16,7 @@
  */
 package org.apache.isis.core.metamodel.layoutmetadata;
 
-/**
- * Representation of actions associated with members (properties or collections).
- * 
- * <p>
- * Free-standing (non-associated) actions are represented simply by {@link MemberRepr}.
- */
-public class ActionRepr {
-    public NamedFacetRepr named;
-    public DescribedAsFacetRepr describedAs;
-    public CssClassFacetRepr cssClass;
-    public CssClassFaFacetRepr cssClassFa;
-    public ActionLayoutFacetRepr actionLayout;
+
+public class ActionLayoutFacetRepr {
+    public String position;
 }

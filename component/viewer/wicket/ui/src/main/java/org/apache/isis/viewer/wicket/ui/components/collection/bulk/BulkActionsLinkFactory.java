@@ -26,6 +26,7 @@ import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 import org.apache.isis.applib.services.command.Command;
@@ -49,7 +50,6 @@ import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 
 public final class BulkActionsLinkFactory implements ActionLinkFactory {
@@ -199,13 +199,14 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
         };
         link.add(new JGrowlBehaviour());
 
-        final boolean explorationOrPrototype = CssMenuItem.isExplorationOrPrototype(objectAction);
-        final String actionIdentifier = CssMenuItem.actionIdentifierFor(objectAction);
-        final String description = CssMenuItem.descriptionOf(objectAction);
-        final String cssClass = CssMenuItem.cssClassFor(objectAction);
-        final String cssClassFa = CssMenuItem.cssClassFaFor(objectAction);
+        final boolean explorationOrPrototype = ObjectAction.Utils.isExplorationOrPrototype(objectAction);
+        final String actionIdentifier = ObjectAction.Utils.actionIdentifierFor(objectAction);
+        final String description = ObjectAction.Utils.descriptionOf(objectAction);
+        final String cssClass = ObjectAction.Utils.cssClassFor(objectAction);
+        final String cssClassFa = ObjectAction.Utils.cssClassFaFor(objectAction);
+        final ActionLayout.Position position = ObjectAction.Utils.actionLayoutPositionOf(objectAction);
 
-        return new LinkAndLabel(link, objectAction.getName(), null, description, false, explorationOrPrototype, actionIdentifier, cssClass, cssClassFa);
+        return new LinkAndLabel(link, objectAction.getName(), null, description, false, explorationOrPrototype, actionIdentifier, cssClass, cssClassFa, position);
     }
     
     

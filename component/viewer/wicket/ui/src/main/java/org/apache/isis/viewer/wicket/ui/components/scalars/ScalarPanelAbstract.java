@@ -30,12 +30,13 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -43,8 +44,6 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -67,8 +66,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     protected static final String ID_SCALAR_IF_COMPACT = "scalarIfCompact";
 
-    private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
-    public static final String ID_ADDITIONAL_LINK = "additionalLink";
+    protected static final String ID_ADDITIONAL_LINKS = "additionalLinks";
+    protected static final String ID_ADDITIONAL_LINK = "additionalLink";
 
     private static final String ID_FEEDBACK = "feedback";
 
@@ -274,7 +273,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         ScalarModel model = getModel();
         final CssClassFacet facet = model.getFacet(CssClassFacet.class);
         if(facet != null) {
-              add(new CssClassAppender(facet.value()));
+            CssClassAppender.appendCssClassTo(this, facet.value());
         }
     }
 
@@ -288,15 +287,6 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     protected void addFeedbackTo(MarkupContainer markupContainer, Component component) {
         markupContainer.addOrReplace(new NotificationPanel(ID_FEEDBACK, component, new ComponentFeedbackMessageFilter(component)));
-    }
-    
-    protected void addAdditionalLinksTo(final MarkupContainer labelIfRegular) {
-        // find the links...
-        final List<LinkAndLabel> entityActions = Lists.newArrayList();
-
-        EntityActionUtil.appendAdditionalLinksForAssociation(this.scalarModel, getDeploymentType(), ID_ADDITIONAL_LINK, entityActions);
-        // ... and add them to the panel
-        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ADDITIONAL_LINKS, entityActions, AdditionalLinksPanel.Style.INLINE_LIST);
     }
 
 
@@ -319,33 +309,56 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     }
 
     /**
-     * Applies the {@literal @}{@link org.apache.isis.applib.annotation.LabelAt LabelAt} facet
+     * Applies the {@literal @}{@link org.apache.isis.applib.annotation.LabelAt LabelAt} facet and also CSS based on
+     * whether any of the associated actions have {@literal @}{@link org.apache.isis.applib.annotation.ActionLayout layout} positioned to
+     * the {@link org.apache.isis.applib.annotation.ActionLayout.Position#RIGHT right}.
      *
-     * @param scalarName The label for the input
-     * @param formGroup The form group element
+     * @param markupContainer The form group element
+     * @param entityActionLinks
      */
-    protected void applyLabelAtRule(Label scalarName, MarkupContainer formGroup) {
+    protected void addPositioningCssTo(final MarkupContainer markupContainer, final List<LinkAndLabel> entityActionLinks) {
+        CssClassAppender.appendCssClassTo(markupContainer, determineLabelAtCss(getModel()));
+        boolean actionsPositionedOnRight = hasActionsPositioned(entityActionLinks, ActionLayout.Position.RIGHT);
+        if(actionsPositionedOnRight) {
+            CssClassAppender.appendCssClassTo(markupContainer, "actions-right");
+        }
+    }
 
-        final LabelAtFacet facet = getModel().getFacet(LabelAtFacet.class);
+    private static boolean hasActionsPositioned(final List<LinkAndLabel> entityActionLinks, final ActionLayout.Position position) {
+        for (LinkAndLabel entityActionLink : entityActionLinks) {
+            if(entityActionLink.getPosition() == position) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    private static String determineLabelAtCss(ScalarModel model) {
+        final LabelAtFacet facet = model.getFacet(LabelAtFacet.class);
         if (facet != null) {
             switch (facet.value()) {
                 case LEFT:
-                    formGroup.add(new CssClassAppender("label-left"));
-                    break;
+                    return "label-left";
                 case NONE:
-                    formGroup.add(new CssClassAppender("label-none"));
-                    break;
+                    return "label-none";
                 case TOP:
-                    formGroup.add(new CssClassAppender("label-top"));
-                    break;
-                default:
-                    break;
-
+                    return "label-top";
             }
-        } else {
-            formGroup.add(new CssClassAppender("label-left"));
         }
+        return "label-left";
+    }
+
+    private static String determineActionLayoutCss(ScalarModel model) {
+        final ActionLayoutFacet facet = model.getFacet(ActionLayoutFacet.class);
+        if (facet != null) {
+            switch (facet.position()) {
+                case BELOW:
+                    return "action-below";
+                case RIGHT:
+                    return "action-right";
+            }
+        }
+        return null;
     }
 
     // //////////////////////////////////////

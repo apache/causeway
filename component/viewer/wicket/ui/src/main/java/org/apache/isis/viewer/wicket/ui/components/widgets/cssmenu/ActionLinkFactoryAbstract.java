@@ -36,6 +36,7 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -244,14 +245,15 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
     protected LinkAndLabel newLinkAndLabel(final ObjectAction objectAction, final AbstractLink link, final String disabledReasonIfAny) {
 
         final String label = ObjectAction.Utils.nameFor(objectAction);
-        final boolean blobOrClob = CssMenuItem.returnsBlobOrClob(objectAction);
-        final boolean prototype = CssMenuItem.isExplorationOrPrototype(objectAction);
-        final String actionIdentifier = CssMenuItem.actionIdentifierFor(objectAction);
-        final String description = CssMenuItem.descriptionOf(objectAction);
-        final String cssClass = CssMenuItem.cssClassFor(objectAction);
-        final String cssClassFa = CssMenuItem.cssClassFaFor(objectAction);
+        final boolean blobOrClob = ObjectAction.Utils.returnsBlobOrClob(objectAction);
+        final boolean prototype = ObjectAction.Utils.isExplorationOrPrototype(objectAction);
+        final String actionIdentifier = ObjectAction.Utils.actionIdentifierFor(objectAction);
+        final String description = ObjectAction.Utils.descriptionOf(objectAction);
+        final ActionLayout.Position position = ObjectAction.Utils.actionLayoutPositionOf(objectAction);
+        final String cssClass = ObjectAction.Utils.cssClassFor(objectAction);
+        final String cssClassFa = ObjectAction.Utils.cssClassFaFor(objectAction);
 
-        return new LinkAndLabel(link, label, disabledReasonIfAny, description, blobOrClob, prototype, actionIdentifier, cssClass, cssClassFa);
+        return new LinkAndLabel(link, label, disabledReasonIfAny, description, blobOrClob, prototype, actionIdentifier, cssClass, cssClassFa, position);
     }
 
 

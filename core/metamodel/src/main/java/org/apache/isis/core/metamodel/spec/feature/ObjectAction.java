@@ -24,6 +24,8 @@ import com.google.common.base.Functions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.When;
@@ -38,9 +40,13 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetFilters;
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
+import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.core.metamodel.interactions.AccessContext;
@@ -215,6 +221,54 @@ public interface ObjectAction extends ObjectMember {
             }
             return "(no name)";
         }
+
+        public static boolean returnsBlobOrClob(final ObjectAction objectAction) {
+            boolean blobOrClob = false;
+            final ObjectSpecification returnType = objectAction.getReturnType();
+            if(returnType != null) {
+                Class<?> cls = returnType.getCorrespondingClass();
+                if (Blob.class.isAssignableFrom(cls) || Clob.class.isAssignableFrom(cls)) {
+                    blobOrClob = true;
+                }
+            }
+            return blobOrClob;
+        }
+
+        public static boolean isExplorationOrPrototype(final ObjectAction action) {
+            return action.getType().isExploration() || action.getType().isPrototype();
+        }
+
+        public static String actionIdentifierFor(final ObjectAction action) {
+            @SuppressWarnings("unused")
+            final Identifier identifier = action.getIdentifier();
+
+            final String className = action.getOnType().getShortIdentifier();
+            final String actionId = action.getId();
+            return className + "-" + actionId;
+        }
+
+        public static String descriptionOf(ObjectAction action) {
+            return action.getDescription();
+        }
+
+        public static ActionLayout.Position actionLayoutPositionOf(ObjectAction action) {
+            final ActionLayoutFacet layoutFacet = action.getFacet(ActionLayoutFacet.class);
+            return layoutFacet != null? layoutFacet.position(): ActionLayout.Position.BELOW;
+        }
+
+        public static String cssClassFaFor(final ObjectAction action) {
+            return facetValueIfAnyFor(action, CssClassFaFacet.class);
+        }
+
+        public static String cssClassFor(final ObjectAction action) {
+            return facetValueIfAnyFor(action, CssClassFacet.class);
+        }
+
+        private static String facetValueIfAnyFor(ObjectAction action, Class<? extends SingleStringValueFacet> facetType) {
+            final SingleStringValueFacet singleStringValueFacet = action.getFacet(facetType);
+            return singleStringValueFacet != null ? singleStringValueFacet.value() : null;
+        }
+
     }
 
 

@@ -39,13 +39,22 @@ import org.apache.isis.core.metamodel.facets.object.fieldorder.FieldOrderFacet;
 public interface MemberOrderFacet extends MultipleValueFacet {
 
     /**
-     * To group members.
+     * Groups or associate members with each other.
+     *
+     * <ul>
+     *     <li>For actions, indicates the property or collection to associate.</li>
+     *     <li>For properties, indicates the property group</li>
+     *     <li>For collections, currently has no meaning</li>
+     * </ul>
      */
     public String name();
 
     /**
-     * The sequence, in dewey-decimal notation.
+     * The order of this member relative to other members in the same group, in
+     * dewey-decimal notation.  For collections this is relative to each other
+     * (collections aren't grouped).
      */
     public String sequence();
+
 
 }

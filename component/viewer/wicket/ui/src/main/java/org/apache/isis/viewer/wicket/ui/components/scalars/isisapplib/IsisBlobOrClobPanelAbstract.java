@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.List;
 import javax.activation.MimeType;
 import javax.imageio.ImageIO;
+import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -49,7 +50,10 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.NamedWithMimeType;
 import org.apache.isis.core.commons.lang.CloseableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -92,7 +96,12 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         final Label scalarName = new Label(ID_SCALAR_NAME, getModel().getName());
         labelIfRegular.add(scalarName);
 
-        applyLabelAtRule(scalarName, labelIfRegular);
+        // find the links...
+        final List<LinkAndLabel> entityActions = Lists.newArrayList();
+
+        EntityActionUtil.appendAdditionalLinksForAssociation(this.scalarModel, getDeploymentType(), ID_ADDITIONAL_LINK, entityActions);
+
+        addPositioningCssTo(labelIfRegular, entityActions);
 
         wicketImage = asWicketImage(ID_IMAGE);
         if(wicketImage != null) {
@@ -107,8 +116,10 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         
         addOrReplace(labelIfRegular);
         addFeedbackTo(labelIfRegular, fileUploadField);
-        addAdditionalLinksTo(labelIfRegular);
-        
+
+        // ... and add them to the panel
+        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ADDITIONAL_LINKS, entityActions, AdditionalLinksPanel.Style.INLINE_LIST);
+
         return labelIfRegular;
     }
 

@@ -32,19 +32,14 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.value.Blob;
-import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -333,58 +328,16 @@ public class CssMenuItem implements Serializable {
                 .link(link)
                 .describedAs(descriptionIfAny)
                 .enabled(reasonDisabledIfAny)
-                .returnsBlobOrClob(returnsBlobOrClob(objectAction))
-                .prototyping(isExplorationOrPrototype(objectAction))
+                .returnsBlobOrClob(ObjectAction.Utils.returnsBlobOrClob(objectAction))
+                .prototyping(ObjectAction.Utils.isExplorationOrPrototype(objectAction))
                 .separator(separator)
-                .withActionIdentifier(actionIdentifierFor(objectAction))
-                .withCssClass(cssClassFor(objectAction))
-                .withCssClassFa(cssClassFaFor(objectAction));
+                .withActionIdentifier(ObjectAction.Utils.actionIdentifierFor(objectAction))
+                .withCssClass(ObjectAction.Utils.cssClassFor(objectAction))
+                .withCssClassFa(ObjectAction.Utils.cssClassFaFor(objectAction));
 
         return builder;
     }
 
-    public static boolean returnsBlobOrClob(final ObjectAction objectAction) {
-        boolean blobOrClob = false;
-        final ObjectSpecification returnType = objectAction.getReturnType();
-        if(returnType != null) {
-            Class<?> cls = returnType.getCorrespondingClass();
-            if (Blob.class.isAssignableFrom(cls) || Clob.class.isAssignableFrom(cls)) {
-                blobOrClob = true;
-            }
-        }
-        return blobOrClob;
-    }
-
-    public static boolean isExplorationOrPrototype(final ObjectAction action) {
-        return action.getType().isExploration() || action.getType().isPrototype();
-    }
-
-    public static String descriptionOf(ObjectAction action) {
-        return action.getDescription();
-    }
-
-
-    public static String actionIdentifierFor(final ObjectAction action) {
-        @SuppressWarnings("unused")
-        final Identifier identifier = action.getIdentifier();
-        
-        final String className = action.getOnType().getShortIdentifier();
-        final String actionId = action.getId();
-        return className + "-" + actionId;
-    }
-
-    public static String cssClassFor(final ObjectAction action) {
-        return facetValueIfAnyFor(action, CssClassFacet.class);
-    }
-
-    public static String cssClassFaFor(final ObjectAction action) {
-        return facetValueIfAnyFor(action, CssClassFaFacet.class);
-    }
-
-    private static String facetValueIfAnyFor(ObjectAction action, Class<? extends SingleStringValueFacet> x) {
-        final SingleStringValueFacet singleStringValueFacet = action.getFacet(x);
-        return singleStringValueFacet != null ? singleStringValueFacet.value() : null;
-    }
 
     /**
      * Creates a {@link Builder} for a submenu item where the provided {@link ActionLinkFactory} is able to provide the target adapter.
@@ -399,8 +352,8 @@ public class CssMenuItem implements Serializable {
         final String actionLabel = linkAndLabel.getLabel();
         Builder builder = this.newSubMenuItem(actionLabel)
                               .link(link)
-                .prototyping(linkAndLabel.isPrototype())
-                .returnsBlobOrClob(linkAndLabel.isBlobOrClob())
+                              .prototyping(linkAndLabel.isPrototype())
+                              .returnsBlobOrClob(linkAndLabel.isBlobOrClob())
                               .withFacet(objectAction.getFacet(CssClassFacet.class))
                               .withFacet(objectAction.getFacet(CssClassFaFacet.class));
         return builder;

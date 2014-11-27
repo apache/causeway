@@ -22,6 +22,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
 
+import java.util.List;
+import com.google.common.collect.Lists;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -30,7 +32,10 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -78,12 +83,16 @@ public class BooleanPanel extends ScalarPanelAbstract {
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(checkBox));
         labelIfRegular.add(scalarName);
 
-        applyLabelAtRule(scalarName, labelIfRegular);
+        final List<LinkAndLabel> entityActions = Lists.newArrayList();
+        EntityActionUtil.appendAdditionalLinksForAssociation(this.scalarModel, getDeploymentType(), ID_ADDITIONAL_LINK, entityActions);
+
+        addPositioningCssTo(labelIfRegular, entityActions);
 
         addOrReplace(labelIfRegular);
-        
         addFeedbackTo(labelIfRegular, checkBox);
-        addAdditionalLinksTo(labelIfRegular);
+
+        // ... and add them to the panel
+        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ADDITIONAL_LINKS, entityActions, AdditionalLinksPanel.Style.INLINE_LIST);
 
         return labelIfRegular;
     }

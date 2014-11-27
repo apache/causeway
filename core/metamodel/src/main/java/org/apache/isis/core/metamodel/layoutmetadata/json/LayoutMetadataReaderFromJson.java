@@ -238,6 +238,10 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         if(cssClassFa != null) {
             props.setProperty(prefix +"." + actionName + ".cssClassFa.value", cssClassFa.value);
         }
+        final ActionLayoutFacetRepr actionLayout = actionRepr.actionLayout;
+        if(actionLayout != null) {
+            props.setProperty(prefix +"." + actionName + ".actionLayout.position", actionLayout.position);
+        }
     }
 
     public LayoutMetadata asLayoutMetadata(Class<?> domainClass) throws ReaderException {

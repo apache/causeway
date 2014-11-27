@@ -34,12 +34,21 @@ import java.lang.annotation.Target;
 public @interface MemberOrder {
 
     /**
-     * Number in Dewey Decimal format representing the order.
+     * Groups or associate members with each other.
+     *
+     * <ul>
+     *     <li>For actions, indicates the property or collection to associate.</li>
+     *     <li>For properties, indicates the property group</li>
+     *     <li>For collections, currently has no meaning</li>
+     * </ul>
+     */
+    String name() default "";
+
+    /**
+     * The order of this member relative to other members in the same group, in
+     * dewey-decimal notation.  For collections this is relative to each other
+     * (collections aren't grouped).
      */
     String sequence();
 
-    /**
-     * Name of the group this set should be known as.
-     */
-    String name() default "";
 }

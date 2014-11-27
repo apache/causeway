@@ -42,12 +42,15 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending.Util;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -126,13 +129,19 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(entityLink));
         labelIfRegular.add(scalarName);
 
-        applyLabelAtRule(scalarName, labelIfRegular);
+        // find the links...
+        final List<LinkAndLabel> entityActions = Lists.newArrayList();
+        EntityActionUtil.appendAdditionalLinksForAssociation(this.scalarModel, getDeploymentType(), ID_ADDITIONAL_LINK, entityActions);
+
+        addPositioningCssTo(labelIfRegular, entityActions);
 
         addOrReplace(labelIfRegular);
         
         addFeedbackTo(labelIfRegular, entityLink);
-        addAdditionalLinksTo(labelIfRegular);
-        
+
+        // ... and add them to the panel
+        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ADDITIONAL_LINKS, entityActions, AdditionalLinksPanel.Style.INLINE_LIST);
+
         // add semantics
         entityLink.setRequired(getModel().isRequired());
         entityLink.add(new IValidator<ObjectAdapter>() {

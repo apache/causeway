@@ -34,9 +34,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModelWithPending;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -82,11 +85,18 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(select2Field));
         labelIfRegular.addOrReplace(scalarName);
 
-        applyLabelAtRule(scalarName, labelIfRegular);
+        // find the links...
+        final List<LinkAndLabel> entityActions = Lists.newArrayList();
+
+        EntityActionUtil.appendAdditionalLinksForAssociation(this.scalarModel, getDeploymentType(), ID_ADDITIONAL_LINK, entityActions);
+
+        addPositioningCssTo(labelIfRegular, entityActions);
 
         addFeedbackTo(labelIfRegular, select2Field);
-        addAdditionalLinksTo(labelIfRegular);
-        
+
+        // ... and add them to the panel
+        AdditionalLinksPanel.addAdditionalLinks(labelIfRegular, ID_ADDITIONAL_LINKS, entityActions, AdditionalLinksPanel.Style.INLINE_LIST);
+
         return labelIfRegular;
     }
 

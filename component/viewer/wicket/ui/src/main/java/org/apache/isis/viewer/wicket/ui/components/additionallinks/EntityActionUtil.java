@@ -53,21 +53,21 @@ public final class EntityActionUtil {
 
     private final static MemberOrderFacetComparator memberOrderFacetComparator = new MemberOrderFacetComparator(false);
 
-    public static void appendAdditionalLinksForAssociation(
+    public static List<LinkAndLabel> appendAdditionalLinksForAssociation(
             final ScalarModel scalarModel,
             final DeploymentType deploymentType,
             final String id,
             final List<LinkAndLabel> entityActionLinks) {
 
         if (scalarModel.getKind() != ScalarModel.Kind.PROPERTY) {
-            return;
+            return entityActionLinks;
         }
 
         final ObjectAdapterMemento parentMemento = scalarModel.getParentObjectAdapterMemento();
         final EntityModel parentEntityModel = new EntityModel(parentMemento);
         final OneToOneAssociation oneToOneAssociation = scalarModel.getPropertyMemento().getProperty();
 
-        appendAdditionalLinksForAssociation(
+        return appendAdditionalLinksForAssociation(
                 parentEntityModel,
                 oneToOneAssociation,
                 deploymentType,
@@ -75,7 +75,7 @@ public final class EntityActionUtil {
                 entityActionLinks);
     }
 
-    public static void appendAdditionalLinksForAssociation(
+    public static List<LinkAndLabel> appendAdditionalLinksForAssociation(
             final EntityModel entityModel,
             final ObjectAssociation association,
             final DeploymentType deploymentType,
@@ -110,6 +110,8 @@ public final class EntityActionUtil {
             }
         });
         entityActionLinks.addAll(linkAndLabels);
+
+        return entityActionLinks;
     }
 
     private static List<ObjectAction> addActions(

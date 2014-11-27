@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.util;
 
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -39,6 +40,21 @@ public class CssClassAppender extends AttributeAppender {
         this(Model.of(append));
     }
 
+    /**
+     * Adds CSS class to container (providing that the class is non-null.
+     */
+    public static void appendCssClassTo(
+            final MarkupContainer markupContainer,
+            final String cssClass) {
+        if(cssClass == null) {
+            return;
+        }
+        markupContainer.add(new CssClassAppender(cssClass));
+    }
+
+    /**
+     * Utility method to sanitize string into a single CSS class.
+     */
     public static String asCssStyle(final String str) {
         return str.toLowerCase().replaceAll("[^A-Za-z0-9- ]", "").replaceAll("\\s+", "-");
     }
