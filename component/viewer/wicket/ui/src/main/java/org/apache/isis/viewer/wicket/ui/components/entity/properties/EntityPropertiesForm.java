@@ -61,6 +61,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.memento.Memento;
@@ -264,9 +265,6 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         return !groupNames.isEmpty();
     }
 
-    public static final String ID_ADDITIONAL_LINK = "additionalLink";
-
-
     private void addPropertyToForm(
             final EntityModel entityModel,
             final OneToOneAssociation association,
@@ -278,11 +276,9 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
         final Component component = getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
 
-        EntityActionUtil.appendAdditionalLinksForAssociation(
-                entityModel, otoa,
-                getDeploymentType(),
-                ID_ADDITIONAL_LINK,
-                entityActions);
+        final List<ObjectAction> associatedActions = EntityActionUtil.getObjectActionsForAssociation(entityModel, otoa, getDeploymentType());
+
+        entityActions.addAll(EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(entityModel, associatedActions));
 
         if(!renderedFirstField) {
             component.add(new CssClassAppender("first-field"));

@@ -26,6 +26,7 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -78,7 +79,9 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
 
         final List<LinkAndLabel> entityActionLinks = Lists.newArrayList();
 
-        EntityActionUtil.appendAdditionalLinksForAssociation(entityModel, otma, getDeploymentType(), "additionalLink", entityActionLinks);
+        final List<ObjectAction> associatedActions = EntityActionUtil.getObjectActionsForAssociation(entityModel, otma, getDeploymentType());
+
+        entityActionLinks.addAll(EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(entityModel, associatedActions));
 
         collectionModel.addEntityActions(entityActionLinks);
     }

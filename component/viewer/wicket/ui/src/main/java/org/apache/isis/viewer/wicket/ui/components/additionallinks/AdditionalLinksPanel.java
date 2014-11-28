@@ -47,6 +47,8 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
     private static final String ID_ADDITIONAL_LINK_FONT_AWESOME = "additionalLinkFontAwesome";
     private static final String ID_ADDITIONAL_LINK_TITLE = "additionalLinkTitle";
 
+    public static final String ID_ADDITIONAL_LINK = "additionalLink";
+
     public enum Style {
         INLINE_LIST {
             @Override

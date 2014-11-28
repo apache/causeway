@@ -53,34 +53,29 @@ public final class EntityActionUtil {
 
     private final static MemberOrderFacetComparator memberOrderFacetComparator = new MemberOrderFacetComparator(false);
 
-    public static List<LinkAndLabel> appendAdditionalLinksForAssociation(
+    public static List<LinkAndLabel> getEntityActionLinksForAssociation(
             final ScalarModel scalarModel,
-            final DeploymentType deploymentType,
-            final String id,
-            final List<LinkAndLabel> entityActionLinks) {
+            final DeploymentType deploymentType) {
+        final List<LinkAndLabel> entityActions = Lists.newArrayList();
 
         if (scalarModel.getKind() != ScalarModel.Kind.PROPERTY) {
-            return entityActionLinks;
+            return entityActions;
+        } else {
+            final ObjectAdapterMemento parentMemento = scalarModel.getParentObjectAdapterMemento();
+            final EntityModel parentEntityModel = new EntityModel(parentMemento);
+            final OneToOneAssociation oneToOneAssociation = scalarModel.getPropertyMemento().getProperty();
+
+            final List<ObjectAction> associatedActions = getObjectActionsForAssociation(parentEntityModel, oneToOneAssociation, deploymentType);
+
+            entityActions.addAll(asLinkAndLabelsForAdditionalLinksPanel(parentEntityModel, associatedActions));
+            return entityActions;
         }
-
-        final ObjectAdapterMemento parentMemento = scalarModel.getParentObjectAdapterMemento();
-        final EntityModel parentEntityModel = new EntityModel(parentMemento);
-        final OneToOneAssociation oneToOneAssociation = scalarModel.getPropertyMemento().getProperty();
-
-        return appendAdditionalLinksForAssociation(
-                parentEntityModel,
-                oneToOneAssociation,
-                deploymentType,
-                id,
-                entityActionLinks);
     }
 
-    public static List<LinkAndLabel> appendAdditionalLinksForAssociation(
+    public static List<ObjectAction> getObjectActionsForAssociation(
             final EntityModel entityModel,
             final ObjectAssociation association,
-            final DeploymentType deploymentType,
-            final String linkId,
-            final List<LinkAndLabel> entityActionLinks) {
+            final DeploymentType deploymentType) {
         final List<ObjectAction> associatedActions = Lists.newArrayList();
 
         addActions(ActionType.USER, entityModel, association, associatedActions);
@@ -98,20 +93,29 @@ public final class EntityActionUtil {
                 return memberOrderFacetComparator.compare(m1, m2);
             }
         });
+        return associatedActions;
+    }
 
+    /**
+     * Converts an {@link org.apache.isis.viewer.wicket.model.models.EntityModel} and a (subset of its) {@link org.apache.isis.core.metamodel.spec.feature.ObjectAction}s into a
+     * list of {@link org.apache.isis.viewer.wicket.model.links.LinkAndLabel}s intended to be apassed
+     * to the {@link org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel}.
+     */
+    public static List<LinkAndLabel> asLinkAndLabelsForAdditionalLinksPanel(
+            final EntityModel entityModel,
+            final List<ObjectAction> actions) {
+
+        final String linkId = AdditionalLinksPanel.ID_ADDITIONAL_LINK;
         final ActionLinkFactory linkFactory = new EntityActionLinkFactory(entityModel);
 
         final ObjectAdapterMemento adapterMemento = entityModel.getObjectAdapterMemento();
-        final List<LinkAndLabel> linkAndLabels = Lists.transform(associatedActions, new Function<ObjectAction, LinkAndLabel>() {
+        return Lists.transform(actions, new Function<ObjectAction, LinkAndLabel>() {
 
             @Override
             public LinkAndLabel apply(ObjectAction objectAction) {
                 return linkFactory.newLink(adapterMemento, objectAction, linkId);
             }
         });
-        entityActionLinks.addAll(linkAndLabels);
-
-        return entityActionLinks;
     }
 
     private static List<ObjectAction> addActions(
@@ -139,4 +143,33 @@ public final class EntityActionUtil {
     }
 
 
+    public static void addTopLevelActions(
+            final ObjectAdapter adapter,
+            final ActionType actionType,
+            final List<ObjectAction> topLevelActions,
+            final AuthenticationSession authenticationSession) {
+
+        final ObjectSpecification adapterSpec = adapter.getSpecification();
+
+        @SuppressWarnings({ "unchecked", "deprecation" })
+        Filter<ObjectAction> filter = Filters.and(
+                ObjectAction.Filters.memberOrderNotAssociationOf(adapterSpec),
+                ObjectAction.Filters.dynamicallyVisible(authenticationSession, adapter, Where.ANYWHERE),
+                ObjectAction.Filters.notBulkOnly(),
+                ObjectAction.Filters.excludeWizardActions(adapterSpec));
+
+        final List<ObjectAction> userActions = adapterSpec.getObjectActions(actionType, Contributed.INCLUDED, filter);
+        topLevelActions.addAll(userActions);
+    }
+
+    public static List<ObjectAction> getTopLevelActions(final ObjectAdapter adapter, final DeploymentType deploymentType, final AuthenticationSession authenticationSession) {
+        final List<ObjectAction> topLevelActions = Lists.newArrayList();
+
+        addTopLevelActions(adapter, ActionType.USER, topLevelActions, authenticationSession);
+        if(deploymentType.isPrototyping()) {
+            addTopLevelActions(adapter, ActionType.EXPLORATION, topLevelActions, authenticationSession);
+            addTopLevelActions(adapter, ActionType.PROTOTYPE, topLevelActions, authenticationSession);
+        }
+        return topLevelActions;
+    }
 }

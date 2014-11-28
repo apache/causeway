@@ -20,32 +20,20 @@
 package org.apache.isis.viewer.wicket.ui.components.entity.header;
 
 import java.util.List;
-import com.google.common.collect.Lists;
-import com.google.inject.Inject;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
+import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityActionLinkFactory;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
@@ -97,51 +85,26 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> {
         final ObjectAdapter adapter = model.getObject();
         final ObjectAdapterMemento adapterMemento = model.getObjectAdapterMemento();
         if (adapter != null) {
-            final List<ObjectAction> topLevelActions = getTopLevelActions(adapter);
+            final List<ObjectAction> topLevelActions = EntityActionUtil.getTopLevelActions(adapter, getDeploymentType(), getAuthenticationSession());
 
-            if(!topLevelActions.isEmpty()) {
-                final ActionPromptProvider actionPromptProvider = ActionPromptProvider.Util.getFrom(this);
-                final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(
-                        adapterMemento, topLevelActions, linkFactory, actionPromptProvider, null);
-                final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
+            final List<LinkAndLabel> entityActionLinks = EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(model, topLevelActions);
 
-                this.addOrReplace(cssMenuPanel);
-            } else {
-                permanentlyHide(ID_ENTITY_ACTIONS);
-            }
+            AdditionalLinksPanel.addAdditionalLinks(this, ID_ENTITY_ACTIONS, entityActionLinks, AdditionalLinksPanel.Style.INLINE_LIST);
+//            if(!topLevelActions.isEmpty()) {
+//
+//
+//                final ActionPromptProvider actionPromptProvider = ActionPromptProvider.Util.getFrom(this);
+//                final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(
+//                        adapterMemento, topLevelActions, linkFactory, actionPromptProvider, null);
+//                final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
+//
+//                this.addOrReplace(cssMenuPanel);
+//            } else {
+//                permanentlyHide(ID_ENTITY_ACTIONS);
+//            }
         } else {
             permanentlyHide(ID_ENTITY_ACTIONS);
         }
-    }
-
-    private List<ObjectAction> getTopLevelActions(final ObjectAdapter adapter) {
-        final List<ObjectAction> topLevelActions = Lists.newArrayList();
-        
-        addTopLevelActions(adapter, ActionType.USER, topLevelActions);
-        if(getDeploymentType().isPrototyping()) {
-            addTopLevelActions(adapter, ActionType.EXPLORATION, topLevelActions);
-            addTopLevelActions(adapter, ActionType.PROTOTYPE, topLevelActions);
-        }
-        return topLevelActions;
-    }
-
-    private void addTopLevelActions(
-            final ObjectAdapter adapter,
-            final ActionType actionType,
-            final List<ObjectAction> topLevelActions) {
-
-        final ObjectSpecification adapterSpec = adapter.getSpecification();
-        final AuthenticationSession authenticationSession = getAuthenticationSession();
-
-        @SuppressWarnings({ "unchecked", "deprecation" })
-        Filter<ObjectAction> filter = Filters.and(
-                ObjectAction.Filters.memberOrderNotAssociationOf(adapterSpec),
-                ObjectAction.Filters.dynamicallyVisible(authenticationSession, adapter, Where.ANYWHERE),
-                ObjectAction.Filters.notBulkOnly(),
-                ObjectAction.Filters.excludeWizardActions(adapterSpec));
-
-        final List<ObjectAction> userActions = adapterSpec.getObjectActions(actionType, Contributed.INCLUDED, filter);
-        topLevelActions.addAll(userActions);
     }
 
     @Override
@@ -151,27 +114,11 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> {
         PanelUtil.renderHead(response, getClass());
     }
 
-    // ///////////////////////////////////////////////////////////////////
-    // Convenience
-    // ///////////////////////////////////////////////////////////////////
-
-    protected PageClassRegistry getPageClassRegistry() {
-        final PageClassRegistryAccessor pcra = (PageClassRegistryAccessor) getApplication();
-        return pcra.getPageClassRegistry();
-    }
 
 
     // ///////////////////////////////////////////////
     // Dependency Injection
     // ///////////////////////////////////////////////
-
-    @Inject
-    private ImageResourceCache imageCache;
-
-    protected ImageResourceCache getImageCache() {
-        return imageCache;
-    }
-
 
     protected DeploymentType getDeploymentType() {
         return IsisContext.getDeploymentType();

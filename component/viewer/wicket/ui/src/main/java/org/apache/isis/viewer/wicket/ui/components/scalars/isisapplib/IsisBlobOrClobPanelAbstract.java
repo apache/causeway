@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.util.List;
 import javax.activation.MimeType;
 import javax.imageio.ImageIO;
-import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -96,9 +95,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         labelIfRegular.add(scalarName);
 
         // find the links...
-        final List<LinkAndLabel> entityActions = Lists.newArrayList();
-
-        EntityActionUtil.appendAdditionalLinksForAssociation(this.scalarModel, getDeploymentType(), ID_ADDITIONAL_LINK, entityActions);
+        final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentType());
 
         addPositioningCssTo(labelIfRegular, entityActions);
 

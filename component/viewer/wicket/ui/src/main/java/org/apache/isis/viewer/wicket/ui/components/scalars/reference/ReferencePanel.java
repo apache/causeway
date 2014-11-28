@@ -126,8 +126,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         labelIfRegular.add(scalarName);
 
         // find the links...
-        final List<LinkAndLabel> entityActions = Lists.newArrayList();
-        EntityActionUtil.appendAdditionalLinksForAssociation(this.scalarModel, getDeploymentType(), ID_ADDITIONAL_LINK, entityActions);
+        final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentType());
 
         addPositioningCssTo(labelIfRegular, entityActions);
 
