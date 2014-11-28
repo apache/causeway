@@ -24,12 +24,20 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 import com.google.common.collect.Lists;
-import org.apache.isis.core.metamodel.spec.*;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDelegator;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderDelegator;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 
-public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderSpiAware {
+public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderSpiAware, ServicesInjectorAware {
 
     private final SpecificationLoaderDelegator specificationLookupDelegator = new SpecificationLoaderDelegator();
-    
+    protected final ServicesInjectorDelegator servicesInjectorDelegator = new ServicesInjectorDelegator();
+
     private Properties properties;
 
 
@@ -54,7 +62,7 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
     protected void injectSubcomponentsInto(final Object candidate) {
         getAdapterManager().injectInto(candidate);
         getAuthenticationSessionProvider().injectInto(candidate);
-        getDependencyInjector().injectInto(candidate);
+        getServicesInjector().injectInto(candidate);
         getDomainObjectServices().injectInto(candidate);
         getLocalizationProvider().injectInto(candidate);
         getObjectInstantiator().injectInto(candidate);
@@ -159,5 +167,13 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
         }
         return list;
     }
+
+
+    //region > injected services
+    @Override
+    public void setServicesInjector(ServicesInjector servicesInjector) {
+        this.servicesInjectorDelegator.setServicesInjectorSpi((ServicesInjectorSpi) servicesInjector);
+    }
+    //endregion
 
 }

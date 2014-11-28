@@ -181,7 +181,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
      */
     public ServicesInjector getDependencyInjector() {
         ensureInitialized();
-        return runtimeContext.getDependencyInjector();
+        return runtimeContext.getServicesInjector();
     }
 
     // ///////////////////////////////////////////////////////

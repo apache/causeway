@@ -336,7 +336,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     }
 
     @Override
-    public ServicesInjector getDependencyInjector() {
+    public ServicesInjector getServicesInjector() {
         return servicesInjector;
     }
 
@@ -384,5 +384,4 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     public TransactionState getTransactionState() {
         throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
     }
-
 }

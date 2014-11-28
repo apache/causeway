@@ -53,6 +53,7 @@ import org.apache.isis.core.metamodel.facets.collections.parented.ParentedFacetS
 import org.apache.isis.core.metamodel.facets.collections.sortedby.annotation.SortedByFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.collections.typeof.annotation.TypeOfFacetOnCollectionAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnActionFromConfiguredRegexFactory;
 import org.apache.isis.core.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
@@ -362,6 +363,8 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(CssClassFacetOnTypeAnnotationFactory.class);
         addFactory(CssClassFacetOnMemberFactory.class);
+        // must come after CssClassFacetOnMemberFactory
+        addFactory(CssClassFacetOnActionFromConfiguredRegexFactory.class);
 
         addFactory(CssClassFaFacetOnTypeAnnotationFactory.class);
         addFactory(CssClassFaFacetOnMemberFactory.class);

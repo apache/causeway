@@ -66,7 +66,7 @@ public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
     /**
      * aka the ServicesInjector...
      */
-    public ServicesInjector getDependencyInjector();
+    public ServicesInjector getServicesInjector();
 
     public ObjectDirtier getObjectDirtier();
 

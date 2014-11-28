@@ -28,7 +28,18 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
 import org.apache.isis.core.commons.authentication.MessageBroker;
-import org.apache.isis.core.metamodel.adapter.*;
+import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
+import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAbstract;
+import org.apache.isis.core.metamodel.adapter.LocalizationProviderAbstract;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
+import org.apache.isis.core.metamodel.adapter.ObjectDirtierAbstract;
+import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
+import org.apache.isis.core.metamodel.adapter.ObjectPersistorAbstract;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitterAbstract;
+import org.apache.isis.core.metamodel.adapter.ServicesProvider;
+import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -37,7 +48,6 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
@@ -64,7 +74,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     private final ObjectInstantiator objectInstantiator;
     private final ObjectPersistor objectPersistor;
     private final ServicesProvider servicesProvider;
-    private final ServicesInjector servicesInjector;
     private final QuerySubmitter querySubmitter;
     private final DomainObjectServices domainObjectServices;
     private final LocalizationProviderAbstract localizationProvider;
@@ -177,7 +186,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
             @Override
             public <T> T lookupService(Class<T> cls) {
-                return getPersistenceSession().getServicesInjector().lookupService(cls);
+                return servicesInjectorDelegator.lookupService(cls);
             }
         };
         this.domainObjectServices = new DomainObjectServicesAbstract() {
@@ -281,42 +290,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                 return list.size() > 0 ? list.get(0) : null;
             }
         };
-        this.servicesInjector = new ServicesInjector() {
-
-            @Override
-            public void injectServicesInto(final Object object) {
-                getPersistenceSession().getServicesInjector().injectServicesInto(object);
-            }
-
-            @Override
-            public void injectServicesInto(List<Object> objects) {
-                getPersistenceSession().getServicesInjector().injectServicesInto(objects);
-            }
-
-            @Override
-            public <T> T lookupService(Class<T> serviceClass) {
-                return getPersistenceSession().getServicesInjector().lookupService(serviceClass);
-            }
-
-            @Override
-            public <T> List<T> lookupServices(Class<T> serviceClass) {
-                return getPersistenceSession().getServicesInjector().lookupServices(serviceClass);
-            }
-
-            @Override
-            public void injectInto(Object candidate) {
-                if (ServicesInjectorAware.class.isAssignableFrom(candidate.getClass())) {
-                    final ServicesInjectorAware cast = ServicesInjectorAware.class.cast(candidate);
-                    cast.setServicesInjector(this);
-                }
-            }
-
-            @Override
-            public List<Object> getRegisteredServices() {
-                return getPersistenceSession().getServicesInjector().getRegisteredServices();
-            }
-
-        };
         this.localizationProvider = new LocalizationProviderAbstract() {
 
             @Override
@@ -371,8 +344,8 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     }
 
     @Override
-    public ServicesInjector getDependencyInjector() {
-        return servicesInjector;
+    public ServicesInjector getServicesInjector() {
+        return servicesInjectorDelegator;
     }
 
     @Override

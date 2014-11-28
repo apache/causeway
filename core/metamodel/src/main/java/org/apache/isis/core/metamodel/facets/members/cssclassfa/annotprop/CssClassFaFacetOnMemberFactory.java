@@ -39,9 +39,8 @@ import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 
-public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, IsisConfigurationAware{
+public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, IsisConfigurationAware {
 
-    private IsisConfiguration configuration;
 
     public CssClassFaFacetOnMemberFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -84,7 +83,6 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
     }
 
     //region > faIconFromPattern
-
 
     private final static Pattern FA_ICON_REGEX_PATTERN = Pattern.compile("([^:]+):(.+)");
 
@@ -153,6 +151,8 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
     //endregion
 
     //region > injected
+    private IsisConfiguration configuration;
+
     @Override
     public void setConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;

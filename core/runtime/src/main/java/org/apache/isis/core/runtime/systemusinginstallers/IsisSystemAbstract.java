@@ -66,7 +66,7 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
     // ///////////////////////////////////////////
 
     public IsisSystemAbstract(final DeploymentType deploymentType) {
-        super(deploymentType, new IsisLocaleInitializer(), new IsisTimeZoneInitializer());
+        this(deploymentType, new IsisLocaleInitializer(), new IsisTimeZoneInitializer());
     }
 
     public IsisSystemAbstract(final DeploymentType deploymentType, final IsisLocaleInitializer localeInitializer, final IsisTimeZoneInitializer timeZoneInitializer) {

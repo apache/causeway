@@ -98,7 +98,7 @@ public class IsisMetaModelTest_init {
                 allowing(mockRuntimeContext).getQuerySubmitter();
                 will(returnValue(mockQuerySubmitter));
 
-                allowing(mockRuntimeContext).getDependencyInjector();
+                allowing(mockRuntimeContext).getServicesInjector();
                 will(returnValue(mockDependencyInjector));
 
                 allowing(mockRuntimeContext).getServicesProvider();

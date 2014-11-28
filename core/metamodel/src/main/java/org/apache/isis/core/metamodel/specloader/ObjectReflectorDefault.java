@@ -47,7 +47,9 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.spec.*;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
@@ -440,7 +442,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             return new ObjectSpecificationOnStandaloneList(specContext, objectMemberContext);
         } else {
             final SpecificationLoaderSpi specificationLoader = this;
-            final ServicesInjector dependencyInjector = getRuntimeContext().getDependencyInjector();
+            final ServicesInjector dependencyInjector = getRuntimeContext().getServicesInjector();
             final CreateObjectContext createObjectContext = new CreateObjectContext(adapterMap, dependencyInjector);
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext = new FacetedMethodsBuilderContext(specificationLoader, facetProcessor);
             return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext, specContext, objectMemberContext, createObjectContext);
@@ -531,6 +533,13 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         if (SpecificationLoaderAware.class.isAssignableFrom(candidateClass)) {
             final SpecificationLoaderAware cast = SpecificationLoaderAware.class.cast(candidate);
             cast.setSpecificationLookup(this);
+        }
+        if (ServicesInjectorAware.class.isAssignableFrom(candidateClass)) {
+            final ServicesInjectorAware cast = ServicesInjectorAware.class.cast(candidate);
+            final ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault();
+            servicesInjector.setSpecificationLookup(this);
+            servicesInjector.setServices(this.services);
+            cast.setServicesInjector(servicesInjector);
         }
     }
 

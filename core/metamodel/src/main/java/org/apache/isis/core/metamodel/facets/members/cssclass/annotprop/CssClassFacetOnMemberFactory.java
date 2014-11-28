@@ -20,8 +20,9 @@
 package org.apache.isis.core.metamodel.facets.members.cssclass.annotprop;
 
 import java.util.Properties;
-
 import org.apache.isis.applib.annotation.CssClass;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -30,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 
-public class CssClassFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class CssClassFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, IsisConfigurationAware {
 
     public CssClassFacetOnMemberFactory() {
         super(FeatureType.MEMBERS);
@@ -42,15 +43,16 @@ public class CssClassFacetOnMemberFactory extends FacetFactoryAbstract implement
         if(cssClassFacet == null) {
             cssClassFacet = createFromAnnotationIfPossible(processMethodContext);
         }
-        
+
         // no-op if null
         FacetUtil.addFacet(cssClassFacet);
     }
 
     
     @Override
-    public void process(ProcessContributeeMemberContext processMemberContext) {
+    public void process(final ProcessContributeeMemberContext processMemberContext) {
         CssClassFacet cssClassFacet = createFromMetadataPropertiesIfPossible(processMemberContext);
+
         // no-op if null
         FacetUtil.addFacet(cssClassFacet);
     }
@@ -64,10 +66,21 @@ public class CssClassFacetOnMemberFactory extends FacetFactoryAbstract implement
         return properties != null ? new CssClassFacetOnMemberFromProperties(properties, holder) : null;
     }
 
+
     private CssClassFacet createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
         final CssClass annotation = Annotations.getAnnotation(processMethodContext.getMethod(), CssClass.class);
         return annotation != null ? new CssClassFacetOnMemberAnnotation(annotation.value(), processMethodContext.getFacetHolder()) : null;
     }
+
+
+    //region > injected
+    private IsisConfiguration configuration;
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        this.configuration = configuration;
+    }
+    //endregion
 
 }
 
