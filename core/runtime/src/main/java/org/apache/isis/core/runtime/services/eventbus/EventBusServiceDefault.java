@@ -16,17 +16,12 @@
  */
 package org.apache.isis.core.runtime.services.eventbus;
 
-import java.util.List;
-
 import javax.enterprise.context.RequestScoped;
-
-import com.google.common.base.Throwables;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.SubscriberExceptionContext;
 import com.google.common.eventbus.SubscriberExceptionHandler;
-
-import org.apache.isis.applib.NonRecoverableException;
-import org.apache.isis.applib.RecoverableException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
 import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase;
 import org.apache.isis.applib.services.eventbus.EventBusService;
@@ -43,6 +38,8 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
  */
 @Deprecated
 public class EventBusServiceDefault extends EventBusService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(EventBusServiceDefault.class);
 
     /**
      * {@inheritDoc}
@@ -85,33 +82,42 @@ public class EventBusServiceDefault extends EventBusService {
             public void handleException(Throwable exception, SubscriberExceptionContext context) {
                 Object event = context.getEvent();
                 if(!(event instanceof AbstractInteractionEvent)) {
+                    if(LOG.isDebugEnabled()) {
+                        LOG.debug("Ignoring exception '%s' (%s), not a subclass of AbstractInteractionEvent", exception.getMessage(), exception.getClass().getName());
+                    }
                     return;
                 } 
                 final AbstractInteractionEvent<?> interactionEvent = (AbstractInteractionEvent<?>) event;
                 final Phase phase = interactionEvent.getPhase();
                 switch (phase) {
                 case HIDE:
+                    LOG.warn("Exception '%s' (%s) thrown during HIDE phase, to be safe will veto (hide) the interaction event");
                     interactionEvent.hide();
                     break;
                 case DISABLE:
+                    LOG.warn("Exception '%s' (%s) thrown during DISABLE phase, to be safe will veto (disable) the interaction event");
                     interactionEvent.disable(exception.getMessage()!=null?exception.getMessage(): exception.getClass().getName() + " thrown.");
                     break;
                 case VALIDATE:
+                    LOG.warn("Exception '%s' (%s) thrown during VALIDATE phase, to be safe will veto (invalidate) the interaction event");
                     interactionEvent.invalidate(exception.getMessage()!=null?exception.getMessage(): exception.getClass().getName() + " thrown.");
                     break;
                 case EXECUTING:
+                    LOG.warn("Exception '%s' (%s) thrown during EXECUTING phase, to be safe will abort the transaction");
+                    abortTransaction(exception);
+                    break;
                 case EXECUTED:
-                    final List<Throwable> causalChain = Throwables.getCausalChain(exception);
-                    for (Throwable cause : causalChain) {
-                        if(cause instanceof RecoverableException || cause instanceof NonRecoverableException) {
-                            getTransactionManager().getTransaction().setAbortCause(new IsisApplicationException(exception));
-                            return;
-                        }
-                    }
+                    LOG.warn("Exception '%s' (%s) thrown during EXECUTED phase, to be safe will abort the transaction");
+                    abortTransaction(exception);
                     break;
                 }
             }
         };
+    }
+
+    private void abortTransaction(Throwable exception) {
+        getTransactionManager().getTransaction().setAbortCause(new IsisApplicationException(exception));
+        return;
     }
 
     protected IsisTransactionManager getTransactionManager() {

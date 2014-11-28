@@ -58,7 +58,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class ToDoItemIntegTest extends AbstractToDoIntegTest {
 
@@ -266,17 +265,16 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             }
 
             @Test
-            public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
+            public void subscriberVetoesEventWithAnyOtherException() throws Exception {
 
                 // given
                 toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.AnyExecuteVetoWithOtherException);
 
+                // then
+                expectedExceptions.expect(RuntimeException.class);
+
                 // when
                 toDoItem.completed();
-
-                // then
-                // (no expectedExceptions setup, expect to continue)
-                assertTrue(true);
             }
 
         }
@@ -569,17 +567,16 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 }
 
                 @Test
-                public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
+                public void subscriberVetoesEventWithAnyOtherException() throws Exception {
 
                     // given
                     toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.AnyExecuteVetoWithOtherException);
 
+                    // then
+                    expectedExceptions.expect(RuntimeException.class);
+
                     // when
                     toDoItem.add(otherToDoItem);
-
-                    // then
-                    // (no expectedExceptions setup, expect to continue)
-                    assertTrue(true);
                 }
             }
             public static class Remove extends ToDoItemIntegTest {
@@ -667,17 +664,16 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 }
 
                 @Test
-                public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
+                public void subscriberVetoesEventWithAnyOtherException() throws Exception {
 
                     // given
                     toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.AnyExecuteVetoWithOtherException);
 
+                    // then
+                    expectedExceptions.expect(RuntimeException.class);
+
                     // when
                     toDoItem.remove(otherToDoItem);
-
-                    // then
-                    // (no expectedExceptions setup, expect to continue)
-                    assertTrue(true);
                 }
             }
         }
@@ -908,17 +904,16 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
 
 
             @Test
-            public void subscriberThrowingOtherExceptionIsIgnored() throws Exception {
+            public void subscriberVetoesEventWithAnyOtherException() throws Exception {
 
                 // given
                 toDoItemSubscriptions.subscriberBehaviour(ToDoItemSubscriptions.Behaviour.AnyExecuteVetoWithOtherException);
 
+                // then
+                expectedExceptions.expect(RuntimeException.class);
+
                 // when
                 toDoItem.setDescription("Buy bread and butter");
-
-                // then
-                // (no expectedExceptions setup, expect to continue)
-                assertTrue(true);
             }
 
 

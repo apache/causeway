@@ -20,15 +20,12 @@
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
 import java.util.List;
-
 import com.google.common.base.Throwables;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
-
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
@@ -104,7 +101,22 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         if (actionModel.hasParameters()) {
             buildGuiForParameters();
         } else {
-            executeActionAndProcessResults(null, null);
+
+            boolean succeeded = executeActionAndProcessResults(null, null);
+            if(succeeded) {
+                // nothing to do
+            } else {
+
+                // render the target entity again
+                //
+                // (One way this can occur is if an event subscriber has a defect and throws an exception; in which case
+                // the EventBus' exception handler will automatically veto.  This results in a growl message rather than
+                // an error page, but is probably 'good enough').
+                final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
+
+                ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, null);
+                resultResponse.getHandlingStrategy().handleResults(this, resultResponse);
+            }
         }
     }
 
