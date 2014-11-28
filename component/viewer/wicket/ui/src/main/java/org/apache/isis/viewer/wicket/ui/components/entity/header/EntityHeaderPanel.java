@@ -90,18 +90,6 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> {
             final List<LinkAndLabel> entityActionLinks = EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(model, topLevelActions);
 
             AdditionalLinksPanel.addAdditionalLinks(this, ID_ENTITY_ACTIONS, entityActionLinks, AdditionalLinksPanel.Style.INLINE_LIST);
-//            if(!topLevelActions.isEmpty()) {
-//
-//
-//                final ActionPromptProvider actionPromptProvider = ActionPromptProvider.Util.getFrom(this);
-//                final CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(
-//                        adapterMemento, topLevelActions, linkFactory, actionPromptProvider, null);
-//                final CssMenuPanel cssMenuPanel = cssMenuBuilder.buildPanel(ID_ENTITY_ACTIONS, "Actions");
-//
-//                this.addOrReplace(cssMenuPanel);
-//            } else {
-//                permanentlyHide(ID_ENTITY_ACTIONS);
-//            }
         } else {
             permanentlyHide(ID_ENTITY_ACTIONS);
         }

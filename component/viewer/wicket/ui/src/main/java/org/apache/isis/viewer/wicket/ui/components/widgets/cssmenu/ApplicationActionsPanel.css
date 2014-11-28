@@ -17,6 +17,242 @@
  *  under the License.
  */
 
+
+/* copied from CssMenuPanel.css (since deleted that panel */
+
+
+
+.cssMenuPanel span.clear {
+    line-height: 3px;
+}
+
+.cssMenuPanel .menuh .small {
+    float: none;
+    display: inline;
+}
+
+.cssMenuPanel .menuh p .small {
+    float: none;
+    display: inline;
+}
+
+.menuh a,.menuh p {
+    text-align: left;
+    display: block;
+    white-space: nowrap;
+    margin: 0;
+    padding: 1px;
+    padding-right: 1.6em;
+    padding-left: 0.4em;
+    font-weight: normal;
+    cursor: default;
+}
+
+.cssMenuPanel .menuh a:hover {
+    text-decoration: underline;
+}
+
+.cssMenuPanel .menuh a.top-parent,.cssMenuPanel .menuh p.top-parent {
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+
+.cssMenuPanel .menuh a.top-parent:hover,.cssMenuPanel .menuh p.top-parent:hover	{
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+
+.cssMenuPanel .menuh a.parent,.cssMenuPanel .menuh p.parent {
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+
+.cssMenuPanel .menuh a.parent:hover,.cssMenuPanel .menuh p.parent:hover	{
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+
+.cssMenuPanel .menuh ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    float: left;
+    display: inline;
+}
+
+.cssMenuPanel .menuh li {
+    position: relative;
+    min-height: 1px;
+}
+
+.cssMenuPanel .menuh ul ul {
+    position: absolute;
+    z-index: 500;
+    top: auto;
+    display: none;
+    padding: 1em;
+    margin: -1em 0 0 -1em;
+}
+
+.cssMenuPanel .menuh ul ul ul {
+    top: 0;
+    left: 100%;
+}
+
+.cssMenuPanel span.menuh a:hover {
+    cursor: pointer;
+    z-index: 100;
+}
+
+.cssMenuPanel span.menuh li:hover ul ul,.cssMenuPanel span.menuh li li:hover ul ul,.cssMenuPanel span.menuh li li li:hover ul ul,.cssMenuPanel span.menuh li li li li:hover ul ul {
+    display: none;
+}
+
+.cssMenuPanel span.menuh li:hover ul,.cssMenuPanel span.menuh li li:hover ul,.cssMenuPanel span.menuh li li li:hover ul,.cssMenuPanel span.menuh li li li li:hover ul {
+    display: block;
+}
+
+.cssMenuPanel li.cssSubMenuItem p.disabled {
+    cursor: not-allowed;
+}
+
+.cssMenuPanel li.cssSubMenuItem {
+    margin-left:0;
+}
+
+/******** overrides for grouped actions and entity actions ***************/
+.groupedActions .cssMenuPanel li.cssMenuItemPanel>p.top-parent {
+    display: none;
+}
+
+.groupedActions .cssMenuPanel .menuh ul {
+    position: relative;
+    display: block;
+    float: right;
+    margin: 0;
+    padding: 0;
+}
+
+.groupedActions .cssMenuPanel .menuh ul ul {
+    position: relative;
+    display: block;
+    float: right;
+    margin: 0;
+    padding: 0;
+}
+
+.groupedActions .cssMenuPanel .menuh li,
+.groupedActions .cssMenuPanel .menuh li p	{
+    float:left;
+    display:block;
+    margin-left:10px;
+}
+
+.groupedActions .cssMenuPanel .menuh a,.groupedActions .cssMenuPanel .menuh p
+{
+    display: inline-block;
+    border: none;
+}
+
+.groupedActions .cssMenuPanel .menuh a:link,
+.groupedActions .cssMenuPanel .menuh a:visited,
+.groupedActions .cssMenuPanel .menuh a:active,
+.groupedActions .cssMenuPanel .menuh p {
+    display: block;
+    float: left;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    font-weight: bold;
+    /*font-size: 0.85em;*/
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    text-decoration: none;
+}
+
+.entityActions .cssMenuPanel li.cssMenuItemPanel>p.top-parent {
+    display: none;
+}
+
+.entityActions .cssMenuPanel .menuh ul {
+    position: relative;
+    display: block;
+    float: right;
+    margin: 0 0 10px;
+    padding: 0;
+}
+
+.entityActions .cssMenuPanel .menuh ul ul {
+    position: relative;
+    display: block;
+    float: right;
+    margin: 0;
+    padding: 0;
+}
+
+.entityActions .cssMenuPanel .menuh li {
+    float:left;
+    display:block;
+    margin-left:10px;
+}
+
+.entityActions .cssMenuPanel .menuh li p {
+    float:left;
+    display:block;
+    margin-left:0;
+}
+
+.entityActions .cssMenuPanel .menuh a,
+.entityActions .cssMenuPanel .menuh p {
+    display: inline-block;
+    /*border: none;*/
+}
+
+.entityActions .cssMenuPanel .menuh a,
+.entityActions .cssMenuPanel .menuh a:link,
+.entityActions .cssMenuPanel .menuh a:visited,
+.entityActions .cssMenuPanel .menuh a:active,
+.entityActions .cssMenuPanel .menuh p {
+    display: block;
+    float: left;
+    height: 30px;
+    /*line-height: 30px;*/
+    padding: 4px 10px 0;
+    /*font-size:0.85em;*/
+    border-radius:4px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    text-decoration:none;
+}
+
+.additionalLinkList {
+    float:left;
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+
+.entityCollectionsPanel .panel-heading .additionalLinkList {
+    margin-right: 10px;
+}
+
+.additionalLinkList li {
+    float:left;
+    margin-right:10px;
+    /*	margin-bottom: 2px;*/
+}
+.entityPropertiesPanel .additionalLinkList li {
+    margin-right:0px;
+}
+.entityPropertiesPanel .properties .panel-heading .additionalLinkList {
+    margin-right: -5px;
+}
+
+
+
+
+
 /**
  * Borrowed from http://bootsnipp.com/snippets/featured/multi-level-dropdown-menu-bs3
  */

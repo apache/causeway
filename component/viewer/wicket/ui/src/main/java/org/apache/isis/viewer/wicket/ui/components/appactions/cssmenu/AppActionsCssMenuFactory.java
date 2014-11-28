@@ -44,7 +44,6 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ApplicationActionsPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuBuilder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem.Builder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
@@ -80,7 +79,8 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
     private final static ActionLinkFactory cssMenuLinkFactory = new AppActionsCssMenuLinkFactory();
 
     public AppActionsCssMenuFactory() {
-        super(ComponentType.APPLICATION_ACTIONS, CssMenuPanel.class);
+        super(ComponentType.APPLICATION_ACTIONS, ApplicationActionsPanel.class);
+        //super(ComponentType.APPLICATION_ACTIONS, CssMenuPanel.class);
     }
 
     /**
@@ -113,7 +113,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
         // prune any service names that have no service actions
         serviceNamesInOrder.retainAll(serviceActionsByName.keySet());
         
-        return buildMenuItems(serviceNamesInOrder, serviceActionsByName, new CssMenuBuilder.CssMenuContext(cssMenuLinkFactory, appActionsModel.getActionPromptProvider()));
+        return buildMenuItems(serviceNamesInOrder, serviceActionsByName, cssMenuLinkFactory);
     }
 
     /**
@@ -122,7 +122,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
     private List<CssMenuItem> buildMenuItems(
             final Set<String> serviceNamesInOrder,
             final Map<String, List<LogicalServiceAction>> serviceActionsByName,
-            final CssMenuBuilder.CssMenuContext cssMenuContext) {
+            final ActionLinkFactory actionLinkFactory) {
         
         final List<CssMenuItem> menuItems = Lists.newArrayList();
         for (String serviceName : serviceNamesInOrder) {
@@ -137,7 +137,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
                 final ObjectAdapterMemento serviceAdapterMemento = logicalServiceAction.serviceAdapterMemento;
                 final ObjectAction objectAction = logicalServiceAction.objectAction;
                 final boolean separator = logicalServiceAction.separator;
-                final Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, objectAction, separator, cssMenuContext);
+                final Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, objectAction, separator, actionLinkFactory);
                 if (subMenuItemBuilder == null) {
                     // not visible
                     continue;

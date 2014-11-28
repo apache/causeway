@@ -24,45 +24,18 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.util.ListModel;
-import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * Top level panel for a CSS menu, consisting of a number of unparented
  * {@link CssMenuItem}s.
- * 
- * <p>
- * The {@link Style} enum allows the presentation to be altered.
  */
 public class CssMenuPanel extends PanelAbstract<CssMenuPanel.ListOfCssMenuItemsModel> {
 
     private static final long serialVersionUID = 1L;
 
-    public enum Style {
-        REGULAR {
-            @Override
-            public String getAppendValue() {
-                return null; // ie, append nothing
-            }
-        },
-        SMALL {
-            @Override
-            public String getAppendValue() {
-                return toString();
-            }
-        };
-        @Override
-        public String toString() {
-            return StringExtensions.toCamelCase(name());
-        }
-
-        public String getAppendValue() {
-            return toString();
-        }
-    }
 
     static class ListOfCssMenuItemsModel extends ListModel<CssMenuItem> {
 
@@ -73,15 +46,11 @@ public class CssMenuPanel extends PanelAbstract<CssMenuPanel.ListOfCssMenuItemsM
         }
     }
 
-    private final StyleAppender styleAppender;
     static final String ID_MENU_ITEMS = "menuItems";
     static final String ID_MENU_ITEM = "menuItem";
 
-    public CssMenuPanel(final String id, final Style style, final List<CssMenuItem> topLevelMenuItems) {
+    private CssMenuPanel(final String id, final List<CssMenuItem> topLevelMenuItems) {
         super(id, new ListOfCssMenuItemsModel(topLevelMenuItems));
-        this.styleAppender = new StyleAppender(style);
-
-        //add(styleAppender);
 
         final RepeatingView menuItemRv = new RepeatingView(CssMenuPanel.ID_MENU_ITEMS);
         add(menuItemRv);
@@ -93,15 +62,6 @@ public class CssMenuPanel extends PanelAbstract<CssMenuPanel.ListOfCssMenuItemsM
             menuItemMarkup.add(new CssMenuItemPanel(CssMenuPanel.ID_MENU_ITEM, cssMenuItem));
         }
 
-    }
-
-    static final class StyleAppender extends CssClassAppender {
-
-        private static final long serialVersionUID = 1L;
-
-        public StyleAppender(final Style style) {
-            super(style.getAppendValue());
-        }
     }
 
     /**

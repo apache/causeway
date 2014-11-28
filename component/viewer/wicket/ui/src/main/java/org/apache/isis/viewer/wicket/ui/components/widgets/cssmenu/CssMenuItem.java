@@ -72,7 +72,7 @@ public class CssMenuItem implements Serializable {
             return this;
         }
 
-        public <T extends Page> Builder link(final Class<T> pageClass) {
+        public <T extends Page> Builder link() {
             final AbstractLink link = new SubmitLink(ID_MENU_LINK); 
             return link(link);
         }
@@ -297,7 +297,7 @@ public class CssMenuItem implements Serializable {
             final ObjectAdapterMemento targetAdapterMemento,
             final ObjectAction objectAction,
             final boolean separator,
-            final CssMenuBuilder.CssMenuContext cssMenuContext) {
+            final ActionLinkFactory actionLinkFactory) {
 
         // check visibility
         final AuthenticationSession session = getAuthenticationSession();
@@ -308,7 +308,7 @@ public class CssMenuItem implements Serializable {
         }
 
         // build the link
-        final LinkAndLabel linkAndLabel = cssMenuContext.getCssMenuLinkFactory().newLink(
+        final LinkAndLabel linkAndLabel = actionLinkFactory.newLink(
                 targetAdapterMemento, objectAction, PageAbstract.ID_MENU_LINK
         );
         if(linkAndLabel==null) {
@@ -338,26 +338,6 @@ public class CssMenuItem implements Serializable {
         return builder;
     }
 
-
-    /**
-     * Creates a {@link Builder} for a submenu item where the provided {@link ActionLinkFactory} is able to provide the target adapter.
-     */
-    public Builder newSubMenuItem(
-            final ObjectAction objectAction,
-            final CssMenuBuilder.CssMenuContext cssMenuContext) {
-
-        final LinkAndLabel linkAndLabel = cssMenuContext.getCssMenuLinkFactory().newLink(null, objectAction, PageAbstract.ID_MENU_LINK);
-
-        final AbstractLink link = linkAndLabel.getLink();
-        final String actionLabel = linkAndLabel.getLabel();
-        Builder builder = this.newSubMenuItem(actionLabel)
-                              .link(link)
-                              .prototyping(linkAndLabel.isPrototype())
-                              .returnsBlobOrClob(linkAndLabel.isBlobOrClob())
-                              .withFacet(objectAction.getFacet(CssClassFacet.class))
-                              .withFacet(objectAction.getFacet(CssClassFaFacet.class));
-        return builder;
-    }
 
     // //////////////////////////////////////////////////////////////
     // Build wicket components from the menu item.
