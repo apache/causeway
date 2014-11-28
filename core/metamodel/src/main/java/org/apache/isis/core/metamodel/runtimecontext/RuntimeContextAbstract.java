@@ -24,8 +24,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 import com.google.common.collect.Lists;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.metamodel.services.ServicesInjectorDelegator;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpiDelegator;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -36,7 +35,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderSpiAware, ServicesInjectorAware {
 
     private final SpecificationLoaderDelegator specificationLookupDelegator = new SpecificationLoaderDelegator();
-    protected final ServicesInjectorDelegator servicesInjectorDelegator = new ServicesInjectorDelegator();
+    protected final ServicesInjectorSpiDelegator servicesInjectorDelegator = new ServicesInjectorSpiDelegator();
 
     private Properties properties;
 
@@ -172,7 +171,7 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
     //region > injected services
     @Override
     public void setServicesInjector(ServicesInjector servicesInjector) {
-        this.servicesInjectorDelegator.setServicesInjectorSpi((ServicesInjectorSpi) servicesInjector);
+        this.servicesInjectorDelegator.setServicesInjectorSpi((org.apache.isis.core.metamodel.services.ServicesInjectorSpi) servicesInjector);
     }
     //endregion
 

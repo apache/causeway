@@ -19,17 +19,18 @@
 
 package org.apache.isis.core.metamodel.spec;
 
-import java.util.List;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 public interface SpecificationLoaderSpi extends ApplicationScopedComponent, DebuggableWithTitle, SpecificationLoader {
 
     /**
      * Specify the services to pro-actively prime the cache, and to initialize them also.
+     * @param services
      */
-    void setServices(List<Object> services);
+    void setServiceInjector(ServicesInjectorSpi services);
 
     /**
      * Populated as a result of running metamodel validation after all specs have been loaded.

@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
-import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.*;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
@@ -140,15 +140,14 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     private final SpecificationTraverser specificationTraverser = new SpecificationTraverser();
 
-    /**
-     * @see #setServices(List)
-     */
-    private List<Object> services;
-
     private final MetaModelValidator metaModelValidator;
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
 
     private boolean initialized = false;
+    /**
+     * Populated in {@link SpecificationLoaderSpi#setServiceInjector(org.apache.isis.core.metamodel.services.ServicesInjectorSpi)}.
+     */
+    private ServicesInjectorSpi servicesInjector;
 
 
     // /////////////////////////////////////////////////////////////
@@ -190,7 +189,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     /**
      * Initializes and wires up, and primes the cache based on any service
-     * classes that may have been {@link #setServices(List) injected}.
+     * classes that may have been {@link SpecificationLoaderSpi#setServiceInjector(org.apache.isis.core.metamodel.services.ServicesInjectorSpi) injected}.
      */
     @Override
     public void init() {
@@ -536,10 +535,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         }
         if (ServicesInjectorAware.class.isAssignableFrom(candidateClass)) {
             final ServicesInjectorAware cast = ServicesInjectorAware.class.cast(candidate);
-            final ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault();
-            servicesInjector.setSpecificationLookup(this);
-            servicesInjector.setServices(this.services);
-            cast.setServicesInjector(servicesInjector);
+            cast.setServicesInjector(this.servicesInjector);
         }
     }
 
@@ -619,7 +615,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     // ////////////////////////////////////////////////////////////////////
 
     public List<Class<?>> getServiceClasses() {
-        List<Class<?>> serviceClasses = Lists.transform(services, new Function<Object, Class<?>>(){
+        List<Class<?>> serviceClasses = Lists.transform(this.servicesInjector.getRegisteredServices(), new Function<Object, Class<?>>(){
             public Class<?> apply(Object o) {
                 return o.getClass();
             }
@@ -627,13 +623,9 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         return Collections.unmodifiableList(serviceClasses);
     }
 
-    private List<Object> getServices() {
-        return services;
-    }
-    
     @Override
-    public void setServices(final List<Object> services) {
-        this.services = services;
+    public void setServiceInjector(final ServicesInjectorSpi services) {
+        servicesInjector = services;
     }
 
     // ////////////////////////////////////////////////////////////////////

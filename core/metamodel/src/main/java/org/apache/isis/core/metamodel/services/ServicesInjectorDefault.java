@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 
 /**
  * Must be a thread-safe.
@@ -71,7 +72,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
      * @param injectorMethodEvaluator
      */
     public ServicesInjectorDefault(InjectorMethodEvaluator injectorMethodEvaluator) {
-        this.injectorMethodEvaluator = injectorMethodEvaluator;
+        this.injectorMethodEvaluator = injectorMethodEvaluator != null ? injectorMethodEvaluator : new InjectorMethodEvaluatorDefault();
     }
 
 //region > init, shutdown
@@ -94,6 +95,11 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
         this.services.clear();
         addServices(services);
         autowireServicesAndContainer();
+    }
+
+    public ServicesInjectorDefault withServices(final List<Object> services) {
+        setServices(services);
+        return this;
     }
 
     @Override

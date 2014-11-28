@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.services;
 
 import java.util.List;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -30,7 +29,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
  * The repository of services, also able to inject into any object.
  * 
  * <p>
- * Can be considered a mutable SPI to the {@link ServicesInjector} immutable API.
+ * Can be considered a mutable SPI to the {@link org.apache.isis.core.metamodel.runtimecontext.ServicesInjector} immutable API.
  */
 public interface ServicesInjectorSpi extends ApplicationScopedComponent, Injectable, ServicesInjector {
 

@@ -29,6 +29,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAbstract;
@@ -121,7 +122,7 @@ public class ProgrammableReflector extends SpecificationLoaderAbstract implement
     }
 
     @Override
-    public void setServices(final List<Object> services) {
+    public void setServiceInjector(final ServicesInjectorSpi serviceInjector) {
         throw new NotYetImplementedException();
     }
 

@@ -35,6 +35,7 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -184,7 +185,10 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
      */
     @Override
     public void init() {
-        specificationLoaderSpi.setServices(serviceList);
+        final ServicesInjectorSpi servicesInjector = persistenceSessionFactory.getServicesInjector();
+        servicesInjector.setServices(serviceList);
+        specificationLoaderSpi.setServiceInjector(servicesInjector);
+
         specificationLoaderSpi.init();
 
         // must come after init of spec loader.

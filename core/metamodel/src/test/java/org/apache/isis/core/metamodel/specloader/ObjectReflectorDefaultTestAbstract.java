@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.unittestsupport.jmocking.InjectIntoJMockAction;
@@ -79,7 +80,7 @@ public abstract class ObjectReflectorDefaultTestAbstract {
                         new HashSet<FacetDecorator>(),
                         new MetaModelValidatorDefault());
         reflector.setRuntimeContext(runtimeContext);
-        reflector.setServices(Collections.<Object>singletonList(new DomainObjectContainerDefault()));
+        reflector.setServiceInjector(new ServicesInjectorDefault().withServices(Collections.<Object>singletonList(new DomainObjectContainerDefault())));
         reflector.init();
         
         specification = loadSpecification(reflector);

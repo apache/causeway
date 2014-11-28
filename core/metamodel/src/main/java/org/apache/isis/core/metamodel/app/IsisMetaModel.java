@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidator
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -134,7 +135,9 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         ensureNotInitialized();
         reflector = new ObjectReflectorDefault(configuration, programmingModel, facetDecorators, metaModelValidator);
 
-        reflector.setServices(services);
+        final ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault();
+        servicesInjector.setServices(services);
+        reflector.setServiceInjector(servicesInjector);
         
         runtimeContext.injectInto(reflector);
         reflector.injectInto(runtimeContext);

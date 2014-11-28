@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.object.viewmodel.annotation;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.memento.MementoService;

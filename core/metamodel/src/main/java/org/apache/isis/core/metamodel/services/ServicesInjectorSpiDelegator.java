@@ -23,11 +23,11 @@ import java.util.List;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class ServicesInjectorDelegator implements ServicesInjector {
+public class ServicesInjectorSpiDelegator implements ServicesInjector {
 
-    private ServicesInjectorSpi servicesInjectorSpi;
+    private org.apache.isis.core.metamodel.services.ServicesInjectorSpi servicesInjectorSpi;
 
-    public void setServicesInjectorSpi(ServicesInjectorSpi servicesInjectorSpi) {
+    public void setServicesInjectorSpi(org.apache.isis.core.metamodel.services.ServicesInjectorSpi servicesInjectorSpi) {
         this.servicesInjectorSpi = servicesInjectorSpi;
         servicesInjectorSpi.init();
     }
