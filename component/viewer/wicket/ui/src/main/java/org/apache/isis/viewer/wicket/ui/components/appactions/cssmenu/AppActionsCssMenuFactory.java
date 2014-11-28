@@ -46,10 +46,9 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFac
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ApplicationActionsPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem.Builder;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel;
 
 /**
- * {@link ComponentFactory} for a {@link CssMenuPanel} to represent the
+ * {@link ComponentFactory} for a {@link org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ApplicationActionsPanel} to represent the
  * {@link ApplicationActionsModel application action}s.
  */
 public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {

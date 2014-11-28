@@ -43,13 +43,5 @@ abstract class CssMenuItemPanelAbstract<T extends IModel<?>> extends PanelAbstra
         cssMenuItem.addTo(markupContainer);
     }
 
-    /**
-     * Because there is no {@link ComponentFactory} for (the subclasses of) this component,
-     * its CSS must be contributed in this way instead (also meaning its CSS is not bundled).
-     */
-    @Override
-    public void renderHead(final IHeaderResponse response) {
-        PanelUtil.renderHead(response, this.getClass());
-    }
 
 }
