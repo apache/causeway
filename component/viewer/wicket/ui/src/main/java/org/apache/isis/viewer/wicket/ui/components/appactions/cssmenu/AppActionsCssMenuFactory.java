@@ -79,7 +79,6 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
 
     public AppActionsCssMenuFactory() {
         super(ComponentType.APPLICATION_ACTIONS, ApplicationActionsPanel.class);
-        //super(ComponentType.APPLICATION_ACTIONS, CssMenuPanel.class);
     }
 
     /**

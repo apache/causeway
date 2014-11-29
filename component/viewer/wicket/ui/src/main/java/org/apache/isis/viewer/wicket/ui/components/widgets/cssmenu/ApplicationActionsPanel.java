@@ -116,14 +116,15 @@ public class ApplicationActionsPanel extends Panel {
         final List<CssMenuItem> subMenuItems = subMenuItem.getSubMenuItems();
         final List<CssMenuItem> itemsWithSeparators = Lists.newArrayList();
         for (CssMenuItem menuItem : subMenuItems) {
-            if(menuItem.isSeparator()) {
-                // nasty...
-                // ... we add it twice, but mutate it along the way
-                itemsWithSeparators.add(
-                        CssMenuItem.newMenuItem(menuItem.getName() + "-separator")
-                                .separator(menuItem.isSeparator())
-                                .prototyping(menuItem.isPrototyping())
-                                .build());
+            if(menuItem.isSeparator() ) {
+                if(!itemsWithSeparators.isEmpty()) {
+                    // bit nasty... we add a new separator item
+                    itemsWithSeparators.add(
+                            CssMenuItem.newMenuItem(menuItem.getName() + "-separator")
+                                    .separator(menuItem.isSeparator())
+                                    .prototyping(menuItem.isPrototyping())
+                                    .build());
+                }
                 menuItem.setSeparator(false);
             }
             itemsWithSeparators.add(menuItem);
