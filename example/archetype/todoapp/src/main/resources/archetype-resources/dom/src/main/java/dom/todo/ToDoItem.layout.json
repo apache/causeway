@@ -23,13 +23,13 @@
                 "members": {
                     "description": {
                         "typicalLength": { "value": 50 },
-                        "labelAt": { "value": "TOP" }
+                        "propertyLayout": { "labelPosition": "TOP" }
                     },
                     "category": {
-                        "labelAt": { "value": "TOP" }
+                        "propertyLayout": { "labelPosition": "TOP" }
                     },
                     "subcategory": {
-                        "labelAt": { "value": "NONE" },
+                        "propertyLayout": { "labelPosition": "NONE" },
                         "actions": {
                             "updateCategory": {
                                 "named": {
@@ -37,9 +37,8 @@
                                 }
                             },
                             "analyseCategory": {
-                                "cssClassFa": {
-                                     "value": "fa fa-pie-chart"
-                                }
+                                "cssClass": { "value": "btn-default" },
+                                "cssClassFa": { "value": "fa fa-pie-chart" }
                             }
                         }
                     },
@@ -53,6 +52,7 @@
                                 "describedAs": {
                                     "value": "Update this todo item as complete"
                                 },
+                                "cssClass": { "value": "btn-success" },
                                 "cssClassFa": { "value": "fa fa-thumbs-up" }
                             },
                             "notYetCompleted": {
@@ -60,6 +60,7 @@
                                 "describedAs": {
                                     "value": "Update this todo item as not yet complete"
                                 },
+                                "cssClass": { "value": "btn-info" },
                                 "cssClassFa": { "value": "fa fa-thumbs-down" }
                             },
                             "scheduleExplicitly": {
@@ -125,7 +126,7 @@
                         "hidden": {
                             "where": "ALL_TABLES"
                         },
-                        "labelAt": { "value": "TOP" }
+                        "propertyLayout": { "labelPosition": "TOP" }
                     },
                     "attachment": {
                         "hidden": {
@@ -151,10 +152,11 @@
                 "disabled": {},
                 "actions": {
                     "add":{
+                        "cssClass": { "value": "btn-default" },
                         "cssClassFa": { "value": "fa fa-plus-square" }
                     },
                     "remove": {
-                        "cssClass": { "value": "x-caution btn-danger" },
+                        "cssClass": { "value": "x-caution btn-default" },
                         "cssClassFa": { "value": "fa fa-minus-square" }
                     }
                 },
@@ -190,6 +192,7 @@
             "describedAs": {
                 "value": "Create a new todo item from this one"
             },
+            "cssClass": { "value": "btn-default" },
             "cssClassFa": { "value": "fa fa-copy fa-lg" }
         }
     }
