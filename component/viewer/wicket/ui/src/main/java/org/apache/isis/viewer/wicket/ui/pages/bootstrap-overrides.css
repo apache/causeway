@@ -71,6 +71,40 @@
 }
 
 
+
+/* from additionalLinksPanel.css */
+
+span .fa {
+    padding-right: 2px;
+}
+
+.additionalLinkList {
+    float:left;
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+
+ul.additionalLinkList,
+div.additionalLinkList {
+    padding-bottom: 10px;
+}
+
+.standaloneCollectionPanel div.additionalLinkList,
+.standaloneCollectionPanel ul.additionalLinkList,
+.entityCollectionsPanel div.additionalLinkList,
+.entityCollectionsPanel ul.additionalLinkList {
+    padding-bottom: 0px;
+}
+
+
+
+
+
+
+
+
+
 .entityPropertiesPanel .additionalLinks,
 .entityCollectionsPanel .additionalLinksAndSelectorDropDown {
     margin-top: -4px;
@@ -104,6 +138,7 @@ th > a > div > strong {
 .form-group {
     margin-bottom: 0;
 }
+
 
 div.label-left.form-group {
     width: 100%;
@@ -186,6 +221,12 @@ div.label-left .choicesPlaceholder {
     margin-left: 0px;
     margin-right: -25px;
 }
+
+.form-horizontal.inputForm .form-group.label-none,
+.form-horizontal.inputForm .form-group.label-top {
+    margin-left: -10px;
+}
+
 
 .modal-body textarea {
     resize: none;

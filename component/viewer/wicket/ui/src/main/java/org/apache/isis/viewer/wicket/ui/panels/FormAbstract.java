@@ -52,29 +52,6 @@ public abstract class FormAbstract<T> extends Form<T> implements IHeaderContribu
         super(id, model);
     }
 
-    // ///////////////////////////////////////////////////////////////////
-    // IHeaderContributor
-    // ///////////////////////////////////////////////////////////////////
-
-    /**
-     * Automatically reference any corresponding CSS.
-     */
-    @Override
-    public void renderHead(final IHeaderResponse response) {
-        super.renderHead(response);
-        renderHead(response, this.getClass());
-    }
-
-    /**
-     * Factored out to allow non-concrete subclasses to additionally render
-     * their own CSS if required.
-     */
-    protected void renderHead(final IHeaderResponse response, final Class<?> cls) {
-        final String url = cls.getSimpleName() + ".css";
-        //response.renderCSSReference(new PackageResourceReference(cls, url));
-        response.render(CssHeaderItem.forReference(new CssResourceReference(cls, url)));
-    }
-
 
     // ///////////////////////////////////////////////////////////////////
     // process() override

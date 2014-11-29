@@ -17,6 +17,34 @@
  *  under the License.
  */
 
+
+.simpleClipboardPanel form {
+	margin: 20px;
+	background-color: white;
+}
+
+.simpleClipboardPanel div.inner {
+	margin: 20px;
+	width:640px;
+}
+
+.simpleClipboardPanel div.inner p.scalarName {
+	padding-top: 40px;
+	padding-bottom: 10px;
+}
+
+.simpleClipboardPanel form input.textField {
+	width:600px;
+	margin-bottom: 60px;
+}
+
+.simpleClipboardPanel form input.ok {
+	margin-bottom: 20px;
+}
+
+
+
+
 .mandatory.scalarName:after,
 .mandatory.collectionName:after {
 	content: "*";
@@ -28,3 +56,5 @@
 .navbar .powered-by {
     margin-right: 0px;
 }
+
+
