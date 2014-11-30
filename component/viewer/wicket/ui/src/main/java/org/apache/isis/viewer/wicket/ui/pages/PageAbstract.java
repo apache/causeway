@@ -42,6 +42,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
+import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -180,6 +181,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             addUserName(themeDiv);
             addLogoutLink(themeDiv);
             addAboutLink(themeDiv);
+            addDevModeWarning(themeDiv);
             addBreadcrumbs();
             addThemePicker();
 
@@ -296,6 +298,16 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         BookmarkablePageLink<Void> aboutLink = new BookmarkablePageLink<>("aboutLink", AboutPage.class);
         aboutLink.setBody(new ResourceModel("aboutLabel"));
         themeDiv.add(aboutLink);
+    }
+
+    /**
+     * Adds a component that shows a warning sign next to "Powered by: Apache Isis" in development mode
+     * @param themeDiv The parent component
+     */
+    private void addDevModeWarning(MarkupContainer themeDiv) {
+        WebComponent devModeWarning = new WebComponent("devModeWarning");
+        devModeWarning.setVisible(getApplication().usesDevelopmentConfig());
+        themeDiv.add(devModeWarning);
     }
 
     private void addBreadcrumbs() {
