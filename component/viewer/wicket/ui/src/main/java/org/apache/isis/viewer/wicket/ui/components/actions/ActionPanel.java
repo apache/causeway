@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -243,7 +242,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         // so we handle it here.
         try {
             // could be programmatic flushing, so must include in the try... finally
-            final ObjectAdapter resultAdapter = executeActionHandlingApplicationExceptions();
+            final ObjectAdapter resultAdapter = getActionModel().executeHandlingApplicationExceptions();
       
             // flush any queued changes, so concurrency or violation exceptions (if any)
             // will be thrown here
@@ -319,49 +318,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             feedbackForm.error(error);
         } else {
             getMessageBroker().addWarning(error);
-        }
-    }
-
-    /**
-     * Executes the action, handling any {@link RecoverableException}s that
-     * might be encountered.
-     * 
-     * <p>
-     * If an {@link RecoverableException} is encountered, then the application error will be
-     * {@link MessageBroker#setApplicationError(String) set} so that a suitable message can be 
-     * rendered higher up the call stack.
-     * 
-     * <p>
-     * Any other types of exception will be ignored (to be picked up higher up in the callstack)
-     */
-    private ObjectAdapter executeActionHandlingApplicationExceptions() {
-        final ActionModel actionModel = getActionModel();
-        try {
-            ObjectAdapter resultAdapter = actionModel.getObject();
-            return resultAdapter;
-
-        } catch (RuntimeException ex) {
-
-            // TODO: some duplication between this code and ActionLinkFactoryAbstract
-            
-            // see if is an application-defined exception
-            // if so, is converted to an application error,
-            // equivalent to calling DomainObjectContainer#raiseError(...)
-            final RecoverableException appEx = ActionModel.getApplicationExceptionIfAny(ex);
-            if (appEx != null) {
-                getMessageBroker().setApplicationError(appEx.getMessage());
-
-                // there's no need to set the abort cause on the transaction, it will have already been done
-                // (in IsisTransactionManager#executeWithinTransaction(...)).
-                return null;
-            } 
-            
-            // the ExceptionRecognizers stuff is done in the calling method (because may be triggered
-            // by a flush to the object store (which in most cases won't have happened in the execute of
-            // the action body)
-
-            // not handled, so propagate
-            throw ex;
         }
     }
 

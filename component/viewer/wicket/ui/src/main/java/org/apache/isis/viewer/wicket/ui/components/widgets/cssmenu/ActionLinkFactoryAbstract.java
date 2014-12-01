@@ -32,11 +32,9 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
-import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
@@ -164,7 +162,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                 @Override
                 protected IRequestHandler getRequestHandler() {
-                    ObjectAdapter resultAdapter = executeActionHandlingApplicationExceptions(actionModel);
+                    ObjectAdapter resultAdapter = actionModel.executeHandlingApplicationExceptions();
                     final Object value = resultAdapter.getObject();
                     return ActionModel.redirectHandler(value);
                 }
@@ -182,7 +180,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
    
                 @Override
                 protected IRequestHandler getRequestHandler() {
-                    ObjectAdapter resultAdapter = executeActionHandlingApplicationExceptions(actionModel);
+                    final ObjectAdapter resultAdapter = actionModel.executeHandlingApplicationExceptions();
                     final Object value = resultAdapter.getObject();
                     return ActionModel.downloadHandler(value);
                 }
@@ -203,33 +201,6 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         return action.getParameterCount() == 0 && action.getReturnType() != null && 
                 (action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Blob.class ||
                 action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Clob.class);
-    }
-    
-    // adapted from similar code in ActionPanel :-(
-    private static ObjectAdapter executeActionHandlingApplicationExceptions(final ActionModel actionModel) {
-        try {
-            return actionModel.getObject();
-
-        } catch (RuntimeException ex) {
-
-            // TODO: some duplication between this code and ActionPanel
-
-            // see if is an application-defined exception
-            // if so, is converted to an application error,
-            // equivalent to calling DomainObjectContainer#raiseError(...)
-            final RecoverableException appEx = ActionModel.getApplicationExceptionIfAny(ex);
-            if (appEx != null) {
-                IsisContext.getMessageBroker().setApplicationError(appEx.getMessage());
-
-                // there's no need to set the abort cause on the transaction, it will have already been done
-                // (in IsisTransactionManager#executeWithinTransaction(...)).
-
-                return null;
-            } 
-
-            // not handled, so propagate
-            throw ex;
-        }
     }
 
     protected LinkAndLabel newLinkAndLabel(final ObjectAction objectAction, final AbstractLink link, final String disabledReasonIfAny) {

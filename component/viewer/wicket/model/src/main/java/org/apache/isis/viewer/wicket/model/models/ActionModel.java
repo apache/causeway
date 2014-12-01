@@ -521,7 +521,46 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return bookmarkPolicy.value() == BookmarkPolicy.AS_ROOT && safeSemantics;
     }
 
-    
+    // //////////////////////////////////////
+
+    /**
+     * Executes the action, handling any {@link RecoverableException}s that
+     * might be encountered.
+     *
+     * <p>
+     * If an {@link RecoverableException} is encountered, then the application error will be
+     * {@link org.apache.isis.core.commons.authentication.MessageBroker#setApplicationError(String) set} so that a suitable message can be
+     * rendered higher up the call stack.
+     *
+     * <p>
+     * Any other types of exception will be ignored (to be picked up higher up in the callstack)
+     */
+    public ObjectAdapter executeHandlingApplicationExceptions() {
+        try {
+            final ObjectAdapter resultAdapter = this.getObject();
+            return resultAdapter;
+
+        } catch (RuntimeException ex) {
+
+            // see if is an application-defined exception
+            // if so, is converted to an application error,
+            // equivalent to calling DomainObjectContainer#raiseError(...)
+            final RecoverableException appEx = getApplicationExceptionIfAny(ex);
+            if (appEx != null) {
+                IsisContext.getMessageBroker().setApplicationError(appEx.getMessage());
+
+                // there's no need to set the abort cause on the transaction, it will have already been done
+                // (in IsisTransactionManager#executeWithinTransaction(...)).
+
+                return null;
+            }
+
+            // not handled, so propagate
+            throw ex;
+        }
+    }
+
+
     // //////////////////////////////////////
     
     public static RecoverableException getApplicationExceptionIfAny(Exception ex) {
