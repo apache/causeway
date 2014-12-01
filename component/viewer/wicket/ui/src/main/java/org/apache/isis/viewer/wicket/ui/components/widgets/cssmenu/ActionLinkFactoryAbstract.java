@@ -26,18 +26,15 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -223,6 +220,10 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             final RecoverableException appEx = ActionModel.getApplicationExceptionIfAny(ex);
             if (appEx != null) {
                 IsisContext.getMessageBroker().setApplicationError(appEx.getMessage());
+
+                // there's no need to set the abort cause on the transaction, it will have already been done
+                // (in IsisTransactionManager#executeWithinTransaction(...)).
+
                 return null;
             } 
 

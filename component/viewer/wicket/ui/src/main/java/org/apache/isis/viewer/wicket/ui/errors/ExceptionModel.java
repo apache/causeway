@@ -18,9 +18,12 @@
  */
 package org.apache.isis.viewer.wicket.ui.errors;
 
+import java.util.Iterator;
 import java.util.List;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
@@ -58,7 +61,13 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
                 this.mainMessage = recognizedMessageIfAny;
             } else {
                 this.recognized =false;
-                this.mainMessage = MAIN_MESSAGE_IF_NOT_RECOGNIZED;
+
+                // see if we can find a NonRecoverableException in the stack trace
+                Iterable<NonRecoverableException> appEx = Iterables.filter(Throwables.getCausalChain(ex), NonRecoverableException.class);
+                Iterator<NonRecoverableException> iterator = appEx.iterator();
+                NonRecoverableException nonRecoverableException = iterator.hasNext() ? iterator.next() : null;
+
+                this.mainMessage = nonRecoverableException != null? nonRecoverableException.getMessage() : MAIN_MESSAGE_IF_NOT_RECOGNIZED;
             }
         }
         stackTraceDetailList = asStackTrace(ex);

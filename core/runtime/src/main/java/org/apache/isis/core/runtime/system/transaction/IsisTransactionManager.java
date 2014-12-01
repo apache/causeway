@@ -46,7 +46,10 @@ import org.apache.isis.core.runtime.system.session.IsisSession;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 public class IsisTransactionManager implements SessionScopedComponent {
 
@@ -139,8 +142,13 @@ public class IsisTransactionManager implements SessionScopedComponent {
      * If a transaction is {@link IsisContext#inTransaction() in progress}, then
      * uses that. Otherwise will {@link #startTransaction() start} a transaction
      * before running the block and {@link #endTransaction() commit} it at the
-     * end. If the closure throws an exception, then will
-     * {@link #abortTransaction() abort} the transaction.
+     * end.
+     *  </p>
+     *
+     * <p>
+     *  If the closure throws an exception, then will {@link #abortTransaction() abort} the transaction if was
+     *  started here, or will ensure that an already-in-progress transaction cannot commit.
+     * </p>
      */
     public void executeWithinTransaction(final TransactionalClosure closure) {
         final boolean initiallyInTransaction = inTransaction();
@@ -157,17 +165,15 @@ public class IsisTransactionManager implements SessionScopedComponent {
         } catch (final RuntimeException ex) {
             closure.onFailure();
             if (!initiallyInTransaction) {
-                // temp TODO fix swallowing of exception
-                // System.out.println(ex.getMessage());
-                // ex.printStackTrace();
                 try {
                     abortTransaction();
                 } catch (final Exception e) {
                     LOG.error("Abort failure after exception", e);
-                    // System.out.println(e.getMessage());
-                    // e.printStackTrace();
                     throw new IsisTransactionManagerException("Abort failure: " + e.getMessage(), ex);
                 }
+            } else {
+                // ensure that this xactn cannot be committed
+                getTransaction().setAbortCause(new IsisException(ex));
             }
             throw ex;
         }
@@ -181,8 +187,13 @@ public class IsisTransactionManager implements SessionScopedComponent {
      * If a transaction is {@link IsisContext#inTransaction() in progress}, then
      * uses that. Otherwise will {@link #startTransaction() start} a transaction
      * before running the block and {@link #endTransaction() commit} it at the
-     * end. If the closure throws an exception, then will
-     * {@link #abortTransaction() abort} the transaction.
+     * end.
+     *  </p>
+     *
+     * <p>
+     *  If the closure throws an exception, then will {@link #abortTransaction() abort} the transaction if was
+     *  started here, or will ensure that an already-in-progress transaction cannot commit.
+     *  </p>
      */
     public <Q> Q executeWithinTransaction(final TransactionalClosureWithReturn<Q> closure) {
         final boolean initiallyInTransaction = inTransaction();
@@ -201,6 +212,9 @@ public class IsisTransactionManager implements SessionScopedComponent {
             closure.onFailure();
             if (!initiallyInTransaction) {
                 abortTransaction();
+            } else {
+                // ensure that this xactn cannot be committed
+                getTransaction().setAbortCause(new IsisException(ex));
             }
             throw ex;
         }

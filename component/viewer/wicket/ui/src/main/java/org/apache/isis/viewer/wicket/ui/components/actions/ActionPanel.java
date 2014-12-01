@@ -351,8 +351,8 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             if (appEx != null) {
                 getMessageBroker().setApplicationError(appEx.getMessage());
 
-                // there's no need to abort the transaction, it will have already been done
-                // (in IsisTransactionManager#executeWithinTransaction(...)). 
+                // there's no need to set the abort cause on the transaction, it will have already been done
+                // (in IsisTransactionManager#executeWithinTransaction(...)).
                 return null;
             } 
             
