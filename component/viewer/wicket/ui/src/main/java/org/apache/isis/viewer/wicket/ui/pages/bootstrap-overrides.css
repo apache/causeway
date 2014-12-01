@@ -17,6 +17,10 @@
  *  under the License.
  */
 
+body {
+    padding-top: 60px;
+}
+
 .table .form-control:disabled {
     background-color: transparent;
     border: none;
@@ -61,6 +65,374 @@
 .pagination {
     margin: 0;
 }
+
+
+
+/* from ActionPromptHeaderPanel */
+
+.entityIconAndTitlePanel img {
+    width: 24px;
+    height: 24px;
+}
+
+.entityIconAndTitlePanel span.actionName {
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+
+/* from SimpleClipboardPanel */
+
+.simpleClipboardPanel form {
+    margin: 20px;
+    background-color: white;
+}
+
+.simpleClipboardPanel div.inner {
+    margin: 20px;
+    width:640px;
+}
+
+.simpleClipboardPanel div.inner p.scalarName {
+    padding-top: 40px;
+    padding-bottom: 10px;
+}
+
+.simpleClipboardPanel form input.textField {
+    width:600px;
+    margin-bottom: 60px;
+}
+
+.simpleClipboardPanel form input.ok {
+    margin-bottom: 20px;
+}
+
+
+
+/* from CollectionContentsAsAjaxTablePanel.css */
+
+.collectionContentsAsAjaxTablePanel table.contents {
+    font-size: 0.9em;
+    width: 100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents caption { text-align: left; }
+.collectionContentsAsAjaxTablePanel table.contents tr {
+}
+
+
+.collectionContentsAsAjaxTablePanel table.contents tr td {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+.collectionContentsAsAjaxTablePanel table.contents tr th,
+.collectionContentsAsAjaxTablePanel table.contents tr th a span {
+    text-align: left;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tr th a {
+    font-weight: normal;
+}
+.collectionContentsAsAjaxTablePanel table.contents #message {
+    padding-left: 3px;
+}
+.collectionContentsAsAjaxTablePanel table.contents caption {
+    padding-bottom: 2px;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents input:disabled {
+    background-color: transparent;
+    border: none;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents .javaMathBigDecimalPanel,
+.collectionContentsAsAjaxTablePanel table.contents .javaMathBigIntegerPanel,
+.collectionContentsAsAjaxTablePanel table.contents .bytePanel,
+.collectionContentsAsAjaxTablePanel table.contents .shortPanel,
+.collectionContentsAsAjaxTablePanel table.contents .integerPanel,
+.collectionContentsAsAjaxTablePanel table.contents .longPanel,
+.collectionContentsAsAjaxTablePanel table.contents .floatPanel,
+.collectionContentsAsAjaxTablePanel table.contents .doublePanel {
+    text-align: right;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tbody td,
+.collectionContentsAsAjaxTablePanel table.contents thead th {
+    padding:5px;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigatorLabel {
+    float: left;
+}
+
+
+.collectionContentsAsAjaxTablePanel table.contents tr.navigation div.navigator {
+    float: right;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents img {
+    width: 16px;
+    height: 16px;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents tbody .togglebox-column {
+    width: 2%;
+}
+.collectionContentsAsAjaxTablePanel table.contents tbody .title-column {
+    text-align: center;
+    width: 3%;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents a:hover {
+    text-decoration:underline;
+}
+
+.collectionContentsAsAjaxTablePanel table.contents .entityLinkSelect2Panel .entityImage {
+    padding-right:6px;
+}
+
+.collectionContentsAsAjaxTablePanel table tfoot {
+    margin-top:20px;
+}
+
+.collectionContentsAsAjaxTablePanel table tfoot tr td {
+    padding:20px 4px 0;
+    /*background-color:#FFFFFF !important;*/
+}
+
+.collectionContentsAsAjaxTablePanel .entityActions {
+    margin-top: -1px;
+    margin-bottom: -10px;
+    float: left;
+    padding:0 0;
+}
+
+/* bootstrap seems to set to 'pointer' */
+.collectionContentsAsAjaxTablePanel label:hover {
+    /*cursor: default;*/
+}
+
+.collectionContentsAsAjaxTablePanel div input[type=text][disabled] {
+    padding: 0;
+}
+
+.collectionContentsAsAjaxTablePanel table {
+    border: none;
+}
+
+.collectionContentsAsAjaxTablePanel table tr td:first-child,
+.collectionContentsAsAjaxTablePanel table tr th:first-child {
+    border-left: none;
+}
+
+.collectionContentsAsAjaxTablePanel table tr th:last-child,
+.collectionContentsAsAjaxTablePanel table tr td:last-child {
+    border-right: none;
+}
+
+.collectionContentsAsAjaxTablePanel .table-responsive {
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.collectionContentsAsAjaxTablePanel table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.collectionContentsAsAjaxTablePanel table tfoot tr:first-child td {
+    border-top: none;
+    border-bottom: none;
+}
+
+.collectionContentsAsAjaxTablePanel .table {
+    margin-bottom: 0px;
+}
+
+
+/* from CollectionContentsMultipleViewsPanel.css */
+/* AND ALSO duplicated in from EntityLinksSelectorPanel.css */
+
+.linksSelectorPanel .viewLinks {
+    float:right;
+    display:block;
+}
+
+.linksSelectorPanel ul.dropdown-menu {
+    min-width: 0;
+}
+
+.linksSelectorPanel ul.dropdown-menu li.viewItem {
+    min-width: 0;
+}
+
+.linksSelectorPanel ul.viewList li.viewItem:first-child span {
+    border-radius:4px 0 0 4px;
+    -moz-border-radius:4px 0 0 4px;
+    -webkit-border-radius:4px 0 0 4px;
+}
+
+.linksSelectorPanel ul.viewList li.viewItem:last-child span {
+    border-radius:0 4px 4px 0;
+    -moz-border-radius:0 4px 4px 0;
+    -webkit-border-radius:0 4px 4px 0;
+}
+
+
+.linksSelectorPanel .link-selector-panel-invisible {
+    display:none;
+}
+
+.linksSelectorPanel .list-inline {
+    margin-left: 0;
+}
+
+.linksSelectorPanel .list-inline li {
+    padding-left: 0;
+}
+
+
+.collectionContentsLinksSelectorPanel select {
+    margin-bottom: 1em;
+}
+
+
+/* from CollectionContentsAsSummary */
+
+.collectionContentsAsSummary .propertyNameCell,
+.collectionContentsAsSummary .aggregatesCell {
+    vertical-align: middle;
+}
+
+.collectionContentsAsSummary .aggregateName {
+    font-style: normal;
+    text-align: left;
+    font-weight: bold !important;
+    font-size: 0.9em;
+    padding-left: 20px;
+    padding-right: 10px;
+    vertical-align: middle;
+}
+
+.collectionContentsAsSummary .numberValue {
+    text-align: right;
+    width: 80px;
+}
+
+.collectionContentsAsSummary .chart {
+    margin-left: 30px;
+    display: inline-block;
+    min-width: 720px;
+}
+
+a span.ViewLinkItem.summary {
+    background-image:url("icon_summary_on.png");
+    background-position: center center;
+    background-repeat:no-repeat;
+}
+
+span.ViewLinkItem.summary {
+    background-image:url("icon_summary_off.png");
+    background-position: center center;
+    background-repeat:no-repeat;
+}
+
+
+/* from EntityHeaderPanel.css */
+
+.entityHeaderPanel {
+    clear:both;
+    padding-top:10px;
+    display:block;
+}
+
+div.entityHeaderPanel .iconAndTitle{
+    float: left;
+    padding:0;
+    padding-bottom: 5px;
+    width: 100%;
+}
+
+div.entityHeaderPanel .iconAndTitleLabel {
+    float: left;
+}
+
+div.entityHeaderPanel .entityActions .cssMenuPanel .cssMenuItems:first-child {
+    float: left;
+    margin-top: 3px;
+    margin-left: 20px;
+}
+
+.entityHeaderPanel .entityImage {
+    width: 32px;
+    height: 32px;
+    vertical-align:text-bottom;
+}
+
+.entityHeaderPanel .entityTitle {
+    font-size: 1.8em;
+    font-weight:normal;
+    text-decoration:none;
+}
+
+
+/* from BreadcrumbPanel.css */
+
+.breadcrumbPanel {
+    display: inline-block;
+    width: 300px;
+}
+
+
+/* from ContainedButtonPanel */
+
+span.containedButtonPanel {
+    display: inline;
+}
+
+.containedButtonPanel form {
+    display: inline;
+}
+
+
+/* from ZeroClipboardPanel */
+
+.zeroClipboardPanel .subscribingLink {
+    display: none;
+}
+
+.zeroClipboardPanel a:hover {
+    text-decoration: none;
+}
+
+.copyLink {
+    visibility: hidden;
+}
+
+
+/* other */
+
+.mandatory.scalarName:after,
+.mandatory.collectionName:after {
+    content: "*";
+    font-weight:bold;
+    color: #c2270d;
+}
+
+
+.navbar .powered-by {
+    margin-right: 0px;
+}
+
+
+
+
+
+
+/* from entityPropertiesPanel */
 
 
 .entityPropertiesPanel .properties.panel-body {
@@ -119,9 +491,7 @@ div.additionalLinkList {
     margin-bottom: 0px;
 }
 
-body {
-    padding-top: 60px;
-}
+
 
 .nav > li > a {
     padding-left: 10px;
@@ -240,6 +610,9 @@ div.label-left .choicesPlaceholder {
 }
 .standaloneCollectionPanel .selectorDropdown {
     margin-top: -4px;
+}
+.standaloneCollectionPanel div.iconAndTitle {
+    min-height: 45px;
 }
 
 .referencePanel .entityLinkSelect2Panel .entityImage {
