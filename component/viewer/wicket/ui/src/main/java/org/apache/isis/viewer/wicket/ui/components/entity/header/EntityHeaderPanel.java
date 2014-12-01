@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.entity.header;
 
 import java.util.List;
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -35,7 +34,6 @@ import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLin
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.EntityActionUtil;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 /**
  * {@link PanelAbstract Panel} representing the summary details (title, icon and
@@ -94,14 +92,6 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> {
             permanentlyHide(ID_ENTITY_ACTIONS);
         }
     }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-
-        PanelUtil.renderHead(response, getClass());
-    }
-
 
 
     // ///////////////////////////////////////////////

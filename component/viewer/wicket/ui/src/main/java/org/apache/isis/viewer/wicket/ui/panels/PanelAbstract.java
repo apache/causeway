@@ -21,11 +21,9 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
@@ -34,7 +32,6 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
@@ -103,32 +100,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
         Components.permanentlyHide(this, ids);
     }
 
-    // ///////////////////////////////////////////////////////////////////
-    // Header Contributors
-    // ///////////////////////////////////////////////////////////////////
 
-    /**
-     * Renders the corresponding CSS for this panel.
-     *
-     * <p>
-     * For most subclasses of {@link PanelAbstract} - specifically those that have their own {@link ComponentFactory},
-     * it is additionally the responsibility (via {@link ComponentFactory#getCssResourceReference()}) of the factory
-     * to declare the {@link CssResourceReference}(s) to be included.  These are then all bundled up into
-     * a single unit, as part of the application bootstrapping (<tt>IsisWicketApplication#init</tt>).
-     *
-     * <p>
-     * This is done because some browsers (we're looking at you, IE!) have a limit of only 31 CSS files.
-     *
-     * <p>
-     * For subclasses that do not have a {@link ComponentFactory}, their CSS will simply be referenced standalone.
-     */
-    @Override
-    public void renderHead(final IHeaderResponse response) {
-        // TODO: mgrigorov remove this stuff once happy no longer needed at all, plus any CSS of panels that used to rely on this.
-//        PanelUtil.renderHead(response, this.getClass());
-    }
-
-    
     // ///////////////////////////////////////////////////////////////////
     // Hint support
     // ///////////////////////////////////////////////////////////////////

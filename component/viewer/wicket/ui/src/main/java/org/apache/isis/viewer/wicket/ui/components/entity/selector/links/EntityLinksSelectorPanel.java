@@ -33,7 +33,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -53,7 +52,6 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
@@ -382,13 +380,6 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel> impleme
 
     protected List<ComponentFactory> ordered(List<ComponentFactory> otherFactories) {
         return otherFactories;
-    }
-
-
-    @Override
-    public void renderHead(final IHeaderResponse response) {
-        super.renderHead(response);
-        PanelUtil.renderHead(response, EntityLinksSelectorPanel.class);
     }
 
 

@@ -28,7 +28,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -43,7 +42,6 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.ObjectAdapterMementoProviderAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2ChoiceUtil;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements ScalarModelWithPending {
@@ -225,13 +223,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
             select2Field.remove(b);
         }
         select2Field.add(behavior);
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-
-        PanelUtil.renderHead(response, ValueChoicesSelect2Panel.class);
     }
 
     // //////////////////////////////////////

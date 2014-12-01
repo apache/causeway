@@ -24,7 +24,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.IEvent;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -37,7 +36,6 @@ import org.apache.isis.viewer.wicket.ui.components.collection.selector.Collectio
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
 
@@ -91,7 +89,7 @@ public class CollectionContentsMultipleViewsPanel
     private void addUnderlyingViews() {
         final EntityCollectionModel model = getModel();
 
-        final CollectionSelectorPanel selectorDropdownPanelIfAny = getSelectorDropdownPanel();
+        final CollectionSelectorPanel selectorDropdownPanelIfAny = CollectionSelectorProvider.Util.getCollectionSelectorProvider(this);
         final int selected = selectorDropdownPanelIfAny != null
                 ? selectorHelper.honourViewHintElseDefault(selectorDropdownPanelIfAny)
                 : 0;
@@ -141,7 +139,7 @@ public class CollectionContentsMultipleViewsPanel
         final UiHintContainer uiHintContainer = uiHintEvent.getUiHintContainer();
 
         int underlyingViewNum = 0;
-        final CollectionSelectorPanel selectorDropdownPanel = this.getSelectorDropdownPanel();
+        final CollectionSelectorPanel selectorDropdownPanel = CollectionSelectorProvider.Util.getCollectionSelectorProvider(this);
         if(selectorDropdownPanel == null) {
             // not expected, because this event shouldn't be called.
             // but no harm in simply returning...
@@ -194,12 +192,6 @@ public class CollectionContentsMultipleViewsPanel
         component.add(modifier);
     }
 
-    @Override
-    public void renderHead(final IHeaderResponse response) {
-        super.renderHead(response);
-        PanelUtil.renderHead(response, CollectionContentsMultipleViewsPanel.class);
-    }
-
 
 
     @Override
@@ -212,22 +204,5 @@ public class CollectionContentsMultipleViewsPanel
         }
     }
 
-    /**
-     * Searches up the component hierarchy looking for a parent that implements
-     * {@link org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider}.
-     *
-     * @return the panel, or null (if there are no alternative views)
-     */
-    private CollectionSelectorPanel getSelectorDropdownPanel() {
-        Component component = this;
-        while(component != null) {
-            if(component instanceof CollectionSelectorProvider) {
-                final CollectionSelectorPanel selectorDropdownPanelIfAny = ((CollectionSelectorProvider) component).getSelectorDropdownPanel();
-                return selectorDropdownPanelIfAny;
-            }
-            component = component.getParent();
-        }
-        throw new IllegalStateException("Could not locate parent that implements HasSelectorDropdownPanel");
-    }
 
 }

@@ -25,17 +25,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.List;
-
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.AbstractItem;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectAdapterUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -44,7 +40,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
@@ -206,10 +201,4 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
         return model.getCount();
     }
 
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-
-        PanelUtil.renderHead(response, CollectionContentsAsSummary.class);
-    }
 }

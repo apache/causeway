@@ -19,21 +19,12 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.checkbox;
 
-import java.util.List;
-
-import com.google.common.collect.Lists;
-
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
-
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 /**
  * A button contained within its own form.
@@ -47,7 +38,7 @@ public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
     private static final String ID_TOGGLEBOX = "togglebox";
 
     private final AjaxCheckBox checkbox;
-    private final List<Component> componentsToRerender = Lists.newArrayList();
+//    private final List<Component> componentsToRerender = Lists.newArrayList();
 
     public ContainedToggleboxPanel(final String id) {
         super(id);
@@ -68,11 +59,12 @@ public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
         form.add(checkbox);
     }
 
-    public void addComponentToRerender(final Component component) {
-        component.setOutputMarkupPlaceholderTag(true);
-        componentsToRerender.add(component);
-    }
- 
+
+//    public void addComponentToRerender(final Component component) {
+//        component.setOutputMarkupPlaceholderTag(true);
+//        componentsToRerender.add(component);
+//    }
+
     /**
      * Hook method for (typically anonymous) subclasses to override.
      */
@@ -86,15 +78,6 @@ public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
     public void toggle(AjaxRequestTarget target) {
         checkbox.setModelObject(!checkbox.getModelObject());
         onSubmit(target);
-    }
-    
-    /**
-     * Because there is no {@link ComponentFactory} for this component,
-     * its CSS must be contributed in this way instead (also meaning its CSS is not bundled).
-     */
-    @Override
-    public void renderHead(final IHeaderResponse response) {
-        PanelUtil.renderHead(response, this.getClass());
     }
     
 }

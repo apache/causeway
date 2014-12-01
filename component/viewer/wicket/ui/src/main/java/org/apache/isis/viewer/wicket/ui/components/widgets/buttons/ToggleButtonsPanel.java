@@ -20,14 +20,9 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.buttons;
 
 import java.io.Serializable;
-
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.head.IHeaderResponse;
-
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 /**
  * Abstraction of show/hide, ie two buttons only one of which is visible.
@@ -148,15 +143,6 @@ public class ToggleButtonsPanel extends PanelAbstract<EntityModel> {
             component2.setVisible(flag);
         }
     }
-    
-    /**
-     * Because there is no {@link ComponentFactory} for this component,
-     * its CSS must be contributed in this way instead (also meaning its CSS is not bundled).
-     */
-    @Override
-    public void renderHead(final IHeaderResponse response) {
-        PanelUtil.renderHead(response, this.getClass());
-    }
 
-    
+
 }
