@@ -91,19 +91,19 @@ public class EventBusServiceDefault extends EventBusService {
                 final Phase phase = interactionEvent.getPhase();
                 switch (phase) {
                 case HIDE:
-                    LOG.warn("Exception '%s' (%s) thrown during HIDE phase, to be safe will veto (hide) the interaction event");
+                    LOG.warn("Exception thrown during HIDE phase, to be safe will veto (hide) the interaction event, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
                     interactionEvent.hide();
                     break;
                 case DISABLE:
-                    LOG.warn("Exception '%s' (%s) thrown during DISABLE phase, to be safe will veto (disable) the interaction event");
+                    LOG.warn("Exception thrown during DISABLE phase, to be safe will veto (disable) the interaction event, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
                     interactionEvent.disable(exception.getMessage()!=null?exception.getMessage(): exception.getClass().getName() + " thrown.");
                     break;
                 case VALIDATE:
-                    LOG.warn("Exception '%s' (%s) thrown during VALIDATE phase, to be safe will veto (invalidate) the interaction event");
+                    LOG.warn("Exception thrown during VALIDATE phase, to be safe will veto (invalidate) the interaction event, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
                     interactionEvent.invalidate(exception.getMessage()!=null?exception.getMessage(): exception.getClass().getName() + " thrown.");
                     break;
                 case EXECUTING:
-                    LOG.warn("Exception '%s' (%s) thrown during EXECUTING phase, to be safe will abort the transaction");
+                    LOG.warn("Exception thrown during EXECUTING phase, to be safe will abort the transaction, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
                     abortTransaction(exception);
                     break;
                 case EXECUTED:
