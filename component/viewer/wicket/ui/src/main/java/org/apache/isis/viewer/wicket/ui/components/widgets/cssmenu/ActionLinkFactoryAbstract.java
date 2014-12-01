@@ -27,7 +27,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -60,17 +59,6 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
     private static final long serialVersionUID = 1L;
 
-    public static void addTargetBlankIfActionReturnsUrl(final AbstractLink link, final ObjectAction action) {
-        final ObjectSpecification returnType = action.getReturnType();
-        if(returnType != null && "java.net.URL".equals(returnType.getFullIdentifier())) {
-            link.add(new AttributeAppender("target", Model.of("_blank")));
-            link.add(new CssClassAppender("noVeil"));
-        }
-    }
-    
-    /**
-     * Either creates a link for the action be rendered in a {@link ModalWindow}.
-     */
     protected AbstractLink newLink(
             final String linkId,
             final ObjectAdapter objectAdapter,
@@ -86,10 +74,11 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             @Override
             public void onClick(AjaxRequestTarget target) {
 
-                final ActionPrompt actionPrompt = ActionPromptProvider.Util.getFrom(getPage()).getActionPrompt();
                 if(ajaxDeferredBehaviour != null) {
                     ajaxDeferredBehaviour.initiate(target);
                 } else {
+                    final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(getPage());
+                    final ActionPrompt actionPrompt = promptProvider.getActionPrompt();
                     ActionPromptHeaderPanel titlePanel = new ActionPromptHeaderPanel(actionPrompt.getTitleId(), actionModel);
                     final ActionPanel actionPanel =
                             (ActionPanel) getComponentFactoryRegistry().createComponent(
