@@ -49,7 +49,7 @@ public class DateConverterForJavaSqlTimestamp extends DateConverterForJavaAbstra
             return new java.sql.Timestamp(newSimpleDateFormatUsingDateTimePattern().parse(valueStr).getTime());
         } catch (ParseException ex) {
             try {
-                return new java.sql.Timestamp(newSimpleDateFormatUsingDatePattern().parse(valueStr).getTime());
+                return new java.sql.Timestamp(newSimpleDateFormatUsingDateTimePattern().parse(valueStr).getTime());
             } catch (ParseException ex2) {
                 throw new ConversionException("Value cannot be converted as a date/time", ex);
             }
