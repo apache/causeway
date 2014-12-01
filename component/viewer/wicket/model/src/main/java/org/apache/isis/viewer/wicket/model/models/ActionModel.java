@@ -79,7 +79,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     private static final long serialVersionUID = 1L;
     
     private static final String NULL_ARG = "$nullArg$";
-    private static Pattern KEY_VALUE_PATTERN = Pattern.compile("([^=]+)=(.+)");
+    private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("([^=]+)=(.+)");
 
     /**
      * Whether we are obtaining arguments (eg in a dialog), or displaying the
