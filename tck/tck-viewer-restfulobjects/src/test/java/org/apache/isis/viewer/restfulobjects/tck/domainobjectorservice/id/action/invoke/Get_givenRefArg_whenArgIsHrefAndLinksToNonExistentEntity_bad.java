@@ -21,8 +21,6 @@ package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.actio
 import java.io.IOException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -103,7 +101,7 @@ public class Get_givenRefArg_whenArgIsHrefAndLinksToNonExistentEntity_bad {
         then(args, restfulResponse);
     }
 
-    private static void then(final JsonRepresentation args, RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
+    private static void then(final JsonRepresentation args, RestfulResponse<ActionResultRepresentation> restfulResponse) throws IOException {
         // then the response is an error
         assertThat(restfulResponse, hasStatus(HttpStatusCode.VALIDATION_FAILED));
         assertThat(restfulResponse.getHeader(Header.WARNING), is("Validation failed, see body for details"));

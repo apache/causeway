@@ -18,6 +18,13 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid;
 
+import java.io.IOException;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status.Family;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
 import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
@@ -25,18 +32,10 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status.Family;
-import java.io.IOException;
-
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class Get_givenViewModel_thenRepresentation_ok_TODO {
@@ -73,7 +72,7 @@ public class Get_givenViewModel_thenRepresentation_ok_TODO {
 
 
 
-    private DomainObjectRepresentation givenDomainObjectRepresentationFor(final String domainType, String instanceId) throws JsonParseException, JsonMappingException, IOException {
+    private DomainObjectRepresentation givenDomainObjectRepresentationFor(final String domainType, String instanceId) throws IOException {
         final DomainObjectResource domainObjectResource = client.getDomainObjectResource();
 
         final Response domainObjectResp = domainObjectResource.object(domainType, instanceId);

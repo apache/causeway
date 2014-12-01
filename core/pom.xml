@@ -112,7 +112,7 @@
         <commons-httpclient.version>3.1</commons-httpclient.version>
         <commons-codec.version>1.9</commons-codec.version>
 
-        <jackson.version>1.9.11</jackson.version>
+        <jackson.version>2.4.3</jackson.version>
         <gson.version>2.2.4</gson.version>
 
         <!-- using 2.3.2 throws strange error about not finding org.hsqldb.jdbcDriver -->
@@ -1282,13 +1282,13 @@ ${license.additional-notes}
 
             <!-- JSON libraries -->
             <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-core-asl</artifactId>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
                 <version>${jackson.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-mapper-asl</artifactId>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
                 <version>${jackson.version}</version>
             </dependency>
             <dependency>

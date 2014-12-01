@@ -25,8 +25,6 @@ import java.util.List;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;

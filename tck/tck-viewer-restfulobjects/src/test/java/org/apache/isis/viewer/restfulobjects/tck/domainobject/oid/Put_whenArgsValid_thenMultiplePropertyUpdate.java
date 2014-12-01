@@ -23,8 +23,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
@@ -210,7 +208,7 @@ public class Put_whenArgsValid_thenMultiplePropertyUpdate {
         return ISODateTimeFormat.timeNoMillis().withZoneUTC().print(dt);
     }
 
-    private DomainObjectRepresentation getObjectRepr(final String domainType, final String instanceId) throws JsonParseException, JsonMappingException, IOException {
+    private DomainObjectRepresentation getObjectRepr(final String domainType, final String instanceId) throws IOException {
         final Response domainObjectResp = domainObjectResource.object(domainType, instanceId);
         final RestfulResponse<DomainObjectRepresentation> domainObjectJsonResp = RestfulResponse.ofT(domainObjectResp);
         assertThat(domainObjectJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));

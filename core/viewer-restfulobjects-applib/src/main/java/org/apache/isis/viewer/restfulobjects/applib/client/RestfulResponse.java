@@ -34,9 +34,9 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.common.collect.Maps;
 
 public class RestfulResponse<T> {

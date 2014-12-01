@@ -18,8 +18,8 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
 import java.util.Map;
+import com.fasterxml.jackson.databind.node.NullNode;
 import com.google.common.collect.Lists;
-import org.codehaus.jackson.node.NullNode;
 import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

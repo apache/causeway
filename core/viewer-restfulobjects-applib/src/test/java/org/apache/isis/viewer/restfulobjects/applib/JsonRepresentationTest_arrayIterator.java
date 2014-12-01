@@ -18,23 +18,20 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
+import java.io.IOException;
+import java.util.Iterator;
+import org.junit.Test;
+
 import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
-import java.io.IOException;
-import java.util.Iterator;
-
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.junit.Test;
 
 public class JsonRepresentationTest_arrayIterator {
 
     private JsonRepresentation jsonRepresentation;
 
     @Test
-    public void forJsonRepresentation() throws JsonParseException, JsonMappingException, IOException {
+    public void forJsonRepresentation() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("list.json"));
         final Iterator<JsonRepresentation> arrayIterator = jsonRepresentation.arrayIterator(JsonRepresentation.class);
         assertThat(arrayIterator.hasNext(), is(true));
@@ -45,7 +42,7 @@ public class JsonRepresentationTest_arrayIterator {
     }
 
     @Test
-    public void forString() throws JsonParseException, JsonMappingException, IOException {
+    public void forString() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("listOfStrings.json"));
         final Iterator<String> arrayIterator = jsonRepresentation.arrayIterator(String.class);
         assertThat(arrayIterator.hasNext(), is(true));

@@ -20,10 +20,12 @@ package org.apache.isis.viewer.restfulobjects.tck;
 
 import java.io.IOException;
 import javax.ws.rs.core.Response;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
-import org.apache.isis.viewer.restfulobjects.applib.*;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.Rel;
+import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
@@ -36,7 +38,9 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceR
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
 
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isLink;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class Util {
@@ -44,7 +48,7 @@ public class Util {
     private Util() {
     }
 
-    public static String givenLinkToService(RestfulClient restfulClient, String serviceId) throws JsonParseException, JsonMappingException, IOException {
+    public static String givenLinkToService(RestfulClient restfulClient, String serviceId) throws IOException {
 
         final DomainServiceResource resource = restfulClient.getDomainServiceResource();
         final Response response = resource.services();
@@ -54,7 +58,7 @@ public class Util {
         return href;
     }
 
-    public static String givenHrefToService(RestfulClient client, final String serviceId) throws JsonParseException, JsonMappingException, IOException {
+    public static String givenHrefToService(RestfulClient client, final String serviceId) throws IOException {
         final DomainServiceResource resource = client.getDomainServiceResource();
         final Response response = resource.services();
         final ListRepresentation services = RestfulResponse.<ListRepresentation> ofT(response).getEntity();
@@ -62,7 +66,7 @@ public class Util {
         return services.getRepresentation("value[rel=urn:org.restfulobjects:rels/service;serviceId=\"%s\"]", serviceId).asLink().getHref();
     }
 
-    public static JsonRepresentation givenAction(RestfulClient client, final String serviceId, final String actionId) throws JsonParseException, JsonMappingException, IOException {
+    public static JsonRepresentation givenAction(RestfulClient client, final String serviceId, final String actionId) throws IOException {
         final String href = givenHrefToService(client, serviceId);
         final String detailRel = Rel.DETAILS.andParam("action", actionId);
 

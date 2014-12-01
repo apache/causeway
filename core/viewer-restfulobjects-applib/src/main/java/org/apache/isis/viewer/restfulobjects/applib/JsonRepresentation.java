@@ -31,6 +31,12 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.NullNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.POJONode;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -38,12 +44,6 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ArrayNode;
-import org.codehaus.jackson.node.JsonNodeFactory;
-import org.codehaus.jackson.node.NullNode;
-import org.codehaus.jackson.node.ObjectNode;
-import org.codehaus.jackson.node.POJONode;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -85,7 +85,7 @@ public class JsonRepresentation {
                 if (!input.isTextual()) {
                     throw new IllegalStateException("found node that is not a string " + input.toString());
                 }
-                return input.getTextValue();
+                return input.textValue();
             }
         });
         REPRESENTATION_INSTANTIATORS.put(JsonNode.class, new Function<JsonNode, JsonNode>() {
@@ -293,7 +293,7 @@ public class JsonRepresentation {
         if (!node.isNumber()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a number"));
         }
-        return node.getNumberValue();
+        return node.numberValue();
     }
 
 
@@ -342,7 +342,7 @@ public class JsonRepresentation {
         if (!node.isTextual()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a date"));
         }
-        final String textValue = node.getTextValue();
+        final String textValue = node.textValue();
         return new java.util.Date(yyyyMMdd.parseMillis(textValue));
     }
 
@@ -368,7 +368,7 @@ public class JsonRepresentation {
         if (!node.isTextual()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a date-time"));
         }
-        final String textValue = node.getTextValue();
+        final String textValue = node.textValue();
         return new java.util.Date(yyyyMMddTHHmmssZ.parseMillis(textValue));
     }
 
@@ -394,7 +394,7 @@ public class JsonRepresentation {
         if (!node.isTextual()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a time"));
         }
-        final String textValue = node.getTextValue();
+        final String textValue = node.textValue();
         final LocalTime localTime = _HHmmss.parseLocalTime(textValue + "Z");
         return new java.util.Date(localTime.getMillisOfDay());
     }
@@ -437,7 +437,7 @@ public class JsonRepresentation {
         if (!node.isBoolean()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a boolean"));
         }
-        return node.getBooleanValue();
+        return node.booleanValue();
     }
     
     // ///////////////////////////////////////////////////////////////////////
@@ -468,7 +468,7 @@ public class JsonRepresentation {
             // there is no node.isByte()
             throw new IllegalArgumentException(formatExMsg(path, "is not a number"));
         }
-        return node.getNumberValue().byteValue();
+        return node.numberValue().byteValue();
     }
 
     // ///////////////////////////////////////////////////////////////////////
@@ -499,7 +499,7 @@ public class JsonRepresentation {
             // there is no node.isShort()
             throw new IllegalArgumentException(formatExMsg(path, "is not a number"));
         }
-        return node.getNumberValue().shortValue();
+        return node.shortValue();
     }
     
 
@@ -530,7 +530,7 @@ public class JsonRepresentation {
         if (!node.isTextual()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not textual"));
         }
-        final String textValue = node.getTextValue();
+        final String textValue = node.textValue();
         if(textValue == null || textValue.length() == 0) {
             return null;
         }
@@ -577,7 +577,7 @@ public class JsonRepresentation {
         if (!node.isInt()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not an int"));
         }
-        return node.getIntValue();
+        return node.intValue();
     }
 
 
@@ -618,10 +618,10 @@ public class JsonRepresentation {
         }
         checkValue(path, node, "a long");
         if(node.isInt()) {
-            return Long.valueOf(node.getIntValue());
+            return Long.valueOf(node.intValue());
         }
         if(node.isLong()) {
-            return node.getLongValue();
+            return node.longValue();
         }
         throw new IllegalArgumentException(formatExMsg(path, "is not a long"));
     }
@@ -653,7 +653,7 @@ public class JsonRepresentation {
         if (!node.isNumber()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a number"));
         }
-        return node.getNumberValue().floatValue();
+        return node.floatValue();
     }
     
 
@@ -712,7 +712,7 @@ public class JsonRepresentation {
         if (!node.isDouble()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a double"));
         }
-        return node.getDoubleValue();
+        return node.doubleValue();
     }
 
     // ///////////////////////////////////////////////////////////////////////
@@ -728,7 +728,7 @@ public class JsonRepresentation {
     }
 
     private boolean isBigInteger(final JsonNode node) {
-        return !representsNull(node) && node.isValueNode() && (node.isBigInteger() || node.isLong() || node.isInt() || node.isTextual() && parseableAsBigInteger(node.getTextValue()));
+        return !representsNull(node) && node.isValueNode() && (node.isBigInteger() || node.isLong() || node.isInt() || node.isTextual() && parseableAsBigInteger(node.textValue()));
     }
 
     private static boolean parseableAsBigInteger(String str) {
@@ -800,16 +800,16 @@ public class JsonRepresentation {
 
     private BigInteger getBigInteger(String path, JsonNode node) {
         if (node.isBigInteger()) {
-            return node.getBigIntegerValue();
+            return node.bigIntegerValue();
         }
         if (node.isTextual()) {
-            return new BigInteger(node.getTextValue());
+            return new BigInteger(node.textValue());
         }
         if (node.isLong()) {
-            return BigInteger.valueOf(node.getLongValue());
+            return BigInteger.valueOf(node.longValue());
         }
         if (node.isInt()) {
-            return BigInteger.valueOf(node.getIntValue());
+            return BigInteger.valueOf(node.intValue());
         }
         throw new IllegalArgumentException(formatExMsg(path, "is not a biginteger, is not any other integral number, is not text parseable as a biginteger"));
     }
@@ -827,7 +827,7 @@ public class JsonRepresentation {
     }
 
     private boolean isBigDecimal(final JsonNode node) {
-        return !representsNull(node) && node.isValueNode() && (node.isBigDecimal() || node.isDouble() || node.isLong() || node.isInt() || node.isBigInteger() || node.isTextual() && parseableAsBigDecimal(node.getTextValue()));
+        return !representsNull(node) && node.isValueNode() && (node.isBigDecimal() || node.isDouble() || node.isLong() || node.isInt() || node.isBigInteger() || node.isTextual() && parseableAsBigDecimal(node.textValue()));
     }
 
     private static boolean parseableAsBigDecimal(String str) {
@@ -904,23 +904,23 @@ public class JsonRepresentation {
 
     private BigDecimal getBigDecimal(String path, JsonNode node) {
         if (node.isBigDecimal()) {
-            return node.getDecimalValue();
+            return node.decimalValue();
         }
         if (node.isTextual()) {
-            return new BigDecimal(node.getTextValue());
+            return new BigDecimal(node.textValue());
         }
         if (node.isLong()) {
-            return new BigDecimal(node.getLongValue());
+            return new BigDecimal(node.longValue());
         }
         if (node.isDouble()) {
             // there will be rounding errors, most likely
-            return BigDecimal.valueOf(node.getDoubleValue());
+            return BigDecimal.valueOf(node.doubleValue());
         }
         if (node.isBigInteger()) {
-            return new BigDecimal(node.getBigIntegerValue());
+            return new BigDecimal(node.bigIntegerValue());
         }
         if (node.isInt()) {
-            return new BigDecimal(node.getIntValue());
+            return new BigDecimal(node.intValue());
         }
         throw new IllegalArgumentException(formatExMsg(path, "is not a bigdecimal, is not any other numeric, is not text parseable as a bigdecimal"));
     }
@@ -965,12 +965,12 @@ public class JsonRepresentation {
         if (!node.isTextual()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a string"));
         }
-        return node.getTextValue();
+        return node.textValue();
     }
 
     public String asArg() {
         if (isValue()) {
-            return asJsonNode().getValueAsText();
+            return asJsonNode().asText();
         } else {
             return asJsonNode().toString();
         }
@@ -1108,7 +1108,7 @@ public class JsonRepresentation {
         if (asJsonNode().size() != 1) {
             throw new IllegalStateException("does not represent link");
         }
-        final String linkPropertyName = asJsonNode().getFieldNames().next();
+        final String linkPropertyName = asJsonNode().fieldNames().next();
         return getLink(linkPropertyName);
     }
 
@@ -1572,7 +1572,7 @@ public class JsonRepresentation {
 
     public Iterator<Map.Entry<String, JsonRepresentation>> mapIterator() {
         ensureIsAMap();
-        return Iterators.transform(jsonNode.getFields(), MAP_ENTRY_JSON_NODE_TO_JSON_REPRESENTATION);
+        return Iterators.transform(jsonNode.fields(), MAP_ENTRY_JSON_NODE_TO_JSON_REPRESENTATION);
     }
 
     private void ensureIsAMap() {
@@ -1676,7 +1676,7 @@ public class JsonRepresentation {
     private String getFormatValueIfAnyFrom(JsonNode jsonNode) {
         String format;
         final JsonNode formatNode = jsonNode.get("format");
-        format = formatNode != null && formatNode.isTextual()? formatNode.getTextValue(): null;
+        format = formatNode != null && formatNode.isTextual()? formatNode.textValue(): null;
         return format;
     }
 

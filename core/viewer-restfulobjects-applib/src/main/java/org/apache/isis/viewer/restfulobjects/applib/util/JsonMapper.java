@@ -26,13 +26,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.ws.rs.core.Response;
-import org.codehaus.jackson.*;
-import org.codehaus.jackson.map.*;
-import org.codehaus.jackson.map.deser.BeanDeserializerFactory;
-import org.codehaus.jackson.map.deser.JsonNodeDeserializer;
-import org.codehaus.jackson.map.deser.StdDeserializerProvider;
-import org.codehaus.jackson.map.module.SimpleModule;
-import org.codehaus.jackson.type.JavaType;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.BeanDescription;
+import com.fasterxml.jackson.databind.BeanProperty;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationConfig;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.cfg.DeserializerFactoryConfig;
+import com.fasterxml.jackson.databind.deser.BeanDeserializerFactory;
+import com.fasterxml.jackson.databind.deser.DefaultDeserializationContext;
+import com.fasterxml.jackson.databind.deser.std.JsonNodeDeserializer;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.jboss.resteasy.client.ClientResponse;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
@@ -49,8 +67,12 @@ public final class JsonMapper {
      */
     @SuppressWarnings("deprecation")
     private static final class JsonRepresentationDeserializerFactory extends BeanDeserializerFactory {
+        public JsonRepresentationDeserializerFactory(DeserializerFactoryConfig config) {
+            super(config);
+        }
+
         @Override
-        public JsonDeserializer<Object> createBeanDeserializer(final DeserializationConfig config, final DeserializerProvider p, final JavaType type, final BeanProperty property) throws JsonMappingException {
+        public JsonDeserializer<Object> createBeanDeserializer(DeserializationContext config, JavaType type, BeanDescription property) throws JsonMappingException {
             final Class<?> rawClass = type.getRawClass();
             if (JsonRepresentation.class.isAssignableFrom(rawClass)) {
                 try {
@@ -63,7 +85,7 @@ public final class JsonMapper {
                     // fall through
                 }
             }
-            return super.createBeanDeserializer(config, p, type, property);
+            return super.createBeanDeserializer(config, type, property);
         }
 
         private static final class JsonRepresentationDeserializer extends JsonDeserializer<Object> {
@@ -99,16 +121,18 @@ public final class JsonMapper {
     private static ObjectMapper createObjectMapper(PrettyPrinting prettyPrinting) {
         // it's a shame that the serialization and deserialization mechanism
         // used aren't symmetric... but it works.
-        final DeserializerProvider deserializerProvider = new StdDeserializerProvider(new JsonRepresentationDeserializerFactory());
+        DeserializerFactoryConfig deserializerFactoryConfig = new DeserializerFactoryConfig();
+        JsonRepresentationDeserializerFactory deserializerFactory = new JsonRepresentationDeserializerFactory(deserializerFactoryConfig);
+        final DefaultDeserializationContext deserializerProvider = new DefaultDeserializationContext.Impl(deserializerFactory);
         final ObjectMapper objectMapper = new ObjectMapper(null, null, deserializerProvider);
-        final SimpleModule jsonModule = new SimpleModule("json", new Version(1, 0, 0, null));
+        final SimpleModule jsonModule = new SimpleModule("json", new Version(1, 0, 0, null, "org.apache", "isis"));
         jsonModule.addSerializer(JsonRepresentation.class, new JsonRepresentationSerializer());
         objectMapper.registerModule(jsonModule);
 
         if(prettyPrinting == PrettyPrinting.ENABLE) {
-            objectMapper.configure(SerializationConfig.Feature.INDENT_OUTPUT, true);
+            objectMapper.configure(SerializationFeature.INDENT_OUTPUT, true);
         }
-        objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return objectMapper;
     }
 

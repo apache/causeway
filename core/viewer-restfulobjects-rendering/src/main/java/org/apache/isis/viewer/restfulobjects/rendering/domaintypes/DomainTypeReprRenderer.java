@@ -32,8 +32,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
-import org.codehaus.jackson.node.NullNode;
-
+import com.fasterxml.jackson.databind.node.NullNode;
 import com.google.common.base.Strings;
 
 public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprRenderer, ObjectSpecification> {

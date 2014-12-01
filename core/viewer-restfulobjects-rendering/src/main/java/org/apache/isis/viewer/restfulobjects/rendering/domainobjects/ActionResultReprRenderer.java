@@ -19,8 +19,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import java.util.Collection;
 import java.util.Map;
 
-import org.codehaus.jackson.node.NullNode;
-
+import com.fasterxml.jackson.databind.node.NullNode;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;

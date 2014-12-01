@@ -21,8 +21,6 @@ package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid.property;
 import java.io.IOException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -122,7 +120,7 @@ public class Put_whenArgValid_thenPrimitivePropertyUpdated_ok {
     }
 
 
-    private ObjectPropertyRepresentation getObjectPropertyRepr(final String domainType, final String instanceId, String propertyId) throws JsonParseException, JsonMappingException, IOException {
+    private ObjectPropertyRepresentation getObjectPropertyRepr(final String domainType, final String instanceId, String propertyId) throws IOException {
         final Response domainObjectResp = domainObjectResource.propertyDetails(domainType, instanceId, propertyId);
         final RestfulResponse<ObjectPropertyRepresentation> domainObjectJsonResp = RestfulResponse.ofT(domainObjectResp);
         assertThat(domainObjectJsonResp.getStatus().getFamily(), is(Family.SUCCESSFUL));
@@ -131,7 +129,7 @@ public class Put_whenArgValid_thenPrimitivePropertyUpdated_ok {
         return repr;
     }
 
-    private LinkRepresentation getObjectPropertyReprModifyLink(String domainType, String instanceId, String propertyId) throws JsonParseException, JsonMappingException, IOException {
+    private LinkRepresentation getObjectPropertyReprModifyLink(String domainType, String instanceId, String propertyId) throws IOException {
         ObjectPropertyRepresentation objectPropertyRepr = getObjectPropertyRepr(domainType, instanceId, propertyId);
         return objectPropertyRepr.getLinkWithRel(Rel.MODIFY);
     }

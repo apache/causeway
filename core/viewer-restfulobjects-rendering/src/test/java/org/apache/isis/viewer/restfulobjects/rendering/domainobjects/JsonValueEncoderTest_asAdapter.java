@@ -20,7 +20,13 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import org.codehaus.jackson.node.*;
+import com.fasterxml.jackson.databind.node.BigIntegerNode;
+import com.fasterxml.jackson.databind.node.BooleanNode;
+import com.fasterxml.jackson.databind.node.DecimalNode;
+import com.fasterxml.jackson.databind.node.DoubleNode;
+import com.fasterxml.jackson.databind.node.IntNode;
+import com.fasterxml.jackson.databind.node.LongNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;

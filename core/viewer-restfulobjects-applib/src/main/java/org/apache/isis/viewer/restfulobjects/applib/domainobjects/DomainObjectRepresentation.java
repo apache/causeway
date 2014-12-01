@@ -19,12 +19,12 @@
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
 import java.util.Map;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
-import org.codehaus.jackson.JsonNode;
 
 public class DomainObjectRepresentation extends DomainRepresentation  {
 

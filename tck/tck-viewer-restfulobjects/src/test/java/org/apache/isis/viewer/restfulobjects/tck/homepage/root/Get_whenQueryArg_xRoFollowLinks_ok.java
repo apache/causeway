@@ -18,15 +18,10 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.homepage.root;
 
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isArray;
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isMap;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import java.io.IOException;
-
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
@@ -36,11 +31,13 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.Reques
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isArray;
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isMap;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 public class Get_whenQueryArg_xRoFollowLinks_ok {
 
@@ -159,7 +156,7 @@ public class Get_whenQueryArg_xRoFollowLinks_ok {
         assertThat(service.getRepresentation("value"), is(nullValue()));
     }
 
-    private HomePageRepresentation whenExecuteAndFollowLinksUsing(final String uriTemplate, final String followLinks) throws JsonParseException, JsonMappingException, IOException {
+    private HomePageRepresentation whenExecuteAndFollowLinksUsing(final String uriTemplate, final String followLinks) throws IOException {
         request = client.createRequest(RestfulHttpMethod.GET, uriTemplate).withArg(RequestParameter.FOLLOW_LINKS, followLinks);
         restfulResponse = request.executeT();
         return restfulResponse.getEntity();

@@ -21,8 +21,6 @@ package org.apache.isis.viewer.restfulobjects.tck.domainobject.oid;
 import java.io.IOException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -67,7 +65,7 @@ public class Get_givenDisabledMembers_thenRepresentation_ok {
     }
 
 
-    private DomainObjectRepresentation givenDomainObjectRepresentationFor(final String domainType, String instanceId) throws JsonParseException, JsonMappingException, IOException {
+    private DomainObjectRepresentation givenDomainObjectRepresentationFor(final String domainType, String instanceId) throws IOException {
         final DomainObjectResource domainObjectResource = client.getDomainObjectResource();
 
         final Response domainObjectResp = domainObjectResource.object(domainType, instanceId);

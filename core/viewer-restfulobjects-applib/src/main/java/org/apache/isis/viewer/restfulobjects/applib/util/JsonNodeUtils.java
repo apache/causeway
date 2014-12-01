@@ -22,12 +22,11 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.JsonNodeFactory;
-import org.codehaus.jackson.node.ObjectNode;
-
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Charsets;
 
 public class JsonNodeUtils {

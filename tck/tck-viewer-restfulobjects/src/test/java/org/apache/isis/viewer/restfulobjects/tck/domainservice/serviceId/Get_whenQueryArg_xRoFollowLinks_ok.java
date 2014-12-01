@@ -19,8 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId;
 
 import java.io.IOException;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,7 +36,9 @@ import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
 
 import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.isMap;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class Get_whenQueryArg_xRoFollowLinks_ok {
@@ -154,7 +154,7 @@ public class Get_whenQueryArg_xRoFollowLinks_ok {
         assertThat(actionRepr.getRepresentation("links[rel="+Rel.DETAILS.andParam("action", "newEntity")+"].value"), is(not(nullValue()))); // also followed
     }
     
-    private String givenHrefToService(final String serviceId) throws JsonParseException, JsonMappingException, IOException {
+    private String givenHrefToService(final String serviceId) throws IOException {
         return Util.givenHrefToService(client, serviceId);
     }
 

@@ -18,18 +18,15 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
+import java.io.IOException;
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-
-import java.io.IOException;
-
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.junit.Before;
-import org.junit.Test;
 
 public class JsonRepresentationTest_getInt {
 
@@ -41,17 +38,17 @@ public class JsonRepresentationTest_getInt {
     }
 
     @Test
-    public void happyCase() throws JsonParseException, JsonMappingException, IOException {
+    public void happyCase() throws IOException {
         assertThat(jsonRepresentation.getInt("anInt"), is(123));
     }
 
     @Test
-    public void forNonExistent() throws JsonParseException, JsonMappingException, IOException {
+    public void forNonExistent() throws IOException {
         assertThat(jsonRepresentation.getInt("doesNotExist"), is(nullValue()));
     }
 
     @Test
-    public void forValueButNotAnInt() throws JsonParseException, JsonMappingException, IOException {
+    public void forValueButNotAnInt() throws IOException {
         try {
             jsonRepresentation.getInt("aString");
             fail();
@@ -61,7 +58,7 @@ public class JsonRepresentationTest_getInt {
     }
 
     @Test
-    public void forMap() throws JsonParseException, JsonMappingException, IOException {
+    public void forMap() throws IOException {
         try {
             jsonRepresentation.getInt("aSubMap");
             fail();
@@ -71,7 +68,7 @@ public class JsonRepresentationTest_getInt {
     }
 
     @Test
-    public void forList() throws JsonParseException, JsonMappingException, IOException {
+    public void forList() throws IOException {
         try {
             jsonRepresentation.getInt("aSubList");
             fail();
@@ -81,7 +78,7 @@ public class JsonRepresentationTest_getInt {
     }
 
     @Test
-    public void forMultipartKey() throws JsonParseException, JsonMappingException, IOException {
+    public void forMultipartKey() throws IOException {
         assertThat(jsonRepresentation.getInt("aSubMap.anInt"), is(456));
     }
 

@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * Represents the members within the {@link DomainObjectRepresentation}'s <tt>members</tt>

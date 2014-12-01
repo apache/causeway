@@ -27,8 +27,6 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,27 +42,27 @@ public class JsonRepresentationTest_getLink_isLink {
     }
 
     @Test
-    public void forLink_whenSimpleKey() throws JsonParseException, JsonMappingException, IOException {
+    public void forLink_whenSimpleKey() throws IOException {
         link.withRel("someRel");
         assertThat(jsonRepresentation.isLink("aLink"), is(true));
         assertThat(jsonRepresentation.getLink("aLink"), is(link));
     }
 
     @Test
-    public void forLink_whenMultipartKey() throws JsonParseException, JsonMappingException, IOException {
+    public void forLink_whenMultipartKey() throws IOException {
         link.withRel("someSubRel");
         assertThat(jsonRepresentation.isLink("aSubMap.aLink"), is(true));
         assertThat(jsonRepresentation.getLink("aSubMap.aLink"), is(link));
     }
 
     @Test
-    public void forNonExistent() throws JsonParseException, JsonMappingException, IOException {
+    public void forNonExistent() throws IOException {
         assertThat(jsonRepresentation.isLink("doesNotExist"), is(false));
         assertThat(jsonRepresentation.getLink("doesNotExist"), is(nullValue()));
     }
 
     @Test
-    public void forValue() throws JsonParseException, JsonMappingException, IOException {
+    public void forValue() throws IOException {
         assertThat(jsonRepresentation.isLink("anInt"), is(false));
         try {
             jsonRepresentation.getLink("anInt");
@@ -75,7 +73,7 @@ public class JsonRepresentationTest_getLink_isLink {
     }
 
     @Test
-    public void forMap() throws JsonParseException, JsonMappingException, IOException {
+    public void forMap() throws IOException {
         assertThat(jsonRepresentation.isLink("aSubMap"), is(false));
         try {
             jsonRepresentation.getLink("aSubMap");
@@ -86,7 +84,7 @@ public class JsonRepresentationTest_getLink_isLink {
     }
 
     @Test
-    public void forList() throws JsonParseException, JsonMappingException, IOException {
+    public void forList() throws IOException {
         assertThat(jsonRepresentation.isLink("aSubList"), is(false));
         try {
             jsonRepresentation.getLink("aSubList");
@@ -97,7 +95,7 @@ public class JsonRepresentationTest_getLink_isLink {
     }
 
     @Test
-    public void withPredicate() throws JsonParseException, JsonMappingException, IOException {
+    public void withPredicate() throws IOException {
 
         // given
         link = new LinkRepresentation().withRel(Rel.SELF).withHref("http://foo/bar").withMethod(RestfulHttpMethod.GET);

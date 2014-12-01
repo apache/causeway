@@ -18,22 +18,19 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
+import java.io.IOException;
+import org.junit.Test;
+
 import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
-import java.io.IOException;
-
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.junit.Test;
 
 public class JsonRepresentationTest_mapHas {
 
     private JsonRepresentation jsonRepresentation;
 
     @Test
-    public void forMap() throws JsonParseException, JsonMappingException, IOException {
+    public void forMap() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
 
         assertThat(jsonRepresentation.mapHas("aString"), is(true));
@@ -42,7 +39,7 @@ public class JsonRepresentationTest_mapHas {
     }
 
     @Test(expected = IllegalStateException.class)
-    public void forList() throws JsonParseException, JsonMappingException, IOException {
+    public void forList() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("list.json"));
 
         jsonRepresentation.mapHas("aString");

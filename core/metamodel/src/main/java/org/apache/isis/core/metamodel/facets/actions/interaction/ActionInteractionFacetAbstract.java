@@ -48,7 +48,7 @@ public abstract class ActionInteractionFacetAbstract
      * not invalidate), then the event is passed through to the executing phase using this thread-local.
      * </p>
      */
-    final static ThreadLocal<ActionInteractionEvent<?>> currentInteraction = new ThreadLocal<ActionInteractionEvent<?>>();
+    final static ThreadLocal<ActionInteractionEvent<?>> currentInteraction = new ThreadLocal<>();
 
     public ActionInteractionFacetAbstract(
             final Class<? extends ActionInteractionEvent<?>> eventType,

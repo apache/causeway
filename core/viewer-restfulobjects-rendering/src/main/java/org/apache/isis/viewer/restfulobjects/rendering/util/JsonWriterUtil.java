@@ -19,8 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.rendering.util;
 
 import java.io.IOException;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
@@ -33,10 +31,6 @@ public final class JsonWriterUtil {
         final JsonMapper.PrettyPrinting prettyPrinting = inferPrettyPrinting(IsisContext.getDeploymentType());
         try {
             return JsonMapper.instance(prettyPrinting).write(object);
-        } catch (final JsonGenerationException e) {
-            throw new RuntimeException(e);
-        } catch (final JsonMappingException e) {
-            throw new RuntimeException(e);
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }

@@ -20,8 +20,6 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -45,17 +43,17 @@ public class JsonRepresentationTest_getBigInteger {
     }
 
     @Test
-    public void happyCase() throws JsonParseException, JsonMappingException, IOException {
+    public void happyCase() throws IOException {
         assertThat(jsonRepresentation.getBigInteger("aBigInteger"), is(new BigInteger("12345678901234567890")));
     }
 
     @Test
-    public void happyCaseForFormatJustFits() throws JsonParseException, JsonMappingException, IOException {
+    public void happyCaseForFormatJustFits() throws IOException {
         assertThat(jsonRepresentation.getBigInteger("aBigInteger", "big-integer(20)"), is(new BigInteger("12345678901234567890")));
     }
 
     @Test
-    public void invalidFormat() throws JsonParseException, JsonMappingException, IOException {
+    public void invalidFormat() throws IOException {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("Value '12345678901234567890' larger than that allowed by format 'big-integer(19)'");
 
@@ -63,12 +61,12 @@ public class JsonRepresentationTest_getBigInteger {
     }
 
     @Test
-    public void validFormattedFromPath() throws JsonParseException, JsonMappingException, IOException {
+    public void validFormattedFromPath() throws IOException {
         assertThat(jsonRepresentation.getBigInteger("yetAnotherSubMap.aFormattedBigInteger.value"), is(new BigInteger("123")));
     }
 
     @Test
-    public void invalidFormattedFromPath() throws JsonParseException, JsonMappingException, IOException {
+    public void invalidFormattedFromPath() throws IOException {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("Value '123' larger than that allowed by format 'big-integer(2)'");
 
@@ -76,17 +74,17 @@ public class JsonRepresentationTest_getBigInteger {
     }
 
     @Test
-    public void invalidFormattedFromPathButOverridden() throws JsonParseException, JsonMappingException, IOException {
+    public void invalidFormattedFromPathButOverridden() throws IOException {
         assertThat(jsonRepresentation.getBigInteger("yetAnotherSubMap.anInvalidFormattedBigInteger.value", "big-integer(3)"), is(new BigInteger("123")));
     }
 
     @Test
-    public void forNonExistent() throws JsonParseException, JsonMappingException, IOException {
+    public void forNonExistent() throws IOException {
         assertThat(jsonRepresentation.getBigInteger("doesNotExist"), is(nullValue()));
     }
 
     @Test
-    public void forNonParseableString() throws JsonParseException, JsonMappingException, IOException {
+    public void forNonParseableString() throws IOException {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("'aString' is not a biginteger");
 
@@ -94,7 +92,7 @@ public class JsonRepresentationTest_getBigInteger {
     }
 
     @Test
-    public void forMap() throws JsonParseException, JsonMappingException, IOException {
+    public void forMap() throws IOException {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("'aSubMap' is not a biginteger");
 
@@ -102,7 +100,7 @@ public class JsonRepresentationTest_getBigInteger {
     }
 
     @Test
-    public void forList() throws JsonParseException, JsonMappingException, IOException {
+    public void forList() throws IOException {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("'aSubList' is not a biginteger");
 
@@ -110,7 +108,7 @@ public class JsonRepresentationTest_getBigInteger {
     }
 
     @Test
-    public void forMultipartKey() throws JsonParseException, JsonMappingException, IOException {
+    public void forMultipartKey() throws IOException {
         assertThat(jsonRepresentation.getBigInteger("aSubMap.aBigInteger"), is(new BigInteger("12345678901234567890")));
     }
 

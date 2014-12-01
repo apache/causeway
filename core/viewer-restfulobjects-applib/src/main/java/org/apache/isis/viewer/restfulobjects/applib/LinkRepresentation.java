@@ -20,12 +20,12 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 import javax.ws.rs.core.MediaType;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.isis.viewer.restfulobjects.applib.client.ClientRequestConfigurer;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.JsonNodeFactory;
-import org.codehaus.jackson.node.ObjectNode;
 import org.jboss.resteasy.client.ClientExecutor;
 
 public final class LinkRepresentation extends JsonRepresentation {
@@ -40,7 +40,7 @@ public final class LinkRepresentation extends JsonRepresentation {
     }
 
     public String getRel() {
-        return asObjectNode().path("rel").getTextValue();
+        return asObjectNode().path("rel").textValue();
     }
 
     public LinkRepresentation withRel(final String rel) {
@@ -54,7 +54,7 @@ public final class LinkRepresentation extends JsonRepresentation {
 
 
     public String getHref() {
-        return asObjectNode().path("href").getTextValue();
+        return asObjectNode().path("href").textValue();
     }
 
     public LinkRepresentation withHref(final String href) {
@@ -76,12 +76,12 @@ public final class LinkRepresentation extends JsonRepresentation {
     }
 
     public RestfulHttpMethod getHttpMethod() {
-        final String methodStr = asObjectNode().path("method").getTextValue();
+        final String methodStr = asObjectNode().path("method").textValue();
         return RestfulHttpMethod.valueOf(methodStr);
     }
 
     public MediaType getType() {
-        final String typeStr = asObjectNode().path("type").getTextValue();
+        final String typeStr = asObjectNode().path("type").textValue();
         if (typeStr == null) {
             return MediaType.APPLICATION_JSON_TYPE;
         }

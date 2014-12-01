@@ -18,29 +18,19 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainservice.serviceId;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.io.IOException;
-
 import javax.ws.rs.core.Response;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import org.apache.isis.core.webserver.WebServer;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.Rel;
-import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulClient;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
-import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ListRepresentation;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class Get_whenDoesntExistId_thenResponseCode_404 {
 

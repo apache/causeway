@@ -18,22 +18,11 @@
  */
 package org.apache.isis.viewer.restfulobjects.tck.domainobjectorservice.id.action.invoke;
 
-import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasMediaTypeProfile;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import java.io.IOException;
-
 import javax.ws.rs.core.Response;
-
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.LinkRepresentation;
@@ -50,6 +39,12 @@ import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ObjectActionRe
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.tck.IsisWebServerRule;
 import org.apache.isis.viewer.restfulobjects.tck.Util;
+
+import static org.apache.isis.viewer.restfulobjects.tck.RestfulMatchers.hasMediaTypeProfile;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 // Get_whenObject_isNotNull_thenRepr_ok_andRespHeaders_ContentType_andContentLength__andRespCode_200_ok
 public class Get_whenObject_isNotNull_thenRepr_andRespHeaders_and_200_ok {
@@ -103,7 +98,7 @@ public class Get_whenObject_isNotNull_thenRepr_andRespHeaders_and_200_ok {
         then(restfulResponse);
     }
 
-    private static void then(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws JsonParseException, JsonMappingException, IOException {
+    private static void then(final RestfulResponse<ActionResultRepresentation> restfulResponse) throws IOException {
         
         assertThat(restfulResponse.getStatus(), is(HttpStatusCode.OK));
         assertThat(restfulResponse.getHeader(Header.CONTENT_TYPE), hasMediaTypeProfile(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT));
