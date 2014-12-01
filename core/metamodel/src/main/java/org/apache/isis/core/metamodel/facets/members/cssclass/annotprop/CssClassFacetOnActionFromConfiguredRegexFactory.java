@@ -145,8 +145,8 @@ public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactor
             }
             for (Map.Entry<String, String> entry : cssClassByRegex.entrySet()) {
                 final String regex = entry.getKey();
-                final String faIcon = entry.getValue();
-                cssClassByPattern.put(Pattern.compile(regex), faIcon);
+                final String cssClass = entry.getValue();
+                cssClassByPattern.put(Pattern.compile(regex), cssClass);
             }
         }
         return cssClassByPattern;
