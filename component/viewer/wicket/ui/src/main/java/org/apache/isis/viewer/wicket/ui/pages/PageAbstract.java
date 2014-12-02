@@ -181,7 +181,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             addUserName(themeDiv);
             addLogoutLink(themeDiv);
             addAboutLink(themeDiv);
-            addDevModeWarning(themeDiv);
+
             addBreadcrumbs();
             addThemePicker();
 
@@ -296,18 +296,21 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     private void addAboutLink(MarkupContainer themeDiv) {
         BookmarkablePageLink<Void> aboutLink = new BookmarkablePageLink<>("aboutLink", AboutPage.class);
-        aboutLink.setBody(new ResourceModel("aboutLabel"));
         themeDiv.add(aboutLink);
+
+        Label aboutLabel = new Label("aboutMessage", new ResourceModel("aboutLabel"));
+        aboutLink.add(aboutLabel);
+        addDevModeWarning(aboutLink);
     }
 
     /**
-     * Adds a component that shows a warning sign next to "Powered by: Apache Isis" in development mode
-     * @param themeDiv The parent component
+     * Adds a component that shows a warning sign next to "About" link in development mode
+     * @param container The parent component
      */
-    private void addDevModeWarning(MarkupContainer themeDiv) {
+    private void addDevModeWarning(MarkupContainer container) {
         WebComponent devModeWarning = new WebComponent("devModeWarning");
         devModeWarning.setVisible(getApplication().usesDevelopmentConfig());
-        themeDiv.add(devModeWarning);
+        container.add(devModeWarning);
     }
 
     private void addBreadcrumbs() {
