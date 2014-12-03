@@ -17,31 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
+package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.model.IModel;
+import java.util.List;
+import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
-
-/**
- * Package-level adapter for menu items and submenu-items.
- */
-abstract class CssMenuItemPanelAbstract<T extends IModel<?>> extends PanelAbstract<T> {
+public class AdditionalLinksAsDropDownPanel extends AdditionalLinksPanel {
 
     private static final long serialVersionUID = 1L;
 
-    public CssMenuItemPanelAbstract(final String id, final T model) {
-        super(id, model);
-        setRenderBodyOnly(true);
+    public AdditionalLinksAsDropDownPanel(String id, List<LinkAndLabel> links) {
+        super(id, links);
     }
-
-    protected void addSubMenuItems(final WebMarkupContainer markupContainer, final CssMenuItem cssMenuItem) {
-        cssMenuItem.addTo(markupContainer);
-    }
-
-
 }

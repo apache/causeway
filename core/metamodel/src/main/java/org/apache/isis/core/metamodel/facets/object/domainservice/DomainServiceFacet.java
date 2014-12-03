@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.domainservice;
 
 
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 
@@ -26,6 +27,11 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * Corresponds to annotating the class with the {@link org.apache.isis.applib.annotation.DomainService} annotation.
  */
 public interface DomainServiceFacet extends Facet {
+
+    /**
+     * Corresponds to {@link org.apache.isis.applib.annotation.DomainService#menuBar()}.
+     */
+    public DomainService.MenuBar getMenuBar();
 
     /**
      * Corresponds to {@link org.apache.isis.applib.annotation.DomainService#menuOrder()}.

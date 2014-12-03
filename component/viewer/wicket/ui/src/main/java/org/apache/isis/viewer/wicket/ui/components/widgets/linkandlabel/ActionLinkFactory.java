@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
+package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
 import java.io.Serializable;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;

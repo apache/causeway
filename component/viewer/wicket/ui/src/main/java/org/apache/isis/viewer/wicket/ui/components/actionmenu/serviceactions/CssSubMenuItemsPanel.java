@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
+package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ import org.apache.wicket.model.util.ListModel;
  * Panel containing a list of {@link CssMenuItem}s acting as submenus of a
  * parent {@link CssMenuItem}.
  */
-public class CssSubMenuItemsPanel extends CssMenuItemPanelAbstract<CssSubMenuItemsPanel.MyModel> {
+class CssSubMenuItemsPanel extends CssMenuItemPanelAbstract<CssSubMenuItemsPanel.MyModel> {
 
     private static final long serialVersionUID = 1L;
 

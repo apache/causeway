@@ -25,10 +25,11 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.components.about.AboutPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionlink.ActionLinkPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.TertiaryMenuPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionInfoPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersFormPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.appactions.cssmenu.AppActionsCssMenuFactory;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceActionsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
@@ -239,7 +240,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     protected void addComponentFactoriesForApplicationActions(final ComponentFactoryList componentFactories) {
-        componentFactories.add(new AppActionsCssMenuFactory());
+        componentFactories.add(new ServiceActionsPanelFactory());
+        componentFactories.add(new TertiaryMenuPanelFactory());
     }
 
     protected void addComponentFactoriesForBreadcrumbs(ComponentFactoryList componentFactories) {

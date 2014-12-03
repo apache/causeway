@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
+package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAutoOpenJavaScriptReference;
@@ -14,7 +14,6 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -32,17 +31,9 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  *     <a href="http://bootsnipp.com/snippets/featured/multi-level-dropdown-menu-bs3">Bootsnip</a>
  * </p>
  */
-public class ApplicationActionsPanel extends Panel {
+public class ServiceActionsPanel extends Panel {
 
-    /**
-     * Constructor.
-     *
-     * @param id
-     *          the Wicket component id
-     * @param menuItems
-     *          the menu items with their sub menu items
-     */
-    public ApplicationActionsPanel(String id, List<CssMenuItem> menuItems) {
+    public ServiceActionsPanel(String id, List<CssMenuItem> menuItems) {
         super(id);
 
         ListView<CssMenuItem> menuItemsView = new ListView<CssMenuItem>("menuItems", menuItems) {
@@ -90,7 +81,7 @@ public class ApplicationActionsPanel extends Panel {
 
         listItem.add(new CssClassAppender("dropdown-submenu"));
 
-        Fragment folderItem = new Fragment("content", "folderItem", ApplicationActionsPanel.this);
+        Fragment folderItem = new Fragment("content", "folderItem", ServiceActionsPanel.this);
         listItem.add(folderItem);
 
         folderItem.add(new Label("folderName", subMenuItem.getName()));
@@ -111,8 +102,12 @@ public class ApplicationActionsPanel extends Panel {
         folderItem.add(subMenuItemsView);
     }
 
-    private List<CssMenuItem> withSeparators(CssMenuItem subMenuItem) {
+    private static List<CssMenuItem> withSeparators(CssMenuItem subMenuItem) {
         final List<CssMenuItem> subMenuItems = subMenuItem.getSubMenuItems();
+        return withSeparators(subMenuItems);
+    }
+
+    private static List<CssMenuItem> withSeparators(List<CssMenuItem> subMenuItems) {
         final List<CssMenuItem> itemsWithSeparators = Lists.newArrayList();
         for (CssMenuItem menuItem : subMenuItems) {
             if(menuItem.isSeparator() ) {
@@ -137,7 +132,7 @@ public class ApplicationActionsPanel extends Panel {
 
         Fragment leafItem;
         if (!menuItem.isSeparator()) {
-            leafItem = new Fragment("content", "leafItem", ApplicationActionsPanel.this);
+            leafItem = new Fragment("content", "leafItem", ServiceActionsPanel.this);
 
             AbstractLink subMenuItemLink = menuItem.getLink();
 
@@ -165,7 +160,7 @@ public class ApplicationActionsPanel extends Panel {
                 subMenuItemLink.addOrReplace(dummy);
             }
         } else {
-            leafItem = new Fragment("content", "empty", ApplicationActionsPanel.this);
+            leafItem = new Fragment("content", "empty", ServiceActionsPanel.this);
             listItem.add(new CssClassAppender("divider"));
         }
         listItem.add(leafItem);
@@ -176,8 +171,9 @@ public class ApplicationActionsPanel extends Panel {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
 
-        response.render(CssHeaderItem.forReference(new CssResourceReference(ApplicationActionsPanel.class, "ApplicationActionsPanel.css")));
+        response.render(CssHeaderItem.forReference(new CssResourceReference(ServiceActionsPanel.class, "ServiceActionsPanel.css")));
         response.render(JavaScriptHeaderItem.forReference(DropdownAutoOpenJavaScriptReference.instance()));
         response.render(OnDomReadyHeaderItem.forScript("$('.dropdown-toggle').dropdownHover();"));
     }
+
 }

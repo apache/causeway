@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.domainservice;
 
 
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -32,13 +33,19 @@ public abstract class DomainServiceFacetAbstract
         return DomainServiceFacet.class;
     }
 
+    private final DomainService.MenuBar menuBar;
     private final String menuOrder;
     private final Class<?> repositoryFor;
 
-    public DomainServiceFacetAbstract(final FacetHolder facetHolder, final String menuOrder, final Class<?> repositoryFor) {
+    public DomainServiceFacetAbstract(final FacetHolder facetHolder, final DomainService.MenuBar menuBar, final String menuOrder, final Class<?> repositoryFor) {
         super(DomainServiceFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
+        this.menuBar = menuBar;
         this.menuOrder = menuOrder;
         this.repositoryFor = repositoryFor;
+    }
+
+    public DomainService.MenuBar getMenuBar() {
+        return menuBar;
     }
 
     public String getMenuOrder() {

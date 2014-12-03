@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu;
+package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
@@ -45,7 +45,6 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAcc
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.AjaxDeferredBehaviour.OpenUrlStrategy;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -156,7 +155,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
              * adapted from:
              * @see https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
              */
-            return new AjaxDeferredBehaviour(OpenUrlStrategy.NEW_WINDOW) {
+            return new AjaxDeferredBehaviour(AjaxDeferredBehaviour.OpenUrlStrategy.NEW_WINDOW) {
                 
                 private static final long serialVersionUID = 1L;
 
@@ -174,7 +173,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
              * adapted from:
              * @see https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
              */
-            return new AjaxDeferredBehaviour(OpenUrlStrategy.SAME_WINDOW) {
+            return new AjaxDeferredBehaviour(AjaxDeferredBehaviour.OpenUrlStrategy.SAME_WINDOW) {
                 
                 private static final long serialVersionUID = 1L;
    

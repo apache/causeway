@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.appactions.cssmenu;
+package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import org.apache.wicket.markup.html.link.AbstractLink;
 
@@ -26,9 +26,9 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactoryAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactoryAbstract;
 
-class AppActionsCssMenuLinkFactory extends ActionLinkFactoryAbstract {
+class ServiceActionLinkFactory extends ActionLinkFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
     
@@ -44,7 +44,5 @@ class AppActionsCssMenuLinkFactory extends ActionLinkFactoryAbstract {
 
         return newLinkAndLabel(action, link, null);
     }
-
-
 
 }

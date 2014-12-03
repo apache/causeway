@@ -49,7 +49,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponse;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 
 public final class BulkActionsLinkFactory implements ActionLinkFactory {

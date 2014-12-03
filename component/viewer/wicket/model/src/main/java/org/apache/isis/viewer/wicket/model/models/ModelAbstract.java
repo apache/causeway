@@ -124,12 +124,8 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> implem
         return IsisContext.getPersistenceSession();
     }
 
-    protected List<ObjectAdapter> getServiceAdapters() {
-        return IsisContext.getPersistenceSession().getServices();
-    }
-
     protected AdapterManager getAdapterManager() {
-        return IsisContext.getPersistenceSession().getAdapterManager();
+        return getPersistenceSession().getAdapterManager();
     }
 
 }

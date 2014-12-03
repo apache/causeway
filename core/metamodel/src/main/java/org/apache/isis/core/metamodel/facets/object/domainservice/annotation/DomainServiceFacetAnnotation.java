@@ -19,13 +19,18 @@
 package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
 
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;
 
 
 public class DomainServiceFacetAnnotation extends DomainServiceFacetAbstract {
 
-    public DomainServiceFacetAnnotation(FacetHolder facetHolder, String menuOrder, Class<?> repositoryFor) {
-        super(facetHolder, menuOrder, repositoryFor);
+    public DomainServiceFacetAnnotation(
+            final FacetHolder facetHolder,
+            final DomainService.MenuBar menubar,
+            final String menuOrder,
+            final Class<?> repositoryFor) {
+        super(facetHolder, menubar, menuOrder, repositoryFor);
     }
 }

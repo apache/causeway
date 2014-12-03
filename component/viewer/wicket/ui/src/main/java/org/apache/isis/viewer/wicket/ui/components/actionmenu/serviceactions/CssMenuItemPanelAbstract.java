@@ -17,4 +17,28 @@
  *  under the License.
  */
 
+package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.model.IModel;
+
+import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+
+/**
+ * Package-level adapter for menu items and submenu-items.
+ */
+abstract class CssMenuItemPanelAbstract<T extends IModel<?>> extends PanelAbstract<T> {
+
+    private static final long serialVersionUID = 1L;
+
+    public CssMenuItemPanelAbstract(final String id, final T model) {
+        super(id, model);
+        setRenderBodyOnly(true);
+    }
+
+    protected void addSubMenuItems(final WebMarkupContainer markupContainer, final CssMenuItem cssMenuItem) {
+        cssMenuItem.addTo(markupContainer);
+    }
+
+
+}

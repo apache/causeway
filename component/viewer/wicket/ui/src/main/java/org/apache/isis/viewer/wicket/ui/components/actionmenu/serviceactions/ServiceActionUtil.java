@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.appactions.cssmenu;
+package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.util.List;
 import java.util.Map;
@@ -26,8 +26,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
@@ -38,24 +36,15 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ApplicationActionsPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem.Builder;
+import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactory;
 
-/**
- * {@link ComponentFactory} for a {@link org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ApplicationActionsPanel} to represent the
- * {@link ApplicationActionsModel application action}s.
- */
-public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
+public final class ServiceActionUtil {
 
-    private final static long serialVersionUID = 1L;
+    private ServiceActionUtil(){}
 
-    
+    private final static ActionLinkFactory linkAndLabelFactory = new ServiceActionLinkFactory();
+
     static class LogicalServiceAction {
         private final String serviceName;
         private final ObjectAdapter serviceAdapter;
@@ -75,27 +64,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
         }
     }
 
-    private final static ActionLinkFactory cssMenuLinkFactory = new AppActionsCssMenuLinkFactory();
-
-    public AppActionsCssMenuFactory() {
-        super(ComponentType.APPLICATION_ACTIONS, ApplicationActionsPanel.class);
-    }
-
-    /**
-     * Generic, so applies to all models.
-     */
-    @Override
-    protected ApplicationAdvice appliesTo(final IModel<?> model) {
-        return appliesIf(model instanceof ApplicationActionsModel);
-    }
-
-    @Override
-    public Component createComponent(final String id, final IModel<?> model) {
-        final ApplicationActionsModel applicationActionsModel = (ApplicationActionsModel) model;
-        return new ApplicationActionsPanel(id, buildMenu(applicationActionsModel));
-    }
-
-    private List<CssMenuItem> buildMenu(final ApplicationActionsModel appActionsModel) {
+    public static List<CssMenuItem> buildMenu(final ServiceActionsModel appActionsModel) {
 
         final List<ObjectAdapter> serviceAdapters = appActionsModel.getObject();
 
@@ -104,24 +73,24 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
             collateServiceActions(serviceAdapter, ActionType.USER, serviceActions);
             collateServiceActions(serviceAdapter, ActionType.PROTOTYPE, serviceActions);
         }
-        
+
         final Set<String> serviceNamesInOrder = serviceNamesInOrder(serviceAdapters, serviceActions);
         final Map<String, List<LogicalServiceAction>> serviceActionsByName = groupByServiceName(serviceActions);
-        
+
         // prune any service names that have no service actions
         serviceNamesInOrder.retainAll(serviceActionsByName.keySet());
-        
-        return buildMenuItems(serviceNamesInOrder, serviceActionsByName, cssMenuLinkFactory);
+
+        return buildMenuItems(serviceNamesInOrder, serviceActionsByName, linkAndLabelFactory);
     }
 
     /**
      * Builds a hierarchy of {@link CssMenuItem}s, following the provided map of {@link LogicalServiceAction}s (keyed by their service Name).
      */
-    private List<CssMenuItem> buildMenuItems(
+    private static List<CssMenuItem> buildMenuItems(
             final Set<String> serviceNamesInOrder,
             final Map<String, List<LogicalServiceAction>> serviceActionsByName,
             final ActionLinkFactory actionLinkFactory) {
-        
+
         final List<CssMenuItem> menuItems = Lists.newArrayList();
         for (String serviceName : serviceNamesInOrder) {
             final CssMenuItem serviceMenuItem = CssMenuItem.newMenuItem(serviceName).build();
@@ -135,11 +104,11 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
                 final ObjectAdapterMemento serviceAdapterMemento = logicalServiceAction.serviceAdapterMemento;
                 final ObjectAction objectAction = logicalServiceAction.objectAction;
                 final boolean separator = logicalServiceAction.separator;
-                final Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, objectAction, separator, actionLinkFactory);
+                final CssMenuItem.Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, objectAction, separator, actionLinkFactory);
                 if (subMenuItemBuilder == null) {
                     // not visible
                     continue;
-                } 
+                }
                 subMenuItemBuilder.build();
             }
             if (serviceMenuItem.hasSubMenuItems()) {
@@ -153,7 +122,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
     // //////////////////////////////////////
 
     /**
-     * Spin through all object actions of the service adapter, and add to the provided List of {@link LogicalServiceAction}s. 
+     * Spin through all object actions of the service adapter, and add to the provided List of {@link LogicalServiceAction}s.
      */
     private static void collateServiceActions(final ObjectAdapter serviceAdapter, ActionType actionType, List<LogicalServiceAction> serviceActions) {
         final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
@@ -175,9 +144,9 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
 
     /**
      * The unique service names, as they appear in order of the provided List of {@link LogicalServiceAction}s.
-     * @param serviceAdapters 
+     * @param serviceAdapters
      */
-    private Set<String> serviceNamesInOrder(
+    private static Set<String> serviceNamesInOrder(
             final List<ObjectAdapter> serviceAdapters, final List<LogicalServiceAction> serviceActions) {
         final Set<String> serviceNameOrder = Sets.newLinkedHashSet();
 
@@ -197,11 +166,11 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
     }
 
     /**
-     * Group the provided {@link LogicalServiceAction}s by their service name. 
+     * Group the provided {@link LogicalServiceAction}s by their service name.
      */
     private static Map<String, List<LogicalServiceAction>> groupByServiceName(final List<LogicalServiceAction> serviceActions) {
         final Map<String, List<LogicalServiceAction>> serviceActionsByName = Maps.newTreeMap();
-        
+
         // map available services
         ObjectAdapter lastServiceAdapter = null;
         for (LogicalServiceAction serviceAction : serviceActions) {
@@ -216,10 +185,8 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
             serviceActionsForName.add(serviceAction);
             lastServiceAdapter = serviceAction.serviceAdapter;
         }
-        
+
         return serviceActionsByName;
     }
-
-
 
 }

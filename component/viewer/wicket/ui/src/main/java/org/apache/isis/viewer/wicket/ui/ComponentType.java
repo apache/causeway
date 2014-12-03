@@ -51,7 +51,7 @@ public enum ComponentType {
      * Could be rendered using a JavaScript or DHTML menu, an accordion, or a
      * tree view.
      */
-    APPLICATION_ACTIONS,
+    SERVICE_ACTIONS,
     /**
      * A single domain entity.
      */

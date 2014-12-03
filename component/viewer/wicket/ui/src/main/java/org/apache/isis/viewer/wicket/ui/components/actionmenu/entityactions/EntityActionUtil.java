@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.additionallinks;
+package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -44,8 +44,7 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.entity.EntityActionLinkFactory;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.ActionLinkFactory;
+import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactory;
 
 public final class EntityActionUtil {
 
@@ -99,7 +98,7 @@ public final class EntityActionUtil {
     /**
      * Converts an {@link org.apache.isis.viewer.wicket.model.models.EntityModel} and a (subset of its) {@link org.apache.isis.core.metamodel.spec.feature.ObjectAction}s into a
      * list of {@link org.apache.isis.viewer.wicket.model.links.LinkAndLabel}s intended to be apassed
-     * to the {@link org.apache.isis.viewer.wicket.ui.components.additionallinks.AdditionalLinksPanel}.
+     * to the {@link AdditionalLinksPanel}.
      */
     public static List<LinkAndLabel> asLinkAndLabelsForAdditionalLinksPanel(
             final EntityModel entityModel,

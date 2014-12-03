@@ -47,7 +47,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
@@ -61,6 +60,7 @@ import org.apache.wicket.request.resource.PackageResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -74,11 +74,11 @@ import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -89,7 +89,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChoo
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
-import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -156,6 +155,15 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     @Inject
     private PageClassRegistry pageClassRegistry;
 
+    /**
+     * Top-level &lt;div&gt; to which all content is added.
+     *
+     * <p>
+     *     Has <code>protected</code> visibility so that subclasses can also add directly to this div.
+     * </p>
+     */
+    protected MarkupContainer themeDiv;
+
     public PageAbstract(
             final PageParameters pageParameters,
             final String title,
@@ -172,14 +180,15 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
                 themeDiv.add(new CssClassAppender(CssClassAppender.asCssStyle(applicationName)));
             }
 
-            addApplicationActions(themeDiv);
+            addActionPromptModalWindow(themeDiv);
+            addServiceActionMenuBars(themeDiv);
 
             this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
             this.pageParameters = pageParameters;
 
             addApplicationName(themeDiv);
             addUserName(themeDiv);
-            addLogoutLink(themeDiv);
+            //addLogoutLink(themeDiv);
             addAboutLink(themeDiv);
 
             addBreadcrumbs();
@@ -237,7 +246,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
         response.render(CssHeaderItem.forReference(new BootstrapOverridesCssResourceReference()));
         contributeThemeSpecificOverrides(response);
-        PanelUtil.renderHead(response, PageAbstract.class);
 
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_ISIS_WICKET_VIEWER_JS));
@@ -282,17 +290,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         themeDiv.add(userName);
     }
 
-    private void addLogoutLink(MarkupContainer themeDiv) {
-        Link logoutLink = new Link("logoutLink") {
-
-            @Override
-            public void onClick() {
-                getSession().invalidate();
-                setResponsePage(getSignInPage());
-            }
-        };
-        themeDiv.add(logoutLink);
-    }
 
     private void addAboutLink(MarkupContainer themeDiv) {
         BookmarkablePageLink<Void> aboutLink = new BookmarkablePageLink<>("aboutLink", AboutPage.class);
@@ -335,11 +332,15 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         return pageParameters;
     }
 
-    private void addApplicationActions(MarkupContainer container) {
-        addActionPromptModalWindow();
-        final ApplicationActionsModel model = new ApplicationActionsModel();
-        model.setActionPromptProvider(this);
-        addComponent(container, ComponentType.APPLICATION_ACTIONS, model);
+    private void addServiceActionMenuBars(MarkupContainer container) {
+        addMenuBar(container, "primaryMenuBar", DomainService.MenuBar.PRIMARY);
+        addMenuBar(container, "secondaryMenuBar", DomainService.MenuBar.SECONDARY);
+        addMenuBar(container, "tertiaryMenuBar", DomainService.MenuBar.TERTIARY);
+    }
+
+    private void addMenuBar(MarkupContainer container, String id, DomainService.MenuBar menuBar) {
+        final ServiceActionsModel model = new ServiceActionsModel(menuBar);
+        getComponentFactoryRegistry().addOrReplaceComponent(container, id, ComponentType.SERVICE_ACTIONS, model);
     }
 
     /**
@@ -395,12 +396,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     
     private ActionPromptModalWindow actionPromptModalWindow;
 
-    protected MarkupContainer themeDiv;
     public ActionPrompt getActionPrompt() {
         return ActionPromptModalWindow.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
     }
 
-    private void addActionPromptModalWindow() {
+    private void addActionPromptModalWindow(final MarkupContainer themeDiv) {
         actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW); 
         themeDiv.addOrReplace(actionPromptModalWindow);
     }

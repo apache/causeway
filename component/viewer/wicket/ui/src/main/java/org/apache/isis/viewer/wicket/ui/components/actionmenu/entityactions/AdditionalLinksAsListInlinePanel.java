@@ -17,16 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.additionallinks;
+package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import java.util.List;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 
-public class AdditionalLinksAsDropDownPanel extends AdditionalLinksPanel {
+public class AdditionalLinksAsListInlinePanel extends AdditionalLinksPanel {
 
     private static final long serialVersionUID = 1L;
 
-    public AdditionalLinksAsDropDownPanel(String id, List<LinkAndLabel> links) {
+    public AdditionalLinksAsListInlinePanel(String id, List<LinkAndLabel> links) {
         super(id, links);
     }
 }
