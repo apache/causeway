@@ -600,8 +600,8 @@ div.label-left .choicesPlaceholder {
 }
 
 
-.modal-body textarea {
-    resize: none;
+.scalarValueWrapper textarea {
+    resize: vertical;
 }
 
 
@@ -649,3 +649,26 @@ div.label-left .choicesPlaceholder {
     display: inline-block;
     margin-left: 5px;
 }
+
+
+.scalarValueWrapper ul.additionalLinkList {
+    padding-bottom: 5px;
+}
+
+.scalarValueWrapper ul.additionalLinkListInline li.additionalLinkItem {
+    padding-bottom: 5px;
+}
+
+.scalarValueWrapper .help-block {
+    margin-bottom: 5px;
+}
+
+.scalarValueWrapper .help-block ul {
+    margin-bottom: 0px;
+}
+
+.scalarValueWrapper .help-block .alert {
+    margin-bottom: 0px;
+}
+
+
