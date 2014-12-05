@@ -189,8 +189,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
                 if(propertyLayout.labelPosition != null) {
                     props.setProperty("member." + memberName + ".propertyLayout.labelPosition", ""+propertyLayout.labelPosition);
                 }
-                //
-                {
+                if(propertyLayout.multiLine > 1) {
                     props.setProperty("member." + memberName + ".propertyLayout.multiLine", "" + propertyLayout.multiLine);
                 }
                 if(propertyLayout.named != null) {
@@ -200,8 +199,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
                 {
                     props.setProperty("member." + memberName + ".propertyLayout.renderedAsDayBefore", "" + propertyLayout.renderedAsDayBefore);
                 }
-                //
-                {
+                if(propertyLayout.typicalLength > 0) {
                     props.setProperty("member." + memberName + ".propertyLayout.typicalLength", "" + propertyLayout.typicalLength);
                 }
             }
@@ -221,8 +219,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
                 if(collectionLayout.named != null) {
                     props.setProperty("member." + memberName + ".collectionLayout.named", collectionLayout.named);
                 }
-                //
-                {
+                if(collectionLayout.paged > 0) {
                     props.setProperty("member." + memberName + ".collectionLayout.paged", "" + collectionLayout.paged);
                 }
                 if(collectionLayout.render != null) {
