@@ -45,6 +45,7 @@ public interface MultiLineFacet extends MultipleValueFacet {
      * set to <tt>false</tt>, then the viewer should automatically wrap when
      * spills over the length of one line.
      */
+    @Deprecated
     public boolean preventWrapping();
 
 }

@@ -29,12 +29,17 @@ public abstract class RenderedAdjustedFacetAbstract extends FacetAbstract implem
         return RenderedAdjustedFacet.class;
     }
 
-    public RenderedAdjustedFacetAbstract(final FacetHolder holder, final boolean derived) {
+    private final int adjustBy;
+
+    public RenderedAdjustedFacetAbstract(int adjustBy, final FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
+        this.adjustBy = adjustBy;
     }
 
     @Override
-    public abstract int value();
+    public int value() {
+        return adjustBy;
+    }
 
     @Override
     protected String toStringValues() {

@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
 public class PagedFacetProperties extends PagedFacetAbstract {
 
     public PagedFacetProperties(final Properties properties, final FacetHolder holder) {
-        super(holder, valueFrom(properties));
+        super(valueFrom(properties), holder);
     }
 
     private static int valueFrom(Properties properties) {

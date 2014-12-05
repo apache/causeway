@@ -34,7 +34,37 @@ import java.lang.annotation.Target;
 public @interface ActionLayout {
 
     /**
-     * If associated with a property, indicates the positioning of the
+     * Indicates the css class that an action should have.
+     *
+     * <p>
+     *     For the Wicket viewer, this can be a bootstrap class such as <code>btn-info</code>.
+     * </p>
+     */
+    String cssClass() default "";
+
+    /**
+     * Indicates the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class to decorate an
+     * action (button or menu item).
+     */
+    String cssClassFa() default "";
+
+    /**
+     * Description of this action, eg to be rendered in a tooltip.
+     */
+    String describedAs() default "";
+
+    /**
+     * Indicates where in the UI the action should <i>not</i>not be visible.
+     */
+    Where hidden() default Where.NOWHERE;
+
+    /**
+     * Name of this action (overriding the name derived from its name in code).
+     */
+    String named() default "";
+
+    /**
+     * For actions that are associated with a property, indicates the positioning of the
      * action's button relative to the property.
      *
      * <p>
@@ -49,5 +79,10 @@ public @interface ActionLayout {
         PANEL,
         PANEL_DROPDOWN
     }
+
+    /**
+     * Whether an action is a prototype action, only available when running in prototype (development) mode.
+     */
+    boolean prototype() default false;
 
 }

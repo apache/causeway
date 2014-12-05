@@ -20,22 +20,16 @@
 package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The page size for instances of this class when rendered within
- * a table.
- * 
- * <p>
- * If annotated on a collection, then the page size refers to
- * parented collections (eg <tt>Order#lineItems</tt>).
- * 
- * <p>
- * If annotated on a type, then the page size refers to standalone
- * collections (eg as returned from a repository query).
+ * @deprecated - use instead {@link ClassLayout#paged()} or {@link CollectionLayout#paged()}.
  */
+@Deprecated
+@Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Paged {

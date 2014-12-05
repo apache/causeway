@@ -29,7 +29,7 @@ public class TypicalLengthFacetOnPropertyFromProperties extends TypicalLengthFac
     private final int value;
 
     public TypicalLengthFacetOnPropertyFromProperties(final Properties properties, final FacetHolder holder) {
-        super(holder, false);
+        super(holder, Derivation.NOT_DERIVED);
         this.value = Integer.parseInt(properties.getProperty("value"));
     }
 

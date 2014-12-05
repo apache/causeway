@@ -22,9 +22,9 @@ package org.apache.isis.applib.annotation;
 import java.lang.annotation.*;
 
 /**
- * Indicates the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class to decorate an
- * action (button or menu item).
+ * @deprecated - see {@link ActionLayout#cssClassFa()}
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)

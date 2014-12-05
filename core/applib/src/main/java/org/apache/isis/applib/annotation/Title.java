@@ -31,6 +31,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Title {
+
     /**
      * The order (in Dewey decimal notation) that the property annotated with
      * {@link Title} appears with respect to other properties also annotated

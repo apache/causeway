@@ -26,8 +26,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The plural name of the class.
+ * @deprecated - use {@link ClassLayout#plural()}.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)

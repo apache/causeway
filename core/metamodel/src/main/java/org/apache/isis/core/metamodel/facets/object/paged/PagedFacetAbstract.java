@@ -31,7 +31,7 @@ public abstract class PagedFacetAbstract extends FacetAbstract implements PagedF
 
     private final int value;
 
-    public PagedFacetAbstract(final FacetHolder holder, int value) {
+    public PagedFacetAbstract(int value, final FacetHolder holder) {
         super(type(), holder, Derivation.DERIVED);
         this.value = value;
     }

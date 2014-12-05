@@ -25,30 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Comparator;
-import java.util.SortedSet;
 
 /**
- * Indicates that the elements in a ({@link SortedSet}) collection should be sorted according to a different order than the
- * natural sort order.
- * 
- * <p>
- * Whenever there is a collection of type {@link SortedSet}, the domain entity referenced 
- * is expected to implement {@link Comparable}, ie to have a natural ordering.  In effect tis
- * means that all domain entities should provide a natural ordering.
- * 
- * <p>
- * However, in some circumstances the ordering of collection may be different to the entity's
- * natural ordering.  For example, the entity may represent an interval of time sorted by its
- * <i>startDate</i> ascending, but the collection may wish to sort by <i>startDate</i>.
- * 
- * <p>
- * The purpose of this annotation is to provide a {@link Comparator} such that the collection
- * may be sorted in an order more suitable to the context.
- * 
- * 
- * <p>
- * Supported by Wicket viewer; check documentation for other viewers.
+ * @deprecated - use instead {@link CollectionLayout#sortedBy()}.
  */
+@Deprecated
 @Inherited
 @Target( ElementType.METHOD )
 @Retention(RetentionPolicy.RUNTIME)

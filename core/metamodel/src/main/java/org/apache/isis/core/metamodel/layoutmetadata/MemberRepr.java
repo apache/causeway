@@ -27,15 +27,70 @@ import java.util.Map;
 public class MemberRepr {
     
     public Map<String,ActionRepr> actions;
-    public PagedFacetRepr paged;
-    public RenderFacetRepr render;
-    public HiddenFacetRepr hidden;
-    public DisabledFacetRepr disabled;
-    public NamedFacetRepr named;
-    public DescribedAsFacetRepr describedAs;
-    public CssClassFacetRepr cssClass;
-    // TODO mgrigorov: should we add public CssClassFaFacetRepr cssClassFa; ?
-    public TypicalLengthFacetRepr typicalLength;
-    public MultiLineFacetRepr multiLine;
+
     public PropertyLayoutFacetRepr propertyLayout;
+    public CollectionLayoutFacetRepr collectionLayout;
+
+
+    // properties or collections
+
+    /**
+     * @deprecated - use instead {@link #propertyLayout} or {@link #collectionLayout}
+     */
+    @Deprecated
+    public CssClassFacetRepr cssClass;
+
+    /**
+     * @deprecated - use instead {@link #propertyLayout} or {@link #collectionLayout}
+     */
+    @Deprecated
+    public DescribedAsFacetRepr describedAs;
+
+    /**
+     * @deprecated - use instead {@link #propertyLayout} or {@link #collectionLayout}
+     */
+    @Deprecated
+    public NamedFacetRepr named;
+
+    /**
+     * @deprecated - use instead {@link #propertyLayout} or {@link #collectionLayout}
+     */
+    @Deprecated
+    public DisabledFacetRepr disabled;
+
+    /**
+     * @deprecated - use instead {@link #propertyLayout} or {@link #collectionLayout}
+     */
+    @Deprecated
+    public HiddenFacetRepr hidden;
+
+
+    // properties
+
+    /**
+     * @deprecated - use instead {@link #propertyLayout}
+     */
+    @Deprecated
+    public MultiLineFacetRepr multiLine;
+
+    /**
+     * @deprecated - use instead {@link #propertyLayout}
+     */
+    @Deprecated
+    public TypicalLengthFacetRepr typicalLength;
+
+    // collections
+
+    /**
+     * @deprecated - use instead {@link #collectionLayout}
+     */
+    @Deprecated
+    public PagedFacetRepr paged;
+
+    /**
+     * @deprecated - use instead {@link #collectionLayout}
+     */
+    @Deprecated
+    public RenderFacetRepr render;
+
 }

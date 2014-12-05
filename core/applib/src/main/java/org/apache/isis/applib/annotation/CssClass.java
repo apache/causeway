@@ -26,13 +26,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates the css class that a class/property/action should have.
+ * @deprecated - use {@link ClassLayout#cssClass()}, {@link PropertyLayout#cssClass()}, {@link CollectionLayout#cssClass()}, {@link ActionLayout#cssClass()} and {@link ParameterLayout#cssClass()}.
  */
-
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CssClass {
     String value();
 }
-

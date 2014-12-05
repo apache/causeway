@@ -37,7 +37,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
  * Enables fixtures to be installed from the application.
  */
 @Named("Prototyping")
-@DomainService(menuOrder = "40.1")
+@DomainService(menuBar = DomainService.MenuBar.SECONDARY, menuOrder = "40.1")
 public class ToDoItemsFixturesService extends FixtureScripts {
 
     public ToDoItemsFixturesService() {

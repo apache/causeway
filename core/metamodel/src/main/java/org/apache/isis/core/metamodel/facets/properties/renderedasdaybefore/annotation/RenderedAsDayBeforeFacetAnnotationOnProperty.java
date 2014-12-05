@@ -27,12 +27,8 @@ public class RenderedAsDayBeforeFacetAnnotationOnProperty extends RenderedAdjust
     private static final int ADJUST_BY = -1;
 
     public RenderedAsDayBeforeFacetAnnotationOnProperty(final FacetHolder holder) {
-        super(holder, false);
+        super(ADJUST_BY, holder);
     }
 
-    @Override
-    public int value() {
-        return ADJUST_BY;
-    }
 
 }

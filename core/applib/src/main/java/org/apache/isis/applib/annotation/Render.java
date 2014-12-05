@@ -26,36 +26,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that the rendering of a collection should be performed lazily or eagerly.
- * 
- * <p>
- * By default, collections and reference properties are rendered
- * lazily, meaning that their contents is not shown automatically; value properties 
- * on the other hand are rendered eagerly (the title at least is shown).
- * 
- * <p>
- * Using this annotation, an <tt>Order#lineItems</tt> collection might be
- * rendered eagerly.  A viewer might use this hint to &quot;open&quot; 
- * the collection automatically so that the user could see a list of
- * line items immediately when the order is rendered.
- * 
- * <p>
- * Or, a reference property containing an <tt>Address</tt> might be shown
- * address as an embedded property.
- *
- * <p>
- * Or, a value property might be annotated to render lazily; this would be
- * suitable for handling of BLOBs and CLOBs.
- * 
- * <p>
- * For properties and collections there is some similarity between this concept 
- * and that of eager-loading as supported by some object stores.  Indeed, some 
- * object stores may choose use their own specific annotations (eg a JDO default 
- * fetch group) in order to infer this semantic.
+ * @deprecated - use instead {@link CollectionLayout#render()}
  */
 @Inherited
 @Target( ElementType.METHOD )
 @Retention(RetentionPolicy.RUNTIME)
+@Deprecated
 public @interface Render {
 
     public enum Type {
@@ -64,7 +40,7 @@ public @interface Render {
     }
 
     /**
-     * How to resolve; by default {@value Type#EAGERLY}.
+     * @deprecated - use instead {@link CollectionLayout#render()}
      */
     Type value() default Type.EAGERLY;
 }

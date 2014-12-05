@@ -26,8 +26,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Description of a property/action.
+ * @deprecated - see {@link ClassLayout#describedAs()}, {@link PropertyLayout#describedAs()},
+ * {@link CollectionLayout#describedAs()}, {@link ActionLayout#describedAs()} and {@link ParameterLayout#describedAs()}.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)

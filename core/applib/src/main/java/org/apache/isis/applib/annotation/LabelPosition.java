@@ -25,6 +25,7 @@ package org.apache.isis.applib.annotation;
  * @see org.apache.isis.applib.annotation.ParameterLayout
  */
 public enum LabelPosition {
+    DEFAULT,
     LEFT,
     TOP,
     NONE

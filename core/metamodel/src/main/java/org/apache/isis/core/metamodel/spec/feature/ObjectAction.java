@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetFilters;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
-import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacet;
+import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -252,7 +252,7 @@ public interface ObjectAction extends ObjectMember {
         }
 
         public static ActionLayout.Position actionLayoutPositionOf(ObjectAction action) {
-            final ActionLayoutFacet layoutFacet = action.getFacet(ActionLayoutFacet.class);
+            final ActionPositionFacet layoutFacet = action.getFacet(ActionPositionFacet.class);
             return layoutFacet != null? layoutFacet.position(): ActionLayout.Position.BELOW;
         }
 

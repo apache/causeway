@@ -143,7 +143,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract implements IsisCo
         if(propParamLayout != null) {
             try {
                 final LabelPosition labelPosition = LabelPosition.valueOf(propParamLayout);
-                return new PropParamLayoutFacetFromConfiguration(labelPosition, facetHolder);
+                return new LabelAtFacetFromLayoutConfiguration(labelPosition, facetHolder);
             } catch(IllegalArgumentException ex) {
                 // ignore
             }

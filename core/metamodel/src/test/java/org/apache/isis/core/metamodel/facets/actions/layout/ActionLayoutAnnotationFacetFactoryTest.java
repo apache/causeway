@@ -24,11 +24,13 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
+import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
 
 public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testActionLayoutAnnotationPickedUp() {
-        final ActionLayoutFacetFactory facetFactory = new ActionLayoutFacetFactory();
+        final ActionLayoutFactory facetFactory = new ActionLayoutFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -41,15 +43,15 @@ public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactory
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(ActionLayoutFacet.class);
+        final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ActionLayoutFacetAnnotation);
-        final ActionLayoutFacetAnnotation actionLayoutFacetAnnotation = (ActionLayoutFacetAnnotation) facet;
+        assertTrue(facet instanceof ActionPositionFacetForActionLayoutAnnotation);
+        final ActionPositionFacetForActionLayoutAnnotation actionLayoutFacetAnnotation = (ActionPositionFacetForActionLayoutAnnotation) facet;
         assertEquals(ActionLayout.Position.PANEL, actionLayoutFacetAnnotation.position());
     }
 
     public void testActionLayoutFallbackPickedUp() {
-        final ActionLayoutFacetFactory facetFactory = new ActionLayoutFacetFactory();
+        final ActionLayoutFactory facetFactory = new ActionLayoutFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -62,9 +64,9 @@ public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactory
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(ActionLayoutFacet.class);
+        final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ActionLayoutFacetFallback);
+        assertTrue(facet instanceof ActionPositionFacetFallback);
     }
 
 }

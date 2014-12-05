@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.propparam.layout.PropParamLayoutFacetInferredFromMultiLineFacet;
+import org.apache.isis.core.metamodel.facets.propparam.layout.LabelAtFacetInferredFromMultiLineFacet;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 
 public class MultiLineFacetOnPropertyFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
@@ -54,7 +54,7 @@ public class MultiLineFacetOnPropertyFactory extends FacetFactoryAbstract implem
         if (facet == null) {
             return;
         }
-        FacetUtil.addFacet(new PropParamLayoutFacetInferredFromMultiLineFacet(facet.getFacetHolder()));
+        FacetUtil.addFacet(new LabelAtFacetInferredFromMultiLineFacet(facet.getFacetHolder()));
     }
 
     @Override

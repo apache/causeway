@@ -17,6 +17,18 @@
 package org.apache.isis.core.metamodel.layoutmetadata;
 
 
+import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotation.Where;
+
 public class PropertyLayoutFacetRepr {
-    public String labelPosition;
+
+    public String cssClass;
+    public String describedAs;
+    public Where hidden;
+    public LabelPosition labelPosition;
+    public int multiLine;
+    public String named;
+    public boolean renderedAsDayBefore;
+    public int typicalLength;
+
 }

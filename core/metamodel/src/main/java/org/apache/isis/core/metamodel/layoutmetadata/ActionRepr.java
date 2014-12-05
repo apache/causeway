@@ -23,9 +23,30 @@ package org.apache.isis.core.metamodel.layoutmetadata;
  * Free-standing (non-associated) actions are represented simply by {@link MemberRepr}.
  */
 public class ActionRepr {
-    public NamedFacetRepr named;
-    public DescribedAsFacetRepr describedAs;
-    public CssClassFacetRepr cssClass;
-    public CssClassFaFacetRepr cssClassFa;
+
     public ActionLayoutFacetRepr actionLayout;
+
+    /**
+     * @deprecated - use instead {@link #actionLayout}
+     */
+    @Deprecated
+    public CssClassFacetRepr cssClass;
+
+    /**
+     * @deprecated - use instead {@link #actionLayout}
+     */
+    @Deprecated
+    public CssClassFaFacetRepr cssClassFa;
+
+    /**
+     * @deprecated - use instead {@link #actionLayout}
+     */
+    @Deprecated
+    public DescribedAsFacetRepr describedAs;
+
+    /**
+     * @deprecated - use instead {@link #actionLayout}
+     */
+    @Deprecated
+    public NamedFacetRepr named;
 }

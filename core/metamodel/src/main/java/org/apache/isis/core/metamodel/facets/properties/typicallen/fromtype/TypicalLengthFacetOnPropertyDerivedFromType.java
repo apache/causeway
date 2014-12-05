@@ -29,7 +29,7 @@ public class TypicalLengthFacetOnPropertyDerivedFromType extends TypicalLengthFa
     private final TypicalLengthFacet typicalLengthFacet;
 
     public TypicalLengthFacetOnPropertyDerivedFromType(final TypicalLengthFacet typicalLengthFacet, final FacetHolder holder) {
-        super(holder, true);
+        super(holder, Derivation.DERIVED);
         this.typicalLengthFacet = typicalLengthFacet;
     }
 

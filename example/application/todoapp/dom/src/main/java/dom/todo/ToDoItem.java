@@ -54,6 +54,7 @@ import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyInteraction;
 import org.apache.isis.applib.annotation.Prototype;
@@ -381,8 +382,8 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     @ActionSemantics(Of.IDEMPOTENT)
     public ToDoItem updateCost(
-            @Named("New cost") 
-            @javax.validation.constraints.Digits(integer=10, fraction=2) 
+            @ParameterLayout(named = "New cost")
+            @javax.validation.constraints.Digits(integer=10, fraction=2)
             @Optional 
             final BigDecimal cost) {
         LOG.debug("%s: cost updated: %s -> %s", container.titleOf(this), getCost(), cost);

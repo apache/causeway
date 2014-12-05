@@ -16,8 +16,6 @@
  */
 package org.apache.isis.core.metamodel.layoutmetadata;
 
-import java.util.Map;
-
 public class PagedFacetRepr {
     public int value;
 }

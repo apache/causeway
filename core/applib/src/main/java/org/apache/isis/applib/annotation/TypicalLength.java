@@ -25,14 +25,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.adapters.Parser;
-
 /**
- * The typical entry length of a field, use to determine the optimum width for
- * display
+ * @deprecated - use instead {@link PropertyLayout#typicalLength()} or
+ * {@link ParameterLayout#typicalLength()}.
  * 
- * @see Parser
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)

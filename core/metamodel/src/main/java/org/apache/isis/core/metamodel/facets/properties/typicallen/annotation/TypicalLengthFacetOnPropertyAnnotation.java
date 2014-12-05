@@ -27,7 +27,7 @@ public class TypicalLengthFacetOnPropertyAnnotation extends TypicalLengthFacetAb
     private final int value;
 
     public TypicalLengthFacetOnPropertyAnnotation(final int value, final FacetHolder holder) {
-        super(holder, false);
+        super(holder, Derivation.NOT_DERIVED);
         this.value = value;
     }
 

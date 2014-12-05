@@ -26,8 +26,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates the name that a property/action should be been known by.
+ * @deprecated - use instead {@link ClassLayout#named()}, {@link PropertyLayout#named()}, {@link CollectionLayout#named()}, {@link ActionLayout#named()} and {@link ParameterLayout#named()}.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)

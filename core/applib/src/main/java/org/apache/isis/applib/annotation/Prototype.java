@@ -26,8 +26,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates the an action should be only available in prototype mode
+ * @deprecated - use {@link ActionLayout#prototype()} instead.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)

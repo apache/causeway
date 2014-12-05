@@ -17,7 +17,12 @@
 package org.apache.isis.core.metamodel.layoutmetadata.json;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
@@ -47,7 +52,25 @@ import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
-import org.apache.isis.core.metamodel.layoutmetadata.*;
+import org.apache.isis.core.metamodel.layoutmetadata.ActionLayoutFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.ActionRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.CollectionLayoutFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.ColumnRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.CssClassFaFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.CssClassFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.DescribedAsFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.DisabledFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.HiddenFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadata;
+import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
+import org.apache.isis.core.metamodel.layoutmetadata.MemberGroupRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.MemberRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.MultiLineFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.NamedFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.PagedFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.PropertyLayoutFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.RenderFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.TypicalLengthFacetRepr;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
@@ -137,34 +160,57 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             
             final MemberRepr memberRepr = members.get(memberName);
 
-            final NamedFacetRepr named = memberRepr.named;
-            if(named != null) {
-                props.setProperty("member." + memberName + ".named.value", named.value);
+            // actions
+
+            final Map<String, ActionRepr> actions = memberRepr.actions;
+            if(actions != null) {
+                int actSeq = 0;
+                for(final String actionName: actions.keySet()) {
+                    final ActionRepr actionRepr = actions.get(actionName);
+                    String nameKey = "action." + actionName + ".memberOrder.name";
+                    props.setProperty(nameKey, memberName);
+                    setRemainingActionProperties(props, "action", actionName, actionRepr, ++actSeq);
+                }
+            }
+
+            // propertyLayout
+
+            final PropertyLayoutFacetRepr propertyLayout = memberRepr.propertyLayout;
+            if(propertyLayout!= null) {
+                props.setProperty("member." + memberName + ".propertyLayout.cssClass", propertyLayout.cssClass);
+                props.setProperty("member." + memberName + ".propertyLayout.describedAs", propertyLayout.describedAs);
+                props.setProperty("member." + memberName + ".propertyLayout.hidden", ""+propertyLayout.hidden);
+                props.setProperty("member." + memberName + ".propertyLayout.labelPosition", ""+propertyLayout.labelPosition);
+                props.setProperty("member." + memberName + ".propertyLayout.multiLine", ""+propertyLayout.multiLine);
+                props.setProperty("member." + memberName + ".propertyLayout.named", propertyLayout.named);
+                props.setProperty("member." + memberName + ".propertyLayout.renderedAsDayBefore", ""+propertyLayout.renderedAsDayBefore);
+                props.setProperty("member." + memberName + ".propertyLayout.typicalLength", ""+propertyLayout.typicalLength);
+            }
+
+            // collectionLayout
+            final CollectionLayoutFacetRepr collectionLayout = memberRepr.collectionLayout;
+            if(collectionLayout!= null) {
+                props.setProperty("member." + memberName + ".collectionLayout.cssClass", collectionLayout.cssClass);
+                props.setProperty("member." + memberName + ".collectionLayout.describedAs", collectionLayout.describedAs);
+                props.setProperty("member." + memberName + ".collectionLayout.hidden", ""+collectionLayout.hidden);
+                props.setProperty("member." + memberName + ".collectionLayout.named", collectionLayout.named);
+                props.setProperty("member." + memberName + ".collectionLayout.paged", ""+collectionLayout.paged);
+                props.setProperty("member." + memberName + ".collectionLayout.render", ""+collectionLayout.render);
+                props.setProperty("member." + memberName + ".collectionLayout.sortedBy", ""+collectionLayout.sortedBy);
+            }
+
+
+            // deprecated - properties & collections
+
+            final CssClassFacetRepr cssClass = memberRepr.cssClass;
+            if(cssClass!= null) {
+                props.setProperty("member." + memberName + ".cssClass.value", cssClass.value);
             }
             final DescribedAsFacetRepr describedAs = memberRepr.describedAs;
             if(describedAs!= null) {
                 props.setProperty("member." + memberName + ".describedAs.value", describedAs.value);
             }
-            final CssClassFacetRepr cssClass = memberRepr.cssClass;
-            if(cssClass!= null) {
-                props.setProperty("member." + memberName + ".cssClass.value", cssClass.value);
-            }
-            final TypicalLengthFacetRepr typicalLength = memberRepr.typicalLength;
-            if(typicalLength!= null) {
-                props.setProperty("member." + memberName + ".typicalLength.value", ""+typicalLength.value);
-            }
-            final MultiLineFacetRepr multiLine = memberRepr.multiLine;
-            if(multiLine!= null) {
-                props.setProperty("member." + memberName + ".multiLine.numberOfLines", ""+multiLine.numberOfLines);
-            }
-            final PropertyLayoutFacetRepr propertyLayout = memberRepr.propertyLayout;
-            if(propertyLayout!= null) {
-                props.setProperty("member." + memberName + ".propertyLayout.labelPosition", ""+propertyLayout.labelPosition);
-            }
-            final PagedFacetRepr paged = memberRepr.paged;
-            if(paged != null) {
-                props.setProperty("member." + memberName + ".paged.value", ""+paged.value);
-            }
+
             final DisabledFacetRepr disabled = memberRepr.disabled;
             if(disabled != null) {
                 // same default as in Disabled.when()
@@ -186,6 +232,29 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
                 final Where hiddenWhere = hidden.where!=null?hidden.where: Where.ANYWHERE;
                 props.setProperty("member." + memberName + ".hidden.where", hiddenWhere.toString());
             }
+
+            final NamedFacetRepr named = memberRepr.named;
+            if(named != null) {
+                props.setProperty("member." + memberName + ".named.value", named.value);
+            }
+
+            // deprecated - properties
+
+            final MultiLineFacetRepr multiLine = memberRepr.multiLine;
+            if(multiLine!= null) {
+                props.setProperty("member." + memberName + ".multiLine.numberOfLines", ""+multiLine.numberOfLines);
+            }
+            final TypicalLengthFacetRepr typicalLength = memberRepr.typicalLength;
+            if(typicalLength!= null) {
+                props.setProperty("member." + memberName + ".typicalLength.value", ""+typicalLength.value);
+            }
+
+            // deprecated - collections
+
+            final PagedFacetRepr paged = memberRepr.paged;
+            if(paged != null) {
+                props.setProperty("member." + memberName + ".paged.value", ""+paged.value);
+            }
             final RenderFacetRepr render = memberRepr.render;
             if(render != null) {
                 // same default as in Render.Type.value()
@@ -193,16 +262,6 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
                 props.setProperty("member." + memberName + ".render.value", renderType.toString());
             }
             
-            final Map<String, ActionRepr> actions = memberRepr.actions;
-            if(actions != null) {
-                int actSeq = 0;
-                for(final String actionName: actions.keySet()) {
-                    final ActionRepr actionRepr = actions.get(actionName);
-                    String nameKey = "action." + actionName + ".memberOrder.name";
-                    props.setProperty(nameKey, memberName);
-                    setRemainingActionProperties(props, "action", actionName, actionRepr, ++actSeq);
-                }
-            }
         }
     }
 
@@ -218,18 +277,30 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         }
     }
 
-    private static void setRemainingActionProperties(Properties props, String prefix, final String actionNameOrig, final ActionRepr actionRepr, final int seq) {
+    private static void setRemainingActionProperties(
+            final Properties props,
+            final String prefix,
+            final String actionNameOrig,
+            final ActionRepr actionRepr,
+            final int seq) {
+
         final String actionName = actionNameOrig + ("action".equals(prefix)?"":"()");
         props.setProperty(prefix + "." + actionName + ".memberOrder.sequence", ""+ seq);
-        
-        final NamedFacetRepr actionNamed = actionRepr.named;
-        if(actionNamed != null) {
-            props.setProperty(prefix +"." + actionName + ".named.value", actionNamed.value);
+
+        final ActionLayoutFacetRepr actionLayout = actionRepr.actionLayout;
+        if(actionLayout != null) {
+            props.setProperty(prefix +"." + actionName + ".actionLayout.cssClass", actionLayout.cssClass);
+            props.setProperty(prefix +"." + actionName + ".actionLayout.cssClassFa", actionLayout.cssClassFa);
+            props.setProperty(prefix +"." + actionName + ".actionLayout.describedAs", actionLayout.describedAs);
+            props.setProperty(prefix +"." + actionName + ".actionLayout.hidden", ""+actionLayout.hidden);
+            props.setProperty(prefix +"." + actionName + ".actionLayout.named", actionLayout.named);
+            props.setProperty(prefix +"." + actionName + ".actionLayout.position", ""+actionLayout.position);
+            props.setProperty(prefix +"." + actionName + ".actionLayout.prototype", ""+actionLayout.prototype);
         }
-        final DescribedAsFacetRepr describedAs = actionRepr.describedAs;
-        if(describedAs!= null) {
-            props.setProperty(prefix +"." + actionName + ".describedAs.value", describedAs.value);
-        }
+
+
+        // deprecated
+
         final CssClassFacetRepr cssClass = actionRepr.cssClass;
         if(cssClass!= null) {
             props.setProperty(prefix +"." + actionName + ".cssClass.value", cssClass.value);
@@ -238,9 +309,13 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         if(cssClassFa != null) {
             props.setProperty(prefix +"." + actionName + ".cssClassFa.value", cssClassFa.value);
         }
-        final ActionLayoutFacetRepr actionLayout = actionRepr.actionLayout;
-        if(actionLayout != null) {
-            props.setProperty(prefix +"." + actionName + ".actionLayout.position", actionLayout.position);
+        final DescribedAsFacetRepr describedAs = actionRepr.describedAs;
+        if(describedAs!= null) {
+            props.setProperty(prefix +"." + actionName + ".describedAs.value", describedAs.value);
+        }
+        final NamedFacetRepr actionNamed = actionRepr.named;
+        if(actionNamed != null) {
+            props.setProperty(prefix +"." + actionName + ".named.value", actionNamed.value);
         }
     }
 

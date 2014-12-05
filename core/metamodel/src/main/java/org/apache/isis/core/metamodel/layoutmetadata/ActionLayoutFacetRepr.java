@@ -17,6 +17,15 @@
 package org.apache.isis.core.metamodel.layoutmetadata;
 
 
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Where;
+
 public class ActionLayoutFacetRepr {
-    public String position;
+    public String cssClass;
+    public String cssClassFa;
+    public String describedAs;
+    public Where hidden;
+    public String named;
+    public ActionLayout.Position position;
+    public boolean prototype;
 }

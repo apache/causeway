@@ -29,8 +29,8 @@ public abstract class TypicalLengthFacetAbstract extends FacetAbstract implement
         return TypicalLengthFacet.class;
     }
 
-    public TypicalLengthFacetAbstract(final FacetHolder holder, final boolean derived) {
-        super(type(), holder, Derivation.NOT_DERIVED);
+    public TypicalLengthFacetAbstract(final FacetHolder holder, final Derivation derivation) {
+        super(type(), holder, derivation);
     }
 
     @Override

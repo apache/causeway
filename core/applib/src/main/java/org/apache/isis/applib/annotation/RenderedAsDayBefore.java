@@ -26,27 +26,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * A rendering hint, instructing the viewer that the date should as one day prior to
- * the actually stored date.
- * 
- * <p>
- * This is intended to be used so that an exclusive end date of an interval
- * can be rendered as 1 day before the actual value stored.
- * 
- * <p>
- * For example:
- * <pre>
- * public LocalDate getStartDate() { ... }
- * 
- * &#64;RenderedAsDayBefore
- * public LocalDate getEndDate() { ... }
- * </pre>
- * 
- * <p>
- * Here, the interval of the [1-may-2013,1-jun-2013) would be rendered as the dates
- * 1-may-2013 for the start date but using 31-may-2013 (the day before) for the end date.  What is stored
- * In the domain object, itself, however, the value stored is 1-jun-2013.
+ * @deprecated - use instead {@link PropertyLayout#renderedAsDayBefore()} and {@link ParameterLayout#renderedAsDayBefore()}.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
