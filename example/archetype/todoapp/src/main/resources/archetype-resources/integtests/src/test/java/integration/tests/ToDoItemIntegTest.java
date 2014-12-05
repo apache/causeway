@@ -1034,7 +1034,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             public void cannotModify() throws Exception {
 
                 // when, then
-                expectedExceptions.expectMessage("Always hidden");
+                expectedExceptions.expectMessage("Reason: Hidden on Everywhere. Identifier: dom.todo.ToDoItem${symbol_pound}ownedBy()");
                 toDoItem.setOwnedBy("other");
             }
 

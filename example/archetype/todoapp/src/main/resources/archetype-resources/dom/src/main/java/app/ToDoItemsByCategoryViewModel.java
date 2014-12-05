@@ -23,7 +23,6 @@ package app;
 
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItem.Category;
-import dom.todo.ToDoItem.Subcategory;
 import dom.todo.ToDoItems;
 
 import java.util.Arrays;
@@ -33,16 +32,19 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.MultiLine;
-import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.ClassLayout;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.util.ObjectContracts;
 
-@Named("By Category")
+@ClassLayout(
+        named="By Category"
+)
 @Bookmarkable
 @ViewModel
 public class ToDoItemsByCategoryViewModel 
@@ -71,14 +73,18 @@ public class ToDoItemsByCategoryViewModel
     //endregion
 
     //region > notYetComplete (property), complete (property)
-    @MultiLine(numberOfLines=5)
+    @PropertyLayout(
+        multiLine=5
+    )
     public String getNotYetComplete() {
         final List<ToDoItem> notYetComplete = getItemsNotYetComplete();
         return Joiner.on(", ").join(
             Iterables.transform(subcategories(), summarizeBySubcategory(notYetComplete)));
     }
 
-    @MultiLine(numberOfLines=5)
+    @PropertyLayout(
+        multiLine=5
+    )
     public String getComplete() {
         final List<ToDoItem> completeInCategory = getItemsComplete();
         return Joiner.on(", ").join(
@@ -87,20 +93,20 @@ public class ToDoItemsByCategoryViewModel
 
     // //////////////////////////////////////
 
-    private Iterable<Subcategory> subcategories() {
-        return Iterables.filter(Arrays.asList(Subcategory.values()), Subcategory.thoseFor(getCategory()));
+    private Iterable<ToDoItem.Subcategory> subcategories() {
+        return Iterables.filter(Arrays.asList(ToDoItem.Subcategory.values()), ToDoItem.Subcategory.thoseFor(getCategory()));
     }
 
-    private Function<Subcategory, String> summarizeBySubcategory(final Iterable<ToDoItem> itemsInCategory) {
-        return new Function<Subcategory, String>() {
+    private Function<ToDoItem.Subcategory, String> summarizeBySubcategory(final Iterable<ToDoItem> itemsInCategory) {
+        return new Function<ToDoItem.Subcategory, String>() {
             @Override
-            public String apply(final Subcategory subcategory) {
+            public String apply(final ToDoItem.Subcategory subcategory) {
                 return subcategory + ": " + countIn(itemsInCategory, subcategory);
             }
         };
     }
 
-    private static int countIn(final Iterable<ToDoItem> items, final Subcategory subcategory) {
+    private static int countIn(final Iterable<ToDoItem> items, final ToDoItem.Subcategory subcategory) {
         return Iterables.size(Iterables.filter(items,
                 ToDoItem.Predicates.thoseSubcategorised(subcategory)));
     }
@@ -128,7 +134,9 @@ public class ToDoItemsByCategoryViewModel
     //endregion
 
     //region > deleteCompleted (action)
-    @Named("Delete")
+    @ActionLayout(
+            named="Delete"
+    )
     public ToDoItemsByCategoryViewModel deleteCompleted() {
         for (ToDoItem item : getItemsComplete()) {
             container.removeIfNotAlready(item);

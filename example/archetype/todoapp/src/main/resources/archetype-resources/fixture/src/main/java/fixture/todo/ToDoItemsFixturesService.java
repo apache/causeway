@@ -24,13 +24,12 @@ package fixture.todo;
 import fixture.todo.scenarios.ToDoItemsRecreateAndCompleteSeveral;
 
 import java.util.List;
+import org.apache.isis.applib.annotation.ClassLayout;
 import org.apache.isis.applib.annotation.CssClassFa;
-import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.MultiLine;
-import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.fixturescripts.FixtureResult;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
@@ -39,8 +38,10 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 /**
  * Enables fixtures to be installed from the application.
  */
-@Named("Prototyping")
-@DomainService(menuOrder = "40.1")
+@ClassLayout(
+        named = "Prototyping"
+)
+@DomainService(menuBar = DomainService.MenuBar.SECONDARY, menuOrder = "10")
 public class ToDoItemsFixturesService extends FixtureScripts {
 
     public ToDoItemsFixturesService() {
@@ -51,8 +52,10 @@ public class ToDoItemsFixturesService extends FixtureScripts {
     @Override
     public List<FixtureResult> runFixtureScript(
             final FixtureScript fixtureScript,
-            final @Named("Parameters") @DescribedAs("Script-specific parameters (key=value) ")
-            @MultiLine(numberOfLines = 10)
+            final @ParameterLayout(
+                    named="Parameters",
+                    describedAs = "Script-specific parameters (key=value) ",
+                    multiLine = 10)
             @Optional
             String parameters) {
         return super.runFixtureScript(fixtureScript, parameters);

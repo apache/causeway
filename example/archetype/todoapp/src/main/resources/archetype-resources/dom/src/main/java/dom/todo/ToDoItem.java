@@ -57,6 +57,7 @@ import org.apache.isis.applib.annotation.MinLength;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyInteraction;
 import org.apache.isis.applib.annotation.Prototype;
@@ -384,8 +385,8 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     @ActionSemantics(Of.IDEMPOTENT)
     public ToDoItem updateCost(
-            @Named("New cost") 
-            @javax.validation.constraints.Digits(integer=10, fraction=2) 
+            @ParameterLayout(named = "New cost")
+            @javax.validation.constraints.Digits(integer=10, fraction=2)
             @Optional 
             final BigDecimal cost) {
         LOG.debug("%s: cost updated: %s -> %s", container.titleOf(this), getCost(), cost);
@@ -582,11 +583,11 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     // (a) has different semantics and (b) is in any case automatically ignored
     // by the framework
     public ToDoItem duplicate(
-            final @RegEx(validation = "${symbol_escape}${symbol_escape}w[@&:${symbol_escape}${symbol_escape}-${symbol_escape}${symbol_escape},${symbol_escape}${symbol_escape}.${symbol_escape}${symbol_escape}+ ${symbol_escape}${symbol_escape}w]*") @Named("Description") String description, 
-            final @Named("Category") Category category,
-            final @Named("Subcategory") Subcategory subcategory,
-            final @Optional @Named("Due by") LocalDate dueBy,
-            final @Optional @Named("Cost") BigDecimal cost) {
+            final @RegEx(validation = "${symbol_escape}${symbol_escape}w[@&:${symbol_escape}${symbol_escape}-${symbol_escape}${symbol_escape},${symbol_escape}${symbol_escape}.${symbol_escape}${symbol_escape}+ ${symbol_escape}${symbol_escape}w]*") @ParameterLayout(named="Description") String description,
+            final @ParameterLayout(named="Category") Category category,
+            final @ParameterLayout(named="Subcategory") Subcategory subcategory,
+            final @Optional @ParameterLayout(named="Due by") LocalDate dueBy,
+            final @Optional @ParameterLayout(named="Cost") BigDecimal cost) {
         return toDoItems.newToDo(description, category, subcategory, dueBy, cost);
     }
     public String default0Duplicate() {

@@ -39,11 +39,11 @@ import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
@@ -198,8 +198,8 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     @ActionSemantics(Of.IDEMPOTENT)
     public Categorized updateCategory(
             final Categorized item,
-            final @Named("Category") Category category,
-            final @Optional @Named("Subcategory") Subcategory subcategory) {
+            final @ParameterLayout(named="Category") Category category,
+            final @Optional @ParameterLayout(named="Subcategory") Subcategory subcategory) {
         item.setCategory(category);
         item.setSubcategory(subcategory);
         return item;

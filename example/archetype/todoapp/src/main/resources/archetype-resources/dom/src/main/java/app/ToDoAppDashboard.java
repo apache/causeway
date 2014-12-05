@@ -23,10 +23,8 @@ package app;
 
 import java.util.List;
 import org.apache.isis.applib.AbstractViewModel;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.Disabled;
-import org.apache.isis.applib.annotation.Named;
-import org.apache.isis.applib.annotation.Render;
-import org.apache.isis.applib.annotation.Render.Type;
 
 public class ToDoAppDashboard extends AbstractViewModel {
 
@@ -52,8 +50,10 @@ public class ToDoAppDashboard extends AbstractViewModel {
     //endregion
 
     //region > getAnalysisByCategory (collection)
-    @Named("By Category")
-    @Render(Type.EAGERLY)
+    @CollectionLayout(
+            named="By Category",
+            render = CollectionLayout.RenderType.EAGERLY
+    )
     @Disabled
     public List<ToDoItemsByCategoryViewModel> getAnalysisByCategory() {
         return toDoItemAnalysis.toDoItemsByCategory();
@@ -61,8 +61,10 @@ public class ToDoAppDashboard extends AbstractViewModel {
     //endregion
 
     //region > getAnalysisByDateRange (collection)
-    @Named("By Date Range")
-    @Render(Type.EAGERLY)
+    @CollectionLayout(
+            named="By Date Range",
+            render = CollectionLayout.RenderType.EAGERLY
+    )
     @Disabled
     public List<ToDoItemsByDateRangeViewModel> getAnalysisByDateRange() {
         return toDoItemAnalysis.toDoItemsByDateRange();
