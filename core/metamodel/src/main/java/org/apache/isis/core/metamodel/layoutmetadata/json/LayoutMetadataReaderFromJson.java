@@ -177,26 +177,60 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
 
             final PropertyLayoutFacetRepr propertyLayout = memberRepr.propertyLayout;
             if(propertyLayout!= null) {
-                props.setProperty("member." + memberName + ".propertyLayout.cssClass", ""+propertyLayout.cssClass);
-                props.setProperty("member." + memberName + ".propertyLayout.describedAs", ""+propertyLayout.describedAs);
-                props.setProperty("member." + memberName + ".propertyLayout.hidden", ""+propertyLayout.hidden);
-                props.setProperty("member." + memberName + ".propertyLayout.labelPosition", ""+propertyLayout.labelPosition);
-                props.setProperty("member." + memberName + ".propertyLayout.multiLine", ""+propertyLayout.multiLine);
-                props.setProperty("member." + memberName + ".propertyLayout.named", ""+propertyLayout.named);
-                props.setProperty("member." + memberName + ".propertyLayout.renderedAsDayBefore", ""+propertyLayout.renderedAsDayBefore);
-                props.setProperty("member." + memberName + ".propertyLayout.typicalLength", ""+propertyLayout.typicalLength);
+                if(propertyLayout.cssClass != null) {
+                    props.setProperty("member." + memberName + ".propertyLayout.cssClass", propertyLayout.cssClass);
+                }
+                if(propertyLayout.describedAs != null) {
+                    props.setProperty("member." + memberName + ".propertyLayout.describedAs", propertyLayout.describedAs);
+                }
+                if(propertyLayout.hidden != null) {
+                    props.setProperty("member." + memberName + ".propertyLayout.hidden", ""+propertyLayout.hidden);
+                }
+                if(propertyLayout.labelPosition != null) {
+                    props.setProperty("member." + memberName + ".propertyLayout.labelPosition", ""+propertyLayout.labelPosition);
+                }
+                //
+                {
+                    props.setProperty("member." + memberName + ".propertyLayout.multiLine", "" + propertyLayout.multiLine);
+                }
+                if(propertyLayout.named != null) {
+                    props.setProperty("member." + memberName + ".propertyLayout.named", propertyLayout.named);
+                }
+                //
+                {
+                    props.setProperty("member." + memberName + ".propertyLayout.renderedAsDayBefore", "" + propertyLayout.renderedAsDayBefore);
+                }
+                //
+                {
+                    props.setProperty("member." + memberName + ".propertyLayout.typicalLength", "" + propertyLayout.typicalLength);
+                }
             }
 
             // collectionLayout
             final CollectionLayoutFacetRepr collectionLayout = memberRepr.collectionLayout;
             if(collectionLayout!= null) {
-                props.setProperty("member." + memberName + ".collectionLayout.cssClass", ""+collectionLayout.cssClass);
-                props.setProperty("member." + memberName + ".collectionLayout.describedAs", ""+collectionLayout.describedAs);
-                props.setProperty("member." + memberName + ".collectionLayout.hidden", ""+collectionLayout.hidden);
-                props.setProperty("member." + memberName + ".collectionLayout.named", ""+collectionLayout.named);
-                props.setProperty("member." + memberName + ".collectionLayout.paged", ""+collectionLayout.paged);
-                props.setProperty("member." + memberName + ".collectionLayout.render", ""+collectionLayout.render);
-                props.setProperty("member." + memberName + ".collectionLayout.sortedBy", ""+collectionLayout.sortedBy);
+                if(collectionLayout.cssClass != null) {
+                    props.setProperty("member." + memberName + ".collectionLayout.cssClass", collectionLayout.cssClass);
+                }
+                if(collectionLayout.describedAs != null) {
+                    props.setProperty("member." + memberName + ".collectionLayout.describedAs", collectionLayout.describedAs);
+                }
+                if(collectionLayout.hidden != null) {
+                    props.setProperty("member." + memberName + ".collectionLayout.hidden", ""+collectionLayout.hidden);
+                }
+                if(collectionLayout.named != null) {
+                    props.setProperty("member." + memberName + ".collectionLayout.named", collectionLayout.named);
+                }
+                //
+                {
+                    props.setProperty("member." + memberName + ".collectionLayout.paged", "" + collectionLayout.paged);
+                }
+                if(collectionLayout.render != null) {
+                    props.setProperty("member." + memberName + ".collectionLayout.render", ""+collectionLayout.render);
+                }
+                if(collectionLayout.sortedBy != null) {
+                    props.setProperty("member." + memberName + ".collectionLayout.sortedBy", collectionLayout.sortedBy);
+                }
             }
 
 
@@ -289,13 +323,28 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
 
         final ActionLayoutFacetRepr actionLayout = actionRepr.actionLayout;
         if(actionLayout != null) {
-            props.setProperty(prefix +"." + actionName + ".actionLayout.cssClass", ""+actionLayout.cssClass);
-            props.setProperty(prefix +"." + actionName + ".actionLayout.cssClassFa", ""+actionLayout.cssClassFa);
-            props.setProperty(prefix +"." + actionName + ".actionLayout.describedAs", ""+actionLayout.describedAs);
-            props.setProperty(prefix +"." + actionName + ".actionLayout.hidden", ""+actionLayout.hidden);
-            props.setProperty(prefix +"." + actionName + ".actionLayout.named", ""+actionLayout.named);
-            props.setProperty(prefix +"." + actionName + ".actionLayout.position", ""+actionLayout.position);
-            props.setProperty(prefix +"." + actionName + ".actionLayout.prototype", ""+actionLayout.prototype);
+            if(actionLayout.cssClass != null) {
+                props.setProperty(prefix + "." + actionName + ".actionLayout.cssClass", actionLayout.cssClass);
+            }
+            if(actionLayout.cssClassFa != null) {
+                props.setProperty(prefix + "." + actionName + ".actionLayout.cssClassFa", actionLayout.cssClassFa);
+            }
+            if(actionLayout.describedAs != null) {
+                props.setProperty(prefix + "." + actionName + ".actionLayout.describedAs", actionLayout.describedAs);
+            }
+            if(actionLayout.hidden != null) {
+                props.setProperty(prefix + "." + actionName + ".actionLayout.hidden", ""+actionLayout.hidden);
+            }
+            if(actionLayout.named != null) {
+                props.setProperty(prefix + "." + actionName + ".actionLayout.named", actionLayout.named);
+            }
+            if(actionLayout.position != null) {
+                props.setProperty(prefix + "." + actionName + ".actionLayout.position", ""+actionLayout.position);
+            }
+            //
+            {
+                props.setProperty(prefix + "." + actionName + ".actionLayout.prototype", "" + actionLayout.prototype);
+            }
         }
 
 

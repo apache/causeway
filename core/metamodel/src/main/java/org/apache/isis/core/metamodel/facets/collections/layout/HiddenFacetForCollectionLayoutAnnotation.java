@@ -34,7 +34,7 @@ public class HiddenFacetForCollectionLayoutAnnotation extends HiddenFacetAbstrac
             return null;
         }
         final Where where = collectionLayout.hidden();
-        return where != null ? new HiddenFacetForCollectionLayoutAnnotation(where, holder) : null;
+        return where != null && where != Where.NOT_SPECIFIED  ? new HiddenFacetForCollectionLayoutAnnotation(where, holder) : null;
     }
 
     private HiddenFacetForCollectionLayoutAnnotation(final Where where, final FacetHolder holder) {

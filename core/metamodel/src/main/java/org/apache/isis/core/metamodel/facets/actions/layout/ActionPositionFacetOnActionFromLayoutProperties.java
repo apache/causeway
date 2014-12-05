@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.util.Properties;
+import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
@@ -40,9 +41,9 @@ public class ActionPositionFacetOnActionFromLayoutProperties extends ActionPosit
         if(properties == null) {
             return null;
         }
-        String position = properties.getProperty("position");
+        String position = Strings.emptyToNull(properties.getProperty("position"));
         if(position == null) {
-            position = properties.getProperty("actionPosition");
+            position = Strings.emptyToNull(properties.getProperty("actionPosition"));
         }
         if(position == null) {
             return null;

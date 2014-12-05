@@ -34,7 +34,7 @@ public class HiddenFacetForPropertyLayoutAnnotation extends HiddenFacetAbstract 
             return null;
         }
         final Where where = propertyLayout.hidden();
-        return where != null ? new HiddenFacetForPropertyLayoutAnnotation(where, holder) : null;
+        return where != null && where != Where.NOT_SPECIFIED ? new HiddenFacetForPropertyLayoutAnnotation(where, holder) : null;
     }
 
     private HiddenFacetForPropertyLayoutAnnotation(final Where where, final FacetHolder holder) {

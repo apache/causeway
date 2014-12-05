@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.Properties;
+import com.google.common.base.Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
@@ -39,7 +40,10 @@ public class PagedFacetOnCollectionFromLayoutProperties extends PagedFacetAbstra
         if(properties == null) {
             return -1;
         }
-        String paged = properties.getProperty("paged");
+        String paged = Strings.emptyToNull(properties.getProperty("paged"));
+        if(paged == null) {
+            return -1;
+        }
         return Integer.parseInt(paged);
     }
 }

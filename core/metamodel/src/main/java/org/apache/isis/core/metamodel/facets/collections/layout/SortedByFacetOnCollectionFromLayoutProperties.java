@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.Comparator;
 import java.util.Properties;
+import com.google.common.base.Strings;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
@@ -41,7 +42,7 @@ public class SortedByFacetOnCollectionFromLayoutProperties extends SortedByFacet
         if(properties == null) {
             return null;
         }
-        String sortedBy = properties.getProperty("sortedBy");
+        String sortedBy = Strings.emptyToNull(properties.getProperty("sortedBy"));
         if (sortedBy == null) {
             return null;
         }

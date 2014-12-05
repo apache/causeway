@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
@@ -30,7 +31,7 @@ public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbs
         if(actionLayout == null) {
             return null;
         }
-        final String cssClass = actionLayout.cssClass();
+        final String cssClass = Strings.emptyToNull(actionLayout.cssClass());
         return cssClass != null ? new CssClassFaFacetForActionLayoutAnnotation(cssClass, holder) : null;
     }
 

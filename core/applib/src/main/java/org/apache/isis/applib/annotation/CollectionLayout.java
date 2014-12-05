@@ -53,7 +53,7 @@ public @interface CollectionLayout {
      *      apply for collections.
      * </p>
      */
-    Where hidden() default Where.NOWHERE;
+    Where hidden() default Where.NOT_SPECIFIED;
 
     /**
      * Name of this collection (overriding the name derived from its name in code).

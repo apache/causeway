@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.layout;
 
 import java.util.Properties;
+import com.google.common.base.Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propparam.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.propparam.renderedadjusted.RenderedAdjustedFacetAbstract;
@@ -41,7 +42,7 @@ public class RenderedAdjustedFacetOnPropertyFromLayoutProperties extends Rendere
         if(properties == null) {
             return false;
         }
-        String renderedAsDayBefore = properties.getProperty("renderedAsDayBefore");
+        String renderedAsDayBefore = Strings.emptyToNull(properties.getProperty("renderedAsDayBefore"));
         return renderedAsDayBefore != null && Boolean.parseBoolean(renderedAsDayBefore);
     }
 

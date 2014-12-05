@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.layout;
 
 import java.util.Properties;
+import com.google.common.base.Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacetAbstract;
@@ -42,7 +43,10 @@ public class TypicalLengthFacetOnPropertyFromLayoutProperties extends TypicalLen
         if(properties == null) {
             return -1;
         }
-        String typicalLength = properties.getProperty("typicalLength");
+        String typicalLength = Strings.emptyToNull(properties.getProperty("typicalLength"));
+        if(typicalLength == null) {
+            return -1;
+        }
         return Integer.parseInt(typicalLength);
     }
 

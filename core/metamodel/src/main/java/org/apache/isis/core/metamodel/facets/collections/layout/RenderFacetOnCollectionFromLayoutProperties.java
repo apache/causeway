@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.Properties;
+import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
@@ -40,11 +41,7 @@ public class RenderFacetOnCollectionFromLayoutProperties extends RenderFacetAbst
         if(properties == null) {
             return null;
         }
-        String renderType = properties.getProperty("render");
-        if(renderType == null) {
-            // alternative key (cos I keep forgetting which to use).
-            renderType = properties.getProperty("renderType");
-        }
+        String renderType = Strings.emptyToNull(properties.getProperty("render"));
         if(renderType == null) {
             return null;
         }

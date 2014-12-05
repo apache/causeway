@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.Properties;
+import com.google.common.base.Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
@@ -39,10 +40,10 @@ public class DescribedAsFacetOnCollectionFromLayoutProperties extends DescribedA
         if(properties == null) {
             return null;
         }
-        String describedAs = properties.getProperty("describedAs");
+        String describedAs = Strings.emptyToNull(properties.getProperty("describedAs"));
         if(describedAs == null) {
             // alternate key
-            describedAs = properties.getProperty("description");
+            describedAs = Strings.emptyToNull(properties.getProperty("description"));
         }
         return describedAs;
     }

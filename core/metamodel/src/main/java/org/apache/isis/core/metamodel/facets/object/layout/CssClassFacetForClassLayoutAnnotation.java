@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.layout;
 
 
+import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.ClassLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -31,7 +32,7 @@ public class CssClassFacetForClassLayoutAnnotation extends CssClassFacetAbstract
         if(classLayout == null) {
             return null;
         }
-        final String cssClass = classLayout.cssClass();
+        final String cssClass = Strings.emptyToNull(classLayout.cssClass());
         return cssClass != null ? new CssClassFacetForClassLayoutAnnotation(cssClass, holder) : null;
     }
 

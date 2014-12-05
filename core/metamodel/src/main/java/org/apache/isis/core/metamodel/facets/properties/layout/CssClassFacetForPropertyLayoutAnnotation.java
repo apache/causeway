@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.layout;
 
+import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -30,7 +31,7 @@ public class CssClassFacetForPropertyLayoutAnnotation extends CssClassFacetAbstr
         if(propertyLayout == null) {
             return null;
         }
-        final String cssClass = propertyLayout.cssClass();
+        final String cssClass = Strings.emptyToNull(propertyLayout.cssClass());
         return cssClass != null ? new CssClassFacetForPropertyLayoutAnnotation(cssClass, holder) : null;
     }
 

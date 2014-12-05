@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
+import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -30,7 +31,7 @@ public class NamedFacetForCollectionLayoutAnnotation extends NamedFacetAbstract 
         if(collectionLayout == null) {
             return null;
         }
-        final String named = collectionLayout.named();
+        final String named = Strings.emptyToNull(collectionLayout.named());
         return named != null ? new NamedFacetForCollectionLayoutAnnotation(named, holder) : null;
     }
 

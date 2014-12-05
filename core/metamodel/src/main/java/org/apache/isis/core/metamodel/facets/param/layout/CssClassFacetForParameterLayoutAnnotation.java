@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.param.layout;
 
+import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -30,7 +31,7 @@ public class CssClassFacetForParameterLayoutAnnotation extends CssClassFacetAbst
         if(parameterLayout == null) {
             return null;
         }
-        final String cssClass = parameterLayout.cssClass();
+        final String cssClass = Strings.emptyToNull(parameterLayout.cssClass());
         return cssClass != null ? new CssClassFacetForParameterLayoutAnnotation(cssClass, holder) : null;
     }
 

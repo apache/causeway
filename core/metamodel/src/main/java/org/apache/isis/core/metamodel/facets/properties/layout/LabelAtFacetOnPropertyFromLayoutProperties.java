@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.layout;
 
 import java.util.Properties;
+import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propparam.layout.LabelAtFacet;
@@ -40,10 +41,10 @@ public class LabelAtFacetOnPropertyFromLayoutProperties extends LabelAtFacetAbst
         if(properties == null) {
             return null;
         }
-        String labelPosition = properties.getProperty("labelPosition");
+        String labelPosition = Strings.emptyToNull(properties.getProperty("labelPosition"));
         if(labelPosition == null) {
             // alternative key (cos I keep forgetting which to use).
-            labelPosition = properties.getProperty("labelAt");
+            labelPosition = Strings.emptyToNull(properties.getProperty("labelAt"));
         }
         if(labelPosition == null) {
             return null;

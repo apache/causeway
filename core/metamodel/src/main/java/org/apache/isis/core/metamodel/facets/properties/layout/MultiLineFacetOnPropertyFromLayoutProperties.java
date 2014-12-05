@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.layout;
 
 import java.util.Properties;
+import com.google.common.base.Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacetAbstract;
@@ -39,7 +40,10 @@ public class MultiLineFacetOnPropertyFromLayoutProperties extends MultiLineFacet
         if(properties == null) {
             return -1;
         }
-        String multiLine = properties.getProperty("multiLine");
+        String multiLine = Strings.emptyToNull(properties.getProperty("multiLine"));
+        if(multiLine == null) {
+            return -1;
+        }
         return Integer.parseInt(multiLine);
     }
 }

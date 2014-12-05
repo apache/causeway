@@ -131,6 +131,15 @@ public enum Where {
         public boolean includes(Where context) {
             return false;
         }
+    },
+    /**
+     * Acts as the default no-op value for {@link PropertyLayout#hidden()}, {@link CollectionLayout#hidden()} and {@link ActionLayout#hidden()}.
+     */
+    NOT_SPECIFIED {
+        @Override
+        public boolean includes(Where context) {
+            return false;
+        }
     };
     
     public String getFriendlyName() {

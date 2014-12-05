@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.layout;
 
 
+import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.ClassLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
@@ -31,7 +32,7 @@ public class PluralFacetForClassLayoutAnnotation extends PluralFacetAbstract {
         if(classLayout == null) {
             return null;
         }
-        final String plural = classLayout.plural();
+        final String plural = Strings.emptyToNull(classLayout.plural());
         return plural != null ? new PluralFacetForClassLayoutAnnotation(plural, holder) : null;
     }
 

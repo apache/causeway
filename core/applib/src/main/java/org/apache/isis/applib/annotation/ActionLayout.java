@@ -56,7 +56,7 @@ public @interface ActionLayout {
     /**
      * Indicates where in the UI the action should <i>not</i>not be visible.
      */
-    Where hidden() default Where.NOWHERE;
+    Where hidden() default Where.NOT_SPECIFIED;
 
     /**
      * Name of this action (overriding the name derived from its name in code).

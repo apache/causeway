@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.Properties;
+import com.google.common.base.Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
@@ -39,10 +40,10 @@ public class NamedFacetOnCollectionFromLayoutProperties extends NamedFacetAbstra
         if(properties == null) {
             return null;
         }
-        String named = properties.getProperty("named");
+        String named = Strings.emptyToNull(properties.getProperty("named"));
         if(named == null) {
             // alternate key
-            named = properties.getProperty("name");
+            named = Strings.emptyToNull(properties.getProperty("name"));
         }
         return named;
     }

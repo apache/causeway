@@ -44,7 +44,7 @@ public @interface PropertyLayout {
     /**
      * Indicates where in the UI the property should <i>not</i>not be visible.
      */
-    Where hidden() default Where.NOWHERE;
+    Where hidden() default Where.NOT_SPECIFIED;
 
     /**
      * In forms, positioning of the label (left, top or none) relative to the property value.

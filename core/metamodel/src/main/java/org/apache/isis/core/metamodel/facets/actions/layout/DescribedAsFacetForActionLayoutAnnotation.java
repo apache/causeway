@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
@@ -30,7 +31,7 @@ public class DescribedAsFacetForActionLayoutAnnotation extends DescribedAsFacetA
         if(actionLayout == null) {
             return null;
         }
-        final String describedAs = actionLayout.describedAs();
+        final String describedAs = Strings.emptyToNull(actionLayout.describedAs());
         return describedAs != null ? new DescribedAsFacetForActionLayoutAnnotation(describedAs, holder) : null;
     }
 

@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.param.layout;
 
+import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -30,7 +31,7 @@ public class NamedFacetForParameterLayoutAnnotation extends NamedFacetAbstract {
         if(parameterLayout == null) {
             return null;
         }
-        final String named = parameterLayout.named();
+        final String named = Strings.emptyToNull(parameterLayout.named());
         return named != null ? new NamedFacetForParameterLayoutAnnotation(named, holder) : null;
     }
 

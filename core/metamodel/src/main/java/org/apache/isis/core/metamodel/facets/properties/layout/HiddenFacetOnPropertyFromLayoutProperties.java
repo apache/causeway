@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.layout;
 
 import java.util.Properties;
+import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -31,14 +32,14 @@ public class HiddenFacetOnPropertyFromLayoutProperties extends HiddenFacetAbstra
 
     public static HiddenFacet create(Properties properties, FacetHolder holder) {
         final Where where = hidden(properties);
-        return where != null? new HiddenFacetOnPropertyFromLayoutProperties(where, holder): null;
+        return where != null && where != Where.NOT_SPECIFIED ? new HiddenFacetOnPropertyFromLayoutProperties(where, holder): null;
     }
 
     private static Where hidden(Properties properties) {
         if(properties == null) {
             return null;
         }
-        String hidden = properties.getProperty("hidden");
+        String hidden = Strings.emptyToNull(properties.getProperty("hidden"));
         if(hidden == null) {
             return null;
         }

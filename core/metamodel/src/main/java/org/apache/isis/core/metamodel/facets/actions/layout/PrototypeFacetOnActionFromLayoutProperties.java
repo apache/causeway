@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.util.Properties;
+import com.google.common.base.Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
@@ -39,7 +40,7 @@ public class PrototypeFacetOnActionFromLayoutProperties extends PrototypeFacetAb
         if(properties == null) {
             return false;
         }
-        String prototype = properties.getProperty("prototype");
+        String prototype = Strings.emptyToNull(properties.getProperty("prototype"));
         if(prototype == null) {
             return false;
         }

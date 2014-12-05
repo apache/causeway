@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.Properties;
+import com.google.common.base.Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
@@ -39,7 +40,8 @@ public class CssClassFacetOnCollectionFromLayoutProperties extends CssClassFacet
         if(properties == null) {
             return null;
         }
-        return properties.getProperty("cssClass");
+        final String cssClass = properties.getProperty("cssClass");
+        return Strings.emptyToNull(cssClass);
     }
 
 }

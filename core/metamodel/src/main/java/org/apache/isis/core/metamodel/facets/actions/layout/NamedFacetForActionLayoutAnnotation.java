@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -30,7 +31,7 @@ public class NamedFacetForActionLayoutAnnotation extends NamedFacetAbstract {
         if(actionLayout == null) {
             return null;
         }
-        final String named = actionLayout.named();
+        final String named = Strings.emptyToNull(actionLayout.named());
         return named != null ? new NamedFacetForActionLayoutAnnotation(named, holder) : null;
     }
 
