@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
@@ -36,7 +37,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 
 
-public class ActionLayoutFactory extends FacetFactoryAbstract {
+public class ActionLayoutFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
     public ActionLayoutFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -101,7 +102,7 @@ public class ActionLayoutFactory extends FacetFactoryAbstract {
             actionPositionFacet = ActionPositionFacetForActionLayoutAnnotation.create(actionLayout, holder);
         }
         if(actionPositionFacet == null) {
-            actionPositionFacet = new ActionPositionFacetFallback(processMethodContext.getFacetHolder());
+            actionPositionFacet = new ActionPositionFacetFallback(holder);
         }
         FacetUtil.addFacet(actionPositionFacet);
 
@@ -112,6 +113,56 @@ public class ActionLayoutFactory extends FacetFactoryAbstract {
             prototypeFacet = PrototypeFacetForActionLayoutAnnotation.create(actionLayout, holder);
         }
         FacetUtil.addFacet(prototypeFacet);
+    }
+
+    @Override
+    public void process(ProcessContributeeMemberContext processMemberContext) {
+        final FacetHolder holder = processMemberContext.getFacetHolder();
+
+        Properties properties = processMemberContext.metadataProperties("actionLayout");
+        if (properties == null) {
+            // alternate key
+            properties = processMemberContext.metadataProperties("layout");
+        }
+
+
+        // cssClass
+        CssClassFacet cssClassFacet = CssClassFacetOnActionFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(cssClassFacet);
+
+
+        // cssClassFa
+        CssClassFaFacet cssClassFaFacet = CssClassFaFacetOnActionFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(cssClassFaFacet);
+
+
+        // describedAs
+        DescribedAsFacet describedAsFacet = DescribedAsFacetOnActionFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(describedAsFacet);
+
+
+        // hidden
+        HiddenFacet hiddenFacet = HiddenFacetOnActionFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(hiddenFacet);
+
+
+        // named
+        NamedFacet namedFacet = NamedFacetOnActionFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(namedFacet);
+
+
+        // position
+        ActionPositionFacet actionPositionFacet = ActionPositionFacetOnActionFromLayoutProperties.create(properties, holder);
+        if(actionPositionFacet == null) {
+            actionPositionFacet = new ActionPositionFacetFallback(holder);
+        }
+        FacetUtil.addFacet(actionPositionFacet);
+
+
+        // prototype
+        PrototypeFacet prototypeFacet = PrototypeFacetOnActionFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(prototypeFacet);
+
     }
 
 }

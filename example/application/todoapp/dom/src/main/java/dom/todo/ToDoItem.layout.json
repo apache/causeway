@@ -23,8 +23,8 @@
                 "members": {
                     "description": {
                         "propertyLayout": {
-                            "labelPosition": "TOP",
-                            "typicalLength": 50
+                            "cssClass": "x-key",
+                            "labelPosition": "TOP"
                         }
                     },
                     "category": {
@@ -118,7 +118,7 @@
                     },
                     "dueBy": {
                         "propertyLayout": {
-                            "cssClass": "x-key"
+                            "renderedAsDayBefore": "false"
                         }
                     }
                 }
@@ -164,6 +164,7 @@
         "collections": {
             "dependencies": {
                 "collectionLayout": {
+                    "describedAs": "ToDo items that must be completed before this one",
                     "paged": 5,
                     "render": "EAGERLY"
                 },
@@ -205,7 +206,7 @@
             "actionLayout": {
                 "named": "Clone",
                 "describedAs": "Create a new todo item from this one",
-                "cssClass": "btn-default",
+                "cssClass": "btn-warn",
                 "cssClassFa": "fa fa-copy fa-lg"
             }
         }

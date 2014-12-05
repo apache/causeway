@@ -31,7 +31,7 @@ public class MultiLineFacetForPropertyLayoutAnnotation extends MultiLineFacetAbs
             return null;
         }
         final int multiLine = propertyLayout.multiLine();
-        return multiLine != -1 ? new MultiLineFacetForPropertyLayoutAnnotation(multiLine, false, holder) : null;
+        return multiLine > 1 ? new MultiLineFacetForPropertyLayoutAnnotation(multiLine, false, holder) : null;
     }
 
     private MultiLineFacetForPropertyLayoutAnnotation(int numberOfLines, boolean preventWrapping, FacetHolder holder) {

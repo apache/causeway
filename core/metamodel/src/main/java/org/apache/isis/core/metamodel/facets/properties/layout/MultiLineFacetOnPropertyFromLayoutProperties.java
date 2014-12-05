@@ -29,7 +29,7 @@ public class MultiLineFacetOnPropertyFromLayoutProperties extends MultiLineFacet
 
     public static MultiLineFacet create(Properties properties, FacetHolder holder) {
         final int multiLine = multiLine(properties);
-        return multiLine != -1? new MultiLineFacetOnPropertyFromLayoutProperties(multiLine, holder): null;
+        return multiLine > 1? new MultiLineFacetOnPropertyFromLayoutProperties(multiLine, holder): null;
     }
 
     private MultiLineFacetOnPropertyFromLayoutProperties(int multiLine, FacetHolder holder) {

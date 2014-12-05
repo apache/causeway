@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -33,11 +34,9 @@ import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
-import org.apache.isis.core.metamodel.facets.properties.layout.TypicalLengthFacetForPropertyLayoutAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.layout.TypicalLengthFacetOnPropertyFromLayoutProperties;
 
 
-public class CollectionLayoutFactory extends FacetFactoryAbstract {
+public class CollectionLayoutFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
     public CollectionLayoutFactory() {
         super(FeatureType.COLLECTIONS_ONLY);
@@ -110,6 +109,55 @@ public class CollectionLayoutFactory extends FacetFactoryAbstract {
             sortedByFacet = SortedByFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
         }
         FacetUtil.addFacet(sortedByFacet);
+
+    }
+
+    @Override
+    public void process(ProcessContributeeMemberContext processMemberContext) {
+
+        final FacetHolder holder = processMemberContext.getFacetHolder();
+
+        Properties properties = processMemberContext.metadataProperties("collectionLayout");
+        if(properties == null) {
+            // alternate key
+            properties = processMemberContext.metadataProperties("layout");
+        }
+
+
+        // cssClass
+        CssClassFacet cssClassFacet = CssClassFacetOnCollectionFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(cssClassFacet);
+
+
+        // describedAs
+        DescribedAsFacet describedAsFacet = DescribedAsFacetOnCollectionFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(describedAsFacet);
+
+
+        // hidden
+        HiddenFacet hiddenFacet = HiddenFacetOnCollectionFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(hiddenFacet);
+
+
+        // named
+        NamedFacet namedFacet = NamedFacetOnCollectionFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(namedFacet);
+
+
+        // paged
+        PagedFacet pagedFacet = PagedFacetOnCollectionFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(pagedFacet);
+
+
+        // renderType
+        RenderFacet renderFacet = RenderFacetOnCollectionFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(renderFacet);
+
+
+        // sortedBy
+        SortedByFacet sortedByFacet = SortedByFacetOnCollectionFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(sortedByFacet);
+
 
     }
 

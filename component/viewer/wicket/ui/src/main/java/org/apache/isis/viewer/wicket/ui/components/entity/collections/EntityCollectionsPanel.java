@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.entity.collections;
 
 import java.util.List;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -118,6 +119,10 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
         fieldset.addOrReplace(collectionPanel);
 
         Label labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, association.getName());
+        final String description = association.getDescription();
+        if(description != null) {
+            labelComponent.add(new AttributeAppender("title", Model.of(description)));
+        }
 
         fieldset.add(labelComponent);
 

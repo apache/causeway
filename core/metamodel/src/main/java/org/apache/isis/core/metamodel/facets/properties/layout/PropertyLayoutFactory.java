@@ -122,6 +122,54 @@ public class PropertyLayoutFactory extends FacetFactoryAbstract implements Contr
 
     @Override
     public void process(ProcessContributeeMemberContext processMemberContext) {
+        final FacetHolder holder = processMemberContext.getFacetHolder();
+
+        Properties properties = processMemberContext.metadataProperties("propertyLayout");
+        if(properties == null) {
+            // alternate key
+            properties = processMemberContext.metadataProperties("layout");
+        }
+
+
+        // cssClass
+        CssClassFacet cssClassFacet = CssClassFacetOnPropertyFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(cssClassFacet);
+
+
+        // describedAs
+        DescribedAsFacet describedAsFacet = DescribedAsFacetOnPropertyFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(describedAsFacet);
+
+
+        // hidden
+        HiddenFacet hiddenFacet = HiddenFacetOnPropertyFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(hiddenFacet);
+
+
+        // labelAt
+        LabelAtFacet labelAtFacet = LabelAtFacetOnPropertyFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(labelAtFacet);
+
+
+        // multiLine
+        MultiLineFacet multiLineFacet = MultiLineFacetOnPropertyFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(multiLineFacet);
+
+
+        // named
+        NamedFacet namedFacet = NamedFacetOnPropertyFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(namedFacet);
+
+
+        // renderedAsDayBefore
+        RenderedAdjustedFacet renderedAdjustedFacet = RenderedAdjustedFacetOnPropertyFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(renderedAdjustedFacet);
+
+
+        // typicalLength
+        TypicalLengthFacet typicalLengthFacet = TypicalLengthFacetOnPropertyFromLayoutProperties.create(properties, holder);
+        FacetUtil.addFacet(typicalLengthFacet);
+
     }
 
 }
