@@ -37,6 +37,9 @@
         <mapping 
             java-type="org.apache.isis.applib.value.Clob" 
             mapping-class="org.apache.isis.objectstore.jdo.datanucleus.valuetypes.IsisClobMapping"/>
+        <mapping
+            java-type="org.apache.isis.applib.value.Money"
+            mapping-class="org.apache.isis.objectstore.jdo.datanucleus.valuetypes.IsisMoneyMapping"/>
     </extension>
 
 
