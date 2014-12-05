@@ -216,7 +216,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
             }
             
         });
-        fileUploadField.getConfig().showUpload(false);
+        fileUploadField.getConfig().showUpload(false).mainClass("input-group-sm");
         return fileUploadField;
     }
 
