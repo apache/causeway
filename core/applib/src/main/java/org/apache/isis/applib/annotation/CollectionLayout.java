@@ -47,6 +47,11 @@ public @interface CollectionLayout {
 
     /**
      * Indicates where in the UI the collection should <i>not</i>not be visible.
+     *
+     * <p>
+     *      Only {@link Where#NOWHERE NOWHERE} or {@link Where#EVERYWHERE EVERYWHERE}/{@link Where#ANYWHERE ANYWHERE}
+     *      apply for collections.
+     * </p>
      */
     Where hidden() default Where.NOWHERE;
 

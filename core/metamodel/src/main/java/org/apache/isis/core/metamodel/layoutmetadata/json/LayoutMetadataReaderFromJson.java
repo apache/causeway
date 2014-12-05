@@ -177,12 +177,12 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
 
             final PropertyLayoutFacetRepr propertyLayout = memberRepr.propertyLayout;
             if(propertyLayout!= null) {
-                props.setProperty("member." + memberName + ".propertyLayout.cssClass", propertyLayout.cssClass);
-                props.setProperty("member." + memberName + ".propertyLayout.describedAs", propertyLayout.describedAs);
+                props.setProperty("member." + memberName + ".propertyLayout.cssClass", ""+propertyLayout.cssClass);
+                props.setProperty("member." + memberName + ".propertyLayout.describedAs", ""+propertyLayout.describedAs);
                 props.setProperty("member." + memberName + ".propertyLayout.hidden", ""+propertyLayout.hidden);
                 props.setProperty("member." + memberName + ".propertyLayout.labelPosition", ""+propertyLayout.labelPosition);
                 props.setProperty("member." + memberName + ".propertyLayout.multiLine", ""+propertyLayout.multiLine);
-                props.setProperty("member." + memberName + ".propertyLayout.named", propertyLayout.named);
+                props.setProperty("member." + memberName + ".propertyLayout.named", ""+propertyLayout.named);
                 props.setProperty("member." + memberName + ".propertyLayout.renderedAsDayBefore", ""+propertyLayout.renderedAsDayBefore);
                 props.setProperty("member." + memberName + ".propertyLayout.typicalLength", ""+propertyLayout.typicalLength);
             }
@@ -190,10 +190,10 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             // collectionLayout
             final CollectionLayoutFacetRepr collectionLayout = memberRepr.collectionLayout;
             if(collectionLayout!= null) {
-                props.setProperty("member." + memberName + ".collectionLayout.cssClass", collectionLayout.cssClass);
-                props.setProperty("member." + memberName + ".collectionLayout.describedAs", collectionLayout.describedAs);
+                props.setProperty("member." + memberName + ".collectionLayout.cssClass", ""+collectionLayout.cssClass);
+                props.setProperty("member." + memberName + ".collectionLayout.describedAs", ""+collectionLayout.describedAs);
                 props.setProperty("member." + memberName + ".collectionLayout.hidden", ""+collectionLayout.hidden);
-                props.setProperty("member." + memberName + ".collectionLayout.named", collectionLayout.named);
+                props.setProperty("member." + memberName + ".collectionLayout.named", ""+collectionLayout.named);
                 props.setProperty("member." + memberName + ".collectionLayout.paged", ""+collectionLayout.paged);
                 props.setProperty("member." + memberName + ".collectionLayout.render", ""+collectionLayout.render);
                 props.setProperty("member." + memberName + ".collectionLayout.sortedBy", ""+collectionLayout.sortedBy);
@@ -289,11 +289,11 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
 
         final ActionLayoutFacetRepr actionLayout = actionRepr.actionLayout;
         if(actionLayout != null) {
-            props.setProperty(prefix +"." + actionName + ".actionLayout.cssClass", actionLayout.cssClass);
-            props.setProperty(prefix +"." + actionName + ".actionLayout.cssClassFa", actionLayout.cssClassFa);
-            props.setProperty(prefix +"." + actionName + ".actionLayout.describedAs", actionLayout.describedAs);
+            props.setProperty(prefix +"." + actionName + ".actionLayout.cssClass", ""+actionLayout.cssClass);
+            props.setProperty(prefix +"." + actionName + ".actionLayout.cssClassFa", ""+actionLayout.cssClassFa);
+            props.setProperty(prefix +"." + actionName + ".actionLayout.describedAs", ""+actionLayout.describedAs);
             props.setProperty(prefix +"." + actionName + ".actionLayout.hidden", ""+actionLayout.hidden);
-            props.setProperty(prefix +"." + actionName + ".actionLayout.named", actionLayout.named);
+            props.setProperty(prefix +"." + actionName + ".actionLayout.named", ""+actionLayout.named);
             props.setProperty(prefix +"." + actionName + ".actionLayout.position", ""+actionLayout.position);
             props.setProperty(prefix +"." + actionName + ".actionLayout.prototype", ""+actionLayout.prototype);
         }

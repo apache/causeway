@@ -580,11 +580,11 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     // (a) has different semantics and (b) is in any case automatically ignored
     // by the framework
     public ToDoItem duplicate(
-            final @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") @Named("Description") String description, 
-            final @Named("Category") Category category,
-            final @Named("Subcategory") Subcategory subcategory,
-            final @Optional @Named("Due by") LocalDate dueBy,
-            final @Optional @Named("Cost") BigDecimal cost) {
+            final @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") @ParameterLayout(named="Description") String description,
+            final @ParameterLayout(named="Category") Category category,
+            final @ParameterLayout(named="Subcategory") Subcategory subcategory,
+            final @Optional @ParameterLayout(named="Due by") LocalDate dueBy,
+            final @Optional @ParameterLayout(named="Cost") BigDecimal cost) {
         return toDoItems.newToDo(description, category, subcategory, dueBy, cost);
     }
     public String default0Duplicate() {

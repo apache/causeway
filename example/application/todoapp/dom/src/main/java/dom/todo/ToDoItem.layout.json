@@ -22,54 +22,64 @@
             "General": {
                 "members": {
                     "description": {
-                        "typicalLength": { "value": 50 },
-                        "propertyLayout": { "labelPosition": "TOP" }
+                        "propertyLayout": {
+                            "labelPosition": "TOP",
+                            "typicalLength": 50
+                        }
                     },
                     "category": {
-                        "propertyLayout": { "labelPosition": "TOP" }
+                        "propertyLayout": {
+                            "labelPosition": "TOP"
+                        }
                     },
                     "subcategory": {
-                        "propertyLayout": { "labelPosition": "NONE" },
+                        "propertyLayout": {
+                            "labelPosition": "NONE"
+                        },
                         "actions": {
                             "updateCategory": {
-                                "named": {
-                                    "value": "Update"
+                                "actionLayout": {
+                                    "named": "Update"
                                 }
                             },
                             "analyseCategory": {
-                                "cssClass": { "value": "btn-default" },
-                                "cssClassFa": { "value": "fa fa-pie-chart" }
+                                "actionLayout": {
+                                    "cssClass": "btn-default",
+                                    "cssClassFa": "fa fa-pie-chart"
+                                }
                             }
                         }
                     },
                     "ownedBy": {
-                        "hidden": {}
+                        "propertyLayout": {
+                            "hidden": "EVERYWHERE"
+                        }
                     },
                     "complete": {
+                        "propertyLayout": {
+                            "describedAs": "Whether this todo item has been completed"
+                        },
                         "actions": {
                             "completed": {
-                                "named": { "value": "Done" },
-                                "describedAs": {
-                                    "value": "Update this todo item as complete"
-                                },
-                                "cssClass": { "value": "btn-success" },
-                                "cssClassFa": { "value": "fa fa-thumbs-up" }
+                                "actionLayout": {
+                                    "named": "Done",
+                                    "describedAs": "Update this todo item as complete",
+                                    "cssClass": "btn-success",
+                                    "cssClassFa": "fa fa-thumbs-up"
+                                }
                             },
                             "notYetCompleted": {
-                                "named": { "value": "Not done" },
-                                "describedAs": {
-                                    "value": "Update this todo item as not yet complete"
-                                },
-                                "cssClass": { "value": "btn-info" },
-                                "cssClassFa": { "value": "fa fa-thumbs-down" }
+                                "actionLayout": {
+                                    "named": "Not done",
+                                    "describedAs": "Update this todo item as not yet complete",
+                                    "cssClass": "btn-info",
+                                    "cssClassFa": "fa fa-thumbs-down"
+                                }
                             },
                             "scheduleExplicitly": {
                             },
                             "scheduleImplicitly": {
                             }
-                        },
-                        "describedAs": {
-                            "value": "Whether this todo item has been completed"
                         }
                     }
                 }
@@ -77,13 +87,11 @@
             "Misc": {
                 "members": {
                     "versionSequence": {
-                        "named": {
-                            "value": "Version"
+                        "propertyLayout": {
+                            "named": "Version",
+                            "hidden": "ALL_TABLES"
                         },
-                        "disabled": {},
-                        "hidden": {
-                            "where": "ALL_TABLES"
-                        }
+                        "disabled": {}
                     }
                 }
             }
@@ -97,15 +105,21 @@
                      "relativePriority": {
                         "actions": {
                             "previous": {
-                                "cssClassFa": { "value": "fa fa-step-backward" }
+                                "actionLayout": {
+                                    "cssClassFa": "fa fa-step-backward"
+                                }
                             },
                             "next": {
-                                "cssClassFa": { "value": "fa fa-step-forward" }
+                                "actionLayout": {
+                                    "cssClassFa": "fa fa-step-forward"
+                                }
                             }
                         }
                     },
                     "dueBy": {
-                        "cssClass": { "value": "x-key" }
+                        "propertyLayout": {
+                            "cssClass": "x-key"
+                        }
                     }
                 }
             },
@@ -114,28 +128,28 @@
                     "cost": {
                         "actions": {
                             "updateCost":{
-                                "named": { "value": "Update" },
-                                "cssClassFa": { "value": "fa fa-dollar" }
+                                "actionLayout": {
+                                    "named": "Update",
+                                    "cssClassFa": "fa fa-dollar"
+                                }
                             }
                         }
                     },
                     "notes": {
-                        "multiLine": {
-                            "numberOfLines": 5
-                        },
-                        "hidden": {
-                            "where": "ALL_TABLES"
-                        },
-                        "propertyLayout": { "labelPosition": "TOP" }
+                        "propertyLayout": {
+                            "hidden": "ALL_TABLES",
+                            "labelPosition": "TOP",
+                            "multiLine": 5
+                        }
                     },
                     "attachment": {
-                        "hidden": {
-                            "where": "STANDALONE_TABLES"
+                        "propertyLayout": {
+                            "hidden": "STANDALONE_TABLES"
                         }
                     },
                     "doc": {
-                        "hidden": {
-                            "where": "STANDALONE_TABLES"
+                        "propertyLayout": {
+                            "hidden": "STANDALONE_TABLES"
                         }
                     }
                 }
@@ -149,32 +163,32 @@
         "span": 6,
         "collections": {
             "dependencies": {
+                "collectionLayout": {
+                    "paged": 5,
+                    "render": "EAGERLY"
+                },
                 "disabled": {},
                 "actions": {
                     "add":{
-                        "cssClass": { "value": "btn-default" },
-                        "cssClassFa": { "value": "fa fa-plus-square" }
+                        "actionLayout": {
+                            "cssClass": "btn-default",
+                            "cssClassFa": "fa fa-plus-square"
+                        }
                     },
                     "remove": {
-                        "cssClass": { "value": "x-caution btn-default" },
-                        "cssClassFa": { "value": "fa fa-minus-square" }
+                        "actionLayout": {
+                            "cssClass": "x-caution btn-default",
+                            "cssClassFa": "fa fa-minus-square"
+                        }
                     }
-                },
-                "paged": {
-                    "value": 5
-                },
-                "render": {
-                    "value": "EAGERLY"
                 }
             },
             "similarTo": {
-                "disabled": {},
-                "paged": {
-                    "value": 3
+                "collectionLayout": {
+                    "paged": 3,
+                    "render": "LAZILY"
                 },
-                "render": {
-                    "value": "LAZILY"
-                }
+                "disabled": {}
             }
         }
     }
@@ -182,18 +196,18 @@
     "actions": {
         "totalCost": {},
         "delete": {
-            "cssClass": { "value": "btn btn-danger" },
-            "cssClassFa": { "value": "fa fa-trash fa-lg" }
+            "actionLayout": {
+                "cssClass": "btn btn-danger",
+                "cssClassFa": "fa fa-trash fa-lg"
+            }
         },
         "duplicate": {
-	          "named": {
-	              "value": "Clone"
-	          },
-            "describedAs": {
-                "value": "Create a new todo item from this one"
-            },
-            "cssClass": { "value": "btn-default" },
-            "cssClassFa": { "value": "fa fa-copy fa-lg" }
+            "actionLayout": {
+                "named": "Clone",
+                "describedAs": "Create a new todo item from this one",
+                "cssClass": "btn-default",
+                "cssClassFa": "fa fa-copy fa-lg"
+            }
         }
     }
 }

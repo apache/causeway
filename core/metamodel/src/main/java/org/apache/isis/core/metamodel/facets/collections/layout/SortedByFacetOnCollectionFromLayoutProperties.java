@@ -45,7 +45,11 @@ public class SortedByFacetOnCollectionFromLayoutProperties extends SortedByFacet
         if (sortedBy == null) {
             return null;
         }
-        return ClassUtil.forName(sortedBy);
+        final Class<?> sortedByClass = ClassUtil.forName(sortedBy);
+        if(sortedByClass == Comparator.class) {
+            return null;
+        }
+        return sortedByClass;
     }
 
 }

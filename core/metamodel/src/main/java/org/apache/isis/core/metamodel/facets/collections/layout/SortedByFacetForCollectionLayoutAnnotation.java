@@ -32,6 +32,10 @@ public class SortedByFacetForCollectionLayoutAnnotation extends SortedByFacetAbs
             return null;
         }
         final Class sortedBy = collectionLayout.sortedBy();
+        if(sortedBy == Comparator.class) {
+            return null;
+        }
+
         return sortedBy != null ? new SortedByFacetForCollectionLayoutAnnotation(sortedBy, holder) : null;
     }
 

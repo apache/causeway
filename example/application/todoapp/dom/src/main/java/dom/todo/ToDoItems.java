@@ -29,18 +29,20 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bookmarkable;
+import org.apache.isis.applib.annotation.ClassLayout;
 import org.apache.isis.applib.annotation.CssClassFa;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.clock.ClockService;
 
-@Named("ToDos")
+@ClassLayout(named="ToDos")
 @DomainService(menuOrder = "10", repositoryFor = ToDoItem.class)
 public class ToDoItems {
 
@@ -94,9 +96,9 @@ public class ToDoItems {
     @MemberOrder(sequence = "40")
     @CssClassFa("fa fa-question")
     public List<ToDoItem> categorized(
-    		@Named("Category") final Category category,
-    		@Named("Subcategory") final Subcategory subcategory,
-    		@Named("Completed?") final boolean completed) {
+    		@ParameterLayout(named="Category") final Category category,
+    		@ParameterLayout(named="Subcategory") final Subcategory subcategory,
+    		@ParameterLayout(named="Completed?") final boolean completed) {
     	// an example "naive" implementation (filtered in Java code, not DBMS)
         return container.allMatches(ToDoItem.class, 
                 Predicates.and(
@@ -130,10 +132,10 @@ public class ToDoItems {
     @MemberOrder(sequence = "5")
     public ToDoItem newToDo(
             final @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") @Named("Description") String description, 
-            final @Named("Category") Category category,
-            final @Optional @Named("Subcategory") Subcategory subcategory,
-            final @Optional @Named("Due by") LocalDate dueBy,
-            final @Optional @Named("Cost") BigDecimal cost) {
+            final @ParameterLayout(named="Category") Category category,
+            final @Optional @ParameterLayout(named="Subcategory") Subcategory subcategory,
+            final @Optional @ParameterLayout(named="Due by") LocalDate dueBy,
+            final @Optional @ParameterLayout(named="Cost") BigDecimal cost) {
         return newToDo(description, category, subcategory, currentUserName(), dueBy, cost);
     }
     public Category default1NewToDo() {

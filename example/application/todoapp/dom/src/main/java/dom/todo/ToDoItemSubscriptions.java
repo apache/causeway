@@ -29,6 +29,7 @@ import com.google.common.eventbus.Subscribe;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -55,7 +56,7 @@ import static com.google.common.collect.Lists.newArrayList;
  *     vetoing the change).
  * </p>
  */
-@DomainService
+@DomainService(menuBar = DomainService.MenuBar.SECONDARY, menuOrder = "30")
 public class ToDoItemSubscriptions {
 
     //region > LOG
@@ -124,9 +125,11 @@ public class ToDoItemSubscriptions {
     /**
      * To demo/test what occurs if a subscriber that might veto an event.
      */
-    @Prototype
     @MemberOrder(name = "Prototyping", sequence = "80")
-    @Named("Set subscriber behaviour")
+    @ActionLayout(
+        named="Set subscriber behaviour",
+        prototype = true
+    )
     @NotContributed
     @ActionSemantics(ActionSemantics.Of.IDEMPOTENT)
     public void subscriberBehaviour(@Named("Behaviour") Behaviour behaviour) {
