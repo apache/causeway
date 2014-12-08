@@ -20,13 +20,19 @@
 package org.apache.isis.core.runtime.services;
 
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import javax.annotation.PreDestroy;
-import com.google.common.base.*;
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
+import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.reflections.Reflections;
 import org.reflections.vfs.Vfs;
@@ -194,21 +200,25 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
             SortedMap<String, SortedSet<String>> positionedServices) {
         initIfRequired();
 
-        for (final String packagePrefix : Iterables.transform(Splitter.on(",").split(packagePrefixes), trim())) {
-            Vfs.setDefaultURLTypes(ClassDiscoveryServiceUsingReflections.getUrlTypes());
-            Reflections reflections = new Reflections(packagePrefix);
+        final List<String> packagePrefixList = asList(packagePrefixes);
 
-            final Iterable<Class<?>> classes = Iterables.filter(
-                    reflections.getTypesAnnotatedWith(DomainService.class), instantiatable());
-            for (final Class<?> cls : classes) {
+        Vfs.setDefaultURLTypes(ClassDiscoveryServiceUsingReflections.getUrlTypes());
+        final Reflections reflections = new Reflections(packagePrefixList);
 
-                final DomainService domainService = cls.getAnnotation(DomainService.class);
-                final String order = domainService.menuOrder();
-                final String serviceName = cls.getName();
+        final Iterable<Class<?>> domainServiceClasses = Iterables.filter(
+                reflections.getTypesAnnotatedWith(DomainService.class), instantiatable());
+        for (final Class<?> cls : domainServiceClasses) {
 
-                ServicesInstallerUtils.appendInPosition(positionedServices, order, serviceName);
-            }
+            final DomainService domainService = cls.getAnnotation(DomainService.class);
+            final String order = domainService.menuOrder();
+            final String serviceName = cls.getName();
+
+            ServicesInstallerUtils.appendInPosition(positionedServices, order, serviceName);
         }
+    }
+
+    protected ArrayList<String> asList(String packagePrefixes1) {
+        return Lists.newArrayList(Iterables.transform(Splitter.on(",").split(packagePrefixes1), trim()));
     }
 
 
