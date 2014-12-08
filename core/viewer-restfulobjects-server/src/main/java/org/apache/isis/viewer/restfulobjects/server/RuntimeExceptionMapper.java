@@ -19,17 +19,15 @@
 package org.apache.isis.viewer.restfulobjects.server;
 
 import java.util.List;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
-
-import com.google.common.collect.Lists;
-
+import com.google.common.base.Throwables;
 import org.jboss.resteasy.spi.Failure;
-
 import org.apache.isis.core.commons.exceptions.ExceptionUtils;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
@@ -39,6 +37,16 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
 
     @Override
     public Response toResponse(final RuntimeException ex) {
+        // since have rendered...
+        final IsisTransaction currentTransaction = IsisContext.getTransactionManager().getTransaction();
+
+        final Throwable rootCause = Throwables.getRootCause(ex);
+        final List<Throwable> causalChain = Throwables.getCausalChain(ex);
+        for (Throwable throwable : causalChain) {
+            if(throwable == rootCause) {
+                currentTransaction.clearAbortCause();
+            }
+        }
         HttpStatusCode statusCode = HttpStatusCode.INTERNAL_SERVER_ERROR;
         if(ex instanceof Failure) {
             Failure failure = (Failure) ex;
@@ -48,56 +56,9 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
         return builder.build();
     }
 
-    private static class ExceptionPojo {
-
-        public static ExceptionPojo create(final Exception ex) {
-            return new ExceptionPojo(ex);
-        }
-
-        private static String format(final StackTraceElement stackTraceElement) {
-            return stackTraceElement.toString();
-        }
-
-        private final String message;
-        private final List<String> stackTrace = Lists.newArrayList();
-        private ExceptionPojo causedBy;
-
-        public ExceptionPojo(final Throwable ex) {
-            this.message = messageFor(ex);
-            final StackTraceElement[] stackTraceElements = ex.getStackTrace();
-            for (final StackTraceElement stackTraceElement : stackTraceElements) {
-                this.stackTrace.add(format(stackTraceElement));
-            }
-            final Throwable cause = ex.getCause();
-            if (cause != null && cause != ex) {
-                this.causedBy = new ExceptionPojo(cause);
-            }
-        }
-
-        private static String messageFor(final Throwable ex) {
-            final String message = ex.getMessage();
-            return message != null ? message : ex.getClass().getName();
-        }
-
-        @SuppressWarnings("unused")
-        public String getMessage() {
-            return message;
-        }
-
-        @SuppressWarnings("unused")
-        public List<String> getStackTrace() {
-            return stackTrace;
-        }
-
-        @SuppressWarnings("unused")
-        public ExceptionPojo getCausedBy() {
-            return causedBy;
-        }
-    }
-
     static String jsonFor(final Exception ex) {
         try {
-            return JsonMapper.instance().write(ExceptionPojo.create(ex));
+            return JsonMapper.instance().write(RuntimeExceptionPojo.create(ex));
         } catch (final Exception e) {
             // fallback
             return "{ \"exception\": \"" + ExceptionUtils.getFullStackTrace(ex) + "\" }";

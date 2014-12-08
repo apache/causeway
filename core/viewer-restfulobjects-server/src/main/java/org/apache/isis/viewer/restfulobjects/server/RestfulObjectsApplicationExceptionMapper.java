@@ -18,22 +18,17 @@
  */
 package org.apache.isis.viewer.restfulobjects.server;
 
-import java.util.List;
-
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.core.commons.exceptions.ExceptionUtils;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
-import org.apache.isis.viewer.restfulobjects.rendering.HasHttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
 //@Path("/") // FIXME: workaround for TomEE ... but breaks the RestEasy TCK tests so commented out:-(
@@ -56,7 +51,7 @@ public class RestfulObjectsApplicationExceptionMapper implements ExceptionMapper
         } else { 
             String body;
             try {
-                body = JsonMapper.instance().write(ExceptionPojo.create(cause));
+                body = JsonMapper.instance().write(RestfulObjectsApplicationExceptionPojo.create(cause));
             } catch (final Exception e) {
                 // fallback
                 body = "{ \"exception\": \"" + ExceptionUtils.getFullStackTrace(cause) + "\" }";
@@ -70,64 +65,6 @@ public class RestfulObjectsApplicationExceptionMapper implements ExceptionMapper
             builder.header(RestfulResponse.Header.WARNING.getName(), RestfulResponse.Header.WARNING.render(message));
         }
         return builder.build();
-    }
-
-    private static class ExceptionPojo {
-
-        public static ExceptionPojo create(final Throwable ex) {
-            return new ExceptionPojo(ex);
-        }
-
-        private static String format(final StackTraceElement stackTraceElement) {
-            return stackTraceElement.toString();
-        }
-
-        private final int httpStatusCode;
-        private final String message;
-        private final List<String> stackTrace = Lists.newArrayList();
-        private ExceptionPojo causedBy;
-
-        public ExceptionPojo(final Throwable ex) {
-            httpStatusCode = getHttpStatusCodeIfAny(ex);
-            this.message = ex.getMessage();
-            final StackTraceElement[] stackTraceElements = ex.getStackTrace();
-            for (final StackTraceElement stackTraceElement : stackTraceElements) {
-                this.stackTrace.add(format(stackTraceElement));
-            }
-            final Throwable cause = ex.getCause();
-            if (cause != null && cause != ex) {
-                this.causedBy = new ExceptionPojo(cause);
-            }
-        }
-
-        private int getHttpStatusCodeIfAny(final Throwable ex) {
-            if (!(ex instanceof HasHttpStatusCode)) {
-                return 0;
-            }
-            final HasHttpStatusCode hasHttpStatusCode = (HasHttpStatusCode) ex;
-            return hasHttpStatusCode.getHttpStatusCode().getStatusCode();
-        }
-
-        @SuppressWarnings("unused")
-        public int getHttpStatusCode() {
-            return httpStatusCode;
-        }
-
-        @SuppressWarnings("unused")
-        public String getMessage() {
-            return message;
-        }
-
-        @SuppressWarnings("unused")
-        public List<String> getStackTrace() {
-            return stackTrace;
-        }
-
-        @SuppressWarnings("unused")
-        public ExceptionPojo getCausedBy() {
-            return causedBy;
-        }
-
     }
 
 

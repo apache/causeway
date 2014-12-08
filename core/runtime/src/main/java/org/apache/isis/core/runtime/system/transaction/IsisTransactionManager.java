@@ -213,7 +213,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
             if (!initiallyInTransaction) {
                 abortTransaction();
             } else {
-                // ensure that this xactn cannot be committed
+                // ensure that this xactn cannot be committed (sets state to MUST_ABORT), and capture the cause so can be rendered appropriately by some higher level in the call stack
                 getTransaction().setAbortCause(new IsisException(ex));
             }
             throw ex;
