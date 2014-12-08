@@ -671,4 +671,6 @@ div.label-left .choicesPlaceholder {
     margin-bottom: 0px;
 }
 
-
+.navbar-header a.navbar-brand {
+    margin-top: -2px;
+}
