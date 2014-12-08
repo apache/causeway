@@ -244,13 +244,17 @@ public abstract class FixtureScripts extends AbstractService {
      * To make this action usable in the UI, override either {@link #choices0RunFixtureScript()} or 
      * {@link #autoComplete0RunFixtureScript(String)} with <tt>public</tt> visibility</tt>.
      */
-    @Prototype
+    @ActionLayout(
+        prototype = true
+    )
     @MemberOrder(sequence="10")
     public List<FixtureResult> runFixtureScript(
             final FixtureScript fixtureScript, 
-            @Named("Parameters")
-            @DescribedAs("Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)")
-            @MultiLine(numberOfLines=10)
+            @ParameterLayout(
+                    named="Parameters",
+                    describedAs="Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)",
+                    multiLine = 10
+            )
             @Optional
             final String parameters) {
 
