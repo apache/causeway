@@ -33,10 +33,9 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotContributed;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
@@ -132,7 +131,8 @@ public class ToDoItemSubscriptions {
     )
     @NotContributed
     @ActionSemantics(ActionSemantics.Of.IDEMPOTENT)
-    public void subscriberBehaviour(@Named("Behaviour") Behaviour behaviour) {
+    public void subscriberBehaviour(
+            @ParameterLayout(named="Behaviour") Behaviour behaviour) {
         this.behaviour = behaviour;
         container.informUser("Subscriber behaviour set to: " + behaviour);
     }

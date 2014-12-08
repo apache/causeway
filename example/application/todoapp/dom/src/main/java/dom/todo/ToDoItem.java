@@ -48,10 +48,10 @@ import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Bulk.AppliesTo;
 import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
 import org.apache.isis.applib.annotation.CollectionInteraction;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MinLength;
-import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -59,7 +59,6 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyInteraction;
 import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.annotation.RegEx;
-import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
@@ -495,7 +494,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     private SortedSet<ToDoItem> dependencies = new TreeSet<ToDoItem>();
 
     @CollectionInteraction
-    @SortedBy(DependenciesComparator.class)
+    @CollectionLayout(sortedBy = DependenciesComparator.class)
     public SortedSet<ToDoItem> getDependencies() {
         return dependencies;
     }
@@ -656,7 +655,8 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     
     @Prototype
     @ActionSemantics(Of.SAFE)
-    public void demoException(final @Named("Type") DemoExceptionType type) {
+    public void demoException(
+            final @ParameterLayout(named="Type") DemoExceptionType type) {
         switch(type) {
         case NonRecoverableException:
             throw new NonRecoverableException("Demo throwing " + type.name());
