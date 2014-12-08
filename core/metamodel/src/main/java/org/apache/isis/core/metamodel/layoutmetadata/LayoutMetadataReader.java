@@ -41,6 +41,11 @@ public interface LayoutMetadataReader {
         public ReaderException(Throwable cause) {
             super(cause);
         }
+
+        @Override
+        public synchronized Throwable fillInStackTrace() {
+            return null;
+        }
     }
 
     public Properties asProperties(Class<?> domainClass) throws ReaderException;
