@@ -31,8 +31,8 @@ public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbs
         if(actionLayout == null) {
             return null;
         }
-        final String cssClass = Strings.emptyToNull(actionLayout.cssClass());
-        return cssClass != null ? new CssClassFaFacetForActionLayoutAnnotation(cssClass, holder) : null;
+        final String cssClassFa = Strings.emptyToNull(actionLayout.cssClassFa());
+        return cssClassFa != null ? new CssClassFaFacetForActionLayoutAnnotation(cssClassFa, holder) : null;
     }
 
     private CssClassFaFacetForActionLayoutAnnotation(String value, FacetHolder holder) {
