@@ -81,7 +81,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
 
-    public Properties asProperties(Class<?> domainClass) {
+        public Properties asProperties(Class<?> domainClass) {
         LayoutMetadata metadata;
         try {
             metadata = readMetadata(domainClass);

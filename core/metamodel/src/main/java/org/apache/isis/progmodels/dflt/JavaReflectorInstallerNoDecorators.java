@@ -24,12 +24,10 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -37,6 +35,7 @@ import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
@@ -79,8 +78,9 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
         final ProgrammingModel programmingModel = createProgrammingModel(getConfiguration());
         final Set<FacetDecorator> facetDecorators = createFacetDecorators(getConfiguration());
         final MetaModelValidator mmv = createMetaModelValidator(getConfiguration());
-        
-        return JavaReflectorHelper.createObjectReflector(programmingModel, metaModelRefiners, facetDecorators, mmv, getConfiguration());
+        final List<LayoutMetadataReader> layoutMetadataReaders = createLayoutMetadataReaders(getConfiguration());
+
+        return JavaReflectorHelper.createObjectReflector(programmingModel, metaModelRefiners, facetDecorators, layoutMetadataReaders, mmv, getConfiguration());
     }
 
 
@@ -166,6 +166,18 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
     protected MetaModelValidator createMetaModelValidator(final IsisConfiguration configuration) {
         final String metaModelValidatorClassName = configuration.getString(ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME, ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT);
         return InstanceUtil.createInstance(metaModelValidatorClassName, MetaModelValidator.class);
+    }
+
+    protected List<LayoutMetadataReader> createLayoutMetadataReaders(final IsisConfiguration configuration) {
+        final List<LayoutMetadataReader> layoutMetadataReaders = Lists.newArrayList();
+        final String[] layoutMetadataReaderClassNames = configuration.getList(ReflectorConstants.LAYOUT_METADATA_READER_LIST, ReflectorConstants.LAYOUT_METADATA_READER_LIST_DEFAULT);
+        if (layoutMetadataReaderClassNames != null) {
+            for (final String layoutMetadataReaderClassName : layoutMetadataReaderClassNames) {
+                final LayoutMetadataReader layoutMetadataReader = InstanceUtil.createInstance(layoutMetadataReaderClassName, LayoutMetadataReader.class);
+                layoutMetadataReaders.add(layoutMetadataReader);
+            }
+        }
+        return layoutMetadataReaders;
     }
 
 

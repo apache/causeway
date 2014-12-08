@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorSet;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
@@ -68,6 +69,7 @@ import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.greaterThan;
 
 /**
  * Builds the meta-model.
@@ -142,6 +144,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     private final MetaModelValidator metaModelValidator;
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
+    private final List<LayoutMetadataReader> layoutMetadataReaders;
 
     private boolean initialized = false;
     /**
@@ -158,12 +161,15 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             final IsisConfiguration configuration,
             final ProgrammingModel programmingModel,
             final Set<FacetDecorator> facetDecorators,
-            final MetaModelValidator metaModelValidator) {
+            final MetaModelValidator metaModelValidator,
+            final List<LayoutMetadataReader> layoutMetadataReaders) {
 
         ensureThatArg(configuration, is(notNullValue()));
         ensureThatArg(programmingModel, is(notNullValue()));
         ensureThatArg(facetDecorators, is(notNullValue()));
         ensureThatArg(metaModelValidator, is(notNullValue()));
+        ensureThatArg(layoutMetadataReaders, is(notNullValue()));
+        ensureThatArg(layoutMetadataReaders.size(), is(greaterThan(0)));
 
         this.configuration = configuration;
         this.programmingModel = programmingModel;
@@ -175,6 +181,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
         this.metaModelValidator = metaModelValidator;
         this.facetProcessor = new FacetProcessor(configuration, programmingModel);
+        this.layoutMetadataReaders = layoutMetadataReaders;
     }
 
     @Override
@@ -443,7 +450,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             final SpecificationLoaderSpi specificationLoader = this;
             final ServicesInjector dependencyInjector = getRuntimeContext().getServicesInjector();
             final CreateObjectContext createObjectContext = new CreateObjectContext(adapterMap, dependencyInjector);
-            final FacetedMethodsBuilderContext facetedMethodsBuilderContext = new FacetedMethodsBuilderContext(specificationLoader, facetProcessor);
+            final FacetedMethodsBuilderContext facetedMethodsBuilderContext = new FacetedMethodsBuilderContext(specificationLoader, facetProcessor, layoutMetadataReaders);
             return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext, specContext, objectMemberContext, createObjectContext);
         }
     }

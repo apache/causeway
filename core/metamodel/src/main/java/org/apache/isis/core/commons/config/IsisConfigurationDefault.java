@@ -357,7 +357,17 @@ public class IsisConfigurationDefault implements IsisConfiguration {
 
     @Override
     public String[] getList(final String name) {
-        final String list = getString(name);
+        final String listAsCommaSeparatedArray = getString(name);
+        return stringAsList(listAsCommaSeparatedArray);
+    }
+
+    @Override
+    public String[] getList(String name, String defaultListAsCommaSeparatedArray) {
+        final String listAsCommaSeparatedArray = getString(name, defaultListAsCommaSeparatedArray);
+        return stringAsList(listAsCommaSeparatedArray);
+    }
+
+    private String[] stringAsList(String list) {
         if (list == null) {
             return new String[0];
         } else {

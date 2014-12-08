@@ -25,6 +25,8 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
+import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
@@ -133,7 +135,11 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     @Override
     public void init() {
         ensureNotInitialized();
-        reflector = new ObjectReflectorDefault(configuration, programmingModel, facetDecorators, metaModelValidator);
+
+        final List<LayoutMetadataReader> layoutMetadataReaders = Lists.<LayoutMetadataReader>newArrayList(
+                new LayoutMetadataReaderFromJson());
+
+        reflector = new ObjectReflectorDefault(configuration, programmingModel, facetDecorators, metaModelValidator, layoutMetadataReaders);
 
         final ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault();
         servicesInjector.setServices(services);

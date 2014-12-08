@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Collections;
 import java.util.HashSet;
+import com.google.common.collect.Lists;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Assert;
@@ -35,6 +36,8 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
+import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
+import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
@@ -78,7 +81,8 @@ public abstract class ObjectReflectorDefaultTestAbstract {
                         mockConfiguration,
                         new ProgrammingModelFacetsJava5(),
                         new HashSet<FacetDecorator>(),
-                        new MetaModelValidatorDefault());
+                        new MetaModelValidatorDefault(),
+                        Lists.<LayoutMetadataReader>newArrayList(new LayoutMetadataReaderFromJson()));
         reflector.setRuntimeContext(runtimeContext);
         reflector.setServiceInjector(new ServicesInjectorDefault().withServices(Collections.<Object>singletonList(new DomainObjectContainerDefault())));
         reflector.init();

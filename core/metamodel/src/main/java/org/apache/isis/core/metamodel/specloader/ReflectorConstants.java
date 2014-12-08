@@ -23,6 +23,7 @@ import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
@@ -70,6 +71,13 @@ public final class ReflectorConstants {
      * Key used to lookup comma-separated list of {@link FacetDecorator}s.
      */
     public static final String FACET_DECORATOR_CLASS_NAMES = ConfigurationConstants.ROOT + "reflector.facet-decorators";
+
+    /**
+     * Key used to lookup comma-separated list of {@link org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader}s.
+     */
+    public static final String LAYOUT_METADATA_READER_LIST = ConfigurationConstants.ROOT + "reflector.layoutMetadataReaders";
+    public static final String LAYOUT_METADATA_READER_LIST_DEFAULT = LayoutMetadataReaderFromJson.class.getName();
+
 
     private ReflectorConstants() {
     }

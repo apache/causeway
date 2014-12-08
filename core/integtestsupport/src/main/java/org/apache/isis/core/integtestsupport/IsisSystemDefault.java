@@ -29,6 +29,8 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
+import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -42,10 +44,10 @@ import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerS
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisSystemAbstract;
 import org.apache.isis.core.runtime.transaction.facetdecorator.standard.StandardTransactionFacetDecorator;
 import org.apache.isis.core.security.authentication.AuthenticatorBypass;
@@ -128,11 +130,10 @@ public class IsisSystemDefault extends IsisSystemAbstract {
         final ProgrammingModel programmingModel = obtainReflectorProgrammingModel();
         final Set<FacetDecorator> facetDecorators = obtainReflectorFacetDecoratorSet();
         final MetaModelValidator mmv = obtainReflectorMetaModelValidator();
-        
-        return JavaReflectorHelper.createObjectReflector(programmingModel, metaModelRefiners, facetDecorators, mmv, getConfiguration());
+        final List<LayoutMetadataReader> layoutMetadataReaders = obtainLayoutMetadataReaders();
+        return JavaReflectorHelper.createObjectReflector(programmingModel, metaModelRefiners, facetDecorators, layoutMetadataReaders, mmv, getConfiguration());
     }
 
- 
 
     /**
      * Optional hook method.
@@ -154,6 +155,14 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     protected MetaModelValidator obtainReflectorMetaModelValidator() {
         return new MetaModelValidatorDefault();
     }
+
+    /**
+     * Optional hook method.
+     */
+    protected List<LayoutMetadataReader> obtainLayoutMetadataReaders() {
+        return Lists.<LayoutMetadataReader>newArrayList(new LayoutMetadataReaderFromJson());
+    }
+
 
     /**
      * The standard authentication manager, configured with the default authenticator (allows all requests through).

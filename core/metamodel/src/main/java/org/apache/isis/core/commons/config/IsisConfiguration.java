@@ -126,6 +126,12 @@ public interface IsisConfiguration extends DebuggableWithTitle, Injectable, Iter
     String[] getList(String name);
 
     /**
+     * Returns a list of entries for the single configuration property with the
+     * specified name.
+     */
+    String[] getList(String name, String defaultListAsCommaSeparatedArray);
+
+    /**
      * Gets the number value for the specified name. If no property is specified
      * with this name then 0 is returned.
      * 

@@ -105,6 +105,7 @@ public abstract class FixtureScript
     /**
      * Enable tracing of the execution to the provided {@link java.io.PrintStream}.
      */
+    @Programmatic
     public FixtureScript withTracing(PrintStream tracePrintStream) {
         this.tracePrintStream = tracePrintStream;
         return this;
@@ -113,6 +114,7 @@ public abstract class FixtureScript
     /**
      * Enable tracing of the execution to stdout.
      */
+    @Programmatic
     public FixtureScript withTracing() {
         return withTracing(System.out);
     }
@@ -121,11 +123,13 @@ public abstract class FixtureScript
 
     //region > viewModel impl
 
+    @Programmatic
     @Override
     public String viewModelMemento() {
         return fixtureScripts.mementoFor(this);
     }
 
+    @Programmatic
     @Override
     public void viewModelInit(String mementoStr) {
         fixtureScripts.initOf(mementoStr, this);

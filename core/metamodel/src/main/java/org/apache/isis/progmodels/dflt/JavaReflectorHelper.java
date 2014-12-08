@@ -20,12 +20,14 @@
 package org.apache.isis.progmodels.dflt;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
@@ -43,6 +45,7 @@ public final class JavaReflectorHelper  {
             final ProgrammingModel programmingModel,
             final Collection<MetaModelRefiner> metaModelRefiners,
             final Set<FacetDecorator> facetDecorators,
+            final List<LayoutMetadataReader> layoutMetadataReaders,
             final MetaModelValidator mmv,
             final IsisConfiguration configuration) {
 
@@ -56,8 +59,8 @@ public final class JavaReflectorHelper  {
         if(!metaModelRefiners.contains(programmingModel)) {
             programmingModel.refineMetaModelValidator(metaModelValidator, configuration);
         }
-        
-        return new ObjectReflectorDefault(configuration, programmingModel, facetDecorators, metaModelValidator);
+
+        return new ObjectReflectorDefault(configuration, programmingModel, facetDecorators, metaModelValidator, layoutMetadataReaders);
     }
 
 }

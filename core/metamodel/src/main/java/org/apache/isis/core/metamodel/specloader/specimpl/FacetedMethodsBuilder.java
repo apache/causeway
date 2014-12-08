@@ -27,14 +27,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-
 import com.google.common.collect.Lists;
 import com.google.gson.JsonSyntaxException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.MethodUtil;
@@ -47,9 +43,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.object.facets.FacetsFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadata;
+import org.apache.isis.core.metamodel.facets.object.facets.FacetsFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader.ReaderException;
 import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
@@ -133,6 +128,9 @@ public class FacetedMethodsBuilder {
 
     private final SpecificationLoaderSpi specificationLoader;
 
+    private final List<LayoutMetadataReader> layoutMetadataReaders;
+
+
     // ////////////////////////////////////////////////////////////////////////////
     // Constructor & finalize
     // ////////////////////////////////////////////////////////////////////////////
@@ -150,6 +148,8 @@ public class FacetedMethodsBuilder {
 
         this.facetProcessor = facetedMethodsBuilderContext.facetProcessor;
         this.specificationLoader = facetedMethodsBuilderContext.specificationLoader;
+
+        this.layoutMetadataReaders = facetedMethodsBuilderContext.layoutMetadataReaders;
     }
 
     @Override
@@ -204,22 +204,14 @@ public class FacetedMethodsBuilder {
         return metadataProperties;
     }
 
-    /**
-     * In the future expect this to be configurable (eg read implementations from {@link IsisConfiguration}).
-     * 
-     * <p>
-     * Not doing for now, though, because expect the {@link LayoutMetadata} to evolve a bit yet. 
-     */
-    private Properties readMetadataProperties(Class<?> domainClass) {
-        List<LayoutMetadataReader> layoutMetadataReaders = 
-                Lists.<LayoutMetadataReader>newArrayList(new LayoutMetadataReaderFromJson(), new LayoutMetadataReaderFromJson());
+    private Properties readMetadataProperties(final Class<?> domainClass) {
         for (final LayoutMetadataReader reader : layoutMetadataReaders) {
             try {
                 Properties properties = reader.asProperties(domainClass);
                 if(properties != null) {
                     return properties;
                 }
-            } catch(ReaderException ex) {
+            } catch(final ReaderException ex) {
                 final String message = reader.toString() +": unable to load layout metadata for " + domainClass.getName() + " (" + ex.getMessage() + ")";
                 if(ex.getCause() instanceof JsonSyntaxException) {
                     LOG.warn(message);
