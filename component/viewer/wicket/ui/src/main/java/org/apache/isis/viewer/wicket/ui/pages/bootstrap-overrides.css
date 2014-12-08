@@ -302,6 +302,10 @@ body {
 
 /* from CollectionContentsAsSummary */
 
+.collectionContentsAsSummary {
+    padding-top: 15px;
+}
+
 .collectionContentsAsSummary .propertyNameCell,
 .collectionContentsAsSummary .aggregatesCell {
     vertical-align: middle;
@@ -674,3 +678,8 @@ div.label-left .choicesPlaceholder {
 .navbar-header a.navbar-brand {
     margin-top: -2px;
 }
+
+.valueChoicesSelect2Panel .scalarValueWrapper .choicesPlaceholder {
+    height: 33px;
+}
+
