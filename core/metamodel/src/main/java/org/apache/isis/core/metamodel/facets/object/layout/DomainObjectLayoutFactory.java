@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.layout;
 
 
-import org.apache.isis.applib.annotation.ClassLayout;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -27,24 +27,24 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 
-public class ClassLayoutFactory extends FacetFactoryAbstract {
+public class DomainObjectLayoutFactory extends FacetFactoryAbstract {
 
-    public ClassLayoutFactory() {
+    public DomainObjectLayoutFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
     public void process(ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final ClassLayout classLayout = Annotations.getAnnotation(cls, ClassLayout.class);
+        final DomainObjectLayout domainObjectLayout = Annotations.getAnnotation(cls, DomainObjectLayout.class);
 
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(CssClassFacetForClassLayoutAnnotation.create(classLayout, facetHolder));
-        FacetUtil.addFacet(DescribedAsFacetForClassLayoutAnnotation.create(classLayout, facetHolder));
-        FacetUtil.addFacet(NamedFacetForClassLayoutAnnotation.create(classLayout, facetHolder));
-        FacetUtil.addFacet(PagedFacetForClassLayoutAnnotation.create(classLayout, facetHolder));
-        FacetUtil.addFacet(PluralFacetForClassLayoutAnnotation.create(classLayout, facetHolder));
+        FacetUtil.addFacet(CssClassFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
+        FacetUtil.addFacet(DescribedAsFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
+        FacetUtil.addFacet(NamedFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
+        FacetUtil.addFacet(PagedFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
+        FacetUtil.addFacet(PluralFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
 
         return;
     }

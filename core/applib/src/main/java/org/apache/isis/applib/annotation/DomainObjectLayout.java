@@ -26,12 +26,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Layout hints for collections.
+ * Layout hints for domain objects.
  */
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ClassLayout {
+public @interface DomainObjectLayout {
 
     /**
      * Indicates the css class that a domain class (type) should have.

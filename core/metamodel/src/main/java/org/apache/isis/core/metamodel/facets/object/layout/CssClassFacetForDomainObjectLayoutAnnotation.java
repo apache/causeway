@@ -20,23 +20,23 @@ package org.apache.isis.core.metamodel.facets.object.layout;
 
 
 import com.google.common.base.Strings;
-import org.apache.isis.applib.annotation.ClassLayout;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 
 
-public class PluralFacetForClassLayoutAnnotation extends PluralFacetAbstract {
+public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetAbstract {
 
-    public static PluralFacet create(ClassLayout classLayout, FacetHolder holder) {
-        if(classLayout == null) {
+    public static CssClassFacet create(DomainObjectLayout domainObjectLayout, FacetHolder holder) {
+        if(domainObjectLayout == null) {
             return null;
         }
-        final String plural = Strings.emptyToNull(classLayout.plural());
-        return plural != null ? new PluralFacetForClassLayoutAnnotation(plural, holder) : null;
+        final String cssClass = Strings.emptyToNull(domainObjectLayout.cssClass());
+        return cssClass != null ? new CssClassFacetForDomainObjectLayoutAnnotation(cssClass, holder) : null;
     }
 
-    private PluralFacetForClassLayoutAnnotation(String value, FacetHolder holder) {
+    private CssClassFacetForDomainObjectLayoutAnnotation(String value, FacetHolder holder) {
         super(value, holder);
     }
 }

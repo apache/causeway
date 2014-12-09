@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @deprecated - use {@link ClassLayout#plural()}.
+ * @deprecated - use {@link DomainObjectLayout#plural()}.
  */
 @Deprecated
 @Inherited

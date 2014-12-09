@@ -31,7 +31,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.ClassLayout;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Render.Type;
@@ -39,8 +39,8 @@ import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.util.ObjectContracts;
 
-@ClassLayout(
-        named="By Category"
+@DomainObjectLayout(
+    named="By Category"
 )
 @Bookmarkable
 @ViewModel

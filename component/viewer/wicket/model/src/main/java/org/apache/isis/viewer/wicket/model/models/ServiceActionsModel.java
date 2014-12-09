@@ -23,9 +23,9 @@ import java.util.List;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
+import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 
 /**
  * Backing model for actions of application services menu bar (typically, as
@@ -35,24 +35,24 @@ public class ServiceActionsModel extends ModelAbstract<List<ObjectAdapter>> {
 
     private static final long serialVersionUID = 1L;
 
-    private final DomainService.MenuBar menuBar;
+    private final DomainServiceLayout.MenuBar menuBar;
 
-    private static Predicate<ObjectAdapter> with(final DomainService.MenuBar menuBar) {
+    private static Predicate<ObjectAdapter> with(final DomainServiceLayout.MenuBar menuBar) {
         return new Predicate<ObjectAdapter>() {
             @Override
             public boolean apply(ObjectAdapter input) {
-              final DomainServiceFacet facet = input.getSpecification().getFacet
-                  (DomainServiceFacet.class);
+              final DomainServiceLayoutFacet facet = input.getSpecification().getFacet
+                  (DomainServiceLayoutFacet.class);
                 return facet != null && facet.getMenuBar() == menuBar;
             }
         };
     }
 
-    public ServiceActionsModel(DomainService.MenuBar menuBar) {
+    public ServiceActionsModel(final DomainServiceLayout.MenuBar menuBar) {
         this.menuBar = menuBar;
     }
 
-    public DomainService.MenuBar getMenuBar() {
+    public DomainServiceLayout.MenuBar getMenuBar() {
         return menuBar;
     }
 

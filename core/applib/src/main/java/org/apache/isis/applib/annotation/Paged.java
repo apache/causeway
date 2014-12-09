@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @deprecated - use instead {@link ClassLayout#paged()} or {@link CollectionLayout#paged()}.
+ * @deprecated - use instead {@link DomainObjectLayout#paged()} or {@link CollectionLayout#paged()}.
  */
 @Deprecated
 @Inherited

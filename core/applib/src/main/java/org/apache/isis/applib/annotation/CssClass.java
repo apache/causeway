@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @deprecated - use {@link ClassLayout#cssClass()}, {@link PropertyLayout#cssClass()}, {@link CollectionLayout#cssClass()}, {@link ActionLayout#cssClass()} and {@link ParameterLayout#cssClass()}.
+ * @deprecated - use {@link DomainObjectLayout#cssClass()}, {@link PropertyLayout#cssClass()}, {@link CollectionLayout#cssClass()}, {@link ActionLayout#cssClass()} and {@link ParameterLayout#cssClass()}.
  */
 @Deprecated
 @Inherited

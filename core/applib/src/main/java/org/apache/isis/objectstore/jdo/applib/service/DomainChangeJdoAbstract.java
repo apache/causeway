@@ -36,7 +36,7 @@ import org.apache.isis.applib.util.ObjectContracts;
         columnSpans={6,0,6,12}, 
         left={"Identifiers"},
         right={"Target","Detail"})
-@Named("Domain Change")
+@DomainObjectLayout(named="Domain Change")
 @Immutable
 public abstract class DomainChangeJdoAbstract {
 
@@ -120,7 +120,7 @@ public abstract class DomainChangeJdoAbstract {
      * subclasses override with the &quot;real&quot; implementation.
      */
     @MemberOrder(name="Target", sequence = "10")
-    @Named("Class")
+    @PropertyLayout(named="Class")
     public String getTargetClass() {
         return null;
     }
@@ -151,10 +151,12 @@ public abstract class DomainChangeJdoAbstract {
      * This dummy implementation is a trick so that Isis will render the property in a standalone table.  Each of the
      * subclasses override with the &quot;real&quot; implementation.
      */
-    @Hidden(where=Where.ALL_EXCEPT_STANDALONE_TABLES)
     @Optional
     @MemberOrder(name="Target", sequence = "20")
-    @Named("Action")
+    @PropertyLayout(
+        named="Action",
+        hidden = Where.ALL_EXCEPT_STANDALONE_TABLES
+    )
     public String getTargetAction() {
         return targetAction;
     }
@@ -170,7 +172,7 @@ public abstract class DomainChangeJdoAbstract {
      * subclasses override with the &quot;real&quot; implementation.
      */
     @MemberOrder(name="Target", sequence="30")
-    @Named("Object")
+    @PropertyLayout(named="Object")
     public String getTargetStr() {
         return null;
     }
@@ -186,7 +188,7 @@ public abstract class DomainChangeJdoAbstract {
     @Bulk
     @ActionSemantics(Of.SAFE)
     @MemberOrder(name="TargetStr", sequence="1")
-    @Named("Open")
+    @PropertyLayout(named="Open")
     public Object openTargetObject() {
         return Util.lookupBookmark(getTarget(), bookmarkService, container);
     }

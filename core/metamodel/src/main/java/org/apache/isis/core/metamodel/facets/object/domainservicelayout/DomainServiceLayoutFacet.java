@@ -16,23 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
-package org.apache.isis.applib.annotation;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+
 
 /**
- * @deprecated - see {@link DomainObjectLayout#describedAs()}, {@link PropertyLayout#describedAs()},
- * {@link CollectionLayout#describedAs()}, {@link ActionLayout#describedAs()} and {@link ParameterLayout#describedAs()}.
+ * Corresponds to annotating the class with the {@link org.apache.isis.applib.annotation.DomainServiceLayout} annotation.
  */
-@Deprecated
-@Inherited
-@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface DescribedAs {
-    String value();
+public interface DomainServiceLayoutFacet extends Facet {
+
+    /**
+     * Corresponds to {@link org.apache.isis.applib.annotation.DomainServiceLayout#menuBar()}.
+     */
+    public DomainServiceLayout.MenuBar getMenuBar();
+
+    /**
+     * Corresponds to {@link org.apache.isis.applib.annotation.DomainService#menuOrder()}.
+     *
+     * <p>
+     * May be null.
+     * </p>
+     */
+    public String getMenuOrder();
+
 }

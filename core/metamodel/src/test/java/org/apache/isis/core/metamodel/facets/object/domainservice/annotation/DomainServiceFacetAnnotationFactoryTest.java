@@ -17,19 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.annotation;
+package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
 import org.junit.Assert;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
-import org.apache.isis.core.metamodel.facets.object.domainservice.annotation.DomainServiceFacetAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainservice.annotation.DomainServiceFacetAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
-import static org.hamcrest.Matchers.is;
 
 public class DomainServiceFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
@@ -61,7 +58,6 @@ public class DomainServiceFacetAnnotationFactoryTest extends AbstractFacetFactor
         assertNotNull(facet);
         assertTrue(facet instanceof DomainServiceFacetAnnotation);
         DomainServiceFacetAnnotation domainServiceFacet = (DomainServiceFacetAnnotation) facet;
-        Assert.assertThat(domainServiceFacet.getMenuOrder(), is("123"));
         Assert.assertThat(domainServiceFacet.getRepositoryFor(), classEqualTo(Customer.class));
 
         assertNoMethodsRemoved();

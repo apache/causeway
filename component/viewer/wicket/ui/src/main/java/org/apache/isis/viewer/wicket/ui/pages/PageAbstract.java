@@ -60,7 +60,7 @@ import org.apache.wicket.request.resource.PackageResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -333,12 +333,12 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     private void addServiceActionMenuBars(MarkupContainer container) {
-        addMenuBar(container, "primaryMenuBar", DomainService.MenuBar.PRIMARY);
-        addMenuBar(container, "secondaryMenuBar", DomainService.MenuBar.SECONDARY);
-        addMenuBar(container, "tertiaryMenuBar", DomainService.MenuBar.TERTIARY);
+        addMenuBar(container, "primaryMenuBar", DomainServiceLayout.MenuBar.PRIMARY);
+        addMenuBar(container, "secondaryMenuBar", DomainServiceLayout.MenuBar.SECONDARY);
+        addMenuBar(container, "tertiaryMenuBar", DomainServiceLayout.MenuBar.TERTIARY);
     }
 
-    private void addMenuBar(MarkupContainer container, String id, DomainService.MenuBar menuBar) {
+    private void addMenuBar(MarkupContainer container, String id, DomainServiceLayout.MenuBar menuBar) {
         final ServiceActionsModel model = new ServiceActionsModel(menuBar);
         getComponentFactoryRegistry().addOrReplaceComponent(container, id, ComponentType.SERVICE_ACTIONS, model);
     }

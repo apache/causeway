@@ -33,21 +33,10 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DomainService {
 
-    public enum MenuBar {
-        PRIMARY,
-        SECONDARY,
-        TERTIARY
-    }
-
     /**
      * If this domain service acts as a repository for an entity type, specify that entity type.
      */
     Class<?> repositoryFor() default Object.class;
-
-    /**
-     * The menubar in which the menu that hold's this service's actions should reside.
-     */
-    MenuBar menuBar() default MenuBar.PRIMARY;
 
     /**
      * Number in Dewey Decimal format representing the order.
@@ -55,7 +44,10 @@ public @interface DomainService {
      * <p>
      * Same convention as {@link MemberOrder#sequence()}.  If not specified, placed after any named.
      * </p>
+     *
+     * @deprecated - use {@link DomainServiceLayout#menuOrder()} instead.
      */
+    @Deprecated
     String menuOrder() default "" + Integer.MAX_VALUE;
 
 

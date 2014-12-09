@@ -20,23 +20,23 @@ package org.apache.isis.core.metamodel.facets.object.layout;
 
 
 import com.google.common.base.Strings;
-import org.apache.isis.applib.annotation.ClassLayout;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
 
-public class CssClassFacetForClassLayoutAnnotation extends CssClassFacetAbstract {
+public class DescribedAsFacetForDomainObjectLayoutAnnotation extends DescribedAsFacetAbstract {
 
-    public static CssClassFacet create(ClassLayout classLayout, FacetHolder holder) {
-        if(classLayout == null) {
+    public static DescribedAsFacet create(DomainObjectLayout domainObjectLayout, FacetHolder holder) {
+        if(domainObjectLayout == null) {
             return null;
         }
-        final String cssClass = Strings.emptyToNull(classLayout.cssClass());
-        return cssClass != null ? new CssClassFacetForClassLayoutAnnotation(cssClass, holder) : null;
+        final String describedAs = Strings.emptyToNull(domainObjectLayout.describedAs());
+        return describedAs != null ? new DescribedAsFacetForDomainObjectLayoutAnnotation(describedAs, holder) : null;
     }
 
-    private CssClassFacetForClassLayoutAnnotation(String value, FacetHolder holder) {
+    private DescribedAsFacetForDomainObjectLayoutAnnotation(String value, FacetHolder holder) {
         super(value, holder);
     }
 }

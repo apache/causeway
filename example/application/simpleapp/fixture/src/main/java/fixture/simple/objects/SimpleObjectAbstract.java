@@ -27,7 +27,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
 public abstract class SimpleObjectAbstract extends FixtureScript {
 
     protected SimpleObject create(final String name, ExecutionContext executionContext) {
-        return executionContext.add(this, simpleObjects.create(name));
+        return executionContext.addResult(this, simpleObjects.create(name));
     }
 
     @javax.inject.Inject

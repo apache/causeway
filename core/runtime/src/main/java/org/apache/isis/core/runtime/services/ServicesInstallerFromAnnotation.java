@@ -39,6 +39,7 @@ import org.reflections.vfs.Vfs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -209,12 +210,21 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
                 reflections.getTypesAnnotatedWith(DomainService.class), instantiatable());
         for (final Class<?> cls : domainServiceClasses) {
 
-            final DomainService domainService = cls.getAnnotation(DomainService.class);
-            final String order = domainService.menuOrder();
+            final String order = orderOf(cls);
             final String serviceName = cls.getName();
 
             ServicesInstallerUtils.appendInPosition(positionedServices, order, serviceName);
         }
+    }
+
+    private static String orderOf(Class<?> cls) {
+        final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);
+        String order = domainServiceLayout != null ? domainServiceLayout.menuOrder(): null;
+        if(order == null || order.equals("" + Integer.MAX_VALUE)) {
+            final DomainService domainService = cls.getAnnotation(DomainService.class);
+            order = domainService.menuOrder();
+        }
+        return order;
     }
 
     protected ArrayList<String> asList(String packagePrefixes1) {

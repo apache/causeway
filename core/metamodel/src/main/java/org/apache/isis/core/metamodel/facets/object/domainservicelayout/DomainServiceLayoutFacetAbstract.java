@@ -16,31 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.domainservice;
+package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
 
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
-public abstract class DomainServiceFacetAbstract
+public abstract class DomainServiceLayoutFacetAbstract
             extends FacetAbstract
-            implements DomainServiceFacet {
+            implements DomainServiceLayoutFacet {
 
     public static Class<? extends Facet> type() {
-        return DomainServiceFacet.class;
+        return DomainServiceLayoutFacet.class;
     }
 
-    private final Class<?> repositoryFor;
+    private final DomainServiceLayout.MenuBar menuBar;
+    private final String menuOrder;
 
-    public DomainServiceFacetAbstract(final FacetHolder facetHolder, final Class<?> repositoryFor) {
-        super(DomainServiceFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
-        this.repositoryFor = repositoryFor;
+    public DomainServiceLayoutFacetAbstract(final FacetHolder facetHolder, final DomainServiceLayout.MenuBar menuBar, final String menuOrder) {
+        super(DomainServiceLayoutFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
+        this.menuBar = menuBar;
+        this.menuOrder = menuOrder;
     }
 
+    public DomainServiceLayout.MenuBar getMenuBar() {
+        return menuBar;
+    }
 
-    public Class<?> getRepositoryFor() {
-        return repositoryFor;
+    public String getMenuOrder() {
+        return menuOrder;
     }
 }

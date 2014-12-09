@@ -31,14 +31,14 @@ import com.google.common.collect.Maps;
 import com.google.common.io.CharSource;
 import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 
-@Named("Script")
+@DomainObjectLayout(named="Script")
 public abstract class FixtureScript 
         extends AbstractViewModel 
         implements InstallableFixture {
@@ -328,12 +328,28 @@ public abstract class FixtureScript
             return fixtureResultList.getResults();
         }
 
+        /**
+         * @deprecated - use {@link #addResult(FixtureScript, Object)} instead.
+         */
+        @Deprecated
         public <T> T add(final FixtureScript script, final T object) {
+            return addResult(script, object);
+        }
+
+        public <T> T addResult(final FixtureScript script, final T object) {
             fixtureResultList.add(script, object);
             return object;
         }
 
+        /**
+         * @deprecated - use {@link #addResult(FixtureScript, String, Object)} instead.
+         */
+        @Deprecated
         public <T> T add(final FixtureScript script, final String key, final T object) {
+            return addResult(script, key, object);
+        }
+
+        public <T> T addResult(final FixtureScript script, final String key, final T object) {
             fixtureResultList.add(script, key, object);
             return object;
         }

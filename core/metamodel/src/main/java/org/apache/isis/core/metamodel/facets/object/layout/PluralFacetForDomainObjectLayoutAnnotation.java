@@ -16,18 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
+package org.apache.isis.core.metamodel.facets.object.layout;
 
 
+import com.google.common.base.Strings;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
+import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
 
 
-public class DomainServiceFacetAnnotation extends DomainServiceFacetAbstract {
+public class PluralFacetForDomainObjectLayoutAnnotation extends PluralFacetAbstract {
 
-    public DomainServiceFacetAnnotation(
-            final FacetHolder facetHolder,
-            final Class<?> repositoryFor) {
-        super(facetHolder, repositoryFor);
+    public static PluralFacet create(DomainObjectLayout domainObjectLayout, FacetHolder holder) {
+        if(domainObjectLayout == null) {
+            return null;
+        }
+        final String plural = Strings.emptyToNull(domainObjectLayout.plural());
+        return plural != null ? new PluralFacetForDomainObjectLayoutAnnotation(plural, holder) : null;
+    }
+
+    private PluralFacetForDomainObjectLayoutAnnotation(String value, FacetHolder holder) {
+        super(value, holder);
     }
 }

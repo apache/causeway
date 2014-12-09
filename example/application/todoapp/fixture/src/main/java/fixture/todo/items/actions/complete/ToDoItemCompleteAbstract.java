@@ -28,23 +28,6 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 public abstract class ToDoItemCompleteAbstract extends FixtureScript {
 
-    @Override
-    protected void execute(ExecutionContext executionContext) {
-        validateParameters(executionContext);
-
-
-    }
-
-    /**
-     * Subclasses should call from within {@link #execute(org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)}.
-     */
-    protected void validateParameters(ExecutionContext executionContext) {
-        final String ownedBy = executionContext.getParameter("ownedBy");
-        if(ownedBy == null) {
-            throw new IllegalArgumentException("'ownedBy' must be specified");
-        }
-    }
-
     /**
      * Looks up item from repository, and completes.
      */
@@ -52,9 +35,8 @@ public abstract class ToDoItemCompleteAbstract extends FixtureScript {
         String ownedBy = executionContext.getParameter("ownedBy");
         final ToDoItem toDoItem = findToDoItem(description, ownedBy);
         toDoItem.setComplete(true);
-        executionContext.add(this, toDoItem);
+        executionContext.addResult(this, toDoItem);
     }
-
 
     private ToDoItem findToDoItem(final String description, final String ownedBy) {
         final Collection<ToDoItem> filtered = Collections2.filter(getContainer().allInstances(ToDoItem.class), new Predicate<ToDoItem>() {

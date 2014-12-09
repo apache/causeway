@@ -19,24 +19,23 @@
 package org.apache.isis.core.metamodel.facets.object.layout;
 
 
-import com.google.common.base.Strings;
-import org.apache.isis.applib.annotation.ClassLayout;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
+import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
 
 
-public class NamedFacetForClassLayoutAnnotation extends NamedFacetAbstract {
+public class PagedFacetForDomainObjectLayoutAnnotation extends PagedFacetAbstract {
 
-    public static NamedFacet create(ClassLayout classLayout, FacetHolder holder) {
-        if(classLayout == null) {
+    public static PagedFacet create(DomainObjectLayout domainObjectLayout, FacetHolder holder) {
+        if(domainObjectLayout == null) {
             return null;
         }
-        final String named = Strings.emptyToNull(classLayout.named());
-        return named != null ? new NamedFacetForClassLayoutAnnotation(named, holder) : null;
+        final int paged = domainObjectLayout.paged();
+        return paged > 1 ? new PagedFacetForDomainObjectLayoutAnnotation(paged, holder) : null;
     }
 
-    private NamedFacetForClassLayoutAnnotation(String value, FacetHolder holder) {
+    private PagedFacetForDomainObjectLayoutAnnotation(int value, FacetHolder holder) {
         super(value, holder);
     }
 }

@@ -26,13 +26,39 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @deprecated - see {@link DomainObjectLayout#describedAs()}, {@link PropertyLayout#describedAs()},
- * {@link CollectionLayout#describedAs()}, {@link ActionLayout#describedAs()} and {@link ParameterLayout#describedAs()}.
+ * Layout hints for domain services.
+ *
+ * <p>
+ * Also indicates whether the domain service acts as a repository for an entity, and menu ordering UI hints.
+ * </p>
  */
-@Deprecated
 @Inherited
-@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER })
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DescribedAs {
-    String value();
+public @interface DomainServiceLayout {
+
+    /**
+     * Name of this class (overriding the name derived from its name in code).
+     */
+    String named() default "";
+
+    public enum MenuBar {
+        PRIMARY,
+        SECONDARY,
+        TERTIARY
+    }
+
+    /**
+     * The menubar in which the menu that holds this service's actions should reside.
+     */
+    MenuBar menuBar() default MenuBar.PRIMARY;
+
+    /**
+     * Number in Dewey Decimal format representing the order.
+     *
+     * <p>
+     * Same convention as {@link org.apache.isis.applib.annotation.MemberOrder#sequence()}.  If not specified, placed after any named.
+     * </p>
+     */
+    String menuOrder() default "" + Integer.MAX_VALUE;
 }

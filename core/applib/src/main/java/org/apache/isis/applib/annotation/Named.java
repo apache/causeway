@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @deprecated - use instead {@link ClassLayout#named()}, {@link PropertyLayout#named()}, {@link CollectionLayout#named()}, {@link ActionLayout#named()} and {@link ParameterLayout#named()}.
+ * @deprecated - use instead {@link DomainServiceLayout#named()}, {@link DomainObjectLayout#named()}, {@link PropertyLayout#named()}, {@link CollectionLayout#named()}, {@link ActionLayout#named()} and {@link ParameterLayout#named()}.
  */
 @Deprecated
 @Inherited

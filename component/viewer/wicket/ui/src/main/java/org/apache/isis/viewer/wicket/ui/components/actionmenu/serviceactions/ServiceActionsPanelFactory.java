@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
-import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -48,7 +48,7 @@ public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final ServiceActionsModel serviceActionsModel = (ServiceActionsModel) model;
-        return appliesIf(serviceActionsModel.getMenuBar() != DomainService.MenuBar.TERTIARY);
+        return appliesIf(serviceActionsModel.getMenuBar() != DomainServiceLayout.MenuBar.TERTIARY);
     }
 
     @Override

@@ -44,7 +44,6 @@ import org.apache.isis.applib.services.audit.AuditingService3;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Audited {
-    
     /**
      * If set to <tt>true</tt>, acts as an override to <i>disable</i> auditing when it is otherwise (eg through 
      * configuration) configured as the default.

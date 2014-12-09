@@ -16,26 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.layout;
+package org.apache.isis.core.metamodel.facets.object.domainservicelayout.annotation;
 
 
-import org.apache.isis.applib.annotation.ClassLayout;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
-import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacetAbstract;
 
 
-public class PagedFacetForClassLayoutAnnotation extends PagedFacetAbstract {
+public class DomainServiceLayoutFacetAnnotation extends DomainServiceLayoutFacetAbstract {
 
-    public static PagedFacet create(ClassLayout classLayout, FacetHolder holder) {
-        if(classLayout == null) {
-            return null;
-        }
-        final int paged = classLayout.paged();
-        return paged > 1 ? new PagedFacetForClassLayoutAnnotation(paged, holder) : null;
-    }
-
-    private PagedFacetForClassLayoutAnnotation(int value, FacetHolder holder) {
-        super(value, holder);
+    public DomainServiceLayoutFacetAnnotation(
+            final FacetHolder facetHolder,
+            final DomainServiceLayout.MenuBar menubar,
+            final String menuOrder) {
+        super(facetHolder, menubar, menuOrder);
     }
 }

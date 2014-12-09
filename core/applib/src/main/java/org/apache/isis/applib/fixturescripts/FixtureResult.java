@@ -21,7 +21,7 @@ package org.apache.isis.applib.fixturescripts;
 import org.apache.isis.applib.annotation.*;
 
 @ViewModel
-@Paged(500)
+@DomainObjectLayout(paged=500)
 public class FixtureResult {
 
 
@@ -29,7 +29,7 @@ public class FixtureResult {
 
     private String fixtureScriptClassName;
 
-    @Named("Fixture script")
+    @PropertyLayout(named="Fixture script")
     @Optional
     @MemberOrder(sequence="1")
     public String getFixtureScriptClassName() {
@@ -60,7 +60,7 @@ public class FixtureResult {
 
     private String key;
 
-    @Named("Result key")
+    @PropertyLayout(named="Result key")
     @Title(sequence="1", append=": ")
     @MemberOrder(sequence="1")
     public String getKey() {
@@ -76,7 +76,7 @@ public class FixtureResult {
 
     private Object object;
 
-    @Named("Result")
+    @PropertyLayout(named="Result")
     @Title(sequence="2")
     @MemberOrder(sequence="1")
     public Object getObject() {
@@ -91,7 +91,7 @@ public class FixtureResult {
     //region > className (derived property)
 
 
-    @Named("Result class")
+    @PropertyLayout(named="Result class")
     @MemberOrder(sequence="3")
     public String getClassName() {
         return object != null? object.getClass().getName(): null;
@@ -105,7 +105,5 @@ public class FixtureResult {
     FixtureScripts fixtureScripts;
 
     //endregion
-
-
 
 }

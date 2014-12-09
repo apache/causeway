@@ -18,6 +18,7 @@ package webapp.prototyping;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.viewer.wicket.viewer.applib.WicketDeveloperUtilitiesService;
 
@@ -25,7 +26,8 @@ import org.apache.isis.viewer.wicket.viewer.applib.WicketDeveloperUtilitiesServi
  * These overrides are simply to 'move' the action underneath the 
  * 'Prototyping' menu.
  */
-@DomainService(menuBar = DomainService.MenuBar.SECONDARY, menuOrder = "40")
+@DomainService
+@DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.SECONDARY, menuOrder = "40")
 public class WicketDeveloperUtilities extends WicketDeveloperUtilitiesService {
 
     @ActionLayout(named="Clear i18n Cache")
