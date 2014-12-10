@@ -69,14 +69,20 @@ final class ServicesInstallerUtils  {
             // a commented out line, in other words...
             return null;
         }
+
+        final String type;
         if (pos != -1) {
-            final String type = serviceName.substring(0, pos);
+            type = serviceName.substring(0, pos);
             // disregard, assume the stuff after the delimiter (#) was a comment
-            final Class<?> cls = loadClass(type);
-            return serviceInstantiator.createInstance(cls);
+        } else {
+            type = serviceName;
         }
 
-        final Class<?> cls = loadClass(serviceName);
+        final Class<?> cls = loadClass(type);
+        if(cls.isAnonymousClass()) {
+            // eg a test class
+            return null;
+        }
         return serviceInstantiator.createInstance(cls);
     }
 
