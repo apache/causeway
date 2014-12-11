@@ -19,23 +19,26 @@
 
 package org.apache.isis.core.runtime.runner.opts;
 
-import static org.apache.isis.core.runtime.runner.Constants.FIXTURE_LONG_OPT;
-import static org.apache.isis.core.runtime.runner.Constants.FIXTURE_OPT;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.system.SystemConstants;
 
+import static org.apache.isis.core.runtime.runner.Constants.FIXTURE_LONG_OPT;
+import static org.apache.isis.core.runtime.runner.Constants.FIXTURE_OPT;
+
 public class OptionHandlerFixture extends OptionHandlerAbstract {
 
-    private String fixture;
+    private static final Logger LOG = LoggerFactory.getLogger(OptionHandlerFixture.class);
+
+    private String fixtureClassName;
 
     public OptionHandlerFixture() {
         super();
@@ -50,13 +53,19 @@ public class OptionHandlerFixture extends OptionHandlerAbstract {
 
     @Override
     public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
-        fixture = commandLine.getOptionValue(Constants.FIXTURE_OPT);
+        fixtureClassName = commandLine.getOptionValue(Constants.FIXTURE_OPT);
         return true;
     }
 
     @Override
     public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
-        isisConfigurationBuilder.add(SystemConstants.FIXTURE_KEY, fixture);
+        prime(isisConfigurationBuilder, SystemConstants.FIXTURE_KEY, fixtureClassName);
+        prime(isisConfigurationBuilder, "isis.persistor.datanucleus.install-fixtures", "true");
+    }
+
+    private static void prime(IsisConfigurationBuilder isisConfigurationBuilder, String key, String value) {
+        LOG.info("priming: " + key + "=" + value);
+        isisConfigurationBuilder.add(key, value);
     }
 
 }

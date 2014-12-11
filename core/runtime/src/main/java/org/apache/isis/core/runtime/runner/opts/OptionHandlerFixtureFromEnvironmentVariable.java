@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
+import org.apache.isis.core.runtime.system.SystemConstants;
 
 public class OptionHandlerFixtureFromEnvironmentVariable extends OptionHandlerAbstract {
 
@@ -57,8 +58,7 @@ public class OptionHandlerFixtureFromEnvironmentVariable extends OptionHandlerAb
         if(fixtureClassName == null) {
             return;
         }
-        prime(isisConfigurationBuilder, "isis.persistor.datanucleus.install-fixtures", "true");
-        prime(isisConfigurationBuilder, "isis.fixtures", fixtureClassName);
+        prime(isisConfigurationBuilder, SystemConstants.FIXTURE_KEY, fixtureClassName);
     }
 
     private static void prime(IsisConfigurationBuilder isisConfigurationBuilder, String key, String value) {

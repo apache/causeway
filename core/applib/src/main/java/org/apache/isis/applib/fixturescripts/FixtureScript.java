@@ -358,6 +358,30 @@ public abstract class FixtureScript
             return fixtureResultList.lookup(key, cls);
         }
 
+        /**
+         * Executes a child {@link FixtureScript fixture script}, injecting services into it first, and (for any results
+         * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
+         * uses a key that is derived from the fixture's class name.
+         */
+         public void executeChild(FixtureScript callingFixtureScript, FixtureScript childFixtureScript) {
+            executeChild(callingFixtureScript, null, childFixtureScript);
+        }
+
+        /**
+         * Executes a child {@link FixtureScript fixture script}, injecting services into it first, and (for any results
+         * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
+         * uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
+         */
+        public void executeChild(FixtureScript callingFixtureScript, String localNameOverride, FixtureScript childFixtureScript) {
+
+            childFixtureScript.setParentPath(callingFixtureScript.pathWith(""));
+            if(localNameOverride != null) {
+                childFixtureScript.setLocalName(localNameOverride);
+            }
+            callingFixtureScript.getContainer().injectServicesInto(childFixtureScript);
+            executeChildIfNotAlready(childFixtureScript);
+        }
+
 
         static enum As { EXEC, SKIP }
 
@@ -438,6 +462,18 @@ public abstract class FixtureScript
             return ((n / roundTo) + 1) * roundTo;
         }
 
+
+        private Map<Class, Object> userData = Maps.newHashMap();
+        public void setUserData(Object object) {
+            userData.put(object.getClass(), object);
+        }
+        public <T> T getUserData(Class<T> cls) {
+            return (T) userData.get(cls);
+        }
+        public <T> T clearUserData(Class<T> cls) {
+            return (T) userData.remove(cls);
+        }
+
     }
 
     //endregion
@@ -494,24 +530,18 @@ public abstract class FixtureScript
             final String localNameOverride,
             final FixtureScript childFixtureScript,
             final ExecutionContext executionContext) {
-        executeChild(localNameOverride, childFixtureScript, executionContext);
+        executionContext.executeChild(this, localNameOverride, childFixtureScript);
     }
 
     /**
-     * Executes a child {@link FixtureScript fixture script}, overriding its default name with one more
-     * meaningful in the context of this fixture.
+     * @deprecated - use instead {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#executeChild(FixtureScript, String, FixtureScript)}.
      */
+    @Deprecated
     protected void executeChild(
             final String localNameOverride,
             final FixtureScript childFixtureScript,
             final ExecutionContext executionContext) {
-
-        childFixtureScript.setParentPath(pathWith(""));
-        if(localNameOverride != null) {
-            childFixtureScript.setLocalName(localNameOverride);
-        }
-        getContainer().injectServicesInto(childFixtureScript);
-        executionContext.executeChildIfNotAlready(childFixtureScript);
+        executionContext.executeChild(this, localNameOverride, childFixtureScript);
     }
 
     /**
@@ -524,16 +554,17 @@ public abstract class FixtureScript
     protected void execute(
             final FixtureScript childFixtureScript,
             final ExecutionContext executionContext) {
-        executeChild(childFixtureScript, executionContext);
+        executionContext.executeChild(this, childFixtureScript);
     }
 
     /**
-     * Executes a child {@link FixtureScript fixture script} (simply using its default name).
+     * @deprecated - use instead {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#executeChild(org.apache.isis.applib.fixturescripts.FixtureScript, org.apache.isis.applib.fixturescripts.FixtureScript)}
      */
+    @Deprecated
     protected void executeChild(
             final FixtureScript childFixtureScript,
             final ExecutionContext executionContext) {
-        executeChild(null, childFixtureScript, executionContext);
+        executionContext.executeChild(this, childFixtureScript);
     }
 
     //endregion

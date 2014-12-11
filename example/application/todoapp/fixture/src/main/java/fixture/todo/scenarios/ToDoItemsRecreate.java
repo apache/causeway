@@ -62,20 +62,20 @@ public class ToDoItemsRecreate extends FixtureScript {
                 Util.coalesce(getOwnedBy(), getContainer().getUser().getName()));
 
         // prereqs
-        executeChild(new ToDoItemsDelete(), executionContext);
+        executionContext.executeChild(this, new ToDoItemsDelete());
 
         // create items
-        executeChild(new ToDoItemForBuyMilk(), executionContext);
-        executeChild(new ToDoItemForBuyBread(), executionContext);
-        executeChild(new ToDoItemForBuyStamps(), executionContext);
-        executeChild(new ToDoItemForPickUpLaundry(), executionContext);
-        executeChild(new ToDoItemForMowLawn(), executionContext);
-        executeChild(new ToDoItemForVacuumHouse(), executionContext);
-        executeChild(new ToDoItemForSharpenKnives(), executionContext);
-        executeChild(new ToDoItemForWriteToPenPal(), executionContext);
-        executeChild(new ToDoItemForWriteBlogPost(), executionContext);
-        executeChild(new ToDoItemForOrganizeBrownBag(), executionContext);
-        executeChild(new ToDoItemForSubmitConferenceSession(), executionContext);
-        executeChild(new ToDoItemForStageIsisRelease(), executionContext);
+        executionContext.executeChild(this, new ToDoItemForBuyMilk());
+        executionContext.executeChild(this, new ToDoItemForBuyBread());
+        executionContext.executeChild(this, new ToDoItemForBuyStamps());
+        executionContext.executeChild(this, new ToDoItemForPickUpLaundry());
+        executionContext.executeChild(this, new ToDoItemForMowLawn());
+        executionContext.executeChild(this, new ToDoItemForVacuumHouse());
+        executionContext.executeChild(this, new ToDoItemForSharpenKnives());
+        executionContext.executeChild(this, new ToDoItemForWriteToPenPal());
+        executionContext.executeChild(this, new ToDoItemForWriteBlogPost());
+        executionContext.executeChild(this, new ToDoItemForOrganizeBrownBag());
+        executionContext.executeChild(this, new ToDoItemForSubmitConferenceSession());
+        executionContext.executeChild(this, new ToDoItemForStageIsisRelease());
     }
 }
