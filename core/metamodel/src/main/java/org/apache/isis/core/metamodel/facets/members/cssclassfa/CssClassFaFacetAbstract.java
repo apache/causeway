@@ -44,9 +44,12 @@ public class CssClassFaFacetAbstract extends SingleStringValueFacetAbstract impl
      */
     static String sanitize(String value) {
         Iterable<String> classes = Splitter.on(WHITESPACE).split(value);
-        Set<String> cssClassesSet = Sets.newHashSet(classes);
+        Set<String> cssClassesSet = Sets.newLinkedHashSet();
         cssClassesSet.add("fa");
         cssClassesSet.add("fa-fw");
+        for (String cssClass : classes) {
+            cssClassesSet.add(cssClass);
+        }
         return Joiner.on(' ').join(cssClassesSet);
     }
 
