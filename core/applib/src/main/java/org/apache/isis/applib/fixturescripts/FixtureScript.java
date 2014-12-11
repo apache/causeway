@@ -386,8 +386,7 @@ public abstract class FixtureScript
         static enum As { EXEC, SKIP }
 
         /**
-         * DO <i>NOT</i> CALL DIRECTLY; instead use {@link org.apache.isis.applib.fixturescripts.FixtureScript#executeChild(String, FixtureScript, org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)} or
-         * {@link org.apache.isis.applib.fixturescripts.FixtureScript#executeChild(FixtureScript, org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)}.
+         * DO <i>NOT</i> CALL DIRECTLY; instead use {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#executeChild(org.apache.isis.applib.fixturescripts.FixtureScript, String, org.apache.isis.applib.fixturescripts.FixtureScript)} or {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#executeChild(FixtureScript, FixtureScript)}.
          *
          * @deprecated - should not be called directly, but has <code>public</code> visibility so there is scope for confusion.  Replaced by method with private visibility.
          */
@@ -520,10 +519,7 @@ public abstract class FixtureScript
     //region > executeChild (API for subclasses to call); deprecated execute(FixtureScript, ExecutionContext)
 
     /**
-     * Renamed to {@link #executeChild(String, FixtureScript, org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)}
-     * to avoid confusion with {@link #execute(org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)}.
-     * 
-     * @deprecated
+     * @deprecated - use instead {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#executeChild(FixtureScript, String, FixtureScript)}.
      */
     @Deprecated
     protected void execute(
@@ -545,10 +541,7 @@ public abstract class FixtureScript
     }
 
     /**
-     * Renamed to {@link #executeChild(FixtureScript, org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)}
-     * to avoid confusion with {@link #execute(org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)}.
-     *
-     * @deprecated
+     * @deprecated - use instead {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#executeChild(org.apache.isis.applib.fixturescripts.FixtureScript, org.apache.isis.applib.fixturescripts.FixtureScript)}
      */
     @Deprecated
     protected void execute(
@@ -575,8 +568,7 @@ public abstract class FixtureScript
      * Subclasses should <b>implement this</b> but SHOULD <i>NOT</i> CALL DIRECTLY.
      *
      * <p>
-     *  Instead call sub fixture scripts using {@link #executeChild(FixtureScript, org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)} or
-     *  {@link #executeChild(String, org.apache.isis.applib.fixturescripts.FixtureScript, org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)}.
+     *  Instead call sub fixture scripts using {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#executeChild(org.apache.isis.applib.fixturescripts.FixtureScript, org.apache.isis.applib.fixturescripts.FixtureScript)} or {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#executeChild(org.apache.isis.applib.fixturescripts.FixtureScript, String, org.apache.isis.applib.fixturescripts.FixtureScript)}.
      * </p>
      */
     @Programmatic
