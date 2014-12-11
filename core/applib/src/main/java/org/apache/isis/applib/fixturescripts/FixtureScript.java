@@ -166,8 +166,7 @@ public abstract class FixtureScript
     private String localName;
     /**
      * Will always be populated, initially by the default name, but can be
-     * {@link #setLocalName(String) overridden} if
-     * {@link DiscoverableFixtureScript#execute(FixtureScript, org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)} reused} within a {@link DiscoverableFixtureScript composite fixture script}.
+     * {@link #setLocalName(String) overridden}.
      */
     @Hidden
     public String getLocalName() {
