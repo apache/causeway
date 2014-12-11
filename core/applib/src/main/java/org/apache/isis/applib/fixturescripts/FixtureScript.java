@@ -249,9 +249,17 @@ public abstract class FixtureScript
             public <T> T add(FixtureScript script, T object) {
                 return object;
             }
+            @Override
+            public <T> T addResult(FixtureScript script, T object) {
+                return object;
+            }
 
             @Override
             public <T> T add(FixtureScript script, String key, T object) {
+                return object;
+            }
+            @Override
+            public <T> T addResult(FixtureScript script, String key, T object) {
                 return object;
             }
 
