@@ -204,9 +204,10 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
         final String description = ObjectAction.Utils.descriptionOf(objectAction);
         final String cssClass = ObjectAction.Utils.cssClassFor(objectAction);
         final String cssClassFa = ObjectAction.Utils.cssClassFaFor(objectAction);
+        final ActionLayout.CssClassFaPosition cssClassFaPosition = ObjectAction.Utils.cssClassFaPositionFor(objectAction);
         final ActionLayout.Position position = ObjectAction.Utils.actionLayoutPositionOf(objectAction);
 
-        return new LinkAndLabel(link, objectAction.getName(), null, description, false, explorationOrPrototype, actionIdentifier, cssClass, cssClassFa, position);
+        return new LinkAndLabel(link, objectAction.getName(), null, description, false, explorationOrPrototype, actionIdentifier, cssClass, cssClassFa, cssClassFaPosition, position);
     }
     
     

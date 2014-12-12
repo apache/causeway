@@ -46,6 +46,7 @@ public class LinkAndLabel implements Serializable {
     private final String actionIdentifier;
     private final String cssClass;
     private final String cssClassFa;
+    private final ActionLayout.CssClassFaPosition cssClassFaPosition;
     private final ActionLayout.Position position;
 
     public LinkAndLabel(
@@ -58,6 +59,7 @@ public class LinkAndLabel implements Serializable {
             final String identifier,
             final String cssClass,
             final String cssClassFa,
+            final ActionLayout.CssClassFaPosition cssClassFaPosition,
             final ActionLayout.Position position) {
         this.link = link;
         this.label = label;
@@ -68,6 +70,7 @@ public class LinkAndLabel implements Serializable {
         this.actionIdentifier = identifier;
         this.cssClass = cssClass;
         this.cssClassFa = cssClassFa;
+        this.cssClassFaPosition = cssClassFaPosition;
         this.position = position;
     }
 
@@ -105,6 +108,10 @@ public class LinkAndLabel implements Serializable {
 
     public String getCssClassFa() {
         return cssClassFa;
+    }
+
+    public ActionLayout.CssClassFaPosition getCssClassFaPosition() {
+        return cssClassFaPosition;
     }
 
     public ActionLayout.Position getPosition() {

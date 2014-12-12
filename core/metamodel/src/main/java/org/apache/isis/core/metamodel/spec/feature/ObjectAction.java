@@ -260,6 +260,11 @@ public interface ObjectAction extends ObjectMember {
             return facetValueIfAnyFor(action, CssClassFaFacet.class);
         }
 
+        public static ActionLayout.CssClassFaPosition cssClassFaPositionFor(final ObjectAction action) {
+            CssClassFaFacet facet = action.getFacet(CssClassFaFacet.class);
+            return facet != null ? facet.getPosition() : ActionLayout.CssClassFaPosition.LEFT;
+        }
+
         public static String cssClassFor(final ObjectAction action) {
             return facetValueIfAnyFor(action, CssClassFacet.class);
         }

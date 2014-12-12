@@ -212,8 +212,9 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         final ActionLayout.Position position = ObjectAction.Utils.actionLayoutPositionOf(objectAction);
         final String cssClass = ObjectAction.Utils.cssClassFor(objectAction);
         final String cssClassFa = ObjectAction.Utils.cssClassFaFor(objectAction);
+        final ActionLayout.CssClassFaPosition cssClassFaPosition = ObjectAction.Utils.cssClassFaPositionFor(objectAction);
 
-        return new LinkAndLabel(link, label, disabledReasonIfAny, description, blobOrClob, prototype, actionIdentifier, cssClass, cssClassFa, position);
+        return new LinkAndLabel(link, label, disabledReasonIfAny, description, blobOrClob, prototype, actionIdentifier, cssClass, cssClassFa, cssClassFaPosition, position);
     }
 
 

@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
 import java.lang.reflect.Method;
 import org.junit.Test;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.CssClassFa;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -55,8 +56,38 @@ public class CssClassFaAnnotationOnMemberFacetFactoryTest extends AbstractFacetF
 
         final Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
         assertThat(facet, is(not(nullValue())));
-        assertThat(facet instanceof CssClassFaFacetAbstract, is(true));
+        assertThat(facet, is(instanceOf(CssClassFaFacetAbstract.class)));
         final CssClassFaFacetAbstract cssClassFacetAbstract = (CssClassFaFacetAbstract) facet;
         assertThat(cssClassFacetAbstract.value(), equalTo("fa fa-fw fa-foo"));
+        assertThat(cssClassFacetAbstract.getPosition(), is(ActionLayout.CssClassFaPosition.LEFT));
+    }
+
+    @Test
+    public void testCssClassFaAnnotationPickedUpOnClassRightPosition() {
+
+        final CssClassFaFacetOnMemberFactory facetFactory = new CssClassFaFacetOnMemberFactory();
+        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
+
+        class Customer {
+
+            @CssClassFa(value = "fa fa-foo", position = ActionLayout.CssClassFaPosition.RIGHT)
+            public String foo() {
+                return "Joe";
+            }
+        }
+
+        expectNoMethodsRemoved();
+
+        final Method actionMethod = findMethod(Customer.class, "foo", new Class[] { });
+
+        facetedMethod = FacetedMethod.createForAction(Customer.class, actionMethod);
+        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+
+        final Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
+        assertThat(facet, is(not(nullValue())));
+        assertThat(facet, is(instanceOf(CssClassFaFacetAbstract.class)));
+        final CssClassFaFacetAbstract cssClassFacetAbstract = (CssClassFaFacetAbstract) facet;
+        assertThat(cssClassFacetAbstract.value(), equalTo("fa fa-fw fa-foo"));
+        assertThat(cssClassFacetAbstract.getPosition(), is(ActionLayout.CssClassFaPosition.RIGHT));
     }
 }

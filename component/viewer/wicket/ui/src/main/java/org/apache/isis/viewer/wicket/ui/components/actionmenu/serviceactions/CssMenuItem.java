@@ -32,6 +32,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -45,6 +46,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -136,6 +138,11 @@ class CssMenuItem implements Serializable {
             return this;
         }
 
+        public Builder withCssClassFaPosition(final ActionLayout.CssClassFaPosition position) {
+            cssMenuItem.setCssClassFaPosition(position);
+            return this;
+        }
+
         /**
          * Returns the built {@link CssMenuItem}, associating with
          * {@link #parent(CssMenuItem) parent} (if specified).
@@ -167,6 +174,7 @@ class CssMenuItem implements Serializable {
     private String actionIdentifier;
     private String cssClass;
     private String cssClassFa;
+    private ActionLayout.CssClassFaPosition cssClassFaPosition;
 
     private String description;
 
@@ -264,6 +272,14 @@ class CssMenuItem implements Serializable {
         return cssClassFa;
     }
 
+    public void setCssClassFaPosition(final ActionLayout.CssClassFaPosition position) {
+        this.cssClassFaPosition = position;
+    }
+
+    public ActionLayout.CssClassFaPosition getCssClassFaPosition() {
+        return cssClassFaPosition;
+    }
+
 
     /**
      * Only populated if not {@link #isEnabled() enabled}.
@@ -331,7 +347,8 @@ class CssMenuItem implements Serializable {
                 .separator(separator)
                 .withActionIdentifier(ObjectAction.Utils.actionIdentifierFor(objectAction))
                 .withCssClass(ObjectAction.Utils.cssClassFor(objectAction))
-                .withCssClassFa(ObjectAction.Utils.cssClassFaFor(objectAction));
+                .withCssClassFa(ObjectAction.Utils.cssClassFaFor(objectAction))
+                .withCssClassFaPosition(ObjectAction.Utils.cssClassFaPositionFor(objectAction));
 
         return builder;
     }
@@ -376,12 +393,8 @@ class CssMenuItem implements Serializable {
             link.add(new CssClassAppender(this.actionIdentifier));
 
             String cssClassFa = getCssClassFa();
-            if (Strings.isNullOrEmpty(cssClassFa)) {
-                Components.permanentlyHide(link, "menuLinkFontAwesome");
-            } else {
-                Label dummy = new Label("menuLinkFontAwesome", "");
-                dummy.add(new CssClassAppender(cssClassFa));
-                link.add(dummy);
+            if (!Strings.isNullOrEmpty(cssClassFa)) {
+                label.add(new CssClassFaBehavior(cssClassFa, getCssClassFaPosition()));
             }
 
             if(! this.isEnabled()) {

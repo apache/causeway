@@ -30,5 +30,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CssClassFa {
     String value();
+
+    ActionLayout.CssClassFaPosition position() default ActionLayout.CssClassFaPosition.LEFT;
 }
 

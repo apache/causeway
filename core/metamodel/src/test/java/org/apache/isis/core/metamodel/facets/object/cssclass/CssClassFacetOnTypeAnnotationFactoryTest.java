@@ -27,8 +27,13 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.cssclass.annotation.CssClassFacetOnTypeAnnotationFactory;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
+
 
 public class CssClassFacetOnTypeAnnotationFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -48,7 +53,7 @@ public class CssClassFacetOnTypeAnnotationFactoryTest extends AbstractFacetFacto
 
         final Facet facet = facetedMethod.getFacet(CssClassFacet.class);
         assertThat(facet, is(not(nullValue())));
-        assertThat(facet instanceof CssClassFacetAbstract, is(true));
+        assertThat(facet, is(instanceOf(CssClassFacetAbstract.class)));
         final CssClassFacetAbstract cssClassFacetAbstract = (CssClassFacetAbstract) facet;
         assertThat(cssClassFacetAbstract.value(), equalTo("testClass"));
     }

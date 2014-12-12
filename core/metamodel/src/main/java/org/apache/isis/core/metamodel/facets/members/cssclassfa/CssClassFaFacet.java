@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 
 /**
@@ -26,7 +27,12 @@ import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
  *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
- * member with <tt>{@literal @}{@link org.apache.isis.applib.annotation.CssClassFa CssClassFa}</tt>.
+ * member with <tt>{@literal @}{@link org.apache.isis.applib.annotation.ActionLayout#cssClassFa()  ActionLayout}</tt>#cssClassFa().
  */
 public interface CssClassFaFacet extends SingleStringValueFacet {
+
+    /**
+     * @return The position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> icon.
+     */
+    ActionLayout.CssClassFaPosition getPosition();
 }

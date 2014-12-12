@@ -20,16 +20,22 @@
 package org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop;
 
 import java.util.Properties;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
 
 public class CssClassFaFacetOnMemberFromProperties extends CssClassFaFacetAbstract {
 
     public CssClassFaFacetOnMemberFromProperties(final Properties properties, final FacetHolder holder) {
-        super(valueFrom(properties), holder);
+        super(valueFrom(properties), positionFrom(properties), holder);
     }
 
     private static String valueFrom(Properties properties) {
         return properties.getProperty("value");
+    }
+
+    private static ActionLayout.CssClassFaPosition positionFrom(final Properties properties) {
+        String position = properties.getProperty("position");
+        return ActionLayout.CssClassFaPosition.valueOf(position.toUpperCase());
     }
 }

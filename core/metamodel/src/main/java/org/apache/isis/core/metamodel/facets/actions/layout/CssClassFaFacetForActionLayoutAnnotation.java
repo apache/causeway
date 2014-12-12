@@ -27,16 +27,17 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetA
 
 public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbstract {
 
-    public static CssClassFaFacet create(ActionLayout actionLayout, FacetHolder holder) {
+    public static CssClassFaFacet create(final ActionLayout actionLayout, final FacetHolder holder) {
         if(actionLayout == null) {
             return null;
         }
         final String cssClassFa = Strings.emptyToNull(actionLayout.cssClassFa());
-        return cssClassFa != null ? new CssClassFaFacetForActionLayoutAnnotation(cssClassFa, holder) : null;
+        ActionLayout.CssClassFaPosition cssClassFaPosition = actionLayout.cssClassFaPosition();
+        return cssClassFa != null ? new CssClassFaFacetForActionLayoutAnnotation(cssClassFa, cssClassFaPosition, holder) : null;
     }
 
-    private CssClassFaFacetForActionLayoutAnnotation(String value, FacetHolder holder) {
-        super(value, holder);
+    private CssClassFaFacetForActionLayoutAnnotation(final String value, final ActionLayout.CssClassFaPosition position, final FacetHolder holder) {
+        super(value, position, holder);
     }
 
 }
