@@ -30,6 +30,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import org.joda.time.LocalDate;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.DescribedAs;
@@ -105,6 +106,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
     @NotContributed(As.ASSOCIATION) // ie contributed as action
+    @ActionLayout(cssClassFa = "fa-step-forward", cssClassFaPosition = ActionLayout.ClassFaPosition.RIGHT)
     public ToDoItem next(final ToDoItem item) {
         final Integer priority = relativePriority(item);
         if(priority == null) {

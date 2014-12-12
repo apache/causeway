@@ -110,9 +110,7 @@
                                 }
                             },
                             "next": {
-                                "actionLayout": {
-                                    "cssClassFa": "fa fa-step-forward"
-                                }
+
                             }
                         }
                     },

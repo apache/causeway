@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 
 /**
@@ -29,4 +30,10 @@ import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
  * member with <tt>{@literal @}{@link org.apache.isis.applib.annotation.CssClassFa CssClassFa}</tt>.
  */
 public interface CssClassFaFacet extends SingleStringValueFacet {
+
+    /**
+     *
+     * @return
+     */
+    ActionLayout.ClassFaPosition getPosition();
 }

@@ -21,13 +21,16 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import java.util.List;
 import com.google.common.base.Strings;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
@@ -102,15 +105,6 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 
                 final AbstractLink link = linkAndLabel.getLink();
 
-                final String cssClassFa = linkAndLabel.getCssClassFa();
-                if(Strings.isNullOrEmpty(cssClassFa)) {
-                    Components.permanentlyHide(link, ID_ADDITIONAL_LINK_FONT_AWESOME);
-                } else {
-                    Label dummy = new Label(ID_ADDITIONAL_LINK_FONT_AWESOME, "");
-                    link.addOrReplace(dummy);
-                    dummy.add(new CssClassAppender(cssClassFa));
-                }
-
                 final String itemTitle = first(linkAndLabel.getDisabledReasonIfAny(), linkAndLabel.getDescriptionIfAny());
                 if(itemTitle != null) {
                     item.add(new AttributeAppender("title", itemTitle));
@@ -132,6 +126,15 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 viewTitleLabel.add(new CssClassAppender(StringExtensions.asLowerDashed(linkAndLabel.getLabel())));
 
                 link.addOrReplace(viewTitleLabel);
+
+                final String cssClassFa = linkAndLabel.getCssClassFa();
+                if(Strings.isNullOrEmpty(cssClassFa)) {
+                    Components.permanentlyHide(link, ID_ADDITIONAL_LINK_FONT_AWESOME);
+                } else {
+                    final ActionLayout.ClassFaPosition position = linkAndLabel.getCssClassFaPosition();
+                    viewTitleLabel.add(new CssClassFaBehavior(cssClassFa, position));
+                }
+
                 item.addOrReplace(link);
             }
         };
@@ -145,5 +148,31 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
         return null;
     }
 
+    private static class CssClassFaBehavior extends Behavior {
+
+        private final String cssClassFa;
+        private final ActionLayout.ClassFaPosition position;
+
+        private CssClassFaBehavior(String cssClassFa, ActionLayout.ClassFaPosition position) {
+            this.cssClassFa = cssClassFa;
+            this.position = position;
+        }
+
+        @Override
+        public void beforeRender(Component component) {
+            super.beforeRender(component);
+            if (position == null || ActionLayout.ClassFaPosition.LEFT == position) {
+                component.getResponse().write("<span class=\"fa "+cssClassFa+"\"></span>");
+            }
+        }
+
+        @Override
+        public void afterRender(Component component) {
+            if (ActionLayout.ClassFaPosition.RIGHT == position) {
+                component.getResponse().write("<span class=\"fa "+cssClassFa+"\"></span>");
+            }
+            super.afterRender(component);
+        }
+    }
 
 }

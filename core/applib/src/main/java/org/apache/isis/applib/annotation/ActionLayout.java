@@ -48,6 +48,12 @@ public @interface ActionLayout {
      */
     String cssClassFa() default "";
 
+    ClassFaPosition cssClassFaPosition() default ClassFaPosition.LEFT;
+
+    enum ClassFaPosition {
+        LEFT, RIGHT
+    }
+
     /**
      * Description of this action, eg to be rendered in a tooltip.
      */

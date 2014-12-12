@@ -27,6 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.CssClassFa;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -79,7 +80,7 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
 
     private CssClassFaFacet createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
         final CssClassFa annotation = Annotations.getAnnotation(processMethodContext.getMethod(), CssClassFa.class);
-        return annotation != null ? new CssClassFaFacetOnMemberAnnotation(annotation.value(), processMethodContext.getFacetHolder()) : null;
+        return annotation != null ? new CssClassFaFacetOnMemberAnnotation(annotation.value(), annotation.position(), processMethodContext.getFacetHolder()) : null;
     }
 
     //region > faIconFromPattern
@@ -92,7 +93,8 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
         String value = faIconIfAnyFor(method);
 
         return value != null
-                ? new CssClassFaFacetOnMemberFromConfiguredRegex(value, processMethodContext.getFacetHolder())
+            // TODO mgrigorov make the position configurable
+                ? new CssClassFaFacetOnMemberFromConfiguredRegex(value, ActionLayout.ClassFaPosition.LEFT, processMethodContext.getFacetHolder())
                 : null;
     }
 
