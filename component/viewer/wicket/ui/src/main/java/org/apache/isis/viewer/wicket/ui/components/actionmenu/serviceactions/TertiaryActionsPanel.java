@@ -20,8 +20,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -133,12 +133,9 @@ public class TertiaryActionsPanel extends Panel {
 
             String cssClassFa = menuItem.getCssClassFa();
             if (Strings.isNullOrEmpty(cssClassFa)) {
-                Components.permanentlyHide(subMenuItemLink, "menuLinkFontAwesome");
                 subMenuItemLink.add(new CssClassAppender("menuLinkSpacer"));
             } else {
-                Label dummy = new Label("menuLinkFontAwesome", "");
-                dummy.add(new CssClassAppender(cssClassFa));
-                subMenuItemLink.addOrReplace(dummy);
+                menuItemLabel.add(new CssClassFaBehavior(cssClassFa, menuItem.getCssClassFaPosition()));
             }
         } else {
             leafItem = new Fragment("content", "empty", TertiaryActionsPanel.this);

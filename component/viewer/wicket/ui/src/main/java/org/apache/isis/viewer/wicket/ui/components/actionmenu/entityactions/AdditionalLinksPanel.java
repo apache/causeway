@@ -21,10 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import java.util.List;
 import com.google.common.base.Strings;
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -34,6 +32,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -44,7 +43,6 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
     private static final String ID_ADDITIONAL_LINK_LIST = "additionalLinkList";
     private static final String ID_ADDITIONAL_LINK_ITEM = "additionalLinkItem";
-    private static final String ID_ADDITIONAL_LINK_FONT_AWESOME = "additionalLinkFontAwesome";
     private static final String ID_ADDITIONAL_LINK_TITLE = "additionalLinkTitle";
 
     public static final String ID_ADDITIONAL_LINK = "additionalLink";
@@ -128,9 +126,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 link.addOrReplace(viewTitleLabel);
 
                 final String cssClassFa = linkAndLabel.getCssClassFa();
-                if(Strings.isNullOrEmpty(cssClassFa)) {
-                    Components.permanentlyHide(link, ID_ADDITIONAL_LINK_FONT_AWESOME);
-                } else {
+                if(!Strings.isNullOrEmpty(cssClassFa)) {
                     final ActionLayout.ClassFaPosition position = linkAndLabel.getCssClassFaPosition();
                     viewTitleLabel.add(new CssClassFaBehavior(cssClassFa, position));
                 }
@@ -146,37 +142,6 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
             if(s != null) return s;
         }
         return null;
-    }
-
-    /**
-     * A behavior that prepends or appends the markup needed to show a Font Awesome icon
-     * for a LinkAndLabel
-     */
-    private static class CssClassFaBehavior extends Behavior {
-
-        private final String cssClassFa;
-        private final ActionLayout.ClassFaPosition position;
-
-        private CssClassFaBehavior(String cssClassFa, ActionLayout.ClassFaPosition position) {
-            this.cssClassFa = cssClassFa;
-            this.position = position;
-        }
-
-        @Override
-        public void beforeRender(Component component) {
-            super.beforeRender(component);
-            if (position == null || ActionLayout.ClassFaPosition.LEFT == position) {
-                component.getResponse().write("<span class=\""+cssClassFa+"\"></span>");
-            }
-        }
-
-        @Override
-        public void afterRender(Component component) {
-            if (ActionLayout.ClassFaPosition.RIGHT == position) {
-                component.getResponse().write("<span class=\""+cssClassFa+"\"></span>");
-            }
-            super.afterRender(component);
-        }
     }
 
 }
