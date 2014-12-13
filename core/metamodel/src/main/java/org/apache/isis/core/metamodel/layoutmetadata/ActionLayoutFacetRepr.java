@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.Where;
 public class ActionLayoutFacetRepr {
     public String cssClass;
     public String cssClassFa;
+    public String cssClassFaPosition;
     public String describedAs;
     public Where hidden;
     public String named;
