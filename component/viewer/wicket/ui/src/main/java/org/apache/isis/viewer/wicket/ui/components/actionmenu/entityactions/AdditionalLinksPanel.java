@@ -166,14 +166,14 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
         public void beforeRender(Component component) {
             super.beforeRender(component);
             if (position == null || ActionLayout.ClassFaPosition.LEFT == position) {
-                component.getResponse().write("<span class=\"fa "+cssClassFa+"\"></span>");
+                component.getResponse().write("<span class=\""+cssClassFa+"\"></span>");
             }
         }
 
         @Override
         public void afterRender(Component component) {
             if (ActionLayout.ClassFaPosition.RIGHT == position) {
-                component.getResponse().write("<span class=\"fa "+cssClassFa+"\"></span>");
+                component.getResponse().write("<span class=\""+cssClassFa+"\"></span>");
             }
             super.afterRender(component);
         }
