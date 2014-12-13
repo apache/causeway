@@ -1,11 +1,11 @@
 package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
-public class CssClassFaFacetAbstractTest {
+public class CssClassFaFacetAbstractTest extends Assert {
 
     public static class Sanitize extends CssClassFaFacetAbstractTest {
 
