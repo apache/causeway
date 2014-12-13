@@ -46,7 +46,7 @@ public class CssClassFaFacetOnActionFromLayoutProperties extends CssClassFaFacet
     }
 
     private static ActionLayout.ClassFaPosition cssClassFaPosition(Properties properties) {
-        if(properties == null) {
+        if (properties == null) {
             return null;
         }
         String cssClassFaPosition = Strings.emptyToNull(properties.getProperty("cssClassFaPosition"));

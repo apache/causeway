@@ -48,6 +48,10 @@ public @interface ActionLayout {
      */
     String cssClassFa() default "";
 
+    /**
+     * Indicates the position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
+     * icon. The icon could be rendered on the left or the right of the action button
+     */
     ClassFaPosition cssClassFaPosition() default ClassFaPosition.LEFT;
 
     enum ClassFaPosition {

@@ -148,6 +148,10 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
         return null;
     }
 
+    /**
+     * A behavior that prepends or appends the markup needed to show a Font Awesome icon
+     * for a LinkAndLabel
+     */
     private static class CssClassFaBehavior extends Behavior {
 
         private final String cssClassFa;
