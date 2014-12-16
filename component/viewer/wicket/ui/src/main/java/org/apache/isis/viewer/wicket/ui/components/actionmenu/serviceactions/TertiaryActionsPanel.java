@@ -10,6 +10,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -39,9 +40,9 @@ public class TertiaryActionsPanel extends Panel {
 
         addLogoutLink(this);
 
-        List<CssMenuItem> subMenuItems = flatten(menuItems);
+        final List<CssMenuItem> subMenuItems = flatten(menuItems);
 
-        ListView<CssMenuItem> subMenuItemsView = new ListView<CssMenuItem>("subMenuItems", subMenuItems) {
+        final ListView<CssMenuItem> subMenuItemsView = new ListView<CssMenuItem>("subMenuItems", subMenuItems) {
             @Override
             protected void populateItem(ListItem<CssMenuItem> listItem) {
                 CssMenuItem subMenuItem = listItem.getModelObject();
@@ -53,7 +54,18 @@ public class TertiaryActionsPanel extends Panel {
                 }
             }
         };
-        add(subMenuItemsView);
+
+        WebComponent divider = new WebComponent("divider") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+
+                subMenuItemsView.configure();
+                setVisible(!subMenuItems.isEmpty());
+            }
+        };
+
+        add(subMenuItemsView, divider);
     }
 
     protected List<CssMenuItem> flatten(List<CssMenuItem> menuItems) {
