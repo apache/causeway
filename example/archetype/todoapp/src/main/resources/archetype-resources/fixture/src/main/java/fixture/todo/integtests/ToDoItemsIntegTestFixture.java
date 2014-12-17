@@ -37,7 +37,7 @@ public class ToDoItemsIntegTestFixture extends FixtureScript {
 
     @Override
     protected void execute(ExecutionContext executionContext) {
-        executeChild(new ToDoItemsRecreateAndCompleteSeveral(), executionContext);
+        executionContext.executeChild(this, new ToDoItemsRecreateAndCompleteSeveral());
     }
 
 }

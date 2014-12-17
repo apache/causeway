@@ -33,13 +33,13 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.ClassLayout;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
 
-@ClassLayout(named="Analysis")
-@DomainService(menuOrder = "20")
+@DomainServiceLayout(named="Analysis", menuOrder = "20")
+@DomainService()
 public class ToDoItemAnalysis {
 
 

@@ -24,13 +24,12 @@ package fixture.todo;
 import fixture.todo.scenarios.ToDoItemsRecreateAndCompleteSeveral;
 
 import java.util.List;
-import org.apache.isis.applib.annotation.ClassLayout;
-import org.apache.isis.applib.annotation.CssClassFa;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.fixturescripts.FixtureResult;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
@@ -38,17 +37,18 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 /**
  * Enables fixtures to be installed from the application.
  */
-@ClassLayout(
-        named = "Prototyping"
-)
-@DomainService(menuBar = DomainService.MenuBar.SECONDARY, menuOrder = "10")
+@DomainService
+@DomainServiceLayout(named = "Prototyping", menuBar = DomainServiceLayout.MenuBar.SECONDARY, menuOrder = "10")
 public class ToDoItemsFixturesService extends FixtureScripts {
 
     public ToDoItemsFixturesService() {
         super("fixture.todo");
     }
 
-    @CssClassFa("fa fa-bolt")
+    @ActionLayout(
+        cssClassFa="fa fa-bolt",
+        prototype = true
+    )
     @Override
     public List<FixtureResult> runFixtureScript(
             final FixtureScript fixtureScript,
@@ -78,8 +78,10 @@ public class ToDoItemsFixturesService extends FixtureScripts {
     // //////////////////////////////////////
 
 
-    @Prototype
-    @CssClassFa("fa fa-list")
+    @ActionLayout(
+        cssClassFa="fa fa-list",
+        prototype = true
+    )
     @MemberOrder(sequence="20")
     public Object recreateToDoItemsReturnFirst() {
         final List<FixtureResult> run = findFixtureScriptFor(ToDoItemsRecreateAndCompleteSeveral.class).run(null);

@@ -24,7 +24,7 @@ package integration.tests;
 import dom.todo.ToDoItem;
 import dom.todo.ToDoItemSubscriptions;
 import dom.todo.ToDoItems;
-import fixture.todo.integtests.ToDoItemsIntegTestFixture;
+import fixture.todo.scenarios.ToDoItemsRecreateAndCompleteSeveral;
 
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
@@ -64,12 +64,12 @@ import static org.junit.Assert.assertThat;
 
 public class ToDoItemIntegTest extends AbstractToDoIntegTest {
 
-    ToDoItemsIntegTestFixture fixture;
+    ToDoItemsRecreateAndCompleteSeveral fixtureScript;
 
     @Before
     public void setUpData() throws Exception {
-        // executing the fixtures directly allows us to look up the results later.
-        fixtureScripts.runFixtureScript(fixture = new ToDoItemsIntegTestFixture(), null);
+        fixtureScript = new ToDoItemsRecreateAndCompleteSeveral();
+        fixtureScripts.runFixtureScript(fixtureScript, null);
     }
 
     @Inject
@@ -103,7 +103,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
             final List<ToDoItem> all = wrap(toDoItems).notYetComplete();
             toDoItem = wrap(all.get(0));
 
-            toDoItem = wrap(fixture.lookup("integ-test/to-do-items-recreate-and-complete-several/to-do-items-recreate/to-do-item-for-buy-bread/item-1", ToDoItem.class));
+            toDoItem = wrap(fixtureScript.lookup("to-do-items-recreate-and-complete-several/to-do-item-for-buy-bread/item-1", ToDoItem.class));
             assertThat(toDoItem, is(not(nullValue())));
 
             nextTransaction();

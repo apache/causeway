@@ -35,7 +35,7 @@ import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
  * <pre>
  *     isis.services = ${symbol_escape}
  *                     ...,
- *                     1:webapp.MyMementoService,
+ *                     1:webapp.CustomMementoService,
  *                     ...,
  * </pre>
  * <p>

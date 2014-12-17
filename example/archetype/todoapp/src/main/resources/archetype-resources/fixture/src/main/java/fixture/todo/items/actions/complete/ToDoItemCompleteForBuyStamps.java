@@ -27,11 +27,6 @@ public class ToDoItemCompleteForBuyStamps extends ToDoItemCompleteAbstract {
 
     @Override
     protected void execute(ExecutionContext executionContext) {
-
-        // prereqs
-        executeChild(new ToDoItemForBuyStamps(), executionContext);
-
-        // this fixture
         complete(ToDoItemForBuyStamps.DESCRIPTION, executionContext);
     }
 

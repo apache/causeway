@@ -49,7 +49,7 @@ public abstract class ToDoItemAbstract extends FixtureScript {
         // execute
         ToDoItem newToDo = toDoItems.newToDo(
                 description, category, subcategory, ownedBy, dueBy, cost);
-        return executionContext.add(this, newToDo);
+        return executionContext.addResult(this, newToDo);
     }
 
     protected LocalDate nowPlusDays(int days) {

@@ -29,28 +29,28 @@ import java.util.List;
 import com.google.common.base.Predicates;
 import org.joda.time.LocalDate;
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.ClassLayout;
-import org.apache.isis.applib.annotation.CssClassFa;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.clock.ClockService;
 
-@ClassLayout(named="ToDos")
-@DomainService(menuOrder = "10", repositoryFor = ToDoItem.class)
+@DomainServiceLayout(named="ToDos", menuOrder = "10")
+@DomainService(repositoryFor = ToDoItem.class)
 public class ToDoItems {
 
     //region > notYetComplete (action)
-    @CssClassFa("fa fa-thumbs-down")
+    @ActionLayout(
+        cssClassFa = "fa fa-thumbs-down"
+    )
     @Bookmarkable
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "10")
@@ -72,7 +72,9 @@ public class ToDoItems {
     //endregion
 
     //region > complete (action)
-    @CssClassFa("fa fa-thumbs-up")
+    @ActionLayout(
+        cssClassFa = "fa fa-thumbs-up"
+    )
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "20")
     public List<ToDoItem> complete() {
@@ -93,11 +95,13 @@ public class ToDoItems {
     //endregion
 
     //region > categorized (action)
-	@SuppressWarnings("unchecked")
-	@Bookmarkable
+    @SuppressWarnings("unchecked")
+    @Bookmarkable
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "40")
-    @CssClassFa("fa fa-question")
+    @ActionLayout(
+        cssClassFa = "fa fa-question"
+    )
     public List<ToDoItem> categorized(
     		@ParameterLayout(named="Category") final Category category,
     		@ParameterLayout(named="Subcategory") final Subcategory subcategory,
@@ -131,10 +135,11 @@ public class ToDoItems {
     //endregion
 
     //region > newToDo (action)
-    @CssClassFa("fa fa-plus")
+    @ActionLayout(cssClassFa = "fa fa-plus")
     @MemberOrder(sequence = "5")
     public ToDoItem newToDo(
-            final @RegEx(validation = "${symbol_escape}${symbol_escape}w[@&:${symbol_escape}${symbol_escape}-${symbol_escape}${symbol_escape},${symbol_escape}${symbol_escape}.${symbol_escape}${symbol_escape}+ ${symbol_escape}${symbol_escape}w]*") @Named("Description") String description, 
+            final @RegEx(validation = "${symbol_escape}${symbol_escape}w[@&:${symbol_escape}${symbol_escape}-${symbol_escape}${symbol_escape},${symbol_escape}${symbol_escape}.${symbol_escape}${symbol_escape}+ ${symbol_escape}${symbol_escape}w]*")
+                  @ParameterLayout(named="Description") String description,
             final @ParameterLayout(named="Category") Category category,
             final @Optional @ParameterLayout(named="Subcategory") Subcategory subcategory,
             final @Optional @ParameterLayout(named="Due by") LocalDate dueBy,
@@ -163,8 +168,10 @@ public class ToDoItems {
     //endregion
 
     //region > allToDos (action)
-    @CssClassFa("fa fa-globe")
-    @Prototype
+    @ActionLayout(
+        cssClassFa = "fa fa-globe",
+        prototype = true
+    )
     @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "50")
     public List<ToDoItem> allToDos() {

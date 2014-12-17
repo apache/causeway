@@ -45,6 +45,39 @@
         </resources>
         <plugins>
             <plugin>
+                <groupId>org.apache.isis.tool</groupId>
+                <artifactId>isis-maven-plugin</artifactId>
+                <version>1.8.0-SNAPSHOT</version>
+                <configuration>
+                    <isisConfigDir>..\webapp\src\main\webapp\WEB-INF</isisConfigDir>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.isis.example.application</groupId>
+                        <artifactId>todoapp-dom</artifactId>
+                        <version>1.8.0-SNAPSHOT</version>
+                    </dependency>
+                    <!--
+                    ... workaround to avoid conflict with plexus-default
+                        (not sure why exclusions in the isis-maven-plugin aren't sufficient, though ...
+                    -->
+                    <dependency>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>guava</artifactId>
+                        <version>16.0.1</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>datanucleus-maven-plugin</artifactId>
                 <version>${datanucleus-maven-plugin.version}</version>

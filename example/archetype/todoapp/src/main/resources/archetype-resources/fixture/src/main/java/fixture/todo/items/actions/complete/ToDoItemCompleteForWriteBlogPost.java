@@ -27,11 +27,6 @@ public class ToDoItemCompleteForWriteBlogPost extends ToDoItemCompleteAbstract {
 
     @Override
     protected void execute(ExecutionContext executionContext) {
-
-        // prereqs
-        executeChild(new ToDoItemForWriteBlogPost(), executionContext);
-
-        // this fixture
         complete(ToDoItemForWriteBlogPost.DESCRIPTION, executionContext);
     }
 
