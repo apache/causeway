@@ -39,38 +39,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.isis.tool</groupId>
-                <artifactId>isis-maven-plugin</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
-                <configuration>
-                    <isisConfigDir>src\main\webapp\WEB-INF</isisConfigDir>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.isis.example.application</groupId>
-                        <artifactId>todoapp-fixture</artifactId>
-                        <version>1.8.0-SNAPSHOT</version>
-                    </dependency>
-		    <!--
-                    ... workaround to avoid conflict with plexus-default (not sure why exclusions in the isis-maven-plugin aren't sufficient, though ...
-		    -->
-                    <dependency>
-                        <groupId>com.google.guava</groupId>
-                        <artifactId>guava</artifactId>
-                        <version>16.0.1</version>
-                    </dependency>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>validate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>maven-jetty-plugin</artifactId>
             </plugin>

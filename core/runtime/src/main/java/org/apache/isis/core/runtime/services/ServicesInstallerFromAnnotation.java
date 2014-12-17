@@ -100,6 +100,11 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
         this.packagePrefixes = Joiner.on(",").join(packagePrefixes);
     }
 
+    @Override
+    public void setIgnoreFailures(boolean ignoreFailures) {
+        // no-op
+    }
+
 
     public void init() {
         initIfRequired();

@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -31,8 +32,23 @@ public class ResourceStreamSourceFileSystem extends ResourceStreamSourceAbstract
     /**
      * Factory method to guard against nulls
      */
-    public static ResourceStreamSource create(final String directory2) {
-        return directory2 != null ? new ResourceStreamSourceFileSystem(directory2) : null;
+    public static ResourceStreamSource create(final String directory) {
+        if(directory == null) {
+            return null;
+        }
+        final File file = new File(directory);
+        if(!file.exists()) {
+            return null;
+        }
+        if (!file.isDirectory()) {
+            return null;
+        }
+        try {
+            return new ResourceStreamSourceFileSystem(file.getCanonicalPath());
+        } catch (IOException e) {
+            // shouldn't happen given earlier checks.
+            throw new RuntimeException(e);
+        }
     }
 
     private final String directory;

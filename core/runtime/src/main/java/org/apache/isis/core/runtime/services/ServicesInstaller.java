@@ -34,4 +34,6 @@ public interface ServicesInstaller extends Installer {
     static String TYPE = "services-installer";
 
     List<Object> getServices(DeploymentType deploymentType);
+
+    void setIgnoreFailures(boolean ignoreFailures);
 }

@@ -66,6 +66,10 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
 
     private Map<DeploymentType, List<Object>> servicesByDeploymentType = Maps.newHashMap();
 
+    @Override
+    public void setIgnoreFailures(boolean ignoreFailures) {
+        // no-op
+    }
 
     public void init() {
         initIfRequired();
@@ -108,6 +112,7 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
         }
         return serviceList;
     }
+
 
     // //////////////////////////////////////
 

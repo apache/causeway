@@ -20,7 +20,6 @@ package org.apache.isis.tool.mavenplugin;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import org.apache.maven.model.Plugin;
@@ -39,6 +38,8 @@ import org.apache.isis.core.metamodel.app.IsisMetaModel;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.core.runtime.services.ServicesInstaller;
+import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
@@ -46,11 +47,6 @@ import org.apache.isis.tool.mavenplugin.util.IsisMetaModels;
 import org.apache.isis.tool.mavenplugin.util.MavenProjects;
 import org.apache.isis.tool.mavenplugin.util.Xpp3Doms;
 
-/**
- * 
- * 
- *
- */
 @Mojo(
         name = "validate",
         defaultPhase = LifecyclePhase.TEST,
@@ -67,8 +63,9 @@ public class ValidateMojo extends AbstractMojo {
 
     public void execute() throws MojoExecutionException, MojoFailureException {
 
-        final List<Object> serviceList = getServiceList();
-        if(serviceList.size() == 0) {
+        final Plugin plugin = MavenProjects.lookupPlugin(mavenProject, CURRENT_PLUGIN_KEY);
+        final List<Object> serviceList = plugin != null ? serviceListFor(plugin) : null;
+        if(serviceList == null || serviceList.size() == 0) {
             return;
         }
         getLog().info("Found " + serviceList.size() + " services");
@@ -88,35 +85,35 @@ public class ValidateMojo extends AbstractMojo {
                 getLog().debug("loaded: " + objectSpecification.getFullIdentifier());
             }
             return isisMetaModel.getValidationFailures();
-
         } finally {
             IsisMetaModels.disposeSafely(isisMetaModel);
         }
     }
 
+    private List<Object> serviceListFor(Plugin plugin) throws MojoFailureException {
+        IsisConfiguration isisConfiguration = isisConfigurationFor(plugin);
 
-    private List<Object> getServiceList() throws MojoFailureException {
-        IsisConfiguration isisConfiguration = getIsisConfiguration();
+        final ServicesInstaller servicesInstaller;
         if(isisConfiguration == null) {
-            return Collections.emptyList();
+            servicesInstaller = new ServicesInstallerFromAnnotation();
+        } else {
+            final ServicesInstallerFromConfigurationAndAnnotation servicesInstallerFromConfigurationAndAnnotation = new ServicesInstallerFromConfigurationAndAnnotation();
+            servicesInstallerFromConfigurationAndAnnotation.setConfiguration(isisConfiguration);
+            servicesInstaller = servicesInstallerFromConfigurationAndAnnotation;
         }
 
-        final ServicesInstallerFromConfigurationAndAnnotation servicesInstaller = new ServicesInstallerFromConfigurationAndAnnotation();
         servicesInstaller.setIgnoreFailures(true);
-        servicesInstaller.setConfiguration(isisConfiguration);
         servicesInstaller.init();
+
         return servicesInstaller.getServices(DeploymentType.SERVER_PROTOTYPE);
     }
 
-    private IsisConfiguration getIsisConfiguration() throws MojoFailureException {
-        final Plugin plugin = MavenProjects.lookupPlugin(mavenProject, CURRENT_PLUGIN_KEY);
-        if(plugin == null) {
-            return null;
-        }
+    private IsisConfiguration isisConfigurationFor(final Plugin plugin) throws MojoFailureException {
         final Xpp3Dom configuration = (Xpp3Dom) plugin.getConfiguration();
         if (configuration == null) {
             throwFailureException("Configuration error", "No <configuration> element found");
         }
+
         final Xpp3Dom servicesEl = configuration.getChild("isisConfigDir");
         if (servicesEl == null) {
             throwFailureException("Configuration error", "No <configuration>/<isisConfigDir> element found");
@@ -124,9 +121,13 @@ public class ValidateMojo extends AbstractMojo {
         final String isisConfigDir = Xpp3Doms.GET_VALUE.apply(servicesEl);
 
         final File basedir = mavenProject.getBasedir();
-        final String absoluteConfigDir = new File(basedir, isisConfigDir).getAbsolutePath();
+        final File file = new File(basedir, isisConfigDir);
+        final String absoluteConfigDir = file.getAbsolutePath();
+        if(!file.exists() || !file.isDirectory()) {
+            throwFailureException("Configuration error",
+                    String.format("isisConfigDir (%s) does not exist or is not a directory", absoluteConfigDir));
+        }
         final IsisConfigurationBuilderDefault configBuilder = new IsisConfigurationBuilderDefault(absoluteConfigDir);
-
         configBuilder.addDefaultConfigurationResources();
         return configBuilder.getConfiguration();
     }

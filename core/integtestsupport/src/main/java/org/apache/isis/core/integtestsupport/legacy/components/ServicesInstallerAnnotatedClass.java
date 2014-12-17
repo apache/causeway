@@ -84,4 +84,8 @@ public class ServicesInstallerAnnotatedClass extends ServicesInstallerAbstract {
         return listOf(List.class); // ie List<Object.class>, of services
     }
 
+    @Override
+    public void setIgnoreFailures(boolean ignoreFailures) {
+        // no-op
+    }
 }
