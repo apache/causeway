@@ -19,16 +19,12 @@
 
 package org.apache.isis.core.runtime.persistence.adaptermanager;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-
+import com.google.common.collect.Lists;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.profiles.Localization;
@@ -40,17 +36,21 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.app.IsisMetaModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.app.IsisMetaModel;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 public class AdapterManagerDefault_aggregateAdapters {
 
@@ -121,7 +121,10 @@ public class AdapterManagerDefault_aggregateAdapters {
         context.ignoring(mockAuthenticationSession);
         context.ignoring(mockConfiguration);
         
-        isisMetaModel = IsisMetaModel.builder(mockRuntimeContext, new ProgrammingModelFacetsJava5()).withServices(new CustomerRepository()).build();
+        isisMetaModel = new IsisMetaModel(
+                                mockRuntimeContext,
+                                new ProgrammingModelFacetsJava5(),
+                                Lists.newArrayList(new CustomerRepository()));
         isisMetaModel.init();
 
         adapterFactory = new PojoAdapterFactory() {

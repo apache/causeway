@@ -20,17 +20,11 @@ package org.apache.isis.tool.mavenplugin;
  */
 
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -39,19 +33,17 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.classworlds.ClassRealm;
-import org.codehaus.classworlds.ClassWorld;
-import org.codehaus.classworlds.DuplicateRealmException;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
-
-import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
-import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.metamodel.app.IsisMetaModel;
+import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-import org.apache.isis.tool.mavenplugin.util.ClassRealms;
-import org.apache.isis.tool.mavenplugin.util.ClassWorlds;
 import org.apache.isis.tool.mavenplugin.util.IsisMetaModels;
-import org.apache.isis.tool.mavenplugin.util.Log4j;
 import org.apache.isis.tool.mavenplugin.util.MavenProjects;
 import org.apache.isis.tool.mavenplugin.util.Xpp3Doms;
 
@@ -60,135 +52,93 @@ import org.apache.isis.tool.mavenplugin.util.Xpp3Doms;
  * 
  *
  */
-@Mojo(name = "validate", defaultPhase = LifecyclePhase.TEST, requiresProject = true, requiresDependencyResolution = ResolutionScope.COMPILE, requiresDependencyCollection = ResolutionScope.COMPILE)
+@Mojo(
+        name = "validate",
+        defaultPhase = LifecyclePhase.TEST,
+        requiresProject = true,
+        requiresDependencyResolution = ResolutionScope.COMPILE,
+        requiresDependencyCollection = ResolutionScope.COMPILE
+)
 public class ValidateMojo extends AbstractMojo {
 
-    private static final String CURRENT_PLUGIN_KEY = "org.apache.isis.tools:isis-maven-plugin";
-    private static final String ISIS_REALM = "isis";
+    private static final String CURRENT_PLUGIN_KEY = "org.apache.isis.tool:isis-maven-plugin";
 
     @Component
     protected MavenProject mavenProject;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
 
-        Log4j.configureIfRequired();
+        final List<Object> serviceList = getServiceList();
+        if(serviceList.size() == 0) {
+            return;
+        }
+        getLog().info("Found " + serviceList.size() + " services");
 
-        ValidationFailures validationFailures = bootIsisThenShutdown();
-
+        final ValidationFailures validationFailures = bootIsisThenShutdown(serviceList);
         if (validationFailures.occurred()) {
             throwFailureException(validationFailures.getNumberOfMessages() + " problems found.", validationFailures.getMessages());
         }
     }
 
-    private ValidationFailures bootIsisThenShutdown() throws MojoExecutionException, MojoFailureException {
-        ClassWorld classWorld = null;
+    private ValidationFailures bootIsisThenShutdown(List<Object> serviceList) throws MojoExecutionException, MojoFailureException {
         IsisMetaModel isisMetaModel = null;
         try {
-            classWorld = new ClassWorld();
-            final ClassRealm isisRealm = classWorld.newRealm(ISIS_REALM);
-
-            addClassesToRealm(isisRealm);
-
-            List<Object> serviceList = createServicesFromConfiguration(isisRealm);
-
-            isisMetaModel = bootstrapIsis(isisRealm, serviceList);
+            isisMetaModel = bootstrapIsis(serviceList);
+            final Collection<ObjectSpecification> objectSpecifications = isisMetaModel.getSpecificationLoader().allSpecifications();
+            for (ObjectSpecification objectSpecification : objectSpecifications) {
+                getLog().debug("loaded: " + objectSpecification.getFullIdentifier());
+            }
             return isisMetaModel.getValidationFailures();
 
-        } catch (DuplicateRealmException e) {
-            throwExecutionException("Error building classworld", e);
-            return null; // never reached, since exception thrown above
         } finally {
-            ClassWorlds.disposeSafely(classWorld, ISIS_REALM);
             IsisMetaModels.disposeSafely(isisMetaModel);
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private void addClassesToRealm(final ClassRealm isisRealm) throws MojoExecutionException {
 
-        // first add all dependencies (including transitive)...
-        Set<Artifact> artifacts = mavenProject.getArtifacts();
-        for (Artifact artifact : artifacts) {
-            File file = artifact.getFile();
-            try {
-                ClassRealms.addFileToRealm(isisRealm, file, getLog());
-            } catch (MalformedURLException e) {
-                throwExecutionException("Error adding classes for artifact '" + artifact + "' to class realm", e);
-            } catch (IOException e) {
-                throwExecutionException("Error adding classes for artifact '" + artifact + "' to class realm", e);
-            }
+    private List<Object> getServiceList() throws MojoFailureException {
+        IsisConfiguration isisConfiguration = getIsisConfiguration();
+        if(isisConfiguration == null) {
+            return Collections.emptyList();
         }
 
-        // ... then all classpath elements
-        // (there is substantial overlap with getArtifacts() here, but neither
-        // appears to
-        // provide the comprehensive set of class path elements).
-        List<String> classpathElements;
-        try {
-            classpathElements = mavenProject.getRuntimeClasspathElements();
-        } catch (DependencyResolutionRequiredException e) {
-            throwExecutionException("Error obtaining runtime classpath", e);
-            return;
-        }
-        for (String classpathElement : classpathElements) {
-            final File file = new File(classpathElement);
-            try {
-                ClassRealms.addFileToRealm(isisRealm, file, getLog());
-            } catch (MalformedURLException e) {
-                throwExecutionException("Error adding classes for classpath element '" + classpathElement + "' to class realm", e);
-            } catch (IOException e) {
-                throwExecutionException("Error adding classes for classpath element '" + classpathElement + "' to class realm", e);
-            }
-        }
+        final ServicesInstallerFromConfigurationAndAnnotation servicesInstaller = new ServicesInstallerFromConfigurationAndAnnotation();
+        servicesInstaller.setIgnoreFailures(true);
+        servicesInstaller.setConfiguration(isisConfiguration);
+        servicesInstaller.init();
+        return servicesInstaller.getServices(DeploymentType.SERVER_PROTOTYPE);
     }
 
-    private List<Object> createServicesFromConfiguration(final ClassRealm isisRealm) throws MojoFailureException {
-        final List<String> serviceEls = getServiceClassNamesFromConfiguration();
-        return createServiceInstances(isisRealm, serviceEls);
-    }
-
-    private List<String> getServiceClassNamesFromConfiguration() throws MojoFailureException {
-        final Xpp3Dom configuration = (Xpp3Dom) MavenProjects.lookupPlugin(mavenProject, CURRENT_PLUGIN_KEY).getConfiguration();
+    private IsisConfiguration getIsisConfiguration() throws MojoFailureException {
+        final Plugin plugin = MavenProjects.lookupPlugin(mavenProject, CURRENT_PLUGIN_KEY);
+        if(plugin == null) {
+            return null;
+        }
+        final Xpp3Dom configuration = (Xpp3Dom) plugin.getConfiguration();
         if (configuration == null) {
             throwFailureException("Configuration error", "No <configuration> element found");
         }
-        final Xpp3Dom servicesEl = configuration.getChild("services");
+        final Xpp3Dom servicesEl = configuration.getChild("isisConfigDir");
         if (servicesEl == null) {
-            throwFailureException("Configuration error", "No <configuration>/<services> element found");
+            throwFailureException("Configuration error", "No <configuration>/<isisConfigDir> element found");
         }
-        final Xpp3Dom[] serviceEls = servicesEl.getChildren("service");
-        if (serviceEls == null || serviceEls.length == 0) {
-            throwFailureException("Configuration error", "No <configuration>/<services>/<service> elements found");
-        }
-        return Lists.transform(Arrays.asList(serviceEls), Xpp3Doms.GET_VALUE);
+        final String isisConfigDir = Xpp3Doms.GET_VALUE.apply(servicesEl);
+
+        final File basedir = mavenProject.getBasedir();
+        final String absoluteConfigDir = new File(basedir, isisConfigDir).getAbsolutePath();
+        final IsisConfigurationBuilderDefault configBuilder = new IsisConfigurationBuilderDefault(absoluteConfigDir);
+
+        configBuilder.addDefaultConfigurationResources();
+        return configBuilder.getConfiguration();
     }
 
-    private List<Object> createServiceInstances(final ClassRealm isisRealm, final List<String> serviceClassNames) throws MojoFailureException {
-        final List<Object> serviceList = Lists.newArrayList();
-        final Set<String> logMessages = Sets.newLinkedHashSet();
-        for (String serviceClassName : serviceClassNames) {
-            try {
-                serviceList.add(isisRealm.loadClass(serviceClassName).newInstance());
-            } catch (ClassNotFoundException e) {
-                logMessages.add("Error loading class '" + serviceClassName + "' from classrealm");
-            } catch (InstantiationException e) {
-                logMessages.add("Error instantiating loaded class '" + serviceClassName + "'");
-            } catch (IllegalAccessException e) {
-                logMessages.add("Error instantiating loaded class '" + serviceClassName + "'");
-            }
-        }
-        if (!logMessages.isEmpty()) {
-            throwFailureException("Unable to load configured services", logMessages);
-        }
-        return serviceList;
-    }
+    private static IsisMetaModel bootstrapIsis(List<Object> serviceList) {
 
-    private static IsisMetaModel bootstrapIsis(final ClassRealm isisRealm, List<Object> serviceList) {
-        Thread.currentThread().setContextClassLoader(isisRealm.getClassLoader());
-
-        IsisMetaModel isisMetaModel = IsisMetaModel.builder(new RuntimeContextNoRuntime(), new ProgrammingModelFacetsJava5()).withServices(serviceList).build();
+        IsisMetaModel isisMetaModel = new IsisMetaModel(
+                                            new RuntimeContextNoRuntime(),
+                                            new ProgrammingModelFacetsJava5(),
+                                            serviceList);
         isisMetaModel.init();
-
         return isisMetaModel;
     }
 

@@ -75,35 +75,6 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 
     private ValidationFailures validationFailures;
 
-    
-    public static class Builder {
-        private final RuntimeContext runtimeContext;
-        private final ProgrammingModel programmingModel;
-        private List<Object> services = Lists.newArrayList();
-        
-        private Builder(RuntimeContext embeddedContext, ProgrammingModel programmingModel) {
-            this.runtimeContext = embeddedContext;
-            this.programmingModel = programmingModel;
-        }
-        
-        public Builder withServices(Object... services) {
-            return withServices(Arrays.asList(services));
-        }
-        
-        public Builder withServices(List<Object> services) {
-            this.services = services;
-            return this;
-        }
-        
-        public IsisMetaModel build() {
-            return new IsisMetaModel(runtimeContext, programmingModel, services);
-        }
-    }
-    
-    public static Builder builder(RuntimeContext runtimeContext, ProgrammingModel programmingModel) {
-        return new Builder(runtimeContext, programmingModel);
-    }
-
     public IsisMetaModel(final RuntimeContext runtimeContext, ProgrammingModel programmingModel, final List<Object> services) {
         this(runtimeContext, programmingModel, services.toArray());
     }

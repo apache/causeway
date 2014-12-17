@@ -23,6 +23,7 @@
 	</prerequisites>
 
 	<build>
+
 		<pluginManagement>
 			<plugins>
                 <!-- Apache Release Audit Tool -->
@@ -255,6 +256,10 @@
                 <exclusion>
                     <groupId>org.codehaus.plexus</groupId>
                     <artifactId>plexus-utils</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.collections</groupId>
+                    <artifactId>google-collections</artifactId>
                 </exclusion>
             </exclusions>
 		</dependency>
