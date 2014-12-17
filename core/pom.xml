@@ -188,36 +188,6 @@
             <timezone>+0</timezone>
         </developer>
         <developer>
-            <id>rcmatthews</id>
-            <name>Robert Matthews</name>
-            <email>rmatthews@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>committer</role>
-            </roles>
-            <timezone>+0</timezone>
-        </developer>
-        <developer>
-            <id>kevin</id>
-            <name>Kevin Meyer</name>
-            <email>kevin@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>committer</role>
-            </roles>
-            <timezone>+2</timezone>
-        </developer>
-        <developer>
-            <id>themalkolm</id>
-            <name>Alexander Krasnuhkin</name>
-            <email>themalkolm@apache.org</email>
-            <roles>
-                <role>pmc</role>
-                <role>committer</role>
-            </roles>
-            <timezone>+3</timezone>
-        </developer>
-        <developer>
             <id>dslaughter</id>
             <name>Dave Slaughter</name>
             <email>dslaughter@apache.org</email>
@@ -238,12 +208,42 @@
             <timezone>+1</timezone>
         </developer>
         <developer>
+            <id>kevin</id>
+            <name>Kevin Meyer</name>
+            <email>kevin@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
             <id>madytyoo</id>
             <name>Maurizio Taverna</name>
             <email>tavernamaurizio@gmail.com</email>
             <roles>
                 <role>pmc</role>
                 <role>committer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>mgrigorov</id>
+            <name>Martin Grigorov</name>
+            <email>mgrigorov@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>-6</timezone>
+        </developer>
+        <developer>
+            <id>mnour</id>
+            <name>Mohammad Nour El-Din</name>
+            <email>mnour@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>mentor while incubating</role>
             </roles>
             <timezone>+1</timezone>
         </developer>
@@ -258,14 +258,14 @@
             <timezone>+1</timezone>
         </developer>
         <developer>
-            <id>mnour</id>
-            <name>Mohammad Nour El-Din</name>
-            <email>mnour@apache.org</email>
+            <id>rcmatthews</id>
+            <name>Robert Matthews</name>
+            <email>rmatthews@apache.org</email>
             <roles>
                 <role>pmc</role>
-                <role>mentor while incubating</role>
+                <role>committer</role>
             </roles>
-            <timezone>+1</timezone>
+            <timezone>+0</timezone>
         </developer>
         <developer>
             <id>struberg</id>
@@ -276,6 +276,16 @@
                 <role>mentor while incubating</role>
             </roles>
             <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>themalkolm</id>
+            <name>Alexander Krasnuhkin</name>
+            <email>themalkolm@apache.org</email>
+            <roles>
+                <role>pmc</role>
+                <role>committer</role>
+            </roles>
+            <timezone>+3</timezone>
         </developer>
     </developers>
 
@@ -1153,7 +1163,6 @@ ${license.additional-notes}
                 <scope>test</scope>
             </dependency>
 
-
             <!-- security implementation(s) -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
@@ -1163,6 +1172,13 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security-shiro</artifactId>
+                <version>1.8.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- Maven plugin -->
+            <dependency>
+                <groupId>org.apache.isis.tool</groupId>
+                <artifactId>isis-maven-plugin</artifactId>
                 <version>1.8.0-SNAPSHOT</version>
             </dependency>
 
@@ -1863,6 +1879,8 @@ ${license.additional-notes}
         <module>viewer-restfulobjects-applib</module>
         <module>viewer-restfulobjects-rendering</module>
         <module>viewer-restfulobjects-server</module>
+
+        <module>maven-plugin</module>
     </modules>
 
 </project>

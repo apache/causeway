@@ -60,8 +60,6 @@
                 <module>example/archetype/todoapp</module>
                 <module>example/archetype/simpleapp</module>
         
-                <module>tool/maven-plugin</module>
-
                 <module>component/viewer/scimpi</module>
             </modules>
         </profile>

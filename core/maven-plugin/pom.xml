@@ -1,111 +1,119 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.isis.core</groupId>
-		<artifactId>isis</artifactId>
+    <parent>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis</artifactId>
         <version>1.8.0-SNAPSHOT</version>
-		<relativePath>../../core/pom.xml</relativePath>
-	</parent>
+    </parent>
 
-	<groupId>org.apache.isis.tool</groupId>
-	<artifactId>isis-maven-plugin</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    
-	<packaging>maven-plugin</packaging>
+    <groupId>org.apache.isis.tool</groupId>
+    <artifactId>isis-maven-plugin</artifactId>
 
-	<name>Isis Maven Mojo (isis-maven-plugin)</name>
-	<url>http://maven.apache.org</url>
+    <packaging>maven-plugin</packaging>
 
-	<prerequisites>
-		<maven>3.0.4</maven>
-	</prerequisites>
+    <name>Isis Maven Plugin (isis-maven-plugin)</name>
+    <description>
+        Maven plugin for Apache Isis, allowing the metamodel to be validated as part of the build process.
+    </description>
 
-	<build>
+    <properties>
+        <siteBaseDir>..</siteBaseDir>
+        <relativeUrl>maven-plugin/</relativeUrl>
+    </properties>
 
-		<pluginManagement>
-			<plugins>
+    <!-- used in Site generation for relative references. -->
+    <url>http://isis.apache.org/${relativeUrl}</url>
+
+    <prerequisites>
+        <maven>3.0.4</maven>
+    </prerequisites>
+
+    <build>
+
+        <pluginManagement>
+            <plugins>
                 <!-- Apache Release Audit Tool -->
                 <plugin>
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
                     <version>0.10</version>
-	                <configuration>
-	                    <excludes>
-	                    	<!-- 
-	                    	overriding inherited excludes from oia.core:isis 
-	                    	with a more specific set for this component
-	                    	 -->
-	                        <exclude>**/target/**</exclude>
-	                        <exclude>**/target-ide/**</exclude>
+                    <configuration>
+                        <excludes>
+                            <!--
+                            overriding inherited excludes from oia.core:isis
+                            with a more specific set for this component
+                             -->
+                            <exclude>**/target/**</exclude>
+                            <exclude>**/target-ide/**</exclude>
 
-	                        <exclude>**/*.project</exclude>
-	                        <exclude>**/.classpath</exclude>
-	                        <exclude>**/.settings/**</exclude>
-	                    </excludes>
+                            <exclude>**/*.project</exclude>
+                            <exclude>**/.classpath</exclude>
+                            <exclude>**/.settings/**</exclude>
+                        </excludes>
                     </configuration>
-	            </plugin>
-			</plugins>
-		</pluginManagement>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-plugin-plugin</artifactId>
-				<configuration>
-				      <goalPrefix>configurator</goalPrefix>
-				    </configuration>
-				    <executions>
-				      <execution>
-				        <id>default-descriptor</id>
-				        <goals>
-				          <goal>descriptor</goal>
-				        </goals>
-				        <phase>process-classes</phase>
-				      </execution>
-				      <execution>
-				        <id>help-descriptor</id>
-				        <goals>
-				          <goal>helpmojo</goal>
-				        </goals>
-				        <phase>process-classes</phase>
-				      </execution>
-				    </executions>
-    			</plugin>
-			<!-- 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-toolchains-plugin</artifactId>
-				<version>1.0</version>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>toolchain</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<toolchains>
-						<jdk>
-							<version>1.5</version>
-						</jdk>
-					</toolchains>
-				</configuration>
-			</plugin>
-			 -->
-		</plugins>
-	</build>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <configuration>
+                    <goalPrefix>configurator</goalPrefix>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-descriptor</id>
+                        <goals>
+                            <goal>descriptor</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                    </execution>
+                    <execution>
+                        <id>help-descriptor</id>
+                        <goals>
+                            <goal>helpmojo</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-toolchains-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>toolchain</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <toolchains>
+                        <jdk>
+                            <version>1.5</version>
+                        </jdk>
+                    </toolchains>
+                </configuration>
+            </plugin>
+             -->
+        </plugins>
+    </build>
 
-	<dependencies>
+    <dependencies>
 
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>isis-core-runtime</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-runtime</artifactId>
+        </dependency>
 
         <!-- 
-        all the plethora of exclusions in the following dependencies
+        the plethora of exclusions in the following dependencies
         are to ensure dependency convergence.
         
         In some cases, what would have been a transitive dependency
@@ -115,29 +123,29 @@
         It's all a bit of a pig's ear...
         -->
 
-		<dependency>
-		      <groupId>org.apache.maven</groupId>
-		      <artifactId>maven-plugin-api</artifactId>
-		      <version>3.0.5</version>
-	    </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.0.5</version>
+        </dependency>
 
-		<dependency>
+        <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>
-		    <version>2.1</version>
-	    </dependency>
+            <version>2.1</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.maven.plugin-tools</groupId>
-			<artifactId>maven-plugin-annotations</artifactId>
-			<version>3.2</version>
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.maven</groupId>
                     <artifactId>maven-artifact</artifactId>
                 </exclusion>
             </exclusions>
-		</dependency>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -187,22 +195,22 @@
             </exclusions>
         </dependency>
 
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-artifact</artifactId>
-			<version>3.0.5</version>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-artifact</artifactId>
+            <version>3.0.5</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.codehaus.plexus</groupId>
                     <artifactId>plexus-utils</artifactId>
                 </exclusion>
             </exclusions>
-		</dependency>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-project</artifactId>
-			<version>3.0-alpha-2</version>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-project</artifactId>
+            <version>3.0-alpha-2</version>
             <exclusions>
                 <!-- for dependency convergence -->
                 <exclusion>
@@ -230,28 +238,28 @@
                     <artifactId>plexus-interpolation</artifactId>
                 </exclusion>
             </exclusions>
-		</dependency>
-        
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-compat</artifactId>
-			<version>3.0.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-compat</artifactId>
+            <version>3.0.5</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.codehaus.plexus</groupId>
                     <artifactId>plexus-utils</artifactId>
                 </exclusion>
             </exclusions>
-		</dependency>
-        
-		<dependency>
-			<groupId>org.codehaus.plexus</groupId>
-			<artifactId>plexus-container-default</artifactId>
-			<version>1.5.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-container-default</artifactId>
+            <version>1.5.5</version>
             <exclusions>
                 <exclusion>
-        			<groupId>org.codehaus.plexus</groupId>
-        			<artifactId>plexus-classworlds</artifactId>
+                    <groupId>org.codehaus.plexus</groupId>
+                    <artifactId>plexus-classworlds</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.codehaus.plexus</groupId>
@@ -262,9 +270,9 @@
                     <artifactId>google-collections</artifactId>
                 </exclusion>
             </exclusions>
-		</dependency>
-        
-		<dependency>
+        </dependency>
+
+        <dependency>
             <groupId>org.sonatype.plexus</groupId>
             <artifactId>plexus-sec-dispatcher</artifactId>
             <version>1.3</version>
@@ -275,11 +283,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-toolchain</artifactId>
-			<version>3.0-alpha-2</version>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-toolchain</artifactId>
+            <version>3.0-alpha-2</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.maven</groupId>
@@ -290,13 +298,13 @@
                     <artifactId>maven-compat</artifactId>
                 </exclusion>
             </exclusions>
-		</dependency>
+        </dependency>
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 </project>
