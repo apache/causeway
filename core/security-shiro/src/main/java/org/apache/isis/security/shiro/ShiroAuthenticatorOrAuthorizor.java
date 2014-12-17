@@ -238,8 +238,9 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
     private boolean isPermitted(Identifier identifier, String qualifier) {
         RealmSecurityManager securityManager = getSecurityManager();
         if(securityManager == null) {
-            // cannot do permission checking if no security manager
-            return false;
+              // since a security manager will always be present for regular web requests, presumably the user
+              // is running in fixtures during bootstrapping.  We therefore permit the interaction.
+            return true;
         }
 
         String permission = asPermissionsString(identifier) + ":" + qualifier;
