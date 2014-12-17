@@ -208,7 +208,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         Professional {
             @Override
             public List<Subcategory> subcategories() {
-                return Arrays.asList(null, Subcategory.OpenSource, Subcategory.Consulting, Subcategory.Education);
+                return Arrays.asList(null, Subcategory.OpenSource, Subcategory.Consulting, Subcategory.Education, Subcategory.Marketing);
             }
         }, Domestic {
             @Override

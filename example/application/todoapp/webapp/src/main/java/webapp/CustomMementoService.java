@@ -32,7 +32,7 @@ import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
  * <pre>
  *     isis.services = \
  *                     ...,
- *                     1:webapp.MyMementoService,
+ *                     1:webapp.CustomMementoService,
  *                     ...,
  * </pre>
  * <p>
