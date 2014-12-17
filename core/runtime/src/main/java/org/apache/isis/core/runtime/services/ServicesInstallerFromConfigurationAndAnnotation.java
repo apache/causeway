@@ -52,6 +52,10 @@ public class ServicesInstallerFromConfigurationAndAnnotation extends InstallerAb
         servicesInstallerFromAnnotation = new ServicesInstallerFromAnnotation(serviceInstantiator);
     }
 
+    public void setIgnoreFailures(boolean ignoreFailures) {
+        this.serviceInstantiator.setIgnoreFailures(ignoreFailures);
+    }
+
     @Override
     public void setConfigurationBuilder(IsisConfigurationBuilder isisConfigurationBuilder) {
         servicesInstallerFromConfiguration.setConfigurationBuilder(isisConfigurationBuilder);

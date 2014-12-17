@@ -222,7 +222,7 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
         String order = domainServiceLayout != null ? domainServiceLayout.menuOrder(): null;
         if(order == null || order.equals("" + Integer.MAX_VALUE)) {
             final DomainService domainService = cls.getAnnotation(DomainService.class);
-            order = domainService.menuOrder();
+            order = domainService != null ? domainService.menuOrder() : "" + Integer.MAX_VALUE;
         }
         return order;
     }

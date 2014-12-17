@@ -70,11 +70,18 @@ public final class ServiceInstantiator {
 
     private final static Logger LOG = LoggerFactory.getLogger(ServiceInstantiator.class);
 
-
     public ServiceInstantiator() {
     }
 
     // //////////////////////////////////////
+
+    private boolean ignoreFailures;
+    public void setIgnoreFailures(boolean ignoreFailures) {
+        this.ignoreFailures = ignoreFailures;
+    }
+
+    // //////////////////////////////////////
+
 
     /**
      * initially null, but checked before first use that has been set (through {@link #setConfiguration(org.apache.isis.core.commons.config.IsisConfiguration)}).
@@ -91,9 +98,33 @@ public final class ServiceInstantiator {
         }
     }
 
+    // //////////////////////////////////////
+
+    public Object createInstance(String type) {
+        final Class<?> cls = loadClass(type);
+        if(cls == null || cls.isAnonymousClass()) {
+            // eg a test class
+            return null;
+        }
+
+        return createInstance(cls);
+    }
+
+    private Class<?> loadClass(final String className) {
+        try {
+            LOG.debug("loading class for service: " + className);
+            //return Thread.currentThread().getContextClassLoader().loadClass(className);
+            return Class.forName(className);
+        } catch (final ClassNotFoundException ex) {
+            if(ignoreFailures) {
+                return null;
+            }
+            throw new InitialisationException(String.format("Cannot find class '%s' for service", className));
+        }
+    }
 
     // //////////////////////////////////////
-    
+
     public <T> T createInstance(final Class<T> cls) {
         ensureInitialized();
         if(cls.isAnnotationPresent(RequestScoped.class)) {
@@ -332,5 +363,6 @@ public final class ServiceInstantiator {
             throw new InstanceCreationException("Could not access the class '" + cls.getName() + "'; " + e.getMessage());
         }
     }
+
 
 }

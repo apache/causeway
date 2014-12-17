@@ -19,7 +19,11 @@
 
 package org.apache.isis.core.metamodel.app;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import com.google.common.collect.Lists;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -27,7 +31,6 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
-import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -37,6 +40,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -67,7 +71,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     private IsisConfiguration configuration;
     private ProgrammingModel programmingModel;
     private Set<FacetDecorator> facetDecorators;
-    private MetaModelValidator metaModelValidator;
+    private MetaModelValidatorComposite metaModelValidator;
 
     private ValidationFailures validationFailures;
 
@@ -118,7 +122,8 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         this.facetDecorators = new TreeSet<>();
         setProgrammingModelFacets(programmingModel);
 
-        this.metaModelValidator = new MetaModelValidatorDefault();
+        this.metaModelValidator = new MetaModelValidatorComposite();
+        programmingModel.refineMetaModelValidator(metaModelValidator, configuration);
     }
 
     /**
@@ -259,16 +264,17 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 
     /**
      * The {@link MetaModelValidator} in force, either defaulted or specified
-     * {@link #setMetaModelValidator(MetaModelValidator) explicitly}.
+     * {@link #setMetaModelValidator(org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite) explicitly}.
      */
-    public MetaModelValidator getMetaModelValidator() {
+    public MetaModelValidatorComposite getMetaModelValidator() {
         return metaModelValidator;
     }
 
     /**
      * Optionally specify the {@link MetaModelValidator}.
+     * @param metaModelValidator
      */
-    public void setMetaModelValidator(final MetaModelValidator metaModelValidator) {
+    public void setMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
         this.metaModelValidator = metaModelValidator;
     }
 

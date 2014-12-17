@@ -78,23 +78,8 @@ final class ServicesInstallerUtils  {
             type = serviceName;
         }
 
-        final Class<?> cls = loadClass(type);
-        if(cls.isAnonymousClass()) {
-            // eg a test class
-            return null;
-        }
-        return serviceInstantiator.createInstance(cls);
+        return serviceInstantiator.createInstance(type);
     }
-
-    private static Class<?> loadClass(final String className) {
-        try {
-            LOG.debug("loading class for service: " + className);
-            return Thread.currentThread().getContextClassLoader().loadClass(className);
-        } catch (final ClassNotFoundException ex) {
-            throw new InitialisationException(String.format("Cannot find class '%s' for service", className));
-        }
-    }
-
 
     static List<Object> instantiateServicesFrom(SortedMap<String, SortedSet<String>> positionedServices, final ServiceInstantiator serviceInstantiator) {
         LinkedHashSet<String> serviceNameList = flatten(positionedServices);
