@@ -74,7 +74,7 @@ public class IsisMoneyMapping extends SingleFieldMultiMapping {
         Column column = null;
         if (table != null) {
             column = mgr.createColumn(this, typeName, getNumberOfDatastoreMappings());
-			/* TODO metaData.setJdbcType("NCHAR") */
+            /* TODO metaData.setJdbcType("NCHAR") */
             column.setColumnMetaData(column.getColumnMetaData().setLength(columnLength));
         }
         mgr.createDatastoreMapping(this, column, typeName);
@@ -90,20 +90,20 @@ public class IsisMoneyMapping extends SingleFieldMultiMapping {
             case 1:
                 return m.getCurrency();
         }
-        throw new IndexOutOfBoundsException();
+        throw new IndexOutOfBoundsException("Wrong index: " + index);
     }
 
     @Override
     public void setObject(final ExecutionContext ec, final PreparedStatement preparedStmt, final int[] exprIndex,
                           final Object value) {
 
-        final Money m = ((Money) value);
-        if (m == null) {
-            getDatastoreMapping(0).setLong(preparedStmt, exprIndex[0], 0l);
-            getDatastoreMapping(1).setString(preparedStmt, exprIndex[1], null);
-        } else {
+        if (value instanceof Money) {
+            final Money m = ((Money) value);
             getDatastoreMapping(0).setLong(preparedStmt, exprIndex[0], m.longValue());
             getDatastoreMapping(1).setString(preparedStmt, exprIndex[1], m.getCurrency());
+        } else {
+            getDatastoreMapping(0).setLong(preparedStmt, exprIndex[0], 0l);
+            getDatastoreMapping(1).setString(preparedStmt, exprIndex[1], null);
         }
     }
 
