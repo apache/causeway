@@ -235,7 +235,7 @@
                 <role>pmc</role>
                 <role>committer</role>
             </roles>
-            <timezone>-6</timezone>
+            <timezone>+2</timezone>
         </developer>
         <developer>
             <id>mnour</id>
