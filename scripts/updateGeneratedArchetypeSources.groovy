@@ -103,7 +103,7 @@ isis_version=options.v
 
 /////////////////////////////////////////////////////
 //
-// update pom.xml's groupId
+// update archetype's own pom.xml's groupId
 //
 /////////////////////////////////////////////////////
 
@@ -140,6 +140,41 @@ def pomXmlText = stripXmlPragma(pomTempFile)
 pomFile.text = 
     license_using_xml_comments + 
     pomXmlText
+
+
+
+/////////////////////////////////////////////////////
+//
+// update archetype's resource's dom/pom.xml's activeByDefault=true
+//
+/////////////////////////////////////////////////////
+
+def pomDomFile=new File(BASE+"src/main/resources/archetype-resources/dom/pom.xml")
+
+println "updating ${pomDomFile.path}"
+
+// read file, ignoring XML pragma
+def pomDomFileText = stripXmlPragma(pomDomFile)
+
+def pomDomXml = new XmlSlurper(false,true).parseText(pomDomFileText)
+
+pomDomXml.profiles.profile.activation.activeByDefault='true'
+
+def pomDomSmb = new groovy.xml.StreamingMarkupBuilder().bind {
+     mkp.declareNamespace("":"http://maven.apache.org/POM/4.0.0")
+     mkp.yield(pomDomXml)
+}
+
+
+def pomDomTempFile = File.createTempFile("temp",".xml")
+def indentedDomXml = indentXml(pomDomSmb.toString())
+pomDomTempFile.text = indentedDomXml
+def pomDomXmlText = stripXmlPragma(pomDomTempFile)
+
+
+pomDomFile.text = 
+    license_using_xml_comments + 
+    pomDomXmlText
 
 
 
@@ -227,7 +262,7 @@ supplementalModelsFile.text = supplemental_models_text
 
 String indentXml(xml) {
     def factory = TransformerFactory.newInstance()
-    factory.setAttribute("indent-number", 2);
+    factory.setAttribute("indent-number", 4);
 
     Transformer transformer = factory.newTransformer()
     transformer.setOutputProperty(OutputKeys.INDENT, 'yes')

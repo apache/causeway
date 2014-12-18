@@ -127,6 +127,9 @@
     <profiles>
         <profile>
             <id>isis</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
