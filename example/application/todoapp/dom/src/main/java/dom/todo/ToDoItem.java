@@ -182,6 +182,14 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         return dueBy;
     }
 
+    /**
+     * Demonstrates how to perform security checks within the domain code.
+     *
+     * <p>
+     *     Generally speaking this approach is not recommended; such checks should
+     *     wherever possible be externalized in the security subsystem.
+     * </p>
+     */
     public boolean hideDueBy() {
         final UserMemento user = container.getUser();
         return user.hasRole("realm1:noDueBy_role");
@@ -903,26 +911,28 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     //region > injected services
     @javax.inject.Inject
-    private DomainObjectContainer container;
+    DomainObjectContainer container;
 
     @javax.inject.Inject
-    private ToDoItems toDoItems;
-
-    Bulk.InteractionContext bulkInteractionContext;
-    public void injectBulkInteractionContext(Bulk.InteractionContext bulkInteractionContext) {
-        this.bulkInteractionContext = bulkInteractionContext;
-    }
+    ToDoItems toDoItems;
 
     @javax.inject.Inject
-    private Scratchpad scratchpad;
+    Scratchpad scratchpad;
 
-    EventBusService eventBusService;
-    public void injectEventBusService(EventBusService eventBusService) {
-        this.eventBusService = eventBusService;
-    }
+    /**
+     * public only so can be injected from integ tests
+     */
+    @javax.inject.Inject
+    public Bulk.InteractionContext bulkInteractionContext;
+
+    /**
+     * public only so can be injected from integ tests
+     */
+    @javax.inject.Inject
+    public EventBusService eventBusService;
 
     @javax.inject.Inject
-    private WrapperFactory wrapperFactory;
+    WrapperFactory wrapperFactory;
 
     //endregion
 
