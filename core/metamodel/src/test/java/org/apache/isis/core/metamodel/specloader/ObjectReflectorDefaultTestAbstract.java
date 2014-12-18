@@ -28,6 +28,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
@@ -53,7 +54,10 @@ public abstract class ObjectReflectorDefaultTestAbstract {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_ONLY);
-    
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
     private RuntimeContext runtimeContext;
 
     @Mock
@@ -91,6 +95,34 @@ public abstract class ObjectReflectorDefaultTestAbstract {
     }
 
     protected abstract ObjectSpecification loadSpecification(ObjectReflectorDefault reflector);
+
+    @Test
+    public void testLayoutMetadataReaderEmptyList() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("illegal argument, expected: is not an empty collection");
+
+        new ObjectReflectorDefault(
+            mockConfiguration,
+            new ProgrammingModelFacetsJava5(),
+            new HashSet<FacetDecorator>(),
+            new MetaModelValidatorDefault(),
+            Lists.<LayoutMetadataReader>newArrayList()
+        );
+    }
+
+    @Test
+    public void testLayoutMetadataReaderNull() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("illegal argument, expected: is not null");
+
+        new ObjectReflectorDefault(
+            mockConfiguration,
+            new ProgrammingModelFacetsJava5(),
+            new HashSet<FacetDecorator>(),
+            new MetaModelValidatorDefault(),
+            null
+        );
+    }
 
     @Test
     public void testCollectionFacet() throws Exception {

@@ -67,9 +67,10 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.emptyCollectionOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * Builds the meta-model.
@@ -169,7 +170,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         ensureThatArg(facetDecorators, is(notNullValue()));
         ensureThatArg(metaModelValidator, is(notNullValue()));
         ensureThatArg(layoutMetadataReaders, is(notNullValue()));
-        ensureThatArg(layoutMetadataReaders.size(), is(greaterThan(0)));
+        ensureThatArg(layoutMetadataReaders, is(not(emptyCollectionOf(LayoutMetadataReader.class))));
 
         this.configuration = configuration;
         this.programmingModel = programmingModel;
