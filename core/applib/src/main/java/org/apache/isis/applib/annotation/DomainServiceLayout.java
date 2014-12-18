@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
  * Layout hints for domain services.
  *
  * <p>
- * Also indicates whether the domain service acts as a repository for an entity, and menu ordering UI hints.
+ * Also indicates the name, and menu ordering UI hints.
  * </p>
  */
 @Inherited
