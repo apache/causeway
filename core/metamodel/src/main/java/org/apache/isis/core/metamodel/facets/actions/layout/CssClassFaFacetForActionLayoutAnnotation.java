@@ -32,11 +32,12 @@ public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbs
             return null;
         }
         final String cssClassFa = Strings.emptyToNull(actionLayout.cssClassFa());
-        return cssClassFa != null ? new CssClassFaFacetForActionLayoutAnnotation(cssClassFa, holder) : null;
+        ActionLayout.ClassFaPosition classFaPosition = actionLayout.cssClassFaPosition();
+        return cssClassFa != null ? new CssClassFaFacetForActionLayoutAnnotation(cssClassFa, classFaPosition, holder) : null;
     }
 
-    private CssClassFaFacetForActionLayoutAnnotation(String value, FacetHolder holder) {
-        super(value, holder);
+    private CssClassFaFacetForActionLayoutAnnotation(String value, ActionLayout.ClassFaPosition position, FacetHolder holder) {
+        super(value, position, holder);
     }
 
 }

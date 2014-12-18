@@ -326,6 +326,9 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             if(actionLayout.cssClassFa != null) {
                 props.setProperty(prefix + "." + actionName + ".actionLayout.cssClassFa", actionLayout.cssClassFa);
             }
+            if(actionLayout.cssClassFaPosition != null) {
+                props.setProperty(prefix + "." + actionName + ".actionLayout.cssClassFaPosition", actionLayout.cssClassFaPosition);
+            }
             if(actionLayout.describedAs != null) {
                 props.setProperty(prefix + "." + actionName + ".actionLayout.describedAs", actionLayout.describedAs);
             }
@@ -354,6 +357,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         final CssClassFaFacetRepr cssClassFa = actionRepr.cssClassFa;
         if(cssClassFa != null) {
             props.setProperty(prefix +"." + actionName + ".cssClassFa.value", cssClassFa.value);
+            props.setProperty(prefix +"." + actionName + ".cssClassFa.position", cssClassFa.position);
         }
         final DescribedAsFacetRepr describedAs = actionRepr.describedAs;
         if(describedAs!= null) {
@@ -368,9 +372,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
     public LayoutMetadata asLayoutMetadata(Class<?> domainClass) throws ReaderException {
         try {
             return readMetadata(domainClass);
-        } catch (IOException e) {
-            throw new ReaderException(e);
-        } catch (RuntimeException e) {
+        } catch (IOException | RuntimeException e) {
             throw new ReaderException(e);
         }
     }

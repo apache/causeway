@@ -26,6 +26,6 @@ import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetA
 public class CssClassFaFacetOnTypeAnnotation extends CssClassFaFacetAbstract {
 
     public CssClassFaFacetOnTypeAnnotation(final CssClassFa cssClassFa, final FacetHolder holder) {
-        super(cssClassFa.value(), holder);
+        super(cssClassFa.value(), cssClassFa.position(), holder);
     }
 }

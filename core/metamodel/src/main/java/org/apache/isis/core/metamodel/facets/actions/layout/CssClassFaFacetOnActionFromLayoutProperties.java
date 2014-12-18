@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.util.Properties;
 import com.google.common.base.Strings;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
@@ -29,11 +30,12 @@ public class CssClassFaFacetOnActionFromLayoutProperties extends CssClassFaFacet
 
     public static CssClassFaFacet create(Properties properties, FacetHolder holder) {
         final String cssClassFa = cssClassFa(properties);
-        return cssClassFa != null? new CssClassFaFacetOnActionFromLayoutProperties(cssClassFa, holder): null;
+        ActionLayout.ClassFaPosition position = cssClassFaPosition(properties);
+        return cssClassFa != null? new CssClassFaFacetOnActionFromLayoutProperties(cssClassFa, position, holder): null;
     }
 
-    private CssClassFaFacetOnActionFromLayoutProperties(String cssClass, FacetHolder holder) {
-        super(cssClass, holder);
+    private CssClassFaFacetOnActionFromLayoutProperties(String cssClass, ActionLayout.ClassFaPosition position, FacetHolder holder) {
+        super(cssClass, position, holder);
     }
 
     private static String cssClassFa(Properties properties) {
@@ -43,4 +45,13 @@ public class CssClassFaFacetOnActionFromLayoutProperties extends CssClassFaFacet
         return Strings.emptyToNull(properties.getProperty("cssClassFa"));
     }
 
+    private static ActionLayout.ClassFaPosition cssClassFaPosition(Properties properties) {
+        if (properties == null) {
+            return null;
+        }
+        String cssClassFaPosition = Strings.emptyToNull(properties.getProperty("cssClassFaPosition"));
+        return cssClassFaPosition != null
+            ? ActionLayout.ClassFaPosition.valueOf(cssClassFaPosition.toUpperCase())
+            : ActionLayout.ClassFaPosition.LEFT;
+    }
 }

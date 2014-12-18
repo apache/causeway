@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.jmock.auto.Mock;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 
@@ -40,7 +41,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
-public abstract class AbstractFacetFactoryJUnit4TestCase {
+public abstract class AbstractFacetFactoryJUnit4TestCase extends Assert {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);

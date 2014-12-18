@@ -26,6 +26,13 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -67,6 +74,50 @@ public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactory
         final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof ActionPositionFacetFallback);
+    }
+
+    public void testCssClassFaLeftPositionIsDefault() {
+        final ActionLayoutFactory facetFactory = new ActionLayoutFactory();
+
+        class Customer {
+            @SuppressWarnings("unused")
+            @ActionLayout(cssClassFa = "font-awesome")
+            public String foz() {
+                return null;
+            }
+        }
+        final Method method = findMethod(Customer.class, "foz");
+
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
+
+        Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
+        assertThat(facet, is(notNullValue()));
+        assertThat(facet, is(instanceOf(CssClassFaFacetForActionLayoutAnnotation.class)));
+        CssClassFaFacetForActionLayoutAnnotation classFaFacetForActionLayoutAnnotation = (CssClassFaFacetForActionLayoutAnnotation) facet;
+        assertThat(classFaFacetForActionLayoutAnnotation.value(), is(equalTo("fa fa-fw font-awesome")));
+        assertThat(classFaFacetForActionLayoutAnnotation.getPosition(), is(ActionLayout.ClassFaPosition.LEFT));
+    }
+
+    public void testCssClassFaRightPosition() {
+        final ActionLayoutFactory facetFactory = new ActionLayoutFactory();
+
+        class Customer {
+            @SuppressWarnings("unused")
+            @ActionLayout(cssClassFa = "font-awesome", cssClassFaPosition = ActionLayout.ClassFaPosition.RIGHT)
+            public String foz() {
+                return null;
+            }
+        }
+        final Method method = findMethod(Customer.class, "foz");
+
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
+
+        Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
+        assertThat(facet, is(notNullValue()));
+        assertThat(facet, is(instanceOf(CssClassFaFacetForActionLayoutAnnotation.class)));
+        CssClassFaFacetForActionLayoutAnnotation classFaFacetForActionLayoutAnnotation = (CssClassFaFacetForActionLayoutAnnotation) facet;
+        assertThat(classFaFacetForActionLayoutAnnotation.value(), is(equalTo("fa fa-fw font-awesome")));
+        assertThat(classFaFacetForActionLayoutAnnotation.getPosition(), is(ActionLayout.ClassFaPosition.RIGHT));
     }
 
 }

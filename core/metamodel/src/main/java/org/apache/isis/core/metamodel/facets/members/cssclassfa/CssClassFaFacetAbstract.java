@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
@@ -32,8 +33,16 @@ public class CssClassFaFacetAbstract extends SingleStringValueFacetAbstract impl
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
-    public CssClassFaFacetAbstract(final String value, final FacetHolder holder) {
+    private final ActionLayout.ClassFaPosition position;
+
+    public CssClassFaFacetAbstract(final String value, ActionLayout.ClassFaPosition position, final FacetHolder holder) {
         super(type(), holder, sanitize(value));
+        this.position = position;
+    }
+
+    @Override
+    public ActionLayout.ClassFaPosition getPosition() {
+        return position;
     }
 
     /**

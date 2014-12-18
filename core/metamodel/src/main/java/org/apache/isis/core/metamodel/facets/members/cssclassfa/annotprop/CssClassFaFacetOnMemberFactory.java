@@ -27,6 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.CssClassFa;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -79,21 +80,36 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
 
     private CssClassFaFacet createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
         final CssClassFa annotation = Annotations.getAnnotation(processMethodContext.getMethod(), CssClassFa.class);
-        return annotation != null ? new CssClassFaFacetOnMemberAnnotation(annotation.value(), processMethodContext.getFacetHolder()) : null;
+        return annotation != null ? new CssClassFaFacetOnMemberAnnotation(annotation.value(), annotation.position(), processMethodContext.getFacetHolder()) : null;
     }
 
     //region > faIconFromPattern
 
+    /**
+     * The pattern matches definitions like:
+     * <ul>
+     *     <li>methodNameRegex:cssClassFa - will render the Font Awesome icon on the left of the title</li>
+     *     <li>methodNameRegex:cssClassFa:(left|right) - will render the Font Awesome icon on the specified position of the title</li>
+     * </ul>
+     */
     private final static Pattern FA_ICON_REGEX_PATTERN = Pattern.compile("([^:]+):(.+)");
 
     private CssClassFaFacet createFromConfiguredRegexIfPossible(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
 
         String value = faIconIfAnyFor(method);
-
-        return value != null
-                ? new CssClassFaFacetOnMemberFromConfiguredRegex(value, processMethodContext.getFacetHolder())
-                : null;
+        ActionLayout.ClassFaPosition position = ActionLayout.ClassFaPosition.LEFT;
+        if (value != null) {
+            int idxOfSeparator = value.indexOf(':');
+            if (idxOfSeparator > -1) {
+                value = value.substring(0, idxOfSeparator);
+                String rest = value.substring(idxOfSeparator + 1);
+                position = ActionLayout.ClassFaPosition.valueOf(rest.toUpperCase());
+            }
+            return new CssClassFaFacetOnMemberFromConfiguredRegex(value, position, processMethodContext.getFacetHolder());
+        } else {
+            return null;
+        }
     }
 
     private String faIconIfAnyFor(Method method) {

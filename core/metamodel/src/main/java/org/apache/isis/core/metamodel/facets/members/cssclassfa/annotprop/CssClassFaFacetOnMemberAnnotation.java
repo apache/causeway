@@ -19,12 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop;
 
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
 
 public class CssClassFaFacetOnMemberAnnotation extends CssClassFaFacetAbstract {
 
-    public CssClassFaFacetOnMemberAnnotation(final String value, final FacetHolder holder) {
-        super(value, holder);
+    public CssClassFaFacetOnMemberAnnotation(final String value, ActionLayout.ClassFaPosition position, final FacetHolder holder) {
+        super(value, position, holder);
     }
 }
