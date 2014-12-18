@@ -40,6 +40,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.ActionInteraction;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.AutoComplete;
@@ -57,7 +58,6 @@ import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyInteraction;
-import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.security.UserMemento;
@@ -638,7 +638,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > openSourceCodeOnGithub (action)
-    @Prototype
+    @ActionLayout(prototype = true)
     @ActionSemantics(Of.SAFE)
     public URL openSourceCodeOnGithub() throws MalformedURLException {
         return new URL("https://github.com/apache/isis/tree/master/example/application/todoapp/dom/src/main/java/dom/todo/ToDoItem.java");
@@ -652,8 +652,8 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         RecoverableExceptionAutoEscalated,
         NonRecoverableException;
     }
-    
-    @Prototype
+
+    @ActionLayout(prototype = true)
     @ActionSemantics(Of.SAFE)
     public void demoException(
             final @ParameterLayout(named="Type") DemoExceptionType type) {
