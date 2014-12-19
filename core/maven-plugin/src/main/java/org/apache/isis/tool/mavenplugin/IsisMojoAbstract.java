@@ -45,15 +45,16 @@ import org.apache.isis.tool.mavenplugin.util.Xpp3Doms;
 public abstract class IsisMojoAbstract extends AbstractMojo {
 
     protected static final String CURRENT_PLUGIN_KEY = "org.apache.isis.tool:isis-maven-plugin";
-    private final IsisRunnable isisRunnable;
 
     @Component
-    protected MavenProject mavenProject;
-    private IsisMojoReporterWithLog reporter;
+    private MavenProject mavenProject;
 
-    protected IsisMojoAbstract(final IsisRunnable isisRunnable) {
-        this.isisRunnable = isisRunnable;
-        this.reporter = new IsisMojoReporterWithLog(getLog());
+    private final MetaModelProcessor metaModelProcessor;
+    private final ContextForMojo context;
+
+    protected IsisMojoAbstract(final MetaModelProcessor metaModelProcessor) {
+        this.metaModelProcessor = metaModelProcessor;
+        this.context = new ContextForMojo(mavenProject, getLog());
     }
 
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -65,15 +66,17 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         }
         getLog().info("Found " + serviceList.size() + " services");
 
-        usingIsisMetaModel(serviceList, isisRunnable);
+        usingIsisMetaModel(serviceList, metaModelProcessor);
     }
 
-    private void usingIsisMetaModel(List<Object> serviceList, IsisRunnable isisRunnable) throws MojoExecutionException, MojoFailureException {
+    private void usingIsisMetaModel(
+            final List<Object> serviceList,
+            final MetaModelProcessor metaModelProcessor) throws MojoExecutionException, MojoFailureException {
 
         IsisMetaModel isisMetaModel = null;
         try {
             isisMetaModel = bootstrapIsis(serviceList);
-            isisRunnable.run(isisMetaModel, reporter);
+            metaModelProcessor.process(isisMetaModel, context);
         } finally {
             IsisMetaModels.disposeSafely(isisMetaModel);
         }
@@ -100,12 +103,12 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
     private IsisConfiguration isisConfigurationFor(final Plugin plugin) throws MojoFailureException {
         final Xpp3Dom configuration = (Xpp3Dom) plugin.getConfiguration();
         if (configuration == null) {
-            reporter.throwFailureException("Configuration error", "No <configuration> element found");
+            context.throwFailureException("Configuration error", "No <configuration> element found");
         }
 
         final Xpp3Dom servicesEl = configuration.getChild("isisConfigDir");
         if (servicesEl == null) {
-            reporter.throwFailureException("Configuration error", "No <configuration>/<isisConfigDir> element found");
+            context.throwFailureException("Configuration error", "No <configuration>/<isisConfigDir> element found");
         }
         final String isisConfigDir = Xpp3Doms.GET_VALUE.apply(servicesEl);
 
@@ -113,7 +116,7 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         final File file = new File(basedir, isisConfigDir);
         final String absoluteConfigDir = file.getAbsolutePath();
         if(!file.exists() || !file.isDirectory()) {
-            reporter.throwFailureException("Configuration error",
+            context.throwFailureException("Configuration error",
                     String.format("isisConfigDir (%s) does not exist or is not a directory", absoluteConfigDir));
         }
         final IsisConfigurationBuilderDefault configBuilder = new IsisConfigurationBuilderDefault(absoluteConfigDir);
@@ -130,13 +133,20 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         return isisMetaModel;
     }
 
-    //region > IsisMojoReporter
-    static class IsisMojoReporterWithLog implements IsisMojoReporter {
+    //region > Context
+    static class ContextForMojo implements MetaModelProcessor.Context {
 
+        private final MavenProject mavenProject;
         private final Log log;
 
-        public IsisMojoReporterWithLog(final Log log) {
+        public ContextForMojo(final MavenProject mavenProject, final Log log) {
+            this.mavenProject = mavenProject;
             this.log = log;
+        }
+
+        @Override
+        public MavenProject getMavenProject() {
+            return mavenProject;
         }
 
         @Override

@@ -18,10 +18,29 @@
  */
 package org.apache.isis.tool.mavenplugin;
 
+import java.util.Set;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
 import org.apache.isis.core.metamodel.app.IsisMetaModel;
 
-interface IsisRunnable {
-    public void run(IsisMetaModel isisMetaModel, IsisMojoReporter isisMojo) throws MojoFailureException, MojoExecutionException;
+interface MetaModelProcessor {
+
+    public interface Context {
+
+        MavenProject getMavenProject();
+
+        Log getLog();
+
+        void logErrors(final String... logMessages);
+
+        void throwFailureException(final String errorMessage, final Set<String> logMessages) throws MojoFailureException;
+
+        void throwFailureException(final String errorMessage, final String... logMessages) throws MojoFailureException;
+
+        void throwExecutionException(final String errorMessage, final Exception e) throws MojoExecutionException;
+    }
+
+    public void process(final IsisMetaModel isisMetaModel, final Context context) throws MojoFailureException, MojoExecutionException;
 }

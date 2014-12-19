@@ -38,20 +38,20 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 public class IsisMojoValidate extends IsisMojoAbstract {
 
     protected IsisMojoValidate() {
-        super(new Validate());
+        super(new ValidateMetaModelProcessor());
     }
 
-    static class Validate implements IsisRunnable {
+    static class ValidateMetaModelProcessor implements MetaModelProcessor {
         @Override
-        public void run(final IsisMetaModel isisMetaModel, final IsisMojoReporter reporter) throws MojoFailureException, MojoExecutionException {
+        public void process(final IsisMetaModel isisMetaModel, final Context context) throws MojoFailureException, MojoExecutionException {
             final Collection<ObjectSpecification> objectSpecifications = isisMetaModel.getSpecificationLoader().allSpecifications();
             for (ObjectSpecification objectSpecification : objectSpecifications) {
-                reporter.getLog().debug("loaded: " + objectSpecification.getFullIdentifier());
+                context.getLog().debug("loaded: " + objectSpecification.getFullIdentifier());
             }
 
             final ValidationFailures validationFailures = isisMetaModel.getValidationFailures();
             if (validationFailures.occurred()) {
-                reporter.throwFailureException(validationFailures.getNumberOfMessages() + " problems found.", validationFailures.getMessages());
+                context.throwFailureException(validationFailures.getNumberOfMessages() + " problems found.", validationFailures.getMessages());
             }
         }
     }
