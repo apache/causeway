@@ -27,8 +27,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.metamodel.app.IsisMetaModel;
@@ -40,7 +40,6 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 import org.apache.isis.tool.mavenplugin.util.IsisMetaModels;
 import org.apache.isis.tool.mavenplugin.util.MavenProjects;
-import org.apache.isis.tool.mavenplugin.util.Xpp3Doms;
 
 public abstract class IsisMojoAbstract extends AbstractMojo {
 
@@ -48,6 +47,9 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
 
     @Component
     private MavenProject mavenProject;
+
+    @Parameter(required = true, readonly = false, property = "isisConfigDir")
+    private String isisConfigDir;
 
     private final MetaModelProcessor metaModelProcessor;
     private final ContextForMojo context;
@@ -83,7 +85,7 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
     }
 
     private List<Object> serviceListFor(Plugin plugin) throws MojoFailureException {
-        IsisConfiguration isisConfiguration = isisConfigurationFor(plugin);
+        IsisConfiguration isisConfiguration = getIsisConfiguration();
 
         final ServicesInstaller servicesInstaller;
         if(isisConfiguration == null) {
@@ -100,20 +102,8 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         return servicesInstaller.getServices(DeploymentType.SERVER_PROTOTYPE);
     }
 
-    private IsisConfiguration isisConfigurationFor(final Plugin plugin) throws MojoFailureException {
-        final Xpp3Dom configuration = (Xpp3Dom) plugin.getConfiguration();
-        if (configuration == null) {
-            context.throwFailureException("Configuration error", "No <configuration> element found");
-        }
-
-        final Xpp3Dom servicesEl = configuration.getChild("isisConfigDir");
-        if (servicesEl == null) {
-            context.throwFailureException("Configuration error", "No <configuration>/<isisConfigDir> element found");
-        }
-        final String isisConfigDir = Xpp3Doms.GET_VALUE.apply(servicesEl);
-
-        final File basedir = mavenProject.getBasedir();
-        final File file = new File(basedir, isisConfigDir);
+    private IsisConfiguration getIsisConfiguration() throws MojoFailureException {
+        final File file = getIsisConfigDir();
         final String absoluteConfigDir = file.getAbsolutePath();
         if(!file.exists() || !file.isDirectory()) {
             context.throwFailureException("Configuration error",
@@ -122,6 +112,15 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         final IsisConfigurationBuilderDefault configBuilder = new IsisConfigurationBuilderDefault(absoluteConfigDir);
         configBuilder.addDefaultConfigurationResources();
         return configBuilder.getConfiguration();
+    }
+
+    private File getIsisConfigDir() {
+        File file = new File(isisConfigDir);
+        if(!file.isAbsolute()) {
+            final File basedir = mavenProject.getBasedir();
+            file = new File(basedir, isisConfigDir);
+        }
+        return file;
     }
 
     private static IsisMetaModel bootstrapIsis(List<Object> serviceList) {
