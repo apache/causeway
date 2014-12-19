@@ -18,33 +18,33 @@
   under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.apache.isis.archetype</groupId>
-  <artifactId>simpleapp-archetype</artifactId>
-  <version>1.8.0-SNAPSHOT</version>
-  <packaging>maven-archetype</packaging>
-  <name>simpleapp-archetype</name>
-  <build>
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.archetype</groupId>
-        <artifactId>archetype-packaging</artifactId>
-        <version>2.2</version>
-      </extension>
-    </extensions>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <artifactId>maven-archetype-plugin</artifactId>
-          <version>2.2</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
-  <parent>
-    <groupId>org.apache.isis.core</groupId>
-    <artifactId>isis</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.apache.isis.archetype</groupId>
+    <artifactId>simpleapp-archetype</artifactId>
     <version>1.8.0-SNAPSHOT</version>
-    <relativePath>../../../core/pom.xml</relativePath>
-  </parent>
+    <packaging>maven-archetype</packaging>
+    <name>simpleapp-archetype</name>
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.archetype</groupId>
+                <artifactId>archetype-packaging</artifactId>
+                <version>2.2</version>
+            </extension>
+        </extensions>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-archetype-plugin</artifactId>
+                    <version>2.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+    <parent>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis</artifactId>
+        <version>1.8.0-SNAPSHOT</version>
+        <relativePath>../../../core/pom.xml</relativePath>
+    </parent>
 </project>
