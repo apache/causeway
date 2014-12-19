@@ -126,7 +126,7 @@
 
     <profiles>
         <profile>
-            <id>isis</id>
+            <id>isis-validate</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
