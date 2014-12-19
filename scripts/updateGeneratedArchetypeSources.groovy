@@ -143,38 +143,38 @@ pomFile.text =
 
 
 
-/////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+////
+//// update archetype's resource's dom/pom.xml's activeByDefault=true
+////
+///////////////////////////////////////////////////////
 //
-// update archetype's resource's dom/pom.xml's activeByDefault=true
+//def pomDomFile=new File(BASE+"src/main/resources/archetype-resources/dom/pom.xml")
 //
-/////////////////////////////////////////////////////
-
-def pomDomFile=new File(BASE+"src/main/resources/archetype-resources/dom/pom.xml")
-
-println "updating ${pomDomFile.path}"
-
-// read file, ignoring XML pragma
-def pomDomFileText = stripXmlPragma(pomDomFile)
-
-def pomDomXml = new XmlSlurper(false,true).parseText(pomDomFileText)
-
-pomDomXml.profiles.profile.activation.activeByDefault='true'
-
-def pomDomSmb = new groovy.xml.StreamingMarkupBuilder().bind {
-     mkp.declareNamespace("":"http://maven.apache.org/POM/4.0.0")
-     mkp.yield(pomDomXml)
-}
-
-
-def pomDomTempFile = File.createTempFile("temp",".xml")
-def indentedDomXml = indentXml(pomDomSmb.toString())
-pomDomTempFile.text = indentedDomXml
-def pomDomXmlText = stripXmlPragma(pomDomTempFile)
-
-
-pomDomFile.text = 
-    license_using_xml_comments + 
-    pomDomXmlText
+//println "updating ${pomDomFile.path}"
+//
+//// read file, ignoring XML pragma
+//def pomDomFileText = stripXmlPragma(pomDomFile)
+//
+//def pomDomXml = new XmlSlurper(false,true).parseText(pomDomFileText)
+//
+//pomDomXml.profiles.profile.activation.activeByDefault='true'
+//
+//def pomDomSmb = new groovy.xml.StreamingMarkupBuilder().bind {
+//     mkp.declareNamespace("":"http://maven.apache.org/POM/4.0.0")
+//     mkp.yield(pomDomXml)
+//}
+//
+//
+//def pomDomTempFile = File.createTempFile("temp",".xml")
+//def indentedDomXml = indentXml(pomDomSmb.toString())
+//pomDomTempFile.text = indentedDomXml
+//def pomDomXmlText = stripXmlPragma(pomDomTempFile)
+//
+//
+//pomDomFile.text = 
+//    license_using_xml_comments + 
+//    pomDomXmlText
 
 
 
