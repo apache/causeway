@@ -19,11 +19,15 @@
  */
 package dom.todo;
 
+import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.security.RoleMemento;
+import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -53,9 +57,45 @@ public abstract class ToDoItemTest {
         context.ignoring(eventBusService);
     }
 
-    public static class Actions {
+    public static class Properties extends ToDoItemTest {
 
-        public static class Completed extends ToDoItemTest {
+        @Mock
+        DomainObjectContainer mockContainer;
+
+        public static class DueBy extends Properties {
+
+            @Test
+            public void hiddenForNoDueByRole() {
+                final UserMemento userWithRole = new UserMemento("user", new RoleMemento("realm1:noDueBy_role"));
+                context.checking(new Expectations() {{
+                    allowing(mockContainer).getUser();
+                    will(returnValue(userWithRole));
+                }});
+
+                toDoItem.container = mockContainer;
+
+                assertThat(toDoItem.hideDueBy(), is(true));
+            }
+
+            @Test
+            public void notHiddenWithoutRole() {
+                final UserMemento userWithRole = new UserMemento("user", new RoleMemento("realm1:someOtherRole"));
+                context.checking(new Expectations() {{
+                    allowing(mockContainer).getUser();
+                    will(returnValue(userWithRole));
+                }});
+
+                toDoItem.container = mockContainer;
+
+                assertThat(toDoItem.hideDueBy(), is(false));
+            }
+        }
+
+    }
+
+    public static class Actions extends ToDoItemTest {
+
+        public static class Completed extends Actions {
 
             @Test
             public void happyCase() throws Exception {
@@ -73,7 +113,7 @@ public abstract class ToDoItemTest {
             }
         }
 
-        public static class NotYetCompleted extends ToDoItemTest {
+        public static class NotYetCompleted extends Actions {
 
             @Test
             public void happyCase() throws Exception {

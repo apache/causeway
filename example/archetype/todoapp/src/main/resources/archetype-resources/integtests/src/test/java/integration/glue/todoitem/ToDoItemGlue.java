@@ -83,8 +83,8 @@ public class ToDoItemGlue extends CukeGlueAbstract {
                     allowing(eventBusService);
                 }
             });
-            toDoItem.injectBulkInteractionContext(bulkInteractionContext);
-            toDoItem.injectEventBusService(eventBusService);
+            toDoItem.bulkInteractionContext = bulkInteractionContext;
+            toDoItem.eventBusService = eventBusService;
         }
         wrap(toDoItem).completed();
     }

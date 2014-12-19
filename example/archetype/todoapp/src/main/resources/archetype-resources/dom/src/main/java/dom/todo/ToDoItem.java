@@ -43,6 +43,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.ActionInteraction;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.AutoComplete;
@@ -60,7 +61,6 @@ import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyInteraction;
-import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.applib.security.UserMemento;
@@ -185,6 +185,14 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         return dueBy;
     }
 
+    /**
+     * Demonstrates how to perform security checks within the domain code.
+     *
+     * <p>
+     *     Generally speaking this approach is not recommended; such checks should
+     *     wherever possible be externalized in the security subsystem.
+     * </p>
+     */
     public boolean hideDueBy() {
         final UserMemento user = container.getUser();
         return user.hasRole("realm1:noDueBy_role");
@@ -641,7 +649,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > openSourceCodeOnGithub (action)
-    @Prototype
+    @ActionLayout(prototype = true)
     @ActionSemantics(Of.SAFE)
     public URL openSourceCodeOnGithub() throws MalformedURLException {
         return new URL("https://github.com/apache/isis/tree/master/example/application/${parentArtifactId}/dom/src/main/java/dom/todo/ToDoItem.java");
@@ -655,8 +663,8 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         RecoverableExceptionAutoEscalated,
         NonRecoverableException;
     }
-    
-    @Prototype
+
+    @ActionLayout(prototype = true)
     @ActionSemantics(Of.SAFE)
     public void demoException(
             final @ParameterLayout(named="Type") DemoExceptionType type) {
@@ -906,26 +914,28 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     //region > injected services
     @javax.inject.Inject
-    private DomainObjectContainer container;
+    DomainObjectContainer container;
 
     @javax.inject.Inject
-    private ToDoItems toDoItems;
-
-    Bulk.InteractionContext bulkInteractionContext;
-    public void injectBulkInteractionContext(Bulk.InteractionContext bulkInteractionContext) {
-        this.bulkInteractionContext = bulkInteractionContext;
-    }
+    ToDoItems toDoItems;
 
     @javax.inject.Inject
-    private Scratchpad scratchpad;
+    Scratchpad scratchpad;
 
-    EventBusService eventBusService;
-    public void injectEventBusService(EventBusService eventBusService) {
-        this.eventBusService = eventBusService;
-    }
+    /**
+     * public only so can be injected from integ tests
+     */
+    @javax.inject.Inject
+    public Bulk.InteractionContext bulkInteractionContext;
+
+    /**
+     * public only so can be injected from integ tests
+     */
+    @javax.inject.Inject
+    public EventBusService eventBusService;
 
     @javax.inject.Inject
-    private WrapperFactory wrapperFactory;
+    WrapperFactory wrapperFactory;
 
     //endregion
 
