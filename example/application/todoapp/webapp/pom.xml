@@ -78,7 +78,7 @@
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <warName>quickstart</warName>
+                    <warName>todoapp</warName>
                     <archive>
                         <manifest>
                             <addClasspath>false</addClasspath>

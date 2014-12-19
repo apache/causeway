@@ -78,7 +78,7 @@
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <warName>simple</warName>
+                    <warName>simpleapp</warName>
                     <archive>
                         <manifest>
                             <addClasspath>false</addClasspath>
