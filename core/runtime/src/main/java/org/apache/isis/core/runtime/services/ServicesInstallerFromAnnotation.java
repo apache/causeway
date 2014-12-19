@@ -216,9 +216,11 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
         for (final Class<?> cls : domainServiceClasses) {
 
             final String order = orderOf(cls);
-            final String serviceName = cls.getName();
+            // we want the class name in order to instantiate it
+            // (and *not* the value of the @DomainServiceLayout(named=...) annotation attribute)
+            final String fullyQualifiedClassName = cls.getName();
 
-            ServicesInstallerUtils.appendInPosition(positionedServices, order, serviceName);
+            ServicesInstallerUtils.appendInPosition(positionedServices, order, fullyQualifiedClassName);
         }
     }
 
