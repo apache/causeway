@@ -32,8 +32,8 @@ import com.google.common.collect.Maps;
 import org.datanucleus.NucleusContext;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.MetaDataManager;
+import org.datanucleus.store.StoreManager;
 import org.datanucleus.store.schema.SchemaAwareStoreManager;
-
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -122,8 +122,10 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     private void createSchema(final Map<String, String> props, final Set<String> classesToBePersisted) {
         final JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory)persistenceManagerFactory;
         final NucleusContext nucleusContext = jdopmf.getNucleusContext();
-        final SchemaAwareStoreManager storeManager = (SchemaAwareStoreManager) nucleusContext.getStoreManager();
-        storeManager.createSchema(classesToBePersisted, asProperties(props));
+        final StoreManager storeManager = nucleusContext.getStoreManager();
+        if (storeManager instanceof SchemaAwareStoreManager) {
+            ((SchemaAwareStoreManager)storeManager).createSchema(classesToBePersisted, asProperties(props));
+		}
     }
 
 

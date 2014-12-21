@@ -252,6 +252,11 @@
           </exclusions>
         </dependency>
 
+        <dependency>
+        	<groupId>org.datanucleus</groupId>
+        	<artifactId>datanucleus-neo4j</artifactId>
+        	<version>3.2.3</version>
+        </dependency>
     </dependencies>
 
     <profiles>
