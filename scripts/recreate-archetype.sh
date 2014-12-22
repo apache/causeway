@@ -58,7 +58,7 @@ echo "mvn clean ..."
 mvn clean
 
 echo "removing other non-source files ..."
-for a in .project .classpath .settings bin .idea target-ide; do /bin/find . -name $a -exec rm -r {} \;; done
+for a in .project .classpath .settings bin .idea neo4j_DB target-ide; do /bin/find . -name $a -exec rm -r {} \;; done
 /bin/find . -name "*.iml" -exec rm {} \;
 /bin/find . -name "*.log" -exec rm {} \;
 /bin/find . -name "pom.xml.*" -exec rm {} \;
