@@ -19,18 +19,15 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
+import org.apache.isis.applib.annotation.BulkInteractionContext;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.Command.Executor;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -41,14 +38,14 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
+import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
+import org.apache.isis.core.metamodel.facets.actions.interaction.CommandUtil;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
-import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
-import org.apache.isis.core.metamodel.facets.actions.interaction.CommandUtil;
 
 public class ObjectActionContributee extends ObjectActionImpl implements ContributeeMember {
 
@@ -184,14 +181,14 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
         
         // this code also exists in ActionInvocationFacetViaMethod
         // we need to repeat it here because the target adapter should be the contributee, not the contributing service.
-        final Bulk.InteractionContext bulkInteractionContext = getServicesProvider().lookupService(Bulk.InteractionContext.class);
+        final BulkInteractionContext bulkInteractionContext = getServicesProvider().lookupService(BulkInteractionContext.class);
 
         final BulkFacet bulkFacet = getFacet(BulkFacet.class);
         if (bulkFacet != null && 
             bulkInteractionContext != null &&
             bulkInteractionContext.getInvokedAs() == null) {
             
-            bulkInteractionContext.setInvokedAs(InvokedAs.REGULAR);
+            bulkInteractionContext.setInvokedAs(BulkInteractionContext.InvokedAs.REGULAR);
             bulkInteractionContext.setDomainObjects(Collections.singletonList(contributee.getObject()));
         }
 

@@ -55,7 +55,7 @@ public abstract class BulkInteractionContext {
      * @deprecated - now a {@link javax.enterprise.context.RequestScoped} service
      */
     @Deprecated
-    public static final ThreadLocal<BulkInteractionContext> current = new ThreadLocal<BulkInteractionContext>();
+    public static final ThreadLocal<BulkInteractionContext> current = new ThreadLocal<>();
 
     /**
      * @deprecated - now a {@link javax.enterprise.context.RequestScoped} service

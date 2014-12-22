@@ -20,8 +20,12 @@
 package org.apache.isis.core.runtime.system.transaction;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.UUID;
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
@@ -34,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.BulkInteractionContext;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
@@ -46,7 +50,14 @@ import org.apache.isis.applib.services.command.Command2;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
-import org.apache.isis.applib.services.publish.*;
+import org.apache.isis.applib.services.publish.EventMetadata;
+import org.apache.isis.applib.services.publish.EventPayload;
+import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
+import org.apache.isis.applib.services.publish.EventPayloadForObjectChanged;
+import org.apache.isis.applib.services.publish.EventSerializer;
+import org.apache.isis.applib.services.publish.EventType;
+import org.apache.isis.applib.services.publish.ObjectStringifier;
+import org.apache.isis.applib.services.publish.PublishingService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
@@ -74,7 +85,12 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.persistence.PersistenceConstants;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.*;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -867,9 +883,9 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     private void closeOtherApplibServicesIfConfigured() {
-        Bulk.InteractionContext bic = getServiceOrNull(Bulk.InteractionContext.class);
+        BulkInteractionContext bic = getServiceOrNull(BulkInteractionContext.class);
         if(bic != null) {
-            Bulk.InteractionContext.current.set(null);
+            BulkInteractionContext.current.set(null);
         }
     }
 
