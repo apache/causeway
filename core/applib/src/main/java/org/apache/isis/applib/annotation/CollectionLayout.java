@@ -100,14 +100,16 @@ public @interface CollectionLayout {
 
         @Deprecated
         public static Render.Type typeOf(final RenderType renderType) {
-            if (renderType == EAGERLY) return Render.Type.EAGERLY;
-            if (renderType == LAZILY) return Render.Type.LAZILY;
+            if(renderType == null) return null;
+            if(renderType == EAGERLY) return Render.Type.EAGERLY;
+            if(renderType == LAZILY) return Render.Type.LAZILY;
             // shouldn't happen
             throw new IllegalArgumentException("Unrecognized renderType: " + renderType);
         }
 
         @Deprecated
         public static RenderType typeOf(final Render.Type renderType) {
+            if(renderType == null) return null;
             if (renderType == Render.Type.EAGERLY) return RenderType.EAGERLY;
             if (renderType == Render.Type.LAZILY) return RenderType.LAZILY;
             // shouldn't happen

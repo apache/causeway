@@ -151,6 +151,7 @@ public @interface Action {
 
         @Deprecated
         public static ActionSemantics.Of from(final Semantics semantics) {
+            if(semantics == null) return null;
             if(semantics == SAFE) return ActionSemantics.Of.SAFE;
             if(semantics == IDEMPOTENT) return ActionSemantics.Of.IDEMPOTENT;
             if(semantics == NON_IDEMPOTENT) return ActionSemantics.Of.NON_IDEMPOTENT;
@@ -160,6 +161,7 @@ public @interface Action {
 
         @Deprecated
         public static Semantics from(final ActionSemantics.Of semantics) {
+            if(semantics == null) return null;
             if(semantics == ActionSemantics.Of.SAFE) return SAFE;
             if(semantics == ActionSemantics.Of.IDEMPOTENT) return IDEMPOTENT;
             if(semantics == ActionSemantics.Of.NON_IDEMPOTENT) return NON_IDEMPOTENT;
@@ -186,6 +188,7 @@ public @interface Action {
 
         @Deprecated
         public static Bulk.AppliesTo from(final BulkAppliesTo bulkAppliesTo) {
+            if(bulkAppliesTo == null) return null;
             if(bulkAppliesTo == BULK_AND_REGULAR) return Bulk.AppliesTo.BULK_AND_REGULAR;
             if(bulkAppliesTo == BULK_ONLY) return Bulk.AppliesTo.BULK_ONLY;
             // shouldn't happen
@@ -194,6 +197,7 @@ public @interface Action {
 
         @Deprecated
         public static BulkAppliesTo from(final Bulk.AppliesTo appliesTo) {
+            if(appliesTo == null) return null;
             if(appliesTo == Bulk.AppliesTo.BULK_AND_REGULAR) return BULK_AND_REGULAR;
             if(appliesTo == Bulk.AppliesTo.BULK_ONLY) return BULK_ONLY;
             // shouldn't happen
@@ -236,6 +240,7 @@ public @interface Action {
 
         @Deprecated
         public static CommandExecuteIn from(final Command.ExecuteIn executeIn) {
+            if(executeIn == null) return null;
             if(executeIn == Command.ExecuteIn.FOREGROUND) return FOREGROUND;
             if(executeIn == Command.ExecuteIn.BACKGROUND) return BACKGROUND;
             // shouldn't happen
@@ -244,6 +249,7 @@ public @interface Action {
 
         @Deprecated
         public static Command.ExecuteIn from(final CommandExecuteIn commandExecuteIn) {
+            if(commandExecuteIn == null) return null;
             if(commandExecuteIn == FOREGROUND) return Command.ExecuteIn.FOREGROUND;
             if(commandExecuteIn == BACKGROUND) return Command.ExecuteIn.BACKGROUND;
             // shouldn't happen
@@ -273,6 +279,7 @@ public @interface Action {
 
         @Deprecated
         public static CommandPersistence from(final Command.Persistence persistence) {
+            if(persistence == null) return null;
             if(persistence == Command.Persistence.PERSISTED) return PERSISTED;
             if(persistence == Command.Persistence.IF_HINTED) return IF_HINTED;
             // shouldn't happen
@@ -281,6 +288,7 @@ public @interface Action {
 
         @Deprecated
         public static Command.Persistence from(final CommandPersistence commandPersistence) {
+            if(commandPersistence == null) return null;
             if(commandPersistence == PERSISTED) return Command.Persistence.PERSISTED;
             if(commandPersistence == IF_HINTED) return Command.Persistence.IF_HINTED;
             // shouldn't happen

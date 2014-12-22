@@ -47,6 +47,7 @@ public abstract class BulkInteractionContext {
 
         @Deprecated
         public static InvokedAs from(final Bulk.InteractionContext.InvokedAs invokedAs) {
+            if (invokedAs == null) return null;
             if (invokedAs == Bulk.InteractionContext.InvokedAs.REGULAR) return REGULAR;
             if (invokedAs == Bulk.InteractionContext.InvokedAs.BULK) return BULK;
             // shouldn't happen
@@ -55,6 +56,7 @@ public abstract class BulkInteractionContext {
 
         @Deprecated
         public static Bulk.InteractionContext.InvokedAs from(final BulkInteractionContext.InvokedAs invokedAs) {
+            if (invokedAs == null) return null;
             if (invokedAs == REGULAR) return Bulk.InteractionContext.InvokedAs.REGULAR;
             if (invokedAs == BULK) return Bulk.InteractionContext.InvokedAs.BULK;
             // shouldn't happen

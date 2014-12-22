@@ -74,6 +74,7 @@ public @interface DomainObject {
 
         @Deprecated
         public static PublishedObject.ChangeKind from(final PublishingChangeKind publishingChangeKind) {
+            if(publishingChangeKind == null) return null;
             if(publishingChangeKind == CREATE) return PublishedObject.ChangeKind.CREATE;
             if(publishingChangeKind == UPDATE) return PublishedObject.ChangeKind.UPDATE;
             if(publishingChangeKind == DELETE) return PublishedObject.ChangeKind.DELETE;
@@ -82,6 +83,7 @@ public @interface DomainObject {
         }
         @Deprecated
         public static PublishingChangeKind from(final PublishedObject.ChangeKind  publishingChangeKind) {
+            if(publishingChangeKind == null) return null;
             if(publishingChangeKind == PublishedObject.ChangeKind.CREATE) return CREATE;
             if(publishingChangeKind == PublishedObject.ChangeKind.UPDATE) return UPDATE;
             if(publishingChangeKind == PublishedObject.ChangeKind.DELETE) return DELETE;

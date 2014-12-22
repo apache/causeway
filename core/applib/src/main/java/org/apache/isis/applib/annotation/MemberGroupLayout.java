@@ -175,9 +175,8 @@ public @interface MemberGroupLayout {
      * As {@link #left()}, but for the middle column in a page.
      * 
      * <p>
-     * If the value of this attribute is non-empty but the {@link #columnSpans()} specifies a zero size
-     * (eg {@link ColumnSpans#_2_0_0_10}, then the framework will not boot and will instead indicate 
-     * a meta-model validation exception. 
+     * If the value of this attribute is non-empty but the {@link #columnSpans()} specifies a zero size, then the
+     * framework will not boot and will instead indicate a meta-model validation exception.
      */
     String[] middle() default {};
 
@@ -185,9 +184,8 @@ public @interface MemberGroupLayout {
      * As {@link #right()}, but for the right column in a page.
      * 
      * <p>
-     * If the value of this attribute is non-empty but the {@link #columnSpans()} specifies a zero size
-     * (eg {@link ColumnSpans#_2_0_0_10}, then the framework will not boot and will instead indicate 
-     * a meta-model validation exception.
+     * If the value of this attribute is non-empty but the {@link #columnSpans()} specifies a zero size, then the
+     * framework will not boot and will instead indicate a meta-model validation exception.
      */
     String[] right() default {};
 
