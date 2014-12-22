@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @see Render - use instead
+ * @deprecated - use {@link CollectionLayout#render()} instead.
  */
 @Deprecated
 @Inherited
@@ -34,23 +34,37 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Resolve {
 
+    /**
+     * @deprecated - use {@link org.apache.isis.applib.annotation.CollectionLayout.RenderType} instead.
+     */
+    @Deprecated
     public enum Type {
+        /**
+         * @deprecated - use {@link org.apache.isis.applib.annotation.CollectionLayout.RenderType#EAGERLY} instead.
+         */
+        @Deprecated
         EAGERLY(Render.Type.EAGERLY),
+        /**
+         * @deprecated - use {@link org.apache.isis.applib.annotation.CollectionLayout.RenderType#LAZILY} instead.
+         */
+        @Deprecated
         LAZILY(Render.Type.LAZILY);
-        
+
         private final org.apache.isis.applib.annotation.Render.Type renderType;
 
         private Type(Render.Type renderType) {
             this.renderType = renderType;
         }
-        
+
+        @Deprecated
         public org.apache.isis.applib.annotation.Render.Type getRenderType() {
             return renderType;
         }
     }
 
     /**
-     * How to resolve; by default {@value Type#EAGERLY}.
+     * @deprecated - use {@link CollectionLayout#render()} instead.
      */
+    @Deprecated
     Type value() default Type.EAGERLY;
 }

@@ -22,14 +22,9 @@ package org.apache.isis.applib.annotation;
 import java.lang.annotation.*;
 
 /**
- * Indicates that an instance should be treated as a view model.
- *
- * <p>
- *     All of its read/write and non-{@link Programmatic} properties (not collections) will be included in the
- *     view model's memento; in other words as returned and marshalled by
- *     {@link org.apache.isis.applib.ViewModel#viewModelMemento()}.
- * </p>
+ * @deprecated - use {@link DomainObject#viewModel()} instead.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)

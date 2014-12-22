@@ -26,11 +26,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The minimum entry length of an autocomplete search argument.
+ * @deprecated - use {@link Parameter#minLength()} instead.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MinLength {
+
+    /**
+     * @deprecated - use {@link Parameter#minLength()} instead.
+     */
+    @Deprecated
     int value();
 }

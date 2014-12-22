@@ -26,16 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that an action is idempotent; invoking may modify domain object
- * state, but invoking it once more will not make further changes (meaning that
- * it is safe to invoke multiple times).
- * 
- * <p>
- * More formally, the post-conditions of the action are guaranteed to be the
- * same whether called once or more than once.
- * 
- * <p>
- * Deprecated - use <tt>@ActionSemantics(Of.IDEMPOTENT)</tt> instead.
+ * @deprecated - use {@link Action#semantics()} instead.
  */
 @Deprecated
 @Inherited

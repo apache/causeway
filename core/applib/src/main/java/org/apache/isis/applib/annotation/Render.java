@@ -34,13 +34,26 @@ import java.lang.annotation.Target;
 @Deprecated
 public @interface Render {
 
+    /**
+     * @deprecated - use {@link org.apache.isis.applib.annotation.CollectionLayout.RenderType} instead.
+     */
+    @Deprecated
     public enum Type {
+        /**
+         * @deprecated - use {@link org.apache.isis.applib.annotation.CollectionLayout.RenderType#EAGERLY} instead.
+         */
+        @Deprecated
         EAGERLY,
+        /**
+         * @deprecated - use {@link org.apache.isis.applib.annotation.CollectionLayout.RenderType#LAZILY} instead.
+         */
+        @Deprecated
         LAZILY
     }
 
     /**
      * @deprecated - use instead {@link CollectionLayout#render()}
      */
+    @Deprecated
     Type value() default Type.EAGERLY;
 }

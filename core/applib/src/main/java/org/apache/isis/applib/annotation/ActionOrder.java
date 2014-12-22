@@ -26,14 +26,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates the order that actions should be grouped/displayed in.
- * 
- * @deprecated - use {@link MemberOrder} instead.
+ * @deprecated - use {@link MemberOrder} or <code>Xxx.layout.json</code> instead.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Deprecated
 public @interface ActionOrder {
+
+    /**
+     * @deprecated - use {@link MemberOrder} or <code>Xxx.layout.json</code> instead.
+     */
+    @Deprecated
     String value();
 }

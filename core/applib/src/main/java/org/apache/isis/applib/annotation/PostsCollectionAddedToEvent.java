@@ -26,28 +26,7 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 
 /**
- * Applies only to collections; any changes should be propagated as events to subscribers.  
- * Only posted after a successful validation.
- * 
- * <p>For example:
- * <pre>
- * public class Order {
- *   public static class OrderLineItemsAddedToEvent extends CollectionAddedToEvent {}
- * 
- *   &#64;PostsCollectionAddedToEvent(OrderLineItemsAddedToEvent.class)
- *   public SortedSet&lt;OrderLine&gt; getLineItems() { ...}
- * }
- * </pre>
- * 
- * <p>
- * Only domain services should be registered as subscribers; only domain services are guaranteed to be instantiated and
- * resident in memory.  The typical implementation of a domain service subscriber is to identify the impacted entities,
- * load them using a repository, and then to delegate to the event to them.
- * 
- * @see PostsCollectionRemovedFromEvent
- * @see CollectionInteraction
- *
- * @deprecated - use instead {@link CollectionInteraction}.
+ * @deprecated - use instead {@link Collection#interaction()}
  */
 @Deprecated
 @Retention(RetentionPolicy.RUNTIME)
@@ -55,10 +34,8 @@ import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
 public @interface PostsCollectionAddedToEvent {
 
     /**
-     * The subclass of {@link CollectionAddedToEvent} to be instantiated and posted.
-     * 
-     * <p>
-     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * @deprecated - use {@link Collection#interaction()} instead.
      */
+    @Deprecated
     Class<? extends CollectionAddedToEvent<?,?>> value() default CollectionAddedToEvent.Default.class;
 }

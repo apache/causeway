@@ -25,9 +25,18 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * @deprecated - use {@link Collection#typeOf()} instead.
+ */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TypeOf {
+
+    /**
+     * @deprecated - use {@link Collection#typeOf()} instead.
+     */
+    @Deprecated
     Class<?> value();
 }

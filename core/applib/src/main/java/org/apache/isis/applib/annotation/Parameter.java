@@ -24,66 +24,76 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.apache.isis.applib.spec.Specification;
 
 /**
- * Layout hints for domain objects.
+ * Domain semantics for domain object collection.
  */
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DomainObjectLayout {
+public @interface Parameter {
 
     /**
-     * Indicates the css class that a domain class (type) should have.
-     */
-    String cssClass() default "";
-
-
-    // //////////////////////////////////////
-
-    /**
-     * Description of this class, eg to be rendered in a tooltip.
-     */
-    String describedAs() default "";
-
-
-    // //////////////////////////////////////
-
-    /**
-     * Name of this class (overriding the name derived from its name in code).
-     */
-    String named() default "";
-
-
-    // //////////////////////////////////////
-
-    /**
-     * The page size for instances of this class when rendered within
-     * a table.
+     * The minimum entry length of an autocomplete search argument.
      *
      * <p>
-     * If annotated on a collection, then the page size refers to
-     * parented collections (eg <tt>Order#lineItems</tt>).
+     *     The default value (<code>-1</code>) indicates that no minLength has been specified.
+     * </p>
+     */
+    int minLength() default -1;
+
+    // //////////////////////////////////////
+
+    /**
+     * The maximum entry length of a field.
      *
      * <p>
-     * If annotated on a type, then the page size refers to standalone
-     * collections (eg as returned from a repository query).
+     *     The default value (<code>-1</code>) indicates that no maxLength has been specified.
+     * </p>
      */
-    public int paged() default -1;
+    int maxLength() default -1;
 
 
     // //////////////////////////////////////
 
     /**
-     * The plural name of the class.
+     * Whether this parameter is mandatory or optional.
      */
-    String plural() default "";
+    Cardinality cardinality() default Cardinality.DEFAULT;
+
 
     // //////////////////////////////////////
 
     /**
-     * Whether (and how) this domain object can be bookmarked in the UI.
+     * The {@link org.apache.isis.applib.spec.Specification}(s) to be satisfied by this parameter.
+     *
+     * <p>
+     * If more than one is provided, then all must be satisfied (in effect &quot;AND&quot;ed together).
+     * </p>
      */
-    BookmarkPolicy bookmarkable() default BookmarkPolicy.AS_ROOT;
+    Class<? extends Specification>[] mustSatisfy();
+
+
+    // //////////////////////////////////////
+
+    /**
+     * Regular expression pattern that a value should conform to, and can be formatted as.
+     */
+    String regexPattern() default "";
+
+    /**
+     * Pattern flags, as per {@link java.util.regex.Pattern#compile(String, int)} .
+     *
+     * <p>
+     *     The default value, <code>0</code>, means that no flags have been specified.
+     * </p>
+     */
+    int regexPatternFlags() default 0;
+
+    /**
+     * Replacement text for the pattern in generated error message.
+     */
+    String regexPatternReplacement() default "";
 
 }

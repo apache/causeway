@@ -25,26 +25,35 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.List;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.publish.EventPayload;
-import org.apache.isis.applib.services.publish.PublishingService;
 
 /**
- * Indicates that the action should be published.
- * 
- * <p>
- * Requires that an implementation of the {@link PublishingService} is registered with the framework.
+ * @deprecated - use {@link Action#publishingPayloadFactory()} instead
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PublishedAction {
-    
+
+    /**
+     * @deprecated - use {@link org.apache.isis.applib.annotation.Action.PublishingPayloadFactory} instead.
+     */
+    @Deprecated
     public interface PayloadFactory {
 
+        /**
+         * @deprecated - use {@link org.apache.isis.applib.annotation.Action.PublishingPayloadFactory#payloadFor(org.apache.isis.applib.Identifier, Object, java.util.List, Object)} instead.
+         */
+        @Deprecated
         @Programmatic
         public EventPayload payloadFor(Identifier actionIdentifier, Object target, List<Object> arguments, Object result);
     }
+
+    /**
+     * @deprecated - use {@link Action#publishingPayloadFactory()} instead
+     */
+    @Deprecated
     Class<? extends PayloadFactory> value()  default PayloadFactory.class;
 }

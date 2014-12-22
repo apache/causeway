@@ -26,23 +26,7 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
 
 /**
- * Applies only to actions; any changes should be propagated as events to subscribers.  
- * Only posted if no exception is thrown.
- * 
- * <p>For example:
- * <pre>
- * public static class StartDateChangedEvent extends ActionInvokedEvent {}
- * 
- * &#64;PostsActionInvokedEvent(StartDateChangedEvent.class)
- * public void changeStartDate(final Date startDate) { ...}
- * </pre>
- * 
- * <p>
- * Only domain services should be registered as subscribers; only domain services are guaranteed to be instantiated and
- * resident in memory.  The typical implementation of a domain service subscriber is to identify the impacted entities,
- * load them using a repository, and then to delegate to the event to them.
- *
- * @deprecated - use instead {@link ActionInteraction}.
+ * @deprecated - use instead {@link org.apache.isis.applib.annotation.Action#interaction()}.
  */
 @Deprecated
 @Retention(RetentionPolicy.RUNTIME)

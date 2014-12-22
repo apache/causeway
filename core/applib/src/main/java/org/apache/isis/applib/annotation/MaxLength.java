@@ -26,14 +26,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The maximum entry length of a field.
- * 
- * <p>
- * Can also be specified for types that are annotated as <tt>@Value</tt> types.
+ * @deprecated - use {@link Property#maxLength()} and {@link Parameter#maxLength()} instead.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MaxLength {
+
+    /**
+     * @deprecated - use {@link Property#maxLength()} and {@link Parameter#maxLength()} instead.
+     */
+    @Deprecated
     int value();
 }

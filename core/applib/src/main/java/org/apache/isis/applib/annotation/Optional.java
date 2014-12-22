@@ -38,7 +38,10 @@ import java.lang.annotation.Target;
  * rarely required; see the {@link Mandatory} annotation javadoc for further discussion.
  * 
  * @see Mandatory
+ *
+ * @deprecated - use {@link Property#cardinality()} and {@link Parameter#cardinality()}  (with {@link org.apache.isis.applib.annotation.Cardinality#OPTIONAL}) instead.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)

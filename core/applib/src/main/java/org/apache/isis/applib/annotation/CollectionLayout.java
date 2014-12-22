@@ -40,10 +40,16 @@ public @interface CollectionLayout {
      */
     String cssClass() default "";
 
+    // //////////////////////////////////////
+
+
     /**
      * Description of this collection, eg to be rendered in a tooltip.
      */
     String describedAs() default "";
+
+
+    // //////////////////////////////////////
 
     /**
      * Indicates where in the UI the collection should <i>not</i>not be visible.
@@ -55,10 +61,16 @@ public @interface CollectionLayout {
      */
     Where hidden() default Where.NOT_SPECIFIED;
 
+
+    // //////////////////////////////////////
+
     /**
      * Name of this collection (overriding the name derived from its name in code).
      */
     String named() default "";
+
+
+    // //////////////////////////////////////
 
     /**
      * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
@@ -79,16 +91,18 @@ public @interface CollectionLayout {
      */
     public int paged() default -1;
 
-    public enum RenderType {
+
+    // //////////////////////////////////////
+
+    enum RenderType {
         EAGERLY,
         LAZILY;
 
-        public static Render.Type typeOf(RenderType renderType) {
-            if (renderType == EAGERLY) {
-                return Render.Type.EAGERLY;
-            } else { // (renderType == CollectionLayout.RenderType.LAZILY)
-                return Render.Type.LAZILY;
-            }
+        public static Render.Type typeOf(final RenderType renderType) {
+            if (renderType == EAGERLY) return Render.Type.EAGERLY;
+            if (renderType == LAZILY) return Render.Type.LAZILY;
+            // shouldn't happen
+            throw new IllegalArgumentException("Unrecognized renderType: " + renderType);
         }
     }
 
@@ -110,6 +124,8 @@ public @interface CollectionLayout {
      */
     public RenderType render() default RenderType.EAGERLY;
 
+
+    // //////////////////////////////////////
 
     /**
      * Indicates that the elements in a ({@link java.util.SortedSet}) collection should be sorted according to a different order than the

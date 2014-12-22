@@ -24,31 +24,55 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
 import org.apache.isis.applib.services.publish.EventPayload;
-import org.apache.isis.applib.services.publish.PublishingService;
 
 /**
- * Indicates that changes to an object should be published.
- * 
- * <p>
- * Requires that an implementation of the {@link PublishingService} is registered with the framework.
+ * @deprecated - use {@link org.apache.isis.applib.annotation.DomainObject#publishingPayloadFactory()} instead.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PublishedObject {
-    
+
+    /**
+     * @deprecated - use {@link org.apache.isis.applib.annotation.DomainObject.PublishingChangeKind} instead.
+     */
+    @Deprecated
     public enum ChangeKind {
+        /**
+         * @deprecated - use {@link org.apache.isis.applib.annotation.DomainObject.PublishingChangeKind#CREATE} instead.
+         */
+        @Deprecated
         CREATE,
+        /**
+         * @deprecated - use {@link org.apache.isis.applib.annotation.DomainObject.PublishingChangeKind#UPDATE} instead.
+         */
+        @Deprecated
         UPDATE,
+        /**
+         * @deprecated - use {@link org.apache.isis.applib.annotation.DomainObject.PublishingChangeKind#DELETE} instead.
+         */
+        @Deprecated
         DELETE
     }
-    
+
+    /**
+     * @deprecated - use {@link org.apache.isis.applib.annotation.DomainObject.PublishingPayloadFactory} instead.
+     */
+    @Deprecated
     public interface PayloadFactory {
+        /**
+         * @deprecated - use {@link org.apache.isis.applib.annotation.DomainObject.PublishingPayloadFactory#payloadFor(Object, org.apache.isis.applib.annotation.DomainObject.PublishingChangeKind)} instead.
+         */
+        @Deprecated
         @Programmatic
         public EventPayload payloadFor(Object changedObject, ChangeKind changeKind);
     }
-    
+
+    /**
+     * @deprecated - use {@link DomainObject#publishingPayloadFactory()} instead.
+     */
+    @Deprecated
     Class<? extends PayloadFactory> value() default PayloadFactory.class;
 }

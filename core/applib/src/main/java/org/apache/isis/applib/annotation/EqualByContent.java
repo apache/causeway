@@ -53,6 +53,10 @@ import java.util.HashMap;
  * 
  * @see Immutable
  * @see Value
+ *
+ * <p>
+ *     Note: This annotation is only incompletely recognized by the framework, and may be deprecated in the future.
+ * </p>
  */
 @Inherited
 @Target({ ElementType.TYPE, ElementType.METHOD })

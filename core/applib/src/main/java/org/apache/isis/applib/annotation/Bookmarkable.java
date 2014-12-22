@@ -30,12 +30,18 @@ import java.lang.annotation.Target;
  * 
  * <p>
  * Three {@link BookmarkPolicy policies} are defined, which control how bookmarked entities are organized.
- * These have no meaning for bookmarkable actions.  
+ * These have no meaning for bookmarkable actions.
+ *
+ * @deprecated - see {@link DomainObjectLayout#bookmarkable()}.
  */
 @Inherited
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Bookmarkable {
-    
+
+    /**
+     * @deprecated - see {@link DomainObjectLayout#bookmarkable()}.
+     */
+    @Deprecated
     BookmarkPolicy value() default BookmarkPolicy.AS_ROOT;  
 }

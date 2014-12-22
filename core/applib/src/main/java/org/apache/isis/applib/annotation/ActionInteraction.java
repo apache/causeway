@@ -26,36 +26,17 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 
 /**
- * Indicates that a member is an action that should use a custom
- * (subclass of) {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent} to propagate the phases
- * of the interaction with collaborators over the registered
- * {@link org.apache.isis.applib.services.eventbus.EventBusService}.
- *
- * <p>For example:
- * <pre>
- * public static class ChangeStartDate extends ActionInteractionEvent {}
- * 
- * &#64;ActionInteraction(ChangedStartDate.class)
- * public void changeStartDate(final Date startDate) { ...}
- * </pre>
- * 
- * <p>
- * Only domain services should be registered as subscribers; only domain services are guaranteed to be instantiated and
- * resident in memory.  The typical implementation of a domain service subscriber is to identify the impacted entities,
- * load them using a repository, and then to delegate to the event to them.
- *
- * @see org.apache.isis.applib.annotation.PostsActionInvokedEvent
+ * @deprecated - see {@link Action#interaction()}.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
+@Deprecated
 public @interface ActionInteraction {
 
     /**
-     * The subclass of {@link ActionInteractionEvent} to be instantiated and posted.
-     * 
-     * <p>
-     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * @deprecated - see {@link Action#interaction()}.
      */
+    @Deprecated
     Class<? extends ActionInteractionEvent<?>> value() default ActionInteractionEvent.Default.class;
 
 }
