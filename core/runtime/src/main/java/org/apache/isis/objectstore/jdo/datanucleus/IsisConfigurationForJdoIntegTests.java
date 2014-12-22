@@ -86,6 +86,11 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
         return this;
     }
 
+    public final IsisConfigurationForJdoIntegTests putDataNucleusProperty(final String key, final String value) {
+        put(DataNucleusObjectStore.DATANUCLEUS_PROPERTIES_ROOT + key, value);
+        return this;
+    }
+
     /**
      * Typically integration tests should set the {@link RegisterEntities} package prefix(es); this method makes it
      * easy to do so.
@@ -93,6 +98,16 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
     public final IsisConfigurationForJdoIntegTests addRegisterEntitiesPackagePrefix(final String... packagePrefix) {
         final String commaSeparated = Joiner.on(',').join(packagePrefix);
         add(RegisterEntities.PACKAGE_PREFIX_KEY, commaSeparated);
+        return this;
+    }
+
+    /**
+     * Typically integration tests should set the {@link RegisterEntities} package prefix(es); this method makes it
+     * easy to do so.
+     */
+    public final IsisConfigurationForJdoIntegTests putRegisterEntitiesPackagePrefix(final String... packagePrefix) {
+        final String commaSeparated = Joiner.on(',').join(packagePrefix);
+        put(RegisterEntities.PACKAGE_PREFIX_KEY, commaSeparated);
         return this;
     }
 
