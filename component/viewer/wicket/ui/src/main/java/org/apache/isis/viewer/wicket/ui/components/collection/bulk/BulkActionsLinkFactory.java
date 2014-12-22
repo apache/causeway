@@ -94,7 +94,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                     
                     final BulkInteractionContext bulkInteractionContext = BulkInteractionContext.current.get();
                     if (bulkInteractionContext != null) {
-                        bulkInteractionContext.setInvokedAs(BulkInteractionContext.InvokedAs.BULK);
+                        bulkInteractionContext.setActionInvokedAs(BulkInteractionContext.InvokedAs.BULK);
                         bulkInteractionContext.setDomainObjects(domainObjects);
                     }
                     

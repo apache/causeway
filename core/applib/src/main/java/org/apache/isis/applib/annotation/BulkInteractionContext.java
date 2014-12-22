@@ -44,6 +44,24 @@ public abstract class BulkInteractionContext {
         REGULAR;
         public boolean isRegular() { return this == REGULAR; }
         public boolean isBulk() { return this == BULK; }
+
+        @Deprecated
+        public static InvokedAs from(final Bulk.InteractionContext.InvokedAs invokedAs) {
+            if (invokedAs == Bulk.InteractionContext.InvokedAs.REGULAR) return REGULAR;
+            if (invokedAs == Bulk.InteractionContext.InvokedAs.BULK) return BULK;
+            // shouldn't happen
+            throw new IllegalArgumentException("Unrecognized bulk interactionContext invokedAs: " + invokedAs);
+        }
+
+        @Deprecated
+        public static Bulk.InteractionContext.InvokedAs from(final BulkInteractionContext.InvokedAs invokedAs) {
+            if (invokedAs == REGULAR) return Bulk.InteractionContext.InvokedAs.REGULAR;
+            if (invokedAs == BULK) return Bulk.InteractionContext.InvokedAs.BULK;
+            // shouldn't happen
+            throw new IllegalArgumentException("Unrecognized bulk interactionContext invokedAs: " + invokedAs);
+        }
+
+
     }
 
     /**
@@ -75,7 +93,7 @@ public abstract class BulkInteractionContext {
 
     // //////////////////////////////////////
 
-    private InvokedAs invokedAs;
+    private InvokedAs actionInvokedAs;
     private List<Object> domainObjects;
 
     private int index;
@@ -90,16 +108,16 @@ public abstract class BulkInteractionContext {
      * @deprecated - now a {@link javax.enterprise.context.RequestScoped} service
      */
     @Deprecated
-    public BulkInteractionContext(final InvokedAs invokedAs, final Object... domainObjects) {
-        this(invokedAs, Arrays.asList(domainObjects));
+    public BulkInteractionContext(final InvokedAs actionInvokedAs, final Object... domainObjects) {
+        this(actionInvokedAs, Arrays.asList(domainObjects));
     }
 
     /**
      * @deprecated - now a {@link javax.enterprise.context.RequestScoped} service
      */
     @Deprecated
-    public BulkInteractionContext(final InvokedAs invokedAs, final List<Object> domainObjects) {
-        this.invokedAs = invokedAs;
+    public BulkInteractionContext(final InvokedAs actionInvokedAs, final List<Object> domainObjects) {
+        this.actionInvokedAs = actionInvokedAs;
         this.domainObjects = domainObjects;
     }
 
@@ -133,8 +151,8 @@ public abstract class BulkInteractionContext {
      * <b>NOT API</b>: intended to be called only by the framework.
      */
     @Programmatic
-    public void setInvokedAs(InvokedAs invokedAs) {
-        this.invokedAs = invokedAs;
+    public void setActionInvokedAs(InvokedAs actionInvokedAs) {
+        this.actionInvokedAs = actionInvokedAs;
     }
 
     /**
@@ -157,13 +175,26 @@ public abstract class BulkInteractionContext {
 
 
     /**
-     * Whether this particular {@link org.apache.isis.applib.annotation.Bulk.InteractionContext} was applied as a {@link InvokedAs#BULK bulk} action
+     * Whether this particular {@link org.apache.isis.applib.annotation.BulkInteractionContext} was applied as a {@link InvokedAs#BULK bulk} action
      * (against each domain object in a list of domain objects) or as a {@link InvokedAs#REGULAR regular}
      * action (against a single domain object).
      */
     @Programmatic
-    public InvokedAs getInvokedAs() {
-        return invokedAs;
+    public BulkInteractionContext.InvokedAs getActionInvokedAs() {
+        return actionInvokedAs;
+    }
+
+    /**
+     * Whether this particular {@link org.apache.isis.applib.annotation.Bulk.InteractionContext} was applied as a {@link InvokedAs#BULK bulk} action
+     * (against each domain object in a list of domain objects) or as a {@link InvokedAs#REGULAR regular}
+     * action (against a single domain object).
+     *
+     * @deprecated - use {@link #getActionInvokedAs()} instead.
+     */
+    @Deprecated
+    @Programmatic
+    public Bulk.InteractionContext.InvokedAs getInvokedAs() {
+        return BulkInteractionContext.InvokedAs.from(actionInvokedAs);
     }
 
     /**

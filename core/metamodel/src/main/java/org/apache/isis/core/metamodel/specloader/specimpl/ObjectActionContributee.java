@@ -188,7 +188,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
             bulkInteractionContext != null &&
             bulkInteractionContext.getInvokedAs() == null) {
             
-            bulkInteractionContext.setInvokedAs(BulkInteractionContext.InvokedAs.REGULAR);
+            bulkInteractionContext.setActionInvokedAs(BulkInteractionContext.InvokedAs.REGULAR);
             bulkInteractionContext.setDomainObjects(Collections.singletonList(contributee.getObject()));
         }
 

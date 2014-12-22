@@ -238,7 +238,7 @@ public abstract class ActionInvocationFacetForInteractionAbstract
                     bulkInteractionContext != null &&
                     bulkInteractionContext.getInvokedAs() == null) {
 
-                bulkInteractionContext.setInvokedAs(BulkInteractionContext.InvokedAs.REGULAR);
+                bulkInteractionContext.setActionInvokedAs(BulkInteractionContext.InvokedAs.REGULAR);
                 bulkInteractionContext.setDomainObjects(Collections.singletonList(targetPojo));
             }
 

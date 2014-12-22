@@ -70,6 +70,28 @@ public @interface Bulk {
 
 
         /**
+         * @deprecated - use {@link org.apache.isis.applib.annotation.BulkInteractionContext.InvokedAs} instead.
+         */
+        @Deprecated
+        public static enum InvokedAs {
+            /**
+             * @deprecated - use {@link org.apache.isis.applib.annotation.BulkInteractionContext.InvokedAs#BULK} instead.
+             */
+            @Deprecated
+            BULK,
+            /**
+             * @deprecated - use {@link org.apache.isis.applib.annotation.BulkInteractionContext.InvokedAs#REGULAR} instead.
+             */
+            @Deprecated
+            REGULAR;
+            public boolean isRegular() { return this == REGULAR; }
+            public boolean isBulk() { return this == BULK; }
+
+
+        }
+
+
+        /**
          * @deprecated - now a {@link RequestScoped} service
          */
         @Deprecated
@@ -111,12 +133,23 @@ public @interface Bulk {
             return new InteractionContext(InvokedAs.BULK, domainObjects);
         }
 
+
+        // //////////////////////////////////////
+
+        /**
+         * @deprecated - see {@link org.apache.isis.applib.annotation.BulkInteractionContext()}.
+         */
+        @Deprecated
+        public InteractionContext() {
+            super();
+        }
+
         /**
          * @deprecated - now a {@link RequestScoped} service
          */
         @Deprecated
         public InteractionContext(final InvokedAs invokedAs, final List<Object> domainObjects) {
-            super(invokedAs, domainObjects);
+            super(BulkInteractionContext.InvokedAs.from(invokedAs), domainObjects);
         }
     }
 
