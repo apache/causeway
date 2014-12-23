@@ -29,7 +29,6 @@ import java.util.List;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
-import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.Request;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -72,8 +71,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
 
     @Override
     public boolean authenticate(final String username, final String password) {
-        AuthenticationRequest authenticationRequest;
-        authenticationRequest = new AuthenticationRequestPassword(username, password);
+        AuthenticationRequest authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.setRoles(Arrays.asList(USER_ROLE));
         authenticationSession = getAuthenticationManager().authenticate(authenticationRequest);
         return authenticationSession != null;
@@ -90,7 +88,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
             return null;
         }
         final List<String> roles = authenticationSession.getRoles();
-        return new Roles(roles.toArray(new String[] {}));
+        return new Roles(roles.toArray(new String[roles.size()]));
     }
     
     // /////////////////////////////////////////////////
@@ -127,6 +125,5 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
             cast.setAuthenticationSessionProvider(this);
         }
     }
-
     
 }
