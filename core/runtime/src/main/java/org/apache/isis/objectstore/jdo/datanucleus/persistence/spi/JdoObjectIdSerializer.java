@@ -32,7 +32,7 @@ import javax.jdo.identity.LongIdentity;
 import javax.jdo.identity.ObjectIdentity;
 import javax.jdo.identity.StringIdentity;
 
-import org.datanucleus.identity.OID;
+import org.datanucleus.identity.DatastoreId;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -74,9 +74,9 @@ public final class JdoObjectIdSerializer {
                 return "u" + SEPARATOR + uuid.toString(); 
             }
         }
-        if(jdoOid instanceof OID) {
-            OID dnOid = (OID) jdoOid;
-            Object keyValue = dnOid.getKeyValue();
+        if(jdoOid instanceof DatastoreId) {
+        	DatastoreId dnOid = (DatastoreId) jdoOid;
+            Object keyValue = dnOid.getKeyAsObject();
             
             // prettier handling of these common cases
             if(keyValue instanceof String) {

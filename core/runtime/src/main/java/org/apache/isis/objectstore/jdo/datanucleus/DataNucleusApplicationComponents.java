@@ -120,12 +120,15 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     }
 
     private void createSchema(final Map<String, String> props, final Set<String> classesToBePersisted) {
-        final JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory)persistenceManagerFactory;
+    	//TODO: Cleanup - Schema creation should be handled by configuration
+    	//REF: http://www.datanucleus.org/products/datanucleus/jdo/schema.html
+    	
+        /*final JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory)persistenceManagerFactory;
         final NucleusContext nucleusContext = jdopmf.getNucleusContext();
         final StoreManager storeManager = nucleusContext.getStoreManager();
         if (storeManager instanceof SchemaAwareStoreManager) {
-            ((SchemaAwareStoreManager)storeManager).createSchema(classesToBePersisted, asProperties(props));
-		}
+            ((SchemaAwareStoreManager)storeManager).createSchemaForClasses(classesToBePersisted, asProperties(props));
+		}*/
     }
 
 

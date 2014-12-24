@@ -25,8 +25,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.filter.Filter;
@@ -145,7 +147,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         for (final Class<?> interfaceType : interfaceTypes) {
             final Class<?> substitutedInterfaceType = classSubstitutor.getClass(interfaceType);
             if (substitutedInterfaceType != null) {
-                final ObjectSpecification interfaceSpec = getSpecificationLookup().loadSpecification(substitutedInterfaceType);
+            	SpecificationLoader specificationLoader = getSpecificationLookup();
+                final ObjectSpecification interfaceSpec = specificationLoader.loadSpecification(substitutedInterfaceType);
                 interfaceSpecList.add(interfaceSpec);
             }
         }
