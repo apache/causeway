@@ -34,7 +34,7 @@ public class IsisDateMapping extends ObjectMapping {
         return org.apache.isis.applib.value.Date.class;
     }
 
-    // TODO: Need to check maping
+    // TODO: Need to check mapping
     
     protected Long objectToLong(Object object) {
         return dateConverter.toDatastoreType((Date) object);
