@@ -21,7 +21,12 @@ package org.apache.isis.viewer.wicket.ui.pages.login;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
+import javax.inject.Inject;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 
 /**
  * An extension of Wicket's default SignInPanel that provides
@@ -32,6 +37,7 @@ import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 public class IsisSignInPanel extends SignInPanel {
 
     private final boolean clearOriginalDestination;
+    private final boolean forgotPassword;
 
     /**
      * Constructor
@@ -46,11 +52,24 @@ public class IsisSignInPanel extends SignInPanel {
     public IsisSignInPanel(
             final String id,
             final boolean rememberMe,
+            final boolean forgotPassword,
             final boolean continueToOriginalDestination) {
         super(id, rememberMe);
+        this.forgotPassword = forgotPassword;
         this.clearOriginalDestination = !continueToOriginalDestination;
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+
+        getSignInForm().addOrReplace(new BookmarkablePageLink<Void>("signUpLink", pageClassRegistry.getPageClass(PageType.SIGN_UP)));
 
         addOrReplace(new NotificationPanel("feedback"));
+    }
+
+    private MarkupContainer getSignInForm() {
+        return (MarkupContainer) get("signInForm");
     }
 
     @Override
@@ -69,4 +88,7 @@ public class IsisSignInPanel extends SignInPanel {
         }
         super.onSignInRemembered();
     }
+
+    @Inject
+    private PageClassRegistry pageClassRegistry;
 }

@@ -554,6 +554,11 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
      */
     protected void mountPages() {
 
+        mountPage("/signin", PageType.SIGN_IN);
+        mountPage("/signup", PageType.SIGN_UP);
+        mountPage("/signup/verify", PageType.SIGN_UP_VERIFY);
+        mountPage("/password/recovery", PageType.FORGOT_PASSWORD);
+
         mountPage("/entity/${objectOid}", PageType.ENTITY);
 
         // nb: action mount cannot contain {actionArgs}, because the default
@@ -735,6 +740,30 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     @Override
     public Class<? extends WebPage> getSignInPageClass() {
         return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.SIGN_IN);
+    }
+
+    /**
+     * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
+     */
+    @SuppressWarnings("unchecked")
+    public Class<? extends WebPage> getSignUpPageClass() {
+        return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.SIGN_UP);
+    }
+
+    /**
+     * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
+     */
+    @SuppressWarnings("unchecked")
+    public Class<? extends WebPage> getSignUpVerifyPageClass() {
+        return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.SIGN_UP_VERIFY);
+    }
+
+    /**
+     * Delegates to the {@link #getPageClassRegistry() PageClassRegistry}.
+     */
+    @SuppressWarnings("unchecked")
+    public Class<? extends WebPage> getForgotPasswordPageClass() {
+        return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.FORGOT_PASSWORD);
     }
 
 

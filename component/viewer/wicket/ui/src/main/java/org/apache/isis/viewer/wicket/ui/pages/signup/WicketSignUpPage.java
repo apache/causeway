@@ -17,14 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.pages.login;
+package org.apache.isis.viewer.wicket.ui.pages.signup;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.authroles.authentication.panel.SignInPanel;
-import org.apache.wicket.markup.head.*;
+import org.apache.wicket.markup.head.CssReferenceHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -38,7 +41,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 /**
  * Boilerplate, pick up our HTML and CSS.
  */
-public class WicketSignInPage extends WebPage {
+public class WicketSignUpPage extends WebPage {
     
     private static final long serialVersionUID = 1L;
 
@@ -48,28 +51,28 @@ public class WicketSignInPage extends WebPage {
     private static final String ID_EXCEPTION_STACK_TRACE = "exceptionStackTrace";
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject}ed when {@link #init() initialized}.
      */
     @Inject
     @Named("applicationName")
     private String applicationName;
 
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject}ed when {@link #init() initialized}.
      */
     @Inject
     @Named("applicationCss")
     private String applicationCss;
-    
+
     /**
-     * {@link Inject}ed when {@link #init() initialized}.
+     * {@link com.google.inject.Inject}ed when {@link #init() initialized}.
      */
     @Inject
     @Named("applicationJs")
     private String applicationJs;
 
     /**
-     * If set by {@link PageAbstract}. 
+     * If set by {@link org.apache.isis.viewer.wicket.ui.pages.PageAbstract}.
      */
     private static ExceptionModel getAndClearExceptionModelIfAny() {
         ExceptionModel exceptionModel = PageAbstract.EXCEPTION.get();
@@ -77,19 +80,19 @@ public class WicketSignInPage extends WebPage {
         return exceptionModel;
     }
 
-    public WicketSignInPage() {
+    public WicketSignUpPage() {
         this(null);
     }
 
-    public WicketSignInPage(final PageParameters parameters) {
+    public WicketSignUpPage(final PageParameters parameters) {
         this(parameters, getAndClearExceptionModelIfAny());
     }
 
-    public WicketSignInPage(final PageParameters parameters, ExceptionModel exceptionModel) {
+    public WicketSignUpPage(final PageParameters parameters, ExceptionModel exceptionModel) {
         addPageTitle();
         addApplicationName();
         addSignInPanel();
-        
+
         if(exceptionModel != null) {
             add(new ExceptionStackTracePanel(ID_EXCEPTION_STACK_TRACE, exceptionModel));
         } else {
@@ -105,21 +108,8 @@ public class WicketSignInPage extends WebPage {
         add(new Label(ID_APPLICATION_NAME, applicationName));
     }
 
-    protected SignInPanel addSignInPanel() {
-        final boolean suppressRememberMe = getConfiguration().getBoolean("isis.viewer.wicket.suppressRememberMe", false);
-        final boolean suppressForgotPassword = getConfiguration().getBoolean("isis.viewer.wicket.suppressForgotPassword", false);
-        final boolean clearOriginalDestination = getConfiguration().getBoolean("isis.viewer.wicket.clearOriginalDestination", false);
-        final boolean rememberMe = !suppressRememberMe;
-        final boolean forgotPassword = !suppressForgotPassword;
-        final boolean continueToOriginalDestination = !clearOriginalDestination;
-        return addSignInPanel(rememberMe, forgotPassword, continueToOriginalDestination);
-    }
-
-    private SignInPanel addSignInPanel(
-            final boolean rememberMe,
-            final boolean forgotPassword,
-            final boolean continueToOriginalDestination) {
-        final SignInPanel signInPanel = new IsisSignInPanel("signInPanel", rememberMe, forgotPassword, continueToOriginalDestination);
+    protected IsisSignUpPanel addSignInPanel() {
+        final IsisSignUpPanel signInPanel = new IsisSignUpPanel("signUpPanel");
         add(signInPanel);
         return signInPanel;
     }

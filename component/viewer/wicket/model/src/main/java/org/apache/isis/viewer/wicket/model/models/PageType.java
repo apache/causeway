@@ -30,7 +30,10 @@ package org.apache.isis.viewer.wicket.model.models;
  * layout (eg headers, footers) to be altered.
  */
 public enum PageType {
-    SIGN_IN, 
+    SIGN_IN,
+    SIGN_UP,
+    SIGN_UP_VERIFY,
+    FORGOT_PASSWORD,
     HOME, 
     ABOUT, 
     ENTITY, 

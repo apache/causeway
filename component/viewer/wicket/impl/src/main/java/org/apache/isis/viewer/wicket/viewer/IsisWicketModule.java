@@ -23,6 +23,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.google.inject.util.Providers;
 
+import org.apache.isis.applib.services.email.EmailSendingService;
+import org.apache.isis.core.runtime.services.email.EmailSendingServiceDefault;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -68,7 +70,8 @@ public class IsisWicketModule extends AbstractModule {
         bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarDefault.class);
         bind(ImageResourceCache.class).to(ImageResourceCacheClassPath.class);
         bind(WicketViewerSettings.class).to(WicketViewerSettingsDefault.class);
-        
+        bind(EmailSendingService.class).to(EmailSendingServiceDefault.class);
+
         bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Apache Isis Wicket Viewer");
         bind(String.class).annotatedWith(Names.named("applicationCss")).toProvider(Providers.of((String)null));
         bind(String.class).annotatedWith(Names.named("applicationJs")).toProvider(Providers.of((String)null));
