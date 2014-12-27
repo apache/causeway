@@ -21,18 +21,27 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 
 import java.util.Iterator;
 import java.util.List;
-
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
-
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.IModel;
-
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
+import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
@@ -51,9 +60,15 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
 
     @Override
     public Iterator<ObjectAdapter> iterator(final long first, final long count) {
-        List<ObjectAdapter> adapters = sortedIfRequired(model.getObject(), this.getSort());
-        
-        return adapters.subList((int)first, (int)(first + count)).iterator();
+        final List<ObjectAdapter> unfilteredAdapters = model.getObject();
+
+        final List<ObjectAdapter> filteredAdapters = Lists.newArrayList(Iterables.filter(unfilteredAdapters, ignoreHidden()));
+
+        List<ObjectAdapter> adapters = sortedIfRequired(filteredAdapters, this.getSort());
+
+        final int from = (int) first;
+        final int toIndex = Math.min((int) (first + count), adapters.size());
+        return adapters.subList(from, toIndex).iterator();
     }
 
     @Override
@@ -74,6 +89,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
 
     
     private List<ObjectAdapter> sortedIfRequired(List<ObjectAdapter> adapters, final SortParam<String> sort) {
+
         if(sort == null) {
             return adapters;
         }
@@ -88,12 +104,34 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
             }
             
             Ordering<ObjectAdapter> ordering = orderingBy(sortProperty, sort.isAscending());
+
             return ordering.sortedCopy(adapters);
         } catch(ObjectSpecificationException ex) {
             // eg invalid propertyId
             return adapters;
         }
     }
+
+    private Predicate<ObjectAdapter> ignoreHidden() {
+        return new Predicate<ObjectAdapter>() {
+            @Override
+            public boolean apply(ObjectAdapter input) {
+                final InteractionResult visibleResult = InteractionUtils.isVisibleResult(input.getSpecification(), createVisibleInteractionContext(input));
+                return visibleResult.isNotVetoing();
+            }
+        };
+    }
+
+    private VisibilityContext<?> createVisibleInteractionContext(final ObjectAdapter objectAdapter) {
+        return new ObjectVisibilityContext(
+                getDeploymentCategory(),
+                getAuthenticationSession(),
+                InteractionInvocationMethod.BY_USER,
+                objectAdapter,
+                objectAdapter.getSpecification().getIdentifier(),
+                Where.ALL_TABLES);
+    }
+
 
     public static Ordering<ObjectAdapter> orderingBy(final ObjectAssociation sortProperty, final boolean ascending) {
         final Ordering<ObjectAdapter> ordering = new Ordering<ObjectAdapter>(){
@@ -128,6 +166,19 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
             Comparable qComparable = (Comparable) qPojo;
             return Ordering.natural().compare(pComparable, qComparable);
         }
-    }; 
+    };
+
+
+
+    // //////////////////////////////////////
+
+    protected AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
+    }
+
+    protected DeploymentCategory getDeploymentCategory() {
+        return IsisContext.getDeploymentType().getDeploymentCategory();
+    }
+
 
 }

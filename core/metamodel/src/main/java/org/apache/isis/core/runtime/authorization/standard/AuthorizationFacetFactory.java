@@ -35,8 +35,8 @@ public class AuthorizationFacetFactory extends FacetFactoryAbstract {
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        FacetUtil.addFacet(createFacet(processClassContaxt.getFacetHolder()));
+    public void process(final ProcessClassContext processClassContext) {
+        FacetUtil.addFacet(createFacet(processClassContext.getFacetHolder()));
     }
 
     @Override

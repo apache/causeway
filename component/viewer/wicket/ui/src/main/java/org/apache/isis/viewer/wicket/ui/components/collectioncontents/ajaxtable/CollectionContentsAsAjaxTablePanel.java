@@ -31,7 +31,6 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -221,10 +220,6 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     private WicketViewerSettings settings;
     protected WicketViewerSettings getSettings() {
         return settings;
-    }
-
-    protected MessageBroker getMessageBroker() {
-        return getAuthenticationSession().getMessageBroker();
     }
 
     //endregion
