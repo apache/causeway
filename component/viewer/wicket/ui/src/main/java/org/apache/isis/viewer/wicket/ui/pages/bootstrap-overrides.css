@@ -621,6 +621,10 @@ div.label-left .choicesPlaceholder {
     min-height: 45px;
 }
 
+div.referencePanel.scalarNameAndValueComponentType {
+    margin-bottom: 4px;
+}
+
 .referencePanel .entityLinkSelect2Panel .entityImage {
     width: 20px;
     height: 20px;
