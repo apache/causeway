@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
+      xml:lang="en"  
+      lang="en">
+    <head>
+        <wicket:header-items/>
+        <title wicket:id="pageTitle"></title>
+    </head>
+    <body>
+    <div id="container" class="wicketSignInPanel container-fluid">
+        <div class="jumbotron" style="background-color: transparent">
+
+            <div class="row">
+                <div class="col-sm-12">&#160;</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">&#160;</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">&#160;</div>
+            </div>
+
+            <div class="row">
+                <div class="headerContainer col-sm-offset-4 col-sm-4">
+                    <h1 wicket:id="applicationName" class="applicationName">[application name]</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">&#160;</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">&#160;</div>
+            </div>
+
+            <div class="row">
+                <div class="registerPanel col-sm-offset-4 col-sm-4">
+                    <h2><xwicket:message key="registerHeader">Register</xwicket:message></h2>
+                    <div>
+                        <form wicket:id="registerForm">
+                            <table>
+                                <tr>
+                                    <td align="right">Username:</td>
+                                    <td>
+                                        <label wicket:id="username"></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Password:</td>
+                                    <td>
+                                        <input wicket:id="password" type="password"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <input type="submit" name="submit" value="Register"/>
+                                        <input type="reset" value="Reset"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div wicket:id="exceptionStackTrace" class="exceptionStackTrace"></div>
+        </div>
+    </div>
+    </body>
+
+</html>
