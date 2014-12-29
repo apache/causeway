@@ -84,6 +84,6 @@ public @interface DomainObjectLayout {
     /**
      * Whether (and how) this domain object can be bookmarked in the UI.
      */
-    BookmarkPolicy bookmarkable() default BookmarkPolicy.AS_ROOT;
+    BookmarkPolicy bookmarking() default BookmarkPolicy.NEVER;
 
 }

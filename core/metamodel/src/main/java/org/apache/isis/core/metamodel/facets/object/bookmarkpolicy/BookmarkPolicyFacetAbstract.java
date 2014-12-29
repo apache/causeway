@@ -35,7 +35,12 @@ public abstract class BookmarkPolicyFacetAbstract extends FacetAbstract implemen
 
     private final BookmarkPolicy bookmarkPolicy;
 
+    @Deprecated
     public BookmarkPolicyFacetAbstract(FacetHolder facetHolder, BookmarkPolicy bookmarkPolicy) {
+        this(bookmarkPolicy, facetHolder);
+    }
+
+    public BookmarkPolicyFacetAbstract(BookmarkPolicy bookmarkPolicy, FacetHolder facetHolder) {
         super(BookmarkPolicyFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
         this.bookmarkPolicy = bookmarkPolicy;
     }

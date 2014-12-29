@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @deprecated - see {@link Property#disabled()}, {@link Collection#disabled()} and {@link Action#disabled()}.
+ * @deprecated - see {@link Property#editing()} and {@link Collection#editing()}.
  */
 @Inherited
 @Target({ ElementType.METHOD })
@@ -35,18 +35,20 @@ import java.lang.annotation.Target;
 public @interface Disabled {
 
     /**
-     * @deprecated.  There is no corresponding attribute in {@link org.apache.isis.applib.annotation.Property}, {@link org.apache.isis.applib.annotation.Collection} and {@link org.apache.isis.applib.annotation.Action}, if the
-     * corresponding <code>disabled()</code> attribute is set then the feature is assumed to be disabled ALWAYS.
+     * @deprecated.  There is no corresponding attribute in {@link org.apache.isis.applib.annotation.Property}, {@link org.apache.isis.applib.annotation.Collection}; the feature is assumed to be disabled ALWAYS.
      */
     @Deprecated
     When when() default When.ALWAYS;
 
     /**
-     * @deprecated - see {@link Property#disabled()}, {@link Collection#disabled()} and {@link Action#disabled()}.
+     * @deprecated - see {@link Property#editing()} and {@link Collection#editing()}.
      */
     @Deprecated
     Where where() default Where.ANYWHERE;
 
+    /**
+     * @deprecated - see {@link Property#editingDisabledReason()} and {@link Collection#editingDisabledReason()}.
+     */
     @Deprecated
     String reason() default "";
 }

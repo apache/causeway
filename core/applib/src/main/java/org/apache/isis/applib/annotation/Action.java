@@ -89,23 +89,6 @@ public @interface Action {
 
     // //////////////////////////////////////
 
-
-    /**
-     * Indicates when an action is not invokable by the user.
-     */
-    Where disabled() default Where.NOWHERE;
-
-
-    /**
-     * If {@link #disabled()} (in any {@link org.apache.isis.applib.annotation.Where} context), then the reason to provide to the user as to why the
-     * collection cannot be edited.
-     * @return
-     */
-    String disabledReason();
-
-
-    // //////////////////////////////////////
-
     enum Semantics {
 
         /**
@@ -182,34 +165,56 @@ public @interface Action {
     // //////////////////////////////////////
 
 
-    enum BulkAppliesTo {
-        BULK_AND_REGULAR,
-        BULK_ONLY;
+    /**
+     * Whether an action can be invoked on a single object and/or on many objects in a collection.
+     */
+    enum AppliesToPolicy {
+        /**
+         * The action can only be invoked on a single object.  This is the default.
+         */
+        OBJECT_ONLY,
+        /**
+         * The action can be invoked either on a single object or on a collection of objects (each in turn).
+         *
+         * <p>
+         *     Corresponds to (the deprecated) <code>@Bulk(appliesTo=BULK_AND_REGULAR)</code> annotation.
+         * </p>
+         */
+        OBJECT_AND_COLLECTION,
+        /**
+         * The action is intended to be invoked only on a collection of objects (each in turn).
+         *
+         * <p>
+         *     Corresponds to (the deprecated) <code>@Bulk(appliesTo=BULK_ONLY)</code> annotation.
+         * </p>
+         */
+        COLLECTION_ONLY;
 
         @Deprecated
-        public static Bulk.AppliesTo from(final BulkAppliesTo bulkAppliesTo) {
-            if(bulkAppliesTo == null) return null;
-            if(bulkAppliesTo == BULK_AND_REGULAR) return Bulk.AppliesTo.BULK_AND_REGULAR;
-            if(bulkAppliesTo == BULK_ONLY) return Bulk.AppliesTo.BULK_ONLY;
+        public static Bulk.AppliesTo from(final AppliesToPolicy appliesToPolicy) {
+            if(appliesToPolicy == null) return null;
+            if(appliesToPolicy == OBJECT_AND_COLLECTION) return Bulk.AppliesTo.BULK_AND_REGULAR;
+            if(appliesToPolicy == COLLECTION_ONLY) return Bulk.AppliesTo.BULK_ONLY;
+            if(appliesToPolicy == OBJECT_ONLY) throw new IllegalArgumentException("No corresponding Bulk.AppliesTo enum for " + appliesToPolicy);
             // shouldn't happen
-            throw new IllegalArgumentException("Unrecognized appliesTo: " + bulkAppliesTo);
+            throw new IllegalArgumentException("Unrecognized appliesTo: " + appliesToPolicy);
         }
 
         @Deprecated
-        public static BulkAppliesTo from(final Bulk.AppliesTo appliesTo) {
+        public static AppliesToPolicy from(final Bulk.AppliesTo appliesTo) {
             if(appliesTo == null) return null;
-            if(appliesTo == Bulk.AppliesTo.BULK_AND_REGULAR) return BULK_AND_REGULAR;
-            if(appliesTo == Bulk.AppliesTo.BULK_ONLY) return BULK_ONLY;
+            if(appliesTo == Bulk.AppliesTo.BULK_AND_REGULAR) return OBJECT_AND_COLLECTION;
+            if(appliesTo == Bulk.AppliesTo.BULK_ONLY) return COLLECTION_ONLY;
             // shouldn't happen
             throw new IllegalArgumentException("Unrecognized appliesTo: " + appliesTo);
         }
     }
 
     /**
-     * Indicates the (entity) action should be used only against many objects in a collection.
+     * Whether an action can be invoked on a single object and/or on many objects in a collection.
      *
      * <p>
-     * Bulk actions have a number of constraints:
+     * Actions to be invoked on collection (currently) have a number of constraints:
      * <ul>
      * <li>It must take no arguments
      * <li>It cannot be hidden (any annotations or supporting methods to that effect will be
@@ -220,84 +225,17 @@ public @interface Action {
      *
      * <p>
      * Has no meaning if annotated on an action of a domain service.
+     * </p>
      */
-    BulkAppliesTo bulk() default BulkAppliesTo.BULK_AND_REGULAR;
-
+    AppliesToPolicy appliesTo() default AppliesToPolicy.OBJECT_ONLY;
 
     // //////////////////////////////////////
 
-    enum CommandExecuteIn {
-        /**
-         * Execute synchronously in the &quot;foreground&quot;, wait for the results.
-         */
-        FOREGROUND,
-        /**
-         * Execute &quot;asynchronously&quot; through the {@link org.apache.isis.applib.services.background.BackgroundCommandService}, returning (if possible) the
-         * persisted {@link org.apache.isis.applib.services.command.Command command} object as a placeholder to the
-         * result.
-         */
-        BACKGROUND;
 
-        @Deprecated
-        public static CommandExecuteIn from(final Command.ExecuteIn executeIn) {
-            if(executeIn == null) return null;
-            if(executeIn == Command.ExecuteIn.FOREGROUND) return FOREGROUND;
-            if(executeIn == Command.ExecuteIn.BACKGROUND) return BACKGROUND;
-            // shouldn't happen
-            throw new IllegalArgumentException("Unrecognized : executeIn" + executeIn);
-        }
-
-        @Deprecated
-        public static Command.ExecuteIn from(final CommandExecuteIn commandExecuteIn) {
-            if(commandExecuteIn == null) return null;
-            if(commandExecuteIn == FOREGROUND) return Command.ExecuteIn.FOREGROUND;
-            if(commandExecuteIn == BACKGROUND) return Command.ExecuteIn.BACKGROUND;
-            // shouldn't happen
-            throw new IllegalArgumentException("Unrecognized : executeIn" + commandExecuteIn);
-        }
-
-    }
-
-    enum CommandPersistence {
-        /**
-         * (If the configured {@link org.apache.isis.applib.services.command.spi.CommandService} supports it), indicates that the
-         * {@link org.apache.isis.applib.services.command.Command Command} object should be persisted.
-         */
-        PERSISTED,
-        /**
-         * (If the configured {@link org.apache.isis.applib.services.command.spi.CommandService} supports it), indicates that the
-         * {@link org.apache.isis.applib.services.command.Command Command} object should only be persisted if
-         * another service, such as the {@link org.apache.isis.applib.services.background.BackgroundCommandService}, hints that it should.
-         */
-        IF_HINTED,
-        /**
-         * (Even if the configured {@link org.apache.isis.applib.services.command.spi.CommandService} supports it), indicates that the
-         * {@link org.apache.isis.applib.services.command.Command Command} object should <i>not</i> be persisted (even if
-         * another service, such as the {@link org.apache.isis.applib.services.background.BackgroundCommandService}, hints that it should).
-         */
-        NOT_PERSISTED;
-
-        @Deprecated
-        public static CommandPersistence from(final Command.Persistence persistence) {
-            if(persistence == null) return null;
-            if(persistence == Command.Persistence.PERSISTED) return PERSISTED;
-            if(persistence == Command.Persistence.IF_HINTED) return IF_HINTED;
-            // shouldn't happen
-            throw new IllegalArgumentException("Unrecognized : persistence" + persistence);
-        }
-
-        @Deprecated
-        public static Command.Persistence from(final CommandPersistence commandPersistence) {
-            if(commandPersistence == null) return null;
-            if(commandPersistence == PERSISTED) return Command.Persistence.PERSISTED;
-            if(commandPersistence == IF_HINTED) return Command.Persistence.IF_HINTED;
-            // shouldn't happen
-            throw new IllegalArgumentException("Unrecognized : persistence" + commandPersistence);
-        }
-    }
-
-
-    boolean command() default false;
+    /**
+     * Whether the action invocation should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
+     */
+    CommandPolicy command() default CommandPolicy.AS_CONFIGURED;
 
     /**
      * How the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
@@ -315,12 +253,6 @@ public @interface Action {
      * </p>
      */
     CommandExecuteIn commandExecuteIn() default CommandExecuteIn.FOREGROUND;
-
-    /**
-     * If set to <tt>true</tt>, acts as an override to <i>disable</i> command semantics for the action when it is
-     * otherwise (eg through configuration) configured as the default.
-     */
-    boolean commandDisabled() default false;
 
 
     // //////////////////////////////////////
@@ -350,9 +282,18 @@ public @interface Action {
     }
 
 
+    /**
+     * Whether changes to the object should be published.
+     *
+     * <p>
+     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublishingService} is
+     * registered with the framework.
+     * </p>
+     */
+    PublishingPolicy publishing() default PublishingPolicy.AS_CONFIGURED;
+
+
     // TODO: factor out PayloadFactory.Default so similar to interaction
     Class<? extends PublishingPayloadFactory> publishingPayloadFactory() default PublishingPayloadFactory.class;
-
-
 
 }

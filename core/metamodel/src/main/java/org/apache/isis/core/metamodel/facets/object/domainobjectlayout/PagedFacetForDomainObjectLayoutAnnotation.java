@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.layout;
+package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;

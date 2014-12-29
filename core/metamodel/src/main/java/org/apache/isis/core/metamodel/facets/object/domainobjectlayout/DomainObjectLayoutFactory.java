@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.layout;
+package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -45,6 +45,7 @@ public class DomainObjectLayoutFactory extends FacetFactoryAbstract {
         FacetUtil.addFacet(NamedFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
         FacetUtil.addFacet(PagedFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
         FacetUtil.addFacet(PluralFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
+        FacetUtil.addFacet(BookmarkPolicyFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
 
         return;
     }

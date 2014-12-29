@@ -24,7 +24,6 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.apache.isis.applib.services.background.BackgroundCommandService;
 
 /**
  * @deprecated - use {@link Action#command()} instead
@@ -36,22 +35,22 @@ import org.apache.isis.applib.services.background.BackgroundCommandService;
 public @interface Command {
 
     /**
-     * @deprecated - see {@link org.apache.isis.applib.annotation.Action.CommandPersistence}
+     * @deprecated - see {@link CommandPersistence}
      */
     @Deprecated
     public static enum Persistence {
         /**
-         * @deprecated - see {@link org.apache.isis.applib.annotation.Action.CommandPersistence#PERSISTED}
+         * @deprecated - see {@link CommandPersistence#PERSISTED}
          */
         @Deprecated
         PERSISTED,
         /**
-         * @deprecated - see {@link org.apache.isis.applib.annotation.Action.CommandPersistence#IF_HINTED}
+         * @deprecated - see {@link CommandPersistence#IF_HINTED}
          */
         @Deprecated
         IF_HINTED,
         /**
-         * @deprecated - see {@link org.apache.isis.applib.annotation.Action.CommandPersistence#NOT_PERSISTED}
+         * @deprecated - see {@link CommandPersistence#NOT_PERSISTED}
          */
         @Deprecated
         NOT_PERSISTED
@@ -68,17 +67,17 @@ public @interface Command {
 
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.annotation.Action.CommandExecuteIn}
+     * @deprecated - use {@link CommandExecuteIn}
      */
     @Deprecated
     public static enum ExecuteIn {
         /**
-         * @deprecated - use {@link org.apache.isis.applib.annotation.Action.CommandExecuteIn#FOREGROUND}
+         * @deprecated - use {@link CommandExecuteIn#FOREGROUND}
          */
         @Deprecated
         FOREGROUND,
         /**
-         * @deprecated - use {@link org.apache.isis.applib.annotation.Action.CommandExecuteIn#BACKGROUND}
+         * @deprecated - use {@link CommandExecuteIn#BACKGROUND}
          */
         @Deprecated
         BACKGROUND

@@ -73,20 +73,19 @@ public @interface Collection {
     // //////////////////////////////////////
 
     /**
-     * Indicates when the collection is not editable by the user.
+     * Whether the properties of this domain object can be edited, or collections of this object be added to/removed from.
      *
      * <p>
-     * Note that if the owning domain object is {@link DomainObject#notEditable()}, then that will take precedence.
+     *     Note that non-editable objects can nevertheless have actions invoked upon them.
      * </p>
      */
-    Where disabled() default Where.NOWHERE;
+    EditPolicy editing() default EditPolicy.AS_CONFIGURED;
 
     /**
-     * If {@link #disabled()} (in any {@link Where} context), then the reason to provide to the user as to why the
-     * collection cannot be edited.
-     * @return
+     * If {@link #editing()} is set to {@link EditPolicy#DISABLED},
+     * then the reason to provide to the user as to why this property cannot be edited.
      */
-    String disabledReason();
+    String editingDisabledReason();
 
 
     // //////////////////////////////////////

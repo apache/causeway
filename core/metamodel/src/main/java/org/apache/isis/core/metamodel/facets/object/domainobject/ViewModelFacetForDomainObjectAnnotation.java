@@ -17,17 +17,33 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.viewmodel.annotation;
+package org.apache.isis.core.metamodel.facets.object.domainobject;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetDeclarativeAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public class ViewModelFacetAnnotation extends ViewModelFacetDeclarativeAbstract {
+public class ViewModelFacetForDomainObjectAnnotation extends ViewModelFacetDeclarativeAbstract {
 
-    public ViewModelFacetAnnotation(
+    public static ViewModelFacet create(
+            final DomainObject domainObject,
+            final SpecificationLoader specificationLoader,
+            final AdapterManager adapterManager,
+            final ServicesInjector servicesInjector,
+            final FacetHolder holder) {
+
+        final boolean viewModel = domainObject.viewModel();
+        if(!viewModel) {
+            return null;
+        }
+        return new ViewModelFacetForDomainObjectAnnotation(holder, specificationLoader, adapterManager, servicesInjector);
+    }
+
+    private ViewModelFacetForDomainObjectAnnotation(
             final FacetHolder holder,
             final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager,

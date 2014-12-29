@@ -116,7 +116,7 @@ import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoEnhancem
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.ImmutableFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutablemarkerifc.ImmutableFacetMarkerInterfaceFactory;
-import org.apache.isis.core.metamodel.facets.object.layout.DomainObjectLayoutFactory;
+import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DomainObjectLayoutFactory;
 import org.apache.isis.core.metamodel.facets.object.mask.annotation.MaskFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.maxlen.annotation.MaxLengthFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupLayoutFacetFactory;
@@ -124,7 +124,7 @@ import org.apache.isis.core.metamodel.facets.object.multiline.annotation.MultiLi
 import org.apache.isis.core.metamodel.facets.object.named.annotation.NamedFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.notpersistableannot.NotPersistableFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.notpersistablemarkerifc.NotPersistableFacetMarkerInterfaceFactory;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.annotation.ObjectFacetSpecIdAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.annotation.ObjectSpecIdFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
 import org.apache.isis.core.metamodel.facets.object.paged.annotation.PagedFacetOnTypeAnnotationFactory;
@@ -318,7 +318,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(RenderFacetOrResolveFactory.class);
 
         // objects
-        addFactory(ObjectFacetSpecIdAnnotationFactory.class);
+        addFactory(ObjectSpecIdFacetAnnotationFactory.class);
         addFactory(IconFacetMethodFactory.class);
         addFactory(CssClassFacetMethodFactory.class);
 

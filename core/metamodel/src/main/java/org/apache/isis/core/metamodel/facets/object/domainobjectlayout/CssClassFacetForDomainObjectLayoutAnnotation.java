@@ -16,27 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.layout;
+package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 
 import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 
 
-public class NamedFacetForDomainObjectLayoutAnnotation extends NamedFacetAbstract {
+public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetAbstract {
 
-    public static NamedFacet create(DomainObjectLayout domainObjectLayout, FacetHolder holder) {
+    public static CssClassFacet create(DomainObjectLayout domainObjectLayout, FacetHolder holder) {
         if(domainObjectLayout == null) {
             return null;
         }
-        final String named = Strings.emptyToNull(domainObjectLayout.named());
-        return named != null ? new NamedFacetForDomainObjectLayoutAnnotation(named, holder) : null;
+        final String cssClass = Strings.emptyToNull(domainObjectLayout.cssClass());
+        return cssClass != null ? new CssClassFacetForDomainObjectLayoutAnnotation(cssClass, holder) : null;
     }
 
-    private NamedFacetForDomainObjectLayoutAnnotation(String value, FacetHolder holder) {
-        super(value, /*escaped*/ true, holder);
+    private CssClassFacetForDomainObjectLayoutAnnotation(String value, FacetHolder holder) {
+        super(value, holder);
     }
 }

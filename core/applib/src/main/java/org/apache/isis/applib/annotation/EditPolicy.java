@@ -16,32 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.annotation;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
- * Indicates the policy by which the entity or action can be bookmarked.
- * 
- * <p>
- * Three {@link BookmarkPolicy policies} are defined, which control how bookmarked entities are organized.
- * These have no meaning for bookmarkable actions.
- *
- * @deprecated - see {@link DomainObjectLayout#bookmarking()}.
+ * The available policies for editing properties and collections.
  */
-@Inherited
-@Target({ ElementType.TYPE, ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Bookmarkable {
-
+public enum EditPolicy {
     /**
-     * @deprecated - see {@link DomainObjectLayout#bookmarking()}.
+     * The editing of the object should be as per the default editing policy configured in <tt>isis.properties</tt>.
+     *
+     * <p>
+     *     If no editing policy is configured, then the editing is enabled.
+     * </p>
      */
-    @Deprecated
-    BookmarkPolicy value() default BookmarkPolicy.AS_ROOT;  
+    AS_CONFIGURED,
+    /**
+     * Audit changes to this object.
+     */
+    ENABLED,
+    /**
+     * Do not allow the properties to be edited, or the collections to be added to/removed from.
+     *
+     * <p>
+     *     Corresponds to the {@link Immutable} annotation).
+     * </p>
+     */
+    DISABLED
 }

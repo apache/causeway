@@ -16,18 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable;
+package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
+
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
 
 
-public class BookmarkPolicyFacetViaBookmarkableAnnotation extends BookmarkPolicyFacetAbstract {
+public class BookmarkPolicyFacetForDomainObjectLayoutAnnotation extends BookmarkPolicyFacetAbstract {
 
-    public BookmarkPolicyFacetViaBookmarkableAnnotation(BookmarkPolicy bookmarkPolicy, FacetHolder facetHolder) {
-        super(bookmarkPolicy, facetHolder);
+    public static BookmarkPolicyFacet create(DomainObjectLayout domainObjectLayout, FacetHolder holder) {
+        if(domainObjectLayout == null) {
+            return null;
+        }
+        final BookmarkPolicy bookmarkPolicy = domainObjectLayout.bookmarking();
+        return bookmarkPolicy != BookmarkPolicy.NEVER ? new BookmarkPolicyFacetForDomainObjectLayoutAnnotation(bookmarkPolicy, holder) : null;
     }
 
-
+    private BookmarkPolicyFacetForDomainObjectLayoutAnnotation(BookmarkPolicy bookmarkPolicy, FacetHolder holder) {
+        super(holder, bookmarkPolicy);
+    }
 }

@@ -60,7 +60,7 @@ public class BookmarkPolicyFacetViaBookmarkableAnnotationFactory extends FacetFa
     }
 
     private BookmarkPolicyFacet create(final Bookmarkable annotation, final FacetHolder holder) {
-        return annotation == null ? new BookmarkPolicyFacetFallback(holder) : new BookmarkPolicyFacetViaBookmarkableAnnotation(holder, annotation.value());
+        return annotation == null ? new BookmarkPolicyFacetFallback(holder) : new BookmarkPolicyFacetViaBookmarkableAnnotation(annotation.value(), holder);
     }
 
 

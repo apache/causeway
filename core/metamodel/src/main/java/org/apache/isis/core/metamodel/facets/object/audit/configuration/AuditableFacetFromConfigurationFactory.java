@@ -27,26 +27,12 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
+import org.apache.isis.core.metamodel.facets.object.domainobject.AuditObjectsConfiguration;
 
 
 public class AuditableFacetFromConfigurationFactory extends FacetFactoryAbstract implements IsisConfigurationAware {
 
-    private static final String AUDIT_OBJECTS_KEY = "isis.services.audit.objects";
-
     private IsisConfiguration configuration;
-
-    private static enum ObjectCategorization {
-        ALL,
-        NONE;
-        public static ObjectCategorization parse(final String value) {
-            if ("all".equalsIgnoreCase(value)) {
-                return ALL;
-            } else {
-                return NONE;
-            }
-        }
-    }
-    
 
     public AuditableFacetFromConfigurationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -54,9 +40,9 @@ public class AuditableFacetFromConfigurationFactory extends FacetFactoryAbstract
 
     @Override
     public void process(ProcessClassContext processClassContext) {
-        final String configuredValue = configuration.getString(AUDIT_OBJECTS_KEY);
-        final ObjectCategorization categorization = ObjectCategorization.parse(configuredValue);
-        if(categorization == ObjectCategorization.NONE) {
+
+        final AuditObjectsConfiguration categorization = AuditObjectsConfiguration.parse(configuration);
+        if(categorization == AuditObjectsConfiguration.NONE) {
             return;
         }
         final Class<?> cls = processClassContext.getCls();

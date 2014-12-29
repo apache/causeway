@@ -29,18 +29,18 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.annotation.ObjectFacetSpecIdAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.annotation.ObjectSpecIdFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.annotation.ObjectSpecIdFacetAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 
 public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
-    private ObjectFacetSpecIdAnnotationFactory facetFactory;
+    private ObjectSpecIdFacetAnnotationFactory facetFactory;
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new ObjectFacetSpecIdAnnotationFactory();
+        facetFactory = new ObjectSpecIdFacetAnnotationFactory();
     }
 
     @Test

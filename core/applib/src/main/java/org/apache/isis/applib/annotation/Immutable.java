@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @deprecated - use {@link DomainObject#notEditable()} instead.
+ * @deprecated - use {@link DomainObject#editing()} instead.
  */
 @Inherited
 @Target({ ElementType.TYPE })
@@ -35,7 +35,7 @@ import java.lang.annotation.Target;
 public @interface Immutable {
 
     /**
-     * @deprecated - see {@link DomainObject#notEditable()}.  <code>true</code> corresponds to {@link When#ALWAYS}, <code>false</code> corresponds to {@link org.apache.isis.applib.annotation.When#NEVER}.  The other values for the
+     * @deprecated - see {@link DomainObject#editing()}.  <code>true</code> corresponds to {@link When#ALWAYS}, <code>false</code> corresponds to {@link org.apache.isis.applib.annotation.When#NEVER}.  The other values for the
      * {@link org.apache.isis.applib.annotation.When} are not (ie no longer) supported.
      */
     @Deprecated

@@ -26,7 +26,7 @@ import java.util.List;
 import javax.enterprise.context.RequestScoped;
 
 /**
- * @deprecated - use {@link Action#bulk()} instead.
+ * @deprecated - use {@link Action#appliesTo()} instead.
  */
 @Inherited
 @Target({ ElementType.METHOD })
@@ -35,24 +35,24 @@ import javax.enterprise.context.RequestScoped;
 public @interface Bulk {
 
     /**
-     * @deprecated - see {@link org.apache.isis.applib.annotation.Action.BulkAppliesTo}
+     * @deprecated - see {@link org.apache.isis.applib.annotation.Action.AppliesToPolicy}
      */
     @Deprecated
     public static enum AppliesTo {
         /**
-         * @deprecated - see {@link org.apache.isis.applib.annotation.Action.BulkAppliesTo#BULK_AND_REGULAR}
+         * @deprecated - see {@link org.apache.isis.applib.annotation.Action.AppliesToPolicy#OBJECT_AND_COLLECTION}
          */
         @Deprecated
         BULK_AND_REGULAR,
         /**
-         * @deprecated - see {@link org.apache.isis.applib.annotation.Action.BulkAppliesTo#BULK_ONLY}
+         * @deprecated - see {@link org.apache.isis.applib.annotation.Action.AppliesToPolicy#COLLECTION_ONLY}
          */
         @Deprecated
         BULK_ONLY
     }
 
     /**
-     * @deprecated - see {@link Action#bulk()}.
+     * @deprecated - see {@link Action#appliesTo()}.
      */
     @Deprecated
     AppliesTo value() default AppliesTo.BULK_AND_REGULAR;

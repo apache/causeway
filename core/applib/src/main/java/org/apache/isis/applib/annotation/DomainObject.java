@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
@@ -34,6 +33,9 @@ import org.apache.isis.applib.services.publish.EventPayload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DomainObject {
 
+    /**
+     * The available policies for auditing changes to the properties of the object.
+     */
     public enum AuditingPolicy {
         /**
          * The auditing of the object should be as per the default auditing policy configured in <tt>isis.properties</tt>.
@@ -101,7 +103,7 @@ public @interface DomainObject {
          * Adapter to subclass if have an existing {@link org.apache.isis.applib.annotation.PublishedObject.PayloadFactory}.
          */
         @Deprecated
-        public abstract class Adapter implements PublishingPayloadFactory {
+        public static class Adapter implements PublishingPayloadFactory {
 
             private final PublishedObject.PayloadFactory payloadFactory;
 
@@ -113,8 +115,22 @@ public @interface DomainObject {
             public EventPayload payloadFor(Object changedObject, PublishingChangeKind publishingChangeKind) {
                 return payloadFactory.payloadFor(changedObject, PublishingChangeKind.from(publishingChangeKind));
             }
+
+            public PublishedObject.PayloadFactory getPayloadFactory() {
+                return payloadFactory;
+            }
         }
     }
+
+    /**
+     * Whether changes to the object should be published.
+     *
+     * <p>
+     * Requires that an implementation of the {@link org.apache.isis.applib.services.publish.PublishingService} is
+     * registered with the framework.
+     * </p>
+     */
+    PublishingPolicy publishing() default PublishingPolicy.AS_CONFIGURED;
 
     // TODO: factor out PayloadFactory.Default so similar to interaction
     Class<? extends PublishingPayloadFactory> publishingPayloadFactory() default PublishingPayloadFactory.class;
@@ -164,19 +180,15 @@ public @interface DomainObject {
      * <p>
      *     Note that non-editable objects can nevertheless have actions invoked upon them.
      * </p>
-     *
-     * <p>
-     *     Corresponds to the {@link org.apache.isis.applib.annotation.Immutable} annotation).
-     * </p>
      */
-    boolean notEditable() default false;
+    EditPolicy editing() default EditPolicy.AS_CONFIGURED;
 
 
     /**
-     * If {@link #notEditable()}, then the reason to provide to the user as to why the object's properties cannot be
-     * edited.
+     * If {@link #editing()} is set to {@link EditPolicy#DISABLED},
+     * then the reason to provide to the user as to why the object's properties cannot be edited/collections modified.
      */
-    String notEditableReason();
+    String editingDisabledReason();
 
 
     // //////////////////////////////////////

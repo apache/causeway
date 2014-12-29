@@ -16,40 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.audit;
 
+package org.apache.isis.core.metamodel.facets.object.domainobject;
 
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
 
+public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBoundedAbstract {
 
-public abstract class AuditableFacetAbstract extends FacetAbstract implements
-        AuditableFacet {
-
-    public static Class<? extends Facet> type() {
-        return AuditableFacet.class;
+    public static Facet create(
+            final DomainObject domainObject,
+            final QuerySubmitter querySubmitter,
+            final FacetHolder facetHolder) {
+        final boolean bounded = domainObject.bounded();
+        return bounded ? new ChoicesFacetForDomainObjectAnnotation(facetHolder, querySubmitter): null;
     }
 
-    public enum Enablement {
-        DISABLED,
-        ENABLED;
-
-        public static Enablement ifDisabled(boolean disabled) {
-            return disabled ? DISABLED: ENABLED;
-        }
-    }
-
-    private final Enablement enablement;
-    
-    public AuditableFacetAbstract(final FacetHolder facetHolder, final Enablement enablement) {
-        super(AuditableFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
-        this.enablement = enablement;
-    }
-
-    @Override
-    public boolean isDisabled() {
-        return this.enablement == Enablement.DISABLED;
+    private ChoicesFacetForDomainObjectAnnotation(final FacetHolder holder, QuerySubmitter querySubmitter) {
+        super(holder, querySubmitter);
     }
 
 }

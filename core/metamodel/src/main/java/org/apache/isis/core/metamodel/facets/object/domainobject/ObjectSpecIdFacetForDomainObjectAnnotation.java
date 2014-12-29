@@ -16,27 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.layout;
 
+package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import com.google.common.base.Strings;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
 
+public class ObjectSpecIdFacetForDomainObjectAnnotation extends ObjectSpecIdFacetAbstract {
 
-public class PluralFacetForDomainObjectLayoutAnnotation extends PluralFacetAbstract {
+    public static ObjectSpecIdFacet create(
+            final DomainObject domainObject,
+            final FacetHolder holder) {
 
-    public static PluralFacet create(DomainObjectLayout domainObjectLayout, FacetHolder holder) {
-        if(domainObjectLayout == null) {
+        final String objectType = domainObject.objectType();
+        if(Strings.isNullOrEmpty(objectType)) {
             return null;
         }
-        final String plural = Strings.emptyToNull(domainObjectLayout.plural());
-        return plural != null ? new PluralFacetForDomainObjectLayoutAnnotation(plural, holder) : null;
+        return new ObjectSpecIdFacetForDomainObjectAnnotation(objectType, holder);
     }
 
-    private PluralFacetForDomainObjectLayoutAnnotation(String value, FacetHolder holder) {
+    private ObjectSpecIdFacetForDomainObjectAnnotation(final String value,
+                                                      final FacetHolder holder) {
         super(value, holder);
     }
 }
