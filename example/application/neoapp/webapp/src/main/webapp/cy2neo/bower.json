@@ -1,0 +1,31 @@
+{
+  "name": "cy2neo",
+  "version": "0.0.1",
+  "authors": [
+    "Michael Hunger <github@jexp.de>"
+  ],
+  "description": "Cy2Neo Tiny Neo4j Cypher Workbench with Alchemy.js Viz",
+  "main": "cy2neo.js",
+  "keywords": [
+    "neo4j",
+    "cypher",
+    "graph",
+    "database",
+    "repl",
+    "shell",
+    "console",
+    "graphviz",
+    "d3",
+    "graph"
+  ],
+  "license": "MIT",
+  "homepage": "http://jexp.github.io/cy2neo",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
