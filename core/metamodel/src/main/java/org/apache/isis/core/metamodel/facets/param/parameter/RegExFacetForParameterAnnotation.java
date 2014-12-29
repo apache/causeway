@@ -17,27 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.property;
+package org.apache.isis.core.metamodel.facets.param.parameter;
 
 import java.util.regex.Pattern;
-import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.object.regex.RegExFacetAbstract;
 
-public class RegExFacetForPropertyAnnotation extends RegExFacetAbstract {
+public class RegExFacetForParameterAnnotation extends RegExFacetAbstract {
 
     private final Pattern pattern;
 
-    static RegExFacet create(final Property property, final FacetHolder holder) {
+    static RegExFacet create(final Parameter parameter, final FacetHolder holder) {
 
-        final String pattern = property.regexPattern();
-        final int patternFlags = property.regexPatternFlags();
+        final String pattern = parameter.regexPattern();
+        final int patternFlags = parameter.regexPatternFlags();
 
-        return new RegExFacetForPropertyAnnotation(pattern, patternFlags, holder);
+        return new RegExFacetForParameterAnnotation(pattern, patternFlags, holder);
     }
 
-    private RegExFacetForPropertyAnnotation(final String pattern, final int patternFlags, final FacetHolder holder) {
+    private RegExFacetForParameterAnnotation(final String pattern, final int patternFlags, final FacetHolder holder) {
         super(pattern, "", false, holder);
         this.pattern = Pattern.compile(pattern, patternFlags);
     }
