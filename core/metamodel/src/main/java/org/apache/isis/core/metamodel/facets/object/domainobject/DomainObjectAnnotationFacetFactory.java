@@ -37,14 +37,14 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
 
-public class DomainObjectFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AdapterManagerAware, ServicesInjectorAware, SpecificationLoaderAware, QuerySubmitterAware {
+public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AdapterManagerAware, ServicesInjectorAware, SpecificationLoaderAware, QuerySubmitterAware {
 
     private IsisConfiguration configuration;
     private AdapterManager adapterManager;
     private ServicesInjector servicesInjector;
     private QuerySubmitter querySubmitter;
 
-    public DomainObjectFactory() {
+    public DomainObjectAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 

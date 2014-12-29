@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.core.metamodel.facets.collections.collection.CollectionFacetFactory;
+import org.apache.isis.core.metamodel.facets.collections.javautilcollection.CollectionFacetFactory;
 
 /**
  * All {@link CollectionTypeRegistry collection types} are intrinsically

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.collections.collection;
+package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 
 import java.util.Collection;
 import java.util.Iterator;

@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValid
 import org.apache.isis.core.metamodel.facets.actions.validating.maxlenannot.MaxLengthFacetOnActionAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetFactory;
-import org.apache.isis.core.metamodel.facets.collections.collection.CollectionFacetFactory;
+import org.apache.isis.core.metamodel.facets.collections.javautilcollection.CollectionFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.disabled.fromimmutable.DisabledFacetOnCollectionDerivedFromImmutableFactory;
 import org.apache.isis.core.metamodel.facets.collections.interaction.CollectionInteractionFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFactory;

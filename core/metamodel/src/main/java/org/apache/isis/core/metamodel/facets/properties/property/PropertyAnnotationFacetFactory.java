@@ -29,11 +29,11 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class PropertyFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
+public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
 
     private ServicesInjector servicesInjector;
 
-    public PropertyFactory() {
+    public PropertyAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
     }
 
