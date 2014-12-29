@@ -75,9 +75,13 @@ public class IsisSignInPanel extends SignInPanel {
     }
 
     private void addPasswdResetLink(String id) {
+        // TODO ISIS-987 is this the correct way to check for the service availability here ? Open a session, etc.
+        IsisContext.openSession(new InitialisationSession());
         Class<? extends Page> passwdResetPageClass = pageClassRegistry.getPageClass(PageType.PASSWORD_RESET);
         BookmarkablePageLink<Void> passwdResetLink = new BookmarkablePageLink<>(id, passwdResetPageClass);
-
+        final UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
+        passwdResetLink.setVisibilityAllowed(true);//userRegistrationService != null);
+        IsisContext.closeSession();
         getSignInForm().addOrReplace(passwdResetLink);
     }
 

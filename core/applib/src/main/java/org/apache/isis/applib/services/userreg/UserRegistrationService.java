@@ -26,8 +26,5 @@ public interface UserRegistrationService {
     void registerUser(String username, String password, String emailAddress);
 
     @Programmatic
-    boolean userExists(String username);
-
-    @Programmatic
     boolean emailExists(String emailAddress);
 }

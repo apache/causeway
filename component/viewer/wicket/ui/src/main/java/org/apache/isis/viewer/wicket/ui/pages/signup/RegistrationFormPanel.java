@@ -29,7 +29,6 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.Url;
@@ -63,6 +62,7 @@ public class RegistrationFormPanel extends Panel {
         final RequiredTextField<String> emailField = new RequiredTextField<>("email", Model.of(""));
         emailField.setLabel(new ResourceModel("emailLabel"));
         emailField.add(EmailAddressValidator.getInstance());
+        emailField.add(EmailAvailableValidator.getInstance());
 
         FormGroup formGroup = new FormGroup("formGroup", emailField);
         form.add(formGroup);
@@ -81,8 +81,7 @@ public class RegistrationFormPanel extends Panel {
                 if (emailSent) {
                     Map<String, String> map = new HashMap<>();
                     map.put("email", email);
-                    IModel<Map<String, String>> model = Model.ofMap(map);
-                    String emailSentMessage = getString("emailSentMessage", model);
+                    String emailSentMessage = getString("emailSentMessage", Model.ofMap(map));
                     success(emailSentMessage);
                 }
             }

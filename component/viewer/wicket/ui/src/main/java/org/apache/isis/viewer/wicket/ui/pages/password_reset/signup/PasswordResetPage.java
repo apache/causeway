@@ -20,6 +20,10 @@
 package org.apache.isis.viewer.wicket.ui.pages.password_reset.signup;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
+import org.apache.isis.applib.services.userreg.UserRegistrationService;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.AccountManagementPageAbstract;
 
@@ -42,11 +46,24 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
     protected void onInitialize() {
         super.onInitialize();
 
-        addPasswordResetPanel();
+        StringValue uuidValue = getPageParameters().get(0);
+        if (uuidValue.isEmpty()) {
+            addPasswordResetPanel("passwordResetPanel");
+        } else {
+            String uuid = uuidValue.toString();
+            AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
+            String email = accountConfirmationMap.get(uuid);
+
+            // TODO ISIS-987 Show a Panel with password/confirmPassword fields and update the passwd of the user with the given email
+//            IsisContext.openSession(new InitialisationSession());
+//            final UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
+//            userRegistrationService.updatePasswordByEmail(email, password);
+//            IsisContext.closeSession();
+        }
     }
 
-    protected PasswordResetPanel addPasswordResetPanel() {
-        final PasswordResetPanel passwordResetPanel = new PasswordResetPanel("passwordResetPanel");
+    protected PasswordResetPanel addPasswordResetPanel(String id) {
+        final PasswordResetPanel passwordResetPanel = new PasswordResetPanel(id);
         addOrReplace(passwordResetPanel);
         return passwordResetPanel;
     }
