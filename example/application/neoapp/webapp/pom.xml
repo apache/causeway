@@ -251,6 +251,14 @@
             </exclusion>
           </exclusions>
         </dependency>
+        
+        
+        <!-- https://github.com/Sprint/isis-neo4j -->
+        <dependency>
+            <groupId>com.sprint</groupId>
+            <artifactId>isis-neo4j</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 

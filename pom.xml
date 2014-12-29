@@ -56,6 +56,7 @@
 
                 <module>example/application/todoapp</module>
                 <module>example/application/simpleapp</module>
+                <module>example/application/neoapp</module>
                 
                 <module>example/archetype/todoapp</module>
                 <module>example/archetype/simpleapp</module>
@@ -72,6 +73,7 @@
         
                 <module>example/application/todoapp</module>
                 <module>example/application/simpleapp</module>
+                <module>example/application/neoapp</module>
                 
                 <module>example/archetype/todoapp</module>
                 <module>example/archetype/simpleapp</module>
@@ -105,6 +107,7 @@
             <modules>
                 <module>example/application/todoapp</module>
                 <module>example/application/simpleapp</module>
+                <module>example/application/neoapp</module>
             </modules>
         </profile>
     </profiles>

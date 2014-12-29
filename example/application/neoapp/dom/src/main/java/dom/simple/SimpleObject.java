@@ -55,6 +55,25 @@ public class SimpleObject implements Comparable<SimpleObject> {
     }
 
     //endregion
+    
+    //region > label (property)
+
+    private Label label;
+
+    @javax.jdo.annotations.Column(allowsNull="false")
+    @Title(sequence="2")
+    @MemberOrder(sequence="2")
+    public Label getLabel() {
+        return label;
+    }
+
+    public void setLabel(final Label label) {
+        this.label = label;
+    }
+
+    //endregion
+    
+    
 
     //region > compareTo
 
@@ -72,5 +91,11 @@ public class SimpleObject implements Comparable<SimpleObject> {
     private DomainObjectContainer container;
 
     //endregion
+    
+    enum Label {
+    	NodeType1,
+    	NodeType2,
+    	AnotherNodeType
+    }
 
 }
