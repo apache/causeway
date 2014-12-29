@@ -31,7 +31,8 @@ import org.apache.isis.viewer.wicket.ui.pages.actionprompt.ActionPromptPage;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
-import org.apache.isis.viewer.wicket.ui.pages.signup.WicketSignUpPage;
+import org.apache.isis.viewer.wicket.ui.pages.register.RegisterPage;
+import org.apache.isis.viewer.wicket.ui.pages.signup.RegistrationFormPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
@@ -106,21 +107,21 @@ public class PageClassListDefault implements PageClassList {
      * For subclassing if required.
      */
     protected Class<? extends Page> getSignUpPageClass() {
-        return WicketSignUpPage.class;
+        return RegistrationFormPage.class;
     }
 
     /**
      * For subclassing if required.
      */
     protected Class<? extends Page> getSignUpVerifyPageClass() {
-        return WicketSignUpPage.class;
+        return RegisterPage.class;
     }
 
     /**
      * For subclassing if required.
      */
     protected Class<? extends Page> getForgotPasswordPageClass() {
-        return WicketSignUpPage.class;
+        return RegistrationFormPage.class;
     }
 
     /**

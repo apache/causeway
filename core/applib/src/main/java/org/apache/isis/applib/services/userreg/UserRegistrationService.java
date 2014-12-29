@@ -23,5 +23,11 @@ import org.apache.isis.applib.annotation.Programmatic;
 public interface UserRegistrationService {
 
     @Programmatic
-    void registerUser(String username, String password);
+    void registerUser(String username, String password, String emailAddress);
+
+    @Programmatic
+    boolean userExists(String username);
+
+    @Programmatic
+    boolean emailExists(String emailAddress);
 }

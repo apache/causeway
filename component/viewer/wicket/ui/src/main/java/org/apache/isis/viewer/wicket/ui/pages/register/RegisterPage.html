@@ -19,7 +19,7 @@
   under the License.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml"  
-      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
+      xmlns:wicket="http://wicket.apache.org"
       xml:lang="en"  
       lang="en">
     <head>
@@ -55,32 +55,8 @@
 
             <div class="row">
                 <div class="registerPanel col-sm-offset-4 col-sm-4">
-                    <h2><xwicket:message key="registerHeader">Register</xwicket:message></h2>
-                    <div>
-                        <form wicket:id="registerForm">
-                            <table>
-                                <tr>
-                                    <td align="right">Username:</td>
-                                    <td>
-                                        <label wicket:id="username"></label>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="right">Password:</td>
-                                    <td>
-                                        <input wicket:id="password" type="password"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>
-                                        <input type="submit" name="submit" value="Register"/>
-                                        <input type="reset" value="Reset"/>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
-                    </div>
+                    <h2><wicket:message key="registerHeader">Register</wicket:message></h2>
+                    <div wicket:id="content"></div>
                 </div>
             </div>
             <div wicket:id="exceptionStackTrace" class="exceptionStackTrace"></div>

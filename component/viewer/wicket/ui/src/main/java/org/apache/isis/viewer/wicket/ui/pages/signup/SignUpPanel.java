@@ -21,21 +21,25 @@ package org.apache.isis.viewer.wicket.ui.pages.signup;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
+import java.util.UUID;
 import javax.inject.Inject;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.PasswordTextField;
+import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.UrlRenderer;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.apache.isis.applib.services.email.EmailSendingService;
-import org.apache.isis.applib.services.email.events.UserCreationEvent;
+import org.apache.isis.applib.services.email.EmailNotificationService;
+import org.apache.isis.applib.services.email.events.EmailRegistrationEvent;
+import org.apache.isis.viewer.wicket.ui.pages.register.RegisterPage;
 
 /**
  * A panel with a form for creation of new users
  */
-public class IsisSignUpPanel extends Panel {
+public class SignUpPanel extends Panel {
 
     /**
      * Constructor
@@ -43,31 +47,48 @@ public class IsisSignUpPanel extends Panel {
      * @param id
      *            the component id
      */
-    public IsisSignUpPanel(final String id) {
+    public SignUpPanel(final String id) {
         super(id);
 
         addOrReplace(new NotificationPanel("feedback"));
 
-        Form<Void> form = new Form<>("signUpForm");
+        StatelessForm<Void> form = new StatelessForm<>("signUpForm");
         addOrReplace(form);
 
         final TextField<String> emailField = new TextField<>("email", Model.of(""));
         emailField.add(EmailAddressValidator.getInstance());
-        final PasswordTextField passwordField = new PasswordTextField("password", Model.of(""));
+
         Button signUpButton = new Button("signUp") {
             @Override
             public void onSubmit() {
                 super.onSubmit();
 
                 String email = emailField.getModelObject();
-                String password = passwordField.getModelObject();
+                String confirmationUrl = createUrl(email);
 
-                emailService.send(new UserCreationEvent(email, password));
+                emailService.send(new EmailRegistrationEvent(email, confirmationUrl));
             }
         };
-        form.add(emailField, passwordField, signUpButton);
+        form.add(emailField, signUpButton);
+    }
+
+    private String createUrl(String email) {
+        String uuid = UUID.randomUUID().toString();
+        uuid = uuid.replace("-", "");
+
+        // TODO mgrigorov: either improve the API or use a DB table for this
+        AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
+        accountConfirmationMap.put(uuid, email);
+
+        PageParameters parameters = new PageParameters();
+        parameters.set(0, uuid);
+        CharSequence relativeUrl = urlFor(RegisterPage.class, parameters);
+        UrlRenderer urlRenderer = getRequestCycle().getUrlRenderer();
+        String fullUrl = urlRenderer.renderFullUrl(Url.parse(relativeUrl));
+
+        return fullUrl;
     }
 
     @Inject
-    private EmailSendingService emailService;
+    private EmailNotificationService emailService;
 }

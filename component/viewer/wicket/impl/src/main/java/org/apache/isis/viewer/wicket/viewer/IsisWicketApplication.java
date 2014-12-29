@@ -61,6 +61,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
+import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -98,6 +99,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2Bootst
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2JsReference;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
+import org.apache.isis.viewer.wicket.ui.pages.signup.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.DeploymentTypeWicketAbstract;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
@@ -260,6 +262,10 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             filterJavascriptContributions();
 
             configureWicketSourcePlugin();
+
+            // TODO ISIS-987 Either make the API better (no direct access to the map) or use DB records
+            int maxEntries = 1000;
+            setMetaData(AccountConfirmationMap.KEY, new AccountConfirmationMap(maxEntries, Duration.days(1)));
 
             mountPages();
 
@@ -788,5 +794,4 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             cast.setAuthenticationSessionProvider(this);
         }
     }
-
 }

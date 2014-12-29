@@ -23,8 +23,12 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 
 import javax.inject.Inject;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.isis.applib.services.userreg.UserRegistrationService;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 
@@ -63,9 +67,25 @@ public class IsisSignInPanel extends SignInPanel {
     protected void onInitialize() {
         super.onInitialize();
 
-        getSignInForm().addOrReplace(new BookmarkablePageLink<Void>("signUpLink", pageClassRegistry.getPageClass(PageType.SIGN_UP)));
+        addSignUpLink("signUpLink");
 
-        addOrReplace(new NotificationPanel("feedback"));
+        addNotificationPanel("feedback");
+    }
+
+    protected void addNotificationPanel(String id) {
+        addOrReplace(new NotificationPanel(id));
+    }
+
+    protected void addSignUpLink(String id) {
+        // TODO ISIS-987 is this the correct way to check for the service availability here ? Open a session, etc.
+        IsisContext.openSession(new InitialisationSession());
+        Class<? extends Page> signUpPageClass = pageClassRegistry.getPageClass(PageType.SIGN_UP);
+        BookmarkablePageLink<Void> signUpLink = new BookmarkablePageLink<>(id, signUpPageClass);
+        final UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
+        signUpLink.setVisibilityAllowed(true);//userRegistrationService != null);
+        IsisContext.closeSession();
+
+        getSignInForm().addOrReplace(signUpLink);
     }
 
     private MarkupContainer getSignInForm() {

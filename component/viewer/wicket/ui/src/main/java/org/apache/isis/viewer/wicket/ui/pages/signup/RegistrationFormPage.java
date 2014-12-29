@@ -41,7 +41,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 /**
  * Boilerplate, pick up our HTML and CSS.
  */
-public class WicketSignUpPage extends WebPage {
+public class RegistrationFormPage extends WebPage {
     
     private static final long serialVersionUID = 1L;
 
@@ -80,15 +80,15 @@ public class WicketSignUpPage extends WebPage {
         return exceptionModel;
     }
 
-    public WicketSignUpPage() {
+    public RegistrationFormPage() {
         this(null);
     }
 
-    public WicketSignUpPage(final PageParameters parameters) {
+    public RegistrationFormPage(final PageParameters parameters) {
         this(parameters, getAndClearExceptionModelIfAny());
     }
 
-    public WicketSignUpPage(final PageParameters parameters, ExceptionModel exceptionModel) {
+    public RegistrationFormPage(final PageParameters parameters, ExceptionModel exceptionModel) {
         addPageTitle();
         addApplicationName();
         addSignInPanel();
@@ -108,8 +108,8 @@ public class WicketSignUpPage extends WebPage {
         add(new Label(ID_APPLICATION_NAME, applicationName));
     }
 
-    protected IsisSignUpPanel addSignInPanel() {
-        final IsisSignUpPanel signInPanel = new IsisSignUpPanel("signUpPanel");
+    protected SignUpPanel addSignInPanel() {
+        final SignUpPanel signInPanel = new SignUpPanel("signUpPanel");
         add(signInPanel);
         return signInPanel;
     }
