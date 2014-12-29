@@ -19,90 +19,31 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.login;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import org.apache.wicket.Application;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
-import org.apache.wicket.markup.head.*;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
-import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.AccountManagementPageAbstract;
 
 /**
  * Boilerplate, pick up our HTML and CSS.
  */
-public class WicketSignInPage extends WebPage {
+public class WicketSignInPage extends AccountManagementPageAbstract {
     
     private static final long serialVersionUID = 1L;
-
-    private static final String ID_PAGE_TITLE = "pageTitle";
-    private static final String ID_APPLICATION_NAME = "applicationName";
-
-    private static final String ID_EXCEPTION_STACK_TRACE = "exceptionStackTrace";
-
-    /**
-     * {@link Inject}ed when {@link #init() initialized}.
-     */
-    @Inject
-    @Named("applicationName")
-    private String applicationName;
-
-    /**
-     * {@link Inject}ed when {@link #init() initialized}.
-     */
-    @Inject
-    @Named("applicationCss")
-    private String applicationCss;
-    
-    /**
-     * {@link Inject}ed when {@link #init() initialized}.
-     */
-    @Inject
-    @Named("applicationJs")
-    private String applicationJs;
-
-    /**
-     * If set by {@link PageAbstract}. 
-     */
-    private static ExceptionModel getAndClearExceptionModelIfAny() {
-        ExceptionModel exceptionModel = PageAbstract.EXCEPTION.get();
-        PageAbstract.EXCEPTION.remove();
-        return exceptionModel;
-    }
-
-    public WicketSignInPage() {
-        this(null);
-    }
 
     public WicketSignInPage(final PageParameters parameters) {
         this(parameters, getAndClearExceptionModelIfAny());
     }
 
     public WicketSignInPage(final PageParameters parameters, ExceptionModel exceptionModel) {
-        addPageTitle();
-        addApplicationName();
+        super(parameters, exceptionModel);
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+
         addSignInPanel();
-        
-        if(exceptionModel != null) {
-            add(new ExceptionStackTracePanel(ID_EXCEPTION_STACK_TRACE, exceptionModel));
-        } else {
-            add(new WebMarkupContainer(ID_EXCEPTION_STACK_TRACE).setVisible(false));
-        }
-    }
-
-    private MarkupContainer addPageTitle() {
-        return add(new Label(ID_PAGE_TITLE, applicationName));
-    }
-
-    private void addApplicationName() {
-        add(new Label(ID_APPLICATION_NAME, applicationName));
     }
 
     protected SignInPanel addSignInPanel() {
@@ -123,28 +64,4 @@ public class WicketSignInPage extends WebPage {
         add(signInPanel);
         return signInPanel;
     }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
-        
-        if(applicationCss != null) {
-            response.render(CssReferenceHeaderItem.forUrl(applicationCss));
-        }
-        if(applicationJs != null) {
-            response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
-        }
-    }
-
-
- 
-    // ///////////////////////////////////////////////////
-    // System components
-    // ///////////////////////////////////////////////////
-
-    protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
-    }
-
 }

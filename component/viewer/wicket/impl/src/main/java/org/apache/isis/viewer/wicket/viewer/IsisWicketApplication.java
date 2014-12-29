@@ -563,7 +563,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         mountPage("/signin", PageType.SIGN_IN);
         mountPage("/signup", PageType.SIGN_UP);
         mountPage("/signup/verify", PageType.SIGN_UP_VERIFY);
-        mountPage("/password/recovery", PageType.FORGOT_PASSWORD);
+        mountPage("/password/reset", PageType.PASSWORD_RESET);
 
         mountPage("/entity/${objectOid}", PageType.ENTITY);
 
@@ -769,7 +769,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
      */
     @SuppressWarnings("unchecked")
     public Class<? extends WebPage> getForgotPasswordPageClass() {
-        return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.FORGOT_PASSWORD);
+        return (Class<? extends WebPage>) getPageClassRegistry().getPageClass(PageType.PASSWORD_RESET);
     }
 
 

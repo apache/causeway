@@ -67,9 +67,18 @@ public class IsisSignInPanel extends SignInPanel {
     protected void onInitialize() {
         super.onInitialize();
 
+        addPasswdResetLink("passwdResetLink");
+
         addSignUpLink("signUpLink");
 
         addNotificationPanel("feedback");
+    }
+
+    private void addPasswdResetLink(String id) {
+        Class<? extends Page> passwdResetPageClass = pageClassRegistry.getPageClass(PageType.PASSWORD_RESET);
+        BookmarkablePageLink<Void> passwdResetLink = new BookmarkablePageLink<>(id, passwdResetPageClass);
+
+        getSignInForm().addOrReplace(passwdResetLink);
     }
 
     protected void addNotificationPanel(String id) {

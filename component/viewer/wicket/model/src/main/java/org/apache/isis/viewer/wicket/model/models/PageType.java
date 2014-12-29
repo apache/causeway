@@ -33,7 +33,7 @@ public enum PageType {
     SIGN_IN,
     SIGN_UP,
     SIGN_UP_VERIFY,
-    FORGOT_PASSWORD,
+    PASSWORD_RESET,
     HOME, 
     ABOUT, 
     ENTITY, 

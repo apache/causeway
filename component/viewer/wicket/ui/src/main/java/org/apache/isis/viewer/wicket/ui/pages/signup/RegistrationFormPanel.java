@@ -44,7 +44,7 @@ import org.apache.isis.viewer.wicket.ui.pages.register.RegisterPage;
 /**
  * A panel with a form for creation of new users
  */
-public class SignUpPanel extends Panel {
+public class RegistrationFormPanel extends Panel {
 
     /**
      * Constructor
@@ -52,7 +52,7 @@ public class SignUpPanel extends Panel {
      * @param id
      *            the component id
      */
-    public SignUpPanel(final String id) {
+    public RegistrationFormPanel(final String id) {
         super(id);
 
         addOrReplace(new NotificationPanel("feedback"));

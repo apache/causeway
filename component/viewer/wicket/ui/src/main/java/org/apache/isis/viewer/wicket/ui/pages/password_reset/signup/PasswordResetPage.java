@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.pages.signup;
+package org.apache.isis.viewer.wicket.ui.pages.password_reset.signup;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
@@ -26,15 +26,15 @@ import org.apache.isis.viewer.wicket.ui.pages.AccountManagementPageAbstract;
 /**
  * Boilerplate, pick up our HTML and CSS.
  */
-public class RegistrationFormPage extends AccountManagementPageAbstract {
+public class PasswordResetPage extends AccountManagementPageAbstract {
     
     private static final long serialVersionUID = 1L;
 
-    public RegistrationFormPage(final PageParameters parameters) {
+    public PasswordResetPage(final PageParameters parameters) {
         this(parameters, getAndClearExceptionModelIfAny());
     }
 
-    public RegistrationFormPage(final PageParameters parameters, ExceptionModel exceptionModel) {
+    public PasswordResetPage(final PageParameters parameters, ExceptionModel exceptionModel) {
         super(parameters, exceptionModel);
     }
 
@@ -42,12 +42,12 @@ public class RegistrationFormPage extends AccountManagementPageAbstract {
     protected void onInitialize() {
         super.onInitialize();
 
-        addSignInPanel();
+        addPasswordResetPanel();
     }
 
-    protected RegistrationFormPanel addSignInPanel() {
-        final RegistrationFormPanel signInPanel = new RegistrationFormPanel("signUpPanel");
-        add(signInPanel);
-        return signInPanel;
+    protected PasswordResetPanel addPasswordResetPanel() {
+        final PasswordResetPanel passwordResetPanel = new PasswordResetPanel("passwordResetPanel");
+        addOrReplace(passwordResetPanel);
+        return passwordResetPanel;
     }
 }
