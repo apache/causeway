@@ -58,9 +58,14 @@ public @interface Parameter {
     // //////////////////////////////////////
 
     /**
-     * Whether this parameter is mandatory or optional.
+     * Whether this parameter is optional or is required.
+     *
+     * <p>
+     *     For parameters the default value, {@link org.apache.isis.applib.annotation.Optionality#DEFAULT}, is taken
+     *     to mean that the parameter is required.
+     * </p>
      */
-    Cardinality cardinality() default Cardinality.DEFAULT;
+    Optionality optional() default Optionality.DEFAULT;
 
 
     // //////////////////////////////////////

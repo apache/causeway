@@ -17,13 +17,13 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.layout;
+package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.layout.LabelAtFacet;
-import org.apache.isis.core.metamodel.facets.propparam.layout.LabelAtFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
+import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacetAbstract;
 
 public class LabelAtFacetForPropertyLayoutAnnotation extends LabelAtFacetAbstract {
 

@@ -17,20 +17,11 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.notpersisted.annotation;
+package org.apache.isis.core.metamodel.facets.propparam.mustsatisfyspec;
 
-import org.apache.isis.applib.annotation.NotPersisted;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
-public class NotPersistedFacetOnPropertyAnnotation extends NotPersistedFacetAbstract {
+public interface MustSatisfySpecificationFacet extends Facet, ValidatingInteractionAdvisor {
 
-    public NotPersistedFacetOnPropertyAnnotation(final FacetHolder holder) {
-        super(holder);
-    }
-
-    static NotPersistedFacet create(final NotPersisted annotation, final FacetHolder holder) {
-        return annotation == null ? null : new NotPersistedFacetOnPropertyAnnotation(holder);
-    }
 }

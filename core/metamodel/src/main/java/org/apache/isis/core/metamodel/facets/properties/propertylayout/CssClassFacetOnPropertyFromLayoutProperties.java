@@ -17,33 +17,30 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.layout;
+package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Properties;
 import com.google.common.base.Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
-import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 
-public class MultiLineFacetOnPropertyFromLayoutProperties extends MultiLineFacetAbstract {
+public class CssClassFacetOnPropertyFromLayoutProperties extends CssClassFacetAbstract {
 
-    public static MultiLineFacet create(Properties properties, FacetHolder holder) {
-        final int multiLine = multiLine(properties);
-        return multiLine > 1? new MultiLineFacetOnPropertyFromLayoutProperties(multiLine, holder): null;
+    public static CssClassFacet create(Properties properties, FacetHolder holder) {
+        final String cssClass = cssClass(properties);
+        return cssClass != null? new CssClassFacetOnPropertyFromLayoutProperties(cssClass, holder): null;
     }
 
-    private MultiLineFacetOnPropertyFromLayoutProperties(int multiLine, FacetHolder holder) {
-        super(multiLine, false, holder);
+    private CssClassFacetOnPropertyFromLayoutProperties(String cssClass, FacetHolder holder) {
+        super(cssClass, holder);
     }
 
-    private static int multiLine(Properties properties) {
+    private static String cssClass(Properties properties) {
         if(properties == null) {
-            return -1;
+            return null;
         }
-        String multiLine = Strings.emptyToNull(properties.getProperty("multiLine"));
-        if(multiLine == null) {
-            return -1;
-        }
-        return Integer.parseInt(multiLine);
+        return Strings.emptyToNull(properties.getProperty("cssClass"));
     }
+
 }

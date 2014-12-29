@@ -20,12 +20,10 @@
 package org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.mandatory;
 
 import org.apache.isis.applib.annotation.Mandatory;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
 
 public class MandatoryFacetOnPropertyMandatoryAnnotationFactory extends FacetFactoryAbstract {
 
@@ -35,15 +33,11 @@ public class MandatoryFacetOnPropertyMandatoryAnnotationFactory extends FacetFac
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        if (!Annotations.isAnnotationPresent(processMethodContext.getMethod(), Mandatory.class)) {
+        final Mandatory annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Mandatory.class);
+        if(annotation == null) {
             return;
         }
-        final Mandatory annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Mandatory.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
-    }
-
-    private MandatoryFacet create(final Mandatory annotation, final FacetHolder holder) {
-        return annotation != null ? new MandatoryFacetOnPropertyMandatoryAnnotation(holder) : null;
+        FacetUtil.addFacet(MandatoryFacetOnPropertyMandatoryAnnotation.create(annotation, processMethodContext.getFacetHolder()));
     }
 
 }

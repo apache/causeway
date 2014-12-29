@@ -56,6 +56,7 @@ public class PropertyInteractionFacetFactory extends FacetFactoryAbstract implem
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
+
         final Method method = processMethodContext.getMethod();
         FacetedMethod holder = processMethodContext.getFacetHolder();
 

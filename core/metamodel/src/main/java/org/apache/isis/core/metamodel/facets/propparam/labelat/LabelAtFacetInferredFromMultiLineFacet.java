@@ -17,34 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.propparam.layout;
+package org.apache.isis.core.metamodel.facets.propparam.labelat;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
 
-public abstract class LabelAtFacetAbstract extends MultipleValueFacetAbstract implements LabelAtFacet {
+/**
+ * If multi-line then position the label at the top.
+ *
+ * <p>
+ *     This can still be overridden using the {@link org.apache.isis.applib.annotation.PropertyLayout} annotation / layout.json.
+ * </p>
+ */
+public class LabelAtFacetInferredFromMultiLineFacet extends LabelAtFacetAbstract {
 
-    public static Class<? extends Facet> type() {
-        return LabelAtFacet.class;
-    }
-
-    private final LabelPosition value;
-
-    public LabelAtFacetAbstract(final LabelPosition value, final FacetHolder holder) {
-        super(type(), holder);
-        this.value = value;
-    }
-
-    @Override
-    public LabelPosition label() {
-        return value;
-    }
-
-    @Override
-    protected String toStringValues() {
-        return "position=" + value;
+    public LabelAtFacetInferredFromMultiLineFacet(final FacetHolder holder) {
+        super(LabelPosition.TOP, holder);
     }
 
 }

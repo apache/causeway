@@ -17,30 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.layout;
+package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 
-public class NamedFacetForPropertyLayoutAnnotation extends NamedFacetAbstract {
+public class CssClassFacetForPropertyLayoutAnnotation extends CssClassFacetAbstract {
 
-    public static NamedFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
+    public static CssClassFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
         if(propertyLayout == null) {
             return null;
         }
-        final String named = Strings.emptyToNull(propertyLayout.named());
-        return named != null ? new NamedFacetForPropertyLayoutAnnotation(named, propertyLayout.namedEscaped(), holder) : null;
+        final String cssClass = Strings.emptyToNull(propertyLayout.cssClass());
+        return cssClass != null ? new CssClassFacetForPropertyLayoutAnnotation(cssClass, holder) : null;
     }
 
-    private NamedFacetForPropertyLayoutAnnotation(
-        final String value,
-        final boolean escaped,
-        final FacetHolder holder) {
-
-        super(value, escaped, holder);
+    private CssClassFacetForPropertyLayoutAnnotation(String value, FacetHolder holder) {
+        super(value, holder);
     }
 
 }

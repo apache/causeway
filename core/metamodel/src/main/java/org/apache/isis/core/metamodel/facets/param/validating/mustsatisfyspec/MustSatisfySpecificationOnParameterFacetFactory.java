@@ -20,13 +20,7 @@
 package org.apache.isis.core.metamodel.facets.param.validating.mustsatisfyspec;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.isis.applib.annotation.MustSatisfy;
-import org.apache.isis.applib.spec.Specification;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -45,38 +39,11 @@ public class MustSatisfySpecificationOnParameterFacetFactory extends FacetFactor
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof MustSatisfy) {
                 final MustSatisfy annotation = (MustSatisfy) parameterAnnotation;
-                FacetUtil.addFacet(create(annotation, processParameterContext.getFacetHolder()));
+                FacetUtil.addFacet(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter.create(annotation, processParameterContext.getFacetHolder()));
                 return;
             }
         }
     }
 
-    private Facet create(final MustSatisfy annotation, final FacetHolder holder) {
-        if (annotation == null) {
-            return null;
-        }
-        final Class<?>[] values = annotation.value();
-        final List<Specification> specifications = new ArrayList<Specification>();
-        for (final Class<?> value : values) {
-            final Specification specification = newSpecificationElseNull(value);
-            if (specification != null) {
-                specifications.add(specification);
-            }
-        }
-        return specifications.size() > 0 ? new MustSatisfySpecificationOnParameterFacet(specifications, holder) : null;
-    }
-
-    private static Specification newSpecificationElseNull(final Class<?> value) {
-        if (!(Specification.class.isAssignableFrom(value))) {
-            return null;
-        }
-        try {
-            return (Specification) value.newInstance();
-        } catch (final InstantiationException e) {
-            return null;
-        } catch (final IllegalAccessException e) {
-            return null;
-        }
-    }
 
 }

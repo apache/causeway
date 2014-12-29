@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.layout;
+package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Properties;
 import com.google.common.base.Strings;

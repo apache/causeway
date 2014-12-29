@@ -17,22 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.propparam.layout;
+package org.apache.isis.core.metamodel.facets.propparam.labelat;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * If multi-line then position the label at the top.
- *
- * <p>
- *     This can still be overridden using the {@link org.apache.isis.applib.annotation.PropertyLayout} annotation / layout.json.
- * </p>
+ * Corresponds to either {@literal @}{@link org.apache.isis.applib.annotation.PropertyLayout#labelPosition()} (for a property) or
+ *{@literal @}{@link org.apache.isis.applib.annotation.ParameterLayout#labelPosition()} (for an action parameter).
  */
-public class LabelAtFacetInferredFromMultiLineFacet extends LabelAtFacetAbstract {
+public interface LabelAtFacet extends Facet {
 
-    public LabelAtFacetInferredFromMultiLineFacet(final FacetHolder holder) {
-        super(LabelPosition.TOP, holder);
-    }
+    /**
+     * The positioning of a property or action parameter's label.
+     */
+    public LabelPosition label();
 
 }

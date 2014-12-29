@@ -17,25 +17,34 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.layout;
+package org.apache.isis.core.metamodel.facets.propparam.labelat;
 
-import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
-import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacetAbstract;
+import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
 
-public class MultiLineFacetForPropertyLayoutAnnotation extends MultiLineFacetAbstract {
+public abstract class LabelAtFacetAbstract extends MultipleValueFacetAbstract implements LabelAtFacet {
 
-    public static MultiLineFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
-        if(propertyLayout == null) {
-            return null;
-        }
-        final int multiLine = propertyLayout.multiLine();
-        return multiLine > 1 ? new MultiLineFacetForPropertyLayoutAnnotation(multiLine, false, holder) : null;
+    public static Class<? extends Facet> type() {
+        return LabelAtFacet.class;
     }
 
-    private MultiLineFacetForPropertyLayoutAnnotation(int numberOfLines, boolean preventWrapping, FacetHolder holder) {
-        super(numberOfLines, preventWrapping, holder);
+    private final LabelPosition value;
+
+    public LabelAtFacetAbstract(final LabelPosition value, final FacetHolder holder) {
+        super(type(), holder);
+        this.value = value;
+    }
+
+    @Override
+    public LabelPosition label() {
+        return value;
+    }
+
+    @Override
+    protected String toStringValues() {
+        return "position=" + value;
     }
 
 }

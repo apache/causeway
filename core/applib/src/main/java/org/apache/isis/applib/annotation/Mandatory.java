@@ -46,7 +46,7 @@ import java.lang.annotation.Target;
  * 
  * @see Optional
  * 
- * @deprecated - use {@link Property#cardinality()} and {@link Parameter#cardinality()}  (with {@link org.apache.isis.applib.annotation.Cardinality#MANDATORY}) instead.
+ * @deprecated - use {@link Property#optional()} and {@link Parameter#optional()}  (with {@link Optionality#FALSE}) instead.
  */
 @Deprecated
 @Inherited

@@ -17,27 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.mandatory;
+package org.apache.isis.core.metamodel.facets.properties.property;
 
-import org.apache.isis.applib.annotation.Mandatory;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
 
-/**
- * Derived by presence of an <tt>@Mandatory</tt> annotation.
- * 
- * <p>
- * This implementation indicates that the {@link FacetHolder} <i>is</i> 
- * mandatory.
- */
-public class MandatoryFacetOnPropertyMandatoryAnnotation extends MandatoryFacetAbstract {
+public class NotPersistedFacetForPropertyAnnotation extends NotPersistedFacetAbstract {
 
-    public MandatoryFacetOnPropertyMandatoryAnnotation(final FacetHolder holder) {
-        super(holder, Semantics.REQUIRED);
+    public NotPersistedFacetForPropertyAnnotation(final FacetHolder holder) {
+        super(holder);
     }
 
-    static MandatoryFacet create(final Mandatory annotation, final FacetHolder holder) {
-        return new MandatoryFacetOnPropertyMandatoryAnnotation(holder);
+    static NotPersistedFacet create(final Property property, final FacetHolder holder) {
+        final boolean notPersisted = property.notPersisted();
+        final boolean persisted = !notPersisted;
+        if(persisted) {
+            return null;
+        }
+        return new NotPersistedFacetForPropertyAnnotation(holder);
     }
 }

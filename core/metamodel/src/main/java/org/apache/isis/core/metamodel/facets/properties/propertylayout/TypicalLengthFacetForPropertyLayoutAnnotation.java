@@ -17,26 +17,33 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.layout;
+package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacetAbstract;
 
-public class CssClassFacetForPropertyLayoutAnnotation extends CssClassFacetAbstract {
+public class TypicalLengthFacetForPropertyLayoutAnnotation extends TypicalLengthFacetAbstract {
 
-    public static CssClassFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
+    public static TypicalLengthFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
         if(propertyLayout == null) {
             return null;
         }
-        final String cssClass = Strings.emptyToNull(propertyLayout.cssClass());
-        return cssClass != null ? new CssClassFacetForPropertyLayoutAnnotation(cssClass, holder) : null;
+        final int typicalLength = propertyLayout.typicalLength();
+        return typicalLength != -1 ? new TypicalLengthFacetForPropertyLayoutAnnotation(typicalLength, holder) : null;
     }
 
-    private CssClassFacetForPropertyLayoutAnnotation(String value, FacetHolder holder) {
-        super(value, holder);
+    private final int typicalLength;
+
+    private TypicalLengthFacetForPropertyLayoutAnnotation(int typicalLength, FacetHolder holder) {
+        super(holder, Derivation.NOT_DERIVED);
+        this.typicalLength = typicalLength;
+    }
+
+    @Override
+    public int value() {
+        return typicalLength;
     }
 
 }

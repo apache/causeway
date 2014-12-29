@@ -1,20 +1,24 @@
 package org.apache.isis.applib.annotation;
 
 /**
- * Whether the property or parameter is mandatory or not.
+ * Whether the property or parameter is optional or is required (aka mandatory).
  */
-public enum Cardinality {
+public enum Optionality {
     /**
-     * Default, usually mandatory (and always so for parameters) unless JDO {@link javax.jdo.annotations.Column}
-     * has also specified with {@link javax.jdo.annotations.Column#allowsNull()} set to <code>true</code>.
+     * Default, usually false (meaning mandatory) for properties and always false for parameters.
+     *
+     * <p>
+     * For properties, will be false unless JDO {@link javax.jdo.annotations.Column} has also specified with
+     * {@link javax.jdo.annotations.Column#allowsNull()} set to <code>true</code>.
+     * </p>
      */
     DEFAULT,
     /**
-     * Indicates that the property or parameter is not mandatory.
+     * Indicates that the property or parameter is not required.
      */
-    OPTIONAL,
+    TRUE,
     /**
-     * Indicates that the property is mandatory (even if the JDO {@link javax.jdo.annotations.Column} annotation
+     * Indicates that the property is required (even if the JDO {@link javax.jdo.annotations.Column} annotation
      * says otherwise).
      *
      * <p>
@@ -31,5 +35,5 @@ public enum Cardinality {
      * is unable to do so.
      * </p>
      */
-    MANDATORY
+    FALSE
 }

@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.properties.notpersisted.annotation;
 
 import org.apache.isis.applib.annotation.NotPersisted;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -36,11 +35,8 @@ public class NotPersistedFacetOnPropertyAnnotationFactory extends FacetFactoryAb
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final NotPersisted annotation = Annotations.getAnnotation(processMethodContext.getMethod(), NotPersisted.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
-    }
-
-    private NotPersistedFacet create(final NotPersisted annotation, final FacetHolder holder) {
-        return annotation == null ? null : new NotPersistedFacetOnPropertyAnnotation(holder);
+        final NotPersistedFacet notPersistedFacet = NotPersistedFacetOnPropertyAnnotation.create(annotation, processMethodContext.getFacetHolder());
+        FacetUtil.addFacet(notPersistedFacet);
     }
 
 }

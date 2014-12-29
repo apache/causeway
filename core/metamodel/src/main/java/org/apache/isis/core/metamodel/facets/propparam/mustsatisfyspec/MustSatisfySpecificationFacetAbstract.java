@@ -17,10 +17,9 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.param.validating.mustsatisfyspec;
+package org.apache.isis.core.metamodel.facets.propparam.mustsatisfyspec;
 
 import java.util.List;
-
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.applib.util.ReasonBuffer;
@@ -29,18 +28,17 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
-import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
-public class MustSatisfySpecificationOnParameterFacet extends FacetAbstract implements ValidatingInteractionAdvisor {
+public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstract implements MustSatisfySpecificationFacet {
 
     public static Class<? extends Facet> type() {
-        return MustSatisfySpecificationOnParameterFacet.class;
+        return MustSatisfySpecificationFacet.class;
     }
 
     private final List<Specification> specifications;
 
-    public MustSatisfySpecificationOnParameterFacet(final List<Specification> specifications, final FacetHolder holder) {
+    public MustSatisfySpecificationFacetAbstract(final List<Specification> specifications, final FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.specifications = specifications;
     }
@@ -51,16 +49,33 @@ public class MustSatisfySpecificationOnParameterFacet extends FacetAbstract impl
             return null;
         }
         final ProposedHolder proposedHolder = (ProposedHolder) validityContext;
-        final ObjectAdapter targetNO = proposedHolder.getProposed();
-        if(targetNO == null) {
+        final ObjectAdapter proposedAdapter = proposedHolder.getProposed();
+        if(proposedAdapter == null) {
             return null;
         }
-        final Object targetObject = targetNO.getObject();
+        final Object proposedObject = proposedAdapter.getObject();
         final ReasonBuffer buf = new ReasonBuffer();
         for (final Specification specification : specifications) {
-            buf.append(specification.satisfies(targetObject));
+            buf.append(specification.satisfies(proposedObject));
         }
         return buf.getReason();
     }
+
+    /**
+     * For benefit of subclasses.
+     */
+    protected static Specification newSpecificationElseNull(final Class<?> value) {
+        if (!(Specification.class.isAssignableFrom(value))) {
+            return null;
+        }
+        try {
+            return (Specification) value.newInstance();
+        } catch (final InstantiationException e) {
+            return null;
+        } catch (final IllegalAccessException e) {
+            return null;
+        }
+    }
+
 
 }

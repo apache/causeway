@@ -17,20 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.propparam.layout;
+package org.apache.isis.core.metamodel.facets.properties.property;
 
-import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacetAbstract;
 
-/**
- * Corresponds to either {@literal @}{@link org.apache.isis.applib.annotation.PropertyLayout#labelPosition()} (for a property) or
- *{@literal @}{@link org.apache.isis.applib.annotation.ParameterLayout#labelPosition()} (for an action parameter).
- */
-public interface LabelAtFacet extends Facet {
+public class MaxLengthFacetForPropertyAnnotation extends MaxLengthFacetAbstract {
 
-    /**
-     * The positioning of a property or action parameter's label.
-     */
-    public LabelPosition label();
+    public static MaxLengthFacet create(Property property, FacetHolder holder) {
+        final int maxLength = property.maxLength();
+        return maxLength != -1
+                ? new MaxLengthFacetForPropertyAnnotation(maxLength, holder)
+                : null;
+    }
+
+    private MaxLengthFacetForPropertyAnnotation(final int value, final FacetHolder holder) {
+        super(value, holder);
+    }
 
 }

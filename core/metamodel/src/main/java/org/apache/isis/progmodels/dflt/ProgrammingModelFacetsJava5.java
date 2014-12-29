@@ -174,7 +174,7 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.method.Property
 import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutableFactory;
 import org.apache.isis.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferredFactory;
 import org.apache.isis.core.metamodel.facets.properties.interaction.PropertyInteractionFacetFactory;
-import org.apache.isis.core.metamodel.facets.properties.layout.PropertyLayoutFactory;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.mandatory.MandatoryFacetOnPropertyMandatoryAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.optional.MandatoryFacetOnPropertyInvertedByOptionalAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.dflt.MandatoryFacetOnProperyDefaultFactory;

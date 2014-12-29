@@ -202,6 +202,8 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         programmingModel.addFactory(BigDecimalDerivedFromJdoColumnAnnotationFacetFactory.class);
         programmingModel.addFactory(MaxLengthDerivedFromJdoColumnAnnotationFacetFactory.class);
         // must appear after JdoPrimaryKeyAnnotationFacetFactory (above)
+        // and also MandatoryFacetOnPropertyMandatoryAnnotationFactory
+        // and also PropertyAnnotationFactory
         programmingModel.addFactory(MandatoryFromJdoColumnAnnotationFacetFactory.class);
         
         programmingModel.addFactory(AuditableAnnotationInJdoApplibFacetFactory.class);

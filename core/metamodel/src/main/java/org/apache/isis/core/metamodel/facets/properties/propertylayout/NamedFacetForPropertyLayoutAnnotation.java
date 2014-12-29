@@ -17,30 +17,30 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.layout;
+package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import java.util.Properties;
 import com.google.common.base.Strings;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
-public class CssClassFacetOnPropertyFromLayoutProperties extends CssClassFacetAbstract {
+public class NamedFacetForPropertyLayoutAnnotation extends NamedFacetAbstract {
 
-    public static CssClassFacet create(Properties properties, FacetHolder holder) {
-        final String cssClass = cssClass(properties);
-        return cssClass != null? new CssClassFacetOnPropertyFromLayoutProperties(cssClass, holder): null;
-    }
-
-    private CssClassFacetOnPropertyFromLayoutProperties(String cssClass, FacetHolder holder) {
-        super(cssClass, holder);
-    }
-
-    private static String cssClass(Properties properties) {
-        if(properties == null) {
+    public static NamedFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
+        if(propertyLayout == null) {
             return null;
         }
-        return Strings.emptyToNull(properties.getProperty("cssClass"));
+        final String named = Strings.emptyToNull(propertyLayout.named());
+        return named != null ? new NamedFacetForPropertyLayoutAnnotation(named, propertyLayout.namedEscaped(), holder) : null;
+    }
+
+    private NamedFacetForPropertyLayoutAnnotation(
+        final String value,
+        final boolean escaped,
+        final FacetHolder holder) {
+
+        super(value, escaped, holder);
     }
 
 }

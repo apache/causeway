@@ -17,27 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.layout;
+package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.renderedadjusted.RenderedAdjustedFacet;
-import org.apache.isis.core.metamodel.facets.propparam.renderedadjusted.RenderedAdjustedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacetAbstract;
 
-public class RenderedAdjustedFacetForPropertyLayoutAnnotation extends RenderedAdjustedFacetAbstract {
+public class MultiLineFacetForPropertyLayoutAnnotation extends MultiLineFacetAbstract {
 
-    public static RenderedAdjustedFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
+    public static MultiLineFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
         if(propertyLayout == null) {
             return null;
         }
-        final boolean renderedAsDayBefore = propertyLayout.renderedAsDayBefore();
-        return renderedAsDayBefore ? new RenderedAdjustedFacetForPropertyLayoutAnnotation(holder) : null;
+        final int multiLine = propertyLayout.multiLine();
+        return multiLine > 1 ? new MultiLineFacetForPropertyLayoutAnnotation(multiLine, false, holder) : null;
     }
 
-    public static final int ADJUST_BY = -1;
-
-    private RenderedAdjustedFacetForPropertyLayoutAnnotation(FacetHolder holder) {
-        super(ADJUST_BY, holder);
+    private MultiLineFacetForPropertyLayoutAnnotation(int numberOfLines, boolean preventWrapping, FacetHolder holder) {
+        super(numberOfLines, preventWrapping, holder);
     }
 
 }

@@ -125,9 +125,15 @@ public @interface Property {
     // //////////////////////////////////////
 
     /**
-     * Whether this property is mandatory or optional.
+     * Whether this property is optional or is required.
+     *
+     * <p>
+     *     For properties the default value, {@link org.apache.isis.applib.annotation.Optionality#DEFAULT}, usually
+     *     means that the property is required unless it has been overridden by {@link javax.jdo.annotations.Column}
+     *     with its {@link javax.jdo.annotations.Column#allowsNull() allowNulls()} attribute set to true.
+     * </p>
      */
-    Cardinality cardinality() default Cardinality.DEFAULT;
+    Optionality optional() default Optionality.DEFAULT;
 
 
     // //////////////////////////////////////
@@ -146,9 +152,5 @@ public @interface Property {
      */
     int regexPatternFlags() default 0;
 
-    /**
-     * Replacement text for the pattern in generated error message.
-     */
-    String regexPatternReplacement() default "";
 
 }

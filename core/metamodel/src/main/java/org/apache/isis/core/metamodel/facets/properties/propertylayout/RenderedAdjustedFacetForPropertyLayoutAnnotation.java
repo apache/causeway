@@ -17,33 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.layout;
+package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import java.util.Properties;
-import com.google.common.base.Strings;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propparam.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.propparam.renderedadjusted.RenderedAdjustedFacetAbstract;
 
-public class RenderedAdjustedFacetOnPropertyFromLayoutProperties extends RenderedAdjustedFacetAbstract {
+public class RenderedAdjustedFacetForPropertyLayoutAnnotation extends RenderedAdjustedFacetAbstract {
+
+    public static RenderedAdjustedFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
+        if(propertyLayout == null) {
+            return null;
+        }
+        final boolean renderedAsDayBefore = propertyLayout.renderedAsDayBefore();
+        return renderedAsDayBefore ? new RenderedAdjustedFacetForPropertyLayoutAnnotation(holder) : null;
+    }
 
     public static final int ADJUST_BY = -1;
 
-    public static RenderedAdjustedFacet create(Properties properties, FacetHolder holder) {
-        final boolean renderedAsDayBefore = renderedAsDayBefore(properties);
-        return renderedAsDayBefore ? new RenderedAdjustedFacetOnPropertyFromLayoutProperties(holder): null;
-    }
-
-    private RenderedAdjustedFacetOnPropertyFromLayoutProperties(FacetHolder holder) {
+    private RenderedAdjustedFacetForPropertyLayoutAnnotation(FacetHolder holder) {
         super(ADJUST_BY, holder);
-    }
-
-    private static boolean renderedAsDayBefore(Properties properties) {
-        if(properties == null) {
-            return false;
-        }
-        String renderedAsDayBefore = Strings.emptyToNull(properties.getProperty("renderedAsDayBefore"));
-        return renderedAsDayBefore != null && Boolean.parseBoolean(renderedAsDayBefore);
     }
 
 }

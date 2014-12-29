@@ -17,41 +17,37 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.validating.regexannot;
+package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.util.regex.Pattern;
-import org.apache.isis.applib.annotation.RegEx;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.object.regex.RegExFacetAbstract;
 
-public class RegExFacetOnPropertyAnnotation extends RegExFacetAbstract {
+public class RegExFacetForPropertyAnnotation extends RegExFacetAbstract {
 
     private final Pattern pattern;
 
-    static RegExFacet createRegexFacet(final RegEx annotation, final FacetHolder holder) {
+    static RegExFacet create(final Property property, final FacetHolder holder) {
 
-        final String validationExpression = annotation.validation();
-        final boolean caseSensitive = annotation.caseSensitive();
-        final String formatExpression = annotation.format();
+        final String pattern = property.regexPattern();
+        final int patternFlags = property.regexPatternFlags();
 
-        return new RegExFacetOnPropertyAnnotation(validationExpression, formatExpression, caseSensitive, holder);
+        return new RegExFacetForPropertyAnnotation(pattern, patternFlags, holder);
     }
 
-    private RegExFacetOnPropertyAnnotation(final String validation, final String format, final boolean caseSensitive, final FacetHolder holder) {
-        super(validation, format, caseSensitive, holder);
-        pattern = Pattern.compile(validation(), patternFlags());
+    private RegExFacetForPropertyAnnotation(final String pattern, final int patternFlags, final FacetHolder holder) {
+        super(pattern, "", false, holder);
+        this.pattern = Pattern.compile(pattern, patternFlags);
     }
 
+    /**
+     * Unused
+     */
     @Override
-    public String format(final String text) {
-        if (text == null) {
-            return "<not a string>";
-        }
-        if (format() == null || format().length() == 0) {
-            return text;
-        }
-        return pattern.matcher(text).replaceAll(format());
+    public String format(String text) {
+        return text;
     }
 
     @Override
@@ -62,8 +58,5 @@ public class RegExFacetOnPropertyAnnotation extends RegExFacetAbstract {
         return !pattern.matcher(text).matches();
     }
 
-    private int patternFlags() {
-        return !caseSensitive() ? Pattern.CASE_INSENSITIVE : 0;
-    }
 
 }
