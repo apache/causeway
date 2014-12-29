@@ -21,8 +21,8 @@
             <span wicket:id="feedback"></span>
 
             <form wicket:id="signUpForm" role="form">
-                <div class="form-group">
-                    <label wicket:for="email"><wicket:message key="emailLabel"/></label>
+                <div class="form-group" wicket:id="formGroup">
+                    <label wicket:for="email" class="control-label"><wicket:message key="emailLabel"/></label>
                     <input type="text" class="form-control" wicket:id="email" wicket:message="placeholder:emailPlaceholder"/>
                 </div>
 

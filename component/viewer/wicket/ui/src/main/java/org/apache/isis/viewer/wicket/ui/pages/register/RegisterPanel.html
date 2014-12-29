@@ -9,19 +9,19 @@
             <div wicket:id="feedback"></div>
 
             <form wicket:id="registerForm" role="form">
-                <div class="form-group">
-                    <label wicket:for="username"><wicket:message key="usernameLabel"/></label>
+                <div class="form-group" wicket:id="usernameFormGroup">
+                    <label wicket:for="username" class="control-label"><wicket:message key="usernameLabel"/></label>
                     <input type="text" class="form-control" wicket:id="username" wicket:message="placeholder:usernamePlaceholder"/>
                 </div>
 
-                <div class="form-group">
-                    <label wicket:for="password"><wicket:message key="passwordLabel"/></label>
+                <div class="form-group" wicket:id="passwordFormGroup">
+                    <label wicket:for="password" class="control-label"><wicket:message key="passwordLabel"/></label>
                     <input type="password" class="form-control" wicket:id="password" wicket:message="placeholder:passwordPlaceholder"/>
                 </div>
 
-                <div class="form-group">
-                    <label wicket:for="verifyPassword"><wicket:message key="verifyPasswordLabel"/></label>
-                    <input type="password" class="form-control" wicket:id="verifyPassword" wicket:message="placeholder:verifyPasswordPlaceholder"/>
+                <div class="form-group" wicket:id="confirmPasswordFormGroup">
+                    <label wicket:for="confirmPassword" class="control-label"><wicket:message key="confirmPasswordLabel"/></label>
+                    <input type="password" class="form-control" wicket:id="confirmPassword" wicket:message="placeholder:confirmPasswordPlaceholder"/>
                 </div>
 
                 <div class="form-group">

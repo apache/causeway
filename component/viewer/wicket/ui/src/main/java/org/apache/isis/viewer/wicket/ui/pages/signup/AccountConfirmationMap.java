@@ -88,17 +88,17 @@ public class AccountConfirmationMap extends MostRecentlyUsedMap<String, Object>
 	}
 
 	@Override
-	public String put(String key, Object bufferedResponse)
+	public String put(String key, Object email)
 	{
-		if (!(bufferedResponse instanceof String))
+		if (!(email instanceof String))
 		{
 			throw new IllegalArgumentException(AccountConfirmationMap.class.getSimpleName() +
-				" can store only instances of " + String.class.getSimpleName());
+				" can store only instances of " + String.class.getSimpleName() + ": " + email);
 		}
 
 		Value value = new Value();
 		value.creationTime = Time.now();
-		value.email = (String)bufferedResponse;
+		value.email = (String)email;
 
 		Value oldValue;
 		synchronized (this)

@@ -9,12 +9,14 @@ import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.pages.signup.AccountConfirmationMap;
 
 /**
@@ -61,21 +63,51 @@ public class RegisterPanel extends Panel {
 
             setModel(new CompoundPropertyModel<>(registree));
 
-            add(new RequiredTextField<String>("username"));
+            addUsername();
 
-            PasswordTextField password = new PasswordTextField("password");
-            add(password);
-            PasswordTextField verifyPassword = new PasswordTextField("verifyPassword");
-            add(verifyPassword);
-            add(new EqualPasswordInputValidator(password, verifyPassword));
+            PasswordTextField password = addPassword();
+            PasswordTextField confirmPassword = addConfirmPassword();
+            add(new EqualPasswordInputValidator(password, confirmPassword));
 
-            // use RO model to prevent changing the email
-            add(new TextField<>("email", new AbstractReadOnlyModel<String>() {
+            addEmail(registree);
+        }
+
+        protected TextField<String> addEmail(final Registree registree) {
+            // use RO-ish model to prevent changing the email with manual form submits
+            TextField<String> emailField = new TextField<>("email", new Model<String>() {
                 @Override
                 public String getObject() {
                     return registree.getEmail();
                 }
-            }));
+            });
+            addOrReplace(emailField);
+            return emailField;
+        }
+
+        protected PasswordTextField addConfirmPassword() {
+            PasswordTextField confirmPassword = new PasswordTextField("confirmPassword");
+            confirmPassword.setLabel(new ResourceModel("confirmPasswordLabel"));
+            FormGroup confirmPasswordFormGroup = new FormGroup("confirmPasswordFormGroup", confirmPassword);
+            confirmPasswordFormGroup.add(confirmPassword);
+            addOrReplace(confirmPasswordFormGroup);
+            return confirmPassword;
+        }
+
+        protected PasswordTextField addPassword() {
+            PasswordTextField password = new PasswordTextField("password");
+            password.setLabel(new ResourceModel("passwordLabel"));
+            FormGroup passwordFormGroup = new FormGroup("passwordFormGroup", password);
+            passwordFormGroup.add(password);
+            addOrReplace(passwordFormGroup);
+            return password;
+        }
+
+        protected TextField<String> addUsername() {
+            RequiredTextField<String> username = new RequiredTextField<>("username");
+            FormGroup usernameFormGroup = new FormGroup("usernameFormGroup", username);
+            usernameFormGroup.add(username);
+            addOrReplace(usernameFormGroup);
+            return username;
         }
 
         @Override

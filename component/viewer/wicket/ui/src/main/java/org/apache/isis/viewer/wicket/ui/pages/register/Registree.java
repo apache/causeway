@@ -9,7 +9,7 @@ public class Registree implements Serializable {
 
     private String username;
     private String password;
-    private String verifyPassword;
+    private String confirmPassword;
     private String email;
 
     public String getUsername()
@@ -31,12 +31,12 @@ public class Registree implements Serializable {
         this.password = password;
     }
 
-    public String getVerifyPassword() {
-        return verifyPassword;
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setVerifyPassword(String verifyPassword) {
-        this.verifyPassword = verifyPassword;
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public String getEmail() {

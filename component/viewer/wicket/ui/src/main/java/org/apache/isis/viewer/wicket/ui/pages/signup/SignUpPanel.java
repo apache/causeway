@@ -21,19 +21,24 @@ package org.apache.isis.viewer.wicket.ui.pages.signup;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import javax.inject.Inject;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.UrlRenderer;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.isis.applib.services.email.EmailNotificationService;
 import org.apache.isis.applib.services.email.events.EmailRegistrationEvent;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.pages.register.RegisterPage;
 
 /**
@@ -55,8 +60,14 @@ public class SignUpPanel extends Panel {
         StatelessForm<Void> form = new StatelessForm<>("signUpForm");
         addOrReplace(form);
 
-        final TextField<String> emailField = new TextField<>("email", Model.of(""));
+        final RequiredTextField<String> emailField = new RequiredTextField<>("email", Model.of(""));
+        emailField.setLabel(new ResourceModel("emailLabel"));
         emailField.add(EmailAddressValidator.getInstance());
+
+        FormGroup formGroup = new FormGroup("formGroup", emailField);
+        form.add(formGroup);
+
+        formGroup.add(emailField);
 
         Button signUpButton = new Button("signUp") {
             @Override
@@ -66,10 +77,18 @@ public class SignUpPanel extends Panel {
                 String email = emailField.getModelObject();
                 String confirmationUrl = createUrl(email);
 
-                emailService.send(new EmailRegistrationEvent(email, confirmationUrl));
+                boolean emailSent = emailService.send(new EmailRegistrationEvent(email, confirmationUrl));
+                if (emailSent) {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("email", email);
+                    IModel<Map<String, String>> model = Model.ofMap(map);
+                    String emailSentMessage = getString("emailSentMessage", model);
+                    success(emailSentMessage);
+                }
             }
         };
-        form.add(emailField, signUpButton);
+
+        form.add(signUpButton);
     }
 
     private String createUrl(String email) {
