@@ -84,7 +84,8 @@ public class BookmarkPolicyFacetViaBookmarkableAnnotationFactory extends FacetFa
                     final ActionSemanticsFacet semanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
                     if(semanticsFacet == null || semanticsFacet.isNoop() || semanticsFacet.value() != Of.SAFE) {
                       validationFailures.add(
-                      "Action %s is bookmarkable but action semantics are not explicitly indicated as being safe.  Either add @ActionSemantics(Of.Safe), or remove @Bookmarkable.", 
+                          "Action %s is bookmarkable but action semantics are not explicitly indicated as being safe.  " +
+                          "Either add @Action(semantics=SemanticsOf.SAFE), or remove @ActionLayout(bookmarking=...).",
                       objectAction.getIdentifier().toClassAndNameIdentityString());
                     }
                 }

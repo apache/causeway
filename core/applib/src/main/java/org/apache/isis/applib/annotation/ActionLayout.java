@@ -33,6 +33,20 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ActionLayout {
 
+
+    /**
+     * Whether (and how) this action can be bookmarked in the UI.
+     *
+     * <p>
+     *     For bookmarkable actions, either {@link org.apache.isis.applib.annotation.BookmarkPolicy#AS_ROOT}
+     *     and {@link org.apache.isis.applib.annotation.BookmarkPolicy#AS_CHILD} can be used (they are treated
+     *     identically).
+     * </p>
+     */
+    BookmarkPolicy bookmarking() default BookmarkPolicy.NEVER;
+
+    // //////////////////////////////////////
+
     /**
      * Indicates the css class that an action should have.
      *
@@ -108,11 +122,5 @@ public @interface ActionLayout {
     boolean prototype() default false;
 
 
-    // //////////////////////////////////////
-
-    /**
-     * Whether (and how) this domain object can be bookmarked in the UI.
-     */
-    BookmarkPolicy bookmarking() default BookmarkPolicy.NEVER;
 
 }

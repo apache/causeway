@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 
 
 public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
@@ -54,6 +55,14 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
             properties = processMethodContext.metadataProperties("layout");
         }
         final ActionLayout actionLayout = Annotations.getAnnotation(processMethodContext.getMethod(), ActionLayout.class);
+
+
+        // bookmarkable
+        BookmarkPolicyFacet bookmarkableFacet = BookmarkPolicyFacetOnActionFromLayoutProperties.create(properties, holder);
+        if(bookmarkableFacet == null) {
+            bookmarkableFacet = BookmarkPolicyFacetForActionLayoutAnnotation.create(actionLayout, holder);
+        }
+        FacetUtil.addFacet(bookmarkableFacet);
 
 
         // cssClass

@@ -18,9 +18,11 @@ package org.apache.isis.core.metamodel.layoutmetadata;
 
 
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Where;
 
 public class ActionLayoutFacetRepr {
+    public BookmarkPolicy bookmarking;
     public String cssClass;
     public String cssClassFa;
     public String cssClassFaPosition;
