@@ -17,26 +17,19 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.hidden;
+package org.apache.isis.core.metamodel.facets.actions.typeof.annotation;
 
-import org.apache.isis.applib.annotation.When;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public class HiddenFacetAlwaysEverywhere extends HiddenFacetAbstract {
+public class TypeOfFacetForActionAnnotation extends TypeOfFacetAbstract {
 
-    public HiddenFacetAlwaysEverywhere(final FacetHolder holder) {
-        super(When.ALWAYS, Where.ANYWHERE, holder);
-    }
-
-    /**
-     * Always returns <i>Always hidden</i>.
-     */
-    @Override
-    public String hiddenReason(final ObjectAdapter target, Where where) {
-        return "Always hidden";
+    public TypeOfFacetForActionAnnotation(
+            final Class<?> type,
+            final SpecificationLoader specificationLookup,
+            final FacetHolder holder) {
+        super(type, holder, specificationLookup);
     }
 
 }

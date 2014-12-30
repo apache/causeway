@@ -36,7 +36,11 @@ public abstract class HiddenFacetAbstract extends WhenAndWhereValueFacetAbstract
     }
 
     public HiddenFacetAbstract(final When when, Where where, final FacetHolder holder) {
-        super(type(), holder, when, where);
+        this(type(), when, where, holder);
+    }
+
+    private HiddenFacetAbstract(final Class<? extends Facet> type, final When when, Where where, final FacetHolder holder) {
+        super(type, holder, when, where);
     }
 
     @Override

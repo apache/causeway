@@ -17,40 +17,40 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.property;
+package org.apache.isis.core.metamodel.facets.collections.collection;
 
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.EditPolicy;
-import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractImpl;
 
-public class DisabledFacetForPropertyAnnotation extends DisabledFacetAbstractImpl {
+public class DisabledFacetForCollectionAnnotation extends DisabledFacetAbstractImpl {
 
-    public static DisabledFacet create(final Property property, final FacetHolder holder) {
-        final EditPolicy editPolicy = property.editing();
-        final String disabledReason = property.editingDisabledReason();
+    public static DisabledFacet create(final Collection collection, final FacetHolder holder) {
+        final EditPolicy editPolicy = collection.editing();
+        final String disabledReason = collection.editingDisabledReason();
 
         switch (editPolicy) {
             case AS_CONFIGURED:
 
                 // nothing needs to be done here; the DomainObjectFactory (processing @DomainObject annotation)
                 // will install an ImmutableFacetForDomainObjectAnnotation on the domain object and then a
-                // DisabledFacetOnPropertyDerivedFromImmutable facet will be installed.
+                // DisabledFacetOnCollectionDerivedFromImmutable facet will be installed.
 
                 return null;
 
             case DISABLED:
-                return new DisabledFacetForPropertyAnnotation(disabledReason, holder);
+                return new DisabledFacetForCollectionAnnotation(disabledReason, holder);
             case ENABLED:
                 return null;
         }
         return null;
     }
 
-    private DisabledFacetForPropertyAnnotation(final String reason, final FacetHolder holder) {
+    private DisabledFacetForCollectionAnnotation(final String reason, final FacetHolder holder) {
         super(When.ALWAYS, Where.EVERYWHERE, reason, holder);
     }
 

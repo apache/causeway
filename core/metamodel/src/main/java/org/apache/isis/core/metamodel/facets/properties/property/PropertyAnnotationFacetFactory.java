@@ -47,7 +47,8 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         }
 
         processInteraction(processMethodContext);
-        processDisabled(processMethodContext);
+        processHidden(processMethodContext);
+        processEditing(processMethodContext);
         processMaxLength(processMethodContext);
         processMustSatisfy(processMethodContext);
         processNotPersisted(processMethodContext);
@@ -56,16 +57,22 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     }
 
     private void processInteraction(final ProcessMethodContext processMethodContext) {
+
+        // interaction is handled by PropertyInteractionFacetFactory, because the
+        // deprecated annotations must also be supported.
+
+    }
+
+    private void processHidden(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final Property property = Annotations.getAnnotation(method, Property.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         FacetUtil.addFacet(
-                PropertyInteractionFacetForPropertyAnnotation.create(
-                        property, servicesInjector, getSpecificationLoader(), holder));
+                HiddenFacetForPropertyAnnotation.create(property, holder));
     }
 
-    private void processDisabled(final ProcessMethodContext processMethodContext) {
+    private void processEditing(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final Property property = Annotations.getAnnotation(method, Property.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();

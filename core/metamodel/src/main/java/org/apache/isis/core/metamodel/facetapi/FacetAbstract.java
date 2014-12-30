@@ -54,7 +54,7 @@ public abstract class FacetAbstract implements Facet {
             final Derivation derivation) {
         this.facetType = ensureThatArg(facetType, is(not(nullValue(Class.class))));
         setFacetHolder(ensureThatArg(holder, is(not(nullValue(FacetHolder.class)))));
-        this.derived = derivation == Derivation.DERIVED;
+        this.derived = (derivation == Derivation.DERIVED);
     }
 
     @Override

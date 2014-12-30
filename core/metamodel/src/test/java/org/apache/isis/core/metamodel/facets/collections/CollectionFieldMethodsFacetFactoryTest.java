@@ -56,11 +56,11 @@ import org.apache.isis.core.metamodel.facets.collections.validate.CollectionVali
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAlwaysEverywhere;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractAlwaysEverywhere;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAlwaysEverywhere;
+import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractAlwaysEverywhere;
 
 public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -665,8 +665,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof HiddenFacetAlwaysEverywhere);
-        final HiddenFacetAbstract hiddenFacetAlways = (HiddenFacetAlwaysEverywhere) facet;
+        assertTrue(facet instanceof HiddenFacetAbstractAlwaysEverywhere);
+        final HiddenFacetAbstract hiddenFacetAlways = (HiddenFacetAbstractAlwaysEverywhere) facet;
         assertEquals(When.ALWAYS, hiddenFacetAlways.when());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(alwaysHideMethod));
@@ -697,8 +697,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof DisabledFacetAlwaysEverywhere);
-        final DisabledFacetAlwaysEverywhere disabledFacetAlways = (DisabledFacetAlwaysEverywhere) facet;
+        assertTrue(facet instanceof DisabledFacetAbstractAlwaysEverywhere);
+        final DisabledFacetAbstractAlwaysEverywhere disabledFacetAlways = (DisabledFacetAbstractAlwaysEverywhere) facet;
         assertEquals(When.ALWAYS, disabledFacetAlways.when());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(protectMethod));

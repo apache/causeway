@@ -30,9 +30,7 @@ public class PropertyInteractionFacetAnnotation extends PropertyInteractionFacet
     public PropertyInteractionFacetAnnotation(
             final Class<? extends PropertyInteractionEvent<?, ?>> eventType,
             final PropertyOrCollectionAccessorFacet getterFacet,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector,
-            final SpecificationLoader specificationLoader) {
+            final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
         super(eventType, getterFacet, holder, servicesInjector, specificationLoader);
     }
 

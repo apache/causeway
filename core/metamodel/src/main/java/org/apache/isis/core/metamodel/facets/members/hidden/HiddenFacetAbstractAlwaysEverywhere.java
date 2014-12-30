@@ -17,19 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.interaction;
+package org.apache.isis.core.metamodel.facets.members.hidden;
 
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public class ActionInteractionFacetDefault extends ActionInteractionFacetAbstract {
+public abstract class HiddenFacetAbstractAlwaysEverywhere extends HiddenFacetAbstract {
 
-    public ActionInteractionFacetDefault(
-            final Class<? extends ActionInteractionEvent<?>> eventType,
-            final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
-        super(eventType, holder, servicesInjector, specificationLoader);
+    public HiddenFacetAbstractAlwaysEverywhere(final FacetHolder holder) {
+        super(When.ALWAYS, Where.ANYWHERE, holder);
+    }
+
+    /**
+     * Always returns <i>Always hidden</i>.
+     */
+    @Override
+    public String hiddenReason(final ObjectAdapter target, Where where) {
+        return "Always hidden";
     }
 
 }

@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.interaction;
 
 import java.lang.reflect.Method;
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionInteraction;
 import org.apache.isis.applib.annotation.PostsCollectionAddedToEvent;
 import org.apache.isis.applib.annotation.PostsCollectionRemovedFromEvent;
@@ -30,6 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.collections.collection.CollectionInteractionFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -54,18 +56,24 @@ public class CollectionInteractionFacetFactory extends FacetFactoryAbstract impl
         //
         // Set up CollectionInteractionFacet, which will act as the hiding/disabling/validating advisor
         //
+        final Collection collection = Annotations.getAnnotation(method, Collection.class);
         final CollectionInteraction collectionInteraction = Annotations.getAnnotation(method, CollectionInteraction.class);
         final Class<? extends CollectionInteractionEvent<?, ?>> collectionInteractionEventType;
 
         final CollectionInteractionFacetAbstract collectionInteractionFacet;
-        if(collectionInteraction != null) {
+        if(collection != null && collection.interaction() != null) {
+            collectionInteractionEventType = collection.interaction();
+            collectionInteractionFacet = new CollectionInteractionFacetForCollectionAnnotation(
+                    collectionInteractionEventType, servicesInjector, getSpecificationLoader(), holder);
+
+        } else if(collectionInteraction != null) {
             collectionInteractionEventType = collectionInteraction.value();
             collectionInteractionFacet = new CollectionInteractionFacetAnnotation(
-                    collectionInteractionEventType, holder, servicesInjector, getSpecificationLoader());
+                    collectionInteractionEventType, servicesInjector, getSpecificationLoader(), holder);
         } else {
             collectionInteractionEventType = CollectionInteractionEvent.Default.class;
             collectionInteractionFacet = new CollectionInteractionFacetDefault(
-                    collectionInteractionEventType, holder, servicesInjector, getSpecificationLoader());
+                    collectionInteractionEventType, servicesInjector, getSpecificationLoader(), holder);
         }
         FacetUtil.addFacet(collectionInteractionFacet);
 
@@ -128,7 +136,7 @@ public class CollectionInteractionFacetFactory extends FacetFactoryAbstract impl
         // would look rather odd
         //
 
-        FacetUtil.addFacet(new CollectionInteractionFacetDefault(CollectionInteractionEvent.Default.class, objectMember, servicesInjector, getSpecificationLoader()));
+        FacetUtil.addFacet(new CollectionInteractionFacetDefault(CollectionInteractionEvent.Default.class, servicesInjector, getSpecificationLoader(), objectMember));
 
     }
 

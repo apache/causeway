@@ -17,19 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.interaction;
+package org.apache.isis.core.metamodel.facets.members.disabled;
 
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+import org.apache.isis.applib.annotation.When;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public class ActionInteractionFacetDefault extends ActionInteractionFacetAbstract {
+public class DisabledFacetForContributee extends DisabledFacetAbstractImpl {
 
-    public ActionInteractionFacetDefault(
-            final Class<? extends ActionInteractionEvent<?>> eventType,
-            final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
-        super(eventType, holder, servicesInjector, specificationLoader);
+    public DisabledFacetForContributee(String reason, FacetHolder holder) {
+        super(When.ALWAYS, Where.ANYWHERE, reason, holder);
     }
-
 }

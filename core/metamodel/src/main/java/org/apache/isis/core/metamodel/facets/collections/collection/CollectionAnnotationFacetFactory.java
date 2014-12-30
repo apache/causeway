@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.facets.collections.collection;
 
 import java.lang.reflect.Method;
 import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -44,28 +46,42 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
             return;
         }
 
-//        processInteraction(processMethodContext);
-//        processDisabled(processMethodContext);
+        processInteraction(processMethodContext);
+        processHidden(processMethodContext);
+        processEditing(processMethodContext);
+        processTypeOf(processMethodContext);
     }
 
-//    private void processInteraction(final ProcessMethodContext processMethodContext) {
-//        final Method method = processMethodContext.getMethod();
-//        final Property property = Annotations.getAnnotation(method, Property.class);
-//        final FacetHolder holder = processMethodContext.getFacetHolder();
-//
-//        FacetUtil.addFacet(
-//                PropertyInteractionFacetForPropertyAnnotation.create(
-//                        property, servicesInjector, getSpecificationLoader(), holder));
-//    }
-//
-//    private void processDisabled(final ProcessMethodContext processMethodContext) {
-//        final Method method = processMethodContext.getMethod();
-//        final Property property = Annotations.getAnnotation(method, Property.class);
-//        final FacetHolder holder = processMethodContext.getFacetHolder();
-//
-//        FacetUtil.addFacet(
-//                DisabledFacetForPropertyAnnotation.create(property, holder));
-//    }
+    private void processInteraction(final ProcessMethodContext processMethodContext) {
+
+        // interaction is handled by CollectionInteractionFacetFactory, because the
+        // deprecated annotations must also be supported.
+
+    }
+
+    private void processHidden(final ProcessMethodContext processMethodContext) {
+        final Method method = processMethodContext.getMethod();
+        final Collection collection = Annotations.getAnnotation(method, Collection.class);
+        final FacetHolder holder = processMethodContext.getFacetHolder();
+
+        FacetUtil.addFacet(
+                HiddenFacetForCollectionAnnotation.create(collection, holder));
+    }
+
+    private void processEditing(final ProcessMethodContext processMethodContext) {
+        final Method method = processMethodContext.getMethod();
+        final Collection collection = Annotations.getAnnotation(method, Collection.class);
+        final FacetHolder holder = processMethodContext.getFacetHolder();
+
+        FacetUtil.addFacet(
+                DisabledFacetForCollectionAnnotation.create(collection, holder));
+    }
+
+    private void processTypeOf(final ProcessMethodContext processMethodContext) {
+
+        // typeOf is handled by TypeOfFacetOnActionAnnotationFactory, because the
+        // deprecated annotations etc that must also be supported.
+    }
 
 
     @Override

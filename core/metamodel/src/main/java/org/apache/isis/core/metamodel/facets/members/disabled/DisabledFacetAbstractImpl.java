@@ -17,43 +17,58 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.hidden;
+package org.apache.isis.core.metamodel.facets.members.disabled;
+
+import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class HiddenFacetImpl extends HiddenFacetAbstract {
+public abstract class DisabledFacetAbstractImpl extends DisabledFacetAbstract {
 
-    public HiddenFacetImpl(final When when, Where where, final FacetHolder holder) {
+    private final String reason;
+
+    public DisabledFacetAbstractImpl(final When when, final Where where, final FacetHolder holder) {
+        this(when, where, null, holder);
+    }
+
+    public DisabledFacetAbstractImpl(final When when, final Where where, final String reason, final FacetHolder holder) {
         super(when, where, holder);
+        this.reason = reason;
     }
 
     @Override
-    public String hiddenReason(final ObjectAdapter targetAdapter, Where whereContext) {
-        if(!where().includes(whereContext)) {
-            return null;
-        }
-        
+    public String disabledReason(final ObjectAdapter targetAdapter) {
         if (when() == When.ALWAYS) {
-            return "Always hidden";
-        }
-        if (when() == When.NEVER) {
+            return disabledReasonElse("Always disabled");
+        } else if (when() == When.NEVER) {
             return null;
         }
 
-        // remaining tests depend on target in question.
+        // remaining tests depend upon the actual target in question
         if (targetAdapter == null) {
             return null;
         }
 
         if (when() == When.UNTIL_PERSISTED) {
-            return targetAdapter.isTransient() ? "Hidden until persisted" : null;
+            return targetAdapter.isTransient() ? disabledReasonElse("Disabled until persisted") : null;
         } else if (when() == When.ONCE_PERSISTED) {
-            return targetAdapter.representsPersistent() ? "Hidden once persisted" : null;
+            return targetAdapter.representsPersistent() ? disabledReasonElse("Disabled once persisted") : null;
         }
         return null;
+    }
+
+    private String disabledReasonElse(final String defaultReason) {
+        return !Strings.isNullOrEmpty(reason) ? reason : defaultReason;
+    }
+
+    /**
+     * Not API... the reason as defined in subclass
+     */
+    public String getReason() {
+        return reason;
     }
 
 }

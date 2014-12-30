@@ -28,9 +28,7 @@ public class CollectionInteractionFacetDefault extends CollectionInteractionFace
 
     public CollectionInteractionFacetDefault(
             final Class<? extends CollectionInteractionEvent<?, ?>> eventType,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector,
-            final SpecificationLoader specificationLoader) {
+            final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
         super(eventType, holder, servicesInjector, specificationLoader);
     }
 

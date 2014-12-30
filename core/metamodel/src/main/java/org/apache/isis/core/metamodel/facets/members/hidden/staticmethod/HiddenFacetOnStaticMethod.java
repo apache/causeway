@@ -17,19 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.interaction;
+package org.apache.isis.core.metamodel.facets.members.hidden.staticmethod;
 
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractAlwaysEverywhere;
 
-public class ActionInteractionFacetDefault extends ActionInteractionFacetAbstract {
+public class HiddenFacetOnStaticMethod extends HiddenFacetAbstractAlwaysEverywhere {
 
-    public ActionInteractionFacetDefault(
-            final Class<? extends ActionInteractionEvent<?>> eventType,
-            final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
-        super(eventType, holder, servicesInjector, specificationLoader);
+    public HiddenFacetOnStaticMethod(final FacetHolder holder) {
+        super(holder);
     }
 
 }

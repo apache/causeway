@@ -25,7 +25,10 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public class TypeOfFacetOnActionAnnotation extends TypeOfFacetAbstract {
 
-    public TypeOfFacetOnActionAnnotation(final Class<?> type, final FacetHolder holder, final SpecificationLoader specificationLookup) {
+    public TypeOfFacetOnActionAnnotation(
+            final Class<?> type,
+            final SpecificationLoader specificationLookup,
+            final FacetHolder holder) {
         super(type, holder, specificationLookup);
     }
 

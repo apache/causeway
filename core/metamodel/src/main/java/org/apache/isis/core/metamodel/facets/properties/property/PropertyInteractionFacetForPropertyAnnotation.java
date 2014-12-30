@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property;
 
-import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -29,27 +28,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public class PropertyInteractionFacetForPropertyAnnotation extends PropertyInteractionFacetAbstract {
 
-    static PropertyInteractionFacetAbstract create(
-            final Property property,
-            final ServicesInjector servicesInjector,
-            final SpecificationLoader specificationLoader,
-            final FacetHolder holder) {
-
-        final PropertyOrCollectionAccessorFacet getterFacet = holder.getFacet(PropertyOrCollectionAccessorFacet.class);
-        if(getterFacet == null) {
-            return null;
-        }
-
-        final Class<? extends PropertyInteractionEvent<?, ?>> interaction = property.interaction();
-        if(interaction == null) {
-            return null;
-        }
-
-        return new PropertyInteractionFacetForPropertyAnnotation(
-                interaction, getterFacet, servicesInjector, specificationLoader, holder);
-    }
-
-    private PropertyInteractionFacetForPropertyAnnotation(
+    public PropertyInteractionFacetForPropertyAnnotation(
             final Class<? extends PropertyInteractionEvent<?, ?>> eventType,
             final PropertyOrCollectionAccessorFacet getterFacet,
             final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {

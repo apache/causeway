@@ -17,16 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.interaction;
+package org.apache.isis.core.metamodel.facets.actions.action;
 
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInteractionFacetAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public class ActionInteractionFacetDefault extends ActionInteractionFacetAbstract {
+public class ActionInteractionFacetForActionAnnotation extends ActionInteractionFacetAbstract {
 
-    public ActionInteractionFacetDefault(
+    public ActionInteractionFacetForActionAnnotation(
             final Class<? extends ActionInteractionEvent<?>> eventType,
             final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
         super(eventType, holder, servicesInjector, specificationLoader);

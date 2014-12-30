@@ -24,23 +24,18 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public class DisabledFacetNever extends DisabledFacetAbstract {
+public abstract class DisabledFacetAbstractAlwaysEverywhere extends DisabledFacetAbstract {
 
-    public DisabledFacetNever(final FacetHolder holder) {
-        super(When.NEVER, Where.ANYWHERE, holder);
+    public DisabledFacetAbstractAlwaysEverywhere(final FacetHolder holder) {
+        super(When.ALWAYS, Where.ANYWHERE, holder);
     }
 
     /**
-     * Always returns <tt>null</tt>.
+     * Always returns <i>Always disabled</i>.
      */
     @Override
     public String disabledReason(final ObjectAdapter target) {
-        return null;
-    }
-
-    @Override
-    public boolean isNoop() {
-        return true;
+        return "Always disabled";
     }
 
 }

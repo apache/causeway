@@ -22,9 +22,9 @@ package org.apache.isis.core.metamodel.facets.members.hidden.annotprop;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetImpl;
+import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractImpl;
 
-public class HiddenFacetOnMemberAnnotation extends HiddenFacetImpl {
+public class HiddenFacetOnMemberAnnotation extends HiddenFacetAbstractImpl {
 
     public HiddenFacetOnMemberAnnotation(final When when, Where where, final FacetHolder holder) {
         super(when, where, holder);

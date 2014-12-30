@@ -24,9 +24,9 @@ import java.util.Properties;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetImpl;
+import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractImpl;
 
-public class HiddenFacetOnMemberFromProperties extends HiddenFacetImpl {
+public class HiddenFacetOnMemberFromProperties extends HiddenFacetAbstractImpl {
 
     public HiddenFacetOnMemberFromProperties(final When when, Where where, final FacetHolder holder) {
         super(when, where, holder);

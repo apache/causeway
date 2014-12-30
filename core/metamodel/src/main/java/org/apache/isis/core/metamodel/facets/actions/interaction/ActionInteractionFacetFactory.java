@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.actions.interaction;
 
 import java.lang.reflect.Method;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionInteraction;
 import org.apache.isis.applib.annotation.PostsActionInvokedEvent;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
@@ -32,6 +33,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.actions.action.ActionInteractionFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -107,16 +109,23 @@ public class ActionInteractionFacetFactory extends MethodPrefixBasedFacetFactory
             //
             // Set up ActionInteractionFacet, which will act as the hiding/disabling/validating advisor
             //
+            final Action action = Annotations.getAnnotation(actionMethod, Action.class);
             final ActionInteraction actionInteraction =Annotations.getAnnotation(actionMethod, ActionInteraction.class);
             final Class<? extends ActionInteractionEvent<?>> actionInteractionEventType;
 
             final ActionInteractionFacetAbstract actionInteractionFacet;
-            if(actionInteraction != null) {
+            if(action != null && action.interaction() != null) {
+                actionInteractionEventType = action.interaction();
+                actionInteractionFacet = new ActionInteractionFacetForActionAnnotation(
+                        actionInteractionEventType, servicesInjector, getSpecificationLoader(), holder);
+            } else if(actionInteraction != null) {
                 actionInteractionEventType = actionInteraction.value();
-                actionInteractionFacet = new ActionInteractionFacetAnnotation(actionInteractionEventType, holder, servicesInjector, getSpecificationLoader());
+                actionInteractionFacet = new ActionInteractionFacetAnnotation(
+                        actionInteractionEventType, servicesInjector, getSpecificationLoader(), holder);
             } else {
                 actionInteractionEventType = ActionInteractionEvent.Default.class;
-                actionInteractionFacet = new ActionInteractionFacetDefault(actionInteractionEventType, holder, servicesInjector, getSpecificationLoader());
+                actionInteractionFacet = new ActionInteractionFacetDefault(
+                        actionInteractionEventType, servicesInjector, getSpecificationLoader(), holder);
             }
             FacetUtil.addFacet(actionInteractionFacet);
 

@@ -17,29 +17,33 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.hidden;
+package org.apache.isis.core.metamodel.facets.properties.property;
 
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 
-public class HiddenFacetNever extends HiddenFacetAbstract {
+public class HiddenFacetForPropertyAnnotation extends HiddenFacetAbstract {
 
-    public HiddenFacetNever(final FacetHolder holder) {
-        super(When.NEVER, Where.ANYWHERE, holder);
+    public static HiddenFacet create(final Property property, final FacetHolder holder) {
+        final Where where = property.hidden();
+        return where != null && where != Where.NOT_SPECIFIED ? new HiddenFacetForPropertyAnnotation(where, holder) : null;
     }
 
-    /**
-     * Always returns <tt>null</tt>.
-     */
+    private HiddenFacetForPropertyAnnotation(final Where where, final FacetHolder holder) {
+        super(When.ALWAYS, where, holder);
+    }
+
     @Override
-    public String hiddenReason(final ObjectAdapter target, Where where) {
-        return null;
+    public String hiddenReason(final ObjectAdapter targetAdapter, final Where whereContext) {
+        if(!where().includes(whereContext)) {
+            return null;
+        }
+        return "Hidden on " + where().getFriendlyName();
     }
 
-    @Override
-    public boolean isNoop() {
-        return true;
-    }
 }

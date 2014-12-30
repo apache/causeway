@@ -44,7 +44,7 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetImpl;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractImpl;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
@@ -526,8 +526,8 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         DisabledFacet disabledFacet = assoc.getFacet(DisabledFacet.class);
         if(disabledFacet != null && !disabledFacet.isNoop()) {
             DisabledFacetRepr disabledFacetRepr = new DisabledFacetRepr();
-            if(disabledFacet instanceof DisabledFacetImpl) {
-                DisabledFacetImpl disabledFacetImpl = (DisabledFacetImpl) disabledFacet;
+            if(disabledFacet instanceof DisabledFacetAbstractImpl) {
+                DisabledFacetAbstractImpl disabledFacetImpl = (DisabledFacetAbstractImpl) disabledFacet;
                 disabledFacetRepr.reason = Strings.emptyToNull(disabledFacetImpl.getReason());
             }
             disabledFacetRepr.when = whenAlwaysToNull(disabledFacet.when());

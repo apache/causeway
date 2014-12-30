@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.List;
 import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyInteraction;
 import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -34,6 +35,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.properties.property.PropertyInteractionFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -68,18 +70,24 @@ public class PropertyInteractionFacetFactory extends FacetFactoryAbstract implem
         //
         // Set up PropertyInteractionFacet, which will act as the hiding/disabling/validating advisor
         //
+        final Property property = Annotations.getAnnotation(method, Property.class);
         final PropertyInteraction propertyInteraction = Annotations.getAnnotation(method, PropertyInteraction.class);
         final Class<? extends PropertyInteractionEvent<?, ?>> propertyInteractionEventType;
 
         final PropertyInteractionFacetAbstract propertyInteractionFacet;
-        if(propertyInteraction != null) {
+        if(property != null && property.interaction() != null) {
+            propertyInteractionEventType = property.interaction();
+            propertyInteractionFacet = new PropertyInteractionFacetForPropertyAnnotation(
+                    propertyInteractionEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
+
+        } else if(propertyInteraction != null) {
             propertyInteractionEventType = propertyInteraction.value();
             propertyInteractionFacet = new PropertyInteractionFacetAnnotation(
-                    propertyInteractionEventType, getterFacet, holder, servicesInjector, getSpecificationLoader());
+                    propertyInteractionEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
         } else {
             propertyInteractionEventType = PropertyInteractionEvent.Default.class;
             propertyInteractionFacet = new PropertyInteractionFacetDefault(
-                    propertyInteractionEventType, getterFacet, holder, servicesInjector, getSpecificationLoader());
+                    propertyInteractionEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
         }
         FacetUtil.addFacet(propertyInteractionFacet);
 

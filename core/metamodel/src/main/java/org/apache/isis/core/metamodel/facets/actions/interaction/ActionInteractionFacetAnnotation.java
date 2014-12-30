@@ -28,9 +28,7 @@ public class ActionInteractionFacetAnnotation extends ActionInteractionFacetAbst
 
     public ActionInteractionFacetAnnotation(
             final Class<? extends ActionInteractionEvent<?>> eventType,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector,
-            final SpecificationLoader specificationLoader) {
+            final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
         super(eventType, holder, servicesInjector, specificationLoader);
     }
 

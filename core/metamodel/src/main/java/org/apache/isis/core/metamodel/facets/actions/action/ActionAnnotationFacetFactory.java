@@ -21,9 +21,13 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.collections.collection.HiddenFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
@@ -44,18 +48,25 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
             return;
         }
 
-//        processInteraction(processMethodContext);
+        processInteraction(processMethodContext);
+        processHidden(processMethodContext);
     }
 
-//    private void processInteraction(final ProcessMethodContext processMethodContext) {
-//        final Method method = processMethodContext.getMethod();
-//        final Property property = Annotations.getAnnotation(method, Property.class);
-//        final FacetHolder holder = processMethodContext.getFacetHolder();
-//
-//        FacetUtil.addFacet(
-//                PropertyInteractionFacetForPropertyAnnotation.create(
-//                        property, servicesInjector, getSpecificationLoader(), holder));
-//    }
+    private void processInteraction(final ProcessMethodContext processMethodContext) {
+
+        // interaction is handled by ActionInteractionFacetFactory, because the
+        // deprecated annotations must also be supported.
+
+    }
+
+    private void processHidden(final ProcessMethodContext processMethodContext) {
+        final Method method = processMethodContext.getMethod();
+        final Action action = Annotations.getAnnotation(method, Action.class);
+        final FacetHolder holder = processMethodContext.getFacetHolder();
+
+        FacetUtil.addFacet(
+                HiddenFacetForActionAnnotation.create(action, holder));
+    }
 
 
     @Override

@@ -28,9 +28,7 @@ public class CollectionInteractionFacetAnnotation extends CollectionInteractionF
 
     public CollectionInteractionFacetAnnotation(
             final Class<? extends CollectionInteractionEvent<?, ?>> eventType,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector,
-            final SpecificationLoader specificationLoader) {
+            final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
         super(eventType, holder, servicesInjector, specificationLoader);
     }
 

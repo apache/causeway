@@ -17,17 +17,30 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.interaction;
+package org.apache.isis.core.metamodel.facets.collections.collection;
 
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.collections.interaction.CollectionInteractionFacet;
+import org.apache.isis.core.metamodel.facets.collections.interaction.CollectionInteractionFacetAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public class ActionInteractionFacetDefault extends ActionInteractionFacetAbstract {
+public class CollectionInteractionFacetForCollectionAnnotation extends CollectionInteractionFacetAbstract {
 
-    public ActionInteractionFacetDefault(
-            final Class<? extends ActionInteractionEvent<?>> eventType,
+    static CollectionInteractionFacet create(
+            final Collection collection,
+            final ServicesInjector servicesInjector,
+            final SpecificationLoader specificationLoader,
+            final FacetHolder holder) {
+        Class<? extends CollectionInteractionEvent<?, ?>> collectionInteractionEventType = collection.interaction();
+        return new CollectionInteractionFacetForCollectionAnnotation(
+                collectionInteractionEventType, servicesInjector, specificationLoader, holder);
+    }
+
+    public CollectionInteractionFacetForCollectionAnnotation(
+            final Class<? extends CollectionInteractionEvent<?, ?>> eventType,
             final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
         super(eventType, holder, servicesInjector, specificationLoader);
     }

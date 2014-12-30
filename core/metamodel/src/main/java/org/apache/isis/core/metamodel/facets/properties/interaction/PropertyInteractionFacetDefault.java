@@ -30,9 +30,7 @@ public class PropertyInteractionFacetDefault extends PropertyInteractionFacetAbs
     public PropertyInteractionFacetDefault(
             final Class<? extends PropertyInteractionEvent<?, ?>> eventType,
             final PropertyOrCollectionAccessorFacet getterFacet,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector,
-            final SpecificationLoader specificationLoader) {
+            final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
         super(eventType, getterFacet, holder, servicesInjector, specificationLoader);
     }
 

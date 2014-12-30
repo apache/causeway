@@ -17,25 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.disabled;
+package org.apache.isis.core.metamodel.facets.members.disabled.staticmethod;
 
-import org.apache.isis.applib.annotation.When;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractAlwaysEverywhere;
 
-public class DisabledFacetAlwaysEverywhere extends DisabledFacetAbstract {
+public class DisabledFacetForStaticMethod extends DisabledFacetAbstractAlwaysEverywhere {
 
-    public DisabledFacetAlwaysEverywhere(final FacetHolder holder) {
-        super(When.ALWAYS, Where.ANYWHERE, holder);
+    public DisabledFacetForStaticMethod(final FacetHolder holder) {
+        super(holder);
     }
 
-    /**
-     * Always returns <i>Always disabled</i>.
-     */
-    @Override
-    public String disabledReason(final ObjectAdapter target) {
-        return "Always disabled";
-    }
 
 }

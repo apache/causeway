@@ -35,7 +35,11 @@ public abstract class DisabledFacetAbstract extends WhenAndWhereValueFacetAbstra
     }
 
     public DisabledFacetAbstract(final When when, Where where, final FacetHolder holder) {
-        super(type(), holder, when, where);
+        this(type(), when, where, holder);
+    }
+
+    private DisabledFacetAbstract(final Class<? extends Facet> type, final When when, Where where, final FacetHolder holder) {
+        super(type, holder, when, where);
     }
 
     @Override
