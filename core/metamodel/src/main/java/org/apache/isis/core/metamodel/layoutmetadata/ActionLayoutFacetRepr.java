@@ -31,5 +31,4 @@ public class ActionLayoutFacetRepr {
     public String named;
     public boolean namedEscaped = true;
     public ActionLayout.Position position;
-    public boolean prototype;
 }

@@ -29,14 +29,16 @@ import com.google.common.eventbus.Subscribe;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.Environment;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
@@ -127,12 +129,14 @@ public class ToDoItemSubscriptions {
      * To demo/test what occurs if a subscriber that might veto an event.
      */
     @MemberOrder(name = "Prototyping", sequence = "80")
-    @ActionLayout(
-        named="Set subscriber behaviour",
-        prototype = true
-    )
     @NotContributed
-    @ActionSemantics(ActionSemantics.Of.IDEMPOTENT)
+    @ActionLayout(
+        named="Set subscriber behaviour"
+    )
+    @Action(
+            semantics = SemanticsOf.IDEMPOTENT,
+            restrictTo = Environment.DEVELOPMENT
+    )
     public void subscriberBehaviour(
             @ParameterLayout(named="Behaviour") Behaviour behaviour) {
         this.behaviour = behaviour;

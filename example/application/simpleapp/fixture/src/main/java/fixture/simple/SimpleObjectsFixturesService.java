@@ -21,11 +21,11 @@ package fixture.simple;
 import fixture.simple.scenario.SimpleObjectsFixture;
 
 import java.util.List;
-import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.Environment;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.fixturescripts.FixtureResult;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
@@ -63,8 +63,8 @@ public class SimpleObjectsFixturesService extends FixtureScripts {
 
     // //////////////////////////////////////
 
-    @ActionLayout(
-            prototype = true
+    @Action(
+            restrictTo = Environment.DEVELOPMENT
     )
     @MemberOrder(sequence="20")
     public Object installFixturesAndReturnFirst() {

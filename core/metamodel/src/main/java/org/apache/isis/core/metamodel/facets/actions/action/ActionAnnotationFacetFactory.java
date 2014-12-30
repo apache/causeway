@@ -58,12 +58,11 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         processInteraction(processMethodContext);
         processHidden(processMethodContext);
-
+        processRestrictTo(processMethodContext);
         processSemantics(processMethodContext);
         processInvokeOn(processMethodContext);
         processCommand(processMethodContext);
         processPublishing(processMethodContext);
-
         processTypeOf(processMethodContext);
     }
 
@@ -81,6 +80,15 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         FacetUtil.addFacet(
                 HiddenFacetForActionAnnotation.create(action, holder));
+    }
+
+    private void processRestrictTo(final ProcessMethodContext processMethodContext) {
+        final Method method = processMethodContext.getMethod();
+        final Action action = Annotations.getAnnotation(method, Action.class);
+        final FacetHolder holder = processMethodContext.getFacetHolder();
+
+        FacetUtil.addFacet(
+                PrototypeFacetForActionAnnotation.create(action, holder));
     }
 
     private void processSemantics(final ProcessMethodContext processMethodContext) {

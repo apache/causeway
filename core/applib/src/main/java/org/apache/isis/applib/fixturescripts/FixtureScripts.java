@@ -244,8 +244,8 @@ public abstract class FixtureScripts extends AbstractService {
      * To make this action usable in the UI, override either {@link #choices0RunFixtureScript()} or 
      * {@link #autoComplete0RunFixtureScript(String)} with <tt>public</tt> visibility</tt>.
      */
-    @ActionLayout(
-        prototype = true
+    @Action(
+        restrictTo = Environment.DEVELOPMENT
     )
     @MemberOrder(sequence="10")
     public List<FixtureResult> runFixtureScript(

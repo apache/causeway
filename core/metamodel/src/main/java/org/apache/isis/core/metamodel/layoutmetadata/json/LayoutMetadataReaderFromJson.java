@@ -356,10 +356,6 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             if(actionLayout.position != null) {
                 props.setProperty(prefix + "." + actionName + ".actionLayout.position", ""+actionLayout.position);
             }
-            //
-            {
-                props.setProperty(prefix + "." + actionName + ".actionLayout.prototype", "" + actionLayout.prototype);
-            }
         }
 
 

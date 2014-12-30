@@ -116,11 +116,6 @@ public @interface ActionLayout {
         PANEL_DROPDOWN
     }
 
-    /**
-     * Whether an action is a prototype action, only available when running in prototype (development) mode.
-     */
-    boolean prototype() default false;
-
 
 
 }

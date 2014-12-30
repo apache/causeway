@@ -17,34 +17,32 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.layout;
+package org.apache.isis.core.metamodel.facets.actions.action;
 
-import java.util.Properties;
-import com.google.common.base.Strings;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.Environment;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
 
-public class PrototypeFacetOnActionFromLayoutProperties extends PrototypeFacetAbstract {
+public class PrototypeFacetForActionAnnotation extends PrototypeFacetAbstract {
 
-    public static PrototypeFacet create(Properties properties, FacetHolder holder) {
-        final boolean prototype = prototype(properties);
-        return prototype ? new PrototypeFacetOnActionFromLayoutProperties(holder): null;
+    public static PrototypeFacet create(
+            final Action action,
+            final FacetHolder holder) {
+
+        if(action == null) {
+            return null;
+        }
+
+        final Environment[] environments = action.restrictTo();
+        boolean developmentOnly = Environment.hasDevelopmentOnly(environments);
+
+        return developmentOnly ? new PrototypeFacetForActionAnnotation(holder) : null;
     }
 
-    private PrototypeFacetOnActionFromLayoutProperties(FacetHolder holder) {
+    private PrototypeFacetForActionAnnotation(FacetHolder holder) {
         super(holder);
-    }
-
-    private static boolean prototype(Properties properties) {
-        if(properties == null) {
-            return false;
-        }
-        String prototype = Strings.emptyToNull(properties.getProperty("prototype"));
-        if(prototype == null) {
-            return false;
-        }
-        return Boolean.parseBoolean(prototype);
     }
 
 }

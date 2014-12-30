@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
-import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -115,13 +114,6 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
         }
         FacetUtil.addFacet(actionPositionFacet);
 
-
-        // prototype
-        PrototypeFacet prototypeFacet = PrototypeFacetOnActionFromLayoutProperties.create(properties, holder);
-        if(prototypeFacet == null) {
-            prototypeFacet = PrototypeFacetForActionLayoutAnnotation.create(actionLayout, holder);
-        }
-        FacetUtil.addFacet(prototypeFacet);
     }
 
     @Override
@@ -166,11 +158,6 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
             actionPositionFacet = new ActionPositionFacetFallback(holder);
         }
         FacetUtil.addFacet(actionPositionFacet);
-
-
-        // prototype
-        PrototypeFacet prototypeFacet = PrototypeFacetOnActionFromLayoutProperties.create(properties, holder);
-        FacetUtil.addFacet(prototypeFacet);
 
     }
 

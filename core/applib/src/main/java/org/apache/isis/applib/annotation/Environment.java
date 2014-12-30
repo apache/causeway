@@ -16,26 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.annotation;
 
-package org.apache.isis.core.metamodel.facets.actions.layout;
+public enum Environment {
+    DEVELOPMENT,
+    PRODUCTION;
 
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
-import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
+    public static boolean hasDevelopmentOnly(final Environment[] environments) {
 
-public class PrototypeFacetForActionLayoutAnnotation extends PrototypeFacetAbstract {
-
-    public static PrototypeFacet create(ActionLayout actionLayout, FacetHolder holder) {
-        if(actionLayout == null) {
-            return null;
+        if (environments == null) {
+            return false;
         }
-        final boolean prototype = actionLayout.prototype();
-        return prototype ? new PrototypeFacetForActionLayoutAnnotation(holder) : null;
-    }
 
-    private PrototypeFacetForActionLayoutAnnotation(FacetHolder holder) {
-        super(holder);
-    }
+        return environments.length == 1 && environments[0] == DEVELOPMENT;
 
+    }
 }

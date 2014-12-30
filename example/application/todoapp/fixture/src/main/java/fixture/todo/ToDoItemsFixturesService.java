@@ -21,9 +21,11 @@ package fixture.todo;
 import fixture.todo.scenarios.ToDoItemsRecreateAndCompleteSeveral;
 
 import java.util.List;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.Environment;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -47,8 +49,10 @@ public class ToDoItemsFixturesService extends FixtureScripts {
     }
 
     @ActionLayout(
-        cssClassFa="fa fa-bolt",
-        prototype = true
+        cssClassFa="fa fa-bolt"
+    )
+    @Action(
+            restrictTo = Environment.DEVELOPMENT
     )
     @Override
     public List<FixtureResult> runFixtureScript(
@@ -80,8 +84,10 @@ public class ToDoItemsFixturesService extends FixtureScripts {
 
 
     @ActionLayout(
-        cssClassFa="fa fa-list",
-        prototype = true
+        cssClassFa="fa fa-list"
+    )
+    @Action(
+            restrictTo = Environment.DEVELOPMENT
     )
     @MemberOrder(sequence="20")
     public Object recreateToDoItemsReturnFirst() {

@@ -168,4 +168,18 @@ public @interface Action {
      */
     Class<?> typeOf() default Object.class;
 
+
+    // //////////////////////////////////////
+
+
+    /**
+     * Which environments the action is available in.
+     *
+     * <p>
+     *     By default there are no restrictions, with the action being available in all environments.
+     * </p>
+     */
+    Environment[] restrictTo() default {Environment.DEVELOPMENT, Environment.PRODUCTION};
+
+
 }
