@@ -26,10 +26,8 @@ import java.util.Map;
 import java.util.UUID;
 import javax.inject.Inject;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
-import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -40,44 +38,48 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.isis.applib.services.email.EmailNotificationService;
 import org.apache.isis.applib.services.email.events.EmailRegistrationEvent;
+import org.apache.isis.applib.services.userreg.UserRegistrationService;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.isis.viewer.wicket.ui.pages.signup.EmailAvailableValidator;
 
 /**
  * A panel with a form for creation of new users
  */
-public class PasswordResetPanel extends Panel {
+public class PasswordResetEmailPanel extends Panel {
 
     /**
      * Constructor
      *
      * @param id
      *            the component id
-     * @param uuid
      */
-    public PasswordResetPanel(final String id, String uuid) {
+    public PasswordResetEmailPanel(final String id) {
         super(id);
 
         addOrReplace(new NotificationPanel("feedback"));
 
-        StatelessForm<Void> form = new StatelessForm<>("passwordResetForm");
+        StatelessForm<Void> form = new StatelessForm<>("signUpForm");
         addOrReplace(form);
 
-        final PasswordTextField passwordField = new PasswordTextField("password", Model.of(""));
-        passwordField.setLabel(new ResourceModel("passwordLabel"));
-        form.add(passwordField);
+        final RequiredTextField<String> emailField = new RequiredTextField<>("email", Model.of(""));
+        emailField.setLabel(new ResourceModel("emailLabel"));
+        emailField.add(EmailAddressValidator.getInstance());
+        emailField.add(EmailAvailableValidator.DOESNT_EXIST);
 
-        final PasswordTextField confirmPasswordField = new PasswordTextField("confirmPassword", Model.of(""));
-        confirmPasswordField.setLabel(new ResourceModel("confirmPasswordLabel"));
-        form.add(confirmPasswordField);
+        FormGroup formGroup = new FormGroup("formGroup", emailField);
+        form.add(formGroup);
 
-        form.add(new EqualPasswordInputValidator(passwordField, confirmPasswordField));
+        formGroup.add(emailField);
 
         Button signUpButton = new Button("passwordResetSubmit") {
             @Override
             public void onSubmit() {
                 super.onSubmit();
 
-                String email = confirmPasswordField.getModelObject();
+                String email = emailField.getModelObject();
+
                 String confirmationUrl = createUrl(email);
 
                 boolean emailSent = emailService.send(new EmailRegistrationEvent(email, confirmationUrl));

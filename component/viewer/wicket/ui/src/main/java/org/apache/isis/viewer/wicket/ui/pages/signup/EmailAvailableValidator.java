@@ -12,21 +12,24 @@ import org.apache.isis.core.runtime.system.internal.InitialisationSession;
  */
 public class EmailAvailableValidator implements IValidator<String> {
 
-    private static final EmailAvailableValidator INSTANCE = new EmailAvailableValidator();
+    public static final EmailAvailableValidator EXISTS = new EmailAvailableValidator(true, "emailIsNotAvailable");
+    public static final EmailAvailableValidator DOESNT_EXIST = new EmailAvailableValidator(false, "noSuchUserByEmail");
 
-    public static EmailAvailableValidator getInstance() {
-        return INSTANCE;
+    private final boolean emailExists;
+    private final String resourceKey;
+
+    private EmailAvailableValidator(boolean emailExists, String resourceKey) {
+        this.emailExists = emailExists;
+        this.resourceKey = resourceKey;
     }
-
-    private EmailAvailableValidator() {}
 
     @Override
     public void validate(IValidatable<String> validatable) {
         IsisContext.openSession(new InitialisationSession());
         final UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
         String email = validatable.getValue();
-        if (userRegistrationService.emailExists(email)) {
-            validatable.error(new ValidationError().addKey("emailIsNotAvailable"));
+        if (userRegistrationService.emailExists(email) == emailExists) {
+            validatable.error(new ValidationError().addKey(resourceKey));
         }
         IsisContext.closeSession();
     }

@@ -62,7 +62,7 @@ public class RegistrationFormPanel extends Panel {
         final RequiredTextField<String> emailField = new RequiredTextField<>("email", Model.of(""));
         emailField.setLabel(new ResourceModel("emailLabel"));
         emailField.add(EmailAddressValidator.getInstance());
-        emailField.add(EmailAvailableValidator.getInstance());
+        emailField.add(EmailAvailableValidator.EXISTS);
 
         FormGroup formGroup = new FormGroup("formGroup", emailField);
         form.add(formGroup);

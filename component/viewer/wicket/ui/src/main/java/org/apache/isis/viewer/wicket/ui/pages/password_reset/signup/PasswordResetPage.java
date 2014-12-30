@@ -34,6 +34,8 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
     
     private static final long serialVersionUID = 1L;
 
+    private static final String ID_CONTENT_PANEL = "passwordResetPanel";
+
     public PasswordResetPage(final PageParameters parameters) {
         this(parameters, getAndClearExceptionModelIfAny());
     }
@@ -48,23 +50,27 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
 
         StringValue uuidValue = getPageParameters().get(0);
         if (uuidValue.isEmpty()) {
-            addPasswordResetPanel("passwordResetPanel");
+            addPasswordResetEmailPanel(ID_CONTENT_PANEL);
         } else {
             String uuid = uuidValue.toString();
-            AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
-            String email = accountConfirmationMap.get(uuid);
 
-            // TODO ISIS-987 Show a Panel with password/confirmPassword fields and update the passwd of the user with the given email
-//            IsisContext.openSession(new InitialisationSession());
-//            final UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
-//            userRegistrationService.updatePasswordByEmail(email, password);
-//            IsisContext.closeSession();
+            // TODO ISIS-987 Check that there is a record in AccountConfirmationMap and an ApplicationUser
+            // Show error feedback.
+            // Otherwise show password reset panel
+
+            addPasswordResetPanel(ID_CONTENT_PANEL, uuid);
         }
     }
 
-    protected PasswordResetPanel addPasswordResetPanel(String id) {
-        final PasswordResetPanel passwordResetPanel = new PasswordResetPanel(id);
+    protected PasswordResetPanel addPasswordResetPanel(String id, String uuid) {
+        final PasswordResetPanel passwordResetPanel = new PasswordResetPanel(id, uuid);
         addOrReplace(passwordResetPanel);
         return passwordResetPanel;
+    }
+
+    protected PasswordResetEmailPanel addPasswordResetEmailPanel(String id) {
+        final PasswordResetEmailPanel passwordResetEmailPanel = new PasswordResetEmailPanel(id);
+        addOrReplace(passwordResetEmailPanel);
+        return passwordResetEmailPanel;
     }
 }
