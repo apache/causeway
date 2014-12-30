@@ -38,7 +38,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.annotation.BulkInteractionContext;
+import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.ActionInvocationContext;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
@@ -883,9 +884,9 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     private void closeOtherApplibServicesIfConfigured() {
-        BulkInteractionContext bic = getServiceOrNull(BulkInteractionContext.class);
+        ActionInvocationContext bic = getServiceOrNull(ActionInvocationContext.class);
         if(bic != null) {
-            BulkInteractionContext.current.set(null);
+            Bulk.InteractionContext.current.set(null);
         }
     }
 

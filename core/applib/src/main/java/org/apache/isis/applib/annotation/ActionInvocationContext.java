@@ -37,104 +37,74 @@ import java.util.List;
  *     the service).
  * </p>
  */
-public abstract class BulkInteractionContext {
+public abstract class ActionInvocationContext {
 
     /**
-     * Intended only to be set only by the framework.
-     *
-     * <p>
-     * Will be populated while a bulk action is being invoked.
-     *
-     * @deprecated - now a {@link javax.enterprise.context.RequestScoped} service
+     * Intended only to support unit testing.
      */
-    @Deprecated
-    public static final ThreadLocal<BulkInteractionContext> current = new ThreadLocal<>();
-
-    /**
-     * @deprecated - now a {@link javax.enterprise.context.RequestScoped} service
-     */
-    @Deprecated
-    public static void with(final Runnable runnable, final Object... domainObjects) {
-        throw new RuntimeException("No longer supported - instead inject Bulk.InteractionContext as service");
+    public static ActionInvocationContext onObject(final Object domainObject) {
+        return new ActionInvocationContext(InvokedOn.OBJECT, Collections.singletonList(domainObject)){};
     }
 
     /**
-     * @deprecated - now a {@link javax.enterprise.context.RequestScoped} service
+     * Intended only to support unit testing.
      */
-    @Deprecated
-    public static void with(final Runnable runnable, final InvokedOn invokedOn, final Object... domainObjects) {
-        throw new RuntimeException("No longer supported - instead inject Bulk.InteractionContext as service");
+    public static ActionInvocationContext onCollection(final Object... domainObjects) {
+        return onCollection(Arrays.asList(domainObjects));
+    }
+
+    /**
+     * Intended only to support unit testing.
+     */
+    public static ActionInvocationContext onCollection(final List<Object> domainObjects) {
+        return new ActionInvocationContext(InvokedOn.COLLECTION, domainObjects){};
     }
 
     // //////////////////////////////////////
 
-    private InvokedOn actionInvokedOn;
+
+    private InvokedOn invokedOn;
     private List<Object> domainObjects;
 
     private int index;
 
     // //////////////////////////////////////
 
-
-    public BulkInteractionContext() {
+    public ActionInvocationContext() {
     }
 
     /**
      * @deprecated - now a {@link javax.enterprise.context.RequestScoped} service
      */
     @Deprecated
-    public BulkInteractionContext(final InvokedOn actionInvokedOn, final Object... domainObjects) {
-        this(actionInvokedOn, Arrays.asList(domainObjects));
+    public ActionInvocationContext(final InvokedOn invokedOn, final Object... domainObjects) {
+        this(invokedOn, Arrays.asList(domainObjects));
     }
 
     /**
      * @deprecated - now a {@link javax.enterprise.context.RequestScoped} service
      */
     @Deprecated
-    public BulkInteractionContext(final InvokedOn actionInvokedOn, final List<Object> domainObjects) {
-        this.actionInvokedOn = actionInvokedOn;
+    public ActionInvocationContext(final InvokedOn invokedOn, final List<Object> domainObjects) {
+        this.invokedOn = invokedOn;
         this.domainObjects = domainObjects;
     }
 
     // //////////////////////////////////////
 
     /**
-     * Intended only to support unit testing.
-     */
-    public static BulkInteractionContext regularAction(Object domainObject) {
-        return new BulkInteractionContext(InvokedOn.OBJECT, Collections.singletonList(domainObject)){};
-    }
-
-    /**
-     * Intended only to support unit testing.
-     */
-    public static BulkInteractionContext bulkAction(Object... domainObjects) {
-        return bulkAction(Arrays.asList(domainObjects));
-    }
-
-    /**
-     * Intended only to support unit testing.
-     */
-    public static BulkInteractionContext bulkAction(List<Object> domainObjects) {
-        return new BulkInteractionContext(InvokedOn.COLLECTION, domainObjects){};
-    }
-
-
-    // //////////////////////////////////////
-
-    /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
     @Programmatic
-    public void setActionInvokedOn(InvokedOn actionInvokedOn) {
-        this.actionInvokedOn = actionInvokedOn;
+    public void setInvokedOn(final InvokedOn invokedOn) {
+        this.invokedOn = invokedOn;
     }
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
     @Programmatic
-    public void setDomainObjects(List<Object> domainObjects) {
+    public void setDomainObjects(final List<Object> domainObjects) {
         this.domainObjects = domainObjects;
     }
 
@@ -142,7 +112,7 @@ public abstract class BulkInteractionContext {
      * <b>NOT API</b>: intended to be called only by the framework.
      */
     @Programmatic
-    public void setIndex(int index) {
+    public void setIndex(final int index) {
         this.index = index;
     }
 
@@ -150,27 +120,15 @@ public abstract class BulkInteractionContext {
 
 
     /**
-     * Whether this particular {@link org.apache.isis.applib.annotation.BulkInteractionContext} was applied as a {@link InvokedOn#COLLECTION bulk} action
+     * Whether this particular {@link ActionInvocationContext} was applied as a {@link InvokedOn#COLLECTION bulk} action
      * (against each domain object in a list of domain objects) or as a {@link InvokedOn#OBJECT regular}
      * action (against a single domain object).
      */
     @Programmatic
     public InvokedOn getInvokedOn() {
-        return actionInvokedOn;
+        return invokedOn;
     }
 
-    /**
-     * Whether this particular {@link org.apache.isis.applib.annotation.Bulk.InteractionContext} was applied as a {@link InvokedOn#COLLECTION bulk} action
-     * (against each domain object in a list of domain objects) or as a {@link InvokedOn#OBJECT regular}
-     * action (against a single domain object).
-     *
-     * @deprecated - use {@link #getInvokedOn()} instead.
-     */
-    @Deprecated
-    @Programmatic
-    public Bulk.InteractionContext.InvokedAs getInvokedAs() {
-        return InvokedOn.from(actionInvokedOn);
-    }
 
     /**
      * The list of domain objects which are being acted upon.

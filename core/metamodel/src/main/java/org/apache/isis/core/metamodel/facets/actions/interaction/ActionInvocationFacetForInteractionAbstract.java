@@ -28,7 +28,8 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.ViewModel;
-import org.apache.isis.applib.annotation.BulkInteractionContext;
+import org.apache.isis.applib.annotation.ActionInvocationContext;
+import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
@@ -224,7 +225,6 @@ public abstract class ActionInvocationFacetForInteractionAbstract
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] arguments) {
 
-        final BulkInteractionContext bulkInteractionContext = getServicesInjector().lookupService(BulkInteractionContext.class);
 
         try {
             final Object[] executionParameters = new Object[arguments.length];
@@ -235,12 +235,25 @@ public abstract class ActionInvocationFacetForInteractionAbstract
             final Object targetPojo = unwrap(targetAdapter);
 
             final BulkFacet bulkFacet = getFacetHolder().getFacet(BulkFacet.class);
-            if (bulkFacet != null &&
-                    bulkInteractionContext != null &&
-                    bulkInteractionContext.getInvokedAs() == null) {
+            if (bulkFacet != null) {
+                final ActionInvocationContext actionInvocationContext = getServicesInjector().lookupService(ActionInvocationContext.class);
+                if (actionInvocationContext != null &&
+                    actionInvocationContext.getInvokedOn() == null) {
 
-                bulkInteractionContext.setActionInvokedOn(InvokedOn.OBJECT);
-                bulkInteractionContext.setDomainObjects(Collections.singletonList(targetPojo));
+                    actionInvocationContext.setInvokedOn(InvokedOn.OBJECT);
+                    actionInvocationContext.setDomainObjects(Collections.singletonList(targetPojo));
+                }
+
+                final Bulk.InteractionContext bulkInteractionContext = getServicesInjector().lookupService(Bulk.InteractionContext.class);
+
+                if (bulkInteractionContext != null &&
+                        bulkInteractionContext.getInvokedAs() == null) {
+
+                    bulkInteractionContext.setInvokedAs(Bulk.InteractionContext.InvokedAs.REGULAR);
+                    actionInvocationContext.setDomainObjects(Collections.singletonList(targetPojo));
+                }
+
+
             }
 
             if(command != null && command.getExecutor() == Command.Executor.USER && owningAction != null) {

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.isis.applib.annotation.BulkInteractionContext;
+import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -287,9 +287,9 @@ public class IsisTransactionManager implements SessionScopedComponent {
     
     private void initOtherApplibServicesIfConfigured() {
         
-        final BulkInteractionContext bic = getServiceOrNull(BulkInteractionContext.class);
+        final Bulk.InteractionContext bic = getServiceOrNull(Bulk.InteractionContext.class);
         if(bic != null) {
-            BulkInteractionContext.current.set(bic);
+            Bulk.InteractionContext.current.set(bic);
         }
     }
 

@@ -61,13 +61,25 @@ public @interface Bulk {
     // //////////////////////////////////////
 
     /**
-     * @deprecated - see {@link BulkInteractionContext}.
+     * @deprecated - see {@link ActionInvocationContext}.
      */
     @Deprecated
     @DomainService
     @RequestScoped
-    public static class InteractionContext extends BulkInteractionContext {
+    public static class InteractionContext {
 
+        /**
+         * Intended only to be set only by the framework.
+         *
+         * <p>
+         * Will be populated while a bulk action is being invoked.
+         *
+         * @deprecated - now a {@link javax.enterprise.context.RequestScoped} service; simply inject an instance of {@link org.apache.isis.applib.annotation.Bulk.InteractionContext}.
+         */
+        @Deprecated
+        public static final ThreadLocal<Bulk.InteractionContext> current = new ThreadLocal<>();
+
+        // //////////////////////////////////////
 
         /**
          * @deprecated - use {@link InvokedOn} instead.
@@ -86,18 +98,25 @@ public @interface Bulk {
             REGULAR;
             public boolean isRegular() { return this == REGULAR; }
             public boolean isBulk() { return this == BULK; }
-
-
         }
 
 
         /**
-         * @deprecated - now a {@link RequestScoped} service
+         * @deprecated - now a {@link javax.enterprise.context.RequestScoped} service
          */
         @Deprecated
         public static void with(final Runnable runnable, final Object... domainObjects) {
             throw new RuntimeException("No longer supported - instead inject Bulk.InteractionContext as service");
         }
+
+        /**
+         * @deprecated - now a {@link javax.enterprise.context.RequestScoped} service
+         */
+        @Deprecated
+        public static void with(final Runnable runnable, final InvokedOn invokedOn, final Object... domainObjects) {
+            throw new RuntimeException("No longer supported - instead inject Bulk.InteractionContext as service");
+        }
+
 
         /**
          * @deprecated - now a {@link RequestScoped} service
@@ -109,8 +128,9 @@ public @interface Bulk {
 
         // //////////////////////////////////////
 
+
         /**
-         * @deprecated - see {@link BulkInteractionContext#regularAction(Object)}.
+         * @deprecated - see {@link ActionInvocationContext#onObject(Object)}.
          */
         @Deprecated
         public static InteractionContext regularAction(Object domainObject) {
@@ -118,7 +138,7 @@ public @interface Bulk {
         }
 
         /**
-         * @deprecated - see {@link BulkInteractionContext#bulkAction(Object...)}.
+         * @deprecated - see {@link ActionInvocationContext#onCollection(Object...)}.
          */
         @Deprecated
         public static InteractionContext bulkAction(Object... domainObjects) {
@@ -126,7 +146,7 @@ public @interface Bulk {
         }
 
         /**
-         * @deprecated - see {@link BulkInteractionContext#bulkAction(java.util.List)}.
+         * @deprecated - see {@link ActionInvocationContext#onCollection(java.util.List)}.
          */
         @Deprecated
         public static InteractionContext bulkAction(List<Object> domainObjects) {
@@ -136,8 +156,13 @@ public @interface Bulk {
 
         // //////////////////////////////////////
 
+        private InvokedAs invokedAs;
+        private List<Object> domainObjects;
+
+        private int index;
+
         /**
-         * @deprecated - see {@link org.apache.isis.applib.annotation.BulkInteractionContext()}.
+         * @deprecated - see {@link ActionInvocationContext ()}.
          */
         @Deprecated
         public InteractionContext() {
@@ -149,8 +174,96 @@ public @interface Bulk {
          */
         @Deprecated
         public InteractionContext(final InvokedAs invokedAs, final List<Object> domainObjects) {
-            super(InvokedOn.from(invokedAs), domainObjects);
+            this.invokedAs = invokedAs;
+            this.domainObjects = domainObjects;
         }
+
+
+        // //////////////////////////////////////
+
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
+        @Programmatic
+        public void setInvokedAs(InvokedAs invokedAs) {
+            this.invokedAs = invokedAs;
+        }
+
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
+        @Programmatic
+        public void setDomainObjects(List<Object> domainObjects) {
+            this.domainObjects = domainObjects;
+        }
+
+        /**
+         * <b>NOT API</b>: intended to be called only by the framework.
+         */
+        @Programmatic
+        public void setIndex(int index) {
+            this.index = index;
+        }
+
+        // //////////////////////////////////////
+
+
+        /**
+         * Whether this particular {@link org.apache.isis.applib.annotation.Bulk.InteractionContext} was applied as a {@link InvokedOn#COLLECTION bulk} action
+         * (against each domain object in a list of domain objects) or as a {@link InvokedOn#OBJECT regular}
+         * action (against a single domain object).
+         */
+        @Deprecated
+        @Programmatic
+        public Bulk.InteractionContext.InvokedAs getInvokedAs() {
+            return invokedAs;
+        }
+
+        /**
+         * The list of domain objects which are being acted upon.
+         */
+        @Programmatic
+        public List<Object> getDomainObjects() {
+            return domainObjects;
+        }
+
+        /**
+         * The number of {@link #domainObjects domain objects} being acted upon.
+         */
+        @Programmatic
+        public int getSize() {
+            return domainObjects.size();
+        }
+
+        /**
+         * The 0-based index to the object being acted upon.
+         *
+         * <p>
+         * Will be a value in range [0, {@link #getSize() size}).
+         */
+        @Programmatic
+        public int getIndex() {
+            return index;
+        }
+
+        /**
+         * Whether this object being acted upon is the first such.
+         */
+        @Programmatic
+        public boolean isFirst() {
+            return this.index == 0;
+        }
+
+        /**
+         * Whether this object being acted upon is the last such.
+         */
+        @Programmatic
+        public boolean isLast() {
+            return this.index == (getSize()-1);
+        }
+
+
+
     }
 
 }

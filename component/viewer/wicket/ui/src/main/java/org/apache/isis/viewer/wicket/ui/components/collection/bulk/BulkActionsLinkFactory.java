@@ -26,8 +26,9 @@ import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.annotation.ActionInvocationContext;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.BulkInteractionContext;
+import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
@@ -91,14 +92,20 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                             Iterables.transform(toggleMementosList, ObjectAdapterMemento.Functions.fromMemento(concurrencyChecking));
                     
                     final List<Object> domainObjects = Lists.newArrayList(Iterables.transform(toggledAdapters, ObjectAdapter.Functions.getObject()));
-                    
-                    
-                    final BulkInteractionContext bulkInteractionContext = BulkInteractionContext.current.get();
+
+
+                    final ActionInvocationContext actionInvocationContext = getServicesInjector().lookupService(ActionInvocationContext.class);
+                    if (actionInvocationContext != null) {
+                        actionInvocationContext.setInvokedOn(InvokedOn.COLLECTION);
+                        actionInvocationContext.setDomainObjects(domainObjects);
+                    }
+
+                    final Bulk.InteractionContext bulkInteractionContext = getServicesInjector().lookupService(Bulk.InteractionContext.class);
                     if (bulkInteractionContext != null) {
-                        bulkInteractionContext.setActionInvokedOn(InvokedOn.COLLECTION);
+                        bulkInteractionContext.setInvokedAs(Bulk.InteractionContext.InvokedAs.BULK);
                         bulkInteractionContext.setDomainObjects(domainObjects);
                     }
-                    
+
                     final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
                     final Command command;
                     if (commandContext != null) {

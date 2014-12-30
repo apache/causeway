@@ -21,7 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import com.google.common.collect.Lists;
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.BulkInteractionContext;
+import org.apache.isis.applib.annotation.ActionInvocationContext;
+import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -182,15 +183,27 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
         
         // this code also exists in ActionInvocationFacetViaMethod
         // we need to repeat it here because the target adapter should be the contributee, not the contributing service.
-        final BulkInteractionContext bulkInteractionContext = getServicesProvider().lookupService(BulkInteractionContext.class);
 
         final BulkFacet bulkFacet = getFacet(BulkFacet.class);
-        if (bulkFacet != null && 
-            bulkInteractionContext != null &&
-            bulkInteractionContext.getInvokedAs() == null) {
-            
-            bulkInteractionContext.setActionInvokedOn(InvokedOn.OBJECT);
-            bulkInteractionContext.setDomainObjects(Collections.singletonList(contributee.getObject()));
+        if (bulkFacet != null) {
+
+            final ActionInvocationContext actionInvocationContext = getServicesProvider().lookupService(ActionInvocationContext.class);
+            if (actionInvocationContext != null &&
+                    actionInvocationContext.getInvokedOn() == null) {
+
+                actionInvocationContext.setInvokedOn(InvokedOn.OBJECT);
+                actionInvocationContext.setDomainObjects(Collections.singletonList(contributee.getObject()));
+            }
+
+            final Bulk.InteractionContext bulkInteractionContext = getServicesProvider().lookupService(Bulk.InteractionContext.class);
+            if (bulkInteractionContext != null &&
+                    bulkInteractionContext.getInvokedAs() == null) {
+
+                bulkInteractionContext.setInvokedAs(Bulk.InteractionContext.InvokedAs.REGULAR);
+                actionInvocationContext.setDomainObjects(Collections.singletonList(contributee.getObject()));
+            }
+
+
         }
 
         final CommandContext commandContext = getServicesProvider().lookupService(CommandContext.class);

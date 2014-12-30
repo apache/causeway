@@ -22,7 +22,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.ActionInvocationContext;
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.eventbus.EventBusService;
@@ -48,7 +48,7 @@ public abstract class ToDoItemTest {
     public void setUp() throws Exception {
         toDoItem = new ToDoItem();
 
-        toDoItem.bulkInteractionContext = Bulk.InteractionContext.regularAction(toDoItem);
+        toDoItem.actionInvocationContext = ActionInvocationContext.onObject(toDoItem);
         toDoItem.eventBusService = eventBusService;
 
         context.ignoring(eventBusService);

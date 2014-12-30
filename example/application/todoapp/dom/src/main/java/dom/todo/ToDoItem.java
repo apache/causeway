@@ -38,9 +38,8 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.ActionInvocationContext;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -348,17 +347,17 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         // remainder of method just demonstrates the use of the Bulk.InteractionContext service 
         //
         @SuppressWarnings("unused")
-        final List<Object> allObjects = bulkInteractionContext.getDomainObjects();
+        final List<Object> allObjects = actionInvocationContext.getDomainObjects();
         
         LOG.debug("completed: "
-                + bulkInteractionContext.getIndex() +
-                " [" + bulkInteractionContext.getSize() + "]"
-                + (bulkInteractionContext.isFirst() ? " (first)" : "")
-                + (bulkInteractionContext.isLast() ? " (last)" : ""));
+                + actionInvocationContext.getIndex() +
+                " [" + actionInvocationContext.getSize() + "]"
+                + (actionInvocationContext.isFirst() ? " (first)" : "")
+                + (actionInvocationContext.isLast() ? " (last)" : ""));
 
         // if invoked as a regular action, return this object;
         // otherwise (if invoked as bulk), return null (so go back to the list)
-        return bulkInteractionContext.getInvokedOn() == InvokedOn.OBJECT? this: null;
+        return actionInvocationContext.getInvokedOn() == InvokedOn.OBJECT? this: null;
     }
     // disable action dependent on state of object
     public String disableCompleted() {
@@ -373,7 +372,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
         // if invoked as a regular action, return this object;
         // otherwise (if invoked as bulk), return null (so go back to the list)
-        return bulkInteractionContext.getInvokedOn() == InvokedOn.COLLECTION ? this: null;
+        return actionInvocationContext.getInvokedOn() == InvokedOn.COLLECTION ? this: null;
     }
     // disable action dependent on state of object
     public String disableNotYetCompleted() {
@@ -967,7 +966,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
      * public only so can be injected from integ tests
      */
     @javax.inject.Inject
-    public Bulk.InteractionContext bulkInteractionContext;
+    public ActionInvocationContext actionInvocationContext;
 
     /**
      * public only so can be injected from integ tests

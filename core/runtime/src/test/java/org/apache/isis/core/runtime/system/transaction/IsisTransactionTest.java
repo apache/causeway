@@ -25,7 +25,7 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.apache.isis.applib.annotation.BulkInteractionContext;
+import org.apache.isis.applib.annotation.ActionInvocationContext;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.audit.AuditingService3;
@@ -92,7 +92,7 @@ public class IsisTransactionTest {
     @Mock
     private PublishedAction.PayloadFactory mockPublishedActionPayloadFactory;
     @Mock
-    private BulkInteractionContext mockBulkInteractionContext;
+    private ActionInvocationContext mockActionInvocationContext;
     @Mock
     private EventBusServiceDefault mockEventBusServiceDefault;
 
@@ -207,8 +207,8 @@ public class IsisTransactionTest {
             allowing(mockServicesInjector).lookupService(PublishedAction.PayloadFactory.class);
             will(returnValue(mockPublishedActionPayloadFactory));
             
-            allowing(mockServicesInjector).lookupService(BulkInteractionContext.class);
-            will(returnValue(mockBulkInteractionContext));
+            allowing(mockServicesInjector).lookupService(ActionInvocationContext.class);
+            will(returnValue(mockActionInvocationContext));
             
             allowing(mockServicesInjector).lookupService(EventBusServiceDefault.class);
             will(returnValue(mockEventBusServiceDefault));

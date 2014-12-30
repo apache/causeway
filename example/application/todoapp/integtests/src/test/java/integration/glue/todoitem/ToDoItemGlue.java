@@ -29,7 +29,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.jmock.Expectations;
 import org.junit.Assert;
-import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.ActionInvocationContext;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.specsupport.scenarios.InMemoryDB;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
@@ -72,15 +72,15 @@ public class ToDoItemGlue extends CukeGlueAbstract {
     public void mark_it_as_complete() throws Throwable {
         final ToDoItem toDoItem = getVar(null, "toDoItem", ToDoItem.class);
         if(supportsMocks()) {
-            final Bulk.InteractionContext bulkInteractionContext = service(Bulk.InteractionContext.class);
+            final ActionInvocationContext actionInvocationContext = service(ActionInvocationContext.class);
             final EventBusService eventBusService = service(EventBusService.class);
             checking(new Expectations() {
                 {
-                    allowing(bulkInteractionContext);
+                    allowing(actionInvocationContext);
                     allowing(eventBusService);
                 }
             });
-            toDoItem.bulkInteractionContext = bulkInteractionContext;
+            toDoItem.actionInvocationContext = actionInvocationContext;
             toDoItem.eventBusService = eventBusService;
         }
         wrap(toDoItem).completed();
