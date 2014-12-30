@@ -19,18 +19,22 @@
 
 package org.apache.isis.objectstore.jdo.datanucleus;
 
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo;
+import javax.jdo.spi.PersistenceCapable;
+import javax.jdo.spi.StateManager;
+
 import org.datanucleus.ExecutionContext;
 import org.datanucleus.cache.CachedPC;
 import org.datanucleus.enhancer.Persistable;
 import org.datanucleus.metadata.AbstractClassMetaData;
 import org.datanucleus.state.ObjectProvider;
 import org.datanucleus.state.ReferentialStateManagerImpl;
+import org.datanucleus.store.FieldValues;
 import org.datanucleus.store.fieldmanager.FieldManager;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo;
 
-public class JDOStateManagerForIsis extends ReferentialStateManagerImpl implements ObjectProvider<Persistable> {
+public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
 
     public JDOStateManagerForIsis(ExecutionContext ec, AbstractClassMetaData cmd) {
         super(ec, cmd);
@@ -51,7 +55,51 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl implemen
         };
     };
 
+    public void initialiseForHollow(Object id, FieldValues fv, Class pcClass) {
+        super.initialiseForHollow(id, fv, pcClass);
+        mapIntoIsis(myPC);
+    }
 
+    public void initialiseForHollowAppId(FieldValues fv, Class pcClass) {
+        super.initialiseForHollowAppId(fv, pcClass);
+        mapIntoIsis(myPC);
+    }
+
+    public void initialiseForHollowPreConstructed(Object id, Persistable pc) {
+        super.initialiseForHollowPreConstructed(id, pc);
+        mapIntoIsis(myPC);
+    }
+
+    public void initialiseForPersistentClean(Object id, Persistable pc) {
+        super.initialiseForPersistentClean(id, pc);
+        mapIntoIsis(myPC);
+    }
+
+    public void initialiseForEmbedded(Persistable pc, boolean copyPc) {
+        super.initialiseForEmbedded(pc, copyPc);
+        mapIntoIsis(myPC);
+    }
+
+    public void initialiseForPersistentNew(Persistable pc,
+            FieldValues preInsertChanges) {
+        super.initialiseForPersistentNew(pc, preInsertChanges);
+        mapIntoIsis(myPC);
+    }
+
+    public void initialiseForTransactionalTransient(Persistable pc) {
+        super.initialiseForTransactionalTransient(pc);
+        mapIntoIsis(myPC);
+    }
+
+    public void initialiseForDetached(Persistable pc, Object id, Object version) {
+        super.initialiseForDetached(pc, id, version);
+        mapIntoIsis(myPC);
+    }
+
+    public void initialiseForPNewToBeDeleted(Persistable pc) {
+        super.initialiseForPNewToBeDeleted(pc);
+        mapIntoIsis(myPC);
+    }
 
     public void initialiseForCachedPC(CachedPC cachedPC, Object id) {
         super.initialiseForCachedPC(cachedPC, id);
@@ -101,8 +149,8 @@ public class JDOStateManagerForIsis extends ReferentialStateManagerImpl implemen
         }
     }
 
-    protected void mapIntoIsis(Persistable myPC) {
-        getServicesInjector().injectServicesInto(myPC);
+    protected void mapIntoIsis(Persistable pc) {
+        getServicesInjector().injectServicesInto(pc);
     }
 
     protected ServicesInjectorSpi getServicesInjector() {

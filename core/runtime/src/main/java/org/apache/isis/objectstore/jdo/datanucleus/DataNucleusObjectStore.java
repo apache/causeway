@@ -22,13 +22,15 @@ import java.sql.Connection;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
+
 import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
-import javax.jdo.spi.PersistenceCapable;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
@@ -71,6 +73,7 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucl
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.*;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoNamedQuery;
+import org.datanucleus.enhancer.Persistable;
 
 import static org.apache.isis.core.commons.ensure.Ensure.*;
 import static org.hamcrest.CoreMatchers.is;
@@ -426,10 +429,10 @@ public class DataNucleusObjectStore implements ObjectStore {
 
     
     public ObjectAdapter lazilyLoaded(Object pojo) {
-        if(!(pojo instanceof PersistenceCapable)) {
+        if(!(pojo instanceof Persistable)) {
             return null;
         } 
-        final PersistenceCapable persistenceCapable = (PersistenceCapable) pojo;
+        final Persistable persistenceCapable = (Persistable) pojo;
         return frameworkSynchronizer.lazilyLoaded(persistenceCapable, CalledFrom.OS_LAZILYLOADED);
     }
 
@@ -493,7 +496,7 @@ public class DataNucleusObjectStore implements ObjectStore {
         // listener, but (with JPA impl) found it was required if we were ever to 
         // get an eager left-outer-join as the result of a refresh (sounds possible).
         
-        frameworkSynchronizer.postLoadProcessingFor((PersistenceCapable) domainObject, CalledFrom.OS_RESOLVE);
+        frameworkSynchronizer.postLoadProcessingFor((Persistable) domainObject, CalledFrom.OS_RESOLVE);
     }
 
 

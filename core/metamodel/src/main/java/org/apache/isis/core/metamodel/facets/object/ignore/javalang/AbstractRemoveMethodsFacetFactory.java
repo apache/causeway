@@ -61,6 +61,7 @@ public abstract class AbstractRemoveMethodsFacetFactory extends FacetFactoryAbst
             addMethodsToBeIgnored(typeToIgnore);
         } catch(Exception ex) {
             // ignore
+        	System.out.println(ex.getMessage());
         }
     }
 

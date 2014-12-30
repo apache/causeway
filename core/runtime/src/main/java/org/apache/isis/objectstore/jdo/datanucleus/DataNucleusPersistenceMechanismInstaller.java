@@ -22,11 +22,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+
 import com.google.common.collect.Sets;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDatanucleusPersistableTypesFacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -206,6 +209,7 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         
         programmingModel.addFactory(AuditableAnnotationInJdoApplibFacetFactory.class);
         programmingModel.addFactory(AuditableMarkerInterfaceInJdoApplibFacetFactory.class);
+        programmingModel.addFactory(RemoveDatanucleusPersistableTypesFacetFactory.class);
     }
 
     @Override
