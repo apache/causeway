@@ -328,6 +328,9 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
 
         final ActionLayoutFacetRepr actionLayout = actionRepr.actionLayout;
         if(actionLayout != null) {
+            if(actionLayout.bookmarking != null) {
+                props.setProperty(prefix + "." + actionName + ".actionLayout.bookmarking", ""+actionLayout.bookmarking);
+            }
             if(actionLayout.cssClass != null) {
                 props.setProperty(prefix + "." + actionName + ".actionLayout.cssClass", actionLayout.cssClass);
             }
