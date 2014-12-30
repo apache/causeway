@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Title;
@@ -44,7 +45,7 @@ import org.apache.isis.applib.util.ObjectContracts;
         bookmarking = BookmarkPolicy.AS_ROOT
 )
 @DomainObject(
-        viewModel = true
+        nature = Nature.VIEW_MODEL
 )
 public class ToDoItemsByCategoryViewModel
         implements Comparable<ToDoItemsByCategoryViewModel> {

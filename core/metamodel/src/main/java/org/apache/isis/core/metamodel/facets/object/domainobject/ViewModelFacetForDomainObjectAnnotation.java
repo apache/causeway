@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -40,8 +41,8 @@ public class ViewModelFacetForDomainObjectAnnotation extends ViewModelFacetDecla
             return null;
         }
 
-        final boolean viewModel = domainObject.viewModel();
-        if(!viewModel) {
+        final Nature nature = domainObject.nature();
+        if(nature == null || nature == Nature.JDO_ENTITY) {
             return null;
         }
         return new ViewModelFacetForDomainObjectAnnotation(holder, specificationLoader, adapterManager, servicesInjector);

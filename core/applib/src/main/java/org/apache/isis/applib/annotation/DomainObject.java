@@ -131,15 +131,10 @@ public @interface DomainObject {
 
     // //////////////////////////////////////
 
+
     /**
-     * Indicates that instances of this class should be handled as a view model.
-     *
-     * <p>
-     *     All of the view model object's read/write and non-{@link Programmatic} properties (not collections) will
-     *     be included in the memento; in other words as returned and marshalled by
-     *     {@link org.apache.isis.applib.ViewModel#viewModelMemento()}.
-     * </p>
+     * The nature of this domain object.
      */
-    boolean viewModel() default false;
+    Nature nature() default Nature.JDO_ENTITY;
 
 }

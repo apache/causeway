@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -41,7 +42,9 @@ import org.apache.isis.applib.util.ObjectContracts;
         named="By Date Range",
         bookmarking = BookmarkPolicy.AS_ROOT
 )
-@DomainObject(viewModel = true)
+@DomainObject(
+        nature = Nature.VIEW_MODEL
+)
 public class ToDoItemsByDateRangeViewModel
         implements Comparable<ToDoItemsByDateRangeViewModel> {
 
