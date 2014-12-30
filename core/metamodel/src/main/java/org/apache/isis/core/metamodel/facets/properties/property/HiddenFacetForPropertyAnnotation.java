@@ -30,8 +30,17 @@ import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 public class HiddenFacetForPropertyAnnotation extends HiddenFacetAbstract {
 
     public static HiddenFacet create(final Property property, final FacetHolder holder) {
+
+        if (property == null) {
+            return null;
+        }
+
         final Where where = property.hidden();
-        return where != null && where != Where.NOT_SPECIFIED ? new HiddenFacetForPropertyAnnotation(where, holder) : null;
+        if (where != null && where != Where.NOT_SPECIFIED) {
+            return new HiddenFacetForPropertyAnnotation(where, holder);
+        }
+
+        return null;
     }
 
     private HiddenFacetForPropertyAnnotation(final Where where, final FacetHolder holder) {

@@ -21,12 +21,43 @@ package org.apache.isis.core.metamodel.facets.actions.publish.annotation;
 
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacetAbstract;
 
 public class PublishedActionFacetAnnotation extends PublishedActionFacetAbstract {
 
-    public PublishedActionFacetAnnotation(PublishedAction.PayloadFactory eventCanonicalizer, final FacetHolder holder) {
-        super(eventCanonicalizer, holder);
+    public static PublishedActionFacet create(
+            final PublishedAction publishedAction,
+            final FacetHolder holder) {
+
+        if (publishedAction == null) {
+            return null;
+        }
+
+        return new PublishedActionFacetAnnotation(newPayloadFactory(publishedAction), holder);
     }
+
+
+    public PublishedActionFacetAnnotation(
+            final PublishedAction.PayloadFactory payloadFactory,
+            final FacetHolder holder) {
+        super(payloadFactory, holder);
+    }
+
+    private static PublishedAction.PayloadFactory newPayloadFactory(final PublishedAction publishedAction) {
+        final Class<? extends PublishedAction.PayloadFactory> payloadFactoryClass = publishedAction.value();
+        if(payloadFactoryClass == null) {
+            return null;
+        }
+
+        try {
+            return payloadFactoryClass.newInstance();
+        } catch (final InstantiationException e) {
+            return null;
+        } catch (final IllegalAccessException e) {
+            return null;
+        }
+    }
+
 
 }

@@ -19,15 +19,10 @@
 package org.apache.isis.core.metamodel.facets.object.audit.configuration;
 
 
-import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
-import org.apache.isis.core.metamodel.facets.object.domainobject.AuditObjectsConfiguration;
 
 
 public class AuditableFacetFromConfigurationFactory extends FacetFactoryAbstract implements IsisConfigurationAware {
@@ -41,25 +36,10 @@ public class AuditableFacetFromConfigurationFactory extends FacetFactoryAbstract
     @Override
     public void process(ProcessClassContext processClassContext) {
 
-        final AuditObjectsConfiguration categorization = AuditObjectsConfiguration.parse(configuration);
-        if(categorization == AuditObjectsConfiguration.NONE) {
-            return;
-        }
-        final Class<?> cls = processClassContext.getCls();
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
-        
-        if(facetHolder.containsDoOpFacet(AuditableFacet.class)) {
-            // do not replace
-            return;
-        }
-        if(HasTransactionId.class.isAssignableFrom(cls)) {
-            // do not install on any implementation of HasTransactionId
-            // (ie commands, audit entries, published events).
-            return; 
-        }
-        
-        FacetUtil.addFacet(new AuditableFacetFromConfiguration(facetHolder));
-        return;
+        //
+        // replaced by equivalent processing in DomainObjectAnnotationFacetFactory
+        // that checks the configured value.
+        //
     }
 
     // //////////////////////////////////////

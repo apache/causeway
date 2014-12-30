@@ -28,27 +28,27 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
-import org.apache.isis.applib.annotation.Bookmarkable;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Render;
-import org.apache.isis.applib.annotation.Render.Type;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.util.ObjectContracts;
 
 @DomainObjectLayout(
-    named="By Date Range"
+        named="By Date Range",
+        bookmarking = BookmarkPolicy.AS_ROOT
 )
-@Bookmarkable
-@ViewModel
+@DomainObject(viewModel = true)
 public class ToDoItemsByDateRangeViewModel
         implements Comparable<ToDoItemsByDateRangeViewModel> {
 
     //region > constructors
     public ToDoItemsByDateRangeViewModel() {
     }
-    public ToDoItemsByDateRangeViewModel(DateRange dateRange) {
+    public ToDoItemsByDateRangeViewModel(final DateRange dateRange) {
         setDateRange(dateRange);
     }
     //endregion
@@ -74,9 +74,11 @@ public class ToDoItemsByDateRangeViewModel
 
     //region > getItemsNotYetComplete (collection)
     /**
-     * All those items {@link ToDoItems#notYetComplete() not yet complete}, for this {@link #getCategory() category}.
+     * All those items {@link ToDoItems#notYetComplete() not yet complete}, for this {@link #getDateRange() date range}.
      */
-    @Render(Type.EAGERLY)
+    @CollectionLayout(
+            render = RenderType.EAGERLY
+    )
     public List<ToDoItem> getItemsNotYetComplete() {
         final List<ToDoItem> notYetComplete = toDoItems.notYetCompleteNoUi();
         return Lists.newArrayList(Iterables.filter(notYetComplete, thoseInDateRange()));
@@ -85,7 +87,7 @@ public class ToDoItemsByDateRangeViewModel
     private Predicate<ToDoItem> thoseInDateRange() {
         return new Predicate<ToDoItem>() {
             @Override
-            public boolean apply(ToDoItem t) {
+            public boolean apply(final ToDoItem t) {
                 return Objects.equal(dateRangeFor(t), getDateRange());
             }
         };
@@ -116,7 +118,7 @@ public class ToDoItemsByDateRangeViewModel
 
     //region > compareTo
     @Override
-    public int compareTo(ToDoItemsByDateRangeViewModel other) {
+    public int compareTo(final ToDoItemsByDateRangeViewModel other) {
         return ObjectContracts.compare(this, other, "dateRange");
     }
     //endregion

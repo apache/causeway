@@ -16,17 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.audit.configuration;
 
+package org.apache.isis.core.metamodel.facets.object.domainobject;
 
+import org.apache.isis.applib.annotation.PublishingPayloadFactoryForObject;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetImpl;
+
+public class PublishedObjectFacetForDomainObjectAnnotationAsConfigured extends PublishedObjectFacetForDomainObjectAnnotation {
 
 
-public class AuditableFacetFromConfiguration extends AuditableFacetImpl {
-
-    public AuditableFacetFromConfiguration(final FacetHolder facetHolder) {
-        super(facetHolder, Enablement.ENABLED);
+    PublishedObjectFacetForDomainObjectAnnotationAsConfigured(final PublishingPayloadFactoryForObject publishingPayloadFactory, final FacetHolder holder) {
+        super(publishingPayloadFactory, holder);
     }
-
 }

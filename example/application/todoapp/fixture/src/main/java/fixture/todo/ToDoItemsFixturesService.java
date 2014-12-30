@@ -25,7 +25,8 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.fixturescripts.FixtureResult;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
@@ -35,7 +36,10 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
  * Enables fixtures to be installed from the application.
  */
 @DomainService
-@DomainServiceLayout(named = "Prototyping", menuBar = DomainServiceLayout.MenuBar.SECONDARY, menuOrder = "10")
+@DomainServiceLayout(
+        named = "Prototyping",
+        menuBar = DomainServiceLayout.MenuBar.SECONDARY,
+        menuOrder = "10")
 public class ToDoItemsFixturesService extends FixtureScripts {
 
     public ToDoItemsFixturesService() {
@@ -49,12 +53,12 @@ public class ToDoItemsFixturesService extends FixtureScripts {
     @Override
     public List<FixtureResult> runFixtureScript(
             final FixtureScript fixtureScript,
-            final @ParameterLayout(
+            @ParameterLayout(
                     named="Parameters",
                     describedAs = "Script-specific parameters (key=value) ",
                     multiLine = 10)
-            @Optional
-            String parameters) {
+            @Parameter(optional = Optionality.TRUE)
+            final String parameters) {
         return super.runFixtureScript(fixtureScript, parameters);
     }
 

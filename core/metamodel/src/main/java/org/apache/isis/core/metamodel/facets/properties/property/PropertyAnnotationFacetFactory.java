@@ -40,12 +40,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final Method method = processMethodContext.getMethod();
-        final Property property = Annotations.getAnnotation(method, Property.class);
-        if (property == null) {
-            return;
-        }
-
         processInteraction(processMethodContext);
         processHidden(processMethodContext);
         processEditing(processMethodContext);
@@ -113,7 +107,8 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final Property property = Annotations.getAnnotation(method, Property.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacet(MandatoryFacetForPropertyAnnotation.create(property, method, holder));
+        FacetUtil.addFacet(
+                MandatoryFacetForPropertyAnnotation.create(property, method, holder));
     }
 
     private void processRegEx(final ProcessMethodContext processMethodContext) {
@@ -121,7 +116,8 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final Property property = Annotations.getAnnotation(method, Property.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacet(RegExFacetForPropertyAnnotation.create(property, holder));
+        FacetUtil.addFacet(
+                RegExFacetForPropertyAnnotation.create(property, holder));
     }
 
 

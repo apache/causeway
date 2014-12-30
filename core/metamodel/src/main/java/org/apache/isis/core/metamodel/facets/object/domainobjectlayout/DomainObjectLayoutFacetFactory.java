@@ -27,9 +27,9 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 
-public class DomainObjectLayoutFactory extends FacetFactoryAbstract {
+public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract {
 
-    public DomainObjectLayoutFactory() {
+    public DomainObjectLayoutFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
@@ -37,15 +37,20 @@ public class DomainObjectLayoutFactory extends FacetFactoryAbstract {
     public void process(ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final DomainObjectLayout domainObjectLayout = Annotations.getAnnotation(cls, DomainObjectLayout.class);
-
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(CssClassFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
-        FacetUtil.addFacet(DescribedAsFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
-        FacetUtil.addFacet(NamedFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
-        FacetUtil.addFacet(PagedFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
-        FacetUtil.addFacet(PluralFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
-        FacetUtil.addFacet(BookmarkPolicyFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
+        FacetUtil.addFacet(
+                CssClassFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
+        FacetUtil.addFacet(
+                DescribedAsFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
+        FacetUtil.addFacet(
+                NamedFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
+        FacetUtil.addFacet(
+                PagedFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
+        FacetUtil.addFacet(
+                PluralFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
+        FacetUtil.addFacet(
+                BookmarkPolicyFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
 
         return;
     }

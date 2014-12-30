@@ -19,14 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.command.annotation;
 
-import org.apache.isis.applib.annotation.Command;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract.Enablement;
 
 public class CommandFacetAnnotationFactory extends FacetFactoryAbstract {
 
@@ -36,14 +30,10 @@ public class CommandFacetAnnotationFactory extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final Command annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Command.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
-    }
 
-    private CommandFacet create(final Command annotation, final FacetHolder holder) {
-        return annotation == null 
-                ? null 
-                : new CommandFacetAnnotation(annotation.persistence(), annotation.executeIn(), Enablement.isDisabled(annotation.disabled()), holder);
+        //
+        // moved to ActionAnnotationFacetFactory
+        //
     }
 
 }

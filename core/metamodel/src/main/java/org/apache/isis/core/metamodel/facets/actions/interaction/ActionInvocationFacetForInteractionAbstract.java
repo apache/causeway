@@ -29,6 +29,7 @@ import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.annotation.BulkInteractionContext;
+import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundService;
@@ -238,7 +239,7 @@ public abstract class ActionInvocationFacetForInteractionAbstract
                     bulkInteractionContext != null &&
                     bulkInteractionContext.getInvokedAs() == null) {
 
-                bulkInteractionContext.setActionInvokedAs(BulkInteractionContext.InvokedAs.REGULAR);
+                bulkInteractionContext.setActionInvokedOn(InvokedOn.OBJECT);
                 bulkInteractionContext.setDomainObjects(Collections.singletonList(targetPojo));
             }
 

@@ -30,6 +30,11 @@ import org.apache.isis.core.metamodel.facets.propparam.mustsatisfyspec.MustSatis
 public class MustSatisfySpecificationFacetForParameterAnnotation extends MustSatisfySpecificationFacetAbstract {
 
     static Facet create(final Parameter parameter, final FacetHolder holder) {
+
+        if (parameter == null) {
+            return null;
+        }
+
         final Class<?>[] values = parameter.mustSatisfy();
         final List<Specification> specifications = Lists.newArrayList();
         for (final Class<?> value : values) {

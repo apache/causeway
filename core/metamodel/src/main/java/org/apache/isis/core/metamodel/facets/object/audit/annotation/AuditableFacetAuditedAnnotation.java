@@ -19,7 +19,9 @@
 package org.apache.isis.core.metamodel.facets.object.audit.annotation;
 
 
+import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetImpl;
 
 
@@ -29,4 +31,12 @@ public class AuditableFacetAuditedAnnotation extends AuditableFacetImpl {
         super(facetHolder, enablement);
     }
 
+    public static AuditableFacet create(final Audited annotation, final FacetHolder holder) {
+        if (annotation == null) {
+            return null;
+        }
+        return new AuditableFacetAuditedAnnotation(
+                holder,
+                Enablement.ifDisabled(annotation.disabled()));
+    }
 }

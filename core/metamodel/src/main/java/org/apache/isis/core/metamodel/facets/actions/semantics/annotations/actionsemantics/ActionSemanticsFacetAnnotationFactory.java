@@ -19,13 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.semantics.annotations.actionsemantics;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
 public class ActionSemanticsFacetAnnotationFactory extends FacetFactoryAbstract {
 
@@ -35,12 +30,11 @@ public class ActionSemanticsFacetAnnotationFactory extends FacetFactoryAbstract 
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final ActionSemantics annotation = Annotations.getAnnotation(processMethodContext.getMethod(), ActionSemantics.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
-    }
 
-    private ActionSemanticsFacet create(final ActionSemantics annotation, final FacetHolder holder) {
-        return annotation == null ? null : new ActionSemanticsFacetAnnotation(annotation.value(), holder);
+        //
+        // now handled by ActionAnnotationFacetFactory
+        // because of the interdependency between action semantics and command reification.
+        //
     }
 
 }

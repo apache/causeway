@@ -36,9 +36,9 @@ import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.propparam.renderedadjusted.RenderedAdjustedFacet;
 
-public class PropertyLayoutFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
-    public PropertyLayoutFactory() {
+    public PropertyLayoutFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
     }
 

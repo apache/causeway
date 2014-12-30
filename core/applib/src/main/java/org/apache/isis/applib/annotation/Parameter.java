@@ -30,7 +30,7 @@ import org.apache.isis.applib.spec.Specification;
  * Domain semantics for domain object collection.
  */
 @Inherited
-@Target({ ElementType.TYPE })
+@Target({ ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Parameter {
 
@@ -77,7 +77,7 @@ public @interface Parameter {
      * If more than one is provided, then all must be satisfied (in effect &quot;AND&quot;ed together).
      * </p>
      */
-    Class<? extends Specification>[] mustSatisfy();
+    Class<? extends Specification>[] mustSatisfy() default {};
 
 
     // //////////////////////////////////////

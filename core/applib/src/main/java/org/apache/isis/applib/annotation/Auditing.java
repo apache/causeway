@@ -19,23 +19,23 @@
 package org.apache.isis.applib.annotation;
 
 /**
- * The available policies for publishing changes to the properties of the object.
+ * The available policies for auditing changes to the properties of the object.
  */
-public enum PublishingPolicy {
+public enum Auditing {
     /**
-     * The publishing of the object should be as per the default publishing policy configured in <tt>isis.properties</tt>.
+     * The auditing of the object should be as per the default auditing policy configured in <tt>isis.properties</tt>.
      *
      * <p>
-     *     If no publishing policy is configured, then the publishing is disabled.
+     *     If no auditing policy is configured, then the auditing is disabled.
      * </p>
      */
     AS_CONFIGURED,
     /**
-     * Publish changes to this object.
+     * Audit changes to this object.
      */
     ENABLED,
     /**
-     * Do not publish changes to this object (even if otherwise configured to enable publishing).
+     * Do not audit changes to this object (even if otherwise configured to enable auditing).
      */
     DISABLED
 }

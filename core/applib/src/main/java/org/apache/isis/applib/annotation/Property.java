@@ -31,7 +31,7 @@ import org.apache.isis.applib.spec.Specification;
  * Domain semantics for domain object property.
  */
 @Inherited
-@Target({ ElementType.TYPE })
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Property {
 
@@ -80,13 +80,13 @@ public @interface Property {
      *     Note that non-editable objects can nevertheless have actions invoked upon them.
      * </p>
      */
-    EditPolicy editing() default EditPolicy.AS_CONFIGURED;
+    Editing editing() default Editing.AS_CONFIGURED;
 
     /**
-     * If {@link #editing()} is set to {@link EditPolicy#DISABLED},
+     * If {@link #editing()} is set to {@link Editing#DISABLED},
      * then the reason to provide to the user as to why this property cannot be edited.
      */
-    String editingDisabledReason();
+    String editingDisabledReason() default "";
 
 
     // //////////////////////////////////////
@@ -111,7 +111,7 @@ public @interface Property {
      * If more than one is provided, then all must be satisfied (in effect &quot;AND&quot;ed together).
      * </p>
      */
-    Class<? extends Specification>[] mustSatisfy();
+    Class<? extends Specification>[] mustSatisfy() default {};
 
 
     // //////////////////////////////////////

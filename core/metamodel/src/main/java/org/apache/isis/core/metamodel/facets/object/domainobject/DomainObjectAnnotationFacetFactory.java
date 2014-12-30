@@ -19,7 +19,9 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 
+import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
@@ -32,6 +34,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
+import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetAuditedAnnotation;
+import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
+import org.apache.isis.core.metamodel.facets.object.publishedobject.annotation.PublishedObjectFacetAnnotation;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
@@ -51,12 +57,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
     @Override
     public void process(ProcessClassContext processClassContext) {
 
-        final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
-        if(domainObject == null) {
-            return;
-        }
-
         processAuditing(processClassContext);
         processPublishing(processClassContext);
         processAutoComplete(processClassContext);
@@ -66,10 +66,10 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         processViewModel(processClassContext);
     }
 
-    private void processAuditing(ProcessClassContext processClassContext) {
+    private void processAuditing(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        final FacetHolder holder = processClassContext.getFacetHolder();
 
         //
         // this rule originally implemented only in AuditableFacetFromConfigurationFactory
@@ -81,16 +81,49 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
             return;
         }
 
-        FacetUtil.addFacet(AuditableFacetForDomainObjectAnnotation.create(domainObject, configuration, facetHolder));
+
+        AuditableFacet auditableFacet;
+
+        // check for the deprecated annotation first
+        final Audited annotation = Annotations.getAnnotation(cls, Audited.class);
+        auditableFacet = AuditableFacetAuditedAnnotation.create(annotation, holder);
+
+        // else check for @DomainObject(auditing=....)
+        if(auditableFacet == null) {
+            auditableFacet = AuditableFacetForDomainObjectAnnotation.create(domainObject, configuration, holder);
+        }
+
+        FacetUtil.addFacet(auditableFacet);
     }
 
 
-    private void processPublishing(ProcessClassContext processClassContext) {
+    private void processPublishing(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(PublishedObjectFacetForDomainObjectAnnotation.create(domainObject, configuration, facetHolder));
+        //
+        // this rule inspired by a similar rule for auditing, see above
+        //
+        if(HasTransactionId.class.isAssignableFrom(cls)) {
+            // do not install on any implementation of HasTransactionId
+            // (ie commands, audit entries, published events).
+            return;
+        }
+
+        PublishedObjectFacet publishedObjectFacet;
+
+        // check for the deprecated @PublishedObject annotation first
+        final PublishedObject publishedObject = Annotations.getAnnotation(processClassContext.getCls(), PublishedObject.class);
+        publishedObjectFacet = PublishedObjectFacetAnnotation.create(publishedObject, processClassContext.getFacetHolder());
+
+        // else check from @DomainObject(publishing=...)
+        if(publishedObjectFacet == null) {
+            publishedObjectFacet=
+                    PublishedObjectFacetForDomainObjectAnnotation.create(domainObject, configuration, facetHolder);
+        }
+        FacetUtil.addFacet(
+                publishedObjectFacet);
     }
 
     private void processAutoComplete(final ProcessClassContext processClassContext) {
@@ -98,7 +131,9 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(AutoCompleteFacetForDomainObjectAnnotation.create(domainObject, getSpecificationLoader(), adapterManager, servicesInjector, facetHolder));
+        FacetUtil.addFacet(
+                AutoCompleteFacetForDomainObjectAnnotation.create(
+                        domainObject, getSpecificationLoader(), adapterManager, servicesInjector, facetHolder));
     }
 
     private void processBounded(final ProcessClassContext processClassContext) {
@@ -106,7 +141,8 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(ChoicesFacetForDomainObjectAnnotation.create(domainObject, querySubmitter, facetHolder));
+        FacetUtil.addFacet(
+                ChoicesFacetForDomainObjectAnnotation.create(domainObject, querySubmitter, facetHolder));
     }
 
     private void processEditing(final ProcessClassContext processClassContext) {
@@ -114,7 +150,8 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(ImmutableFacetForDomainObjectAnnotation.create(domainObject, configuration, facetHolder));
+        FacetUtil.addFacet(
+                ImmutableFacetForDomainObjectAnnotation.create(domainObject, configuration, facetHolder));
     }
 
     private void processObjectType(final ProcessClassContext processClassContext) {
@@ -122,7 +159,8 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObject, facetHolder));
+        FacetUtil.addFacet(
+                ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObject, facetHolder));
     }
 
     private void processViewModel(final ProcessClassContext processClassContext) {
@@ -130,7 +168,9 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(ViewModelFacetForDomainObjectAnnotation.create(domainObject, getSpecificationLoader(), adapterManager, servicesInjector, facetHolder));
+        FacetUtil.addFacet(
+                ViewModelFacetForDomainObjectAnnotation.create(
+                        domainObject, getSpecificationLoader(), adapterManager, servicesInjector, facetHolder));
     }
 
 
@@ -138,7 +178,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
     public void setConfiguration(IsisConfiguration configuration) {
         this.configuration = configuration;
     }
-
 
     @Override
     public void setAdapterManager(AdapterManager adapterManager) {

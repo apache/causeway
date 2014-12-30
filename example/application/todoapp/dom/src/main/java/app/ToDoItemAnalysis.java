@@ -26,17 +26,19 @@ import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.Bookmarkable;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
-@DomainServiceLayout(named="Analysis", menuOrder = "20")
-@DomainService()
+@DomainServiceLayout(
+        named="Analysis",
+        menuOrder = "20")
+@DomainService
 public class ToDoItemAnalysis {
 
 
@@ -54,10 +56,10 @@ public class ToDoItemAnalysis {
     //region > byCategory (action)
     @ActionLayout(
         cssClassFa="fa fa-pie-chart",
-        named="By Category"
+        named="By Category",
+        bookmarking = BookmarkPolicy.AS_ROOT
     )
-    @Bookmarkable
-    @ActionSemantics(Of.SAFE)
+    @Action(semantics = SemanticsOf.SAFE)
     @MemberOrder(sequence = "1")
     public List<ToDoItemsByCategoryViewModel> toDoItemsByCategory() {
         final List<Category> categories = Arrays.asList(Category.values());
@@ -87,17 +89,17 @@ public class ToDoItemAnalysis {
 
     @ActionLayout(
         cssClassFa="fa fa-calendar",
-        named="By Date Range"
+        named="By Date Range",
+        bookmarking = BookmarkPolicy.AS_ROOT
     )
-    @Bookmarkable
-    @ActionSemantics(Of.SAFE)
+    @Action(semantics = SemanticsOf.SAFE)
     @MemberOrder(sequence = "1")
     public List<ToDoItemsByDateRangeViewModel> toDoItemsByDateRange() {
         final List<DateRange> dateRanges = Arrays.asList(DateRange.values());
         return Lists.newArrayList(Iterables.transform(dateRanges, byDateRange()));
     }
 
-    private Function<DateRange, ToDoItemsByDateRangeViewModel> byDateRange() {
+    private static Function<DateRange, ToDoItemsByDateRangeViewModel> byDateRange() {
         return new Function<DateRange, ToDoItemsByDateRangeViewModel>(){
              @Override
              public ToDoItemsByDateRangeViewModel apply(final DateRange dateRange) {
@@ -109,7 +111,7 @@ public class ToDoItemAnalysis {
 
     //region > forCategory (programmatic)
     @Programmatic
-    public ToDoItemsByCategoryViewModel toDoItemsForCategory(Category category) {
+    public ToDoItemsByCategoryViewModel toDoItemsForCategory(final Category category) {
         return byCategory().apply(category);
     }
 

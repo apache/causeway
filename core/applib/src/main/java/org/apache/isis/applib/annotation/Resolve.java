@@ -35,17 +35,17 @@ import java.lang.annotation.Target;
 public @interface Resolve {
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.annotation.CollectionLayout.RenderType} instead.
+     * @deprecated - use {@link RenderType} instead.
      */
     @Deprecated
     public enum Type {
         /**
-         * @deprecated - use {@link org.apache.isis.applib.annotation.CollectionLayout.RenderType#EAGERLY} instead.
+         * @deprecated - use {@link RenderType#EAGERLY} instead.
          */
         @Deprecated
         EAGERLY(Render.Type.EAGERLY),
         /**
-         * @deprecated - use {@link org.apache.isis.applib.annotation.CollectionLayout.RenderType#LAZILY} instead.
+         * @deprecated - use {@link RenderType#LAZILY} instead.
          */
         @Deprecated
         LAZILY(Render.Type.LAZILY);

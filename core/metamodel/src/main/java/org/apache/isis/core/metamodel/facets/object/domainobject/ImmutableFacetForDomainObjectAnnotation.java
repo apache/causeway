@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.EditPolicy;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -40,9 +40,13 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final EditPolicy editPolicy = domainObject.editing();
+        if(domainObject == null) {
+            return null;
+        }
+
+        final Editing editing = domainObject.editing();
         final String disabledReason = domainObject.editingDisabledReason();
-        switch (editPolicy) {
+        switch (editing) {
             case AS_CONFIGURED:
 
                 if(holder.containsDoOpFacet(ImmutableFacet.class)) {

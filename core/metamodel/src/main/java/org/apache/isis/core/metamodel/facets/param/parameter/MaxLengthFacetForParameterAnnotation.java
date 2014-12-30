@@ -26,7 +26,14 @@ import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacetAbst
 
 public class MaxLengthFacetForParameterAnnotation extends MaxLengthFacetAbstract {
 
-    public static MaxLengthFacet create(Parameter parameter, FacetHolder holder) {
+    public static MaxLengthFacet create(
+            final Parameter parameter,
+            final FacetHolder holder) {
+
+        if (parameter == null) {
+            return null;
+        }
+
         final int maxLength = parameter.maxLength();
         return maxLength != -1
                 ? new MaxLengthFacetForParameterAnnotation(maxLength, holder)

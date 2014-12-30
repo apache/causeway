@@ -36,6 +36,10 @@ public class ViewModelFacetForDomainObjectAnnotation extends ViewModelFacetDecla
             final ServicesInjector servicesInjector,
             final FacetHolder holder) {
 
+        if(domainObject == null) {
+            return null;
+        }
+
         final boolean viewModel = domainObject.viewModel();
         if(!viewModel) {
             return null;

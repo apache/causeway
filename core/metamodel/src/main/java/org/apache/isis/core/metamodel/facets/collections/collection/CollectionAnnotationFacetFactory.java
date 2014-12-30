@@ -40,12 +40,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final Method method = processMethodContext.getMethod();
-        final Collection collection = Annotations.getAnnotation(method, Collection.class);
-        if (collection == null) {
-            return;
-        }
-
         processInteraction(processMethodContext);
         processHidden(processMethodContext);
         processEditing(processMethodContext);
@@ -79,7 +73,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
     private void processTypeOf(final ProcessMethodContext processMethodContext) {
 
-        // typeOf is handled by TypeOfFacetOnActionAnnotationFactory, because the
+        // typeOf is handled by TypeOfFacetOnCollectionAnnotationFactory, because the
         // deprecated annotations etc that must also be supported.
     }
 

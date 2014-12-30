@@ -38,13 +38,13 @@ import org.apache.isis.applib.services.publish.EventPayload;
 public @interface PublishedAction {
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.annotation.Action.PublishingPayloadFactory} instead.
+     * @deprecated - use {@link PublishingPayloadFactoryForAction} instead.
      */
     @Deprecated
     public interface PayloadFactory {
 
         /**
-         * @deprecated - use {@link org.apache.isis.applib.annotation.Action.PublishingPayloadFactory#payloadFor(org.apache.isis.applib.Identifier, Object, java.util.List, Object)} instead.
+         * @deprecated - use {@link PublishingPayloadFactoryForAction#payloadFor(org.apache.isis.applib.Identifier, Object, java.util.List, Object)} instead.
          */
         @Deprecated
         @Programmatic

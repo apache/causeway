@@ -30,7 +30,14 @@ public class NotPersistedFacetForPropertyAnnotation extends NotPersistedFacetAbs
         super(holder);
     }
 
-    static NotPersistedFacet create(final Property property, final FacetHolder holder) {
+    static NotPersistedFacet create(
+            final Property property,
+            final FacetHolder holder) {
+
+        if (property == null) {
+            return null;
+        }
+
         final boolean notPersisted = property.notPersisted();
         final boolean persisted = !notPersisted;
         if(persisted) {

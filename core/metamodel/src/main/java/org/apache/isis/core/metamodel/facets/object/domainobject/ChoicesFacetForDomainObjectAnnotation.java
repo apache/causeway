@@ -31,6 +31,11 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
             final DomainObject domainObject,
             final QuerySubmitter querySubmitter,
             final FacetHolder facetHolder) {
+
+        if(domainObject == null) {
+            return null;
+        }
+
         final boolean bounded = domainObject.bounded();
         return bounded ? new ChoicesFacetForDomainObjectAnnotation(facetHolder, querySubmitter): null;
     }

@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefau
 import org.apache.isis.core.metamodel.facets.actions.exploration.annotation.ExplorationFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInteractionFacetFactory;
-import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFactory;
+import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.annotation.NotContributedFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method.NotInServiceMenuFacetViaMethodFactory;
@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFa
 import org.apache.isis.core.metamodel.facets.collections.javautilcollection.CollectionFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.disabled.fromimmutable.DisabledFacetOnCollectionDerivedFromImmutableFactory;
 import org.apache.isis.core.metamodel.facets.collections.interaction.CollectionInteractionFacetFactory;
-import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFactory;
+import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToRemoveFromAndValidateFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.notpersisted.annotation.NotPersistedFacetOnCollectionAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.collections.paged.annotation.PagedFacetOnCollectionFactory;
@@ -116,7 +116,7 @@ import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoEnhancem
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.ImmutableFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutablemarkerifc.ImmutableFacetMarkerInterfaceFactory;
-import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DomainObjectLayoutFactory;
+import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DomainObjectLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.mask.annotation.MaskFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.maxlen.annotation.MaxLengthFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupLayoutFacetFactory;
@@ -152,7 +152,7 @@ import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParam
 import org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetDerivedFromTypeFactory;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.describedas.annotderived.DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory;
-import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFactory;
+import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.mandatory.annotation.MandatoryFacetOnParameterInvertedByOptionalAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.param.mandatory.dflt.MandatoryFacetOnParametersDefaultFactory;
 import org.apache.isis.core.metamodel.facets.param.multiline.annotation.MultiLineFacetOnParameterAnnotationFactory;
@@ -174,7 +174,7 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.method.Property
 import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutableFactory;
 import org.apache.isis.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferredFactory;
 import org.apache.isis.core.metamodel.facets.properties.interaction.PropertyInteractionFacetFactory;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFactory;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.mandatory.MandatoryFacetOnPropertyMandatoryAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.optional.MandatoryFacetOnPropertyInvertedByOptionalAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.dflt.MandatoryFacetOnProperyDefaultFactory;
@@ -417,12 +417,12 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
 
         addFactory(DomainServiceLayoutFactory.class);
-        addFactory(DomainObjectLayoutFactory.class);
+        addFactory(DomainObjectLayoutFacetFactory.class);
         // must come after MultiLine
-        addFactory(PropertyLayoutFactory.class);
-        addFactory(ParameterLayoutFactory.class);
-        addFactory(ActionLayoutFactory.class);
-        addFactory(CollectionLayoutFactory.class);
+        addFactory(PropertyLayoutFacetFactory.class);
+        addFactory(ParameterLayoutFacetFactory.class);
+        addFactory(ActionLayoutFacetFactory.class);
+        addFactory(CollectionLayoutFacetFactory.class);
 
         addFactory(NamedFacetOnTypeAnnotationFactory.class);
         addFactory(NamedFacetOnMemberFactory.class);

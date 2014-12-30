@@ -35,6 +35,11 @@ public class ActionSemanticsFacetFallbackToNonIdempotentFactory extends FacetFac
     public void process(final ProcessMethodContext processMethodContext) {
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
         if(facetHolder.containsDoOpFacet(ActionSemanticsFacet.class)) {
+
+            // expect this always to be the case, because ActionSemanticsFacetAnnotationFactory will always install
+            // an action semantics facet, either for @ActionSemantics or for @Action(semantics=...)
+
+            // therefore, this facet factory is a no-op and can (probably, I reckon) be deleted
             return;
         }
         FacetUtil.addFacet(new ActionSemanticsFacetFallbackToNonIdempotent(facetHolder));

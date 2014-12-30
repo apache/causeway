@@ -29,9 +29,19 @@ import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 
 public class HiddenFacetForActionAnnotation extends HiddenFacetAbstract {
 
-    public static HiddenFacet create(final Action action, final FacetHolder holder) {
+    public static HiddenFacet create(
+            final Action action,
+            final FacetHolder holder) {
+
+        if (action == null) {
+            return null;
+        }
+
         final Where where = action.hidden();
-        return where != null && where != Where.NOT_SPECIFIED ? new HiddenFacetForActionAnnotation(where, holder) : null;
+        if (where != null && where != Where.NOT_SPECIFIED) {
+            return new HiddenFacetForActionAnnotation(where, holder);
+        }
+        return null;
     }
 
     private HiddenFacetForActionAnnotation(final Where where, final FacetHolder holder) {

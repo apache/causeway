@@ -19,12 +19,8 @@
 package org.apache.isis.core.metamodel.facets.object.audit.annotation;
 
 
-import org.apache.isis.applib.annotation.Audited;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetAbstract.Enablement;
 
 
 public class AuditableFacetFromAuditedAnnotationFactory extends FacetFactoryAbstract {
@@ -35,16 +31,10 @@ public class AuditableFacetFromAuditedAnnotationFactory extends FacetFactoryAbst
 
     @Override
     public void process(ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final Audited annotation = Annotations.getAnnotation(cls, Audited.class);
-        if (annotation == null) {
-            return;
-        }
-        FacetUtil.addFacet(
-                new AuditableFacetAuditedAnnotation(
-                        processClassContext.getFacetHolder(), 
-                        Enablement.ifDisabled(annotation.disabled())));
-        return;
+
+        //
+        // moved to DomainObjectAnnotationFacetFactory
+        //
     }
 
 

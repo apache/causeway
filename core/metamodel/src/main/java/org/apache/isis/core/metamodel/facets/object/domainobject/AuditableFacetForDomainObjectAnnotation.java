@@ -19,11 +19,13 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 
+import org.apache.isis.applib.annotation.Auditing;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.audit.configuration.AuditableFacetForDomainObjectAnnotationAsConfigured;
 
 
 public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstract {
@@ -33,23 +35,21 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final DomainObject.AuditingPolicy auditingPolicy = domainObject.auditing();
-        switch (auditingPolicy) {
+        if(domainObject == null) {
+            return null;
+        }
+
+        final Auditing auditing = domainObject.auditing();
+        switch (auditing) {
             case AS_CONFIGURED:
 
-                //
-                // this rule also implemented in AuditableFacetFromConfigurationFactory
-                // don't overwrite if already explicitly specified.
-                //
-                if(holder.containsDoOpFacet(AuditableFacet.class)) {
-                    // do not replace
-                    return null;
-                }
-
                 final AuditObjectsConfiguration setting = AuditObjectsConfiguration.parse(configuration);
-                return setting.asEnablement() == Enablement.ENABLED
-                        ? new AuditableFacetForDomainObjectAnnotation(Enablement.ENABLED, holder)
-                        : null;
+                switch (setting) {
+                    case NONE:
+                        return null;
+                    default:
+                        return new AuditableFacetForDomainObjectAnnotationAsConfigured(holder);
+                }
             case DISABLED:
                 return null;
             case ENABLED:
@@ -58,7 +58,9 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
         return null;
     }
 
-    private AuditableFacetForDomainObjectAnnotation(Enablement enablement, FacetHolder holder) {
+    protected AuditableFacetForDomainObjectAnnotation(
+            final Enablement enablement,
+            final FacetHolder holder) {
         super(holder, enablement);
     }
 }

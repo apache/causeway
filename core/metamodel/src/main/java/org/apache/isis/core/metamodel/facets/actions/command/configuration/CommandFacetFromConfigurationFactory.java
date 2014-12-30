@@ -25,7 +25,6 @@ import org.apache.isis.applib.annotation.Command;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -40,23 +39,6 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
  */
 public class CommandFacetFromConfigurationFactory extends FacetFactoryAbstract implements IsisConfigurationAware  {
 
-    private static final String  COMMAND_ACTIONS_KEY = "isis.services.command.actions";
-
-    private static enum ActionCategorization {
-        ALL,
-        IGNORE_SAFE,
-        NONE;
-        public static ActionCategorization parse(final String value) {
-            if ("ignoreQueryOnly".equalsIgnoreCase(value) || "ignoreSafe".equalsIgnoreCase(value)) {
-                return IGNORE_SAFE;
-            } else if ("all".equals(value)) {
-                return ALL;
-            } else {
-                return NONE;
-            }
-        }
-    }
-    
     private IsisConfiguration configuration;
 
     public CommandFacetFromConfigurationFactory() {
@@ -83,19 +65,15 @@ public class CommandFacetFromConfigurationFactory extends FacetFactoryAbstract i
             // (ie commands, audit entries, published events).
             return; 
         }
-        final ActionCategorization categorization = ActionCategorization.parse(configuration.getString(COMMAND_ACTIONS_KEY));
-        if(categorization == ActionCategorization.NONE) {
+        final ActionConfiguration setting = ActionConfiguration.parse(configuration);
+        if(setting == ActionConfiguration.NONE) {
             return;
         }
-        if(actionSemanticsFacet.value() == Of.SAFE && categorization == ActionCategorization.IGNORE_SAFE) {
+        if(actionSemanticsFacet.value() == Of.SAFE && setting == ActionConfiguration.IGNORE_SAFE) {
             return;
         }
         final Command annotation = Annotations.getAnnotation(method, Command.class);
-        FacetUtil.addFacet(create(annotation, facetHolder));
-    }
-
-    private CommandFacet create(final Command annotation, final FacetHolder holder) {
-        return new CommandFacetFromConfiguration(Command.Persistence.PERSISTED, Command.ExecuteIn.FOREGROUND, holder);
+        FacetUtil.addFacet(CommandFacetFromConfiguration.create(facetHolder));
     }
 
     // //////////////////////////////////////

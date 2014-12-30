@@ -22,11 +22,16 @@ package org.apache.isis.core.metamodel.facets.actions.command.configuration;
 import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
 
 public class CommandFacetFromConfiguration extends CommandFacetAbstract {
 
-    public CommandFacetFromConfiguration(
+    public static CommandFacet create(final FacetHolder holder) {
+        return new CommandFacetFromConfiguration(Persistence.PERSISTED, ExecuteIn.FOREGROUND, holder);
+    }
+
+    private CommandFacetFromConfiguration(
             final Persistence persistence, 
             final ExecuteIn executeIn,
             final FacetHolder holder) {

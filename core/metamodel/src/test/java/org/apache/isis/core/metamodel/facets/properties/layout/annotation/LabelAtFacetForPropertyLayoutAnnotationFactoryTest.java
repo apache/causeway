@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.LabelAtFacetForPropertyLayoutAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFactory;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -38,7 +38,7 @@ import static org.junit.Assert.assertThat;
 public class LabelAtFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     public void testPropertyLayoutAnnotationPickedUp() {
-        final PropertyLayoutFactory facetFactory = new PropertyLayoutFactory();
+        final PropertyLayoutFacetFactory facetFactory = new PropertyLayoutFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")

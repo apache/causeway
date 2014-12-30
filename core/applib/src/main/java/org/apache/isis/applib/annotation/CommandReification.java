@@ -19,14 +19,20 @@
 package org.apache.isis.applib.annotation;
 
 /**
- * The available policies for editing properties and collections.
+ * The available policies as to whether action invocations are reified into commands.
+ *
+ * <p>
+ *     Note: this enum is <i>not</i> an inner class of the {@link org.apache.isis.applib.annotation.Action} annotation
+ *     because in the future we may also support commands for {@link org.apache.isis.applib.annotation.Property} and
+ *     {@link org.apache.isis.applib.annotation.Collection}.
+ * </p>
  */
-public enum EditPolicy {
+public enum CommandReification {
     /**
-     * The editing of the object should be as per the default editing policy configured in <tt>isis.properties</tt>.
+     * Whether the action should be handled as a command is per the default editing policy configured in <tt>isis.properties</tt>.
      *
      * <p>
-     *     If no editing policy is configured, then the editing is enabled.
+     *     If no command policy is configured, then the action is <i>not</i> treated as a command.
      * </p>
      */
     AS_CONFIGURED,

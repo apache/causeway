@@ -21,7 +21,9 @@ package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.PublishedObject;
-import org.apache.isis.applib.annotation.PublishingPolicy;
+import org.apache.isis.applib.annotation.Publishing;
+import org.apache.isis.applib.annotation.PublishingChangeKind;
+import org.apache.isis.applib.annotation.PublishingPayloadFactoryForObject;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -35,29 +37,35 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        final PublishingPolicy publishingPolicy = domainObject.publishing();
+        if(domainObject == null) {
+            return null;
+        }
 
-        switch (publishingPolicy) {
+        final Publishing publishing = domainObject.publishing();
+
+        switch (publishing) {
             case AS_CONFIGURED:
 
-                if(holder.containsDoOpFacet(PublishedObjectFacet.class)) {
-                    // do not replace
-                    return null;
-                }
-
                 final PublishObjectsConfiguration setting = PublishObjectsConfiguration.parse(configuration);
-                return setting == PublishObjectsConfiguration.ALL
-                        ? new PublishedObjectFacetForDomainObjectAnnotation(newPayloadFactory(domainObject.publishingPayloadFactory()), holder)
-                        : null;
+                switch (setting) {
+                    case NONE:
+                        return null;
+                    default:
+                    return new PublishedObjectFacetForDomainObjectAnnotationAsConfigured(
+                            newPayloadFactory(domainObject), holder);
+                }
             case DISABLED:
                 return null;
             case ENABLED:
-                return new PublishedObjectFacetForDomainObjectAnnotation(newPayloadFactory(domainObject.publishingPayloadFactory()), holder);
+                return new PublishedObjectFacetForDomainObjectAnnotation(
+                        newPayloadFactory(domainObject), holder);
         }
         return null;
     }
 
-    private static DomainObject.PublishingPayloadFactory newPayloadFactory(final Class<? extends DomainObject.PublishingPayloadFactory> value) {
+    protected static PublishingPayloadFactoryForObject newPayloadFactory(
+            final DomainObject domainObject) {
+        final Class<? extends PublishingPayloadFactoryForObject> value = domainObject.publishingPayloadFactory();
         if(value == null) {
             return null;
         }
@@ -71,13 +79,13 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
     }
 
 
-    private PublishedObjectFacetForDomainObjectAnnotation(DomainObject.PublishingPayloadFactory publishingPayloadFactory, final FacetHolder holder) {
+    PublishedObjectFacetForDomainObjectAnnotation(PublishingPayloadFactoryForObject publishingPayloadFactory, final FacetHolder holder) {
         super(legacyPayloadFactoryFor(publishingPayloadFactory), holder);
     }
 
-    private static PublishedObject.PayloadFactory legacyPayloadFactoryFor(DomainObject.PublishingPayloadFactory publishingPayloadFactory) {
-        if(publishingPayloadFactory instanceof DomainObject.PublishingPayloadFactory.Adapter) {
-            final DomainObject.PublishingPayloadFactory.Adapter adapter = (DomainObject.PublishingPayloadFactory.Adapter) publishingPayloadFactory;
+    private static PublishedObject.PayloadFactory legacyPayloadFactoryFor(PublishingPayloadFactoryForObject publishingPayloadFactory) {
+        if(publishingPayloadFactory instanceof PublishingPayloadFactoryForObject.Adapter) {
+            final PublishingPayloadFactoryForObject.Adapter adapter = (PublishingPayloadFactoryForObject.Adapter) publishingPayloadFactory;
             return adapter.getPayloadFactory();
         }
         return new LegacyAdapter(publishingPayloadFactory);
@@ -85,15 +93,15 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
 
     private static class LegacyAdapter implements PublishedObject.PayloadFactory {
 
-        private final DomainObject.PublishingPayloadFactory payloadFactory;
+        private final PublishingPayloadFactoryForObject payloadFactory;
 
-        LegacyAdapter(final DomainObject.PublishingPayloadFactory payloadFactory) {
+        LegacyAdapter(final PublishingPayloadFactoryForObject payloadFactory) {
             this.payloadFactory = payloadFactory;
         }
 
         @Override
         public EventPayload payloadFor(Object changedObject, PublishedObject.ChangeKind changeKind) {
-            return payloadFactory.payloadFor(changedObject, DomainObject.PublishingChangeKind.from(changeKind));
+            return payloadFactory.payloadFor(changedObject, PublishingChangeKind.from(changeKind));
         }
     }
 

@@ -26,7 +26,7 @@ import java.util.List;
 import javax.enterprise.context.RequestScoped;
 
 /**
- * @deprecated - use {@link Action#appliesTo()} instead.
+ * @deprecated - use {@link Action#invokeOn()} instead.
  */
 @Inherited
 @Target({ ElementType.METHOD })
@@ -35,24 +35,24 @@ import javax.enterprise.context.RequestScoped;
 public @interface Bulk {
 
     /**
-     * @deprecated - see {@link org.apache.isis.applib.annotation.Action.AppliesToPolicy}
+     * @deprecated - see {@link InvokeOn}
      */
     @Deprecated
     public static enum AppliesTo {
         /**
-         * @deprecated - see {@link org.apache.isis.applib.annotation.Action.AppliesToPolicy#OBJECT_AND_COLLECTION}
+         * @deprecated - see {@link InvokeOn#OBJECT_AND_COLLECTION}
          */
         @Deprecated
         BULK_AND_REGULAR,
         /**
-         * @deprecated - see {@link org.apache.isis.applib.annotation.Action.AppliesToPolicy#COLLECTION_ONLY}
+         * @deprecated - see {@link InvokeOn#COLLECTION_ONLY}
          */
         @Deprecated
         BULK_ONLY
     }
 
     /**
-     * @deprecated - see {@link Action#appliesTo()}.
+     * @deprecated - see {@link Action#invokeOn()}.
      */
     @Deprecated
     AppliesTo value() default AppliesTo.BULK_AND_REGULAR;
@@ -70,17 +70,17 @@ public @interface Bulk {
 
 
         /**
-         * @deprecated - use {@link org.apache.isis.applib.annotation.BulkInteractionContext.InvokedAs} instead.
+         * @deprecated - use {@link InvokedOn} instead.
          */
         @Deprecated
         public static enum InvokedAs {
             /**
-             * @deprecated - use {@link org.apache.isis.applib.annotation.BulkInteractionContext.InvokedAs#BULK} instead.
+             * @deprecated - use {@link InvokedOn#COLLECTION} instead.
              */
             @Deprecated
             BULK,
             /**
-             * @deprecated - use {@link org.apache.isis.applib.annotation.BulkInteractionContext.InvokedAs#REGULAR} instead.
+             * @deprecated - use {@link InvokedOn#OBJECT} instead.
              */
             @Deprecated
             REGULAR;
@@ -149,7 +149,7 @@ public @interface Bulk {
          */
         @Deprecated
         public InteractionContext(final InvokedAs invokedAs, final List<Object> domainObjects) {
-            super(BulkInteractionContext.InvokedAs.from(invokedAs), domainObjects);
+            super(InvokedOn.from(invokedAs), domainObjects);
         }
     }
 

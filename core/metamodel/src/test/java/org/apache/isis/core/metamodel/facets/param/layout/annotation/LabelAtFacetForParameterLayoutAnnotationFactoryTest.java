@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.param.layout.LabelAtFacetForParameterLayoutAnnotation;
-import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFactory;
+import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
 
 import static org.hamcrest.Matchers.instanceOf;
@@ -37,7 +37,7 @@ import static org.junit.Assert.assertThat;
 public class LabelAtFacetForParameterLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     public void testParameterLayoutAnnotationPickedUp() {
-        final ParameterLayoutFactory facetFactory = new ParameterLayoutFactory();
+        final ParameterLayoutFacetFactory facetFactory = new ParameterLayoutFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")

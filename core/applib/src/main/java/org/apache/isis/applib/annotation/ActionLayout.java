@@ -42,11 +42,15 @@ public @interface ActionLayout {
      */
     String cssClass() default "";
 
+    // //////////////////////////////////////
+
     /**
      * Indicates the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class to decorate an
      * action (button or menu item).
      */
     String cssClassFa() default "";
+
+    // //////////////////////////////////////
 
     /**
      * Indicates the position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
@@ -58,20 +62,28 @@ public @interface ActionLayout {
         LEFT, RIGHT
     }
 
+    // //////////////////////////////////////
+
     /**
      * Description of this action, eg to be rendered in a tooltip.
      */
     String describedAs() default "";
+
+    // //////////////////////////////////////
 
     /**
      * Indicates where in the UI the action should <i>not</i>not be visible.
      */
     Where hidden() default Where.NOT_SPECIFIED;
 
+    // //////////////////////////////////////
+
     /**
      * Name of this action (overriding the name derived from its name in code).
      */
     String named() default "";
+
+    // //////////////////////////////////////
 
     /**
      * For actions that are associated with a property, indicates the positioning of the
@@ -94,5 +106,13 @@ public @interface ActionLayout {
      * Whether an action is a prototype action, only available when running in prototype (development) mode.
      */
     boolean prototype() default false;
+
+
+    // //////////////////////////////////////
+
+    /**
+     * Whether (and how) this domain object can be bookmarked in the UI.
+     */
+    BookmarkPolicy bookmarking() default BookmarkPolicy.NEVER;
 
 }

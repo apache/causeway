@@ -32,11 +32,20 @@ public abstract class MandatoryFacetForParameterAnnotation extends MandatoryFace
         super(holder, semantics);
     }
 
-    static MandatoryFacet create(final Parameter parameter, Method method, final FacetHolder holder) {
+    static MandatoryFacet create(
+            final Parameter parameter,
+            final Method method,
+            final FacetHolder holder) {
+
+        if (parameter == null) {
+            return null;
+        }
+
         final Class<?> returnType = method.getReturnType();
         if (returnType.isPrimitive()) {
             return new MandatoryFacetForParameterAnnotation.Primitive(holder);
         }
+
         final Optionality optionality = parameter.optional();
         switch (optionality) {
             case DEFAULT:

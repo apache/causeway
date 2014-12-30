@@ -19,15 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.bulk.annotation;
 
-import java.lang.reflect.Method;
-
-import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 
 public class BulkFacetAnnotationFactory extends FacetFactoryAbstract {
 
@@ -37,13 +30,10 @@ public class BulkFacetAnnotationFactory extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        Method method = processMethodContext.getMethod();
-        final Bulk annotation = Annotations.getAnnotation(method, Bulk.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
-    }
 
-    private BulkFacet create(final Bulk annotation, final FacetHolder holder) {
-        return annotation == null ? null : new BulkFacetAnnotation(annotation.value(), holder);
+        //
+        // moved to ActionAnnotationFacetFactory
+        //
     }
 
 }

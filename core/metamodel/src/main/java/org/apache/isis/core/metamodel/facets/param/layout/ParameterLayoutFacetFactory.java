@@ -27,9 +27,9 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 
-public class ParameterLayoutFactory extends FacetFactoryAbstract {
+public class ParameterLayoutFacetFactory extends FacetFactoryAbstract {
 
-    public ParameterLayoutFactory() {
+    public ParameterLayoutFacetFactory() {
         super(FeatureType.PARAMETERS_ONLY);
     }
 

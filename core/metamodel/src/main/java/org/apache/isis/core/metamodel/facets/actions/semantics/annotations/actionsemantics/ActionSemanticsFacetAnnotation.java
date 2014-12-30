@@ -19,14 +19,28 @@
 
 package org.apache.isis.core.metamodel.facets.actions.semantics.annotations.actionsemantics;
 
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 
 public class ActionSemanticsFacetAnnotation extends ActionSemanticsFacetAbstract {
 
+    public static ActionSemanticsFacet create(
+            final ActionSemantics actionSemantics,
+            final FacetHolder holder) {
+
+        if (actionSemantics == null) {
+            return null;
+        }
+
+        return new ActionSemanticsFacetAnnotation(actionSemantics.value(), holder);
+    }
+
     public ActionSemanticsFacetAnnotation(Of of, final FacetHolder holder) {
         super(of, holder);
     }
+
 
 }

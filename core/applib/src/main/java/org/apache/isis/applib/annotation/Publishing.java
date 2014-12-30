@@ -19,33 +19,23 @@
 package org.apache.isis.applib.annotation;
 
 /**
- * The available policies as to whether action invocations are reified into commands.
- *
- * <p>
- *     Note: this enum is <i>not</i> an inner class of the {@link org.apache.isis.applib.annotation.Action} annotation
- *     because in the future we may also support commands for {@link org.apache.isis.applib.annotation.Property} and
- *     {@link org.apache.isis.applib.annotation.Collection}.
- * </p>
+ * The available policies for publishing changes to the properties of the object.
  */
-public enum CommandPolicy {
+public enum Publishing {
     /**
-     * Whether the action should be handled as a command is per the default editing policy configured in <tt>isis.properties</tt>.
+     * The publishing of the object should be as per the default publishing policy configured in <tt>isis.properties</tt>.
      *
      * <p>
-     *     If no command policy is configured, then the action is <i>not</i> treated as a command.
+     *     If no publishing policy is configured, then the publishing is disabled.
      * </p>
      */
     AS_CONFIGURED,
     /**
-     * Audit changes to this object.
+     * Publish changes to this object.
      */
     ENABLED,
     /**
-     * Do not allow the properties to be edited, or the collections to be added to/removed from.
-     *
-     * <p>
-     *     Corresponds to the {@link Immutable} annotation).
-     * </p>
+     * Do not publish changes to this object (even if otherwise configured to enable publishing).
      */
     DISABLED
 }

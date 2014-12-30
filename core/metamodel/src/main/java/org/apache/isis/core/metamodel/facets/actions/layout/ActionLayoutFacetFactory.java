@@ -37,9 +37,9 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 
 
-public class ActionLayoutFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
-    public ActionLayoutFactory() {
+    public ActionLayoutFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
     }
 

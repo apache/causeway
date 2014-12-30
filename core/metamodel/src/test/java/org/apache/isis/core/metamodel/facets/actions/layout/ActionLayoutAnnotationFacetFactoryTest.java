@@ -37,7 +37,7 @@ import static org.junit.Assert.assertThat;
 public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testActionLayoutAnnotationPickedUp() {
-        final ActionLayoutFactory facetFactory = new ActionLayoutFactory();
+        final ActionLayoutFacetFactory facetFactory = new ActionLayoutFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -58,7 +58,7 @@ public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testActionLayoutFallbackPickedUp() {
-        final ActionLayoutFactory facetFactory = new ActionLayoutFactory();
+        final ActionLayoutFacetFactory facetFactory = new ActionLayoutFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -77,7 +77,7 @@ public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testCssClassFaLeftPositionIsDefault() {
-        final ActionLayoutFactory facetFactory = new ActionLayoutFactory();
+        final ActionLayoutFacetFactory facetFactory = new ActionLayoutFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -99,7 +99,7 @@ public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactory
     }
 
     public void testCssClassFaRightPosition() {
-        final ActionLayoutFactory facetFactory = new ActionLayoutFactory();
+        final ActionLayoutFacetFactory facetFactory = new ActionLayoutFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")

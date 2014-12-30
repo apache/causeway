@@ -19,13 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.publishedobject.annotation;
 
-import org.apache.isis.applib.annotation.PublishedObject;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 
 public class PublishedObjectFacetAnnotationFactory extends FacetFactoryAbstract {
 
@@ -34,27 +29,12 @@ public class PublishedObjectFacetAnnotationFactory extends FacetFactoryAbstract 
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
-        super.process(processClassContext);
-        final PublishedObject annotation = Annotations.getAnnotation(processClassContext.getCls(), PublishedObject.class);
-        FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
+    public void process(final ProcessClassContext processClassContext) {
+
+        //
+        // moved to DomainObjectAnnotationFacetFactory
+        //
     }
 
-    private PublishedObjectFacet create(final PublishedObject annotation, final FacetHolder holder) {
-        return annotation == null ? null : new PublishedObjectFacetAnnotation(newPayloadFactory(annotation.value()), holder);
-    }
-
-    private static PublishedObject.PayloadFactory newPayloadFactory(final Class<? extends PublishedObject.PayloadFactory> value) {
-        if(value == null) {
-            return null;
-        }
-        try {
-            return (PublishedObject.PayloadFactory) value.newInstance();
-        } catch (final InstantiationException e) {
-            return null;
-        } catch (final IllegalAccessException e) {
-            return null;
-        }
-    }
 
 }

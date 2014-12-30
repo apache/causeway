@@ -23,7 +23,6 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.apache.isis.applib.services.publish.EventPayload;
 
 /**
  * Domain semantics for domain objects (entities and view models; for services see {@link org.apache.isis.applib.annotation.DomainService}).
@@ -34,28 +33,6 @@ import org.apache.isis.applib.services.publish.EventPayload;
 public @interface DomainObject {
 
     /**
-     * The available policies for auditing changes to the properties of the object.
-     */
-    public enum AuditingPolicy {
-        /**
-         * The auditing of the object should be as per the default auditing policy configured in <tt>isis.properties</tt>.
-         *
-         * <p>
-         *     If no auditing policy is configured, then the auditing is disabled.
-         * </p>
-         */
-        AS_CONFIGURED,
-        /**
-         * Audit changes to this object.
-         */
-        ENABLED,
-        /**
-         * Do not audit changes to this object (even if otherwise configured to enable auditing).
-         */
-        DISABLED
-    }
-
-    /**
      * Whether the entity should be audited (note: does not apply to {@link #viewModel() view model}s.
      *
      * <p>
@@ -63,64 +40,11 @@ public @interface DomainObject {
      * registered with the framework.
      * </p>
      */
-    AuditingPolicy auditing() default AuditingPolicy.AS_CONFIGURED;
+    Auditing auditing() default Auditing.AS_CONFIGURED;
 
 
     // //////////////////////////////////////
 
-
-    public enum PublishingChangeKind {
-        CREATE,
-        UPDATE,
-        DELETE;
-
-        @Deprecated
-        public static PublishedObject.ChangeKind from(final PublishingChangeKind publishingChangeKind) {
-            if(publishingChangeKind == null) return null;
-            if(publishingChangeKind == CREATE) return PublishedObject.ChangeKind.CREATE;
-            if(publishingChangeKind == UPDATE) return PublishedObject.ChangeKind.UPDATE;
-            if(publishingChangeKind == DELETE) return PublishedObject.ChangeKind.DELETE;
-            // shouldn't happen
-            throw new IllegalArgumentException("Unrecognized changeKind: " + publishingChangeKind);
-        }
-        @Deprecated
-        public static PublishingChangeKind from(final PublishedObject.ChangeKind  publishingChangeKind) {
-            if(publishingChangeKind == null) return null;
-            if(publishingChangeKind == PublishedObject.ChangeKind.CREATE) return CREATE;
-            if(publishingChangeKind == PublishedObject.ChangeKind.UPDATE) return UPDATE;
-            if(publishingChangeKind == PublishedObject.ChangeKind.DELETE) return DELETE;
-            // shouldn't happen
-            throw new IllegalArgumentException("Unrecognized changeKind: " + publishingChangeKind);
-        }
-    }
-
-    public interface PublishingPayloadFactory {
-
-        @Programmatic
-        public EventPayload payloadFor(Object changedObject, PublishingChangeKind publishingChangeKind);
-
-        /**
-         * Adapter to subclass if have an existing {@link org.apache.isis.applib.annotation.PublishedObject.PayloadFactory}.
-         */
-        @Deprecated
-        public static class Adapter implements PublishingPayloadFactory {
-
-            private final PublishedObject.PayloadFactory payloadFactory;
-
-            public Adapter(final PublishedObject.PayloadFactory payloadFactory) {
-                this.payloadFactory = payloadFactory;
-            }
-
-            @Override
-            public EventPayload payloadFor(Object changedObject, PublishingChangeKind publishingChangeKind) {
-                return payloadFactory.payloadFor(changedObject, PublishingChangeKind.from(publishingChangeKind));
-            }
-
-            public PublishedObject.PayloadFactory getPayloadFactory() {
-                return payloadFactory;
-            }
-        }
-    }
 
     /**
      * Whether changes to the object should be published.
@@ -130,10 +54,10 @@ public @interface DomainObject {
      * registered with the framework.
      * </p>
      */
-    PublishingPolicy publishing() default PublishingPolicy.AS_CONFIGURED;
+    Publishing publishing() default Publishing.AS_CONFIGURED;
 
     // TODO: factor out PayloadFactory.Default so similar to interaction
-    Class<? extends PublishingPayloadFactory> publishingPayloadFactory() default PublishingPayloadFactory.class;
+    Class<? extends PublishingPayloadFactoryForObject> publishingPayloadFactory() default PublishingPayloadFactoryForObject.class;
 
 
     // //////////////////////////////////////
@@ -145,7 +69,7 @@ public @interface DomainObject {
      * <p>
      * It is sufficient to specify an interface rather than a concrete type.
      */
-    Class<?> autoCompleteRepository();
+    Class<?> autoCompleteRepository() default Object.class;
 
 
     /**
@@ -181,14 +105,14 @@ public @interface DomainObject {
      *     Note that non-editable objects can nevertheless have actions invoked upon them.
      * </p>
      */
-    EditPolicy editing() default EditPolicy.AS_CONFIGURED;
+    Editing editing() default Editing.AS_CONFIGURED;
 
 
     /**
-     * If {@link #editing()} is set to {@link EditPolicy#DISABLED},
+     * If {@link #editing()} is set to {@link Editing#DISABLED},
      * then the reason to provide to the user as to why the object's properties cannot be edited/collections modified.
      */
-    String editingDisabledReason();
+    String editingDisabledReason() default "";
 
 
     // //////////////////////////////////////
@@ -202,7 +126,7 @@ public @interface DomainObject {
      * used by the framework to unique identify an object over time (same concept as a URN).
      * </p>
      */
-    String objectType();
+    String objectType() default "";
 
 
     // //////////////////////////////////////

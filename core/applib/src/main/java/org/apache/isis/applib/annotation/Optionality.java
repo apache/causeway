@@ -5,7 +5,7 @@ package org.apache.isis.applib.annotation;
  */
 public enum Optionality {
     /**
-     * Default, usually false (meaning mandatory) for properties and always false for parameters.
+     * Default, usually meaning mandatory for properties and always meaning mandatory for parameters.
      *
      * <p>
      * For properties, will be false unless JDO {@link javax.jdo.annotations.Column} has also specified with

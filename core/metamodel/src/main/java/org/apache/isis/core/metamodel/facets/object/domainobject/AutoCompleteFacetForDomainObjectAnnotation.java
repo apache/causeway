@@ -36,8 +36,12 @@ public class AutoCompleteFacetForDomainObjectAnnotation extends AutoCompleteFace
             final ServicesInjector servicesInjector,
             final FacetHolder holder) {
 
+        if(domainObject == null) {
+            return null;
+        }
+
         final Class<?> autoCompleteRepository = domainObject.autoCompleteRepository();
-        if(autoCompleteRepository == null) {
+        if(autoCompleteRepository == null || autoCompleteRepository == Object.class) {
             return null;
         }
         final String autoCompleteAction = domainObject.autoCompleteAction();

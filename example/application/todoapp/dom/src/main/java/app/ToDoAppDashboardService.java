@@ -19,11 +19,9 @@
 package app;
 
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.services.homepage.AbstractHomePageDashboardService;
 
 @DomainService
-@Hidden
 public class ToDoAppDashboardService extends AbstractHomePageDashboardService<ToDoAppDashboard> {
 
     public ToDoAppDashboardService() {

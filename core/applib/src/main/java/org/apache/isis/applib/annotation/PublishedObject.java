@@ -36,34 +36,34 @@ import org.apache.isis.applib.services.publish.EventPayload;
 public @interface PublishedObject {
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.annotation.DomainObject.PublishingChangeKind} instead.
+     * @deprecated - use {@link PublishingChangeKind} instead.
      */
     @Deprecated
     public enum ChangeKind {
         /**
-         * @deprecated - use {@link org.apache.isis.applib.annotation.DomainObject.PublishingChangeKind#CREATE} instead.
+         * @deprecated - use {@link PublishingChangeKind#CREATE} instead.
          */
         @Deprecated
         CREATE,
         /**
-         * @deprecated - use {@link org.apache.isis.applib.annotation.DomainObject.PublishingChangeKind#UPDATE} instead.
+         * @deprecated - use {@link PublishingChangeKind#UPDATE} instead.
          */
         @Deprecated
         UPDATE,
         /**
-         * @deprecated - use {@link org.apache.isis.applib.annotation.DomainObject.PublishingChangeKind#DELETE} instead.
+         * @deprecated - use {@link PublishingChangeKind#DELETE} instead.
          */
         @Deprecated
         DELETE
     }
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.annotation.DomainObject.PublishingPayloadFactory} instead.
+     * @deprecated - use {@link PublishingPayloadFactoryForObject} instead.
      */
     @Deprecated
     public interface PayloadFactory {
         /**
-         * @deprecated - use {@link org.apache.isis.applib.annotation.DomainObject.PublishingPayloadFactory#payloadFor(Object, org.apache.isis.applib.annotation.DomainObject.PublishingChangeKind)} instead.
+         * @deprecated - use {@link PublishingPayloadFactoryForObject#payloadFor(Object, PublishingChangeKind)} instead.
          */
         @Deprecated
         @Programmatic

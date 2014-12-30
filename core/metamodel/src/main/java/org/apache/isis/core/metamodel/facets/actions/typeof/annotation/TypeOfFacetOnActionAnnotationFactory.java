@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.TypeOf;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -58,10 +58,13 @@ public class TypeOfFacetOnActionAnnotationFactory extends FacetFactoryAbstract {
             return;
         }
 
-        final Collection collection = Annotations.getAnnotation(method, Collection.class);
-        if (collection != null && collection.typeOf() != null) {
-            FacetUtil.addFacet(new TypeOfFacetForActionAnnotation(collection.typeOf(), getSpecificationLoader(), processMethodContext.getFacetHolder()));
-            return;
+        final Action action = Annotations.getAnnotation(method, Action.class);
+        if (action != null) {
+            final Class<?> typeOf = action.typeOf();
+            if(typeOf != null && typeOf != Object.class) {
+                FacetUtil.addFacet(new TypeOfFacetForActionAnnotation(typeOf, getSpecificationLoader(), processMethodContext.getFacetHolder()));
+                return;
+            }
         }
 
         final TypeOf annotation = Annotations.getAnnotation(method, TypeOf.class);

@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
-import org.apache.isis.core.metamodel.facets.object.audit.configuration.AuditableFacetFromConfiguration;
+import org.apache.isis.core.metamodel.facets.object.audit.configuration.AuditableFacetForDomainObjectAnnotationAsConfigured;
 import org.apache.isis.core.metamodel.facets.object.audit.configuration.AuditableFacetFromConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 
@@ -93,7 +93,7 @@ public class AuditableFacetFromConfigurationFactoryTest extends AbstractFacetFac
         facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolderImpl));
 
         final Facet facet = facetHolderImpl.getFacet(AuditableFacet.class);
-        Assert.assertTrue(facet instanceof AuditableFacetFromConfiguration);
+        Assert.assertTrue(facet instanceof AuditableFacetForDomainObjectAnnotationAsConfigured);
 
         expectNoMethodsRemoved();
     }

@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -38,27 +37,24 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.annotation.ActionInteraction;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.AutoComplete;
-import org.apache.isis.applib.annotation.Bookmarkable;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.Bulk.AppliesTo;
-import org.apache.isis.applib.annotation.Bulk.InteractionContext.InvokedAs;
-import org.apache.isis.applib.annotation.CollectionInteraction;
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.Disabled;
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.MinLength;
-import org.apache.isis.applib.annotation.ObjectType;
-import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.InvokeOn;
+import org.apache.isis.applib.annotation.InvokedOn;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.PropertyInteraction;
-import org.apache.isis.applib.annotation.RegEx;
-import org.apache.isis.applib.annotation.TypicalLength;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
@@ -118,10 +114,15 @@ import com.google.common.collect.Ordering;
                     + "WHERE ownedBy == :ownedBy && "
                     + "description.indexOf(:description) >= 0")
 })
-@ObjectType("TODO")
-@AutoComplete(repository=ToDoItems.class, action="autoComplete") // default unless overridden by autoCompleteNXxx() method
-//@Bounded - if there were a small number of instances only (overrides autoComplete functionality)
-@Bookmarkable
+@DomainObject(
+        autoCompleteRepository = ToDoItems.class, // for drop-downs, unless autoCompleteNXxx() is present
+        autoCompleteAction = "autoComplete",
+        // bounded = true,  // for drop-downs if only a small number of instances only (overrides autoComplete)
+        objectType = "TODO"
+)
+@DomainObjectLayout(
+        bookmarking = BookmarkPolicy.AS_ROOT
+)
 public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     //region > LOG
@@ -144,8 +145,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
                 if (dueBy != null) {
                     buf.append(" due by", dueBy);
                 }
-            } catch(HiddenException ex) {
-                // ignore
+            } catch(final HiddenException ignored) {
             }
         }
         return buf.toString();
@@ -163,8 +163,9 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     private String description;
 
     @javax.jdo.annotations.Column(allowsNull="false", length=100)
-    @PropertyInteraction()
-    @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*")
+    @Property(
+        regexPattern = "\\w[@&:\\-\\,\\.\\+ \\w]*"
+    )
     public String getDescription() {
         return description;
     }
@@ -248,7 +249,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         // other
         Other;
 
-        public static List<Subcategory> listFor(Category category) {
+        public static List<Subcategory> listFor(final Category category) {
             return category != null? category.subcategories(): Collections.<Subcategory>emptyList();
         }
 
@@ -265,7 +266,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
             return new Predicate<Subcategory>() {
 
                 @Override
-                public boolean apply(Subcategory subcategory) {
+                public boolean apply(final Subcategory subcategory) {
                     return category.subcategories().contains(subcategory);
                 }
             };
@@ -277,7 +278,10 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     private Category category;
 
     @javax.jdo.annotations.Column(allowsNull="false")
-    @Disabled(reason="Use action to update both category and subcategory")
+    @Property(
+            editing = Editing.DISABLED,
+            editingDisabledReason = "Use action to update both category and subcategory"
+    )
     public Category getCategory() {
         return category;
     }
@@ -291,7 +295,10 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     private Subcategory subcategory;
 
     @javax.jdo.annotations.Column(allowsNull="true")
-    @Disabled(reason="Use action to update both category and subcategory")
+    @Property(
+            editing = Editing.DISABLED,
+            editingDisabledReason = "Use action to update both category and subcategory"
+    )
     public Subcategory getSubcategory() {
         return subcategory;
     }
@@ -318,7 +325,9 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     private boolean complete;
 
-    @Disabled
+    @Property(
+        editing = Editing.DISABLED
+    )
     public boolean isComplete() {
         return complete;
     }
@@ -327,8 +336,10 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         this.complete = complete;
     }
 
-    @ActionInteraction(CompletedEvent.class)
-    @Bulk
+    @Action(
+            interaction=CompletedEvent.class,
+            invokeOn = InvokeOn.OBJECT_AND_COLLECTION
+    )
     public ToDoItem completed() {
         setComplete(true);
         
@@ -346,21 +357,22 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
         // if invoked as a regular action, return this object;
         // otherwise (if invoked as bulk), return null (so go back to the list)
-        return bulkInteractionContext.getInvokedAs() == InvokedAs.REGULAR? this: null;
+        return bulkInteractionContext.getInvokedOn() == InvokedOn.OBJECT? this: null;
     }
     // disable action dependent on state of object
     public String disableCompleted() {
         return isComplete() ? "Already completed" : null;
     }
 
-    @ActionInteraction(NoLongerCompletedEvent.class)
-    @Bulk
+    @Action(
+        invokeOn = InvokeOn.OBJECT_AND_COLLECTION
+    )
     public ToDoItem notYetCompleted() {
         setComplete(false);
 
         // if invoked as a regular action, return this object;
         // otherwise (if invoked as bulk), return null (so go back to the list)
-        return bulkInteractionContext.getInvokedAs() == InvokedAs.REGULAR? this: null;
+        return bulkInteractionContext.getInvokedOn() == InvokedOn.COLLECTION ? this: null;
     }
     // disable action dependent on state of object
     public String disableNotYetCompleted() {
@@ -370,11 +382,13 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     //region > completeSlowly (property)
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    @Hidden
-    public void completeSlowly(int millis) {
+    @Action(
+            hidden = Where.EVERYWHERE
+    )
+    public void completeSlowly(final int millis) {
         try {
             Thread.sleep(millis);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException ignored) {
         }
         setComplete(true);
     }
@@ -385,27 +399,32 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     @javax.jdo.annotations.Column(allowsNull="true", scale=2)
     @javax.validation.constraints.Digits(integer=10, fraction=2)
-    @Disabled(reason="Update using action")
+    @Property(
+            editing = Editing.DISABLED,
+            editingDisabledReason = "Update using action"
+    )
     public BigDecimal getCost() {
         return cost;
     }
 
     public void setCost(final BigDecimal cost) {
-        this.cost = cost!=null?cost.setScale(2):null;
+        this.cost = cost!=null?cost.setScale(2, BigDecimal.ROUND_HALF_EVEN):null;
     }
 
-    @ActionSemantics(Of.IDEMPOTENT)
+    @Action(
+            semantics = SemanticsOf.IDEMPOTENT
+    )
     public ToDoItem updateCost(
+            @Parameter(optional = Optionality.TRUE)
             @ParameterLayout(named = "New cost")
             @javax.validation.constraints.Digits(integer=10, fraction=2)
-            @Optional 
             final BigDecimal cost) {
         LOG.debug("%s: cost updated: %s -> %s", container.titleOf(this), getCost(), cost);
         
         // just to simulate a long-running action
         try {
             Thread.sleep(3000);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException ignored) {
         }
         
         setCost(cost);
@@ -444,7 +463,9 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
             @javax.jdo.annotations.Column(name = "attachment_mimetype"),
             @javax.jdo.annotations.Column(name = "attachment_bytes", jdbcType = "BLOB", sqlType = "BLOB")
     })
-    @Optional
+    @Property(
+            optional = Optionality.TRUE
+    )
     public Blob getAttachment() {
         return attachment;
     }
@@ -461,7 +482,9 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
             @javax.jdo.annotations.Column(name = "doc_mimetype"),
             @javax.jdo.annotations.Column(name = "doc_chars", jdbcType = "CLOB", sqlType = "CLOB")
     })
-    @Optional
+    @Property(
+            optional = Optionality.TRUE
+    )
     public Clob getDoc() {
         return doc;
     }
@@ -475,10 +498,8 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     public Long getVersionSequence() {
         if(!(this instanceof javax.jdo.spi.PersistenceCapable)) {
             return null;
-        } 
-        javax.jdo.spi.PersistenceCapable persistenceCapable = (javax.jdo.spi.PersistenceCapable) this;
-        final Long version = (Long) JDOHelper.getVersion(persistenceCapable);
-        return version;
+        }
+        return (Long) JDOHelper.getVersion((javax.jdo.spi.PersistenceCapable) this);
     }
     // hide property (imperatively, based on state of object)
     public boolean hideVersionSequence() {
@@ -491,8 +512,8 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     // overrides the natural ordering
     public static class DependenciesComparator implements Comparator<ToDoItem> {
         @Override
-        public int compare(ToDoItem p, ToDoItem q) {
-            Ordering<ToDoItem> byDescription = new Ordering<ToDoItem>() {
+        public int compare(final ToDoItem p, final ToDoItem q) {
+            final Ordering<ToDoItem> byDescription = new Ordering<ToDoItem>() {
                 public int compare(final ToDoItem p, final ToDoItem q) {
                     return Ordering.natural().nullsFirst().compare(p.getDescription(), q.getDescription());
                 }
@@ -506,10 +527,11 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     @javax.jdo.annotations.Persistent(table="ToDoItemDependencies")
     @javax.jdo.annotations.Join(column="dependingId")
     @javax.jdo.annotations.Element(column="dependentId")
+
     private Set<ToDoItem> dependencies = new TreeSet<>();
     //private SortedSet<ToDoItem> dependencies = new TreeSet<>();  // not compatible with neo4j (as of DN v3.2.3)
 
-    @CollectionInteraction
+    @Collection()
     @CollectionLayout(/*sortedBy = DependenciesComparator.class*/) // not compatible with neo4j (as of DN v3.2.3)
     public Set<ToDoItem> getDependencies() {
         return dependencies;
@@ -526,14 +548,18 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         getDependencies().remove(toDoItem);
     }
 
-    public ToDoItem add(final ToDoItem toDoItem) {
+    public ToDoItem add(
+            @ParameterLayout(typicalLength = 20)
+            final ToDoItem toDoItem) {
         // By wrapping the call, Isis will detect that the collection is modified
         // and it will automatically send CollectionInteractionEvents to the Event Bus.
         // ToDoItemSubscriptions is a demo subscriber to this event
         wrapperFactory.wrapSkipRules(this).addToDependencies(toDoItem);
         return this;
     }
-    public List<ToDoItem> autoComplete0Add(final @MinLength(2) String search) {
+    public List<ToDoItem> autoComplete0Add(
+            @Parameter(minLength = 2)
+            final String search) {
         final List<ToDoItem> list = toDoItems.autoComplete(search);
         list.removeAll(getDependencies());
         list.remove(this);
@@ -558,7 +584,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     }
 
     public ToDoItem remove(
-            @TypicalLength(20)
+            @ParameterLayout(typicalLength = 20)
             final ToDoItem toDoItem) {
         // By wrapping the call, Isis will detect that the collection is modified
         // and it will automatically send a CollectionInteractionEvent to the Event Bus.
@@ -581,7 +607,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         return null;
     }
     // provide a drop-down
-    public Collection<ToDoItem> choices0Remove() {
+    public java.util.Collection<ToDoItem> choices0Remove() {
         return getDependencies();
     }
     //endregion
@@ -593,11 +619,19 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     // (a) has different semantics and (b) is in any case automatically ignored
     // by the framework
     public ToDoItem duplicate(
-            final @RegEx(validation = "\\w[@&:\\-\\,\\.\\+ \\w]*") @ParameterLayout(named="Description") String description,
-            final @ParameterLayout(named="Category") Category category,
-            final @ParameterLayout(named="Subcategory") Subcategory subcategory,
-            final @Optional @ParameterLayout(named="Due by") LocalDate dueBy,
-            final @Optional @ParameterLayout(named="Cost") BigDecimal cost) {
+            @Parameter(regexPattern = "\\w[@&:\\-\\,\\.\\+ \\w]*" )
+            @ParameterLayout(named="Description")
+            final String description,
+            @ParameterLayout(named="Category")
+            final Category category,
+            @ParameterLayout(named="Subcategory")
+            final Subcategory subcategory,
+            @Parameter(optional = Optionality.TRUE)
+            @ParameterLayout(named="Due by")
+            final LocalDate dueBy,
+            @Parameter(optional = Optionality.TRUE)
+            @ParameterLayout(named="Cost")
+            final BigDecimal cost) {
         return toDoItems.newToDo(description, category, subcategory, dueBy, cost);
     }
     public String default0Duplicate() {
@@ -625,8 +659,10 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > delete (action)
-    @ActionInteraction(DeletedEvent.class)
-    @Bulk
+    @Action(
+            interaction=DeletedEvent.class,
+            invokeOn = InvokeOn.OBJECT_AND_COLLECTION
+    )
     public List<ToDoItem> delete() {
         
         container.removeIfNotAlready(this);
@@ -639,21 +675,23 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //endregion
 
     //region > totalCost (property)
-    @ActionSemantics(Of.SAFE)
-    @Bulk(AppliesTo.BULK_ONLY)
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            invokeOn = InvokeOn.COLLECTION_ONLY
+    )
     public BigDecimal totalCost() {
         BigDecimal total = (BigDecimal) scratchpad.get("runningTotal");
         if(getCost() != null) {
             total = total != null ? total.add(getCost()) : getCost();
             scratchpad.put("runningTotal", total);
         }
-        return total.setScale(2);
+        return total.setScale(2, BigDecimal.ROUND_HALF_EVEN);
     }
     //endregion
 
     //region > openSourceCodeOnGithub (action)
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(prototype = true)
-    @ActionSemantics(Of.SAFE)
     public URL openSourceCodeOnGithub() throws MalformedURLException {
         return new URL("https://github.com/apache/isis/tree/master/example/application/todoapp/dom/src/main/java/dom/todo/ToDoItem.java");
     }
@@ -667,10 +705,11 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         NonRecoverableException;
     }
 
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(prototype = true)
-    @ActionSemantics(Of.SAFE)
     public void demoException(
-            final @ParameterLayout(named="Type") DemoExceptionType type) {
+            @ParameterLayout(named="Type")
+            final DemoExceptionType type) {
         switch(type) {
         case NonRecoverableException:
             throw new NonRecoverableException("Demo throwing " + type.name());
@@ -695,30 +734,24 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     public void created() {
         LOG.debug("lifecycle callback: created: " + this.toString());
     }
-
     public void loaded() {
         LOG.debug("lifecycle callback: loaded: " + this.toString());
     }
-
     public void persisting() {
         LOG.debug("lifecycle callback: persisting: " + this.toString());
     }
-
     public void persisted() {
         LOG.debug("lifecycle callback: persisted: " + this.toString());
     }
-
     public void updating() {
         LOG.debug("lifecycle callback: updating: " + this.toString());
     }
     public void updated() {
         LOG.debug("lifecycle callback: updated: " + this.toString());
     }
-
     public void removing() {
         LOG.debug("lifecycle callback: removing: " + this.toString());
     }
-
     public void removed() {
         LOG.debug("lifecycle callback: removed: " + this.toString());
     }
@@ -738,7 +771,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     /**
      * Prevent user from modifying any other user's data.
      */
-    public String disabled(Identifier.Type type){
+    public String disabled(final Identifier.Type identifierType){
         final UserMemento currentUser = container.getUser();
         final String currentUserName = currentUser.getName();
         if(Objects.equal(getOwnedBy(), currentUserName)) { return null; }

@@ -36,9 +36,9 @@ import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 
 
-public class CollectionLayoutFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
-    public CollectionLayoutFactory() {
+    public CollectionLayoutFacetFactory() {
         super(FeatureType.COLLECTIONS_ONLY);
     }
 

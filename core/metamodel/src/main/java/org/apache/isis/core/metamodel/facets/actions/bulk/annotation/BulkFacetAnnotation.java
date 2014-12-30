@@ -21,12 +21,25 @@ package org.apache.isis.core.metamodel.facets.actions.bulk.annotation;
 
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacetAbstract;
 
 public class BulkFacetAnnotation extends BulkFacetAbstract {
 
-    public BulkFacetAnnotation(Bulk.AppliesTo value, final FacetHolder holder) {
+    public static BulkFacet create(
+            final Bulk annotation,
+            final FacetHolder holder) {
+
+        if (annotation == null) {
+            return null;
+        }
+
+        return new BulkFacetAnnotation(annotation.value(), holder);
+    }
+
+    private BulkFacetAnnotation(Bulk.AppliesTo value, final FacetHolder holder) {
         super(value, holder);
     }
+
 
 }

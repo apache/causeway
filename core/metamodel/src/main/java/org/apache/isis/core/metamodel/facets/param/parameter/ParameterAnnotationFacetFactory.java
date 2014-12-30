@@ -40,12 +40,6 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final Method method = processMethodContext.getMethod();
-        final Parameter parameter = Annotations.getAnnotation(method, Parameter.class);
-        if (parameter == null) {
-            return;
-        }
-
         processMaxLength(processMethodContext);
         processMustSatisfy(processMethodContext);
         processOptional(processMethodContext);
@@ -75,7 +69,8 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         final Parameter parameter = Annotations.getAnnotation(method, Parameter.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacet(MandatoryFacetForParameterAnnotation.create(parameter, method, holder));
+        FacetUtil.addFacet(
+                MandatoryFacetForParameterAnnotation.create(parameter, method, holder));
     }
 
     private void processRegEx(final ProcessMethodContext processMethodContext) {
@@ -83,7 +78,8 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         final Parameter parameter = Annotations.getAnnotation(method, Parameter.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacet(RegExFacetForParameterAnnotation.create(parameter, holder));
+        FacetUtil.addFacet(
+                RegExFacetForParameterAnnotation.create(parameter, holder));
     }
 
 

@@ -32,11 +32,20 @@ public abstract class MandatoryFacetForPropertyAnnotation extends MandatoryFacet
         super(holder, semantics);
     }
 
-    static MandatoryFacet create(final Property property, Method method, final FacetHolder holder) {
+    static MandatoryFacet create(
+            final Property property,
+            final Method method,
+            final FacetHolder holder) {
+
+        if (property == null) {
+            return null;
+        }
+
         final Class<?> returnType = method.getReturnType();
         if (returnType.isPrimitive()) {
             return new MandatoryFacetForPropertyAnnotation.Primitive(holder);
         }
+
         final Optionality optionality = property.optional();
         switch (optionality) {
             case DEFAULT:

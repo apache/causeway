@@ -31,6 +31,10 @@ public class ObjectSpecIdFacetForDomainObjectAnnotation extends ObjectSpecIdFace
             final DomainObject domainObject,
             final FacetHolder holder) {
 
+        if(domainObject == null) {
+            return null;
+        }
+
         final String objectType = domainObject.objectType();
         if(Strings.isNullOrEmpty(objectType)) {
             return null;

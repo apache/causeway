@@ -29,7 +29,13 @@ public class RegExFacetForPropertyAnnotation extends RegExFacetAbstract {
 
     private final Pattern pattern;
 
-    static RegExFacet create(final Property property, final FacetHolder holder) {
+    static RegExFacet create(
+            final Property property,
+            final FacetHolder holder) {
+
+        if (property == null) {
+            return null;
+        }
 
         final String pattern = property.regexPattern();
         final int patternFlags = property.regexPatternFlags();

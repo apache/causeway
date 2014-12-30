@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @deprecated - use {@link Collection#typeOf()} instead.
+ * @deprecated - use {@link Collection#typeOf()} or {@link Action#typeOf()} instead.
  */
 @Deprecated
 @Inherited
@@ -35,7 +35,7 @@ import java.lang.annotation.Target;
 public @interface TypeOf {
 
     /**
-     * @deprecated - use {@link Collection#typeOf()} instead.
+     * @deprecated - use {@link Collection#typeOf()} or {@link Action#typeOf()} instead.
      */
     @Deprecated
     Class<?> value();

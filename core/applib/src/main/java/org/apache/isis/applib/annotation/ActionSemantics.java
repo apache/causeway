@@ -35,59 +35,59 @@ import java.lang.annotation.Target;
 public @interface ActionSemantics {
 
     /**
-     * @deprecated - see {@link org.apache.isis.applib.annotation.Action.Semantics}
+     * @deprecated - see {@link SemanticsOf}
      */
     @Deprecated
     public enum Of {
         /**
-         * @deprecated - see {@link org.apache.isis.applib.annotation.Action.Semantics#SAFE}
+         * @deprecated - see {@link SemanticsOf#SAFE}
          */
         @Deprecated
         SAFE, 
         /**
-         * @deprecated - see {@link org.apache.isis.applib.annotation.Action.Semantics#IDEMPOTENT}
+         * @deprecated - see {@link SemanticsOf#IDEMPOTENT}
          */
         @Deprecated
         IDEMPOTENT,
         /**
-         * @deprecated - see {@link org.apache.isis.applib.annotation.Action.Semantics#IDEMPOTENT}
+         * @deprecated - see {@link SemanticsOf#IDEMPOTENT}
          */
         @Deprecated
         NON_IDEMPOTENT;
 
         /**
-         * @deprecated - see {@link org.apache.isis.applib.annotation.Action.Semantics#getFriendlyName()}
+         * @deprecated - see {@link SemanticsOf#getFriendlyName()}
          */
         @Deprecated
         public String getFriendlyName() {
-            return Action.Semantics.from(this).getFriendlyName();
+            return SemanticsOf.from(this).getFriendlyName();
             //return Enums.getFriendlyNameOf(this);
         }
 
         /**
-         * @deprecated - see {@link org.apache.isis.applib.annotation.Action.Semantics#getCamelCaseName()}
+         * @deprecated - see {@link SemanticsOf#getCamelCaseName()}
          */
         @Deprecated
         public String getCamelCaseName() {
-            return Action.Semantics.from(this).getCamelCaseName();
+            return SemanticsOf.from(this).getCamelCaseName();
         }
 
         /**
          * {@link #SAFE} is idempotent in nature, as well as, obviously, {@link #IDEMPOTENT}.
          *
-         * @deprecated - see {@link org.apache.isis.applib.annotation.Action.Semantics#isIdempotentInNature()}
+         * @deprecated - see {@link SemanticsOf#isIdempotentInNature()}
          */
         @Deprecated
         public boolean isIdempotentInNature() {
-            return Action.Semantics.from(this).isIdempotentInNature();
+            return SemanticsOf.from(this).isIdempotentInNature();
         }
 
         /**
-         * @deprecated - see {@link org.apache.isis.applib.annotation.Action.Semantics#isSafe()}.
+         * @deprecated - see {@link SemanticsOf#isSafe()}.
          */
         @Deprecated
         public boolean isSafe() {
-            return Action.Semantics.from(this).isSafe();
+            return SemanticsOf.from(this).isSafe();
         }
     }
 

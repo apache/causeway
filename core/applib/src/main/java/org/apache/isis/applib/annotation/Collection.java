@@ -30,7 +30,7 @@ import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
  * Domain semantics for domain object collection.
  */
 @Inherited
-@Target({ ElementType.TYPE })
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Collection {
 
@@ -79,13 +79,13 @@ public @interface Collection {
      *     Note that non-editable objects can nevertheless have actions invoked upon them.
      * </p>
      */
-    EditPolicy editing() default EditPolicy.AS_CONFIGURED;
+    Editing editing() default Editing.AS_CONFIGURED;
 
     /**
-     * If {@link #editing()} is set to {@link EditPolicy#DISABLED},
+     * If {@link #editing()} is set to {@link Editing#DISABLED},
      * then the reason to provide to the user as to why this property cannot be edited.
      */
-    String editingDisabledReason();
+    String editingDisabledReason() default "";
 
 
     // //////////////////////////////////////
@@ -94,6 +94,6 @@ public @interface Collection {
      * The type-of the elements held within the collection.
      * @return
      */
-    Class<?> typeOf();
+    Class<?> typeOf() default Object.class;
 
 }

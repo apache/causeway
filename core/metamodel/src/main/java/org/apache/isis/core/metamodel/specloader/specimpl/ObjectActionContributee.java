@@ -22,6 +22,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.BulkInteractionContext;
+import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -188,7 +189,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
             bulkInteractionContext != null &&
             bulkInteractionContext.getInvokedAs() == null) {
             
-            bulkInteractionContext.setActionInvokedAs(BulkInteractionContext.InvokedAs.REGULAR);
+            bulkInteractionContext.setActionInvokedOn(InvokedOn.OBJECT);
             bulkInteractionContext.setDomainObjects(Collections.singletonList(contributee.getObject()));
         }
 

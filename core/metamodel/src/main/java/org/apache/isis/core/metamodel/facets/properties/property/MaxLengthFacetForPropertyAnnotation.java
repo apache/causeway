@@ -26,7 +26,13 @@ import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacetAbst
 
 public class MaxLengthFacetForPropertyAnnotation extends MaxLengthFacetAbstract {
 
-    public static MaxLengthFacet create(Property property, FacetHolder holder) {
+    public static MaxLengthFacet create(
+            final Property property,
+            final FacetHolder holder) {
+
+        if (property == null) {
+            return null;
+        }
         final int maxLength = property.maxLength();
         return maxLength != -1
                 ? new MaxLengthFacetForPropertyAnnotation(maxLength, holder)

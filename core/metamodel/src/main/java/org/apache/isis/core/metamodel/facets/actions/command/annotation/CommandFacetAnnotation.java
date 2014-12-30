@@ -19,17 +19,25 @@
 
 package org.apache.isis.core.metamodel.facets.actions.command.annotation;
 
+import org.apache.isis.applib.annotation.Command;
 import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
 
 public class CommandFacetAnnotation extends CommandFacetAbstract {
 
-    public CommandFacetAnnotation(
-            final Persistence persistence, 
+    public static CommandFacet create(final Command annotation, final FacetHolder holder) {
+        return annotation == null
+                ? null
+                : new CommandFacetAnnotation(annotation.persistence(), annotation.executeIn(), Enablement.isDisabled(annotation.disabled()), holder);
+    }
+
+    private CommandFacetAnnotation(
+            final Persistence persistence,
             final ExecuteIn executeIn,
-            final Enablement enablement, 
+            final Enablement enablement,
             final FacetHolder holder) {
         super(persistence, executeIn, enablement, holder);
     }

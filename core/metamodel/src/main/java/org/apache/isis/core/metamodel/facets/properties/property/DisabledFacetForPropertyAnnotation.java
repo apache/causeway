@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property;
 
-import org.apache.isis.applib.annotation.EditPolicy;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
@@ -30,10 +30,15 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstr
 public class DisabledFacetForPropertyAnnotation extends DisabledFacetAbstractImpl {
 
     public static DisabledFacet create(final Property property, final FacetHolder holder) {
-        final EditPolicy editPolicy = property.editing();
+
+        if (property == null) {
+            return null;
+        }
+
+        final Editing editing = property.editing();
         final String disabledReason = property.editingDisabledReason();
 
-        switch (editPolicy) {
+        switch (editing) {
             case AS_CONFIGURED:
 
                 // nothing needs to be done here; the DomainObjectFactory (processing @DomainObject annotation)

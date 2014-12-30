@@ -28,6 +28,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BulkInteractionContext;
+import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -94,7 +95,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                     
                     final BulkInteractionContext bulkInteractionContext = BulkInteractionContext.current.get();
                     if (bulkInteractionContext != null) {
-                        bulkInteractionContext.setActionInvokedAs(BulkInteractionContext.InvokedAs.BULK);
+                        bulkInteractionContext.setActionInvokedOn(InvokedOn.COLLECTION);
                         bulkInteractionContext.setDomainObjects(domainObjects);
                     }
                     

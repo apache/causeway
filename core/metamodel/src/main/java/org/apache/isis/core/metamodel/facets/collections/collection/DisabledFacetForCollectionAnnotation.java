@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.collection;
 
 import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.annotation.EditPolicy;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -29,11 +29,18 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstr
 
 public class DisabledFacetForCollectionAnnotation extends DisabledFacetAbstractImpl {
 
-    public static DisabledFacet create(final Collection collection, final FacetHolder holder) {
-        final EditPolicy editPolicy = collection.editing();
+    public static DisabledFacet create(
+            final Collection collection,
+            final FacetHolder holder) {
+
+        if (collection == null) {
+            return null;
+        }
+
+        final Editing editing = collection.editing();
         final String disabledReason = collection.editingDisabledReason();
 
-        switch (editPolicy) {
+        switch (editing) {
             case AS_CONFIGURED:
 
                 // nothing needs to be done here; the DomainObjectFactory (processing @DomainObject annotation)
