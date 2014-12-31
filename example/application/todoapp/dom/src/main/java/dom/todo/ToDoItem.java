@@ -38,7 +38,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionInvocationContext;
+import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;

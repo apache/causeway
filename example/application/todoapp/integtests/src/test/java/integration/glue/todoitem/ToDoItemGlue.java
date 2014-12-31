@@ -29,7 +29,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.jmock.Expectations;
 import org.junit.Assert;
-import org.apache.isis.applib.annotation.ActionInvocationContext;
+import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.specsupport.scenarios.InMemoryDB;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;

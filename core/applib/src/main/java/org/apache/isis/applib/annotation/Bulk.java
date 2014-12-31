@@ -61,7 +61,7 @@ public @interface Bulk {
     // //////////////////////////////////////
 
     /**
-     * @deprecated - see {@link ActionInvocationContext}.
+     * @deprecated - see {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext}.
      */
     @Deprecated
     @DomainService
@@ -130,7 +130,7 @@ public @interface Bulk {
 
 
         /**
-         * @deprecated - see {@link ActionInvocationContext#onObject(Object)}.
+         * @deprecated - see {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext#onObject(Object)}.
          */
         @Deprecated
         public static InteractionContext regularAction(Object domainObject) {
@@ -138,7 +138,7 @@ public @interface Bulk {
         }
 
         /**
-         * @deprecated - see {@link ActionInvocationContext#onCollection(Object...)}.
+         * @deprecated - see {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext#onCollection(Object...)}.
          */
         @Deprecated
         public static InteractionContext bulkAction(Object... domainObjects) {
@@ -146,7 +146,7 @@ public @interface Bulk {
         }
 
         /**
-         * @deprecated - see {@link ActionInvocationContext#onCollection(java.util.List)}.
+         * @deprecated - see {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext#onCollection(java.util.List)}.
          */
         @Deprecated
         public static InteractionContext bulkAction(List<Object> domainObjects) {
@@ -162,7 +162,7 @@ public @interface Bulk {
         private int index;
 
         /**
-         * @deprecated - see {@link ActionInvocationContext ()}.
+         * @deprecated - see {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext ()}.
          */
         @Deprecated
         public InteractionContext() {

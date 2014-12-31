@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.ActionInvocationContext;
+import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;

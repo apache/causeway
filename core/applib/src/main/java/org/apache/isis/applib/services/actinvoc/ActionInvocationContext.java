@@ -16,28 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.annotation;
+package org.apache.isis.applib.services.actinvoc;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.InvokedOn;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * This service (API and implementation) provides access to context information about a bulk action invocation.
  *
  * <p>
  * This implementation has no UI and there is only one implementation (this class) in applib, so it is annotated
- * with {@link DomainService}.  This means that it is automatically registered
+ * with {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered
  * and available for use; no further configuration is required.
  * </p>
- *
- * <p>
- *     Note that this not annotated as <tt>@DomainService</tt> an <tt>@RequestScoped</tt> only because of the
- *     legacy {@link org.apache.isis.applib.annotation.Bulk.InteractionContext} subclass (which *is* registered as
- *     the service).
- * </p>
  */
-public abstract class ActionInvocationContext {
+@DomainService
+public class ActionInvocationContext {
 
     /**
      * Intended only to support unit testing.
