@@ -33,6 +33,7 @@ import com.google.common.collect.Maps;
 import org.datanucleus.NucleusContext;
 import org.datanucleus.NucleusContextHelper;
 import org.datanucleus.PropertyNames;
+import org.datanucleus.StoreNucleusContext;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.MetaDataManager;
 import org.datanucleus.store.StoreManager;
@@ -128,13 +129,12 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     	
         final JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory)persistenceManagerFactory;
         final NucleusContext nucleusContext = jdopmf.getNucleusContext();
-        final StoreManager storeManager = NucleusContextHelper.createStoreManagerForProperties(
-                new HashMap<String, Object>(props),
-                jdopmf.getPersistenceProperties(),
-                nucleusContext.getClassLoaderResolver(ClassLoader.getSystemClassLoader()), nucleusContext);
-        if (storeManager instanceof SchemaAwareStoreManager) {
-            ((SchemaAwareStoreManager)storeManager).createSchemaForClasses(classesToBePersisted, asProperties(props));
-		}
+        if (nucleusContext instanceof StoreNucleusContext) {
+            final StoreManager storeManager = ((StoreNucleusContext)nucleusContext).getStoreManager();
+            if (storeManager instanceof SchemaAwareStoreManager) {
+                ((SchemaAwareStoreManager)storeManager).createSchemaForClasses(classesToBePersisted, asProperties(props));
+            }
+        }
     }
 
 
