@@ -470,7 +470,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
 
                     // then
                     assertThat(toDoItem.getDependencies().size(), is(1));
-                    assertThat(toDoItem.getDependencies().first(), is(unwrap(otherToDoItem)));
+                    assertThat(toDoItem.getDependencies().iterator().next(), is(unwrap(otherToDoItem)));
                 }
 
 

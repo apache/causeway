@@ -31,20 +31,20 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 
 /**
  * A refinement of the {@link AuthenticationManagerStandard}, which adds support
- * to make it easier without the palava of logging in when running in either
- * {@link DeploymentType#EXPLORATION exploration} mode or in
- * {@link DeploymentType#PROTOTYPE prototype} mode.
+ * to make it easier without the need of logging in when running in either
+ * {@link DeploymentType#SERVER_EXPLORATION exploration} mode or in
+ * {@link DeploymentType#SERVER_PROTOTYPE prototype} mode.
  * 
  * <p>
  * Specifically:
  * <ul>
  * <li>the {@link ExplorationAuthenticator} will always provide a special
  * {@link ExplorationSession} if running in the {@link DeploymentType} of
- * {@link DeploymentType#EXPLORATION exploration}.
+ * {@link DeploymentType#SERVER_EXPLORATION exploration}.
  * <li>the {@link LogonFixtureAuthenticator} will set up a session using the
  * login provided by a {@link LogonFixture}, provided that the
- * {@link DeploymentType} is {@link DeploymentType#EXPLORATION exploration} or
- * {@link DeploymentType#PROTOTYPE prototyping}
+ * {@link DeploymentType} is {@link DeploymentType#SERVER_EXPLORATION exploration} or
+ * {@link DeploymentType#SERVER_PROTOTYPE prototyping}
  * </ul>
  */
 public class AuthenticationManagerStandardForDfltRuntime extends AuthenticationManagerStandard {

@@ -91,6 +91,12 @@
                         <include>logging.properties</include>
                     </includes>
                 </fileSet>
+                <fileSet encoding="UTF-8">
+                    <directory/>
+                    <includes>
+                        <include>.gitignore</include>
+                    </includes>
+                </fileSet>
             </fileSets>
         </module>
         <module id="${rootArtifactId}-webapp" dir="webapp" name="${rootArtifactId}-webapp">
@@ -149,6 +155,12 @@
                     <directory>ide/eclipse</directory>
                     <includes>
                         <include>**/*.launch</include>
+                    </includes>
+                </fileSet>
+                <fileSet encoding="UTF-8">
+                    <directory/>
+                    <includes>
+                        <include>.gitignore</include>
                     </includes>
                 </fileSet>
             </fileSets>

@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.jdo.JDOHelper;
@@ -502,15 +503,16 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     @javax.jdo.annotations.Persistent(table="ToDoItemDependencies")
     @javax.jdo.annotations.Join(column="dependingId")
     @javax.jdo.annotations.Element(column="dependentId")
-    private SortedSet<ToDoItem> dependencies = new TreeSet<ToDoItem>();
+    private Set<ToDoItem> dependencies = new TreeSet<>();
+    //private SortedSet<ToDoItem> dependencies = new TreeSet<>();  // not compatible with neo4j (as of DN v3.2.3)
 
     @CollectionInteraction
-    @CollectionLayout(sortedBy = DependenciesComparator.class)
-    public SortedSet<ToDoItem> getDependencies() {
+    @CollectionLayout(/*sortedBy = DependenciesComparator.class*/) // not compatible with neo4j (as of DN v3.2.3)
+    public Set<ToDoItem> getDependencies() {
         return dependencies;
     }
 
-    public void setDependencies(final SortedSet<ToDoItem> dependencies) {
+    public void setDependencies(final Set<ToDoItem> dependencies) {
         this.dependencies = dependencies;
     }
 
@@ -521,9 +523,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         getDependencies().remove(toDoItem);
     }
 
-    public ToDoItem add(
-            @TypicalLength(20)
-            final ToDoItem toDoItem) {
+    public ToDoItem add(final ToDoItem toDoItem) {
         // By wrapping the call, Isis will detect that the collection is modified
         // and it will automatically send CollectionInteractionEvents to the Event Bus.
         // ToDoItemSubscriptions is a demo subscriber to this event
