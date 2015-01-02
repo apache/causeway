@@ -65,8 +65,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
 
     @Before
     public void setUpData() throws Exception {
-    	final ToDoItem testToDo = toDoItems.newToDo("new todo", ToDoItem.Category.Professional, ToDoItem.Subcategory.OpenSource, null, null);
-        fixtureScript = new ToDoItemsRecreateAndCompleteSeveral();
+    	fixtureScript = new ToDoItemsRecreateAndCompleteSeveral();
         fixtureScripts.runFixtureScript(fixtureScript, null);
     }
 
