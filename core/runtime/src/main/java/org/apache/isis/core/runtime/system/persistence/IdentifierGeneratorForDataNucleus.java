@@ -21,8 +21,8 @@ package org.apache.isis.core.runtime.system.persistence;
 import java.util.UUID;
 
 import javax.jdo.PersistenceManager;
-import javax.jdo.spi.PersistenceCapable;
 
+import org.datanucleus.enhancer.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +74,7 @@ class IdentifierGeneratorForDataNucleus implements IdentifierGenerator {
     public String createPersistentIdentifierFor(ObjectSpecId objectSpecId, Object pojo, RootOid transientRootOid) {
         
         // hack to deal with services
-        if(!(pojo instanceof PersistenceCapable)) {
+        if(!(pojo instanceof Persistable)) {
             return "1";
         }
         

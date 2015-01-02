@@ -21,7 +21,6 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence;
 import java.util.Date;
 
 import javax.jdo.listener.InstanceLifecycleEvent;
-import javax.jdo.spi.PersistenceCapable;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

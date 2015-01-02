@@ -34,6 +34,7 @@ import javax.jdo.annotations.VersionStrategy;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Ordering;
+import org.datanucleus.enhancer.Persistable;
 import org.joda.time.LocalDate;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.Identifier;
@@ -466,16 +467,16 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     //region > version (derived property)
     public Long getVersionSequence() {
-        if(!(this instanceof javax.jdo.spi.PersistenceCapable)) {
+        if(!(this instanceof Persistable)) {
             return null;
-        } 
-        javax.jdo.spi.PersistenceCapable persistenceCapable = (javax.jdo.spi.PersistenceCapable) this;
+        }
+        Persistable persistenceCapable = (Persistable) this;
         final Long version = (Long) JDOHelper.getVersion(persistenceCapable);
         return version;
     }
     // hide property (imperatively, based on state of object)
     public boolean hideVersionSequence() {
-        return !(this instanceof javax.jdo.spi.PersistenceCapable);
+        return !(this instanceof Persistable);
     }
     //endregion
 

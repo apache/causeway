@@ -18,6 +18,7 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -30,6 +31,8 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 
 import org.datanucleus.NucleusContext;
+import org.datanucleus.NucleusContextHelper;
+import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.MetaDataManager;
 import org.datanucleus.store.StoreManager;
@@ -106,7 +109,8 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         props.put("datanucleus.autoStartClassNames", persistableClassNames);
         persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(props);
 
-        final boolean createSchema = Boolean.parseBoolean( props.get("datanucleus.autoCreateSchema") );
+        final boolean createSchema = (Boolean.parseBoolean( props.get(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_SCHEMA) ) ||
+                Boolean.parseBoolean( props.get(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL) ));
         if(createSchema) {
             createSchema(props, persistableClassNameSet);
         }
@@ -120,15 +124,17 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     }
 
     private void createSchema(final Map<String, String> props, final Set<String> classesToBePersisted) {
-    	//TODO: Cleanup - Schema creation should be handled by configuration
     	//REF: http://www.datanucleus.org/products/datanucleus/jdo/schema.html
     	
-        /*final JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory)persistenceManagerFactory;
+        final JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory)persistenceManagerFactory;
         final NucleusContext nucleusContext = jdopmf.getNucleusContext();
-        final StoreManager storeManager = nucleusContext.getStoreManager();
+        final StoreManager storeManager = NucleusContextHelper.createStoreManagerForProperties(
+                new HashMap<String, Object>(props),
+                jdopmf.getPersistenceProperties(),
+                nucleusContext.getClassLoaderResolver(ClassLoader.getSystemClassLoader()), nucleusContext);
         if (storeManager instanceof SchemaAwareStoreManager) {
             ((SchemaAwareStoreManager)storeManager).createSchemaForClasses(classesToBePersisted, asProperties(props));
-		}*/
+		}
     }
 
 

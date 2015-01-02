@@ -107,6 +107,15 @@
                 <module>example/application/simpleapp</module>
             </modules>
         </profile>
+
+        <profile>
+            <id>core-simple</id>
+            <modules>
+                <module>core</module>
+                <module>example/application/simpleapp</module>
+                <module>example/archetype/simpleapp</module>
+            </modules>
+        </profile>
     </profiles>
 
 </project>

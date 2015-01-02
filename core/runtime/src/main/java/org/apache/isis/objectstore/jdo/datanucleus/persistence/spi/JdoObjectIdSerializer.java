@@ -75,7 +75,7 @@ public final class JdoObjectIdSerializer {
             }
         }
         if(jdoOid instanceof DatastoreId) {
-        	DatastoreId dnOid = (DatastoreId) jdoOid;
+            DatastoreId dnOid = (DatastoreId) jdoOid;
             Object keyValue = dnOid.getKeyAsObject();
             
             // prettier handling of these common cases
