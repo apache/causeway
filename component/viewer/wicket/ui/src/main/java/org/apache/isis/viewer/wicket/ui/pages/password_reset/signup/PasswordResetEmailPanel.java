@@ -37,7 +37,7 @@ import org.apache.wicket.request.UrlRenderer;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.isis.applib.services.email.EmailNotificationService;
-import org.apache.isis.applib.services.email.events.EmailRegistrationEvent;
+import org.apache.isis.applib.services.email.events.PasswordResetEvent;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.pages.signup.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.pages.signup.EmailAvailableValidator;
@@ -80,7 +80,7 @@ public class PasswordResetEmailPanel extends Panel {
 
                 String confirmationUrl = createUrl(email);
 
-                boolean emailSent = emailService.send(new EmailRegistrationEvent(email, confirmationUrl));
+                boolean emailSent = emailService.send(new PasswordResetEvent(email, confirmationUrl));
                 if (emailSent) {
                     Map<String, String> map = new HashMap<>();
                     map.put("email", email);
