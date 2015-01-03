@@ -38,10 +38,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.isis.applib.services.email.EmailNotificationService;
 import org.apache.isis.applib.services.email.events.EmailRegistrationEvent;
-import org.apache.isis.applib.services.userreg.UserRegistrationService;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.isis.viewer.wicket.ui.pages.signup.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.pages.signup.EmailAvailableValidator;
 
 /**
@@ -66,7 +64,7 @@ public class PasswordResetEmailPanel extends Panel {
         final RequiredTextField<String> emailField = new RequiredTextField<>("email", Model.of(""));
         emailField.setLabel(new ResourceModel("emailLabel"));
         emailField.add(EmailAddressValidator.getInstance());
-        emailField.add(EmailAvailableValidator.DOESNT_EXIST);
+        emailField.add(EmailAvailableValidator.EXISTS);
 
         FormGroup formGroup = new FormGroup("formGroup", emailField);
         form.add(formGroup);

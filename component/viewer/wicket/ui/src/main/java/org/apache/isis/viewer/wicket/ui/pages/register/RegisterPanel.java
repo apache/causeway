@@ -14,7 +14,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.pages.signup.AccountConfirmationMap;
@@ -113,35 +112,37 @@ public class RegisterPanel extends Panel {
         @Override
         public final void onSubmit()
         {
-            IsisContext.openSession(new InitialisationSession());
-
             final Registree registree = getModelObject();
 
-            // TODO: need to add a link on the login page to register.
-            // TODO: however, if there is no UserRegistrationService domain service available, then should suppress the link to get to the registration page.
-            final UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
-
-            IsisContext.getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
+            IsisContext.doInSession(new Runnable() {
                 @Override
-                public void preExecute() {
-                }
+                public void run() {
 
-                @Override
-                public void execute() {
-                    userRegistrationService.registerUser(registree.getUsername(), registree.getPassword(), registree.getEmail());
-                    removeAccountConfirmation();
-                }
+                    // TODO: need to add a link on the login page to register.
+                    // TODO: however, if there is no UserRegistrationService domain service available, then should suppress the link to get to the registration page.
+                    final UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
 
-                @Override
-                public void onSuccess() {
-                }
+                    IsisContext.getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
+                        @Override
+                        public void preExecute() {
+                        }
 
-                @Override
-                public void onFailure() {
+                        @Override
+                        public void execute() {
+                            userRegistrationService.registerUser(registree.getUsername(), registree.getPassword(), registree.getEmail());
+                            removeAccountConfirmation();
+                        }
+
+                        @Override
+                        public void onSuccess() {
+                        }
+
+                        @Override
+                        public void onFailure() {
+                        }
+                    });
                 }
             });
-
-            IsisContext.closeSession();
 
             // TODO: more error handling here... eg what if the username is already in use.
             signIn(registree.getUsername(), registree.getPassword());

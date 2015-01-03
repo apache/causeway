@@ -21,14 +21,11 @@ package org.apache.isis.viewer.wicket.ui.pages.password_reset.signup;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
-import org.apache.isis.applib.services.userreg.UserRegistrationService;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.AccountManagementPageAbstract;
 
 /**
- * Boilerplate, pick up our HTML and CSS.
+ * A page used for resetting the password of an user.
  */
 public class PasswordResetPage extends AccountManagementPageAbstract {
     
@@ -62,12 +59,28 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
         }
     }
 
+    /**
+     * Shows a panel with password reset form fields.
+     *
+     * @param id The component id
+     * @param uuid A unique id used to identify the email of the user whose password will be reset
+     * @return A panel with "password reset" form fields
+     */
     protected PasswordResetPanel addPasswordResetPanel(String id, String uuid) {
         final PasswordResetPanel passwordResetPanel = new PasswordResetPanel(id, uuid);
         addOrReplace(passwordResetPanel);
         return passwordResetPanel;
     }
 
+    /**
+     * Shows a panel where where the user has to provide her email address.
+     * An email with unique url will be sent to this email address. Once clicked
+     * {@link #addPasswordResetPanel(String, String)} will be used to actually
+     * change the password
+     *
+     * @param id The component id
+     * @return A panel with "send email for password reset" functionality
+     */
     protected PasswordResetEmailPanel addPasswordResetEmailPanel(String id) {
         final PasswordResetEmailPanel passwordResetEmailPanel = new PasswordResetEmailPanel(id);
         addOrReplace(passwordResetEmailPanel);

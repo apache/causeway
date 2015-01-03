@@ -19,28 +19,27 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.password_reset.signup;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.INotificationMessage;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationMessage;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+import java.util.concurrent.Callable;
 import javax.inject.Inject;
+import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.PasswordTextField;
-import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.request.Url;
-import org.apache.wicket.request.UrlRenderer;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.apache.isis.applib.services.email.EmailNotificationService;
-import org.apache.isis.applib.services.email.events.EmailRegistrationEvent;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.isis.applib.services.userreg.UserRegistrationService;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.viewer.wicket.ui.pages.signup.AccountConfirmationMap;
 
 /**
  * A panel with a form for creation of new users
@@ -50,11 +49,10 @@ public class PasswordResetPanel extends Panel {
     /**
      * Constructor
      *
-     * @param id
-     *            the component id
-     * @param uuid
+     * @param id The component id
+     * @param uuid The unique id to identify the user's email
      */
-    public PasswordResetPanel(final String id, String uuid) {
+    public PasswordResetPanel(final String id, final String uuid) {
         super(id);
 
         addOrReplace(new NotificationPanel("feedback"));
@@ -77,16 +75,24 @@ public class PasswordResetPanel extends Panel {
             public void onSubmit() {
                 super.onSubmit();
 
-                String email = confirmPasswordField.getModelObject();
-                String confirmationUrl = createUrl(email);
+                final String password = confirmPasswordField.getModelObject();
 
-                boolean emailSent = emailService.send(new EmailRegistrationEvent(email, confirmationUrl));
-                if (emailSent) {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("email", email);
-                    IModel<Map<String, String>> model = Model.ofMap(map);
-                    String emailSentMessage = getString("emailSentMessage", model);
-                    success(emailSentMessage);
+                AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
+                final String email = accountConfirmationMap.remove(uuid);
+
+                Boolean passwordUpdated = IsisContext.doInSession(new Callable<Boolean>() {
+                    @Override
+                    public Boolean call() throws Exception {
+
+                        UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
+                        return userRegistrationService.updatePasswordByEmail(email, password);
+                    }
+                });
+
+                if (passwordUpdated) {
+                    success(createPasswordChangeSuccessfulMessage());
+                } else {
+                    error(getString("passwordChangeUnsuccessful"));
                 }
             }
         };
@@ -94,23 +100,17 @@ public class PasswordResetPanel extends Panel {
         form.add(signUpButton);
     }
 
-    private String createUrl(String email) {
-        String uuid = UUID.randomUUID().toString();
-        uuid = uuid.replace("-", "");
-
-        // TODO mgrigorov: either improve the API or use a DB table for this
-        AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
-        accountConfirmationMap.put(uuid, email);
-
-        PageParameters parameters = new PageParameters();
-        parameters.set(0, uuid);
-        CharSequence relativeUrl = urlFor(PasswordResetPage.class, parameters);
-        UrlRenderer urlRenderer = getRequestCycle().getUrlRenderer();
-        String fullUrl = urlRenderer.renderFullUrl(Url.parse(relativeUrl));
-
-        return fullUrl;
+    private INotificationMessage createPasswordChangeSuccessfulMessage() {
+        Class<? extends Page> signInPage = pageClassRegistry.getPageClass(PageType.SIGN_IN);
+        CharSequence signInUrl = urlFor(signInPage, null);
+        Map<String, CharSequence> map = new HashMap<>();
+        map.put("signInUrl", signInUrl);
+        String passwordChangeSuccessful = getString("passwordChangeSuccessful", Model.ofMap(map));
+        NotificationMessage message = new NotificationMessage(Model.of(passwordChangeSuccessful));
+        message.escapeModelStrings(false);
+        return message;
     }
 
     @Inject
-    private EmailNotificationService emailService;
+    private PageClassRegistry pageClassRegistry;
 }

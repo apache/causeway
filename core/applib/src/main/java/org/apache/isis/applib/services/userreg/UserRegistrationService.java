@@ -29,5 +29,5 @@ public interface UserRegistrationService {
     boolean emailExists(String emailAddress);
 
     @Programmatic
-    void updatePasswordByEmail(String emailAddress, String password);
+    boolean updatePasswordByEmail(String emailAddress, String password);
 }
