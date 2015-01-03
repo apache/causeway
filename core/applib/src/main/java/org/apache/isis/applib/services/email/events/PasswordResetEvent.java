@@ -3,20 +3,15 @@ package org.apache.isis.applib.services.email.events;
 /**
  * An event send to all services interested in user password reset
  */
-public class PasswordResetEvent {
+public class PasswordResetEvent extends EmailEventAbstract {
 
-    private final String email;
     private final String confirmationUrl;
 
     public PasswordResetEvent(
         final String email,
         final String confirmationUrl) {
-        this.email = email;
+        super(email);
         this.confirmationUrl = confirmationUrl;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public String getConfirmationUrl() {

@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.email.EmailNotificationService;
+import org.apache.isis.applib.services.email.events.EmailEventAbstract;
 import org.apache.isis.applib.services.email.events.EmailRegistrationEvent;
 import org.apache.isis.applib.services.email.events.PasswordResetEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -54,15 +55,15 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
 
     @Override
     public boolean send(EmailRegistrationEvent emailRegistrationEvent) {
-        return send(calculateSubject(emailRegistrationEvent), loadMessage(emailRegistrationEvent));
+        return send(emailRegistrationEvent, loadMessage(emailRegistrationEvent));
     }
 
     @Override
     public boolean send(PasswordResetEvent passwordResetEvent) {
-        return send(calculateSubject(passwordResetEvent), loadMessage(passwordResetEvent));
+        return send(passwordResetEvent, loadMessage(passwordResetEvent));
     }
 
-    protected boolean send(String subject, String body) {
+    protected boolean send(EmailEventAbstract emailEvent, String body) {
 
         boolean mailSent = true;
         try {
@@ -72,25 +73,25 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
             Email email = new HtmlEmail();
             email.setAuthenticator(new DefaultAuthenticator(senderEmailAddress, senderEmailPasswd));
             email.setHostName(getSenderEmailHostName());
-            email.setSmtpPort(getSenderEmailPort());
+            Integer senderEmailPort = getSenderEmailPort();
+            email.setSmtpPort(senderEmailPort);
             email.setStartTLSEnabled(getSenderEmailTlsEnabled());
             Properties properties = email.getMailSession().getProperties();
-            // TODO mgrigorov: check whether all these are required and extract as configuration settings
+            // TODO ISIS-987: check whether all these are required and extract as configuration settings
             properties.put("mail.smtps.auth", "true");
             properties.put("mail.debug", "true");
-            properties.put("mail.smtps.port", "587");
-            properties.put("mail.smtps.socketFactory.port", "587");
+            properties.put("mail.smtps.port", "" + senderEmailPort);
+            properties.put("mail.smtps.socketFactory.port", "" + senderEmailPort);
             properties.put("mail.smtps.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
             properties.put("mail.smtps.socketFactory.fallback", "false");
-            properties.put("mail.smtp.starttls.enable", "true");
+            properties.put("mail.smtp.starttls.enable", "" + getSenderEmailTlsEnabled());
 
             email.setFrom(senderEmailAddress);
 
-            email.setSubject(subject);
+            email.setSubject(calculateSubject(emailEvent));
             email.setMsg(body);
 
-            // TODO ISIS-987 use the provided email once development/testing is done
-            email.addTo("martin.grigorov@gmail.com");
+            email.addTo(emailEvent.getEmail());
             email.send();
 
         } catch (EmailException ex) {
