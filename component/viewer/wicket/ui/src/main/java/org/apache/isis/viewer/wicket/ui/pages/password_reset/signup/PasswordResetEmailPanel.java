@@ -56,8 +56,6 @@ public class PasswordResetEmailPanel extends Panel {
     public PasswordResetEmailPanel(final String id) {
         super(id);
 
-        addOrReplace(new NotificationPanel("feedback"));
-
         StatelessForm<Void> form = new StatelessForm<>("signUpForm");
         addOrReplace(form);
 

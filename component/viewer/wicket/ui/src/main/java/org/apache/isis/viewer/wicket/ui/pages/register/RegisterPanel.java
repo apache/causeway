@@ -1,7 +1,5 @@
 package org.apache.isis.viewer.wicket.ui.pages.register;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
-
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -14,23 +12,22 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.pages.signup.AccountConfirmationMap;
+import org.apache.isis.viewer.wicket.ui.pages.signup.UsernameAvailableValidator;
 
 /**
- * TODO ISIS-987 Add javadoc
+ * A panel with a form for self-registration of a user
  */
 public class RegisterPanel extends Panel {
 
-    private static final String REGISTER_FORM = "registerForm";
+    private static final String ID_REGISTER_FORM = "registerForm";
 
     public RegisterPanel(String id, String uuid) {
         super(id);
 
-        add(new RegisterForm(REGISTER_FORM, uuid));
-
-        add(new NotificationPanel("feedback"));
+        add(new RegisterForm(ID_REGISTER_FORM, uuid));
     }
 
 
@@ -103,6 +100,7 @@ public class RegisterPanel extends Panel {
 
         protected TextField<String> addUsername() {
             RequiredTextField<String> username = new RequiredTextField<>("username");
+            username.add(UsernameAvailableValidator.INSTANCE);
             FormGroup usernameFormGroup = new FormGroup("usernameFormGroup", username);
             usernameFormGroup.add(username);
             addOrReplace(usernameFormGroup);
@@ -117,34 +115,18 @@ public class RegisterPanel extends Panel {
             IsisContext.doInSession(new Runnable() {
                 @Override
                 public void run() {
-
-                    // TODO: need to add a link on the login page to register.
-                    // TODO: however, if there is no UserRegistrationService domain service available, then should suppress the link to get to the registration page.
                     final UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
 
-                    IsisContext.getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
-                        @Override
-                        public void preExecute() {
-                        }
-
+                    IsisContext.getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
                         @Override
                         public void execute() {
                             userRegistrationService.registerUser(registree.getUsername(), registree.getPassword(), registree.getEmail());
                             removeAccountConfirmation();
                         }
-
-                        @Override
-                        public void onSuccess() {
-                        }
-
-                        @Override
-                        public void onFailure() {
-                        }
                     });
                 }
             });
 
-            // TODO: more error handling here... eg what if the username is already in use.
             signIn(registree.getUsername(), registree.getPassword());
             setResponsePage(getApplication().getHomePage());
         }
@@ -164,5 +146,4 @@ public class RegisterPanel extends Panel {
             accountConfirmationMap.remove(uuid);
         }
     }
-
 }

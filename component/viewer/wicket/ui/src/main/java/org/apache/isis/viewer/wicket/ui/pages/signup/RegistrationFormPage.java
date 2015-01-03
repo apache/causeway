@@ -24,7 +24,7 @@ import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.AccountManagementPageAbstract;
 
 /**
- * Boilerplate, pick up our HTML and CSS.
+ * A page for self-registering a new user after confirmation of her email account.
  */
 public class RegistrationFormPage extends AccountManagementPageAbstract {
     
@@ -34,7 +34,7 @@ public class RegistrationFormPage extends AccountManagementPageAbstract {
         this(parameters, getAndClearExceptionModelIfAny());
     }
 
-    public RegistrationFormPage(final PageParameters parameters, ExceptionModel exceptionModel) {
+    private RegistrationFormPage(final PageParameters parameters, ExceptionModel exceptionModel) {
         super(parameters, exceptionModel);
     }
 
@@ -42,12 +42,12 @@ public class RegistrationFormPage extends AccountManagementPageAbstract {
     protected void onInitialize() {
         super.onInitialize();
 
-        addSignInPanel();
+        addRegistrationFormPanel();
     }
 
-    protected RegistrationFormPanel addSignInPanel() {
-        final RegistrationFormPanel signInPanel = new RegistrationFormPanel("signUpPanel");
-        add(signInPanel);
-        return signInPanel;
+    protected RegistrationFormPanel addRegistrationFormPanel() {
+        final RegistrationFormPanel registrationFormPanel = new RegistrationFormPanel("registrationFormPanel");
+        addOrReplace(registrationFormPanel);
+        return registrationFormPanel;
     }
 }

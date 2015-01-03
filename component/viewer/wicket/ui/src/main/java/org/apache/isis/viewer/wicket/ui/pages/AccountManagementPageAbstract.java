@@ -79,7 +79,7 @@ public class AccountManagementPageAbstract extends WebPage {
         return exceptionModel;
     }
 
-    public AccountManagementPageAbstract(final PageParameters parameters, final ExceptionModel exceptionModel) {
+    protected AccountManagementPageAbstract(final PageParameters parameters, final ExceptionModel exceptionModel) {
         super(parameters);
 
         addPageTitle();

@@ -22,46 +22,16 @@
       xmlns:wicket="http://wicket.apache.org"
       xml:lang="en"  
       lang="en">
-    <head>
-        <wicket:header-items/>
-        <title wicket:id="pageTitle"></title>
-    </head>
     <body>
-    <div id="container" class="wicketSignInPanel container-fluid">
-        <div class="jumbotron" style="background-color: transparent">
-
-            <div class="row">
-                <div class="col-sm-12">&#160;</div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">&#160;</div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">&#160;</div>
-            </div>
-
-            <div class="row">
-                <div class="headerContainer col-sm-offset-4 col-sm-4">
-                    <h1 wicket:id="applicationName" class="applicationName">[application name]</h1>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-12">&#160;</div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">&#160;</div>
-            </div>
-
+        <wicket:extend>
+            <div wicket:id="feedback"></div>
             <div class="row">
                 <div class="registerPanel col-sm-offset-4 col-sm-4">
                     <h2><wicket:message key="registerHeader">Register</wicket:message></h2>
                     <div wicket:id="content"></div>
                 </div>
             </div>
-            <div wicket:id="exceptionStackTrace" class="exceptionStackTrace"></div>
-        </div>
-    </div>
+        </wicket:extend>
     </body>
 
 </html>

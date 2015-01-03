@@ -19,11 +19,19 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.register;
 
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+
+import javax.inject.Inject;
+import org.apache.wicket.Page;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.string.Strings;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.AccountManagementPageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.viewer.wicket.ui.pages.signup.AccountConfirmationMap;
 
 /**
  * Web page representing the about page.
@@ -36,7 +44,7 @@ public class RegisterPage extends AccountManagementPageAbstract {
         this(parameters, getAndClearExceptionModelIfAny());
     }
 
-    public RegisterPage(final PageParameters parameters, ExceptionModel exceptionModel) {
+    private RegisterPage(final PageParameters parameters, final ExceptionModel exceptionModel) {
         super(parameters, exceptionModel);
     }
 
@@ -44,12 +52,29 @@ public class RegisterPage extends AccountManagementPageAbstract {
     protected void onInitialize() {
         super.onInitialize();
 
+        add(new NotificationPanel("feedback"));
+
         final StringValue uuidValue = getPageParameters().get(0);
         if (uuidValue.isEmpty()) {
-            // TODO ISIS-987 Add feedback explaining why there is no form
-            addOrReplace(new WebMarkupContainer("content"));
+            goToSignUpPage();
         } else {
-            addOrReplace(new RegisterPanel("content", uuidValue.toString()));
+            String uuid = uuidValue.toString();
+
+            AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
+            final String email = accountConfirmationMap.get(uuid);
+            if (Strings.isEmpty(email)) {
+                goToSignUpPage();
+            } else {
+                addOrReplace(new RegisterPanel("content", uuidValue.toString()));
+            }
         }
     }
+
+    private void goToSignUpPage() {
+        Class<? extends Page> signUpPageClass = pageClassRegistry.getPageClass(PageType.SIGN_UP);
+        throw new RestartResponseException(signUpPageClass);
+    }
+
+    @Inject
+    private PageClassRegistry pageClassRegistry;
 }

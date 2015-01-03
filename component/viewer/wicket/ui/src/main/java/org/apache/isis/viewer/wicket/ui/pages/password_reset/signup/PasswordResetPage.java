@@ -19,10 +19,17 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.password_reset.signup;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+
+import java.util.concurrent.Callable;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.string.Strings;
+import org.apache.isis.applib.services.userreg.UserRegistrationService;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.AccountManagementPageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.signup.AccountConfirmationMap;
 
 /**
  * A page used for resetting the password of an user.
@@ -37,7 +44,7 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
         this(parameters, getAndClearExceptionModelIfAny());
     }
 
-    public PasswordResetPage(final PageParameters parameters, ExceptionModel exceptionModel) {
+    private PasswordResetPage(final PageParameters parameters, ExceptionModel exceptionModel) {
         super(parameters, exceptionModel);
     }
 
@@ -45,17 +52,34 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
     protected void onInitialize() {
         super.onInitialize();
 
+        add(new NotificationPanel("feedback"));
+
         StringValue uuidValue = getPageParameters().get(0);
         if (uuidValue.isEmpty()) {
             addPasswordResetEmailPanel(ID_CONTENT_PANEL);
         } else {
             String uuid = uuidValue.toString();
 
-            // TODO ISIS-987 Check that there is a record in AccountConfirmationMap and an ApplicationUser
-            // Show error feedback.
-            // Otherwise show password reset panel
-
-            addPasswordResetPanel(ID_CONTENT_PANEL, uuid);
+            AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
+            final String email = accountConfirmationMap.get(uuid);
+            if (Strings.isEmpty(email)) {
+                error(getString("passwordResetExpiredOrInvalidToken"));
+                addOrReplace(addPasswordResetEmailPanel(ID_CONTENT_PANEL));
+            } else {
+                Boolean emailExists = IsisContext.doInSession(new Callable<Boolean>() {
+                    @Override
+                    public Boolean call() throws Exception {
+                        UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
+                        return userRegistrationService.emailExists(email);
+                    }
+                });
+                if (!emailExists) {
+                    error(getString("noUserForAnEmailValidToken"));
+                    addOrReplace(addPasswordResetEmailPanel(ID_CONTENT_PANEL));
+                } else {
+                    addPasswordResetPanel(ID_CONTENT_PANEL, uuid);
+                }
+            }
         }
     }
 

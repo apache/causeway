@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.pages.password_reset.signup;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.INotificationMessage;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationMessage;
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,12 +49,10 @@ public class PasswordResetPanel extends Panel {
      * Constructor
      *
      * @param id The component id
-     * @param uuid The unique id to identify the user's email
+     * @param uuid The unique id to find the user's email address
      */
     public PasswordResetPanel(final String id, final String uuid) {
         super(id);
-
-        addOrReplace(new NotificationPanel("feedback"));
 
         StatelessForm<Void> form = new StatelessForm<>("passwordResetForm");
         addOrReplace(form);
@@ -77,12 +74,12 @@ public class PasswordResetPanel extends Panel {
 
                 final String password = confirmPasswordField.getModelObject();
 
-                AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
-                final String email = accountConfirmationMap.remove(uuid);
+                final AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
 
                 Boolean passwordUpdated = IsisContext.doInSession(new Callable<Boolean>() {
                     @Override
                     public Boolean call() throws Exception {
+                        String email = accountConfirmationMap.get(uuid);
 
                         UserRegistrationService userRegistrationService = IsisContext.getPersistenceSession().getServicesInjector().lookupService(UserRegistrationService.class);
                         return userRegistrationService.updatePasswordByEmail(email, password);
@@ -90,6 +87,7 @@ public class PasswordResetPanel extends Panel {
                 });
 
                 if (passwordUpdated) {
+                    accountConfirmationMap.remove(uuid);
                     success(createPasswordChangeSuccessfulMessage());
                 } else {
                     error(getString("passwordChangeUnsuccessful"));
