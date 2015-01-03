@@ -25,7 +25,6 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Bookmarkable;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -48,7 +47,6 @@ public class SimpleObject implements Comparable<SimpleObject> {
 
     @javax.jdo.annotations.Column(allowsNull="false")
     @Title(sequence="1")
-    @MemberOrder(sequence="1")
     public String getName() {
         return name;
     }
@@ -62,7 +60,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     //region > compareTo
 
     @Override
-    public int compareTo(SimpleObject other) {
+    public int compareTo(final SimpleObject other) {
         return ObjectContracts.compare(this, other, "name");
     }
 

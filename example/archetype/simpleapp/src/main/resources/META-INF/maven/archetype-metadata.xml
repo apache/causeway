@@ -18,6 +18,15 @@
   under the License.
 -->
 <archetype-descriptor xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0" xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd" name="simpleapp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <fileSets>
+        <fileSet encoding="UTF-8">
+            <directory/>
+            <includes>
+                <include>.gitattributes</include>
+                <include>.gitignore</include>
+            </includes>
+        </fileSet>
+    </fileSets>
     <modules>
         <module id="${rootArtifactId}-dom" dir="dom" name="${rootArtifactId}-dom">
             <fileSets>
@@ -63,12 +72,6 @@
                         <include>**/*.java</include>
                     </includes>
                 </fileSet>
-                <fileSet encoding="UTF-8">
-                    <directory/>
-                    <includes>
-                        <include>.gitignore</include>
-                    </includes>
-                </fileSet>
             </fileSets>
         </module>
         <module id="${rootArtifactId}-integtests" dir="integtests" name="${rootArtifactId}-integtests">
@@ -89,12 +92,6 @@
                     <directory/>
                     <includes>
                         <include>logging.properties</include>
-                    </includes>
-                </fileSet>
-                <fileSet encoding="UTF-8">
-                    <directory/>
-                    <includes>
-                        <include>.gitignore</include>
                     </includes>
                 </fileSet>
             </fileSets>
@@ -155,12 +152,6 @@
                     <directory>ide/eclipse</directory>
                     <includes>
                         <include>**/*.launch</include>
-                    </includes>
-                </fileSet>
-                <fileSet encoding="UTF-8">
-                    <directory/>
-                    <includes>
-                        <include>.gitignore</include>
                     </includes>
                 </fileSet>
             </fileSets>
