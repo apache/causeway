@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.pages.password_reset.signup;
+package org.apache.isis.viewer.wicket.ui.pages.password_reset;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 

@@ -31,7 +31,7 @@ import org.apache.isis.viewer.wicket.ui.pages.actionprompt.ActionPromptPage;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
-import org.apache.isis.viewer.wicket.ui.pages.password_reset.signup.PasswordResetPage;
+import org.apache.isis.viewer.wicket.ui.pages.password_reset.PasswordResetPage;
 import org.apache.isis.viewer.wicket.ui.pages.register.RegisterPage;
 import org.apache.isis.viewer.wicket.ui.pages.signup.RegistrationFormPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
