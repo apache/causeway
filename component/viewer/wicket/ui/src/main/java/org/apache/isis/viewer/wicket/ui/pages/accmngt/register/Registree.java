@@ -1,9 +1,9 @@
-package org.apache.isis.viewer.wicket.ui.pages.register;
+package org.apache.isis.viewer.wicket.ui.pages.accmngt.register;
 
 import java.io.Serializable;
 
 /**
- * A model object for {@link org.apache.isis.viewer.wicket.ui.pages.register.RegisterPanel}
+ * A model object for {@link org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPanel}
  */
 public class Registree implements Serializable {
 

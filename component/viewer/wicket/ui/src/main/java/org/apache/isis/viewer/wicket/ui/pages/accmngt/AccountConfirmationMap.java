@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.isis.viewer.wicket.ui.pages.signup;
+package org.apache.isis.viewer.wicket.ui.pages.accmngt;
 
 import java.util.Map;
 

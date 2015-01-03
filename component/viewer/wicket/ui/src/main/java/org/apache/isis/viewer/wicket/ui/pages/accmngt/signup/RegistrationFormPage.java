@@ -17,11 +17,11 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.pages.signup;
+package org.apache.isis.viewer.wicket.ui.pages.accmngt.signup;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
-import org.apache.isis.viewer.wicket.ui.pages.AccountManagementPageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 
 /**
  * A page for self-registering a new user after confirmation of her email account.

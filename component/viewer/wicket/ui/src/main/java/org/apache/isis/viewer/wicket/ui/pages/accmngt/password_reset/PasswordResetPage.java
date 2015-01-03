@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.pages.password_reset;
+package org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -28,8 +28,8 @@ import org.apache.wicket.util.string.Strings;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
-import org.apache.isis.viewer.wicket.ui.pages.AccountManagementPageAbstract;
-import org.apache.isis.viewer.wicket.ui.pages.signup.AccountConfirmationMap;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 
 /**
  * A page used for resetting the password of an user.

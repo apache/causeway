@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.wicket.ui.pages.signup;
+package org.apache.isis.viewer.wicket.ui.pages.accmngt;
 
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;

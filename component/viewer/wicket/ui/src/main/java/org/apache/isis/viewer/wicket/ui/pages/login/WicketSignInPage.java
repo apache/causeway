@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui.pages.login;
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
-import org.apache.isis.viewer.wicket.ui.pages.AccountManagementPageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 
 /**
  * Boilerplate, pick up our HTML and CSS.

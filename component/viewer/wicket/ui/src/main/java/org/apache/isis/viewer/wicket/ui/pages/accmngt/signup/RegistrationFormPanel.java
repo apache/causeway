@@ -17,7 +17,9 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.pages.password_reset;
+package org.apache.isis.viewer.wicket.ui.pages.accmngt.signup;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +29,6 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.Url;
@@ -35,15 +36,16 @@ import org.apache.wicket.request.UrlRenderer;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.isis.applib.services.email.EmailNotificationService;
-import org.apache.isis.applib.services.email.events.PasswordResetEvent;
+import org.apache.isis.applib.services.email.events.EmailRegistrationEvent;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-import org.apache.isis.viewer.wicket.ui.pages.signup.AccountConfirmationMap;
-import org.apache.isis.viewer.wicket.ui.pages.signup.EmailAvailableValidator;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.EmailAvailableValidator;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage;
 
 /**
  * A panel with a form for creation of new users
  */
-public class PasswordResetEmailPanel extends Panel {
+public class RegistrationFormPanel extends Panel {
 
     /**
      * Constructor
@@ -51,8 +53,10 @@ public class PasswordResetEmailPanel extends Panel {
      * @param id
      *            the component id
      */
-    public PasswordResetEmailPanel(final String id) {
+    public RegistrationFormPanel(final String id) {
         super(id);
+
+        addOrReplace(new NotificationPanel("feedback"));
 
         StatelessForm<Void> form = new StatelessForm<>("signUpForm");
         addOrReplace(form);
@@ -60,28 +64,26 @@ public class PasswordResetEmailPanel extends Panel {
         final RequiredTextField<String> emailField = new RequiredTextField<>("email", Model.of(""));
         emailField.setLabel(new ResourceModel("emailLabel"));
         emailField.add(EmailAddressValidator.getInstance());
-        emailField.add(EmailAvailableValidator.EXISTS);
+        emailField.add(EmailAvailableValidator.DOESNT_EXIST);
 
         FormGroup formGroup = new FormGroup("formGroup", emailField);
         form.add(formGroup);
 
         formGroup.add(emailField);
 
-        Button signUpButton = new Button("passwordResetSubmit") {
+        Button signUpButton = new Button("signUp") {
             @Override
             public void onSubmit() {
                 super.onSubmit();
 
                 String email = emailField.getModelObject();
-
                 String confirmationUrl = createUrl(email);
 
-                boolean emailSent = emailService.send(new PasswordResetEvent(email, confirmationUrl));
+                boolean emailSent = emailService.send(new EmailRegistrationEvent(email, confirmationUrl));
                 if (emailSent) {
                     Map<String, String> map = new HashMap<>();
                     map.put("email", email);
-                    IModel<Map<String, String>> model = Model.ofMap(map);
-                    String emailSentMessage = getString("emailSentMessage", model);
+                    String emailSentMessage = getString("emailSentMessage", Model.ofMap(map));
                     success(emailSentMessage);
                 }
             }
@@ -100,7 +102,7 @@ public class PasswordResetEmailPanel extends Panel {
 
         PageParameters parameters = new PageParameters();
         parameters.set(0, uuid);
-        CharSequence relativeUrl = urlFor(PasswordResetPage.class, parameters);
+        CharSequence relativeUrl = urlFor(RegisterPage.class, parameters);
         UrlRenderer urlRenderer = getRequestCycle().getUrlRenderer();
         String fullUrl = urlRenderer.renderFullUrl(Url.parse(relativeUrl));
 

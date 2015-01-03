@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.pages;
+package org.apache.isis.viewer.wicket.ui.pages.accmngt;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -36,6 +36,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
 /**
  * Boilerplate, pick up our HTML and CSS.
@@ -71,7 +72,7 @@ public class AccountManagementPageAbstract extends WebPage {
     private String applicationJs;
 
     /**
-     * If set by {@link PageAbstract}.
+     * If set by {@link org.apache.isis.viewer.wicket.ui.pages.PageAbstract}.
      */
     protected static ExceptionModel getAndClearExceptionModelIfAny() {
         ExceptionModel exceptionModel = PageAbstract.EXCEPTION.get();

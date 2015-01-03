@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.wicket.ui.pages.register;
+package org.apache.isis.viewer.wicket.ui.pages.accmngt.register;
 
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -14,8 +14,8 @@ import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-import org.apache.isis.viewer.wicket.ui.pages.signup.AccountConfirmationMap;
-import org.apache.isis.viewer.wicket.ui.pages.signup.UsernameAvailableValidator;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.UsernameAvailableValidator;
 
 /**
  * A panel with a form for self-registration of a user
