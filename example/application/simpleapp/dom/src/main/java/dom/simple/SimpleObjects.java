@@ -24,10 +24,12 @@ import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 
-@DomainService(menuOrder = "10", repositoryFor = SimpleObject.class)
+@DomainService(repositoryFor = SimpleObject.class)
+@DomainServiceLayout(menuOrder = "10")
 public class SimpleObjects {
 
     //region > listAll (action)

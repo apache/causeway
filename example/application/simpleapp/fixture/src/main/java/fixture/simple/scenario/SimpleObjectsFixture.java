@@ -33,7 +33,7 @@ public class SimpleObjectsFixture extends FixtureScript {
     }
 
     @Override
-    protected void execute(ExecutionContext executionContext) {
+    protected void execute(final ExecutionContext executionContext) {
 
         executionContext.executeChild(this, new SimpleObjectsTearDownFixture());
 
