@@ -27,6 +27,7 @@ package org.apache.isis.applib.annotation;
 public enum LabelPosition {
     DEFAULT,
     LEFT,
+    RIGHT,
     TOP,
     NONE
 }

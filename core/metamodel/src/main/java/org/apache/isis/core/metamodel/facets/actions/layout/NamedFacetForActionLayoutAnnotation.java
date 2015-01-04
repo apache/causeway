@@ -35,8 +35,9 @@ public class NamedFacetForActionLayoutAnnotation extends NamedFacetAbstract {
         return named != null ? new NamedFacetForActionLayoutAnnotation(named, holder) : null;
     }
 
-    private NamedFacetForActionLayoutAnnotation(String value, FacetHolder holder) {
-        super(value, holder);
+    private NamedFacetForActionLayoutAnnotation(final String value, final FacetHolder holder) {
+
+        super(value, /*escaped*/ true, holder);
     }
 
 }

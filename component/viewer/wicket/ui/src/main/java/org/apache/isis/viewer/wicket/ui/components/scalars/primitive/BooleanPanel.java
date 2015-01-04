@@ -30,6 +30,7 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -80,6 +81,10 @@ public class BooleanPanel extends ScalarPanelAbstract {
         
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(checkBox));
         labelIfRegular.add(scalarName);
+        NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
+        if (namedFacet != null) {
+            scalarName.setEscapeModelStrings(namedFacet.escaped());
+        }
 
         final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentType());
 

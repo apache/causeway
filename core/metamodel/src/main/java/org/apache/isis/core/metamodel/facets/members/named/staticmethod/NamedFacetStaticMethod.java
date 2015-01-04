@@ -32,7 +32,7 @@ public class NamedFacetStaticMethod extends NamedFacetAbstract implements Impera
     private final Method method;
 
     public NamedFacetStaticMethod(final String value, final Method method, final FacetHolder holder) {
-        super(value, holder);
+        super(value, /*escaped*/ true, holder);
         this.method = method;
     }
 

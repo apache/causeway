@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 public class NamedFacetNone extends NamedFacetAbstract {
 
     public NamedFacetNone(final FacetHolder holder) {
-        super(null, holder);
+        super(null, /*escaped*/ true, holder);
     }
 
     @Override

@@ -32,11 +32,15 @@ public class NamedFacetForCollectionLayoutAnnotation extends NamedFacetAbstract 
             return null;
         }
         final String named = Strings.emptyToNull(collectionLayout.named());
-        return named != null ? new NamedFacetForCollectionLayoutAnnotation(named, holder) : null;
+        return named != null ? new NamedFacetForCollectionLayoutAnnotation(named, collectionLayout.namedEscaped(), holder) : null;
     }
 
-    private NamedFacetForCollectionLayoutAnnotation(String value, FacetHolder holder) {
-        super(value, holder);
+    private NamedFacetForCollectionLayoutAnnotation(
+        final String value,
+        final boolean escaped,
+        final FacetHolder holder) {
+
+        super(value, escaped, holder);
     }
 
 }

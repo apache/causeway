@@ -66,6 +66,11 @@ public @interface PropertyLayout {
     String named() default "";
 
     /**
+     * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
+     */
+    boolean namedEscaped() default true;
+
+    /**
      * For date properties (and parameters) only, instructs the viewer that the date should be rendered as one day
      * prior to the actually stored date.
      *

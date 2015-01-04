@@ -32,11 +32,15 @@ public class NamedFacetForParameterLayoutAnnotation extends NamedFacetAbstract {
             return null;
         }
         final String named = Strings.emptyToNull(parameterLayout.named());
-        return named != null ? new NamedFacetForParameterLayoutAnnotation(named, holder) : null;
+        return named != null ? new NamedFacetForParameterLayoutAnnotation(named, parameterLayout.namedEscaped(), holder) : null;
     }
 
-    private NamedFacetForParameterLayoutAnnotation(String value, FacetHolder holder) {
-        super(value, holder);
+    private NamedFacetForParameterLayoutAnnotation(
+        final String value,
+        final boolean escaped,
+        final FacetHolder holder) {
+
+        super(value, escaped, holder);
     }
 
 }
