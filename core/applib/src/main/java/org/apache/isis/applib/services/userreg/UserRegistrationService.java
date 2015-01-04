@@ -16,29 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.services.userreg;
 
-package org.apache.isis.viewer.wicket.model.models;
+import org.apache.isis.applib.annotation.Programmatic;
 
+public interface UserRegistrationService {
 
+    @Programmatic
+    boolean usernameExists(String username);
 
-/**
- * Enumerates the different types of pages that can be rendered.
- * 
- * <p>
- * Is used by {@link PageClassRegistry} to lookup the concrete page to render
- * different types of pages. This allows the large-scale structure of page
- * layout (eg headers, footers) to be altered.
- */
-public enum PageType {
-    SIGN_IN,
-    SIGN_UP,
-    SIGN_UP_VERIFY,
-    PASSWORD_RESET,
-    HOME, 
-    ABOUT, 
-    ENTITY, 
-    ACTION_PROMPT,
-    STANDALONE_COLLECTION,
-    VALUE,
-    VOID_RETURN;
+    @Programmatic
+    void registerUser(String username, String password, String emailAddress);
+
+    @Programmatic
+    boolean emailExists(String emailAddress);
+
+    @Programmatic
+    boolean updatePasswordByEmail(String emailAddress, String password);
 }

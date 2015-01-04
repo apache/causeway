@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <wicket:panel>
+            <form wicket:id="registerForm" role="form">
+                <div class="form-group" wicket:id="usernameFormGroup">
+                    <label wicket:for="username" class="control-label"><wicket:message key="usernameLabel"/></label>
+                    <input type="text" class="form-control" wicket:id="username" wicket:message="placeholder:usernamePlaceholder"/>
+                </div>
+
+                <div class="form-group" wicket:id="passwordFormGroup">
+                    <label wicket:for="password" class="control-label"><wicket:message key="passwordLabel"/></label>
+                    <input type="password" class="form-control" wicket:id="password" wicket:message="placeholder:passwordPlaceholder"/>
+                </div>
+
+                <div class="form-group" wicket:id="confirmPasswordFormGroup">
+                    <label wicket:for="confirmPassword" class="control-label"><wicket:message key="confirmPasswordLabel"/></label>
+                    <input type="password" class="form-control" wicket:id="confirmPassword" wicket:message="placeholder:confirmPasswordPlaceholder"/>
+                </div>
+
+                <div class="form-group">
+                    <label wicket:for="email"><wicket:message key="emailLabel"/></label>
+                    <input type="text" class="form-control" wicket:id="email" readonly tabindex="-1"/>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-sm"><wicket:message key="registerButtonLabel"/></button>
+                <button type="reset" class="btn btn-default btn-sm"><wicket:message key="resetButtonLabel"/></button>
+            </form>
+        </wicket:panel>
+    </body>
+</html>

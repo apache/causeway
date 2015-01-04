@@ -20,6 +20,7 @@
 package org.apache.isis.core.runtime.system.context;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.profiles.Localization;
@@ -37,6 +38,7 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -510,5 +512,47 @@ public abstract class IsisContext implements DebuggableWithTitle {
         debug.appendln("context ", this);
     }
 
+    /**
+     * A template method that executes a piece of code in a session.
+     * If there is an open session then it is reused, otherwise a temporary one
+     * is created.
+     *
+     * @param runnable The piece of code to run.
+     */
+    public static void doInSession(final Runnable runnable) {
+        doInSession(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                runnable.run();
+                return null;
+            }
+        });
+    }
 
+    /**
+     * A template method that executes a piece of code in a session.
+     * If there is an open session then it is reused, otherwise a temporary one
+     * is created.
+     *
+     * @param callable The piece of code to run.
+     * @return The result of the code execution.
+     */
+    public static <R> R doInSession(Callable<R> callable) {
+        boolean noSession = !inSession();
+        try {
+            if (noSession) {
+                openSession(new InitialisationSession());
+            }
+
+            return callable.call();
+        } catch (Exception x) {
+            throw new RuntimeException(
+                String.format("An error occurred while executing code in %s session", noSession ? "a temporary" : "a"),
+                x);
+        } finally {
+            if (noSession) {
+                closeSession();
+            }
+        }
+    }
 }

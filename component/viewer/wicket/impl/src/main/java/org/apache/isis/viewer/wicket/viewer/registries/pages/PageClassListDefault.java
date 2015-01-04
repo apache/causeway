@@ -31,6 +31,9 @@ import org.apache.isis.viewer.wicket.ui.pages.actionprompt.ActionPromptPage;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
@@ -47,6 +50,9 @@ public class PageClassListDefault implements PageClassList {
     @Override
     public void registerPages(final PageClassRegistrySpi pageRegistry) {
         pageRegistry.registerPage(PageType.SIGN_IN, getSignInPageClass());
+        pageRegistry.registerPage(PageType.SIGN_UP, getSignUpPageClass());
+        pageRegistry.registerPage(PageType.SIGN_UP_VERIFY, getSignUpVerifyPageClass());
+        pageRegistry.registerPage(PageType.PASSWORD_RESET, getPasswordResetPageClass());
         pageRegistry.registerPage(PageType.ABOUT, getAboutPageClass());
         pageRegistry.registerPage(PageType.ENTITY, getEntityPageClass());
         pageRegistry.registerPage(PageType.HOME, getHomePageClass());
@@ -96,6 +102,27 @@ public class PageClassListDefault implements PageClassList {
      */
     protected Class<? extends Page> getSignInPageClass() {
         return WicketSignInPage.class;
+    }
+
+    /**
+     * For subclassing if required.
+     */
+    protected Class<? extends Page> getSignUpPageClass() {
+        return RegistrationFormPage.class;
+    }
+
+    /**
+     * For subclassing if required.
+     */
+    protected Class<? extends Page> getSignUpVerifyPageClass() {
+        return RegisterPage.class;
+    }
+
+    /**
+     * For subclassing if required.
+     */
+    protected Class<? extends Page> getPasswordResetPageClass() {
+        return PasswordResetPage.class;
     }
 
     /**
