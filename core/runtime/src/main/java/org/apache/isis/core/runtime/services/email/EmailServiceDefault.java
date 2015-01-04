@@ -2,7 +2,6 @@ package org.apache.isis.core.runtime.services.email;
 
 import java.util.List;
 import java.util.Properties;
-import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import com.google.common.base.Strings;
 import org.apache.commons.mail.DefaultAuthenticator;
@@ -14,14 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.email.EmailService;
-import org.apache.isis.applib.services.userreg.events.EmailEventAbstract;
-import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
-import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-
-import static java.util.regex.Pattern.compile;
-import static java.util.regex.Pattern.quote;
 
 /**
  * A service that sends email notifications when specific events occur
@@ -32,21 +25,26 @@ public class EmailServiceDefault implements EmailService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmailServiceDefault.class);
 
-    private static final Pattern EMAIL_PATTERN = compile(quote("${email}"));
-    private static final Pattern CONFIRMATION_URL_PATTERN = compile(quote("${confirmationUrl}"));
-    private static final Pattern APPLICATION_NAME_PATTERN = compile(quote("${applicationName}"));
+    //region > constants
 
     private static final String ISIS_SERVICE_EMAIL_SENDER_ADDRESS = "isis.service.email.sender.address";
     private static final String ISIS_SERVICE_EMAIL_SENDER_PASSWORD = "isis.service.email.sender.password";
+
     private static final String ISIS_SERVICE_EMAIL_SENDER_HOSTNAME = "isis.service.email.sender.hostname";
     private static final String ISIS_SERVICE_EMAIL_SENDER_HOSTNAME_DEFAULT = "smtp.gmail.com";
+
     private static final String ISIS_SERVICE_EMAIL_PORT = "isis.service.email.port";
+    private static final int ISIS_SERVICE_EMAIL_PORT_DEFAULT = 587;
+
     private static final String ISIS_SERVICE_EMAIL_TLS_ENABLED = "isis.service.email.tls.enabled";
+    public static final boolean ISIS_SERVICE_EMAIL_TLS_ENABLED_DEFAULT = true;
 
     private String senderEmailAddress;
     private String senderEmailPassword;
     private Integer senderEmailPort;
+    //endregion
 
+    //region > init
     private boolean initialized;
 
     /**
@@ -62,12 +60,47 @@ public class EmailServiceDefault implements EmailService {
 
         senderEmailAddress = getSenderEmailAddress();
         senderEmailPassword = getSenderEmailPassword();
-
         senderEmailPort = getSenderEmailPort();
 
         initialized = true;
+
+        if(!isConfigured()) {
+            LOG.warn("NOT configured");
+        } else {
+            LOG.debug("configured");
+        }
     }
 
+    protected String getSenderEmailAddress() {
+        return getConfiguration().getString(ISIS_SERVICE_EMAIL_SENDER_ADDRESS);
+    }
+
+    protected String getSenderEmailPassword() {
+        return getConfiguration().getString(ISIS_SERVICE_EMAIL_SENDER_PASSWORD);
+    }
+
+    protected String getSenderEmailHostName() {
+        return getConfiguration().getString(ISIS_SERVICE_EMAIL_SENDER_HOSTNAME, ISIS_SERVICE_EMAIL_SENDER_HOSTNAME_DEFAULT);
+    }
+
+    protected Integer getSenderEmailPort() {
+        return getConfiguration().getInteger(ISIS_SERVICE_EMAIL_PORT, ISIS_SERVICE_EMAIL_PORT_DEFAULT);
+    }
+
+    protected Boolean getSenderEmailTlsEnabled() {
+        return getConfiguration().getBoolean(ISIS_SERVICE_EMAIL_TLS_ENABLED, ISIS_SERVICE_EMAIL_TLS_ENABLED_DEFAULT);
+    }
+    //endregion
+
+    //region > isConfigured
+
+    @Override
+    public boolean isConfigured() {
+        return !Strings.isNullOrEmpty(senderEmailAddress) && !Strings.isNullOrEmpty(senderEmailPassword);
+    }
+    //endregion
+
+    //region > send
 
     @Override
     public boolean send(final List<String> toList, final List<String> ccList, final List<String> bccList, final String subject, final String body) {
@@ -115,60 +148,20 @@ public class EmailServiceDefault implements EmailService {
 
         return true;
     }
+    //endregion
 
-    protected boolean notEmpty(final List<String> toList) {
+    //region > helper methods
+    private boolean notEmpty(final List<String> toList) {
         return toList != null && !toList.isEmpty();
     }
+    //endregion
 
-    private String replace(final String template, final EmailEventAbstract emailEvent) {
-        String message = template;
-        message = EMAIL_PATTERN.matcher(message).replaceFirst(emailEvent.getEmail());
-        message = CONFIRMATION_URL_PATTERN.matcher(message).replaceFirst(emailEvent.getConfirmationUrl());
-        message = APPLICATION_NAME_PATTERN.matcher(message).replaceAll(emailEvent.getApplicationName());
-        return message;
-    }
-
-    protected String buildSubject(final EmailEventAbstract emailEvent) {
-        String subject = "["+emailEvent.getApplicationName()+"]";
-        if (emailEvent instanceof EmailRegistrationEvent) {
-            subject += " Please confirm your identity";
-        } else if (emailEvent instanceof PasswordResetEvent) {
-            subject += " Password reset request";
-        }
-        return subject;
-    }
-
-    protected String getSenderEmailAddress() {
-        return getConfigurationPropertyElseThrow(ISIS_SERVICE_EMAIL_SENDER_ADDRESS);
-    }
-
-    protected String getSenderEmailPassword() {
-        return getConfigurationPropertyElseThrow(ISIS_SERVICE_EMAIL_SENDER_PASSWORD);
-    }
-
-    protected String getSenderEmailHostName() {
-        return getConfiguration().getString(ISIS_SERVICE_EMAIL_SENDER_HOSTNAME, ISIS_SERVICE_EMAIL_SENDER_HOSTNAME_DEFAULT);
-    }
-
-    protected Integer getSenderEmailPort() {
-        return getConfiguration().getInteger(ISIS_SERVICE_EMAIL_PORT, 587);
-    }
-
-    protected Boolean getSenderEmailTlsEnabled() {
-        return getConfiguration().getBoolean(ISIS_SERVICE_EMAIL_TLS_ENABLED, true);
-    }
-
+    //region > dependencies
     protected IsisConfiguration getConfiguration() {
         return IsisContext.getConfiguration();
     }
+    //endregion
 
-    private String getConfigurationPropertyElseThrow(final String configProperty) {
-        final String configuredValue = getConfiguration().getString(configProperty);
-        if(Strings.isNullOrEmpty(configuredValue)) {
-            throw new IllegalStateException(configProperty + " not specified");
-        }
-        return configuredValue;
-    }
 
 
 }

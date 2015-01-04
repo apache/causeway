@@ -17,8 +17,6 @@ import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.events.EmailEventAbstract;
 import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 
 import static java.util.regex.Pattern.compile;
 import static java.util.regex.Pattern.quote;
@@ -32,12 +30,17 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
 
     private static final Logger LOG = LoggerFactory.getLogger(EmailNotificationServiceDefault.class);
 
+    //region > constants
+
     private static final Pattern EMAIL_PATTERN = compile(quote("${email}"));
     private static final Pattern CONFIRMATION_URL_PATTERN = compile(quote("${confirmationUrl}"));
     private static final Pattern APPLICATION_NAME_PATTERN = compile(quote("${applicationName}"));
 
     private String passwordResetTemplate;
     private String emailVerificationTemplate;
+    //endregion
+
+    //region > init
 
     private boolean initialized;
 
@@ -67,25 +70,50 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         }
     }
 
+    //endregion
+
+    //region > isConfigured
+
+    @Override
+    public boolean isConfigured() {
+        return emailService != null && emailService.isConfigured();
+    }
+
+    //endregion
+
+    //region > send
+
 
     @Override
     public boolean send(final EmailRegistrationEvent emailRegistrationEvent) {
+        ensureConfigured();
         final String body = replace(emailVerificationTemplate, emailRegistrationEvent);
-        return send(emailRegistrationEvent, body);
+        return sendEmail(emailRegistrationEvent, body);
     }
 
     @Override
     public boolean send(final PasswordResetEvent passwordResetEvent) {
+        ensureConfigured();
         final String body = replace(passwordResetTemplate, passwordResetEvent);
-        return send(passwordResetEvent, body);
+        return sendEmail(passwordResetEvent, body);
     }
 
-    protected boolean send(final EmailEventAbstract emailEvent, final String body) {
+    //endregion
+
+    //region > helper methods for send(...)
+
+    private void ensureConfigured() {
+        if(!isConfigured()) {
+            throw new IllegalStateException("Not configured");
+        }
+    }
+
+    protected boolean sendEmail(final EmailEventAbstract emailEvent, final String body) {
 
         final String subject = buildSubject(emailEvent);
         final String to = emailEvent.getEmail();
 
-        return send(to, subject, body);
+        return sendEmail(to, subject, body);
     }
 
     protected String buildSubject(final EmailEventAbstract emailEvent) {
@@ -98,7 +126,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         return subject;
     }
 
-    protected boolean send(final String to, final String subject, final String body) {
+    protected boolean sendEmail(final String to, final String subject, final String body) {
 
         final List<String> toList = Collections.singletonList(to);
         final List<String> cc = Collections.emptyList();
@@ -114,11 +142,12 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         return message;
     }
 
-    protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
-    }
+    //endregion
+
+    //region > dependencies
 
     @Inject
     private EmailServiceDefault emailService;
+    //endregion
 
 }

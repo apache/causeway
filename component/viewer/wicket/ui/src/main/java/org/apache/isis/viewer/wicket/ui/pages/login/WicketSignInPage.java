@@ -48,19 +48,19 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
 
     protected SignInPanel addSignInPanel() {
         final boolean suppressRememberMe = getConfiguration().getBoolean("isis.viewer.wicket.suppressRememberMe", false);
-        final boolean suppressForgotPassword = getConfiguration().getBoolean("isis.viewer.wicket.suppressForgotPassword", false);
+        final boolean suppressPasswordResetLink = getConfiguration().getBoolean("isis.viewer.wicket.suppressPasswordReset", false);
         final boolean clearOriginalDestination = getConfiguration().getBoolean("isis.viewer.wicket.clearOriginalDestination", false);
         final boolean rememberMe = !suppressRememberMe;
-        final boolean forgotPassword = !suppressForgotPassword;
+        final boolean passwordReset = !suppressPasswordResetLink;
         final boolean continueToOriginalDestination = !clearOriginalDestination;
-        return addSignInPanel(rememberMe, forgotPassword, continueToOriginalDestination);
+        return addSignInPanel(rememberMe, passwordReset, continueToOriginalDestination);
     }
 
     private SignInPanel addSignInPanel(
             final boolean rememberMe,
-            final boolean forgotPassword,
+            final boolean passwordResetLink,
             final boolean continueToOriginalDestination) {
-        final SignInPanel signInPanel = new IsisSignInPanel("signInPanel", rememberMe, forgotPassword, continueToOriginalDestination);
+        final SignInPanel signInPanel = new IsisSignInPanel("signInPanel", rememberMe, passwordResetLink, continueToOriginalDestination);
         add(signInPanel);
         return signInPanel;
     }

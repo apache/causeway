@@ -20,4 +20,10 @@ public interface EmailNotificationService extends Serializable {
 
     @Programmatic
     boolean send(PasswordResetEvent emailRegistrationEvent);
+
+    /**
+     * Whether this service has been configured and thus available for use.
+     */
+    @Programmatic
+    boolean isConfigured();
 }

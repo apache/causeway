@@ -16,4 +16,11 @@ public interface EmailService extends Serializable {
 
     @Programmatic
     boolean send(List<String> to, List<String> cc, List<String> bcc, String subject, String body);
+
+    /**
+     * Whether this service has been configured and thus available for use.
+     */
+    @Programmatic
+    boolean isConfigured();
+
 }
