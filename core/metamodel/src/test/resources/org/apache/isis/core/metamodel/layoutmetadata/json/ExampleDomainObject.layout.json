@@ -37,7 +37,9 @@
                             },
                             notYetCompleted: {}
                         },
-			            named: { value: "Done" },
+                        propertyLayout: {
+                            named: "the name of complete property"
+                        },
 			            describedAs: {
 			                value: "Whether this todo item has been completed"
 			            },
@@ -55,6 +57,9 @@
                         hidden: {
                             where: ALL_TABLES,
                             when: ALWAYS 
+                        },
+                        propertyLayout: {
+                            namedEscaped: false
                         }
                     }
                 }
@@ -129,4 +134,3 @@
         }
     }
 }
- 

@@ -28,7 +28,7 @@ public class PropertyLayoutFacetRepr {
     public LabelPosition labelPosition;
     public int multiLine;
     public String named;
-    public boolean namedEscaped;
+    public boolean namedEscaped = true;
     public boolean renderedAsDayBefore;
     public int typicalLength;
 
