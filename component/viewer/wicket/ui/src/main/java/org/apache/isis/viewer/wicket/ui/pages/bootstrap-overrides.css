@@ -586,6 +586,14 @@ div.label-left .choicesPlaceholder {
     vertical-align: -webkit-baseline-middle;
     vertical-align: middle;
 }
+
+div.label-right .scalarValueWrapper {
+    padding-left: 28.5%;
+}
+
+div.label-right .scalarValueWrapper .control-label{
+    vertical-align: sub;
+}
 /* Labels on the left/top/none END */
 
 

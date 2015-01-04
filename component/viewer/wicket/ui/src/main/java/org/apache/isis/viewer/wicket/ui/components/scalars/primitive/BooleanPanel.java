@@ -29,8 +29,10 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.propparam.layout.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -174,4 +176,15 @@ public class BooleanPanel extends ScalarPanelAbstract {
         checkBox.add(behavior);
     }
 
+    @Override
+    public String getVariation() {
+        String variation;
+        final LabelAtFacet facet = getModel().getFacet(LabelAtFacet.class);
+        if (facet != null && LabelPosition.RIGHT == facet.label()) {
+            variation = "labelRightPosition";
+        } else {
+            variation = super.getVariation();
+        }
+        return variation;
+    }
 }

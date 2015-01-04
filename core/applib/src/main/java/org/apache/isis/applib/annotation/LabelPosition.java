@@ -27,6 +27,11 @@ package org.apache.isis.applib.annotation;
 public enum LabelPosition {
     DEFAULT,
     LEFT,
+
+    /**
+     * Right position of the label for Boolean properties.
+     * <strong>Not supported</strong> for now for other types.
+     */
     RIGHT,
     TOP,
     NONE
