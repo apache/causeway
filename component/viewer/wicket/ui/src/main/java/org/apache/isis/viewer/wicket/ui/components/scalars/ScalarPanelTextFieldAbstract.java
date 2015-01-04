@@ -34,6 +34,7 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -100,6 +101,10 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         scalarTypeContainer.add(labelIfRegular);
 
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(textField));
+        NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
+        if (namedFacet != null) {
+            scalarName.setEscapeModelStrings(namedFacet.escaped());
+        }
 
         // find the links...
 

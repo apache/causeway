@@ -33,6 +33,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -81,6 +82,10 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(select2Field));
         labelIfRegular.addOrReplace(scalarName);
+        NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
+        if (namedFacet != null) {
+            scalarName.setEscapeModelStrings(namedFacet.escaped());
+        }
 
         // find the links...
         final List<LinkAndLabel> entityActions = EntityActionUtil.getEntityActionLinksForAssociation(this.scalarModel, getDeploymentType());
