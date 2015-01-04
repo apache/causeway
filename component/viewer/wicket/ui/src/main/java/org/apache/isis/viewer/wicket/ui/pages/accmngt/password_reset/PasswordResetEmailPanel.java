@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import javax.inject.Inject;
+import com.google.inject.name.Named;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -76,7 +77,8 @@ public class PasswordResetEmailPanel extends Panel {
 
                 String confirmationUrl = createUrl(email);
 
-                boolean emailSent = emailService.send(new PasswordResetEvent(email, confirmationUrl));
+                final PasswordResetEvent passwordResetEvent = new PasswordResetEvent(email, confirmationUrl, applicationName);
+                boolean emailSent = emailService.send(passwordResetEvent);
                 if (emailSent) {
                     Map<String, String> map = new HashMap<>();
                     map.put("email", email);
@@ -109,4 +111,9 @@ public class PasswordResetEmailPanel extends Panel {
 
     @Inject
     private EmailNotificationService emailService;
+
+    @com.google.inject.Inject
+    @Named("applicationName")
+    private String applicationName;
+
 }

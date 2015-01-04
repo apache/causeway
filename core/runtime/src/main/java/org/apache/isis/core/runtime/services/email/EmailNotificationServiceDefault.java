@@ -8,7 +8,6 @@ import javax.annotation.PostConstruct;
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import com.google.common.io.Resources;
-import com.google.inject.name.Named;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
@@ -93,7 +92,13 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
 
     protected boolean send(final EmailEventAbstract emailEvent, final String body) {
 
-        boolean mailSent = true;
+        final String subject = buildSubject(emailEvent);
+        final String to = emailEvent.getEmail();
+
+        return send(subject, to, body);
+    }
+
+    private boolean send(final String subject, final String to, final String body) {
         try {
 
             final Email email = new HtmlEmail();
@@ -115,36 +120,34 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
 
             email.setFrom(senderEmailAddress);
 
-            email.setSubject(calculateSubject(emailEvent));
+            email.setSubject(subject);
             email.setMsg(body);
 
-            email.addTo(emailEvent.getEmail());
+            email.addTo(to);
             email.send();
 
         } catch (EmailException ex) {
             LOG.error("An error occurred while trying to send an email about user email verification", ex);
-            mailSent = false;
+            return false;
         }
 
-        return mailSent;
+        return true;
     }
 
     private String replace(final String template, final EmailEventAbstract emailEvent) {
         String message = template;
         message = EMAIL_PATTERN.matcher(message).replaceFirst(emailEvent.getEmail());
         message = CONFIRMATION_URL_PATTERN.matcher(message).replaceFirst(emailEvent.getConfirmationUrl());
-        message = APPLICATION_NAME_PATTERN.matcher(message).replaceAll(applicationName);
+        message = APPLICATION_NAME_PATTERN.matcher(message).replaceAll(emailEvent.getApplicationName());
         return message;
     }
 
-    protected String calculateSubject(Object event) {
-        String subject;
-        if (event instanceof EmailRegistrationEvent) {
-            subject = "["+applicationName+"] Please confirm your identity";
-        } else if (event instanceof PasswordResetEvent) {
-            subject = "["+applicationName+"] Password reset request";
-        } else {
-            subject = "[" + applicationName + "]";
+    protected String buildSubject(final EmailEventAbstract emailEvent) {
+        String subject = "["+emailEvent.getApplicationName()+"]";
+        if (emailEvent instanceof EmailRegistrationEvent) {
+            subject += " Please confirm your identity";
+        } else if (emailEvent instanceof PasswordResetEvent) {
+            subject += " Password reset request";
         }
         return subject;
     }
@@ -182,7 +185,4 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
     }
 
 
-    @com.google.inject.Inject
-    @Named("applicationName")
-    protected String applicationName;
 }

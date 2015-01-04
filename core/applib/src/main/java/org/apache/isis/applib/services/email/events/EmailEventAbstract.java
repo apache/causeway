@@ -7,12 +7,15 @@ public abstract class EmailEventAbstract {
 
     private final String email;
     private final String confirmationUrl;
+    private final String applicationName;
 
     public EmailEventAbstract(
             final String email,
-            final String confirmationUrl) {
+            final String confirmationUrl,
+            final String applicationName) {
         this.email = email;
         this.confirmationUrl = confirmationUrl;
+        this.applicationName = applicationName;
     }
 
     public String getEmail() {
@@ -23,4 +26,7 @@ public abstract class EmailEventAbstract {
         return confirmationUrl;
     }
 
+    public String getApplicationName() {
+        return applicationName;
+    }
 }
