@@ -20,14 +20,12 @@
 package org.apache.isis.core.metamodel.facets.properties.layout.annotation;
 
 import java.lang.reflect.Method;
-import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.properties.layout.LabelAtFacetForPropertyLayoutAnnotation;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.properties.layout.NamedFacetForPropertyLayoutAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.layout.PropertyLayoutFactory;
-import org.apache.isis.core.metamodel.facets.propparam.layout.LabelAtFacet;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -35,14 +33,14 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-public class LabelAtFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
+public class NamedFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
-    public void testPropertyLayoutAnnotationPickedUp() {
+    public void testPropertyLayoutAnnotationNamed() {
         final PropertyLayoutFactory facetFactory = new PropertyLayoutFactory();
 
         class Customer {
             @SuppressWarnings("unused")
-            @PropertyLayout(labelPosition = LabelPosition.LEFT)
+            @PropertyLayout(named = "1st name")
             public String getFirstName() {
                 return null;
             }
@@ -51,10 +49,32 @@ public class LabelAtFacetForPropertyLayoutAnnotationFactoryTest extends Abstract
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(LabelAtFacet.class);
+        final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
         assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(LabelAtFacetForPropertyLayoutAnnotation.class)));
-        final LabelAtFacetForPropertyLayoutAnnotation layoutAnnotation = (LabelAtFacetForPropertyLayoutAnnotation) facet;
-        assertThat(layoutAnnotation.label(), is(equalTo(LabelPosition.LEFT)));
+        assertThat(facet, is(instanceOf(NamedFacetForPropertyLayoutAnnotation.class)));
+        assertThat(facet.value(), is(equalTo("1st name")));
+        assertThat(facet.escaped(), is(true));
     }
+
+    public void testPropertyLayoutAnnotationNamedEscapedFalse() {
+        final PropertyLayoutFactory facetFactory = new PropertyLayoutFactory();
+
+        class Customer {
+            @SuppressWarnings("unused")
+            @PropertyLayout(named = "1st name", namedEscaped = false)
+            public String getFirstName() {
+                return null;
+            }
+        }
+        final Method method = findMethod(Customer.class, "getFirstName");
+
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
+
+        final NamedFacet facet = facetedMethod.getFacet(NamedFacet.class);
+        assertThat(facet, is(notNullValue()));
+        assertThat(facet, is(instanceOf(NamedFacetForPropertyLayoutAnnotation.class)));
+        assertThat(facet.value(), is(equalTo("1st name")));
+        assertThat(facet.escaped(), is(false));
+    }
+
 }

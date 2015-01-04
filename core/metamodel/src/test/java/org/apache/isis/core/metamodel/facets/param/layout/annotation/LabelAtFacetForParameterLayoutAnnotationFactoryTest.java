@@ -29,6 +29,11 @@ import org.apache.isis.core.metamodel.facets.param.layout.LabelAtFacetForParamet
 import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFactory;
 import org.apache.isis.core.metamodel.facets.propparam.layout.LabelAtFacet;
 
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 public class LabelAtFacetForParameterLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     public void testParameterLayoutAnnotationPickedUp() {
@@ -44,9 +49,9 @@ public class LabelAtFacetForParameterLayoutAnnotationFactoryTest extends Abstrac
         facetFactory.processParams(new FacetFactory.ProcessParameterContext(method, 0, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(LabelAtFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof LabelAtFacetForParameterLayoutAnnotation);
+        assertThat(facet, is(notNullValue()));
+        assertThat(facet, is(instanceOf(LabelAtFacetForParameterLayoutAnnotation.class)));
         final LabelAtFacetForParameterLayoutAnnotation layoutAnnotation = (LabelAtFacetForParameterLayoutAnnotation) facet;
-        assertEquals(LabelPosition.LEFT, layoutAnnotation.label());
+        assertThat(layoutAnnotation.label(), is(LabelPosition.LEFT));
     }
 }
