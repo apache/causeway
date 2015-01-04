@@ -1,4 +1,4 @@
-package org.apache.isis.applib.services.email.events;
+package org.apache.isis.applib.services.userreg.events;
 
 /**
  * An event send to all services interested in user registration

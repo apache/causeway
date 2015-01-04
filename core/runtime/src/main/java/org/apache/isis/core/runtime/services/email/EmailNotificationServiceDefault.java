@@ -2,24 +2,21 @@ package org.apache.isis.core.runtime.services.email;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Properties;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import com.google.common.base.Charsets;
-import com.google.common.base.Strings;
 import com.google.common.io.Resources;
-import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.Email;
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.email.EmailNotificationService;
-import org.apache.isis.applib.services.email.events.EmailEventAbstract;
-import org.apache.isis.applib.services.email.events.EmailRegistrationEvent;
-import org.apache.isis.applib.services.email.events.PasswordResetEvent;
+import org.apache.isis.applib.services.userreg.EmailNotificationService;
+import org.apache.isis.applib.services.userreg.events.EmailEventAbstract;
+import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
+import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
@@ -29,6 +26,7 @@ import static java.util.regex.Pattern.quote;
 /**
  * A service that sends email notifications when specific events occur
  */
+@com.google.inject.Singleton // necessary because is registered in and injected by google guice
 @DomainService
 public class EmailNotificationServiceDefault implements EmailNotificationService {
 
@@ -38,19 +36,10 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
     private static final Pattern CONFIRMATION_URL_PATTERN = compile(quote("${confirmationUrl}"));
     private static final Pattern APPLICATION_NAME_PATTERN = compile(quote("${applicationName}"));
 
-    private static final String ISIS_NOTIFICATION_EMAIL_SENDER_ADDRESS = "isis.notification.email.sender.address";
-    private static final String ISIS_NOTIFICATION_EMAIL_SENDER_PASSWORD = "isis.notification.email.sender.password";
-    private static final String ISIS_NOTIFICATION_EMAIL_SENDER_HOSTNAME = "isis.notification.email.sender.hostname";
-    private static final String ISIS_NOTIFICATION_EMAIL_SENDER_HOSTNAME_DEFAULT = "smtp.gmail.com";
-    private static final String ISIS_NOTIFICATION_EMAIL_PORT = "isis.notification.email.port";
-    private static final String ISIS_NOTIFICATION_EMAIL_TLS_ENABLED = "isis.notification.email.tls.enabled";
-
     private String passwordResetTemplate;
     private String emailVerificationTemplate;
-    private String senderEmailAddress;
-    private String senderEmailPassword;
-    private Integer senderEmailPort;
 
+    private boolean initialized;
 
     /**
      * Loads responsive email templates borrowed from http://zurb.com/ink/templates.php (Basic)
@@ -59,13 +48,14 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
     @Programmatic
     public void init() {
 
+        if(initialized) {
+            return;
+        }
+
         emailVerificationTemplate = loadResource("EmailVerificationTemplate.html");
         passwordResetTemplate = loadResource("PasswordResetTemplate.html");
 
-        senderEmailAddress = getSenderEmailAddress();
-        senderEmailPassword = getSenderEmailPassword();
-
-        senderEmailPort = getSenderEmailPort();
+        initialized = true;
     }
 
     protected String loadResource(final String resourceName) {
@@ -95,51 +85,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         final String subject = buildSubject(emailEvent);
         final String to = emailEvent.getEmail();
 
-        return send(subject, to, body);
-    }
-
-    private boolean send(final String subject, final String to, final String body) {
-        try {
-
-            final Email email = new HtmlEmail();
-            email.setAuthenticator(new DefaultAuthenticator(senderEmailAddress, senderEmailPassword));
-            email.setHostName(getSenderEmailHostName());
-            email.setSmtpPort(senderEmailPort);
-            email.setStartTLSEnabled(getSenderEmailTlsEnabled());
-
-            final Properties properties = email.getMailSession().getProperties();
-
-            // TODO ISIS-987: check whether all these are required and extract as configuration settings
-            properties.put("mail.smtps.auth", "true");
-            properties.put("mail.debug", "true");
-            properties.put("mail.smtps.port", "" + senderEmailPort);
-            properties.put("mail.smtps.socketFactory.port", "" + senderEmailPort);
-            properties.put("mail.smtps.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-            properties.put("mail.smtps.socketFactory.fallback", "false");
-            properties.put("mail.smtp.starttls.enable", "" + getSenderEmailTlsEnabled());
-
-            email.setFrom(senderEmailAddress);
-
-            email.setSubject(subject);
-            email.setMsg(body);
-
-            email.addTo(to);
-            email.send();
-
-        } catch (EmailException ex) {
-            LOG.error("An error occurred while trying to send an email about user email verification", ex);
-            return false;
-        }
-
-        return true;
-    }
-
-    private String replace(final String template, final EmailEventAbstract emailEvent) {
-        String message = template;
-        message = EMAIL_PATTERN.matcher(message).replaceFirst(emailEvent.getEmail());
-        message = CONFIRMATION_URL_PATTERN.matcher(message).replaceFirst(emailEvent.getConfirmationUrl());
-        message = APPLICATION_NAME_PATTERN.matcher(message).replaceAll(emailEvent.getApplicationName());
-        return message;
+        return send(to, subject, body);
     }
 
     protected String buildSubject(final EmailEventAbstract emailEvent) {
@@ -152,37 +98,27 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         return subject;
     }
 
-    protected String getSenderEmailAddress() {
-        return getConfigurationPropertyElseThrow(ISIS_NOTIFICATION_EMAIL_SENDER_ADDRESS);
+    protected boolean send(final String to, final String subject, final String body) {
+
+        final List<String> toList = Collections.singletonList(to);
+        final List<String> cc = Collections.emptyList();
+        final List<String> bcc = Collections.emptyList();
+        return emailService.send(toList, cc, bcc, subject, body);
     }
 
-    protected String getSenderEmailPassword() {
-        return getConfigurationPropertyElseThrow(ISIS_NOTIFICATION_EMAIL_SENDER_PASSWORD);
-    }
-
-    protected String getSenderEmailHostName() {
-        return getConfiguration().getString(ISIS_NOTIFICATION_EMAIL_SENDER_HOSTNAME, ISIS_NOTIFICATION_EMAIL_SENDER_HOSTNAME_DEFAULT);
-    }
-
-    protected Integer getSenderEmailPort() {
-        return getConfiguration().getInteger(ISIS_NOTIFICATION_EMAIL_PORT, 587);
-    }
-
-    protected Boolean getSenderEmailTlsEnabled() {
-        return getConfiguration().getBoolean(ISIS_NOTIFICATION_EMAIL_TLS_ENABLED, true);
+    protected String replace(final String template, final EmailEventAbstract emailEvent) {
+        String message = template;
+        message = EMAIL_PATTERN.matcher(message).replaceFirst(emailEvent.getEmail());
+        message = CONFIRMATION_URL_PATTERN.matcher(message).replaceFirst(emailEvent.getConfirmationUrl());
+        message = APPLICATION_NAME_PATTERN.matcher(message).replaceAll(emailEvent.getApplicationName());
+        return message;
     }
 
     protected IsisConfiguration getConfiguration() {
         return IsisContext.getConfiguration();
     }
 
-    private String getConfigurationPropertyElseThrow(final String configProperty) {
-        final String configuredValue = getConfiguration().getString(configProperty);
-        if(Strings.isNullOrEmpty(configuredValue)) {
-            throw new IllegalStateException(configProperty + " not specified");
-        }
-        return configuredValue;
-    }
-
+    @Inject
+    private EmailServiceDefault emailService;
 
 }

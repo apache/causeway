@@ -35,8 +35,9 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.UrlRenderer;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.apache.isis.applib.services.email.EmailNotificationService;
-import org.apache.isis.applib.services.email.events.PasswordResetEvent;
+import org.apache.isis.applib.services.email.EmailService;
+import org.apache.isis.applib.services.userreg.EmailNotificationService;
+import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.EmailAvailableValidator;
@@ -77,8 +78,17 @@ public class PasswordResetEmailPanel extends Panel {
 
                 String confirmationUrl = createUrl(email);
 
+                /**
+                 * We have to init() the services here because the Isis runtime is not available to us
+                 * (guice will have instantiated a new instance of the service).
+                 *
+                 * We do it this way just so that the programming model for the EmailService is similar to regular Isis-managed services.
+                 */
+                emailNotificationService.init();
+                emailService.init();
+
                 final PasswordResetEvent passwordResetEvent = new PasswordResetEvent(email, confirmationUrl, applicationName);
-                boolean emailSent = emailService.send(passwordResetEvent);
+                boolean emailSent = emailNotificationService.send(passwordResetEvent);
                 if (emailSent) {
                     Map<String, String> map = new HashMap<>();
                     map.put("email", email);
@@ -110,7 +120,9 @@ public class PasswordResetEmailPanel extends Panel {
     }
 
     @Inject
-    private EmailNotificationService emailService;
+    private EmailNotificationService emailNotificationService;
+    @Inject
+    private EmailService emailService;
 
     @com.google.inject.Inject
     @Named("applicationName")

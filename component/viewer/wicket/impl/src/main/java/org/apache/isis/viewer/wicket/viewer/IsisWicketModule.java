@@ -22,9 +22,10 @@ package org.apache.isis.viewer.wicket.viewer;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.google.inject.util.Providers;
-
-import org.apache.isis.applib.services.email.EmailNotificationService;
+import org.apache.isis.applib.services.email.EmailService;
+import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.core.runtime.services.email.EmailNotificationServiceDefault;
+import org.apache.isis.core.runtime.services.email.EmailServiceDefault;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -70,7 +71,13 @@ public class IsisWicketModule extends AbstractModule {
         bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarDefault.class);
         bind(ImageResourceCache.class).to(ImageResourceCacheClassPath.class);
         bind(WicketViewerSettings.class).to(WicketViewerSettingsDefault.class);
-        bind(EmailNotificationService.class).to(EmailNotificationServiceDefault.class);
+
+        // these services need to be bound because they injected directly into
+        // Wicket panels outside of the Isis runtime.
+        bind(EmailService.class)
+                .to(EmailServiceDefault.class);
+        bind(EmailNotificationService.class)
+                .to(EmailNotificationServiceDefault.class);
 
         bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Apache Isis Wicket Viewer");
         bind(String.class).annotatedWith(Names.named("applicationCss")).toProvider(Providers.of((String)null));

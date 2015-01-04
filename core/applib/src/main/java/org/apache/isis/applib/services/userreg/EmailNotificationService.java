@@ -1,10 +1,10 @@
-package org.apache.isis.applib.services.email;
+package org.apache.isis.applib.services.userreg;
 
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.email.events.EmailRegistrationEvent;
-import org.apache.isis.applib.services.email.events.PasswordResetEvent;
+import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
+import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 
 /**
  * TODO ISIS-987 Javadoc
