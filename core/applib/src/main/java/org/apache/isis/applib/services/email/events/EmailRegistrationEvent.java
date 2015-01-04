@@ -5,16 +5,10 @@ package org.apache.isis.applib.services.email.events;
  */
 public class EmailRegistrationEvent extends EmailEventAbstract {
     
-    private final String confirmationUrl;
-
     public EmailRegistrationEvent(
         final String email,
         final String confirmationUrl) {
-        super(email);
-        this.confirmationUrl = confirmationUrl;
+        super(email, confirmationUrl);
     }
 
-    public String getConfirmationUrl() {
-        return confirmationUrl;
-    }
 }

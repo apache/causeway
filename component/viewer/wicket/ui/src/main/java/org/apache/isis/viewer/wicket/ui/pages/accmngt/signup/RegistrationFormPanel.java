@@ -79,6 +79,14 @@ public class RegistrationFormPanel extends Panel {
                 String email = emailField.getModelObject();
                 String confirmationUrl = createUrl(email);
 
+                /**
+                 * We have to init() the service here because the Isis runtime is not available to us
+                 * (guice will have instantiated a new instance of the service).
+                 *
+                 * We do it this way just so that the programming model for the EmailService is similar to regular Isis-managed services.
+                 */
+                emailService.init();
+
                 boolean emailSent = emailService.send(new EmailRegistrationEvent(email, confirmationUrl));
                 if (emailSent) {
                     Map<String, String> map = new HashMap<>();
