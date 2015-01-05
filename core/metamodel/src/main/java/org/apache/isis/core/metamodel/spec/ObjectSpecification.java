@@ -199,6 +199,15 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      */
     String getIconName(ObjectAdapter object);
 
+    /**
+     * Returns the CSS class name to use for the specified object.
+     *
+     * <p>
+     * Corresponds to the {@link org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet#value()} value}
+     * returned by the {@link org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet}.
+     */
+    String getCssClass(ObjectAdapter object);
+
     boolean isAbstract();
 
     // //////////////////////////////////////////////////////////////

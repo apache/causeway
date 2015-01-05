@@ -210,6 +210,11 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
+    public String getCssClass(final ObjectAdapter reference) {
+        return null;
+    }
+
+    @Override
     public ObjectAction getObjectAction(final ActionType type, final String name, final List<ObjectSpecification> parameters) {
         if (action != null && action.getId().equals(name)) {
             return action;

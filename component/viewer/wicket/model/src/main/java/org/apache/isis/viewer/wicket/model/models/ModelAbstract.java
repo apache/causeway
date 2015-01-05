@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import java.util.List;
 import java.util.Map;
 import com.google.common.collect.Maps;
 import org.apache.wicket.Component;
@@ -27,7 +26,6 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.util.string.PrependingStringBuffer;
 import org.apache.wicket.util.string.Strings;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
