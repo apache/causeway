@@ -71,45 +71,50 @@ public class IsisSignInPanel extends SignInPanel {
     protected void onInitialize() {
         super.onInitialize();
 
-        addPasswordResetLink("passwdResetLink");
-        addSignUpLink("signUpLink");
+        final Component passwordResetLink = addPasswordResetLink("passwdResetLink");
+        final Component signUpLink = addSignUpLink("signUpLink");
+
+        setVisibilityAllowedBasedOnAvailableServices(signUpLink, passwordResetLink);
 
         addNotificationPanel("feedback");
     }
 
-    private void addPasswordResetLink(final String id) {
-        final Class < ?extends Page> passwordResetPageClass = pageClassRegistry.getPageClass(PageType.PASSWORD_RESET);
+    private BookmarkablePageLink<Void> addPasswordResetLink(final String id) {
+        final Class <? extends Page> passwordResetPageClass = pageClassRegistry.getPageClass(PageType.PASSWORD_RESET);
         final BookmarkablePageLink<Void> passwordResetLink =
                 new BookmarkablePageLink<>(id, passwordResetPageClass);
 
-        setVisibilityAllowedBasedOnAvailableServices(passwordResetLink);
-
-        // in addition, don't show password reset link has been suppressed.
         if(!this.passwordResetLink) {
             passwordResetLink.setVisibilityAllowed(false);
         }
 
         getSignInForm().addOrReplace(passwordResetLink);
+        return passwordResetLink;
     }
 
-    private void addSignUpLink(final String id) {
+    private BookmarkablePageLink<Void> addSignUpLink(final String id) {
         final Class<? extends Page> signUpPageClass = pageClassRegistry.getPageClass(PageType.SIGN_UP);
         final BookmarkablePageLink<Void> signUpLink = new BookmarkablePageLink<>(id, signUpPageClass);
-        setVisibilityAllowedBasedOnAvailableServices(signUpLink);
         getSignInForm().addOrReplace(signUpLink);
+        return signUpLink;
     }
 
     private void addNotificationPanel(final String id) {
         addOrReplace(new NotificationPanel(id));
     }
 
-    private void setVisibilityAllowedBasedOnAvailableServices(final Component component) {
+    private void setVisibilityAllowedBasedOnAvailableServices(final Component... components) {
         IsisContext.doInSession(new Runnable() {
             @Override
             public void run() {
                 final UserRegistrationService userRegistrationService = lookupService(UserRegistrationService.class);
                 final EmailNotificationService emailNotificationService = lookupService(EmailNotificationService.class);
-                component.setVisibilityAllowed(userRegistrationService != null && emailNotificationService.isConfigured());
+                final boolean visibilityAllowed = userRegistrationService != null && emailNotificationService.isConfigured();
+                for (final Component component: components) {
+                    if(component.isVisibilityAllowed()) {
+                        component.setVisibilityAllowed(visibilityAllowed);
+                    }
+                }
             }
         });
     }
