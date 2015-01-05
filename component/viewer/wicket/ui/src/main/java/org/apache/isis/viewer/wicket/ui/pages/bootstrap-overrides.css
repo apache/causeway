@@ -182,6 +182,7 @@ body {
 .collectionContentsAsAjaxTablePanel table.contents tbody .togglebox-column {
     width: 2%;
 }
+.collectionContentsAsAjaxTablePanel table.contents thead .title-column,
 .collectionContentsAsAjaxTablePanel table.contents tbody .title-column {
     text-align: center;
     width: 3%;
