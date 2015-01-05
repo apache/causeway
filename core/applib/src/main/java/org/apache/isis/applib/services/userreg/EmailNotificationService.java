@@ -16,10 +16,10 @@ public interface EmailNotificationService extends Serializable {
     public void init() ;
 
     @Programmatic
-    boolean send(EmailRegistrationEvent emailRegistrationEvent);
+    boolean send(EmailRegistrationEvent ev);
 
     @Programmatic
-    boolean send(PasswordResetEvent emailRegistrationEvent);
+    boolean send(PasswordResetEvent ev);
 
     /**
      * Whether this service has been configured and thus available for use.
