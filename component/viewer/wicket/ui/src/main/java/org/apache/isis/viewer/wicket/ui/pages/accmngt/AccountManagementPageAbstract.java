@@ -51,6 +51,12 @@ public class AccountManagementPageAbstract extends WebPage {
     private static final String ID_EXCEPTION_STACK_TRACE = "exceptionStackTrace";
 
     /**
+     * The name of a special cookie that is used as a temporary container for
+     * stateless session scoped success feedback messages.
+     */
+    public static final String FEEDBACK_COOKIE_NAME = "isis.feedback.success";
+
+    /**
      * {@link com.google.inject.Inject}ed when {@link #init() initialized}.
      */
     @Inject

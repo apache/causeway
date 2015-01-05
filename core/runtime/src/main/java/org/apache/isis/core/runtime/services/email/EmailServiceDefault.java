@@ -37,7 +37,7 @@ public class EmailServiceDefault implements EmailService {
     private static final int ISIS_SERVICE_EMAIL_PORT_DEFAULT = 587;
 
     private static final String ISIS_SERVICE_EMAIL_TLS_ENABLED = "isis.service.email.tls.enabled";
-    public static final boolean ISIS_SERVICE_EMAIL_TLS_ENABLED_DEFAULT = true;
+    private static final boolean ISIS_SERVICE_EMAIL_TLS_ENABLED_DEFAULT = true;
 
     private String senderEmailAddress;
     private String senderEmailPassword;

@@ -71,12 +71,12 @@ public class IsisSignInPanel extends SignInPanel {
     protected void onInitialize() {
         super.onInitialize();
 
+        addOrReplace(new NotificationPanel("feedback"));
+
         final Component passwordResetLink = addPasswordResetLink("passwdResetLink");
         final Component signUpLink = addSignUpLink("signUpLink");
 
         setVisibilityAllowedBasedOnAvailableServices(signUpLink, passwordResetLink);
-
-        addNotificationPanel("feedback");
     }
 
     private BookmarkablePageLink<Void> addPasswordResetLink(final String id) {
@@ -97,10 +97,6 @@ public class IsisSignInPanel extends SignInPanel {
         final BookmarkablePageLink<Void> signUpLink = new BookmarkablePageLink<>(id, signUpPageClass);
         getSignInForm().addOrReplace(signUpLink);
         return signUpLink;
-    }
-
-    private void addNotificationPanel(final String id) {
-        addOrReplace(new NotificationPanel(id));
     }
 
     private void setVisibilityAllowedBasedOnAvailableServices(final Component... components) {

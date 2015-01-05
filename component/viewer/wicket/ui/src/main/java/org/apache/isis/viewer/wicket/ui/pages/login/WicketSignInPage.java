@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.ui.pages.login;
 
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.cookies.CookieUtils;
+import org.apache.wicket.util.string.Strings;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 
@@ -44,6 +46,22 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
         super.onInitialize();
 
         addSignInPanel();
+
+        checkForSuccessFeedback();
+    }
+
+    /**
+     * Checks for a cookie with name {@value #FEEDBACK_COOKIE_NAME} that is
+     * used as a temporary container for stateless session scoped success feedback
+     * messages.
+     */
+    private void checkForSuccessFeedback() {
+        CookieUtils cookieUtils = new CookieUtils();
+        String successFeedback = cookieUtils.load(FEEDBACK_COOKIE_NAME);
+        if (!Strings.isEmpty(successFeedback)) {
+            success(successFeedback);
+            cookieUtils.remove(FEEDBACK_COOKIE_NAME);
+        }
     }
 
     protected SignInPanel addSignInPanel() {
