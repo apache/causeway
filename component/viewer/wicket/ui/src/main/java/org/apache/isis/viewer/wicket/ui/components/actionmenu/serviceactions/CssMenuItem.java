@@ -39,8 +39,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -114,22 +112,8 @@ class CssMenuItem implements Serializable {
             return this;
         }
 
-        public Builder withFacet(CssClassFacet facet) {
-            if(facet != null) {
-                withCssClass(facet.value());
-            }
-            return this;
-        }
-
         public Builder withCssClass(String cssClass) {
             cssMenuItem.setCssClass(cssClass);
-            return this;
-        }
-
-        public Builder withFacet(CssClassFaFacet facet) {
-            if(facet != null) {
-                withCssClassFa(facet.value());
-            }
             return this;
         }
 
@@ -346,7 +330,7 @@ class CssMenuItem implements Serializable {
                 .prototyping(ObjectAction.Utils.isExplorationOrPrototype(objectAction))
                 .separator(separator)
                 .withActionIdentifier(ObjectAction.Utils.actionIdentifierFor(objectAction))
-                .withCssClass(ObjectAction.Utils.cssClassFor(objectAction))
+                .withCssClass(ObjectAction.Utils.cssClassFor(objectAction, adapter))
                 .withCssClassFa(ObjectAction.Utils.cssClassFaFor(objectAction))
                 .withCssClassFaPosition(ObjectAction.Utils.cssClassFaPositionFor(objectAction));
 

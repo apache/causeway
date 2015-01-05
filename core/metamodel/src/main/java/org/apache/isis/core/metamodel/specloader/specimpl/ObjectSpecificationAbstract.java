@@ -55,7 +55,6 @@ import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethod;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.ClearDirtyObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.IsDirtyObjectFacet;
@@ -158,7 +157,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     private TitleFacet titleFacet;
     private IconFacet iconFacet;
-    private CssClassFacetMethod cssClassFacetMethod;
+    private CssClassFacet cssClassFacet;
 
     private IntrospectionState introspected = IntrospectionState.NOT_INTROSPECTED;
 
@@ -362,10 +361,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
         titleFacet = getFacet(TitleFacet.class);
         iconFacet = getFacet(IconFacet.class);
-        CssClassFacet cssClassFacet = getFacet(CssClassFacet.class);
-        if (cssClassFacet instanceof CssClassFacetMethod) {
-            cssClassFacetMethod = (CssClassFacetMethod) cssClassFacet;
-        }
+        cssClassFacet = getFacet(CssClassFacet.class);
 
         this.persistability = determinePersistability();
     }
@@ -422,7 +418,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     @Override
     public String getCssClass(final ObjectAdapter reference) {
-        return cssClassFacetMethod == null ? null : cssClassFacetMethod.value(reference);
+        return cssClassFacet == null ? null : cssClassFacet.cssClass(reference);
     }
 
     // //////////////////////////////////////////////////////////////////////
@@ -519,12 +515,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public String getHelp() {
         final HelpFacet helpFacet = getFacet(HelpFacet.class);
         return helpFacet == null ? null : helpFacet.value();
-    }
-
-    @Override
-    public String getCssClass() {
-        final CssClassFacet cssClassFacet = getFacet(CssClassFacet.class);
-        return cssClassFacet == null ? null : cssClassFacet.value();
     }
 
     @Override

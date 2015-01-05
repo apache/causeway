@@ -40,7 +40,6 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetFilters;
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -257,7 +256,8 @@ public interface ObjectAction extends ObjectMember {
         }
 
         public static String cssClassFaFor(final ObjectAction action) {
-            return facetValueIfAnyFor(action, CssClassFaFacet.class);
+            final CssClassFaFacet cssClassFaFacet = action.getFacet(CssClassFaFacet.class);
+            return cssClassFaFacet != null ? cssClassFaFacet.value() : null;
         }
 
         public static ActionLayout.CssClassFaPosition cssClassFaPositionFor(final ObjectAction action) {
@@ -265,13 +265,9 @@ public interface ObjectAction extends ObjectMember {
             return facet != null ? facet.getPosition() : ActionLayout.CssClassFaPosition.LEFT;
         }
 
-        public static String cssClassFor(final ObjectAction action) {
-            return facetValueIfAnyFor(action, CssClassFacet.class);
-        }
-
-        private static String facetValueIfAnyFor(ObjectAction action, Class<? extends SingleStringValueFacet> facetType) {
-            final SingleStringValueFacet singleStringValueFacet = action.getFacet(facetType);
-            return singleStringValueFacet != null ? singleStringValueFacet.value() : null;
+        public static String cssClassFor(final ObjectAction action, final ObjectAdapter objectAdapter) {
+            final CssClassFacet cssClassFacet = action.getFacet(CssClassFacet.class);
+            return cssClassFacet != null ? cssClassFacet.cssClass(objectAdapter) : null;
         }
 
     }

@@ -19,14 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclass;
 
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * The css class of a class, a property, collection, or an action.
- *
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
- * member with <tt>@CssClass</tt>.
  */
-public interface CssClassFacet extends SingleStringValueFacet {
+public interface CssClassFacet extends Facet {
+
+    public String cssClass(final ObjectAdapter objectAdapter);
+
 }

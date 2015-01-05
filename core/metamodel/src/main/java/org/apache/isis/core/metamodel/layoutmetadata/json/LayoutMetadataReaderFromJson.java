@@ -473,7 +473,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         CssClassFacet cssClassFacet = action.getFacet(CssClassFacet.class);
         if(cssClassFacet != null && !cssClassFacet.isNoop()) {
             CssClassFacetRepr cssClassFacetRepr = new CssClassFacetRepr();
-            cssClassFacetRepr.value = cssClassFacet.value();
+            cssClassFacetRepr.value = cssClassFacet.cssClass(null);
             actionRepr.cssClass = cssClassFacetRepr;
         }
         DescribedAsFacet describedAsFacet = action.getFacet(DescribedAsFacet.class);
@@ -508,7 +508,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         CssClassFacet cssClassFacet = assoc.getFacet(CssClassFacet.class);
         if(cssClassFacet != null && !cssClassFacet.isNoop()) {
             CssClassFacetRepr cssClassFacetRepr = new CssClassFacetRepr();
-            cssClassFacetRepr.value = cssClassFacet.value();
+            cssClassFacetRepr.value = cssClassFacet.cssClass(null);
             memberRepr.cssClass = cssClassFacetRepr;
         }
         DescribedAsFacet describedAsFacet = assoc.getFacet(DescribedAsFacet.class);

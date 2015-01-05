@@ -202,7 +202,11 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                 action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Clob.class);
     }
 
-    protected LinkAndLabel newLinkAndLabel(final ObjectAction objectAction, final AbstractLink link, final String disabledReasonIfAny) {
+    protected LinkAndLabel newLinkAndLabel(
+            final ObjectAdapter objectAdapter,
+            final ObjectAction objectAction,
+            final AbstractLink link,
+            final String disabledReasonIfAny) {
 
         final String label = ObjectAction.Utils.nameFor(objectAction);
         final boolean blobOrClob = ObjectAction.Utils.returnsBlobOrClob(objectAction);
@@ -210,7 +214,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         final String actionIdentifier = ObjectAction.Utils.actionIdentifierFor(objectAction);
         final String description = ObjectAction.Utils.descriptionOf(objectAction);
         final ActionLayout.Position position = ObjectAction.Utils.actionLayoutPositionOf(objectAction);
-        final String cssClass = ObjectAction.Utils.cssClassFor(objectAction);
+        final String cssClass = ObjectAction.Utils.cssClassFor(objectAction, objectAdapter);
         final String cssClassFa = ObjectAction.Utils.cssClassFaFor(objectAction);
         final ActionLayout.CssClassFaPosition cssClassFaPosition = ObjectAction.Utils.cssClassFaPositionFor(objectAction);
 

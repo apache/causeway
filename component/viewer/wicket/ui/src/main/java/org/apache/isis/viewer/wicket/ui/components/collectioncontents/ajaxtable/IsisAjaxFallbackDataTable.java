@@ -35,11 +35,13 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Generics;
-import org.apache.wicket.util.string.Strings;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> implements UiHintPathSignificant {
     
@@ -84,10 +86,10 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> implements 
 
                 if (model instanceof EntityModel) {
                     EntityModel entityModel = (EntityModel) model;
-                    String cssClass = entityModel.getTypeOfSpecification().getCssClass(entityModel.getObject());
-                    if (!Strings.isEmpty(cssClass)) {
-                        tag.append("class", cssClass, " ");
-                    }
+                    final ObjectAdapter objectAdapter = entityModel.getObject();
+                    final ObjectSpecification typeOfSpecification = entityModel.getTypeOfSpecification();
+                    String cssClass = typeOfSpecification.getCssClass(objectAdapter);
+                    CssClassAppender.appendCssClassTo(tag, cssClass);
                 }
             }
         };
