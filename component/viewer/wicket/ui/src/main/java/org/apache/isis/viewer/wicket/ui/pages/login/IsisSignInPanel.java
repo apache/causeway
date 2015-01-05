@@ -42,27 +42,29 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
  */
 public class IsisSignInPanel extends SignInPanel {
 
-    private final boolean clearOriginalDestination;
+    private final boolean signUpLink;
     private final boolean passwordResetLink;
+    private final boolean clearOriginalDestination;
 
     /**
      * Constructor
-     *
-     * @param id
+     *  @param id
      *            the component id
      * @param rememberMe
      *            True if form should include a remember-me checkbox
+     * @param signUpLink
      * @param passwordResetLink
      *            True if form should include the password reset link
      * @param continueToOriginalDestination
-     *            A flag indicating whether to continue to the originally requested destination
      */
     public IsisSignInPanel(
             final String id,
             final boolean rememberMe,
+            final boolean signUpLink,
             final boolean passwordResetLink,
             final boolean continueToOriginalDestination) {
         super(id, rememberMe);
+        this.signUpLink = signUpLink;
         this.passwordResetLink = passwordResetLink;
         this.clearOriginalDestination = !continueToOriginalDestination;
     }
@@ -73,30 +75,33 @@ public class IsisSignInPanel extends SignInPanel {
 
         addOrReplace(new NotificationPanel("feedback"));
 
-        final Component passwordResetLink = addPasswordResetLink("passwdResetLink");
-        final Component signUpLink = addSignUpLink("signUpLink");
+        final Component passwordResetLink = addPasswordResetLink();
+        final Component signUpLink = addSignUpLink();
 
         setVisibilityAllowedBasedOnAvailableServices(signUpLink, passwordResetLink);
     }
 
-    private BookmarkablePageLink<Void> addPasswordResetLink(final String id) {
-        final Class <? extends Page> passwordResetPageClass = pageClassRegistry.getPageClass(PageType.PASSWORD_RESET);
-        final BookmarkablePageLink<Void> passwordResetLink =
-                new BookmarkablePageLink<>(id, passwordResetPageClass);
-
-        if(!this.passwordResetLink) {
-            passwordResetLink.setVisibilityAllowed(false);
-        }
-
-        getSignInForm().addOrReplace(passwordResetLink);
-        return passwordResetLink;
+    private BookmarkablePageLink<Void> addPasswordResetLink() {
+        return addLink("passwdResetLink", PageType.PASSWORD_RESET, this.passwordResetLink);
     }
 
-    private BookmarkablePageLink<Void> addSignUpLink(final String id) {
-        final Class<? extends Page> signUpPageClass = pageClassRegistry.getPageClass(PageType.SIGN_UP);
-        final BookmarkablePageLink<Void> signUpLink = new BookmarkablePageLink<>(id, signUpPageClass);
-        getSignInForm().addOrReplace(signUpLink);
-        return signUpLink;
+    private BookmarkablePageLink<Void> addSignUpLink() {
+        return addLink("signUpLink", PageType.SIGN_UP, this.signUpLink);
+    }
+
+    private BookmarkablePageLink<Void> addLink(
+            final String id,
+            final PageType pageType,
+            final boolean visibilityAllowed) {
+        final Class<? extends Page> signUpPageClass = pageClassRegistry.getPageClass(pageType);
+        final BookmarkablePageLink<Void> link = new BookmarkablePageLink<>(id, signUpPageClass);
+
+        if(!visibilityAllowed) {
+            link.setVisibilityAllowed(false);
+        }
+
+        getSignInForm().addOrReplace(link);
+        return link;
     }
 
     private void setVisibilityAllowedBasedOnAvailableServices(final Component... components) {
