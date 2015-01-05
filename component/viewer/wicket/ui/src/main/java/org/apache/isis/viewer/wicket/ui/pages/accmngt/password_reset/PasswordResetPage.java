@@ -22,14 +22,16 @@ package org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 import java.util.concurrent.Callable;
+import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 
 /**
  * A page used for resetting the password of an user.
@@ -46,6 +48,11 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
 
     private PasswordResetPage(final PageParameters parameters, ExceptionModel exceptionModel) {
         super(parameters, exceptionModel);
+
+        boolean suppressPasswordResetLink = getConfiguration().getBoolean(WicketSignInPage.ISIS_VIEWER_WICKET_SUPPRESS_PASSWORD_RESET, false);
+        if(suppressPasswordResetLink) {
+            throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
+        }
     }
 
     @Override

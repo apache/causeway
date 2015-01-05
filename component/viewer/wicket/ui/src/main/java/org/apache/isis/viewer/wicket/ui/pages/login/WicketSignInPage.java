@@ -30,8 +30,13 @@ import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstr
  * Boilerplate, pick up our HTML and CSS.
  */
 public class WicketSignInPage extends AccountManagementPageAbstract {
-    
+
     private static final long serialVersionUID = 1L;
+
+    public static final String ISIS_VIEWER_WICKET_SUPPRESS_REMEMBER_ME = "isis.viewer.wicket.suppressRememberMe";
+    public static final String ISIS_VIEWER_WICKET_SUPPRESS_SIGN_UP = "isis.viewer.wicket.suppressSignUp";
+    public static final String ISIS_VIEWER_WICKET_SUPPRESS_PASSWORD_RESET = "isis.viewer.wicket.suppressPasswordReset";
+    public static final String ISIS_VIEWER_WICKET_CLEAR_ORIGINAL_DESTINATION = "isis.viewer.wicket.clearOriginalDestination";
 
     public WicketSignInPage(final PageParameters parameters) {
         this(parameters, getAndClearExceptionModelIfAny());
@@ -65,10 +70,10 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
     }
 
     protected SignInPanel addSignInPanel() {
-        final boolean suppressRememberMe = getConfiguration().getBoolean("isis.viewer.wicket.suppressRememberMe", false);
-        final boolean suppressSignUpLink = getConfiguration().getBoolean("isis.viewer.wicket.suppressSignUp", false);
-        final boolean suppressPasswordResetLink = getConfiguration().getBoolean("isis.viewer.wicket.suppressPasswordReset", false);
-        final boolean clearOriginalDestination = getConfiguration().getBoolean("isis.viewer.wicket.clearOriginalDestination", false);
+        final boolean suppressRememberMe = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_SUPPRESS_REMEMBER_ME, false);
+        final boolean suppressSignUpLink = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_SUPPRESS_SIGN_UP, false);
+        final boolean suppressPasswordResetLink = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_SUPPRESS_PASSWORD_RESET, false);
+        final boolean clearOriginalDestination = getConfiguration().getBoolean(ISIS_VIEWER_WICKET_CLEAR_ORIGINAL_DESTINATION, false);
         final boolean rememberMe = !suppressRememberMe;
         final boolean signUpLink = !suppressSignUpLink;
         final boolean passwordReset = !suppressPasswordResetLink;

@@ -19,9 +19,11 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.accmngt.signup;
 
+import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 
 /**
  * A page for self-registering a new user after confirmation of her email account.
@@ -36,6 +38,12 @@ public class RegistrationFormPage extends AccountManagementPageAbstract {
 
     private RegistrationFormPage(final PageParameters parameters, ExceptionModel exceptionModel) {
         super(parameters, exceptionModel);
+
+        boolean suppressSignUp = getConfiguration().getBoolean(WicketSignInPage.ISIS_VIEWER_WICKET_SUPPRESS_SIGN_UP, false);
+        if(suppressSignUp) {
+            throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
+        }
+
     }
 
     @Override
