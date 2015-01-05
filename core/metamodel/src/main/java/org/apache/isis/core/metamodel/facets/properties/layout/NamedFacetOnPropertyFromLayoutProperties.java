@@ -28,12 +28,17 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 public class NamedFacetOnPropertyFromLayoutProperties extends NamedFacetAbstract {
 
     public static NamedFacet create(Properties properties, FacetHolder holder) {
-        final String named = named(properties);
-        return named != null? new NamedFacetOnPropertyFromLayoutProperties(named, holder): null;
+        final String value = named(properties);
+        final boolean escaped = namedEscaped(properties);
+        return value != null? new NamedFacetOnPropertyFromLayoutProperties(value, escaped, holder): null;
     }
 
-    private NamedFacetOnPropertyFromLayoutProperties(String named, FacetHolder holder) {
-        super(named, holder);
+    private NamedFacetOnPropertyFromLayoutProperties(
+        final String named,
+        final boolean escaped,
+        final FacetHolder holder) {
+
+        super(named, escaped, holder);
     }
 
     private static String named(Properties properties) {
@@ -46,6 +51,17 @@ public class NamedFacetOnPropertyFromLayoutProperties extends NamedFacetAbstract
             named = Strings.emptyToNull(properties.getProperty("name"));
         }
         return named;
+    }
+
+    private static boolean namedEscaped(final Properties properties) {
+        boolean escaped = true;
+        if(properties != null) {
+            String namedEscapedValue = Strings.emptyToNull(properties.getProperty("namedEscaped"));
+            if("false".equalsIgnoreCase(namedEscapedValue)) {
+                escaped = false;
+            }
+        }
+        return escaped;
     }
 
 }

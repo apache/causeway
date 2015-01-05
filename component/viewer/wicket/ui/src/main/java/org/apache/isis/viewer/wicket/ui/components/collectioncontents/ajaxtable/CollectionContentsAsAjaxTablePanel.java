@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -193,8 +194,14 @@ public class CollectionContentsAsAjaxTablePanel extends PanelAbstract<EntityColl
     }
 
     private ObjectAdapterPropertyColumn createObjectAdapterPropertyColumn(final ObjectAssociation property) {
-        return new ObjectAdapterPropertyColumn(Model.of(property.getName()), property.getId(), property.getId());
+
+        final NamedFacet facet = property.getFacet(NamedFacet.class);
+        final boolean escaped = facet == null || facet.escaped();
+
+        return new ObjectAdapterPropertyColumn(Model.of(property.getName()), property.getId(), property.getId(), escaped);
     }
+
+
 
     @Override
     protected void onModelChanged() {

@@ -23,7 +23,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -37,14 +36,14 @@ public class ObjectAdapterTitleColumn extends ColumnAbstract<ObjectAdapter> {
     private static final long serialVersionUID = 1L;
     private final ObjectAdapterMemento parentAdapterMementoIfAny;
 
-    private static String columnName(ObjectAdapterMemento parentAdapterMementoIfAny, int maxTitleLength) {
+    private static String columnName(final ObjectAdapterMemento parentAdapterMementoIfAny, final int maxTitleLength) {
         if(maxTitleLength == 0) {
             return "";
         }
         return (parentAdapterMementoIfAny != null? "Related ":"") + "Object";
     }
 
-    public ObjectAdapterTitleColumn(ObjectAdapterMemento parentAdapterMementoIfAny, int maxTitleLength) {
+    public ObjectAdapterTitleColumn(final ObjectAdapterMemento parentAdapterMementoIfAny, final int maxTitleLength) {
         super(columnName(parentAdapterMementoIfAny, maxTitleLength)); // i18n
         this.parentAdapterMementoIfAny = parentAdapterMementoIfAny;
     }

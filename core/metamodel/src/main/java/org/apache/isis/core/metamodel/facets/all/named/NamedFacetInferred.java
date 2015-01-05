@@ -24,7 +24,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public class NamedFacetInferred extends NamedFacetAbstract {
 
     public NamedFacetInferred(final String value, final FacetHolder holder) {
-        super(value, holder);
+
+        super(value, /*escaped*/ true, holder);
     }
 
 }

@@ -335,6 +335,8 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
             switch (facet.label()) {
                 case LEFT:
                     return "label-left";
+                case RIGHT:
+                    return "label-right";
                 case NONE:
                     return "label-none";
                 case TOP:

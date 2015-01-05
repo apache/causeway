@@ -36,6 +36,8 @@ import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
+import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterTitleColumn;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 
 /**
@@ -139,6 +141,10 @@ public class IsisAjaxHeadersToolbar<S> extends AbstractToolbar
                 Component label = column.getHeader("label");
                 Component sortIcon = newSortIcon("sortIcon", column, stateLocator);
                 header.add(label, sortIcon);
+
+                if(column instanceof ObjectAdapterTitleColumn) {
+                    header.add(new CssClassAppender("title-column"));
+                }
             }
         };
         add(headers);

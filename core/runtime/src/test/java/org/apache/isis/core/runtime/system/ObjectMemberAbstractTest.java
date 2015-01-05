@@ -19,8 +19,13 @@
 
 package org.apache.isis.core.runtime.system;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -78,11 +83,10 @@ public class ObjectMemberAbstractTest {
         testMember = new ObjectMemberAbstractImpl("id");
     }
 
-
     @Test
     public void testToString() throws Exception {
-        testMember.addFacet(new NamedFacetAbstract("", testMember) {});
-        assertTrue(testMember.toString().length() > 0);
+        testMember.addFacet(new NamedFacetAbstract("", true, testMember) {});
+        assertThat(testMember.toString(), not(isEmptyString()));
     }
 
     @Test
@@ -180,9 +184,9 @@ public class ObjectMemberAbstractTest {
     @Test
     public void testName() throws Exception {
         final String name = "action name";
-        testMember.addFacet(new NamedFacetAbstract(name, testMember) {
+        testMember.addFacet(new NamedFacetAbstract(name, true, testMember) {
         });
-        assertEquals(name, testMember.getName());
+        assertThat(testMember.getName(), is(equalTo(name)));
     }
 
     @Test

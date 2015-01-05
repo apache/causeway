@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -119,6 +120,9 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
         fieldset.addOrReplace(collectionPanel);
 
         Label labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, association.getName());
+        final NamedFacet namedFacet = association.getFacet(NamedFacet.class);
+        labelComponent.setEscapeModelStrings(namedFacet == null || namedFacet.escaped());
+
         final String description = association.getDescription();
         if(description != null) {
             labelComponent.add(new AttributeAppender("title", Model.of(description)));

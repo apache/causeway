@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 public class NamedFacetOnTypeAnnotation extends NamedFacetAbstract {
 
     public NamedFacetOnTypeAnnotation(final String value, final FacetHolder holder) {
-        super(value, holder);
+        super(value, /*escaped*/ true, holder);
     }
 
 }

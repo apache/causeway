@@ -61,6 +61,11 @@ public @interface CollectionLayout {
     String named() default "";
 
     /**
+     * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
+     */
+    boolean namedEscaped() default true;
+
+    /**
      * The page size for instances of this class when rendered within
      * a table.
      *

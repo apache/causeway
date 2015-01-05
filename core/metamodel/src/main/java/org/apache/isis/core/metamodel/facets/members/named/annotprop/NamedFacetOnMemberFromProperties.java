@@ -20,18 +20,25 @@
 package org.apache.isis.core.metamodel.facets.members.named.annotprop;
 
 import java.util.Properties;
-
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 public class NamedFacetOnMemberFromProperties extends NamedFacetAbstract {
 
     public NamedFacetOnMemberFromProperties(final Properties properties, final FacetHolder holder) {
-        super(valueFrom(properties), holder);
+        super(valueFrom(properties), namedEscapedFrom(properties), holder);
     }
 
     private static String valueFrom(Properties properties) {
         return properties.getProperty("value");
     }
 
+    private static boolean namedEscapedFrom(final Properties properties) {
+        boolean escaped = true;
+        String namedEscapedValue = properties.getProperty("namedEscaped");
+        if("false".equalsIgnoreCase(namedEscapedValue)) {
+            escaped = false;
+        }
+        return escaped;
+    }
 }
