@@ -26,6 +26,7 @@ public class CollectionLayoutFacetRepr {
     public String describedAs;
     public Where hidden;
     public String named;
+    public boolean namedEscaped = true;
     public int paged;
     public CollectionLayout.RenderType render;
     public String sortedBy;

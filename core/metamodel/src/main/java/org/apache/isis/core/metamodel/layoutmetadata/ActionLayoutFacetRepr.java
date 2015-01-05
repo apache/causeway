@@ -27,6 +27,7 @@ public class ActionLayoutFacetRepr {
     public String describedAs;
     public Where hidden;
     public String named;
+    public boolean namedEscaped = true;
     public ActionLayout.Position position;
     public boolean prototype;
 }

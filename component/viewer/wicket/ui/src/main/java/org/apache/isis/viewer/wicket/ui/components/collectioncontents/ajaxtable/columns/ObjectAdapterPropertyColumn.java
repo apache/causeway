@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
@@ -49,11 +50,25 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
     private static final long serialVersionUID = 1L;
 
     private final String propertyExpression;
+    private final boolean escaped;
 
-    public ObjectAdapterPropertyColumn(final IModel<String> columnNameModel, final String sortProperty, final String propertyName) {
+    public ObjectAdapterPropertyColumn(
+            final IModel<String> columnNameModel,
+            final String sortProperty,
+            final String propertyName,
+            final boolean escaped) {
         super(columnNameModel, sortProperty);
         this.propertyExpression = propertyName;
+        this.escaped = escaped;
     }
+
+    public Component getHeader(final String componentId)
+    {
+        final Label label = new Label(componentId, getDisplayModel());
+        label.setEscapeModelStrings(escaped);
+        return label;
+    }
+
 
     @Override
     public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId, final IModel<ObjectAdapter> rowModel) {

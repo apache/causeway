@@ -197,6 +197,10 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
                 }
                 //
                 {
+                    props.setProperty("member." + memberName + ".propertyLayout.namedEscaped", ""+propertyLayout.namedEscaped);
+                }
+                //
+                {
                     props.setProperty("member." + memberName + ".propertyLayout.renderedAsDayBefore", "" + propertyLayout.renderedAsDayBefore);
                 }
                 if(propertyLayout.typicalLength > 0) {
@@ -218,6 +222,10 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
                 }
                 if(collectionLayout.named != null) {
                     props.setProperty("member." + memberName + ".collectionLayout.named", collectionLayout.named);
+                }
+                //
+                {
+                    props.setProperty("member." + memberName + ".collectionLayout.namedEscaped", ""+collectionLayout.namedEscaped);
                 }
                 if(collectionLayout.paged > 0) {
                     props.setProperty("member." + memberName + ".collectionLayout.paged", "" + collectionLayout.paged);
@@ -337,6 +345,10 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             }
             if(actionLayout.named != null) {
                 props.setProperty(prefix + "." + actionName + ".actionLayout.named", actionLayout.named);
+            }
+            //
+            {
+                props.setProperty(prefix + "." + actionName + ".actionLayout.namedEscaped", ""+actionLayout.namedEscaped);
             }
             if(actionLayout.position != null) {
                 props.setProperty(prefix + "." + actionName + ".actionLayout.position", ""+actionLayout.position);
