@@ -37,7 +37,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
  * usage of the chain-of-responsibility design pattern. The available
  * {@link ComponentFactory}s are registered through
  * {@link ComponentFactoryRegistry} (bootstrapped from the
- * <tt>WicketObjectsApplication</tt>); various adapters make it easy to lookup
+ * <tt>IsisWicketApplication</tt>); various adapters make it easy to lookup
  * {@link Component}s from this registry.
  */
 public interface ComponentFactory extends Serializable {
