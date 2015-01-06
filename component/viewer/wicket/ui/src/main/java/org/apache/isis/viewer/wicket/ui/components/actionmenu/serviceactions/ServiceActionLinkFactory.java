@@ -42,7 +42,7 @@ class ServiceActionLinkFactory extends ActionLinkFactoryAbstract {
 
         final AbstractLink link = newLink(linkId, objectAdapter, action);
 
-        return newLinkAndLabel(action, link, null);
+        return newLinkAndLabel(objectAdapter, action, link, null);
     }
 
 }

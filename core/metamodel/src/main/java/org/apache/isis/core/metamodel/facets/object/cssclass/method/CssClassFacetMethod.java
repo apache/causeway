@@ -17,28 +17,39 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.cssclass;
+package org.apache.isis.core.metamodel.facets.object.cssclass.method;
 
+import java.lang.reflect.Method;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 
-public abstract class CssClassFacetAbstract extends FacetAbstract implements CssClassFacet {
+public class CssClassFacetMethod extends FacetAbstract implements CssClassFacet {
 
     public static Class<? extends Facet> type() {
         return CssClassFacet.class;
     }
 
-    private final String value;
+    private final Method method;
 
-    public CssClassFacetAbstract(final String value, final FacetHolder holder) {
+
+    public CssClassFacetMethod(final Method method, final FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
-        this.value = value;
+        this.method = method;
     }
 
     @Override
-    public String cssClass(final ObjectAdapter objectAdapter) {
-        return value;
+    public String cssClass(final ObjectAdapter owningAdapter) {
+        if(owningAdapter == null) {
+            return "";
+        }
+        try {
+            return (String) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
+        } catch (final RuntimeException ex) {
+            return null;
+        }
     }
+
 }

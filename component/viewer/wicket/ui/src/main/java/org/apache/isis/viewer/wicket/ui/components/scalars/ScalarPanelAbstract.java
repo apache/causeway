@@ -36,6 +36,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.propparam.layout.LabelAtFacet;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -273,7 +274,9 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         ScalarModel model = getModel();
         final CssClassFacet facet = model.getFacet(CssClassFacet.class);
         if(facet != null) {
-            CssClassAppender.appendCssClassTo(this, facet.value());
+            final ObjectAdapter parentAdapter = model.getParentObjectAdapterMemento().getObjectAdapter(AdapterManager.ConcurrencyChecking.NO_CHECK);
+            final String cssClass = facet.cssClass(parentAdapter);
+            CssClassAppender.appendCssClassTo(this, cssClass);
         }
     }
 

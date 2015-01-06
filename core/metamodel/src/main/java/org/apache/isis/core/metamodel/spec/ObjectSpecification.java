@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -162,14 +161,6 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     String getHelp();
 
     /**
-     * Returns a css class name of the specification.
-     *
-     * <p>
-     * Corresponds to the {@link org.apache.isis.applib.annotation.CssClass#value()) value} of {@link CssClassFacet};
-     */
-    String getCssClass();
-
-    /**
      * Returns the title string for the specified object.
      * 
      * <p>
@@ -198,6 +189,15 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * returned by the {@link IconFacet}; is not necessarily immutable.
      */
     String getIconName(ObjectAdapter object);
+
+    /**
+     * Returns the CSS class name to use for the specified object.
+     *
+     * <p>
+     * Corresponds to the {@link org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet#cssClass(org.apache.isis.core.metamodel.adapter.ObjectAdapter)} value}
+     * returned by the {@link org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet}.
+     */
+    String getCssClass(ObjectAdapter object);
 
     boolean isAbstract();
 

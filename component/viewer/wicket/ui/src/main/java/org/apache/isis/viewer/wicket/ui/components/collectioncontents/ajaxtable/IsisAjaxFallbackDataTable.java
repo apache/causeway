@@ -28,16 +28,20 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.repeater.IItemFactory;
 import org.apache.wicket.markup.repeater.IItemReuseStrategy;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.OddEvenItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Generics;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> implements UiHintPathSignificant {
     
@@ -66,7 +70,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> implements 
     }
     
     private void buildGui() {
-        headersToolbar = new IsisAjaxFallbackHeadersToolbar<S>(this, this.dataProvider);
+        headersToolbar = new IsisAjaxFallbackHeadersToolbar<>(this, this.dataProvider);
         addTopToolbar(headersToolbar);
         addBottomToolbar(new IsisAjaxNavigationToolbar(this));
         addBottomToolbar(new NoRecordsToolbar(this));
@@ -75,7 +79,20 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> implements 
     @Override
     protected Item<T> newRowItem(final String id, final int index, final IModel<T> model)
     {
-        return new OddEvenItem<T>(id, index, model);
+        return new OddEvenItem<T>(id, index, model) {
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+
+                if (model instanceof EntityModel) {
+                    EntityModel entityModel = (EntityModel) model;
+                    final ObjectAdapter objectAdapter = entityModel.getObject();
+                    final ObjectSpecification typeOfSpecification = entityModel.getTypeOfSpecification();
+                    String cssClass = typeOfSpecification.getCssClass(objectAdapter);
+                    CssClassAppender.appendCssClassTo(tag, cssClass);
+                }
+            }
+        };
     }
 
     static class PreserveModelReuseStrategy implements IItemReuseStrategy {

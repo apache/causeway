@@ -157,6 +157,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     private TitleFacet titleFacet;
     private IconFacet iconFacet;
+    private CssClassFacet cssClassFacet;
 
     private IntrospectionState introspected = IntrospectionState.NOT_INTROSPECTED;
 
@@ -360,6 +361,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
         titleFacet = getFacet(TitleFacet.class);
         iconFacet = getFacet(IconFacet.class);
+        cssClassFacet = getFacet(CssClassFacet.class);
 
         this.persistability = determinePersistability();
     }
@@ -412,6 +414,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @Override
     public String getIconName(final ObjectAdapter reference) {
         return iconFacet == null ? null : iconFacet.iconName(reference);
+    }
+
+    @Override
+    public String getCssClass(final ObjectAdapter reference) {
+        return cssClassFacet == null ? null : cssClassFacet.cssClass(reference);
     }
 
     // //////////////////////////////////////////////////////////////////////
@@ -508,12 +515,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public String getHelp() {
         final HelpFacet helpFacet = getFacet(HelpFacet.class);
         return helpFacet == null ? null : helpFacet.value();
-    }
-
-    @Override
-    public String getCssClass() {
-        final CssClassFacet cssClassFacet = getFacet(CssClassFacet.class);
-        return cssClassFacet == null ? null : cssClassFacet.value();
     }
 
     @Override

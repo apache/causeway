@@ -51,31 +51,31 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
             final ObjectAction action,
             final String linkId) {
 
-        final ObjectAdapter adapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+        final ObjectAdapter objectAdapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
         
-        final Boolean persistent = adapter.representsPersistent();
+        final Boolean persistent = objectAdapter.representsPersistent();
         if (!persistent) {
-            throw new IllegalArgumentException("Object '" + adapter.titleString(null) + "' is not persistent.");
+            throw new IllegalArgumentException("Object '" + objectAdapter.titleString(null) + "' is not persistent.");
         }
 
         // check visibility and whether enabled
         final AuthenticationSession session = getAuthenticationSession();
         
-        final Consent visibility = action.isVisible(session, adapter, Where.OBJECT_FORMS);
+        final Consent visibility = action.isVisible(session, objectAdapter, Where.OBJECT_FORMS);
         if (visibility.isVetoed()) {
             return null;
         }
 
         
-        final AbstractLink link = newLink(linkId, adapter, action);
+        final AbstractLink link = newLink(linkId, objectAdapter, action);
         
-        final Consent usability = action.isUsable(session, adapter, Where.OBJECT_FORMS);
+        final Consent usability = action.isUsable(session, objectAdapter, Where.OBJECT_FORMS);
         final String disabledReasonIfAny = usability.getReason();
         if(disabledReasonIfAny != null) {
             link.setEnabled(false);
         }
 
-        return newLinkAndLabel(action, link, disabledReasonIfAny);
+        return newLinkAndLabel(objectAdapter, action, link, disabledReasonIfAny);
     }
 
     

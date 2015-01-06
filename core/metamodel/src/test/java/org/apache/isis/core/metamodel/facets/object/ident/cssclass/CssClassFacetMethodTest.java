@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.ident.icon;
+package org.apache.isis.core.metamodel.facets.object.ident.cssclass;
 
 import java.lang.reflect.Method;
 import org.jmock.Expectations;
@@ -28,37 +28,39 @@ import org.junit.Before;
 import org.junit.Test;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethod;
+import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethod;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class IconFacetMethodTest {
+public class CssClassFacetMethodTest {
 
+    public static final String CSS_CLASS = "someCssClass";
     private final Mockery mockery = new JUnit4Mockery();
 
-    private IconFacetMethod facet;
+    private CssClassFacetMethod facet;
     private FacetHolder mockFacetHolder;
 
     private ObjectAdapter mockOwningAdapter;
 
-    private DomainObjectWithProblemInIconNameMethod pojo;
+    private DomainObjectInCssClassMethod pojo;
 
-    public static class DomainObjectWithProblemInIconNameMethod {
-        public String iconName() {
-            throw new NullPointerException();
+    public static class DomainObjectInCssClassMethod {
+        public String cssClass() {
+            return CSS_CLASS;
         }
     }
 
     @Before
     public void setUp() throws Exception {
 
-        pojo = new DomainObjectWithProblemInIconNameMethod();
+        pojo = new DomainObjectInCssClassMethod();
         mockFacetHolder = mockery.mock(FacetHolder.class);
         mockOwningAdapter = mockery.mock(ObjectAdapter.class);
-        final Method iconNameMethod = DomainObjectWithProblemInIconNameMethod.class.getMethod("iconName");
-        facet = new IconFacetMethod(iconNameMethod, mockFacetHolder);
+        final Method iconNameMethod = DomainObjectInCssClassMethod.class.getMethod("cssClass");
+        facet = new CssClassFacetMethod(iconNameMethod, mockFacetHolder);
 
         mockery.checking(new Expectations() {
             {
@@ -69,14 +71,14 @@ public class IconFacetMethodTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         facet = null;
     }
 
     @Test
-    public void testIconNameThrowsException() {
-        final String iconName = facet.iconName(mockOwningAdapter);
-        assertThat(iconName, is(nullValue()));
+    public void testCssClassThrowsException() {
+        final String iconName = facet.cssClass(mockOwningAdapter);
+        assertThat(iconName, is(equalTo(CSS_CLASS)));
     }
 
 }

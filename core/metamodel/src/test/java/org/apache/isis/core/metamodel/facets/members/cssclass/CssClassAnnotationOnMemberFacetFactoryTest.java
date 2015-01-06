@@ -54,6 +54,6 @@ public class CssClassAnnotationOnMemberFacetFactoryTest extends AbstractFacetFac
         assertThat(facet, is(not(nullValue())));
         assertThat(facet instanceof CssClassFacetAbstract, is(true));
         final CssClassFacetAbstract cssClassFacetAbstract = (CssClassFacetAbstract) facet;
-        assertThat(cssClassFacetAbstract.value(), equalTo("user"));
+        assertThat(cssClassFacetAbstract.cssClass(null), equalTo("user"));
     }
 }
