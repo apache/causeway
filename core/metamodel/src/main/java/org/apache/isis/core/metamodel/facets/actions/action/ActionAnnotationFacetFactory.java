@@ -61,8 +61,13 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         processRestrictTo(processMethodContext);
         processSemantics(processMethodContext);
         processInvokeOn(processMethodContext);
+
+        // must come after processing semantics
         processCommand(processMethodContext);
+
+        // must come after processing semantics
         processPublishing(processMethodContext);
+
         processTypeOf(processMethodContext);
     }
 

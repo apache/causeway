@@ -21,21 +21,21 @@ package org.apache.isis.core.metamodel.facets.object.audited.annotation;
 
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetAuditedAnnotation;
-import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetFromAuditedAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 
-public class AuditableAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class DomainObjectAnnotationFacetFactoryTest_forAuditable extends AbstractFacetFactoryTest {
 
-    private AuditableFacetFromAuditedAnnotationFactory facetFactory;
+    private DomainObjectAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new AuditableFacetFromAuditedAnnotationFactory();
+        facetFactory = new DomainObjectAnnotationFacetFactory();
     }
 
     @Override
@@ -44,7 +44,8 @@ public class AuditableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         super.tearDown();
     }
 
-    public void testAggregatedAnnotationPickedUpOnClass() {
+    public void testAnnotationPickedUpOnClass() {
+
         @Audited
         class Customer {
         }

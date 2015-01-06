@@ -19,72 +19,55 @@
 
 package org.apache.isis.core.metamodel.facets.param.parameter;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 
-public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
-
-    private ServicesInjector servicesInjector;
+public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract {
 
     public ParameterAnnotationFacetFactory() {
         super(FeatureType.PARAMETERS_ONLY);
     }
 
     @Override
-    public void process(final ProcessMethodContext processMethodContext) {
+    public void processParams(final ProcessParameterContext processParameterContext) {
 
-        processMaxLength(processMethodContext);
-        processMustSatisfy(processMethodContext);
-        processOptional(processMethodContext);
-        processRegEx(processMethodContext);
+        final Method method = processParameterContext.getMethod();
+        final int paramNum = processParameterContext.getParamNum();
+        final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
+
+        final Class<?>[] parameterTypes = method.getParameterTypes();
+        if (paramNum >= parameterTypes.length) {
+            return; // ignore
+        }
+
+        final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(method)[paramNum];
+        for (final Annotation parameterAnnotation : parameterAnnotations) {
+            if (parameterAnnotation instanceof Parameter) {
+                final Parameter parameter = (Parameter) parameterAnnotation;
+
+                FacetUtil.addFacet(
+                        MaxLengthFacetForParameterAnnotation.create(parameter, holder));
+
+                FacetUtil.addFacet(
+                        MustSatisfySpecificationFacetForParameterAnnotation.create(parameter, holder));
+
+                FacetUtil.addFacet(
+                        MandatoryFacetForParameterAnnotation.create(parameter, method, holder));
+
+                if (Annotations.isString(parameterTypes[paramNum])) {
+                    FacetUtil.addFacet(
+                            RegExFacetForParameterAnnotation.create(parameter, holder));
+                }
+
+                return;
+            }
+        }
     }
 
-    private void processMaxLength(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final Parameter parameter = Annotations.getAnnotation(method, Parameter.class);
-        final FacetHolder holder = processMethodContext.getFacetHolder();
-
-        FacetUtil.addFacet(
-                MaxLengthFacetForParameterAnnotation.create(parameter, holder));
-    }
-
-    private void processMustSatisfy(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final Parameter parameter = Annotations.getAnnotation(method, Parameter.class);
-        final FacetHolder holder = processMethodContext.getFacetHolder();
-
-        FacetUtil.addFacet(
-                MustSatisfySpecificationFacetForParameterAnnotation.create(parameter, holder));
-    }
-
-    private void processOptional(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final Parameter parameter = Annotations.getAnnotation(method, Parameter.class);
-        final FacetHolder holder = processMethodContext.getFacetHolder();
-
-        FacetUtil.addFacet(
-                MandatoryFacetForParameterAnnotation.create(parameter, method, holder));
-    }
-
-    private void processRegEx(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final Parameter parameter = Annotations.getAnnotation(method, Parameter.class);
-        final FacetHolder holder = processMethodContext.getFacetHolder();
-
-        FacetUtil.addFacet(
-                RegExFacetForParameterAnnotation.create(parameter, holder));
-    }
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
-    }
 }

@@ -35,11 +35,7 @@ public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstr
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        if(domainObject == null) {
-            return null;
-        }
-
-        final Auditing auditing = domainObject.auditing();
+        final Auditing auditing = domainObject != null ? domainObject.auditing() : Auditing.AS_CONFIGURED;
         switch (auditing) {
             case AS_CONFIGURED:
 

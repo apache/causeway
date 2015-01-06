@@ -32,11 +32,8 @@ public enum PublishObjectsConfiguration {
     }
 
     private static PublishObjectsConfiguration parse(final String value) {
-        if ("all".equalsIgnoreCase(value)) {
-            return ALL;
-        } else {
-            return NONE;
-        }
+        // must be explicitly enabled
+        return Util.parseYes(value)? ALL: NONE;
     }
 
 }

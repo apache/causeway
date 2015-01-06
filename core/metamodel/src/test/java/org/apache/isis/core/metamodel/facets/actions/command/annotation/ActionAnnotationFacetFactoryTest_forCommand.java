@@ -24,19 +24,20 @@ import java.lang.reflect.Method;
 import org.apache.isis.applib.annotation.Command;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
 
-public class CommandFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
+public class ActionAnnotationFacetFactoryTest_forCommand extends AbstractFacetFactoryTest {
 
-    private CommandFacetAnnotationFactory facetFactory;
+    private ActionAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new CommandFacetAnnotationFactory();
+        facetFactory = new ActionAnnotationFacetFactory();
     }
 
     @Override
@@ -45,7 +46,7 @@ public class CommandFacetAnnotationFactoryTest extends AbstractFacetFactoryTest 
         super.tearDown();
     }
 
-    public void testExplorationAnnotationPickedUp() {
+    public void testAnnotationPickedUp() {
         class Customer {
             @Command
             public void someAction() {

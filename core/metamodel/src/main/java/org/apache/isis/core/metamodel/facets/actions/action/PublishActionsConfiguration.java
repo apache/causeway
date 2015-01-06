@@ -19,9 +19,11 @@
 package org.apache.isis.core.metamodel.facets.actions.action;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.facets.object.domainobject.Util;
 
 public enum PublishActionsConfiguration {
     ALL,
+    IGNORE_SAFE,
     NONE;
 
     private static final String PUBLISH_ACTIONS_KEY = "isis.services.publish.actions";
@@ -32,11 +34,10 @@ public enum PublishActionsConfiguration {
     }
 
     private static PublishActionsConfiguration parse(final String value) {
-        if ("all".equalsIgnoreCase(value)) {
-            return ALL;
-        } else {
-            return NONE;
+        if ("ignoreQueryOnly".equalsIgnoreCase(value) || "ignoreSafe".equalsIgnoreCase(value)) {
+            return IGNORE_SAFE;
         }
+        return Util.parseYes(value)? ALL: NONE;
     }
 
 }

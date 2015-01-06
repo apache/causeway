@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.actions.command.configuration;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.facets.object.domainobject.Util;
 
 public enum ActionConfiguration {
     ALL,
@@ -34,10 +35,8 @@ public enum ActionConfiguration {
     private static ActionConfiguration parse(final String value) {
         if ("ignoreQueryOnly".equalsIgnoreCase(value) || "ignoreSafe".equalsIgnoreCase(value)) {
             return IGNORE_SAFE;
-        } else if ("all".equals(value)) {
-            return ALL;
-        } else {
-            return NONE;
         }
+        // must be explicitly enabled
+        return Util.parseYes(value)? ALL: NONE;
     }
 }

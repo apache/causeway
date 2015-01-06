@@ -20,29 +20,27 @@
 package org.apache.isis.core.metamodel.facets.object.audited.configuration;
 
 import java.util.UUID;
-
 import org.jmock.Expectations;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.audit.configuration.AuditableFacetForDomainObjectAnnotationAsConfigured;
-import org.apache.isis.core.metamodel.facets.object.audit.configuration.AuditableFacetFromConfigurationFactory;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 
-public class AuditableFacetFromConfigurationFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
+public class DomainObjectAnnotationFacetFactoryTest_auditableFromConfiguration extends AbstractFacetFactoryJUnit4TestCase {
 
-    private AuditableFacetFromConfigurationFactory facetFactory;
+    private DomainObjectAnnotationFacetFactory facetFactory;
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new AuditableFacetFromConfigurationFactory();
+        facetFactory = new DomainObjectAnnotationFacetFactory();
         facetFactory.setConfiguration(mockConfiguration);
     }
 
@@ -128,6 +126,9 @@ public class AuditableFacetFromConfigurationFactoryTest extends AbstractFacetFac
             {
                 allowing(mockConfiguration).getString("isis.services.audit.objects");
                 will(returnValue(value));
+
+                // anything else
+                ignoring(mockConfiguration);
             }
         });
     }

@@ -40,12 +40,9 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        if(domainObject == null) {
-            return null;
-        }
+        final Editing editing       = domainObject != null? domainObject.editing() : Editing.AS_CONFIGURED;
+        final String disabledReason = domainObject != null? domainObject.editingDisabledReason(): "Disabled";
 
-        final Editing editing = domainObject.editing();
-        final String disabledReason = domainObject.editingDisabledReason();
         switch (editing) {
             case AS_CONFIGURED:
 
@@ -55,7 +52,7 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
                 }
 
                 final EditingObjectsConfiguration setting = EditingObjectsConfiguration.parse(configuration);
-                return setting == EditingObjectsConfiguration.NONE
+                return setting == EditingObjectsConfiguration.FALSE
                         ? new ImmutableFacetForDomainObjectAnnotation(disabledReason, holder)
                         : null;
             case DISABLED:

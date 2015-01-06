@@ -37,11 +37,7 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        if(domainObject == null) {
-            return null;
-        }
-
-        final Publishing publishing = domainObject.publishing();
+        final Publishing publishing = domainObject != null ? domainObject.publishing() : Publishing.AS_CONFIGURED;
 
         switch (publishing) {
             case AS_CONFIGURED:

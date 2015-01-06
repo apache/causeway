@@ -20,24 +20,23 @@
 package org.apache.isis.core.metamodel.facets.actions.semantics;
 
 import java.lang.reflect.Method;
-
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.semantics.annotations.actionsemantics.ActionSemanticsFacetAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.semantics.annotations.actionsemantics.ActionSemanticsFacetAnnotationFactory;
 
-public class ActionSemanticsFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
+public class ActionAnnotationFacetFactoryTest_forActionSemantics extends AbstractFacetFactoryTest {
 
-    private ActionSemanticsFacetAnnotationFactory facetFactory;
+    private ActionAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ActionSemanticsFacetAnnotationFactory();
+        facetFactory = new ActionAnnotationFacetFactory();
     }
 
     @Override

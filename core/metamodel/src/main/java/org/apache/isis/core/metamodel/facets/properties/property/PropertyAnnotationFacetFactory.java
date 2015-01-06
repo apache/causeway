@@ -116,6 +116,11 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final Property property = Annotations.getAnnotation(method, Property.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
+        final Class<?> returnType = processMethodContext.getMethod().getReturnType();
+        if (!Annotations.isString(returnType)) {
+            return;
+        }
+
         FacetUtil.addFacet(
                 RegExFacetForPropertyAnnotation.create(property, holder));
     }

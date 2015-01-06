@@ -18,22 +18,24 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
+public final class Util {
 
-public enum EditingObjectsConfiguration {
-    TRUE,
-    FALSE;
+    private Util(){}
 
-    private static final String EDIT_OBJECTS_KEY = "isis.objects.editing";
-
-    public static EditingObjectsConfiguration parse(final IsisConfiguration configuration) {
-        final String configuredValue = configuration.getString(EDIT_OBJECTS_KEY);
-        return EditingObjectsConfiguration.parse(configuredValue);
+    static boolean parse(final String value, final String... matches) {
+        for (String match : matches) {
+            if(match.equalsIgnoreCase(value))
+                return true;
+        }
+        return false;
     }
 
-    private static EditingObjectsConfiguration parse(final String value) {
-        // must be explicitly disabled
-        return Util.parseNo(value)? FALSE : TRUE;
+    public static boolean parseYes(final String value) {
+        return parse(value, "all", "yes", "y", "true", "1", "enable", "enabled");
+    }
+
+    static boolean parseNo(final String value) {
+        return parse(value, "none", "no", "n", "false", "0", "disable", "disabled");
     }
 
 }

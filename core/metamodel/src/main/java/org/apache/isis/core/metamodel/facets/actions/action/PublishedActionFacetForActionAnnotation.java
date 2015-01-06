@@ -22,14 +22,17 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import java.util.List;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.PublishingPayloadFactoryForAction;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
 public class PublishedActionFacetForActionAnnotation extends PublishedActionFacetAbstract {
 
@@ -41,6 +44,16 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
         if (action == null) {
             return null;
         }
+
+        final ActionSemanticsFacet actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
+        if(actionSemanticsFacet == null) {
+            throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
+        }
+        if(holder.containsDoOpFacet(CommandFacet.class)) {
+            // do not replace
+            return null;
+        }
+
         final Publishing publishing = action.publishing();
 
         switch (publishing) {
@@ -50,6 +63,11 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
                 switch (setting) {
                     case NONE:
                         return null;
+                    case IGNORE_SAFE:
+                        if(actionSemanticsFacet.value() == ActionSemantics.Of.SAFE) {
+                            return  null;
+                        }
+                        // else fall through
                     default:
                         return new PublishedActionFacetForActionAnnotation(
                                 newPayloadFactory(action), holder);
