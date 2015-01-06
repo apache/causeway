@@ -25,7 +25,6 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 
 public final class Links {
@@ -42,7 +41,10 @@ public final class Links {
         };
     }
 
-    // TODO mgrigorov: This is bad practice. Use BookmarkablePageLink for such simple logic. Avoids an HTTP redirect
+    /**
+     * @deprecated Use {@link #newBookmarkablePageLink(String, org.apache.wicket.request.mapper.parameter.PageParameters, Class)} instead
+     */
+    @Deprecated
     public static <T extends Page> AbstractLink newAbstractLink(final String linkId, final PageParameters pageParameters, final Class<T> pageClass) {
 
       return new Link<T>(linkId) {
@@ -59,8 +61,7 @@ public final class Links {
     public static <T extends Page> AbstractLink newBookmarkablePageLink(
             final String linkId, final PageParameters pageParameters, final Class<T> pageClass) {
 
-        // TODO mgrigorov: <T> should really be <Void>
-        return new BookmarkablePageLink<T>(linkId, pageClass, pageParameters);
+        return new BookmarkablePageLink<Void>(linkId, pageClass, pageParameters);
     }
 
     public static <T extends Page> AbstractLink newBookmarkablePageLinkWithAnchor(
