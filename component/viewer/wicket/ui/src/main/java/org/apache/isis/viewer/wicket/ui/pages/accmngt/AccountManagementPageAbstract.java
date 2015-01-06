@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.accmngt;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapJavascriptBehavior;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.wicket.Application;
@@ -28,6 +30,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -97,6 +100,9 @@ public class AccountManagementPageAbstract extends WebPage {
         } else {
             add(new WebMarkupContainer(ID_EXCEPTION_STACK_TRACE).setVisible(false));
         }
+
+        add(new HeaderResponseContainer("footerJS", "footerJS"));
+        BootstrapJavascriptBehavior.addTo(this);
     }
 
     private MarkupContainer addPageTitle() {
@@ -111,7 +117,7 @@ public class AccountManagementPageAbstract extends WebPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
-        
+
         if(applicationCss != null) {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
         }
