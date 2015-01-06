@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.actions.homepage;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.homepage.HomePageFacetAbstract;
 
 public class HomePageFacetImpl extends HomePageFacetAbstract {
 
