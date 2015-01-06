@@ -17,31 +17,30 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.ident.icon;
+package org.apache.isis.core.metamodel.facets.object.ident.cssclass;
 
 import java.lang.reflect.Method;
-
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethod;
-import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethodFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethod;
+import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethodFactory;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-public class IconFacetMethodFactoryTest extends AbstractFacetFactoryTest {
+public class CssClassFacetMethodFactoryTest extends AbstractFacetFactoryTest {
 
-    private IconFacetMethodFactory facetFactory;
+    private CssClassFacetMethodFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new IconFacetMethodFactory();
+        facetFactory = new CssClassFacetMethodFactory();
     }
 
     @Override
@@ -53,19 +52,19 @@ public class IconFacetMethodFactoryTest extends AbstractFacetFactoryTest {
     public void testIconNameMethodPickedUpOnClassAndMethodRemoved() {
         class Customer {
             @SuppressWarnings("unused")
-            public String iconName() {
+            public String cssClass() {
                 return null;
             }
         }
-        final Method iconNameMethod = findMethod(Customer.class, "iconName");
+        final Method cssClassNameMethod = findMethod(Customer.class, "cssClass");
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(IconFacet.class);
+        final Facet facet = facetedMethod.getFacet(CssClassFacet.class);
         assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(IconFacetMethod.class)));
+        assertThat(facet, is(instanceOf(CssClassFacetMethod.class)));
 
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(iconNameMethod));
+        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(cssClassNameMethod));
     }
 
 }
