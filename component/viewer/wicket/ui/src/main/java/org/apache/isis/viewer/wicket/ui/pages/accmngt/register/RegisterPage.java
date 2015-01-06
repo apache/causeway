@@ -29,6 +29,7 @@ import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
+import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
@@ -56,25 +57,20 @@ public class RegisterPage extends AccountManagementPageAbstract {
 
         final StringValue uuidValue = getPageParameters().get(0);
         if (uuidValue.isEmpty()) {
-            goToSignUpPage();
+            pageNavigationService.navigateTo(PageType.SIGN_IN);
         } else {
             String uuid = uuidValue.toString();
 
             AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
             final String email = accountConfirmationMap.get(uuid);
             if (Strings.isEmpty(email)) {
-                goToSignUpPage();
+                pageNavigationService.navigateTo(PageType.SIGN_IN);
             } else {
                 addOrReplace(new RegisterPanel("content", uuidValue.toString()));
             }
         }
     }
 
-    private void goToSignUpPage() {
-        Class<? extends Page> signUpPageClass = pageClassRegistry.getPageClass(PageType.SIGN_UP);
-        throw new RestartResponseException(signUpPageClass);
-    }
-
     @Inject
-    private PageClassRegistry pageClassRegistry;
+    private PageNavigationService pageNavigationService;
 }

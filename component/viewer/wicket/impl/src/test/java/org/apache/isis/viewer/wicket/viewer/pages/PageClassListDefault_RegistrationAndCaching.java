@@ -19,20 +19,20 @@
 
 package org.apache.isis.viewer.wicket.viewer.pages;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import org.apache.wicket.Page;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.actionprompt.ActionPromptPage;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
+
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 public class PageClassListDefault_RegistrationAndCaching {
 
@@ -62,7 +62,7 @@ public class PageClassListDefault_RegistrationAndCaching {
         registryImpl.registerPage(PageType.ACTION_PROMPT, TestingActionPage.class);
 
         final Class<? extends Page> pageClass = registryImpl.getPageClass(PageType.ACTION_PROMPT);
-        assertThat(pageClass.equals(TestingActionPage.class), is(true));
+        assertThat(pageClass, is(instanceOf(TestingActionPage.class)));
     }
 
 }

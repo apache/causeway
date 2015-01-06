@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.UUID;
 import javax.inject.Inject;
 import com.google.inject.name.Named;
-import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -43,7 +42,7 @@ import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.EmailAvailableValidator;
@@ -104,7 +103,7 @@ public class RegistrationFormPanel extends Panel {
 
                     CookieUtils cookieUtils = new CookieUtils();
                     cookieUtils.save(AccountManagementPageAbstract.FEEDBACK_COOKIE_NAME, emailSentMessage);
-                    goToSignInPage();
+                    pageNavigationService.navigateTo(PageType.SIGN_IN);
                 }
             }
         };
@@ -129,18 +128,13 @@ public class RegistrationFormPanel extends Panel {
         return fullUrl;
     }
 
-    private void goToSignInPage() {
-        Class<? extends Page> signInPage = pageClassRegistry.getPageClass(PageType.SIGN_IN);
-        setResponsePage(signInPage);
-    }
-
     @Inject
     private EmailNotificationService emailNotificationService;
     @Inject
     private EmailService emailService;
 
     @Inject
-    private PageClassRegistry pageClassRegistry;
+    private PageNavigationService pageNavigationService;
 
     @Inject
     @Named("applicationName")

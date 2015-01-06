@@ -32,11 +32,13 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.isis.viewer.wicket.viewer.imagecache.ImageResourceCacheClassPath;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
+import org.apache.isis.viewer.wicket.viewer.registries.pages.PageNavigationServiceDefault;
 import org.apache.isis.viewer.wicket.viewer.settings.WicketViewerSettingsDefault;
 
 /**
@@ -67,6 +69,7 @@ public class IsisWicketModule extends AbstractModule {
     protected void configure() {
         bind(ComponentFactoryRegistry.class).to(ComponentFactoryRegistryDefault.class);
         bind(PageClassRegistry.class).to(PageClassRegistryDefault.class);
+        bind(PageNavigationService.class).to(PageNavigationServiceDefault.class);
         bind(PageClassList.class).to(PageClassListDefault.class);
         bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarDefault.class);
         bind(ImageResourceCache.class).to(ImageResourceCacheClassPath.class);

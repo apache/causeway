@@ -19,9 +19,11 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.accmngt.signup;
 
-import org.apache.wicket.RestartResponseAtInterceptPageException;
+import com.google.inject.Inject;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
+import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 
@@ -32,6 +34,9 @@ public class RegistrationFormPage extends AccountManagementPageAbstract {
     
     private static final long serialVersionUID = 1L;
 
+    @Inject
+    private PageNavigationService pageNavigationService;
+
     public RegistrationFormPage(final PageParameters parameters) {
         this(parameters, getAndClearExceptionModelIfAny());
     }
@@ -41,7 +46,7 @@ public class RegistrationFormPage extends AccountManagementPageAbstract {
 
         boolean suppressSignUp = getConfiguration().getBoolean(WicketSignInPage.ISIS_VIEWER_WICKET_SUPPRESS_SIGN_UP, false);
         if(suppressSignUp) {
-            throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
+            pageNavigationService.interceptAndRestartAt(PageType.SIGN_IN);
         }
 
     }
