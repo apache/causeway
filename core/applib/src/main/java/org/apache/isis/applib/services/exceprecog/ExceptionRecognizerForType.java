@@ -19,12 +19,11 @@
 package org.apache.isis.applib.services.exceprecog;
 
 import java.util.List;
-
+import javax.jdo.JDODataStoreException;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.base.Throwables;
-
 import org.apache.isis.applib.annotation.Hidden;
 
 /**
@@ -75,6 +74,16 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
                         final String throwableMessage = throwable.getMessage();
                         if(throwableMessage != null && throwableMessage.contains(message)) {
                             return false;
+                        }
+                        if(throwable instanceof JDODataStoreException) {
+                            final JDODataStoreException jdoDataStoreException = (JDODataStoreException) throwable;
+                            final Throwable[] nestedExceptions = jdoDataStoreException.getNestedExceptions();
+                            for (Throwable nestedException : nestedExceptions) {
+                                final String nestedThrowableMessage = nestedException.getMessage();
+                                if(nestedThrowableMessage != null && nestedThrowableMessage.contains(message)) {
+                                    return false;
+                                }
+                            }
                         }
                     }
                 }
