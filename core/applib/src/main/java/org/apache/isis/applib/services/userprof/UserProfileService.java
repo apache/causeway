@@ -33,24 +33,11 @@ public interface UserProfileService {
     /**
      * Used as the menu name of the {@link org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary}
      * &quot;Me&quot; menu bar.
+     *
+     * <p>
+     *     If returns <tt>null</tt>, then the current user name is used instead.
+     * </p>
      */
     @Programmatic
     String userProfileName();
-
-    /**
-     * Default implementation (instantiated internally by the framework if no
-     * other implementation has been registered).
-     */
-    public static class Default implements UserProfileService {
-        private final String userProfileName;
-
-        public Default(final String userProfileName) {
-            this.userProfileName = userProfileName;
-        }
-
-        @Override
-        public String userProfileName() {
-            return userProfileName;
-        }
-    }
 }

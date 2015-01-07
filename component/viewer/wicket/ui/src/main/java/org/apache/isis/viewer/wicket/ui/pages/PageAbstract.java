@@ -97,10 +97,6 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  */
 public abstract class PageAbstract extends WebPage implements ActionPromptProvider {
 
-    public static final String TERTIARY_MENU_BAR = "tertiaryMenuBar";
-    public static final String SECONDARY_MENU_BAR = "secondaryMenuBar";
-    public static final String PRIMARY_MENU_BAR = "primaryMenuBar";
-    public static final String USER_NAME = "userName";
     private static Logger LOG = LoggerFactory.getLogger(PageAbstract.class);
 
     private static final long serialVersionUID = 1L;
@@ -111,8 +107,17 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
     private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
     
+    // not to be confused with the bootstrap theme...
+    // is simply a CSS class derived from the application's name
     private static final String ID_THEME = "theme";
+
     private static final String ID_BOOKMARKED_PAGES = "bookmarks";
+    private static final String ID_PRIMARY_MENU_BAR = "primaryMenuBar";
+    private static final String ID_SECONDARY_MENU_BAR = "secondaryMenuBar";
+    private static final String ID_TERTIARY_MENU_BAR = "tertiaryMenuBar";
+    private static final String ID_USER_NAME = "userName";
+    private static final String ID_ABOUT_LINK = "aboutLink";
+    private static final String ID_ABOUT_MESSAGE = "aboutMessage";
 
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     
@@ -120,9 +125,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     
     public static final String ID_MENU_LINK = "menuLink";
 
+    // the bootstrap theme
     private static final String ID_THEME_PICKER = "themePicker";
     private static final String ID_BREADCRUMBS = "breadcrumbs";
-
 
     /**
      * This is a bit hacky, but best way I've found to pass an exception over to the WicketSignInPage
@@ -305,22 +310,27 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     private void addUserName(final MarkupContainer themeDiv) {
         final UserProfileService userProfileService = getUserProfileService();
-        final Label userName = new Label(USER_NAME, userProfileService.userProfileName());
+        final Label userName = new Label(ID_USER_NAME, userProfileService.userProfileName());
         themeDiv.add(userName);
     }
 
     private UserProfileService getUserProfileService() {
         final UserProfileService userProfileService = lookupService(UserProfileService.class);
-        final String userProfileName = getAuthenticationSession().getUserName();
-        return userProfileService != null ? userProfileService: new UserProfileService.Default(userProfileName);
+        return new UserProfileService() {
+            @Override
+            public String userProfileName() {
+                final String userProfileName = userProfileService != null ? userProfileService.userProfileName() : null;
+                return userProfileName != null? userProfileName: getAuthenticationSession().getUserName();
+            }
+        };
     }
 
 
     private void addAboutLink(final MarkupContainer themeDiv) {
-        final BookmarkablePageLink<Void> aboutLink = new BookmarkablePageLink<>("aboutLink", AboutPage.class);
+        final BookmarkablePageLink<Void> aboutLink = new BookmarkablePageLink<>(ID_ABOUT_LINK, AboutPage.class);
         themeDiv.add(aboutLink);
 
-        final Label aboutLabel = new Label("aboutMessage", new ResourceModel("aboutLabel"));
+        final Label aboutLabel = new Label(ID_ABOUT_MESSAGE, new ResourceModel("aboutLabel"));
         aboutLink.add(aboutLabel);
         addDevModeWarning(aboutLink);
     }
@@ -358,9 +368,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     private void addServiceActionMenuBars(final MarkupContainer container) {
-        addMenuBar(container, PRIMARY_MENU_BAR, DomainServiceLayout.MenuBar.PRIMARY);
-        addMenuBar(container, SECONDARY_MENU_BAR, DomainServiceLayout.MenuBar.SECONDARY);
-        addMenuBar(container, TERTIARY_MENU_BAR, DomainServiceLayout.MenuBar.TERTIARY);
+        addMenuBar(container, ID_PRIMARY_MENU_BAR, DomainServiceLayout.MenuBar.PRIMARY);
+        addMenuBar(container, ID_SECONDARY_MENU_BAR, DomainServiceLayout.MenuBar.SECONDARY);
+        addMenuBar(container, ID_TERTIARY_MENU_BAR, DomainServiceLayout.MenuBar.TERTIARY);
     }
 
     private void addMenuBar(final MarkupContainer container, final String id, final DomainServiceLayout.MenuBar menuBar) {
