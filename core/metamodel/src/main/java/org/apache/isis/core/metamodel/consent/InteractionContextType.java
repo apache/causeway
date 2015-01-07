@@ -32,6 +32,10 @@ public enum InteractionContextType {
      */
     OBJECT_VALIDATE("Saving or updating object"),
     /**
+     * Viewing the object.
+     */
+    OBJECT_VISIBILITY("Viewing the object"),
+    /**
      * Accessing the object's title.
      */
     OBJECT_TITLE("Reading object's title"),

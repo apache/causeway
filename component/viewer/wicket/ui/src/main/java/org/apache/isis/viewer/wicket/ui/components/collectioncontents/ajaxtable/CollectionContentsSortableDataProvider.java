@@ -21,18 +21,27 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 
 import java.util.Iterator;
 import java.util.List;
-
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
-
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.IModel;
-
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
+import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
@@ -47,13 +56,6 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
 
     public CollectionContentsSortableDataProvider(final EntityCollectionModel model) {
         this.model = model;
-    }
-
-    @Override
-    public Iterator<ObjectAdapter> iterator(final long first, final long count) {
-        List<ObjectAdapter> adapters = sortedIfRequired(model.getObject(), this.getSort());
-        
-        return adapters.subList((int)first, (int)(first + count)).iterator();
     }
 
     @Override
@@ -72,30 +74,86 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
         model.detach();
     }
 
-    
-    private List<ObjectAdapter> sortedIfRequired(List<ObjectAdapter> adapters, final SortParam<String> sort) {
-        if(sort == null) {
-            return adapters;
+    @Override
+    public Iterator<ObjectAdapter> iterator(final long first, final long count) {
+
+        final List<ObjectAdapter> adapters = model.getObject();
+
+        final Iterable<ObjectAdapter> visibleAdapters =
+                Iterables.filter(adapters, ignoreHidden());
+
+        // need to create a list from the iterable, then back to an iterable
+        // because guava's Ordering class doesn't support sorting of iterable -> iterable
+        final List<ObjectAdapter> sortedVisibleAdapters = sortedCopy(visibleAdapters, getSort());
+        final List<ObjectAdapter> pagedAdapters = subList(first, count, sortedVisibleAdapters);
+        return pagedAdapters.iterator();
+    }
+
+    private static List<ObjectAdapter> subList(
+            final long first,
+            final long count,
+            final List<ObjectAdapter> objectAdapters) {
+
+        final int fromIndex = (int) first;
+        // if adapters where filter out (as invisible), then make sure don't run off the end
+        final int toIndex = Math.min((int) (first + count), objectAdapters.size());
+
+        return objectAdapters.subList(fromIndex, toIndex);
+    }
+
+    private List<ObjectAdapter> sortedCopy(
+            final Iterable<ObjectAdapter> adapters,
+            final SortParam<String> sort) {
+
+        final ObjectAssociation sortProperty = lookupAssociationFor(sort);
+        if(sortProperty == null) {
+            return Lists.newArrayList(adapters);
         }
-        
+
+        final Ordering<ObjectAdapter> ordering =
+                orderingBy(sortProperty, sort.isAscending());
+        return ordering.sortedCopy(adapters);
+    }
+
+    private ObjectAssociation lookupAssociationFor(final SortParam<String> sort) {
+
+        if(sort == null) {
+            return null;
+        }
+
         final ObjectSpecification elementSpec = model.getTypeOfSpecification();
-        
         final String sortPropertyId = sort.getProperty();
+
         try {
-            final ObjectAssociation sortProperty = elementSpec.getAssociation(sortPropertyId);
-            if(sortProperty == null) {
-                return adapters;
-            }
-            
-            Ordering<ObjectAdapter> ordering = orderingBy(sortProperty, sort.isAscending());
-            return ordering.sortedCopy(adapters);
+            // might be null, or throw ex
+            return elementSpec.getAssociation(sortPropertyId);
         } catch(ObjectSpecificationException ex) {
             // eg invalid propertyId
-            return adapters;
+            return null;
         }
     }
 
-    public static Ordering<ObjectAdapter> orderingBy(final ObjectAssociation sortProperty, final boolean ascending) {
+    private Predicate<ObjectAdapter> ignoreHidden() {
+        return new Predicate<ObjectAdapter>() {
+            @Override
+            public boolean apply(ObjectAdapter input) {
+                final InteractionResult visibleResult = InteractionUtils.isVisibleResult(input.getSpecification(), createVisibleInteractionContext(input));
+                return visibleResult.isNotVetoing();
+            }
+        };
+    }
+
+    private VisibilityContext<?> createVisibleInteractionContext(final ObjectAdapter objectAdapter) {
+        return new ObjectVisibilityContext(
+                getDeploymentCategory(),
+                getAuthenticationSession(),
+                InteractionInvocationMethod.BY_USER,
+                objectAdapter,
+                objectAdapter.getSpecification().getIdentifier(),
+                Where.ALL_TABLES);
+    }
+
+    private static Ordering<ObjectAdapter> orderingBy(final ObjectAssociation sortProperty, final boolean ascending) {
         final Ordering<ObjectAdapter> ordering = new Ordering<ObjectAdapter>(){
     
             @Override
@@ -112,7 +170,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
         return ascending?ordering:ordering.reverse();
     }
 
-    public static Ordering<ObjectAdapter> ORDERING_BY_NATURAL = new Ordering<ObjectAdapter>(){
+    private static Ordering<ObjectAdapter> ORDERING_BY_NATURAL = new Ordering<ObjectAdapter>(){
         @Override
         public int compare(final ObjectAdapter p, final ObjectAdapter q) {
             final Object pPojo = p.getObject();
@@ -128,6 +186,17 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
             Comparable qComparable = (Comparable) qPojo;
             return Ordering.natural().compare(pComparable, qComparable);
         }
-    }; 
+    };
+
+    // //////////////////////////////////////
+
+    protected AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
+    }
+
+    protected DeploymentCategory getDeploymentCategory() {
+        return IsisContext.getDeploymentType().getDeploymentCategory();
+    }
+
 
 }

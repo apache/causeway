@@ -21,38 +21,39 @@ package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.events.VisibilityEvent;
+import org.apache.isis.applib.events.ObjectVisibilityEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
+
 /**
- * See {@link InteractionContext} for overview; analogous to
- * {@link VisibilityEvent}.
+ * See {@link org.apache.isis.core.metamodel.interactions.InteractionContext} for overview; analogous to
+ * {@link org.apache.isis.applib.events.ObjectVisibilityEvent}.
  */
-public abstract class VisibilityContext<T extends VisibilityEvent> extends InteractionContext<T> {
+public class ObjectVisibilityContext extends VisibilityContext<ObjectVisibilityEvent> implements ProposedHolder {
 
-    private Where where;
-
-    public VisibilityContext(
-            final InteractionContextType interactionType,
+    public ObjectVisibilityContext(
             final DeploymentCategory deploymentCategory,
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
-            final Identifier identifier,
             final ObjectAdapter target,
+            final Identifier identifier,
             final Where where) {
-        super(interactionType, deploymentCategory, session, invocationMethod, identifier, target);
-        this.where = where;
+        super(InteractionContextType.OBJECT_VISIBILITY, deploymentCategory, session, invocationMethod, identifier, target, where);
     }
 
-    /**
-     * Where the element is to be rendered.
-     */
-    public Where getWhere() {
-        return where;
+    @Override
+    public ObjectVisibilityEvent createInteractionEvent() {
+        return new ObjectVisibilityEvent(unwrap(getTarget()), getIdentifier());
+    }
+
+    @Override
+    public ObjectAdapter getProposed() {
+        return getTarget();
     }
 
 }
