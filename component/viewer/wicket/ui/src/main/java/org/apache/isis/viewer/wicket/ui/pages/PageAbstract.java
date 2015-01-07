@@ -90,6 +90,8 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChoo
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
+import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -319,8 +321,15 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         return new UserProfileService() {
             @Override
             public String userProfileName() {
-                final String userProfileName = userProfileService != null ? userProfileService.userProfileName() : null;
-                return userProfileName != null? userProfileName: getAuthenticationSession().getUserName();
+                if(PageAbstract.this instanceof ErrorPage) {
+                    return getAuthenticationSession().getUserName();
+                }
+                try {
+                    final String userProfileName = userProfileService != null ? userProfileService.userProfileName() : null;
+                    return userProfileName != null? userProfileName: getAuthenticationSession().getUserName();
+                } catch (final Exception e) {
+                    return getAuthenticationSession().getUserName();
+                }
             }
         };
     }
@@ -374,8 +383,12 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     private void addMenuBar(final MarkupContainer container, final String id, final DomainServiceLayout.MenuBar menuBar) {
-        final ServiceActionsModel model = new ServiceActionsModel(menuBar);
-        getComponentFactoryRegistry().addOrReplaceComponent(container, id, ComponentType.SERVICE_ACTIONS, model);
+        if (!(this instanceof ErrorPage)) {
+            final ServiceActionsModel model = new ServiceActionsModel(menuBar);
+            getComponentFactoryRegistry().addOrReplaceComponent(container, id, ComponentType.SERVICE_ACTIONS, model);
+        } else {
+            Components.permanentlyHide(container, id);
+        }
     }
 
     /**
