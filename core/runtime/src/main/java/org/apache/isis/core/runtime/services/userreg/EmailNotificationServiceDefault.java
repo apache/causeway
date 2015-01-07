@@ -1,4 +1,4 @@
-package org.apache.isis.core.runtime.services.email;
+package org.apache.isis.core.runtime.services.userreg;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,6 +17,7 @@ import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.events.EmailEventAbstract;
 import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
+import org.apache.isis.core.runtime.services.email.EmailServiceDefault;
 
 import static java.util.regex.Pattern.compile;
 import static java.util.regex.Pattern.quote;
