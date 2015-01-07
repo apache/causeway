@@ -122,7 +122,11 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     
     private boolean renderedFirstField;
 
-    public EntityPropertiesForm(final String id, final EntityModel entityModel, final Component owningPanel) {
+    public EntityPropertiesForm(
+            final String id,
+            final EntityModel entityModel,
+            final Component owningPanel) {
+
         super(id, entityModel);
         this.owningPanel = owningPanel; // for repainting
 

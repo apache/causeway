@@ -111,6 +111,12 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract i
         if (isPerspectiveMember(identifier)) {
             return true;
         }
+
+        // no-op if is visibility context check at object-level
+        if (identifier.getMemberName().equals("")) {
+            return true;
+        }
+
         if (authorizor.isVisibleInAnyRole(identifier)) {
             return true;
         }

@@ -29,6 +29,12 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
+import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -72,14 +78,14 @@ public class EntityPage extends PageAbstract {
      * Ensure that any {@link ConcurrencyException} that might have occurred already
      * (eg from an action invocation) is show.
      */
-    public EntityPage(ObjectAdapter adapter, ConcurrencyException exIfAny) {
+    public EntityPage(final ObjectAdapter adapter, final ConcurrencyException exIfAny) {
         this(new PageParameters(), newEntityModel(adapter, exIfAny));
     }
 
     private static EntityModel newEntityModel(
             final ObjectAdapter adapter,
             final ConcurrencyException exIfAny) {
-        EntityModel model = new EntityModel(adapter);
+        final EntityModel model = new EntityModel(adapter);
         model.setException(exIfAny);
         return model;
     }
@@ -96,7 +102,7 @@ public class EntityPage extends PageAbstract {
         try {
             // check object still exists
             objectAdapter = entityModel.getObject();
-        } catch(RuntimeException ex) {
+        } catch(final RuntimeException ex) {
             removeAnyBookmark(model);
             removeAnyBreadcrumb(model);
 
@@ -104,7 +110,12 @@ public class EntityPage extends PageAbstract {
             throw new ObjectMember.AuthorizationException(ex);
         }
 
-        // check that at least one property of the entity can be viewed.
+        // check that the entity overall can be viewed.
+        if(!isVisible(objectAdapter)) {
+            throw new ObjectMember.AuthorizationException();
+        }
+
+        // belt-n-braces: check that at least one property of the entity can be viewed.
         final AuthenticationSession session = getAuthenticationSession();
         final ObjectSpecification specification = objectAdapter.getSpecification();
         final List<ObjectAssociation> visibleAssociation = specification.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.dynamicallyVisible(session, objectAdapter, Where.NOWHERE));
@@ -114,7 +125,7 @@ public class EntityPage extends PageAbstract {
         }
 
 
-        // this is a work-around for JRebel integration...
+        // the next bit is a work-around for JRebel integration...
         // ... even though the IsisJRebelPlugin calls invalidateCache, it seems that there is 
         // some caching elsewhere in the Wicket viewer meaning that stale metadata is referenced.
         // doing an additional call here seems to be sufficient, though not exactly sure why... :-(
@@ -123,7 +134,7 @@ public class EntityPage extends PageAbstract {
         }
 
         if(titleString == null) {
-            String titleStr = objectAdapter.titleString(null);
+            final String titleStr = objectAdapter.titleString(null);
             setTitle(titleStr);
         }
         
@@ -135,6 +146,7 @@ public class EntityPage extends PageAbstract {
 
         addBookmarkedPages();
 
+
         // TODO mgrigorov: Zero Clipboard has been moved to EntityIconAndTitlePanel where the entity model is available.
         // Is this still needed for something else ?!
         //
@@ -142,14 +154,30 @@ public class EntityPage extends PageAbstract {
         send(this, Broadcast.BREADTH, new IsisUiHintEvent(entityModel, null));
     }
 
+    private boolean isVisible(final ObjectAdapter input) {
+        final InteractionResult visibleResult = InteractionUtils.isVisibleResult(input.getSpecification(), createVisibleInteractionContext(input));
+        return visibleResult.isNotVetoing();
+    }
 
-    private void addBreadcrumb(EntityModel entityModel) {
+    private VisibilityContext<?> createVisibleInteractionContext(final ObjectAdapter objectAdapter) {
+        return new ObjectVisibilityContext(
+                getDeploymentCategory(),
+                getAuthenticationSession(),
+                InteractionInvocationMethod.BY_USER,
+                objectAdapter,
+                objectAdapter.getSpecification().getIdentifier(),
+                Where.OBJECT_FORMS);
+    }
+
+
+
+    private void addBreadcrumb(final EntityModel entityModel) {
         final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
         final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
         breadcrumbModel.visited(entityModel);
     }
 
-    private void removeAnyBreadcrumb(EntityModel entityModel) {
+    private void removeAnyBreadcrumb(final EntityModel entityModel) {
         final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
         final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
         breadcrumbModel.remove(entityModel);
@@ -172,6 +200,9 @@ public class EntityPage extends PageAbstract {
         return IsisContext.getDeploymentType();
     }
 
+    protected DeploymentCategory getDeploymentCategory() {
+        return getDeploymentType().getDeploymentCategory();
+    }
 
 
 }

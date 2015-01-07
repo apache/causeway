@@ -59,19 +59,6 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
     }
 
     @Override
-    public Iterator<ObjectAdapter> iterator(final long first, final long count) {
-        final List<ObjectAdapter> unfilteredAdapters = model.getObject();
-
-        final List<ObjectAdapter> filteredAdapters = Lists.newArrayList(Iterables.filter(unfilteredAdapters, ignoreHidden()));
-
-        List<ObjectAdapter> adapters = sortedIfRequired(filteredAdapters, this.getSort());
-
-        final int from = (int) first;
-        final int toIndex = Math.min((int) (first + count), adapters.size());
-        return adapters.subList(from, toIndex).iterator();
-    }
-
-    @Override
     public IModel<ObjectAdapter> model(final ObjectAdapter adapter) {
         return new EntityModel(adapter);
     }
@@ -87,28 +74,62 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
         model.detach();
     }
 
-    
-    private List<ObjectAdapter> sortedIfRequired(List<ObjectAdapter> adapters, final SortParam<String> sort) {
+    @Override
+    public Iterator<ObjectAdapter> iterator(final long first, final long count) {
+
+        final List<ObjectAdapter> adapters = model.getObject();
+
+        final Iterable<ObjectAdapter> visibleAdapters =
+                Iterables.filter(adapters, ignoreHidden());
+
+        // need to create a list from the iterable, then back to an iterable
+        // because guava's Ordering class doesn't support sorting of iterable -> iterable
+        final List<ObjectAdapter> sortedVisibleAdapters = sortedCopy(visibleAdapters, getSort());
+        final List<ObjectAdapter> pagedAdapters = subList(first, count, sortedVisibleAdapters);
+        return pagedAdapters.iterator();
+    }
+
+    private static List<ObjectAdapter> subList(
+            final long first,
+            final long count,
+            final List<ObjectAdapter> objectAdapters) {
+
+        final int fromIndex = (int) first;
+        // if adapters where filter out (as invisible), then make sure don't run off the end
+        final int toIndex = Math.min((int) (first + count), objectAdapters.size());
+
+        return objectAdapters.subList(fromIndex, toIndex);
+    }
+
+    private List<ObjectAdapter> sortedCopy(
+            final Iterable<ObjectAdapter> adapters,
+            final SortParam<String> sort) {
+
+        final ObjectAssociation sortProperty = lookupAssociationFor(sort);
+        if(sortProperty == null) {
+            return Lists.newArrayList(adapters);
+        }
+
+        final Ordering<ObjectAdapter> ordering =
+                orderingBy(sortProperty, sort.isAscending());
+        return ordering.sortedCopy(adapters);
+    }
+
+    private ObjectAssociation lookupAssociationFor(final SortParam<String> sort) {
 
         if(sort == null) {
-            return adapters;
+            return null;
         }
-        
-        final ObjectSpecification elementSpec = model.getTypeOfSpecification();
-        
-        final String sortPropertyId = sort.getProperty();
-        try {
-            final ObjectAssociation sortProperty = elementSpec.getAssociation(sortPropertyId);
-            if(sortProperty == null) {
-                return adapters;
-            }
-            
-            Ordering<ObjectAdapter> ordering = orderingBy(sortProperty, sort.isAscending());
 
-            return ordering.sortedCopy(adapters);
+        final ObjectSpecification elementSpec = model.getTypeOfSpecification();
+        final String sortPropertyId = sort.getProperty();
+
+        try {
+            // might be null, or throw ex
+            return elementSpec.getAssociation(sortPropertyId);
         } catch(ObjectSpecificationException ex) {
             // eg invalid propertyId
-            return adapters;
+            return null;
         }
     }
 
@@ -132,8 +153,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
                 Where.ALL_TABLES);
     }
 
-
-    public static Ordering<ObjectAdapter> orderingBy(final ObjectAssociation sortProperty, final boolean ascending) {
+    private static Ordering<ObjectAdapter> orderingBy(final ObjectAssociation sortProperty, final boolean ascending) {
         final Ordering<ObjectAdapter> ordering = new Ordering<ObjectAdapter>(){
     
             @Override
@@ -150,7 +170,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
         return ascending?ordering:ordering.reverse();
     }
 
-    public static Ordering<ObjectAdapter> ORDERING_BY_NATURAL = new Ordering<ObjectAdapter>(){
+    private static Ordering<ObjectAdapter> ORDERING_BY_NATURAL = new Ordering<ObjectAdapter>(){
         @Override
         public int compare(final ObjectAdapter p, final ObjectAdapter q) {
             final Object pPojo = p.getObject();
@@ -167,8 +187,6 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
             return Ordering.natural().compare(pComparable, qComparable);
         }
     };
-
-
 
     // //////////////////////////////////////
 
