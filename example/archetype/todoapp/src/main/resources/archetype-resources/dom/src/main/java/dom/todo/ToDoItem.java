@@ -154,6 +154,9 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     public String iconName() {
         return !isComplete() ? "todo" : "done";
     }
+
+    public String cssClass() { return iconName(); }
+
     //endregion
 
     //region > description (property)

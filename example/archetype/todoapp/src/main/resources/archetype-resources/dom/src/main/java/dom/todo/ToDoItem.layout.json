@@ -57,7 +57,10 @@
                     },
                     "complete": {
                         "propertyLayout": {
-                            "describedAs": "Whether this todo item has been completed"
+                            "named": "Whether this todo item has been <i>completed</i> or not.",
+                            "namedEscaped": false,
+                            "describedAs": "Whether this todo item has been completed, or not.",
+                            "labelPosition": "LEFT"
                         },
                         "actions": {
                             "completed": {
@@ -165,7 +168,9 @@
         "collections": {
             "dependencies": {
                 "collectionLayout": {
-                    "describedAs": "ToDo items that must be completed before this one",
+                    "named": "Todo items that are <i>dependencies</i> of this item.",
+                    "namedEscaped": false,
+                    "describedAs": "Todo items that must be completed before this one",
                     "paged": 5,
                     "render": "EAGERLY"
                 },
@@ -187,6 +192,8 @@
             },
             "similarTo": {
                 "collectionLayout": {
+                    "named": "Todo items that are <i>similar to</i> this one",
+                    "namedEscaped": false,
                     "paged": 3,
                     "render": "LAZILY"
                 },
