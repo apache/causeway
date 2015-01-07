@@ -47,7 +47,9 @@ public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final ServiceActionsModel serviceActionsModel = (ServiceActionsModel) model;
-        return appliesIf(serviceActionsModel.getMenuBar() == DomainServiceLayout.MenuBar.TERTIARY);
+        final DomainServiceLayout.MenuBar menuBar = serviceActionsModel.getMenuBar();
+        final boolean applicability = menuBar == DomainServiceLayout.MenuBar.TERTIARY || menuBar == null;
+        return appliesIf(applicability);
     }
 
     @Override

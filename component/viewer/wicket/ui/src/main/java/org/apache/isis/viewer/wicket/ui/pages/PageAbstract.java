@@ -377,18 +377,20 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     private void addServiceActionMenuBars(final MarkupContainer container) {
-        addMenuBar(container, ID_PRIMARY_MENU_BAR, DomainServiceLayout.MenuBar.PRIMARY);
-        addMenuBar(container, ID_SECONDARY_MENU_BAR, DomainServiceLayout.MenuBar.SECONDARY);
-        addMenuBar(container, ID_TERTIARY_MENU_BAR, DomainServiceLayout.MenuBar.TERTIARY);
+        if (this instanceof ErrorPage) {
+            Components.permanentlyHide(container, ID_PRIMARY_MENU_BAR);
+            Components.permanentlyHide(container, ID_SECONDARY_MENU_BAR);
+            addMenuBar(container, ID_TERTIARY_MENU_BAR, null);
+        } else {
+            addMenuBar(container, ID_PRIMARY_MENU_BAR, DomainServiceLayout.MenuBar.PRIMARY);
+            addMenuBar(container, ID_SECONDARY_MENU_BAR, DomainServiceLayout.MenuBar.SECONDARY);
+            addMenuBar(container, ID_TERTIARY_MENU_BAR, DomainServiceLayout.MenuBar.TERTIARY);
+        }
     }
 
     private void addMenuBar(final MarkupContainer container, final String id, final DomainServiceLayout.MenuBar menuBar) {
-        if (!(this instanceof ErrorPage)) {
-            final ServiceActionsModel model = new ServiceActionsModel(menuBar);
-            getComponentFactoryRegistry().addOrReplaceComponent(container, id, ComponentType.SERVICE_ACTIONS, model);
-        } else {
-            Components.permanentlyHide(container, id);
-        }
+        final ServiceActionsModel model = new ServiceActionsModel(menuBar);
+        getComponentFactoryRegistry().addOrReplaceComponent(container, id, ComponentType.SERVICE_ACTIONS, model);
     }
 
     /**

@@ -37,27 +37,33 @@ public class ServiceActionsModel extends ModelAbstract<List<ObjectAdapter>> {
 
     private final DomainServiceLayout.MenuBar menuBar;
 
-    private static Predicate<ObjectAdapter> with(final DomainServiceLayout.MenuBar menuBar) {
-        return new Predicate<ObjectAdapter>() {
-            @Override
-            public boolean apply(ObjectAdapter input) {
-              final DomainServiceLayoutFacet facet = input.getSpecification().getFacet
-                  (DomainServiceLayoutFacet.class);
-                return facet != null && facet.getMenuBar() == menuBar;
-            }
-        };
-    }
-
+    /**
+     * @param menuBar - may be null in special case of rendering the tertiary menu on the error page.
+     */
     public ServiceActionsModel(final DomainServiceLayout.MenuBar menuBar) {
         this.menuBar = menuBar;
     }
 
+    /**
+     * The menu bar being rendered; may be null in special case of rendering the tertiary menu on the error page.
+     */
     public DomainServiceLayout.MenuBar getMenuBar() {
         return menuBar;
     }
 
     protected List<ObjectAdapter> load() {
         return Lists.newArrayList(Iterables.filter(getServiceAdapters(), with(menuBar)));
+    }
+
+    private static Predicate<ObjectAdapter> with(final DomainServiceLayout.MenuBar menuBar) {
+        return new Predicate<ObjectAdapter>() {
+            @Override
+            public boolean apply(ObjectAdapter input) {
+                final DomainServiceLayoutFacet facet = input.getSpecification().getFacet
+                        (DomainServiceLayoutFacet.class);
+                return facet != null && facet.getMenuBar() == menuBar;
+            }
+        };
     }
 
     protected List<ObjectAdapter> getServiceAdapters() {
