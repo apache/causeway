@@ -69,7 +69,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     private Persistability persistable;
     private boolean isEncodeable;
-    private boolean hasNoIdentity;
+
     private RuntimeContextNoRuntime runtimeContext;
 
     public ObjectSpecificationStub(final Class<?> type) {
@@ -151,19 +151,19 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public List<ObjectAssociation> getAssociations(Contributed contributed) {
+    public List<ObjectAssociation> getAssociations(final Contributed contributed) {
         return fields;
     }
 
     @Deprecated
     @Override
-    public List<ObjectAssociation> getAssociations(Filter<ObjectAssociation> filter) {
+    public List<ObjectAssociation> getAssociations(final Filter<ObjectAssociation> filter) {
         return getAssociations(Contributed.INCLUDED, filter);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<OneToOneAssociation> getProperties(Contributed contributed) {
+    public List<OneToOneAssociation> getProperties(final Contributed contributed) {
         @SuppressWarnings("rawtypes")
         final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES);
         return new ArrayList<OneToOneAssociation>(list);
@@ -171,14 +171,14 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<OneToManyAssociation> getCollections(Contributed contributed) {
+    public List<OneToManyAssociation> getCollections(final Contributed contributed) {
         @SuppressWarnings("rawtypes")
         final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.COLLECTIONS);
-        return new ArrayList<OneToManyAssociation>(list);
+        return new ArrayList<>(list);
     }
 
     @Override
-    public List<ObjectAssociation> getAssociations(Contributed contributed, final Filter<ObjectAssociation> filter) {
+    public List<ObjectAssociation> getAssociations(final Contributed contributed, final Filter<ObjectAssociation> filter) {
         final List<ObjectAssociation> allFields = getAssociations(Contributed.EXCLUDED);
 
         final List<ObjectAssociation> selectedFields = Lists.newArrayList();
@@ -206,6 +206,11 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public String getIconName(final ObjectAdapter reference) {
+        return null;
+    }
+
+    @Override
+    public String getCssClass() {
         return null;
     }
 
@@ -270,7 +275,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public String getTitle(final ObjectAdapter contextAdapterIfAny, ObjectAdapter targetAdapter, final Localization localization) {
+    public String getTitle(final ObjectAdapter contextAdapterIfAny, final ObjectAdapter targetAdapter, final Localization localization) {
         return title;
     }
 
@@ -352,7 +357,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     public void setupHasNoIdentity(final boolean hasNoIdentity) {
-        this.hasNoIdentity = hasNoIdentity;
     }
 
     public void setupTitle(final String title) {
@@ -399,7 +403,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public ObjectAdapter initialize(ObjectAdapter objectAdapter) {
+    public ObjectAdapter initialize(final ObjectAdapter objectAdapter) {
         return objectAdapter;
     }
 
@@ -428,7 +432,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public ObjectValidityContext createValidityInteractionContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+    public ObjectValidityContext createValidityInteractionContext(final DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
@@ -474,7 +478,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(List<ActionType> types, final Contributed contributed, final Filter<ObjectAction> filter) {
+    public List<ObjectAction> getObjectActions(final List<ActionType> types, final Contributed contributed, final Filter<ObjectAction> filter) {
         return null;
     }
 
@@ -490,7 +494,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public boolean isViewModelCloneable(ObjectAdapter targetAdapter) {
+    public boolean isViewModelCloneable(final ObjectAdapter targetAdapter) {
         return false;
     }
 
