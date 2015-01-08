@@ -130,6 +130,30 @@ public abstract class AbstractInteractionEvent<S> extends java.util.EventObject 
     }
     //endregion
 
+    //region > veto
+
+    /**
+     * Use instead of {@link #hide()}, {@link #disable(String)} and {@link #invalidate(String)}; just delegates to
+     * appropriate vetoing method based upon the {@link #getPhase()}.
+     *
+     * <p>
+     *     If hiding, just pass <tt>null</tt> for the parameter.
+     * </p>
+     *
+     * @param reason - reason why the interaction is being invalidated (ignored if in {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#HIDE hide} phase).
+     */
+    public void veto(final String reason) {
+        switch (getPhase()) {
+            case HIDE:
+                hide();
+            case DISABLE:
+                disable(reason);
+            case VALIDATE:
+                invalidate(reason);
+        }
+    }
+    //endregion
+
     //region > userData
     /**
      * Provides a mechanism to pass data to the next {@link #getPhase() phase}.
