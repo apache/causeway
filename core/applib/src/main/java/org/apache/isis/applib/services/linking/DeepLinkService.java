@@ -5,11 +5,11 @@ import java.net.URI;
 /**
  * A service that creates a link to any POJO
  */
-public interface PojoDeeplinkService {
+public interface DeepLinkService {
 
     /**
      * @param pojo The POJO to link to
      * @return The link to the POJO
      */
-    URI createLink(Object pojo);
+    URI deepLinkFor(Object pojo);
 }

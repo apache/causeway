@@ -2,7 +2,7 @@ package org.apache.isis.viewer.wicket.viewer.services;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.linking.PojoDeeplinkService;
+import org.apache.isis.applib.services.linking.DeepLinkService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -21,25 +21,25 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
- * An implementation of {@link org.apache.isis.applib.services.linking.PojoDeeplinkService}
+ * An implementation of {@link org.apache.isis.applib.services.linking.DeepLinkService}
  * for Wicket Viewer
  */
 @DomainService
-public class PojoDeeplinkServiceWicket implements PojoDeeplinkService {
+public class DeepLinkServiceWicket implements DeepLinkService {
     private final PageClassRegistry pageClassRegistry;
 
     @Inject
-    public PojoDeeplinkServiceWicket() {
+    public DeepLinkServiceWicket() {
         // TODO PageClassRegistry impl should be injected somehow
         this.pageClassRegistry = new PageClassRegistryDefault(new PageClassListDefault());
     }
 
     @Programmatic
     @Override
-    public URI createLink(Object pojo) {
+    public URI deepLinkFor(Object domainObject) {
 
         AdapterManagerDefault adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
-        ObjectAdapter objectAdapter = adapterManager.adapterFor(pojo);
+        ObjectAdapter objectAdapter = adapterManager.adapterFor(domainObject);
         PageParameters pageParameters = EntityModel.createPageParameters(objectAdapter);
 
         final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
@@ -50,7 +50,7 @@ public class PojoDeeplinkServiceWicket implements PojoDeeplinkService {
         try {
             return new URI(fullUrl);
         } catch (URISyntaxException x) {
-            throw new RuntimeException("Cannot create a deeplink to object: " + pojo, x);
+            throw new RuntimeException("Cannot create a deep link to domain object: " + domainObject, x);
         }
     }
 }
