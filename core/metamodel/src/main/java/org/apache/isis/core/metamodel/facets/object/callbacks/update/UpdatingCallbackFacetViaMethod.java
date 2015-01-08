@@ -16,14 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.object.callbacks.update;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import org.apache.isis.core.commons.lang.Wormhole;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -64,7 +63,12 @@ public class UpdatingCallbackFacetViaMethod extends UpdatingCallbackFacetAbstrac
 
     @Override
     public void invoke(final ObjectAdapter adapter) {
-        ObjectAdapter.InvokeUtils.invokeAll(methods, adapter);
+        Wormhole.invoke(new Runnable() {
+            @Override
+            public void run() {
+                ObjectAdapter.InvokeUtils.invokeAll(methods, adapter);
+            }
+        });
     }
 
     @Override
