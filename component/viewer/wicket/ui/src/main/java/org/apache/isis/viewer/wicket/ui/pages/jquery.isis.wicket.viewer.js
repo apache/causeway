@@ -65,7 +65,7 @@ $(function() {
 
     /* for modal dialogs */
     Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_BEFORE_SEND, function(jqEvent, attributes, jqXHR, settings) {
-        if (!$('#'+attributes.c).hasClass('noVeil')) {
+        if (attributes.c !== window && !$('#'+attributes.c).hasClass('noVeil')) {
             isisShowVeil(attributes, jqXHR, settings);
         }
     });
