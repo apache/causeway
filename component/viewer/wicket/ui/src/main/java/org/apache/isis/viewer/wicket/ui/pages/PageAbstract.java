@@ -63,6 +63,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.applib.services.userprof.UserProfileService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -89,6 +90,8 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChoo
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
+import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -106,8 +109,17 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static final JavaScriptResourceReference JQUERY_LIVEQUERY_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.livequery.js");
     private static final JavaScriptResourceReference JQUERY_ISIS_WICKET_VIEWER_JS = new JavaScriptResourceReference(PageAbstract.class, "jquery.isis.wicket.viewer.js");
     
+    // not to be confused with the bootstrap theme...
+    // is simply a CSS class derived from the application's name
     private static final String ID_THEME = "theme";
+
     private static final String ID_BOOKMARKED_PAGES = "bookmarks";
+    private static final String ID_PRIMARY_MENU_BAR = "primaryMenuBar";
+    private static final String ID_SECONDARY_MENU_BAR = "secondaryMenuBar";
+    private static final String ID_TERTIARY_MENU_BAR = "tertiaryMenuBar";
+    private static final String ID_USER_NAME = "userName";
+    private static final String ID_ABOUT_LINK = "aboutLink";
+    private static final String ID_ABOUT_MESSAGE = "aboutMessage";
 
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     
@@ -115,9 +127,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     
     public static final String ID_MENU_LINK = "menuLink";
 
+    // the bootstrap theme
     private static final String ID_THEME_PICKER = "themePicker";
     private static final String ID_BREADCRUMBS = "breadcrumbs";
-
 
     /**
      * This is a bit hacky, but best way I've found to pass an exception over to the WicketSignInPage
@@ -197,7 +209,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             // ensure that all collected JavaScript contributions are loaded at the page footer
             add(new HeaderResponseContainer("footerJS", "footerJS"));
 
-        } catch(RuntimeException ex) {
+        } catch(final RuntimeException ex) {
 
             LOG.error("Failed to construct page, going back to sign in page", ex);
             
@@ -216,14 +228,14 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         }
     }
 
-    private void addApplicationName(MarkupContainer themeDiv) {
-        BookmarkablePageLink<Void> applicationNameLink = homePageLink("applicationName");
+    private void addApplicationName(final MarkupContainer themeDiv) {
+        final BookmarkablePageLink<Void> applicationNameLink = homePageLink("applicationName");
         applicationNameLink.setBody(Model.of(applicationName));
         themeDiv.add(applicationNameLink);
     }
 
     private void addThemePicker() {
-        ThemeChooser themeChooser = new ThemeChooser(ID_THEME_PICKER);
+        final ThemeChooser themeChooser = new ThemeChooser(ID_THEME_PICKER);
         themeDiv.addOrReplace(themeChooser);
     }
 
@@ -238,7 +250,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         
         super.renderHead(response);
 
@@ -250,7 +262,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_ISIS_WICKET_VIEWER_JS));
 
-        JGrowlBehaviour jGrowlBehaviour = new JGrowlBehaviour();
+        final JGrowlBehaviour jGrowlBehaviour = new JGrowlBehaviour();
         jGrowlBehaviour.renderFeedbackMessages(response);
 
         if(applicationCss != null) {
@@ -260,13 +272,26 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         }
 
-        // TODO mgrigorov Remove before merge to master
-        WebClientInfo clientInfo = WebSession.get().getClientInfo();
-        ClientProperties properties = clientInfo.getProperties();
-        if (!(properties.isBrowserInternetExplorer() && properties.getBrowserVersionMajor() < 9)) {
-            // use BootLint for any browser but IE 6-8
-            response.render(JavaScriptHeaderItem.forReference(BootlintJavaScriptReference.INSTANCE));
+        if(isModernBrowser()) {
+            addBootLint(response);
         }
+    }
+
+    private void addBootLint(final IHeaderResponse response) {
+        response.render(JavaScriptHeaderItem.forReference(BootlintJavaScriptReference.INSTANCE));
+    }
+
+    private boolean isModernBrowser() {
+        return !isIePre9();
+    }
+
+    private boolean isIePre9() {
+        final WebClientInfo clientInfo = WebSession.get().getClientInfo();
+        final ClientProperties properties = clientInfo.getProperties();
+        if (properties.isBrowserInternetExplorer())
+            if (properties.getBrowserVersionMajor() < 9)
+                return true;
+        return false;
     }
 
     /**
@@ -274,28 +299,47 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
      *
      * @param response The header response to contribute to
      */
-    private void contributeThemeSpecificOverrides(IHeaderResponse response) {
-        IBootstrapSettings bootstrapSettings = Bootstrap.getSettings(getApplication());
-        ITheme activeTheme = bootstrapSettings.getActiveThemeProvider().getActiveTheme();
-        String name = activeTheme.name().toLowerCase(Locale.ENGLISH);
-        String themeSpecificOverride = "bootstrap-overrides-" + name + ".css";
-        ResourceReference.Key themeSpecificOverrideKey = new ResourceReference.Key(PageAbstract.class.getName(), themeSpecificOverride, null, null, null);
+    private void contributeThemeSpecificOverrides(final IHeaderResponse response) {
+        final IBootstrapSettings bootstrapSettings = Bootstrap.getSettings(getApplication());
+        final ITheme activeTheme = bootstrapSettings.getActiveThemeProvider().getActiveTheme();
+        final String name = activeTheme.name().toLowerCase(Locale.ENGLISH);
+        final String themeSpecificOverride = "bootstrap-overrides-" + name + ".css";
+        final ResourceReference.Key themeSpecificOverrideKey = new ResourceReference.Key(PageAbstract.class.getName(), themeSpecificOverride, null, null, null);
         if (PackageResource.exists(themeSpecificOverrideKey)) {
             response.render(CssHeaderItem.forReference(new CssResourceReference(themeSpecificOverrideKey)));
         }
     }
 
-    private void addUserName(MarkupContainer themeDiv) {
-        Label userName = new Label("userName", getAuthenticationSession().getUserName());
+    private void addUserName(final MarkupContainer themeDiv) {
+        final UserProfileService userProfileService = getUserProfileService();
+        final Label userName = new Label(ID_USER_NAME, userProfileService.userProfileName());
         themeDiv.add(userName);
     }
 
+    private UserProfileService getUserProfileService() {
+        final UserProfileService userProfileService = lookupService(UserProfileService.class);
+        return new UserProfileService() {
+            @Override
+            public String userProfileName() {
+                if(PageAbstract.this instanceof ErrorPage) {
+                    return getAuthenticationSession().getUserName();
+                }
+                try {
+                    final String userProfileName = userProfileService != null ? userProfileService.userProfileName() : null;
+                    return userProfileName != null? userProfileName: getAuthenticationSession().getUserName();
+                } catch (final Exception e) {
+                    return getAuthenticationSession().getUserName();
+                }
+            }
+        };
+    }
 
-    private void addAboutLink(MarkupContainer themeDiv) {
-        BookmarkablePageLink<Void> aboutLink = new BookmarkablePageLink<>("aboutLink", AboutPage.class);
+
+    private void addAboutLink(final MarkupContainer themeDiv) {
+        final BookmarkablePageLink<Void> aboutLink = new BookmarkablePageLink<>(ID_ABOUT_LINK, AboutPage.class);
         themeDiv.add(aboutLink);
 
-        Label aboutLabel = new Label("aboutMessage", new ResourceModel("aboutLabel"));
+        final Label aboutLabel = new Label(ID_ABOUT_MESSAGE, new ResourceModel("aboutLabel"));
         aboutLink.add(aboutLabel);
         addDevModeWarning(aboutLink);
     }
@@ -304,14 +348,14 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
      * Adds a component that shows a warning sign next to "About" link in development mode
      * @param container The parent component
      */
-    private void addDevModeWarning(MarkupContainer container) {
-        WebComponent devModeWarning = new WebComponent("devModeWarning");
+    private void addDevModeWarning(final MarkupContainer container) {
+        final WebComponent devModeWarning = new WebComponent("devModeWarning");
         devModeWarning.setVisible(getApplication().usesDevelopmentConfig());
         container.add(devModeWarning);
     }
 
     private void addBreadcrumbs() {
-        BreadcrumbPanel breadcrumbPanel = new BreadcrumbPanel(ID_BREADCRUMBS);
+        final BreadcrumbPanel breadcrumbPanel = new BreadcrumbPanel(ID_BREADCRUMBS);
         themeDiv.addOrReplace(breadcrumbPanel);
     }
 
@@ -332,13 +376,19 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         return pageParameters;
     }
 
-    private void addServiceActionMenuBars(MarkupContainer container) {
-        addMenuBar(container, "primaryMenuBar", DomainServiceLayout.MenuBar.PRIMARY);
-        addMenuBar(container, "secondaryMenuBar", DomainServiceLayout.MenuBar.SECONDARY);
-        addMenuBar(container, "tertiaryMenuBar", DomainServiceLayout.MenuBar.TERTIARY);
+    private void addServiceActionMenuBars(final MarkupContainer container) {
+        if (this instanceof ErrorPage) {
+            Components.permanentlyHide(container, ID_PRIMARY_MENU_BAR);
+            Components.permanentlyHide(container, ID_SECONDARY_MENU_BAR);
+            addMenuBar(container, ID_TERTIARY_MENU_BAR, null);
+        } else {
+            addMenuBar(container, ID_PRIMARY_MENU_BAR, DomainServiceLayout.MenuBar.PRIMARY);
+            addMenuBar(container, ID_SECONDARY_MENU_BAR, DomainServiceLayout.MenuBar.SECONDARY);
+            addMenuBar(container, ID_TERTIARY_MENU_BAR, DomainServiceLayout.MenuBar.TERTIARY);
+        }
     }
 
-    private void addMenuBar(MarkupContainer container, String id, DomainServiceLayout.MenuBar menuBar) {
+    private void addMenuBar(final MarkupContainer container, final String id, final DomainServiceLayout.MenuBar menuBar) {
         final ServiceActionsModel model = new ServiceActionsModel(menuBar);
         getComponentFactoryRegistry().addOrReplaceComponent(container, id, ComponentType.SERVICE_ACTIONS, model);
     }
@@ -353,13 +403,13 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
      *            - used to find the best matching {@link ComponentFactory} to
      *            render the model.
      */
-    protected void addChildComponents(MarkupContainer container, final IModel<?> model) {
+    protected void addChildComponents(final MarkupContainer container, final IModel<?> model) {
         for (final ComponentType componentType : getChildModelTypes()) {
             addComponent(container, componentType, model);
         }
     }
 
-    private void addComponent(MarkupContainer container, final ComponentType componentType, final IModel<?> model) {
+    private void addComponent(final MarkupContainer container, final ComponentType componentType, final IModel<?> model) {
         getComponentFactoryRegistry().addOrReplaceComponent(container, componentType, model);
     }
 
@@ -375,16 +425,16 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, ID_BOOKMARKED_PAGES, ComponentType.BOOKMARKED_PAGES, getBookmarkedPagesModel());
     }
 
-    protected void bookmarkPage(BookmarkableModel<?> model) {
+    protected void bookmarkPage(final BookmarkableModel<?> model) {
         getBookmarkedPagesModel().bookmarkPage(model);
     }
 
-    protected void removeAnyBookmark(EntityModel model) {
+    protected void removeAnyBookmark(final EntityModel model) {
         getBookmarkedPagesModel().remove(model);
     }
 
     private BookmarkedPagesModel getBookmarkedPagesModel() {
-        BookmarkedPagesModelProvider session = (BookmarkedPagesModelProvider) getSession();
+        final BookmarkedPagesModelProvider session = (BookmarkedPagesModelProvider) getSession();
         return session.getBookmarkedPagesModel();
     }
 
@@ -414,11 +464,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
      * Propagates all {@link org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract letter} events down to
      * all child components, wrapped in an {@link org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent envelope} event.
      */
-    public void onEvent(org.apache.wicket.event.IEvent<?> event) {
-        Object payload = event.getPayload();
+    public void onEvent(final org.apache.wicket.event.IEvent<?> event) {
+        final Object payload = event.getPayload();
         if(payload instanceof IsisEventLetterAbstract) {
-            IsisEventLetterAbstract letter = (IsisEventLetterAbstract)payload;
-            IsisEnvelopeEvent broadcastEv = new IsisEnvelopeEvent(letter);
+            final IsisEventLetterAbstract letter = (IsisEventLetterAbstract)payload;
+            final IsisEnvelopeEvent broadcastEv = new IsisEnvelopeEvent(letter);
             send(this, Broadcast.BREADTH, broadcastEv);
         }
     }
@@ -431,6 +481,10 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
         final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor) getApplication();
         return cfra.getComponentFactoryRegistry();
+    }
+
+    protected <T> T lookupService(final Class<T> serviceClass) {
+        return getServicesInjector().lookupService(serviceClass);
     }
 
     // ///////////////////////////////////////////////////
