@@ -216,7 +216,7 @@ public class InteractionHelper {
             } else {
                 final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
                 final Identifier identifier = identified.getIdentifier();
-                event = newCollectionInteractionEvent(eventType, null, identifier, source, of, reference);
+                event = newCollectionInteractionEvent(eventType, phase, identifier, source, of, reference);
             }
             event.setPhase(phase);
             getEventBusService().post(event);
