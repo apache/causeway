@@ -416,6 +416,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return iconFacet == null ? null : iconFacet.iconName(reference);
     }
 
+    @Deprecated
+    @Override
+    public String getCssClass() {
+        return getCssClass(null);
+    }
+
     @Override
     public String getCssClass(final ObjectAdapter reference) {
         return cssClassFacet == null ? null : cssClassFacet.cssClass(reference);

@@ -388,6 +388,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // createObject
     // //////////////////////////////////////////////////////////////////////
 
+
     @Override
     public Object createObject() {
         if (getCorrespondingClass().isArray()) {

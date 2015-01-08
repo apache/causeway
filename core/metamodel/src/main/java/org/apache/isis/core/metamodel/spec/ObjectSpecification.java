@@ -191,13 +191,22 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     String getIconName(ObjectAdapter object);
 
     /**
+     *
+     * @deprecated - use {@link #getCssClass(org.apache.isis.core.metamodel.adapter.ObjectAdapter)}.
+     */
+    @Deprecated
+    String getCssClass();
+
+    /**
      * Returns the CSS class name to use for the specified object.
      *
      * <p>
      * Corresponds to the {@link org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet#cssClass(org.apache.isis.core.metamodel.adapter.ObjectAdapter)} value}
      * returned by the {@link org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet}.
+     *
+     * @param objectAdapter - to evaluate (may be <tt>null</tt> if called by deprecated {@link #getCssClass}).
      */
-    String getCssClass(ObjectAdapter object);
+    String getCssClass(ObjectAdapter objectAdapter);
 
     boolean isAbstract();
 

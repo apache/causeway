@@ -27,6 +27,11 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface CssClassFacet extends Facet {
 
+    /**
+     * return custom CSS (if any) for provided {@link org.apache.isis.core.metamodel.adapter.ObjectAdapter object}.
+     *
+     * @param objectAdapter - to evaluate.  May be <tt>null</tt> in exceptional circumstances (specifically: the {@link org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson#asJson(org.apache.isis.core.metamodel.spec.ObjectSpecification)} which generates <tt>xxx.layout.json</tt> for a spec without recourse to any given object).
+     */
     public String cssClass(final ObjectAdapter objectAdapter);
 
 }
