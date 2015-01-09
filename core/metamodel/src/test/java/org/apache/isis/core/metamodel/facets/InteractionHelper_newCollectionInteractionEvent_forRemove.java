@@ -19,8 +19,8 @@ package org.apache.isis.core.metamodel.facets;
 import java.util.Set;
 import org.junit.Test;
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
-import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -33,7 +33,7 @@ public class InteractionHelper_newCollectionInteractionEvent_forRemove {
     }
     public static class SomeReferencedObject {}
     
-    public static class SomeDomainObjectCollectionRemovedFromEvent extends CollectionInteractionEvent<SomeDomainObject, SomeReferencedObject> {
+    public static class SomeDomainObjectCollectionRemovedFromEvent extends CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> {
         private static final long serialVersionUID = 1L;
         public SomeDomainObjectCollectionRemovedFromEvent(SomeDomainObject source, Identifier identifier, Of of, SomeReferencedObject value) {
             super(source, identifier, of, value);
@@ -46,11 +46,11 @@ public class InteractionHelper_newCollectionInteractionEvent_forRemove {
         SomeReferencedObject other = new SomeReferencedObject();
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
 
-        final CollectionInteractionEvent<Object, Object> ev = new InteractionHelper(null).newCollectionInteractionEvent(
-                CollectionRemovedFromEvent.Default.class, AbstractInteractionEvent.Phase.EXECUTED, identifier, sdo, CollectionInteractionEvent.Of.REMOVE_FROM, other);
+        final CollectionDomainEvent<Object, Object> ev = new InteractionHelper(null).newCollectionDomainEvent(
+                CollectionRemovedFromEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
-        assertThat(ev.getOf(), is(CollectionInteractionEvent.Of.REMOVE_FROM));
+        assertThat(ev.getOf(), is(CollectionDomainEvent.Of.REMOVE_FROM));
         assertThat(ev.getValue(), is((Object)other));
     }
 
@@ -60,11 +60,11 @@ public class InteractionHelper_newCollectionInteractionEvent_forRemove {
         SomeReferencedObject other = new SomeReferencedObject();
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
 
-        final CollectionInteractionEvent<Object, Object> ev = new InteractionHelper(null).newCollectionInteractionEvent(
-                CollectionRemovedFromEvent.Default.class, AbstractInteractionEvent.Phase.EXECUTED, identifier, sdo, CollectionInteractionEvent.Of.REMOVE_FROM, other);
+        final CollectionDomainEvent<Object, Object> ev = new InteractionHelper(null).newCollectionDomainEvent(
+                CollectionRemovedFromEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
-        assertThat(ev.getOf(), is(CollectionInteractionEvent.Of.REMOVE_FROM));
+        assertThat(ev.getOf(), is(CollectionDomainEvent.Of.REMOVE_FROM));
         assertThat(ev.getValue(), is((Object)other));
     }
 
@@ -74,11 +74,11 @@ public class InteractionHelper_newCollectionInteractionEvent_forRemove {
         SomeReferencedObject other = new SomeReferencedObject();
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
 
-        final CollectionInteractionEvent<SomeDomainObject, SomeReferencedObject> ev = new InteractionHelper(null).newCollectionInteractionEvent(
-                SomeDomainObjectCollectionRemovedFromEvent.class, AbstractInteractionEvent.Phase.EXECUTED, identifier, sdo, CollectionInteractionEvent.Of.REMOVE_FROM, other);
+        final CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> ev = new InteractionHelper(null).newCollectionDomainEvent(
+                SomeDomainObjectCollectionRemovedFromEvent.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
         assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
-        assertThat(ev.getOf(), is(CollectionInteractionEvent.Of.REMOVE_FROM));
+        assertThat(ev.getOf(), is(CollectionDomainEvent.Of.REMOVE_FROM));
         assertThat(ev.getValue(), is(other));
     }
     

@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.collection;
 
 import org.apache.isis.applib.annotation.Collection;
-import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.interaction.CollectionInteractionFacet;
 import org.apache.isis.core.metamodel.facets.collections.interaction.CollectionInteractionFacetAbstract;
@@ -34,13 +34,13 @@ public class CollectionInteractionFacetForCollectionAnnotation extends Collectio
             final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader,
             final FacetHolder holder) {
-        Class<? extends CollectionInteractionEvent<?, ?>> collectionInteractionEventType = collection.interaction();
+        Class<? extends CollectionDomainEvent<?, ?>> collectionInteractionEventType = collection.domainEvent();
         return new CollectionInteractionFacetForCollectionAnnotation(
                 collectionInteractionEventType, servicesInjector, specificationLoader, holder);
     }
 
     public CollectionInteractionFacetForCollectionAnnotation(
-            final Class<? extends CollectionInteractionEvent<?, ?>> eventType,
+            final Class<? extends CollectionDomainEvent<?, ?>> eventType,
             final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
         super(eventType, holder, servicesInjector, specificationLoader);
     }

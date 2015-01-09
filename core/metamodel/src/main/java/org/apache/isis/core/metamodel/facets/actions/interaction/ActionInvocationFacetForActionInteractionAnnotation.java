@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.actions.interaction;
 
 import java.lang.reflect.Method;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
@@ -31,7 +31,7 @@ public class ActionInvocationFacetForActionInteractionAnnotation
         extends ActionInvocationFacetForInteractionAbstract {
 
     public ActionInvocationFacetForActionInteractionAnnotation(
-            final Class<? extends ActionInteractionEvent<?>> eventType, final Method method,
+            final Class<? extends ActionDomainEvent<?>> eventType, final Method method,
             final ObjectSpecification onType,
             final ObjectSpecification returnType,
             final ActionInteractionFacetAbstract actionInteractionFacet,

@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.interaction;
 
-import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 public class PropertyInteractionFacetDefault extends PropertyInteractionFacetAbstract {
 
     public PropertyInteractionFacetDefault(
-            final Class<? extends PropertyInteractionEvent<?, ?>> eventType,
+            final Class<? extends PropertyDomainEvent<?, ?>> eventType,
             final PropertyOrCollectionAccessorFacet getterFacet,
             final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
         super(eventType, getterFacet, holder, servicesInjector, specificationLoader);

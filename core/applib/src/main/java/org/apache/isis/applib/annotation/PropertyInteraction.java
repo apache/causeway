@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
 
 /**
- * @deprecated - use {@link Property#interaction()} instead.
+ * @deprecated - use {@link Property#domainEvent()} instead.
  */
 @Deprecated
 @Retention(RetentionPolicy.RUNTIME)
@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
 public @interface PropertyInteraction {
 
     /**
-     * @deprecated - use {@link Property#interaction()} instead.
+     * @deprecated - use {@link Property#domainEvent()} instead.
      */
     @Deprecated
     Class<? extends PropertyInteractionEvent<?,?>> value() default PropertyInteractionEvent.Default.class;

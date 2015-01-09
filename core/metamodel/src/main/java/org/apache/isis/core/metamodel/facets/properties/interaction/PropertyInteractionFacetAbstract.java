@@ -23,7 +23,7 @@ import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
-import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.InteractionHelper;
@@ -41,12 +41,12 @@ public abstract class PropertyInteractionFacetAbstract
 
     private final InteractionHelper interactionHelper;
 
-    final static ThreadLocal<PropertyInteractionEvent<?,?>> currentInteraction = new ThreadLocal<PropertyInteractionEvent<?,?>>();
+    final static ThreadLocal<PropertyDomainEvent<?,?>> currentInteraction = new ThreadLocal<PropertyDomainEvent<?,?>>();
 
     private final PropertyOrCollectionAccessorFacet getterFacet;
 
     public PropertyInteractionFacetAbstract(
-            final Class<? extends PropertyInteractionEvent<?, ?>> eventType,
+            final Class<? extends PropertyDomainEvent<?, ?>> eventType,
             final PropertyOrCollectionAccessorFacet getterFacet,
             final FacetHolder holder,
             final ServicesInjector servicesInjector,
@@ -65,7 +65,7 @@ public abstract class PropertyInteractionFacetAbstract
         // reset (belt-n-braces)
         currentInteraction.set(null);
 
-        final PropertyInteractionEvent<?, ?> event =
+        final PropertyDomainEvent<?, ?> event =
                 interactionHelper.postEventForProperty(
                         eventType(), null, AbstractInteractionEvent.Phase.HIDE, getIdentified(), ic.getTarget(), null, null);
         if (event != null && event.isHidden()) {
@@ -83,7 +83,7 @@ public abstract class PropertyInteractionFacetAbstract
         // reset (belt-n-braces)
         currentInteraction.set(null);
 
-        final PropertyInteractionEvent<?, ?> event =
+        final PropertyDomainEvent<?, ?> event =
                 interactionHelper.postEventForProperty(
                     eventType(), null, AbstractInteractionEvent.Phase.DISABLE, getIdentified(), ic.getTarget(), null, null);
         if (event != null && event.isDisabled()) {
@@ -104,7 +104,7 @@ public abstract class PropertyInteractionFacetAbstract
         final Object oldValue = getterFacet.getProperty(ic.getTarget());
         final Object proposedValue = proposedFrom(ic);
 
-        final PropertyInteractionEvent<?, ?> event =
+        final PropertyDomainEvent<?, ?> event =
                 interactionHelper.postEventForProperty(
                         eventType(), null, AbstractInteractionEvent.Phase.VALIDATE, getIdentified(), ic.getTarget(), oldValue, proposedValue);
         if (event != null && event.isInvalid()) {

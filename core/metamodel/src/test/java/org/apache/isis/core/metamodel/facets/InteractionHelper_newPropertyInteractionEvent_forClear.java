@@ -19,7 +19,7 @@ package org.apache.isis.core.metamodel.facets;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -29,7 +29,7 @@ public class InteractionHelper_newPropertyInteractionEvent_forClear {
 
     public static class SomeDomainObject {}
     
-    public static class SomeDatePropertyChangedEvent extends PropertyInteractionEvent<SomeDomainObject, LocalDate> {
+    public static class SomeDatePropertyChangedEvent extends PropertyDomainEvent<SomeDomainObject, LocalDate> {
         private static final long serialVersionUID = 1L;
         public SomeDatePropertyChangedEvent(SomeDomainObject source, Identifier identifier, LocalDate oldValue, LocalDate newValue) {
             super(source, identifier, oldValue, newValue);
@@ -44,8 +44,8 @@ public class InteractionHelper_newPropertyInteractionEvent_forClear {
         LocalDate oldValue = new LocalDate(2013,4,1);
         LocalDate newValue = null;
         
-        final PropertyInteractionEvent<Object, Object> ev =
-                new InteractionHelper(null).newPropertyInteractionEvent(PropertyInteractionEvent.Default.class, identifier, sdo, oldValue, newValue);
+        final PropertyDomainEvent<Object, Object> ev =
+                new InteractionHelper(null).newPropertyDomainEvent(PropertyDomainEvent.Default.class, identifier, sdo, oldValue, newValue);
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOldValue(), is((Object)oldValue));
@@ -61,8 +61,8 @@ public class InteractionHelper_newPropertyInteractionEvent_forClear {
         LocalDate oldValue = new LocalDate(2013,4,1);
         LocalDate newValue = null;
         
-        final PropertyInteractionEvent<SomeDomainObject, LocalDate> ev =
-                new InteractionHelper(null).newPropertyInteractionEvent(SomeDatePropertyChangedEvent.class, identifier, sdo, oldValue, newValue);
+        final PropertyDomainEvent<SomeDomainObject, LocalDate> ev =
+                new InteractionHelper(null).newPropertyDomainEvent(SomeDatePropertyChangedEvent.class, identifier, sdo, oldValue, newValue);
         assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOldValue(), is(oldValue));

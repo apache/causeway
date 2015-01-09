@@ -18,25 +18,24 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.util.ObjectContracts;
 
-public abstract class ActionInteractionEvent<S> extends AbstractInteractionEvent<S> {
+/**
+ * @deprecated - use {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent} instead.
+ */
+@Deprecated
+public abstract class ActionInteractionEvent<S> extends ActionDomainEvent<S> {
 
     private static final long serialVersionUID = 1L;
 
     //region > Default class
 
     /**
-     * Propagated if no custom subclass was specified using
-     * {@link org.apache.isis.applib.annotation.ActionInteraction} annotation.
+     * @deprecated - use {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent.Default} instead.
      */
-    public static class Default extends ActionInteractionEvent<Object> {
+    @Deprecated
+    public static class Default extends ActionDomainEvent.Default {
         private static final long serialVersionUID = 1L;
         public Default(Object source, Identifier identifier, Object... arguments) {
             super(source, identifier, arguments);
@@ -55,84 +54,16 @@ public abstract class ActionInteractionEvent<S> extends AbstractInteractionEvent
             final S source,
             final Identifier identifier,
             final Object... arguments) {
-        this(source, identifier, arguments != null? Arrays.asList(arguments): Collections.emptyList());
+        super(source, identifier, arguments);
     }
 
     public ActionInteractionEvent(
             final S source,
             final Identifier identifier,
             final List<Object> arguments) {
-        this(source, identifier);
-        this.arguments = Collections.unmodifiableList(arguments);
+        super(source, identifier, arguments);
     }
     //endregion
 
-    //region > command
-    private Command command;
-
-    /**
-     * The {@link org.apache.isis.applib.services.command.Command} for this action.
-     *
-     * <p>
-     * Set when in {@link Phase#EXECUTING} and {@link Phase#EXECUTED}, but not for earlier phases.
-     *
-     * <p>
-     * The command is set by the framework based on the configured
-     * {@link org.apache.isis.applib.services.command.CommandContext}) service).  Ths command may or may not be
-     * persisted, depending on the which implementation of
-     * {@link org.apache.isis.applib.services.command.spi.CommandService} service is configured.
-     */
-    public Command getCommand() {
-        return command;
-    }
-
-    /**
-     * Not API - set by the framework.
-     */
-    public void setCommand(Command command) {
-        this.command = command;
-    }
-    //endregion
-
-
-    //region > actionSemantics
-    private ActionSemantics.Of actionSemantics;
-    public ActionSemantics.Of getActionSemantics() {
-        return actionSemantics;
-    }
-
-    /**
-     * Not API - set by the framework.
-     */
-    public void setActionSemantics(ActionSemantics.Of actionSemantics) {
-        this.actionSemantics = actionSemantics;
-    }
-
-    //endregion
-
-    //region > arguments
-    private List<Object> arguments;
-    /**
-     * The arguments being used to invoke the action; populated at {@link Phase#VALIDATE} and subsequent phases
-     * (but null for {@link Phase#HIDE hidden} and {@link Phase#DISABLE disable} phases).
-     */
-    public List<Object> getArguments() {
-        return arguments;
-    }
-
-    /**
-     * Not API - set by the framework.
-     */
-    public void setArguments(List<Object> arguments) {
-        this.arguments = arguments;
-    }
-    //endregion
-
-    //region > toString
-    @Override
-    public String toString() {
-        return ObjectContracts.toString(this, "source,identifier,phase");
-    }
-    //endregion
 
 }

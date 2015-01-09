@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.interaction;
 
-import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
@@ -30,7 +30,7 @@ public class PropertyClearFacetForPropertyInteractionDefault
 
 
     public PropertyClearFacetForPropertyInteractionDefault(
-            final Class<? extends PropertyInteractionEvent<?, ?>> eventType,
+            final Class<? extends PropertyDomainEvent<?, ?>> eventType,
             final PropertyOrCollectionAccessorFacet getterFacet,
             final PropertyClearFacet clearFacet,
             final PropertyInteractionFacetAbstract propertyInteractionFacet,

@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
 
 /**
- * @deprecated - use instead {@link org.apache.isis.applib.annotation.Action#interaction()}.
+ * @deprecated - use instead {@link org.apache.isis.applib.annotation.Action#domainEvent()}.
  */
 @Deprecated
 @Retention(RetentionPolicy.RUNTIME)

@@ -19,9 +19,9 @@ package org.apache.isis.core.metamodel.facets;
 import java.util.Set;
 import org.junit.Test;
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
+import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
-import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -33,7 +33,7 @@ public class InteractionHelper_newCollectionInteractionEvent_forAdd {
     }
     public static class SomeReferencedObject {}
     
-    public static class SomeDomainObjectCollectionEvent extends CollectionInteractionEvent<SomeDomainObject, SomeReferencedObject> {
+    public static class SomeDomainObjectCollectionEvent extends CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> {
         private static final long serialVersionUID = 1L;
         public SomeDomainObjectCollectionEvent(SomeDomainObject source, Identifier identifier, Of of, SomeReferencedObject value) {
             super(source, identifier, of, value);
@@ -46,11 +46,11 @@ public class InteractionHelper_newCollectionInteractionEvent_forAdd {
         final SomeReferencedObject other = new SomeReferencedObject();
         final Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
 
-        final CollectionInteractionEvent<Object, Object> ev = new InteractionHelper(null).newCollectionInteractionEvent(
-                CollectionInteractionEvent.Default.class, null, identifier, sdo, CollectionInteractionEvent.Of.ADD_TO, other);
+        final CollectionDomainEvent<Object, Object> ev = new InteractionHelper(null).newCollectionDomainEvent(
+                CollectionDomainEvent.Default.class, null, identifier, sdo, CollectionDomainEvent.Of.ADD_TO, other);
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
-        assertThat(ev.getOf(), is(CollectionInteractionEvent.Of.ADD_TO));
+        assertThat(ev.getOf(), is(CollectionDomainEvent.Of.ADD_TO));
         assertThat(ev.getValue(), is((Object)other));
     }
 
@@ -60,11 +60,11 @@ public class InteractionHelper_newCollectionInteractionEvent_forAdd {
         final SomeReferencedObject other = new SomeReferencedObject();
         final Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
 
-        final CollectionInteractionEvent<Object, Object> ev = new InteractionHelper(null).newCollectionInteractionEvent(
-                CollectionAddedToEvent.Default.class, AbstractInteractionEvent.Phase.EXECUTED, identifier, sdo, CollectionInteractionEvent.Of.ADD_TO, other);
+        final CollectionDomainEvent<Object, Object> ev = new InteractionHelper(null).newCollectionDomainEvent(
+                CollectionAddedToEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.ADD_TO, other);
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
-        assertThat(ev.getOf(), is(CollectionInteractionEvent.Of.ADD_TO));
+        assertThat(ev.getOf(), is(CollectionDomainEvent.Of.ADD_TO));
         assertThat(ev.getValue(), is((Object)other));
     }
 
@@ -74,11 +74,11 @@ public class InteractionHelper_newCollectionInteractionEvent_forAdd {
         final SomeReferencedObject other = new SomeReferencedObject();
         final Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
         
-        final CollectionInteractionEvent<SomeDomainObject, SomeReferencedObject> ev = new InteractionHelper(null).newCollectionInteractionEvent(
-                SomeDomainObjectCollectionEvent.class, AbstractInteractionEvent.Phase.EXECUTED, identifier, sdo, CollectionInteractionEvent.Of.ADD_TO, other);
+        final CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> ev = new InteractionHelper(null).newCollectionDomainEvent(
+                SomeDomainObjectCollectionEvent.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.ADD_TO, other);
         assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
-        assertThat(ev.getOf(), is(CollectionInteractionEvent.Of.ADD_TO));
+        assertThat(ev.getOf(), is(CollectionDomainEvent.Of.ADD_TO));
         assertThat(ev.getValue(), is(other));
     }
     

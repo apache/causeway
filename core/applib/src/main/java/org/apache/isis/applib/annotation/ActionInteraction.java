@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 
 /**
- * @deprecated - see {@link Action#interaction()}.
+ * @deprecated - see {@link Action#domainEvent()}.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 public @interface ActionInteraction {
 
     /**
-     * @deprecated - see {@link Action#interaction()}.
+     * @deprecated - see {@link Action#domainEvent()}.
      */
     @Deprecated
     Class<? extends ActionInteractionEvent<?>> value() default ActionInteractionEvent.Default.class;

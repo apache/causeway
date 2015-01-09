@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.interaction;
 
-import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
@@ -30,7 +30,7 @@ public class PropertyClearFacetForPostsPropertyChangedEventAnnotation
 
 
     public PropertyClearFacetForPostsPropertyChangedEventAnnotation(
-            final Class<? extends PropertyInteractionEvent<?, ?>> eventType,
+            final Class<? extends PropertyDomainEvent<?, ?>> eventType,
             final PropertyOrCollectionAccessorFacet getterFacet,
             final PropertyClearFacet clearFacet,
             final PropertyInteractionFacetAbstract propertyInteractionFacet,
@@ -39,7 +39,7 @@ public class PropertyClearFacetForPostsPropertyChangedEventAnnotation
     }
 
     @Override
-    protected PropertyInteractionEvent<?, ?> verify(final PropertyInteractionEvent<?, ?> event) {
+    protected PropertyDomainEvent<?, ?> verify(final PropertyDomainEvent<?, ?> event) {
         // will discard event if different type to that specified in the PostsPropertyChangedEvent annotation.
         return event != null && value() == event.getClass() ? event : null;
     }

@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.interaction;
 
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 public class ActionInteractionFacetAnnotation extends ActionInteractionFacetAbstract {
 
     public ActionInteractionFacetAnnotation(
-            final Class<? extends ActionInteractionEvent<?>> eventType,
+            final Class<? extends ActionDomainEvent<?>> eventType,
             final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
         super(eventType, holder, servicesInjector, specificationLoader);
     }

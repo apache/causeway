@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.collections.interaction;
 
-import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 public class CollectionInteractionFacetDefault extends CollectionInteractionFacetAbstract {
 
     public CollectionInteractionFacetDefault(
-            final Class<? extends CollectionInteractionEvent<?, ?>> eventType,
+            final Class<? extends CollectionDomainEvent<?, ?>> eventType,
             final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
         super(eventType, holder, servicesInjector, specificationLoader);
     }

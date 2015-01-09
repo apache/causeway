@@ -24,7 +24,7 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.applib.spec.Specification;
 
 /**
@@ -38,15 +38,15 @@ public @interface Property {
     /**
      * Indicates that changes to the property that should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
-     * {@link org.apache.isis.applib.services.eventbus.PropertyInteractionEvent}.
+     * {@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}.
      *
      * <p>For example:
      * </p>
      *
      * <pre>
-     * public static class StartDateChanged extends PropertyInteractionEvent {}
+     * public static class StartDateChanged extends PropertyDomainEvent { ... }
      *
-     * &#64;PropertyInteraction(StartDateChanged.class)
+     * &#64;Property(domainEvent=StartDateChanged.class)
      * public LocalDate getStartDate() { ...}
      * </pre>
      *
@@ -60,7 +60,7 @@ public @interface Property {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
-    Class<? extends PropertyInteractionEvent<?,?>> interaction() default PropertyInteractionEvent.Default.class;
+    Class<? extends PropertyDomainEvent<?,?>> domainEvent() default PropertyDomainEvent.Default.class;
 
 
     // //////////////////////////////////////

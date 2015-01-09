@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 
 /**
- * @deprecated - use instead {@link org.apache.isis.applib.annotation.Property#interaction()}.
+ * @deprecated - use instead {@link org.apache.isis.applib.annotation.Property#domainEvent()}.
  */
 @Deprecated
 @Retention(RetentionPolicy.RUNTIME)
@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 public @interface PostsPropertyChangedEvent {
 
     /**
-     * @deprecated - use instead {@link org.apache.isis.applib.annotation.Property#interaction()}.
+     * @deprecated - use instead {@link org.apache.isis.applib.annotation.Property#domainEvent()}.
      */
     @Deprecated
     Class<? extends PropertyChangedEvent<?,?>> value() default PropertyChangedEvent.Default.class;

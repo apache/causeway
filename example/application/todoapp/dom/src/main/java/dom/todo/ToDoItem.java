@@ -38,7 +38,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
@@ -56,7 +55,8 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.security.UserMemento;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.scratchpad.Scratchpad;
 import org.apache.isis.applib.services.wrapper.HiddenException;
@@ -337,7 +337,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     }
 
     @Action(
-            interaction=CompletedEvent.class,
+            domainEvent =CompletedEvent.class,
             invokeOn = InvokeOn.OBJECT_AND_COLLECTION
     )
     public ToDoItem completed() {
@@ -660,7 +660,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     //region > delete (action)
     @Action(
-            interaction=DeletedEvent.class,
+            domainEvent =DeletedEvent.class,
             invokeOn = InvokeOn.OBJECT_AND_COLLECTION
     )
     public List<ToDoItem> delete() {
@@ -810,10 +810,10 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     //region > events
 
-    public static abstract class AbstractActionInteractionEvent extends ActionInteractionEvent<ToDoItem> {
+    public static abstract class AbstractActionDomainEvent extends ActionDomainEvent<ToDoItem> {
         private static final long serialVersionUID = 1L;
         private final String description;
-        public AbstractActionInteractionEvent(
+        public AbstractActionDomainEvent(
                 final String description,
                 final ToDoItem source,
                 final Identifier identifier,
@@ -826,7 +826,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         }
     }
 
-    public static class CompletedEvent extends AbstractActionInteractionEvent {
+    public static class CompletedEvent extends AbstractActionDomainEvent {
         private static final long serialVersionUID = 1L;
         public CompletedEvent(
                 final ToDoItem source, 
@@ -836,7 +836,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         }
     }
 
-    public static class NoLongerCompletedEvent extends AbstractActionInteractionEvent {
+    public static class NoLongerCompletedEvent extends AbstractActionDomainEvent {
         private static final long serialVersionUID = 1L;
         public NoLongerCompletedEvent(
                 final ToDoItem source, 
@@ -846,7 +846,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
         }
     }
 
-    public static class DeletedEvent extends AbstractActionInteractionEvent {
+    public static class DeletedEvent extends AbstractActionDomainEvent {
         private static final long serialVersionUID = 1L;
         public DeletedEvent(
                 final ToDoItem source, 

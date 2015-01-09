@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionInteraction;
 import org.apache.isis.applib.annotation.PostsActionInvokedEvent;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
@@ -111,11 +111,11 @@ public class ActionInteractionFacetFactory extends MethodPrefixBasedFacetFactory
             //
             final Action action = Annotations.getAnnotation(actionMethod, Action.class);
             final ActionInteraction actionInteraction =Annotations.getAnnotation(actionMethod, ActionInteraction.class);
-            final Class<? extends ActionInteractionEvent<?>> actionInteractionEventType;
+            final Class<? extends ActionDomainEvent<?>> actionInteractionEventType;
 
             final ActionInteractionFacetAbstract actionInteractionFacet;
-            if(action != null && action.interaction() != null) {
-                actionInteractionEventType = action.interaction();
+            if(action != null && action.domainEvent() != null) {
+                actionInteractionEventType = action.domainEvent();
                 actionInteractionFacet = new ActionInteractionFacetForActionAnnotation(
                         actionInteractionEventType, servicesInjector, getSpecificationLoader(), holder);
             } else if(actionInteraction != null) {
@@ -123,7 +123,7 @@ public class ActionInteractionFacetFactory extends MethodPrefixBasedFacetFactory
                 actionInteractionFacet = new ActionInteractionFacetAnnotation(
                         actionInteractionEventType, servicesInjector, getSpecificationLoader(), holder);
             } else {
-                actionInteractionEventType = ActionInteractionEvent.Default.class;
+                actionInteractionEventType = ActionDomainEvent.Default.class;
                 actionInteractionFacet = new ActionInteractionFacetDefault(
                         actionInteractionEventType, servicesInjector, getSpecificationLoader(), holder);
             }
@@ -141,7 +141,7 @@ public class ActionInteractionFacetFactory extends MethodPrefixBasedFacetFactory
                         postsActionInvokedEvent.value(), actionMethod, typeSpec, returnSpec, actionInteractionFacet, holder, getRuntimeContext(), getAdapterManager(), getServicesInjector());
             } else {
                 actionInvocationFacet = new ActionInvocationFacetForActionInteractionDefault(
-                        ActionInteractionEvent.Default.class, actionMethod, typeSpec, returnSpec, actionInteractionFacet, holder, getRuntimeContext(), getAdapterManager(), getServicesInjector());
+                        ActionDomainEvent.Default.class, actionMethod, typeSpec, returnSpec, actionInteractionFacet, holder, getRuntimeContext(), getAdapterManager(), getServicesInjector());
             }
             FacetUtil.addFacet(actionInvocationFacet);
 

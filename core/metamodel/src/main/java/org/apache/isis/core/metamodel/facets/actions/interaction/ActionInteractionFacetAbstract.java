@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.facets.actions.interaction;
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
-import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.InteractionHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
@@ -48,10 +48,10 @@ public abstract class ActionInteractionFacetAbstract
      * not invalidate), then the event is passed through to the executing phase using this thread-local.
      * </p>
      */
-    final static ThreadLocal<ActionInteractionEvent<?>> currentInteraction = new ThreadLocal<>();
+    final static ThreadLocal<ActionDomainEvent<?>> currentInteraction = new ThreadLocal<>();
 
     public ActionInteractionFacetAbstract(
-            final Class<? extends ActionInteractionEvent<?>> eventType,
+            final Class<? extends ActionDomainEvent<?>> eventType,
             final FacetHolder holder,
             final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader) {
@@ -68,9 +68,9 @@ public abstract class ActionInteractionFacetAbstract
         // reset (belt-n-braces)
         currentInteraction.set(null);
 
-        final ActionInteractionEvent<?> event =
+        final ActionDomainEvent<?> event =
                 interactionHelper.postEventForAction(
-                        eventType(), null, null, AbstractInteractionEvent.Phase.HIDE,
+                        eventType(), null, null, AbstractDomainEvent.Phase.HIDE,
                         getIdentified(), ic.getTarget(), null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
@@ -87,9 +87,9 @@ public abstract class ActionInteractionFacetAbstract
         // reset (belt-n-braces)
         currentInteraction.set(null);
 
-        final ActionInteractionEvent<?> event =
+        final ActionDomainEvent<?> event =
                 interactionHelper.postEventForAction(
-                        eventType(), null, null, AbstractInteractionEvent.Phase.DISABLE,
+                        eventType(), null, null, AbstractDomainEvent.Phase.DISABLE,
                         getIdentified(), ic.getTarget(), null);
         if (event != null && event.isDisabled()) {
             return event.getDisabledReason();
@@ -107,9 +107,9 @@ public abstract class ActionInteractionFacetAbstract
         currentInteraction.set(null);
 
         final ActionInvocationContext aic = (ActionInvocationContext) ic;
-        final ActionInteractionEvent<?> event =
+        final ActionDomainEvent<?> event =
                 interactionHelper.postEventForAction(
-                        eventType(), null, null, AbstractInteractionEvent.Phase.VALIDATE,
+                        eventType(), null, null, AbstractDomainEvent.Phase.VALIDATE,
                         getIdentified(), ic.getTarget(), aic.getArgs());
         if (event != null && event.isInvalid()) {
             return event.getInvalidityReason();

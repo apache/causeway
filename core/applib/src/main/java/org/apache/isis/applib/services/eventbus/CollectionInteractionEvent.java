@@ -19,18 +19,19 @@
 package org.apache.isis.applib.services.eventbus;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.util.ObjectContracts;
 
-public abstract class CollectionInteractionEvent<S,T> extends AbstractInteractionEvent<S> {
-
-    private static final long serialVersionUID = 1L;
+/**
+ * @deprecated - use {@link org.apache.isis.applib.services.eventbus.CollectionDomainEvent} instead.
+ */
+@Deprecated
+public abstract class CollectionInteractionEvent<S,T> extends CollectionDomainEvent<S,T> {
 
     //region > Default class
     /**
-     * Propagated if no custom subclass was specified using
-     * {@link org.apache.isis.applib.annotation.ActionInteraction} annotation.
+     * @deprecated - use {@link org.apache.isis.applib.services.eventbus.CollectionDomainEvent.Default} instead.
      */
-    public static class Default extends CollectionInteractionEvent<Object, Object> {
+    @Deprecated
+    public static class Default extends CollectionDomainEvent.Default {
         private static final long serialVersionUID = 1L;
         public Default(
                 final Object source,
@@ -47,8 +48,7 @@ public abstract class CollectionInteractionEvent<S,T> extends AbstractInteractio
             final S source,
             final Identifier identifier,
             final Of of) {
-        super(source, identifier);
-        this.of = of;
+        super(source, identifier, of);
     }
 
     public CollectionInteractionEvent(
@@ -56,71 +56,8 @@ public abstract class CollectionInteractionEvent<S,T> extends AbstractInteractio
             final Identifier identifier,
             final Of of,
             final T value) {
-        this(source, identifier, of);
-        this.value = value;
+        super(source, identifier, of, value);
     }
     //endregion
 
-    //region > value
-    private T value;
-
-    /**
-     * The proposed reference to either add or remove (per {@link #getOf()}), populated at {@link Phase#VALIDATE}
-     * and subsequent phases (is null for {@link Phase#HIDE hidden} and {@link Phase#DISABLE disable} phases).
-     */
-    public T getValue() {
-        return value;
-    }
-    /**
-     * Not API, set by the framework.
-     */
-    public void setValue(T value) {
-        this.value = value;
-    }
-    //endregion
-
-    //region > Of
-    public static enum Of {
-        /**
-         * The collection is being accessed
-         * ({@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#HIDE hide} and
-         * {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#DISABLE disable}) checks.
-         */
-        ACCESS,
-        /**
-         * The collection is being added to
-         * ({@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#VALIDATE validity} check and
-         * {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTED execution}).
-         */
-        ADD_TO,
-        /**
-         * The collection is being removed from
-         * ({@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#VALIDATE validity} check and
-         * {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTED execution}).
-         */
-        REMOVE_FROM
-    }
-
-    private Of of;
-
-    public Of getOf() {
-        return of;
-    }
-
-    /**
-     * Not API; updates from {@link Of#ACCESS} to either {@link Of#ADD_TO} or {@link Of#REMOVE_FROM} when hits the
-     * {@link Phase#VALIDATE validation phase}.
-     */
-    public void setOf(Of of) {
-        this.of = of;
-    }
-
-    //endregion
-
-    //region > toString
-    @Override
-    public String toString() {
-        return ObjectContracts.toString(this, "source,identifier,phase,of,value");
-    }
-    //endregion
 }

@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets.collections.interaction;
 
 import java.util.Set;
-import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
-import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 
 public abstract class CollectionAddToFacetForInteractionAbstract
-    extends SingleValueFacetAbstract<Class<? extends CollectionInteractionEvent<?,?>>>
+    extends SingleValueFacetAbstract<Class<? extends CollectionDomainEvent<?,?>>>
     implements CollectionAddToFacet {
 
     private final InteractionHelper interactionHelper;
@@ -44,19 +44,19 @@ public abstract class CollectionAddToFacetForInteractionAbstract
 
     private final PropertyOrCollectionAccessorFacet getterFacet;
     private final CollectionAddToFacet collectionAddToFacet;
-    private final CollectionInteractionFacetAbstract collectionInteractionFacet;
+    private final CollectionInteractionFacetAbstract collectionDomainEventFacet;
 
     public CollectionAddToFacetForInteractionAbstract(
-            final Class<? extends CollectionInteractionEvent<?, ?>> eventType,
+            final Class<? extends CollectionDomainEvent<?, ?>> eventType,
             final PropertyOrCollectionAccessorFacet getterFacet,
             final CollectionAddToFacet collectionAddToFacet,
-            final CollectionInteractionFacetAbstract collectionInteractionFacet,
+            final CollectionInteractionFacetAbstract collectionDomainEventFacet,
             final ServicesInjector servicesInjector,
             final FacetHolder holder) {
         super(type(), eventType, holder);
         this.getterFacet = getterFacet;
         this.collectionAddToFacet = collectionAddToFacet;
-        this.collectionInteractionFacet = collectionInteractionFacet;
+        this.collectionDomainEventFacet = collectionDomainEventFacet;
         this.interactionHelper = new InteractionHelper(servicesInjector);
     }
 
@@ -91,24 +91,24 @@ public abstract class CollectionAddToFacetForInteractionAbstract
             // execute the add wrapped between the executing and executed events ...
 
             // pick up existing event (saved in thread local during the validation phase)
-            final CollectionInteractionEvent<?, ?> existingEvent = collectionInteractionFacet.currentInteraction.get();
+            final CollectionDomainEvent<?, ?> existingEvent = collectionDomainEventFacet.currentInteraction.get();
 
             // ... post the executing event
-            final CollectionInteractionEvent<?, ?> event = interactionHelper.postEventForCollection(
-                    value(), existingEvent, AbstractInteractionEvent.Phase.EXECUTING,
-                    getIdentified(), targetAdapter, CollectionInteractionEvent.Of.ADD_TO, referencedObject);
+            final CollectionDomainEvent<?, ?> event = interactionHelper.postEventForCollection(
+                    value(), existingEvent, AbstractDomainEvent.Phase.EXECUTING,
+                    getIdentified(), targetAdapter, CollectionDomainEvent.Of.ADD_TO, referencedObject);
 
             // ... perform add
             collectionAddToFacet.add(targetAdapter, referencedObjectAdapter);
 
             // ... post the executed event
             interactionHelper.postEventForCollection(
-                    value(), verify(event), AbstractInteractionEvent.Phase.EXECUTED,
-                    getIdentified(), targetAdapter, CollectionInteractionEvent.Of.ADD_TO, referencedObject);
+                    value(), verify(event), AbstractDomainEvent.Phase.EXECUTED,
+                    getIdentified(), targetAdapter, CollectionDomainEvent.Of.ADD_TO, referencedObject);
 
         } finally {
             // clean up
-            collectionInteractionFacet.currentInteraction.set(null);
+            collectionDomainEventFacet.currentInteraction.set(null);
         }
     }
 
@@ -116,7 +116,7 @@ public abstract class CollectionAddToFacetForInteractionAbstract
      * Optional hook to allow the facet implementation for the deprecated {@link org.apache.isis.applib.annotation.PostsCollectionAddedToEvent} annotation
      * to discard the event if of a different type.
      */
-    protected CollectionInteractionEvent<?, ?> verify(CollectionInteractionEvent<?, ?> event) {
+    protected CollectionDomainEvent<?, ?> verify(CollectionDomainEvent<?, ?> event) {
         return event;
     }
 

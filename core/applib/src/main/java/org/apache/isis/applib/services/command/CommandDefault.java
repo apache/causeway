@@ -17,7 +17,11 @@
 package org.apache.isis.applib.services.command;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -25,10 +29,11 @@ import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public class CommandDefault implements Command2 {
+public class CommandDefault implements Command2, Command3 {
 
     public CommandDefault() {
         setExecutor(Executor.OTHER);
@@ -186,31 +191,75 @@ public class CommandDefault implements Command2 {
     // actionInteractionEvent (property)
     // //////////////////////////////////////
 
-    private final LinkedList<ActionInteractionEvent<?>> actionInteractionEvents = Lists.newLinkedList();
 
+    @Deprecated
     @Override
     public ActionInteractionEvent<?> peekActionInteractionEvent() {
-        return actionInteractionEvents.isEmpty()? null: actionInteractionEvents.getLast();
+        final ActionDomainEvent<?> actionDomainEvent = peekActionDomainEvent();
+        if (!(actionDomainEvent instanceof ActionInteractionEvent)) {
+            throw new IllegalStateException("Most recently pushed event was not an instance of ActionInteractionEvent; use either ActionDomainEvent or the (deprecated) ActionInteractionEvent consistently");
+        }
+        return (ActionInteractionEvent<?>) actionDomainEvent;
     }
 
+    @Deprecated
     @Override
     public void pushActionInteractionEvent(ActionInteractionEvent<?> event) {
-        if(peekActionInteractionEvent() == event) {
-            return;
+        pushActionDomainEvent(event);
+    }
+
+    @Deprecated
+    @Override
+    public ActionInteractionEvent popActionInteractionEvent() {
+        final ActionDomainEvent<?> actionDomainEvent = popActionDomainEvent();
+        if (!(actionDomainEvent instanceof ActionInteractionEvent)) {
+            throw new IllegalStateException("Most recently pushed event was not an instance of ActionInteractionEvent; use either ActionDomainEvent or the (deprecated) ActionInteractionEvent consistently");
         }
-        this.actionInteractionEvents.add(event);
+        return (ActionInteractionEvent<?>) actionDomainEvent;
+    }
+
+    @Deprecated
+    @Programmatic
+    public List<ActionInteractionEvent<?>> flushActionInteractionEvents() {
+        final List<ActionDomainEvent<?>> actionDomainEvents = flushActionDomainEvents();
+        for (ActionDomainEvent<?> actionDomainEvent : actionDomainEvents) {
+            if (!(actionDomainEvent instanceof ActionInteractionEvent)) {
+                throw new IllegalStateException("List of events includes at least one event that is not an instance of ActionInteractionEvent; use either ActionDomainEvent or the (deprecated) ActionInteractionEvent consistently");
+            }
+        }
+        return (List)actionDomainEvents;
+    }
+
+
+    // //////////////////////////////////////
+    // actionDomainEvent (property)
+    // //////////////////////////////////////
+
+    private final LinkedList<ActionDomainEvent<?>> actionDomainEvents = Lists.newLinkedList();
+
+    @Override
+    public ActionDomainEvent<?> peekActionDomainEvent() {
+        return actionDomainEvents.isEmpty()? null: actionDomainEvents.getLast();
     }
 
     @Override
-    public ActionInteractionEvent popActionInteractionEvent() {
-        return !actionInteractionEvents.isEmpty() ? actionInteractionEvents.removeLast() : null;
+    public void pushActionDomainEvent(ActionDomainEvent<?> event) {
+        if(peekActionDomainEvent() == event) {
+            return;
+        }
+        this.actionDomainEvents.add(event);
+    }
+
+    @Override
+    public ActionDomainEvent popActionDomainEvent() {
+        return !actionDomainEvents.isEmpty() ? actionDomainEvents.removeLast() : null;
     }
 
     @Programmatic
-    public List<ActionInteractionEvent<?>> flushActionInteractionEvents() {
-        final List<ActionInteractionEvent<?>> events =
-                Collections.unmodifiableList(Lists.newArrayList(actionInteractionEvents));
-        actionInteractionEvents.clear();
+    public List<ActionDomainEvent<?>> flushActionDomainEvents() {
+        final List<ActionDomainEvent<?>> events =
+                Collections.unmodifiableList(Lists.newArrayList(actionDomainEvents));
+        actionDomainEvents.clear();
         return events;
     }
 

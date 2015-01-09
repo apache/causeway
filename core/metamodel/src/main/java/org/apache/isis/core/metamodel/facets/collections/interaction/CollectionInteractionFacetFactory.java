@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionInteraction;
 import org.apache.isis.applib.annotation.PostsCollectionAddedToEvent;
 import org.apache.isis.applib.annotation.PostsCollectionRemovedFromEvent;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -58,11 +59,11 @@ public class CollectionInteractionFacetFactory extends FacetFactoryAbstract impl
         //
         final Collection collection = Annotations.getAnnotation(method, Collection.class);
         final CollectionInteraction collectionInteraction = Annotations.getAnnotation(method, CollectionInteraction.class);
-        final Class<? extends CollectionInteractionEvent<?, ?>> collectionInteractionEventType;
+        final Class<? extends CollectionDomainEvent<?, ?>> collectionInteractionEventType;
 
         final CollectionInteractionFacetAbstract collectionInteractionFacet;
-        if(collection != null && collection.interaction() != null) {
-            collectionInteractionEventType = collection.interaction();
+        if(collection != null && collection.domainEvent() != null) {
+            collectionInteractionEventType = collection.domainEvent();
             collectionInteractionFacet = new CollectionInteractionFacetForCollectionAnnotation(
                     collectionInteractionEventType, servicesInjector, getSpecificationLoader(), holder);
 
@@ -71,7 +72,7 @@ public class CollectionInteractionFacetFactory extends FacetFactoryAbstract impl
             collectionInteractionFacet = new CollectionInteractionFacetAnnotation(
                     collectionInteractionEventType, servicesInjector, getSpecificationLoader(), holder);
         } else {
-            collectionInteractionEventType = CollectionInteractionEvent.Default.class;
+            collectionInteractionEventType = CollectionDomainEvent.Default.class;
             collectionInteractionFacet = new CollectionInteractionFacetDefault(
                     collectionInteractionEventType, servicesInjector, getSpecificationLoader(), holder);
         }
@@ -136,7 +137,7 @@ public class CollectionInteractionFacetFactory extends FacetFactoryAbstract impl
         // would look rather odd
         //
 
-        FacetUtil.addFacet(new CollectionInteractionFacetDefault(CollectionInteractionEvent.Default.class, servicesInjector, getSpecificationLoader(), objectMember));
+        FacetUtil.addFacet(new CollectionInteractionFacetDefault(CollectionDomainEvent.Default.class, servicesInjector, getSpecificationLoader(), objectMember));
 
     }
 

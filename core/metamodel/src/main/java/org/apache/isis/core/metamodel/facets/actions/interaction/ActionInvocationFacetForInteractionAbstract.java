@@ -28,18 +28,18 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.ViewModel;
-import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
-import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -74,11 +74,11 @@ public abstract class ActionInvocationFacetForInteractionAbstract
     private final RuntimeContext runtimeContext;
 
     private final ServicesInjector servicesInjector;
-    final Class<? extends ActionInteractionEvent<?>> eventType;
+    final Class<? extends ActionDomainEvent<?>> eventType;
     private final InteractionHelper interactionHelper;
 
     public ActionInvocationFacetForInteractionAbstract(
-            final Class<? extends ActionInteractionEvent<?>> eventType,
+            final Class<? extends ActionDomainEvent<?>> eventType,
             final Method method,
             final ObjectSpecification onType,
             final ObjectSpecification returnType,
@@ -178,12 +178,12 @@ public abstract class ActionInvocationFacetForInteractionAbstract
             final Command command = commandContext != null ? commandContext.getCommand() : null;
 
             // pick up existing event (saved in thread local during the validation phase)
-            final ActionInteractionEvent<?> existingEvent = actionInteractionFacet.currentInteraction.get();
+            final ActionDomainEvent<?> existingEvent = actionInteractionFacet.currentInteraction.get();
 
             // ... post the executing event
-            final ActionInteractionEvent<?> event =
+            final ActionDomainEvent<?> event =
                     interactionHelper.postEventForAction(
-                            eventType, existingEvent, command, AbstractInteractionEvent.Phase.EXECUTING,
+                            eventType, existingEvent, command, AbstractDomainEvent.Phase.EXECUTING,
                             owningAction, targetAdapter, arguments);
 
             // ... invoke the action
@@ -194,7 +194,7 @@ public abstract class ActionInvocationFacetForInteractionAbstract
                 // perhaps the Action was not properly invoked (i.e. an exception was raised).
                 // If invoked, then send the ActionInteractionEvent to the EventBus.
                 interactionHelper.postEventForAction(
-                        eventType, verify(event), command, AbstractInteractionEvent.Phase.EXECUTED,
+                        eventType, verify(event), command, AbstractDomainEvent.Phase.EXECUTED,
                         owningAction, targetAdapter, arguments);
             }
 
@@ -215,7 +215,7 @@ public abstract class ActionInvocationFacetForInteractionAbstract
      * Optional hook to allow the facet implementation for the deprecated {@link org.apache.isis.applib.annotation.PostsActionInvokedEvent} annotation
      * to discard the event if of a different type.
      */
-    protected ActionInteractionEvent<?> verify(ActionInteractionEvent<?> event) {
+    protected ActionDomainEvent<?> verify(ActionDomainEvent<?> event) {
         return event;
     }
 

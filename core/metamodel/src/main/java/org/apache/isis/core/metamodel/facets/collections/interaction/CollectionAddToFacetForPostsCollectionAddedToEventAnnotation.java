@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.interaction;
 
 import org.apache.isis.applib.services.eventbus.CollectionAddedToEvent;
-import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -29,17 +29,17 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 public class CollectionAddToFacetForPostsCollectionAddedToEventAnnotation
         extends CollectionAddToFacetForInteractionAbstract {
 
-	public CollectionAddToFacetForPostsCollectionAddedToEventAnnotation(
+    public CollectionAddToFacetForPostsCollectionAddedToEventAnnotation(
             final Class<? extends CollectionAddedToEvent<?, ?>> eventType,
             final PropertyOrCollectionAccessorFacet getterFacet,
             final CollectionAddToFacet collectionAddToFacet,
             final CollectionInteractionFacetAbstract collectionInteractionFacet,
             final FacetHolder holder, final ServicesInjector servicesInjector) {
-		super(eventType, getterFacet, collectionAddToFacet, collectionInteractionFacet, servicesInjector, holder);
-	}
+        super(eventType, getterFacet, collectionAddToFacet, collectionInteractionFacet, servicesInjector, holder);
+    }
 
     @Override
-    protected CollectionInteractionEvent<?, ?> verify(final CollectionInteractionEvent<?, ?> event) {
+    protected CollectionDomainEvent<?, ?> verify(final CollectionDomainEvent<?, ?> event) {
         // will discard event if different type to that specified in the PostsCollectionAddedToEvent annotation.
         return event != null && value() == event.getClass() ? event : null;
     }

@@ -24,7 +24,7 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 
 /**
  * Domain semantics for domain object collection.
@@ -37,13 +37,13 @@ public @interface Collection {
     /**
      * Indicates that changes to the collection that should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
-     * {@link org.apache.isis.applib.services.eventbus.CollectionInteractionEvent}.
+     * {@link org.apache.isis.applib.services.eventbus.CollectionDomainEvent}.
      *
      * <p>For example:
      * </p>
      * <pre>
      * public class Order {
-     *   public static class OrderLineItems extends CollectionInteractionEvent {}
+     *   public static class OrderLineItems extends CollectionDomainEvent { ... }
      *
      *   &#64;CollectionInteraction(OrderLineItems.class)
      *   public SortedSet&lt;OrderLine&gt; getLineItems() { ...}
@@ -60,7 +60,7 @@ public @interface Collection {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
-    Class<? extends CollectionInteractionEvent<?,?>> interaction() default CollectionInteractionEvent.Default.class;
+    Class<? extends CollectionDomainEvent<?,?>> domainEvent() default CollectionDomainEvent.Default.class;
 
     // //////////////////////////////////////
 

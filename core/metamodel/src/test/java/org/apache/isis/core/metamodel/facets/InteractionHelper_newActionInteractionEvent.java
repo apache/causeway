@@ -18,10 +18,12 @@ package org.apache.isis.core.metamodel.facets;
 
 import org.junit.Test;
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class InteractionHelper_newActionInteractionEvent {
@@ -30,7 +32,7 @@ public class InteractionHelper_newActionInteractionEvent {
         public String foo(int x, String y) { return null; }
     }
     
-    public static class SomeDomainObjectFooInvokedEvent extends ActionInteractionEvent<SomeDomainObject> {
+    public static class SomeDomainObjectFooInvokedEvent extends ActionDomainEvent<SomeDomainObject> {
         private static final long serialVersionUID = 1L;
         public SomeDomainObjectFooInvokedEvent(SomeDomainObject source, Identifier identifier, Object... arguments) {
             super(source, identifier, arguments);
@@ -42,8 +44,8 @@ public class InteractionHelper_newActionInteractionEvent {
         SomeDomainObject sdo = new SomeDomainObject();
         Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
 
-        final ActionInteractionEvent<Object> ev = new InteractionHelper(null).newActionInteractionEvent(
-                ActionInteractionEvent.Default.class, identifier, sdo, new Object[]{1, "bar"});
+        final ActionDomainEvent<Object> ev = new InteractionHelper(null).newActionDomainEvent(
+                ActionDomainEvent.Default.class, identifier, sdo, new Object[]{1, "bar"});
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getArguments(), is(not(nullValue())));
@@ -56,7 +58,7 @@ public class InteractionHelper_newActionInteractionEvent {
         SomeDomainObject sdo = new SomeDomainObject();
         Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
 
-        final ActionInteractionEvent<Object> ev = new InteractionHelper(null).newActionInteractionEvent(
+        final ActionDomainEvent<Object> ev = new InteractionHelper(null).newActionDomainEvent(
                 ActionInvokedEvent.Default.class, identifier, sdo, new Object[]{1, "bar"});
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
@@ -70,7 +72,7 @@ public class InteractionHelper_newActionInteractionEvent {
         SomeDomainObject sdo = new SomeDomainObject();
         Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
         
-        final ActionInteractionEvent<SomeDomainObject> ev = new InteractionHelper(null).newActionInteractionEvent(
+        final ActionDomainEvent<SomeDomainObject> ev = new InteractionHelper(null).newActionDomainEvent(
                 SomeDomainObjectFooInvokedEvent.class, identifier, sdo, new Object[]{1, "bar"});
         assertThat((SomeDomainObject)ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));

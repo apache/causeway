@@ -24,7 +24,7 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 
 /**
  * Domain semantics for domain object collection.
@@ -38,15 +38,15 @@ public @interface Action {
     /**
      * Indicates that an invocation of the action should be posted to the
      * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
-     * {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}.
+     * {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}.
      *
      * <p>For example:
      * </p>
      *
      * <pre>
-     * public static class StartDateChangedEvent extends ActionInvokedEvent {}
+     * public static class StartDateChangedEvent extends ActionDomainEvent { ... }
      *
-     * &#64;PostsActionInvokedEvent(StartDateChangedEvent.class)
+     * &#64;Action(domainEvent=StartDateChangedEvent.class)
      * public void changeStartDate(final Date startDate) { ...}
      * </pre>
      *
@@ -60,7 +60,7 @@ public @interface Action {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
-    Class<? extends ActionInteractionEvent<?>> interaction() default ActionInteractionEvent.Default.class;
+    Class<? extends ActionDomainEvent<?>> domainEvent() default ActionDomainEvent.Default.class;
 
 
     // //////////////////////////////////////

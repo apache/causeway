@@ -25,7 +25,7 @@ import java.util.List;
 import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyInteraction;
-import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -72,22 +72,22 @@ public class PropertyInteractionFacetFactory extends FacetFactoryAbstract implem
         //
         final Property property = Annotations.getAnnotation(method, Property.class);
         final PropertyInteraction propertyInteraction = Annotations.getAnnotation(method, PropertyInteraction.class);
-        final Class<? extends PropertyInteractionEvent<?, ?>> propertyInteractionEventType;
+        final Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEventType;
 
         final PropertyInteractionFacetAbstract propertyInteractionFacet;
-        if(property != null && property.interaction() != null) {
-            propertyInteractionEventType = property.interaction();
+        if(property != null && property.domainEvent() != null) {
+            propertyDomainEventType = property.domainEvent();
             propertyInteractionFacet = new PropertyInteractionFacetForPropertyAnnotation(
-                    propertyInteractionEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
+                    propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
 
         } else if(propertyInteraction != null) {
-            propertyInteractionEventType = propertyInteraction.value();
+            propertyDomainEventType = propertyInteraction.value();
             propertyInteractionFacet = new PropertyInteractionFacetAnnotation(
-                    propertyInteractionEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
+                    propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
         } else {
-            propertyInteractionEventType = PropertyInteractionEvent.Default.class;
+            propertyDomainEventType = PropertyDomainEvent.Default.class;
             propertyInteractionFacet = new PropertyInteractionFacetDefault(
-                    propertyInteractionEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
+                    propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
         }
         FacetUtil.addFacet(propertyInteractionFacet);
 
@@ -108,13 +108,13 @@ public class PropertyInteractionFacetFactory extends FacetFactoryAbstract implem
             final PropertySetterFacetForInteractionAbstract replacementFacet;
             if(propertyInteraction != null) {
                 replacementFacet = new PropertySetterFacetForPropertyInteractionAnnotation(
-                        propertyInteractionEventType, getterFacet, setterFacet, propertyInteractionFacet, holder, servicesInjector);
+                        propertyDomainEventType, getterFacet, setterFacet, propertyInteractionFacet, holder, servicesInjector);
             } else if(postsPropertyChangedEvent != null) {
                 replacementFacet = new PropertySetterFacetForPostsPropertyChangedEventAnnotation(
                         postsPropertyChangedEvent.value(), getterFacet, setterFacet, propertyInteractionFacet, holder, servicesInjector);
             } else {
                 replacementFacet = new PropertySetterFacetForPropertyInteractionDefault(
-                        PropertyInteractionEvent.Default.class, getterFacet, setterFacet, propertyInteractionFacet, holder, servicesInjector);
+                        PropertyDomainEvent.Default.class, getterFacet, setterFacet, propertyInteractionFacet, holder, servicesInjector);
             }
             FacetUtil.addFacet(replacementFacet);
         }
@@ -125,13 +125,13 @@ public class PropertyInteractionFacetFactory extends FacetFactoryAbstract implem
             final PropertyClearFacetForInteractionAbstract replacementFacet;
             if(propertyInteraction != null) {
                 replacementFacet = new PropertyClearFacetForPropertyInteractionAnnotation(
-                        propertyInteractionEventType, getterFacet, clearFacet, propertyInteractionFacet, holder, servicesInjector);
+                        propertyDomainEventType, getterFacet, clearFacet, propertyInteractionFacet, holder, servicesInjector);
             } else if(postsPropertyChangedEvent != null) {
                 replacementFacet = new PropertyClearFacetForPostsPropertyChangedEventAnnotation(
                         postsPropertyChangedEvent.value(), getterFacet, clearFacet, propertyInteractionFacet, holder, servicesInjector);
             } else {
                 replacementFacet = new PropertyClearFacetForPropertyInteractionDefault(
-                        PropertyInteractionEvent.Default.class, getterFacet, clearFacet, propertyInteractionFacet, holder, servicesInjector);
+                        PropertyDomainEvent.Default.class, getterFacet, clearFacet, propertyInteractionFacet, holder, servicesInjector);
             }
             FacetUtil.addFacet(replacementFacet);
         }

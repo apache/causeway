@@ -22,8 +22,8 @@ import com.google.common.eventbus.SubscriberExceptionContext;
 import com.google.common.eventbus.SubscriberExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
-import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -88,7 +88,7 @@ public class EventBusServiceDefault extends EventBusService {
                     return;
                 } 
                 final AbstractInteractionEvent<?> interactionEvent = (AbstractInteractionEvent<?>) event;
-                final Phase phase = interactionEvent.getPhase();
+                final AbstractDomainEvent.Phase phase = interactionEvent.getPhase();
                 switch (phase) {
                 case HIDE:
                     LOG.warn("Exception thrown during HIDE phase, to be safe will veto (hide) the interaction event, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());

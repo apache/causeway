@@ -39,10 +39,10 @@ import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
-import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
@@ -188,7 +188,7 @@ public class ToDoItemSubscriptions {
 
     @Programmatic
     @Subscribe
-    public void on(final ActionInteractionEvent<?> ev) {
+    public void on(final ActionDomainEvent<?> ev) {
         recordEvent(ev);
         switch(ev.getPhase()) {
             case HIDE:
@@ -222,7 +222,7 @@ public class ToDoItemSubscriptions {
 
     @Programmatic
     @Subscribe
-    public void on(PropertyInteractionEvent<?,?> ev) {
+    public void on(PropertyDomainEvent<?,?> ev) {
         recordEvent(ev);
         switch(ev.getPhase()) {
             case HIDE:
@@ -261,7 +261,7 @@ public class ToDoItemSubscriptions {
     
     @Programmatic
     @Subscribe
-    public void on(CollectionInteractionEvent<?,?> ev) {
+    public void on(CollectionDomainEvent<?,?> ev) {
         recordEvent(ev);
         switch (ev.getPhase()) {
             case HIDE:
@@ -283,19 +283,19 @@ public class ToDoItemSubscriptions {
             case VALIDATE:
                 if(getSubscriberBehaviour() == Behaviour.DependenciesCollectionInvalidateAdd &&
                     ev.getIdentifier().getMemberName().equals("dependencies") &&
-                    ev.getOf() == CollectionInteractionEvent.Of.ADD_TO ) {
+                    ev.getOf() == CollectionDomainEvent.Of.ADD_TO ) {
                     ev.invalidate("ToDoItemSubscriptions says: can't add this object to dependencies collection!");
                 }
                 if(getSubscriberBehaviour() == Behaviour.DependenciesCollectionInvalidateRemove &&
                     ev.getIdentifier().getMemberName().equals("dependencies") &&
-                    ev.getOf() == CollectionInteractionEvent.Of.REMOVE_FROM ) {
+                    ev.getOf() == CollectionDomainEvent.Of.REMOVE_FROM ) {
                     ev.invalidate("ToDoItemSubscriptions says: can't remove this object from dependencies collection!");
                 }
                 break;
             case EXECUTING:
                 break;
             case EXECUTED:
-                if(ev.getOf() == CollectionInteractionEvent.Of.ADD_TO) {
+                if(ev.getOf() == CollectionDomainEvent.Of.ADD_TO) {
                     LOG.info("Received CollectionInteractionEvent, " + ev.getSource().toString() + ", added to " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
                 } else {
                     LOG.info("Received CollectionInteractionEvent, " + ev.getSource().toString() + ", removed from " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());

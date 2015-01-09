@@ -39,18 +39,19 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
 import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command2;
+import org.apache.isis.applib.services.command.Command3;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.publish.EventMetadata;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventPayloadForActionInvocation;
@@ -797,14 +798,21 @@ public class IsisTransaction implements TransactionScopedComponent {
         if (!(command instanceof Command2)) {
             return;
         }
-        final Command2 command2 = (Command2) command;
-        final List<ActionInteractionEvent<?>> events = command2.flushActionInteractionEvents();
+
+        final List<? extends ActionDomainEvent<?>> events;
+        if(command instanceof Command3) {
+            final Command3 command3 = (Command3) command;
+            events = command3.flushActionDomainEvents();
+        } else {
+            final Command2 command2 = (Command2) command;
+            events = command2.flushActionInteractionEvents();
+        }
         if (events.isEmpty()) {
             return;
         }
 
         // are all safe?
-        for (ActionInteractionEvent<?> event : events) {
+        for (ActionDomainEvent<?> event : events) {
             if(!event.getActionSemantics().isSafe()) {
                 // found at least one non-safe action, so all bets are off.
                 return;

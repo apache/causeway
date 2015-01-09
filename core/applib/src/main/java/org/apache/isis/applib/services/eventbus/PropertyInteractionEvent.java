@@ -19,18 +19,19 @@
 package org.apache.isis.applib.services.eventbus;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.util.ObjectContracts;
 
-public abstract class PropertyInteractionEvent<S,T> extends AbstractInteractionEvent<S> {
-
-    private static final long serialVersionUID = 1L;
+/**
+ * @deprecated - use {@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent} instead.
+ */
+@Deprecated
+public abstract class PropertyInteractionEvent<S,T> extends PropertyDomainEvent<S,T> {
 
     //region > Default class
     /**
-     * Propagated if no custom subclass was specified using
-     * {@link org.apache.isis.applib.annotation.ActionInteraction} annotation.
+     * @deprecated - use {@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent.Default} instead.
      */
-    public static class Default extends PropertyInteractionEvent<Object, Object> {
+    @Deprecated
+    public static class Default extends PropertyDomainEvent.Default {
         private static final long serialVersionUID = 1L;
         public Default(Object source, Identifier identifier, Object oldValue, Object newValue) {
             super(source, identifier, oldValue, newValue);
@@ -49,51 +50,8 @@ public abstract class PropertyInteractionEvent<S,T> extends AbstractInteractionE
             final S source,
             final Identifier identifier,
             final T oldValue, final T newValue) {
-        this(source, identifier);
-        this.oldValue = oldValue;
-        this.newValue = newValue;
+        super(source, identifier, oldValue, newValue);
     }
     //endregion
 
-    //region > oldValue
-    private T oldValue;
-
-    /**
-     * The current (pre-modification) value of the property; populated at {@link Phase#VALIDATE} and subsequent phases
-     * (but null for {@link Phase#HIDE hidden} and {@link Phase#DISABLE disable} phases).
-     */
-    public T getOldValue() {
-        return oldValue;
-    }
-    /**
-     * Not API; for framework use only.
-     */
-    public void setOldValue(T oldValue) {
-        this.oldValue = oldValue;
-    }
-    //endregion
-
-    //region > newValue
-    private T newValue;
-    /**
-     * The proposed (post-modification) value of the property; populated at {@link Phase#VALIDATE} and subsequent phases
-     * (but null for {@link Phase#HIDE hidden} and {@link Phase#DISABLE disable} phases).
-     */
-    public T getNewValue() {
-        return newValue;
-    }
-    /**
-     * Not API; for framework use only.
-     */
-    public void setNewValue(T newValue) {
-        this.newValue = newValue;
-    }
-    //endregion
-
-    //region > toString
-    @Override
-    public String toString() {
-        return ObjectContracts.toString(this, "source,identifier,phase,oldValue,newValue");
-    }
-    //endregion
 }

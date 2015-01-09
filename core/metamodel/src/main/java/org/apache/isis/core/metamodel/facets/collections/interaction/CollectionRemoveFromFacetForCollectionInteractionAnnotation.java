@@ -19,23 +19,23 @@
 
 package org.apache.isis.core.metamodel.facets.collections.interaction;
 
-import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public class CollectionRemoveFromFacetForCollectionInteractionAnnotation extends
         CollectionRemoveFromFacetForInteractionAbstract {
 
-	public CollectionRemoveFromFacetForCollectionInteractionAnnotation(
-            final Class<? extends CollectionInteractionEvent<?, ?>> eventType,
+    public CollectionRemoveFromFacetForCollectionInteractionAnnotation(
+            final Class<? extends CollectionDomainEvent<?, ?>> eventType,
             final PropertyOrCollectionAccessorFacet getterFacet,
             final CollectionRemoveFromFacet collectionRemoveFromFacet,
             final CollectionInteractionFacetAbstract collectionInteractionFacet,
             final ServicesInjector servicesInjector,
             final FacetHolder holder) {
-		super(eventType, getterFacet, collectionRemoveFromFacet, collectionInteractionFacet, servicesInjector, holder);
-	}
+       super(eventType, getterFacet, collectionRemoveFromFacet, collectionInteractionFacet, servicesInjector, holder);
+    }
 
 }

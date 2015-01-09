@@ -26,7 +26,13 @@ import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command2;
-import org.apache.isis.applib.services.eventbus.*;
+import org.apache.isis.applib.services.command.Command3;
+import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
+import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -42,13 +48,13 @@ public class InteractionHelper {
         this.servicesInjector = servicesInjector;
     }
 
-    //region > postEventForAction, newActionInteractionEvent
+    //region > postEventForAction, newActionDomainEvent
     @SuppressWarnings({ "rawtypes" })
-    public ActionInteractionEvent<?> postEventForAction(
+    public ActionDomainEvent<?> postEventForAction(
             final Class eventType,
-            final ActionInteractionEvent<?> existingEvent,
+            final ActionDomainEvent<?> existingEvent,
             final Command command,
-            final AbstractInteractionEvent.Phase phase,
+            final AbstractDomainEvent.Phase phase,
             final IdentifiedHolder identified,
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] argumentAdapters) {
@@ -57,7 +63,7 @@ public class InteractionHelper {
             return null;
         }
         try {
-            final ActionInteractionEvent<?> event;
+            final ActionDomainEvent<?> event;
             if (existingEvent != null && phase.isValidatingOrLater()) {
                 event = existingEvent;
                 final Object[] arguments = ObjectAdapter.Util.unwrap(argumentAdapters);
@@ -66,17 +72,22 @@ public class InteractionHelper {
 
                     // current event always references the command (originally created by the xactn)
                     event.setCommand(command);
-                    if(command != null && command instanceof Command2) {
-                        final Command2 command2 = (Command2) command;
-
-                        command2.pushActionInteractionEvent(event);
+                    if(command != null) {
+                        if(command instanceof Command3) {
+                            final Command3 command3 = (Command3) command;
+                            command3.pushActionDomainEvent(event);
+                        } else if(command instanceof Command2 && event instanceof ActionInteractionEvent) {
+                            final Command2 command2 = (Command3) command;
+                            final ActionInteractionEvent<?> aie = (ActionInteractionEvent<?>) event;
+                            command2.pushActionInteractionEvent(aie);
+                        }
                     }
                 }
             } else {
                 final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
                 final Object[] arguments = ObjectAdapter.Util.unwrap(argumentAdapters);
                 final Identifier identifier = identified.getIdentifier();
-                event = newActionInteractionEvent(eventType, identifier, source, arguments);
+                event = newActionDomainEvent(eventType, identifier, source, arguments);
             }
 
             if(identified instanceof ObjectAction) {
@@ -94,8 +105,8 @@ public class InteractionHelper {
     }
 
     @SuppressWarnings("unchecked")
-    static <S> ActionInteractionEvent<S> newActionInteractionEvent(
-            final Class<? extends ActionInteractionEvent<S>> type,
+    static <S> ActionDomainEvent<S> newActionDomainEvent(
+            final Class<? extends ActionDomainEvent<S>> type,
             final Identifier identifier,
             final S source,
             final Object... arguments) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
@@ -115,17 +126,17 @@ public class InteractionHelper {
                 continue;
             }
             final Object event = constructor.newInstance(source, identifier, arguments);
-            return (ActionInteractionEvent<S>) event;
+            return (ActionDomainEvent<S>) event;
         }
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", [Ljava.lang.Object;)");
     }
     //endregion
 
     //region > postEventForProperty, newPropertyInteraction
-    public PropertyInteractionEvent<?, ?> postEventForProperty(
+    public PropertyDomainEvent<?, ?> postEventForProperty(
             final Class eventType,
-            final PropertyInteractionEvent<?, ?> existingEvent,
-            final AbstractInteractionEvent.Phase phase,
+            final PropertyDomainEvent<?, ?> existingEvent,
+            final AbstractDomainEvent.Phase phase,
             final IdentifiedHolder identified,
             final ObjectAdapter targetAdapter,
             final Object oldValue,
@@ -134,7 +145,7 @@ public class InteractionHelper {
             return null;
         }
         try {
-            final PropertyInteractionEvent<?, ?> event;
+            final PropertyDomainEvent<?, ?> event;
             if(existingEvent != null && phase.isValidatingOrLater()) {
                 event = existingEvent;
                 setEventOldValue(event, oldValue);
@@ -142,7 +153,7 @@ public class InteractionHelper {
             } else {
                 final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
                 final Identifier identifier = identified.getIdentifier();
-                event = newPropertyInteractionEvent(eventType, identifier, source, oldValue, newValue);
+                event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
             }
             event.setPhase(phase);
             getEventBusService().post(event);
@@ -152,17 +163,17 @@ public class InteractionHelper {
         }
     }
 
-    private static <S,T> void setEventOldValue(PropertyInteractionEvent<S, T> event, Object oldValue) {
+    private static <S,T> void setEventOldValue(PropertyDomainEvent<S, T> event, Object oldValue) {
         event.setOldValue((T) oldValue);
     }
 
-    private static <S,T> void setEventNewValue(PropertyInteractionEvent<S, T> event, Object newValue) {
+    private static <S,T> void setEventNewValue(PropertyDomainEvent<S, T> event, Object newValue) {
         event.setNewValue((T) newValue);
     }
 
     @SuppressWarnings("unchecked")
-    static <S,T> PropertyInteractionEvent<S,T> newPropertyInteractionEvent(
-            final Class<? extends PropertyInteractionEvent<S, T>> type,
+    static <S,T> PropertyDomainEvent<S,T> newPropertyDomainEvent(
+            final Class<? extends PropertyDomainEvent<S, T>> type,
             final Identifier identifier,
             final S source,
             final T oldValue,
@@ -187,28 +198,28 @@ public class InteractionHelper {
                 continue;
             }
             final Object event = constructor.newInstance(source, identifier, oldValue, newValue);
-            return (PropertyInteractionEvent<S, T>) event;
+            return (PropertyDomainEvent<S, T>) event;
         }
 
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object, java.lang.Object)");
     }
     //endregion
 
-    //region > postEventForCollection, newCollectionInteractionEvent
+    //region > postEventForCollection, newCollectionDomainEvent
 
-    public CollectionInteractionEvent<?, ?> postEventForCollection(
+    public CollectionDomainEvent<?, ?> postEventForCollection(
             final Class eventType,
-            final CollectionInteractionEvent<?, ?> existingEvent,
-            AbstractInteractionEvent.Phase phase,
+            final CollectionDomainEvent<?, ?> existingEvent,
+            AbstractDomainEvent.Phase phase,
             final IdentifiedHolder identified,
             final ObjectAdapter targetAdapter,
-            final CollectionInteractionEvent.Of of,
+            final CollectionDomainEvent.Of of,
             final Object reference) {
         if(!hasEventBusService()) {
             return null;
         }
         try {
-            final CollectionInteractionEvent<?, ?> event;
+            final CollectionDomainEvent<?, ?> event;
             if (existingEvent != null && phase.isValidatingOrLater()) {
                 event = existingEvent;
                 event.setOf(of);
@@ -216,7 +227,7 @@ public class InteractionHelper {
             } else {
                 final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
                 final Identifier identifier = identified.getIdentifier();
-                event = newCollectionInteractionEvent(eventType, phase, identifier, source, of, reference);
+                event = newCollectionDomainEvent(eventType, phase, identifier, source, of, reference);
             }
             event.setPhase(phase);
             getEventBusService().post(event);
@@ -226,17 +237,17 @@ public class InteractionHelper {
         }
     }
 
-    private static <T,S> void setEventValue(CollectionInteractionEvent<T, S> event, Object reference) {
+    private static <T,S> void setEventValue(CollectionDomainEvent<T, S> event, Object reference) {
         event.setValue((S) reference);
     }
 
     @SuppressWarnings("unchecked")
-    <S, T> CollectionInteractionEvent<S, T> newCollectionInteractionEvent(
-            final Class<? extends CollectionInteractionEvent<S, T>> type,
-            final AbstractInteractionEvent.Phase phase,
+    <S, T> CollectionDomainEvent<S, T> newCollectionDomainEvent(
+            final Class<? extends CollectionDomainEvent<S, T>> type,
+            final AbstractDomainEvent.Phase phase,
             final Identifier identifier,
             final S source,
-            final CollectionInteractionEvent.Of of,
+            final CollectionDomainEvent.Of of,
             final T value)
             throws NoSuchMethodException, SecurityException, InstantiationException,
             IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -255,18 +266,18 @@ public class InteractionHelper {
             if(!parameterTypes[1].isAssignableFrom(Identifier.class)) {
                 continue;
             }
-            if(!parameterTypes[2].isAssignableFrom(CollectionInteractionEvent.Of.class)) {
+            if(!parameterTypes[2].isAssignableFrom(CollectionDomainEvent.Of.class)) {
                 continue;
             }
             if(value != null && !parameterTypes[3].isAssignableFrom(value.getClass())) {
                 continue;
             }
             final Object event = constructor.newInstance(source, identifier, of, value);
-            return (CollectionInteractionEvent<S, T>) event;
+            return (CollectionDomainEvent<S, T>) event;
         }
 
-        if(phase == AbstractInteractionEvent.Phase.EXECUTED) {
-            if(of == CollectionInteractionEvent.Of.ADD_TO) {
+        if(phase == AbstractDomainEvent.Phase.EXECUTED) {
+            if(of == CollectionDomainEvent.Of.ADD_TO) {
                 // support for @PostsCollectionAddedTo annotation:
                 // search for constructor accepting source, identifier, value
                 for (final Constructor<?> constructor : constructors) {
@@ -284,9 +295,9 @@ public class InteractionHelper {
                         continue;
                     }
                     final Object event = constructor.newInstance(source, identifier, value);
-                    return (CollectionInteractionEvent<S, T>) event;
+                    return (CollectionDomainEvent<S, T>) event;
                 }
-            } else if(of == CollectionInteractionEvent.Of.REMOVE_FROM) {
+            } else if(of == CollectionDomainEvent.Of.REMOVE_FROM) {
                 // support for @PostsCollectionRemovedFrom annotation:
                 // search for constructor accepting source, identifier, value
                 for (final Constructor<?> constructor : constructors) {
@@ -305,7 +316,7 @@ public class InteractionHelper {
                     }
                     final Object event = constructor.newInstance(
                             source, identifier, value);
-                    return (CollectionInteractionEvent<S, T>) event;
+                    return (CollectionDomainEvent<S, T>) event;
                 }
             }
         }

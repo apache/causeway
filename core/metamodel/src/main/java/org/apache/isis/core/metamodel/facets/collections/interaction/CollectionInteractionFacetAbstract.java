@@ -22,12 +22,15 @@ package org.apache.isis.core.metamodel.facets.collections.interaction;
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
-import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
-import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.InteractionHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
-import org.apache.isis.core.metamodel.interactions.*;
+import org.apache.isis.core.metamodel.interactions.ProposedHolder;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
@@ -35,10 +38,10 @@ public abstract class CollectionInteractionFacetAbstract extends SingleClassValu
 
     private final InteractionHelper interactionHelper;
 
-    final static ThreadLocal<CollectionInteractionEvent<?,?>> currentInteraction = new ThreadLocal<CollectionInteractionEvent<?,?>>();
+    final static ThreadLocal<CollectionDomainEvent<?,?>> currentInteraction = new ThreadLocal<>();
 
     public CollectionInteractionFacetAbstract(
-            final Class<? extends CollectionInteractionEvent<?, ?>> eventType,
+            final Class<? extends CollectionDomainEvent<?, ?>> eventType,
             final FacetHolder holder,
             final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader) {
@@ -55,9 +58,9 @@ public abstract class CollectionInteractionFacetAbstract extends SingleClassValu
         // reset (belt-n-braces)
         currentInteraction.set(null);
 
-        final CollectionInteractionEvent<?, ?> event =
+        final CollectionDomainEvent<?, ?> event =
                 interactionHelper.postEventForCollection(
-                        eventType(), null, AbstractInteractionEvent.Phase.HIDE, getIdentified(), ic.getTarget(), CollectionInteractionEvent.Of.ACCESS, null);
+                        eventType(), null, AbstractDomainEvent.Phase.HIDE, getIdentified(), ic.getTarget(), CollectionDomainEvent.Of.ACCESS, null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
         }
@@ -73,9 +76,9 @@ public abstract class CollectionInteractionFacetAbstract extends SingleClassValu
         // reset (belt-n-braces)
         currentInteraction.set(null);
 
-        final CollectionInteractionEvent<?, ?> event =
+        final CollectionDomainEvent<?, ?> event =
                 interactionHelper.postEventForCollection(
-                    eventType(), null, AbstractInteractionEvent.Phase.DISABLE, getIdentified(), ic.getTarget(), CollectionInteractionEvent.Of.ACCESS, null);
+                    eventType(), null, AbstractDomainEvent.Phase.DISABLE, getIdentified(), ic.getTarget(), CollectionDomainEvent.Of.ACCESS, null);
         if (event != null && event.isDisabled()) {
             return event.getDisabledReason();
         }
@@ -94,9 +97,9 @@ public abstract class CollectionInteractionFacetAbstract extends SingleClassValu
         final ProposedHolder catc = (ProposedHolder) ic;
         final Object proposed = catc.getProposed().getObject();
 
-        final CollectionInteractionEvent<?, ?> event =
+        final CollectionDomainEvent<?, ?> event =
                 interactionHelper.postEventForCollection(
-                        eventType(), null, AbstractInteractionEvent.Phase.VALIDATE, getIdentified(), ic.getTarget(), CollectionInteractionEvent.Of.ADD_TO, proposed);
+                        eventType(), null, AbstractDomainEvent.Phase.VALIDATE, getIdentified(), ic.getTarget(), CollectionDomainEvent.Of.ADD_TO, proposed);
         if (event != null && event.isInvalid()) {
             return event.getInvalidityReason();
         }

@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 
 /**
- * @deprecated - use instead {@link Collection#interaction()}
+ * @deprecated - use instead {@link Collection#domainEvent()}
  */
 @Deprecated
 @Retention(RetentionPolicy.RUNTIME)
@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 public @interface PostsCollectionRemovedFromEvent {
 
     /**
-     * @deprecated - use {@link Collection#interaction()} instead.
+     * @deprecated - use {@link Collection#domainEvent()} instead.
      */
     @Deprecated
     Class<? extends CollectionRemovedFromEvent<?,?>> value() default CollectionRemovedFromEvent.Default.class;

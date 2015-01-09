@@ -20,8 +20,9 @@
 package org.apache.isis.core.metamodel.facets.properties.interaction;
 
 import com.google.common.base.Objects;
+import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
-import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -32,7 +33,7 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public abstract class PropertyClearFacetForInteractionAbstract
-        extends SingleValueFacetAbstract<Class<? extends PropertyInteractionEvent<?,?>>>
+        extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>>
         implements PropertyClearFacet {
 
 
@@ -44,19 +45,19 @@ public abstract class PropertyClearFacetForInteractionAbstract
 
     private final PropertyOrCollectionAccessorFacet getterFacet;
     private final PropertyClearFacet clearFacet;
-    private final PropertyInteractionFacetAbstract propertyInteractionFacet;
+    private final PropertyInteractionFacetAbstract propertyDomainEventFacet;
 
     public PropertyClearFacetForInteractionAbstract(
-            final Class<? extends PropertyInteractionEvent<?, ?>> eventType,
+            final Class<? extends PropertyDomainEvent<?, ?>> eventType,
             final PropertyOrCollectionAccessorFacet getterFacet,
             final PropertyClearFacet clearFacet,
-            final PropertyInteractionFacetAbstract propertyInteractionFacet,
+            final PropertyInteractionFacetAbstract propertyDomainEventFacet,
             final ServicesInjector servicesInjector,
             final FacetHolder holder) {
         super(type(), eventType, holder);
         this.getterFacet = getterFacet;
         this.clearFacet = clearFacet;
-        this.propertyInteractionFacet = propertyInteractionFacet;
+        this.propertyDomainEventFacet = propertyDomainEventFacet;
         this.interactionHelper = new InteractionHelper(servicesInjector);
     }
 
@@ -74,12 +75,12 @@ public abstract class PropertyClearFacetForInteractionAbstract
 
         try {
             // pick up existing event (saved in thread local during the validation phase)
-            final PropertyInteractionEvent<?, ?> existingEvent = propertyInteractionFacet.currentInteraction.get();
+            final PropertyDomainEvent<?, ?> existingEvent = propertyDomainEventFacet.currentInteraction.get();
 
             // ... post the executing event
             final Object oldValue = getterFacet.getProperty(targetAdapter);
             interactionHelper.postEventForProperty(
-                    value(), existingEvent, AbstractInteractionEvent.Phase.EXECUTING,
+                    value(), existingEvent, AbstractDomainEvent.Phase.EXECUTING,
                     getIdentified(), targetAdapter, oldValue, null);
 
             // ... perform the property clear
@@ -93,12 +94,12 @@ public abstract class PropertyClearFacetForInteractionAbstract
             }
 
             // ... and post the event (reusing existing event if available)
-            final PropertyInteractionEvent<?, ?> event = propertyInteractionFacet.currentInteraction.get();
+            final PropertyDomainEvent<?, ?> event = propertyDomainEventFacet.currentInteraction.get();
             interactionHelper.postEventForProperty(value(), verify(event), AbstractInteractionEvent.Phase.EXECUTED, getIdentified(), targetAdapter, oldValue, actualNewValue);
 
         } finally {
             // clean up
-            propertyInteractionFacet.currentInteraction.set(null);
+            propertyDomainEventFacet.currentInteraction.set(null);
         }
     }
 
@@ -106,13 +107,12 @@ public abstract class PropertyClearFacetForInteractionAbstract
      * Optional hook to allow the facet implementation for the deprecated {@link org.apache.isis.applib.annotation.PostsPropertyChangedEvent} annotation
      * to discard the event if of a different type.
      */
-    protected PropertyInteractionEvent<?, ?> verify(PropertyInteractionEvent<?, ?> event) {
+    protected PropertyDomainEvent<?, ?> verify(PropertyDomainEvent<?, ?> event) {
         return event;
     }
 
-    private Class<? extends PropertyInteractionEvent<?, ?>> eventType() {
+    private Class<? extends PropertyDomainEvent<?, ?>> eventType() {
         return value();
     }
-
 
 }
