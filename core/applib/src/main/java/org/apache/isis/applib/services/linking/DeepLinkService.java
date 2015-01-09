@@ -3,13 +3,19 @@ package org.apache.isis.applib.services.linking;
 import java.net.URI;
 
 /**
- * A service that creates a link to any POJO
+ * A service that creates a web link to any domain object in one of the Isis viewers.
+ *
+ * <p>
+ *     The implementation is specific to the viewer(s) configured for Isis.  At the time of writing only one
+ *     implementation is available, for the Wicket viewer.
+ * </p>
  */
 public interface DeepLinkService {
 
     /**
-     * @param pojo The POJO to link to
-     * @return The link to the POJO
+     * Creates a URI that can be used to obtain a representation of the provided domain object in one of the
+     * Isis viewers.
      */
-    URI deepLinkFor(Object pojo);
+    URI deepLinkFor(Object domainObject);
+
 }
