@@ -73,7 +73,8 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
                                          ",org.apache.isis.objectstore.jdo.applib.service" +
                                          ",org.apache.isis.viewer.restfulobjects.rendering.service" +
                                          ",org.apache.isis.objectstore.jdo.datanucleus.service.support" +
-                                         ",org.apache.isis.objectstore.jdo.datanucleus.service.eventbus";
+                                         ",org.apache.isis.objectstore.jdo.datanucleus.service.eventbus" +
+                                         ",org.apache.isis.viewer.wicket.viewer.services";
 
     private final ServiceInstantiator serviceInstantiator;
 
