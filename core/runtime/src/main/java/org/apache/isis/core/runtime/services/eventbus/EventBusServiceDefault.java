@@ -107,7 +107,7 @@ public class EventBusServiceDefault extends EventBusService {
                     abortTransaction(exception);
                     break;
                 case EXECUTED:
-                    LOG.warn("Exception '%s' (%s) thrown during EXECUTED phase, to be safe will abort the transaction");
+                    LOG.warn("Exception thrown during EXECUTED phase, to be safe will abort the transaction, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
                     abortTransaction(exception);
                     break;
                 }
