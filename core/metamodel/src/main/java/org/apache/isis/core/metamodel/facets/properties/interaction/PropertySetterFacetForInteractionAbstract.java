@@ -91,7 +91,7 @@ public abstract class PropertySetterFacetForInteractionAbstract
                 return;
             }
 
-            // ... post the executing event
+            // ... post the executed event
             final PropertyInteractionEvent<?, ?> event = propertyInteractionFacet.currentInteraction.get();
             interactionHelper.postEventForProperty(value(), verify(event), AbstractInteractionEvent.Phase.EXECUTED, getIdentified(), targetAdapter, oldValue, actualNewValue);
 
