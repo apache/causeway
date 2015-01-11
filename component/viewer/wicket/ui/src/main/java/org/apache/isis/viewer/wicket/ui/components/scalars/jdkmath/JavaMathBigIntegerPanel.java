@@ -41,7 +41,7 @@ public class JavaMathBigIntegerPanel extends ScalarPanelTextFieldNumeric<BigInte
     private static final String ID_SCALAR_VALUE = "scalarValue";
     
     public JavaMathBigIntegerPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, BigInteger.class);
+        super(id, scalarModel, BigInteger.class, BigIntegerConverter.INSTANCE);
     }
 
     @Override

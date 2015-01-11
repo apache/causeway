@@ -38,7 +38,7 @@ public class ShortPanel extends ScalarPanelTextFieldNumeric<Short> {
     private static final long serialVersionUID = 1L;
 
     public ShortPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, Short.class);
+        super(id, scalarModel, Short.class, ShortConverter.INSTANCE);
     }
 
     @Override

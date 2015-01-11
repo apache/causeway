@@ -38,7 +38,7 @@ public class LongPanel extends ScalarPanelTextFieldNumeric<Long> {
     private static final long serialVersionUID = 1L;
 
     public LongPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, Long.class);
+        super(id, scalarModel, Long.class, LongConverter.INSTANCE);
     }
 
     @Override

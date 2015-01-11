@@ -38,7 +38,7 @@ public class FloatPanel extends ScalarPanelTextFieldNumeric<Float> {
     private static final long serialVersionUID = 1L;
 
     public FloatPanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, Float.class);
+        super(id, scalarModel, Float.class, FloatConverter.INSTANCE);
     }
 
     @Override

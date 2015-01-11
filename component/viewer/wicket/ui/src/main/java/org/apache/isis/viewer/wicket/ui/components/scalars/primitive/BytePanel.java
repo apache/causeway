@@ -38,7 +38,7 @@ public class BytePanel extends ScalarPanelTextFieldNumeric<Byte> {
     private static final long serialVersionUID = 1L;
 
     public BytePanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, Byte.class);
+        super(id, scalarModel, Byte.class, ByteConverter.INSTANCE);
     }
 
     @Override

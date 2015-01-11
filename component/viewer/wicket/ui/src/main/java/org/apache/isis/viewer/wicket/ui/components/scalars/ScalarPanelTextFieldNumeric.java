@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.wicket.util.convert.IConverter;
 
 /**
  * Panel for rendering numeric scalars.
@@ -34,13 +35,27 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
 
     private static final long serialVersionUID = 1L;
 
-    public ScalarPanelTextFieldNumeric(final String id, final ScalarModel scalarModel, final Class<T> cls) {
+    /**
+     * The converter that is going to be used for the regular view of the panel, i.e. for the text field.
+     * The same converter should be used to render the compact view as well, to show the same precision and scale
+     * for the floating point types
+     */
+    private final IConverter<T> converter;
+
+    public ScalarPanelTextFieldNumeric(final String id, final ScalarModel scalarModel, final Class<T> cls, final IConverter<T> converter) {
         super(id, scalarModel, cls);
+
+        this.converter = converter;
     }
 
     protected Component addComponentForCompact() {
         Fragment compactFragment = getCompactFragment(CompactType.SPAN);
-        final Label label = new Label(ID_SCALAR_IF_COMPACT, newTextFieldValueModel());
+        final Label label = new Label(ID_SCALAR_IF_COMPACT, newTextFieldValueModel()) {
+            @Override
+            public <C> IConverter<C> getConverter(Class<C> type) {
+                return (IConverter<C>) converter;
+            }
+        };
 
         label.setEnabled(false);
 
@@ -49,4 +64,7 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
         return label;
     }
 
+    public IConverter<T> getConverter() {
+        return converter;
+    }
 }

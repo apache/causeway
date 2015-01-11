@@ -38,7 +38,7 @@ public class DoublePanel extends ScalarPanelTextFieldNumeric<Double> {
     private static final long serialVersionUID = 1L;
 
     public DoublePanel(final String id, final ScalarModel scalarModel) {
-        super(id, scalarModel, Double.class);
+        super(id, scalarModel, Double.class, DoubleConverter.INSTANCE);
     }
     
     @Override
