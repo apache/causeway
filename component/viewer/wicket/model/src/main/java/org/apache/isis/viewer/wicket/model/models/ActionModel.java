@@ -598,7 +598,12 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             public InputStream getInputStream() throws ResourceStreamNotFoundException {
                 return new ByteArrayInputStream(blob.getBytes());
             }
-            
+
+            @Override
+            public String getContentType() {
+                return blob.getMimeType().toString();
+            }
+
             @Override
             public void close() throws IOException {
             }
