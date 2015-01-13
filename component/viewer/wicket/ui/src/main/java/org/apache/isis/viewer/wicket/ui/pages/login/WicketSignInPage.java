@@ -19,12 +19,17 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.login;
 
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.util.string.Strings;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
+
+import javax.inject.Inject;
 
 /**
  * Boilerplate, pick up our HTML and CSS.
@@ -44,6 +49,10 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
 
     public WicketSignInPage(final PageParameters parameters, ExceptionModel exceptionModel) {
         super(parameters, exceptionModel);
+
+        if (IsisContext.inSession()) {
+            pageNavigationService.restartAt(PageType.HOME);
+        }
     }
 
     @Override
@@ -90,4 +99,7 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
         add(signInPanel);
         return signInPanel;
     }
+
+    @Inject
+    private PageNavigationService pageNavigationService;
 }
