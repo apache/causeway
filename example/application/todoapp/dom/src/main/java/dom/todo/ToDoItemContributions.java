@@ -44,6 +44,7 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
+import org.apache.isis.applib.value.Clob;
 
 @DomainService
 public class ToDoItemContributions extends AbstractFactoryAndRepository {
@@ -100,7 +101,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
     //endregion
 
-    //region >  next, previous (contributed actions)
+    //region > next, previous (contributed actions)
     @DescribedAs("The next item not yet completed")
     @NotInServiceMenu
     @ActionSemantics(Of.SAFE)
@@ -220,6 +221,34 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
         return Subcategory.validate(category, subcategory);
     }
     //endregion
+
+    // region > exportAsJson (action)
+    /**
+     * Demonstrates functionality of streaming back Clob/Blob result within an action with a prompt, i.e. Ajax request
+     */
+    @ActionSemantics(Of.SAFE)
+    @NotInServiceMenu
+    public Clob exportAsJson(
+            final ToDoItem toDoItem,
+            @ParameterLayout(named = "File name") String fileName
+    ) {
+        if(!fileName.endsWith(".json")) {
+            fileName += ".json";
+        }
+        return new Clob(
+                fileName,
+                "application/json",
+                "{" +
+                "\"description\": \"" + toDoItem.getDescription()+"\"" +
+                ",\"complete\": " + ""+toDoItem.isComplete() +
+                "}");
+    }
+
+    public String default1ExportAsJson() {
+        return "todo";
+    }
+    //endregion
+
 
     //region > helpers
     protected String currentUserName() {

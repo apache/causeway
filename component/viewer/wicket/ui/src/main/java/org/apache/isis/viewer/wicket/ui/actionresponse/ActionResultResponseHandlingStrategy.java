@@ -18,14 +18,18 @@ package org.apache.isis.viewer.wicket.ui.actionresponse;
 
 import java.net.URL;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.request.Url;
-import org.apache.wicket.request.cycle.RequestCycle;
-
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.VoidModel;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AbstractAjaxBehavior;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.request.resource.ContentDisposition;
+import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.util.time.Duration;
 
 public enum ActionResultResponseHandlingStrategy {
     REDIRECT_TO_VOID {
@@ -50,7 +54,18 @@ public enum ActionResultResponseHandlingStrategy {
         @Override
         public void handleResults(final Component component, final ActionResultResponse resultResponse) {
             RequestCycle requestCycle = component.getRequestCycle();
-            requestCycle.scheduleRequestHandlerAfterCurrent(resultResponse.getHandler());
+            AjaxRequestTarget target = requestCycle.find(AjaxRequestTarget.class);
+            if (target == null) {
+                // normal (non-Ajax) request => just stream the Lob to the browser
+                requestCycle.scheduleRequestHandlerAfterCurrent(resultResponse.getHandler());
+            } else {
+                // Ajax request => respond with a redirect to be able to stream the Lob to the client
+                ResourceStreamRequestHandler scheduledHandler = (ResourceStreamRequestHandler) resultResponse.getHandler();
+                StreamAfterAjaxResponseBehavior streamingBehavior = new StreamAfterAjaxResponseBehavior(scheduledHandler);
+                component.getPage().add(streamingBehavior);
+                CharSequence callbackUrl = streamingBehavior.getCallbackUrl();
+                target.appendJavaScript("setTimeout(\"window.location.href='" + callbackUrl + "'\", 10);");
+            }
         }
     },
     OPEN_URL_IN_BROWSER {
@@ -95,4 +110,30 @@ public enum ActionResultResponseHandlingStrategy {
         return urlStr;
     }
 
+    /**
+     * A special Ajax behavior that is used to stream the contents of a Lob after
+     * an Ajax request.
+     */
+    private static class StreamAfterAjaxResponseBehavior extends AbstractAjaxBehavior {
+
+        private final String fileName;
+        private final IResourceStream resourceStream;
+        private final Duration cacheDuration;
+
+        public StreamAfterAjaxResponseBehavior(ResourceStreamRequestHandler scheduledHandler) {
+            this.fileName = scheduledHandler.getFileName();
+            this.resourceStream = scheduledHandler.getResourceStream();
+            this.cacheDuration = scheduledHandler.getCacheDuration();
+        }
+
+        @Override
+        public void onRequest() {
+            ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(resourceStream, fileName);
+            handler.setCacheDuration(cacheDuration);
+            handler.setContentDisposition(ContentDisposition.ATTACHMENT);
+            Component page = getComponent();
+            page.getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+            page.remove(this);
+        }
+    }
 }
