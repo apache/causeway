@@ -690,18 +690,6 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     }
     //endregion
 
-    // region > exportAsJson (action)
-    /**
-     * Demonstrates functionality of streaming back Clob/Blob result within an action with a prompt, i.e. Ajax request
-     */
-    @ActionSemantics(Of.SAFE)
-    public Clob exportAsJson(
-            @ParameterLayout(named = "Comment") String comment
-    ) {
-        return new Clob("todo.json", "application/json", "{\"description\": \""+getDescription()+"\", \"comment\":\""+comment+"\"}");
-    }
-    //endregion
-
     //region > lifecycle callbacks
 
     public void created() {

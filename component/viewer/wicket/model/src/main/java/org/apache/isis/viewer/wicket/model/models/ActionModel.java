@@ -101,7 +101,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
      * @param action
      * @return
      */
-    public static ActionModel create(ObjectAdapter objectAdapter, ObjectAction action) {
+    public static ActionModel create(final ObjectAdapter objectAdapter, final ObjectAction action) {
         final ObjectAdapterMemento serviceMemento = ObjectAdapterMemento.Functions.fromAdapter().apply(objectAdapter);
         final ActionMemento homePageActionMemento = ObjectAdapterMemento.Functions.fromAction().apply(action);
         final Mode mode = action.getParameterCount() > 0? Mode.PARAMETERS : Mode.RESULTS;
@@ -194,7 +194,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
         // capture argument values
         final ObjectAdapter[] argumentsAsArray = getArgumentsAsArray();
-        for(ObjectAdapter argumentAdapter: argumentsAsArray) {
+        for(final ObjectAdapter argumentAdapter: argumentsAsArray) {
             final String encodedArg = encodeArg(argumentAdapter);
             PageParameterNames.ACTION_ARGS.addStringTo(pageParameters, encodedArg);
         }
@@ -209,7 +209,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         
         final StringBuilder buf = new StringBuilder();
         final ObjectAdapter[] argumentsAsArray = getArgumentsAsArray();
-        for(ObjectAdapter argumentAdapter: argumentsAsArray) {
+        for(final ObjectAdapter argumentAdapter: argumentsAsArray) {
             if(buf.length() > 0) {
                 buf.append(",");
             }
@@ -229,7 +229,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     //////////////////////////////////////////////////
 
     
-    private static String titleOf(ObjectAdapter argumentAdapter) {
+    private static String titleOf(final ObjectAdapter argumentAdapter) {
         return argumentAdapter!=null?argumentAdapter.titleString(null):"";
     }
     
@@ -277,7 +277,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         return new ActionMemento(owningSpec, actionType, actionNameParms);
     }
 
-    private static Mode actionModeFrom(PageParameters pageParameters) {
+    private static Mode actionModeFrom(final PageParameters pageParameters) {
         final ActionMemento actionMemento = newActionMementoFrom(pageParameters);
         if(actionMemento.getAction().getParameterCount() == 0) {
             return Mode.RESULTS;
@@ -288,7 +288,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
 
     private static ObjectAdapterMemento newObjectAdapterMementoFrom(final PageParameters pageParameters) {
-        RootOid oid = oidFor(pageParameters);
+        final RootOid oid = oidFor(pageParameters);
         if(oid.isTransient()) {
             return null;
         } else {
@@ -297,7 +297,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     }
 
     private static RootOid oidFor(final PageParameters pageParameters) {
-        String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
+        final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
         return getOidMarshaller().unmarshal(oidStr, RootOid.class);
     }
 
@@ -311,7 +311,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     /**
      * Copy constructor, as called by {@link #copy()}.
      */
-    private ActionModel(ActionModel actionModel) {
+    private ActionModel(final ActionModel actionModel) {
         this.targetAdapterMemento = actionModel.targetAdapterMemento;
         this.actionMemento = actionModel.actionMemento;
         this.actionMode = actionModel.actionMode;
@@ -319,7 +319,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         
         primeArgumentModels();
         final Map<Integer, ScalarModel> argumentModelByIdx = actionModel.arguments;
-        for (Map.Entry<Integer,ScalarModel> argumentModel : argumentModelByIdx.entrySet()) {
+        for (final Map.Entry<Integer,ScalarModel> argumentModel : argumentModelByIdx.entrySet()) {
             setArgument(argumentModel.getKey(), argumentModel.getValue().getObject());
         }
 
@@ -327,13 +327,13 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     }
 
     private void setArgumentsIfPossible(final PageParameters pageParameters) {
-        List<String> args = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
+        final List<String> args = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
 
         final ObjectAction action = actionMemento.getAction();
         final List<ObjectSpecification> parameterTypes = action.getParameterTypes();
 
         for (int paramNum = 0; paramNum < args.size(); paramNum++) {
-            String encoded = args.get(paramNum);
+            final String encoded = args.get(paramNum);
             setArgument(paramNum, parameterTypes.get(paramNum), encoded);
         }
     }
@@ -370,27 +370,27 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         setArgument(paramNum, argumentAdapter);
     }
 
-    private String encodeArg(ObjectAdapter adapter) {
+    private String encodeArg(final ObjectAdapter adapter) {
         if(adapter == null) {
             return NULL_ARG;
         }
         
-        ObjectSpecification objSpec = adapter.getSpecification();
+        final ObjectSpecification objSpec = adapter.getSpecification();
         if(objSpec.isEncodeable()) {
-            EncodableFacet encodeable = objSpec.getFacet(EncodableFacet.class);
+            final EncodableFacet encodeable = objSpec.getFacet(EncodableFacet.class);
             return encodeable.toEncodedString(adapter);
         }
         
         return adapter.getOid().enStringNoVersion(getOidMarshaller());
     }
 
-    private ObjectAdapter decodeArg(ObjectSpecification objSpec, String encoded) {
+    private ObjectAdapter decodeArg(final ObjectSpecification objSpec, final String encoded) {
         if(NULL_ARG.equals(encoded)) {
             return null;
         }
         
         if(objSpec.isEncodeable()) {
-            EncodableFacet encodeable = objSpec.getFacet(EncodableFacet.class);
+            final EncodableFacet encodeable = objSpec.getFacet(EncodableFacet.class);
             return encodeable.fromEncodedString(encoded);
         }
         
@@ -412,7 +412,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
 
     public ScalarModel getArgumentModel(final ActionParameterMemento apm) {
-        int i = apm.getNumber();
+        final int i = apm.getNumber();
 		ScalarModel scalarModel = arguments.get(i);
         if (scalarModel == null) {
             scalarModel = new ScalarModel(targetAdapterMemento, apm);
@@ -504,7 +504,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     }
 
     public void clearArguments() {
-        for (ScalarModel argumentModel : arguments.values()) {
+        for (final ScalarModel argumentModel : arguments.values()) {
             argumentModel.reset();
         }
         this.actionMode = determineMode(actionMemento.getAction());
@@ -540,7 +540,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             final ObjectAdapter resultAdapter = this.getObject();
             return resultAdapter;
 
-        } catch (RuntimeException ex) {
+        } catch (final RuntimeException ex) {
 
             // see if is an application-defined exception
             // if so, is converted to an application error,
@@ -563,15 +563,15 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
     // //////////////////////////////////////
     
-    public static RecoverableException getApplicationExceptionIfAny(Exception ex) {
-        Iterable<RecoverableException> appEx = Iterables.filter(Throwables.getCausalChain(ex), RecoverableException.class);
-        Iterator<RecoverableException> iterator = appEx.iterator();
+    public static RecoverableException getApplicationExceptionIfAny(final Exception ex) {
+        final Iterable<RecoverableException> appEx = Iterables.filter(Throwables.getCausalChain(ex), RecoverableException.class);
+        final Iterator<RecoverableException> iterator = appEx.iterator();
         return iterator.hasNext() ? iterator.next() : null;
     }
 
     public static IRequestHandler redirectHandler(final Object value) {
         if(value instanceof java.net.URL) {
-            java.net.URL url = (java.net.URL) value;
+            final java.net.URL url = (java.net.URL) value;
             return new RedirectRequestHandler(url.toString());
         }
         return null;
@@ -579,19 +579,19 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
     public static IRequestHandler downloadHandler(final Object value) {
         if(value instanceof Clob) {
-            Clob clob = (Clob)value;
+            final Clob clob = (Clob)value;
             return handlerFor(resourceStreamFor(clob), clob);
         }
         if(value instanceof Blob) {
-            Blob blob = (Blob)value;
+            final Blob blob = (Blob)value;
             return handlerFor(resourceStreamFor(blob), blob);
         }
         return null;
     }
     
     private static IResourceStream resourceStreamFor(final Blob blob) {
-        IResourceStream byteArrayResource = new AbstractResourceStream() {
-            
+        final IResourceStream resourceStream = new AbstractResourceStream() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -608,16 +608,16 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             public void close() throws IOException {
             }
         };
-        return byteArrayResource;
-    }
-
-    private static IResourceStream resourceStreamFor(final Clob clob) {
-        IResourceStream resourceStream = new StringResourceStream(clob.getChars(), clob.getMimeType().toString());
         return resourceStream;
     }
 
-    private static IRequestHandler handlerFor(IResourceStream resourceStream, final NamedWithMimeType namedWithMimeType) {
-        ResourceStreamRequestHandler handler = 
+    private static IResourceStream resourceStreamFor(final Clob clob) {
+        final IResourceStream resourceStream = new StringResourceStream(clob.getChars(), clob.getMimeType().toString());
+        return resourceStream;
+    }
+
+    private static IRequestHandler handlerFor(final IResourceStream resourceStream, final NamedWithMimeType namedWithMimeType) {
+        final ResourceStreamRequestHandler handler =
             new ResourceStreamRequestHandler(resourceStream, namedWithMimeType.getName());
         handler.setContentDisposition(ContentDisposition.ATTACHMENT);
         return handler;
