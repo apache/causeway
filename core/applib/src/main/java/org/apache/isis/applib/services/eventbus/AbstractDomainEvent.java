@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.eventbus;
 import java.util.Map;
 import com.google.common.collect.Maps;
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.util.ObjectContracts;
 
 public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
@@ -131,7 +132,6 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     //endregion
 
     //region > veto
-
     /**
      * Use instead of {@link #hide()}, {@link #disable(String)} and {@link #invalidate(String)}; just delegates to
      * appropriate vetoing method based upon the {@link #getPhase()}.
@@ -140,16 +140,18 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
      *     If hiding, just pass <tt>null</tt> for the parameter.
      * </p>
      *
-     * @param reason - reason why the interaction is being invalidated (ignored if in {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#HIDE hide} phase).
+     * @param reason - reason why the interaction is being invalidated (ignored if in {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#HIDE hide} phase).
+     * @param args
      */
-    public void veto(final String reason) {
+    @Programmatic
+    public void veto(final String reason, final Object... args) {
         switch (getPhase()) {
             case HIDE:
                 hide();
             case DISABLE:
-                disable(reason);
+                disable(String.format(reason, args));
             case VALIDATE:
-                invalidate(reason);
+                invalidate(String.format(reason, args));
         }
     }
     //endregion

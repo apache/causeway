@@ -32,6 +32,7 @@ import org.joda.time.LocalDate;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NotContributed;
@@ -235,7 +236,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     /**
      * Demonstrates functionality of streaming back Clob/Blob result within an action with a prompt, i.e. Ajax request
      */
-    @ActionSemantics(Of.SAFE)
+    @ActionSemantics(ActionSemantics.Of.SAFE)
     @NotInServiceMenu
     public Clob exportAsJson(
             final ToDoItem toDoItem,
