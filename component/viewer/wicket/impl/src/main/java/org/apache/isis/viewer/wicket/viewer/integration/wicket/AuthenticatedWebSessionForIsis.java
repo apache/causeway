@@ -24,8 +24,11 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
@@ -43,6 +46,7 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 /**
  * Viewer-specific implementation of {@link AuthenticatedWebSession}, which
@@ -74,7 +78,25 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         AuthenticationRequest authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.setRoles(Arrays.asList(USER_ROLE));
         authenticationSession = getAuthenticationManager().authenticate(authenticationRequest);
-        return authenticationSession != null;
+        if (authenticationSession != null) {
+            log(SessionLoggingService.Type.LOGIN, username, SessionLoggingService.CausedBy.USER);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void onInvalidate() {
+        super.onInvalidate();
+
+        SessionLoggingService.CausedBy causedBy = RequestCycle.get() != null
+                ? SessionLoggingService.CausedBy.USER
+                : SessionLoggingService.CausedBy.SESSION_EXPIRATION;
+
+        String userName = authenticationSession.getUserName();
+
+        log(SessionLoggingService.Type.LOGOUT, userName, causedBy);
     }
 
     @Override
@@ -124,6 +146,27 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
             final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
             cast.setAuthenticationSessionProvider(this);
         }
+    }
+
+    private void log(final SessionLoggingService.Type type, final String username, final SessionLoggingService.CausedBy causedBy) {
+        final SessionLoggingService sessionLoggingService = getSessionLoggingService();
+        if (sessionLoggingService != null) {
+            IsisContext.doInSession(new Runnable() {
+                @Override
+                public void run() {
+                    sessionLoggingService.log(type, username, new Date(), causedBy);
+                }
+            });
+        }
+    }
+
+    protected SessionLoggingService getSessionLoggingService() {
+        return IsisContext.doInSession(new Callable<SessionLoggingService>() {
+            @Override
+            public SessionLoggingService call() throws Exception {
+                return IsisContext.getPersistenceSession().getServicesInjector().lookupService(SessionLoggingService.class);
+            }
+        });
     }
     
 }
