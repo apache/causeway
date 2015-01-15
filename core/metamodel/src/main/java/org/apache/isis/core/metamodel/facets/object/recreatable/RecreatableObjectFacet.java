@@ -17,33 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.viewmodel;
+package org.apache.isis.core.metamodel.facets.object.recreatable;
 
-import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
-public abstract class ViewModelFacetAbstract extends MarkerFacetAbstract implements ViewModelFacet {
+/**
+ * Indicates that this class is either a view model (for the UI/application layer) or a recreatable domain object of some sort (for the domain layer, that is: an external or synthetic entity).
+ * 
+ * <p>
+ * In the standard Apache Isis Programming Model, corresponds to
+ * applying either {@link org.apache.isis.applib.annotation.ViewModel} annotation or {@link org.apache.isis.applib.ViewModel} interface (for a view model), or by annotating
+ */
+public interface RecreatableObjectFacet extends Facet {
 
-    public static Class<? extends Facet> type() {
-        return ViewModelFacet.class;
-    }
+    void initialize(Object pojo, String memento);
 
-    public ViewModelFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
-    }
+    String memento(Object pojo);
 
-    @Override
-    public boolean isCloneable(Object pojo) {
-        return pojo != null && pojo instanceof ViewModel.Cloneable;
-    }
+    /**
+     * Whether {@link #clone(Object)} can be called.
+     */
+    boolean isCloneable(Object pojo);
 
-    @Override
-    public Object clone(Object pojo) {
-        ViewModel.Cloneable viewModelCloneable = (ViewModel.Cloneable) pojo;
-        return viewModelCloneable.clone();
-    }
-
-
+    Object clone(Object pojo);
 }

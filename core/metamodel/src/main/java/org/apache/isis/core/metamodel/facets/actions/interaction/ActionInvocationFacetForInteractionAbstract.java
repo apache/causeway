@@ -52,7 +52,7 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -358,7 +358,7 @@ public abstract class ActionInvocationFacetForInteractionAbstract
                 resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
 
                 if(command != null) {
-                    if(!resultAdapter.getSpecification().containsDoOpFacet(ViewModelFacet.class)) {
+                    if(!resultAdapter.getSpecification().containsDoOpFacet(RecreatableObjectFacet.class)) {
                         final Bookmark bookmark = CommandUtil.bookmarkFor(resultAdapter);
                         command.setResult(bookmark);
                     }

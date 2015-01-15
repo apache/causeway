@@ -52,7 +52,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacet;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -98,7 +98,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     @Override
     public <T> T newViewModelInstance(Class<T> ofClass, String memento) {
         final ObjectSpecification spec = getSpecificationLookup().loadSpecification(ofClass);
-        if (!spec.containsFacet(ViewModelFacet.class)) {
+        if (!spec.containsFacet(RecreatableObjectFacet.class)) {
             throw new IsisException("Type must be a ViewModel: " + ofClass);
         }
         final ObjectAdapter adapter = doCreateViewModelInstance(spec, memento);

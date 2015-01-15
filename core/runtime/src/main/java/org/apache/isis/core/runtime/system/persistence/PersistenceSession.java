@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtils;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
@@ -320,7 +320,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
             LOG.debug("creating view model instance of " + objectSpec);
         }
         final Object pojo = objectSpec.createObject();
-        ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
+        RecreatableObjectFacet facet = objectSpec.getFacet(RecreatableObjectFacet.class);
         facet.initialize(pojo, memento);
         final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
         return objectSpec.initialize(adapter);

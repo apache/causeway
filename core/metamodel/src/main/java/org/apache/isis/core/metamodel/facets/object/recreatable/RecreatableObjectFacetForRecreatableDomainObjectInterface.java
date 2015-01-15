@@ -17,25 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.viewmodel;
+package org.apache.isis.core.metamodel.facets.object.recreatable;
 
-import org.apache.isis.applib.annotation.When;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
-public class DisabledFacetOnPropertyDerivedFromViewModel extends DisabledFacetAbstract {
+public class RecreatableObjectFacetForRecreatableDomainObjectInterface extends RecreatableObjectFacetAbstract {
 
-    public DisabledFacetOnPropertyDerivedFromViewModel(final FacetHolder holder) {
-        super(When.ALWAYS, Where.ANYWHERE, holder);
+    public RecreatableObjectFacetForRecreatableDomainObjectInterface(final FacetHolder holder) {
+        super(holder);
     }
 
     @Override
-    public String disabledReason(final ObjectAdapter target) {
-        final ViewModelFacet facet = target.getSpecification().getFacet(ViewModelFacet.class);
-        final boolean cloneable = facet.isCloneable(target.getObject());
-        return !cloneable ? "Non-cloneable view models are read-only" : null;
+    public void initialize(final Object pojo, final String memento) {
+        final RecreatableDomainObject viewModel = (RecreatableDomainObject)pojo;
+        viewModel.__isis_recreate(memento);
+    }
+    
+    @Override
+    public String memento(final Object pojo) {
+        final RecreatableDomainObject viewModel = (RecreatableDomainObject)pojo;
+        return viewModel.__isis_memento();
     }
 
 }

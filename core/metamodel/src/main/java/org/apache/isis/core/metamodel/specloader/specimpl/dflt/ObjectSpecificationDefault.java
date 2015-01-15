@@ -50,7 +50,7 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.*;
@@ -299,12 +299,12 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     @Override
     public boolean isViewModel() {
-        return containsFacet(ViewModelFacet.class);
+        return containsFacet(RecreatableObjectFacet.class);
     }
 
     @Override
     public boolean isViewModelCloneable(ObjectAdapter targetAdapter) {
-        final ViewModelFacet facet = getFacet(ViewModelFacet.class);
+        final RecreatableObjectFacet facet = getFacet(RecreatableObjectFacet.class);
         if(facet == null) {
             return false;
         }

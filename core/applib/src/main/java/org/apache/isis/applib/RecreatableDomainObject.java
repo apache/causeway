@@ -23,16 +23,19 @@ import org.apache.isis.applib.annotation.Hidden;
 
 
 /**
- * Indicates that an object belongs to the UI/application layer, and is intended to be used as a view model.
+ * Indicates that the domain object can be recreated from a string.
+ *
  *
  * <p>
- *     Objects that are part of the domain object layer should instead implement {@link RecreatableDomainObject}.
+ *      Objects that are view models (logically belonging to the UI/application layer) should instead implement
+ *      {@link org.apache.isis.applib.ViewModel}.
  * </p>
+
  */
-public interface ViewModel {
+public interface RecreatableDomainObject {
 
     /**
-     * Obtain a memento of the view model.
+     * Obtain a memento of the recreatable object.
      *
      * <p>
      * Typically this will be the identifier of a backing domain entity, but it could also be an arbitrary string,
@@ -40,23 +43,15 @@ public interface ViewModel {
      * 
      * <p>
      * This method is called by the framework in order that the view model may be recreated subsequently
-     * through {@link #viewModelInit(String)}.
+     * through {@link #__isis_recreate(String)}.
      */
     @Hidden
-    public String viewModelMemento();
+    public String __isis_memento();
     
     /**
-     * Used to re-initialize a view model with a memento obtained from {@link #viewModelMemento()}.
+     * Used to recreate a recreatable object with a memento obtained from {@link #__isis_recreate(String)}.
      */
     @Hidden
-    public void viewModelInit(String memento);
+    public void __isis_recreate(String memento);
 
-    /**
-     * Cloneable view models can in effect appear to be editable; the viewer can build a new view model from a
-     * view model whose state has been edited.
-     */
-    public interface Cloneable extends java.lang.Cloneable {
-        @Hidden
-        public Object clone();
-    }
 }

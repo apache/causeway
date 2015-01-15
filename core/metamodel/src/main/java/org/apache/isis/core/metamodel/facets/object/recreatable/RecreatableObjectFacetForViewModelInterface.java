@@ -17,22 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.viewmodel.annotation;
+package org.apache.isis.core.metamodel.facets.object.recreatable;
 
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetDeclarativeAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public class ViewModelFacetAnnotation extends ViewModelFacetDeclarativeAbstract {
+public class RecreatableObjectFacetForViewModelInterface extends RecreatableObjectFacetAbstract {
 
-    public ViewModelFacetAnnotation(
-            final FacetHolder holder,
-            final SpecificationLoader specificationLoader,
-            final AdapterManager adapterManager,
-            final ServicesInjector servicesInjector) {
-        super(holder, specificationLoader, adapterManager, servicesInjector);
+    public RecreatableObjectFacetForViewModelInterface(final FacetHolder holder) {
+        super(holder);
+    }
+
+    @Override
+    public void initialize(Object pojo, String memento) {
+        final ViewModel viewModel = (ViewModel)pojo;
+        viewModel.viewModelInit(memento);
+    }
+    
+    @Override
+    public String memento(Object pojo) {
+        final ViewModel viewModel = (ViewModel)pojo;
+        return viewModel.viewModelMemento();
     }
 
 }

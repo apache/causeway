@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
@@ -493,7 +493,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     /**
      * Apply changes to the underlying adapter (possibly returning a new adapter).
      *
-     * @return adapter, which may be different from the original (if a {@link org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
+     * @return adapter, which may be different from the original (if a {@link org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacet#isCloneable(Object) cloneable} view model, for example.
      */
     public ObjectAdapter apply() {
         ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
@@ -530,12 +530,12 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
             property.set(adapter, associate);
         }
 
-        final ViewModelFacet viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
-        if(viewModelFacet != null) {
+        final RecreatableObjectFacet recreatableObjectFacet = adapter.getSpecification().getFacet(RecreatableObjectFacet.class);
+        if(recreatableObjectFacet != null) {
             final Object viewModel = adapter.getObject();
-            final boolean cloneable = viewModelFacet.isCloneable(viewModel);
+            final boolean cloneable = recreatableObjectFacet.isCloneable(viewModel);
             if(cloneable) {
-                final Object newViewModel = viewModelFacet.clone(viewModel);
+                final Object newViewModel = recreatableObjectFacet.clone(viewModel);
                 adapter = getAdapterManager().adapterFor(newViewModel);
             }
         }

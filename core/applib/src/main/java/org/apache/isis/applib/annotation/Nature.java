@@ -27,12 +27,22 @@ package org.apache.isis.applib.annotation;
  * </p>
  */
 public enum Nature {
+
+    /**
+     * The default.
+     */
+    NOT_SPECIFIED,
+
     /**
      * A domain entity whose persistence is managed internally by Isis, using JDO as the persistence implementation.
      * Domain entities are considered to be part of the domain model layer.
      *
      * <p>
      *     Domain entities are considered to be part of the domain model layer.
+     * </p>
+     *
+     * <p>
+     *    Currently implies no additional semantics other than documentation.
      * </p>
      */
     JDO_ENTITY,
@@ -46,6 +56,16 @@ public enum Nature {
      * </p>
      */
     EXTERNAL_ENTITY,
+    /**
+     * A domain entity that is a wrapper/proxy/stub to a &quot;synthetic&quot; entity, for example one that is
+     * constructed from some sort of internal memory data structure.
+     *
+     * <p>
+     *     As for a {@link #EXTERNAL_ENTITY}, the identity of a synthetic entity is determined solely by the state of
+     *     entity's properties (that have not been set to be ignored using {@link org.apache.isis.applib.annotation.Property#notPersisted()}).
+     * </p>
+     */
+    INMEMORY_ENTITY,
     /**
      * An object that is conceptually part of the application layer, and which surfaces behaviour and/or state that
      * is aggregate of one or more domain entity.

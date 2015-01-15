@@ -17,24 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.viewmodel;
+package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.iface.ViewModelFacetInterface;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.iface.ViewModelFacetInterfaceFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 
-public class ViewModelInteraceFacetFactoryTest extends AbstractFacetFactoryTest {
+public class RecreatableObjectFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private ViewModelFacetInterfaceFactory facetFactory;
+    private RecreatableObjectFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ViewModelFacetInterfaceFactory();
+        facetFactory = new RecreatableObjectFacetFactory();
     }
 
     @Override
@@ -59,9 +57,9 @@ public class ViewModelInteraceFacetFactoryTest extends AbstractFacetFactoryTest 
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(ViewModelFacet.class);
+        final Facet facet = facetedMethod.getFacet(RecreatableObjectFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ViewModelFacetInterface);
+        assertTrue(facet instanceof RecreatableObjectFacetForViewModelInterface);
 
         assertNoMethodsRemoved();
     }

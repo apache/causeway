@@ -63,7 +63,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         processBounded(processClassContext);
         processEditing(processClassContext);
         processObjectType(processClassContext);
-        processViewModel(processClassContext);
+        processNature(processClassContext);
     }
 
     private void processAuditing(final ProcessClassContext processClassContext) {
@@ -163,13 +163,13 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
                 ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObject, facetHolder));
     }
 
-    private void processViewModel(final ProcessClassContext processClassContext) {
+    private void processNature(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         FacetUtil.addFacet(
-                ViewModelFacetForDomainObjectAnnotation.create(
+                RecreatableObjectFacetForDomainObjectAnnotation.create(
                         domainObject, getSpecificationLoader(), adapterManager, servicesInjector, facetHolder));
     }
 

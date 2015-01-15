@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.viewmodel;
+package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import java.util.List;
 import java.util.Set;
@@ -38,13 +38,13 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public abstract class ViewModelFacetDeclarativeAbstract extends ViewModelFacetAbstract {
+public abstract class RecreatableObjectFacetDeclarativeAbstract extends RecreatableObjectFacetAbstract {
 
     private final SpecificationLoader specificationLoader;
     private final ServicesInjector servicesInjector;
     private final AdapterManager adapterManager;
 
-    public ViewModelFacetDeclarativeAbstract(
+    public RecreatableObjectFacetDeclarativeAbstract(
             final FacetHolder holder,
             final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager,

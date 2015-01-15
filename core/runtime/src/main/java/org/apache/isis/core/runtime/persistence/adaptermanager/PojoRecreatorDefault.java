@@ -21,7 +21,7 @@ package org.apache.isis.core.runtime.persistence.adaptermanager;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -34,9 +34,9 @@ class PojoRecreatorDefault implements PojoRecreator {
         if(oid.isViewModel()) {
             // initialize the view model pojo from the oid's identifier
             
-            final ViewModelFacet facet = spec.getFacet(ViewModelFacet.class);
+            final RecreatableObjectFacet facet = spec.getFacet(RecreatableObjectFacet.class);
             if(facet == null) {
-                throw new IllegalArgumentException("spec does not have ViewModelFacet; " + oid.toString() + "; spec is " + spec.getFullIdentifier());
+                throw new IllegalArgumentException("spec does not have RecreatableObjectFacet; " + oid.toString() + "; spec is " + spec.getFullIdentifier());
             }
 
             // a slight compromise? close enough.

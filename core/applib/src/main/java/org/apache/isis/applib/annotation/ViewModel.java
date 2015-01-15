@@ -21,10 +21,6 @@ package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.*;
 
-/**
- * @deprecated - use {@link DomainObject#viewModel()} instead.
- */
-@Deprecated
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)

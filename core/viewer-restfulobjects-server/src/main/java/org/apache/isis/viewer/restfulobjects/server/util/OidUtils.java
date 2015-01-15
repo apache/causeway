@@ -22,7 +22,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -72,7 +72,7 @@ public final class OidUtils {
         // TODO: the logic to figure out which PersistenceSession API to call should be pushed down into PersistenceSession itself.
         final PersistenceSession persistenceSession = rendererContext.getPersistenceSession();
 
-        if(spec.containsFacet(ViewModelFacet.class)) {
+        if(spec.containsFacet(RecreatableObjectFacet.class)) {
 
             // this is a hack; the RO viewer when rendering the URL for the view model loses the "view model" indicator
             // ("*") from the specId, meaning that the marshalling logic above in RootOidDefault.deString() creates an

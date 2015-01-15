@@ -17,25 +17,33 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.viewmodel;
+package org.apache.isis.core.metamodel.facets.object.recreatable;
 
-import org.apache.isis.applib.annotation.When;
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.applib.ViewModel;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
+import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
-public class DisabledFacetOnCollectionDerivedFromViewModel extends DisabledFacetAbstract {
+public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract implements RecreatableObjectFacet {
 
-    public DisabledFacetOnCollectionDerivedFromViewModel(final FacetHolder holder) {
-        super(When.ALWAYS, Where.ANYWHERE, holder);
+    public static Class<? extends Facet> type() {
+        return RecreatableObjectFacet.class;
+    }
+
+    public RecreatableObjectFacetAbstract(final FacetHolder holder) {
+        super(type(), holder);
     }
 
     @Override
-    public String disabledReason(final ObjectAdapter target) {
-        final ViewModelFacet facet = target.getSpecification().getFacet(ViewModelFacet.class);
-        final boolean cloneable = facet.isCloneable(target.getObject());
-        return !cloneable ? "Non-cloneable view models are read-only" : null;
+    public boolean isCloneable(Object pojo) {
+        return pojo != null && pojo instanceof ViewModel.Cloneable;
     }
+
+    @Override
+    public Object clone(Object pojo) {
+        ViewModel.Cloneable viewModelCloneable = (ViewModel.Cloneable) pojo;
+        return viewModelCloneable.clone();
+    }
+
 
 }

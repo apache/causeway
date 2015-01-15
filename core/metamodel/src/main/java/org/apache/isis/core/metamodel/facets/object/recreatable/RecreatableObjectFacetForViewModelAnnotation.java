@@ -17,27 +17,21 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.viewmodel;
+package org.apache.isis.core.metamodel.facets.object.recreatable;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-/**
- * Indicates that this class is a view model.
- * 
- * <p>
- * In the standard Apache Isis Programming Model, typically corresponds to
- * applying the <tt>@ViewModel</tt> annotation at the class level.
- */
-public interface ViewModelFacet extends Facet {
+public class RecreatableObjectFacetForViewModelAnnotation extends RecreatableObjectFacetDeclarativeAbstract {
 
-    void initialize(Object pojo, String memento);
+    public RecreatableObjectFacetForViewModelAnnotation(
+            final FacetHolder holder,
+            final SpecificationLoader specificationLoader,
+            final AdapterManager adapterManager,
+            final ServicesInjector servicesInjector) {
+        super(holder, specificationLoader, adapterManager, servicesInjector);
+    }
 
-    String memento(Object pojo);
-
-    /**
-     * Whether {@link #clone(Object)} can be called.
-     */
-    boolean isCloneable(Object pojo);
-
-    Object clone(Object pojo);
 }

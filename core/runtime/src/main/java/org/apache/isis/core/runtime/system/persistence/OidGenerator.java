@@ -25,7 +25,7 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.*;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -59,7 +59,7 @@ public class OidGenerator implements DebuggableWithTitle {
         final ObjectSpecification spec = getSpecificationLookup().loadSpecification(pojo.getClass());
         final ObjectSpecId objectSpecId = spec.getSpecId();
         final String transientIdentifier = identifierGenerator.createTransientIdentifierFor(objectSpecId, pojo);
-        final State state = spec.containsDoOpFacet(ViewModelFacet.class)? State.VIEWMODEL:State.TRANSIENT;
+        final State state = spec.containsDoOpFacet(RecreatableObjectFacet.class)? State.VIEWMODEL:State.TRANSIENT;
         return new RootOidDefault(objectSpecId, transientIdentifier, state);
     }
 
@@ -95,7 +95,7 @@ public class OidGenerator implements DebuggableWithTitle {
         final String persistentIdentifier = identifierGenerator.createPersistentIdentifierFor(objectSpecId, pojo, transientRootOid);
         
         final ObjectSpecification spec = getSpecificationLookup().lookupBySpecId(objectSpecId);
-        final State state = spec != null && spec.containsFacet(ViewModelFacet.class)? State.VIEWMODEL:State.PERSISTENT;
+        final State state = spec != null && spec.containsFacet(RecreatableObjectFacet.class)? State.VIEWMODEL:State.PERSISTENT;
         return new RootOidDefault(objectSpecId, persistentIdentifier, state);
     }
 

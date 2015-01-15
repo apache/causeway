@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.viewmodel;
+package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import java.lang.reflect.Method;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -26,9 +26,9 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class DisabledFacetOnPropertyDerivedFromViewModelFacetFactory extends FacetFactoryAbstract {
+public class DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory extends FacetFactoryAbstract {
 
-    public DisabledFacetOnPropertyDerivedFromViewModelFacetFactory() {
+    public DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
     }
 
@@ -38,11 +38,11 @@ public class DisabledFacetOnPropertyDerivedFromViewModelFacetFactory extends Fac
         final Class<?> declaringClass = method.getDeclaringClass();
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(declaringClass);
 
-        if (!spec.containsDoOpFacet(ViewModelFacet.class)) {
+        if (!spec.containsDoOpFacet(RecreatableObjectFacet.class)) {
             return;
         }
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new DisabledFacetOnPropertyDerivedFromViewModel(facetHolder));
+        FacetUtil.addFacet(new DisabledFacetOnPropertyDerivedFromRecreatableObject(facetHolder));
     }
 
 }

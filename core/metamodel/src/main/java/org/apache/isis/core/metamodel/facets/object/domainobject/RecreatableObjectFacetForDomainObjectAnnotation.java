@@ -23,14 +23,14 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacetDeclarativeAbstract;
+import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacet;
+import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetDeclarativeAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public class ViewModelFacetForDomainObjectAnnotation extends ViewModelFacetDeclarativeAbstract {
+public class RecreatableObjectFacetForDomainObjectAnnotation extends RecreatableObjectFacetDeclarativeAbstract {
 
-    public static ViewModelFacet create(
+    public static RecreatableObjectFacet create(
             final DomainObject domainObject,
             final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager,
@@ -42,13 +42,25 @@ public class ViewModelFacetForDomainObjectAnnotation extends ViewModelFacetDecla
         }
 
         final Nature nature = domainObject.nature();
+
         if(nature == null || nature == Nature.JDO_ENTITY) {
             return null;
         }
-        return new ViewModelFacetForDomainObjectAnnotation(holder, specificationLoader, adapterManager, servicesInjector);
+        switch (nature)
+        {
+            case NOT_SPECIFIED:
+            case JDO_ENTITY:
+                return null;
+            case VIEW_MODEL:
+            case EXTERNAL_ENTITY:
+            case INMEMORY_ENTITY:
+                return new RecreatableObjectFacetForDomainObjectAnnotation(holder, specificationLoader, adapterManager, servicesInjector);
+        }
+        // shouldn't happen, the above switch should match all cases.
+        throw new IllegalArgumentException("nature of '" + nature + "' not recognized");
     }
 
-    private ViewModelFacetForDomainObjectAnnotation(
+    private RecreatableObjectFacetForDomainObjectAnnotation(
             final FacetHolder holder,
             final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager,

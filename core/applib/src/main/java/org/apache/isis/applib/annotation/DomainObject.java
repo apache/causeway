@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
 public @interface DomainObject {
 
     /**
-     * Whether the entity should be audited (note: does not apply to {@link #viewModel() view model}s.
+     * Whether the entity should be audited (note: does not apply to view models or other recreatable objects.
      *
      * <p>
      * Requires that an implementation of the {@link org.apache.isis.applib.services.audit.AuditingService3} is
@@ -135,6 +135,6 @@ public @interface DomainObject {
     /**
      * The nature of this domain object.
      */
-    Nature nature() default Nature.JDO_ENTITY;
+    Nature nature() default Nature.NOT_SPECIFIED;
 
 }

@@ -196,7 +196,7 @@ public class CommandDefault implements Command2, Command3 {
     @Override
     public ActionInteractionEvent<?> peekActionInteractionEvent() {
         final ActionDomainEvent<?> actionDomainEvent = peekActionDomainEvent();
-        if (!(actionDomainEvent instanceof ActionInteractionEvent)) {
+        if (actionDomainEvent != null && !(actionDomainEvent instanceof ActionInteractionEvent)) {
             throw new IllegalStateException("Most recently pushed event was not an instance of ActionInteractionEvent; use either ActionDomainEvent or the (deprecated) ActionInteractionEvent consistently");
         }
         return (ActionInteractionEvent<?>) actionDomainEvent;
@@ -212,7 +212,7 @@ public class CommandDefault implements Command2, Command3 {
     @Override
     public ActionInteractionEvent popActionInteractionEvent() {
         final ActionDomainEvent<?> actionDomainEvent = popActionDomainEvent();
-        if (!(actionDomainEvent instanceof ActionInteractionEvent)) {
+        if (actionDomainEvent != null  && !(actionDomainEvent instanceof ActionInteractionEvent)) {
             throw new IllegalStateException("Most recently pushed event was not an instance of ActionInteractionEvent; use either ActionDomainEvent or the (deprecated) ActionInteractionEvent consistently");
         }
         return (ActionInteractionEvent<?>) actionDomainEvent;

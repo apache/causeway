@@ -136,6 +136,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.annotcfg.Parseable
 import org.apache.isis.core.metamodel.facets.object.plural.annotation.PluralAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.plural.staticmethod.PluralFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.annotation.PublishedObjectFacetAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.regex.annotation.RegExFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
@@ -143,10 +144,8 @@ import org.apache.isis.core.metamodel.facets.object.typicallen.annotation.Typica
 import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationOnTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotationOrConfigurationFactory;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.DisabledFacetOnCollectionDerivedFromViewModelFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.DisabledFacetOnPropertyDerivedFromViewModelFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.annotation.ViewModelFacetAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.iface.ViewModelFacetInterfaceFactory;
+import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromRecreatableObjectFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits.BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.param.choices.enums.ActionParameterChoicesFacetDerivedFromChoicesFacetFactory;
@@ -402,10 +401,9 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         addFactory(ImmutableFacetMarkerInterfaceFactory.class);
 
-        addFactory(ViewModelFacetAnnotationFactory.class);
-        addFactory(ViewModelFacetInterfaceFactory.class);
-        addFactory(DisabledFacetOnPropertyDerivedFromViewModelFacetFactory.class);
-        addFactory(DisabledFacetOnCollectionDerivedFromViewModelFacetFactory.class);
+        addFactory(RecreatableObjectFacetFactory.class);
+        addFactory(DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory.class);
+        addFactory(DisabledFacetOnCollectionDerivedFromRecreatableObjectFacetFactory.class);
 
         addFactory(MaxLengthFacetOnTypeAnnotationFactory.class);
         addFactory(MaxLengthFacetOnPropertyAnnotationFactory.class);
