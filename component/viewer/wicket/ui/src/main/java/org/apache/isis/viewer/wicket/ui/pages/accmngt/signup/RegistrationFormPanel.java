@@ -19,13 +19,23 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.accmngt.signup;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
 import javax.inject.Inject;
-import com.google.inject.name.Named;
+
+import org.apache.isis.applib.services.email.EmailService;
+import org.apache.isis.applib.services.userreg.EmailNotificationService;
+import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.EmailAvailableValidator;
+import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -37,16 +47,9 @@ import org.apache.wicket.request.UrlRenderer;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.apache.isis.applib.services.email.EmailService;
-import org.apache.isis.applib.services.userreg.EmailNotificationService;
-import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.EmailAvailableValidator;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage;
+
+import com.google.inject.name.Named;
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * A panel with a form for creation of new users
@@ -121,7 +124,8 @@ public class RegistrationFormPanel extends Panel {
 
         PageParameters parameters = new PageParameters();
         parameters.set(0, uuid);
-        CharSequence relativeUrl = urlFor(RegisterPage.class, parameters);
+        Class<? extends Page> signUpStep2Page = pageClassRegistry.getPageClass(PageType.SIGN_UP_VERIFY);
+        CharSequence relativeUrl = urlFor(signUpStep2Page, parameters);
         UrlRenderer urlRenderer = getRequestCycle().getUrlRenderer();
         String fullUrl = urlRenderer.renderFullUrl(Url.parse(relativeUrl));
 
@@ -132,6 +136,9 @@ public class RegistrationFormPanel extends Panel {
     private EmailNotificationService emailNotificationService;
     @Inject
     private EmailService emailService;
+
+    @Inject
+    private PageClassRegistry pageClassRegistry;
 
     @Inject
     private PageNavigationService pageNavigationService;

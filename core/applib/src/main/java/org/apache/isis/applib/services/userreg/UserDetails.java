@@ -1,16 +1,16 @@
-package org.apache.isis.viewer.wicket.ui.pages.accmngt.register;
+package org.apache.isis.applib.services.userreg;
 
 import java.io.Serializable;
 
 /**
- * A model object for {@link org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPanel}
+ * A model object for the signup page
  */
-public class Registree implements Serializable {
+public class UserDetails implements Serializable {
 
     private String username;
     private String password;
     private String confirmPassword;
-    private String email;
+    private String emailAddress;
 
     public String getUsername()
     {
@@ -39,11 +39,11 @@ public class Registree implements Serializable {
         this.confirmPassword = confirmPassword;
     }
 
-    public String getEmail() {
-        return email;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmailAddress(final String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 }

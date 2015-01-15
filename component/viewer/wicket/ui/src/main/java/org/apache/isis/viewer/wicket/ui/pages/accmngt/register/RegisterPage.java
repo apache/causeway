@@ -19,20 +19,21 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.accmngt.register;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
-
 import javax.inject.Inject;
-import org.apache.wicket.Page;
-import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.StringValue;
-import org.apache.wicket.util.string.Strings;
+
+import org.apache.isis.applib.services.userreg.UserDetails;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.string.Strings;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * Web page representing the about page.
@@ -66,9 +67,23 @@ public class RegisterPage extends AccountManagementPageAbstract {
             if (Strings.isEmpty(email)) {
                 pageNavigationService.navigateTo(PageType.SIGN_IN);
             } else {
-                addOrReplace(new RegisterPanel("content", uuidValue.toString()));
+                UserDetails userDetails = newUserDetails();
+                addOrReplace(new RegisterPanel("content", userDetails, uuidValue.toString()) {
+                    @Override
+                    protected MarkupContainer newExtraFieldsContainer(String id) {
+                        return RegisterPage.this.newExtraFieldsContainer(id);
+                    }
+                });
             }
         }
+    }
+
+    protected UserDetails newUserDetails() {
+        return new UserDetails();
+    }
+
+    protected MarkupContainer newExtraFieldsContainer(final String id) {
+        return new WebMarkupContainer(id);
     }
 
     @Inject
