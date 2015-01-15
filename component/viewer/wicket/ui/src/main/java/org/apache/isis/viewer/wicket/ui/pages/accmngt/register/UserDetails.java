@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * A model object for {@link org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPanel}
  */
-public class Registree implements Serializable {
+public class UserDetails implements Serializable {
 
     private String username;
     private String password;

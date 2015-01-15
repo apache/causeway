@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.UUID;
 import javax.inject.Inject;
 import com.google.inject.name.Named;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -119,7 +121,8 @@ public class PasswordResetEmailPanel extends Panel {
 
         PageParameters parameters = new PageParameters();
         parameters.set(0, uuid);
-        CharSequence relativeUrl = urlFor(PasswordResetPage.class, parameters);
+        Class<? extends Page> passwordResetPage = pageClassRegistry.getPageClass(PageType.PASSWORD_RESET);
+        CharSequence relativeUrl = urlFor(passwordResetPage, parameters);
         UrlRenderer urlRenderer = getRequestCycle().getUrlRenderer();
         String fullUrl = urlRenderer.renderFullUrl(Url.parse(relativeUrl));
 
@@ -130,6 +133,9 @@ public class PasswordResetEmailPanel extends Panel {
     private EmailNotificationService emailNotificationService;
     @Inject
     private EmailService emailService;
+
+    @Inject
+    private PageClassRegistry pageClassRegistry;
 
     @Inject
     private PageNavigationService pageNavigationService;
