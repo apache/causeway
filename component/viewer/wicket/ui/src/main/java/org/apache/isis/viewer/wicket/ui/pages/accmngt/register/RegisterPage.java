@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.pages.accmngt.register;
 
 import javax.inject.Inject;
 
+import org.apache.isis.applib.services.userreg.UserDetails;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;

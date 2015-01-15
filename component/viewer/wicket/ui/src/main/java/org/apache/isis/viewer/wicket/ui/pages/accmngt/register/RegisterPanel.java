@@ -1,5 +1,6 @@
 package org.apache.isis.viewer.wicket.ui.pages.accmngt.register;
 
+import org.apache.isis.applib.services.userreg.UserDetails;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
@@ -95,7 +96,7 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
 
             String email = getEmail();
 
-            userDetails.setEmail(email);
+            userDetails.setEmailAddress(email);
         }
 
         @Override
@@ -111,7 +112,7 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
                     IsisContext.getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
                         @Override
                         public void execute() {
-                            userRegistrationService.registerUser(userDetails.getUsername(), userDetails.getPassword(), userDetails.getEmail());
+                            userRegistrationService.registerUser(userDetails);
                             removeAccountConfirmation();
                         }
                     });
@@ -143,7 +144,7 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
         TextField<String> emailField = new TextField<>(ID_EMAIL, new Model<String>() {
             @Override
             public String getObject() {
-                return userDetails.getEmail();
+                return userDetails.getEmailAddress();
             }
         });
         return emailField;
