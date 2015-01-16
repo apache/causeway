@@ -20,15 +20,17 @@ public interface SessionLoggingService {
     }
 
     @Programmatic
-    void log(Type type, String username, Date date, CausedBy causedBy);
+    void log(Type type, String username, Date date, CausedBy causedBy, String sessionId);
 
 
     public static class Stderr implements SessionLoggingService {
 
         @Override
-        public void log(Type type, String username, Date date, CausedBy causedBy) {
+        public void log(final Type type, final String username, final Date date, final CausedBy causedBy, final String sessionId) {
             StringBuilder logMessage = new StringBuilder();
-            logMessage.append("User '").append(username).append("' has logged ");
+            logMessage.append("User '").append(username);
+            logMessage.append("' with sessionId '").append(sessionId)
+            .append("' has logged ");
             if (type == Type.LOGIN) {
                 logMessage.append("in");
             } else {

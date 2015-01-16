@@ -154,7 +154,9 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
             IsisContext.doInSession(new Runnable() {
                 @Override
                 public void run() {
-                    sessionLoggingService.log(type, username, new Date(), causedBy);
+                    // use hashcode as session identifier, to avoid re-binding http sessions if using Session#getId()
+                    int sessionHashCode = System.identityHashCode(AuthenticatedWebSessionForIsis.this);
+                    sessionLoggingService.log(type, username, new Date(), causedBy, Integer.toString(sessionHashCode));
                 }
             });
         }
