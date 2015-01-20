@@ -16,17 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.audit.configuration;
+package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 
+import com.google.common.base.Strings;
+import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.domainobject.AuditableFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 
-public class AuditableFacetForDomainObjectAnnotationAsConfigured extends AuditableFacetForDomainObjectAnnotation {
+public class NamedFacetForViewModelLayoutAnnotation extends NamedFacetAbstract {
 
-    public AuditableFacetForDomainObjectAnnotationAsConfigured(final FacetHolder facetHolder) {
-        super(Enablement.ENABLED, facetHolder);
+    public static NamedFacet create(final ViewModelLayout viewModelLayout, final FacetHolder holder) {
+        if(viewModelLayout == null) {
+            return null;
+        }
+        final String named = Strings.emptyToNull(viewModelLayout.named());
+        return named != null ? new NamedFacetForViewModelLayoutAnnotation(named, holder) : null;
     }
 
+    private NamedFacetForViewModelLayoutAnnotation(final String value, final FacetHolder holder) {
+        super(value, /*escaped*/ true, holder);
+    }
 }

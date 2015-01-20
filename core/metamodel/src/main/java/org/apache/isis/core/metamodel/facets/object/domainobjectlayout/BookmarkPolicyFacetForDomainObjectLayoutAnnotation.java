@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolic
 
 public class BookmarkPolicyFacetForDomainObjectLayoutAnnotation extends BookmarkPolicyFacetAbstract {
 
-    public static BookmarkPolicyFacet create(DomainObjectLayout domainObjectLayout, FacetHolder holder) {
+    public static BookmarkPolicyFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
         if(domainObjectLayout == null) {
             return null;
         }
@@ -36,7 +36,7 @@ public class BookmarkPolicyFacetForDomainObjectLayoutAnnotation extends Bookmark
         return bookmarkPolicy != BookmarkPolicy.NEVER ? new BookmarkPolicyFacetForDomainObjectLayoutAnnotation(bookmarkPolicy, holder) : null;
     }
 
-    private BookmarkPolicyFacetForDomainObjectLayoutAnnotation(BookmarkPolicy bookmarkPolicy, FacetHolder holder) {
+    private BookmarkPolicyFacetForDomainObjectLayoutAnnotation(final BookmarkPolicy bookmarkPolicy, final FacetHolder holder) {
         super(holder, bookmarkPolicy);
     }
 }

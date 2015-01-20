@@ -23,6 +23,7 @@ import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 
 public class RecreatableObjectFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -57,7 +58,7 @@ public class RecreatableObjectFacetFactoryTest extends AbstractFacetFactoryTest 
 
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(RecreatableObjectFacet.class);
+        final Facet facet = facetedMethod.getFacet(ViewModelFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof RecreatableObjectFacetForViewModelInterface);
 

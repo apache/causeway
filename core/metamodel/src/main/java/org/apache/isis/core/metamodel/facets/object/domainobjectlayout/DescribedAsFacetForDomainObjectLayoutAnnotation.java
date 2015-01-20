@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbs
 
 public class DescribedAsFacetForDomainObjectLayoutAnnotation extends DescribedAsFacetAbstract {
 
-    public static DescribedAsFacet create(DomainObjectLayout domainObjectLayout, FacetHolder holder) {
+    public static DescribedAsFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
         if(domainObjectLayout == null) {
             return null;
         }
@@ -36,7 +36,7 @@ public class DescribedAsFacetForDomainObjectLayoutAnnotation extends DescribedAs
         return describedAs != null ? new DescribedAsFacetForDomainObjectLayoutAnnotation(describedAs, holder) : null;
     }
 
-    private DescribedAsFacetForDomainObjectLayoutAnnotation(String value, FacetHolder holder) {
+    private DescribedAsFacetForDomainObjectLayoutAnnotation(final String value, final FacetHolder holder) {
         super(value, holder);
     }
 }

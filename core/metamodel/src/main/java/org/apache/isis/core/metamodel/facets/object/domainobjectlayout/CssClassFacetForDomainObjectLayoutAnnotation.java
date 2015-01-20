@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstr
 
 public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetAbstract {
 
-    public static CssClassFacet create(DomainObjectLayout domainObjectLayout, FacetHolder holder) {
+    public static CssClassFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
         if(domainObjectLayout == null) {
             return null;
         }
@@ -36,7 +36,7 @@ public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetA
         return cssClass != null ? new CssClassFacetForDomainObjectLayoutAnnotation(cssClass, holder) : null;
     }
 
-    private CssClassFacetForDomainObjectLayoutAnnotation(String value, FacetHolder holder) {
+    private CssClassFacetForDomainObjectLayoutAnnotation(final String value, final FacetHolder holder) {
         super(value, holder);
     }
 }

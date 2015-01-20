@@ -53,7 +53,7 @@ public class ImmutableFacetAnnotationFactory extends FacetFactoryAbstract {
     }
 
     private ImmutableFacet create(final Immutable annotation, final FacetHolder holder) {
-        return annotation == null ? null : new ImmutableFacetAnnotation(annotation.value(), holder);
+        return annotation == null ? null : new ImmutableFacetForImmutableAnnotation(annotation.value(), holder);
     }
 
 }

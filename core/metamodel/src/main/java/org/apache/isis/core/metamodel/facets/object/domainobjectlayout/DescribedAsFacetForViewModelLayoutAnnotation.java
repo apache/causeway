@@ -20,23 +20,23 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 
 import com.google.common.base.Strings;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
 
-public class NamedFacetForDomainObjectLayoutAnnotation extends NamedFacetAbstract {
+public class DescribedAsFacetForViewModelLayoutAnnotation extends DescribedAsFacetAbstract {
 
-    public static NamedFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
-        if(domainObjectLayout == null) {
+    public static DescribedAsFacet create(final ViewModelLayout viewModelLayout, final FacetHolder holder) {
+        if(viewModelLayout == null) {
             return null;
         }
-        final String named = Strings.emptyToNull(domainObjectLayout.named());
-        return named != null ? new NamedFacetForDomainObjectLayoutAnnotation(named, holder) : null;
+        final String describedAs = Strings.emptyToNull(viewModelLayout.describedAs());
+        return describedAs != null ? new DescribedAsFacetForViewModelLayoutAnnotation(describedAs, holder) : null;
     }
 
-    private NamedFacetForDomainObjectLayoutAnnotation(final String value, final FacetHolder holder) {
-        super(value, /*escaped*/ true, holder);
+    private DescribedAsFacetForViewModelLayoutAnnotation(final String value, final FacetHolder holder) {
+        super(value, holder);
     }
 }

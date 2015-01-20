@@ -53,7 +53,7 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
 
                 final EditingObjectsConfiguration setting = EditingObjectsConfiguration.parse(configuration);
                 return setting == EditingObjectsConfiguration.FALSE
-                        ? new ImmutableFacetForDomainObjectAnnotation(disabledReason, holder)
+                        ? new ImmutableFacetForDomainObjectAnnotationAsConfigured(disabledReason, holder)
                         : null;
             case DISABLED:
                 return new ImmutableFacetForDomainObjectAnnotation(disabledReason, holder);

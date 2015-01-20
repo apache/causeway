@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
 
 public class PluralFacetForDomainObjectLayoutAnnotation extends PluralFacetAbstract {
 
-    public static PluralFacet create(DomainObjectLayout domainObjectLayout, FacetHolder holder) {
+    public static PluralFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
         if(domainObjectLayout == null) {
             return null;
         }
@@ -36,7 +36,7 @@ public class PluralFacetForDomainObjectLayoutAnnotation extends PluralFacetAbstr
         return plural != null ? new PluralFacetForDomainObjectLayoutAnnotation(plural, holder) : null;
     }
 
-    private PluralFacetForDomainObjectLayoutAnnotation(String value, FacetHolder holder) {
+    private PluralFacetForDomainObjectLayoutAnnotation(final String value, final FacetHolder holder) {
         super(value, holder);
     }
 }

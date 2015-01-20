@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -55,7 +55,7 @@ class IdentifierGeneratorForDataNucleus implements IdentifierGenerator {
     public String createTransientIdentifierFor(ObjectSpecId objectSpecId, Object pojo) {
 
         final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
-        final RecreatableObjectFacet recreatableObjectFacet = spec.getFacet(RecreatableObjectFacet.class);
+        final ViewModelFacet recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
         if(recreatableObjectFacet != null) {
             return recreatableObjectFacet.memento(pojo);
         }
@@ -79,8 +79,8 @@ class IdentifierGeneratorForDataNucleus implements IdentifierGenerator {
         }
         
         final ObjectSpecification spec = getSpecificationLookup().lookupBySpecId(objectSpecId);
-        if(spec.containsFacet(RecreatableObjectFacet.class)) {
-            RecreatableObjectFacet recreatableObjectFacet = spec.getFacet(RecreatableObjectFacet.class);
+        if(spec.containsFacet(ViewModelFacet.class)) {
+            ViewModelFacet recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
             return recreatableObjectFacet.memento(pojo);
         }
         final Object jdoOid = getJdoPersistenceManager().getObjectId(pojo);

@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.properties.interaction;
 
 import com.google.common.base.Objects;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
-import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -80,7 +79,7 @@ public abstract class PropertySetterFacetForInteractionAbstract
             final Object newValue = ObjectAdapter.Util.unwrap(newValueAdapter);
 
             interactionHelper.postEventForProperty(
-                    value(), existingEvent, AbstractInteractionEvent.Phase.EXECUTING,
+                    value(), existingEvent, AbstractDomainEvent.Phase.EXECUTING,
                     getIdentified(), targetAdapter, oldValue, newValue);
 
             // ... perform the property modification

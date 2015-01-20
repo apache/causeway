@@ -52,9 +52,9 @@ public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
         
         expectNoMethodsRemoved();
         
-        facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolderImpl));
+        facetFactory.process(new ProcessClassContext(Customer.class, null, mockMethodRemover, facetHolder));
 
-        final ObjectSpecIdFacet facet = facetHolderImpl.getFacet(ObjectSpecIdFacet.class);
+        final ObjectSpecIdFacet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
         
         assertThat(facet, is(not(nullValue())));
         assertThat(facet instanceof ObjectSpecIdFacetAnnotation, is(true));

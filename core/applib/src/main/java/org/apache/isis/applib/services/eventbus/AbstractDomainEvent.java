@@ -67,14 +67,14 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
      * Whether the framework is checking visibility, enablement, validity or actually executing (invoking action,
      * updating property or collection).
      */
-    public Phase getPhase() {
+    public Phase getEventPhase() {
         return phase;
     }
 
     /**
      * Not API, set by the framework.
      */
-    public void setPhase(Phase phase) {
+    public void setEventPhase(Phase phase) {
         this.phase = phase;
     }
     //endregion
@@ -145,7 +145,7 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
      */
     @Programmatic
     public void veto(final String reason, final Object... args) {
-        switch (getPhase()) {
+        switch (getEventPhase()) {
             case HIDE:
                 hide();
             case DISABLE:

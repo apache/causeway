@@ -38,8 +38,8 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 /**
- * Wrapper around {@link PublishingService} that also includes the
- * {@link PublishedObject.PayloadFactory event} {@link PublishedAction.PayloadFactory canonicalizers}. 
+ * Wrapper around {@link PublishingService} that also includes the payload factories for
+ * {@link PublishedObject.PayloadFactory published object}s and {@link PublishedAction.PayloadFactory published action}s.
  */
 public class PublishingServiceWithDefaultPayloadFactories {
 

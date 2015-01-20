@@ -25,7 +25,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.audit.configuration.AuditableFacetForDomainObjectAnnotationAsConfigured;
 
 
 public class AuditableFacetForDomainObjectAnnotation extends AuditableFacetAbstract {

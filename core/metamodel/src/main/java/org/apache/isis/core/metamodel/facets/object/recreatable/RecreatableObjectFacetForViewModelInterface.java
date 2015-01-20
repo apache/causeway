@@ -25,19 +25,18 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public class RecreatableObjectFacetForViewModelInterface extends RecreatableObjectFacetAbstract {
 
     public RecreatableObjectFacetForViewModelInterface(final FacetHolder holder) {
-        super(holder);
+        super(holder, ArchitecturalLayer.APPLICATION);
     }
 
     @Override
     public void initialize(Object pojo, String memento) {
-        final ViewModel viewModel = (ViewModel)pojo;
+        final ViewModel viewModel = (ViewModel) pojo;
         viewModel.viewModelInit(memento);
     }
-    
+
     @Override
     public String memento(Object pojo) {
-        final ViewModel viewModel = (ViewModel)pojo;
+        final ViewModel viewModel = (ViewModel) pojo;
         return viewModel.viewModelMemento();
     }
-
 }

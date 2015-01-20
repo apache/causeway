@@ -23,15 +23,21 @@ import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 
-public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract implements RecreatableObjectFacet {
+public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract implements ViewModelFacet {
+
+    private final ArchitecturalLayer architecturalLayer;
 
     public static Class<? extends Facet> type() {
-        return RecreatableObjectFacet.class;
+        return ViewModelFacet.class;
     }
 
-    public RecreatableObjectFacetAbstract(final FacetHolder holder) {
+    public RecreatableObjectFacetAbstract(
+            final FacetHolder holder,
+            final ArchitecturalLayer architecturalLayer) {
         super(type(), holder);
+        this.architecturalLayer = architecturalLayer;
     }
 
     @Override
@@ -45,5 +51,8 @@ public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract
         return viewModelCloneable.clone();
     }
 
-
+    @Override
+    public ArchitecturalLayer getArchitecturalLayer() {
+        return architecturalLayer;
+    }
 }

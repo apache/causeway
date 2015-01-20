@@ -21,18 +21,16 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 import java.util.List;
-
 import org.jmock.auto.Mock;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.facets.object.domainobject.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -56,7 +54,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     @Mock
     protected IsisConfiguration mockConfiguration;
 
-    protected FacetHolder facetHolderImpl;
+    protected FacetHolder facetHolder;
 
     @Mock
     protected ObjectSpecification mockObjSpec;
@@ -72,14 +70,14 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
 
     @Before
     public void setUpFacetedMethodAndParameter() throws Exception {
-        facetHolderImpl = new FacetHolderImpl();
+        facetHolder = new FacetHolderImpl();
         facetedMethod = FacetedMethod.createForProperty(AbstractFacetFactoryTest.Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(String.class);
     }
     
     @After
     public void tearDown() throws Exception {
-        facetHolderImpl = null;
+        facetHolder = null;
         facetedMethod = null;
         facetedMethodParameter = null;
     }
@@ -104,8 +102,9 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
         return Utils.findMethod(type, methodName);
     }
 
-    protected void expectNoMethodsRemoved() {
+    protected AutoCompleteFacetForDomainObjectAnnotation expectNoMethodsRemoved() {
         context.never(mockMethodRemover);
+        return null;
     }
 
 }

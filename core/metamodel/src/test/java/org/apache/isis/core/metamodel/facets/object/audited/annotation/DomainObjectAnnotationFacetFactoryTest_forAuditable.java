@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
-import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetAuditedAnnotation;
+import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetForAuditedAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 
 public class DomainObjectAnnotationFacetFactoryTest_forAuditable extends AbstractFacetFactoryTest {
@@ -54,7 +54,7 @@ public class DomainObjectAnnotationFacetFactoryTest_forAuditable extends Abstrac
 
         final Facet facet = facetHolder.getFacet(AuditableFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof AuditableFacetAuditedAnnotation);
+        assertTrue(facet instanceof AuditableFacetForAuditedAnnotation);
 
         assertNoMethodsRemoved();
     }

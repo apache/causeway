@@ -33,4 +33,77 @@ public abstract class AbstractInteractionEvent<S> extends AbstractDomainEvent<S>
         super(source, identifier);
     }
 
+
+    //region > Phase
+
+    /**
+     * @deprecated - replaced by {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase}.
+     */
+    @Deprecated
+    public enum Phase {
+        @Deprecated
+        HIDE,
+        @Deprecated
+        DISABLE,
+        @Deprecated
+        VALIDATE,
+        @Deprecated
+        EXECUTING,
+        @Deprecated
+        EXECUTED;
+
+        @Deprecated
+        public static Phase from(final AbstractDomainEvent.Phase phase) {
+            switch (phase) {
+                case HIDE:
+                    return AbstractInteractionEvent.Phase.HIDE;
+                case DISABLE:
+                    return AbstractInteractionEvent.Phase.DISABLE;
+                case VALIDATE:
+                    return AbstractInteractionEvent.Phase.VALIDATE;
+                case EXECUTING:
+                    return AbstractInteractionEvent.Phase.EXECUTING;
+                case EXECUTED:
+                    return AbstractInteractionEvent.Phase.EXECUTED;
+            }
+            throw new IllegalArgumentException(String.format("Phase '%s' not recognized", phase));
+        }
+
+        @Deprecated
+        public static AbstractDomainEvent.Phase from(final Phase phase) {
+            switch (phase) {
+                case HIDE:
+                    return AbstractDomainEvent.Phase.HIDE;
+                case DISABLE:
+                    return AbstractDomainEvent.Phase.DISABLE;
+                case VALIDATE:
+                    return AbstractDomainEvent.Phase.VALIDATE;
+                case EXECUTING:
+                    return AbstractDomainEvent.Phase.EXECUTING;
+                case EXECUTED:
+                    return AbstractDomainEvent.Phase.EXECUTED;
+            }
+            throw new IllegalArgumentException(String.format("Phase '%s' not recognized", phase));
+        }
+    }
+
+    private Phase phase;
+
+    /**
+     * @deprecated - use {@link #getEventPhase()} instead.
+     */
+    @Deprecated
+    public Phase getPhase() {
+        return phase;
+    }
+
+    /**
+     * Not API, set by the framework.
+     */
+    @Deprecated
+    public void setPhase(Phase phase) {
+        this.phase = phase;
+    }
+    //endregion
+
 }

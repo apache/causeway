@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.cssclassfa.annotation.annotation;
+package org.apache.isis.core.metamodel.facets.object.cssclassfa.annotation;
 
 import org.apache.isis.applib.annotation.CssClassFa;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

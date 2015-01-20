@@ -16,16 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.object.domainobject;
 
-package org.apache.isis.core.metamodel.facets.object.cssclassfa.annotation.annotation;
 
-import org.apache.isis.applib.annotation.CssClassFa;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
 
-public class CssClassFaFacetOnTypeAnnotation extends CssClassFaFacetAbstract {
 
-    public CssClassFaFacetOnTypeAnnotation(final CssClassFa cssClassFa, final FacetHolder holder) {
-        super(cssClassFa.value(), cssClassFa.position(), holder);
+public class AuditableFacetForDomainObjectAnnotationAsConfigured extends AuditableFacetForDomainObjectAnnotation {
+
+    public AuditableFacetForDomainObjectAnnotationAsConfigured(final FacetHolder facetHolder) {
+        super(Enablement.ENABLED, facetHolder);
     }
+
 }

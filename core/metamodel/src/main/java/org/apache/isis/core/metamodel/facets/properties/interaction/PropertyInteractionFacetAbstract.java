@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.interaction;
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
-import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
+import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -67,7 +67,7 @@ public abstract class PropertyInteractionFacetAbstract
 
         final PropertyDomainEvent<?, ?> event =
                 interactionHelper.postEventForProperty(
-                        eventType(), null, AbstractInteractionEvent.Phase.HIDE, getIdentified(), ic.getTarget(), null, null);
+                        eventType(), null, AbstractDomainEvent.Phase.HIDE, getIdentified(), ic.getTarget(), null, null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
         }
@@ -85,7 +85,7 @@ public abstract class PropertyInteractionFacetAbstract
 
         final PropertyDomainEvent<?, ?> event =
                 interactionHelper.postEventForProperty(
-                    eventType(), null, AbstractInteractionEvent.Phase.DISABLE, getIdentified(), ic.getTarget(), null, null);
+                    eventType(), null, AbstractDomainEvent.Phase.DISABLE, getIdentified(), ic.getTarget(), null, null);
         if (event != null && event.isDisabled()) {
             return event.getDisabledReason();
         }
@@ -106,7 +106,7 @@ public abstract class PropertyInteractionFacetAbstract
 
         final PropertyDomainEvent<?, ?> event =
                 interactionHelper.postEventForProperty(
-                        eventType(), null, AbstractInteractionEvent.Phase.VALIDATE, getIdentified(), ic.getTarget(), oldValue, proposedValue);
+                        eventType(), null, AbstractDomainEvent.Phase.VALIDATE, getIdentified(), ic.getTarget(), oldValue, proposedValue);
         if (event != null && event.isInvalid()) {
             return event.getInvalidityReason();
         }

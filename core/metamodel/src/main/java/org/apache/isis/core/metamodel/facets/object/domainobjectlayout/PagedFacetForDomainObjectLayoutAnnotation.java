@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
 
 public class PagedFacetForDomainObjectLayoutAnnotation extends PagedFacetAbstract {
 
-    public static PagedFacet create(DomainObjectLayout domainObjectLayout, FacetHolder holder) {
+    public static PagedFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
         if(domainObjectLayout == null) {
             return null;
         }
@@ -35,7 +35,7 @@ public class PagedFacetForDomainObjectLayoutAnnotation extends PagedFacetAbstrac
         return paged > 1 ? new PagedFacetForDomainObjectLayoutAnnotation(paged, holder) : null;
     }
 
-    private PagedFacetForDomainObjectLayoutAnnotation(int value, FacetHolder holder) {
+    private PagedFacetForDomainObjectLayoutAnnotation(final int value, final FacetHolder holder) {
         super(value, holder);
     }
 }

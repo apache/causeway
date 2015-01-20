@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class DisabledFacetOnCollectionDerivedFromRecreatableObjectFacetFactory extends FacetFactoryAbstract {
@@ -38,7 +39,7 @@ public class DisabledFacetOnCollectionDerivedFromRecreatableObjectFacetFactory e
         final Class<?> declaringClass = method.getDeclaringClass();
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(declaringClass);
 
-        if (!spec.containsDoOpFacet(RecreatableObjectFacet.class)) {
+        if (!spec.containsDoOpFacet(ViewModelFacet.class)) {
             return;
         }
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();

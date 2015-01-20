@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -71,7 +72,7 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract implemen
         // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectFacetFactory
     }
 
-    private RecreatableObjectFacet create(final org.apache.isis.applib.annotation.ViewModel annotation, final FacetHolder holder) {
+    private ViewModelFacet create(final org.apache.isis.applib.annotation.ViewModel annotation, final FacetHolder holder) {
         return annotation != null ? new RecreatableObjectFacetForViewModelAnnotation(holder, getSpecificationLoader(), adapterManager, servicesInjector) : null;
     }
 
@@ -83,7 +84,7 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract implemen
 
             @Override
             public boolean visit(final ObjectSpecification objectSpec, final ValidationFailures validationFailures) {
-                final RecreatableObjectFacet facet = objectSpec.getFacet(RecreatableObjectFacet.class);
+                final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
                 final Facet underlyingFacet = facet != null ? facet.getUnderlyingFacet() : null;
                 if(underlyingFacet != null) {
                     validationFailures.add(

@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public class RecreatableObjectFacetForRecreatableDomainObjectInterface extends RecreatableObjectFacetAbstract {
 
     public RecreatableObjectFacetForRecreatableDomainObjectInterface(final FacetHolder holder) {
-        super(holder);
+        super(holder, ArchitecturalLayer.DOMAIN);
     }
 
     @Override
@@ -36,8 +36,8 @@ public class RecreatableObjectFacetForRecreatableDomainObjectInterface extends R
     
     @Override
     public String memento(final Object pojo) {
-        final RecreatableDomainObject viewModel = (RecreatableDomainObject)pojo;
-        return viewModel.__isis_memento();
+        final RecreatableDomainObject recreatableDomainObject = (RecreatableDomainObject)pojo;
+        return recreatableDomainObject.__isis_memento();
     }
 
 }

@@ -35,9 +35,9 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
-import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetAuditedAnnotation;
+import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetForAuditedAnnotation;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
-import org.apache.isis.core.metamodel.facets.object.publishedobject.annotation.PublishedObjectFacetAnnotation;
+import org.apache.isis.core.metamodel.facets.object.publishedobject.annotation.PublishedObjectFacetForPublishedObjectAnnotation;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
@@ -86,7 +86,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
 
         // check for the deprecated annotation first
         final Audited annotation = Annotations.getAnnotation(cls, Audited.class);
-        auditableFacet = AuditableFacetAuditedAnnotation.create(annotation, holder);
+        auditableFacet = AuditableFacetForAuditedAnnotation.create(annotation, holder);
 
         // else check for @DomainObject(auditing=....)
         if(auditableFacet == null) {
@@ -115,7 +115,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
 
         // check for the deprecated @PublishedObject annotation first
         final PublishedObject publishedObject = Annotations.getAnnotation(processClassContext.getCls(), PublishedObject.class);
-        publishedObjectFacet = PublishedObjectFacetAnnotation.create(publishedObject, processClassContext.getFacetHolder());
+        publishedObjectFacet = PublishedObjectFacetForPublishedObjectAnnotation.create(publishedObject, facetHolder);
 
         // else check from @DomainObject(publishing=...)
         if(publishedObjectFacet == null) {

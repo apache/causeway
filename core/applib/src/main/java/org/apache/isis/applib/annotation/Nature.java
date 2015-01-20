@@ -29,7 +29,8 @@ package org.apache.isis.applib.annotation;
 public enum Nature {
 
     /**
-     * The default.
+     * The default; allows the programmer to combine <tt>@DomainObject</tt> annotation with the
+     * <tt>@ViewModel</tt> annotation or implementing the <tt>ViewModel</tt> interface.
      */
     NOT_SPECIFIED,
 

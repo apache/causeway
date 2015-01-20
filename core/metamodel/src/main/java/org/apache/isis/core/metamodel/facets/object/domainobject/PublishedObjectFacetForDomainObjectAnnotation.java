@@ -59,8 +59,13 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
         return null;
     }
 
-    protected static PublishingPayloadFactoryForObject newPayloadFactory(
-            final DomainObject domainObject) {
+    /**
+     * @return null means that the default payload factories will be used; this is handled within IsisTransaction.
+     */
+    protected static PublishingPayloadFactoryForObject newPayloadFactory(final DomainObject domainObject) {
+        if(domainObject == null) {
+            return null;
+        }
         final Class<? extends PublishingPayloadFactoryForObject> value = domainObject.publishingPayloadFactory();
         if(value == null) {
             return null;
@@ -75,11 +80,11 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
     }
 
 
-    PublishedObjectFacetForDomainObjectAnnotation(PublishingPayloadFactoryForObject publishingPayloadFactory, final FacetHolder holder) {
+    PublishedObjectFacetForDomainObjectAnnotation(final PublishingPayloadFactoryForObject publishingPayloadFactory, final FacetHolder holder) {
         super(legacyPayloadFactoryFor(publishingPayloadFactory), holder);
     }
 
-    private static PublishedObject.PayloadFactory legacyPayloadFactoryFor(PublishingPayloadFactoryForObject publishingPayloadFactory) {
+    private static PublishedObject.PayloadFactory legacyPayloadFactoryFor(final PublishingPayloadFactoryForObject publishingPayloadFactory) {
         if(publishingPayloadFactory instanceof PublishingPayloadFactoryForObject.Adapter) {
             final PublishingPayloadFactoryForObject.Adapter adapter = (PublishingPayloadFactoryForObject.Adapter) publishingPayloadFactory;
             return adapter.getPayloadFactory();
@@ -87,7 +92,7 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
         return new LegacyAdapter(publishingPayloadFactory);
     }
 
-    private static class LegacyAdapter implements PublishedObject.PayloadFactory {
+    static class LegacyAdapter implements PublishedObject.PayloadFactory {
 
         private final PublishingPayloadFactoryForObject payloadFactory;
 
@@ -96,8 +101,16 @@ public class PublishedObjectFacetForDomainObjectAnnotation extends PublishedObje
         }
 
         @Override
-        public EventPayload payloadFor(Object changedObject, PublishedObject.ChangeKind changeKind) {
+        public EventPayload payloadFor(final Object changedObject, final PublishedObject.ChangeKind changeKind) {
             return payloadFactory.payloadFor(changedObject, PublishingChangeKind.from(changeKind));
+        }
+
+        /**
+         * For testing only.
+         * @return
+         */
+        PublishingPayloadFactoryForObject getPayloadFactory() {
+            return payloadFactory;
         }
     }
 

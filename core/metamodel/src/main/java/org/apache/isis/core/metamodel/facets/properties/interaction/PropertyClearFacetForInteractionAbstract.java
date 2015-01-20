@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.properties.interaction;
 
 import com.google.common.base.Objects;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
-import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -95,7 +94,7 @@ public abstract class PropertyClearFacetForInteractionAbstract
 
             // ... and post the event (reusing existing event if available)
             final PropertyDomainEvent<?, ?> event = propertyDomainEventFacet.currentInteraction.get();
-            interactionHelper.postEventForProperty(value(), verify(event), AbstractInteractionEvent.Phase.EXECUTED, getIdentified(), targetAdapter, oldValue, actualNewValue);
+            interactionHelper.postEventForProperty(value(), verify(event), AbstractDomainEvent.Phase.EXECUTED, getIdentified(), targetAdapter, oldValue, actualNewValue);
 
         } finally {
             // clean up

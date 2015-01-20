@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -27,33 +28,52 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 
-public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract {
+public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract  {
 
     public DomainObjectLayoutFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
-        final DomainObjectLayout domainObjectLayout = Annotations.getAnnotation(cls, DomainObjectLayout.class);
+
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
+
+        final DomainObjectLayout domainObjectLayout = Annotations.getAnnotation(cls, DomainObjectLayout.class);
+        final ViewModelLayout viewModelLayout = Annotations.getAnnotation(cls, ViewModelLayout.class);
 
         FacetUtil.addFacet(
                 CssClassFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
         FacetUtil.addFacet(
+                CssClassFacetForViewModelLayoutAnnotation.create(viewModelLayout, facetHolder));
+
+        FacetUtil.addFacet(
                 DescribedAsFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
+        FacetUtil.addFacet(
+                DescribedAsFacetForViewModelLayoutAnnotation.create(viewModelLayout, facetHolder));
+
         FacetUtil.addFacet(
                 NamedFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
         FacetUtil.addFacet(
+                NamedFacetForViewModelLayoutAnnotation.create(viewModelLayout, facetHolder));
+
+        FacetUtil.addFacet(
                 PagedFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
+        FacetUtil.addFacet(
+                PagedFacetForViewModelLayoutAnnotation.create(viewModelLayout, facetHolder));
+
         FacetUtil.addFacet(
                 PluralFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
         FacetUtil.addFacet(
+                PluralFacetForViewModelLayoutAnnotation.create(viewModelLayout, facetHolder));
+
+        FacetUtil.addFacet(
                 BookmarkPolicyFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
+        FacetUtil.addFacet(
+                BookmarkPolicyFacetForViewModelLayoutAnnotation.create(viewModelLayout, facetHolder));
 
         return;
     }
-
 
 }

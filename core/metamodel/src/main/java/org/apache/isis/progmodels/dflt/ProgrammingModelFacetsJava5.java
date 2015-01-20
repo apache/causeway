@@ -73,6 +73,7 @@ import org.apache.isis.core.metamodel.facets.members.named.annotprop.NamedFacetO
 import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.render.annotprop.RenderFacetOrResolveFactory;
+import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.actionorder.annotation.ActionOrderFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetFromAuditedAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.audit.configuration.AuditableFacetFromConfigurationFactory;
@@ -90,7 +91,7 @@ import org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc.Cho
 import org.apache.isis.core.metamodel.facets.object.choices.enums.EnumFacetUsingValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.object.cssclass.annotation.CssClassFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethodFactory;
-import org.apache.isis.core.metamodel.facets.object.cssclassfa.annotation.annotation.CssClassFaFacetOnTypeAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.object.cssclassfa.annotation.CssClassFaFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.describedas.annotation.DescribedAsFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.dirty.method.DirtyMethodsFacetFactory;
@@ -136,6 +137,8 @@ import org.apache.isis.core.metamodel.facets.object.parseable.annotcfg.Parseable
 import org.apache.isis.core.metamodel.facets.object.plural.annotation.PluralAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.plural.staticmethod.PluralFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.annotation.PublishedObjectFacetAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromRecreatableObjectFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.regex.annotation.RegExFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
@@ -144,8 +147,6 @@ import org.apache.isis.core.metamodel.facets.object.typicallen.annotation.Typica
 import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationOnTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotationOrConfigurationFactory;
-import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromRecreatableObjectFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits.BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.param.choices.enums.ActionParameterChoicesFacetDerivedFromChoicesFacetFactory;
@@ -419,7 +420,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(MultiLineFacetOnParameterAnnotationFactory.class);
 
 
-        // ISIS-970
+        // must come after RecreatableObjectFacetFactory
         addFactory(DomainObjectAnnotationFacetFactory.class);
         addFactory(PropertyAnnotationFacetFactory.class);
         addFactory(CollectionAnnotationFacetFactory.class);
@@ -557,5 +558,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(PublishedObjectFacetAnnotationFactory.class);
 
         addFactory(FacetsFacetAnnotationFactory.class);
+
+        addFactory(ViewModelSemanticCheckingFacetFactory.class);
     }
 }

@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.ImmutableFacetAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.ImmutableFacetAnnotation;
+import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.ImmutableFacetForImmutableAnnotation;
 
 public class ImmutableFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
@@ -53,8 +53,8 @@ public class ImmutableFacetAnnotationFactoryTest extends AbstractFacetFactoryTes
 
         final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ImmutableFacetAnnotation);
-        final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
+        assertTrue(facet instanceof ImmutableFacetForImmutableAnnotation);
+        final ImmutableFacetForImmutableAnnotation immutableFacetAnnotation = (ImmutableFacetForImmutableAnnotation) facet;
         assertEquals(When.ALWAYS, immutableFacetAnnotation.when());
 
         assertNoMethodsRemoved();
@@ -69,8 +69,8 @@ public class ImmutableFacetAnnotationFactoryTest extends AbstractFacetFactoryTes
 
         final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ImmutableFacetAnnotation);
-        final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
+        assertTrue(facet instanceof ImmutableFacetForImmutableAnnotation);
+        final ImmutableFacetForImmutableAnnotation immutableFacetAnnotation = (ImmutableFacetForImmutableAnnotation) facet;
         assertEquals(When.ALWAYS, immutableFacetAnnotation.when());
 
         assertNoMethodsRemoved();
@@ -85,8 +85,8 @@ public class ImmutableFacetAnnotationFactoryTest extends AbstractFacetFactoryTes
 
         final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ImmutableFacetAnnotation);
-        final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
+        assertTrue(facet instanceof ImmutableFacetForImmutableAnnotation);
+        final ImmutableFacetForImmutableAnnotation immutableFacetAnnotation = (ImmutableFacetForImmutableAnnotation) facet;
         assertEquals(When.NEVER, immutableFacetAnnotation.when());
 
         assertNoMethodsRemoved();
@@ -101,8 +101,8 @@ public class ImmutableFacetAnnotationFactoryTest extends AbstractFacetFactoryTes
 
         final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ImmutableFacetAnnotation);
-        final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
+        assertTrue(facet instanceof ImmutableFacetForImmutableAnnotation);
+        final ImmutableFacetForImmutableAnnotation immutableFacetAnnotation = (ImmutableFacetForImmutableAnnotation) facet;
         assertEquals(When.ONCE_PERSISTED, immutableFacetAnnotation.when());
 
         assertNoMethodsRemoved();
@@ -117,8 +117,8 @@ public class ImmutableFacetAnnotationFactoryTest extends AbstractFacetFactoryTes
 
         final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ImmutableFacetAnnotation);
-        final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
+        assertTrue(facet instanceof ImmutableFacetForImmutableAnnotation);
+        final ImmutableFacetForImmutableAnnotation immutableFacetAnnotation = (ImmutableFacetForImmutableAnnotation) facet;
         assertEquals(When.UNTIL_PERSISTED, immutableFacetAnnotation.when());
 
         assertNoMethodsRemoved();

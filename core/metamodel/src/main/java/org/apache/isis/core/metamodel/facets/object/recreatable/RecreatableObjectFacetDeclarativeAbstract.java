@@ -46,10 +46,11 @@ public abstract class RecreatableObjectFacetDeclarativeAbstract extends Recreata
 
     public RecreatableObjectFacetDeclarativeAbstract(
             final FacetHolder holder,
+            final ArchitecturalLayer architecturalLayer,
             final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager,
             final ServicesInjector servicesInjector) {
-        super(holder);
+        super(holder, architecturalLayer);
         this.specificationLoader = specificationLoader;
         this.servicesInjector = servicesInjector;
         this.adapterManager = adapterManager;

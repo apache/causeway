@@ -28,6 +28,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command2;
 import org.apache.isis.applib.services.command.Command3;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
+import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
@@ -96,7 +97,8 @@ public class InteractionHelper {
                 event.setActionSemantics(objectAction.getSemantics());
             }
 
-            event.setPhase(phase);
+            event.setEventPhase(phase);
+            event.setPhase(AbstractInteractionEvent.Phase.from(phase));
             getEventBusService().post(event);
             return event;
         } catch (Exception e) {
@@ -155,7 +157,8 @@ public class InteractionHelper {
                 final Identifier identifier = identified.getIdentifier();
                 event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
             }
-            event.setPhase(phase);
+            event.setEventPhase(phase);
+            event.setPhase(AbstractInteractionEvent.Phase.from(phase));
             getEventBusService().post(event);
             return event;
         } catch (Exception e) {
@@ -229,7 +232,8 @@ public class InteractionHelper {
                 final Identifier identifier = identified.getIdentifier();
                 event = newCollectionDomainEvent(eventType, phase, identifier, source, of, reference);
             }
-            event.setPhase(phase);
+            event.setEventPhase(phase);
+            event.setPhase(AbstractInteractionEvent.Phase.from(phase));
             getEventBusService().post(event);
             return event;
         } catch (Exception e) {

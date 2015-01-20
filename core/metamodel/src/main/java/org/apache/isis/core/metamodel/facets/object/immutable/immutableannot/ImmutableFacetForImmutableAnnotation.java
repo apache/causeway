@@ -17,21 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.recreatable;
+package org.apache.isis.core.metamodel.facets.object.immutable.immutableannot;
 
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.applib.annotation.When;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
 
-public class RecreatableObjectFacetForViewModelAnnotation extends RecreatableObjectFacetDeclarativeAbstract {
+@Deprecated
+public class ImmutableFacetForImmutableAnnotation extends ImmutableFacetAbstract {
 
-    public RecreatableObjectFacetForViewModelAnnotation(
-            final FacetHolder holder,
-            final SpecificationLoader specificationLoader,
-            final AdapterManager adapterManager,
-            final ServicesInjector servicesInjector) {
-        super(holder, ArchitecturalLayer.APPLICATION, specificationLoader, adapterManager, servicesInjector);
+    public ImmutableFacetForImmutableAnnotation(final When value, final FacetHolder holder) {
+        super(value, holder);
+    }
+
+    @Override
+    public void copyOnto(final FacetHolder holder) {
+        final Facet facet = new ImmutableFacetForImmutableAnnotation(this.when(), holder);
+        FacetUtil.addFacet(facet);
     }
 
 }

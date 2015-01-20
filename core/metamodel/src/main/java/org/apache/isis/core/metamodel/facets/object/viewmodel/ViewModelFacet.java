@@ -17,18 +17,31 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.recreatable;
+package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
- * Indicates that this class is either a view model (for the UI/application layer) or a recreatable domain object of some sort (for the domain layer, that is: an external or synthetic entity).
+ * Indicates that this class is either a view model (for the UI/application layer) or a recreatable domain object of
+ * some sort (for the domain layer, that is: an external or synthetic entity).
  * 
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to
- * applying either {@link org.apache.isis.applib.annotation.ViewModel} annotation or {@link org.apache.isis.applib.ViewModel} interface (for a view model), or by annotating
+ * applying either {@link org.apache.isis.applib.annotation.ViewModel} annotation or
+ * {@link org.apache.isis.applib.ViewModel} interface (for a view model), or by annotating
+ *
+ * <p>
+ *     Note: this facet is called &quot;ViewModelFacet&quot; for historical reasons; a better name would be
+ *     &quot;RecreatableObjectFacet&quot;.  The old name has been retained only to avoid unnecessarily breaking
+ *     some add-ons (eg Isis Addons Excel Module) that use this facet.
+ * </p>
  */
-public interface RecreatableObjectFacet extends Facet {
+public interface ViewModelFacet extends Facet {
+
+    public enum ArchitecturalLayer {
+        APPLICATION,
+        DOMAIN
+    }
 
     void initialize(Object pojo, String memento);
 
@@ -40,4 +53,6 @@ public interface RecreatableObjectFacet extends Facet {
     boolean isCloneable(Object pojo);
 
     Object clone(Object pojo);
+
+    ArchitecturalLayer getArchitecturalLayer();
 }

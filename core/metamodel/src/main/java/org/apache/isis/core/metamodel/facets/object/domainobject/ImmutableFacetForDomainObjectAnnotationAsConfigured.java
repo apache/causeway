@@ -17,24 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.immutable.immutableannot;
+package org.apache.isis.core.metamodel.facets.object.domainobject;
 
-import org.apache.isis.applib.annotation.When;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
 
-public class ImmutableFacetAnnotation extends ImmutableFacetAbstract {
+public class ImmutableFacetForDomainObjectAnnotationAsConfigured extends ImmutableFacetForDomainObjectAnnotation {
 
-    public ImmutableFacetAnnotation(final When value, final FacetHolder holder) {
-        super(value, holder);
-    }
-
-    @Override
-    public void copyOnto(final FacetHolder holder) {
-        final Facet facet = new ImmutableFacetAnnotation(this.when(), holder);
-        FacetUtil.addFacet(facet);
+    public ImmutableFacetForDomainObjectAnnotationAsConfigured(final String reason, final FacetHolder holder) {
+        super(reason,holder);
     }
 
 }

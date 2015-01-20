@@ -16,22 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.object.audit.annotation;
 
-package org.apache.isis.core.metamodel.facets.object.recreatable;
 
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
+import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetImpl;
 
-public class RecreatableObjectFacetForViewModelAnnotation extends RecreatableObjectFacetDeclarativeAbstract {
 
-    public RecreatableObjectFacetForViewModelAnnotation(
-            final FacetHolder holder,
-            final SpecificationLoader specificationLoader,
-            final AdapterManager adapterManager,
-            final ServicesInjector servicesInjector) {
-        super(holder, ArchitecturalLayer.APPLICATION, specificationLoader, adapterManager, servicesInjector);
+@Deprecated
+public class AuditableFacetForAuditedAnnotation extends AuditableFacetImpl {
+
+    public AuditableFacetForAuditedAnnotation(final FacetHolder facetHolder, final Enablement enablement) {
+        super(facetHolder, enablement);
     }
 
+    public static AuditableFacet create(final Audited annotation, final FacetHolder holder) {
+        if (annotation == null) {
+            return null;
+        }
+        return new AuditableFacetForAuditedAnnotation(
+                holder,
+                Enablement.ifDisabled(annotation.disabled()));
+    }
 }

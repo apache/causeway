@@ -40,7 +40,7 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
         return bounded ? new ChoicesFacetForDomainObjectAnnotation(facetHolder, querySubmitter): null;
     }
 
-    private ChoicesFacetForDomainObjectAnnotation(final FacetHolder holder, QuerySubmitter querySubmitter) {
+    private ChoicesFacetForDomainObjectAnnotation(final FacetHolder holder, final QuerySubmitter querySubmitter) {
         super(holder, querySubmitter);
     }
 

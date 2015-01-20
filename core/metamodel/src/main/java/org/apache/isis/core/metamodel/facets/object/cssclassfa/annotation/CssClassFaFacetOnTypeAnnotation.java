@@ -17,21 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.recreatable;
+package org.apache.isis.core.metamodel.facets.object.cssclassfa.annotation;
 
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.applib.annotation.CssClassFa;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
 
-public class RecreatableObjectFacetForViewModelAnnotation extends RecreatableObjectFacetDeclarativeAbstract {
+public class CssClassFaFacetOnTypeAnnotation extends CssClassFaFacetAbstract {
 
-    public RecreatableObjectFacetForViewModelAnnotation(
-            final FacetHolder holder,
-            final SpecificationLoader specificationLoader,
-            final AdapterManager adapterManager,
-            final ServicesInjector servicesInjector) {
-        super(holder, ArchitecturalLayer.APPLICATION, specificationLoader, adapterManager, servicesInjector);
+    public CssClassFaFacetOnTypeAnnotation(final CssClassFa cssClassFa, final FacetHolder holder) {
+        super(cssClassFa.value(), cssClassFa.position(), holder);
     }
-
 }

@@ -16,27 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.audit.annotation;
+package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 
-import org.apache.isis.applib.annotation.Audited;
+import com.google.common.base.Strings;
+import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
-import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacetImpl;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 
 
-public class AuditableFacetAuditedAnnotation extends AuditableFacetImpl {
+public class CssClassFacetForViewModelLayoutAnnotation extends CssClassFacetAbstract {
 
-    public AuditableFacetAuditedAnnotation(final FacetHolder facetHolder, final Enablement enablement) {
-        super(facetHolder, enablement);
-    }
-
-    public static AuditableFacet create(final Audited annotation, final FacetHolder holder) {
-        if (annotation == null) {
+    public static CssClassFacet create(final ViewModelLayout viewModelLayout, final FacetHolder holder) {
+        if(viewModelLayout == null) {
             return null;
         }
-        return new AuditableFacetAuditedAnnotation(
-                holder,
-                Enablement.ifDisabled(annotation.disabled()));
+        final String cssClass = Strings.emptyToNull(viewModelLayout.cssClass());
+        return cssClass != null ? new CssClassFacetForViewModelLayoutAnnotation(cssClass, holder) : null;
+    }
+
+    private CssClassFacetForViewModelLayoutAnnotation(final String value, final FacetHolder holder) {
+        super(value, holder);
     }
 }

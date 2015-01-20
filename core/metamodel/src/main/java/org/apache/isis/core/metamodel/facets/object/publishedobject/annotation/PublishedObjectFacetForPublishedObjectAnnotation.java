@@ -24,7 +24,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacetAbstract;
 
-public class PublishedObjectFacetAnnotation extends PublishedObjectFacetAbstract {
+@Deprecated
+public class PublishedObjectFacetForPublishedObjectAnnotation extends PublishedObjectFacetAbstract {
 
     public static PublishedObjectFacet create(
             final PublishedObject publishedObject,
@@ -34,10 +35,10 @@ public class PublishedObjectFacetAnnotation extends PublishedObjectFacetAbstract
             return null;
         }
 
-        else return new PublishedObjectFacetAnnotation(newPayloadFactory(publishedObject.value()), holder);
+        else return new PublishedObjectFacetForPublishedObjectAnnotation(newPayloadFactory(publishedObject.value()), holder);
     }
 
-    private PublishedObjectFacetAnnotation(final PublishedObject.PayloadFactory payloadFactory, final FacetHolder holder) {
+    private PublishedObjectFacetForPublishedObjectAnnotation(final PublishedObject.PayloadFactory payloadFactory, final FacetHolder holder) {
         super(payloadFactory, holder);
     }
 

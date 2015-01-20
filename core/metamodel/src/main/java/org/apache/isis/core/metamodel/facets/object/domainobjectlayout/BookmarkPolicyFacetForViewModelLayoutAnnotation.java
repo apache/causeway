@@ -19,24 +19,24 @@
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 
-import com.google.common.base.Strings;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
+import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
 
 
-public class NamedFacetForDomainObjectLayoutAnnotation extends NamedFacetAbstract {
+public class BookmarkPolicyFacetForViewModelLayoutAnnotation extends BookmarkPolicyFacetAbstract {
 
-    public static NamedFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
-        if(domainObjectLayout == null) {
+    public static BookmarkPolicyFacet create(final ViewModelLayout viewModelLayout, final FacetHolder holder) {
+        if(viewModelLayout == null) {
             return null;
         }
-        final String named = Strings.emptyToNull(domainObjectLayout.named());
-        return named != null ? new NamedFacetForDomainObjectLayoutAnnotation(named, holder) : null;
+        final BookmarkPolicy bookmarkPolicy = viewModelLayout.bookmarking();
+        return bookmarkPolicy != BookmarkPolicy.NEVER ? new BookmarkPolicyFacetForViewModelLayoutAnnotation(bookmarkPolicy, holder) : null;
     }
 
-    private NamedFacetForDomainObjectLayoutAnnotation(final String value, final FacetHolder holder) {
-        super(value, /*escaped*/ true, holder);
+    private BookmarkPolicyFacetForViewModelLayoutAnnotation(final BookmarkPolicy bookmarkPolicy, final FacetHolder holder) {
+        super(holder, bookmarkPolicy);
     }
 }

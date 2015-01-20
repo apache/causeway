@@ -29,6 +29,9 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public class AutoCompleteFacetForDomainObjectAnnotation extends AutoCompleteFacetAbstract {
 
+    private final Class<?> repositoryClass;
+    private final String actionName;
+
     public static AutoCompleteFacet create(
             final DomainObject domainObject,
             final SpecificationLoader specificationLoader,
@@ -48,11 +51,25 @@ public class AutoCompleteFacetForDomainObjectAnnotation extends AutoCompleteFace
         return new AutoCompleteFacetForDomainObjectAnnotation(holder, autoCompleteRepository, autoCompleteAction, specificationLoader, adapterManager, servicesInjector);
     }
 
-    private AutoCompleteFacetForDomainObjectAnnotation(FacetHolder holder, Class<?> repositoryClass, String actionName, SpecificationLoader specificationLoader, AdapterManager adapterManager, ServicesInjector servicesInjector) {
+    private AutoCompleteFacetForDomainObjectAnnotation(
+            final FacetHolder holder, final Class<?> repositoryClass, final String actionName, final SpecificationLoader specificationLoader, final AdapterManager adapterManager, final ServicesInjector servicesInjector) {
         super(holder, repositoryClass, actionName, specificationLoader, adapterManager, servicesInjector);
+        this.repositoryClass = repositoryClass;
+        this.actionName = actionName;
     }
 
 
+    /**
+     * Introduced for testing only.
+     */
+    public Class<?> getRepositoryClass() {
+        return repositoryClass;
+    }
 
-
+    /**
+     * Introduced for testing only.
+     */
+    public String getActionName() {
+        return actionName;
+    }
 }

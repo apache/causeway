@@ -30,8 +30,8 @@ public abstract class PublishedObjectFacetAbstract extends SingleValueFacetAbstr
         return PublishedObjectFacet.class;
     }
 
-    public PublishedObjectFacetAbstract(final PublishedObject.PayloadFactory eventCanonicalizer, final FacetHolder holder) {
-        super(type(), eventCanonicalizer, holder);
+    public PublishedObjectFacetAbstract(final PublishedObject.PayloadFactory payloadFactory, final FacetHolder holder) {
+        super(type(), payloadFactory, holder);
     }
 
 }
