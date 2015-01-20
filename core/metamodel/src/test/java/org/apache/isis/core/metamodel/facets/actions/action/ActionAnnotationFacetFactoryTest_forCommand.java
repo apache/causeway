@@ -17,18 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.semantics;
+package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.Command;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
-import org.apache.isis.core.metamodel.facets.actions.semantics.annotations.actionsemantics.ActionSemanticsFacetAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
 
-public class ActionAnnotationFacetFactoryTest_forActionSemantics extends AbstractFacetFactoryTest {
+public class ActionAnnotationFacetFactoryTest_forCommand extends AbstractFacetFactoryTest {
 
     private ActionAnnotationFacetFactory facetFactory;
 
@@ -45,9 +44,9 @@ public class ActionAnnotationFacetFactoryTest_forActionSemantics extends Abstrac
         super.tearDown();
     }
 
-    public void testSafeAnnotationPickedUp() {
+    public void testAnnotationPickedUp() {
         class Customer {
-            @ActionSemantics(Of.SAFE)
+            @Command
             public void someAction() {
             }
         }
@@ -55,25 +54,9 @@ public class ActionAnnotationFacetFactoryTest_forActionSemantics extends Abstrac
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
+        final Facet facet = facetedMethod.getFacet(CommandFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ActionSemanticsFacetAnnotation);
-
-        assertNoMethodsRemoved();
-    }
-
-    public void testNoAnnotationPickedUp() {
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction() {
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
-        assertNull(facet);
+        assertTrue(facet instanceof CommandFacetAbstract);
 
         assertNoMethodsRemoved();
     }

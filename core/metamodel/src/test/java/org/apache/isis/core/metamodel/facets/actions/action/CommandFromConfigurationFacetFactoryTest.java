@@ -17,34 +17,32 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.command.configuration;
+package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 import java.util.UUID;
-
 import org.jmock.Expectations;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
-import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 
 public class CommandFromConfigurationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
-    private CommandFacetFromConfigurationFactory facetFactory;
+    private ActionAnnotationFacetFactory facetFactory;
     private Method customerActionMethod;
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new CommandFacetFromConfigurationFactory();
+        facetFactory = new ActionAnnotationFacetFactory();
         facetFactory.setConfiguration(mockConfiguration);
 
         customerActionMethod = findMethod(Customer.class, "someAction");
@@ -84,12 +82,10 @@ public class CommandFromConfigurationFacetFactoryTest extends AbstractFacetFacto
 
     @Test
     public void ignoreHasTransactionId() {
-        String configuredValue = "all";
-        Of actionSemantics = Of.SAFE;
+        final Of actionSemantics = Of.SAFE;
 
-        Method actionMethod = findMethod(SomeTransactionalId.class, "someAction");
-
-        allowingConfigurationToReturn(configuredValue);
+        allowingConfigurationToReturn("all");
+        final Method actionMethod = findMethod(SomeTransactionalId.class, "someAction");
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(actionSemantics, facetedMethod) {});
         facetFactory.process(new ProcessMethodContext(SomeTransactionalId.class, null, null, actionMethod, mockMethodRemover, facetedMethod));
@@ -103,10 +99,9 @@ public class CommandFromConfigurationFacetFactoryTest extends AbstractFacetFacto
 
     @Test
     public void all_with_safe() {
-        String configuredValue = "all";
-        Of actionSemantics = Of.SAFE;
+        final Of actionSemantics = Of.SAFE;
         
-        allowingConfigurationToReturn(configuredValue);
+        allowingConfigurationToReturn("all");
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(actionSemantics, facetedMethod) {});
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, customerActionMethod, mockMethodRemover, facetedMethod));
@@ -119,10 +114,9 @@ public class CommandFromConfigurationFacetFactoryTest extends AbstractFacetFacto
 
     @Test
     public void ignoreQueryOnly_with_safe() {
-        String configuredValue = "ignoreQueryOnly";
-        Of actionSemantics = Of.SAFE;
+        final Of actionSemantics = Of.SAFE;
         
-        allowingConfigurationToReturn(configuredValue);
+        allowingConfigurationToReturn("ignoreQueryOnly");
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(actionSemantics, facetedMethod) {});
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, customerActionMethod, mockMethodRemover, facetedMethod));
@@ -135,10 +129,9 @@ public class CommandFromConfigurationFacetFactoryTest extends AbstractFacetFacto
 
     @Test
     public void none_with_nonIdempotent() {
-        String configuredValue = "none";
-        Of actionSemantics = Of.NON_IDEMPOTENT;
+        final Of actionSemantics = Of.NON_IDEMPOTENT;
         
-        allowingConfigurationToReturn(configuredValue);
+        allowingConfigurationToReturn("none");
 
         facetedMethod.addFacet(new ActionSemanticsFacetAbstract(actionSemantics, facetedMethod) {});
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, customerActionMethod, mockMethodRemover, facetedMethod));
@@ -157,6 +150,5 @@ public class CommandFromConfigurationFacetFactoryTest extends AbstractFacetFacto
             }
         });
     }
-
 
 }

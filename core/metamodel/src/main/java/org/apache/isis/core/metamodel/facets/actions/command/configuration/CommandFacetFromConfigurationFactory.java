@@ -19,27 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.actions.command.configuration;
 
-import java.lang.reflect.Method;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.Command;
-import org.apache.isis.applib.services.HasTransactionId;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationAware;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
-import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
-/**
- * {@link CommandFacet} can also be installed via a naming convention, see
- * {@link org.apache.isis.core.metamodel.facets.actions.interaction.ActionInteractionFacetFactory}.
- */
-public class CommandFacetFromConfigurationFactory extends FacetFactoryAbstract implements IsisConfigurationAware  {
-
-    private IsisConfiguration configuration;
+public class CommandFacetFromConfigurationFactory extends FacetFactoryAbstract {
 
     public CommandFacetFromConfigurationFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -48,39 +31,11 @@ public class CommandFacetFromConfigurationFactory extends FacetFactoryAbstract i
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-        final Class<?> cls = processMethodContext.getCls();
-        final Method method = processMethodContext.getMethod();
+        //
+        // moved to ActionAnnotationFacetFactory
+        //
 
-        final ActionSemanticsFacet actionSemanticsFacet = facetHolder.getFacet(ActionSemanticsFacet.class);
-        if(actionSemanticsFacet == null) {
-            throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
-        }
-        if(facetHolder.containsDoOpFacet(CommandFacet.class)) {
-            // do not replace
-            return;
-        }
-        if(HasTransactionId.class.isAssignableFrom(cls)) {
-            // do not install on any implementation of HasTransactionId
-            // (ie commands, audit entries, published events).
-            return; 
-        }
-        final ActionConfiguration setting = ActionConfiguration.parse(configuration);
-        if(setting == ActionConfiguration.NONE) {
-            return;
-        }
-        if(actionSemanticsFacet.value() == Of.SAFE && setting == ActionConfiguration.IGNORE_SAFE) {
-            return;
-        }
-        final Command annotation = Annotations.getAnnotation(method, Command.class);
-        FacetUtil.addFacet(CommandFacetFromConfiguration.create(facetHolder));
     }
 
-    // //////////////////////////////////////
-
-    @Override
-    public void setConfiguration(IsisConfiguration configuration) {
-        this.configuration = configuration;
-    }
 
 }
