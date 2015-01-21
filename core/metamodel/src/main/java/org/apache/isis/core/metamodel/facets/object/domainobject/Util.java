@@ -34,7 +34,7 @@ public final class Util {
         return parse(value, "all", "yes", "y", "true", "1", "enable", "enabled");
     }
 
-    static boolean parseNo(final String value) {
+    public static boolean parseNo(final String value) {
         return parse(value, "none", "no", "n", "false", "0", "disable", "disabled");
     }
 

@@ -20,7 +20,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable;
 
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetForAuditedAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForAuditedAnnotation;
 
 
 @Deprecated

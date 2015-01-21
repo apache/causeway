@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -29,15 +30,28 @@ import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitterAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
-import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetForAuditedAnnotation;
+import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
+import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForAuditedAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.choices.ChoicesFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetForPublishedObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.ImmutableFacetForImmutableAnnotation;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
-import org.apache.isis.core.metamodel.facets.object.publishedobject.annotation.PublishedObjectFacetForPublishedObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
@@ -66,7 +80,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         processNature(processClassContext);
     }
 
-    private void processAuditing(final ProcessClassContext processClassContext) {
+    void processAuditing(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder holder = processClassContext.getFacetHolder();
@@ -93,11 +107,12 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
             auditableFacet = AuditableFacetForDomainObjectAnnotation.create(domainObject, configuration, holder);
         }
 
+        // then add
         FacetUtil.addFacet(auditableFacet);
     }
 
 
-    private void processPublishing(final ProcessClassContext processClassContext) {
+    void processPublishing(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
@@ -122,55 +137,69 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
             publishedObjectFacet=
                     PublishedObjectFacetForDomainObjectAnnotation.create(domainObject, configuration, facetHolder);
         }
-        FacetUtil.addFacet(
-                publishedObjectFacet);
+
+        // then add
+        FacetUtil.addFacet(publishedObjectFacet);
     }
 
-    private void processAutoComplete(final ProcessClassContext processClassContext) {
+    void processAutoComplete(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(
-                AutoCompleteFacetForDomainObjectAnnotation.create(
-                        domainObject, getSpecificationLoader(), adapterManager, servicesInjector, facetHolder));
+        final AutoCompleteFacet facet = AutoCompleteFacetForDomainObjectAnnotation.create(
+                domainObject, getSpecificationLoader(), adapterManager, servicesInjector, facetHolder);
+
+        FacetUtil.addFacet(facet);
     }
 
-    private void processBounded(final ProcessClassContext processClassContext) {
+    void processBounded(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(
-                ChoicesFacetForDomainObjectAnnotation.create(domainObject, querySubmitter, facetHolder));
+        final Facet facet = ChoicesFacetForDomainObjectAnnotation.create(domainObject, querySubmitter, facetHolder);
+
+        FacetUtil.addFacet(facet);
     }
 
-    private void processEditing(final ProcessClassContext processClassContext) {
+    void processEditing(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(
-                ImmutableFacetForDomainObjectAnnotation.create(domainObject, configuration, facetHolder));
+        // check for the deprecated annotation first
+        final Immutable annotation = Annotations.getAnnotation(processClassContext.getCls(), Immutable.class);
+        ImmutableFacet facet = ImmutableFacetForImmutableAnnotation.create(annotation, processClassContext.getFacetHolder());
+
+        // else check from @DomainObject(editing=...)
+        if(facet == null) {
+            facet = ImmutableFacetForDomainObjectAnnotation.create(domainObject, configuration, facetHolder);
+        }
+
+        // then add
+        FacetUtil.addFacet(facet);
     }
 
-    private void processObjectType(final ProcessClassContext processClassContext) {
+    void processObjectType(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(
-                ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObject, facetHolder));
+        final ObjectSpecIdFacet facet = ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObject, facetHolder);
+
+        FacetUtil.addFacet(facet);
     }
 
-    private void processNature(final ProcessClassContext processClassContext) {
+    void processNature(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(
-                RecreatableObjectFacetForDomainObjectAnnotation.create(
-                        domainObject, getSpecificationLoader(), adapterManager, servicesInjector, facetHolder));
+        final ViewModelFacet facet = RecreatableObjectFacetForDomainObjectAnnotation.create(
+                domainObject, getSpecificationLoader(), adapterManager, servicesInjector, facetHolder);
+
+        FacetUtil.addFacet(facet);
     }
 
 

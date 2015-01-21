@@ -19,15 +19,11 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -45,6 +41,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ObjectAssociationAbstractTest_alwaysHidden {
 
@@ -152,6 +151,8 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
     public void alwaysHidden_forHiddenAlwaysEverywhere() throws Exception {
         context.checking(new Expectations() {
             {
+                allowing(facet).isNoop();
+                will(returnValue(false));
                 allowing(facet).when();
                 will(returnValue(When.ALWAYS));
                 allowing(facet).where();
@@ -169,6 +170,8 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
     public void alwaysHidden_forHiddenAlwaysObjectForm() throws Exception {
         context.checking(new Expectations() {
             {
+                allowing(facet).isNoop();
+                will(returnValue(false));
                 allowing(facet).when();
                 will(returnValue(When.ALWAYS));
                 allowing(facet).where();
@@ -183,6 +186,8 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
     public void alwaysHidden_forHiddenOncePersistedAnywhere() throws Exception {
         context.checking(new Expectations() {
             {
+                allowing(facet).isNoop();
+                will(returnValue(false));
                 allowing(facet).when();
                 will(returnValue(When.ONCE_PERSISTED));
                 allowing(facet).where();

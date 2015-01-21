@@ -112,7 +112,7 @@ public @interface DomainObject {
      * If {@link #editing()} is set to {@link Editing#DISABLED},
      * then the reason to provide to the user as to why the object's properties cannot be edited/collections modified.
      */
-    String editingDisabledReason() default "";
+    String editingDisabledReason() default "Disabled";
 
 
     // //////////////////////////////////////

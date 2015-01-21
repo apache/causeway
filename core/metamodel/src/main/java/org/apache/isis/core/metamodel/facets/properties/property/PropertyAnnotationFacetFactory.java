@@ -20,16 +20,54 @@
 package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
+import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyInteraction;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventAbstract;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForPostsPropertyChangedEventAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetAbstract;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyInteractionAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventAbstract;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyInteractionAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForPostsPropertyChangedEventAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
+import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
-public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
+public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, ContributeeMemberFacetFactory {
 
     private ServicesInjector servicesInjector;
 
@@ -40,7 +78,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        processInteraction(processMethodContext);
+        processModify(processMethodContext);
         processHidden(processMethodContext);
         processEditing(processMethodContext);
         processMaxLength(processMethodContext);
@@ -50,68 +88,171 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         processRegEx(processMethodContext);
     }
 
-    private void processInteraction(final ProcessMethodContext processMethodContext) {
+    void processModify(final ProcessMethodContext processMethodContext) {
 
-        // interaction is handled by PropertyInteractionFacetFactory, because the
-        // deprecated annotations must also be supported.
+        final Method method = processMethodContext.getMethod();
+        FacetedMethod holder = processMethodContext.getFacetHolder();
 
+        final PropertyOrCollectionAccessorFacet getterFacet = holder.getFacet(PropertyOrCollectionAccessorFacet.class);
+        if(getterFacet == null) {
+            return;
+        }
+
+        //
+        // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating advisor
+        //
+        final Property property = Annotations.getAnnotation(method, Property.class);
+        final PropertyInteraction propertyInteraction = Annotations.getAnnotation(method, PropertyInteraction.class);
+        final Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEventType;
+
+        final PropertyDomainEventFacetAbstract propertyDomainEventFacet;
+
+        // search for @PropertyInteraction(value=...)
+        if(propertyInteraction != null) {
+            propertyDomainEventType = propertyInteraction.value();
+            propertyDomainEventFacet = new PropertyDomainEventFacetForPropertyInteractionAnnotation(
+                    propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
+        } else
+        // search for @Property(domainEvent=...)
+        if(property != null && property.domainEvent() != null) {
+            propertyDomainEventType = property.domainEvent();
+            propertyDomainEventFacet = new PropertyDomainEventFacetForPropertyAnnotation(
+                    propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
+
+        } else
+        // else use default event type
+        {
+            propertyDomainEventType = PropertyDomainEvent.Default.class;
+            propertyDomainEventFacet = new PropertyDomainEventFacetDefault(
+                    propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
+        }
+        FacetUtil.addFacet(propertyDomainEventFacet);
+
+
+        //
+        // if the property is mutable, then replace the current setter and clear facets with equivalents that
+        // emit the appropriate domain event and then delegate onto the underlying
+        //
+
+
+        final PostsPropertyChangedEvent postsPropertyChangedEvent = Annotations.getAnnotation(method, PostsPropertyChangedEvent.class);
+
+        final PropertySetterFacet setterFacet = holder.getFacet(PropertySetterFacet.class);
+        if(setterFacet != null) {
+            // the current setter facet will end up as the underlying facet
+            final PropertySetterFacetForDomainEventAbstract replacementFacet;
+            // deprecated
+            if(postsPropertyChangedEvent != null) {
+                replacementFacet = new PropertySetterFacetForPostsPropertyChangedEventAnnotation(
+                        postsPropertyChangedEvent.value(), getterFacet, setterFacet, propertyDomainEventFacet, holder, servicesInjector);
+            } else
+            // deprecated (but more recently)
+            if(propertyInteraction != null) {
+                replacementFacet = new PropertySetterFacetForDomainEventFromPropertyInteractionAnnotation(
+                        propertyDomainEventType, getterFacet, setterFacet, propertyDomainEventFacet, holder, servicesInjector);
+            } else
+            // current
+            if(property != null) {
+                replacementFacet = new PropertySetterFacetForDomainEventFromPropertyAnnotation(
+                        propertyDomainEventType, getterFacet, setterFacet, propertyDomainEventFacet, holder, servicesInjector);
+            } else
+            // default
+            {
+                replacementFacet = new PropertySetterFacetForDomainEventFromDefault(
+                        PropertyDomainEvent.Default.class, getterFacet, setterFacet, propertyDomainEventFacet, holder, servicesInjector);
+            }
+            FacetUtil.addFacet(replacementFacet);
+        }
+
+        final PropertyClearFacet clearFacet = holder.getFacet(PropertyClearFacet.class);
+        if(clearFacet != null) {
+            // the current clear facet will end up as the underlying facet
+            final PropertyClearFacetForDomainEventAbstract replacementFacet;
+
+            // deprecated
+            if(postsPropertyChangedEvent != null) {
+                replacementFacet = new PropertyClearFacetForPostsPropertyChangedEventAnnotation(
+                        postsPropertyChangedEvent.value(), getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
+            } else
+            // deprecated (but more recently)
+            if(propertyInteraction != null) {
+                replacementFacet = new PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation(
+                        propertyDomainEventType, getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
+            } else
+            // current
+            if(property != null) {
+                replacementFacet = new PropertyClearFacetForDomainEventFromPropertyAnnotation(
+                        propertyDomainEventType, getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
+            } else
+            {
+                replacementFacet = new PropertyClearFacetForDomainEventFromDefault(
+                        PropertyDomainEvent.Default.class, getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
+            }
+            FacetUtil.addFacet(replacementFacet);
+        }
     }
 
-    private void processHidden(final ProcessMethodContext processMethodContext) {
+    void processHidden(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final Property property = Annotations.getAnnotation(method, Property.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacet(
-                HiddenFacetForPropertyAnnotation.create(property, holder));
+        final HiddenFacet facet = HiddenFacetForPropertyAnnotation.create(property, holder);
+
+        FacetUtil.addFacet(facet);
     }
 
-    private void processEditing(final ProcessMethodContext processMethodContext) {
+    void processEditing(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final Property property = Annotations.getAnnotation(method, Property.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacet(
-                DisabledFacetForPropertyAnnotation.create(property, holder));
+        final DisabledFacet facet = DisabledFacetForPropertyAnnotation.create(property, holder);
+
+        FacetUtil.addFacet(facet);
     }
 
-    private void processMaxLength(final ProcessMethodContext processMethodContext) {
+    void processMaxLength(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final Property property = Annotations.getAnnotation(method, Property.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacet(
-                MaxLengthFacetForPropertyAnnotation.create(property, holder));
+        final MaxLengthFacet facet = MaxLengthFacetForPropertyAnnotation.create(property, holder);
+
+        FacetUtil.addFacet(facet);
     }
 
-    private void processMustSatisfy(final ProcessMethodContext processMethodContext) {
+    void processMustSatisfy(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final Property property = Annotations.getAnnotation(method, Property.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacet(
-                MustSatisfySpecificationFacetForPropertyAnnotation.create(property, holder));
+        final Facet facet = MustSatisfySpecificationFacetForPropertyAnnotation.create(property, holder);
+
+        FacetUtil.addFacet(facet);
     }
 
-    private void processNotPersisted(final ProcessMethodContext processMethodContext) {
+    void processNotPersisted(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final Property property = Annotations.getAnnotation(method, Property.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacet(
-                NotPersistedFacetForPropertyAnnotation.create(property, holder));
+        final NotPersistedFacet facet = NotPersistedFacetForPropertyAnnotation.create(property, holder);
+
+        FacetUtil.addFacet(facet);
     }
 
-    private void processOptional(final ProcessMethodContext processMethodContext) {
+    void processOptional(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final Property property = Annotations.getAnnotation(method, Property.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacet(
-                MandatoryFacetForPropertyAnnotation.create(property, method, holder));
+        final MandatoryFacet facet = MandatoryFacetForPropertyAnnotation.create(property, method, holder);
+
+        FacetUtil.addFacet(facet);
     }
 
-    private void processRegEx(final ProcessMethodContext processMethodContext) {
+    void processRegEx(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final Property property = Annotations.getAnnotation(method, Property.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
@@ -121,8 +262,32 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
             return;
         }
 
-        FacetUtil.addFacet(
-                RegExFacetForPropertyAnnotation.create(property, holder));
+        final RegExFacet facet = RegExFacetForPropertyAnnotation.create(property, holder);
+
+        FacetUtil.addFacet(facet);
+    }
+
+
+    @Override
+    public void process(ContributeeMemberFacetFactory.ProcessContributeeMemberContext processMemberContext) {
+
+        final ObjectMember objectMember = processMemberContext.getFacetHolder();
+
+        //
+        // an enhancement would be to pick up a custom event, however the contributed property ultimately maps
+        // to an action on a service, and would therefore require a @Property(...) annotated on an action;
+        // would look rather odd
+        //
+
+        final PropertyOrCollectionAccessorFacet accessorFacet =
+                objectMember.getFacet(PropertyOrCollectionAccessorFacet.class);
+        if(accessorFacet != null) {
+            final PropertyDomainEventFacet facet = new PropertyDomainEventFacetDefault(
+                    PropertyDomainEvent.Default.class, accessorFacet, servicesInjector, getSpecificationLoader(), objectMember);
+
+            FacetUtil.addFacet(facet);
+        }
+
     }
 
 

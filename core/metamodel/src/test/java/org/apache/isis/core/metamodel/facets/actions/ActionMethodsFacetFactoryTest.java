@@ -28,55 +28,50 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedDebugExplorationFacetFactory;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInvocationFacetForInteractionAbstract;
-import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.disabled.staticmethod.DisabledFacetStaticMethodFacetFactory;
-import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
+import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedDebugExplorationFacetFactory;
+import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
+import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
-import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
-import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
-import org.apache.isis.core.metamodel.facets.param.choices.method.ActionChoicesFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
-import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
-import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacet;
+import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.disabled.staticmethod.DisabledFacetStaticMethodFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
+import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.method.ActionChoicesFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.param.choices.method.ActionChoicesFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
 
 public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -84,33 +79,10 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     private final ObjectSpecification stringSpec = new ObjectSpecificationStub("java.lang.String");
     private final ObjectSpecification customerSpec = new ObjectSpecificationStub("Customer");
 
-    public void testActionInvocationFacetIsInstalledAndMethodRemoved() {
-        final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction() {
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ActionInvocationFacetForInteractionAbstract);
-        final ActionInvocationFacetForInteractionAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForInteractionAbstract) facet;
-        assertEquals(actionMethod, actionInvocationFacetViaMethod.getMethods().get(0));
-
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(actionMethod));
-    }
-
     public void testProvidesDefaultNameForActionButIgnoresAnyNamedAnnotation() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -131,8 +103,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testPicksUpDebugPrefixAndSetsNameAppropriatelyAlso() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -155,8 +127,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testPicksUpExplorationPrefixAndSetsNameAppropriatelyAlso() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -179,8 +151,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testCannotHaveBothDebugAndThenExplorationPrefix() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -200,8 +172,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testCannotHaveBothExplorationAndThenDebugPrefix() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -221,8 +193,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsValidateMethodNoArgsFacetAndRemovesMethod() {
         final ActionValidationFacetViaMethodFactory facetFactory = new ActionValidationFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -250,8 +222,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsValidateMethodSomeArgsFacetAndRemovesMethod() {
         final ActionValidationFacetViaMethodFactory facetFactory = new ActionValidationFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -279,8 +251,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsParameterDefaultsMethodNoArgsFacetAndRemovesMethod() {
         final ActionDefaultsFacetViaMethodFactory facetFactory = new ActionDefaultsFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -308,8 +280,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsParameterDefaultsMethodSomeArgsIsIgnored() {
         final ActionDefaultsFacetViaMethodFactory facetFactory = new ActionDefaultsFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -331,7 +303,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsParameterChoicesMethodNoArgsFacetAndRemovesMethod() {
         final ActionChoicesFacetViaMethodFactory facetFactory = new ActionChoicesFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -345,7 +317,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, Long.class });
         final Method choicesMethod = findMethod(Customer.class, "choicesSomeAction", new Class[] {});
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
@@ -360,8 +332,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsParameterChoicesMethodSomeArgsIsIgnored() {
         final ActionChoicesFacetViaMethodFactory facetFactory = new ActionChoicesFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -423,8 +395,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsNamedFacetUsingNameMethodAndRemovesMethod() {
         final NamedFacetStaticMethodFactory facetFactory = new NamedFacetStaticMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
         final Method nameMethod = findMethod(CustomerStatic.class, "nameSomeAction");
@@ -442,8 +414,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsDescribedAsFacetUsingDescriptionAndRemovesMethod() {
         final DescribedAsFacetStaticMethodFactory facetFactory = new DescribedAsFacetStaticMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
         final Method descriptionMethod = findMethod(CustomerStatic.class, "descriptionSomeAction");
@@ -461,11 +433,11 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsHiddenFacetUsingAlwaysHideAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
         final Method alwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideSomeAction", new Class[] {});
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, actionMethod, methodRemover, facetedMethod));
 
@@ -480,8 +452,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsHiddenFacetUsingAlwaysHideWhenNotAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "otherAction", new Class[] { int.class, Long.class });
         final Method alwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideOtherAction", new Class[] {});
@@ -495,8 +467,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsDisabledFacetUsingProtectAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
         final Method protectMethod = findMethod(CustomerStatic.class, "protectSomeAction", new Class[] {});
@@ -514,8 +486,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testDoesNotInstallDisabledFacetUsingProtectWhenNotAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "otherAction", new Class[] { int.class, Long.class });
         final Method protectMethod = findMethod(CustomerStatic.class, "protectOtherAction", new Class[] {});
@@ -530,8 +502,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
 
         final HideForSessionFacetViaMethodFactory facetFactory = new HideForSessionFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
         final Method hideMethod = findMethod(CustomerStatic.class, "hideSomeAction", new Class[] { UserMemento.class });
@@ -549,8 +521,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
         final DisableForSessionFacetViaMethodFactory facetFactory = new DisableForSessionFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
         final Method disableMethod = findMethod(CustomerStatic.class, "disableSomeAction", new Class[] { UserMemento.class });
@@ -566,69 +538,10 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(disableMethod));
     }
 
-    public void testActionReturnTypeWhenVoid() {
-        final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction() {
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        final ActionInvocationFacetForInteractionAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForInteractionAbstract) facet;
-        assertEquals(voidSpec, actionInvocationFacetViaMethod.getReturnType());
-    }
-
-    public void testActionReturnTypeWhenNotVoid() {
-        final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(stringSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public String someAction() {
-                return null;
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        final ActionInvocationFacetForInteractionAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForInteractionAbstract) facet;
-        assertEquals(stringSpec, actionInvocationFacetViaMethod.getReturnType());
-    }
-
-    public void testActionOnType() {
-        final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(customerSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public String someAction() {
-                return null;
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-        final ActionInvocationFacetForInteractionAbstract actionInvocationFacetViaMethod = (ActionInvocationFacetForInteractionAbstract) facet;
-        assertEquals(customerSpec, actionInvocationFacetViaMethod.getOnType());
-    }
-
     public void testInstallsParameterDefaultsMethodAndRemovesMethod() {
         final ActionParameterDefaultsFacetViaMethodFactory facetFactory = new ActionParameterDefaultsFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -648,7 +561,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
         final Method default0Method = findMethod(Customer.class, "default0SomeAction", new Class[] {});
-        final Method default1Method = findMethod(Customer.class, "default1SomeAction", new Class[] {});
+        final Method default1Method = findMethod(Customer.class, "default1SomeAction", new Class[]{});
 
         final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(Customer.class, actionMethod);
 
@@ -674,8 +587,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsParameterChoicesMethodAndRemovesMethod() {
         final ActionParameterChoicesFacetViaMethodFactory facetFactory = new ActionParameterChoicesFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -734,11 +647,10 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     }
 
-    
     public void testInstallsParameterAutoCompleteMethodAndRemovesMethod() {
         final ActionParameterAutoCompleteFacetViaMethodFactory facetFactory = new ActionParameterAutoCompleteFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -767,116 +679,15 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(autoComplete0Method));
     }
 
-    
-    public void testActionsPickedUpFromSuperclass() {
-        final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(final int x, final long y) {
-            }
-        }
-
-        class CustomerEx extends Customer {
-        }
-
-        final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
-
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod);
-
-        facetFactory.process(new ProcessMethodContext(CustomerEx.class, null, null, actionMethod, methodRemover, facetHolderWithParms));
-
-        final Facet facet0 = facetHolderWithParms.getFacet(ActionInvocationFacet.class);
-        assertNotNull(facet0);
-    }
-
-    public void testActionsPickedUpFromSuperclassButHelpersFromSubClass() {
-        final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
-
-        final ActionParameterChoicesFacetViaMethodFactory facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory();
-        facetFactoryForChoices.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
-
-        final DisableForContextFacetViaMethodFactory facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
-        facetFactoryForDisable.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction(final int x, final long y) {
-            }
-
-            @SuppressWarnings("unused")
-            public int[] choices0SomeAction() {
-                return new int[0];
-            }
-        }
-
-        class CustomerEx extends Customer {
-            @Override
-            public int[] choices0SomeAction() {
-                return new int[0];
-            }
-
-            @SuppressWarnings("unused")
-            public long[] choices1SomeAction() {
-                return new long[0];
-            }
-
-            @SuppressWarnings("unused")
-            public String disableSomeAction(final int x, final long y) {
-                return null;
-            }
-        }
-
-        final Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
-        final Method choices0Method = findMethod(CustomerEx.class, "choices0SomeAction", new Class[] {});
-        final Method choices1Method = findMethod(CustomerEx.class, "choices1SomeAction", new Class[] {});
-        final Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] { int.class, long.class });
-
-        final FacetedMethod facetHolderWithParms = FacetedMethod.createForAction(CustomerEx.class, actionMethod);
-
-        final ProcessMethodContext processMethodContext = new ProcessMethodContext(CustomerEx.class, null, null, actionMethod, methodRemover, facetHolderWithParms);
-        facetFactory.process(processMethodContext);
-        facetFactoryForChoices.process(processMethodContext);
-        facetFactoryForDisable.process(processMethodContext);
-
-        final Facet facet0 = facetHolderWithParms.getFacet(ActionInvocationFacet.class);
-        assertNotNull(facet0);
-
-        final Facet facet1 = facetHolderWithParms.getParameters().get(0).getFacet(ActionParameterChoicesFacet.class);
-        assertNotNull(facet1);
-        assertTrue(facet1 instanceof ActionParameterChoicesFacetViaMethod);
-        final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod0 = (ActionParameterChoicesFacetViaMethod) facet1;
-        assertEquals(choices0Method, actionChoicesFacetViaMethod0.getMethods().get(0));
-
-        final Facet facet2 = facetHolderWithParms.getParameters().get(1).getFacet(ActionParameterChoicesFacet.class);
-        assertNotNull(facet2);
-        assertTrue(facet2 instanceof ActionParameterChoicesFacetViaMethod);
-        final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod1 = (ActionParameterChoicesFacetViaMethod) facet2;
-        assertEquals(choices1Method, actionChoicesFacetViaMethod1.getMethods().get(0));
-
-        final Facet facet3 = facetHolderWithParms.getFacet(DisableForContextFacet.class);
-        assertNotNull(facet3);
-        assertTrue(facet3 instanceof DisableForContextFacetViaMethod);
-        final DisableForContextFacetViaMethod disableFacetViaMethod = (DisableForContextFacetViaMethod) facet3;
-        assertEquals(disableMethod, disableFacetViaMethod.getMethods().get(0));
-
-    }
-
     public void testBothChoicesMethodCausesException() {
 
         final ActionChoicesFacetViaMethodFactory facetFactory = new ActionChoicesFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final ActionParameterChoicesFacetViaMethodFactory facetFactoryForParams = new ActionParameterChoicesFacetViaMethodFactory();
-        facetFactoryForParams.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactoryForParams.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -914,12 +725,12 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testBothDefaultMethodCausesException() {
         final ActionDefaultsFacetViaMethodFactory facetFactory = new ActionDefaultsFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final ActionParameterDefaultsFacetViaMethodFactory facetFactoryForParams = new ActionParameterDefaultsFacetViaMethodFactory();
-        facetFactoryForParams.setSpecificationLookup(reflector);
-        reflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactoryForParams.setSpecificationLookup(programmableReflector);
+        programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
             @SuppressWarnings("unused")

@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 
 public class CollectionFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware {
@@ -51,24 +52,37 @@ public class CollectionFacetFactory extends FacetFactoryAbstract implements Adap
     }
 
     private void processCollectionType(final ProcessClassContext processClassContext) {
+        final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
-        final TypeOfFacet typeOfFacet = facetHolder.getFacet(TypeOfFacet.class);
+
+        TypeOfFacet typeOfFacet = facetHolder.getFacet(TypeOfFacet.class);
         if (typeOfFacet == null) {
-            final Class<?> collectionElementType = collectionElementType(processClassContext.getCls());
-            facetHolder.addFacet(collectionElementType != Object.class ? new TypeOfFacetInferredFromGenerics(collectionElementType, facetHolder, getSpecificationLoader()) : new TypeOfFacetDefaultToObject(facetHolder, getSpecificationLoader()));
-        } else {
-            // nothing
+            final Class<?> collectionElementType = collectionElementType(cls);
+            typeOfFacet =
+                    collectionElementType != Object.class
+                            ? new TypeOfFacetInferredFromGenerics(collectionElementType, facetHolder, getSpecificationLoader())
+                            : new TypeOfFacetDefaultToObject(facetHolder, getSpecificationLoader());
+            facetHolder.addFacet(typeOfFacet);
         }
-        facetHolder.addFacet(new JavaCollectionFacet(facetHolder, getAdapterManager()));
-        return;
+
+        final CollectionFacet collectionFacet = new JavaCollectionFacet(facetHolder, getAdapterManager());
+
+        facetHolder.addFacet(collectionFacet);
     }
 
-    private void processAsArrayType(final ProcessClassContext processClassContaxt) {
-        final FacetHolder facetHolder = processClassContaxt.getFacetHolder();
-        facetHolder.addFacet(new JavaArrayFacet(facetHolder, getAdapterManager()));
-        facetHolder.addFacet(new TypeOfFacetInferredFromArray(processClassContaxt.getCls().getComponentType(), facetHolder, getSpecificationLoader()));
+    private void processAsArrayType(final ProcessClassContext processClassContext) {
+        final Class<?> cls = processClassContext.getCls();
+        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+
+        final CollectionFacet collectionFacet = new JavaArrayFacet(facetHolder, getAdapterManager());
+        facetHolder.addFacet(collectionFacet);
+
+        final TypeOfFacet typeOfFacet =
+                new TypeOfFacetInferredFromArray(cls.getComponentType(), facetHolder, getSpecificationLoader());
+        facetHolder.addFacet(typeOfFacet);
     }
 
+    // TODO
     private Class<?> collectionElementType(final Class<?> cls) {
         return Object.class;
     }

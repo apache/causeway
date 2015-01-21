@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.TypeOf;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.eventbus.ActionInvokedEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -44,27 +45,34 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
+import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForCommandAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionInteractionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionInteractionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPostsActionInvokedEventAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.bulk.annotation.BulkFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
-import org.apache.isis.core.metamodel.facets.actions.command.annotation.CommandFacetAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.command.configuration.ActionConfiguration;
-import org.apache.isis.core.metamodel.facets.actions.command.configuration.CommandFacetFromConfiguration;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInteractionFacetAbstract;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInteractionFacetAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInteractionFacetDefault;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInvocationFacetForActionInteractionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInvocationFacetForActionInteractionDefault;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInvocationFacetForInteractionAbstract;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInvocationFacetForPostsActionInvokedEventAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.annotation.PublishedActionFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.annotations.actionsemantics.ActionSemanticsFacetAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.typeof.annotation.TypeOfFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.typeof.annotation.TypeOfFacetOnActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetOnActionForTypeOfAnnotation;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -88,7 +96,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        processInteraction(processMethodContext);
+        processInvocation(processMethodContext);
         processHidden(processMethodContext);
         processRestrictTo(processMethodContext);
         processSemantics(processMethodContext);
@@ -103,7 +111,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         processTypeOf(processMethodContext);
     }
 
-    private void processInteraction(final ProcessMethodContext processMethodContext) {
+    void processInvocation(final ProcessMethodContext processMethodContext) {
 
         final Method actionMethod = processMethodContext.getMethod();
 
@@ -119,41 +127,64 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
             final FacetHolder holder = processMethodContext.getFacetHolder();
 
             //
-            // Set up ActionInteractionFacet, which will act as the hiding/disabling/validating advisor
+            // Set up ActionDomainEventFacet, which will act as the hiding/disabling/validating advisor
             //
             final Action action = Annotations.getAnnotation(actionMethod, Action.class);
             final ActionInteraction actionInteraction =Annotations.getAnnotation(actionMethod, ActionInteraction.class);
-            final Class<? extends ActionDomainEvent<?>> actionInteractionEventType;
+            final Class<? extends ActionDomainEvent<?>> actionDomainEventType;
 
-            final ActionInteractionFacetAbstract actionInteractionFacet;
+            final ActionDomainEventFacetAbstract actionDomainEventFacet;
+
+            // search for @ActionInteraction(value=...)
+            if(actionInteraction != null) {
+                actionDomainEventType = actionInteraction.value();
+                actionDomainEventFacet = new ActionDomainEventFacetForActionInteractionAnnotation(
+                        actionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
+            } else
+            // search for @Action(domainEvent=...)
             if(action != null && action.domainEvent() != null) {
-                actionInteractionEventType = action.domainEvent();
-                actionInteractionFacet = new ActionInteractionFacetForActionAnnotation(
-                        actionInteractionEventType, servicesInjector, getSpecificationLoader(), holder);
-            } else if(actionInteraction != null) {
-                actionInteractionEventType = actionInteraction.value();
-                actionInteractionFacet = new ActionInteractionFacetAnnotation(
-                        actionInteractionEventType, servicesInjector, getSpecificationLoader(), holder);
-            } else {
-                actionInteractionEventType = ActionDomainEvent.Default.class;
-                actionInteractionFacet = new ActionInteractionFacetDefault(
-                        actionInteractionEventType, servicesInjector, getSpecificationLoader(), holder);
+                actionDomainEventType = action.domainEvent();
+                actionDomainEventFacet = new ActionDomainEventFacetForActionAnnotation(
+                        actionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
+            } else
+            // else use default event type
+            {
+                actionDomainEventType = ActionDomainEvent.Default.class;
+                actionDomainEventFacet = new ActionDomainEventFacetDefault(
+                        actionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
             }
-            FacetUtil.addFacet(actionInteractionFacet);
+            FacetUtil.addFacet(actionDomainEventFacet);
 
 
+            // replace the current actionInvocationFacet with one that will
+            // emit the appropriate domain event and then delegate onto the underlying
             final PostsActionInvokedEvent postsActionInvokedEvent = Annotations.getAnnotation(actionMethod, PostsActionInvokedEvent.class);
 
-            final ActionInvocationFacetForInteractionAbstract actionInvocationFacet;
-            if (actionInteraction != null) {
-                actionInvocationFacet = new ActionInvocationFacetForActionInteractionAnnotation(
-                        actionInteractionEventType, actionMethod, typeSpec, returnSpec, actionInteractionFacet, holder, getRuntimeContext(), getAdapterManager(), getServicesInjector());
-            } else if (postsActionInvokedEvent != null) {
+            final ActionInvocationFacetForDomainEventAbstract actionInvocationFacet;
+            // deprecated
+            if (postsActionInvokedEvent != null) {
+                final Class<? extends ActionInvokedEvent<?>> actionInvokedEventType = postsActionInvokedEvent.value();
                 actionInvocationFacet = new ActionInvocationFacetForPostsActionInvokedEventAnnotation(
-                        postsActionInvokedEvent.value(), actionMethod, typeSpec, returnSpec, actionInteractionFacet, holder, getRuntimeContext(), getAdapterManager(), getServicesInjector());
-            } else {
-                actionInvocationFacet = new ActionInvocationFacetForActionInteractionDefault(
-                        ActionDomainEvent.Default.class, actionMethod, typeSpec, returnSpec, actionInteractionFacet, holder, getRuntimeContext(), getAdapterManager(), getServicesInjector());
+                        actionInvokedEventType, actionMethod, typeSpec, returnSpec, actionDomainEventFacet, holder,
+                        getRuntimeContext(), getAdapterManager(), getServicesInjector());
+            } else
+            // deprecated (but more recently)
+            if (actionInteraction != null) {
+                actionInvocationFacet = new ActionInvocationFacetForDomainEventFromActionInteractionAnnotation(
+                        actionDomainEventType, actionMethod, typeSpec, returnSpec, actionDomainEventFacet, holder,
+                        getRuntimeContext(), getAdapterManager(), getServicesInjector());
+            } else
+            // current
+            if (action != null) {
+                actionInvocationFacet = new ActionInvocationFacetForDomainEventFromActionAnnotation(
+                        actionDomainEventType, actionMethod, typeSpec, returnSpec, actionDomainEventFacet, holder,
+                        getRuntimeContext(), getAdapterManager(), getServicesInjector());
+            } else
+            // default
+            {
+                actionInvocationFacet = new ActionInvocationFacetForDomainEventFromDefault(
+                        actionDomainEventType, actionMethod, typeSpec, returnSpec, actionDomainEventFacet, holder,
+                        getRuntimeContext(), getAdapterManager(), getServicesInjector());
             }
             FacetUtil.addFacet(actionInvocationFacet);
 
@@ -162,25 +193,23 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         }
     }
 
-    private void processHidden(final ProcessMethodContext processMethodContext) {
+    void processHidden(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final Action action = Annotations.getAnnotation(method, Action.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacet(
-                HiddenFacetForActionAnnotation.create(action, holder));
+        FacetUtil.addFacet(HiddenFacetForActionAnnotation.create(action, holder));
     }
 
-    private void processRestrictTo(final ProcessMethodContext processMethodContext) {
+    void processRestrictTo(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final Action action = Annotations.getAnnotation(method, Action.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacet(
-                PrototypeFacetForActionAnnotation.create(action, holder));
+        FacetUtil.addFacet(PrototypeFacetForActionAnnotation.create(action, holder));
     }
 
-    private void processSemantics(final ProcessMethodContext processMethodContext) {
+    void processSemantics(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final Action action = Annotations.getAnnotation(method, Action.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
@@ -201,7 +230,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         FacetUtil.addFacet(facet);
     }
 
-    private void processInvokeOn(final ProcessMethodContext processMethodContext) {
+    void processInvokeOn(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final Action action = Annotations.getAnnotation(method, Action.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
@@ -220,12 +249,13 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         FacetUtil.addFacet(bulkFacet);
     }
 
-    private void processCommand(final ProcessMethodContext processMethodContext) {
+    void processCommand(final ProcessMethodContext processMethodContext) {
 
         final Class<?> cls = processMethodContext.getCls();
         final Method method = processMethodContext.getMethod();
         final Action action = Annotations.getAnnotation(method, Action.class);
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
+
         final FacetHolder holder = facetHolder;
 
         //
@@ -237,43 +267,21 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
             return;
         }
 
-        final ActionSemanticsFacet actionSemanticsFacet = facetHolder.getFacet(ActionSemanticsFacet.class);
-        if(actionSemanticsFacet == null) {
-            throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
-        }
-        if(facetHolder.containsDoOpFacet(CommandFacet.class)) {
-            // do not replace
-            return;
-        }
-
         CommandFacet commandFacet;
 
         // check for deprecated @Command annotation first
         final Command annotation = Annotations.getAnnotation(method, Command.class);
-        commandFacet = CommandFacetAnnotation.create(annotation, processMethodContext.getFacetHolder());
+        commandFacet = CommandFacetForCommandAnnotation.create(annotation, processMethodContext.getFacetHolder());
 
         // else check for @Action(command=...)
         if(commandFacet == null) {
             commandFacet = CommandFacetForActionAnnotation.create(action, configuration, holder);
         }
 
-        // else check from configuration
-        if(commandFacet == null) {
-            final ActionConfiguration setting = ActionConfiguration.parse(configuration);
-            if(setting == ActionConfiguration.NONE) {
-                return;
-            }
-            if(actionSemanticsFacet.value() == ActionSemantics.Of.SAFE && setting == ActionConfiguration.IGNORE_SAFE) {
-                return;
-            }
-
-            commandFacet = CommandFacetFromConfiguration.create(facetHolder);
-        }
-
         FacetUtil.addFacet(commandFacet);
     }
 
-    private void processPublishing(final ProcessMethodContext processMethodContext) {
+    void processPublishing(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
         final Action action = Annotations.getAnnotation(method, Action.class);
@@ -304,11 +312,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
     }
 
 
-    private void processTypeOf(final ProcessMethodContext processMethodContext) {
-
+    void processTypeOf(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
-        final Action action = Annotations.getAnnotation(method, Action.class);
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
         final Class<?> methodReturnType = method.getReturnType();
@@ -316,48 +322,67 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
             return;
         }
 
-        final Class<?> returnType = method.getReturnType();
-        if (returnType.isArray()) {
-            final Class<?> componentType = returnType.getComponentType();
-            FacetUtil.addFacet(new TypeOfFacetInferredFromArray(componentType, holder, getSpecificationLoader()));
-            return;
-        }
+        TypeOfFacet facet;
 
-        if (action != null) {
-            final Class<?> typeOf = action.typeOf();
-            if(typeOf != null && typeOf != Object.class) {
-                FacetUtil.addFacet(new TypeOfFacetForActionAnnotation(typeOf, getSpecificationLoader(), holder));
-                return;
+        // check for deprecated @TypeOf
+        final TypeOf annotation = Annotations.getAnnotation(method, TypeOf.class);
+        facet = TypeOfFacetOnActionForTypeOfAnnotation.create(annotation, getSpecificationLoader(), holder);
+
+        // check for @Action(typeOf=...)
+        if(facet == null) {
+            final Action action = Annotations.getAnnotation(method, Action.class);
+            if (action != null) {
+                final Class<?> typeOf = action.typeOf();
+                if(typeOf != null && typeOf != Object.class) {
+                    facet = new TypeOfFacetForActionAnnotation(typeOf, getSpecificationLoader(), holder);
+                }
             }
         }
 
-        final TypeOf annotation = Annotations.getAnnotation(method, TypeOf.class);
-        if (annotation != null) {
-            FacetUtil.addFacet(new TypeOfFacetOnActionAnnotation(annotation.value(), getSpecificationLoader(), holder));
-            return;
+        // infer from return type
+        if(facet == null) {
+            final Class<?> returnType = method.getReturnType();
+            if (returnType.isArray()) {
+                final Class<?> componentType = returnType.getComponentType();
+                facet = new TypeOfFacetInferredFromArray(componentType, holder, getSpecificationLoader());
+            }
         }
+
+        // infer from generic return type
+        if(facet == null) {
+            facet = inferFromGenericReturnType(processMethodContext);
+        }
+
+        FacetUtil.addFacet(facet);
+    }
+
+    private TypeOfFacet inferFromGenericReturnType(
+            final ProcessMethodContext processMethodContext) {
+
+        final Method method = processMethodContext.getMethod();
+        final FacetedMethod holder = processMethodContext.getFacetHolder();
 
         final Type type = method.getGenericReturnType();
         if (!(type instanceof ParameterizedType)) {
-            return;
+            return null;
         }
 
         final ParameterizedType methodParameterizedType = (ParameterizedType) type;
         final Type[] methodActualTypeArguments = methodParameterizedType.getActualTypeArguments();
+
         if (methodActualTypeArguments.length == 0) {
-            return;
+            return null;
         }
 
         final Object methodActualTypeArgument = methodActualTypeArguments[0];
         if (methodActualTypeArgument instanceof Class) {
             final Class<?> actualType = (Class<?>) methodActualTypeArgument;
-            FacetUtil.addFacet(new TypeOfFacetInferredFromGenerics(actualType, holder, getSpecificationLoader()));
-            return;
+            return new TypeOfFacetInferredFromGenerics(actualType, holder, getSpecificationLoader());
         }
 
         if (methodActualTypeArgument instanceof TypeVariable) {
 
-            TypeVariable<?> methodTypeVariable = (TypeVariable<?>) methodActualTypeArgument;
+            final TypeVariable<?> methodTypeVariable = (TypeVariable<?>) methodActualTypeArgument;
             final GenericDeclaration methodGenericClassDeclaration = methodTypeVariable.getGenericDeclaration();
 
             // try to match up with the actual type argument of the generic superclass.
@@ -371,18 +396,15 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                         final Type actualType = genericSuperClassActualTypeArguments[0];
                         if(actualType instanceof Class) {
                             // just being safe
-                            Class<?> actualCls = (Class<?>) actualType;
-                            FacetUtil.addFacet(new TypeOfFacetInferredFromGenerics(actualCls, holder, getSpecificationLoader()));
-                            return;
+                            final Class<?> actualCls = (Class<?>) actualType;
+                            return new TypeOfFacetInferredFromGenerics(actualCls, holder, getSpecificationLoader());
                         }
                     }
                 }
             }
-
-            // TODO: otherwise, what to do?
-            return;
+            // otherwise, what to do?
         }
-
+        return null;
     }
 
     // ///////////////////////////////////////////////////////////////
@@ -417,7 +439,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
     }
 
     @Override
-    public void setRuntimeContext(RuntimeContext runtimeContext) {
+    public void setRuntimeContext(final RuntimeContext runtimeContext) {
         this.runtimeContext = runtimeContext;
     }
 

@@ -19,16 +19,25 @@
 
 package org.apache.isis.core.metamodel.facets.object.immutable.immutableannot;
 
+import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
 
 @Deprecated
 public class ImmutableFacetForImmutableAnnotation extends ImmutableFacetAbstract {
 
-    public ImmutableFacetForImmutableAnnotation(final When value, final FacetHolder holder) {
+    public static ImmutableFacet create(final Immutable annotation, final FacetHolder facetHolder) {
+        if (annotation == null) {
+            return null;
+        }
+        return new ImmutableFacetForImmutableAnnotation(annotation.value(), facetHolder);
+    }
+
+    private ImmutableFacetForImmutableAnnotation(final When value, final FacetHolder holder) {
         super(value, holder);
     }
 
