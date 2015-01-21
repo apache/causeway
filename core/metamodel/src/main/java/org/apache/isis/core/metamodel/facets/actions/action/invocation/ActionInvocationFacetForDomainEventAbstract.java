@@ -178,7 +178,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final Command command = commandContext != null ? commandContext.getCommand() : null;
 
             // pick up existing event (saved in thread local during the validation phase)
-            final ActionDomainEvent<?> existingEvent = actionInteractionFacet.currentInteraction.get();
+            final ActionDomainEvent<?> existingEvent = ActionDomainEventFacetAbstract.currentInteraction.get();
 
             // ... post the executing event
             final ActionDomainEvent<?> event =
@@ -207,15 +207,16 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             // note that if the action invoked some other action via a wrapper then this will already have been cleared
             // out.  That isn't a problem; we only need to pass the event from validate to pre-execute, not to formally
             // "nest" the events.
-            actionInteractionFacet.currentInteraction.set(null);
+            ActionDomainEventFacetAbstract.currentInteraction.set(null);
         }
     }
 
     /**
      * Optional hook to allow the facet implementation for the deprecated {@link org.apache.isis.applib.annotation.PostsActionInvokedEvent} annotation
-     * to discard the event if of a different type.
+     * to discard the event if the domain event is of a different type (specifically if was installed by virtue of a no
+     * @{@link org.apache.isis.applib.annotation.Action} or @{@link org.apache.isis.applib.annotation.ActionInteraction} annotations.
      */
-    protected ActionDomainEvent<?> verify(ActionDomainEvent<?> event) {
+    protected ActionDomainEvent<?> verify(final ActionDomainEvent<?> event) {
         return event;
     }
 

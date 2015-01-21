@@ -27,6 +27,10 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class ActionInvocationFacetForDomainEventFromActionInteractionAnnotation
         extends ActionInvocationFacetForDomainEventAbstract {
 

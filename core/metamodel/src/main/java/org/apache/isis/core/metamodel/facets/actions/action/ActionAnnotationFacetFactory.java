@@ -129,8 +129,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
             //
             // Set up ActionDomainEventFacet, which will act as the hiding/disabling/validating advisor
             //
-            final Action action = Annotations.getAnnotation(actionMethod, Action.class);
+            final PostsActionInvokedEvent postsActionInvokedEvent = Annotations.getAnnotation(actionMethod, PostsActionInvokedEvent.class);
             final ActionInteraction actionInteraction =Annotations.getAnnotation(actionMethod, ActionInteraction.class);
+            final Action action = Annotations.getAnnotation(actionMethod, Action.class);
             final Class<? extends ActionDomainEvent<?>> actionDomainEventType;
 
             final ActionDomainEventFacetAbstract actionDomainEventFacet;
@@ -147,7 +148,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                 actionDomainEventFacet = new ActionDomainEventFacetForActionAnnotation(
                         actionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
             } else
-            // else use default event type
+            // else use default event type (also for @PostsActionInvoked)
             {
                 actionDomainEventType = ActionDomainEvent.Default.class;
                 actionDomainEventFacet = new ActionDomainEventFacetDefault(
@@ -158,7 +159,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
             // replace the current actionInvocationFacet with one that will
             // emit the appropriate domain event and then delegate onto the underlying
-            final PostsActionInvokedEvent postsActionInvokedEvent = Annotations.getAnnotation(actionMethod, PostsActionInvokedEvent.class);
 
             final ActionInvocationFacetForDomainEventAbstract actionInvocationFacet;
             // deprecated

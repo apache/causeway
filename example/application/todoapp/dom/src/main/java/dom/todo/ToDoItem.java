@@ -28,11 +28,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
 import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
-
+import com.google.common.base.Objects;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Ordering;
+import org.joda.time.LocalDate;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.NonRecoverableException;
@@ -65,11 +67,6 @@ import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
-import org.joda.time.LocalDate;
-
-import com.google.common.base.Objects;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Ordering;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
 @javax.jdo.annotations.DatastoreIdentity(
@@ -372,7 +369,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
         // if invoked as a regular action, return this object;
         // otherwise (if invoked as bulk), return null (so go back to the list)
-        return actionInvocationContext.getInvokedOn() == InvokedOn.COLLECTION ? this: null;
+        return actionInvocationContext.getInvokedOn() == InvokedOn.OBJECT ? this: null;
     }
     // disable action dependent on state of object
     public String disableNotYetCompleted() {

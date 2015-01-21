@@ -24,10 +24,10 @@ import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.InteractionHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
@@ -37,6 +37,10 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public abstract class ActionDomainEventFacetAbstract
         extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
+
+    static Class<? extends Facet> type() {
+        return ActionDomainEventFacet.class;
+    }
 
     private final InteractionHelper interactionHelper;
 
@@ -55,9 +59,10 @@ public abstract class ActionDomainEventFacetAbstract
             final FacetHolder holder,
             final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader) {
-        super(CollectionDomainEventFacet.class, holder, eventType, specificationLoader);
+        super(type(), holder, eventType, specificationLoader);
         interactionHelper = new InteractionHelper(servicesInjector);
     }
+
 
     @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {

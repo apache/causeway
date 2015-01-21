@@ -45,7 +45,8 @@ public class ActionInvocationFacetForPostsActionInvokedEventAnnotation
 
     @Override
     protected ActionDomainEvent<?> verify(final ActionDomainEvent<?> event) {
-        // will discard event if different type to that specified in the PostsActionInvokedEvent annotation.
+        // will discard event if different type to that specified in the PostsActionInvokedEvent annotation
+        // (that is, if the ActionDomainEventFacetDefault was installed by virtue of a no @Action or @ActionInteraction annotation)
         return event != null && eventType == event.getClass() ? event : null;
     }
 

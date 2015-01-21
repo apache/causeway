@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.util.ObjectContracts;
 
@@ -94,9 +95,13 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
     }
     //endregion
 
-
     //region > actionSemantics
+    public SemanticsOf getSemantics() {
+        return SemanticsOf.from(actionSemantics);
+    }
+
     private ActionSemantics.Of actionSemantics;
+    @Deprecated
     public ActionSemantics.Of getActionSemantics() {
         return actionSemantics;
     }

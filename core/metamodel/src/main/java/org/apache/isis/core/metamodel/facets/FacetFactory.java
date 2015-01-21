@@ -118,7 +118,7 @@ public interface FacetFactory {
             methodRemover.removeMethods(methods);
         }
 
-        public Properties metadataProperties(String subKey) {
+        public Properties metadataProperties(final String subKey) {
             if(metadataProperties == null) {
                 return null;
             }
@@ -187,12 +187,12 @@ public interface FacetFactory {
             methodRemover.removeMethods(methods);
         }
 
-        public Properties metadataProperties(String subKey) {
+        public Properties metadataProperties(final String subKey) {
             
             if(metadataProperties == null) {
                 return null;
             }
-            Identifier identifier = featureType.identifierFor(getCls(), getMethod());
+            final Identifier identifier = featureType.identifierFor(getCls(), getMethod());
             final String id = identifier.getMemberName();
             
             // build list of keys to search for... 
