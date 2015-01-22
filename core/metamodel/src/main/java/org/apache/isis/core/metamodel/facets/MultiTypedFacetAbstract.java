@@ -44,4 +44,14 @@ public abstract class MultiTypedFacetAbstract extends FacetAbstract implements M
     @Override
     public abstract <T extends Facet> T getFacet(Class<T> facetType);
 
+    @Override
+    public boolean containsFacetTypeOf(final Class<? extends Facet> requiredFacetType) {
+        for (final Class<? extends Facet> facetType : facetTypes()) {
+            if(facetType == requiredFacetType) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
