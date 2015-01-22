@@ -25,6 +25,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
@@ -64,11 +65,10 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     @Override
     public synchronized void onBeginRequest(RequestCycle requestCycle) {
         
-        final AuthenticatedWebSessionForIsis wicketSession = AuthenticatedWebSessionForIsis.get();
-        if (wicketSession == null) {
-            // FIXME Session.get() acts as getOrCreate so this will never be null
+        if (!Session.exists()) {
             return;
         }
+        final AuthenticatedWebSessionForIsis wicketSession = AuthenticatedWebSessionForIsis.get();
         final AuthenticationSession authenticationSession = wicketSession.getAuthenticationSession();
         if (authenticationSession == null) {
             return;
