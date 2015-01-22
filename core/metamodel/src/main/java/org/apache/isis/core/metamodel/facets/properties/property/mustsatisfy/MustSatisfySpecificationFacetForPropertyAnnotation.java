@@ -53,4 +53,6 @@ public class MustSatisfySpecificationFacetForPropertyAnnotation extends MustSati
         super(specifications, holder);
     }
 
+
+
 }

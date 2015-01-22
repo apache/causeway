@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyInteraction;
+import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -91,7 +92,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     void processModify(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
-        FacetedMethod holder = processMethodContext.getFacetHolder();
+        final FacetedMethod holder = processMethodContext.getFacetHolder();
 
         final PropertyOrCollectionAccessorFacet getterFacet = holder.getFacet(PropertyOrCollectionAccessorFacet.class);
         if(getterFacet == null) {
@@ -101,6 +102,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         //
         // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
+        final PostsPropertyChangedEvent postsPropertyChangedEvent = Annotations.getAnnotation(method, PostsPropertyChangedEvent.class);
         final Property property = Annotations.getAnnotation(method, Property.class);
         final PropertyInteraction propertyInteraction = Annotations.getAnnotation(method, PropertyInteraction.class);
         final Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEventType;
@@ -120,7 +122,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
                     propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
 
         } else
-        // else use default event type
+        // else use default event type (also for @PostsPropertyChangedEvent)
         {
             propertyDomainEventType = PropertyDomainEvent.Default.class;
             propertyDomainEventFacet = new PropertyDomainEventFacetDefault(
@@ -134,17 +136,15 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         // emit the appropriate domain event and then delegate onto the underlying
         //
 
-
-        final PostsPropertyChangedEvent postsPropertyChangedEvent = Annotations.getAnnotation(method, PostsPropertyChangedEvent.class);
-
         final PropertySetterFacet setterFacet = holder.getFacet(PropertySetterFacet.class);
         if(setterFacet != null) {
             // the current setter facet will end up as the underlying facet
             final PropertySetterFacetForDomainEventAbstract replacementFacet;
             // deprecated
             if(postsPropertyChangedEvent != null) {
+                final Class<? extends PropertyChangedEvent<?, ?>> propertySetEventType = postsPropertyChangedEvent.value();
                 replacementFacet = new PropertySetterFacetForPostsPropertyChangedEventAnnotation(
-                        postsPropertyChangedEvent.value(), getterFacet, setterFacet, propertyDomainEventFacet, holder, servicesInjector);
+                        propertySetEventType, getterFacet, setterFacet, propertyDomainEventFacet, holder, servicesInjector);
             } else
             // deprecated (but more recently)
             if(propertyInteraction != null) {
@@ -159,7 +159,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
             // default
             {
                 replacementFacet = new PropertySetterFacetForDomainEventFromDefault(
-                        PropertyDomainEvent.Default.class, getterFacet, setterFacet, propertyDomainEventFacet, holder, servicesInjector);
+                        propertyDomainEventType, getterFacet, setterFacet, propertyDomainEventFacet, holder, servicesInjector);
             }
             FacetUtil.addFacet(replacementFacet);
         }
@@ -171,8 +171,9 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
             // deprecated
             if(postsPropertyChangedEvent != null) {
+                final Class<? extends PropertyChangedEvent<?, ?>> propertyClearEventType = postsPropertyChangedEvent.value();
                 replacementFacet = new PropertyClearFacetForPostsPropertyChangedEventAnnotation(
-                        postsPropertyChangedEvent.value(), getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
+                        propertyClearEventType, getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
             } else
             // deprecated (but more recently)
             if(propertyInteraction != null) {
@@ -186,7 +187,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
             } else
             {
                 replacementFacet = new PropertyClearFacetForDomainEventFromDefault(
-                        PropertyDomainEvent.Default.class, getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
+                        propertyDomainEventType, getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
             }
             FacetUtil.addFacet(replacementFacet);
         }

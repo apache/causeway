@@ -220,6 +220,13 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         return event;
     }
 
+    /**
+     * For testing only.
+     */
+    public Class<? extends ActionDomainEvent<?>> getEventType() {
+        return eventType;
+    }
+
     protected InvocationResult internalInvoke(
             final Command command,
             final ObjectAction owningAction,

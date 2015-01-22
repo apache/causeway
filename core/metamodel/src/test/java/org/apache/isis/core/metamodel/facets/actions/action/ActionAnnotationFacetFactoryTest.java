@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import org.jmock.Expectations;
@@ -52,6 +53,9 @@ import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotationAsConfigured;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForCommandAnnotation;
@@ -69,6 +73,8 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForPublishedActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetFromConfiguration;
+import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetOnActionForTypeOfAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
@@ -79,6 +85,7 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -97,9 +104,9 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
     @Mock
     ObjectSpecification mockReturnTypeSpec;
 
-    void expectRemoveMethod(final Method actionMethod1) {
+    void expectRemoveMethod(final Method actionMethod) {
         context.checking(new Expectations() {{
-            oneOf(mockMethodRemover).removeMethod(actionMethod1);
+            oneOf(mockMethodRemover).removeMethod(actionMethod);
         }});
     }
 
@@ -179,11 +186,15 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
             Assert.assertNotNull(domainEventFacet);
-            Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetDefault); // this is discarded at runtime, see ActionInvocationFacetForPostsActionInvokedEventAnnotation#verify(...)
+            Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetDefault);
+            final ActionDomainEventFacetDefault domainEventFacetImpl = (ActionDomainEventFacetDefault) domainEventFacet;
+            assertThat(domainEventFacetImpl.getEventType(), classEqualTo(ActionDomainEvent.Default.class)); // this is discarded at runtime, see ActionInvocationFacetForPostsActionInvokedEventAnnotation#verify(...)
 
             final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
             Assert.assertNotNull(invocationFacet);
             Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForPostsActionInvokedEventAnnotation);
+            final ActionInvocationFacetForPostsActionInvokedEventAnnotation invocationFacetImpl = (ActionInvocationFacetForPostsActionInvokedEventAnnotation) invocationFacet;
+            assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvoked.class));
         }
 
         @Test
@@ -218,10 +229,14 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
             Assert.assertNotNull(domainEventFacet);
             Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetForActionInteractionAnnotation);
+            final ActionDomainEventFacetForActionInteractionAnnotation domainEventFacetImpl = (ActionDomainEventFacetForActionInteractionAnnotation) domainEventFacet;
+            assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvoked.class));
 
             final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
             Assert.assertNotNull(invocationFacet);
             Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromActionInteractionAnnotation);
+            final ActionInvocationFacetForDomainEventFromActionInteractionAnnotation invocationFacetImpl = (ActionInvocationFacetForDomainEventFromActionInteractionAnnotation) invocationFacet;
+            assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvoked.class));
         }
 
         @Test
@@ -256,10 +271,14 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
             Assert.assertNotNull(domainEventFacet);
             Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetForActionAnnotation);
+            final ActionDomainEventFacetForActionAnnotation domainEventFacetImpl = (ActionDomainEventFacetForActionAnnotation) domainEventFacet;
+            assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvoked.class));
 
             final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
             Assert.assertNotNull(invocationFacet);
             Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromActionAnnotation);
+            final ActionInvocationFacetForDomainEventFromActionAnnotation invocationFacetImpl = (ActionInvocationFacetForDomainEventFromActionAnnotation) invocationFacet;
+            assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvoked.class));
         }
 
         @Test
@@ -286,10 +305,14 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
             Assert.assertNotNull(domainEventFacet);
             Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetDefault);
+            final ActionDomainEventFacetDefault domainEventFacetImpl = (ActionDomainEventFacetDefault) domainEventFacet;
+            assertThat(domainEventFacetImpl.getEventType(), classEqualTo(ActionDomainEvent.Default.class));
 
             final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
             Assert.assertNotNull(invocationFacet);
             Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromDefault);
+            final ActionInvocationFacetForDomainEventFromDefault invocationFacetImpl = (ActionInvocationFacetForDomainEventFromDefault) invocationFacet;
+            assertThat(invocationFacetImpl.getEventType(), classEqualTo(ActionDomainEvent.Default.class));
         }
     }
 
@@ -625,7 +648,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processInvokeOn(processMethodContext);
+            facetFactory.processBulk(processMethodContext);
 
             // then
             final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
@@ -649,7 +672,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processInvokeOn(processMethodContext);
+            facetFactory.processBulk(processMethodContext);
 
             // then
             final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
@@ -672,7 +695,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processInvokeOn(processMethodContext);
+            facetFactory.processBulk(processMethodContext);
 
             // then
             final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
@@ -695,7 +718,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processInvokeOn(processMethodContext);
+            facetFactory.processBulk(processMethodContext);
 
             // then
             final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
@@ -719,7 +742,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processInvokeOn(processMethodContext);
+            facetFactory.processBulk(processMethodContext);
 
             // then
             final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
@@ -1337,6 +1360,165 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
     }
 
+    public static class TypeOf extends ActionAnnotationFacetFactoryTest {
+
+        @Test
+        public void whenDeprecatedTypeOfAnnotationOnActionReturningCollection() {
+
+            class Order {
+            }
+            class Customer {
+                @org.apache.isis.applib.annotation.TypeOf(Order.class)
+                public Collection someAction() {
+                    return null;
+                }
+            }
+
+            // given
+            final Class<?> cls = Customer.class;
+            actionMethod = findMethod(cls, "someAction");
+
+            // when
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            facetFactory.processTypeOf(processMethodContext);
+
+            // then
+            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            Assert.assertNotNull(facet);
+            Assert.assertTrue(facet instanceof TypeOfFacetOnActionForTypeOfAnnotation);
+            assertThat(facet.value(), classEqualTo(Order.class));
+        }
+
+        @Test
+        public void whenDeprecatedTypeOfAnnotationOnActionNotReturningCollection() {
+
+            class Order {
+            }
+            class Customer {
+                @org.apache.isis.applib.annotation.TypeOf(Order.class)
+                public Customer someAction() {
+                    return null;
+                }
+            }
+
+            // given
+            final Class<?> cls = Customer.class;
+            actionMethod = findMethod(cls, "someAction");
+
+            // when
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            facetFactory.processTypeOf(processMethodContext);
+
+            // then
+            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            Assert.assertNull(facet);
+        }
+
+        @Test
+        public void whenActionAnnotationOnActionReturningCollection() {
+
+            class Order {
+            }
+            class Customer {
+                @Action(typeOf = Order.class)
+                public Collection someAction() {
+                    return null;
+                }
+            }
+
+            // given
+            final Class<?> cls = Customer.class;
+            actionMethod = findMethod(cls, "someAction");
+
+            // when
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            facetFactory.processTypeOf(processMethodContext);
+
+            // then
+            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            Assert.assertNotNull(facet);
+            Assert.assertTrue(facet instanceof TypeOfFacetForActionAnnotation);
+            assertThat(facet.value(), classEqualTo(Order.class));
+        }
+
+        @Test
+        public void whenActionAnnotationOnActionNotReturningCollection() {
+
+            class Order {
+            }
+            class Customer {
+                @Action(typeOf = Order.class)
+                public Customer someAction() {
+                    return null;
+                }
+            }
+
+            // given
+            final Class<?> cls = Customer.class;
+            actionMethod = findMethod(cls, "someAction");
+
+            // when
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            facetFactory.processTypeOf(processMethodContext);
+
+            // then
+            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            Assert.assertNull(facet);
+        }
+
+        @Test
+        public void whenInferFromType() {
+
+            class Order {
+            }
+            class Customer {
+                public Order[] someAction() {
+                    return null;
+                }
+            }
+
+            // given
+            final Class<?> cls = Customer.class;
+            actionMethod = findMethod(cls, "someAction");
+
+            // when
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            facetFactory.processTypeOf(processMethodContext);
+
+            // then
+            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            Assert.assertNotNull(facet);
+            Assert.assertTrue(facet instanceof TypeOfFacetInferredFromArray);
+            assertThat(facet.value(), classEqualTo(Order.class));
+        }
+
+        @Test
+        public void whenInferFromGenerics() {
+
+            class Order {
+            }
+            class Customer {
+                public Collection<Order> someAction() {
+                    return null;
+                }
+            }
+
+            // given
+            final Class<?> cls = Customer.class;
+            actionMethod = findMethod(cls, "someAction");
+
+            // when
+            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
+            facetFactory.processTypeOf(processMethodContext);
+
+            // then
+            final TypeOfFacet facet = facetedMethod.getFacet(TypeOfFacet.class);
+            Assert.assertNotNull(facet);
+            Assert.assertTrue(facet instanceof TypeOfFacetInferredFromGenerics);
+            assertThat(facet.value(), classEqualTo(Order.class));
+        }
+
+    }
 
     void allowingCommandConfigurationToReturn(final String value) {
         context.checking(new Expectations() {

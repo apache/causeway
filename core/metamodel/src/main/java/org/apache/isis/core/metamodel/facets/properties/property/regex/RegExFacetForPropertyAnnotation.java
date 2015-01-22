@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.property.regex;
 
 import java.util.regex.Pattern;
+import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
@@ -38,13 +39,16 @@ public class RegExFacetForPropertyAnnotation extends RegExFacetAbstract {
         }
 
         final String pattern = property.regexPattern();
+        if(Strings.isNullOrEmpty(pattern)) {
+            return null;
+        }
         final int patternFlags = property.regexPatternFlags();
 
         return new RegExFacetForPropertyAnnotation(pattern, patternFlags, holder);
     }
 
     private RegExFacetForPropertyAnnotation(final String pattern, final int patternFlags, final FacetHolder holder) {
-        super(pattern, "", false, holder);
+        super(pattern, "", (patternFlags & Pattern.CASE_INSENSITIVE) == Pattern.CASE_INSENSITIVE, holder);
         this.pattern = Pattern.compile(pattern, patternFlags);
     }
 

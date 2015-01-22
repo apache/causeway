@@ -106,7 +106,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         processHidden(processMethodContext);
         processRestrictTo(processMethodContext);
         processSemantics(processMethodContext);
-        processInvokeOn(processMethodContext);
+        processBulk(processMethodContext);
 
         // must come after processing semantics
         processCommand(processMethodContext);
@@ -252,7 +252,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         FacetUtil.addFacet(facet);
     }
 
-    void processInvokeOn(final ProcessMethodContext processMethodContext) {
+    void processBulk(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final Action action = Annotations.getAnnotation(method, Action.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();

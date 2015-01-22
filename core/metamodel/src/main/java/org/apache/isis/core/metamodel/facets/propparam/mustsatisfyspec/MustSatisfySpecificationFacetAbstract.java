@@ -38,6 +38,13 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
 
     private final List<Specification> specifications;
 
+    /**
+     * For testing.
+     */
+    public List<Specification> getSpecifications() {
+        return specifications;
+    }
+
     public MustSatisfySpecificationFacetAbstract(final List<Specification> specifications, final FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.specifications = specifications;
@@ -76,6 +83,5 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
             return null;
         }
     }
-
 
 }

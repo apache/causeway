@@ -25,6 +25,10 @@ import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollect
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class PropertyDomainEventFacetForPropertyInteractionAnnotation extends PropertyDomainEventFacetAbstract {
 
     public PropertyDomainEventFacetForPropertyInteractionAnnotation(

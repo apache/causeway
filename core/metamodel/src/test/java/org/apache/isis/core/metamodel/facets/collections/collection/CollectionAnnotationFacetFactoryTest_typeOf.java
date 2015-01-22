@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredF
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromTypeOfAnnotation;
 
-public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class CollectionAnnotationFacetFactoryTest_typeOf extends AbstractFacetFactoryTest {
 
     private CollectionAnnotationFacetFactory facetFactory;
 
@@ -232,27 +232,6 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNoMethodsRemoved();
     }
 
-    public void testTypeOfFacetInferredForActionWithArrayReturnType() {
-        class Order {
-        }
-        class Customer {
-            @SuppressWarnings("unused")
-            public Order[] someAction() {
-                return null;
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacetInferredFromArray);
-        final TypeOfFacetInferredFromArray typeOfFacetInferredFromArray = (TypeOfFacetInferredFromArray) facet;
-        assertEquals(Order.class, typeOfFacetInferredFromArray.value());
-
-        assertNoMethodsRemoved();
-    }
 
     public void testTypeOfFacetIsInferredForCollectionFromOrderArray() {
         class Order {
@@ -275,23 +254,5 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     }
 
-    public void testTypeOfAnnotationIgnoredForActionIfReturnTypeIsntACollectionType() {
-        class Order {
-        }
-        class Customer {
-            @SuppressWarnings("unused")
-            @TypeOf(Order.class)
-            public Customer someAction() {
-                return null;
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        assertNull(facetedMethod.getFacet(TypeOfFacet.class));
-
-        assertNoMethodsRemoved();
-    }
 
 }

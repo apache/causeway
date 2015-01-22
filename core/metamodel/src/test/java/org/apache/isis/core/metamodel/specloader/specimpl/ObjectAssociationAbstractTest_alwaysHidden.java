@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
@@ -31,9 +30,11 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.Instance;
@@ -54,16 +55,11 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
     private FacetedMethod facetedMethod;
 
     @Mock
-    private ObjectSpecification objectSpecification;
-
-    @Mock
-    private HiddenFacet facet;
+    private ObjectSpecification mockObjectSpecification;
 
     public static class Customer {
-        private String firstName;
-
         public String getFirstName() {
-            return firstName;
+            return null;
         }
     }
 
@@ -71,7 +67,9 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
     public void setup() {
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
         
-        objectAssociation = new ObjectAssociationAbstract(facetedMethod, FeatureType.PROPERTY, objectSpecification, new ObjectMemberContext(DeploymentCategory.PRODUCTION, null, null, null, null, null)) {
+        objectAssociation = new ObjectAssociationAbstract(
+                facetedMethod, FeatureType.PROPERTY, mockObjectSpecification,
+                new ObjectMemberContext(DeploymentCategory.PRODUCTION, null, null, null, null, null)) {
 
             @Override
             public ObjectAdapter get(final ObjectAdapter fromObject) {
@@ -98,12 +96,12 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             }
 
             @Override
-            public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, Where where) {
+            public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Where where) {
                 return null;
             }
 
             @Override
-            public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter, Where where) {
+            public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter, final Where where) {
                 return null;
             }
 
@@ -136,66 +134,80 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
                 return 0;
             }
         };
-
-        context.checking(new Expectations() {
-            {
-                allowing(facet).facetType();
-                will(returnValue(HiddenFacet.class));
-            }
-        });
-
     }
 
 
     @Test
-    public void alwaysHidden_forHiddenAlwaysEverywhere() throws Exception {
-        context.checking(new Expectations() {
-            {
-                allowing(facet).isNoop();
-                will(returnValue(false));
-                allowing(facet).when();
-                will(returnValue(When.ALWAYS));
-                allowing(facet).where();
-                will(returnValue(Where.ANYWHERE));
-                allowing(facet).where();
-                will(returnValue(Where.OBJECT_FORMS));
-            }
-        });
-        facetedMethod.addFacet(facet);
+    public void whenNone() throws Exception {
+
+        // given (none)
+
+        // when, then
+        assertFalse(objectAssociation.isAlwaysHidden());
+    }
+
+    @Test
+    public void whenNoop() throws Exception {
+
+        // given
+        addHiddenFacet(When.ALWAYS, Where.EVERYWHERE, facetedMethod, true);
+
+        // when, then
+        assertFalse(objectAssociation.isAlwaysHidden());
+    }
+
+    @Test
+    public void whenNotAlwaysEverywhere() throws Exception {
+
+        // given
+        addHiddenFacet(When.ONCE_PERSISTED, Where.EVERYWHERE, facetedMethod, false);
+
+        // when, then
+        assertFalse(objectAssociation.isAlwaysHidden());
+    }
+
+    @Test
+    public void whenAlwaysNotEverywhere() throws Exception {
+
+        // given
+        addHiddenFacet(When.ALWAYS, Where.OBJECT_FORMS, facetedMethod, false);
+
+        // when, then
+        assertFalse(objectAssociation.isAlwaysHidden());
+    }
+
+    @Test
+    public void whenAlwaysEverywhere() throws Exception {
+
+        // given
+        addHiddenFacet(When.ALWAYS, Where.EVERYWHERE, facetedMethod, false);
+
+        // when, then
         assertTrue(objectAssociation.isAlwaysHidden());
     }
 
+    @Test
+    public void whenAlwaysAnywhere() throws Exception {
 
-    @Test
-    public void alwaysHidden_forHiddenAlwaysObjectForm() throws Exception {
-        context.checking(new Expectations() {
-            {
-                allowing(facet).isNoop();
-                will(returnValue(false));
-                allowing(facet).when();
-                will(returnValue(When.ALWAYS));
-                allowing(facet).where();
-                will(returnValue(Where.OBJECT_FORMS));
-            }
-        });
-        facetedMethod.addFacet(facet);
-        assertFalse(objectAssociation.isAlwaysHidden());
-    }
-    
-    @Test
-    public void alwaysHidden_forHiddenOncePersistedAnywhere() throws Exception {
-        context.checking(new Expectations() {
-            {
-                allowing(facet).isNoop();
-                will(returnValue(false));
-                allowing(facet).when();
-                will(returnValue(When.ONCE_PERSISTED));
-                allowing(facet).where();
-                will(returnValue(Where.ANYWHERE));
-            }
-        });
-        facetedMethod.addFacet(facet);
-        assertFalse(objectAssociation.isAlwaysHidden());
+        // given
+        addHiddenFacet(When.ALWAYS, Where.ANYWHERE, facetedMethod, false);
+
+        // when, then
+        assertTrue(objectAssociation.isAlwaysHidden());
     }
 
+    private static void addHiddenFacet(final When when, final Where where, final FacetedMethod holder, final boolean noop) {
+        HiddenFacet facet = new HiddenFacetAbstract(HiddenFacet.class, when, where, holder) {
+            @Override
+            protected String hiddenReason(final ObjectAdapter target, final Where whereContext) {
+                return null;
+            }
+
+            @Override
+            public boolean isNoop() {
+                return noop;
+            }
+        };
+        FacetUtil.addFacet(facet);
+    }
 }
