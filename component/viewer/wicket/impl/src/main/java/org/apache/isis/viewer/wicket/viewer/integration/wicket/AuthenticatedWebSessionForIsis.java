@@ -94,7 +94,10 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
                 ? SessionLoggingService.CausedBy.USER
                 : SessionLoggingService.CausedBy.SESSION_EXPIRATION;
 
-        String userName = authenticationSession.getUserName();
+        String userName = null;
+        if (authenticationSession != null) {
+            userName = authenticationSession.getUserName();
+        }
 
         log(SessionLoggingService.Type.LOGOUT, userName, causedBy);
     }
