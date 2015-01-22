@@ -50,6 +50,7 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract {
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof Parameter) {
                 final Parameter parameter = (Parameter) parameterAnnotation;
+                Class<?> parameterType = parameterTypes[paramNum];
 
                 FacetUtil.addFacet(
                         MaxLengthFacetForParameterAnnotation.create(parameter, holder));
@@ -58,9 +59,9 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract {
                         MustSatisfySpecificationFacetForParameterAnnotation.create(parameter, holder));
 
                 FacetUtil.addFacet(
-                        MandatoryFacetForParameterAnnotation.create(parameter, method, holder));
+                        MandatoryFacetForParameterAnnotation.create(parameter, parameterType, holder));
 
-                if (Annotations.isString(parameterTypes[paramNum])) {
+                if (Annotations.isString(parameterType)) {
                     FacetUtil.addFacet(
                             RegExFacetForParameterAnnotation.create(parameter, holder));
                 }

@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.param.parameter;
 
 import java.util.regex.Pattern;
+import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
@@ -37,7 +38,12 @@ public class RegExFacetForParameterAnnotation extends RegExFacetAbstract {
             return null;
         }
 
+
         final String pattern = parameter.regexPattern();
+        if(Strings.isNullOrEmpty(pattern)) {
+            return null;
+        }
+
         final int patternFlags = parameter.regexPatternFlags();
 
         return new RegExFacetForParameterAnnotation(pattern, patternFlags, holder);

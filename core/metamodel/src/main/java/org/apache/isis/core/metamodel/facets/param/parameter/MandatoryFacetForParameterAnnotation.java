@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.param.parameter;
 
-import java.lang.reflect.Method;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -34,15 +33,14 @@ public abstract class MandatoryFacetForParameterAnnotation extends MandatoryFace
 
     static MandatoryFacet create(
             final Parameter parameter,
-            final Method method,
+            final Class<?> parameterType,
             final FacetHolder holder) {
 
         if (parameter == null) {
             return null;
         }
 
-        final Class<?> returnType = method.getReturnType();
-        if (returnType.isPrimitive()) {
+        if (parameterType.isPrimitive()) {
             return new MandatoryFacetForParameterAnnotation.Primitive(holder);
         }
 
