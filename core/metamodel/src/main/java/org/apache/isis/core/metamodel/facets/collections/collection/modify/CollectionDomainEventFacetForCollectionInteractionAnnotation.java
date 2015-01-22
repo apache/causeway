@@ -24,6 +24,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class CollectionDomainEventFacetForCollectionInteractionAnnotation extends CollectionDomainEventFacetAbstract {
 
     public CollectionDomainEventFacetForCollectionInteractionAnnotation(

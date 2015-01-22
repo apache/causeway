@@ -113,4 +113,12 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
         return value();
     }
 
+    /**
+     * For testing.
+     */
+    public Class<? extends CollectionDomainEvent<?, ?>> getEventType() {
+        Class eventType = eventType();
+        return eventType;
+    }
+
 }

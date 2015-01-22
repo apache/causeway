@@ -164,20 +164,22 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
             Assert.assertNotNull(domainEventFacet);
-            Assert.assertTrue(domainEventFacet instanceof PropertyDomainEventFacetDefault); // this is discarded at runtime, see PropertySetterFacetForPostsPropertyChangedEventAnnotation#verify(...)
+            Assert.assertTrue(domainEventFacet instanceof PropertyDomainEventFacetDefault);
+            final PropertyDomainEventFacetDefault domainEventFacetDefault = (PropertyDomainEventFacetDefault) domainEventFacet;
+            assertThat(domainEventFacetDefault.getEventType(), classEqualTo(PropertyDomainEvent.Default.class)); // this is discarded at runtime, see PropertySetterFacetForPostsPropertyChangedEventAnnotation#verify(...)
 
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             Assert.assertNotNull(setterFacet);
             Assert.assertTrue(setterFacet instanceof PropertySetterFacetForPostsPropertyChangedEventAnnotation);
-            PropertySetterFacetForPostsPropertyChangedEventAnnotation setterFacetImpl = (PropertySetterFacetForPostsPropertyChangedEventAnnotation) setterFacet;
+            final PropertySetterFacetForPostsPropertyChangedEventAnnotation setterFacetImpl = (PropertySetterFacetForPostsPropertyChangedEventAnnotation) setterFacet;
             assertThat(setterFacetImpl.value(), classEqualTo(Customer.NamedChanged.class));
 
             // then
             final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
             Assert.assertNotNull(clearFacet);
             Assert.assertTrue(clearFacet instanceof PropertyClearFacetForPostsPropertyChangedEventAnnotation);
-            PropertyClearFacetForPostsPropertyChangedEventAnnotation clearFacetImpl = (PropertyClearFacetForPostsPropertyChangedEventAnnotation) clearFacet;
+            final PropertyClearFacetForPostsPropertyChangedEventAnnotation clearFacetImpl = (PropertyClearFacetForPostsPropertyChangedEventAnnotation) clearFacet;
             assertThat(clearFacetImpl.value(), classEqualTo(Customer.NamedChanged.class));
         }
 
@@ -218,21 +220,21 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
             Assert.assertNotNull(domainEventFacet);
             Assert.assertTrue(domainEventFacet instanceof PropertyDomainEventFacetForPropertyInteractionAnnotation);
-            PropertyDomainEventFacetForPropertyInteractionAnnotation domainEventFacetImpl = (PropertyDomainEventFacetForPropertyInteractionAnnotation) domainEventFacet;
+            final PropertyDomainEventFacetForPropertyInteractionAnnotation domainEventFacetImpl = (PropertyDomainEventFacetForPropertyInteractionAnnotation) domainEventFacet;
             assertThat(domainEventFacetImpl.value(), classEqualTo(Customer.NamedChanged.class));
 
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             Assert.assertNotNull(setterFacet);
             Assert.assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyInteractionAnnotation);
-            PropertySetterFacetForDomainEventFromPropertyInteractionAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyInteractionAnnotation) setterFacet;
+            final PropertySetterFacetForDomainEventFromPropertyInteractionAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyInteractionAnnotation) setterFacet;
             assertThat(setterFacetImpl.value(), classEqualTo(Customer.NamedChanged.class));
 
             // then
             final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
             Assert.assertNotNull(clearFacet);
             Assert.assertTrue(clearFacet instanceof PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation);
-            PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation clearFacetImpl = (PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation) clearFacet;
+            final PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation clearFacetImpl = (PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation) clearFacet;
             assertThat(clearFacetImpl.value(), classEqualTo(Customer.NamedChanged.class));
         }
 
@@ -272,21 +274,21 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
             Assert.assertNotNull(domainEventFacet);
             Assert.assertTrue(domainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation);
-            PropertyDomainEventFacetForPropertyAnnotation domainEventFacetImpl = (PropertyDomainEventFacetForPropertyAnnotation) domainEventFacet;
+            final PropertyDomainEventFacetForPropertyAnnotation domainEventFacetImpl = (PropertyDomainEventFacetForPropertyAnnotation) domainEventFacet;
             assertThat(domainEventFacetImpl.value(), classEqualTo(Customer.NamedChanged.class));
 
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             Assert.assertNotNull(setterFacet);
             Assert.assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromPropertyAnnotation);
-            PropertySetterFacetForDomainEventFromPropertyAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyAnnotation) setterFacet;
+            final PropertySetterFacetForDomainEventFromPropertyAnnotation setterFacetImpl = (PropertySetterFacetForDomainEventFromPropertyAnnotation) setterFacet;
             assertThat(setterFacetImpl.value(), classEqualTo(Customer.NamedChanged.class));
 
             // then
             final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
             Assert.assertNotNull(clearFacet);
             Assert.assertTrue(clearFacet instanceof PropertyClearFacetForDomainEventFromPropertyAnnotation);
-            PropertyClearFacetForDomainEventFromPropertyAnnotation clearFacetImpl = (PropertyClearFacetForDomainEventFromPropertyAnnotation) clearFacet;
+            final PropertyClearFacetForDomainEventFromPropertyAnnotation clearFacetImpl = (PropertyClearFacetForDomainEventFromPropertyAnnotation) clearFacet;
             assertThat(clearFacetImpl.value(), classEqualTo(Customer.NamedChanged.class));
         }
 
@@ -320,21 +322,21 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
             Assert.assertNotNull(domainEventFacet);
             Assert.assertTrue(domainEventFacet instanceof PropertyDomainEventFacetDefault);
-            PropertyDomainEventFacetDefault domainEventFacetImpl = (PropertyDomainEventFacetDefault) domainEventFacet;
+            final PropertyDomainEventFacetDefault domainEventFacetImpl = (PropertyDomainEventFacetDefault) domainEventFacet;
             assertThat(domainEventFacetImpl.value(), classEqualTo(PropertyDomainEvent.Default.class));
 
             // then
             final Facet setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             Assert.assertNotNull(setterFacet);
             Assert.assertTrue(setterFacet instanceof PropertySetterFacetForDomainEventFromDefault);
-            PropertySetterFacetForDomainEventFromDefault setterFacetImpl = (PropertySetterFacetForDomainEventFromDefault) setterFacet;
+            final PropertySetterFacetForDomainEventFromDefault setterFacetImpl = (PropertySetterFacetForDomainEventFromDefault) setterFacet;
             assertThat(setterFacetImpl.value(), classEqualTo(PropertyDomainEvent.Default.class));
 
             // then
             final Facet clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
             Assert.assertNotNull(clearFacet);
             Assert.assertTrue(clearFacet instanceof PropertyClearFacetForDomainEventFromDefault);
-            PropertyClearFacetForDomainEventFromDefault clearFacetImpl = (PropertyClearFacetForDomainEventFromDefault) clearFacet;
+            final PropertyClearFacetForDomainEventFromDefault clearFacetImpl = (PropertyClearFacetForDomainEventFromDefault) clearFacet;
             assertThat(clearFacetImpl.value(), classEqualTo(PropertyDomainEvent.Default.class));
         }
     }
@@ -365,7 +367,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             final HiddenFacet hiddenFacet = facetedMethod.getFacet(HiddenFacet.class);
             Assert.assertNotNull(hiddenFacet);
             Assert.assertTrue(hiddenFacet instanceof HiddenFacetForPropertyAnnotation);
-            HiddenFacetForPropertyAnnotation hiddenFacetImpl = (HiddenFacetForPropertyAnnotation) hiddenFacet;
+            final HiddenFacetForPropertyAnnotation hiddenFacetImpl = (HiddenFacetForPropertyAnnotation) hiddenFacet;
             assertThat(hiddenFacetImpl.where(), is(Where.REFERENCES_PARENT));
             assertThat(hiddenFacetImpl.when(), is(When.ALWAYS));
 
@@ -405,7 +407,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             final DisabledFacet disabledFacet = facetedMethod.getFacet(DisabledFacet.class);
             Assert.assertNotNull(disabledFacet);
             Assert.assertTrue(disabledFacet instanceof DisabledFacetForPropertyAnnotation);
-            DisabledFacetForPropertyAnnotation disabledFacetImpl = (DisabledFacetForPropertyAnnotation) disabledFacet;
+            final DisabledFacetForPropertyAnnotation disabledFacetImpl = (DisabledFacetForPropertyAnnotation) disabledFacet;
             assertThat(disabledFacet.where(), is(Where.EVERYWHERE));
             assertThat(disabledFacet.when(), is(When.ALWAYS));
             assertThat(disabledFacetImpl.getReason(), is("you cannot edit the name property"));
@@ -487,8 +489,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             final MustSatisfySpecificationFacet mustSatisfySpecificationFacet = facetedMethod.getFacet(MustSatisfySpecificationFacet.class);
             Assert.assertNotNull(mustSatisfySpecificationFacet);
             Assert.assertTrue(mustSatisfySpecificationFacet instanceof MustSatisfySpecificationFacetForPropertyAnnotation);
-            MustSatisfySpecificationFacetForPropertyAnnotation mustSatisfySpecificationFacetImpl = (MustSatisfySpecificationFacetForPropertyAnnotation) mustSatisfySpecificationFacet;
-            List<Specification> specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
+            final MustSatisfySpecificationFacetForPropertyAnnotation mustSatisfySpecificationFacetImpl = (MustSatisfySpecificationFacetForPropertyAnnotation) mustSatisfySpecificationFacet;
+            final List<Specification> specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
             assertThat(specifications.size(), is(2));
 
             assertTrue(specifications.get(0) instanceof NotTooHot);

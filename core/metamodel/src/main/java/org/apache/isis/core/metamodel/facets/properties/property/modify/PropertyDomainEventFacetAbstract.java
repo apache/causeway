@@ -126,4 +126,11 @@ public abstract class PropertyDomainEventFacetAbstract
         return value();
     }
 
+    /**
+     * For testing.
+     */
+    public Class<? extends PropertyDomainEvent<?, ?>> getEventType() {
+        Class eventType = eventType();
+        return eventType;
+    }
 }
