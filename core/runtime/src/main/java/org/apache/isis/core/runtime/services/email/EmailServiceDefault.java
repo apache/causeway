@@ -2,19 +2,24 @@ package org.apache.isis.core.runtime.services.email;
 
 import java.util.List;
 import java.util.Properties;
+
+import javax.activation.DataSource;
 import javax.annotation.PostConstruct;
-import com.google.common.base.Strings;
+
 import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.mail.MultiPartEmail;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Strings;
 
 /**
  * A service that sends email notifications when specific events occur
@@ -103,11 +108,12 @@ public class EmailServiceDefault implements EmailService {
     //region > send
 
     @Override
-    public boolean send(final List<String> toList, final List<String> ccList, final List<String> bccList, final String subject, final String body) {
+    public boolean send(final List<String> toList, final List<String> ccList, final List<String> bccList, final String subject, final String body,
+                        final DataSource... attachments) {
 
         try {
 
-            final Email email = new HtmlEmail();
+            final HtmlEmail email = new HtmlEmail();
             email.setAuthenticator(new DefaultAuthenticator(senderEmailAddress, senderEmailPassword));
             email.setHostName(getSenderEmailHostName());
             email.setSmtpPort(senderEmailPort);
@@ -127,7 +133,13 @@ public class EmailServiceDefault implements EmailService {
             email.setFrom(senderEmailAddress);
 
             email.setSubject(subject);
-            email.setMsg(body);
+            email.setHtmlMsg(body);
+
+            if (attachments != null && attachments.length > 0) {
+                for (DataSource attachment : attachments) {
+                    email.attach(attachment, attachment.getName(), "");
+                }
+            }
 
             if(notEmpty(toList)) {
                 email.addTo(toList.toArray(new String[toList.size()]));
