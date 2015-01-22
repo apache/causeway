@@ -92,7 +92,7 @@ public @interface Command {
 
     
     /**
-     * @deprecated - use {@link org.apache.isis.applib.annotation.Action#commandDisabled()}.
+     * @deprecated - use {@link Action#command()} to specify if the action is handled as a command or not.
      */
     @Deprecated
     boolean disabled() default false;

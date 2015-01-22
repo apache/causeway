@@ -25,7 +25,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethod;
 import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
@@ -38,13 +37,13 @@ import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForC
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.staticmethod.DisabledFacetStaticMethodFacetFactory;
-import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractAlwaysEverywhere;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetOnStaticMethod;
 import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethod;
 import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
@@ -739,9 +738,8 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
+        final HiddenFacetOnStaticMethod facet = facetedMethod.getFacet(HiddenFacetOnStaticMethod.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof HiddenFacetAbstractAlwaysEverywhere);
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAlwaysHideMethod));
     }
@@ -755,7 +753,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        assertNull(facetedMethod.getFacet(HiddenFacet.class));
+        assertNull(facetedMethod.getFacet(HiddenFacetOnStaticMethod.class));
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(propertyAlwaysHideMethod));
     }

@@ -28,7 +28,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.value.Blob;
@@ -42,7 +41,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetFilters;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
@@ -281,9 +279,6 @@ public interface ObjectAction extends ObjectMember {
 
         private Predicates(){}
 
-        public static final Predicate<ObjectAction> VISIBLE_AT_LEAST_SOMETIMES =
-                org.apache.isis.applib.filter.Filters.asPredicate(Filters.VISIBLE_AT_LEAST_SOMETIMES);
-
         public static Predicate<ObjectAction> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target, final Where where) {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.dynamicallyVisible(session, target, where));
         }
@@ -322,18 +317,6 @@ public interface ObjectAction extends ObjectMember {
     public static final class Filters {
         
         private Filters(){}
-
-        /**
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-         */
-        @Deprecated
-        public static final Filter<ObjectAction> VISIBLE_AT_LEAST_SOMETIMES = new Filter<ObjectAction>() {
-            @Override
-            public boolean accept(final ObjectAction action) {
-                final HiddenFacet hiddenFacet = action.getFacet(HiddenFacet.class);
-                return hiddenFacet == null || hiddenFacet.when() != When.ALWAYS || hiddenFacet.where() != Where.ANYWHERE;
-            }
-        };
 
         /**
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}

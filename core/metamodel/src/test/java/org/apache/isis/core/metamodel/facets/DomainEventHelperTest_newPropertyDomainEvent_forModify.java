@@ -22,10 +22,9 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class InteractionHelper_newPropertyInteractionEvent_forClear {
+public class DomainEventHelperTest_newPropertyDomainEvent_forModify {
 
     public static class SomeDomainObject {}
     
@@ -42,10 +41,10 @@ public class InteractionHelper_newPropertyInteractionEvent_forClear {
         SomeDomainObject sdo = new SomeDomainObject();
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "someDateProperty");
         LocalDate oldValue = new LocalDate(2013,4,1);
-        LocalDate newValue = null;
+        LocalDate newValue = new LocalDate(2013,5,2);
         
         final PropertyDomainEvent<Object, Object> ev =
-                new InteractionHelper(null).newPropertyDomainEvent(PropertyDomainEvent.Default.class, identifier, sdo, oldValue, newValue);
+                new DomainEventHelper(null).newPropertyDomainEvent(PropertyDomainEvent.Default.class, identifier, sdo, oldValue, newValue);
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOldValue(), is((Object)oldValue));
@@ -59,14 +58,14 @@ public class InteractionHelper_newPropertyInteractionEvent_forClear {
         SomeDomainObject sdo = new SomeDomainObject();
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "someDateProperty");
         LocalDate oldValue = new LocalDate(2013,4,1);
-        LocalDate newValue = null;
+        LocalDate newValue = new LocalDate(2013,5,2);
         
         final PropertyDomainEvent<SomeDomainObject, LocalDate> ev =
-                new InteractionHelper(null).newPropertyDomainEvent(SomeDatePropertyChangedEvent.class, identifier, sdo, oldValue, newValue);
+                new DomainEventHelper(null).newPropertyDomainEvent(SomeDatePropertyChangedEvent.class, identifier, sdo, oldValue, newValue);
         assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOldValue(), is(oldValue));
-        assertThat(ev.getNewValue(), is(nullValue()));
+        assertThat(ev.getNewValue(), is(newValue));
     }
     
 }

@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValid
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
@@ -52,10 +51,10 @@ import org.apache.isis.core.metamodel.facets.members.disabled.forsession.Disable
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.staticmethod.DisabledFacetStaticMethodFacetFactory;
-import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetOnStaticMethod;
 import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
@@ -441,11 +440,9 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
+        final HiddenFacetOnStaticMethod facet = facetedMethod.getFacet(HiddenFacetOnStaticMethod.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof HiddenFacetAbstract);
-        final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
-        assertEquals(When.ALWAYS, hiddenFacetAbstract.when());
+        assertEquals(When.ALWAYS, facet.when());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(alwaysHideMethod));
     }
@@ -460,7 +457,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, actionMethod, methodRemover, facetedMethod));
 
-        assertNull(facetedMethod.getFacet(HiddenFacet.class));
+        assertNull(facetedMethod.getFacet(HiddenFacetOnStaticMethod.class));
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(alwaysHideMethod));
     }

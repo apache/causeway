@@ -17,54 +17,30 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.semantics;
+package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.actions.semantics.annotations.actionsemantics.ActionSemanticsFacetAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.semantics.fallback.ActionSemanticsFacetFallbackToNonIdempotentFactory;
-import org.apache.isis.core.metamodel.facets.actions.semantics.fallback.ActionSemanticsFacetFallbackToNonIdempotent;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFallbackToNonIdempotent;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
 public class ActionSemanticsFacetFallbackToNonIdempotentFactoryTest extends AbstractFacetFactoryTest {
 
-    private ActionSemanticsFacetFallbackToNonIdempotentFactory facetFactory;
+    private ActionAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ActionSemanticsFacetFallbackToNonIdempotentFactory();
+        facetFactory = new ActionAnnotationFacetFactory();
     }
 
     @Override
     protected void tearDown() throws Exception {
         facetFactory = null;
         super.tearDown();
-    }
-
-    public void testNoFallbackAppliedIfFacetAlreadyExistsPickedUp() {
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction() {
-            }
-        }
-        final Facet existing = new ActionSemanticsFacetAnnotation(ActionSemantics.Of.SAFE, facetedMethod);
-        facetedMethod.addFacet(existing);
-        
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
-        assertThat(facet, is(existing));
-
-        assertNoMethodsRemoved();
     }
 
     public void testNoAnnotationPickedUp() {
@@ -75,7 +51,7 @@ public class ActionSemanticsFacetFallbackToNonIdempotentFactoryTest extends Abst
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processSemantics(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
         assertNotNull(facet);

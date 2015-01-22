@@ -19,7 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.actions.publish;
 
+import java.util.List;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.PublishedAction;
+import org.apache.isis.applib.annotation.PublishingPayloadFactoryForAction;
+import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
@@ -30,8 +34,44 @@ public abstract class PublishedActionFacetAbstract extends SingleValueFacetAbstr
         return PublishedActionFacet.class;
     }
 
+    public PublishedActionFacetAbstract(final PublishingPayloadFactoryForAction payloadFactory, final FacetHolder holder) {
+        this(legacyPayloadFactoryFor(payloadFactory), holder);
+    }
+
     public PublishedActionFacetAbstract(final PublishedAction.PayloadFactory payloadFactory, final FacetHolder holder) {
         super(type(), payloadFactory, holder);
+    }
+
+    static PublishedAction.PayloadFactory legacyPayloadFactoryFor(final PublishingPayloadFactoryForAction publishingPayloadFactory) {
+        if(publishingPayloadFactory == null) {
+            return null;
+        }
+        if(publishingPayloadFactory instanceof PublishingPayloadFactoryForAction.Adapter) {
+            final PublishingPayloadFactoryForAction.Adapter adapter = (PublishingPayloadFactoryForAction.Adapter) publishingPayloadFactory;
+            return adapter.getPayloadFactory();
+        }
+        return new LegacyAdapter(publishingPayloadFactory);
+    }
+
+    public static class LegacyAdapter implements PublishedAction.PayloadFactory {
+
+        private final PublishingPayloadFactoryForAction payloadFactory;
+
+        LegacyAdapter(final PublishingPayloadFactoryForAction payloadFactory) {
+            this.payloadFactory = payloadFactory;
+        }
+
+        @Override
+        public EventPayload payloadFor(final Identifier actionIdentifier, final Object target, final List<Object> arguments, final Object result) {
+            return payloadFactory.payloadFor(actionIdentifier, target, arguments, result);
+        }
+
+        /**
+         * For testing only.
+         */
+        public PublishingPayloadFactoryForAction getPayloadFactory() {
+            return payloadFactory;
+        }
     }
 
 }

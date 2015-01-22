@@ -17,28 +17,34 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.action.prototype;
+package org.apache.isis.core.metamodel.facets.actions.action.semantics;
 
-import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.RestrictTo;
+import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
-import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 
-public class PrototypeFacetForActionAnnotation extends PrototypeFacetAbstract {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class ActionSemanticsFacetForActionSemanticsAnnotation extends ActionSemanticsFacetAbstract {
 
-    public static PrototypeFacet create(
-            final Action action,
+    public static ActionSemanticsFacet create(
+            final ActionSemantics actionSemantics,
             final FacetHolder holder) {
 
-        return action == null || action.restrictTo() == RestrictTo.NO_RESTRICTIONS
-                ? null
-                : new PrototypeFacetForActionAnnotation(holder);
+        if (actionSemantics == null) {
+            return null;
+        }
 
+        return new ActionSemanticsFacetForActionSemanticsAnnotation(actionSemantics.value(), holder);
     }
 
-    private PrototypeFacetForActionAnnotation(FacetHolder holder) {
-        super(holder);
+    public ActionSemanticsFacetForActionSemanticsAnnotation(Of of, final FacetHolder holder) {
+        super(of, holder);
     }
+
 
 }

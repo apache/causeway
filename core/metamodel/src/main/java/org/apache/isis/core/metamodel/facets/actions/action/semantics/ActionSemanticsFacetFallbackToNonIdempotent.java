@@ -17,24 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.semantics.annotations.actionsemantics;
+package org.apache.isis.core.metamodel.facets.actions.action.semantics;
 
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 
-public class ActionSemanticsFacetAnnotationFactory extends FacetFactoryAbstract {
+public class ActionSemanticsFacetFallbackToNonIdempotent extends ActionSemanticsFacetAbstract {
 
-    public ActionSemanticsFacetAnnotationFactory() {
-        super(FeatureType.ACTIONS_ONLY);
-    }
-
-    @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-
-        //
-        // now handled by ActionAnnotationFacetFactory
-        // because of the interdependency between action semantics and command reification.
-        //
+    public ActionSemanticsFacetFallbackToNonIdempotent(final FacetHolder holder) {
+        super(ActionSemantics.Of.NON_IDEMPOTENT, holder);
     }
 
 }

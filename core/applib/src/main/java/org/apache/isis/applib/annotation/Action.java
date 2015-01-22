@@ -173,13 +173,13 @@ public @interface Action {
 
 
     /**
-     * Which environments the action is available in.
+     * Whether the action is restricted to prototyping.
      *
      * <p>
      *     By default there are no restrictions, with the action being available in all environments.
      * </p>
      */
-    Environment[] restrictTo() default {Environment.DEVELOPMENT, Environment.PRODUCTION};
+    RestrictTo restrictTo() default RestrictTo.NO_RESTRICTIONS;
 
 
 }

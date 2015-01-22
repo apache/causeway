@@ -26,25 +26,25 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class InteractionHelper_newActionInteractionEvent {
+public class DomainEventHelperTest_newActionInteractionEvent {
 
     public static class SomeDomainObject {
-        public String foo(int x, String y) { return null; }
+        public String foo(final int x, final String y) { return null; }
     }
     
     public static class SomeDomainObjectFooInvokedEvent extends ActionDomainEvent<SomeDomainObject> {
         private static final long serialVersionUID = 1L;
-        public SomeDomainObjectFooInvokedEvent(SomeDomainObject source, Identifier identifier, Object... arguments) {
+        public SomeDomainObjectFooInvokedEvent(final SomeDomainObject source, final Identifier identifier, final Object... arguments) {
             super(source, identifier, arguments);
         }
     }
     
     @Test
     public void defaultEventType() throws Exception {
-        SomeDomainObject sdo = new SomeDomainObject();
-        Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
+        final SomeDomainObject sdo = new SomeDomainObject();
+        final Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
 
-        final ActionDomainEvent<Object> ev = new InteractionHelper(null).newActionDomainEvent(
+        final ActionDomainEvent<Object> ev = new DomainEventHelper(null).newActionDomainEvent(
                 ActionDomainEvent.Default.class, identifier, sdo, new Object[]{1, "bar"});
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
@@ -55,10 +55,10 @@ public class InteractionHelper_newActionInteractionEvent {
 
     @Test
     public void actionInvokedEventDefaultEventType() throws Exception {
-        SomeDomainObject sdo = new SomeDomainObject();
-        Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
+        final SomeDomainObject sdo = new SomeDomainObject();
+        final Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
 
-        final ActionDomainEvent<Object> ev = new InteractionHelper(null).newActionDomainEvent(
+        final ActionDomainEvent<Object> ev = new DomainEventHelper(null).newActionDomainEvent(
                 ActionInvokedEvent.Default.class, identifier, sdo, new Object[]{1, "bar"});
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
@@ -69,10 +69,10 @@ public class InteractionHelper_newActionInteractionEvent {
 
     @Test
     public void customEventType() throws Exception {
-        SomeDomainObject sdo = new SomeDomainObject();
-        Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
+        final SomeDomainObject sdo = new SomeDomainObject();
+        final Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
         
-        final ActionDomainEvent<SomeDomainObject> ev = new InteractionHelper(null).newActionDomainEvent(
+        final ActionDomainEvent<SomeDomainObject> ev = new DomainEventHelper(null).newActionDomainEvent(
                 SomeDomainObjectFooInvokedEvent.class, identifier, sdo, new Object[]{1, "bar"});
         assertThat((SomeDomainObject)ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));

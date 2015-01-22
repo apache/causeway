@@ -29,11 +29,11 @@ import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractI
 public class HiddenFacetOnMemberFromProperties extends HiddenFacetAbstractImpl {
 
     public HiddenFacetOnMemberFromProperties(final When when, Where where, final FacetHolder holder) {
-        super(when, where, holder);
+        super(HiddenFacetOnMemberFromProperties.class, when, where, holder);
     }
 
     public HiddenFacetOnMemberFromProperties(Properties properties, FacetHolder holder) {
-        super(hiddenWhenFrom(properties), hiddenWhereFrom(properties), holder);
+        super(HiddenFacetOnMemberFromProperties.class, hiddenWhenFrom(properties), hiddenWhereFrom(properties), holder);
     }
 
     private static When hiddenWhenFrom(Properties properties) {

@@ -46,7 +46,7 @@ public class HiddenFacetForCollectionAnnotation extends HiddenFacetAbstract {
     }
 
     private HiddenFacetForCollectionAnnotation(final Where where, final FacetHolder holder) {
-        super(When.ALWAYS, where, holder);
+        super(HiddenFacetForCollectionAnnotation.class, When.ALWAYS, where, holder);
     }
 
     @Override

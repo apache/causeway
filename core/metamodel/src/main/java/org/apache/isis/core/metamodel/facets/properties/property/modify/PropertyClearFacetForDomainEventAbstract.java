@@ -25,7 +25,7 @@ import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.InteractionHelper;
+import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
@@ -40,7 +40,7 @@ public abstract class PropertyClearFacetForDomainEventAbstract
         return PropertyClearFacet.class;
     }
 
-    private final InteractionHelper interactionHelper;
+    private final DomainEventHelper domainEventHelper;
 
     private final PropertyOrCollectionAccessorFacet getterFacet;
     private final PropertyClearFacet clearFacet;
@@ -57,7 +57,7 @@ public abstract class PropertyClearFacetForDomainEventAbstract
         this.getterFacet = getterFacet;
         this.clearFacet = clearFacet;
         this.propertyDomainEventFacet = propertyDomainEventFacet;
-        this.interactionHelper = new InteractionHelper(servicesInjector);
+        this.domainEventHelper = new DomainEventHelper(servicesInjector);
     }
 
     @Override
@@ -66,7 +66,7 @@ public abstract class PropertyClearFacetForDomainEventAbstract
             return;
         }
 
-        if(!interactionHelper.hasEventBusService()) {
+        if(!domainEventHelper.hasEventBusService()) {
             clearFacet.clearProperty(targetAdapter);
             return;
         }
@@ -78,7 +78,7 @@ public abstract class PropertyClearFacetForDomainEventAbstract
 
             // ... post the executing event
             final Object oldValue = getterFacet.getProperty(targetAdapter);
-            interactionHelper.postEventForProperty(
+            domainEventHelper.postEventForProperty(
                     value(), existingEvent, AbstractDomainEvent.Phase.EXECUTING,
                     getIdentified(), targetAdapter, oldValue, null);
 
@@ -94,7 +94,7 @@ public abstract class PropertyClearFacetForDomainEventAbstract
 
             // ... and post the event (reusing existing event if available)
             final PropertyDomainEvent<?, ?> event = propertyDomainEventFacet.currentInteraction.get();
-            interactionHelper.postEventForProperty(value(), verify(event), AbstractDomainEvent.Phase.EXECUTED, getIdentified(), targetAdapter, oldValue, actualNewValue);
+            domainEventHelper.postEventForProperty(value(), verify(event), AbstractDomainEvent.Phase.EXECUTED, getIdentified(), targetAdapter, oldValue, actualNewValue);
 
         } finally {
             // clean up

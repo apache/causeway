@@ -46,7 +46,7 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.Environment;
+import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.annotation.Optionality;
@@ -689,7 +689,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
     //region > openSourceCodeOnGithub (action)
     @Action(
             semantics = SemanticsOf.SAFE,
-            restrictTo = Environment.DEVELOPMENT
+            restrictTo = RestrictTo.PROTOTYPING
     )
     public URL openSourceCodeOnGithub() throws MalformedURLException {
         return new URL("https://github.com/apache/isis/tree/master/example/application/todoapp/dom/src/main/java/dom/todo/ToDoItem.java");
@@ -706,7 +706,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
 
     @Action(
             semantics = SemanticsOf.SAFE,
-            restrictTo = Environment.DEVELOPMENT
+            restrictTo = RestrictTo.PROTOTYPING
     )
     public void demoException(
             @ParameterLayout(named="Type")

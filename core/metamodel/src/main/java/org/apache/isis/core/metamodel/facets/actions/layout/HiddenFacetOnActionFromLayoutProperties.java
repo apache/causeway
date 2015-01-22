@@ -20,41 +20,20 @@
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.util.Properties;
-import com.google.common.base.Strings;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetFromLayoutPropertiesAbstract;
 
-public class HiddenFacetOnActionFromLayoutProperties extends HiddenFacetAbstract {
+public class HiddenFacetOnActionFromLayoutProperties extends HiddenFacetFromLayoutPropertiesAbstract {
 
     public static HiddenFacet create(Properties properties, FacetHolder holder) {
         final Where where = hidden(properties);
         return where != null && where != Where.NOT_SPECIFIED ? new HiddenFacetOnActionFromLayoutProperties(where, holder): null;
     }
 
-    private static Where hidden(Properties properties) {
-        if(properties == null) {
-            return null;
-        }
-        String hidden = Strings.emptyToNull(properties.getProperty("hidden"));
-        if(hidden == null) {
-            return null;
-        }
-        return Where.valueOf(hidden);
-    }
-
     private HiddenFacetOnActionFromLayoutProperties(Where where, FacetHolder holder) {
-        super(When.ALWAYS, where, holder);
+        super(where, holder);
     }
 
-    @Override
-    public String hiddenReason(final ObjectAdapter targetAdapter, Where whereContext) {
-        if(!where().includes(whereContext)) {
-            return null;
-        }
-        return "Hidden on " + where().getFriendlyName();
-    }
 }

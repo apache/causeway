@@ -17,30 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.semantics.annotations.actionsemantics;
+package org.apache.isis.core.metamodel.facets.actions.action.publishing;
 
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.PublishingPayloadFactoryForAction;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacetAbstract;
 
-public class ActionSemanticsFacetAnnotation extends ActionSemanticsFacetAbstract {
+public class PublishedActionFacetFromConfiguration extends PublishedActionFacetAbstract {
 
-    public static ActionSemanticsFacet create(
-            final ActionSemantics actionSemantics,
+    public PublishedActionFacetFromConfiguration(
+            final PublishingPayloadFactoryForAction publishingPayloadFactory,
             final FacetHolder holder) {
-
-        if (actionSemantics == null) {
-            return null;
-        }
-
-        return new ActionSemanticsFacetAnnotation(actionSemantics.value(), holder);
+        super(publishingPayloadFactory, holder);
     }
-
-    public ActionSemanticsFacetAnnotation(Of of, final FacetHolder holder) {
-        super(of, holder);
-    }
-
 
 }

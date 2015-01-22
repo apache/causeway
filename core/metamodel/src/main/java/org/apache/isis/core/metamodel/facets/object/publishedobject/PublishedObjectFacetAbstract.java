@@ -41,7 +41,10 @@ public abstract class PublishedObjectFacetAbstract extends SingleValueFacetAbstr
         this(legacyPayloadFactoryFor(publishingPayloadFactory), holder);
     }
 
-    protected static PublishedObject.PayloadFactory legacyPayloadFactoryFor(final PublishingPayloadFactoryForObject publishingPayloadFactory) {
+    static PublishedObject.PayloadFactory legacyPayloadFactoryFor(final PublishingPayloadFactoryForObject publishingPayloadFactory) {
+        if(publishingPayloadFactory == null) {
+            return null;
+        }
         if(publishingPayloadFactory instanceof PublishingPayloadFactoryForObject.Adapter) {
             final PublishingPayloadFactoryForObject.Adapter adapter = (PublishingPayloadFactoryForObject.Adapter) publishingPayloadFactory;
             return adapter.getPayloadFactory();
@@ -64,7 +67,6 @@ public abstract class PublishedObjectFacetAbstract extends SingleValueFacetAbstr
 
         /**
          * For testing only.
-         * @return
          */
         public PublishingPayloadFactoryForObject getPayloadFactory() {
             return payloadFactory;

@@ -17,23 +17,29 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.bulk.annotation;
+package org.apache.isis.core.metamodel.facets.actions.action.bulk;
 
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
+import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacetAbstract;
 
-public class BulkFacetAnnotationFactory extends FacetFactoryAbstract {
+public class BulkFacetForBulkAnnotation extends BulkFacetAbstract {
 
-    public BulkFacetAnnotationFactory() {
-        super(FeatureType.ACTIONS_ONLY);
+    public static BulkFacet create(
+            final Bulk annotation,
+            final FacetHolder holder) {
+
+        if (annotation == null) {
+            return null;
+        }
+
+        return new BulkFacetForBulkAnnotation(annotation.value(), holder);
     }
 
-    @Override
-    public void process(final ProcessMethodContext processMethodContext) {
-
-        //
-        // moved to ActionAnnotationFacetFactory
-        //
+    private BulkFacetForBulkAnnotation(Bulk.AppliesTo value, final FacetHolder holder) {
+        super(value, holder);
     }
+
 
 }

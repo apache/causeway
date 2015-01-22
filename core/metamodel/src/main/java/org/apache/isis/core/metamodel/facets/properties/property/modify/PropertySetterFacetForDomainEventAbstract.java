@@ -25,7 +25,7 @@ import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.InteractionHelper;
+import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
@@ -39,7 +39,7 @@ public abstract class PropertySetterFacetForDomainEventAbstract
         return PropertySetterFacet.class;
     }
 
-    private final InteractionHelper interactionHelper;
+    private final DomainEventHelper domainEventHelper;
 
     private final PropertyOrCollectionAccessorFacet getterFacet;
     private final PropertySetterFacet setterFacet;
@@ -56,7 +56,7 @@ public abstract class PropertySetterFacetForDomainEventAbstract
         this.getterFacet = getterFacet;
         this.setterFacet = setterFacet;
         this.propertyDomainEventFacet = propertyDomainEventFacet;
-        this.interactionHelper = new InteractionHelper(servicesInjector);
+        this.domainEventHelper = new DomainEventHelper(servicesInjector);
     }
 
     @Override
@@ -64,7 +64,7 @@ public abstract class PropertySetterFacetForDomainEventAbstract
         if(setterFacet == null) {
             return;
         }
-        if(!interactionHelper.hasEventBusService()) {
+        if(!domainEventHelper.hasEventBusService()) {
             setterFacet.setProperty(targetAdapter, newValueAdapter);
             return;
         }
@@ -78,7 +78,7 @@ public abstract class PropertySetterFacetForDomainEventAbstract
             final Object oldValue = getterFacet.getProperty(targetAdapter);
             final Object newValue = ObjectAdapter.Util.unwrap(newValueAdapter);
 
-            interactionHelper.postEventForProperty(
+            domainEventHelper.postEventForProperty(
                     value(), existingEvent, AbstractDomainEvent.Phase.EXECUTING,
                     getIdentified(), targetAdapter, oldValue, newValue);
 
@@ -93,7 +93,7 @@ public abstract class PropertySetterFacetForDomainEventAbstract
 
             // ... post the executed event
             final PropertyDomainEvent<?, ?> event = propertyDomainEventFacet.currentInteraction.get();
-            interactionHelper.postEventForProperty(value(), verify(event), AbstractDomainEvent.Phase.EXECUTED, getIdentified(), targetAdapter, oldValue, actualNewValue);
+            domainEventHelper.postEventForProperty(value(), verify(event), AbstractDomainEvent.Phase.EXECUTED, getIdentified(), targetAdapter, oldValue, actualNewValue);
 
         } finally {
             // clean up

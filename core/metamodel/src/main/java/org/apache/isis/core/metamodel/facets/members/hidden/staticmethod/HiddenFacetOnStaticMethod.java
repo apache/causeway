@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractA
 public class HiddenFacetOnStaticMethod extends HiddenFacetAbstractAlwaysEverywhere {
 
     public HiddenFacetOnStaticMethod(final FacetHolder holder) {
-        super(holder);
+        super(HiddenFacetOnStaticMethod.class, holder);
     }
 
 }

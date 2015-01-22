@@ -29,8 +29,10 @@ import org.apache.isis.applib.annotation.ActionInteraction;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Command;
+import org.apache.isis.applib.annotation.Idempotent;
 import org.apache.isis.applib.annotation.PostsActionInvokedEvent;
 import org.apache.isis.applib.annotation.PublishedAction;
+import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.applib.annotation.TypeOf;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
@@ -51,28 +53,32 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredF
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForCommandAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionInteractionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPostsActionInvokedEventAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFallbackToNonIdempotent;
 import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
-import org.apache.isis.core.metamodel.facets.actions.bulk.annotation.BulkFacetAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
-import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
-import org.apache.isis.core.metamodel.facets.actions.publish.annotation.PublishedActionFacetAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-import org.apache.isis.core.metamodel.facets.actions.semantics.annotations.actionsemantics.ActionSemanticsFacetAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFromIdempotentAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFromQueryOnlyAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetOnActionForTypeOfAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForBulkAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
+import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForPublishedActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionSemanticsAnnotation;
+import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -198,7 +204,8 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         final Action action = Annotations.getAnnotation(method, Action.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacet(HiddenFacetForActionAnnotation.create(action, holder));
+        HiddenFacet facet = HiddenFacetForActionAnnotation.create(action, holder);
+        FacetUtil.addFacet(facet);
     }
 
     void processRestrictTo(final ProcessMethodContext processMethodContext) {
@@ -211,22 +218,37 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
     void processSemantics(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
-        final Action action = Annotations.getAnnotation(method, Action.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         ActionSemanticsFacet facet;
 
-        //
-        // check for the deprecated @ActionSemantics first, because the
-        // @Action(semantics=...) has a default of NON_IDEMPOTENT that would otherwise be used
-        //
-        final ActionSemantics actionSemantics = Annotations.getAnnotation(method, ActionSemantics.class);
-        facet = ActionSemanticsFacetAnnotation.create(actionSemantics, holder);
+        // check for the deprecated @QueryOnly...
+        final QueryOnly queryOnly = Annotations.getAnnotation(processMethodContext.getMethod(), QueryOnly.class);
+        facet = ActionSemanticsFacetFromQueryOnlyAnnotation.create(queryOnly, holder);
+
+        // else check for the deprecated @Idempotent...
+        if(facet == null) {
+            final Idempotent idempotent = Annotations.getAnnotation(processMethodContext.getMethod(), Idempotent.class);
+            facet = ActionSemanticsFacetFromIdempotentAnnotation.create(idempotent, holder);
+        }
+
+        // else check for the deprecated @ActionSemantics ...
+        if(facet == null) {
+            final ActionSemantics actionSemantics = Annotations.getAnnotation(method, ActionSemantics.class);
+            facet = ActionSemanticsFacetForActionSemanticsAnnotation.create(actionSemantics, holder);
+        }
 
         // else check for @Action(semantics=...)
         if(facet == null) {
+            final Action action = Annotations.getAnnotation(method, Action.class);
             facet = ActionSemanticsFacetForActionAnnotation.create(action, holder);
         }
+
+        // else fallback
+        if(facet == null) {
+            facet = new ActionSemanticsFacetFallbackToNonIdempotent(holder);
+        }
+
         FacetUtil.addFacet(facet);
     }
 
@@ -235,18 +257,18 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         final Action action = Annotations.getAnnotation(method, Action.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        BulkFacet bulkFacet;
+        BulkFacet facet;
 
         // check for the deprecated @Bulk annotation first
         final Bulk annotation = Annotations.getAnnotation(method, Bulk.class);
-        bulkFacet = BulkFacetAnnotation.create(annotation, holder);
+        facet = BulkFacetForBulkAnnotation.create(annotation, holder);
 
         // else check for @Action(invokeOn=...)
-        if(bulkFacet == null) {
-            bulkFacet = BulkFacetForActionAnnotation.create(action, holder);
+        if(facet == null) {
+            facet = BulkFacetForActionAnnotation.create(action, holder);
         }
 
-        FacetUtil.addFacet(bulkFacet);
+        FacetUtil.addFacet(facet);
     }
 
     void processCommand(final ProcessMethodContext processMethodContext) {
@@ -297,20 +319,19 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
             return;
         }
 
-        PublishedActionFacet publishedActionFacet;
+        PublishedActionFacet facet;
 
         // check for deprecated @PublishedAction annotation first
         final PublishedAction annotation = Annotations.getAnnotation(processMethodContext.getMethod(), PublishedAction.class);
-        publishedActionFacet = PublishedActionFacetAnnotation.create(annotation, holder);
+        facet = PublishedActionFacetForPublishedActionAnnotation.create(annotation, holder);
 
         // else check for @Action(publishing=...)
-        if(publishedActionFacet == null) {
-            publishedActionFacet = PublishedActionFacetForActionAnnotation.create(action, configuration, holder);
+        if(facet == null) {
+            facet = PublishedActionFacetForActionAnnotation.create(action, configuration, holder);
         }
 
-        FacetUtil.addFacet(publishedActionFacet);
+        FacetUtil.addFacet(facet);
     }
-
 
     void processTypeOf(final ProcessMethodContext processMethodContext) {
 

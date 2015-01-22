@@ -26,7 +26,7 @@ import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.InteractionHelper;
+import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
@@ -42,7 +42,7 @@ public abstract class ActionDomainEventFacetAbstract
         return ActionDomainEventFacet.class;
     }
 
-    private final InteractionHelper interactionHelper;
+    private final DomainEventHelper domainEventHelper;
 
     /**
      * Pass event from validate to executing phases.
@@ -60,13 +60,13 @@ public abstract class ActionDomainEventFacetAbstract
             final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader) {
         super(type(), holder, eventType, specificationLoader);
-        interactionHelper = new InteractionHelper(servicesInjector);
+        domainEventHelper = new DomainEventHelper(servicesInjector);
     }
 
 
     @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
-        if(!interactionHelper.hasEventBusService()) {
+        if(!domainEventHelper.hasEventBusService()) {
             return null;
         }
 
@@ -74,7 +74,7 @@ public abstract class ActionDomainEventFacetAbstract
         currentInteraction.set(null);
 
         final ActionDomainEvent<?> event =
-                interactionHelper.postEventForAction(
+                domainEventHelper.postEventForAction(
                         eventType(), null, null, AbstractDomainEvent.Phase.HIDE,
                         getIdentified(), ic.getTarget(), null);
         if (event != null && event.isHidden()) {
@@ -85,7 +85,7 @@ public abstract class ActionDomainEventFacetAbstract
 
     @Override
     public String disables(UsabilityContext<? extends UsabilityEvent> ic) {
-        if(!interactionHelper.hasEventBusService()) {
+        if(!domainEventHelper.hasEventBusService()) {
             return null;
         }
 
@@ -93,7 +93,7 @@ public abstract class ActionDomainEventFacetAbstract
         currentInteraction.set(null);
 
         final ActionDomainEvent<?> event =
-                interactionHelper.postEventForAction(
+                domainEventHelper.postEventForAction(
                         eventType(), null, null, AbstractDomainEvent.Phase.DISABLE,
                         getIdentified(), ic.getTarget(), null);
         if (event != null && event.isDisabled()) {
@@ -104,7 +104,7 @@ public abstract class ActionDomainEventFacetAbstract
 
     @Override
     public String invalidates(ValidityContext<? extends ValidityEvent> ic) {
-        if(!interactionHelper.hasEventBusService()) {
+        if(!domainEventHelper.hasEventBusService()) {
             return null;
         }
 
@@ -113,7 +113,7 @@ public abstract class ActionDomainEventFacetAbstract
 
         final ActionInvocationContext aic = (ActionInvocationContext) ic;
         final ActionDomainEvent<?> event =
-                interactionHelper.postEventForAction(
+                domainEventHelper.postEventForAction(
                         eventType(), null, null, AbstractDomainEvent.Phase.VALIDATE,
                         getIdentified(), ic.getTarget(), aic.getArgs());
         if (event != null && event.isInvalid()) {

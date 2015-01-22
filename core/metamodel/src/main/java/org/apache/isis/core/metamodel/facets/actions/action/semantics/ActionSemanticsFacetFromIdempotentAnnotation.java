@@ -17,15 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.semantics.annotations.queryonly;
+package org.apache.isis.core.metamodel.facets.actions.action.semantics;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.Idempotent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 
-public class QueryOnlyFacetAnnotation extends ActionSemanticsFacetAbstract {
+public class ActionSemanticsFacetFromIdempotentAnnotation extends ActionSemanticsFacetAbstract {
 
-    public QueryOnlyFacetAnnotation(final FacetHolder holder) {
-        super(ActionSemantics.Of.SAFE, holder);
+    private ActionSemanticsFacetFromIdempotentAnnotation(final FacetHolder holder) {
+        super(ActionSemantics.Of.IDEMPOTENT, holder);
     }
+
+    public static ActionSemanticsFacet create(final Idempotent idempotent, final FacetHolder holder) {
+        if (idempotent == null) {
+            return null;
+        }
+        return new ActionSemanticsFacetFromIdempotentAnnotation(holder);
+    }
+
 }

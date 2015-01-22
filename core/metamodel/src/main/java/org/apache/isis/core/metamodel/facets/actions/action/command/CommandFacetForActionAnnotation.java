@@ -29,8 +29,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
-import org.apache.isis.core.metamodel.facets.actions.command.configuration.ActionConfiguration;
-import org.apache.isis.core.metamodel.facets.actions.command.configuration.CommandFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
 public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
@@ -49,26 +47,22 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
 
         switch (command) {
             case AS_CONFIGURED:
-                final ActionSemanticsFacet actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
-                if(actionSemanticsFacet == null) {
-                    throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
-                }
-                if(holder.containsDoOpFacet(CommandFacet.class)) {
-                    // do not replace
-                    return null;
-                }
-                final ActionConfiguration setting = ActionConfiguration.parse(configuration);
+                final CommandActionsConfiguration setting = CommandActionsConfiguration.parse(configuration);
                 switch (setting) {
                     case NONE:
                         return null;
                     case IGNORE_SAFE:
+                        final ActionSemanticsFacet actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
+                        if(actionSemanticsFacet == null) {
+                            throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
+                        }
                         if(actionSemanticsFacet.value() == ActionSemantics.Of.SAFE) {
                             return  null;
                         }
                         // else fall through
                     default:
                         return action != null
-                                ? new CommandFacetForActionAnnotation(persistence, executeIn, Enablement.ENABLED, holder)
+                                ? new CommandFacetForActionAnnotationAsConfigured(persistence, executeIn, Enablement.ENABLED, holder)
                                 : CommandFacetFromConfiguration.create(holder);
                 }
             case DISABLED:
@@ -81,7 +75,7 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
     }
 
 
-    private CommandFacetForActionAnnotation(
+    CommandFacetForActionAnnotation(
             final Persistence persistence,
             final ExecuteIn executeIn,
             final Enablement enablement,

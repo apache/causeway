@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.semantics;
+package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
 
@@ -25,18 +25,18 @@ import org.apache.isis.applib.annotation.Idempotent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.actions.semantics.annotations.idempotent.IdempotentFacetAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.actions.semantics.annotations.idempotent.IdempotentFacetAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFromIdempotentAnnotation;
 
 public class IdempotentFacetAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
-    private IdempotentFacetAnnotationFactory facetFactory;
+    private ActionAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new IdempotentFacetAnnotationFactory();
+        facetFactory = new ActionAnnotationFacetFactory();
     }
 
     @Override
@@ -53,29 +53,12 @@ public class IdempotentFacetAnnotationFactoryTest extends AbstractFacetFactoryTe
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processSemantics(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof IdempotentFacetAnnotation);
+        assertTrue(facet instanceof ActionSemanticsFacetFromIdempotentAnnotation);
 
         assertNoMethodsRemoved();
     }
-
-    public void testNoAnnotationPickedUp() {
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction() {
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
-        assertNull(facet);
-
-        assertNoMethodsRemoved();
-    }
-
 }

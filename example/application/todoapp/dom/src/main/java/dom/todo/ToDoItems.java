@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.Environment;
+import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
@@ -179,7 +179,7 @@ public class ToDoItems {
     )
     @Action(
             semantics = SemanticsOf.SAFE,
-            restrictTo = Environment.DEVELOPMENT
+            restrictTo = RestrictTo.PROTOTYPING
     )
     @MemberOrder(sequence = "50")
     public List<ToDoItem> allToDos() {

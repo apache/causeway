@@ -25,7 +25,7 @@ import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.InteractionHelper;
+import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public abstract class CollectionDomainEventFacetAbstract extends SingleClassValueFacetAbstract implements CollectionDomainEventFacet {
 
-    private final InteractionHelper interactionHelper;
+    private final DomainEventHelper domainEventHelper;
 
     final static ThreadLocal<CollectionDomainEvent<?,?>> currentInteraction = new ThreadLocal<>();
 
@@ -46,12 +46,12 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
             final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader) {
         super(CollectionDomainEventFacet.class, holder, eventType, specificationLoader);
-        interactionHelper = new InteractionHelper(servicesInjector);
+        domainEventHelper = new DomainEventHelper(servicesInjector);
     }
 
     @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
-        if(!interactionHelper.hasEventBusService()) {
+        if(!domainEventHelper.hasEventBusService()) {
             return null;
         }
 
@@ -59,7 +59,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
         currentInteraction.set(null);
 
         final CollectionDomainEvent<?, ?> event =
-                interactionHelper.postEventForCollection(
+                domainEventHelper.postEventForCollection(
                         eventType(), null, AbstractDomainEvent.Phase.HIDE, getIdentified(), ic.getTarget(), CollectionDomainEvent.Of.ACCESS, null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
@@ -69,7 +69,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
 
     @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
-        if(!interactionHelper.hasEventBusService()) {
+        if(!domainEventHelper.hasEventBusService()) {
             return null;
         }
 
@@ -77,7 +77,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
         currentInteraction.set(null);
 
         final CollectionDomainEvent<?, ?> event =
-                interactionHelper.postEventForCollection(
+                domainEventHelper.postEventForCollection(
                     eventType(), null, AbstractDomainEvent.Phase.DISABLE, getIdentified(), ic.getTarget(), CollectionDomainEvent.Of.ACCESS, null);
         if (event != null && event.isDisabled()) {
             return event.getDisabledReason();
@@ -87,7 +87,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
 
     @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> ic) {
-        if(!interactionHelper.hasEventBusService()) {
+        if(!domainEventHelper.hasEventBusService()) {
             return null;
         }
 
@@ -98,7 +98,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
         final Object proposed = catc.getProposed().getObject();
 
         final CollectionDomainEvent<?, ?> event =
-                interactionHelper.postEventForCollection(
+                domainEventHelper.postEventForCollection(
                         eventType(), null, AbstractDomainEvent.Phase.VALIDATE, getIdentified(), ic.getTarget(), CollectionDomainEvent.Of.ADD_TO, proposed);
         if (event != null && event.isInvalid()) {
             return event.getInvalidityReason();

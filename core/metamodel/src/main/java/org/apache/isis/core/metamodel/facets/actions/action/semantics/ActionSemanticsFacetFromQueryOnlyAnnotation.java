@@ -17,25 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.command.configuration;
+package org.apache.isis.core.metamodel.facets.actions.action.semantics;
 
-import org.apache.isis.applib.annotation.Command.ExecuteIn;
-import org.apache.isis.applib.annotation.Command.Persistence;
+import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 
-public class CommandFacetFromConfiguration extends CommandFacetAbstract {
+public class ActionSemanticsFacetFromQueryOnlyAnnotation extends ActionSemanticsFacetAbstract {
 
-    public static CommandFacet create(final FacetHolder holder) {
-        return new CommandFacetFromConfiguration(Persistence.PERSISTED, ExecuteIn.FOREGROUND, holder);
+    private ActionSemanticsFacetFromQueryOnlyAnnotation(final FacetHolder holder) {
+        super(ActionSemantics.Of.SAFE, holder);
     }
 
-    private CommandFacetFromConfiguration(
-            final Persistence persistence, 
-            final ExecuteIn executeIn,
-            final FacetHolder holder) {
-        super(persistence, executeIn, Enablement.ENABLED, holder);
+    public static ActionSemanticsFacet create(final QueryOnly queryOnly, final FacetHolder holder) {
+        if (queryOnly == null) {
+            return null;
+        }
+        return new ActionSemanticsFacetFromQueryOnlyAnnotation(holder);
     }
-
 }

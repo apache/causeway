@@ -25,7 +25,7 @@ import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.InteractionHelper;
+import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -36,7 +36,7 @@ public abstract class CollectionAddToFacetForDomainEventFromAbstract
     extends SingleValueFacetAbstract<Class<? extends CollectionDomainEvent<?,?>>>
     implements CollectionAddToFacet {
 
-    private final InteractionHelper interactionHelper;
+    private final DomainEventHelper domainEventHelper;
 
     public static Class<? extends Facet> type() {
 	    return CollectionAddToFacet.class;
@@ -57,7 +57,7 @@ public abstract class CollectionAddToFacetForDomainEventFromAbstract
         this.getterFacet = getterFacet;
         this.collectionAddToFacet = collectionAddToFacet;
         this.collectionDomainEventFacet = collectionDomainEventFacet;
-        this.interactionHelper = new InteractionHelper(servicesInjector);
+        this.domainEventHelper = new DomainEventHelper(servicesInjector);
     }
 
     @Override
@@ -67,7 +67,7 @@ public abstract class CollectionAddToFacetForDomainEventFromAbstract
         if (this.collectionAddToFacet == null) {
             return;
         }
-        if(!interactionHelper.hasEventBusService()) {
+        if(!domainEventHelper.hasEventBusService()) {
             collectionAddToFacet.add(targetAdapter, referencedObjectAdapter);
             return;
         }
@@ -94,7 +94,7 @@ public abstract class CollectionAddToFacetForDomainEventFromAbstract
             final CollectionDomainEvent<?, ?> existingEvent = collectionDomainEventFacet.currentInteraction.get();
 
             // ... post the executing event
-            final CollectionDomainEvent<?, ?> event = interactionHelper.postEventForCollection(
+            final CollectionDomainEvent<?, ?> event = domainEventHelper.postEventForCollection(
                     value(), existingEvent, AbstractDomainEvent.Phase.EXECUTING,
                     getIdentified(), targetAdapter, CollectionDomainEvent.Of.ADD_TO, referencedObject);
 
@@ -102,7 +102,7 @@ public abstract class CollectionAddToFacetForDomainEventFromAbstract
             collectionAddToFacet.add(targetAdapter, referencedObjectAdapter);
 
             // ... post the executed event
-            interactionHelper.postEventForCollection(
+            domainEventHelper.postEventForCollection(
                     value(), verify(event), AbstractDomainEvent.Phase.EXECUTED,
                     getIdentified(), targetAdapter, CollectionDomainEvent.Of.ADD_TO, referencedObject);
 

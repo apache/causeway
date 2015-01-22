@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractI
 public class HiddenFacetOnTypeAnnotation extends HiddenFacetAbstractImpl {
 
     public HiddenFacetOnTypeAnnotation(final When when, final FacetHolder holder) {
-        super(when, Where.ANYWHERE, holder);
+        super(HiddenFacetOnTypeAnnotation.class, when, Where.ANYWHERE, holder);
     }
 
 }

@@ -25,7 +25,7 @@ import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.InteractionHelper;
+import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -44,7 +44,7 @@ public abstract class CollectionRemoveFromFacetForDomainEventFromAbstract
     private final CollectionRemoveFromFacet collectionRemoveFromFacet;
     private final CollectionDomainEventFacetAbstract collectionDomainEventFacet;
 
-    private final InteractionHelper interactionHelper;
+    private final DomainEventHelper domainEventHelper;
 
     public CollectionRemoveFromFacetForDomainEventFromAbstract(
             final Class<? extends CollectionDomainEvent<?, ?>> eventType,
@@ -57,7 +57,7 @@ public abstract class CollectionRemoveFromFacetForDomainEventFromAbstract
         this.getterFacet = getterFacet;
         this.collectionRemoveFromFacet = collectionRemoveFromFacet;
         this.collectionDomainEventFacet = collectionDomainEventFacet;
-        this.interactionHelper = new InteractionHelper(servicesInjector);
+        this.domainEventHelper = new DomainEventHelper(servicesInjector);
     }
 
     @Override
@@ -66,7 +66,7 @@ public abstract class CollectionRemoveFromFacetForDomainEventFromAbstract
         if (this.collectionRemoveFromFacet == null) {
             return;
         }
-        if(!interactionHelper.hasEventBusService()) {
+        if(!domainEventHelper.hasEventBusService()) {
             collectionRemoveFromFacet.remove(targetAdapter,
                     referencedObjectAdapter);
             return;
@@ -92,7 +92,7 @@ public abstract class CollectionRemoveFromFacetForDomainEventFromAbstract
             final CollectionDomainEvent<?, ?> existingEvent = collectionDomainEventFacet.currentInteraction.get();
 
             // ... post the executing event
-            final CollectionDomainEvent<?, ?> event = interactionHelper.postEventForCollection(
+            final CollectionDomainEvent<?, ?> event = domainEventHelper.postEventForCollection(
                     value(), existingEvent, AbstractDomainEvent.Phase.EXECUTING,
                     getIdentified(), targetAdapter, CollectionDomainEvent.Of.REMOVE_FROM, referencedObject);
 
@@ -100,7 +100,7 @@ public abstract class CollectionRemoveFromFacetForDomainEventFromAbstract
             collectionRemoveFromFacet.remove(targetAdapter, referencedObjectAdapter);
 
             // ... and post the executed event
-            interactionHelper.postEventForCollection(
+            domainEventHelper.postEventForCollection(
                     value(), verify(event), AbstractDomainEvent.Phase.EXECUTED,
                     getIdentified(), targetAdapter, CollectionDomainEvent.Of.REMOVE_FROM, referencedObject);
 

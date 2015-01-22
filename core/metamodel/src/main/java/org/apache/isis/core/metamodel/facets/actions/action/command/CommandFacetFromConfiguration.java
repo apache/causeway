@@ -17,29 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.bulk.annotation;
+package org.apache.isis.core.metamodel.facets.actions.action.command;
 
-import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.applib.annotation.Command.ExecuteIn;
+import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
-import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
+import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
 
-public class BulkFacetAnnotation extends BulkFacetAbstract {
+public class CommandFacetFromConfiguration extends CommandFacetAbstract {
 
-    public static BulkFacet create(
-            final Bulk annotation,
+    public static CommandFacet create(final FacetHolder holder) {
+        return new CommandFacetFromConfiguration(Persistence.PERSISTED, ExecuteIn.FOREGROUND, holder);
+    }
+
+    private CommandFacetFromConfiguration(
+            final Persistence persistence, 
+            final ExecuteIn executeIn,
             final FacetHolder holder) {
-
-        if (annotation == null) {
-            return null;
-        }
-
-        return new BulkFacetAnnotation(annotation.value(), holder);
+        super(persistence, executeIn, Enablement.ENABLED, holder);
     }
-
-    private BulkFacetAnnotation(Bulk.AppliesTo value, final FacetHolder holder) {
-        super(value, holder);
-    }
-
 
 }

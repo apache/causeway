@@ -23,44 +23,48 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
-import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetViaClearMethod;
-import org.apache.isis.core.metamodel.facets.collections.modify.*;
-import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethod;
-import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.disabled.staticmethod.DisabledFacetStaticMethodFacetFactory;
-import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethod;
-import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor;
+import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetViaAccessor;
+import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetViaClearMethod;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacetViaAccessor;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToRemoveFromAndValidateFacetFactory;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacetViaAccessor;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.collections.modify.TypeOfFacetInferredFromSupportingMethods;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacet;
+import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethod;
+import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractAlwaysEverywhere;
-import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.disabled.staticmethod.DisabledFacetStaticMethodFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractAlwaysEverywhere;
+import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetOnStaticMethod;
+import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethod;
+import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
+import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 
 public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -663,11 +667,9 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, collectionAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
+        final HiddenFacetOnStaticMethod facet = facetedMethod.getFacet(HiddenFacetOnStaticMethod.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof HiddenFacetAbstractAlwaysEverywhere);
-        final HiddenFacetAbstract hiddenFacetAlways = (HiddenFacetAbstractAlwaysEverywhere) facet;
-        assertEquals(When.ALWAYS, hiddenFacetAlways.when());
+        assertEquals(When.ALWAYS, facet.when());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(alwaysHideMethod));
     }
@@ -681,7 +683,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, collectionAccessorMethod, methodRemover, facetedMethod));
 
-        assertNull(facetedMethod.getFacet(HiddenFacet.class));
+        assertNull(facetedMethod.getFacet(HiddenFacetOnStaticMethod.class));
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(alwaysHideMethod));
     }

@@ -16,19 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.annotation;
 
-public enum Environment {
-    DEVELOPMENT,
-    PRODUCTION;
+package org.apache.isis.core.metamodel.facets.actions.action.publishing;
 
-    public static boolean hasDevelopmentOnly(final Environment[] environments) {
+import org.apache.isis.applib.annotation.PublishingPayloadFactoryForAction;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-        if (environments == null) {
-            return false;
-        }
+public class PublishedActionFacetForActionAnnotationAsConfigured extends PublishedActionFacetForActionAnnotation {
 
-        return environments.length == 1 && environments[0] == DEVELOPMENT;
-
+    public PublishedActionFacetForActionAnnotationAsConfigured(
+            final PublishingPayloadFactoryForAction publishingPayloadFactory,
+            final FacetHolder holder) {
+        super(publishingPayloadFactory, holder);
     }
+
 }

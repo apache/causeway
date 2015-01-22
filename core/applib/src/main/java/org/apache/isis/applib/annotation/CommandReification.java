@@ -29,7 +29,7 @@ package org.apache.isis.applib.annotation;
  */
 public enum CommandReification {
     /**
-     * Whether the action should be handled as a command is per the default editing policy configured in <tt>isis.properties</tt>.
+     * Whether the action should be handled as a command is per the default command configured in <tt>isis.properties</tt>.
      *
      * <p>
      *     If no command policy is configured, then the action is <i>not</i> treated as a command.
@@ -37,15 +37,11 @@ public enum CommandReification {
      */
     AS_CONFIGURED,
     /**
-     * Audit changes to this object.
+     * Handle the action as a command, irrespective of any configuration settings.
      */
     ENABLED,
     /**
-     * Do not allow the properties to be edited, or the collections to be added to/removed from.
-     *
-     * <p>
-     *     Corresponds to the {@link Immutable} annotation).
-     * </p>
+     * Do not handle the action as a command, irrespective of any configuration settings.
      */
     DISABLED
 }

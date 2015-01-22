@@ -26,7 +26,7 @@ import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.InteractionHelper;
+import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 public abstract class PropertyDomainEventFacetAbstract
         extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
 
-    private final InteractionHelper interactionHelper;
+    private final DomainEventHelper domainEventHelper;
 
     final static ThreadLocal<PropertyDomainEvent<?,?>> currentInteraction = new ThreadLocal<PropertyDomainEvent<?,?>>();
 
@@ -53,12 +53,12 @@ public abstract class PropertyDomainEventFacetAbstract
             final SpecificationLoader specificationLoader) {
         super(PropertyDomainEventFacet.class, holder, eventType, specificationLoader);
         this.getterFacet = getterFacet;
-        interactionHelper = new InteractionHelper(servicesInjector);
+        domainEventHelper = new DomainEventHelper(servicesInjector);
     }
 
     @Override
     public String hides(VisibilityContext<? extends VisibilityEvent> ic) {
-        if(!interactionHelper.hasEventBusService()) {
+        if(!domainEventHelper.hasEventBusService()) {
             return null;
         }
 
@@ -66,7 +66,7 @@ public abstract class PropertyDomainEventFacetAbstract
         currentInteraction.set(null);
 
         final PropertyDomainEvent<?, ?> event =
-                interactionHelper.postEventForProperty(
+                domainEventHelper.postEventForProperty(
                         eventType(), null, AbstractDomainEvent.Phase.HIDE, getIdentified(), ic.getTarget(), null, null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
@@ -76,7 +76,7 @@ public abstract class PropertyDomainEventFacetAbstract
 
     @Override
     public String disables(UsabilityContext<? extends UsabilityEvent> ic) {
-        if(!interactionHelper.hasEventBusService()) {
+        if(!domainEventHelper.hasEventBusService()) {
             return null;
         }
 
@@ -84,7 +84,7 @@ public abstract class PropertyDomainEventFacetAbstract
         currentInteraction.set(null);
 
         final PropertyDomainEvent<?, ?> event =
-                interactionHelper.postEventForProperty(
+                domainEventHelper.postEventForProperty(
                     eventType(), null, AbstractDomainEvent.Phase.DISABLE, getIdentified(), ic.getTarget(), null, null);
         if (event != null && event.isDisabled()) {
             return event.getDisabledReason();
@@ -94,7 +94,7 @@ public abstract class PropertyDomainEventFacetAbstract
 
     @Override
     public String invalidates(ValidityContext<? extends ValidityEvent> ic) {
-        if(!interactionHelper.hasEventBusService()) {
+        if(!domainEventHelper.hasEventBusService()) {
             return null;
         }
 
@@ -105,7 +105,7 @@ public abstract class PropertyDomainEventFacetAbstract
         final Object proposedValue = proposedFrom(ic);
 
         final PropertyDomainEvent<?, ?> event =
-                interactionHelper.postEventForProperty(
+                domainEventHelper.postEventForProperty(
                         eventType(), null, AbstractDomainEvent.Phase.VALIDATE, getIdentified(), ic.getTarget(), oldValue, proposedValue);
         if (event != null && event.isInvalid()) {
             return event.getInvalidityReason();

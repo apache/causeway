@@ -16,17 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.annotation;
 
-package org.apache.isis.core.metamodel.facets.actions.semantics.fallback;
-
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
-
-public class ActionSemanticsFacetFallbackToNonIdempotent extends ActionSemanticsFacetAbstract {
-
-    public ActionSemanticsFacetFallbackToNonIdempotent(final FacetHolder holder) {
-        super(ActionSemantics.Of.NON_IDEMPOTENT, holder);
-    }
-
+/**
+ * Whether an action is restricted to development mode, or available in all.
+ */
+public enum RestrictTo {
+    PROTOTYPING,
+    NO_RESTRICTIONS;
 }

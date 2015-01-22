@@ -19,17 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.publishing;
 
-import java.util.List;
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.Publishing;
 import org.apache.isis.applib.annotation.PublishingPayloadFactoryForAction;
-import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
@@ -41,20 +36,7 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
             final IsisConfiguration configuration,
             final FacetHolder holder) {
 
-        if (action == null) {
-            return null;
-        }
-
-        final ActionSemanticsFacet actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
-        if(actionSemanticsFacet == null) {
-            throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
-        }
-        if(holder.containsDoOpFacet(CommandFacet.class)) {
-            // do not replace
-            return null;
-        }
-
-        final Publishing publishing = action.publishing();
+        final Publishing publishing = action != null ? action.publishing() : Publishing.AS_CONFIGURED;
 
         switch (publishing) {
             case AS_CONFIGURED:
@@ -64,13 +46,20 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
                     case NONE:
                         return null;
                     case IGNORE_SAFE:
+                        final ActionSemanticsFacet actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
+                        if(actionSemanticsFacet == null) {
+                            throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
+                        }
+
                         if(actionSemanticsFacet.value() == ActionSemantics.Of.SAFE) {
                             return  null;
                         }
                         // else fall through
                     default:
-                        return new PublishedActionFacetForActionAnnotation(
-                                newPayloadFactory(action), holder);
+                        final PublishingPayloadFactoryForAction publishingPayloadFactory = newPayloadFactory(action);
+                        return action != null
+                                ? new PublishedActionFacetForActionAnnotation(publishingPayloadFactory, holder)
+                                : new PublishedActionFacetFromConfiguration(publishingPayloadFactory, holder);
                 }
             case DISABLED:
                 return null;
@@ -81,7 +70,13 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
         return null;
     }
 
+    /**
+     * @return null means that the default payload factories will be used; this is handled within IsisTransaction.
+     */
     private static PublishingPayloadFactoryForAction newPayloadFactory(final Action action) {
+        if(action == null) {
+            return null;
+        }
         final Class<? extends PublishingPayloadFactoryForAction> payloadFactoryClass = action.publishingPayloadFactory();
         if(payloadFactoryClass == null) {
             return null;
@@ -99,30 +94,7 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
     public PublishedActionFacetForActionAnnotation(
             final PublishingPayloadFactoryForAction publishingPayloadFactory,
             final FacetHolder holder) {
-        super(legacyPayloadFactoryFor(publishingPayloadFactory), holder);
+        super(publishingPayloadFactory, holder);
     }
-
-    private static PublishedAction.PayloadFactory legacyPayloadFactoryFor(PublishingPayloadFactoryForAction publishingPayloadFactory) {
-        if(publishingPayloadFactory instanceof PublishingPayloadFactoryForAction.Adapter) {
-            final PublishingPayloadFactoryForAction.Adapter adapter = (PublishingPayloadFactoryForAction.Adapter) publishingPayloadFactory;
-            return adapter.getPayloadFactory();
-        }
-        return new LegacyAdapter(publishingPayloadFactory);
-    }
-
-    private static class LegacyAdapter implements PublishedAction.PayloadFactory {
-
-        private final PublishingPayloadFactoryForAction payloadFactory;
-
-        LegacyAdapter(final PublishingPayloadFactoryForAction payloadFactory) {
-            this.payloadFactory = payloadFactory;
-        }
-
-        @Override
-        public EventPayload payloadFor(final Identifier actionIdentifier, final Object target, final List<Object> arguments, final Object result) {
-            return payloadFactory.payloadFor(actionIdentifier, target, arguments, result);
-        }
-    }
-
 
 }

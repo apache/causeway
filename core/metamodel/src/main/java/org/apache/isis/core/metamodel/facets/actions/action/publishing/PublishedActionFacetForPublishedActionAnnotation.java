@@ -17,14 +17,18 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.publish.annotation;
+package org.apache.isis.core.metamodel.facets.actions.action.publishing;
 
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacetAbstract;
 
-public class PublishedActionFacetAnnotation extends PublishedActionFacetAbstract {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class PublishedActionFacetForPublishedActionAnnotation extends PublishedActionFacetAbstract {
 
     public static PublishedActionFacet create(
             final PublishedAction publishedAction,
@@ -34,11 +38,11 @@ public class PublishedActionFacetAnnotation extends PublishedActionFacetAbstract
             return null;
         }
 
-        return new PublishedActionFacetAnnotation(newPayloadFactory(publishedAction), holder);
+        return new PublishedActionFacetForPublishedActionAnnotation(newPayloadFactory(publishedAction), holder);
     }
 
 
-    public PublishedActionFacetAnnotation(
+    public PublishedActionFacetForPublishedActionAnnotation(
             final PublishedAction.PayloadFactory payloadFactory,
             final FacetHolder holder) {
         super(payloadFactory, holder);

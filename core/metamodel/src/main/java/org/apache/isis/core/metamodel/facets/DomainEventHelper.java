@@ -40,12 +40,12 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 
-public class InteractionHelper {
+public class DomainEventHelper {
 
     private final ServicesInjector servicesInjector;
 
 
-    public InteractionHelper(final ServicesInjector servicesInjector) {
+    public DomainEventHelper(final ServicesInjector servicesInjector) {
         this.servicesInjector = servicesInjector;
     }
 

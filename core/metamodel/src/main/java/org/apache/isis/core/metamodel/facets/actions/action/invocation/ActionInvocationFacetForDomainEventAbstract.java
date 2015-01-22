@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.InteractionHelper;
+import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
@@ -75,7 +75,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     private final ServicesInjector servicesInjector;
     final Class<? extends ActionDomainEvent<?>> eventType;
-    private final InteractionHelper interactionHelper;
+    private final DomainEventHelper domainEventHelper;
 
     public ActionInvocationFacetForDomainEventAbstract(
             final Class<? extends ActionDomainEvent<?>> eventType,
@@ -96,7 +96,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         this.runtimeContext = runtimeContext;
         this.adapterManager = adapterManager;
         this.servicesInjector = servicesInjector;
-        this.interactionHelper = new InteractionHelper(servicesInjector);
+        this.domainEventHelper = new DomainEventHelper(servicesInjector);
     }
 
     /**
@@ -182,7 +182,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
             // ... post the executing event
             final ActionDomainEvent<?> event =
-                    interactionHelper.postEventForAction(
+                    domainEventHelper.postEventForAction(
                             eventType, existingEvent, command, AbstractDomainEvent.Phase.EXECUTING,
                             owningAction, targetAdapter, arguments);
 
@@ -193,7 +193,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             if (invocationResult.getWhetherInvoked()) {
                 // perhaps the Action was not properly invoked (i.e. an exception was raised).
                 // If invoked, then send the ActionInteractionEvent to the EventBus.
-                interactionHelper.postEventForAction(
+                domainEventHelper.postEventForAction(
                         eventType, verify(event), command, AbstractDomainEvent.Phase.EXECUTED,
                         owningAction, targetAdapter, arguments);
             }

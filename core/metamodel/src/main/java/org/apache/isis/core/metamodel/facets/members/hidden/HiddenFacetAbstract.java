@@ -29,18 +29,34 @@ import org.apache.isis.core.metamodel.facets.WhenAndWhereValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
+/**
+ * This implements {@link org.apache.isis.core.metamodel.facetapi.MultiTypedFacet} so that each concrete implementation
+ * is added to the eventual {@link org.apache.isis.core.metamodel.facetapi.FacetHolder} twice: once under 
+ * <tt>HiddeFacet.class</tt> and once under its own concrete type class (eg <tt>HiddenFacetForActionAnnotation</tt>).
+ * This satisfies a couple of (independent) requirements:
+ * <ul>
+ *     <li>that we don't have the concept of a single (blessed?) HiddenFacet; rather there are simply facets some of
+ *     which implement {@link org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor}</li>
+ *     <li>that there is nevertheless always at least one facet that is registered under <tt>HiddenFacet.class</tt>;
+ *     this is used by the {@link org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson} exporter</li>
+ * </ul>
+ * <p>
+ *     Note that the {@link org.apache.isis.core.metamodel.facetapi.FacetUtil#getFacets(java.util.Map, org.apache.isis.applib.filter.Filter)}
+ *     (which among other things is used to return all facets matching a particular facet type) ensures that the list
+ *     of facets returned contains no duplicates.
+ * </p>
+ */
 public abstract class HiddenFacetAbstract extends WhenAndWhereValueFacetAbstract implements HiddenFacet {
 
-    public static Class<? extends Facet> type() {
-        return HiddenFacet.class;
+    public HiddenFacetAbstract(final Class<? extends Facet> facetType, final When when, Where where, final FacetHolder holder) {
+        super(facetType, holder, when, where);
     }
 
+    /**
+     * For testing only.
+     */
     public HiddenFacetAbstract(final When when, Where where, final FacetHolder holder) {
-        this(type(), when, where, holder);
-    }
-
-    private HiddenFacetAbstract(final Class<? extends Facet> type, final When when, Where where, final FacetHolder holder) {
-        super(type, holder, when, where);
+        super(HiddenFacetAbstract.class, holder, when, where);
     }
 
     @Override
@@ -53,5 +69,15 @@ public abstract class HiddenFacetAbstract extends WhenAndWhereValueFacetAbstract
      * <tt>null</tt> if visible.
      */
     protected abstract String hiddenReason(ObjectAdapter target, Where whereContext);
+
+    @Override
+    public Class<? extends Facet>[] facetTypes() {
+        return new Class[]{facetType(), HiddenFacet.class};
+    }
+
+    @Override
+    public <T extends Facet> T getFacet(final Class<T> facet) {
+        return (T) this;
+    }
 
 }

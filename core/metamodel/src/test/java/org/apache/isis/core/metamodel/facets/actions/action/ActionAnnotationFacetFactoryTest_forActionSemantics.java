@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-import org.apache.isis.core.metamodel.facets.actions.semantics.annotations.actionsemantics.ActionSemanticsFacetAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionSemanticsAnnotation;
 
 public class ActionAnnotationFacetFactoryTest_forActionSemantics extends AbstractFacetFactoryTest {
 
@@ -57,23 +57,7 @@ public class ActionAnnotationFacetFactoryTest_forActionSemantics extends Abstrac
 
         final Facet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof ActionSemanticsFacetAnnotation);
-
-        assertNoMethodsRemoved();
-    }
-
-    public void testNoAnnotationPickedUp() {
-        class Customer {
-            @SuppressWarnings("unused")
-            public void someAction() {
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "someAction");
-
-        facetFactory.processSemantics(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
-        assertNull(facet);
+        assertTrue(facet instanceof ActionSemanticsFacetForActionSemanticsAnnotation);
 
         assertNoMethodsRemoved();
     }

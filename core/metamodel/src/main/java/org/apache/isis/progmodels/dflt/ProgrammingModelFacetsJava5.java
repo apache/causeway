@@ -20,7 +20,6 @@
 package org.apache.isis.progmodels.dflt;
 
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
-import org.apache.isis.core.metamodel.facets.actions.bulk.annotation.BulkFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.debug.annotation.DebugFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.exploration.annotation.ExplorationFacetAnnotationFactory;
@@ -32,10 +31,6 @@ import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.annotation
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method.NotInServiceMenuFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.paged.annotation.PagedFacetOnActionFactory;
 import org.apache.isis.core.metamodel.facets.actions.prototype.annotation.PrototypeFacetAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.actions.semantics.annotations.actionsemantics.ActionSemanticsFacetAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.actions.semantics.annotations.idempotent.IdempotentFacetAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.actions.semantics.annotations.queryonly.QueryOnlyFacetAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.actions.semantics.fallback.ActionSemanticsFacetFallbackToNonIdempotentFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.validating.maxlenannot.MaxLengthFacetOnActionAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
@@ -296,10 +291,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(ActionParameterAutoCompleteFacetViaMethodFactory.class);
         addFactory(ActionDefaultsFacetViaMethodFactory.class);
         addFactory(ActionParameterDefaultsFacetViaMethodFactory.class);
-        addFactory(QueryOnlyFacetAnnotationFactory.class);
-        addFactory(IdempotentFacetAnnotationFactory.class);
-        addFactory(ActionSemanticsFacetAnnotationFactory.class);
-        addFactory(ActionSemanticsFacetFallbackToNonIdempotentFactory.class);
 
         // members in general
         addFactory(NamedFacetStaticMethodFactory.class);
@@ -362,7 +353,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(NotContributedFacetAnnotationFactory.class);
         addFactory(NotInServiceMenuFacetAnnotationFactory.class);
         addFactory(NotInServiceMenuFacetViaMethodFactory.class);
-        addFactory(BulkFacetAnnotationFactory.class);
 
         addFactory(HiddenFacetOnTypeAnnotationFactory.class);
         // must come after the TitleAnnotationFacetFactory, because can act as an override
@@ -403,10 +393,11 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         // must come after the property/collection accessor+mutator facet factories
         // (nb actions domain events are conflated with the action invocation).
+        // nb: all must come after HiddenFacetOnMemberFactory
         addFactory(PropertyAnnotationFacetFactory.class);
         addFactory(CollectionAnnotationFacetFactory.class);
-
         addFactory(ActionAnnotationFacetFactory.class);
+
         addFactory(ParameterAnnotationFacetFactory.class);
 
         // must come after DomainObjectAnnotationFacetFactory

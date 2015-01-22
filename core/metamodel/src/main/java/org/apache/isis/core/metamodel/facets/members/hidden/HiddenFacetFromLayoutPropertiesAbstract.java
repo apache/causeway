@@ -17,34 +17,30 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.property.hidden;
+package org.apache.isis.core.metamodel.facets.members.hidden;
 
-import org.apache.isis.applib.annotation.Property;
+import java.util.Properties;
+import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 
-public class HiddenFacetForPropertyAnnotation extends HiddenFacetAbstract {
+public abstract class HiddenFacetFromLayoutPropertiesAbstract extends HiddenFacetAbstract {
 
-    public static HiddenFacet create(final Property property, final FacetHolder holder) {
-
-        if (property == null) {
+    protected static Where hidden(final Properties properties) {
+        if(properties == null) {
             return null;
         }
-
-        final Where where = property.hidden();
-        if (where != null && where != Where.NOT_SPECIFIED) {
-            return new HiddenFacetForPropertyAnnotation(where, holder);
+        final String hidden = Strings.emptyToNull(properties.getProperty("hidden"));
+        if(hidden == null) {
+            return null;
         }
-
-        return null;
+        return Where.valueOf(hidden);
     }
 
-    private HiddenFacetForPropertyAnnotation(final Where where, final FacetHolder holder) {
-        super(HiddenFacetForPropertyAnnotation.class, When.ALWAYS, where, holder);
+    protected HiddenFacetFromLayoutPropertiesAbstract(final Where where, final FacetHolder holder) {
+        super(HiddenFacetFromLayoutPropertiesAbstract.class, When.ALWAYS, where, holder);
     }
 
     @Override
@@ -54,5 +50,4 @@ public class HiddenFacetForPropertyAnnotation extends HiddenFacetAbstract {
         }
         return "Hidden on " + where().getFriendlyName();
     }
-
 }

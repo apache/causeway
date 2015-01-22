@@ -16,17 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.facets.actions.action.command;
 
-package org.apache.isis.core.metamodel.facets.actions.semantics.annotations.idempotent;
-
-import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.Command.ExecuteIn;
+import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 
-public class IdempotentFacetAnnotation extends ActionSemanticsFacetAbstract {
+public class CommandFacetForActionAnnotationAsConfigured extends CommandFacetForActionAnnotation {
 
-    public IdempotentFacetAnnotation(final FacetHolder holder) {
-        super(ActionSemantics.Of.IDEMPOTENT, holder);
+    CommandFacetForActionAnnotationAsConfigured(
+            final Persistence persistence,
+            final ExecuteIn executeIn,
+            final Enablement enablement,
+            final FacetHolder holder) {
+        super(persistence, executeIn, enablement, holder);
     }
+
 
 }

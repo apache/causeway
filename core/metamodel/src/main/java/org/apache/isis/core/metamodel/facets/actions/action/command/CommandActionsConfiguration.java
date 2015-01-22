@@ -16,23 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.actions.command.configuration;
+package org.apache.isis.core.metamodel.facets.actions.action.command;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.object.domainobject.Util;
 
-public enum ActionConfiguration {
+public enum CommandActionsConfiguration {
     ALL,
     IGNORE_SAFE,
     NONE;
 
     private static final String  COMMAND_ACTIONS_KEY = "isis.services.command.actions";
 
-    public static ActionConfiguration parse(final IsisConfiguration configuration) {
+    public static CommandActionsConfiguration parse(final IsisConfiguration configuration) {
         return parse(configuration.getString(COMMAND_ACTIONS_KEY));
     }
 
-    private static ActionConfiguration parse(final String value) {
+    private static CommandActionsConfiguration parse(final String value) {
         if ("ignoreQueryOnly".equalsIgnoreCase(value) || "ignoreSafe".equalsIgnoreCase(value)) {
             return IGNORE_SAFE;
         }

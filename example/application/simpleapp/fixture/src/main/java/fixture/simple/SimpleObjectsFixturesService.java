@@ -24,7 +24,7 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.Environment;
+import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.fixturescripts.FixtureResult;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
@@ -64,7 +64,7 @@ public class SimpleObjectsFixturesService extends FixtureScripts {
     // //////////////////////////////////////
 
     @Action(
-            restrictTo = Environment.DEVELOPMENT
+            restrictTo = RestrictTo.PROTOTYPING
     )
     @MemberOrder(sequence="20")
     public Object installFixturesAndReturnFirst() {

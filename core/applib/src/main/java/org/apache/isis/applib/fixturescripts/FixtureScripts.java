@@ -245,7 +245,7 @@ public abstract class FixtureScripts extends AbstractService {
      * {@link #autoComplete0RunFixtureScript(String)} with <tt>public</tt> visibility</tt>.
      */
     @Action(
-        restrictTo = Environment.DEVELOPMENT
+        restrictTo = RestrictTo.PROTOTYPING
     )
     @MemberOrder(sequence="10")
     public List<FixtureResult> runFixtureScript(
