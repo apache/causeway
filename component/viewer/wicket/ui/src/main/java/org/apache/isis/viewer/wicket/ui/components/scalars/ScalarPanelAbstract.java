@@ -38,7 +38,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.propparam.layout.LabelAtFacet;
+import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -312,7 +312,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     }
 
     /**
-     * Applies the {@literal @}{@link org.apache.isis.core.metamodel.facets.propparam.layout.LabelAtFacet} and also CSS based on
+     * Applies the {@literal @}{@link org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet} and also CSS based on
      * whether any of the associated actions have {@literal @}{@link org.apache.isis.applib.annotation.ActionLayout layout} positioned to
      * the {@link org.apache.isis.applib.annotation.ActionLayout.Position#RIGHT right}.
      *

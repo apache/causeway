@@ -21,16 +21,25 @@ package org.apache.isis.core.metamodel.specloader.validator;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
-
 import com.google.common.collect.Sets;
 
 public final class ValidationFailures implements Iterable<String> {
 
     private final Set<String> messages = Sets.newLinkedHashSet();
     
-    public void add(String pattern, Object... arguments) {
+    public void add(final String pattern, final Object... arguments) {
         final String message = String.format(pattern, arguments);
         messages.add(message);
+    }
+
+    public void addAll(final Iterable<String> messages) {
+        for (final String message : messages) {
+            this.messages.add(message);
+        }
+    }
+
+    public void add(final ValidationFailures validationFailures) {
+        addAll(validationFailures.getMessages());
     }
 
     public void assertNone() {

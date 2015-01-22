@@ -25,60 +25,76 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.util.Enums;
-
 /**
- * Indicates that an instance cannot be persisted by a user, but only
- * programmatically.
+ * @deprecated - see {@link Action#semantics()}.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ActionSemantics {
 
+    /**
+     * @deprecated - see {@link SemanticsOf}
+     */
+    @Deprecated
     public enum Of {
         /**
-         * Safe, with no side-effects.
-         * 
-         * <p>
-         * In other words, a query-only action.  By definition, is also idempotent.
+         * @deprecated - see {@link SemanticsOf#SAFE}
          */
+        @Deprecated
         SAFE, 
         /**
-         * Post-conditions are always the same, irrespective as to how many times called.
-         * 
-         * <p>
-         * An example might be <tt>placeOrder()</tt>, that is a no-op if the order has already been placed. 
+         * @deprecated - see {@link SemanticsOf#IDEMPOTENT}
          */
+        @Deprecated
         IDEMPOTENT,
         /**
-         * Neither safe nor idempotent; every invocation is likely to change the state of the object.
-         * 
-         * <p>
-         * An example is increasing the quantity of a line item in an Order by 1.
+         * @deprecated - see {@link SemanticsOf#IDEMPOTENT}
          */
+        @Deprecated
         NON_IDEMPOTENT;
 
+        /**
+         * @deprecated - see {@link SemanticsOf#getFriendlyName()}
+         */
+        @Deprecated
         public String getFriendlyName() {
-            return Enums.getFriendlyNameOf(this);
+            return SemanticsOf.from(this).getFriendlyName();
+            //return Enums.getFriendlyNameOf(this);
         }
 
+        /**
+         * @deprecated - see {@link SemanticsOf#getCamelCaseName()}
+         */
+        @Deprecated
         public String getCamelCaseName() {
-            return Enums.enumToCamelCase(this);
+            return SemanticsOf.from(this).getCamelCaseName();
         }
 
         /**
          * {@link #SAFE} is idempotent in nature, as well as, obviously, {@link #IDEMPOTENT}.
+         *
+         * @deprecated - see {@link SemanticsOf#isIdempotentInNature()}
          */
+        @Deprecated
         public boolean isIdempotentInNature() {
-            return this == SAFE || this == IDEMPOTENT;
+            return SemanticsOf.from(this).isIdempotentInNature();
         }
 
+        /**
+         * @deprecated - see {@link SemanticsOf#isSafe()}.
+         */
+        @Deprecated
         public boolean isSafe() {
-            return this == SAFE;
+            return SemanticsOf.from(this).isSafe();
         }
     }
 
+    /**
+     * @deprecated - use {@link Action#semantics()} instead.
+     */
+    @Deprecated
     Of value() default Of.NON_IDEMPOTENT;
     
 }

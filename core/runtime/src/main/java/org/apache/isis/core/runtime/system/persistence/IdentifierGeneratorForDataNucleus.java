@@ -55,9 +55,9 @@ class IdentifierGeneratorForDataNucleus implements IdentifierGenerator {
     public String createTransientIdentifierFor(ObjectSpecId objectSpecId, Object pojo) {
 
         final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
-        final ViewModelFacet viewModelFacet = spec.getFacet(ViewModelFacet.class);
-        if(viewModelFacet != null) {
-            return viewModelFacet.memento(pojo);
+        final ViewModelFacet recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
+        if(recreatableObjectFacet != null) {
+            return recreatableObjectFacet.memento(pojo);
         }
 
         return UUID.randomUUID().toString();
@@ -80,8 +80,8 @@ class IdentifierGeneratorForDataNucleus implements IdentifierGenerator {
         
         final ObjectSpecification spec = getSpecificationLookup().lookupBySpecId(objectSpecId);
         if(spec.containsFacet(ViewModelFacet.class)) {
-            ViewModelFacet viewModelFacet = spec.getFacet(ViewModelFacet.class);
-            return viewModelFacet.memento(pojo);
+            ViewModelFacet recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
+            return recreatableObjectFacet.memento(pojo);
         }
         final Object jdoOid = getJdoPersistenceManager().getObjectId(pojo);
         return JdoObjectIdSerializer.toOidIdentifier(jdoOid);

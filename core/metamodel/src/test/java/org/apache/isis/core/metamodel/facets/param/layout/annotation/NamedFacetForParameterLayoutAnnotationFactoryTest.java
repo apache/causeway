@@ -23,10 +23,9 @@ import java.lang.reflect.Method;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.param.layout.NamedFacetForParameterLayoutAnnotation;
-import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFactory;
+import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -39,7 +38,7 @@ public class NamedFacetForParameterLayoutAnnotationFactoryTest extends AbstractF
     private static final String NAME = "an action";
 
     public void testParameterLayoutAnnotationNamed() {
-        final ParameterLayoutFactory facetFactory = new ParameterLayoutFactory();
+        final ParameterLayoutFacetFactory facetFactory = new ParameterLayoutFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -58,7 +57,7 @@ public class NamedFacetForParameterLayoutAnnotationFactoryTest extends AbstractF
     }
 
     public void testParameterLayoutAnnotationNamedEscapedFalse() {
-        final ParameterLayoutFactory facetFactory = new ParameterLayoutFactory();
+        final ParameterLayoutFacetFactory facetFactory = new ParameterLayoutFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")

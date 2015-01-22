@@ -21,7 +21,7 @@ package org.apache.isis.applib.services.eventbus;
 import org.apache.isis.applib.Identifier;
 
 /**
- * @deprecated - use instead {@link PropertyInteractionEvent}
+ * @deprecated - use instead {@link PropertyDomainEvent}
  */
 @Deprecated
 public abstract class PropertyChangedEvent<S,T> extends PropertyInteractionEvent<S,T> {

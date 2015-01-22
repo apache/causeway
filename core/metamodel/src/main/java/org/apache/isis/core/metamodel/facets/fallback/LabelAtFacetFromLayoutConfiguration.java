@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.fallback;
 
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.layout.LabelAtFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacetAbstract;
 
 public class LabelAtFacetFromLayoutConfiguration extends LabelAtFacetAbstract {
 

@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAlwaysEverywhere;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractAlwaysEverywhere;
 import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -173,8 +173,8 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject_transient {
     public void shouldNotBeAbleToModifyProperty() {
 
         // given
-        final DisabledFacet disabledFacet = new DisabledFacetAlwaysEverywhere(mockPasswordMember);
-        facets = Arrays.asList((Facet)disabledFacet, new PropertySetterFacetViaSetterMethod(setPasswordMethod, mockPasswordMember));
+        final DisabledFacet disabledFacet = new DisabledFacetAbstractAlwaysEverywhere(mockPasswordMember){};
+        facets = Arrays.asList(disabledFacet, new PropertySetterFacetViaSetterMethod(setPasswordMethod, mockPasswordMember));
 
         final Consent visibilityConsent = new Allow(new InteractionResult(new PropertyVisibilityEvent(employeeDO, null)));
 

@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @deprecated - use {@link ActionLayout#prototype()} instead.
+ * @deprecated - use {@link org.apache.isis.applib.annotation.Action#restrictTo()} ()} instead.
  */
 @Deprecated
 @Inherited

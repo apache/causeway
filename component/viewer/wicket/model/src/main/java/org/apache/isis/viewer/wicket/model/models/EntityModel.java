@@ -530,12 +530,12 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
             property.set(adapter, associate);
         }
 
-        final ViewModelFacet viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
-        if(viewModelFacet != null) {
+        final ViewModelFacet recreatableObjectFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
+        if(recreatableObjectFacet != null) {
             final Object viewModel = adapter.getObject();
-            final boolean cloneable = viewModelFacet.isCloneable(viewModel);
+            final boolean cloneable = recreatableObjectFacet.isCloneable(viewModel);
             if(cloneable) {
-                final Object newViewModel = viewModelFacet.clone(viewModel);
+                final Object newViewModel = recreatableObjectFacet.clone(viewModel);
                 adapter = getAdapterManager().adapterFor(newViewModel);
             }
         }

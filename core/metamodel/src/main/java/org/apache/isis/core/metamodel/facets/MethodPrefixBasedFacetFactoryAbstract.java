@@ -46,7 +46,7 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract extends FacetFactory
         DONT_VALIDATE
     }
     
-    public MethodPrefixBasedFacetFactoryAbstract(final List<FeatureType> featureTypes, OrphanValidation orphanValidation, final String... prefixes) {
+    public MethodPrefixBasedFacetFactoryAbstract(final List<FeatureType> featureTypes, final OrphanValidation orphanValidation, final String... prefixes) {
         super(featureTypes);
         this.orphanValidation = orphanValidation;
         this.prefixes = Collections.unmodifiableList(Arrays.asList(prefixes));
@@ -58,17 +58,17 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract extends FacetFactory
     }
 
     @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
         if(orphanValidation == OrphanValidation.DONT_VALIDATE) {
             return;
         }
         metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
 
             @Override
-            public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.EXCLUDED);
-                for (ObjectAction objectAction : objectActions) {
-                    for (String prefix : prefixes) {
+            public boolean visit(final ObjectSpecification objectSpec, final ValidationFailures validationFailures) {
+                final List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.EXCLUDED);
+                for (final ObjectAction objectAction : objectActions) {
+                    for (final String prefix : prefixes) {
                         final String actionId = objectAction.getId();
                         if (actionId.startsWith(prefix) && prefix.length() < actionId.length()) {
                             validationFailures.add("Method '%s#%s' has prefix %s, is probably a supporting method for a property, collection or action.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic", objectSpec.getIdentifier().getClassName(), actionId, prefix);

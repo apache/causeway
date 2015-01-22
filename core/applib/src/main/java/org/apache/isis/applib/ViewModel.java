@@ -23,7 +23,11 @@ import org.apache.isis.applib.annotation.Hidden;
 
 
 /**
- * Indicates that a domain object is intended to be used as a view model.
+ * Indicates that an object belongs to the UI/application layer, and is intended to be used as a view model.
+ *
+ * <p>
+ *     Objects that are part of the domain object layer should instead implement {@link RecreatableDomainObject}.
+ * </p>
  */
 public interface ViewModel {
 

@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.properties.notpersisted.annotation;
 
+import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
 
 public class NotPersistedFacetOnPropertyAnnotation extends NotPersistedFacetAbstract {
@@ -28,4 +30,7 @@ public class NotPersistedFacetOnPropertyAnnotation extends NotPersistedFacetAbst
         super(holder);
     }
 
+    static NotPersistedFacet create(final NotPersisted annotation, final FacetHolder holder) {
+        return annotation == null ? null : new NotPersistedFacetOnPropertyAnnotation(holder);
+    }
 }

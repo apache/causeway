@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.optional;
 
+import java.lang.reflect.Method;
+import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetAbstract;
 
 /**
@@ -33,5 +36,13 @@ public class MandatoryFacetOnPropertyInvertedByOptionalAnnotation extends Mandat
 
     public MandatoryFacetOnPropertyInvertedByOptionalAnnotation(final FacetHolder holder) {
         super(holder, Semantics.OPTIONAL);
+    }
+
+    static MandatoryFacet create(final Optional annotation, Method method, final FacetHolder holder) {
+        final Class<?> returnType = method.getReturnType();
+        if (returnType.isPrimitive()) {
+            return null;
+        }
+        return new MandatoryFacetOnPropertyInvertedByOptionalAnnotation(holder);
     }
 }

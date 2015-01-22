@@ -21,14 +21,13 @@ package org.apache.isis.core.metamodel.facets.members.hidden;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberAnnotation;
 import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberFactory;
 
 public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -59,9 +58,8 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
+        final Facet facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof HiddenFacetAbstract);
 
         assertNoMethodsRemoved();
     }
@@ -77,9 +75,8 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
+        final Facet facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof HiddenFacetAbstract);
 
         assertNoMethodsRemoved();
     }
@@ -94,9 +91,8 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
+        final HiddenFacetOnMemberAnnotation facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof HiddenFacetAbstract);
 
         assertNoMethodsRemoved();
     }
@@ -111,10 +107,9 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
-        final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
+        final HiddenFacetOnMemberAnnotation facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
 
-        assertEquals(When.ALWAYS, hiddenFacetAbstract.when());
+        assertEquals(When.ALWAYS, facet.when());
     }
 
     public void testHiddenWhenNeverAnnotationPickedUpOn() {
@@ -127,10 +122,9 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
-        final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
+        final HiddenFacetOnMemberAnnotation facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
 
-        assertEquals(When.NEVER, hiddenFacetAbstract.when());
+        assertEquals(When.NEVER, facet.when());
     }
 
     public void testHiddenWhenOncePersistedAnnotationPickedUpOn() {
@@ -143,10 +137,9 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
-        final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
+        final HiddenFacetOnMemberAnnotation facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
 
-        assertEquals(When.ONCE_PERSISTED, hiddenFacetAbstract.when());
+        assertEquals(When.ONCE_PERSISTED, facet.when());
     }
 
     public void testHiddenWhenUntilPersistedAnnotationPickedUpOn() {
@@ -159,11 +152,10 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
-        final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
+        final HiddenFacetOnMemberAnnotation facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
 
-        assertEquals(When.UNTIL_PERSISTED, hiddenFacetAbstract.when());
-        assertEquals(Where.ANYWHERE, hiddenFacetAbstract.where());
+        assertEquals(When.UNTIL_PERSISTED, facet.when());
+        assertEquals(Where.ANYWHERE, facet.where());
     }
 
     public void testHiddenWhereCollectionTableAnnotationPickedUpOn() {
@@ -176,11 +168,10 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
-        final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
+        final HiddenFacetOnMemberAnnotation facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
 
-        assertEquals(Where.PARENTED_TABLES, hiddenFacetAbstract.where());
-        assertEquals(When.ALWAYS, hiddenFacetAbstract.when());
+        assertEquals(Where.PARENTED_TABLES, facet.where());
+        assertEquals(When.ALWAYS, facet.when());
     }
 
 
@@ -194,11 +185,10 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
-        final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
+        final HiddenFacetOnMemberAnnotation facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
 
-        assertEquals(Where.PARENTED_TABLES, hiddenFacetAbstract.where());
-        assertEquals(When.UNTIL_PERSISTED, hiddenFacetAbstract.when());
+        assertEquals(Where.PARENTED_TABLES, facet.where());
+        assertEquals(When.UNTIL_PERSISTED, facet.when());
     }
 
 }

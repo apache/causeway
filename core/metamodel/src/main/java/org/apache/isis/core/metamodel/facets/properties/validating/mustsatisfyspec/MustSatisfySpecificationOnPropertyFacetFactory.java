@@ -20,11 +20,8 @@
 package org.apache.isis.core.metamodel.facets.properties.validating.mustsatisfyspec;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.MustSatisfy;
-import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -44,35 +41,8 @@ public class MustSatisfySpecificationOnPropertyFacetFactory extends FacetFactory
     }
 
     private Facet create(final Method method, final FacetHolder holder) {
-        return create(Annotations.getAnnotation(method, MustSatisfy.class), holder);
+        return MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty.create(Annotations.getAnnotation(method, MustSatisfy.class), holder);
     }
 
-    private Facet create(final MustSatisfy annotation, final FacetHolder holder) {
-        if (annotation == null) {
-            return null;
-        }
-        final Class<?>[] values = annotation.value();
-        final List<Specification> specifications = new ArrayList<Specification>();
-        for (final Class<?> value : values) {
-            final Specification specification = newSpecificationElseNull(value);
-            if (specification != null) {
-                specifications.add(specification);
-            }
-        }
-        return specifications.size() > 0 ? new MustSatisfySpecificationOnPropertyFacet(specifications, holder) : null;
-    }
-
-    private static Specification newSpecificationElseNull(final Class<?> value) {
-        if (!(Specification.class.isAssignableFrom(value))) {
-            return null;
-        }
-        try {
-            return (Specification) value.newInstance();
-        } catch (final InstantiationException e) {
-            return null;
-        } catch (final IllegalAccessException e) {
-            return null;
-        }
-    }
 
 }

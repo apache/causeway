@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.mandatory;
 
+import org.apache.isis.applib.annotation.Mandatory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetAbstract;
 
 /**
@@ -33,5 +35,9 @@ public class MandatoryFacetOnPropertyMandatoryAnnotation extends MandatoryFacetA
 
     public MandatoryFacetOnPropertyMandatoryAnnotation(final FacetHolder holder) {
         super(holder, Semantics.REQUIRED);
+    }
+
+    static MandatoryFacet create(final Mandatory annotation, final FacetHolder holder) {
+        return new MandatoryFacetOnPropertyMandatoryAnnotation(holder);
     }
 }

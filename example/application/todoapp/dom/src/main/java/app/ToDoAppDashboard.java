@@ -20,8 +20,10 @@ package app;
 
 import java.util.List;
 import org.apache.isis.applib.AbstractViewModel;
+import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.RenderType;
 
 public class ToDoAppDashboard extends AbstractViewModel {
 
@@ -40,7 +42,7 @@ public class ToDoAppDashboard extends AbstractViewModel {
     }
 
     @Override
-    public void viewModelInit(String memento) {
+    public void viewModelInit(final String memento) {
         this.memento = memento;
     }
 
@@ -49,9 +51,11 @@ public class ToDoAppDashboard extends AbstractViewModel {
     //region > getAnalysisByCategory (collection)
     @CollectionLayout(
             named="By Category",
-            render = CollectionLayout.RenderType.EAGERLY
+            render = RenderType.EAGERLY
     )
-    @Disabled
+    @Collection(
+            editing = Editing.DISABLED
+    )
     public List<ToDoItemsByCategoryViewModel> getAnalysisByCategory() {
         return toDoItemAnalysis.toDoItemsByCategory();
     }
@@ -60,9 +64,11 @@ public class ToDoAppDashboard extends AbstractViewModel {
     //region > getAnalysisByDateRange (collection)
     @CollectionLayout(
             named="By Date Range",
-            render = CollectionLayout.RenderType.EAGERLY
+            render = RenderType.EAGERLY
     )
-    @Disabled
+    @Collection(
+            editing = Editing.DISABLED
+    )
     public List<ToDoItemsByDateRangeViewModel> getAnalysisByDateRange() {
         return toDoItemAnalysis.toDoItemsByDateRange();
     }

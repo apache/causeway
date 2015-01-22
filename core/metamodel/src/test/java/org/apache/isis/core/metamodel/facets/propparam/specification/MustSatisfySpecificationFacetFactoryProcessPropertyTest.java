@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.properties.validating.mustsatisfyspec.MustSatisfySpecificationOnPropertyFacet;
+import org.apache.isis.core.metamodel.facets.properties.validating.mustsatisfyspec.MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.validating.mustsatisfyspec.MustSatisfySpecificationOnPropertyFacetFactory;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
@@ -69,7 +69,7 @@ public class MustSatisfySpecificationFacetFactoryProcessPropertyTest {
 
         mockery.checking(new Expectations() {
             {
-                one(mockFacetHolder).addFacet(with(anInstanceOf(MustSatisfySpecificationOnPropertyFacet.class)));
+                one(mockFacetHolder).addFacet(with(anInstanceOf(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty.class)));
             }
         });
         facetFactory.process(new ProcessMethodContext(domainObjectClassWithAnnotation.getClass(), null, null, firstNameMethodWith, mockMethodRemover, mockFacetHolder));
@@ -81,7 +81,7 @@ public class MustSatisfySpecificationFacetFactoryProcessPropertyTest {
 
         mockery.checking(new Expectations() {
             {
-                never(mockFacetHolder).addFacet(with(anInstanceOf(MustSatisfySpecificationOnPropertyFacet.class)));
+                never(mockFacetHolder).addFacet(with(anInstanceOf(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty.class)));
             }
         });
         facetFactory.process(new ProcessMethodContext(domainObjectClassWithAnnotation.getClass(), null, null, firstNameMethodWithout, mockMethodRemover, mockFacetHolder));

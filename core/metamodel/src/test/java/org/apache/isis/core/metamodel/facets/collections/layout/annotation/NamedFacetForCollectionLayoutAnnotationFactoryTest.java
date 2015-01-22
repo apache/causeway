@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFactory;
+import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.layout.NamedFacetForCollectionLayoutAnnotation;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -39,7 +39,7 @@ import static org.junit.Assert.assertThat;
 public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     public void testCollectionLayoutAnnotationNamed() {
-        final CollectionLayoutFactory facetFactory = new CollectionLayoutFactory();
+        final CollectionLayoutFacetFactory facetFactory = new CollectionLayoutFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -60,7 +60,7 @@ public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends Abstract
     }
 
     public void testCollectionLayoutAnnotationNamedEscapedFalse() {
-        final CollectionLayoutFactory facetFactory = new CollectionLayoutFactory();
+        final CollectionLayoutFacetFactory facetFactory = new CollectionLayoutFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")

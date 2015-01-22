@@ -26,9 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates the order that properties should be displayed in.
- * 
- * @deprecated - use {@link MemberOrder} instead.
+ * @deprecated - use {@link MemberOrder} or <code>Xxx.layout.json</code> instead.
  */
 @Inherited
 @Target({ ElementType.TYPE })

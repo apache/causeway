@@ -44,7 +44,7 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetImpl;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractImpl;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
@@ -81,11 +81,11 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
 
-        public Properties asProperties(Class<?> domainClass) {
-        LayoutMetadata metadata;
+        public Properties asProperties(final Class<?> domainClass) {
+        final LayoutMetadata metadata;
         try {
             metadata = readMetadata(domainClass);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new ReaderException("Failed to locate/parse " + domainClass.getName() + ".layout.json file (" + e.getMessage() + ")", e);
         }
         if(metadata.getColumns() == null || metadata.getColumns().size() != 4) {
@@ -99,7 +99,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         setMemberGroupLayoutColumnLists(metadata, 1, "middle", props);
         setMemberGroupLayoutColumnLists(metadata, 2, "right", props);
         
-        int[] memberSeq = {0};
+        final int[] memberSeq = {0};
         setProperties(metadata, props, memberSeq);
         setCollections(metadata, props, memberSeq);
         setFreestandingActions(metadata, props);
@@ -107,24 +107,24 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         return props;
     }
 
-    private static void setMemberGroupLayoutColumnSpans(LayoutMetadata metadata, final Properties props) {
+    private static void setMemberGroupLayoutColumnSpans(final LayoutMetadata metadata, final Properties props) {
         final List<ColumnRepr> columns = metadata.getColumns();
         final String columnSpansStr = Joiner.on(",").join(Iterables.transform(columns, new Function<ColumnRepr,Integer>(){
             @Override
-            public Integer apply(ColumnRepr input) {
+            public Integer apply(final ColumnRepr input) {
                 return input.span;
             }}));
         props.setProperty("class.memberGroupLayout.columnSpans", columnSpansStr);
     }
 
-    private static void setMemberGroupLayoutColumnLists(LayoutMetadata metadata, int colIdx, String propkey, Properties props) {
+    private static void setMemberGroupLayoutColumnLists(final LayoutMetadata metadata, final int colIdx, final String propkey, final Properties props) {
         final ColumnRepr column = metadata.getColumns().get(colIdx);
         final Map<String, MemberGroupRepr> memberGroups = column.memberGroups;
         final String val = memberGroups != null ? Joiner.on(",").join(memberGroups.keySet()) : "";
         props.setProperty("class.memberGroupLayout." + propkey, val);
     }
 
-    private static void setProperties(LayoutMetadata metadata, Properties props, int[] memberSeq) {
+    private static void setProperties(final LayoutMetadata metadata, final Properties props, final int[] memberSeq) {
         final List<ColumnRepr> columns = metadata.getColumns();
         for (final ColumnRepr columnRepr : columns) {
             final Map<String, MemberGroupRepr> memberGroups = columnRepr.memberGroups;
@@ -145,13 +145,13 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         }
     }
 
-    private static void setCollections(LayoutMetadata metadata, Properties props, int[] memberSeq) {
+    private static void setCollections(final LayoutMetadata metadata, final Properties props, final int[] memberSeq) {
         final ColumnRepr columnRepr = metadata.getColumns().get(3);
         final Map<String, MemberRepr> collections = columnRepr.collections;
         setMembersAndAssociatedActions(props, null, collections, memberSeq);
     }
 
-    private static void setMembersAndAssociatedActions(Properties props, final String memberGroupName, final Map<String, MemberRepr> members, int[] memberSeq) {
+    private static void setMembersAndAssociatedActions(final Properties props, final String memberGroupName, final Map<String, MemberRepr> members, final int[] memberSeq) {
         for(final String memberName: members.keySet()) {
             props.setProperty("member." + memberName + ".memberOrder.sequence", ""+ ++memberSeq[0]);
             if(memberGroupName != null) {
@@ -167,7 +167,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
                 int actSeq = 0;
                 for(final String actionName: actions.keySet()) {
                     final ActionRepr actionRepr = actions.get(actionName);
-                    String nameKey = "action." + actionName + ".memberOrder.name";
+                    final String nameKey = "action." + actionName + ".memberOrder.name";
                     props.setProperty(nameKey, memberName);
                     setRemainingActionProperties(props, "action", actionName, actionRepr, ++actSeq);
                 }
@@ -304,7 +304,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         }
     }
 
-    private static void setFreestandingActions(LayoutMetadata metadata, Properties props) {
+    private static void setFreestandingActions(final LayoutMetadata metadata, final Properties props) {
         if(metadata.getActions() == null) {
             return;
         }
@@ -328,6 +328,9 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
 
         final ActionLayoutFacetRepr actionLayout = actionRepr.actionLayout;
         if(actionLayout != null) {
+            if(actionLayout.bookmarking != null) {
+                props.setProperty(prefix + "." + actionName + ".actionLayout.bookmarking", ""+actionLayout.bookmarking);
+            }
             if(actionLayout.cssClass != null) {
                 props.setProperty(prefix + "." + actionName + ".actionLayout.cssClass", actionLayout.cssClass);
             }
@@ -353,10 +356,6 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             if(actionLayout.position != null) {
                 props.setProperty(prefix + "." + actionName + ".actionLayout.position", ""+actionLayout.position);
             }
-            //
-            {
-                props.setProperty(prefix + "." + actionName + ".actionLayout.prototype", "" + actionLayout.prototype);
-            }
         }
 
 
@@ -381,7 +380,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         }
     }
 
-    public LayoutMetadata asLayoutMetadata(Class<?> domainClass) throws ReaderException {
+    public LayoutMetadata asLayoutMetadata(final Class<?> domainClass) throws ReaderException {
         try {
             return readMetadata(domainClass);
         } catch (IOException | RuntimeException e) {
@@ -391,7 +390,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
 
     // //////////////////////////////////////
 
-    private LayoutMetadata readMetadata(Class<?> domainClass) throws IOException {
+    private LayoutMetadata readMetadata(final Class<?> domainClass) throws IOException {
         final String content = ClassExtensions.resourceContent(domainClass, ".layout.json");
         return readMetadata(content);
     }
@@ -408,14 +407,14 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
     /**
      * not API
      */
-    public String asJson(ObjectSpecification objectSpec) {
+    public String asJson(final ObjectSpecification objectSpec) {
         final LayoutMetadata metadata = new LayoutMetadata();
         metadata.setColumns(Lists.<ColumnRepr>newArrayList());
         
         final MemberGroupLayoutFacet mglf = objectSpec.getFacet(MemberGroupLayoutFacet.class);
         final ColumnSpans columnSpans = mglf.getColumnSpans();
         
-        Set<String> actionIdsForAssociations = Sets.newTreeSet();
+        final Set<String> actionIdsForAssociations = Sets.newTreeSet();
         
         ColumnRepr columnRepr;
         
@@ -437,14 +436,14 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         return gson.toJson(metadata);
     }
 
-    private static void updateColumnMemberGroups(ObjectSpecification objectSpec, final MemberGroupLayoutHint hint, ColumnRepr columnRepr, Set<String> actionIdsForAssociations) {
+    private static void updateColumnMemberGroups(final ObjectSpecification objectSpec, final MemberGroupLayoutHint hint, final ColumnRepr columnRepr, final Set<String> actionIdsForAssociations) {
         final List<ObjectAssociation> objectAssociations = propertiesOf(objectSpec);
         final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(objectAssociations);
         
         final List<String> groupNames = ObjectSpecifications.orderByMemberGroups(objectSpec, associationsByGroup.keySet(), hint);
         
         columnRepr.memberGroups = Maps.newLinkedHashMap();
-        for (String groupName : groupNames) {
+        for (final String groupName : groupNames) {
             final MemberGroupRepr memberGroupRepr = new MemberGroupRepr();
             columnRepr.memberGroups.put(groupName, memberGroupRepr);
             final List<ObjectAssociation> associationsInGroup = associationsByGroup.get(groupName);
@@ -452,39 +451,39 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
             if(associationsInGroup == null) {
                 continue;
             }
-            for (ObjectAssociation assoc : associationsInGroup) {
+            for (final ObjectAssociation assoc : associationsInGroup) {
                 final MemberRepr memberRepr = newMemberRepr(objectSpec, assoc, actionIdsForAssociations);
                 memberGroupRepr.members.put(assoc.getId(), memberRepr);
             }
         }
     }
-    private static void addActions(ObjectSpecification objectSpec, final LayoutMetadata metadata, Set<String> actionIdsForAssociations) {
-        Map<String, ActionRepr> actions = Maps.newLinkedHashMap();
+    private static void addActions(final ObjectSpecification objectSpec, final LayoutMetadata metadata, final Set<String> actionIdsForAssociations) {
+        final Map<String, ActionRepr> actions = Maps.newLinkedHashMap();
         final List<ObjectAction> actionsOf = actionsOf(objectSpec, actionIdsForAssociations);
-        for(ObjectAction action: actionsOf) {
+        for(final ObjectAction action: actionsOf) {
             actions.put(action.getId(), newActionRepr(objectSpec, action));
         }
         metadata.setActions(actions);
     }
 
-    private static ActionRepr newActionRepr(ObjectSpecification objectSpec, ObjectAction action) {
-        ActionRepr actionRepr = new ActionRepr();
+    private static ActionRepr newActionRepr(final ObjectSpecification objectSpec, final ObjectAction action) {
+        final ActionRepr actionRepr = new ActionRepr();
         
-        CssClassFacet cssClassFacet = action.getFacet(CssClassFacet.class);
+        final CssClassFacet cssClassFacet = action.getFacet(CssClassFacet.class);
         if(cssClassFacet != null && !cssClassFacet.isNoop()) {
-            CssClassFacetRepr cssClassFacetRepr = new CssClassFacetRepr();
+            final CssClassFacetRepr cssClassFacetRepr = new CssClassFacetRepr();
             cssClassFacetRepr.value = cssClassFacet.cssClass(null);
             actionRepr.cssClass = cssClassFacetRepr;
         }
-        DescribedAsFacet describedAsFacet = action.getFacet(DescribedAsFacet.class);
+        final DescribedAsFacet describedAsFacet = action.getFacet(DescribedAsFacet.class);
         if(describedAsFacet != null && !describedAsFacet.isNoop() && !Strings.isNullOrEmpty(describedAsFacet.value())) {
-            DescribedAsFacetRepr describedAsFacetRepr = new DescribedAsFacetRepr();
+            final DescribedAsFacetRepr describedAsFacetRepr = new DescribedAsFacetRepr();
             describedAsFacetRepr.value = describedAsFacet.value();
             actionRepr.describedAs = describedAsFacetRepr;
         }
-        NamedFacet namedFacet = action.getFacet(NamedFacet.class);
+        final NamedFacet namedFacet = action.getFacet(NamedFacet.class);
         if(namedFacet != null && !namedFacet.isNoop()) {
-            NamedFacetRepr namedFacetRepr = new NamedFacetRepr();
+            final NamedFacetRepr namedFacetRepr = new NamedFacetRepr();
             namedFacetRepr.value = namedFacet.value();
             actionRepr.named = namedFacetRepr;
         }
@@ -492,76 +491,77 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         return actionRepr;
     }
 
-    private static void updateCollectionColumnRepr(ObjectSpecification objectSpec, ColumnRepr columnRepr, Set<String> actionIdsOfAssociations) {
+    private static void updateCollectionColumnRepr(final ObjectSpecification objectSpec, final ColumnRepr columnRepr, final Set<String> actionIdsOfAssociations) {
         final List<ObjectAssociation> objectAssociations = collectionsOf(objectSpec);
         columnRepr.collections = Maps.newLinkedHashMap();
-        for(ObjectAssociation assoc: objectAssociations) {
+        for(final ObjectAssociation assoc: objectAssociations) {
             final MemberRepr memberRepr = newMemberRepr(objectSpec, assoc, actionIdsOfAssociations);
             columnRepr.collections.put(assoc.getId(), memberRepr);
         }
     }
 
 
-    private static MemberRepr newMemberRepr(ObjectSpecification objectSpec, ObjectAssociation assoc, Set<String> actionIdsForAssociations) {
+    private static MemberRepr newMemberRepr(final ObjectSpecification objectSpec, final ObjectAssociation assoc, final Set<String> actionIdsForAssociations) {
         final MemberRepr memberRepr = new MemberRepr();
 
-        CssClassFacet cssClassFacet = assoc.getFacet(CssClassFacet.class);
+        final CssClassFacet cssClassFacet = assoc.getFacet(CssClassFacet.class);
         if(cssClassFacet != null && !cssClassFacet.isNoop()) {
-            CssClassFacetRepr cssClassFacetRepr = new CssClassFacetRepr();
+            final CssClassFacetRepr cssClassFacetRepr = new CssClassFacetRepr();
             cssClassFacetRepr.value = cssClassFacet.cssClass(null);
             memberRepr.cssClass = cssClassFacetRepr;
         }
-        DescribedAsFacet describedAsFacet = assoc.getFacet(DescribedAsFacet.class);
+        final DescribedAsFacet describedAsFacet = assoc.getFacet(DescribedAsFacet.class);
         if(describedAsFacet != null && !describedAsFacet.isNoop() && !Strings.isNullOrEmpty(describedAsFacet.value())) {
-            DescribedAsFacetRepr describedAsFacetRepr = new DescribedAsFacetRepr();
+            final DescribedAsFacetRepr describedAsFacetRepr = new DescribedAsFacetRepr();
             describedAsFacetRepr.value = describedAsFacet.value();
             memberRepr.describedAs = describedAsFacetRepr;
         }
-        NamedFacet namedFacet = assoc.getFacet(NamedFacet.class);
+        final NamedFacet namedFacet = assoc.getFacet(NamedFacet.class);
         if(namedFacet != null && !namedFacet.isNoop()) {
-            NamedFacetRepr namedFacetRepr = new NamedFacetRepr();
+            final NamedFacetRepr namedFacetRepr = new NamedFacetRepr();
             namedFacetRepr.value = namedFacet.value();
             memberRepr.named = namedFacetRepr;
         }
-        DisabledFacet disabledFacet = assoc.getFacet(DisabledFacet.class);
+        final DisabledFacet disabledFacet = assoc.getFacet(DisabledFacet.class);
         if(disabledFacet != null && !disabledFacet.isNoop()) {
-            DisabledFacetRepr disabledFacetRepr = new DisabledFacetRepr();
-            if(disabledFacet instanceof DisabledFacetImpl) {
-                DisabledFacetImpl disabledFacetImpl = (DisabledFacetImpl) disabledFacet;
+            final DisabledFacetRepr disabledFacetRepr = new DisabledFacetRepr();
+            if(disabledFacet instanceof DisabledFacetAbstractImpl) {
+                final DisabledFacetAbstractImpl disabledFacetImpl = (DisabledFacetAbstractImpl) disabledFacet;
                 disabledFacetRepr.reason = Strings.emptyToNull(disabledFacetImpl.getReason());
             }
             disabledFacetRepr.when = whenAlwaysToNull(disabledFacet.when());
             disabledFacetRepr.where = whereAnywhereToNull(disabledFacet.where());
             memberRepr.disabled = disabledFacetRepr;
         }
-        HiddenFacet hiddenFacet = assoc.getFacet(HiddenFacet.class);
+        // relies on the fact that HiddenFacetAbstract is multi-typed
+        final HiddenFacet hiddenFacet = assoc.getFacet(HiddenFacet.class);
         if(hiddenFacet != null && !hiddenFacet.isNoop()) {
-            HiddenFacetRepr hiddenFacetRepr = new HiddenFacetRepr();
+            final HiddenFacetRepr hiddenFacetRepr = new HiddenFacetRepr();
             hiddenFacetRepr.when = whenAlwaysToNull(hiddenFacet.when());
             hiddenFacetRepr.where = whereAnywhereToNull(hiddenFacet.where());
             memberRepr.hidden = hiddenFacetRepr;
         }
-        MultiLineFacet multiLineFacet = assoc.getFacet(MultiLineFacet.class);
+        final MultiLineFacet multiLineFacet = assoc.getFacet(MultiLineFacet.class);
         if(multiLineFacet != null && !multiLineFacet.isNoop()) {
-            MultiLineFacetRepr multiLineFacetRepr = new MultiLineFacetRepr();
+            final MultiLineFacetRepr multiLineFacetRepr = new MultiLineFacetRepr();
             multiLineFacetRepr.numberOfLines = multiLineFacet.numberOfLines();
             memberRepr.multiLine = multiLineFacetRepr;
         }
-        PagedFacet pagedFacet = assoc.getFacet(PagedFacet.class);
+        final PagedFacet pagedFacet = assoc.getFacet(PagedFacet.class);
         if(pagedFacet != null && !pagedFacet.isNoop()) {
-            PagedFacetRepr pagedFacetRepr = new PagedFacetRepr();
+            final PagedFacetRepr pagedFacetRepr = new PagedFacetRepr();
             pagedFacetRepr.value = pagedFacet.value();
             memberRepr.paged = pagedFacetRepr;
         }
-        RenderFacet renderFacet = assoc.getFacet(RenderFacet.class);
+        final RenderFacet renderFacet = assoc.getFacet(RenderFacet.class);
         if(renderFacet != null && !renderFacet.isNoop()) {
-            RenderFacetRepr renderFacetRepr = new RenderFacetRepr();
+            final RenderFacetRepr renderFacetRepr = new RenderFacetRepr();
             renderFacetRepr.value = renderFacet.value();
             memberRepr.render = renderFacetRepr;
         }
-        TypicalLengthFacet typicalLengthFacet = assoc.getFacet(TypicalLengthFacet.class);
+        final TypicalLengthFacet typicalLengthFacet = assoc.getFacet(TypicalLengthFacet.class);
         if(typicalLengthFacet != null && !typicalLengthFacet.isNoop()) {
-            TypicalLengthFacetRepr typicalLengthFacetRepr = new TypicalLengthFacetRepr();
+            final TypicalLengthFacetRepr typicalLengthFacetRepr = new TypicalLengthFacetRepr();
             typicalLengthFacetRepr.value = typicalLengthFacet.value();
             memberRepr.typicalLength = typicalLengthFacetRepr;
         }
@@ -582,11 +582,11 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         return memberRepr;
     }
 
-    private static Where whereAnywhereToNull(Where where) {
+    private static Where whereAnywhereToNull(final Where where) {
         return where != Where.ANYWHERE? where: null;
     }
 
-    private static When whenAlwaysToNull(When when) {
+    private static When whenAlwaysToNull(final When when) {
         return when != When.ALWAYS? when: null;
     }
 
@@ -594,7 +594,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         Collections.sort(actions, new Comparator<ObjectAction>() {
 
             @Override
-            public int compare(ObjectAction o1, ObjectAction o2) {
+            public int compare(final ObjectAction o1, final ObjectAction o2) {
                 final MemberOrderFacet m1 = o1.getFacet(MemberOrderFacet.class);
                 final MemberOrderFacet m2 = o2.getFacet(MemberOrderFacet.class);
                 return memberOrderFacetComparator.compare(m1, m2);
@@ -623,7 +623,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
     private static Filter<ObjectAction> excluding(final Set<String> excludedActionIds) {
         return new Filter<ObjectAction>(){
                     @Override
-                    public boolean accept(ObjectAction t) {
+                    public boolean accept(final ObjectAction t) {
                         return !excludedActionIds.contains(t.getId());
                     }
                 };

@@ -43,7 +43,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         }
     }
 
-    protected ProgrammableReflector reflector;
+    protected ProgrammableReflector programmableReflector;
     protected ProgrammableMethodRemover methodRemover;
 
     protected FacetHolder facetHolder;
@@ -53,7 +53,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        reflector = new ProgrammableReflector();
+        programmableReflector = new ProgrammableReflector();
         facetHolder = new FacetHolderImpl();
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(String.class);
@@ -62,7 +62,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
     @Override
     protected void tearDown() throws Exception {
-        reflector = null;
+        programmableReflector = null;
         methodRemover = null;
         facetedMethod = null;
         super.tearDown();

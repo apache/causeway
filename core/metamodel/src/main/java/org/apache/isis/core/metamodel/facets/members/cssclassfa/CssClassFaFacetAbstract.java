@@ -59,7 +59,7 @@ public class CssClassFaFacetAbstract extends SingleStringValueFacetAbstract impl
         for (String cssClass : classes) {
             cssClassesSet.add(cssClass);
         }
-        return Joiner.on(' ').join(cssClassesSet);
+        return Joiner.on(' ').join(cssClassesSet).trim();
     }
 
     public static Class<? extends Facet> type() {

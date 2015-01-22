@@ -45,10 +45,10 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
-import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.applib.value.Blob;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -429,7 +429,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                 assertThat(unwrap(toDoItem).isComplete(), is(false));
 
                 // and then
-                final ActionInteractionEvent<ToDoItem> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(ActionInteractionEvent.class);
+                final ActionDomainEvent<ToDoItem> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(ActionDomainEvent.class);
                 assertThat(ev, is(not(nullValue())));
 
                 ToDoItem source = ev.getSource();
@@ -512,25 +512,25 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
                     final List<EventObject> receivedEvents = toDoItemSubscriptions.receivedEvents();
 
                     assertThat(receivedEvents.size(), is(7));
-                    assertThat(receivedEvents.get(0) instanceof ActionInteractionEvent, is(true)); // ToDoItem#add() executed
-                    assertThat(receivedEvents.get(1) instanceof CollectionInteractionEvent, is(true)); // ToDoItem#dependencies add, executed
-                    assertThat(receivedEvents.get(2) instanceof CollectionInteractionEvent, is(true)); // ToDoItem#dependencies add, executing
-                    assertThat(receivedEvents.get(3) instanceof ActionInteractionEvent, is(true)); // ToDoItem#add executing
-                    assertThat(receivedEvents.get(4) instanceof ActionInteractionEvent, is(true)); // ToDoItem#add validate
-                    assertThat(receivedEvents.get(5) instanceof ActionInteractionEvent, is(true)); // ToDoItem#add disable
-                    assertThat(receivedEvents.get(6) instanceof ActionInteractionEvent, is(true)); // ToDoItem#add hide
+                    assertThat(receivedEvents.get(0) instanceof ActionDomainEvent, is(true)); // ToDoItem#add() executed
+                    assertThat(receivedEvents.get(1) instanceof CollectionDomainEvent, is(true)); // ToDoItem#dependencies add, executed
+                    assertThat(receivedEvents.get(2) instanceof CollectionDomainEvent, is(true)); // ToDoItem#dependencies add, executing
+                    assertThat(receivedEvents.get(3) instanceof ActionDomainEvent, is(true)); // ToDoItem#add executing
+                    assertThat(receivedEvents.get(4) instanceof ActionDomainEvent, is(true)); // ToDoItem#add validate
+                    assertThat(receivedEvents.get(5) instanceof ActionDomainEvent, is(true)); // ToDoItem#add disable
+                    assertThat(receivedEvents.get(6) instanceof ActionDomainEvent, is(true)); // ToDoItem#add hide
 
                     // inspect the collection interaction (posted programmatically in ToDoItem#add)
-                    final CollectionInteractionEvent<ToDoItem,ToDoItem> ciEv = (CollectionInteractionEvent<ToDoItem, ToDoItem>) toDoItemSubscriptions.mostRecentlyReceivedEvent(CollectionInteractionEvent.class);
+                    final CollectionDomainEvent<ToDoItem,ToDoItem> ciEv = (CollectionDomainEvent<ToDoItem, ToDoItem>) toDoItemSubscriptions.mostRecentlyReceivedEvent(CollectionDomainEvent.class);
                     assertThat(ciEv, is(notNullValue()));
 
                     assertThat(ciEv.getSource(), is(equalTo(unwrap(toDoItem))));
                     assertThat(ciEv.getIdentifier().getMemberName(), is("dependencies"));
-                    assertThat(ciEv.getOf(), is(CollectionInteractionEvent.Of.ADD_TO));
+                    assertThat(ciEv.getOf(), is(CollectionDomainEvent.Of.ADD_TO));
                     assertThat(ciEv.getValue(), is(unwrap(otherToDoItem)));
 
                     // inspect the action interaction (posted declaratively by framework)
-                    final ActionInteractionEvent<ToDoItem> aiEv = (ActionInteractionEvent<ToDoItem>) toDoItemSubscriptions.mostRecentlyReceivedEvent(ActionInteractionEvent.class);
+                    final ActionDomainEvent<ToDoItem> aiEv = (ActionDomainEvent<ToDoItem>) toDoItemSubscriptions.mostRecentlyReceivedEvent(ActionDomainEvent.class);
                     assertThat(aiEv, is(notNullValue()));
 
                     assertThat(aiEv.getSource(), is(equalTo(unwrap(toDoItem))));
@@ -865,7 +865,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
 
                 // then published and received
                 @SuppressWarnings("unchecked")
-                final PropertyInteractionEvent<ToDoItem,String> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(PropertyInteractionEvent.class);
+                final PropertyDomainEvent<ToDoItem,String> ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(PropertyDomainEvent.class);
                 assertThat(ev, is(not(nullValue())));
 
                 ToDoItem source = ev.getSource();
@@ -1015,7 +1015,7 @@ public class ToDoItemIntegTest extends AbstractToDoIntegTest {
 
                 // and then receive the default event.
                 @SuppressWarnings("unchecked")
-                final PropertyInteractionEvent.Default ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(PropertyInteractionEvent.Default.class);
+                final PropertyDomainEvent.Default ev = toDoItemSubscriptions.mostRecentlyReceivedEvent(PropertyDomainEvent.Default.class);
                 assertThat(ev, is(notNullValue()));
 
                 assertThat(ev.getSource(), is((Object)unwrap(toDoItem)));

@@ -27,8 +27,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 public abstract class AuditableFacetAbstract extends FacetAbstract implements
         AuditableFacet {
 
-
-
     public static Class<? extends Facet> type() {
         return AuditableFacet.class;
     }

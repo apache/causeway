@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 
 public interface Facet {
 

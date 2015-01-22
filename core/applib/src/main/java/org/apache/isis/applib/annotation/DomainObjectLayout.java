@@ -38,15 +38,24 @@ public @interface DomainObjectLayout {
      */
     String cssClass() default "";
 
+
+    // //////////////////////////////////////
+
     /**
      * Description of this class, eg to be rendered in a tooltip.
      */
     String describedAs() default "";
 
+
+    // //////////////////////////////////////
+
     /**
      * Name of this class (overriding the name derived from its name in code).
      */
     String named() default "";
+
+
+    // //////////////////////////////////////
 
     /**
      * The page size for instances of this class when rendered within
@@ -62,10 +71,19 @@ public @interface DomainObjectLayout {
      */
     public int paged() default -1;
 
+
+    // //////////////////////////////////////
+
     /**
      * The plural name of the class.
      */
     String plural() default "";
 
+    // //////////////////////////////////////
+
+    /**
+     * Whether (and how) this domain object can be bookmarked in the UI.
+     */
+    BookmarkPolicy bookmarking() default BookmarkPolicy.NEVER;
 
 }

@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.param.validating.mustsatisfyspec.MustSatisfySpecificationOnParameterFacet;
+import org.apache.isis.core.metamodel.facets.param.validating.mustsatisfyspec.MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.param.validating.mustsatisfyspec.MustSatisfySpecificationOnParameterFacetFactory;
 import org.apache.isis.core.unittestsupport.jmocking.JavassistImposteriser;
 
@@ -66,7 +66,7 @@ public class MustSatisfySpecificationFacetFactoryProcessParameterTest {
 
         mockery.checking(new Expectations() {
             {
-                one(mockFacetedMethodParameter).addFacet(with(anInstanceOf(MustSatisfySpecificationOnParameterFacet.class)));
+                one(mockFacetedMethodParameter).addFacet(with(anInstanceOf(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter.class)));
             }
         });
         facetFactory.processParams(new ProcessParameterContext(changeLastNameMethodWith, 0, mockFacetedMethodParameter));
@@ -78,7 +78,7 @@ public class MustSatisfySpecificationFacetFactoryProcessParameterTest {
 
         mockery.checking(new Expectations() {
             {
-                never(mockFacetedMethodParameter).addFacet(with(anInstanceOf(MustSatisfySpecificationOnParameterFacet.class)));
+                never(mockFacetedMethodParameter).addFacet(with(anInstanceOf(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter.class)));
             }
         });
         facetFactory.processParams(new ProcessParameterContext(changeLastNameMethodWithout, 0, mockFacetedMethodParameter));

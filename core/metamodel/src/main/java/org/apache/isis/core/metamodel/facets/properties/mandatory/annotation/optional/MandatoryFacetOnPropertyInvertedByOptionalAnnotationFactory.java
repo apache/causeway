@@ -19,13 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.optional;
 
+import java.lang.reflect.Method;
 import org.apache.isis.applib.annotation.Optional;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
 public class MandatoryFacetOnPropertyInvertedByOptionalAnnotationFactory extends FacetFactoryAbstract {
 
@@ -35,19 +35,15 @@ public class MandatoryFacetOnPropertyInvertedByOptionalAnnotationFactory extends
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final Class<?> returnType = processMethodContext.getMethod().getReturnType();
-        if (returnType.isPrimitive()) {
+        final Method method = processMethodContext.getMethod();
+        final Optional annotation = Annotations.getAnnotation(method, Optional.class);
+        if(annotation == null) {
             return;
         }
-        if (!Annotations.isAnnotationPresent(processMethodContext.getMethod(), Optional.class)) {
-            return;
-        }
-        final Optional annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Optional.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
-    }
+        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
 
-    private MandatoryFacet create(final Optional annotation, final FacetHolder holder) {
-        return annotation != null ? new MandatoryFacetOnPropertyInvertedByOptionalAnnotation(holder) : null;
+        FacetUtil.addFacet(
+                MandatoryFacetOnPropertyInvertedByOptionalAnnotation.create(annotation, method, facetHolder));
     }
 
 }

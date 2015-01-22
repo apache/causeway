@@ -22,9 +22,9 @@ package org.apache.isis.core.metamodel.facets.members.disabled.annotprop;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetImpl;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractImpl;
 
-public class DisabledFacetAnnotation extends DisabledFacetImpl {
+public class DisabledFacetAnnotation extends DisabledFacetAbstractImpl {
 
     public DisabledFacetAnnotation(final When when, Where where, String reason, final FacetHolder holder) {
         super(when, where, reason, holder);

@@ -42,30 +42,18 @@ public class RegExFacetFacetOnPropertyAnnotationFactory extends FacetFactoryAbst
             return;
         }
         final RegEx annotation = Annotations.getAnnotation(processMethodContext.getMethod(), RegEx.class);
+        if(annotation == null) {
+            return;
+        }
         addRegexFacetAndCorrespondingTitleFacet(processMethodContext.getFacetHolder(), annotation);
     }
 
     private void addRegexFacetAndCorrespondingTitleFacet(final FacetHolder holder, final RegEx annotation) {
-        final RegExFacet regexFacet = createRegexFacet(annotation, holder);
-        if (regexFacet == null) {
-            return;
-        }
+        final RegExFacet regexFacet = RegExFacetOnPropertyAnnotation.createRegexFacet(annotation, holder);
         FacetUtil.addFacet(regexFacet);
 
         final TitleFacet titleFacet = createTitleFacet(regexFacet);
         FacetUtil.addFacet(titleFacet);
-    }
-
-    private RegExFacet createRegexFacet(final RegEx annotation, final FacetHolder holder) {
-        if (annotation == null) {
-            return null;
-        }
-
-        final String validationExpression = annotation.validation();
-        final boolean caseSensitive = annotation.caseSensitive();
-        final String formatExpression = annotation.format();
-
-        return new RegExFacetOnPropertyAnnotation(validationExpression, formatExpression, caseSensitive, holder);
     }
 
     private TitleFacet createTitleFacet(final RegExFacet regexFacet) {

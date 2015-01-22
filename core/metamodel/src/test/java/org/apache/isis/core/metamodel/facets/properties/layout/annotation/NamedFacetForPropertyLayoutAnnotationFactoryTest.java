@@ -24,8 +24,8 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.properties.layout.NamedFacetForPropertyLayoutAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.layout.PropertyLayoutFactory;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.NamedFacetForPropertyLayoutAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -36,7 +36,7 @@ import static org.junit.Assert.assertThat;
 public class NamedFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     public void testPropertyLayoutAnnotationNamed() {
-        final PropertyLayoutFactory facetFactory = new PropertyLayoutFactory();
+        final PropertyLayoutFacetFactory facetFactory = new PropertyLayoutFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -57,7 +57,7 @@ public class NamedFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFa
     }
 
     public void testPropertyLayoutAnnotationNamedEscapedFalse() {
-        final PropertyLayoutFactory facetFactory = new PropertyLayoutFactory();
+        final PropertyLayoutFacetFactory facetFactory = new PropertyLayoutFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")

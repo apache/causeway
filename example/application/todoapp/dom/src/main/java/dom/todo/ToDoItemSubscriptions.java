@@ -29,18 +29,20 @@ import com.google.common.eventbus.Subscribe;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
-import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
@@ -127,14 +129,19 @@ public class ToDoItemSubscriptions {
      * To demo/test what occurs if a subscriber that might veto an event.
      */
     @MemberOrder(name = "Prototyping", sequence = "80")
-    @ActionLayout(
-        named="Set subscriber behaviour",
-        prototype = true
-    )
     @NotContributed
-    @ActionSemantics(ActionSemantics.Of.IDEMPOTENT)
+    @ActionLayout(
+        named="Set subscriber behaviour"
+    )
+    @Action(
+            semantics = SemanticsOf.IDEMPOTENT,
+            restrictTo = RestrictTo.PROTOTYPING
+    )
     public void subscriberBehaviour(
-            @ParameterLayout(named="Behaviour") Behaviour behaviour) {
+            @ParameterLayout(
+                    named="Behaviour"
+            )
+            final Behaviour behaviour) {
         this.behaviour = behaviour;
         container.informUser("Subscriber behaviour set to: " + behaviour);
     }
@@ -146,7 +153,23 @@ public class ToDoItemSubscriptions {
     public Behaviour getSubscriberBehaviour() {
         return behaviour;
     }
-    private void onExecutedVetoIfRequired() {
+
+
+    private void onExecutedThrowExceptionIfSet(final ActionDomainEvent<?> ev) {
+        if(ev != null && ev.getSemantics().isSafe()) {
+            return;
+        }
+        onExecutedThrowExceptionIfSet();
+    }
+    private void onExecutedThrowExceptionIfSet(final PropertyDomainEvent<?, ?> ev) {
+        onExecutedThrowExceptionIfSet();
+    }
+    private void onExecutedThrowExceptionIfSet(final CollectionDomainEvent<?, ?> ev) {
+        onExecutedThrowExceptionIfSet();
+    }
+
+
+    private void onExecutedThrowExceptionIfSet() {
         if(behaviour == Behaviour.AnyExecuteVetoWithRecoverableException) {
             throw new RecoverableException("Rejecting event (recoverable exception thrown)");
         }
@@ -164,7 +187,7 @@ public class ToDoItemSubscriptions {
     @Subscribe
     public void on(final ToDoItem.CompletedEvent ev) {
         recordEvent(ev);
-        switch(ev.getPhase()) {
+        switch(ev.getEventPhase()) {
             case HIDE:
                 break;
             case DISABLE:
@@ -184,9 +207,9 @@ public class ToDoItemSubscriptions {
 
     @Programmatic
     @Subscribe
-    public void on(final ActionInteractionEvent<?> ev) {
+    public void on(final ActionDomainEvent<?> ev) {
         recordEvent(ev);
-        switch(ev.getPhase()) {
+        switch(ev.getEventPhase()) {
             case HIDE:
                 if(getSubscriberBehaviour() == Behaviour.UpdateCostActionHide) {
                     if(ev.getIdentifier().getMemberName().equals("updateCost")) {
@@ -211,39 +234,39 @@ public class ToDoItemSubscriptions {
                 break;
             case EXECUTED:
                 LOG.info("Received ActionInteractionEvent, " + ev.getSource().toString() + ", invoked " + ev.getIdentifier().getMemberName());
-                onExecutedVetoIfRequired();
+                onExecutedThrowExceptionIfSet(ev);
                 break;
         }
     }
 
     @Programmatic
     @Subscribe
-    public void on(PropertyInteractionEvent<?,?> ev) {
+    public void on(PropertyDomainEvent<?,?> ev) {
         recordEvent(ev);
-        switch(ev.getPhase()) {
+        switch(ev.getEventPhase()) {
             case HIDE:
                 if(getSubscriberBehaviour() == Behaviour.DescriptionPropertyHide &&
                     ev.getIdentifier().getMemberName().equals("description")) {
-                    ev.hide();
+                    ev.veto("");
                 }
                 break;
             case DISABLE:
                 if(getSubscriberBehaviour() == Behaviour.DescriptionPropertyDisable &&
                     ev.getIdentifier().getMemberName().equals("description")) {
-                    ev.disable("ToDoItemSubscriptions says: description property disabled!");
+                    ev.veto("ToDoItemSubscriptions says: description property disabled!");
                 }
                 break;
             case VALIDATE:
                 if(getSubscriberBehaviour() == Behaviour.DescriptionPropertyInvalidate &&
                     ev.getIdentifier().getMemberName().equals("description")) {
-                    ev.disable("ToDoItemSubscriptions says: can't change description property to this value!");
+                    ev.veto("ToDoItemSubscriptions says: can't change description property to this value!");
                 }
                 break;
             case EXECUTING:
                 break;
             case EXECUTED:
                 LOG.info("Received PropertyInteractionEvent, " + ev.getSource().toString() + ", changed " + ev.getIdentifier().getMemberName() + " : " + ev.getOldValue() + " -> " + ev.getNewValue());
-                onExecutedVetoIfRequired();
+                onExecutedThrowExceptionIfSet(ev);
 
                 if(ev.getIdentifier().getMemberName().contains("description")) {
                     String newValue = (String) ev.getNewValue();
@@ -254,53 +277,54 @@ public class ToDoItemSubscriptions {
                 break;
         }
     }
-    
+
     @Programmatic
     @Subscribe
-    public void on(CollectionInteractionEvent<?,?> ev) {
+    public void on(CollectionDomainEvent<?,?> ev) {
         recordEvent(ev);
-        switch (ev.getPhase()) {
+        switch (ev.getEventPhase()) {
             case HIDE:
                 if(getSubscriberBehaviour() == Behaviour.DependenciesCollectionHide &&
                     ev.getIdentifier().getMemberName().equals("dependencies")) {
-                    ev.hide();
+                    ev.veto("");
                 }
                 if (getSubscriberBehaviour() == Behaviour.SimilarToCollectionHide &&
                     ev.getIdentifier().getMemberName().equals("similarTo")) {
-                    ev.hide();
+                    ev.veto("");
                 }
                 break;
             case DISABLE:
                 if (getSubscriberBehaviour() == Behaviour.DependenciesCollectionDisable &&
                     ev.getIdentifier().getMemberName().equals("dependencies")) {
-                    ev.disable("ToDoItemSubscriptions says: dependencies collection disabled!");
+                    ev.veto("ToDoItemSubscriptions says: dependencies collection disabled!");
                 }
                 break;
             case VALIDATE:
                 if(getSubscriberBehaviour() == Behaviour.DependenciesCollectionInvalidateAdd &&
                     ev.getIdentifier().getMemberName().equals("dependencies") &&
-                    ev.getOf() == CollectionInteractionEvent.Of.ADD_TO ) {
-                    ev.invalidate("ToDoItemSubscriptions says: can't add this object to dependencies collection!");
+                    ev.getOf() == CollectionDomainEvent.Of.ADD_TO ) {
+                    ev.veto("ToDoItemSubscriptions says: can't add this object to dependencies collection!");
                 }
                 if(getSubscriberBehaviour() == Behaviour.DependenciesCollectionInvalidateRemove &&
                     ev.getIdentifier().getMemberName().equals("dependencies") &&
-                    ev.getOf() == CollectionInteractionEvent.Of.REMOVE_FROM ) {
-                    ev.invalidate("ToDoItemSubscriptions says: can't remove this object from dependencies collection!");
+                    ev.getOf() == CollectionDomainEvent.Of.REMOVE_FROM ) {
+                    ev.veto("ToDoItemSubscriptions says: can't remove this object from dependencies collection!");
                 }
                 break;
             case EXECUTING:
                 break;
             case EXECUTED:
-                if(ev.getOf() == CollectionInteractionEvent.Of.ADD_TO) {
+                if(ev.getOf() == CollectionDomainEvent.Of.ADD_TO) {
                     LOG.info("Received CollectionInteractionEvent, " + ev.getSource().toString() + ", added to " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
                 } else {
                     LOG.info("Received CollectionInteractionEvent, " + ev.getSource().toString() + ", removed from " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
                 }
-                onExecutedVetoIfRequired();
+                onExecutedThrowExceptionIfSet(ev);
                 break;
         }
 
     }
+
     //endregion
 
     //region > receivedEvents

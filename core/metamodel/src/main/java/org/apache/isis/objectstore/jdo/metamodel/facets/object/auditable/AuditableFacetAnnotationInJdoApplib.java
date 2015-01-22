@@ -20,11 +20,11 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable;
 
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetAuditedAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForAuditedAnnotation;
 
 
 @Deprecated
-public class AuditableFacetAnnotationInJdoApplib extends AuditableFacetAuditedAnnotation {
+public class AuditableFacetAnnotationInJdoApplib extends AuditableFacetForAuditedAnnotation {
 
     public AuditableFacetAnnotationInJdoApplib(final FacetHolder facetHolder) {
         super(facetHolder, Enablement.ENABLED);

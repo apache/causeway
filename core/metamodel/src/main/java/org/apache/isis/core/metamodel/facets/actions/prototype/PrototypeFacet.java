@@ -23,12 +23,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 
 /**
- * Indicates that the action should only be available in a special
- * <i>prototype</i> mode.
- * 
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
- * action method using <tt>@Prototype</tt>.
+ * Indicates that the action should only be available in <i>prototype</i> mode.
  */
 public interface PrototypeFacet extends Facet, HidingInteractionAdvisor {
 

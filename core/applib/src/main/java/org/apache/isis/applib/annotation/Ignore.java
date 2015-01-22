@@ -26,16 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that an property, collection or action should be ignored from the
- * metamodel.
- * 
- * <p>
- * Use of this annotation is discouraged because of the nameclash with
- * <tt>org.junit.Ignore</tt>.
- * 
- * Instead, use {@link Programmatic}, which is functionally identical.
- * 
- * @see Programmatic
+ * @deprecated - use {@link org.apache.isis.applib.annotation.Programmatic} instead.
  */
 @Deprecated
 @Inherited

@@ -19,21 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.properties.disabled.inferred;
 
-import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
-import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractAlwaysEverywhere;
 
-public class DisabledFacetOnPropertyInferred extends DisabledFacetAbstract {
+public class DisabledFacetOnPropertyInferred extends DisabledFacetAbstractAlwaysEverywhere {
 
-    public DisabledFacetOnPropertyInferred(final ImmutableFacet immutableFacet, final FacetHolder holder) {
-        super(immutableFacet.when(), Where.ANYWHERE, holder);
+    public DisabledFacetOnPropertyInferred(final FacetHolder holder) {
+        super(holder);
     }
 
-    @Override
-    public String disabledReason(final ObjectAdapter target) {
-        return when().appliesTo(target) ? "Immutable" : null;
-    }
 
 }

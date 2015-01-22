@@ -20,15 +20,25 @@
 package org.apache.isis.core.metamodel.facets.properties.validating.regexannot;
 
 import java.util.regex.Pattern;
-
+import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.object.regex.RegExFacetAbstract;
 
 public class RegExFacetOnPropertyAnnotation extends RegExFacetAbstract {
 
     private final Pattern pattern;
 
-    public RegExFacetOnPropertyAnnotation(final String validation, final String format, final boolean caseSensitive, final FacetHolder holder) {
+    static RegExFacet createRegexFacet(final RegEx annotation, final FacetHolder holder) {
+
+        final String validationExpression = annotation.validation();
+        final boolean caseSensitive = annotation.caseSensitive();
+        final String formatExpression = annotation.format();
+
+        return new RegExFacetOnPropertyAnnotation(validationExpression, formatExpression, caseSensitive, holder);
+    }
+
+    private RegExFacetOnPropertyAnnotation(final String validation, final String format, final boolean caseSensitive, final FacetHolder holder) {
         super(validation, format, caseSensitive, holder);
         pattern = Pattern.compile(validation(), patternFlags());
     }

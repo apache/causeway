@@ -28,8 +28,9 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.spec.Specification;
 
 /**
- * 
+ * @deprecated - use {@link Property#mustSatisfy()} or {@link Parameter#mustSatisfy()} instead.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
@@ -40,6 +41,9 @@ public @interface MustSatisfy {
      * <p>
      * If more than one is provided, then all must be satisfied (in effect
      * &quot;AND&quot;ed together).
+     *
+     * @deprecated - use {@link Property#mustSatisfy()} or {@link Parameter#mustSatisfy()} instead.
      */
+    @Deprecated
     Class<? extends Specification>[] value();
 }

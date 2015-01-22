@@ -27,11 +27,14 @@ import org.apache.isis.viewer.wicket.viewer.applib.WicketDeveloperUtilitiesServi
  * 'Prototyping' menu.
  */
 @DomainService
-@DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.SECONDARY, menuOrder = "40")
+@DomainServiceLayout(
+        menuBar = DomainServiceLayout.MenuBar.SECONDARY,
+        named = "Prototyping",
+        menuOrder = "40")
 public class WicketDeveloperUtilities extends WicketDeveloperUtilitiesService {
 
     @ActionLayout(named="Clear i18n Cache")
-    @MemberOrder(name="Prototyping", sequence="90.3")
+    @MemberOrder(sequence="90.3")
     @Override
     public void resetI18nCache() {
         super.resetI18nCache();

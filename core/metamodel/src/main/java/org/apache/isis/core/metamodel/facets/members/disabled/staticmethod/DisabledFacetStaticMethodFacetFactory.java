@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.members.disabled.staticmethod;
 
 import java.lang.reflect.Method;
-
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
@@ -28,11 +27,10 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAlwaysEverywhere;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 public class DisabledFacetStaticMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -77,7 +75,7 @@ public class DisabledFacetStaticMethodFacetFactory extends MethodPrefixBasedFace
         }
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new DisabledFacetAlwaysEverywhere(facetedMethod));
+        FacetUtil.addFacet(new DisabledFacetForStaticMethod(facetedMethod));
     }
 
     private static Boolean invokeProtectMethod(final Method protectMethod) {

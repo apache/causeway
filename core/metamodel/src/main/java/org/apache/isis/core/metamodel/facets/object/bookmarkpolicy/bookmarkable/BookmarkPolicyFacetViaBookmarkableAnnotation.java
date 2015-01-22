@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolic
 
 public class BookmarkPolicyFacetViaBookmarkableAnnotation extends BookmarkPolicyFacetAbstract {
 
-    public BookmarkPolicyFacetViaBookmarkableAnnotation(FacetHolder facetHolder, BookmarkPolicy bookmarkPolicy) {
-        super(facetHolder, bookmarkPolicy);
+    public BookmarkPolicyFacetViaBookmarkableAnnotation(BookmarkPolicy bookmarkPolicy, FacetHolder facetHolder) {
+        super(bookmarkPolicy, facetHolder);
     }
 
 

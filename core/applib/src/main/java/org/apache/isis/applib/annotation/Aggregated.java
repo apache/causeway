@@ -31,11 +31,12 @@ import java.lang.annotation.Target;
  * 
  * <p>
  * This is/should be interpreted by viewers as meaning that references to the
- * object may not be shared between instances. So for example in the DnD viewer
- * an aggregated object may not be drag/dropped into an empty &quot;slot&quot;.
- * Instead, the user would need to use copy/paste.
- * 
- * @see Value
+ * object may not be shared between instances.
+ *
+ * <p>
+ *     Note: This annotation is not recognized by the Wicket viewer, Restful Objects viewer or JDO Objectstore,
+ *     and may be deprecated in the future.
+ * </p>
  */
 @Inherited
 @Target({ ElementType.TYPE })
