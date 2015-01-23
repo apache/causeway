@@ -800,13 +800,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
 
         final List<? extends ActionDomainEvent<?>> events;
-        if(command instanceof Command3) {
-            final Command3 command3 = (Command3) command;
-            events = command3.flushActionDomainEvents();
-        } else {
-            final Command2 command2 = (Command2) command;
-            events = command2.flushActionInteractionEvents();
-        }
+        events = flushActionDomainEvents(command);
         if (events.isEmpty()) {
             return;
         }
@@ -845,6 +839,22 @@ public class IsisTransaction implements TransactionScopedComponent {
         if(enforceSafeSemantics) {
             throw new RecoverableException(msg);
         }
+    }
+
+    private List<? extends ActionDomainEvent<?>> flushActionDomainEvents(
+            final Command command) {
+
+        if(command instanceof Command3) {
+            final Command3 command3 = (Command3) command;
+            return command3.flushActionDomainEvents();
+        }
+        // else
+        if(command instanceof Command2) {
+            final Command2 command2 = (Command2) command;
+            return command2.flushActionInteractionEvents();
+        }
+        // else
+        return Collections.emptyList();
     }
 
     private static Set<ObjectAdapter> findChangedAdapters(
@@ -906,10 +916,7 @@ public class IsisTransaction implements TransactionScopedComponent {
                 final Command command = commandContext.getCommand();
                 commandService.complete(command);
 
-                if(command instanceof Command2) {
-                    final Command2 command2 = (Command2) command;
-                    command2.flushActionInteractionEvents();
-                }
+                flushActionDomainEvents(command);
             }
         }
     }
