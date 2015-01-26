@@ -21,27 +21,28 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 
 
 import java.sql.Timestamp;
+
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldAbstract;
 
 /**
- * Panel for rendering scalars of type {@link java.util.Date}.
+ * Panel for rendering scalars of type {@link java.sql.Timestamp}.
  */
-public class JavaSqlTimestampPanel extends ScalarPanelTextFieldAbstract<Timestamp> {
+public class JavaSqlTimestampPanel extends ScalarPanelTextFieldDatePickerAbstract<Timestamp> {
 
     private static final long serialVersionUID = 1L;
 
     public JavaSqlTimestampPanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, java.sql.Timestamp.class);
-//        init(new DateConverterForJavaSqlTimestamp(getSettings(), getAdjustBy()));
+        init(new DateConverterForJavaSqlTimestamp(getSettings(), getAdjustBy()));
     }
 
-//    @Override
-//    protected Integer getLengthAdjustHint() {
-//        return +3;
-//    }
+    @Override
+    protected Integer getLengthAdjustHint() {
+        return +3;
+    }
 
     @Override
     protected IModel<String> getScalarPanelType() {
