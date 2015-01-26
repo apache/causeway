@@ -30,9 +30,11 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
+import org.apache.isis.viewer.wicket.ui.pages.EmailVerificationUrlService;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.EmailVerificationUrlServiceDefault;
 import org.apache.isis.viewer.wicket.viewer.imagecache.ImageResourceCacheClassPath;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
 import org.apache.isis.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
@@ -69,6 +71,7 @@ public class IsisWicketModule extends AbstractModule {
     protected void configure() {
         bind(ComponentFactoryRegistry.class).to(ComponentFactoryRegistryDefault.class);
         bind(PageClassRegistry.class).to(PageClassRegistryDefault.class);
+        bind(EmailVerificationUrlService.class).to(EmailVerificationUrlServiceDefault.class);
         bind(PageNavigationService.class).to(PageNavigationServiceDefault.class);
         bind(PageClassList.class).to(PageClassListDefault.class);
         bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarDefault.class);

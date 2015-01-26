@@ -21,11 +21,18 @@ package org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+
 import javax.inject.Inject;
-import com.google.inject.name.Named;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.wicket.Page;
+
+import org.apache.isis.applib.services.email.EmailService;
+import org.apache.isis.applib.services.userreg.EmailNotificationService;
+import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
+import org.apache.isis.viewer.wicket.ui.pages.EmailVerificationUrlService;
+import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.EmailAvailableValidator;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -33,20 +40,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.request.Url;
-import org.apache.wicket.request.UrlRenderer;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.apache.isis.applib.services.email.EmailService;
-import org.apache.isis.applib.services.userreg.EmailNotificationService;
-import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
-import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.EmailAvailableValidator;
+
+import com.google.inject.name.Named;
 
 /**
  * A panel with a form for creation of new users
@@ -82,7 +79,7 @@ public class PasswordResetEmailPanel extends Panel {
 
                 String email = emailField.getModelObject();
 
-                String confirmationUrl = createUrl(email);
+                String confirmationUrl = emailVerificationUrlService.createVerificationUrl(PageType.PASSWORD_RESET, email);
 
                 /**
                  * We have to init() the services here because the Isis runtime is not available to us
@@ -111,31 +108,13 @@ public class PasswordResetEmailPanel extends Panel {
         form.add(signUpButton);
     }
 
-    private String createUrl(String email) {
-        String uuid = UUID.randomUUID().toString();
-        uuid = uuid.replace("-", "");
-
-        // TODO mgrigorov: either improve the API or use a DB table for this
-        AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
-        accountConfirmationMap.put(uuid, email);
-
-        PageParameters parameters = new PageParameters();
-        parameters.set(0, uuid);
-        Class<? extends Page> passwordResetPage = pageClassRegistry.getPageClass(PageType.PASSWORD_RESET);
-        CharSequence relativeUrl = urlFor(passwordResetPage, parameters);
-        UrlRenderer urlRenderer = getRequestCycle().getUrlRenderer();
-        String fullUrl = urlRenderer.renderFullUrl(Url.parse(relativeUrl));
-
-        return fullUrl;
-    }
-
     @Inject
     private EmailNotificationService emailNotificationService;
     @Inject
     private EmailService emailService;
 
     @Inject
-    private PageClassRegistry pageClassRegistry;
+    private EmailVerificationUrlService emailVerificationUrlService;
 
     @Inject
     private PageNavigationService pageNavigationService;
