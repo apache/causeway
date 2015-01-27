@@ -19,18 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import java.util.List;
 import java.util.Locale;
-import java.util.StringTokenizer;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 
-import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormatter;
 
 import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 
 public final class JodaFunctions  {
 
@@ -42,11 +37,11 @@ public final class JodaFunctions  {
             public DateTimeFormatter apply(DateTimeFormatter input) {
                 if (localization == null) {
                     return input;
-                } 
+                }
                 final Locale locale = localization.getLocale();
                 if (locale == null) {
                     return input;
-                } 
+                }
                 return input.withLocale(locale);
             }
         };
