@@ -14,6 +14,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverte
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaSqlTimestamp;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaUtilDate;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.BigDecimalConverterWithScale;
+import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigIntegerPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaDateTime;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaLocalDate;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaLocalDateTime;
@@ -53,6 +54,8 @@ public class IsisConverterLocator {
             converter = new DateConverterForJodaDateTime(wicketViewerSettings, adjustBy);
         } else if (java.sql.Timestamp.class == correspondingClass) {
             converter = new DateConverterForJavaSqlTimestamp(wicketViewerSettings, adjustBy);
+        } else if (java.math.BigInteger.class == correspondingClass) {
+            converter = JavaMathBigIntegerPanelFactory.BigIntegerConverter.INSTANCE;
         } else if (java.math.BigDecimal.class == correspondingClass) {
             final BigDecimalValueFacet facet = objectSpecification.getFacet(BigDecimalValueFacet.class);
             Integer scale = null;
