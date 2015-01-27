@@ -62,7 +62,7 @@ public class IsisConverterLocator {
             if (facet != null) {
                 scale = facet.getScale();
             }
-            converter = new BigDecimalConverterWithScale(scale);
+            converter = new BigDecimalConverterWithScale(scale).forViewMode();
         } else if (Application.exists()) {
             IConverterLocator converterLocator = Application.get().getConverterLocator();
             converter = converterLocator.getConverter(correspondingClass);
