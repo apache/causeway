@@ -32,10 +32,10 @@ public class DateConverterForJavaSqlTimestamp extends DateConverterForJavaAbstra
     private static final long serialVersionUID = 1L;
     
     public DateConverterForJavaSqlTimestamp(WicketViewerSettings settings, int adjustBy) {
-        this(settings.getTimestampPattern(), adjustBy);
+        this(settings.getDatePattern(), settings.getTimestampPattern(), adjustBy);
     }
-    public DateConverterForJavaSqlTimestamp(String datetimePattern, int adjustBy) {
-        super(java.sql.Timestamp.class, datetimePattern, datetimePattern, datetimePattern, adjustBy);
+    public DateConverterForJavaSqlTimestamp(final String datePattern, String timestampPattern, int adjustBy) {
+        super(java.sql.Timestamp.class, datePattern, timestampPattern, timestampPattern, adjustBy);
     }
 
     @Override
@@ -50,7 +50,11 @@ public class DateConverterForJavaSqlTimestamp extends DateConverterForJavaAbstra
             Date parsed = newSimpleDateFormatUsingDateTimePattern().parse(valueStr);
             return new java.sql.Timestamp(parsed.getTime());
         } catch (ParseException ex) {
-            throw new ConversionException("Value cannot be converted as a date/time", ex);
+            try {
+                return new java.sql.Timestamp(newSimpleDateFormatUsingDatePattern().parse(valueStr).getTime());
+            } catch (ParseException ex2) {
+                throw new ConversionException("Value cannot be converted as a date/time", ex);
+            }
         }
     }
 
