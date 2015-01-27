@@ -40,6 +40,7 @@ public class JodaLocalDateTimePanel extends ScalarPanelTextFieldDatePickerAbstra
         init(new DateConverterForJodaLocalDateTime(getSettings(), getAdjustBy()));
     }
 
+    // TODO mgrigorov: Check whether this is really needed after fixing ISIS-1012
     @Override
     protected TextField<LocalDateTime> createTextField(final String id) {
         return new TextFieldWithDateTimePicker<>(id, new TextFieldValueModel<LocalDateTime>(this), cls, converter);

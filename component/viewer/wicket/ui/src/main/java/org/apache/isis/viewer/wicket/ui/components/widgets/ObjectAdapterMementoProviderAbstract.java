@@ -18,17 +18,22 @@ package org.apache.isis.viewer.wicket.ui.components.widgets;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.vaynberg.wicket.select2.TextChoiceProvider;
 
+import org.apache.wicket.util.convert.IConverter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.IsisConverterLocator;
 
 public abstract class ObjectAdapterMementoProviderAbstract extends TextChoiceProvider<ObjectAdapterMemento> {
 
@@ -38,14 +43,28 @@ public abstract class ObjectAdapterMementoProviderAbstract extends TextChoicePro
     private static final String NULL_DISPLAY_TEXT = "";
 
     private final ScalarModel scalarModel;
+    private final WicketViewerSettings wicketViewerSettings;
 
-    public ObjectAdapterMementoProviderAbstract(final ScalarModel scalarModel){
+    public ObjectAdapterMementoProviderAbstract(final ScalarModel scalarModel, WicketViewerSettings wicketViewerSettings) {
         this.scalarModel = scalarModel;
+        this.wicketViewerSettings = wicketViewerSettings;
     }
     
     @Override
     protected String getDisplayText(ObjectAdapterMemento choice) {
-        return choice != null? choice.getObjectAdapter(ConcurrencyChecking.NO_CHECK).titleString(null) : NULL_DISPLAY_TEXT;
+        String displayText = NULL_DISPLAY_TEXT;
+        if (choice != null) {
+            ObjectAdapter objectAdapter = choice.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+            IConverter<Object> converter = IsisConverterLocator.findConverter(objectAdapter, wicketViewerSettings);
+            if (converter != null) {
+                // TODO mgrigorov: use the Session locale ?!
+                displayText = converter.convertToString(objectAdapter.getObject(), Locale.ENGLISH);
+            } else {
+                displayText = objectAdapter.titleString(null);
+            }
+        }
+
+        return displayText;
     }
 
     @Override

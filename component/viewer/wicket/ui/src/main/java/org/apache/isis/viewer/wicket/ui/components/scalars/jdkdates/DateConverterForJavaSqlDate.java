@@ -32,7 +32,7 @@ public class DateConverterForJavaSqlDate extends DateConverterForJavaAbstract<ja
     private static final long serialVersionUID = 1L;
     
     public DateConverterForJavaSqlDate(WicketViewerSettings settings, int adjustBy) {
-        this(settings.getDatePattern(), settings.getDatePickerPattern(), adjustBy);
+        this(settings.getDatePattern(), settings.getDatePattern(), adjustBy);
     }
 
     private DateConverterForJavaSqlDate(String datePattern, String datePickerPattern, int adjustBy) {

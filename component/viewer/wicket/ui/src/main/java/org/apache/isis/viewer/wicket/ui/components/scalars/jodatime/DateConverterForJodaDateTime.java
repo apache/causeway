@@ -30,7 +30,7 @@ public class DateConverterForJodaDateTime extends DateConverterForJodaAbstract<D
     private static final long serialVersionUID = 1L;
 
     public DateConverterForJodaDateTime(WicketViewerSettings settings, int adjustBy) {
-        this(settings.getDatePattern(), settings.getDateTimePattern(), settings.getDatePickerPattern(), adjustBy);
+        this(settings.getDatePattern(), settings.getDateTimePattern(), settings.getDateTimePattern(), adjustBy);
     }
     
     private DateConverterForJodaDateTime(String datePattern, String dateTimePattern, String datePickerPattern, int adjustBy) {

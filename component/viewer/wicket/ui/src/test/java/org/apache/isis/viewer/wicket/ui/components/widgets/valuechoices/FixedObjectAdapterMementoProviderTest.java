@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -53,7 +54,8 @@ public class FixedObjectAdapterMementoProviderTest {
                 mockMemento1, mockMemento2
         );
 
-        provider = new ValueChoicesSelect2Panel.FixedObjectAdapterMementoProvider(null, mementos);
+        WicketViewerSettings wicketViewerSettings = context.mock(WicketViewerSettings.class);
+        provider = new ValueChoicesSelect2Panel.FixedObjectAdapterMementoProvider(null, mementos, wicketViewerSettings);
     }
 
     @Test

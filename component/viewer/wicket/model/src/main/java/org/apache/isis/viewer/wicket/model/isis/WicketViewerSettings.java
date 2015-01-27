@@ -31,6 +31,12 @@ public interface WicketViewerSettings extends Serializable {
     public String getDatePattern();
     public String getDateTimePattern();
     public String getTimestampPattern();
+
+    /**
+     * @deprecated Not used since 1.8.0. Each Date scalar panel will use {@linkplain #getDatePattern()}
+     *             or {@linkplain #getDateTimePattern()} depending on its date type
+     */
+    @Deprecated
     public String getDatePickerPattern();
 
 
