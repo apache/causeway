@@ -36,7 +36,7 @@ import org.apache.wicket.util.convert.converter.BigDecimalConverter;
  * instances, per scale.  The {@link JavaMathBigDecimalPanelFactory} actually takes care of handling this cache,
  * providing the {@link JavaMathBigDecimalPanel} with an appropriate underlying converter for it to delegate to. 
  */
-class BigDecimalConverterWithScale extends BigDecimalConverter {
+public class BigDecimalConverterWithScale extends BigDecimalConverter {
 
     /**
      * For {@link JavaMathBigDecimalPanelFactory} to call, so that there is a single instance.
@@ -48,7 +48,7 @@ class BigDecimalConverterWithScale extends BigDecimalConverter {
     private static final long serialVersionUID = 1L;
     private final Integer scale;
     
-    BigDecimalConverterWithScale(final Integer scale) {
+    public BigDecimalConverterWithScale(final Integer scale) {
         this.scale = scale;
     }
 

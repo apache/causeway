@@ -19,12 +19,10 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
 
-import java.math.BigDecimal;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.util.convert.converter.AbstractNumberConverter;
 
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -52,7 +50,7 @@ public class JavaMathBigDecimalPanelFactory extends ComponentFactoryScalarAbstra
     // //////////////////////////////////////
     
     private final BigDecimalConverterWithScale converterForNullScale = new BigDecimalConverterWithScale(null);
-    private final Map<Integer, BigDecimalConverterWithScale> converterByScale = new ConcurrentHashMap<Integer, BigDecimalConverterWithScale>();
+    private final Map<Integer, BigDecimalConverterWithScale> converterByScale = new ConcurrentHashMap<>();
 
     private BigDecimalConverterWithScale getConverter(final ScalarModel scalarModel) {
         final Integer scale = scalarModel.getScale();

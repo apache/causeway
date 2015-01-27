@@ -5,6 +5,7 @@ import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.propparam.renderedadjusted.RenderedAdjustedFacet;
+import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.DateConverterForApplibDate;
@@ -12,6 +13,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.DateConver
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaSqlDate;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaSqlTimestamp;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaUtilDate;
+import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.BigDecimalConverterWithScale;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaDateTime;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaLocalDate;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaLocalDateTime;
@@ -51,6 +53,13 @@ public class IsisConverterLocator {
             converter = new DateConverterForJodaDateTime(wicketViewerSettings, adjustBy);
         } else if (java.sql.Timestamp.class == correspondingClass) {
             converter = new DateConverterForJavaSqlTimestamp(wicketViewerSettings, adjustBy);
+        } else if (java.math.BigDecimal.class == correspondingClass) {
+            final BigDecimalValueFacet facet = objectSpecification.getFacet(BigDecimalValueFacet.class);
+            Integer scale = null;
+            if (facet != null) {
+                scale = facet.getScale();
+            }
+            converter = new BigDecimalConverterWithScale(scale);
         } else if (Application.exists()) {
             IConverterLocator converterLocator = Application.get().getConverterLocator();
             converter = converterLocator.getConverter(correspondingClass);
