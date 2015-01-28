@@ -32,12 +32,11 @@ import org.joda.time.LocalDate;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.NotContributed.As;
-import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -46,11 +45,10 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.value.Clob;
 
-@DomainService
+@DomainService(nature = NatureOfService.VIEW_CONTRIBUTIONS)
 public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
     //region > priority (contributed property)
-    @NotInServiceMenu
     @NotContributed(As.ACTION) // ie contributed as association
     @Action(
             semantics = SemanticsOf.SAFE,
@@ -106,7 +104,6 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     //endregion
 
     //region >  next, previous (contributed actions)
-    @NotInServiceMenu
     @NotContributed(As.ASSOCIATION) // ie contributed as action
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(
@@ -132,7 +129,6 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
     // //////////////////////////////////////
 
-    @NotInServiceMenu
     @NotContributed(As.ASSOCIATION) // ie contributed as action
     @ActionLayout(
             describedAs = "The previous item not yet completed"
@@ -174,7 +170,6 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     //endregion
 
     //region > similarTo (contributed collection)
-    @NotInServiceMenu
     @NotContributed(As.ACTION)
     @Action(semantics = SemanticsOf.SAFE)
     public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
@@ -199,7 +194,6 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
     //region > updateCategory (contributed action)
 
-    @NotInServiceMenu
     @ActionLayout(
             describedAs = "Update category and subcategory"
     )
@@ -236,8 +230,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     /**
      * Demonstrates functionality of streaming back Clob/Blob result within an action with a prompt, i.e. Ajax request
      */
-    @ActionSemantics(ActionSemantics.Of.SAFE)
-    @NotInServiceMenu
+    @Action(semantics = SemanticsOf.SAFE)
     public Clob exportAsJson(
             final ToDoItem toDoItem,
             @ParameterLayout(named = "File name") String fileName

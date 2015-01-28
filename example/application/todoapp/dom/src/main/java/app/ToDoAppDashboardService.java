@@ -19,9 +19,10 @@
 package app;
 
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.homepage.AbstractHomePageDashboardService;
 
-@DomainService
+@DomainService(nature = NatureOfService.DOMAIN)
 public class ToDoAppDashboardService extends AbstractHomePageDashboardService<ToDoAppDashboard> {
 
     public ToDoAppDashboardService() {

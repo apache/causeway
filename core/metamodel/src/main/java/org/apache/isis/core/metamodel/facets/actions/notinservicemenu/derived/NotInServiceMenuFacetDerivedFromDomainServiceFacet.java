@@ -16,20 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
+package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived;
 
 
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacetAbstract;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 
-public class DomainServiceFacetAnnotation extends DomainServiceFacetAbstract {
+public class NotInServiceMenuFacetDerivedFromDomainServiceFacet extends NotInServiceMenuFacetAbstract {
 
-    public DomainServiceFacetAnnotation(
-            final FacetHolder facetHolder,
-            final Class<?> repositoryFor,
-            final NatureOfService natureOfService) {
-        super(facetHolder, repositoryFor, natureOfService);
+    private final NatureOfService natureOfService;
+
+    public NotInServiceMenuFacetDerivedFromDomainServiceFacet(
+            final NatureOfService natureOfService, final FacetHolder holder) {
+        super(holder);
+        this.natureOfService = natureOfService;
+    }
+
+    @Override
+    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
+        return String.format("@DomainService(nature=%s) annotation present", natureOfService);
     }
 }

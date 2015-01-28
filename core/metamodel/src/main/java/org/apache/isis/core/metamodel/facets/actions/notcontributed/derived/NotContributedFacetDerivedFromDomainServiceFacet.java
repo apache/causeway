@@ -16,20 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
+package org.apache.isis.core.metamodel.facets.actions.notcontributed.derived;
 
 
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
 
 
-public class DomainServiceFacetAnnotation extends DomainServiceFacetAbstract {
+public class NotContributedFacetDerivedFromDomainServiceFacet extends NotContributedFacetAbstract {
 
-    public DomainServiceFacetAnnotation(
-            final FacetHolder facetHolder,
-            final Class<?> repositoryFor,
-            final NatureOfService natureOfService) {
-        super(facetHolder, repositoryFor, natureOfService);
+    private final NatureOfService natureOfService;
+
+    public NotContributedFacetDerivedFromDomainServiceFacet(final NatureOfService natureOfService, final FacetHolder holder) {
+        super(NotContributed.As.EITHER, holder);
+        this.natureOfService = natureOfService;
     }
 }

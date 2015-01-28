@@ -33,11 +33,11 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.NotContributed;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
@@ -58,7 +58,7 @@ import static com.google.common.collect.Lists.newArrayList;
  *     vetoing the change).
  * </p>
  */
-@DomainService
+@DomainService(nature = NatureOfService.VIEW_MENU)
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.SECONDARY, menuOrder = "30")
 public class ToDoItemSubscriptions {
 
@@ -129,7 +129,6 @@ public class ToDoItemSubscriptions {
      * To demo/test what occurs if a subscriber that might veto an event.
      */
     @MemberOrder(name = "Prototyping", sequence = "80")
-    @NotContributed
     @ActionLayout(
         named="Set subscriber behaviour"
     )
