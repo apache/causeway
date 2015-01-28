@@ -48,7 +48,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebSession;
@@ -86,6 +85,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
 import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChooser;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
@@ -146,18 +146,22 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     @Inject
     @Named("applicationName")
     private String applicationName;
+
+    @Inject(optional = true)
+    @Named("brandLogo")
+    private String brandLogo;
     
     /**
      * {@link Inject}ed when {@link #init() initialized}.
      */
-    @Inject
+    @Inject(optional = true)
     @Named("applicationCss")
     private String applicationCss;
     
     /**
      * {@link Inject}ed when {@link #init() initialized}.
-     */
-    @Inject
+     *///
+    @Inject(optional = true)
     @Named("applicationJs")
     private String applicationJs;
 
@@ -230,7 +234,10 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     private void addApplicationName(final MarkupContainer themeDiv) {
         final BookmarkablePageLink<Void> applicationNameLink = homePageLink("applicationName");
-        applicationNameLink.setBody(Model.of(applicationName));
+        final Label brandLabel = new Label("brandText", applicationName);
+        brandLabel.setVisible(brandLogo == null);
+        final BrandLogo brandImage = new BrandLogo(brandLogo);
+        applicationNameLink.add(brandLabel, brandImage);
         themeDiv.add(applicationNameLink);
     }
 
