@@ -173,5 +173,10 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
             }
         });
     }
-    
+
+    @Override
+    public void replaceSession() {
+        // do nothing here because this will lead to problems with Shiro
+        // see https://issues.apache.org/jira/browse/ISIS-1018
+    }
 }
