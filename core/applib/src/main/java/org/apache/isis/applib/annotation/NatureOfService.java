@@ -35,7 +35,7 @@ public enum NatureOfService {
      * Equivalent to annotating all actions with {@link org.apache.isis.applib.annotation.NotContributed}).
      * </p>
      */
-    VIEW_MENU,
+    VIEW_MENU_ONLY,
     /**
      * The service's actions can be contributed to domain objects as actions, properties or collections but do not
      * appear on menus.
@@ -44,7 +44,7 @@ public enum NatureOfService {
      * Equivalent to annotating all actions with {@link org.apache.isis.applib.annotation.NotInServiceMenu).
      * </p>
      */
-    VIEW_CONTRIBUTIONS,
+    VIEW_CONTRIBUTIONS_ONLY,
     /**
      * The service's actions do not appear on menus and are not contributed.
      *

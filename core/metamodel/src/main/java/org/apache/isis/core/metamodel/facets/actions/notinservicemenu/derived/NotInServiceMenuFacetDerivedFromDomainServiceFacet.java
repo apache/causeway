@@ -32,12 +32,16 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacet extends NotInSer
 
     public NotInServiceMenuFacetDerivedFromDomainServiceFacet(
             final NatureOfService natureOfService, final FacetHolder holder) {
-        super(holder);
+        super(holder, Derivation.DERIVED);
         this.natureOfService = natureOfService;
     }
 
     @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
         return String.format("@DomainService(nature=%s) annotation present", natureOfService);
+    }
+
+    NatureOfService getNatureOfService() {
+        return natureOfService;
     }
 }

@@ -36,6 +36,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory extends F
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
+
         final Method method = processMethodContext.getMethod();
         final Class<?> declaringClass = method.getDeclaringClass();
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(declaringClass);
@@ -46,7 +47,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory extends F
         }
         
         final NatureOfService natureOfService = domainServiceFacet.getNatureOfService();
-        if(natureOfService == NatureOfService.VIEW_MENU || natureOfService == NatureOfService.VIEW) {
+        if(natureOfService == NatureOfService.VIEW_MENU_ONLY || natureOfService == NatureOfService.VIEW) {
             return;
         }
 

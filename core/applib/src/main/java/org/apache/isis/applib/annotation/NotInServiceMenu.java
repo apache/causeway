@@ -36,7 +36,7 @@ import java.lang.annotation.Target;
  * <p>
  * Has no meaning if annotated on an action of a regular entity.
  * 
- * @deprecated - instead move such actions into a separate domain service and specify nature of {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_CONTRIBUTIONS contributions} or {@link org.apache.isis.applib.annotation.NatureOfService#DOMAIN domain} using {@link DomainService#nature()}.
+ * @deprecated - instead move such actions into a separate domain service and specify nature of {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_CONTRIBUTIONS_ONLY contributions} or {@link org.apache.isis.applib.annotation.NatureOfService#DOMAIN domain} using {@link DomainService#nature()}.
  */
 @Deprecated
 @Inherited

@@ -48,9 +48,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         try {
             final Method method = declaringType.getMethod("get" + StringExtensions.asPascal(propertyName));
             return FacetedMethod.createForProperty(declaringType, method);
-        } catch (final SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (final NoSuchMethodException e) {
+        } catch (final SecurityException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
     }
@@ -62,9 +60,19 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         try {
             final Method method = declaringType.getMethod("get" + StringExtensions.asPascal(collectionName));
             return FacetedMethod.createForCollection(declaringType, method);
-        } catch (final SecurityException e) {
+        } catch (final SecurityException | NoSuchMethodException e) {
             throw new RuntimeException(e);
-        } catch (final NoSuchMethodException e) {
+        }
+    }
+
+    /**
+     * Principally for testing purposes.
+     */
+    public static FacetedMethod createForAction(final Class<?> declaringType, final String actionName, final Class<?>... parameterTypes) {
+        try {
+            final Method method = declaringType.getMethod(actionName, parameterTypes);
+            return FacetedMethod.createForAction(declaringType, method);
+        } catch (final SecurityException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
     }

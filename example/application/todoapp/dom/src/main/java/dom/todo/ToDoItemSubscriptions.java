@@ -58,7 +58,7 @@ import static com.google.common.collect.Lists.newArrayList;
  *     vetoing the change).
  * </p>
  */
-@DomainService(nature = NatureOfService.VIEW_MENU)
+@DomainService(nature = NatureOfService.VIEW_MENU_ONLY)
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.SECONDARY, menuOrder = "30")
 public class ToDoItemSubscriptions {
 

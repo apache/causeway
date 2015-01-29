@@ -46,7 +46,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactory extends Fac
         }
 
         final NatureOfService natureOfService = domainServiceFacet.getNatureOfService();
-        if(natureOfService == NatureOfService.VIEW_CONTRIBUTIONS || natureOfService == NatureOfService.VIEW) {
+        if(natureOfService == NatureOfService.VIEW_CONTRIBUTIONS_ONLY || natureOfService == NatureOfService.VIEW) {
             return;
         }
 

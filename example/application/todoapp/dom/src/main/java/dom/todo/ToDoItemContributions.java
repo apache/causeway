@@ -45,7 +45,7 @@ import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.value.Clob;
 
-@DomainService(nature = NatureOfService.VIEW_CONTRIBUTIONS)
+@DomainService(nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
 public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
     //region > priority (contributed property)
