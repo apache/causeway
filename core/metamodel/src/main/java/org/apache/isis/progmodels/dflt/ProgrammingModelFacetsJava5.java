@@ -27,7 +27,9 @@ import org.apache.isis.core.metamodel.facets.actions.homepage.annotation.HomePag
 import org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedDebugExplorationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.annotation.NotContributedFacetAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuFacetAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method.NotInServiceMenuFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.paged.annotation.PagedFacetOnActionFactory;
 import org.apache.isis.core.metamodel.facets.actions.prototype.annotation.PrototypeFacetAnnotationFactory;
@@ -353,6 +355,10 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(NotContributedFacetAnnotationFactory.class);
         addFactory(NotInServiceMenuFacetAnnotationFactory.class);
         addFactory(NotInServiceMenuFacetViaMethodFactory.class);
+
+        addFactory(NotContributedFacetDerivedFromDomainServiceFacetFactory.class);
+        addFactory(NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory.class);
+
 
         addFactory(HiddenFacetOnTypeAnnotationFactory.class);
         // must come after the TitleAnnotationFacetFactory, because can act as an override

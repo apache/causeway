@@ -16,40 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.domainservice;
+package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived;
 
 
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacetAbstract;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 
-public abstract class DomainServiceFacetAbstract
-            extends FacetAbstract
-            implements DomainServiceFacet {
+public class NotInServiceMenuFacetDerivedFromDomainServiceFacet extends NotInServiceMenuFacetAbstract {
 
-    public static Class<? extends Facet> type() {
-        return DomainServiceFacet.class;
-    }
-
-    private final Class<?> repositoryFor;
     private final NatureOfService natureOfService;
 
-    public DomainServiceFacetAbstract(
-            final FacetHolder facetHolder,
-            final Class<?> repositoryFor,
-            final NatureOfService natureOfService) {
-        super(DomainServiceFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
-        this.repositoryFor = repositoryFor;
+    public NotInServiceMenuFacetDerivedFromDomainServiceFacet(
+            final NatureOfService natureOfService, final FacetHolder holder) {
+        super(holder, Derivation.DERIVED);
         this.natureOfService = natureOfService;
     }
 
-    public Class<?> getRepositoryFor() {
-        return repositoryFor;
+    @Override
+    public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
+        return String.format("@DomainService(nature=%s) annotation present", natureOfService);
     }
 
-    public NatureOfService getNatureOfService() {
+    NatureOfService getNatureOfService() {
         return natureOfService;
     }
 }

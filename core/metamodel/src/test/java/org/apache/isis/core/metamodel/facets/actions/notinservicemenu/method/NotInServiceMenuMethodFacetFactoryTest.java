@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.notinrepositorymenu;
+package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method;
 
 import java.lang.reflect.Method;
 
@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServi
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method.NotInServiceMenuFacetViaMethodFactory;
 
-public class NotInRepositoryMenuMethodFacetFactoryTest extends AbstractFacetFactoryTest {
+public class NotInServiceMenuMethodFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private NotInServiceMenuFacetViaMethodFactory facetFactory;
 

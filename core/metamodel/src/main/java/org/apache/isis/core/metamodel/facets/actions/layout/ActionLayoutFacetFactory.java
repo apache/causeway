@@ -19,14 +19,17 @@
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 
+import java.lang.reflect.Method;
 import java.util.Properties;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
@@ -35,6 +38,8 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
 public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
@@ -114,6 +119,32 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
         }
         FacetUtil.addFacet(actionPositionFacet);
 
+
+        // contributing
+
+        if (isContributingService(processMethodContext)) {
+            NotContributedFacet notContributedFacet = NotContributedFacetForLayoutProperties.create(properties, holder);
+            if(notContributedFacet == null) {
+                notContributedFacet = NotContributedFacetForActionLayoutAnnotation.create(actionLayout, holder);
+            }
+            FacetUtil.addFacet(notContributedFacet);
+        }
+    }
+
+    protected boolean isContributingService(final ProcessMethodContext processMethodContext) {
+        final Method method = processMethodContext.getMethod();
+        final Class<?> declaringClass = method.getDeclaringClass();
+        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(declaringClass);
+
+        final DomainServiceFacet domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
+        return domainServiceFacet != null && !domainServiceFacet.isNoop() &&
+                domainServiceFacet.getNatureOfService() != NatureOfService.VIEW_MENU_ONLY &&
+                domainServiceFacet.getNatureOfService() != NatureOfService.DOMAIN;
+    }
+
+
+    protected boolean skipContributing(final DomainServiceFacet domainServiceFacet) {
+        return domainServiceFacet == null || domainServiceFacet.isNoop() || domainServiceFacet.getNatureOfService() == NatureOfService.VIEW_MENU_ONLY || domainServiceFacet.getNatureOfService() == NatureOfService.DOMAIN;
     }
 
     @Override

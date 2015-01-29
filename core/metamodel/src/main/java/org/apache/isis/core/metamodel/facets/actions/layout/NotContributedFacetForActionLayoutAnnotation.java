@@ -16,28 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
-import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Contributed;
+import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
+import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
 
-public class NamedFacetForActionLayoutAnnotation extends NamedFacetAbstract {
 
-    public static NamedFacet create(final ActionLayout actionLayout, final FacetHolder holder) {
+public class NotContributedFacetForActionLayoutAnnotation extends NotContributedFacetAbstract {
+
+    public static NotContributedFacet create(
+            final ActionLayout actionLayout, final FacetHolder holder) {
         if(actionLayout == null) {
             return null;
         }
-        final String named = Strings.emptyToNull(actionLayout.named());
-        return named != null ? new NamedFacetForActionLayoutAnnotation(named, holder) : null;
+        final Contributed contributed = actionLayout.contributed();
+        final NotContributed.As as = NotContributed.As.from(contributed);
+        if(as == null) {
+            return null;
+        }
+        return new NotContributedFacetForActionLayoutAnnotation(as, holder);
     }
 
-    private NamedFacetForActionLayoutAnnotation(final String value, final FacetHolder holder) {
-
-        super(value, /*escaped*/ true, holder);
+    private NotContributedFacetForActionLayoutAnnotation(final NotContributed.As as, final FacetHolder holder) {
+        super(as, holder);
     }
 
 }

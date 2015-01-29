@@ -17,19 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.notinrepositorymenu;
+package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.annotation;
 
 import java.lang.reflect.Method;
-
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacetAbstract;
-import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuFacetAnnotationFactory;
 
-public class NotInRepositoryMenuAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class NotInServiceMenuAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private NotInServiceMenuFacetAnnotationFactory facetFactory;
 

@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.domainservice;
 
 
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 
@@ -29,10 +30,26 @@ public interface DomainServiceFacet extends Facet {
 
     /**
      * Corresponds to {@link org.apache.isis.applib.annotation.DomainService#repositoryFor()}.
-     *
+     * <p/>
      * <p>
      * May be null.
      * </p>
      */
     public Class<?> getRepositoryFor();
+
+    /**
+     * Corresponds to {@link org.apache.isis.applib.annotation.DomainService#nature()}.
+     *
+     * <p>
+     *     If set to {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_MENU_ONLY} or {@link org.apache.isis.applib.annotation.NatureOfService#DOMAIN}, then {@link org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet} is
+     *     derived for all actions.
+     * </p>
+     *
+     * <p>
+     *     If set to {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_CONTRIBUTIONS_ONLY} or {@link org.apache.isis.applib.annotation.NatureOfService#DOMAIN}, then {@link org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet} is
+     *     derived for all actions.
+     * </p>
+     */
+    public NatureOfService getNatureOfService();
+
 }

@@ -361,7 +361,7 @@ public abstract class FixtureScript
             return object;
         }
 
-        <T> T lookup(final String key, final Class<T> cls) {
+        public <T> T lookup(final String key, final Class<T> cls) {
             return fixtureResultList.lookup(key, cls);
         }
 
@@ -505,6 +505,10 @@ public abstract class FixtureScript
         return executionContext.getResults();
     }
 
+    /**
+     * Use instead {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#lookup(String, Class)} directly.
+     */
+    @Deprecated
     public <T> T lookup(final String key, Class<T> cls) {
         if(executionContext == null) {
             throw new IllegalStateException("This fixture has not yet been run.");
