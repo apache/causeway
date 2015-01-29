@@ -272,7 +272,7 @@ public class JodaLocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
     
     @Override
     public String toString() {
-        return "JodaLocalDateValueSemanticsProvider: " + titleStringFormatter;
+        return "JodaLocalDateTimeValueSemanticsProvider: " + titleStringFormatter;
     }
 
 }

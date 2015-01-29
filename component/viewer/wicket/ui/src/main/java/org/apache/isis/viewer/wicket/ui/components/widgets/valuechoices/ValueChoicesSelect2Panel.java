@@ -16,6 +16,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices;
 
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
 import com.google.common.base.Function;
@@ -34,6 +35,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -143,9 +145,8 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
     
     protected ChoiceProvider<ObjectAdapterMemento> newChoiceProvider(final List<ObjectAdapterMemento> choicesMementos) {
-        return new FixedObjectAdapterMementoProvider(getScalarModel(), choicesMementos);
+        return new FixedObjectAdapterMementoProvider(getScalarModel(), choicesMementos, wicketViewerSettings);
     }
-
 
     static class FixedObjectAdapterMementoProvider extends ObjectAdapterMementoProviderAbstract {
 
@@ -154,8 +155,9 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
         public FixedObjectAdapterMementoProvider(
                 final ScalarModel scalarModel,
-                final List<ObjectAdapterMemento> choicesMementos) {
-            super(scalarModel);
+                final List<ObjectAdapterMemento> choicesMementos,
+                final WicketViewerSettings wicketViewerSettings) {
+            super(scalarModel, wicketViewerSettings);
             this.choicesMementos = choicesMementos;
         }
 
@@ -278,4 +280,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         return scalarModel;
     }
 
+    @Inject
+    private WicketViewerSettings wicketViewerSettings;
 }

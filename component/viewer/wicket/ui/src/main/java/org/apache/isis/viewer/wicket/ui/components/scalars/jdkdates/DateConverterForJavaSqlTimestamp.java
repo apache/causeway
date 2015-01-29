@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import org.apache.wicket.util.convert.ConversionException;
@@ -31,12 +32,11 @@ public class DateConverterForJavaSqlTimestamp extends DateConverterForJavaAbstra
     private static final long serialVersionUID = 1L;
     
     public DateConverterForJavaSqlTimestamp(WicketViewerSettings settings, int adjustBy) {
-        this(settings.getDatePattern(), settings.getTimestampPattern(), settings.getDatePickerPattern(), adjustBy);
+        this(settings.getDatePattern(), settings.getTimestampPattern(), adjustBy);
     }
-    public DateConverterForJavaSqlTimestamp(String datePattern, String dateTimePattern, String datePickerPattern, int adjustBy) {
-        super(java.sql.Timestamp.class, datePattern, dateTimePattern, datePickerPattern, adjustBy);
+    public DateConverterForJavaSqlTimestamp(final String datePattern, String timestampPattern, int adjustBy) {
+        super(java.sql.Timestamp.class, datePattern, timestampPattern, timestampPattern, adjustBy);
     }
-    
 
     @Override
     protected java.sql.Timestamp doConvertToObject(String value, Locale locale) throws ConversionException {
@@ -44,12 +44,14 @@ public class DateConverterForJavaSqlTimestamp extends DateConverterForJavaAbstra
         final java.sql.Timestamp adjustedDate = addDays(date, 0-adjustBy);
         return adjustedDate;
     }
+
     private java.sql.Timestamp convert(String valueStr) {
         try {
-            return new java.sql.Timestamp(newSimpleDateFormatUsingDateTimePattern().parse(valueStr).getTime());
+            Date parsed = newSimpleDateFormatUsingDateTimePattern().parse(valueStr);
+            return new java.sql.Timestamp(parsed.getTime());
         } catch (ParseException ex) {
             try {
-                return new java.sql.Timestamp(newSimpleDateFormatUsingDateTimePattern().parse(valueStr).getTime());
+                return new java.sql.Timestamp(newSimpleDateFormatUsingDatePattern().parse(valueStr).getTime());
             } catch (ParseException ex2) {
                 throw new ConversionException("Value cannot be converted as a date/time", ex);
             }

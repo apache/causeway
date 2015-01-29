@@ -37,7 +37,7 @@ public class JavaMathBigDecimalPanel extends ScalarPanelTextFieldNumeric<BigDeci
     private final BigDecimalConverterWithScale converter;
 
     public JavaMathBigDecimalPanel(final String id, final ScalarModel scalarModel, final BigDecimalConverterWithScale converter) {
-        super(id, scalarModel, BigDecimal.class, converter);
+        super(id, scalarModel, BigDecimal.class, converter.forViewMode());
         this.converter = converter;
     }
  

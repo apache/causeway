@@ -44,8 +44,6 @@ public class ValueChoicesSelect2PanelFactory extends ComponentFactoryAbstract {
         return appliesIf(hasChoices);
     }
 
-    int choiceCount = 0;
-
     @Override
     public final Component createComponent(final String id, final IModel<?> model) {
         final ScalarModel scalarModel = (ScalarModel) model;

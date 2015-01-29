@@ -31,7 +31,7 @@ public class DateConverterForApplibDate extends DateConverterAbstract<org.apache
     private final DateConverterForJavaUtilDate converter;
     
     public DateConverterForApplibDate(WicketViewerSettings settings, int adjustBy) {
-        this(settings.getDatePattern(), settings.getDatePickerPattern(), adjustBy);
+        this(settings.getDatePattern(), settings.getDatePattern(), adjustBy);
     }
 
     private DateConverterForApplibDate(String datePattern, String datePickerPattern, int adjustBy) {

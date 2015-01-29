@@ -32,7 +32,7 @@ public class DateConverterForJavaUtilDate extends DateConverterForJavaAbstract<j
     private static final long serialVersionUID = 1L;
     
     public DateConverterForJavaUtilDate(WicketViewerSettings settings, int adjustBy) {
-        this(settings.getDatePattern(), settings.getDateTimePattern(), settings.getDatePickerPattern(), adjustBy);
+        this(settings.getDatePattern(), settings.getDateTimePattern(), settings.getDateTimePattern(), adjustBy);
     }
     public DateConverterForJavaUtilDate(String datePattern, String dateTimePattern, String datePickerPattern, int adjustBy) {
         super(java.util.Date.class, datePattern, dateTimePattern, datePickerPattern, adjustBy);

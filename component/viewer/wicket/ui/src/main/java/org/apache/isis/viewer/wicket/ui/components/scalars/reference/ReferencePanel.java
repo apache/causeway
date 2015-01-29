@@ -19,6 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
+import javax.inject.Inject;
 import java.util.List;
 import com.google.common.collect.Lists;
 import com.vaynberg.wicket.select2.ChoiceProvider;
@@ -40,6 +41,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -372,7 +374,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
     // called by setProviderAndCurrAndPending
     private ChoiceProvider<ObjectAdapterMemento> providerForObjectAutoComplete() {
-        return new ObjectAdapterMementoProviderAbstract(getModel()) {
+        return new ObjectAdapterMementoProviderAbstract(getModel(), wicketViewerSettings) {
 
             private static final long serialVersionUID = 1L;
 
@@ -388,7 +390,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
     // called by setProviderAndCurrAndPending
     private ChoiceProvider<ObjectAdapterMemento> providerForParamOrPropertyAutoComplete() {
-        return new ObjectAdapterMementoProviderAbstract(getModel()) {
+        return new ObjectAdapterMementoProviderAbstract(getModel(), wicketViewerSettings) {
             
             private static final long serialVersionUID = 1L;
             
@@ -407,7 +409,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
     // called by setProviderAndCurrAndPending
     private ObjectAdapterMementoProviderAbstract providerForChoices(final List<ObjectAdapterMemento> choiceMementos) {
-        return new ObjectAdapterMementoProviderAbstract(getModel()) {
+        return new ObjectAdapterMementoProviderAbstract(getModel(), wicketViewerSettings) {
             private static final long serialVersionUID = 1L;
             @Override
             protected List<ObjectAdapterMemento> obtainMementos(String unused) {
@@ -499,6 +501,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         return autoCompleteFacet != null;
     }
 
-
+    @Inject
+    private WicketViewerSettings wicketViewerSettings;
 
 }

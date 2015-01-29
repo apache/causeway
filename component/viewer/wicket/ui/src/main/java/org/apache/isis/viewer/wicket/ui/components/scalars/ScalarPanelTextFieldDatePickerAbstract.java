@@ -30,6 +30,7 @@ import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -87,7 +88,12 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     
     protected Component addComponentForCompact() {
         Fragment compactFragment = getCompactFragment(CompactType.SPAN);
-        final Label label = new Label(ID_SCALAR_IF_COMPACT, newTextFieldValueModel());
+        final Label label = new Label(ID_SCALAR_IF_COMPACT, newTextFieldValueModel()) {
+            @Override
+            public <C> IConverter<C> getConverter(Class<C> type) {
+                return (IConverter<C>) converter;
+            }
+        };
         label.setEnabled(false);
 
         // adding an amount because seemed to truncate in tables in certain circumstances
