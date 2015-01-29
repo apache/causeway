@@ -21,20 +21,18 @@ package app;
 import dom.todo.ToDoItem;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.NotContributed;
-import org.apache.isis.applib.annotation.NotContributed.As;
-import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 
-@DomainService
+@DomainService(nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
 public class ToDoItemAnalysisContributions {
 
 
     //region > analyseCategory (action)
-    @NotInServiceMenu
-    @NotContributed(As.ASSOCIATION)
+    @ActionLayout(contributed = Contributed.AS_ACTION)
     @Action(
             semantics = SemanticsOf.SAFE
     )

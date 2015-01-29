@@ -34,7 +34,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
 
         // given
         @DomainService(nature = NatureOfService.VIEW_MENU_ONLY)
-        class Customer {
+        class CustomerService {
 
             public String name() {
                 return "Joe";
@@ -42,19 +42,20 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
         }
 
         context.checking(new Expectations() {{
-            allowing(mockSpecificationLoaderSpi).loadSpecification(Customer.class);
+            allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
             will(returnValue(mockObjSpec));
 
             allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_MENU_ONLY) {}));
+            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_MENU_ONLY) {
+            }));
         }});
 
         expectNoMethodsRemoved();
 
-        facetedMethod = FacetedMethod.createForAction(Customer.class, "name");
+        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
 
         // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
@@ -69,7 +70,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
 
         // given
         @DomainService(nature = NatureOfService.DOMAIN)
-        class Customer {
+        class CustomerService {
 
             public String name() {
                 return "Joe";
@@ -77,19 +78,20 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
         }
 
         context.checking(new Expectations() {{
-            allowing(mockSpecificationLoaderSpi).loadSpecification(Customer.class);
+            allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
             will(returnValue(mockObjSpec));
 
             allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.DOMAIN) {}));
+            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.DOMAIN) {
+            }));
         }});
 
         expectNoMethodsRemoved();
 
-        facetedMethod = FacetedMethod.createForAction(Customer.class, "name");
+        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
 
         // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
@@ -104,7 +106,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
 
         // given
         @DomainService(nature = NatureOfService.VIEW)
-        class Customer {
+        class CustomerService {
 
             public String name() {
                 return "Joe";
@@ -112,19 +114,20 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
         }
 
         context.checking(new Expectations() {{
-            allowing(mockSpecificationLoaderSpi).loadSpecification(Customer.class);
+            allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
             will(returnValue(mockObjSpec));
 
             allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW) {}));
+            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW) {
+            }));
         }});
 
         expectNoMethodsRemoved();
 
-        facetedMethod = FacetedMethod.createForAction(Customer.class, "name");
+        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
 
         // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
@@ -136,7 +139,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
 
         // given
         @DomainService(nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
-        class Customer {
+        class CustomerService {
 
             public String name() {
                 return "Joe";
@@ -144,19 +147,20 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
         }
 
         context.checking(new Expectations() {{
-            allowing(mockSpecificationLoaderSpi).loadSpecification(Customer.class);
+            allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
             will(returnValue(mockObjSpec));
 
             allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
-            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {}));
+            will(returnValue(new DomainServiceFacetAbstract(mockObjSpec, null, NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
+            }));
         }});
 
         expectNoMethodsRemoved();
 
-        facetedMethod = FacetedMethod.createForAction(Customer.class, "name");
+        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
 
         // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
@@ -167,7 +171,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
     public void whenNone() throws Exception {
 
         // given
-        class Customer {
+        class CustomerService {
 
             public String name() {
                 return "Joe";
@@ -175,7 +179,7 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
         }
 
         context.checking(new Expectations() {{
-            allowing(mockSpecificationLoaderSpi).loadSpecification(Customer.class);
+            allowing(mockSpecificationLoaderSpi).loadSpecification(CustomerService.class);
             will(returnValue(mockObjSpec));
 
             allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
@@ -184,10 +188,10 @@ public class NotContributedFacetDerivedFromDomainServiceFacetFactoryTest extends
 
         expectNoMethodsRemoved();
 
-        facetedMethod = FacetedMethod.createForAction(Customer.class, "name");
+        facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
 
         // when
-        facetFactory.process(new FacetFactory.ProcessMethodContext(Customer.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
+        facetFactory.process(new FacetFactory.ProcessMethodContext(CustomerService.class, null, null, facetedMethod.getMethod(), mockMethodRemover, facetedMethod));
 
         // then
         final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);

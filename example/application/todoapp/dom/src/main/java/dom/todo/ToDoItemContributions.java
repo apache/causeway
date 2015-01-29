@@ -32,11 +32,10 @@ import org.joda.time.LocalDate;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.NotContributed;
-import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -49,13 +48,13 @@ import org.apache.isis.applib.value.Clob;
 public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
     //region > priority (contributed property)
-    @NotContributed(As.ACTION) // ie contributed as association
     @Action(
             semantics = SemanticsOf.SAFE,
             hidden = Where.ALL_TABLES
     )
     @ActionLayout(
-            describedAs = "The relative priority of this item compared to others not yet complete (using 'due by' date)"
+            describedAs = "The relative priority of this item compared to others not yet complete (using 'due by' date)",
+            contributed = Contributed.AS_ASSOCIATION
     )
     @Disabled(reason="Relative priority, derived from due date")
     public Integer relativePriority(final ToDoItem toDoItem) {
@@ -104,10 +103,10 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     //endregion
 
     //region >  next, previous (contributed actions)
-    @NotContributed(As.ASSOCIATION) // ie contributed as action
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(
-            describedAs = "The next item not yet completed"
+            describedAs = "The next item not yet completed",
+            contributed = Contributed.AS_ACTION
     )
     public ToDoItem next(final ToDoItem item) {
         final Integer priority = relativePriority(item);
@@ -129,9 +128,9 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
     // //////////////////////////////////////
 
-    @NotContributed(As.ASSOCIATION) // ie contributed as action
     @ActionLayout(
-            describedAs = "The previous item not yet completed"
+            describedAs = "The previous item not yet completed",
+            contributed = Contributed.AS_ACTION
     )
     @Action(semantics = SemanticsOf.SAFE)
     public ToDoItem previous(final ToDoItem item) {
@@ -170,7 +169,9 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     //endregion
 
     //region > similarTo (contributed collection)
-    @NotContributed(As.ACTION)
+    @ActionLayout(
+            contributed = Contributed.AS_ASSOCIATION
+    )
     @Action(semantics = SemanticsOf.SAFE)
     public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
         final List<ToDoItem> similarToDoItems = allMatches(
