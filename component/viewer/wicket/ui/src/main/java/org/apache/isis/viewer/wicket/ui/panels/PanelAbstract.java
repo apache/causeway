@@ -165,5 +165,15 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
         }
     }
 
+    /**
+     * Helper method that looks up a domain service by type
+     *
+     * @param serviceClass The class of the domain service to lookup
+     * @param <T> The type of the domain service to lookup
+     * @return The found domain service
+     */
+    protected <T> T getService(Class<T> serviceClass) {
+        return getPersistenceSession().getServicesInjector().lookupService(serviceClass);
+    }
     
 }
