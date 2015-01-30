@@ -38,7 +38,7 @@ public abstract class SortedSetsContractTestAbstract extends AbstractApplyToAllC
 
     @Override
     protected void applyContractTest(Class<?> entityType) {
-        final Set<Field> collectionFields = Reflections.getAllFields(entityType, ReflectionUtils.withTypeAssignableTo(Collection.class));
+        final Set<Field> collectionFields = ReflectionUtils.getAllFields(entityType, ReflectionUtils.withTypeAssignableTo(Collection.class));
         for (Field collectionField : collectionFields) {
             try {
                 final String desc = desc(entityType, collectionField);
