@@ -32,10 +32,17 @@ public class IsisConverterLocator {
      * @return The best converter for the object adapter's type
      */
     public static IConverter<Object> findConverter(final ObjectAdapter objectAdapter, final WicketViewerSettings wicketViewerSettings) {
-        ObjectSpecification objectSpecification = objectAdapter.getSpecification();
-        RenderedAdjustedFacet renderedAdjustedFacet = objectSpecification.getFacet(RenderedAdjustedFacet.class);
-        int adjustBy = renderedAdjustedFacet != null ? renderedAdjustedFacet.value() : 0;
-        Class<?> correspondingClass = objectSpecification.getCorrespondingClass();
+
+        final ObjectSpecification objectSpecification = objectAdapter.getSpecification();
+
+        // only use Wicket IConverter for value types, not for domain objects.
+        if (!objectSpecification.isValue()) {
+            return null;
+        }
+
+        final RenderedAdjustedFacet renderedAdjustedFacet = objectSpecification.getFacet(RenderedAdjustedFacet.class);
+        final int adjustBy = renderedAdjustedFacet != null ? renderedAdjustedFacet.value() : 0;
+        final Class<?> correspondingClass = objectSpecification.getCorrespondingClass();
 
         IConverter converter = null;
         if (java.util.Date.class == correspondingClass) {
@@ -64,7 +71,7 @@ public class IsisConverterLocator {
             }
             converter = new BigDecimalConverterWithScale(scale).forViewMode();
         } else if (Application.exists()) {
-            IConverterLocator converterLocator = Application.get().getConverterLocator();
+            final IConverterLocator converterLocator = Application.get().getConverterLocator();
             converter = converterLocator.getConverter(correspondingClass);
         }
 
