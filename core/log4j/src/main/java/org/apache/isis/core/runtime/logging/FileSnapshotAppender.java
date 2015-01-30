@@ -24,7 +24,7 @@ import java.io.IOException;
 
 public class FileSnapshotAppender extends SnapshotAppender {
     
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(FileSnapshotAppender.class);
+    private static final org.apache.logging.log4j.Logger LOG = org.apache.logging.log4j.LogManager.getLogger(FileSnapshotAppender.class);
     
     private String directoryPath;
     private String extension;
@@ -66,7 +66,7 @@ public class FileSnapshotAppender extends SnapshotAppender {
     protected synchronized void writeSnapshot(final String message, final String details) {
         SnapshotWriter s;
         try {
-            final String contentType = layout.getContentType();
+            final String contentType = getLayout().getContentType();
             final String fileExtension = isEmpty(extension) ? contentType.substring(contentType.indexOf('/') + 1) : extension;
             s = new SnapshotWriter(directoryPath, fileName, fileExtension, message);
             s.appendLog(details);

@@ -20,39 +20,44 @@
 package org.apache.isis.core.runtime.logging;
 
 import java.util.Date;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LogEvent;
+import org.apache.logging.log4j.core.appender.AbstractAppender;
+import org.apache.logging.log4j.core.impl.Log4jLogEvent;
+import org.apache.logging.log4j.core.util.CyclicBuffer;
+import org.apache.logging.log4j.core.util.OptionConverter;
 
-import org.apache.log4j.helpers.CyclicBuffer;
-import org.apache.log4j.spi.TriggeringEventEvaluator;
 
-class DefaultEvaluator implements TriggeringEventEvaluator {
+class DefaultEvaluator implements LogEventEvaluator {
     @Override
-    public boolean isTriggeringEvent(final org.apache.log4j.spi.LoggingEvent event) {
-        return event.getLevel().isGreaterOrEqual(org.apache.log4j.Level.ERROR);
+    public boolean isTriggeringEvent(final LogEvent event) {
+        return event.getLevel().isMoreSpecificThan(Level.ERROR);
     }
 }
 
-public abstract class SnapshotAppender extends org.apache.log4j.AppenderSkeleton {
+public abstract class SnapshotAppender extends AbstractAppender {
     private int bufferSize = 512;
-    protected CyclicBuffer buffer = new CyclicBuffer(bufferSize);
+    protected CyclicBuffer buffer = new CyclicBuffer(SnapshotAppender.class, bufferSize);
     private boolean locationInfo = false;
-    protected TriggeringEventEvaluator triggerEvaluator;
+    protected LogEventEvaluator triggerEvaluator;
     private boolean addInfo;
 
     /**
      * The default constructor will instantiate the appender with a
-     * {@link TriggeringEventEvaluator} that will trigger on events with level
+     * {@link LogEventEvaluator} that will trigger on events with level
      * ERROR or higher.
      */
     public SnapshotAppender() {
         this(new DefaultEvaluator());
     }
 
-    public SnapshotAppender(final TriggeringEventEvaluator evaluator) {
+    public SnapshotAppender(final LogEventEvaluator evaluator) {
         this.triggerEvaluator = evaluator;
     }
 
     @Override
-    public void append(final org.apache.log4j.spi.LoggingEvent event) {
+    public void append(final LogEvent event) {
         if (shouldAppend()) {
             event.getThreadName();
             event.getNDC();
@@ -74,10 +79,10 @@ public abstract class SnapshotAppender extends org.apache.log4j.AppenderSkeleton
      * Send the contents of the cyclic buffer as an web server posting.
      */
     private void writeSnapshot(final CyclicBuffer buffer) {
-        final StringBuffer details = new StringBuffer();
-        final String header = layout.getHeader();
+        final StringBuilder details = new StringBuilder();
+        final byte[] header = getLayout().getHeader();
         if (header != null) {
-            details.append(header);
+            details.append(new String(header));
         }
 
         if (addInfo) {
@@ -86,28 +91,26 @@ public abstract class SnapshotAppender extends org.apache.log4j.AppenderSkeleton
             final String java = System.getProperty("java.vm.name") + " " + System.getProperty("java.vm.version");
             final String version = getFrameworkVersion();
 
-            final org.apache.log4j.spi.LoggingEvent infoEvent = new org.apache.log4j.spi.LoggingEvent("", org.apache.log4j.Logger.getRootLogger(), org.apache.log4j.Level.INFO, "Snapshot:- " + new Date() + "\n\t" + user + "\n\t" + system + "\n\t" + java + "\n\t" + version, null);
-            details.append(layout.format(infoEvent));
+            final LogEvent infoEvent = new Log4jLogEvent("", LogManager.getRootLogger(), Level.INFO, "Snapshot:- " + new Date() + "\n\t" + user + "\n\t" + system + "\n\t" + java + "\n\t" + version, null);
+            details.append(getLayout().format(infoEvent));
         }
 
         final int len = buffer.length();
         String message = "";
         for (int i = 0; i < len; i++) {
-            final org.apache.log4j.spi.LoggingEvent event = buffer.get();
+            final LogEvent event = buffer.get();
             message = event.getLoggerName() + ": " + event.getMessage();
-            details.append(layout.format(event));
-            if (layout.ignoresThrowable()) {
-                final String[] s = event.getThrowableStrRep();
+            details.append(getLayout().toSerializable(event));
+            if (getLayout().ignoresThrowable()) {
+                final String s = event.getThrownProxy().getExtendedStackTraceAsString();
                 if (s != null) {
-                    for (final String element : s) {
-                        details.append(element);
-                        details.append('\n');
-                    }
+                    details.append(s);
+                    details.append('\n');
                 }
             }
         }
 
-        final String footer = layout.getFooter();
+        final String footer = getLayout().getFooter();
         if (footer != null) {
             details.append(footer);
         }
@@ -154,7 +157,7 @@ public abstract class SnapshotAppender extends org.apache.log4j.AppenderSkeleton
     }
 
     public void setEvaluatorClass(final String value) {
-        triggerEvaluator = (TriggeringEventEvaluator) org.apache.log4j.helpers.OptionConverter.instantiateByClassName(value, TriggeringEventEvaluator.class, triggerEvaluator);
+        triggerEvaluator = (LogEventEvaluator) OptionConverter.instantiateByClassName(value, LogEventEvaluator.class, triggerEvaluator);
     }
 
     public void setAddInfo(final boolean addInfo) {

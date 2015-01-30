@@ -38,11 +38,12 @@
     <url>http://isis.apache.org/${relativeUrl}</url>
 
 	<dependencies>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-		</dependency>
-		
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.jdom</groupId>
             <artifactId>jdom</artifactId>

@@ -27,15 +27,15 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Properties;
-
-import org.apache.log4j.spi.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SnapshotServer {
     private static final String SNAPSHOT_PROPERTIES = "snapshot.properties";
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SnapshotServer.class);
+    private static final Logger LOG = LogManager.getLogger(SnapshotServer.class);
 
     public static void main(final String[] args) {
-        org.apache.log4j.BasicConfigurator.configure();
+        org.apache.logging.log4j.core.config.Configurator.BasicConfigurator.configure();
 
         int port;
         String directoryPath;

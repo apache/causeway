@@ -24,14 +24,13 @@ import java.io.OutputStreamWriter;
 import java.net.ConnectException;
 import java.net.Socket;
 
-import org.apache.log4j.spi.LoggerFactory;
 
 public class SocketSnapshotAppender extends SnapshotAppender {
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(SmtpSnapshotAppender.class);
+    private static final org.apache.logging.log4j.Logger LOG = org.apache.logging.log4j.LogManager.getLogger(SmtpSnapshotAppender.class);
     private int port = 9289;
     private String server;
 
-    public SocketSnapshotAppender(final org.apache.log4j.spi.TriggeringEventEvaluator evaluator) {
+    public SocketSnapshotAppender(final TriggeringEventEvaluator evaluator) {
         super(evaluator);
     }
 
