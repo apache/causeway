@@ -38,7 +38,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
  * An extension of Wicket's default SignInPanel that provides
  * custom markup, based on Bootstrap, and uses
  * {@link de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel}
- * to Bootstrap styled error messages
+ * for Bootstrap styled error messages
  */
 public class IsisSignInPanel extends SignInPanel {
 

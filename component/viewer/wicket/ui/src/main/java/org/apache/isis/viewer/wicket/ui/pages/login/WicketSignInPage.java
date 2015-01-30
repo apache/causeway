@@ -87,16 +87,18 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
         final boolean signUpLink = !suppressSignUpLink;
         final boolean passwordReset = !suppressPasswordResetLink;
         final boolean continueToOriginalDestination = !clearOriginalDestination;
-        return addSignInPanel(rememberMe, signUpLink, passwordReset, continueToOriginalDestination);
+        SignInPanel signInPanel = createSignInPanel("signInPanel", rememberMe, signUpLink, passwordReset, continueToOriginalDestination);
+        add(signInPanel);
+        return signInPanel;
     }
 
-    private SignInPanel addSignInPanel(
+    protected SignInPanel createSignInPanel(
+            final String id,
             final boolean rememberMe,
             final boolean signUpLink,
             final boolean passwordResetLink,
             final boolean continueToOriginalDestination) {
-        final SignInPanel signInPanel = new IsisSignInPanel("signInPanel", rememberMe, signUpLink, passwordResetLink, continueToOriginalDestination);
-        add(signInPanel);
+        final SignInPanel signInPanel = new IsisSignInPanel(id, rememberMe, signUpLink, passwordResetLink, continueToOriginalDestination);
         return signInPanel;
     }
 
