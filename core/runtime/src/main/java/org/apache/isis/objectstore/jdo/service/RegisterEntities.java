@@ -20,21 +20,17 @@ package org.apache.isis.objectstore.jdo.service;
 
 import java.util.Map;
 import java.util.Set;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.jdo.annotations.PersistenceCapable;
-
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
-
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -77,8 +73,25 @@ public class RegisterEntities {
                 throw new IllegalStateException("Could not locate any @PersistenceCapable entities in package " + packagePrefix);
             }
             for (Class<?> entityType : entityTypes) {
+                if(ignore(entityType)) {
+                    // ignore (probably a testing class)
+                    continue;
+                }
                 getSpecificationLoader().loadSpecification(entityType);
             }
+        }
+    }
+
+    private static boolean ignore(final Class<?> entityType) {
+        try {
+            if(entityType.isAnonymousClass() || entityType.isLocalClass() || entityType.isMemberClass()) {
+                return true;
+            }
+            final PersistenceCapable persistenceCapable = entityType.getAnnotation(PersistenceCapable.class);
+            final boolean hasPersistenceCapable = persistenceCapable != null;
+            return !hasPersistenceCapable; // don't ignore if has @PersistenceCapable
+        } catch (NoClassDefFoundError ex) {
+            return true;
         }
     }
 
