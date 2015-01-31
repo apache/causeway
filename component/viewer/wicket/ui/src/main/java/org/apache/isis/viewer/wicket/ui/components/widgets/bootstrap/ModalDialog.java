@@ -37,6 +37,7 @@ public class ModalDialog<T> extends Modal<T> implements ActionPrompt {
     public ModalDialog(String id, IModel<T> model) {
         super(id, model);
 
+        setFadeIn(false);
         setUseKeyboard(true);
         setDisableEnforceFocus(true);
         setOutputMarkupPlaceholderTag(true);
