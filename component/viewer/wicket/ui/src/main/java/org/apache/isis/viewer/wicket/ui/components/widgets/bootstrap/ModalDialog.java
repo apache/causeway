@@ -17,6 +17,8 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.behavior.Draggable;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.behavior.DraggableConfig;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -42,6 +44,7 @@ public class ModalDialog<T> extends Modal<T> implements ActionPrompt {
         setUseKeyboard(true);
         setDisableEnforceFocus(true);
         setOutputMarkupPlaceholderTag(true);
+        add(new Draggable(new DraggableConfig().withHandle(".modal-content").withCursor("move")));
         WebMarkupContainer emptyComponent = new WebMarkupContainer(getContentId());
         add(emptyComponent);
     }
