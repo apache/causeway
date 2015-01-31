@@ -565,6 +565,11 @@ div.label-none .scalarValueWrapper {
     padding-right: 14px;
 }
 
+/* vertical center positioned modal. See o.a.isis.viewer.wicket.ui.components.widgets.bootstrap.ModalDialog.createDialog */
+.modal-dialog-center {
+    margin-top: 15%;
+}
+
 div.label-left .scalarValueWrapper .form-control {
     width: 100%;
 }
