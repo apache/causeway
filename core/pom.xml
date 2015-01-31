@@ -130,7 +130,7 @@
         <xstream.version>1.4.7</xstream.version>
         <htmlparser.version>2.1</htmlparser.version>
 
-        <junit.version>4.11</junit.version>
+        <junit.version>4.12</junit.version>
         <jmock.version>2.6.0</jmock.version>
         <easymock.version>2.5.2</easymock.version>
         <cucumber.version>1.1.5</cucumber.version>
