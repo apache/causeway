@@ -112,7 +112,7 @@
         <commons-httpclient.version>3.1</commons-httpclient.version>
         <commons-codec.version>1.9</commons-codec.version>
 
-        <jackson.version>2.4.4</jackson.version>
+        <jackson.version>2.5.0</jackson.version>
         <gson.version>2.3.1</gson.version>
 
         <!-- using 2.3.2 throws strange error about not finding org.hsqldb.jdbcDriver -->
