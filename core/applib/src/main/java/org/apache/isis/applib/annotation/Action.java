@@ -69,15 +69,13 @@ public @interface Action {
      * Indicates when the action is not visible to the user.
      *
      * <p>
-     * For a repository action, is equivalent to {@link NotContributed} and also
-     * {@link NotInServiceMenu}.
+     * It is also possible to suppress an action's visibility using {@link ActionLayout#hidden()}.
      * </p>
      *
      * <p>
-     * If a repository action is contributed as a property, then the {@link Hidden#where() where}
-     * attribute can be used to optionally hide the contributed property in a table (using
-     * {@link Where#ALL_TABLES}, {@link Where#STANDALONE_TABLES}, {@link Where#PARENTED_TABLES}
-     * as appropriate).
+     *     For {@link DomainService domain service} actions, the action's visibility is dependent upon its
+     *     {@link DomainService#nature() nature} and for contributed actions on how it is
+     *     {@link ActionLayout#contributed()}.
      * </p>
      */
     Where hidden() default Where.NOWHERE;
