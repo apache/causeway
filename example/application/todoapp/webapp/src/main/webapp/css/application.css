@@ -17,6 +17,10 @@
  *  under the License.
  */
 
+.navbar-brand img {
+    margin-top: -5px;
+    margin-left: 5px;
+}
 
 .x-key label.scalarName {
     color: red;
