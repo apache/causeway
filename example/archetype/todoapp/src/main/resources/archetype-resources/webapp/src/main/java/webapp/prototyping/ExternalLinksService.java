@@ -21,16 +21,20 @@ package webapp.prototyping;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
 @DomainService
-@DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.SECONDARY, menuOrder = "20")
+@DomainServiceLayout(
+        menuBar = DomainServiceLayout.MenuBar.SECONDARY,
+        menuOrder = "20"
+)
 public class ExternalLinksService {
 
     public static enum ExternalLink {
@@ -55,10 +59,12 @@ public class ExternalLinksService {
     }
 
     @ActionLayout(
-        cssClassFa = "fa-external-link" ,
-        prototype = true
+            cssClassFa = "fa-external-link"
     )
-    @ActionSemantics(Of.SAFE)
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            restrictTo = RestrictTo.PROTOTYPING
+    )
     @MemberOrder(name="Prototyping", sequence="91.1")
     public URL goToDocs(@ParameterLayout(named="Link") ExternalLink link) throws MalformedURLException {
         return link.open();

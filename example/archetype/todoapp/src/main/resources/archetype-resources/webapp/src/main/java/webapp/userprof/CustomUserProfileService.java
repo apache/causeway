@@ -19,17 +19,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package app;
+package webapp.userprof;
 
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.homepage.AbstractHomePageDashboardService;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.userprof.UserProfileService;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
-@DomainService(nature = NatureOfService.DOMAIN)
-public class ToDoAppDashboardService extends AbstractHomePageDashboardService<ToDoAppDashboard> {
+/**
+ * Demonstrates how to provide a custom implementation of the {@link org.apache.isis.applib.services.userprof.UserProfileService}.
+ */
+@DomainService
+public class CustomUserProfileService implements UserProfileService {
 
-    public ToDoAppDashboardService() {
-        super(ToDoAppDashboard.class);
+    @Override
+    @Programmatic
+    public String userProfileName() {
+        return "Hi " + getAuthenticationSession().getUserName() + "!";
+    }
+
+    protected AuthenticationSession getAuthenticationSession() {
+        return IsisContext.getAuthenticationSession();
     }
 
 }

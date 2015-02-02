@@ -29,17 +29,18 @@ import java.util.List;
 import com.google.common.base.Predicates;
 import org.joda.time.LocalDate;
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.Bookmarkable;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.annotation.RegEx;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.clock.ClockService;
 
@@ -48,11 +49,11 @@ import org.apache.isis.applib.services.clock.ClockService;
 public class ToDoItems {
 
     //region > notYetComplete (action)
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(
-        cssClassFa = "fa fa-thumbs-down"
+        cssClassFa = "fa fa-thumbs-down",
+        bookmarking = BookmarkPolicy.AS_ROOT
     )
-    @Bookmarkable
-    @ActionSemantics(Of.SAFE)
     @MemberOrder(sequence = "10")
     public List<ToDoItem> notYetComplete() {
         final List<ToDoItem> items = notYetCompleteNoUi();
@@ -65,7 +66,7 @@ public class ToDoItems {
     @Programmatic
     public List<ToDoItem> notYetCompleteNoUi() {
         return container.allMatches(
-                new QueryDefault<ToDoItem>(ToDoItem.class, 
+                new QueryDefault<>(ToDoItem.class,
                         "findByOwnedByAndCompleteIsFalse", 
                         "ownedBy", currentUserName()));
     }
@@ -75,7 +76,7 @@ public class ToDoItems {
     @ActionLayout(
         cssClassFa = "fa fa-thumbs-up"
     )
-    @ActionSemantics(Of.SAFE)
+    @Action(semantics = SemanticsOf.SAFE)
     @MemberOrder(sequence = "20")
     public List<ToDoItem> complete() {
         final List<ToDoItem> items = completeNoUi();
@@ -88,7 +89,7 @@ public class ToDoItems {
     @Programmatic
     public List<ToDoItem> completeNoUi() {
         return container.allMatches(
-            new QueryDefault<ToDoItem>(ToDoItem.class, 
+            new QueryDefault<>(ToDoItem.class,
                     "findByOwnedByAndCompleteIsTrue", 
                     "ownedBy", currentUserName()));
     }
@@ -96,12 +97,12 @@ public class ToDoItems {
 
     //region > categorized (action)
     @SuppressWarnings("unchecked")
-    @Bookmarkable
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "40")
+    @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(
-        cssClassFa = "fa fa-question"
+        cssClassFa = "fa fa-question",
+        bookmarking = BookmarkPolicy.AS_ROOT
     )
+    @MemberOrder(sequence = "40")
     public List<ToDoItem> categorized(
     		@ParameterLayout(named="Category") final Category category,
     		@ParameterLayout(named="Subcategory") final Subcategory subcategory,
@@ -120,7 +121,7 @@ public class ToDoItems {
         return default0Categorized().subcategories().get(0);
     }
     public boolean default2Categorized() {
-    	return false;
+        return false;
     }
     public List<Subcategory> choices1Categorized(
             final Category category) {
@@ -138,12 +139,20 @@ public class ToDoItems {
     @ActionLayout(cssClassFa = "fa fa-plus")
     @MemberOrder(sequence = "5")
     public ToDoItem newToDo(
-            final @RegEx(validation = "${symbol_escape}${symbol_escape}w[@&:${symbol_escape}${symbol_escape}-${symbol_escape}${symbol_escape},${symbol_escape}${symbol_escape}.${symbol_escape}${symbol_escape}+ ${symbol_escape}${symbol_escape}w]*")
-                  @ParameterLayout(named="Description") String description,
-            final @ParameterLayout(named="Category") Category category,
-            final @Optional @ParameterLayout(named="Subcategory") Subcategory subcategory,
-            final @Optional @ParameterLayout(named="Due by") LocalDate dueBy,
-            final @Optional @ParameterLayout(named="Cost") BigDecimal cost) {
+            @Parameter(regexPattern = "${symbol_escape}${symbol_escape}w[@&:${symbol_escape}${symbol_escape}-${symbol_escape}${symbol_escape},${symbol_escape}${symbol_escape}.${symbol_escape}${symbol_escape}+ ${symbol_escape}${symbol_escape}w]*")
+            @ParameterLayout(named="Description")
+            final String description,
+            @ParameterLayout(named="Category")
+            final Category category,
+            @Parameter(optional = Optionality.TRUE)
+            @ParameterLayout(named="Subcategory")
+            final Subcategory subcategory,
+            @Parameter(optional = Optionality.TRUE)
+            @ParameterLayout(named="Due by")
+            final LocalDate dueBy,
+            @Parameter(optional = Optionality.TRUE)
+            @ParameterLayout(named="Cost")
+            final BigDecimal cost) {
         return newToDo(description, category, subcategory, currentUserName(), dueBy, cost);
     }
     public Category default1NewToDo() {
@@ -169,14 +178,16 @@ public class ToDoItems {
 
     //region > allToDos (action)
     @ActionLayout(
-        cssClassFa = "fa fa-globe",
-        prototype = true
+        cssClassFa = "fa fa-globe"
     )
-    @ActionSemantics(Of.SAFE)
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            restrictTo = RestrictTo.PROTOTYPING
+    )
     @MemberOrder(sequence = "50")
     public List<ToDoItem> allToDos() {
         final List<ToDoItem> items = container.allMatches(
-                new QueryDefault<ToDoItem>(ToDoItem.class, 
+                new QueryDefault<>(ToDoItem.class,
                         "findByOwnedBy", 
                         "ownedBy", currentUserName()));
         if(items.isEmpty()) {
@@ -190,7 +201,7 @@ public class ToDoItems {
     @Programmatic // not part of metamodel
     public List<ToDoItem> autoComplete(final String description) {
         return container.allMatches(
-                new QueryDefault<ToDoItem>(ToDoItem.class, 
+                new QueryDefault<>(ToDoItem.class,
                         "findByOwnedByAndDescriptionContains", 
                         "ownedBy", currentUserName(), 
                         "description", description));
@@ -229,7 +240,7 @@ public class ToDoItems {
     private static final long ONE_WEEK_IN_MILLIS = 7 * 24 * 60 * 60 * 1000L;
 
     @Programmatic
-    public String validateDueBy(LocalDate dueBy) {
+    public String validateDueBy(final LocalDate dueBy) {
         return isMoreThanOneWeekInPast(dueBy) ? "Due by date cannot be more than one week old" : null;
     }
     @Programmatic

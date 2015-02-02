@@ -21,12 +21,12 @@
  */
 package dom.todo;
 
-import org.apache.isis.applib.annotation.PublishedObject.ChangeKind;
-import org.apache.isis.applib.annotation.PublishedObject.PayloadFactory;
+import org.apache.isis.applib.annotation.PublishingChangeKind;
+import org.apache.isis.applib.annotation.PublishingPayloadFactoryForObject;
 import org.apache.isis.applib.services.publish.EventPayload;
 import org.apache.isis.applib.services.publish.EventPayloadForObjectChanged;
 
-public class ToDoItemChangedPayloadFactory implements PayloadFactory{
+public class ToDoItemChangedPayloadFactory implements PublishingPayloadFactoryForObject {
 
     public static class ToDoItemPayload extends EventPayloadForObjectChanged<ToDoItem> {
 
@@ -44,7 +44,7 @@ public class ToDoItemChangedPayloadFactory implements PayloadFactory{
     }
 
     @Override
-    public EventPayload payloadFor(Object changedObject, ChangeKind changeKind) {
+    public EventPayload payloadFor(final Object changedObject, final PublishingChangeKind publishingChangeKind) {
         return new ToDoItemPayload((ToDoItem) changedObject);
     }
 

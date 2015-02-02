@@ -132,7 +132,7 @@
                         <include>**/*.png</include>
                         <include>**/*.js</include>
                         <include>**/*.ini</include>
-                        <include>**/*.gif</include>
+                        <include>**/*.pdn</include>
                         <include>**/*.css</include>
                     </includes>
                 </fileSet>

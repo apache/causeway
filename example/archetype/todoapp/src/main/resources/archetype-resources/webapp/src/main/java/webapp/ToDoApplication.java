@@ -81,7 +81,7 @@ public class ToDoApplication extends IsisWicketApplication {
     protected void init() {
         super.init();
 
-        IBootstrapSettings settings = Bootstrap.getSettings();
+        final IBootstrapSettings settings = Bootstrap.getSettings();
         settings.setThemeProvider(new BootswatchThemeProvider(BootswatchTheme.Flatly));
     }
 
@@ -100,21 +100,21 @@ public class ToDoApplication extends IsisWicketApplication {
     }
 
     @Override
-    public WebRequest newWebRequest(HttpServletRequest servletRequest, String filterPath) {
+    public WebRequest newWebRequest(final HttpServletRequest servletRequest, final String filterPath) {
         if(!DEMO_MODE_USING_CREDENTIALS_AS_QUERYARGS) {
             return super.newWebRequest(servletRequest, filterPath);
         } 
 
         // else demo mode
         try {
-            String uname = servletRequest.getParameter("user");
+            final String uname = servletRequest.getParameter("user");
             if (uname != null) {
                 servletRequest.getSession().invalidate();
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
-        WebRequest request = super.newWebRequest(servletRequest, filterPath);
-        return request;
+
+        return super.newWebRequest(servletRequest, filterPath);
     }
     
     @Override
@@ -128,6 +128,7 @@ public class ToDoApplication extends IsisWicketApplication {
                 bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("ToDo App");
                 bind(String.class).annotatedWith(Names.named("applicationCss")).toInstance("css/application.css");
                 bind(String.class).annotatedWith(Names.named("applicationJs")).toInstance("scripts/application.js");
+                bind(String.class).annotatedWith(Names.named("brandLogo")).toInstance("/images/todo%61pp-logo-160x40.png");
                 bind(String.class).annotatedWith(Names.named("welcomeMessage")).toInstance(readLines(getClass(), "welcome.html"));
                 bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("ToDo App");
                 bind(InputStream.class).annotatedWith(Names.named("metaInfManifest")).toProvider(Providers.of(getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")));
@@ -139,10 +140,11 @@ public class ToDoApplication extends IsisWicketApplication {
 
     private static String readLines(final Class<?> contextClass, final String resourceName) {
         try {
-            List<String> readLines = Resources.readLines(Resources.getResource(contextClass, resourceName), Charset.defaultCharset());
+            final List<String> readLines = Resources.readLines(
+                    Resources.getResource(contextClass, resourceName), Charset.defaultCharset());
             final String aboutText = Joiner.on("${symbol_escape}n").join(readLines);
             return aboutText;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             return "This is a Todo app";
         }
     }

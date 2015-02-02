@@ -33,30 +33,32 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import org.joda.time.LocalDate;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.DescribedAs;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.NotContributed;
-import org.apache.isis.applib.annotation.NotContributed.As;
-import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
+import org.apache.isis.applib.value.Clob;
 
-@DomainService
+@DomainService(nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
 public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
     //region > priority (contributed property)
-    @DescribedAs("The relative priority of this item compared to others not yet complete (using 'due by' date)")
-    @NotInServiceMenu
-    @ActionSemantics(Of.SAFE)
-    @NotContributed(As.ACTION) // ie contributed as association
-    @Hidden(where=Where.ALL_TABLES)
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            hidden = Where.ALL_TABLES
+    )
+    @ActionLayout(
+            describedAs = "The relative priority of this item compared to others not yet complete (using 'due by' date)",
+            contributed = Contributed.AS_ASSOCIATION
+    )
     @Disabled(reason="Relative priority, derived from due date")
     public Integer relativePriority(final ToDoItem toDoItem) {
         return queryResultsCache.execute(new Callable<Integer>(){
@@ -68,7 +70,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
                 // sort items, then locate this one
                 int i=1;
-                for (ToDoItem each : sortedNotYetComplete()) {
+                for (final ToDoItem each : sortedNotYetComplete()) {
                     if(each == toDoItem) {
                         return i;
                     }
@@ -84,18 +86,18 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
         .sortedCopy(toDoItems.notYetComplete());
     }
 
-    private static Ordering<ToDoItem> ORDERING_DUE_BY = 
+    private static final Ordering<ToDoItem> ORDERING_DUE_BY =
         Ordering.natural().nullsLast().onResultOf(new Function<ToDoItem, LocalDate>(){
             @Override
-            public LocalDate apply(ToDoItem input) {
+            public LocalDate apply(final ToDoItem input) {
                 return input.getDueBy();
             }
         });
     
-    private static Ordering<ToDoItem> ORDERING_DESCRIPTION = 
+    private static final Ordering<ToDoItem> ORDERING_DESCRIPTION =
         Ordering.natural().nullsLast().onResultOf(new Function<ToDoItem, String>(){
             @Override
-            public String apply(ToDoItem input) {
+            public String apply(final ToDoItem input) {
                 return input.getDescription();
             }
         });
@@ -104,10 +106,11 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     //endregion
 
     //region >  next, previous (contributed actions)
-    @DescribedAs("The next item not yet completed")
-    @NotInServiceMenu
-    @ActionSemantics(Of.SAFE)
-    @NotContributed(As.ASSOCIATION) // ie contributed as action
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(
+            describedAs = "The next item not yet completed",
+            contributed = Contributed.AS_ACTION
+    )
     public ToDoItem next(final ToDoItem item) {
         final Integer priority = relativePriority(item);
         if(priority == null) {
@@ -119,7 +122,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     public String disableNext(final ToDoItem toDoItem) {
         if (toDoItem.isComplete()) {
             return "Completed";
-        } 
+        }
         if(next(toDoItem) == null) {
             return "No next item";
         }
@@ -128,10 +131,11 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
     // //////////////////////////////////////
 
-    @DescribedAs("The previous item not yet completed")
-    @NotInServiceMenu
-    @ActionSemantics(Of.SAFE)
-    @NotContributed(As.ASSOCIATION) // ie contributed as action
+    @ActionLayout(
+            describedAs = "The previous item not yet completed",
+            contributed = Contributed.AS_ACTION
+    )
+    @Action(semantics = SemanticsOf.SAFE)
     public ToDoItem previous(final ToDoItem item) {
         final Integer priority = relativePriority(item);
         if(priority == null) {
@@ -168,9 +172,10 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     //endregion
 
     //region > similarTo (contributed collection)
-    @NotInServiceMenu
-    @ActionSemantics(Of.SAFE)
-    @NotContributed(As.ACTION)
+    @ActionLayout(
+            contributed = Contributed.AS_ASSOCIATION
+    )
+    @Action(semantics = SemanticsOf.SAFE)
     public List<ToDoItem> similarTo(final ToDoItem toDoItem) {
         final List<ToDoItem> similarToDoItems = allMatches(
                 new QueryDefault<ToDoItem>(ToDoItem.class,
@@ -193,9 +198,10 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
 
     //region > updateCategory (contributed action)
 
-    @DescribedAs("Update category and subcategory")
-    @NotInServiceMenu
-    @ActionSemantics(Of.IDEMPOTENT)
+    @ActionLayout(
+            describedAs = "Update category and subcategory"
+    )
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
     public Categorized updateCategory(
             final Categorized item,
             final @ParameterLayout(named="Category") Category category,
@@ -223,6 +229,33 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
         return Subcategory.validate(category, subcategory);
     }
     //endregion
+
+    // region > exportAsJson (action)
+    /**
+     * Demonstrates functionality of streaming back Clob/Blob result within an action with a prompt, i.e. Ajax request
+     */
+    @Action(semantics = SemanticsOf.SAFE)
+    public Clob exportAsJson(
+            final ToDoItem toDoItem,
+            @ParameterLayout(named = "File name") String fileName
+    ) {
+        if(!fileName.endsWith(".json")) {
+            fileName += ".json";
+        }
+        return new Clob(
+                fileName,
+                "application/json",
+                "{" +
+                "${symbol_escape}"description${symbol_escape}": ${symbol_escape}"" + toDoItem.getDescription()+"${symbol_escape}"" +
+                ",${symbol_escape}"complete${symbol_escape}": " + ""+toDoItem.isComplete() +
+                "}");
+    }
+
+    public String default1ExportAsJson() {
+        return "todo";
+    }
+    //endregion
+
 
     //region > helpers
     protected String currentUserName() {

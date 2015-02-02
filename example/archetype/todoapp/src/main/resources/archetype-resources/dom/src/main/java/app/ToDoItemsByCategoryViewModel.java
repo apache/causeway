@@ -33,27 +33,30 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Bookmarkable;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.applib.annotation.Render;
-import org.apache.isis.applib.annotation.Render.Type;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.util.ObjectContracts;
 
 @DomainObjectLayout(
-    named="By Category"
+        named="By Category",
+        bookmarking = BookmarkPolicy.AS_ROOT
 )
-@Bookmarkable
-@ViewModel
-public class ToDoItemsByCategoryViewModel 
+@DomainObject(
+        nature = Nature.VIEW_MODEL
+)
+public class ToDoItemsByCategoryViewModel
         implements Comparable<ToDoItemsByCategoryViewModel> {
 
     //region > constructors
     public ToDoItemsByCategoryViewModel() {
     }
-    public ToDoItemsByCategoryViewModel(Category category) {
+    public ToDoItemsByCategoryViewModel(final Category category) {
         setCategory(category);
     }
     //endregion
@@ -116,7 +119,9 @@ public class ToDoItemsByCategoryViewModel
     /**
      * All those items {@link ToDoItems${symbol_pound}notYetComplete() not yet complete}, for this {@link ${symbol_pound}getCategory() category}.
      */
-    @Render(Type.EAGERLY)
+    @CollectionLayout(
+            render = RenderType.EAGERLY
+    )
     public List<ToDoItem> getItemsNotYetComplete() {
         final List<ToDoItem> notYetComplete = toDoItems.notYetCompleteNoUi();
         return Lists.newArrayList(Iterables.filter(notYetComplete, ToDoItem.Predicates.thoseCategorised(getCategory())));
@@ -125,7 +130,9 @@ public class ToDoItemsByCategoryViewModel
     /**
      * All those items {@link ToDoItems${symbol_pound}complete() complete}, for this {@link ${symbol_pound}getCategory() category}.
      */
-    @Render(Type.EAGERLY)
+    @CollectionLayout(
+            render = RenderType.EAGERLY
+    )
     public List<ToDoItem> getItemsComplete() {
         final List<ToDoItem> complete = toDoItems.completeNoUi();
         return Lists.newArrayList(Iterables.filter(complete, ToDoItem.Predicates.thoseCategorised(getCategory())));
@@ -138,7 +145,7 @@ public class ToDoItemsByCategoryViewModel
             named="Delete"
     )
     public ToDoItemsByCategoryViewModel deleteCompleted() {
-        for (ToDoItem item : getItemsComplete()) {
+        for (final ToDoItem item : getItemsComplete()) {
             container.removeIfNotAlready(item);
         }
         // force reload of page
@@ -149,7 +156,7 @@ public class ToDoItemsByCategoryViewModel
 
     //region > compareTo
     @Override
-    public int compareTo(ToDoItemsByCategoryViewModel other) {
+    public int compareTo(final ToDoItemsByCategoryViewModel other) {
         return ObjectContracts.compare(this, other, "category");
     }
     //endregion
