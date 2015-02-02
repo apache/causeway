@@ -49,6 +49,7 @@
 
         <wicket-select2.version>2.2.3</wicket-select2.version>
         <select2.version>3.5.1</select2.version>
+        <jquery-ui.version>1.10.4</jquery-ui.version>
     </properties>
 
     <!-- used in Site generation for relative references. -->
@@ -285,6 +286,18 @@
                 <groupId>org.webjars</groupId>
                 <artifactId>select2</artifactId>
                 <version>${select2.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>jquery-ui</artifactId>
+                <version>${jquery-ui.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>jquery</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- Webjars -->

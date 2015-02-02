@@ -17,10 +17,13 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.dialog.Modal;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.behavior.Draggable;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.behavior.DraggableConfig;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
@@ -37,9 +40,11 @@ public class ModalDialog<T> extends Modal<T> implements ActionPrompt {
     public ModalDialog(String id, IModel<T> model) {
         super(id, model);
 
+        setFadeIn(false);
         setUseKeyboard(true);
         setDisableEnforceFocus(true);
         setOutputMarkupPlaceholderTag(true);
+        add(new Draggable(new DraggableConfig().withHandle(".modal-content").withCursor("move")));
         WebMarkupContainer emptyComponent = new WebMarkupContainer(getContentId());
         add(emptyComponent);
     }
@@ -77,5 +82,12 @@ public class ModalDialog<T> extends Modal<T> implements ActionPrompt {
             close(target);
         }
         setVisible(false);
+    }
+
+    @Override
+    protected WebMarkupContainer createDialog(String id) {
+        WebMarkupContainer dialog = super.createDialog(id);
+        dialog.add(AttributeAppender.append("class", "modal-dialog-center"));
+        return dialog;
     }
 }
