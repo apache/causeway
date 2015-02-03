@@ -565,11 +565,6 @@ div.label-none .scalarValueWrapper {
     padding-right: 14px;
 }
 
-/* vertical center positioned modal. See o.a.isis.viewer.wicket.ui.components.widgets.bootstrap.ModalDialog.createDialog */
-.modal-dialog-center {
-    margin-top: 15%;
-}
-
 div.label-left .scalarValueWrapper .form-control {
     width: 100%;
 }
@@ -701,3 +696,9 @@ div.referencePanel.scalarNameAndValueComponentType {
     height: 33px;
 }
 
+/* vertical center positioned modal. See o.a.isis.viewer.wicket.ui.components.widgets.bootstrap.ModalDialog.createDialog */
+.modal.in .modal-dialog.modal-dialog-center {
+    -ms-transform: translate(0, 100%); /* IE 9 */
+    -webkit-transform: translate(0, 100%); /* Safari and Chrome */
+    transform: translate(0, 100%);
+}
