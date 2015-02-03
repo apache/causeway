@@ -44,6 +44,8 @@ import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAn
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconTitleAndCopyLinkPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityPropertiesPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.selector.links.EntityLinksSelectorPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.footer.FooterPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.header.HeaderPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.*;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlTimePanelFactory;
@@ -124,8 +126,18 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         addComponentFactoriesForValue(componentFactories);
         addComponentFactoriesForParameters(componentFactories);
         addComponentFactoriesForBreadcrumbs(componentFactories);
+        addComponentFactoriesForPageHeader(componentFactories);
+        addComponentFactoriesForPageFooter(componentFactories);
         
         addComponentFactoriesForUnknown(componentFactories);
+    }
+
+    protected void addComponentFactoriesForPageHeader(ComponentFactoryList componentFactories) {
+        componentFactories.add(new HeaderPanelFactory());
+    }
+
+    protected void addComponentFactoriesForPageFooter(ComponentFactoryList componentFactories) {
+        componentFactories.add(new FooterPanelFactory());
     }
 
     protected void addComponentFactoriesForWelcomeAndAbout(final ComponentFactoryList componentFactories) {

@@ -17,24 +17,32 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.pages.about;
+package org.apache.isis.viewer.wicket.ui.components.header;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
+import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
 
 /**
- * Web page representing the about page.
+ * {@link org.apache.isis.viewer.wicket.ui.ComponentFactory} to create container for the page header.
  */
-public class AboutPage extends PageAbstract {
+public class HeaderPanelFactory extends ComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public AboutPage(final PageParameters parameters) {
-        super(parameters, null, ComponentType.ABOUT);
-        addBookmarkedPages();
-        addChildComponents(themeDiv, null);
+    public HeaderPanelFactory() {
+        super(ComponentType.HEADER, HeaderPanel.class);
+    }
+
+    @Override
+    public ApplicationAdvice appliesTo(final IModel<?> model) {
+        return ApplicationAdvice.APPLIES;
+    }
+
+    @Override
+    public Component createComponent(final String id, final IModel<?> model) {
+        return new HeaderPanel(id);
     }
 
 }

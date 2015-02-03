@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -79,7 +80,7 @@ public class EntityPage extends PageAbstract {
      * (eg from an action invocation) is show.
      */
     public EntityPage(final ObjectAdapter adapter, final ConcurrencyException exIfAny) {
-        this(new PageParameters(), newEntityModel(adapter, exIfAny));
+        this(PageParametersUtils.newPageParameters(), newEntityModel(adapter, exIfAny));
     }
 
     private static EntityModel newEntityModel(

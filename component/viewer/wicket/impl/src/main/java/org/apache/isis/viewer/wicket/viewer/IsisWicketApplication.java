@@ -59,6 +59,8 @@ import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponseDecorator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
+import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
+import org.apache.wicket.request.cycle.RequestCycleListenerCollection;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
 import org.apache.wicket.util.time.Duration;
@@ -236,8 +238,10 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             configureLogging(isisConfigDir);
     
             getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_RENDER);
-    
-            getRequestCycleListeners().add(newWebRequestCycleForIsis());
+
+            RequestCycleListenerCollection requestCycleListeners = getRequestCycleListeners();
+            requestCycleListeners.add(newWebRequestCycleForIsis());
+            requestCycleListeners.add(new PageRequestHandlerTracker());
     
             getResourceSettings().setParentFolderPlaceholder("$up$");
 
@@ -565,7 +569,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
         mountPage("/signup/verify", PageType.SIGN_UP_VERIFY);
         mountPage("/password/reset", PageType.PASSWORD_RESET);
 
-        mountPage("/entity/${objectOid}", PageType.ENTITY);
+        mountPage("/entity/#{objectOid}", PageType.ENTITY);
 
         // nb: action mount cannot contain {actionArgs}, because the default
         // parameters encoder doesn't seem to be able to handle multiple args
@@ -574,12 +578,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
     protected void mountPage(final String mountPath, final PageType pageType) {
         final Class<? extends Page> pageClass = this.pageClassRegistry.getPageClass(pageType);
-        mount(new MountedMapper(mountPath, pageClass){
-            @Override
-            protected String getOptionalPlaceholder(String s) {
-                return getPlaceholder(s, '~');
-            }
-        });
+        mount(new MountedMapper(mountPath, pageClass));
     }
 
 

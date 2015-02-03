@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
@@ -69,7 +70,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
      */
     public static PageParameters createPageParameters(final ObjectAdapter adapter) {
 
-        final PageParameters pageParameters = new PageParameters();
+        final PageParameters pageParameters = PageParametersUtils.newPageParameters();
 
         final Boolean persistent = adapter != null && adapter.representsPersistent();
 

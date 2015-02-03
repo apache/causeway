@@ -140,7 +140,17 @@ public enum ComponentType {
      * not used for matching, since the {@link ComponentFactory} implementation
      * acts as a fallback whenever a more suitable factory cannot be located.
      */
-    UNKNOWN;
+    UNKNOWN,
+
+    /**
+     * The header (navigation bar) of the page
+     */
+    HEADER,
+
+    /**
+     * The footer of the page
+     */
+    FOOTER;
 
     /**
      * Returns the {@link #name()} formatted as
