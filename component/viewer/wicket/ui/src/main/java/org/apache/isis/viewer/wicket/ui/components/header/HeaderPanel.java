@@ -1,16 +1,8 @@
 package org.apache.isis.viewer.wicket.ui.components.header;
 
 import java.util.Locale;
-import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.services.userprof.UserProfileService;
-import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
-import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
-import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.Components;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -19,9 +11,16 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.services.userprof.UserProfileService;
+import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
+import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
+import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
+import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
+import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
+import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 
 /**
  * A panel for the default page header
@@ -71,10 +70,11 @@ public class HeaderPanel extends PanelAbstract<Model<String>> {
     protected void addApplicationName() {
         Class<? extends Page> homePage = getApplication().getHomePage();
         final BookmarkablePageLink<Void> applicationNameLink = new BookmarkablePageLink<>("applicationName", homePage);
-        final Label brandLabel = new Label("brandText", applicationName);
-        brandLabel.setVisible(brandLogo == null);
-        final BrandLogo brandImage = new BrandLogo(brandLogo);
-        applicationNameLink.add(brandLabel, brandImage);
+
+        final BrandLogo brandImage = new BrandLogo("brandLogo");
+        final BrandName brandName = new BrandName("brandText");
+        applicationNameLink.add(brandName, brandImage);
+
         add(applicationNameLink);
     }
 
@@ -107,7 +107,7 @@ public class HeaderPanel extends PanelAbstract<Model<String>> {
         if (getPage() instanceof ErrorPage) {
             Components.permanentlyHide(this, ID_PRIMARY_MENU_BAR);
             Components.permanentlyHide(this, ID_SECONDARY_MENU_BAR);
-            addMenuBar(this, ID_TERTIARY_MENU_BAR, null);
+            addMenuBar(this, ID_TERTIARY_MENU_BAR, DomainServiceLayout.MenuBar.TERTIARY);
         } else {
             addMenuBar(this, ID_PRIMARY_MENU_BAR, DomainServiceLayout.MenuBar.PRIMARY);
             addMenuBar(this, ID_SECONDARY_MENU_BAR, DomainServiceLayout.MenuBar.SECONDARY);
