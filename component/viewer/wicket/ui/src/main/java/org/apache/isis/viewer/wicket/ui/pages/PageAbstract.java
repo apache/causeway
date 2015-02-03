@@ -86,6 +86,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAcc
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
+import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
 import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChooser;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
@@ -147,10 +148,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     @Named("applicationName")
     private String applicationName;
 
-    @Inject(optional = true)
-    @Named("brandLogo")
-    private String brandLogo;
-    
     /**
      * {@link Inject}ed when {@link #init() initialized}.
      */
@@ -234,10 +231,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     private void addApplicationName(final MarkupContainer themeDiv) {
         final BookmarkablePageLink<Void> applicationNameLink = homePageLink("applicationName");
-        final Label brandLabel = new Label("brandText", applicationName);
-        brandLabel.setVisible(brandLogo == null);
-        final BrandLogo brandImage = new BrandLogo(brandLogo);
-        applicationNameLink.add(brandLabel, brandImage);
+        final BrandLogo brandImage = new BrandLogo("brandLogo");
+        final BrandName brandName = new BrandName("brandText");
+        applicationNameLink.add(brandName, brandImage);
         themeDiv.add(applicationNameLink);
     }
 

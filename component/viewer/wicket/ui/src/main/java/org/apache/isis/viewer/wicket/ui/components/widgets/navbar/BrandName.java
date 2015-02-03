@@ -1,13 +1,19 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
 
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.Model;
+
+import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.WebComponent;
 
 /**
  * A component used as a brand logo in the top-left corner of the navigation bar
  */
-public class BrandLogo extends WebComponent {
+public class BrandName extends Label {
+
+    @Inject
+    @Named("applicationName")
+    private String applicationName;
 
 
     @com.google.inject.Inject(optional = true)
@@ -19,20 +25,14 @@ public class BrandLogo extends WebComponent {
      *
      * @param id The component id
      */
-    public BrandLogo(final String id) {
+    public BrandName(final String id) {
         super(id);
-    }
-
-    @Override
-    protected void onComponentTag(final ComponentTag tag) {
-        super.onComponentTag(tag);
-
-        tag.put("src", logoUrl);
+        setDefaultModel(Model.of(applicationName));
     }
 
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        setVisible(logoUrl != null);
+        setVisible(logoUrl == null);
     }
 }
