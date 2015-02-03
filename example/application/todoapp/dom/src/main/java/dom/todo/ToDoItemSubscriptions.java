@@ -232,7 +232,7 @@ public class ToDoItemSubscriptions {
             case EXECUTING:
                 break;
             case EXECUTED:
-                LOG.info("Received ActionInteractionEvent, " + ev.getSource().toString() + ", invoked " + ev.getIdentifier().getMemberName());
+                LOG.info("Received ActionDomainEvent, " + ev.getSource().toString() + ", invoked " + ev.getIdentifier().getMemberName());
                 onExecutedThrowExceptionIfSet(ev);
                 break;
         }
@@ -264,7 +264,7 @@ public class ToDoItemSubscriptions {
             case EXECUTING:
                 break;
             case EXECUTED:
-                LOG.info("Received PropertyInteractionEvent, " + ev.getSource().toString() + ", changed " + ev.getIdentifier().getMemberName() + " : " + ev.getOldValue() + " -> " + ev.getNewValue());
+                LOG.info("Received PropertyDomainEvent, " + ev.getSource().toString() + ", changed " + ev.getIdentifier().getMemberName() + " : " + ev.getOldValue() + " -> " + ev.getNewValue());
                 onExecutedThrowExceptionIfSet(ev);
 
                 if(ev.getIdentifier().getMemberName().contains("description")) {
@@ -314,9 +314,9 @@ public class ToDoItemSubscriptions {
                 break;
             case EXECUTED:
                 if(ev.getOf() == CollectionDomainEvent.Of.ADD_TO) {
-                    LOG.info("Received CollectionInteractionEvent, " + ev.getSource().toString() + ", added to " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
+                    LOG.info("Received CollectionDomainEvent, " + ev.getSource().toString() + ", added to " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
                 } else {
-                    LOG.info("Received CollectionInteractionEvent, " + ev.getSource().toString() + ", removed from " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
+                    LOG.info("Received CollectionDomainEvent, " + ev.getSource().toString() + ", removed from " + ev.getIdentifier().getMemberName() + " : " + ev.getValue());
                 }
                 onExecutedThrowExceptionIfSet(ev);
                 break;
