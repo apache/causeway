@@ -643,6 +643,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     @Override
     protected void onDestroy() {
         try {
+            system.shutdown();
             IsisContext.shutdown();
             super.onDestroy();
         } catch(final RuntimeException ex) {
