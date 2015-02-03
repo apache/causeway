@@ -38,12 +38,11 @@ $(function() {
             clearTimeout(isisVeilTimeoutId);
             isisVeilTimeoutId = null;
         }
-        $("#veil").stop().fadeIn(1000)/*show()*/;
+        $("#veil").show();
     };
 
     var isisFadeInVeil = function(attributes, jqxhr, settings) {
         // use timeouts because JQuery's delay(...) cannot be stopped. 
-        //var activeEl = attributes.currentTarget.activeElement;
         isisVeilTimeoutId = setTimeout(function() {
             $("#veil").fadeIn(750);
         }, 250);
@@ -66,7 +65,7 @@ $(function() {
     /* for modal dialogs */
     Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_BEFORE_SEND, function(jqEvent, attributes, jqXHR, settings) {
         if (attributes.c !== window && !$('#'+attributes.c).hasClass('noVeil')) {
-            isisShowVeil(attributes, jqXHR, settings);
+            isisFadeInVeil(attributes, jqXHR, settings);
         }
     });
 
@@ -77,9 +76,9 @@ $(function() {
 
     
     /* only seem to work in non-modal situation */
-    $('.buttons .okButton:not(.noVeil)').click(isisShowVeil);
-    $('.buttons .ok:not(.noVeil)').click(isisShowVeil);
-    $('.cssSubMenuItemsPanel .cssSubMenuItem a:not(.noVeil)').click(isisShowVeil);
+    $('.buttons .okButton:not(.noVeil)').click(isisFadeInVeil);
+    $('.buttons .ok:not(.noVeil)').click(isisFadeInVeil);
+    $('.cssSubMenuItemsPanel .cssSubMenuItem a:not(.noVeil)').click(isisFadeInVeil);
 
     $('div.collectionContentsAsAjaxTablePanel > table.contents > tbody > tr.reloaded-after-concurrency-exception') 
         .livequery(function(){
