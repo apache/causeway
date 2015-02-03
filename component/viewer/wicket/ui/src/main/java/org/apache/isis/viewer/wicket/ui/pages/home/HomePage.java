@@ -43,8 +43,8 @@ public class HomePage extends PageAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public HomePage() {
-        super(new PageParameters(), null);
+    public HomePage(final PageParameters parameters) {
+        super(parameters, null);
         
         addChildComponents(themeDiv, null);
         buildGui();

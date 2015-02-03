@@ -16,25 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
 
-package org.apache.isis.viewer.wicket.ui.pages.about;
+public enum Placement {
+    HEADER,
+    SIGNIN;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
-
-/**
- * Web page representing the about page.
- */
-public class AboutPage extends PageAbstract {
-
-    private static final long serialVersionUID = 1L;
-
-    public AboutPage(final PageParameters parameters) {
-        super(parameters, null, ComponentType.ABOUT);
-        addBookmarkedPages();
-        addChildComponents(themeDiv, null);
+    String urlFor(final String logoHeaderUrl, final String logoSigninUrl) {
+        return this == Placement.HEADER? logoHeaderUrl: logoSigninUrl;
     }
-
 }

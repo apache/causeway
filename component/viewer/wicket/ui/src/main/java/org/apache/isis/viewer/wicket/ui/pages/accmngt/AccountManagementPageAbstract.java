@@ -39,6 +39,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
+import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.Placement;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
@@ -112,8 +113,9 @@ public class AccountManagementPageAbstract extends WebPage {
     }
 
     private void addApplicationName() {
-        final BrandLogo brandLogo = new BrandLogo("brandLogo");
-        final BrandName brandName = new BrandName(ID_APPLICATION_NAME);
+        final Placement placement = Placement.SIGNIN;
+        final BrandLogo brandLogo = new BrandLogo("brandLogo", placement);
+        final BrandName brandName = new BrandName(ID_APPLICATION_NAME, placement);
         add(brandName, brandLogo);
     }
 

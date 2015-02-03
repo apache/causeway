@@ -19,7 +19,7 @@
   under the License.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml"  
-      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"  
+      xmlns:wicket="http://wicket.apache.org"
       xml:lang="en"  
       lang="en">
     <head>
@@ -33,39 +33,7 @@
         <div id="container" class="page container-fluid">
             <div wicket:id="theme">
 
-                <header class="navbar navbar-default navbar-fixed-top" role="navigation">
-                    <div class="container-fluid">
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse.app-actions">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                            <a class="navbar-brand" wicket:id="applicationName">
-                                <span wicket:id="brandText"></span>
-                                <img alt="Brand" wicket:id="brandLogo"/>
-                            </a>
-                        </div>
-                        <div class="navbar-header navbar-right">
-                            <ul class="nav navbar-nav">
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fa fa-fw fa-user"></i> <span wicket:id="userName"></span><span class="caret"></span>
-                                    </a>
-                                    <ul wicket:id="tertiaryMenuBar" class="dropdown-menu" role="menu" style="min-width: 0px;">
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="navbar-collapse app-actions collapse navbar-right">
-                            <ul class="nav navbar-nav" wicket:id="secondaryMenuBar"></ul>
-                        </div>
-                        <div class="navbar-collapse app-actions collapse">
-                            <ul class="nav navbar-nav" wicket:id="primaryMenuBar"></ul>
-                        </div>
-                    </div>
-                </header>
+                <wicket:container wicket:id="header"></wicket:container>
 
                 <div class="clear"/>
 
@@ -78,40 +46,7 @@
 
                 <div wicket:id="actionPromptModalWindow"></div>
 
-
-                <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
-                    <div class="container-fluid">
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-footer">
-                                <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
-                        </div>
-
-                        <div class="collapse navbar-collapse" id="navbar-collapse-footer">
-                            <form class="nav navbar-nav navbar-form navbar-left">
-                                <span wicket:id="breadcrumbs"></span>
-                            </form>
-
-                            <ul class="nav navbar-nav">
-                            </ul>
-                            <ul class="nav navbar-nav navbar-right">
-                                <p class="navbar-text powered-by">Powered by:</p>
-                                <li><a href="http://isis.apache.org" target="_blank">Apache Isis &#8482;</a></li>
-                                <li>
-                                    <a wicket:id="aboutLink" class="navbar-right">
-                                        <span wicket:id="aboutMessage">About</span>
-                                        <i wicket:id="devModeWarning" class="fa fa-lg fa-warning text-danger" title="Running in Prototype (Development) mode!"/>
-                                    </a>
-
-                                </li>
-                                <li wicket:id="themePicker"></li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
+                <wicket:container wicket:id="footer"></wicket:container>
 
             </div>
 

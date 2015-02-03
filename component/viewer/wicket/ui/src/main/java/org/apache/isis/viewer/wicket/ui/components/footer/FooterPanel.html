@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+    <body>
+        <wicket:panel>
+
+            <footer class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-footer">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbar-collapse-footer">
+                    <form class="nav navbar-nav navbar-form navbar-left">
+                        <span wicket:id="breadcrumbs"></span>
+                    </form>
+
+                    <ul class="nav navbar-nav">
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <p class="navbar-text powered-by">Powered by:</p>
+                        <li><a href="http://isis.apache.org" target="_blank">Apache Isis &#8482;</a></li>
+                        <li>
+                            <a wicket:id="aboutLink" class="navbar-right">
+                                <span wicket:id="aboutMessage">About</span>
+                                <i wicket:id="devModeWarning" class="fa fa-lg fa-warning text-danger" title="Running in Prototype (Development) mode!"/>
+                            </a>
+
+                        </li>
+                        <li wicket:id="themePicker"></li>
+                    </ul>
+                </div>
+            </div>
+
+            </footer>
+        </wicket:panel>
+    </body>
+</html>

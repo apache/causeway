@@ -31,9 +31,11 @@ import java.util.List;
 import java.util.Locale;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
@@ -42,13 +44,10 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
-import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
@@ -59,10 +58,8 @@ import org.apache.wicket.request.resource.PackageResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
-import org.apache.isis.applib.services.userprof.UserProfileService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -70,6 +67,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisEventLetterAbstract;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
@@ -78,21 +76,14 @@ import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
-import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
-import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.ThemeChooser;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
-import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
-import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
-import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
@@ -115,12 +106,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static final String ID_THEME = "theme";
 
     private static final String ID_BOOKMARKED_PAGES = "bookmarks";
-    private static final String ID_PRIMARY_MENU_BAR = "primaryMenuBar";
-    private static final String ID_SECONDARY_MENU_BAR = "secondaryMenuBar";
-    private static final String ID_TERTIARY_MENU_BAR = "tertiaryMenuBar";
-    private static final String ID_USER_NAME = "userName";
-    private static final String ID_ABOUT_LINK = "aboutLink";
-    private static final String ID_ABOUT_MESSAGE = "aboutMessage";
 
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     
@@ -128,18 +113,13 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     
     public static final String ID_MENU_LINK = "menuLink";
 
-    // the bootstrap theme
-    private static final String ID_THEME_PICKER = "themePicker";
-    private static final String ID_BREADCRUMBS = "breadcrumbs";
-
     /**
      * This is a bit hacky, but best way I've found to pass an exception over to the WicketSignInPage
      * if there is a problem rendering this page.
      */
-    public static ThreadLocal<ExceptionModel> EXCEPTION = new ThreadLocal<ExceptionModel>(); 
+    public static ThreadLocal<ExceptionModel> EXCEPTION = new ThreadLocal<>();
 
     private final List<ComponentType> childComponentIds;
-    private final PageParameters pageParameters;
 
     /**
      * {@link Inject}ed when {@link #init() initialized}.
@@ -181,31 +161,29 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             final PageParameters pageParameters,
             final String title,
             final ComponentType... childComponentIds) {
+        super(pageParameters);
+
         try {
             // for breadcrumbs support
             getSession().bind();
             
             setTitle(title);
-            
+
             themeDiv = new WebMarkupContainer(ID_THEME);
             add(themeDiv);
             if(applicationName != null) {
                 themeDiv.add(new CssClassAppender(CssClassAppender.asCssStyle(applicationName)));
             }
 
+            MarkupContainer header = createPageHeader("header");
+            themeDiv.add(header);
+
+            MarkupContainer footer = createPageFooter("footer");
+            themeDiv.add(footer);
+
             addActionPromptModalWindow(themeDiv);
-            addServiceActionMenuBars(themeDiv);
 
             this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
-            this.pageParameters = pageParameters;
-
-            addApplicationName(themeDiv);
-            addUserName(themeDiv);
-            //addLogoutLink(themeDiv);
-            addAboutLink(themeDiv);
-
-            addBreadcrumbs();
-            addThemePicker();
 
             // ensure that all collected JavaScript contributions are loaded at the page footer
             add(new HeaderResponseContainer("footerJS", "footerJS"));
@@ -229,17 +207,26 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         }
     }
 
-    private void addApplicationName(final MarkupContainer themeDiv) {
-        final BookmarkablePageLink<Void> applicationNameLink = homePageLink("applicationName");
-        final BrandLogo brandImage = new BrandLogo("brandLogo");
-        final BrandName brandName = new BrandName("brandText");
-        applicationNameLink.add(brandName, brandImage);
-        themeDiv.add(applicationNameLink);
+    /**
+     * Creates the component that should be used as a page header/navigation bar
+     *
+     * @param id The component id
+     * @return The container that should be used as a page header/navigation bar
+     */
+    protected MarkupContainer createPageHeader(final String id) {
+        Component header = getComponentFactoryRegistry().createComponent(ComponentType.HEADER, id, null);
+        return (MarkupContainer) header;
     }
 
-    private void addThemePicker() {
-        final ThemeChooser themeChooser = new ThemeChooser(ID_THEME_PICKER);
-        themeDiv.addOrReplace(themeChooser);
+    /**
+     * Creates the component that should be used as a page header/navigation bar
+     *
+     * @param id The component id
+     * @return The container that should be used as a page header/navigation bar
+     */
+    protected MarkupContainer createPageFooter(final String id) {
+        Component footer = getComponentFactoryRegistry().createComponent(ComponentType.FOOTER, id, null);
+        return (MarkupContainer) footer;
     }
 
 
@@ -313,55 +300,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         }
     }
 
-    private void addUserName(final MarkupContainer themeDiv) {
-        final UserProfileService userProfileService = getUserProfileService();
-        final Label userName = new Label(ID_USER_NAME, userProfileService.userProfileName());
-        themeDiv.add(userName);
-    }
-
-    private UserProfileService getUserProfileService() {
-        final UserProfileService userProfileService = lookupService(UserProfileService.class);
-        return new UserProfileService() {
-            @Override
-            public String userProfileName() {
-                if(PageAbstract.this instanceof ErrorPage) {
-                    return getAuthenticationSession().getUserName();
-                }
-                try {
-                    final String userProfileName = userProfileService != null ? userProfileService.userProfileName() : null;
-                    return userProfileName != null? userProfileName: getAuthenticationSession().getUserName();
-                } catch (final Exception e) {
-                    return getAuthenticationSession().getUserName();
-                }
-            }
-        };
-    }
-
-
-    private void addAboutLink(final MarkupContainer themeDiv) {
-        final BookmarkablePageLink<Void> aboutLink = new BookmarkablePageLink<>(ID_ABOUT_LINK, AboutPage.class);
-        themeDiv.add(aboutLink);
-
-        final Label aboutLabel = new Label(ID_ABOUT_MESSAGE, new ResourceModel("aboutLabel"));
-        aboutLink.add(aboutLabel);
-        addDevModeWarning(aboutLink);
-    }
-
-    /**
-     * Adds a component that shows a warning sign next to "About" link in development mode
-     * @param container The parent component
-     */
-    private void addDevModeWarning(final MarkupContainer container) {
-        final WebComponent devModeWarning = new WebComponent("devModeWarning");
-        devModeWarning.setVisible(getApplication().usesDevelopmentConfig());
-        container.add(devModeWarning);
-    }
-
-    private void addBreadcrumbs() {
-        final BreadcrumbPanel breadcrumbPanel = new BreadcrumbPanel(ID_BREADCRUMBS);
-        themeDiv.addOrReplace(breadcrumbPanel);
-    }
-
     /**
      * As provided in the {@link #PageAbstract(org.apache.wicket.request.mapper.parameter.PageParameters, String, org.apache.isis.viewer.wicket.ui.ComponentType...)} constructor}.
      * 
@@ -372,28 +310,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
      */
     public List<ComponentType> getChildModelTypes() {
         return childComponentIds;
-    }
-
-    @Override
-    public PageParameters getPageParameters() {
-        return pageParameters;
-    }
-
-    private void addServiceActionMenuBars(final MarkupContainer container) {
-        if (this instanceof ErrorPage) {
-            Components.permanentlyHide(container, ID_PRIMARY_MENU_BAR);
-            Components.permanentlyHide(container, ID_SECONDARY_MENU_BAR);
-            addMenuBar(container, ID_TERTIARY_MENU_BAR, null);
-        } else {
-            addMenuBar(container, ID_PRIMARY_MENU_BAR, DomainServiceLayout.MenuBar.PRIMARY);
-            addMenuBar(container, ID_SECONDARY_MENU_BAR, DomainServiceLayout.MenuBar.SECONDARY);
-            addMenuBar(container, ID_TERTIARY_MENU_BAR, DomainServiceLayout.MenuBar.TERTIARY);
-        }
-    }
-
-    private void addMenuBar(final MarkupContainer container, final String id, final DomainServiceLayout.MenuBar menuBar) {
-        final ServiceActionsModel model = new ServiceActionsModel(menuBar);
-        getComponentFactoryRegistry().addOrReplaceComponent(container, id, ComponentType.SERVICE_ACTIONS, model);
     }
 
     /**
@@ -425,7 +341,17 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
      * Convenience for subclasses
      */
     protected void addBookmarkedPages() {
-        getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, ID_BOOKMARKED_PAGES, ComponentType.BOOKMARKED_PAGES, getBookmarkedPagesModel());
+        Component bookmarks = getComponentFactoryRegistry().createComponent(ComponentType.BOOKMARKED_PAGES, ID_BOOKMARKED_PAGES, getBookmarkedPagesModel());
+        themeDiv.add(bookmarks);
+        bookmarks.add(new Behavior() {
+            @Override
+            public void onConfigure(Component component) {
+                super.onConfigure(component);
+
+                PageParameters parameters = getPageParameters();
+                component.setVisible(parameters.get(PageParametersUtils.ISIS_NO_HEADER_PARAMETER_NAME).isNull());
+            }
+        });
     }
 
     protected void bookmarkPage(final BookmarkableModel<?> model) {
@@ -453,9 +379,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         return ActionPromptModalWindow.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
     }
 
-    private void addActionPromptModalWindow(final MarkupContainer themeDiv) {
+    private void addActionPromptModalWindow(final MarkupContainer parent) {
         actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW); 
-        themeDiv.addOrReplace(actionPromptModalWindow);
+        parent.addOrReplace(actionPromptModalWindow);
     }
 
     
@@ -517,7 +443,5 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     protected IsisConfiguration getConfiguration() {
         return IsisContext.getConfiguration();
     }
-
-
 
 }

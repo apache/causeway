@@ -64,6 +64,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -120,7 +121,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
     public static PageParameters createPageParameters(
             final ObjectAdapter adapter, final ObjectAction objectAction, final ConcurrencyChecking concurrencyChecking) {
         
-        final PageParameters pageParameters = new PageParameters();
+        final PageParameters pageParameters = PageParametersUtils.newPageParameters();
         
         final String oidStr = concurrencyChecking == ConcurrencyChecking.CHECK?
                 adapter.getOid().enString(getOidMarshaller()):
@@ -283,7 +284,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             return Mode.RESULTS;
         }
         final List<String> listFrom = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
-        return listFrom != null && !listFrom.isEmpty()? Mode.RESULTS: Mode.PARAMETERS;
+        return !listFrom.isEmpty()? Mode.RESULTS: Mode.PARAMETERS;
     }
 
 
