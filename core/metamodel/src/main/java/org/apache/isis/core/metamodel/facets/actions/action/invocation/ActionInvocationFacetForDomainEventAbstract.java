@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.NonRecoverableException;
@@ -394,7 +395,17 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     // so escalate this exception to be non-recoverable
                     final Throwable targetExceptionCause = targetException.getCause();
                     Throwable nonRecoverableCause = targetExceptionCause != null? targetExceptionCause: targetException;
-                    throw new NonRecoverableException(nonRecoverableCause);
+
+                    // trim to first 300 chars
+                    String message = nonRecoverableCause.getMessage();
+                    if(!Strings.isNullOrEmpty(message)) {
+                        message = message.substring(0, Math.min(message.length(), 300));
+                        if(message.length() == 300) {
+                            message += " ...";
+                        }
+                    }
+
+                    throw new NonRecoverableException(message, nonRecoverableCause);
                 }
             }
 
