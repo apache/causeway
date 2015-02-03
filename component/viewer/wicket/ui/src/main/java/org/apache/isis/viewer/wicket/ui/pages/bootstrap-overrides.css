@@ -702,3 +702,7 @@ div.referencePanel.scalarNameAndValueComponentType {
     -webkit-transform: translate(0, 100%); /* Safari and Chrome */
     transform: translate(0, 100%);
 }
+
+.ui-draggable .modal-header {
+    cursor: move;
+}

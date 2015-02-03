@@ -44,7 +44,6 @@ public class ModalDialog<T> extends Modal<T> implements ActionPrompt {
         setUseKeyboard(true);
         setDisableEnforceFocus(true);
         setOutputMarkupPlaceholderTag(true);
-        add(new Draggable(new DraggableConfig().withHandle(".modal-content").withCursor("move")));
         WebMarkupContainer emptyComponent = new WebMarkupContainer(getContentId());
         add(emptyComponent);
     }
@@ -88,6 +87,7 @@ public class ModalDialog<T> extends Modal<T> implements ActionPrompt {
     protected WebMarkupContainer createDialog(String id) {
         WebMarkupContainer dialog = super.createDialog(id);
         dialog.add(AttributeAppender.append("class", "modal-dialog-center"));
+        dialog.add(new Draggable(new DraggableConfig().withHandle(".modal-header").withCursor("move")));
         return dialog;
     }
 }
