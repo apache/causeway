@@ -180,6 +180,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                 }
             };
             okButton.add(new JGrowlBehaviour());
+            setDefaultButton(okButton);
             add(okButton);
             
             AjaxButton cancelButton = new AjaxButton(ID_CANCEL_BUTTON, new ResourceModel("cancelLabel")) {
