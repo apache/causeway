@@ -110,7 +110,7 @@ public @interface CollectionLayout {
      * There is some similarity between this concept and that of eager-loading as supported by some object stores.
      * </p>
      */
-    public RenderType render() default RenderType.EAGERLY;
+    public RenderType render() default RenderType.LAZILY;
 
 
     // //////////////////////////////////////
