@@ -49,6 +49,8 @@ import org.apache.isis.core.metamodel.facets.collections.collection.modify.Colle
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionInteractionAnnotation;
+import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForPostsCollectionAddedToEventAnnotation;
+import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForPostsCollectionRemovedFromEventAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromAbstract;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromCollectionInteractionAnnotation;
@@ -97,19 +99,41 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         //
         // Set up CollectionDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
-        final Collection collection = Annotations.getAnnotation(method, Collection.class);
+        final PostsCollectionAddedToEvent postsCollectionAddedToEvent = Annotations.getAnnotation(method, PostsCollectionAddedToEvent.class);
+        final PostsCollectionRemovedFromEvent postsCollectionRemovedFromEvent = Annotations.getAnnotation(method, PostsCollectionRemovedFromEvent.class);
         final CollectionInteraction collectionInteraction = Annotations.getAnnotation(method, CollectionInteraction.class);
+        final Collection collection = Annotations.getAnnotation(method, Collection.class);
         final Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEventType;
 
         final CollectionDomainEventFacetAbstract collectionDomainEventFacet;
 
-        // search for @PropertyInteraction(value=...)
+        // this is not quite ideal... because there are two events (addTo/removeFrom) whereas the
+        // newer @CollectionInteraction and @Collection annotations have a single event type.  The net result is that
+        // combining @PostsCollectionAddToEvent or @PostsCollectionRemovedFromEvent with @Collection or @CollectionInteraction
+        // could produce some unexpected results.
+        //
+        // Have decided not to sweat it; it's easy to update, and these annotations will be removed in Isis 2.0
+
+        // search for @PostsCollectionAddedToEvent(value=...)
+        if(postsCollectionAddedToEvent != null) {
+            collectionDomainEventType = postsCollectionAddedToEvent.value();
+            collectionDomainEventFacet = new CollectionDomainEventFacetForPostsCollectionAddedToEventAnnotation(
+                    collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
+        } else
+        // search for @PostsCollectionRemovedFromEvent(value=...)
+        if(postsCollectionRemovedFromEvent != null) {
+            collectionDomainEventType = postsCollectionRemovedFromEvent.value();
+            collectionDomainEventFacet = new CollectionDomainEventFacetForPostsCollectionRemovedFromEventAnnotation(
+                    collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
+        } else
+
+        // search for @CollectionInteraction(value=...)
         if(collectionInteraction != null) {
             collectionDomainEventType = collectionInteraction.value();
             collectionDomainEventFacet = new CollectionDomainEventFacetForCollectionInteractionAnnotation(
                     collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
         } else
-        // search for @Property(domainEvent=...)
+        // search for @Collection(domainEvent=...)
         if(collection != null && collection.domainEvent() != null) {
             collectionDomainEventType = collection.domainEvent();
             collectionDomainEventFacet = new CollectionDomainEventFacetForCollectionAnnotation(
@@ -131,9 +155,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         //
         // here we support the deprecated annotations
         //
-        final PostsCollectionAddedToEvent postsCollectionAddedToEvent = Annotations.getAnnotation(method, PostsCollectionAddedToEvent.class);
-        final PostsCollectionRemovedFromEvent postsCollectionRemovedFromEvent = Annotations.getAnnotation(method, PostsCollectionRemovedFromEvent.class);
-
         final CollectionAddToFacet collectionAddToFacet = holder.getFacet(CollectionAddToFacet.class);
         if (collectionAddToFacet != null) {
             // the current collectionAddToFacet will end up as the underlying facet of

@@ -39,6 +39,9 @@ import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventAbstract;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyAnnotation;
@@ -47,6 +50,7 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPostsPropertyChangedEventAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventAbstract;
@@ -54,9 +58,6 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForPostsPropertyChangedEventAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
@@ -92,6 +93,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     void processModify(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
+        final Class<?> declaringClass = method.getDeclaringClass();
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
         final PropertyOrCollectionAccessorFacet getterFacet = holder.getFacet(PropertyOrCollectionAccessorFacet.class);
@@ -103,12 +105,20 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
         final PostsPropertyChangedEvent postsPropertyChangedEvent = Annotations.getAnnotation(method, PostsPropertyChangedEvent.class);
-        final Property property = Annotations.getAnnotation(method, Property.class);
         final PropertyInteraction propertyInteraction = Annotations.getAnnotation(method, PropertyInteraction.class);
+        final Property property = Annotations.getAnnotation(method, Property.class);
         final Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEventType;
 
         final PropertyDomainEventFacetAbstract propertyDomainEventFacet;
 
+        // search for @PostsPropertyChanged(value=...)
+        // (even though these do not participate in hide/disable/validate, we rely on the validate to set up the
+        // event on a thread-local, such that it is then picked up later by the setter/clear facets
+        if(postsPropertyChangedEvent != null) {
+            propertyDomainEventType = postsPropertyChangedEvent.value();
+            propertyDomainEventFacet = new PropertyDomainEventFacetForPostsPropertyChangedEventAnnotation(
+                    propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
+        } else
         // search for @PropertyInteraction(value=...)
         if(propertyInteraction != null) {
             propertyDomainEventType = propertyInteraction.value();
@@ -122,7 +132,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
                     propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
 
         } else
-        // else use default event type (also for @PostsPropertyChangedEvent)
+        // else use default event type
         {
             propertyDomainEventType = PropertyDomainEvent.Default.class;
             propertyDomainEventFacet = new PropertyDomainEventFacetDefault(

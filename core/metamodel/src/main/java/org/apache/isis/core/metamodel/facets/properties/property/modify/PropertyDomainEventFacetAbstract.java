@@ -41,7 +41,7 @@ public abstract class PropertyDomainEventFacetAbstract
 
     private final DomainEventHelper domainEventHelper;
 
-    final static ThreadLocal<PropertyDomainEvent<?,?>> currentInteraction = new ThreadLocal<PropertyDomainEvent<?,?>>();
+    final static ThreadLocal<PropertyDomainEvent<?,?>> currentInteraction = new ThreadLocal<>();
 
     private final PropertyOrCollectionAccessorFacet getterFacet;
 
@@ -85,7 +85,7 @@ public abstract class PropertyDomainEventFacetAbstract
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
-                    eventType(), null, AbstractDomainEvent.Phase.DISABLE, getIdentified(), ic.getTarget(), null, null);
+                        eventType(), null, AbstractDomainEvent.Phase.DISABLE, getIdentified(), ic.getTarget(), null, null);
         if (event != null && event.isDisabled()) {
             return event.getDisabledReason();
         }

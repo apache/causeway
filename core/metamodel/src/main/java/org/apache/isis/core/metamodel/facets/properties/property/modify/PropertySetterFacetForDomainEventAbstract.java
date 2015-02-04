@@ -72,7 +72,7 @@ public abstract class PropertySetterFacetForDomainEventAbstract
 
         try {
             // pick up existing event (saved in thread local during the validation phase)
-            final PropertyDomainEvent<?, ?> existingEvent = propertyDomainEventFacet.currentInteraction.get();
+            final PropertyDomainEvent<?, ?> existingEvent = PropertyDomainEventFacetAbstract.currentInteraction.get();
 
             // ... post the executing event
             final Object oldValue = getterFacet.getProperty(targetAdapter);
@@ -92,12 +92,12 @@ public abstract class PropertySetterFacetForDomainEventAbstract
             }
 
             // ... post the executed event
-            final PropertyDomainEvent<?, ?> event = propertyDomainEventFacet.currentInteraction.get();
+            final PropertyDomainEvent<?, ?> event = PropertyDomainEventFacetAbstract.currentInteraction.get();
             domainEventHelper.postEventForProperty(value(), verify(event), AbstractDomainEvent.Phase.EXECUTED, getIdentified(), targetAdapter, oldValue, actualNewValue);
 
         } finally {
             // clean up
-            propertyDomainEventFacet.currentInteraction.set(null);
+            PropertyDomainEventFacetAbstract.currentInteraction.set(null);
         }
     }
 
