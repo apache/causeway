@@ -133,7 +133,9 @@ public abstract class IsisContext implements DebuggableWithTitle {
     }
 
     public static void shutdown() {
-        getInstance().shutdownInstance();
+        if(exists()) {
+            getInstance().shutdownInstance();
+        }
     }
 
 
