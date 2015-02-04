@@ -101,7 +101,7 @@ public @interface CollectionLayout {
      * By default, collections are rendered lazily, meaning its contents is not shown automatically.
      *
      * <p>
-     * Using this attribute, an <tt>Order#lineItems</tt> collection might berendered eagerly.  A viewer might use this
+     * Using this attribute, an <tt>Order#lineItems</tt> collection might be rendered eagerly.  A viewer might use this
      * hint to &quot;open&quot; the collection automatically so that the user could see a list of line items
      * immediately when the order is rendered.
      * </p>
