@@ -19,37 +19,34 @@
 
 package org.apache.isis.core.runtime.runner.opts;
 
-import java.util.Map;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
-import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.system.SystemConstants;
 
-public class OptionHandlerFixtureFromEnvironmentVariable extends OptionHandlerFixtureAbstract {
+public abstract class OptionHandlerFixtureAbstract extends OptionHandlerAbstract {
 
-    private static final Logger LOG = LoggerFactory.getLogger(OptionHandlerFixtureFromEnvironmentVariable.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OptionHandlerFixtureAbstract.class);
 
+    public static final String DATANUCLEUS_ROOT_KEY = ConfigurationConstants.ROOT + "persistor.datanucleus.";
+    public static final String DATANUCLEUS_INSTALL_FIXTURES_KEY = DATANUCLEUS_ROOT_KEY + "install-fixtures";
+
+    protected String fixtureClassName;
 
     @Override
-    @SuppressWarnings("static-access")
-    public void addOption(final Options options) {
-        // no-op
+    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        if (fixtureClassName == null) {
+            return;
+        }
+        prime(isisConfigurationBuilder, SystemConstants.FIXTURE_KEY, fixtureClassName);
+        prime(isisConfigurationBuilder, DATANUCLEUS_INSTALL_FIXTURES_KEY, "true");
     }
 
-    @Override
-    public boolean handle(final CommandLine commandLine, final BootPrinter bootPrinter, final Options options) {
-        Map<String, String> properties = System.getenv();
-        for (String key : properties.keySet()) {
-            if (key.equalsIgnoreCase("IsisFixture") || key.equalsIgnoreCase("IsisFixtures")) {
-                this.fixtureClassName = properties.get(key);
-                return true;
-            }
-        }
-        return true;
+    static void prime(IsisConfigurationBuilder isisConfigurationBuilder, String key, String value) {
+        LOG.info("priming: " + key + "=" + value);
+        isisConfigurationBuilder.add(key, value);
     }
 
 }
