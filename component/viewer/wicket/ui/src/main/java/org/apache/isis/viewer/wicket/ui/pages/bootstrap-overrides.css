@@ -706,3 +706,8 @@ div.referencePanel.scalarNameAndValueComponentType {
 .ui-draggable .modal-header {
     cursor: move;
 }
+
+.navigatorLabel .btn-link {
+    margin-top: -2px;
+    text-decoration: underline;
+}
