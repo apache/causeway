@@ -412,8 +412,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
         return new ObjectAdapterMementoProviderAbstract(getModel(), wicketViewerSettings) {
             private static final long serialVersionUID = 1L;
             @Override
-            protected List<ObjectAdapterMemento> obtainMementos(String unused) {
-                return choiceMementos;
+            protected List<ObjectAdapterMemento> obtainMementos(String term) {
+                return obtainMementos(term, choiceMementos);
             }
         };
     }

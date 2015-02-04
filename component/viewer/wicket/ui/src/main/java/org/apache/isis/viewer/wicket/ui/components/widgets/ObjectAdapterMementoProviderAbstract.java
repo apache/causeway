@@ -25,6 +25,7 @@ import com.google.common.collect.Lists;
 import com.vaynberg.wicket.select2.TextChoiceProvider;
 import org.apache.wicket.Session;
 import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.util.string.Strings;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -87,6 +88,31 @@ public abstract class ObjectAdapterMementoProviderAbstract extends TextChoicePro
     }
 
     protected abstract List<ObjectAdapterMemento> obtainMementos(String term);
+
+    /**
+     * Filters all choices against a term by using their
+     * {@link org.apache.isis.core.metamodel.adapter.ObjectAdapter#titleString(org.apache.isis.core.metamodel.adapter.ObjectAdapter) title string}
+     *
+     * @param term The term entered by the user
+     * @param choicesMementos The collections of choices to filter
+     * @return A list of all matching choices
+     */
+    protected List<ObjectAdapterMemento> obtainMementos(String term, Collection<ObjectAdapterMemento> choicesMementos) {
+        List<ObjectAdapterMemento> matches = Lists.newArrayList();
+        if (Strings.isEmpty(term)) {
+            matches.addAll(choicesMementos);
+        } else {
+            for (ObjectAdapterMemento candidate : choicesMementos) {
+                ObjectAdapter objectAdapter = candidate.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                String title = objectAdapter.titleString(objectAdapter);
+                if (title.toLowerCase().contains(term.toLowerCase())) {
+                    matches.add(candidate);
+                }
+            }
+        }
+
+        return matches;
+    }
 
     @Override
     public Collection<ObjectAdapterMemento> toChoices(final Collection<String> ids) {

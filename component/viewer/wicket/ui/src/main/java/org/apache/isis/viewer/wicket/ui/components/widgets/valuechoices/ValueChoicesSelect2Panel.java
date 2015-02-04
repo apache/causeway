@@ -188,7 +188,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
         @Override
         protected List<ObjectAdapterMemento> obtainMementos(String term) {
-            return choicesMementos;
+            return obtainMementos(term, choicesMementos);
         }
 
     }
