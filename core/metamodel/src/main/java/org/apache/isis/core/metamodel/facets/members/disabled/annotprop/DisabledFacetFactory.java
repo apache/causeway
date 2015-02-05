@@ -47,7 +47,7 @@ public class DisabledFacetFactory extends FacetFactoryAbstract
     public void process(final ProcessMethodContext processMethodContext) {
         DisabledFacet disabledFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(disabledFacet == null) {
-            disabledFacet = validator.invalidIfPresent(createFromAnnotationIfPossible(processMethodContext));
+            disabledFacet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext));
         }
         // no-op if null
         FacetUtil.addFacet(disabledFacet);

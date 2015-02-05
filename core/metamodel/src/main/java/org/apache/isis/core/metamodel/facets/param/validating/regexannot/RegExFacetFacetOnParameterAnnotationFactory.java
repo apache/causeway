@@ -65,7 +65,7 @@ public class RegExFacetFacetOnParameterAnnotationFactory extends FacetFactoryAbs
     }
 
     private void addRegexFacetAndCorrespondingTitleFacet(final FacetHolder holder, final RegEx annotation) {
-        final RegExFacet regexFacet = validator.invalidIfPresent(createRegexFacet(annotation, holder));
+        final RegExFacet regexFacet = validator.flagIfPresent(createRegexFacet(annotation, holder));
         if (regexFacet == null) {
             return;
         }

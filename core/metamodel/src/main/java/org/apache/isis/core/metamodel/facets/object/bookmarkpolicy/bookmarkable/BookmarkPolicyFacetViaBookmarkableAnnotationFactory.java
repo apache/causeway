@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -52,17 +53,17 @@ public class BookmarkPolicyFacetViaBookmarkableAnnotationFactory extends FacetFa
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final Bookmarkable annotation = Annotations.getAnnotation(processClassContext.getCls(), Bookmarkable.class);
-        validator.addFacet(create(annotation, processClassContext.getFacetHolder()));
+        FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final Bookmarkable annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Bookmarkable.class);
-        validator.addFacet(create(annotation, processMethodContext.getFacetHolder()));
+        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 
     private BookmarkPolicyFacet create(final Bookmarkable annotation, final FacetHolder holder) {
-        return annotation == null ? new BookmarkPolicyFacetFallback(holder) : new BookmarkPolicyFacetViaBookmarkableAnnotation(annotation.value(), holder);
+        return annotation == null ? new BookmarkPolicyFacetFallback(holder) : validator.flagIfPresent(new BookmarkPolicyFacetViaBookmarkableAnnotation(annotation.value(), holder));
     }
 
 

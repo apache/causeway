@@ -47,7 +47,7 @@ public class HiddenFacetOnMemberFactory extends FacetFactoryAbstract
     public void process(final ProcessMethodContext processMethodContext) {
         HiddenFacet hiddenFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(hiddenFacet == null) {
-            hiddenFacet = validator.invalidIfPresent(createFromAnnotationIfPossible(processMethodContext));
+            hiddenFacet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext));
         }
         // no-op if null
         FacetUtil.addFacet(hiddenFacet);

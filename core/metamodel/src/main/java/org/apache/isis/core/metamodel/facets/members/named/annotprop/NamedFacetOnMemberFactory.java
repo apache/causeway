@@ -47,7 +47,7 @@ public class NamedFacetOnMemberFactory extends FacetFactoryAbstract implements C
     public void process(final ProcessMethodContext processMethodContext) {
         NamedFacet namedFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(namedFacet == null) {
-            namedFacet = validator.invalidIfPresent(createFromAnnotationIfPossible(processMethodContext));
+            namedFacet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext));
         }
         // no-op if null
         FacetUtil.addFacet(namedFacet);

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.objectstore.jdo.applib.service.exceprecog;
 
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 
@@ -31,10 +30,8 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
  * If using the JDO Object store, either register in <tt>isis.properties</tt>, or
  * compose your own, out of the underlying more fine-grained {@link ExceptionRecognizer} implementations. 
  */
-@Hidden
 public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionRecognizerComposite {
-    
-    
+
     public ExceptionRecognizerCompositeForJdoObjectStore() {
         // most specific ones first
         add(new ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException());

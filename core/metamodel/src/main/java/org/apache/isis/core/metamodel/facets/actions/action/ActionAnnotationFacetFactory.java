@@ -44,6 +44,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -86,8 +87,21 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, IsisConfigurationAware, AdapterManagerAware, RuntimeContextAware {
+public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, IsisConfigurationAware, AdapterManagerAware, RuntimeContextAware, MetaModelValidatorRefiner {
+
+    private final MetaModelValidatorForDeprecatedAnnotation actionSemanticsValidator = new MetaModelValidatorForDeprecatedAnnotation(ActionSemantics.class);
+    private final MetaModelValidatorForDeprecatedAnnotation actionInteractionValidator = new MetaModelValidatorForDeprecatedAnnotation(ActionInteraction.class);
+    private final MetaModelValidatorForDeprecatedAnnotation postsActionInvokedEventValidator = new MetaModelValidatorForDeprecatedAnnotation(PostsActionInvokedEvent.class);
+    private final MetaModelValidatorForDeprecatedAnnotation bulkValidator = new MetaModelValidatorForDeprecatedAnnotation(Bulk.class);
+    private final MetaModelValidatorForDeprecatedAnnotation commandValidator = new MetaModelValidatorForDeprecatedAnnotation(Command.class);
+    private final MetaModelValidatorForDeprecatedAnnotation queryOnlyValidator = new MetaModelValidatorForDeprecatedAnnotation(QueryOnly.class);
+    private final MetaModelValidatorForDeprecatedAnnotation idempotentValidator = new MetaModelValidatorForDeprecatedAnnotation(Idempotent.class);
+    private final MetaModelValidatorForDeprecatedAnnotation publishedActionValidator = new MetaModelValidatorForDeprecatedAnnotation(PublishedAction.class);
+    private final MetaModelValidatorForDeprecatedAnnotation typeOfValidator = new MetaModelValidatorForDeprecatedAnnotation(TypeOf.class);
+
 
     private ServicesInjector servicesInjector;
     private IsisConfiguration configuration;
@@ -177,15 +191,17 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
             // deprecated
             if (postsActionInvokedEvent != null) {
                 final Class<? extends ActionInvokedEvent<?>> actionInvokedEventType = postsActionInvokedEvent.value();
-                actionInvocationFacet = new ActionInvocationFacetForPostsActionInvokedEventAnnotation(
-                        actionInvokedEventType, actionMethod, typeSpec, returnSpec, actionDomainEventFacet, holder,
-                        getRuntimeContext(), getAdapterManager(), getServicesInjector());
+                actionInvocationFacet = actionInteractionValidator.flagIfPresent(
+                        new ActionInvocationFacetForPostsActionInvokedEventAnnotation(
+                                actionInvokedEventType, actionMethod, typeSpec, returnSpec, actionDomainEventFacet, holder,
+                                getRuntimeContext(), getAdapterManager(), getServicesInjector()));
             } else
             // deprecated (but more recently)
             if (actionInteraction != null) {
-                actionInvocationFacet = new ActionInvocationFacetForDomainEventFromActionInteractionAnnotation(
-                        actionDomainEventType, actionMethod, typeSpec, returnSpec, actionDomainEventFacet, holder,
-                        getRuntimeContext(), getAdapterManager(), getServicesInjector());
+                actionInvocationFacet = actionInteractionValidator.flagIfPresent(
+                        new ActionInvocationFacetForDomainEventFromActionInteractionAnnotation(
+                                actionDomainEventType, actionMethod, typeSpec, returnSpec, actionDomainEventFacet, holder,
+                                getRuntimeContext(), getAdapterManager(), getServicesInjector()));
             } else
             // current
             if (action != null) {
@@ -231,18 +247,18 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         // check for the deprecated @QueryOnly...
         final QueryOnly queryOnly = Annotations.getAnnotation(processMethodContext.getMethod(), QueryOnly.class);
-        facet = ActionSemanticsFacetFromQueryOnlyAnnotation.create(queryOnly, holder);
+        facet = queryOnlyValidator.flagIfPresent(ActionSemanticsFacetFromQueryOnlyAnnotation.create(queryOnly, holder));
 
         // else check for the deprecated @Idempotent...
         if(facet == null) {
             final Idempotent idempotent = Annotations.getAnnotation(processMethodContext.getMethod(), Idempotent.class);
-            facet = ActionSemanticsFacetFromIdempotentAnnotation.create(idempotent, holder);
+            facet = idempotentValidator.flagIfPresent(ActionSemanticsFacetFromIdempotentAnnotation.create(idempotent, holder));
         }
 
         // else check for the deprecated @ActionSemantics ...
         if(facet == null) {
             final ActionSemantics actionSemantics = Annotations.getAnnotation(method, ActionSemantics.class);
-            facet = ActionSemanticsFacetForActionSemanticsAnnotation.create(actionSemantics, holder);
+            facet = actionSemanticsValidator.flagIfPresent(ActionSemanticsFacetForActionSemanticsAnnotation.create(actionSemantics, holder));
         }
 
         // else check for @Action(semantics=...)
@@ -268,7 +284,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         // check for the deprecated @Bulk annotation first
         final Bulk annotation = Annotations.getAnnotation(method, Bulk.class);
-        facet = BulkFacetForBulkAnnotation.create(annotation, holder);
+        facet = bulkValidator.flagIfPresent(BulkFacetForBulkAnnotation.create(annotation, holder));
 
         // else check for @Action(invokeOn=...)
         if(facet == null) {
@@ -300,7 +316,8 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         // check for deprecated @Command annotation first
         final Command annotation = Annotations.getAnnotation(method, Command.class);
-        commandFacet = CommandFacetForCommandAnnotation.create(annotation, processMethodContext.getFacetHolder());
+        commandFacet = commandValidator.flagIfPresent(
+                CommandFacetForCommandAnnotation.create(annotation, processMethodContext.getFacetHolder()));
 
         // else check for @Action(command=...)
         if(commandFacet == null) {
@@ -330,7 +347,8 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         // check for deprecated @PublishedAction annotation first
         final PublishedAction annotation = Annotations.getAnnotation(processMethodContext.getMethod(), PublishedAction.class);
-        facet = PublishedActionFacetForPublishedActionAnnotation.create(annotation, holder);
+        facet = publishedActionValidator.flagIfPresent(
+                PublishedActionFacetForPublishedActionAnnotation.create(annotation, holder));
 
         // else check for @Action(publishing=...)
         if(facet == null) {
@@ -354,7 +372,8 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         // check for deprecated @TypeOf
         final TypeOf annotation = Annotations.getAnnotation(method, TypeOf.class);
-        facet = TypeOfFacetOnActionForTypeOfAnnotation.create(annotation, getSpecificationLoader(), holder);
+        facet = typeOfValidator.flagIfPresent(
+                TypeOfFacetOnActionForTypeOfAnnotation.create(annotation, getSpecificationLoader(), holder));
 
         // check for @Action(typeOf=...)
         if(facet == null) {
@@ -436,7 +455,20 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
     }
 
     // ///////////////////////////////////////////////////////////////
-    // Dependencies
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(actionSemanticsValidator);
+        metaModelValidator.add(actionInteractionValidator);
+        metaModelValidator.add(postsActionInvokedEventValidator);
+        metaModelValidator.add(bulkValidator);
+        metaModelValidator.add(commandValidator);
+        metaModelValidator.add(queryOnlyValidator);
+        metaModelValidator.add(idempotentValidator);
+        metaModelValidator.add(publishedActionValidator);
+        metaModelValidator.add(typeOfValidator);
+    }
+
     // ///////////////////////////////////////////////////////////////
 
     @Override
@@ -447,6 +479,16 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
     @Override
     public void setConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
+
+        actionSemanticsValidator.setConfiguration(configuration);
+        actionInteractionValidator.setConfiguration(configuration);
+        postsActionInvokedEventValidator.setConfiguration(configuration);
+        bulkValidator.setConfiguration(configuration);
+        commandValidator.setConfiguration(configuration);
+        queryOnlyValidator.setConfiguration(configuration);
+        idempotentValidator.setConfiguration(configuration);
+        publishedActionValidator.setConfiguration(configuration);
+        typeOfValidator.setConfiguration(configuration);
     }
 
     @Override

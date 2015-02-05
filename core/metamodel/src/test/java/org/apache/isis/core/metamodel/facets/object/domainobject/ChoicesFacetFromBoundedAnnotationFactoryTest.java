@@ -17,25 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.bounded;
+package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import org.apache.isis.applib.annotation.Bounded;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.choices.boundedannot.ChoicesFacetFromBoundedAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
 import org.apache.isis.core.metamodel.facets.propparam.choices.ChoicesFacet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 
 public class ChoicesFacetFromBoundedAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
-    private ChoicesFacetFromBoundedAnnotationFactory facetFactory;
+    private DomainObjectAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ChoicesFacetFromBoundedAnnotationFactory();
+        facetFactory = new DomainObjectAnnotationFacetFactory();
     }
 
     @Override
@@ -49,7 +48,7 @@ public class ChoicesFacetFromBoundedAnnotationFactoryTest extends AbstractFacetF
         class Customer {
         }
 
-        facetFactory.process(new ProcessClassContext(Customer.class, null, methodRemover, facetedMethod));
+        facetFactory.processBounded(new ProcessClassContext(Customer.class, null, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ChoicesFacet.class);
         assertNotNull(facet);
@@ -57,5 +56,4 @@ public class ChoicesFacetFromBoundedAnnotationFactoryTest extends AbstractFacetF
 
         assertNoMethodsRemoved();
     }
-
 }

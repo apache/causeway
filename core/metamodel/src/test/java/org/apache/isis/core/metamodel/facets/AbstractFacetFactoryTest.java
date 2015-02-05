@@ -19,11 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
 import junit.framework.TestCase;
 
+import java.lang.reflect.Method;
+import java.util.List;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -56,7 +55,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         programmableReflector = new ProgrammableReflector();
         facetHolder = new FacetHolderImpl();
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
-        facetedMethodParameter = new FacetedMethodParameter(String.class);
+        facetedMethodParameter = new FacetedMethodParameter(facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class);
         methodRemover = new ProgrammableMethodRemover();
     }
 

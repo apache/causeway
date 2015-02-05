@@ -72,7 +72,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     public void setUpFacetedMethodAndParameter() throws Exception {
         facetHolder = new FacetHolderImpl();
         facetedMethod = FacetedMethod.createForProperty(AbstractFacetFactoryTest.Customer.class, "firstName");
-        facetedMethodParameter = new FacetedMethodParameter(String.class);
+        facetedMethodParameter = new FacetedMethodParameter(facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class);
     }
     
     @After

@@ -50,10 +50,10 @@ public class RenderFacetOrResolveFactory extends FacetFactoryAbstract
         
         RenderFacet renderFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(renderFacet == null) {
-            renderFacet = renderValidator.invalidIfPresent(createFromRenderAnnotationIfPossible(processMethodContext));
+            renderFacet = renderValidator.flagIfPresent(createFromRenderAnnotationIfPossible(processMethodContext));
         }
         if(renderFacet == null) {
-            renderFacet = resolveValidator.invalidIfPresent(createFromResolveAnnotationIfPossible(processMethodContext));
+            renderFacet = resolveValidator.flagIfPresent(createFromResolveAnnotationIfPossible(processMethodContext));
         }
 
         // no-op if null

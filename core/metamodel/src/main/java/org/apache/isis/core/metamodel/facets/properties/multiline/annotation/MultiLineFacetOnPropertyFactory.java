@@ -47,7 +47,7 @@ public class MultiLineFacetOnPropertyFactory extends FacetFactoryAbstract implem
     public void process(final ProcessMethodContext processMethodContext) {
         MultiLineFacet facet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(facet == null) {
-            facet = validator.invalidIfPresent(createFromAnnotationIfPossible(processMethodContext));
+            facet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext));
         }
         
         // no-op if null

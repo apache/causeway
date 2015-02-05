@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 
@@ -31,7 +32,11 @@ public class MetaModelValidatorForDeprecatedAnnotation extends MetaModelValidato
 
     @Override
     protected String failureMessageFor(final Facet facet) {
-        return String.format("@%s is deprecated: %s", annotationType.getSimpleName(), ((IdentifiedHolder) facet.getFacetHolder()).getIdentifier().toFullIdentityString());
+        final String simpleName = annotationType.getSimpleName();
+        final IdentifiedHolder facetHolder = (IdentifiedHolder) facet.getFacetHolder();
+        final Identifier identifier = facetHolder.getIdentifier();
+        final String s = identifier.toFullIdentityString();
+        return String.format("@%s is deprecated: %s", simpleName, s);
     }
 
 }

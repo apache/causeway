@@ -57,7 +57,7 @@ public class RegExFacetFacetOnPropertyAnnotationFactory extends FacetFactoryAbst
     }
 
     private void addRegexFacetAndCorrespondingTitleFacet(final FacetHolder holder, final RegEx annotation) {
-        final RegExFacet regexFacet = validator.invalidIfPresent(RegExFacetOnPropertyAnnotation.createRegexFacet(annotation, holder));
+        final RegExFacet regexFacet = validator.flagIfPresent(RegExFacetOnPropertyAnnotation.createRegexFacet(annotation, holder));
         FacetUtil.addFacet(regexFacet);
 
         final TitleFacet titleFacet = createTitleFacet(regexFacet);

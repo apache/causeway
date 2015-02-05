@@ -20,11 +20,9 @@
 package org.apache.isis.applib;
 
 import java.util.List;
-
 import com.google.common.base.Predicate;
-
 import org.apache.isis.applib.annotation.Aggregated;
-import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
@@ -69,7 +67,6 @@ public abstract class AbstractContainedObject {
      * 
      * @see #newAggregatedInstance(Object, Class)
      */
-    @Hidden
     protected <T> T newTransientInstance(final Class<T> ofType) {
         return getContainer().newTransientInstance(ofType);
     }
@@ -94,7 +91,6 @@ public abstract class AbstractContainedObject {
      * 
      *  @see #newAggregatedInstance(Object, Class)
      */
-    @Hidden
     protected <T> T newAggregatedInstance(final Class<T> ofType) {
         return newAggregatedInstance(this, ofType);
     }
@@ -108,7 +104,6 @@ public abstract class AbstractContainedObject {
      * 
      *  @see #newAggregatedInstance(Class)
      */
-    @Hidden
     protected <T> T newAggregatedInstance(final Object parent, final Class<T> ofType) {
         return getContainer().newAggregatedInstance(parent, ofType);
     }
@@ -302,7 +297,6 @@ public abstract class AbstractContainedObject {
      * Determines if the specified object is persistent (that it is stored
      * permanently outside of the virtual machine).
      */
-    @Hidden
     protected boolean isPersistent(final Object domainObject) {
         return getContainer().isPersistent(domainObject);
     }
@@ -324,7 +318,6 @@ public abstract class AbstractContainedObject {
      * @see #isPersistent(Object)
      * @see #persistIfNotAlready(Object)
      */
-    @Hidden
     protected <T> T persist(final T transientDomainObject) {
         getContainer().persist(transientDomainObject);
         return transientDomainObject;
@@ -343,7 +336,6 @@ public abstract class AbstractContainedObject {
      * @see #isPersistent(Object)
      * @see #persist(Object)
      */
-    @Hidden
     protected <T> T persistIfNotAlready(final T domainObject) {
         getContainer().persistIfNotAlready(domainObject);
         return domainObject;
@@ -403,7 +395,6 @@ public abstract class AbstractContainedObject {
     /**
      * This field is not persisted, nor displayed to the user.
      */
-    @Hidden
     protected DomainObjectContainer getContainer() {
         return this.container;
     }
@@ -411,6 +402,7 @@ public abstract class AbstractContainedObject {
     /**
      * Injected by the application container itself.
      */
+    @Programmatic
     public void setContainer(final DomainObjectContainer container) {
         this.container = container;
     }

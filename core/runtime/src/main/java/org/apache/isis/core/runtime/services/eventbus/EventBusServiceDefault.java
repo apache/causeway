@@ -22,6 +22,7 @@ import com.google.common.eventbus.SubscriberExceptionContext;
 import com.google.common.eventbus.SubscriberExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
@@ -53,6 +54,7 @@ public class EventBusServiceDefault extends EventBusService {
      *     registrations are in effect ignored.
      * </p>
      */
+    @Programmatic
     @Override
     public void register(final Object domainService) {
         if(domainService instanceof RequestScopedService) {

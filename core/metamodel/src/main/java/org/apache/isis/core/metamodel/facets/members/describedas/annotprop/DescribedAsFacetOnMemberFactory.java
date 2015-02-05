@@ -49,7 +49,7 @@ public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implem
         DescribedAsFacet facet = createFromMetadataPropertiesIfPossible(processMethodContext);
         
         if(facet == null) {
-            facet = validator.invalidIfPresent(createFromAnnotationIfPossible(processMethodContext));
+            facet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext));
         }
         if (facet == null) {
             facet = createFromAnnotationOnReturnTypeIfPossible(processMethodContext);

@@ -30,7 +30,7 @@ public class FixtureResult {
     private String fixtureScriptClassName;
 
     @PropertyLayout(named="Fixture script")
-    @Optional
+    @Property(optional = Optionality.TRUE)
     @MemberOrder(sequence="1")
     public String getFixtureScriptClassName() {
         return fixtureScriptClassName;

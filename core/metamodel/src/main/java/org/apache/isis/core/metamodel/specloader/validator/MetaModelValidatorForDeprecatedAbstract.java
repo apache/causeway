@@ -32,7 +32,7 @@ public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelV
 
     private IsisConfiguration configuration;
 
-    public <T extends Facet> T invalidIfPresent(final T facet) {
+    public <T extends Facet> T flagIfPresent(final T facet) {
         if(facet != null) {
             failures.add(failureMessageFor(facet));
         }
@@ -42,7 +42,7 @@ public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelV
     protected abstract String failureMessageFor(final Facet facet);
 
     public void addFacet(final Facet facet) {
-        FacetUtil.addFacet(invalidIfPresent(facet));
+        FacetUtil.addFacet(flagIfPresent(facet));
     }
 
     @Override

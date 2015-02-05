@@ -39,7 +39,6 @@ import org.apache.isis.applib.util.ObjectContracts;
 
 public abstract class FixtureScripts extends AbstractService {
 
-
     //region > nonPersistedObjectsStrategy, multipleExecutionStrategy enums
 
     /**
@@ -186,7 +185,8 @@ public abstract class FixtureScripts extends AbstractService {
     //region > init
 
     private final List<FixtureScript> fixtureScriptList = Lists.newArrayList();
-    
+
+    @Programmatic
     @PostConstruct
     public void init() {
         findAndInstantiateFixtureScripts(fixtureScriptList);
@@ -255,7 +255,7 @@ public abstract class FixtureScripts extends AbstractService {
                     describedAs="Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)",
                     multiLine = 10
             )
-            @Optional
+            @Parameter(optional = Optionality.TRUE)
             final String parameters) {
 
         // if this method is called programmatically, the caller may have simply new'd up the fixture script

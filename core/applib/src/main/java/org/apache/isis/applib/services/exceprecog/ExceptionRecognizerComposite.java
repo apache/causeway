@@ -21,13 +21,9 @@ package org.apache.isis.applib.services.exceprecog;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-
 import com.google.common.collect.Lists;
-
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
@@ -43,7 +39,6 @@ import org.apache.isis.applib.annotation.Programmatic;
  * recognize various types of constraint violations.  These are grouped together as a single
  * set through the use of this class.
  */
-@Hidden
 public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
 
     private final List<ExceptionRecognizer> services = Lists.newArrayList();

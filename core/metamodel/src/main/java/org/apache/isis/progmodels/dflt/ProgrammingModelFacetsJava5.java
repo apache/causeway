@@ -67,7 +67,6 @@ import org.apache.isis.core.metamodel.facets.members.render.annotprop.RenderFace
 import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.actionorder.annotation.ActionOrderFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.audit.markerifc.AuditableFacetMarkerInterfaceFactory;
-import org.apache.isis.core.metamodel.facets.object.autocomplete.annotation.AutoCompleteFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.create.CreatedCallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.load.LoadCallbackFacetFactory;
@@ -75,7 +74,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.persist.PersistCal
 import org.apache.isis.core.metamodel.facets.object.callbacks.persist.PersistCallbackViaSaveMethodFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.remove.RemoveCallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.callbacks.update.UpdateCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.choices.boundedannot.ChoicesFacetFromBoundedAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc.ChoicesFacetFromBoundedMarkerInterfaceFactory;
 import org.apache.isis.core.metamodel.facets.object.choices.enums.EnumFacetUsingValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.object.cssclass.annotation.CssClassFacetOnTypeAnnotationFactory;
@@ -117,7 +115,6 @@ import org.apache.isis.core.metamodel.facets.object.multiline.annotation.MultiLi
 import org.apache.isis.core.metamodel.facets.object.named.annotation.NamedFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.notpersistableannot.NotPersistableFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.notpersistablemarkerifc.NotPersistableFacetMarkerInterfaceFactory;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.annotation.ObjectSpecIdFacetForObjectTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
 import org.apache.isis.core.metamodel.facets.object.paged.annotation.PagedFacetOnTypeAnnotationFactory;
@@ -306,7 +303,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(RenderFacetOrResolveFactory.class);
 
         // objects
-        addFactory(ObjectSpecIdFacetForObjectTypeAnnotationFactory.class);
         addFactory(IconFacetMethodFactory.class);
         addFactory(CssClassFacetMethodFactory.class);
 
@@ -333,7 +329,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(ParentedFacetSinceAggregatedAnnotationFactory.class);
         addFactory(BookmarkPolicyFacetViaBookmarkableAnnotationFactory.class);
         addFactory(HomePageFacetAnnotationFactory.class);
-        addFactory(ChoicesFacetFromBoundedAnnotationFactory.class);
         addFactory(ChoicesFacetFromBoundedMarkerInterfaceFactory.class);
         addFactory(DebugFacetAnnotationFactory.class);
 
@@ -438,7 +433,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(PagedFacetOnCollectionFactory.class);
         addFactory(PagedFacetOnActionFactory.class);
 
-        addFactory(AutoCompleteFacetAnnotationFactory.class);
 
         // must come after any facets that install titles
         addFactory(MaskFacetOnTypeAnnotationFactory.class);

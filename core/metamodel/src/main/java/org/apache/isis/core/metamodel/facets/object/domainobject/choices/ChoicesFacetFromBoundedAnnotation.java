@@ -17,15 +17,28 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.objectspecid.annotation;
+package org.apache.isis.core.metamodel.facets.object.domainobject.choices;
 
+import org.apache.isis.applib.annotation.Bounded;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
+import org.apache.isis.core.metamodel.facets.propparam.choices.ChoicesFacet;
 
-public class ObjectSpecIdFacetAnnotation extends ObjectSpecIdFacetAbstract {
+public class ChoicesFacetFromBoundedAnnotation extends ChoicesFacetFromBoundedAbstract {
 
-    public ObjectSpecIdFacetAnnotation(final String value,
-                                       final FacetHolder holder) {
-        super(value, holder);
+    private ChoicesFacetFromBoundedAnnotation(final FacetHolder holder, QuerySubmitter querySubmitter) {
+        super(holder, querySubmitter);
     }
+
+    public static ChoicesFacet create(final Bounded annotation, final QuerySubmitter querySubmitter, final FacetHolder holder) {
+        if (annotation == null) {
+            return null;
+        }
+
+        return new ChoicesFacetFromBoundedAnnotation(holder, querySubmitter);
+    }
+
+
+
 }

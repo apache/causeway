@@ -62,7 +62,7 @@ public class MaskFacetOnParameterAnnotationFactory extends FacetFactoryAbstract 
     }
 
     private boolean addMaskFacetAndCorrespondingTitleFacet(final FacetHolder holder, final Mask annotation, final Class<?> cls) {
-        final MaskFacet maskFacet = validator.invalidIfPresent(createMaskFacet(annotation, holder));
+        final MaskFacet maskFacet = validator.flagIfPresent(createMaskFacet(annotation, holder));
         if (maskFacet == null) {
             return false;
         }

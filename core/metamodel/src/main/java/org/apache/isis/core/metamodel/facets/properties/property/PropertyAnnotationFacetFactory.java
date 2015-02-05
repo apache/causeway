@@ -25,10 +25,13 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyInteraction;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -68,8 +71,13 @@ import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, ContributeeMemberFacetFactory {
+public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, ContributeeMemberFacetFactory, MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation postsPropertyChangedEventValidator = new MetaModelValidatorForDeprecatedAnnotation(PostsPropertyChangedEvent.class);
+    private final MetaModelValidatorForDeprecatedAnnotation propertyInteractionValidator = new MetaModelValidatorForDeprecatedAnnotation(PropertyInteraction.class);
 
     private ServicesInjector servicesInjector;
 
@@ -116,14 +124,16 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         // event on a thread-local, such that it is then picked up later by the setter/clear facets
         if(postsPropertyChangedEvent != null) {
             propertyDomainEventType = postsPropertyChangedEvent.value();
-            propertyDomainEventFacet = new PropertyDomainEventFacetForPostsPropertyChangedEventAnnotation(
-                    propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
+            propertyDomainEventFacet = postsPropertyChangedEventValidator.flagIfPresent(
+                    new PropertyDomainEventFacetForPostsPropertyChangedEventAnnotation(
+                        propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder));
         } else
         // search for @PropertyInteraction(value=...)
         if(propertyInteraction != null) {
             propertyDomainEventType = propertyInteraction.value();
-            propertyDomainEventFacet = new PropertyDomainEventFacetForPropertyInteractionAnnotation(
-                    propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
+            propertyDomainEventFacet = propertyInteractionValidator.flagIfPresent(
+                    new PropertyDomainEventFacetForPropertyInteractionAnnotation(
+                        propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder));
         } else
         // search for @Property(domainEvent=...)
         if(property != null && property.domainEvent() != null) {
@@ -280,7 +290,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
 
     @Override
-    public void process(ContributeeMemberFacetFactory.ProcessContributeeMemberContext processMemberContext) {
+    public void process(final ContributeeMemberFacetFactory.ProcessContributeeMemberContext processMemberContext) {
 
         final ObjectMember objectMember = processMemberContext.getFacetHolder();
 
@@ -299,6 +309,23 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
             FacetUtil.addFacet(facet);
         }
 
+    }
+
+    // //////////////////////////////////////
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(postsPropertyChangedEventValidator);
+        metaModelValidator.add(propertyInteractionValidator);
+    }
+
+    // //////////////////////////////////////
+
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        postsPropertyChangedEventValidator.setConfiguration(configuration);
+        propertyInteractionValidator.setConfiguration(configuration);
     }
 
 

@@ -64,7 +64,7 @@ public class MultiLineFacetOnParameterAnnotationFactory extends FacetFactoryAbst
     private void process(ProcessParameterContext processParameterContext, MultiLine parameterAnnotation) {
         final MultiLine annotation = (MultiLine) parameterAnnotation;
 
-        final MultiLineFacet facet = validator.invalidIfPresent(create(annotation, processParameterContext.getFacetHolder()));
+        final MultiLineFacet facet = validator.flagIfPresent(create(annotation, processParameterContext.getFacetHolder()));
 
         // no-op if null
         FacetUtil.addFacet(facet);

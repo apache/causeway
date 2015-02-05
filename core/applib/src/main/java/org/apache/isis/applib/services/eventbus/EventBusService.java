@@ -22,7 +22,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
@@ -41,7 +40,6 @@ import org.apache.isis.applib.annotation.Programmatic;
  *     (keeps things nice and symmetrical).
  * </p>
  */
-@Hidden
 public abstract class EventBusService {
 
     /**

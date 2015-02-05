@@ -25,6 +25,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class ActionSemanticsFacetFromIdempotentAnnotation extends ActionSemanticsFacetAbstract {
 
     private ActionSemanticsFacetFromIdempotentAnnotation(final FacetHolder holder) {
