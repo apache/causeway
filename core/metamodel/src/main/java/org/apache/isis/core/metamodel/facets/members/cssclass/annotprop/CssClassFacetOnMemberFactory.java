@@ -26,12 +26,17 @@ import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class CssClassFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, IsisConfigurationAware {
+public class CssClassFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(CssClass.class);
 
     public CssClassFacetOnMemberFactory() {
         super(FeatureType.MEMBERS);
@@ -41,7 +46,7 @@ public class CssClassFacetOnMemberFactory extends FacetFactoryAbstract implement
     public void process(final ProcessMethodContext processMethodContext) {
         CssClassFacet cssClassFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(cssClassFacet == null) {
-            cssClassFacet = createFromAnnotationIfPossible(processMethodContext);
+            cssClassFacet = validator.invalidIfPresent(createFromAnnotationIfPossible(processMethodContext));
         }
 
         // no-op if null
@@ -73,12 +78,24 @@ public class CssClassFacetOnMemberFactory extends FacetFactoryAbstract implement
     }
 
 
+    // //////////////////////////////////////
+
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    // //////////////////////////////////////
+
+
     //region > injected
     private IsisConfiguration configuration;
 
     @Override
     public void setConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
+        validator.setConfiguration(configuration);
     }
     //endregion
 

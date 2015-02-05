@@ -31,14 +31,14 @@ import com.google.common.collect.Maps;
 import com.google.common.io.CharSource;
 import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 
-@DomainObjectLayout(named="Script")
+@ViewModelLayout(named="Script")
 public abstract class FixtureScript 
         extends AbstractViewModel 
         implements InstallableFixture {

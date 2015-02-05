@@ -23,14 +23,19 @@ import org.apache.isis.applib.annotation.Paged;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.objcoll.paged.PagedFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class PagedFacetOnTypeAnnotationFactory extends FacetFactoryAbstract implements IsisConfigurationAware {
+public class PagedFacetOnTypeAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Paged.class);
+
 
     private IsisConfiguration configuration;
 
@@ -38,15 +43,24 @@ public class PagedFacetOnTypeAnnotationFactory extends FacetFactoryAbstract impl
         super(FeatureType.OBJECTS_ONLY);
     }
 
+    // //////////////////////////////////////
+
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final Paged annotation = Annotations.getAnnotation(processClassContext.getCls(), Paged.class);
-        FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
+        validator.addFacet(create(annotation, processClassContext.getFacetHolder()));
     }
 
-    private PagedFacet create(final Paged annotation, final FacetHolder holder) {
+    private static PagedFacet create(final Paged annotation, final FacetHolder holder) {
         return annotation != null ? new PagedFacetAnnotation(holder, annotation.value()) : null;
     }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    // //////////////////////////////////////
 
     public IsisConfiguration getConfiguration() {
         return configuration;
@@ -55,6 +69,7 @@ public class PagedFacetOnTypeAnnotationFactory extends FacetFactoryAbstract impl
     @Override
     public void setConfiguration(IsisConfiguration configuration) {
         this.configuration = configuration;
+        validator.setConfiguration(configuration);
     }
 
 }

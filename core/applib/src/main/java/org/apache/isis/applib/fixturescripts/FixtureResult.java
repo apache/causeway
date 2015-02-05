@@ -21,7 +21,7 @@ package org.apache.isis.applib.fixturescripts;
 import org.apache.isis.applib.annotation.*;
 
 @ViewModel
-@DomainObjectLayout(paged=500)
+@ViewModelLayout(paged=500)
 public class FixtureResult {
 
 

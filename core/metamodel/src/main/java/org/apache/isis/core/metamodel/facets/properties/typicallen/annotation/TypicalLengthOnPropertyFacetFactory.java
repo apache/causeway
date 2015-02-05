@@ -20,17 +20,23 @@
 package org.apache.isis.core.metamodel.facets.properties.typicallen.annotation;
 
 import java.util.Properties;
-
 import org.apache.isis.applib.annotation.TypicalLength;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class TypicalLengthOnPropertyFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class TypicalLengthOnPropertyFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory , MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(TypicalLength.class);
 
     public TypicalLengthOnPropertyFacetFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -40,7 +46,7 @@ public class TypicalLengthOnPropertyFacetFactory extends FacetFactoryAbstract im
     public void process(final ProcessMethodContext processMethodContext) {
         TypicalLengthFacet facet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(facet == null) {
-            facet = createFromAnnotationIfPossible(processMethodContext);
+            facet = validator.invalidIfPresent(createFromAnnotationIfPossible(processMethodContext));
         }
 
         // no-op if null
@@ -72,5 +78,15 @@ public class TypicalLengthOnPropertyFacetFactory extends FacetFactoryAbstract im
                 : null;
     }
 
-    
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
+    }
+
 }

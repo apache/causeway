@@ -20,27 +20,45 @@
 package org.apache.isis.core.metamodel.facets.object.objectspecid.annotation;
 
 import org.apache.isis.applib.annotation.ObjectType;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class ObjectSpecIdFacetAnnotationFactory extends FacetFactoryAbstract {
+public class ObjectSpecIdFacetForObjectTypeAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
-    public ObjectSpecIdFacetAnnotationFactory() {
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(ObjectType.class);
+
+
+    public ObjectSpecIdFacetForObjectTypeAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final ObjectType annotation = Annotations.getAnnotation(processClassContext.getCls(), ObjectType.class);
-        FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
+        validator.addFacet(create(annotation, processClassContext.getFacetHolder()));
     }
 
     private ObjectSpecIdFacet create(final ObjectType annotation, final FacetHolder holder) {
         return annotation != null ? new ObjectSpecIdFacetAnnotation(annotation.value(), holder) : null;
     }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
+    }
+
 
 }

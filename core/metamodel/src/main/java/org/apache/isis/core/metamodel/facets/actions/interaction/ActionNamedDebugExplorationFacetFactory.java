@@ -20,15 +20,21 @@
 package org.apache.isis.core.metamodel.facets.actions.interaction;
 
 import java.lang.reflect.Method;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedMethodPrefix;
 
 /**
  * Sets up {@link org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet} and also an {@link org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet}, along with a number of supporting
@@ -39,10 +45,14 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
  * and {@link DebugFacet}. In addition a {@link NamedFacet} is inferred from the
  * name (taking into account the above well-known prefixes).
  */
-public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private static final String EXPLORATION_PREFIX = "Exploration";
     private static final String DEBUG_PREFIX = "Debug";
+
+    private final MetaModelValidatorForDeprecatedMethodPrefix explorationValidator = new MetaModelValidatorForDeprecatedMethodPrefix(EXPLORATION_PREFIX);
+
+    private final MetaModelValidatorForDeprecatedMethodPrefix debugValidator = new MetaModelValidatorForDeprecatedMethodPrefix(DEBUG_PREFIX);
 
     private static final String[] PREFIXES = { EXPLORATION_PREFIX, DEBUG_PREFIX };
 
@@ -73,7 +83,8 @@ public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFa
             return;
         }
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new DebugFacetViaNamingConvention(facetedMethod));
+        final Facet facet = new DebugFacetViaNamingConvention(facetedMethod);
+        debugValidator.addFacet(facet);
     }
 
     private void attachExplorationFacetIfActionMethodNamePrefixed(final ProcessMethodContext processMethodContext) {
@@ -84,14 +95,12 @@ public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFa
             return;
         }
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new ExplorationFacetViaNamingConvention(facetedMethod));
+        final Facet facet = new ExplorationFacetViaNamingConvention(facetedMethod);
+        explorationValidator.addFacet(facet);
     }
 
     /**
      * Must be called after added the debug, exploration etc facets.
-     * 
-     * <p>
-     * TODO: remove this hack
      */
     private void attachNamedFacetInferredFromMethodName(final ProcessMethodContext processMethodContext) {
 
@@ -108,5 +117,17 @@ public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFa
         FacetUtil.addFacet(new NamedFacetInferred(name, facetedMethod));
     }
 
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(explorationValidator);
+        metaModelValidator.add(debugValidator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        explorationValidator.setConfiguration(configuration);
+        debugValidator.setConfiguration(configuration);
+    }
 
 }

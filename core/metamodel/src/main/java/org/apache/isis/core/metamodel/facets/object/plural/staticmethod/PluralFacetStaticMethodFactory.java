@@ -20,22 +20,27 @@
 package org.apache.isis.core.metamodel.facets.object.plural.staticmethod;
 
 import java.lang.reflect.Method;
-
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedMethodPrefix;
 
-public class PluralFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class PluralFacetStaticMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private static final String PLURAL_NAME = "pluralName";
 
     private static final String[] PREFIXES = { PLURAL_NAME, };
 
-    public PluralFacetMethodFactory() {
+    private final MetaModelValidatorForDeprecatedMethodPrefix validator = new MetaModelValidatorForDeprecatedMethodPrefix(PREFIXES[0]);
+
+    public PluralFacetStaticMethodFactory() {
         super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
     }
 
@@ -48,7 +53,19 @@ public class PluralFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstr
         if (method != null) {
             final String name = (String) MethodExtensions.invokeStatic(method);
             processClassContext.removeMethod(method);
-            FacetUtil.addFacet(new PluralFacetMethod(name, facetHolder));
+            validator.addFacet(new PluralFacetMethod(name, facetHolder));
         }
     }
+
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
+    }
+
 }

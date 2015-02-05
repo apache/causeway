@@ -21,11 +21,10 @@ package org.apache.isis.core.metamodel.facets.collections.sortedby.annotation;
 
 import java.util.Comparator;
 import java.util.List;
-
 import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -35,6 +34,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
@@ -43,7 +43,9 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
  * There is no check that the value is a {@link Comparator}; instead this is done through 
  * the {@link #refineMetaModelValidator(MetaModelValidatorComposite, IsisConfiguration)}.
  */
-public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(SortedBy.class);
 
     public SortedByFacetAnnotationFactory() {
         super(FeatureType.COLLECTIONS_ONLY);
@@ -52,7 +54,7 @@ public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract impleme
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final SortedBy renderAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), SortedBy.class);
-        FacetUtil.addFacet(create(renderAnnotation, processMethodContext.getFacetHolder()));
+        validator.addFacet(create(renderAnnotation, processMethodContext.getFacetHolder()));
     }
 
     private SortedByFacet create(final SortedBy annotation, final FacetHolder holder) {
@@ -68,6 +70,7 @@ public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract impleme
     @Override
     public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
         metaModelValidator.add(new MetaModelValidatorVisiting(newValidatorVisitor()));
+        metaModelValidator.add(validator);
     }
 
     protected Visitor newValidatorVisitor() {
@@ -88,6 +91,12 @@ public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract impleme
                 return true;
             }
         };
+    }
+
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 

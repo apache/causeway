@@ -26,17 +26,17 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.object.plural.staticmethod.PluralFacetMethod;
-import org.apache.isis.core.metamodel.facets.object.plural.staticmethod.PluralFacetMethodFactory;
+import org.apache.isis.core.metamodel.facets.object.plural.staticmethod.PluralFacetStaticMethodFactory;
 
 public class PluralFacetMethodFactoryTest extends AbstractFacetFactoryTest {
 
-    private PluralFacetMethodFactory facetFactory;
+    private PluralFacetStaticMethodFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new PluralFacetMethodFactory();
+        facetFactory = new PluralFacetStaticMethodFactory();
     }
 
     @Override

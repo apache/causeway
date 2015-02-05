@@ -117,15 +117,15 @@ import org.apache.isis.core.metamodel.facets.object.multiline.annotation.MultiLi
 import org.apache.isis.core.metamodel.facets.object.named.annotation.NamedFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.notpersistableannot.NotPersistableFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.notpersistablemarkerifc.NotPersistableFacetMarkerInterfaceFactory;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.annotation.ObjectSpecIdFacetAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.annotation.ObjectSpecIdFacetForObjectTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
 import org.apache.isis.core.metamodel.facets.object.paged.annotation.PagedFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.parented.aggregated.ParentedFacetSinceAggregatedAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.parseable.annotcfg.ParseableFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.plural.annotation.PluralAnnotationFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.plural.staticmethod.PluralFacetMethodFactory;
-import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromRecreatableObjectFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.plural.staticmethod.PluralFacetStaticMethodFactory;
+import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromViewModelFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.regex.annotation.RegExFacetOnTypeAnnotationFactory;
@@ -306,7 +306,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(RenderFacetOrResolveFactory.class);
 
         // objects
-        addFactory(ObjectSpecIdFacetAnnotationFactory.class);
+        addFactory(ObjectSpecIdFacetForObjectTypeAnnotationFactory.class);
         addFactory(IconFacetMethodFactory.class);
         addFactory(CssClassFacetMethodFactory.class);
 
@@ -320,7 +320,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(DirtyMethodsFacetFactory.class);
         addFactory(ValidateObjectFacetMethodFactory.class);
         addFactory(ObjectValidPropertiesFacetImplFactory.class);
-        addFactory(PluralFacetMethodFactory.class);
+        addFactory(PluralFacetStaticMethodFactory.class);
         addFactory(org.apache.isis.core.metamodel.facets.object.named.staticmethod.NamedFacetStaticMethodFactory.class);
         addFactory(TitleAnnotationFacetFactory.class);
         addFactory(TitleFacetViaMethodsFactory.class);
@@ -408,7 +408,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         // must come after DomainObjectAnnotationFacetFactory
         addFactory(DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory.class);
-        addFactory(DisabledFacetOnCollectionDerivedFromRecreatableObjectFacetFactory.class);
+        addFactory(DisabledFacetOnCollectionDerivedFromViewModelFacetFactory.class);
 
         addFactory(DomainServiceLayoutFactory.class);
         addFactory(DomainObjectLayoutFacetFactory.class);

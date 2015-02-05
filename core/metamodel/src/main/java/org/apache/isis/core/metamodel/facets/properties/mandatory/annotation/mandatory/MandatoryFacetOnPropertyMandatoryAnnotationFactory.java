@@ -20,12 +20,18 @@
 package org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.mandatory;
 
 import org.apache.isis.applib.annotation.Mandatory;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class MandatoryFacetOnPropertyMandatoryAnnotationFactory extends FacetFactoryAbstract {
+public class MandatoryFacetOnPropertyMandatoryAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Mandatory.class);
 
     public MandatoryFacetOnPropertyMandatoryAnnotationFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -37,7 +43,17 @@ public class MandatoryFacetOnPropertyMandatoryAnnotationFactory extends FacetFac
         if(annotation == null) {
             return;
         }
-        FacetUtil.addFacet(MandatoryFacetOnPropertyMandatoryAnnotation.create(annotation, processMethodContext.getFacetHolder()));
+        validator.addFacet(MandatoryFacetOnPropertyMandatoryAnnotation.create(annotation, processMethodContext.getFacetHolder()));
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

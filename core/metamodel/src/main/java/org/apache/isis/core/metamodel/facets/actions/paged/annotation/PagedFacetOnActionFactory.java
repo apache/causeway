@@ -25,18 +25,23 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.objcoll.paged.PagedFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.objcoll.paged.PagedFacetProperties;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
 /**
  * To support contributed collections.
  */
 public class PagedFacetOnActionFactory extends FacetFactoryAbstract
-        implements ContributeeMemberFacetFactory, IsisConfigurationAware {
+        implements ContributeeMemberFacetFactory, IsisConfigurationAware, MetaModelValidatorRefiner {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Paged.class);
 
     private IsisConfiguration configuration;
 
@@ -49,14 +54,14 @@ public class PagedFacetOnActionFactory extends FacetFactoryAbstract
         
         PagedFacet pagedFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(pagedFacet == null) {
-            pagedFacet = createFromPagedAnnotationIfPossible(processMethodContext);
+            pagedFacet = validator.invalidIfPresent(createFromPagedAnnotationIfPossible(processMethodContext));
         }
         // no-op if null
         FacetUtil.addFacet(pagedFacet);
     }
 
     @Override
-    public void process(ProcessContributeeMemberContext processMemberContext) {
+    public void process(final ProcessContributeeMemberContext processMemberContext) {
         final PagedFacet pagedFacet = createFromMetadataPropertiesIfPossible(processMemberContext);
         // no-op if null
         FacetUtil.addFacet(pagedFacet);
@@ -72,6 +77,12 @@ public class PagedFacetOnActionFactory extends FacetFactoryAbstract
         return annotation != null ? new PagedFacetAnnotation(processMethodContext.getFacetHolder(), annotation.value()) : null;
     }
 
+    // //////////////////////////////////////
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
 
     // //////////////////////////////////////
 
@@ -80,9 +91,12 @@ public class PagedFacetOnActionFactory extends FacetFactoryAbstract
     }
 
     @Override
-    public void setConfiguration(IsisConfiguration configuration) {
+    public void setConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
+        validator.setConfiguration(configuration);
     }
+
+
 
 
 }

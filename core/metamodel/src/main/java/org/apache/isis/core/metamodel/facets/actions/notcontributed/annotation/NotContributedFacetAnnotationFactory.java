@@ -20,14 +20,20 @@
 package org.apache.isis.core.metamodel.facets.actions.notcontributed.annotation;
 
 import org.apache.isis.applib.annotation.NotContributed;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class NotContributedFacetAnnotationFactory extends FacetFactoryAbstract {
+public class NotContributedFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(NotContributed.class);
 
     public NotContributedFacetAnnotationFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -36,11 +42,21 @@ public class NotContributedFacetAnnotationFactory extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final NotContributed annotation = Annotations.getAnnotation(processMethodContext.getMethod(), NotContributed.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
+        validator.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 
     private NotContributedFacet create(final NotContributed annotation, final FacetHolder holder) {
         return annotation == null ? null : new NotContributedFacetAnnotation(annotation.value(), holder);
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

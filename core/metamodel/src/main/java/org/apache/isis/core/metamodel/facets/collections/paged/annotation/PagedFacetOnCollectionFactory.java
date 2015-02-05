@@ -20,21 +20,25 @@
 package org.apache.isis.core.metamodel.facets.collections.paged.annotation;
 
 import java.util.Properties;
-
 import org.apache.isis.applib.annotation.Paged;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.objcoll.paged.PagedFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.objcoll.paged.PagedFacetProperties;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
 public class PagedFacetOnCollectionFactory extends FacetFactoryAbstract
-        implements ContributeeMemberFacetFactory, IsisConfigurationAware {
+        implements ContributeeMemberFacetFactory, IsisConfigurationAware,MetaModelValidatorRefiner {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Paged.class);
 
     private IsisConfiguration configuration;
 
@@ -47,7 +51,7 @@ public class PagedFacetOnCollectionFactory extends FacetFactoryAbstract
         
         PagedFacet pagedFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(pagedFacet == null) {
-            pagedFacet = createFromPagedAnnotationIfPossible(processMethodContext);
+            pagedFacet = validator.invalidIfPresent(createFromPagedAnnotationIfPossible(processMethodContext));
         }
         // no-op if null
         FacetUtil.addFacet(pagedFacet);
@@ -71,6 +75,11 @@ public class PagedFacetOnCollectionFactory extends FacetFactoryAbstract
     }
 
 
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
     // //////////////////////////////////////
 
     public IsisConfiguration getConfiguration() {
@@ -80,7 +89,9 @@ public class PagedFacetOnCollectionFactory extends FacetFactoryAbstract
     @Override
     public void setConfiguration(IsisConfiguration configuration) {
         this.configuration = configuration;
+        validator.setConfiguration(configuration);
     }
+
 
 
 }

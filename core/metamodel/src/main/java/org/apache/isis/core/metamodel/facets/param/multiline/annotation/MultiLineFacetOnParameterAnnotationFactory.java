@@ -21,15 +21,22 @@ package org.apache.isis.core.metamodel.facets.param.multiline.annotation;
 
 import java.lang.annotation.Annotation;
 import org.apache.isis.applib.annotation.MultiLine;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacetInferredFromMultiLineFacet;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class MultiLineFacetOnParameterAnnotationFactory extends FacetFactoryAbstract {
+public class MultiLineFacetOnParameterAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(MultiLine.class);
 
     public MultiLineFacetOnParameterAnnotationFactory() {
         super(FeatureType.PARAMETERS_ONLY);
@@ -56,7 +63,8 @@ public class MultiLineFacetOnParameterAnnotationFactory extends FacetFactoryAbst
 
     private void process(ProcessParameterContext processParameterContext, MultiLine parameterAnnotation) {
         final MultiLine annotation = (MultiLine) parameterAnnotation;
-        final MultiLineFacet facet = create(annotation, processParameterContext.getFacetHolder());
+
+        final MultiLineFacet facet = validator.invalidIfPresent(create(annotation, processParameterContext.getFacetHolder()));
 
         // no-op if null
         FacetUtil.addFacet(facet);
@@ -74,6 +82,17 @@ public class MultiLineFacetOnParameterAnnotationFactory extends FacetFactoryAbst
 
     private MultiLineFacet create(final MultiLine annotation, final FacetHolder holder) {
         return (annotation != null) ? new MultiLineFacetOnParameterAnnotation(annotation.numberOfLines(), annotation.preventWrapping(), holder) : null;
+    }
+
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

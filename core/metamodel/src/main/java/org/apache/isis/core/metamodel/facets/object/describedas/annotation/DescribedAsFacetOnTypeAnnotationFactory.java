@@ -20,14 +20,20 @@
 package org.apache.isis.core.metamodel.facets.object.describedas.annotation;
 
 import org.apache.isis.applib.annotation.DescribedAs;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class DescribedAsFacetOnTypeAnnotationFactory extends FacetFactoryAbstract {
+public class DescribedAsFacetOnTypeAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(DescribedAs.class);
 
     public DescribedAsFacetOnTypeAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -36,11 +42,21 @@ public class DescribedAsFacetOnTypeAnnotationFactory extends FacetFactoryAbstrac
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final DescribedAs annotation = Annotations.getAnnotation(processClassContaxt.getCls(), DescribedAs.class);
-        FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
+        validator.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }
 
     private DescribedAsFacet create(final DescribedAs annotation, final FacetHolder holder) {
         return annotation == null ? null : new DescribedAsFacetOnTypeAnnotation(annotation.value(), holder);
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

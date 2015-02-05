@@ -20,17 +20,24 @@
 package org.apache.isis.core.metamodel.facets.properties.validating.maskannot;
 
 import org.apache.isis.applib.annotation.Mask;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.facets.object.mask.MaskFacet;
 import org.apache.isis.core.metamodel.facets.object.mask.TitleFacetBasedOnMask;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class MaskFacetOnPropertyAnnotationFactory extends FacetFactoryAbstract {
+public class MaskFacetOnPropertyAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Mask.class);
 
     public MaskFacetOnPropertyAnnotationFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -78,7 +85,7 @@ public class MaskFacetOnPropertyAnnotationFactory extends FacetFactoryAbstract {
     }
 
     private boolean addMaskFacetAndCorrespondingTitleFacet(final FacetHolder holder, final Mask annotation, final Class<?> cls) {
-        final MaskFacet maskFacet = createMaskFacet(annotation, holder);
+        final MaskFacet maskFacet = validator.invalidIfPresent(createMaskFacet(annotation, holder));
         if (maskFacet == null) {
             return false;
         }
@@ -91,6 +98,16 @@ public class MaskFacetOnPropertyAnnotationFactory extends FacetFactoryAbstract {
             FacetUtil.addFacet(titleFacet);
         }
         return true;
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

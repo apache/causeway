@@ -20,21 +20,26 @@
 package org.apache.isis.core.metamodel.facets.properties.mandatory.staticmethod;
 
 import java.lang.reflect.Method;
-
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedMethodPrefix;
 
-public class MandatoryFacetOnPropertyStaticMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class MandatoryFacetOnPropertyStaticMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.OPTIONAL_PREFIX };
+
+    private final MetaModelValidatorForDeprecatedMethodPrefix validator = new MetaModelValidatorForDeprecatedMethodPrefix(PREFIXES[0]);
 
     public MandatoryFacetOnPropertyStaticMethodFactory() {
         super(FeatureType.PROPERTIES_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -46,7 +51,7 @@ public class MandatoryFacetOnPropertyStaticMethodFactory extends MethodPrefixBas
         attachMandatoryFacetIfOptionalMethodIsFound(processMethodContext);
     }
 
-    private static void attachMandatoryFacetIfOptionalMethodIsFound(final ProcessMethodContext processMethodContext) {
+    private void attachMandatoryFacetIfOptionalMethodIsFound(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
 
         final String capitalizedName = StringExtensions.asJavaBaseName(method.getName());
@@ -63,7 +68,7 @@ public class MandatoryFacetOnPropertyStaticMethodFactory extends MethodPrefixBas
             throw new MetaModelException(cls.getName() + "#" + capitalizedName + " cannot be an optional property as it is of a primitive type");
         }
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new MandatoryFacetOnPropertyStaticMethod(property));
+        validator.addFacet(new MandatoryFacetOnPropertyStaticMethod(property));
     }
 
     private static boolean indicatesOptional(final Method method) {
@@ -81,5 +86,17 @@ public class MandatoryFacetOnPropertyStaticMethodFactory extends MethodPrefixBas
         }
         return false;
     }
+
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
+    }
+
 
 }

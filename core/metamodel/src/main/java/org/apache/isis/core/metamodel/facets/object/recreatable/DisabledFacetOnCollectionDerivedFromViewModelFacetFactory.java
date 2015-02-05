@@ -27,9 +27,9 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class DisabledFacetOnCollectionDerivedFromRecreatableObjectFacetFactory extends FacetFactoryAbstract {
+public class DisabledFacetOnCollectionDerivedFromViewModelFacetFactory extends FacetFactoryAbstract {
 
-    public DisabledFacetOnCollectionDerivedFromRecreatableObjectFacetFactory() {
+    public DisabledFacetOnCollectionDerivedFromViewModelFacetFactory() {
         super(FeatureType.COLLECTIONS_ONLY);
     }
 

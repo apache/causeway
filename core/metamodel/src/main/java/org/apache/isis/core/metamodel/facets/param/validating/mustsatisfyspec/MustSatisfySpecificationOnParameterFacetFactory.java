@@ -21,12 +21,18 @@ package org.apache.isis.core.metamodel.facets.param.validating.mustsatisfyspec;
 
 import java.lang.annotation.Annotation;
 import org.apache.isis.applib.annotation.MustSatisfy;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class MustSatisfySpecificationOnParameterFacetFactory extends FacetFactoryAbstract {
+public class MustSatisfySpecificationOnParameterFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(MustSatisfy.class);
 
     public MustSatisfySpecificationOnParameterFacetFactory() {
         super(FeatureType.PARAMETERS_ONLY);
@@ -39,10 +45,20 @@ public class MustSatisfySpecificationOnParameterFacetFactory extends FacetFactor
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof MustSatisfy) {
                 final MustSatisfy annotation = (MustSatisfy) parameterAnnotation;
-                FacetUtil.addFacet(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter.create(annotation, processParameterContext.getFacetHolder()));
+                validator.addFacet(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter.create(annotation, processParameterContext.getFacetHolder()));
                 return;
             }
         }
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 

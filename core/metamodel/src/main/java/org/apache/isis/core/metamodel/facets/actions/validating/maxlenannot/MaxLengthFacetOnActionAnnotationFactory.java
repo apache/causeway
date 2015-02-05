@@ -20,17 +20,23 @@
 package org.apache.isis.core.metamodel.facets.actions.validating.maxlenannot;
 
 import org.apache.isis.applib.annotation.MaxLength;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
 /**
  * To support contributed properties.
  */
-public class MaxLengthFacetOnActionAnnotationFactory extends FacetFactoryAbstract {
+public class MaxLengthFacetOnActionAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(MaxLength.class);
 
     public MaxLengthFacetOnActionAnnotationFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -39,10 +45,21 @@ public class MaxLengthFacetOnActionAnnotationFactory extends FacetFactoryAbstrac
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final MaxLength annotation = Annotations.getAnnotation(processMethodContext.getMethod(), MaxLength.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
+        validator.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 
     private MaxLengthFacet create(final MaxLength annotation, final FacetHolder holder) {
         return annotation == null ? null : new MaxLengthFacetOnActionAnnotation(annotation.value(), holder);
     }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
+    }
+
 }

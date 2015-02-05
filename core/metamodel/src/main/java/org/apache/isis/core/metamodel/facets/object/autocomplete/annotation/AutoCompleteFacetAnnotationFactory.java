@@ -20,19 +20,25 @@
 package org.apache.isis.core.metamodel.facets.object.autocomplete.annotation;
 
 import org.apache.isis.applib.annotation.AutoComplete;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class AutoCompleteFacetAnnotationFactory extends FacetFactoryAbstract implements AdapterManagerAware, ServicesInjectorAware, SpecificationLoaderAware {
+public class AutoCompleteFacetAnnotationFactory extends FacetFactoryAbstract implements AdapterManagerAware, ServicesInjectorAware, SpecificationLoaderAware, MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(AutoComplete.class);
 
     private AdapterManager adapterManager;
     private ServicesInjector servicesInjector;
@@ -44,7 +50,7 @@ public class AutoCompleteFacetAnnotationFactory extends FacetFactoryAbstract imp
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final AutoComplete annotation = Annotations.getAnnotation(processClassContext.getCls(), AutoComplete.class);
-        FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
+        validator.addFacet(create(annotation, processClassContext.getFacetHolder()));
     }
 
     private AutoCompleteFacet create(final AutoComplete annotation, final FacetHolder holder) {
@@ -57,6 +63,13 @@ public class AutoCompleteFacetAnnotationFactory extends FacetFactoryAbstract imp
     }
 
     @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    // //////////////////////////////////////
+
+    @Override
     public void setAdapterManager(AdapterManager adapterManager) {
         this.adapterManager = adapterManager;
     }
@@ -64,6 +77,11 @@ public class AutoCompleteFacetAnnotationFactory extends FacetFactoryAbstract imp
     @Override
     public void setServicesInjector(ServicesInjector servicesInjector) {
         this.servicesInjector = servicesInjector;
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

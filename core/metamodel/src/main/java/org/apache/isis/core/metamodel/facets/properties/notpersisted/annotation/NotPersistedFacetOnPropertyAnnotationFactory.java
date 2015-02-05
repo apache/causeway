@@ -20,13 +20,19 @@
 package org.apache.isis.core.metamodel.facets.properties.notpersisted.annotation;
 
 import org.apache.isis.applib.annotation.NotPersisted;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class NotPersistedFacetOnPropertyAnnotationFactory extends FacetFactoryAbstract {
+public class NotPersistedFacetOnPropertyAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(NotPersisted.class);
 
     public NotPersistedFacetOnPropertyAnnotationFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -36,7 +42,17 @@ public class NotPersistedFacetOnPropertyAnnotationFactory extends FacetFactoryAb
     public void process(final ProcessMethodContext processMethodContext) {
         final NotPersisted annotation = Annotations.getAnnotation(processMethodContext.getMethod(), NotPersisted.class);
         final NotPersistedFacet notPersistedFacet = NotPersistedFacetOnPropertyAnnotation.create(annotation, processMethodContext.getFacetHolder());
-        FacetUtil.addFacet(notPersistedFacet);
+        validator.addFacet(notPersistedFacet);
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

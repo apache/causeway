@@ -16,23 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.specloader.validator;
 
-package org.apache.isis.core.metamodel.facets.param.mandatory.staticmethod;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetAbstract;
+public class MetaModelValidatorForDeprecatedAnnotation extends MetaModelValidatorForDeprecatedAbstract{
 
-/**
- * Derived by presence of an <tt>optionalXxx</tt> method.
- * 
- * <p>
- * This implementation indicates that the {@link FacetHolder} is <i>not</i>
- * mandatory, as per {@link #isInvertedSemantics()}.
- */
-public class MandatoryFacetOnParameterStaticMethod extends MandatoryFacetAbstract {
+    private final Class<?> annotationType;
 
-    public MandatoryFacetOnParameterStaticMethod(final FacetHolder holder) {
-        super(holder, Semantics.OPTIONAL);
+    public MetaModelValidatorForDeprecatedAnnotation(final Class<?> annotationType) {
+        this.annotationType = annotationType;
+    }
+
+    @Override
+    protected String failureMessageFor(final Facet facet) {
+        return String.format("@%s is deprecated: %s", annotationType.getSimpleName(), ((IdentifiedHolder) facet.getFacetHolder()).getIdentifier().toFullIdentityString());
     }
 
 }

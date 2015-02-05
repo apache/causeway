@@ -27,7 +27,10 @@ import java.lang.annotation.Target;
 
 /**
  * Indicates that a property should not be persisted.
+ * 
+ * @deprecated - use {@link org.apache.isis.applib.annotation.Property#notPersisted()}@Dep
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)

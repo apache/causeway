@@ -20,14 +20,20 @@
 package org.apache.isis.core.metamodel.facets.collections.notpersisted.annotation;
 
 import org.apache.isis.applib.annotation.NotPersisted;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class NotPersistedFacetOnCollectionAnnotationFactory extends FacetFactoryAbstract {
+public class NotPersistedFacetOnCollectionAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(NotPersisted.class);
 
     public NotPersistedFacetOnCollectionAnnotationFactory() {
         super(FeatureType.COLLECTIONS_ONLY);
@@ -36,11 +42,21 @@ public class NotPersistedFacetOnCollectionAnnotationFactory extends FacetFactory
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final NotPersisted annotation = Annotations.getAnnotation(processMethodContext.getMethod(), NotPersisted.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
+        validator.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 
     private NotPersistedFacet create(final NotPersisted annotation, final FacetHolder holder) {
         return annotation == null ? null : new NotPersistedFacetOnCollectionAnnotation(holder);
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

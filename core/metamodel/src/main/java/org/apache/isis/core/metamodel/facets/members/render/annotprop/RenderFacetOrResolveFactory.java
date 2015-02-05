@@ -20,18 +20,26 @@
 package org.apache.isis.core.metamodel.facets.members.render.annotprop;
 
 import java.util.Properties;
-
 import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.applib.annotation.Resolve;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
 public class RenderFacetOrResolveFactory extends FacetFactoryAbstract
-        implements ContributeeMemberFacetFactory {
+        implements ContributeeMemberFacetFactory, MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation renderValidator = new MetaModelValidatorForDeprecatedAnnotation(Render.class);
+    private final MetaModelValidatorForDeprecatedAnnotation resolveValidator = new MetaModelValidatorForDeprecatedAnnotation(Resolve.class);
 
     public RenderFacetOrResolveFactory() {
         super(FeatureType.MEMBERS);
@@ -42,10 +50,10 @@ public class RenderFacetOrResolveFactory extends FacetFactoryAbstract
         
         RenderFacet renderFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(renderFacet == null) {
-            renderFacet = createFromRenderAnnotationIfPossible(processMethodContext);
+            renderFacet = renderValidator.invalidIfPresent(createFromRenderAnnotationIfPossible(processMethodContext));
         }
         if(renderFacet == null) {
-            renderFacet = createFromResolveAnnotationIfPossible(processMethodContext);
+            renderFacet = resolveValidator.invalidIfPresent(createFromResolveAnnotationIfPossible(processMethodContext));
         }
 
         // no-op if null
@@ -80,4 +88,18 @@ public class RenderFacetOrResolveFactory extends FacetFactoryAbstract
         Annotations.getAnnotation(processMethodContext.getMethod(), org.apache.isis.applib.annotation.Resolve.class);
         return resolveAnnotation == null ? null : new RenderFacetViaResolveAnnotation(processMethodContext.getFacetHolder(), resolveAnnotation.value());
     }
+
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(renderValidator);
+        metaModelValidator.add(resolveValidator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        renderValidator.setConfiguration(configuration);
+        resolveValidator.setConfiguration(configuration);
+    }
+
 }

@@ -21,17 +21,22 @@ package org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.isis.applib.annotation.MustSatisfy;
 import org.apache.isis.applib.spec.Specification;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class MustSatisfySpecificationOnTypeFacetFactory extends FacetFactoryAbstract {
+public class MustSatisfySpecificationOnTypeFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(MustSatisfy.class);
 
     public MustSatisfySpecificationOnTypeFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -39,7 +44,7 @@ public class MustSatisfySpecificationOnTypeFacetFactory extends FacetFactoryAbst
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        FacetUtil.addFacet(create(processClassContaxt.getCls(), processClassContaxt.getFacetHolder()));
+        validator.addFacet(create(processClassContaxt.getCls(), processClassContaxt.getFacetHolder()));
     }
 
     private Facet create(final Class<?> clazz, final FacetHolder holder) {
@@ -72,6 +77,16 @@ public class MustSatisfySpecificationOnTypeFacetFactory extends FacetFactoryAbst
         } catch (final IllegalAccessException e) {
             return null;
         }
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }
