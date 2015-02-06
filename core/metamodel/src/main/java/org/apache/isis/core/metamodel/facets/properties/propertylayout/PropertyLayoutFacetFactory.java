@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.Render
 public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
     public PropertyLayoutFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+        super(FeatureType.PROPERTIES_AND_ACTIONS);
     }
 
     @Override
