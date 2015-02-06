@@ -525,7 +525,7 @@ div.label-left label.control-label {
     width: 30%;
     float: left;
     padding-top: 2px;
-    text-align: start;
+    text-align: left;
 }
 
 div.label-top label.control-label {
