@@ -29,12 +29,16 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.objcoll.paged.PagedFacetAnnotation;
-import org.apache.isis.core.metamodel.facets.objcoll.paged.PagedFacetProperties;
+import org.apache.isis.core.metamodel.facets.collections.paged.PagedFacetForPagedAnnotationOnCollection;
+import org.apache.isis.core.metamodel.facets.collections.paged.PagedFacetPropertiesOnCollection;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class PagedFacetOnCollectionFactory extends FacetFactoryAbstract
         implements ContributeeMemberFacetFactory, IsisConfigurationAware,MetaModelValidatorRefiner {
 
@@ -66,12 +70,12 @@ public class PagedFacetOnCollectionFactory extends FacetFactoryAbstract
 
     private PagedFacet createFromMetadataPropertiesIfPossible(final ProcessContextWithMetadataProperties<?> processMethodContext) {
         final Properties properties = processMethodContext.metadataProperties("paged");
-        return properties != null ? new PagedFacetProperties(properties, processMethodContext.getFacetHolder()) : null;
+        return properties != null ? new PagedFacetPropertiesOnCollection(properties, processMethodContext.getFacetHolder()) : null;
     }
 
     private PagedFacet createFromPagedAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
         final Paged annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Paged.class);
-        return annotation != null ? new PagedFacetAnnotation(processMethodContext.getFacetHolder(), annotation.value()) : null;
+        return annotation != null ? new PagedFacetForPagedAnnotationOnCollection(processMethodContext.getFacetHolder(), annotation.value()) : null;
     }
 
 

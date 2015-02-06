@@ -20,8 +20,12 @@
 package org.apache.isis.core.metamodel.facets.param.renderedasdaybefore.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.renderedadjusted.RenderedAdjustedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class RenderedAsDayBeforeFacetOnParameterAnnotation extends RenderedAdjustedFacetAbstract {
 
     private static final int ADJUST_BY = -1;

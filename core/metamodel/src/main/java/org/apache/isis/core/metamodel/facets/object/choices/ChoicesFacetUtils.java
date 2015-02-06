@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.choices;
 
-import org.apache.isis.core.metamodel.facets.propparam.choices.ChoicesFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class ChoicesFacetUtils {

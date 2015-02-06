@@ -24,9 +24,13 @@ import java.util.regex.Pattern;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.Annotations;
-import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
-import org.apache.isis.core.metamodel.facets.object.regex.RegExFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class RegExFacetFromRegExAnnotationOnParameter extends RegExFacetAbstract {
 
     private final Pattern pattern;

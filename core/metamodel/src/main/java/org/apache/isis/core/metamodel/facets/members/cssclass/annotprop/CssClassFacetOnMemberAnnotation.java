@@ -22,6 +22,10 @@ package org.apache.isis.core.metamodel.facets.members.cssclass.annotprop;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class CssClassFacetOnMemberAnnotation extends CssClassFacetAbstract {
 
     public CssClassFacetOnMemberAnnotation(final String value, final FacetHolder holder) {

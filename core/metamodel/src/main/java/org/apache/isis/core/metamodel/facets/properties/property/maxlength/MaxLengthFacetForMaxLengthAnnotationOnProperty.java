@@ -21,9 +21,13 @@ package org.apache.isis.core.metamodel.facets.properties.property.maxlength;
 
 import org.apache.isis.applib.annotation.MaxLength;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
-import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class MaxLengthFacetForMaxLengthAnnotationOnProperty extends MaxLengthFacetAbstract {
 
     public MaxLengthFacetForMaxLengthAnnotationOnProperty(final int value, final FacetHolder holder) {

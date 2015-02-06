@@ -103,14 +103,14 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        processDomainEvent(processMethodContext);
+        processModify(processMethodContext);
         processHidden(processMethodContext);
         processEditing(processMethodContext);
         processNotPersisted(processMethodContext);
         processTypeOf(processMethodContext);
     }
 
-    void processDomainEvent(final ProcessMethodContext processMethodContext) {
+    void processModify(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
         final FacetHolder holder = processMethodContext.getFacetHolder();

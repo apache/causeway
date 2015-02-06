@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.properties.property.mandatory;
 
 import org.apache.isis.applib.annotation.Mandatory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
 
 /**
  * Derived by presence of an <tt>@Mandatory</tt> annotation.
@@ -30,7 +30,10 @@ import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetA
  * <p>
  * This implementation indicates that the {@link FacetHolder} <i>is</i> 
  * mandatory.
+ *
+ * @deprecated
  */
+@Deprecated
 public class MandatoryFacetForMandatoryAnnotationOnProperty extends MandatoryFacetAbstract {
 
     public static MandatoryFacet create(final Mandatory annotation, final FacetHolder holder) {

@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 import java.util.Properties;
 import com.google.common.base.Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.renderedadjusted.RenderedAdjustedFacet;
-import org.apache.isis.core.metamodel.facets.propparam.renderedadjusted.RenderedAdjustedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacetAbstract;
 
 public class RenderedAdjustedFacetOnPropertyFromLayoutProperties extends RenderedAdjustedFacetAbstract {
 

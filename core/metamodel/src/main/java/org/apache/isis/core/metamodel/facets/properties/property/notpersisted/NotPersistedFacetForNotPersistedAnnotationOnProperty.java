@@ -24,6 +24,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class NotPersistedFacetForNotPersistedAnnotationOnProperty extends NotPersistedFacetAbstract {
 
     public NotPersistedFacetForNotPersistedAnnotationOnProperty(final FacetHolder holder) {

@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
-import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationOnTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -39,8 +39,8 @@ public class MustSatisfySpecificationValidatingInteractionTest {
     @Rule
     public JUnitRuleMockery2 mockery = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    private MustSatisfySpecificationOnTypeFacet facetForSpecificationAlwaysSatisfied;
-    private MustSatisfySpecificationOnTypeFacet facetForSpecificationNeverSatisfied;
+    private MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet facetForSpecificationAlwaysSatisfied;
+    private MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet facetForSpecificationNeverSatisfied;
     private FacetHolder mockHolder;
 
     private PropertyModifyContext mockContext;
@@ -57,8 +57,8 @@ public class MustSatisfySpecificationValidatingInteractionTest {
         specificationAlwaysSatisfied = new SpecificationAlwaysSatisfied();
         specificationNeverSatisfied = new SpecificationNeverSatisfied();
 
-        facetForSpecificationAlwaysSatisfied = new MustSatisfySpecificationOnTypeFacet(Utils.listOf(specificationAlwaysSatisfied), mockHolder);
-        facetForSpecificationNeverSatisfied = new MustSatisfySpecificationOnTypeFacet(Utils.listOf(specificationNeverSatisfied), mockHolder);
+        facetForSpecificationAlwaysSatisfied = new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(Utils.listOf(specificationAlwaysSatisfied), mockHolder);
+        facetForSpecificationNeverSatisfied = new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(Utils.listOf(specificationNeverSatisfied), mockHolder);
 
         mockContext = mockery.mock(PropertyModifyContext.class);
         mockProposedObjectAdapter = mockery.mock(ObjectAdapter.class, "proposed");

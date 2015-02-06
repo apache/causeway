@@ -19,13 +19,31 @@
 
 package org.apache.isis.core.metamodel.facets.param.multiline.annotation;
 
+import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacetAbstract;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class MultiLineFacetOnParameterAnnotation extends MultiLineFacetAbstract {
 
     public MultiLineFacetOnParameterAnnotation(final int numberOfLines, final boolean preventWrapping, final FacetHolder holder) {
         super(numberOfLines, preventWrapping, holder);
     }
 
+    static MultiLineFacet create(final MultiLine annotation, final Class<?> parameterType, final FacetHolder holder) {
+        if (annotation != null) {
+            return new MultiLineFacetOnParameterAnnotation(annotation.numberOfLines(), annotation.preventWrapping(), holder);
+        }
+
+        if (!Annotations.isString(parameterType)) {
+            return null;
+        }
+
+        return null;
+    }
 }

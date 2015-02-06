@@ -23,8 +23,12 @@ import org.apache.isis.applib.annotation.Bounded;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
-import org.apache.isis.core.metamodel.facets.propparam.choices.ChoicesFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class ChoicesFacetFromBoundedAnnotation extends ChoicesFacetFromBoundedAbstract {
 
     private ChoicesFacetFromBoundedAnnotation(final FacetHolder holder, QuerySubmitter querySubmitter) {

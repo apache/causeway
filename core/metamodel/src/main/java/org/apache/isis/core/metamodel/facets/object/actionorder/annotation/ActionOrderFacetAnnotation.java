@@ -22,6 +22,10 @@ package org.apache.isis.core.metamodel.facets.object.actionorder.annotation;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.actionorder.ActionOrderFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class ActionOrderFacetAnnotation extends ActionOrderFacetAbstract {
 
     public ActionOrderFacetAnnotation(final String value, final FacetHolder holder) {

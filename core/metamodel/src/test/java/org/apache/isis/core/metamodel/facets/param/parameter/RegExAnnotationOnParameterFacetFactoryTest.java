@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
-import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetFromRegExAnnotationOnParameter;
 
 public class RegExAnnotationOnParameterFacetFactoryTest extends AbstractFacetFactoryTest {

@@ -21,13 +21,13 @@ package org.apache.isis.core.metamodel.facets.propparam.specification;
 
 import org.junit.Test;
 
-import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationOnTypeFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory;
 
 public class MustSatisfySpecificationFacetFactoryInstantiationTest {
 
     @Test
     public void canInstantiate() {
-        new MustSatisfySpecificationOnTypeFacetFactory();
+        new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory();
     }
 
 }

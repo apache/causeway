@@ -22,6 +22,10 @@ package org.apache.isis.core.metamodel.facets.actions.interaction;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class ExplorationFacetViaNamingConvention extends ExplorationFacetAbstract {
 
     public ExplorationFacetViaNamingConvention(final FacetHolder holder) {

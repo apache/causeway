@@ -40,7 +40,10 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 /**
  * Sets up a {@link DescribedAsFacet} if a
  * {@value MethodPrefixConstants#DESCRIPTION_PREFIX}-prefixed method is present.
+ *
+ * @deprecated
  */
+@Deprecated
 public class DescribedAsFacetStaticMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.DESCRIPTION_PREFIX };

@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
-import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacetAbstract;
 
 public class LabelAtFacetForPropertyLayoutAnnotation extends LabelAtFacetAbstract {
 

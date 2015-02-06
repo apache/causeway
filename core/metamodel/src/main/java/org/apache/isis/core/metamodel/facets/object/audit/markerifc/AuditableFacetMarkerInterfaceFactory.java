@@ -25,6 +25,10 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class AuditableFacetMarkerInterfaceFactory extends FacetFactoryAbstract {
 
     public AuditableFacetMarkerInterfaceFactory() {

@@ -34,12 +34,12 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
-import org.apache.isis.core.metamodel.facets.object.regex.TitleFacetFormattedByRegex;
+import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.regex.TitleFacetFormattedByRegex;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForParameterAnnotation;
-import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetOnParamForMaxLengthAnnotation;
+import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForMaxLengthAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
@@ -86,7 +86,7 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof MaxLength) {
                 final MaxLength annotation = (MaxLength) parameterAnnotation;
-                maxLengthValidator.addFacetFlagIfPresent(MaxLengthFacetOnParamForMaxLengthAnnotation.create(annotation, processParameterContext.getFacetHolder()));
+                maxLengthValidator.addFacetFlagIfPresent(MaxLengthFacetForMaxLengthAnnotationOnParameter.create(annotation, processParameterContext.getFacetHolder()));
                 return;
             }
         }

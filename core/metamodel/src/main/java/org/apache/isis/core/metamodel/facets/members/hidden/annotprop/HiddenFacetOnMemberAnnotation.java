@@ -26,6 +26,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractImpl;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class HiddenFacetOnMemberAnnotation extends HiddenFacetAbstractImpl {
 
     public static HiddenFacet create(final Hidden hiddenAnnotation, final FacetHolder facetHolder) {

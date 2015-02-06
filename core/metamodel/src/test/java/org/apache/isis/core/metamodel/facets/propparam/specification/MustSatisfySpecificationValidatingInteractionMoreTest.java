@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
-import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationOnTypeFacet;
+import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -39,7 +39,7 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
     @Rule
     public JUnitRuleMockery2 mockery = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    private MustSatisfySpecificationOnTypeFacet facetForSpecificationFirstLetterUpperCase;
+    private MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet facetForSpecificationFirstLetterUpperCase;
     private FacetHolder mockHolder;
 
     private PropertyModifyContext mockContext;
@@ -53,7 +53,7 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
         mockHolder = mockery.mock(IdentifiedHolder.class);
         requiresFirstLetterToBeUpperCase = new SpecificationRequiresFirstLetterToBeUpperCase();
 
-        facetForSpecificationFirstLetterUpperCase = new MustSatisfySpecificationOnTypeFacet(Utils.listOf(requiresFirstLetterToBeUpperCase), mockHolder);
+        facetForSpecificationFirstLetterUpperCase = new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(Utils.listOf(requiresFirstLetterToBeUpperCase), mockHolder);
 
         mockContext = mockery.mock(PropertyModifyContext.class);
         mockProposedObjectAdapter = mockery.mock(ObjectAdapter.class, "proposed");

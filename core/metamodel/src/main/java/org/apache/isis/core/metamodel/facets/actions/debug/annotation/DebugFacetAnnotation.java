@@ -22,6 +22,10 @@ package org.apache.isis.core.metamodel.facets.actions.debug.annotation;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class DebugFacetAnnotation extends DebugFacetAbstract {
 
     public DebugFacetAnnotation(final FacetHolder holder) {

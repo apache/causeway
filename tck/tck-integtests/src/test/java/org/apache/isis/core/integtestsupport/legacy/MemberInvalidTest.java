@@ -31,8 +31,8 @@ import org.junit.Test;
 import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.core.integtestsupport.legacy.sample.domain.Country;
 import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForMaxLengthAnnotationOnProperty;
-import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetFromRegExAnnotationOnProperty;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetDefault;
+import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForRegExAnnotationOnProperty;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacetViaMethod;
@@ -242,7 +242,7 @@ public class MemberInvalidTest extends AbstractTest {
             custJsWO.setRegExCaseInsensitiveField("abXfoobar");
             fail("Should have thrown exception");
         } catch (final InvalidException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(RegExFacetFromRegExAnnotationOnProperty.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(RegExFacetForRegExAnnotationOnProperty.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Reg Ex Case Insensitive Field"));
         }
     }

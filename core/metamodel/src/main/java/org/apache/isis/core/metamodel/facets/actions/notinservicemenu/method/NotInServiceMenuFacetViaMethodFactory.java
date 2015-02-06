@@ -32,6 +32,10 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedMethodPrefix;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class NotInServiceMenuFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
     public static final String NOT_IN_SERVICE_MENU_PREFIX = "notInServiceMenu";

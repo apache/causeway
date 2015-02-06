@@ -35,6 +35,10 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedMethodPrefix;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class MandatoryFacetOnPropertyStaticMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.OPTIONAL_PREFIX };

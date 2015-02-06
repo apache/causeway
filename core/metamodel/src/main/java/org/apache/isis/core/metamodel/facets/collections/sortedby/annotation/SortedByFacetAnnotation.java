@@ -24,6 +24,10 @@ import java.util.Comparator;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class SortedByFacetAnnotation extends SortedByFacetAbstract {
 
     public SortedByFacetAnnotation(final FacetHolder holder, Class<? extends Comparator<?>> value) {

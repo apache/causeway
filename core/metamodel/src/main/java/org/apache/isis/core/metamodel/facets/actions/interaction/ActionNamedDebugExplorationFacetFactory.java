@@ -44,7 +44,10 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
  * The supporting methods are: {@link ExplorationFacet}
  * and {@link DebugFacet}. In addition a {@link NamedFacet} is inferred from the
  * name (taking into account the above well-known prefixes).
+ *
+ * @deprecated
  */
+@Deprecated
 public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private static final String EXPLORATION_PREFIX = "Exploration";

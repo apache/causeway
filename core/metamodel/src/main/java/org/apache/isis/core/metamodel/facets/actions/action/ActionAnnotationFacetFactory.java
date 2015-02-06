@@ -128,7 +128,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        processDomainEvent(processMethodContext);
+        processInvocation(processMethodContext);
         processHidden(processMethodContext);
         processDisabled(processMethodContext);
         processRestrictTo(processMethodContext);
@@ -144,7 +144,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         processTypeOf(processMethodContext);
     }
 
-    void processDomainEvent(final ProcessMethodContext processMethodContext) {
+    void processInvocation(final ProcessMethodContext processMethodContext) {
 
         final Method actionMethod = processMethodContext.getMethod();
 

@@ -27,6 +27,10 @@ import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFac
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class AutoCompleteFacetForAutoCompleteAnnotation extends AutoCompleteFacetAbstract {
 
     public static AutoCompleteFacet create(

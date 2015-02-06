@@ -24,6 +24,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class NotInServiceMenuFacetAnnotation extends NotInServiceMenuFacetAbstract {
 
     public NotInServiceMenuFacetAnnotation(final FacetHolder holder) {

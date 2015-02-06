@@ -27,11 +27,14 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.objcoll.paged.PagedFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class PagedFacetOnTypeAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Paged.class);
@@ -52,7 +55,7 @@ public class PagedFacetOnTypeAnnotationFactory extends FacetFactoryAbstract impl
     }
 
     private static PagedFacet create(final Paged annotation, final FacetHolder holder) {
-        return annotation != null ? new PagedFacetAnnotation(holder, annotation.value()) : null;
+        return annotation != null ? new PagedFacetForPagedAnnotationOnType(holder, annotation.value()) : null;
     }
 
     @Override

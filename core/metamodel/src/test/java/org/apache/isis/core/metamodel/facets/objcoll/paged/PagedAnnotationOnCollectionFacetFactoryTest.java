@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.Paged;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.collections.paged.PagedFacetForPagedAnnotationOnCollection;
 import org.apache.isis.core.metamodel.facets.collections.paged.annotation.PagedFacetOnCollectionFactory;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -73,7 +74,7 @@ public class PagedAnnotationOnCollectionFacetFactoryTest extends AbstractFacetFa
 
         final Facet facet = facetedMethod.getFacet(PagedFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof PagedFacetAnnotation);
+        assertTrue(facet instanceof PagedFacetForPagedAnnotationOnCollection);
         PagedFacet pagedFacet = (PagedFacet) facet;
         assertThat(pagedFacet.value(), is(10));
     }

@@ -24,6 +24,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class PrototypeFacetForPrototypeAnnotation extends PrototypeFacetAbstract {
 
     public PrototypeFacetForPrototypeAnnotation(final FacetHolder holder) {

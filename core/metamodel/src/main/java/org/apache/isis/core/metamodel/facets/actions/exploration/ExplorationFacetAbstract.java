@@ -25,6 +25,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public abstract class ExplorationFacetAbstract extends MarkerFacetAbstract implements ExplorationFacet {
 
     public static Class<? extends Facet> type() {

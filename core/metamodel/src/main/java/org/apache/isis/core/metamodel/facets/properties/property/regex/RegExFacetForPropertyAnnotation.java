@@ -24,8 +24,8 @@ import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.Annotations;
-import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
-import org.apache.isis.core.metamodel.facets.object.regex.RegExFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacetAbstract;
 
 public class RegExFacetForPropertyAnnotation extends RegExFacetAbstract {
 

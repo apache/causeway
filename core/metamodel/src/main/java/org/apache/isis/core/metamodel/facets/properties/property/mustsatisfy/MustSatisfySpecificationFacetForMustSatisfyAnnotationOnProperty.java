@@ -25,8 +25,12 @@ import org.apache.isis.applib.annotation.MustSatisfy;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.mustsatisfyspec.MustSatisfySpecificationFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty extends MustSatisfySpecificationFacetAbstract {
 
     public static Facet create(final MustSatisfy annotation, final FacetHolder holder) {

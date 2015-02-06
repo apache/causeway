@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.facets.properties.property.mandatory;
 import java.lang.reflect.Method;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
 
 /**
  * Derived by presence of an <tt>@Optional</tt> annotation.
@@ -31,7 +31,10 @@ import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetA
  * <p>
  * This implementation indicates that the {@link FacetHolder} is <i>not</i>
  * mandatory, as per {@link #isInvertedSemantics()}.
+ *
+ * @deprecated
  */
+@Deprecated
 public class MandatoryFacetInvertedByOptionalAnnotationOnProperty extends MandatoryFacetAbstract {
 
     public MandatoryFacetInvertedByOptionalAnnotationOnProperty(final FacetHolder holder) {

@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.param.parameter.maxlen;
 
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
-import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
 
 public class MaxLengthFacetForParameterAnnotation extends MaxLengthFacetAbstract {
 

@@ -40,7 +40,10 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 /**
  * Sets up a {@link NamedFacet} if a {@value MethodPrefixConstants#NAME_PREFIX}
  * -prefixed method is present.
+ *
+ * @deprecated
  */
+@Deprecated
 public class NamedFacetStaticMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.NAME_PREFIX };

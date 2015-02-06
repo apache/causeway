@@ -48,8 +48,8 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.annotprop.DisabledFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberAnnotation;
-import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
-import org.apache.isis.core.metamodel.facets.object.regex.TitleFacetFormattedByRegex;
+import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.regex.TitleFacetFormattedByRegex;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForMandatoryAnnotationOnProperty;
@@ -79,12 +79,12 @@ import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.Mus
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetFromRegExAnnotationOnProperty;
+import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForRegExAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForMaxLengthAnnotationOnProperty;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -113,7 +113,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        processDomainEvent(processMethodContext);
+        processModify(processMethodContext);
         processHidden(processMethodContext);
         processEditing(processMethodContext);
         processMaxLength(processMethodContext);
@@ -123,7 +123,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         processRegEx(processMethodContext);
     }
 
-    void processDomainEvent(final ProcessMethodContext processMethodContext) {
+    void processModify(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
         final FacetedMethod holder = processMethodContext.getFacetHolder();
@@ -353,7 +353,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for deprecated @RegEx first
         final RegEx annotation = Annotations.getAnnotation(processMethodContext.getMethod(), RegEx.class);
-        RegExFacet facet = regexValidator.flagIfPresent(RegExFacetFromRegExAnnotationOnProperty.create(annotation, returnType, holder));
+        RegExFacet facet = regexValidator.flagIfPresent(RegExFacetForRegExAnnotationOnProperty.create(annotation, returnType, holder));
 
         if (facet != null) {
             // @RegEx also supports corresponding title facet

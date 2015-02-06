@@ -34,7 +34,10 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 /**
  * {@link ExplorationFacet} can also be installed via a naming convention, see
  * {@link org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedDebugExplorationFacetFactory}.
+ *
+ * @deprecated
  */
+@Deprecated
 public class ExplorationFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Exploration.class);

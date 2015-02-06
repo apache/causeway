@@ -23,14 +23,14 @@ import java.lang.annotation.Annotation;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacetInferredFromMultiLineFacet;
-import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacetInferredFromMultiLineFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
@@ -45,32 +45,29 @@ public class MultiLineFacetOnParameterAnnotationFactory extends FacetFactoryAbst
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
         final Class<?>[] parameterTypes = processParameterContext.getMethod().getParameterTypes();
-        if (processParameterContext.getParamNum() >= parameterTypes.length) {
+        final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
+        final int paramNum = processParameterContext.getParamNum();
+
+        if (paramNum >= parameterTypes.length) {
             // ignore
             return;
         }
-        if (!Annotations.isString(parameterTypes[processParameterContext.getParamNum()])) {
-            return;
-        }
-        final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
+        final Class<?> parameterType = parameterTypes[paramNum];
+
+        final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(processParameterContext.getMethod())[paramNum];
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof MultiLine) {
-                process(processParameterContext, (MultiLine) parameterAnnotation);
+
+                final MultiLine annotation = (MultiLine) parameterAnnotation;
+
+                final MultiLineFacet facet = validator.addFacetFlagIfPresent(
+                        MultiLineFacetOnParameterAnnotation.create(annotation, parameterType, holder));
+
+                // no-op if null
+                inferPropParamLayoutFacet(facet);
                 return;
             }
         }
-    }
-
-    private void process(ProcessParameterContext processParameterContext, MultiLine parameterAnnotation) {
-        final MultiLine annotation = (MultiLine) parameterAnnotation;
-
-        final MultiLineFacet facet = validator.flagIfPresent(create(annotation, processParameterContext.getFacetHolder()));
-
-        // no-op if null
-        FacetUtil.addFacet(facet);
-
-        // no-op if null
-        inferPropParamLayoutFacet(facet);
     }
 
     private static void inferPropParamLayoutFacet(MultiLineFacet facet) {
@@ -78,10 +75,6 @@ public class MultiLineFacetOnParameterAnnotationFactory extends FacetFactoryAbst
             return;
         }
         FacetUtil.addFacet(new LabelAtFacetInferredFromMultiLineFacet(facet.getFacetHolder()));
-    }
-
-    private MultiLineFacet create(final MultiLine annotation, final FacetHolder holder) {
-        return (annotation != null) ? new MultiLineFacetOnParameterAnnotation(annotation.numberOfLines(), annotation.preventWrapping(), holder) : null;
     }
 
 

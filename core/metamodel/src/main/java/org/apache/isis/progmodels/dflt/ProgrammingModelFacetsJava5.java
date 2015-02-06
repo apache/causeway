@@ -31,9 +31,9 @@ import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotC
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method.NotInServiceMenuFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.actions.paged.annotation.PagedFacetOnActionFactory;
+import org.apache.isis.core.metamodel.facets.actions.contributing.paged.PagedFacetOnActionFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.actions.validating.maxlenannot.MaxLengthFacetOnActionAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.actions.contributing.maxlenannot.MaxLengthFacetOnActionAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
@@ -127,7 +127,7 @@ import org.apache.isis.core.metamodel.facets.object.regex.annotation.RegExFacetO
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
 import org.apache.isis.core.metamodel.facets.object.typicallen.annotation.TypicalLengthFacetOnTypeAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationOnTypeFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotationOrConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethodFactory;
@@ -365,7 +365,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(MaxLengthFacetOnTypeAnnotationFactory.class);
         addFactory(MaxLengthFacetOnActionAnnotationFactory.class);
 
-        addFactory(MustSatisfySpecificationOnTypeFacetFactory.class);
+        addFactory(MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory.class);
 
         addFactory(MultiLineFacetOnTypeAnnotationFactory.class);
         addFactory(MultiLineFacetOnPropertyFactory.class);

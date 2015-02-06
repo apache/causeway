@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
 
 /**
  * Derived by presence of an <tt>@Optional</tt> method.
@@ -31,7 +31,10 @@ import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetA
  * <p>
  * This implementation indicates that the {@link FacetHolder} is <i>not</i>
  * mandatory, as per {@link #isInvertedSemantics()}.
+ *
+ * @deprecated
  */
+@Deprecated
 public class MandatoryFacetInvertedByOptionalAnnotationOnParameter extends MandatoryFacetAbstract {
 
 
