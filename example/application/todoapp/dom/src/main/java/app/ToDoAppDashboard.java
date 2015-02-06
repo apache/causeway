@@ -35,20 +35,6 @@ public class ToDoAppDashboard {
     }
     //endregion
 
-//    //region > memento (property)
-//    private String memento = "Dashboard";
-//
-//    @Property(hidden = Where.EVERYWHERE)
-//    @MemberOrder(sequence = "1")
-//    public String getMemento() {
-//        return memento;
-//    }
-//
-//    public void setMemento(final String memento) {
-//        this.memento = memento;
-//    }
-//    //endregion
-
     //region > getAnalysisByCategory (collection)
     @CollectionLayout(
             named="By Category",
