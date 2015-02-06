@@ -69,7 +69,7 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
         }
         if(implementsViewModel && annotatedWithDomainObject) {
             validator.addFailure(
-                    "Inconsistent view model / domain object semantics; %1$s should not implement %2$s and be annotated with @%3$s (annotate with %4$s instead of %2$s, or implement %6s instead of %2$s)",
+                    "Inconsistent view model / domain object semantics; %1$s should not implement %2$s and be annotated with @%3$s (annotate with %4$s instead of %2$s, or implement %5s instead of %2$s)",
                     cls.getName(),
                     org.apache.isis.applib.ViewModel.class.getSimpleName(),
                     DomainObject.class.getSimpleName(),
