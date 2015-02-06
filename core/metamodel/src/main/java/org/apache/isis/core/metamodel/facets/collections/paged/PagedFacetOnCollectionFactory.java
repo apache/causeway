@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.collections.paged.annotation;
+package org.apache.isis.core.metamodel.facets.collections.paged;
 
 import java.util.Properties;
 import org.apache.isis.applib.annotation.Paged;
@@ -29,8 +29,6 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.collections.paged.PagedFacetForPagedAnnotationOnCollection;
-import org.apache.isis.core.metamodel.facets.collections.paged.PagedFacetPropertiesOnCollection;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;

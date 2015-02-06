@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.disabled.annotprop;
+package org.apache.isis.core.metamodel.facets.members.hidden.layout;
 
 import java.util.Properties;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -25,11 +25,11 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 
-public class DisabledFacetOnMemberFromPropertiesFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class HiddenFacetOnMemberFromPropertiesFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
-    public DisabledFacetOnMemberFromPropertiesFactory() {
+    public HiddenFacetOnMemberFromPropertiesFactory() {
         super(FeatureType.MEMBERS);
     }
 
@@ -39,18 +39,19 @@ public class DisabledFacetOnMemberFromPropertiesFactory extends FacetFactoryAbst
     }
 
     @Override
-    public void process(ProcessContributeeMemberContext processMemberContext) {
-        DisabledFacet disabledFacet = createFromMetadataPropertiesIfPossible(processMemberContext);
-        FacetUtil.addFacet(disabledFacet);
+    public void process(final ProcessContributeeMemberContext processMemberContext) {
+        HiddenFacet hiddenFacet = createFromMetadataPropertiesIfPossible(processMemberContext);
+        // no-op if null
+        FacetUtil.addFacet(hiddenFacet);
     }
-
-    private static DisabledFacet createFromMetadataPropertiesIfPossible(
+    
+    private static HiddenFacet createFromMetadataPropertiesIfPossible(
             final ProcessContextWithMetadataProperties<? extends FacetHolder> pcwmp) {
         
         final FacetHolder holder = pcwmp.getFacetHolder();
         
-        final Properties properties = pcwmp.metadataProperties("disabled");
-        return properties != null ? new DisabledFacetFromProperties(properties, holder) : null;
+        final Properties properties = pcwmp.metadataProperties("hidden");
+        return properties != null ? new HiddenFacetOnMemberFromProperties(properties, holder) : null;
     }
 
 }

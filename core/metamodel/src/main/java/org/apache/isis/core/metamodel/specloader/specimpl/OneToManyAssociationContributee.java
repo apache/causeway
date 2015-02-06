@@ -21,6 +21,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -32,6 +33,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
+import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
@@ -76,17 +78,27 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
         this.serviceAdapter = serviceAdapter;
         this.serviceAction = serviceAction;
 
-        // copy over facets from contributed to own.
-        FacetUtil.copyFacets(serviceAction.getFacetedMethod(), facetHolder);
-        
+        //
+        // ensure the contributed collection cannot be modified, and derive its TypeOfFaccet
+        //
         final NotPersistedFacet notPersistedFacet = new NotPersistedFacetAbstract(this) {};
         final DisabledFacet disabledFacet = disabledFacet();
-        final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this, objectMemberContext.getSpecificationLookup()) {}; 
-        
+        final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this, objectMemberContext.getSpecificationLookup()) {};
+
         FacetUtil.addFacet(notPersistedFacet);
         FacetUtil.addFacet(disabledFacet);
         FacetUtil.addFacet(typeOfFacet);
+
+
+        //
+        // in addition, copy over facets from contributed to own.
+        //
+        // These could include everything under @Collection(...) because the
+        // CollectionAnnotationFacetFactory is also run against actions.
+        //
+        FacetUtil.copyFacets(serviceAction.getFacetedMethod(), facetHolder);
         
+
         // calculate the identifier
         final Identifier contributorIdentifier = serviceAction.getFacetedMethod().getIdentifier();
         final String memberName = contributorIdentifier.getMemberName();

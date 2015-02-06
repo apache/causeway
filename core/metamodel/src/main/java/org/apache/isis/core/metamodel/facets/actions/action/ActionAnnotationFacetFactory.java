@@ -58,7 +58,9 @@ import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForAct
 import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForBulkAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForCommandAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.disabled.DisabledFacetForDisabledAnnotationOnAction;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForHiddenAnnotationOnAction;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation;
@@ -86,8 +88,6 @@ import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFace
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.annotprop.DisabledFacetAnnotation;
-import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberAnnotation;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -244,7 +244,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         // check for deprecated @Hidden
         final Hidden hiddenAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), Hidden.class);
-        HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetOnMemberAnnotation.create(hiddenAnnotation, holder));
+        HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetForHiddenAnnotationOnAction.create(hiddenAnnotation, holder));
 
         // else search for @Action(hidden=...)
         final Action action = Annotations.getAnnotation(method, Action.class);
@@ -260,7 +260,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         // check for deprecated @Disabled
         final Disabled annotation = Annotations.getAnnotation(method, Disabled.class);
-        DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetAnnotation.create(annotation, holder));
+        DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetForDisabledAnnotationOnAction.create(annotation, holder));
 
         // there is no equivalent in @Action(...)
 

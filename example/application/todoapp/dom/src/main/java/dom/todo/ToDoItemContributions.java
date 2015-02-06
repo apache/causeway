@@ -34,10 +34,12 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Optionality;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.query.QueryDefault;
@@ -56,10 +58,10 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
             describedAs = "The relative priority of this item compared to others not yet complete (using 'due by' date)",
             contributed = Contributed.AS_ASSOCIATION
     )
-//    @Property(
-//            editingDisabledReason = "Relative priority, derived from due date"
-//    )
-//    @Disabled(reason="Relative priority, derived from due date")
+    @Property(
+            editing = Editing.DISABLED,
+            editingDisabledReason = "Relative priority, derived from due date"
+    )
     public Integer relativePriority(final ToDoItem toDoItem) {
         return queryResultsCache.execute(new Callable<Integer>(){
             @Override

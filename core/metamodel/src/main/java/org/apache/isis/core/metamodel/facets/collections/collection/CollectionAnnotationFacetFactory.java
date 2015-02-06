@@ -39,7 +39,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
-import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -47,7 +46,9 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredF
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.disabled.DisabledFacetForCollectionAnnotation;
+import org.apache.isis.core.metamodel.facets.collections.collection.disabled.DisabledFacetForDisabledAnnotationOnCollection;
 import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForCollectionAnnotation;
+import org.apache.isis.core.metamodel.facets.collections.collection.hidden.HiddenFacetForHiddenAnnotationOnCollection;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromAbstract;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionAddToFacetForDomainEventFromCollectionInteractionAnnotation;
@@ -57,7 +58,6 @@ import org.apache.isis.core.metamodel.facets.collections.collection.modify.Colle
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionInteractionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForPostsCollectionRemovedFromEventAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromAbstract;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromCollectionInteractionAnnotation;
@@ -70,18 +70,15 @@ import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeO
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.annotprop.DisabledFacetAnnotation;
-import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberAnnotation;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, ContributeeMemberFacetFactory, MetaModelValidatorRefiner, IsisConfigurationAware {
+public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private final MetaModelValidatorForDeprecatedAnnotation postsCollectionAddedToEventValidator = new MetaModelValidatorForDeprecatedAnnotation(PostsCollectionAddedToEvent.class);
     private final MetaModelValidatorForDeprecatedAnnotation postsCollectionRemovedFromEventValidator = new MetaModelValidatorForDeprecatedAnnotation(PostsCollectionRemovedFromEvent.class);
@@ -96,12 +93,11 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
     private ServicesInjector servicesInjector;
 
     public CollectionAnnotationFacetFactory() {
-        super(FeatureType.COLLECTIONS_ONLY);
+        super(FeatureType.COLLECTIONS_AND_ACTIONS);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-
         processModify(processMethodContext);
         processHidden(processMethodContext);
         processEditing(processMethodContext);
@@ -241,7 +237,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
         // check for deprecated @Hidden
         final Hidden hiddenAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), Hidden.class);
-        HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetOnMemberAnnotation.create(hiddenAnnotation, holder));
+        HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetForHiddenAnnotationOnCollection.create(hiddenAnnotation, holder));
 
         // else check for @Collection(hidden=...)
         final Collection collection = Annotations.getAnnotation(method, Collection.class);
@@ -258,7 +254,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
         // check for deprecated @Disabled
         final Disabled annotation = Annotations.getAnnotation(method, Disabled.class);
-        DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetAnnotation.create(annotation, holder));
+        DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetForDisabledAnnotationOnCollection.create(annotation, holder));
 
         // else check for @Collection(editing=...)
         final Collection collection = Annotations.getAnnotation(method, Collection.class);
@@ -358,21 +354,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         }
 
         return null;
-    }
-
-    @Override
-    public void process(ContributeeMemberFacetFactory.ProcessContributeeMemberContext processMemberContext) {
-
-        final ObjectMember objectMember = processMemberContext.getFacetHolder();
-
-        //
-        // an enhancement would be to pick up a custom event, however the contributed collection ultimately maps
-        // to an action on a service, and would therefore require a @Collection(...) annotated on an action;
-        // would look rather odd
-        //
-
-        FacetUtil.addFacet(new CollectionDomainEventFacetDefault(CollectionDomainEvent.Default.class, servicesInjector, getSpecificationLoader(), objectMember));
-
     }
 
 

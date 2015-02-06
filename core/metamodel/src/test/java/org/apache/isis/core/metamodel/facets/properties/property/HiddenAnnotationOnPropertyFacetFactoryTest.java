@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForHiddenAnnotationOnProperty;
 
 public class HiddenAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -54,7 +54,7 @@ public class HiddenAnnotationOnPropertyFacetFactoryTest extends AbstractFacetFac
 
         facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
+        final Facet facet = facetedMethod.getFacet(HiddenFacetForHiddenAnnotationOnProperty.class);
         assertNotNull(facet);
 
         assertNoMethodsRemoved();

@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 
 public class NamedFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, MetaModelValidatorRefiner, IsisConfigurationAware {
 
-    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Named.class);
+    private final MetaModelValidatorForDeprecatedAnnotation namedValidator = new MetaModelValidatorForDeprecatedAnnotation(Named.class);
 
 
     public NamedFacetOnMemberFactory() {
@@ -47,7 +47,7 @@ public class NamedFacetOnMemberFactory extends FacetFactoryAbstract implements C
     public void process(final ProcessMethodContext processMethodContext) {
         NamedFacet namedFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(namedFacet == null) {
-            namedFacet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext));
+            namedFacet = namedValidator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext));
         }
         // no-op if null
         FacetUtil.addFacet(namedFacet);
@@ -76,12 +76,12 @@ public class NamedFacetOnMemberFactory extends FacetFactoryAbstract implements C
 
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(validator);
+        metaModelValidator.add(namedValidator);
     }
 
     @Override
     public void setConfiguration(final IsisConfiguration configuration) {
-        validator.setConfiguration(configuration);
+        namedValidator.setConfiguration(configuration);
     }
 
 }

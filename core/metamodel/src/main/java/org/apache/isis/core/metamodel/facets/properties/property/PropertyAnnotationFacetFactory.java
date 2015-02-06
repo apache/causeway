@@ -41,20 +41,19 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
-import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.annotprop.DisabledFacetAnnotation;
-import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberAnnotation;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.TitleFacetFormattedByRegex;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForDisabledAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForHiddenAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForMandatoryAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
@@ -66,7 +65,6 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForPostsPropertyChangedEventAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation;
@@ -86,11 +84,10 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, ContributeeMemberFacetFactory, MetaModelValidatorRefiner, IsisConfigurationAware {
+public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private final MetaModelValidatorForDeprecatedAnnotation postsPropertyChangedEventValidator = new MetaModelValidatorForDeprecatedAnnotation(PostsPropertyChangedEvent.class);
     private final MetaModelValidatorForDeprecatedAnnotation propertyInteractionValidator = new MetaModelValidatorForDeprecatedAnnotation(PropertyInteraction.class);
@@ -106,12 +103,11 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     private ServicesInjector servicesInjector;
 
     public PropertyAnnotationFacetFactory() {
-        super(FeatureType.PROPERTIES_ONLY);
+        super(FeatureType.PROPERTIES_AND_ACTIONS);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-
         processModify(processMethodContext);
         processHidden(processMethodContext);
         processEditing(processMethodContext);
@@ -242,7 +238,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for deprecated @Hidden first
         final Hidden hiddenAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), Hidden.class);
-        HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetOnMemberAnnotation.create(hiddenAnnotation, holder));
+        HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetForHiddenAnnotationOnProperty.create(hiddenAnnotation, holder));
 
         // else search for @Property(hidden=...)
         final Property property = Annotations.getAnnotation(method, Property.class);
@@ -259,7 +255,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for deprecated @Disabled first
         final Disabled annotation = Annotations.getAnnotation(method, Disabled.class);
-        DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetAnnotation.create(annotation, holder));
+        DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetForDisabledAnnotationOnProperty.create(annotation, holder));
 
         // else search for @Property(editing=...)
         final Property property = Annotations.getAnnotation(method, Property.class);
@@ -368,29 +364,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         FacetUtil.addFacet(facet);
     }
 
-    // //////////////////////////////////////
-
-    @Override
-    public void process(final ContributeeMemberFacetFactory.ProcessContributeeMemberContext processMemberContext) {
-
-        final ObjectMember objectMember = processMemberContext.getFacetHolder();
-
-        //
-        // an enhancement would be to pick up a custom event, however the contributed property ultimately maps
-        // to an action on a service, and would therefore require a @Property(...) annotated on an action;
-        // would look rather odd
-        //
-
-        final PropertyOrCollectionAccessorFacet accessorFacet =
-                objectMember.getFacet(PropertyOrCollectionAccessorFacet.class);
-        if(accessorFacet != null) {
-            final PropertyDomainEventFacet facet = new PropertyDomainEventFacetDefault(
-                    PropertyDomainEvent.Default.class, accessorFacet, servicesInjector, getSpecificationLoader(), objectMember);
-
-            FacetUtil.addFacet(facet);
-        }
-
-    }
 
     // //////////////////////////////////////
 

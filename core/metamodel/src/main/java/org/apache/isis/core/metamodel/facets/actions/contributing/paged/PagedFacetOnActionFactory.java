@@ -97,7 +97,4 @@ public class PagedFacetOnActionFactory extends FacetFactoryAbstract
         validator.setConfiguration(configuration);
     }
 
-
-
-
 }

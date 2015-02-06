@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.disabled.annotprop;
+package org.apache.isis.core.metamodel.facets.properties.property.disabled;
 
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.When;
@@ -26,15 +26,21 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractImpl;
 
-public class DisabledFacetAnnotation extends DisabledFacetAbstractImpl {
-
-    public DisabledFacetAnnotation(final When when, Where where, String reason, final FacetHolder holder) {
-        super(when, where, reason, holder);
-    }
+/**
+ * @deprecated
+ */
+@Deprecated
+public class DisabledFacetForDisabledAnnotationOnProperty extends DisabledFacetAbstractImpl {
 
     public static DisabledFacet create(final Disabled annotation, final FacetHolder facetHolder) {
         return annotation != null
-                ? new DisabledFacetAnnotation(annotation.when(), annotation.where(), annotation.reason(), facetHolder)
+                ? new DisabledFacetForDisabledAnnotationOnProperty(annotation.when(), annotation.where(), annotation.reason(), facetHolder)
                 : null;
     }
+
+    private DisabledFacetForDisabledAnnotationOnProperty(final When when, Where where, String reason, final FacetHolder holder) {
+        super(when, where, reason, holder);
+    }
+
+
 }

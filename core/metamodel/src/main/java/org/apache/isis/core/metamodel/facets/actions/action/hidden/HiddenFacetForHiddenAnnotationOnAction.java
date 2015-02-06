@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.hidden.annotprop;
+package org.apache.isis.core.metamodel.facets.actions.action.hidden;
 
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.When;
@@ -30,17 +30,17 @@ import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractI
  * @deprecated
  */
 @Deprecated
-public class HiddenFacetOnMemberAnnotation extends HiddenFacetAbstractImpl {
+public class HiddenFacetForHiddenAnnotationOnAction extends HiddenFacetAbstractImpl {
 
     public static HiddenFacet create(final Hidden hiddenAnnotation, final FacetHolder facetHolder) {
         if (hiddenAnnotation == null) {
             return null;
         }
-        return new HiddenFacetOnMemberAnnotation(hiddenAnnotation.when(), hiddenAnnotation.where(), facetHolder);
+        return new HiddenFacetForHiddenAnnotationOnAction(hiddenAnnotation.when(), hiddenAnnotation.where(), facetHolder);
     }
 
-    private HiddenFacetOnMemberAnnotation(final When when, Where where, final FacetHolder holder) {
-        super(HiddenFacetOnMemberAnnotation.class, when, where, holder);
+    private HiddenFacetForHiddenAnnotationOnAction(final When when, Where where, final FacetHolder holder) {
+        super(HiddenFacetForHiddenAnnotationOnAction.class, when, where, holder);
     }
 
 

@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.collections.paged.PagedFacetForPagedAnnotationOnCollection;
-import org.apache.isis.core.metamodel.facets.collections.paged.annotation.PagedFacetOnCollectionFactory;
+import org.apache.isis.core.metamodel.facets.collections.paged.PagedFacetOnCollectionFactory;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 

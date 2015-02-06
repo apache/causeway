@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.facets.collections.disabled.fromimmutable.
 import org.apache.isis.core.metamodel.facets.collections.javautilcollection.CollectionFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToRemoveFromAndValidateFacetFactory;
-import org.apache.isis.core.metamodel.facets.collections.paged.annotation.PagedFacetOnCollectionFactory;
+import org.apache.isis.core.metamodel.facets.collections.paged.PagedFacetOnCollectionFactory;
 import org.apache.isis.core.metamodel.facets.collections.parented.ParentedFacetSinceCollectionFactory;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.annotation.SortedByFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
@@ -50,11 +50,11 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.annotprop.CssClass
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.disabled.annotprop.DisabledFacetOnMemberFromPropertiesFactory;
+import org.apache.isis.core.metamodel.facets.members.disabled.layout.DisabledFacetOnMemberFromPropertiesFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.staticmethod.DisabledFacetStaticMethodFacetFactory;
-import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberFromPropertiesFactory;
+import org.apache.isis.core.metamodel.facets.members.hidden.layout.HiddenFacetOnMemberFromPropertiesFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
@@ -372,15 +372,18 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(MultiLineFacetOnParameterAnnotationFactory.class);
 
 
+
         // must come after RecreatableObjectFacetFactory
         addFactory(DomainObjectAnnotationFacetFactory.class);
 
+
         // must come after the property/collection accessor+mutator facet factories
-        // (nb actions domain events are conflated with the action invocation).
-        // nb: all must come after HiddenFacetOnMemberFactory
-        addFactory(PropertyAnnotationFacetFactory.class);
-        addFactory(CollectionAnnotationFacetFactory.class);
         addFactory(ActionAnnotationFacetFactory.class);
+        // after the ActionAnnotationFacetFactory so that takes precedent for contributed associations
+        addFactory(PropertyAnnotationFacetFactory.class);
+        // after the ActionAnnotationFacetFactory so that takes precedent for contributed associations
+        addFactory(CollectionAnnotationFacetFactory.class);
+
 
         addFactory(ParameterAnnotationFacetFactory.class);
 

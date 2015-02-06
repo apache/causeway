@@ -17,41 +17,35 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.disabled.annotprop;
+package org.apache.isis.core.metamodel.facets.members.hidden.layout;
 
 import java.util.Properties;
 
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractImpl;
+import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractImpl;
 
-public class DisabledFacetFromProperties extends DisabledFacetAbstractImpl {
+public class HiddenFacetOnMemberFromProperties extends HiddenFacetAbstractImpl {
 
-    public DisabledFacetFromProperties(final When when, Where where, String reason, final FacetHolder holder) {
-        super(when, where, reason, holder);
+    public HiddenFacetOnMemberFromProperties(final When when, Where where, final FacetHolder holder) {
+        super(HiddenFacetOnMemberFromProperties.class, when, where, holder);
     }
 
-    public DisabledFacetFromProperties(Properties properties, FacetHolder holder) {
-        super(disabledWhenFrom(properties), disabledWhereFrom(properties), disabledReasonFrom(properties), holder);
+    public HiddenFacetOnMemberFromProperties(Properties properties, FacetHolder holder) {
+        super(HiddenFacetOnMemberFromProperties.class, hiddenWhenFrom(properties), hiddenWhereFrom(properties), holder);
     }
 
-    private static When disabledWhenFrom(Properties properties) {
+    private static When hiddenWhenFrom(Properties properties) {
         String value = properties.getProperty("when");
-        // same default as in Disabled.when()
+        // same default as in Hidden.when()
         return value != null? When.valueOf(value): When.ALWAYS;
     }
 
-    private static Where disabledWhereFrom(Properties properties) {
+    private static Where hiddenWhereFrom(Properties properties) {
         String value = properties.getProperty("where");
-        // same default as in Disabled.where()
+        // same default as in Hidden.where()
         return value != null? Where.valueOf(value): Where.ANYWHERE;
-    }
-    
-    private static String disabledReasonFrom(Properties properties) {
-        String value = properties.getProperty("reason");
-        // same default as in Disabled.reason()
-        return value != null? value: "";
     }
 
 }
