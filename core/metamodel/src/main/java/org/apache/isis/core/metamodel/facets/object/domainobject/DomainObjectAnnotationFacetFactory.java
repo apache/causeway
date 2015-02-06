@@ -19,6 +19,9 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 
+import java.util.Collection;
+import java.util.Map;
+import com.google.common.collect.Maps;
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Bounded;
@@ -49,19 +52,23 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.choices.Choices
 import org.apache.isis.core.metamodel.facets.object.domainobject.choices.ChoicesFacetFromBoundedAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetFromObjectTypeAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetForPublishedObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.ImmutableFacetForImmutableAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetFromObjectTypeAnnotation;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AdapterManagerAware, ServicesInjectorAware, SpecificationLoaderAware, QuerySubmitterAware, MetaModelValidatorRefiner {
@@ -252,6 +259,38 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
 
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+
+        metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
+            @Override
+            public boolean visit(final ObjectSpecification thisSpec, final ValidationFailures validationFailures) {
+
+                final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
+                final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
+                for (final ObjectSpecification otherSpec : allSpecifications) {
+
+                    if(thisSpec == otherSpec) {
+                        continue;
+                    }
+                    final ObjectSpecId objectSpecId = otherSpec.getSpecId();
+                    if (objectSpecId == null) {
+                        continue;
+                    }
+                    final ObjectSpecification existingSpec = specById.put(objectSpecId, otherSpec);
+                    if (existingSpec == null) {
+                        continue;
+                    }
+                    validationFailures.add(
+                            "Cannot have two entities with same object type (@DomainObject(objectType=...) or @ObjectType); " +
+                            "both %s and %s are annotated with value of ''%s''.",
+                            existingSpec.getFullIdentifier(),
+                            otherSpec.getFullIdentifier(),
+                            objectSpecId);
+                }
+
+                return true;
+            }
+        }));
+
         metaModelValidator.add(publishedObjectValidator);
         metaModelValidator.add(auditedValidator);
         metaModelValidator.add(autoCompleteValidator);

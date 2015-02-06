@@ -644,21 +644,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         return metaModelValidator;
     }
 
-    @Override
-    public void validateSpecifications(ValidationFailures validationFailures) {
-        final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
-        for (final ObjectSpecification objSpec : allSpecifications()) {
-            final ObjectSpecId objectSpecId = objSpec.getSpecId();
-            if (objectSpecId == null) {
-                continue;
-            }
-            final ObjectSpecification existingSpec = specById.put(objectSpecId, objSpec);
-            if (existingSpec == null) {
-                continue;
-            }
-            validationFailures.add("Cannot have two entities with same object type (@ObjectType facet or equivalent) Value; " + "both %s and %s are annotated with value of ''%s''.", existingSpec.getFullIdentifier(), objSpec.getFullIdentifier(), objectSpecId);
-        }
-    }
 
 
 
