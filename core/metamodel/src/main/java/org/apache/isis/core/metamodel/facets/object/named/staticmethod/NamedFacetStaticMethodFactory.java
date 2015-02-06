@@ -52,7 +52,7 @@ public class NamedFacetStaticMethodFactory extends MethodPrefixBasedFacetFactory
         if (method != null) {
             final String name = (String) MethodExtensions.invokeStatic(method);
             processClassContext.removeMethod(method);
-            validator.addFacet(new NamedFacetStaticMethod(name, facetHolder));
+            validator.addFacetFlagIfPresent(new NamedFacetStaticMethod(name, facetHolder));
         }
     }
 

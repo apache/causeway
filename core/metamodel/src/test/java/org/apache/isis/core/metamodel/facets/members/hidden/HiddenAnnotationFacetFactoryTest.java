@@ -28,17 +28,17 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberAnnotation;
-import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberFactory;
+import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberFromPropertiesFactory;
 
 public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private HiddenFacetOnMemberFactory facetFactory;
+    private HiddenFacetOnMemberFromPropertiesFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new HiddenFacetOnMemberFactory();
+        facetFactory = new HiddenFacetOnMemberFromPropertiesFactory();
     }
 
     @Override

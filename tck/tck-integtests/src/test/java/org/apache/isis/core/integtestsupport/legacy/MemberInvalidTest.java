@@ -30,8 +30,8 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.core.integtestsupport.legacy.sample.domain.Country;
-import org.apache.isis.core.metamodel.facets.properties.validating.maxlenannot.MaxLengthFacetOnPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.validating.regexannot.RegExFacetOnPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForMaxLengthAnnotationOnProperty;
+import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetFromRegExAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
@@ -215,7 +215,7 @@ public class MemberInvalidTest extends AbstractTest {
             custJsWO.setMaxLengthField("This is far too long");
             fail("Should have thrown exception");
         } catch (final InvalidException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(MaxLengthFacetOnPropertyAnnotation.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(MaxLengthFacetForMaxLengthAnnotationOnProperty.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Max Length Field"));
         }
     }
@@ -242,7 +242,7 @@ public class MemberInvalidTest extends AbstractTest {
             custJsWO.setRegExCaseInsensitiveField("abXfoobar");
             fail("Should have thrown exception");
         } catch (final InvalidException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(RegExFacetOnPropertyAnnotation.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(RegExFacetFromRegExAnnotationOnProperty.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Reg Ex Case Insensitive Field"));
         }
     }

@@ -53,7 +53,7 @@ public class PluralFacetStaticMethodFactory extends MethodPrefixBasedFacetFactor
         if (method != null) {
             final String name = (String) MethodExtensions.invokeStatic(method);
             processClassContext.removeMethod(method);
-            validator.addFacet(new PluralFacetMethod(name, facetHolder));
+            validator.addFacetFlagIfPresent(new PluralFacetMethod(name, facetHolder));
         }
     }
 

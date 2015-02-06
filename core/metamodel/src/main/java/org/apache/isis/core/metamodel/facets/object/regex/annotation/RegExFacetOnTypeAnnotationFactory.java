@@ -42,7 +42,7 @@ public class RegExFacetOnTypeAnnotationFactory extends FacetFactoryAbstract impl
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final RegEx annotation = Annotations.getAnnotation(processClassContaxt.getCls(), RegEx.class);
-        validator.addFacet(createRegexFacet(annotation, processClassContaxt.getFacetHolder()));
+        validator.addFacetFlagIfPresent(createRegexFacet(annotation, processClassContaxt.getFacetHolder()));
     }
 
     private RegExFacet createRegexFacet(final RegEx annotation, final FacetHolder holder) {

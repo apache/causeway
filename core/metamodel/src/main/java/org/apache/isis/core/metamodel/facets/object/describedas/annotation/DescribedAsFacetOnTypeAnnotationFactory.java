@@ -42,7 +42,7 @@ public class DescribedAsFacetOnTypeAnnotationFactory extends FacetFactoryAbstrac
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final DescribedAs annotation = Annotations.getAnnotation(processClassContaxt.getCls(), DescribedAs.class);
-        validator.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
+        validator.addFacetFlagIfPresent(create(annotation, processClassContaxt.getFacetHolder()));
     }
 
     private DescribedAsFacet create(final DescribedAs annotation, final FacetHolder holder) {

@@ -23,7 +23,6 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -43,7 +42,7 @@ public class HiddenFacetOnTypeAnnotationFactory extends FacetFactoryAbstract imp
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final Hidden annotation = Annotations.getAnnotation(processClassContext.getCls(), Hidden.class);
-        validator.addFacet(create(annotation, processClassContext.getFacetHolder()));
+        validator.addFacetFlagIfPresent(create(annotation, processClassContext.getFacetHolder()));
     }
 
     private static HiddenFacet create(final Hidden annotation, final FacetHolder holder) {

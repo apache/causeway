@@ -27,20 +27,20 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.members.disabled.annotprop.DisabledFacetFactory;
+import org.apache.isis.core.metamodel.facets.members.disabled.annotprop.DisabledFacetOnMemberFromPropertiesFactory;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private DisabledFacetFactory facetFactory;
+    private DisabledFacetOnMemberFromPropertiesFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new DisabledFacetFactory();
+        facetFactory = new DisabledFacetOnMemberFromPropertiesFactory();
     }
 
     @Override

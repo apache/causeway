@@ -46,7 +46,7 @@ public class MaskFacetOnTypeAnnotationFactory extends FacetFactoryAbstract imple
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final Mask annotation = Annotations.getAnnotation(processClassContaxt.getCls(), Mask.class);
-        validator.addFacet(createMaskFacet(annotation, processClassContaxt.getFacetHolder()));
+        validator.addFacetFlagIfPresent(createMaskFacet(annotation, processClassContaxt.getFacetHolder()));
     }
 
     private MaskFacet createMaskFacet(final Mask annotation, final FacetHolder holder) {

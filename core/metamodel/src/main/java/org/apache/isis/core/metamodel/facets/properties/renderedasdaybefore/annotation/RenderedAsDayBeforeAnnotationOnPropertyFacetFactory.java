@@ -45,7 +45,7 @@ public class RenderedAsDayBeforeAnnotationOnPropertyFacetFactory extends FacetFa
         final RenderedAsDayBefore annotation = Annotations.getAnnotation(processMethodContext.getMethod(), RenderedAsDayBefore.class);
         final RenderedAdjustedFacet facet = create(annotation, processMethodContext.getFacetHolder());
 
-        validator.addFacet(facet);
+        validator.addFacetFlagIfPresent(facet);
     }
 
     private RenderedAdjustedFacet create(final RenderedAsDayBefore annotation, final FacetHolder holder) {

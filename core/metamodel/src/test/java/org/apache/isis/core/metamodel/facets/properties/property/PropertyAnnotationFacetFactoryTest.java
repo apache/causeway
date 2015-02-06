@@ -159,7 +159,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processModify(processMethodContext);
+            facetFactory.processDomainEvent(processMethodContext);
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
@@ -214,7 +214,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processModify(processMethodContext);
+            facetFactory.processDomainEvent(processMethodContext);
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
@@ -268,7 +268,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processModify(processMethodContext);
+            facetFactory.processDomainEvent(processMethodContext);
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);
@@ -316,7 +316,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null, null, propertyMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processModify(processMethodContext);
+            facetFactory.processDomainEvent(processMethodContext);
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(PropertyDomainEventFacet.class);

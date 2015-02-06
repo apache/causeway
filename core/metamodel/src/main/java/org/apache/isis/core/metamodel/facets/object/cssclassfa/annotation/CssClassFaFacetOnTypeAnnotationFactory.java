@@ -42,7 +42,7 @@ public class CssClassFaFacetOnTypeAnnotationFactory extends FacetFactoryAbstract
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final CssClassFa annotation = Annotations.getAnnotation(processClassContext.getCls(), CssClassFa.class);
-        validator.addFacet(create(annotation, processClassContext.getFacetHolder()));
+        validator.addFacetFlagIfPresent(create(annotation, processClassContext.getFacetHolder()));
     }
 
     private static CssClassFaFacet create(final CssClassFa annotation, final FacetHolder holder) {

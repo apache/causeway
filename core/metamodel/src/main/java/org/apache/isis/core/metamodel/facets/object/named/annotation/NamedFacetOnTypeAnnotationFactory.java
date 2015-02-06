@@ -44,7 +44,7 @@ public class NamedFacetOnTypeAnnotationFactory extends FacetFactoryAbstract impl
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final Named annotation = Annotations.getAnnotation(processClassContaxt.getCls(), Named.class);
-        validator.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
+        validator.addFacetFlagIfPresent(create(annotation, processClassContaxt.getFacetHolder()));
     }
 
     private NamedFacet create(final Named annotation, final FacetHolder holder) {

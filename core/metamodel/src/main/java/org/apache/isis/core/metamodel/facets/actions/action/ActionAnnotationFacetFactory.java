@@ -29,8 +29,11 @@ import org.apache.isis.applib.annotation.ActionInteraction;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.Command;
+import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Idempotent;
 import org.apache.isis.applib.annotation.PostsActionInvokedEvent;
+import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.QueryOnly;
 import org.apache.isis.applib.annotation.TypeOf;
@@ -78,9 +81,14 @@ import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetFo
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetOnActionForTypeOfAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
+import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForPrototypeAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.annotprop.DisabledFacetAnnotation;
+import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberAnnotation;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -101,6 +109,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
     private final MetaModelValidatorForDeprecatedAnnotation idempotentValidator = new MetaModelValidatorForDeprecatedAnnotation(Idempotent.class);
     private final MetaModelValidatorForDeprecatedAnnotation publishedActionValidator = new MetaModelValidatorForDeprecatedAnnotation(PublishedAction.class);
     private final MetaModelValidatorForDeprecatedAnnotation typeOfValidator = new MetaModelValidatorForDeprecatedAnnotation(TypeOf.class);
+    private final MetaModelValidatorForDeprecatedAnnotation hiddenValidator = new MetaModelValidatorForDeprecatedAnnotation(Hidden.class);
+    private final MetaModelValidatorForDeprecatedAnnotation disabledValidator = new MetaModelValidatorForDeprecatedAnnotation(Disabled.class);
+    private final MetaModelValidatorForDeprecatedAnnotation prototypeValidator = new MetaModelValidatorForDeprecatedAnnotation(Prototype.class);
 
 
     private ServicesInjector servicesInjector;
@@ -117,8 +128,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        processInvocation(processMethodContext);
+        processDomainEvent(processMethodContext);
         processHidden(processMethodContext);
+        processDisabled(processMethodContext);
         processRestrictTo(processMethodContext);
         processSemantics(processMethodContext);
         processBulk(processMethodContext);
@@ -132,7 +144,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         processTypeOf(processMethodContext);
     }
 
-    void processInvocation(final ProcessMethodContext processMethodContext) {
+    void processDomainEvent(final ProcessMethodContext processMethodContext) {
 
         final Method actionMethod = processMethodContext.getMethod();
 
@@ -224,19 +236,47 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
     void processHidden(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
-        final Action action = Annotations.getAnnotation(method, Action.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        HiddenFacet facet = HiddenFacetForActionAnnotation.create(action, holder);
+        // check for deprecated @Hidden
+        final Hidden hiddenAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), Hidden.class);
+        HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetOnMemberAnnotation.create(hiddenAnnotation, holder));
+
+        // else search for @Action(hidden=...)
+        final Action action = Annotations.getAnnotation(method, Action.class);
+        if(facet == null) {
+            facet = HiddenFacetForActionAnnotation.create(action, holder);
+        }
+        FacetUtil.addFacet(facet);
+    }
+
+    void processDisabled(final ProcessMethodContext processMethodContext) {
+        final Method method = processMethodContext.getMethod();
+        final FacetHolder holder = processMethodContext.getFacetHolder();
+
+        // check for deprecated @Disabled
+        final Disabled annotation = Annotations.getAnnotation(method, Disabled.class);
+        DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetAnnotation.create(annotation, holder));
+
+        // there is no equivalent in @Action(...)
+
         FacetUtil.addFacet(facet);
     }
 
     void processRestrictTo(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
-        final Action action = Annotations.getAnnotation(method, Action.class);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        FacetUtil.addFacet(PrototypeFacetForActionAnnotation.create(action, holder));
+        // check for deprecated @Prototype
+        final Prototype annotation = Annotations.getAnnotation(method, Prototype.class);
+        PrototypeFacet facet = prototypeValidator.addFacetFlagIfPresent(PrototypeFacetForPrototypeAnnotation.create(annotation, holder));
+
+        // else search for @Action(restrictTo=...)
+        final Action action = Annotations.getAnnotation(method, Action.class);
+        if(facet == null) {
+            facet = PrototypeFacetForActionAnnotation.create(action, holder);
+        }
+        FacetUtil.addFacet(facet);
     }
 
     void processSemantics(final ProcessMethodContext processMethodContext) {
@@ -467,6 +507,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         metaModelValidator.add(idempotentValidator);
         metaModelValidator.add(publishedActionValidator);
         metaModelValidator.add(typeOfValidator);
+        metaModelValidator.add(hiddenValidator);
+        metaModelValidator.add(disabledValidator);
+        metaModelValidator.add(prototypeValidator);
     }
 
     // ///////////////////////////////////////////////////////////////
@@ -489,6 +532,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         idempotentValidator.setConfiguration(configuration);
         publishedActionValidator.setConfiguration(configuration);
         typeOfValidator.setConfiguration(configuration);
+        hiddenValidator.setConfiguration(configuration);
+        disabledValidator.setConfiguration(configuration);
+        prototypeValidator.setConfiguration(configuration);
     }
 
     @Override

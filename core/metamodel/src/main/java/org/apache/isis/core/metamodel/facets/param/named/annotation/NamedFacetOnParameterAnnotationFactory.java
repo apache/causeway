@@ -47,7 +47,7 @@ public class NamedFacetOnParameterAnnotationFactory extends FacetFactoryAbstract
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof Named) {
                 final Named annotation = (Named) parameterAnnotation;
-                validator.addFacet(create(annotation, processParameterContext.getFacetHolder()));
+                validator.addFacetFlagIfPresent(create(annotation, processParameterContext.getFacetHolder()));
                 return;
             }
         }

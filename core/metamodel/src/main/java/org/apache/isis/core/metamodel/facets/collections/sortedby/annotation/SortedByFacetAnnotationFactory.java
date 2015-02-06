@@ -54,7 +54,7 @@ public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract impleme
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final SortedBy renderAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), SortedBy.class);
-        validator.addFacet(create(renderAnnotation, processMethodContext.getFacetHolder()));
+        validator.addFacetFlagIfPresent(create(renderAnnotation, processMethodContext.getFacetHolder()));
     }
 
     private SortedByFacet create(final SortedBy annotation, final FacetHolder holder) {

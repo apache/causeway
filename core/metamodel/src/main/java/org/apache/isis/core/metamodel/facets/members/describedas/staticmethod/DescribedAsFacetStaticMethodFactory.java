@@ -79,7 +79,7 @@ public class DescribedAsFacetStaticMethodFactory extends MethodPrefixBasedFacetF
         final String description = invokeDescriptionMethod(descriptionMethod);
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        validator.addFacet(new DescribedAsFacetStaticMethod(description, descriptionMethod, facetedMethod));
+        validator.addFacetFlagIfPresent(new DescribedAsFacetStaticMethod(description, descriptionMethod, facetedMethod));
     }
 
     private static String invokeDescriptionMethod(final Method descriptionMethod) {

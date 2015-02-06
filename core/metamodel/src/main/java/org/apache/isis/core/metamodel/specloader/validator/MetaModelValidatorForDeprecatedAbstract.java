@@ -41,8 +41,9 @@ public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelV
 
     protected abstract String failureMessageFor(final Facet facet);
 
-    public void addFacet(final Facet facet) {
+    public <T extends Facet> T addFacetFlagIfPresent(final T facet) {
         FacetUtil.addFacet(flagIfPresent(facet));
+        return facet;
     }
 
     @Override

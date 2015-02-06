@@ -45,7 +45,7 @@ public class MaxLengthFacetOnTypeAnnotationFactory extends FacetFactoryAbstract 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final MaxLength annotation = Annotations.getAnnotation(processClassContaxt.getCls(), MaxLength.class);
-        validator.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
+        validator.addFacetFlagIfPresent(create(annotation, processClassContaxt.getFacetHolder()));
     }
 
     private MaxLengthFacet create(final MaxLength annotation, final FacetHolder holder) {

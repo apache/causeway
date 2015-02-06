@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 
 public class MultiLineFacetOnPropertyFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, MetaModelValidatorRefiner, IsisConfigurationAware {
 
-    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(MultiLine.class);
+    private final MetaModelValidatorForDeprecatedAnnotation multiLineValidator = new MetaModelValidatorForDeprecatedAnnotation(MultiLine.class);
 
     public MultiLineFacetOnPropertyFactory() {
         super(FeatureType.PROPERTIES_ONLY);
@@ -47,17 +47,17 @@ public class MultiLineFacetOnPropertyFactory extends FacetFactoryAbstract implem
     public void process(final ProcessMethodContext processMethodContext) {
         MultiLineFacet facet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(facet == null) {
-            facet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext));
+            facet = multiLineValidator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext));
         }
         
         // no-op if null
         FacetUtil.addFacet(facet);
 
         // no-op if null
-        inferPropParamLayoutFacet(facet);
+        inferLabelAtFacet(facet);
     }
 
-    private static void inferPropParamLayoutFacet(MultiLineFacet facet) {
+    private static void inferLabelAtFacet(MultiLineFacet facet) {
         if (facet == null) {
             return;
         }
@@ -71,9 +71,9 @@ public class MultiLineFacetOnPropertyFactory extends FacetFactoryAbstract implem
     
     private static MultiLineFacet createFromMetadataPropertiesIfPossible(
             final ProcessContextWithMetadataProperties<? extends FacetHolder> pcwmp) {
-        
+
         final FacetHolder holder = pcwmp.getFacetHolder();
-        
+
         final Properties properties = pcwmp.metadataProperties("multiLine");
         return properties != null ? new MultiLineFacetOnPropertyFromProperties(properties, holder) : null;
     }
@@ -89,12 +89,12 @@ public class MultiLineFacetOnPropertyFactory extends FacetFactoryAbstract implem
 
     @Override
     public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
-        metaModelValidator.add(validator);
+        metaModelValidator.add(multiLineValidator);
     }
 
     @Override
     public void setConfiguration(final IsisConfiguration configuration) {
-        validator.setConfiguration(configuration);
+        multiLineValidator.setConfiguration(configuration);
     }
 
 

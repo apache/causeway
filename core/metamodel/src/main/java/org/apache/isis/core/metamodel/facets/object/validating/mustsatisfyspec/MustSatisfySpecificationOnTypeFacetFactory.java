@@ -44,7 +44,7 @@ public class MustSatisfySpecificationOnTypeFacetFactory extends FacetFactoryAbst
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        validator.addFacet(create(processClassContaxt.getCls(), processClassContaxt.getFacetHolder()));
+        validator.addFacetFlagIfPresent(create(processClassContaxt.getCls(), processClassContaxt.getFacetHolder()));
     }
 
     private Facet create(final Class<?> clazz, final FacetHolder holder) {

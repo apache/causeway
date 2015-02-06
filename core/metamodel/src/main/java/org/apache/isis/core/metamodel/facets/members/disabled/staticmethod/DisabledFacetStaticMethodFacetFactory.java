@@ -81,7 +81,7 @@ public class DisabledFacetStaticMethodFacetFactory extends MethodPrefixBasedFace
         }
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        validator.addFacet(new DisabledFacetForStaticMethod(facetedMethod));
+        validator.addFacetFlagIfPresent(new DisabledFacetForStaticMethod(facetedMethod));
     }
 
     private static Boolean invokeProtectMethod(final Method protectMethod) {

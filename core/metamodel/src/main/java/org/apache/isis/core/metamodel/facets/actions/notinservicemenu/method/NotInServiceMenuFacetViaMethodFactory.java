@@ -58,7 +58,7 @@ public class NotInServiceMenuFacetViaMethodFactory extends MethodPrefixBasedFace
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
         final NotInServiceMenuFacetViaMethod facet = new NotInServiceMenuFacetViaMethod(notInServiceMenuMethod, facetedMethod);
-        validator.addFacet(facet);
+        validator.addFacetFlagIfPresent(facet);
     }
 
     @Override

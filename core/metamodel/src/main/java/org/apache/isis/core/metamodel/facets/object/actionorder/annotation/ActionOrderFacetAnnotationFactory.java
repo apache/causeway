@@ -42,7 +42,7 @@ public class ActionOrderFacetAnnotationFactory extends FacetFactoryAbstract impl
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final ActionOrder annotation = Annotations.getAnnotation(processClassContext.getCls(), ActionOrder.class);
-        validator.addFacet(create(annotation, processClassContext.getFacetHolder()));
+        validator.addFacetFlagIfPresent(create(annotation, processClassContext.getFacetHolder()));
     }
 
     private ActionOrderFacet create(final ActionOrder annotation, final FacetHolder facetHolder) {

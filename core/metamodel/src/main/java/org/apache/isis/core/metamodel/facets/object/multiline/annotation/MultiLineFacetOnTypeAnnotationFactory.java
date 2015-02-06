@@ -46,7 +46,7 @@ public class MultiLineFacetOnTypeAnnotationFactory extends FacetFactoryAbstract 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final MultiLine annotation = Annotations.getAnnotation(processClassContaxt.getCls(), MultiLine.class);
-        validator.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
+        validator.addFacetFlagIfPresent(create(annotation, processClassContaxt.getFacetHolder()));
     }
 
     private MultiLineFacet create(final MultiLine annotation, final FacetHolder holder) {

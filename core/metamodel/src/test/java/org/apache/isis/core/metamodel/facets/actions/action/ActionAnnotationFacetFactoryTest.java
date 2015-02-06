@@ -181,7 +181,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processInvocation(processMethodContext);
+            facetFactory.processDomainEvent(processMethodContext);
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
@@ -223,7 +223,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processInvocation(processMethodContext);
+            facetFactory.processDomainEvent(processMethodContext);
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
@@ -265,7 +265,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processInvocation(processMethodContext);
+            facetFactory.processDomainEvent(processMethodContext);
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
@@ -299,7 +299,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processInvocation(processMethodContext);
+            facetFactory.processDomainEvent(processMethodContext);
 
             // then
             final Facet domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);

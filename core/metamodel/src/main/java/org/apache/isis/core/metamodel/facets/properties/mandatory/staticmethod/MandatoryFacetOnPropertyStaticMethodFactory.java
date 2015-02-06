@@ -68,7 +68,7 @@ public class MandatoryFacetOnPropertyStaticMethodFactory extends MethodPrefixBas
             throw new MetaModelException(cls.getName() + "#" + capitalizedName + " cannot be an optional property as it is of a primitive type");
         }
         final FacetHolder property = processMethodContext.getFacetHolder();
-        validator.addFacet(new MandatoryFacetOnPropertyStaticMethod(property));
+        validator.addFacetFlagIfPresent(new MandatoryFacetOnPropertyStaticMethod(property));
     }
 
     private static boolean indicatesOptional(final Method method) {

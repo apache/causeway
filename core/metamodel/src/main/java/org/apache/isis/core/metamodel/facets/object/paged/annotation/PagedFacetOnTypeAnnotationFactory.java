@@ -48,7 +48,7 @@ public class PagedFacetOnTypeAnnotationFactory extends FacetFactoryAbstract impl
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final Paged annotation = Annotations.getAnnotation(processClassContext.getCls(), Paged.class);
-        validator.addFacet(create(annotation, processClassContext.getFacetHolder()));
+        validator.addFacetFlagIfPresent(create(annotation, processClassContext.getFacetHolder()));
     }
 
     private static PagedFacet create(final Paged annotation, final FacetHolder holder) {

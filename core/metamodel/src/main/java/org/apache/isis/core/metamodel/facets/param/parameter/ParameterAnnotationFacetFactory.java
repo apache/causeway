@@ -21,14 +21,38 @@ package org.apache.isis.core.metamodel.facets.param.parameter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import org.apache.isis.applib.annotation.MaxLength;
+import org.apache.isis.applib.annotation.MustSatisfy;
+import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.RegEx;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
+import org.apache.isis.core.metamodel.facets.object.regex.TitleFacetFormattedByRegex;
+import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
+import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnParameter;
+import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForParameterAnnotation;
+import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetOnParamForMaxLengthAnnotation;
+import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter;
+import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
+import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
+import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetFromRegExAnnotationOnParameter;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract {
+public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation maxLengthValidator = new MetaModelValidatorForDeprecatedAnnotation(MaxLength.class);
+    private final MetaModelValidatorForDeprecatedAnnotation mustSatisfyValidator = new MetaModelValidatorForDeprecatedAnnotation(MustSatisfy.class);
+    private final MetaModelValidatorForDeprecatedAnnotation regexValidator = new MetaModelValidatorForDeprecatedAnnotation(RegEx.class);
+    private final MetaModelValidatorForDeprecatedAnnotation optionalValidator = new MetaModelValidatorForDeprecatedAnnotation(Optional.class);
 
     public ParameterAnnotationFacetFactory() {
         super(FeatureType.PARAMETERS_ONLY);
@@ -39,36 +63,146 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract {
 
         final Method method = processParameterContext.getMethod();
         final int paramNum = processParameterContext.getParamNum();
-        final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
 
         final Class<?>[] parameterTypes = method.getParameterTypes();
         if (paramNum >= parameterTypes.length) {
             return; // ignore
         }
 
+        processParamsMaxLength(processParameterContext);
+        processParamsMustSatisfy(processParameterContext);
+        processParamsRegEx(processParameterContext);
+        processParamsOptional(processParameterContext);
+
+    }
+
+    void processParamsMaxLength(final ProcessParameterContext processParameterContext) {
+
+        final Method method = processParameterContext.getMethod();
+        final int paramNum = processParameterContext.getParamNum();
+        final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
         final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(method)[paramNum];
+
         for (final Annotation parameterAnnotation : parameterAnnotations) {
-            if (parameterAnnotation instanceof Parameter) {
-                final Parameter parameter = (Parameter) parameterAnnotation;
-                Class<?> parameterType = parameterTypes[paramNum];
-
-                FacetUtil.addFacet(
-                        MaxLengthFacetForParameterAnnotation.create(parameter, holder));
-
-                FacetUtil.addFacet(
-                        MustSatisfySpecificationFacetForParameterAnnotation.create(parameter, holder));
-
-                FacetUtil.addFacet(
-                        MandatoryFacetForParameterAnnotation.create(parameter, parameterType, holder));
-
-                if (Annotations.isString(parameterType)) {
-                    FacetUtil.addFacet(
-                            RegExFacetForParameterAnnotation.create(parameter, holder));
-                }
-
+            if (parameterAnnotation instanceof MaxLength) {
+                final MaxLength annotation = (MaxLength) parameterAnnotation;
+                maxLengthValidator.addFacetFlagIfPresent(MaxLengthFacetOnParamForMaxLengthAnnotation.create(annotation, processParameterContext.getFacetHolder()));
                 return;
             }
         }
+
+        for (final Annotation parameterAnnotation : parameterAnnotations) {
+            if (parameterAnnotation instanceof Parameter) {
+                final Parameter parameter = (Parameter) parameterAnnotation;
+                FacetUtil.addFacet(
+                        MaxLengthFacetForParameterAnnotation.create(parameter, holder));
+                return;
+            }
+        }
+    }
+
+    void processParamsMustSatisfy(final ProcessParameterContext processParameterContext) {
+
+        final Method method = processParameterContext.getMethod();
+        final int paramNum = processParameterContext.getParamNum();
+        final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
+        final Class<?>[] parameterTypes = method.getParameterTypes();
+        final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(method)[paramNum];
+
+        boolean mustSatisfyAnnotationFound = false;
+        for (final Annotation parameterAnnotation : parameterAnnotations) {
+            if (parameterAnnotation instanceof MustSatisfy) {
+                final MustSatisfy annotation = (MustSatisfy) parameterAnnotation;
+                mustSatisfyValidator.addFacetFlagIfPresent(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter.create(annotation, processParameterContext.getFacetHolder()));
+                return;
+            }
+        }
+
+        for (final Annotation parameterAnnotation : parameterAnnotations) {
+            if (parameterAnnotation instanceof Parameter) {
+                final Parameter parameter = (Parameter) parameterAnnotation;
+                FacetUtil.addFacet(
+                        MustSatisfySpecificationFacetForParameterAnnotation.create(parameter, holder));
+                return;
+            }
+        }
+    }
+
+    void processParamsRegEx(final ProcessParameterContext processParameterContext) {
+
+        final Method method = processParameterContext.getMethod();
+        final int paramNum = processParameterContext.getParamNum();
+        final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
+        final Class<?>[] parameterTypes = method.getParameterTypes();
+        final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(method)[paramNum];
+
+        for (final Annotation parameterAnnotation : parameterAnnotations) {
+            final Class<?> parameterType = parameterTypes[paramNum];
+            if (parameterAnnotation instanceof RegEx) {
+                final RegEx annotation = (RegEx) parameterAnnotation;
+                final RegExFacet regExFacet = regexValidator.addFacetFlagIfPresent(RegExFacetFromRegExAnnotationOnParameter.create(annotation, parameterType, holder));
+
+                // regex also adds a title facet
+                if(regExFacet != null) {
+                    FacetUtil.addFacet(new TitleFacetFormattedByRegex(regExFacet));
+                }
+                return;
+            }
+        }
+
+        for (final Annotation parameterAnnotation : parameterAnnotations) {
+            if (parameterAnnotation instanceof Parameter) {
+                final Parameter parameter = (Parameter) parameterAnnotation;
+                final Class<?> parameterType = parameterTypes[paramNum];
+                FacetUtil.addFacet(
+                        RegExFacetForParameterAnnotation.create(parameter, parameterType, holder));
+                return;
+            }
+        }
+    }
+
+    void processParamsOptional(final ProcessParameterContext processParameterContext) {
+
+        final Method method = processParameterContext.getMethod();
+        final int paramNum = processParameterContext.getParamNum();
+        final FacetedMethodParameter holder = processParameterContext.getFacetHolder();
+        final Class<?>[] parameterTypes = method.getParameterTypes();
+        final Annotation[] parameterAnnotations = Annotations.getParameterAnnotations(method)[paramNum];
+
+        for (final Annotation parameterAnnotation : parameterAnnotations) {
+            final Class<?> parameterType = parameterTypes[paramNum];
+            if (parameterAnnotation instanceof Optional) {
+                final Optional annotation = (Optional) parameterAnnotation;
+                optionalValidator.addFacetFlagIfPresent(MandatoryFacetInvertedByOptionalAnnotationOnParameter.create(annotation, parameterType, holder));
+                return;
+            }
+        }
+
+        for (final Annotation parameterAnnotation : parameterAnnotations) {
+            if (parameterAnnotation instanceof Parameter) {
+                final Parameter parameter = (Parameter) parameterAnnotation;
+                final Class<?> parameterType = parameterTypes[paramNum];
+                FacetUtil.addFacet(
+                        MandatoryFacetForParameterAnnotation.create(parameter, parameterType, holder));
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(maxLengthValidator);
+        metaModelValidator.add(mustSatisfyValidator);
+        metaModelValidator.add(regexValidator);
+        metaModelValidator.add(optionalValidator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        maxLengthValidator.setConfiguration(configuration);
+        mustSatisfyValidator.setConfiguration(configuration);
+        regexValidator.setConfiguration(configuration);
+        optionalValidator.setConfiguration(configuration);
     }
 
 }

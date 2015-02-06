@@ -19,9 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.members.disabled.annotprop;
 
+import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractImpl;
 
 public class DisabledFacetAnnotation extends DisabledFacetAbstractImpl {
@@ -30,4 +32,9 @@ public class DisabledFacetAnnotation extends DisabledFacetAbstractImpl {
         super(when, where, reason, holder);
     }
 
+    public static DisabledFacet create(final Disabled annotation, final FacetHolder facetHolder) {
+        return annotation != null
+                ? new DisabledFacetAnnotation(annotation.when(), annotation.where(), annotation.reason(), facetHolder)
+                : null;
+    }
 }

@@ -90,6 +90,15 @@ public @interface Collection {
 
     // //////////////////////////////////////
 
+
+    /**
+     * Indicates that the property should not be persisted.
+     */
+    boolean notPersisted() default false;
+
+
+    // //////////////////////////////////////
+
     /**
      * The type-of the elements held within the collection.
      * @return

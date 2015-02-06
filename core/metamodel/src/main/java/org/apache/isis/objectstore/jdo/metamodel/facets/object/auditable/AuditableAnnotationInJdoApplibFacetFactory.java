@@ -50,7 +50,7 @@ public class AuditableAnnotationInJdoApplibFacetFactory extends FacetFactoryAbst
         if (annotation == null) {
             return;
         }
-        validator.addFacet(new AuditableFacetAnnotationInJdoApplib(processClassContext.getFacetHolder()));
+        validator.addFacetFlagIfPresent(new AuditableFacetAnnotationInJdoApplib(processClassContext.getFacetHolder()));
         return;
     }
 

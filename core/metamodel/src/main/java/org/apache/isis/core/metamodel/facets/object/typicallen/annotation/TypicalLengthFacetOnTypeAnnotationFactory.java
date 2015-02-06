@@ -42,7 +42,7 @@ public class TypicalLengthFacetOnTypeAnnotationFactory extends FacetFactoryAbstr
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final TypicalLength annotation = Annotations.getAnnotation(processClassContaxt.getCls(), TypicalLength.class);
-        validator.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
+        validator.addFacetFlagIfPresent(create(annotation, processClassContaxt.getFacetHolder()));
     }
 
     private TypicalLengthFacet create(final TypicalLength annotation, final FacetHolder holder) {

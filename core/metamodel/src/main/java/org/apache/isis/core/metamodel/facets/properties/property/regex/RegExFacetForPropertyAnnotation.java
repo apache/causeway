@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.object.regex.RegExFacetAbstract;
 
@@ -31,18 +32,23 @@ public class RegExFacetForPropertyAnnotation extends RegExFacetAbstract {
     private final Pattern pattern;
 
     public static RegExFacet create(
-            final Property property,
+            final Property annotation,
+            final Class<?> returnType,
             final FacetHolder holder) {
 
-        if (property == null) {
+        if (annotation == null) {
             return null;
         }
 
-        final String pattern = property.regexPattern();
+        if (!Annotations.isString(returnType)) {
+            return null;
+        }
+
+        final String pattern = annotation.regexPattern();
         if(Strings.isNullOrEmpty(pattern)) {
             return null;
         }
-        final int patternFlags = property.regexPatternFlags();
+        final int patternFlags = annotation.regexPatternFlags();
 
         return new RegExFacetForPropertyAnnotation(pattern, patternFlags, holder);
     }
