@@ -30,8 +30,8 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.properties.validating.maxlenannot.MaxLengthFacetOnPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForMaxLengthAnnotationOnProperty;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -115,7 +115,7 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
                         continue;
                     }
 
-                    if(facet instanceof MaxLengthFacetDerivedFromJdoColumn && underlying instanceof MaxLengthFacetOnPropertyAnnotation) {
+                    if(facet instanceof MaxLengthFacetDerivedFromJdoColumn && underlying instanceof MaxLengthFacetForMaxLengthAnnotationOnProperty) {
                         if(facet.value() != underlying.value()) {
                             validationFailures.add("%s: incompatible usage of Isis' @MaxLength annotation and @javax.jdo.annotations.Column with inconsistent lengths; use just @javax.jdo.annotations.Column(length=...)", association.getIdentifier().toClassAndNameIdentityString());
                         }

@@ -25,10 +25,11 @@ import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -54,7 +55,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     @Mock
     protected IsisConfiguration mockConfiguration;
 
-    protected FacetHolder facetHolder;
+    protected IdentifiedHolder facetHolder;
 
     @Mock
     protected ObjectSpecification mockObjSpec;
@@ -68,11 +69,24 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     protected FacetedMethod facetedMethod;
     protected FacetedMethodParameter facetedMethodParameter;
 
+    public static class Customer {
+
+        private String firstName;
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(final String firstName) {
+            this.firstName = firstName;
+        }
+    }
+
     @Before
     public void setUpFacetedMethodAndParameter() throws Exception {
-        facetHolder = new FacetHolderImpl();
+        facetHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
         facetedMethod = FacetedMethod.createForProperty(AbstractFacetFactoryTest.Customer.class, "firstName");
-        facetedMethodParameter = new FacetedMethodParameter(String.class);
+        facetedMethodParameter = new FacetedMethodParameter(facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class);
     }
     
     @After

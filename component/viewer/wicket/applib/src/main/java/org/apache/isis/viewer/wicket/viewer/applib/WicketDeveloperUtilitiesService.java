@@ -20,9 +20,10 @@
 package org.apache.isis.viewer.wicket.viewer.applib;
 
 import org.apache.wicket.Application;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.applib.annotation.Prototype;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.RestrictTo;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 
 public class WicketDeveloperUtilitiesService {
 
@@ -34,9 +35,11 @@ public class WicketDeveloperUtilitiesService {
      * the resource cache anyway if running in development/prototype mode.
      * </p>
      */
-    @Hidden
-    @Prototype
-    @ActionSemantics(ActionSemantics.Of.IDEMPOTENT)
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING,
+            hidden = Where.EVERYWHERE,
+            semantics = SemanticsOf.IDEMPOTENT
+    )
     public void resetI18nCache() {
         Application.get()
                 .getResourceSettings()

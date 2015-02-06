@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.multiline.annotation;
 import java.util.Properties;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacetAbstract;
 
 public class MultiLineFacetOnPropertyFromProperties extends MultiLineFacetAbstract {
 

@@ -32,7 +32,7 @@ import static org.junit.Assert.assertThat;
 public class CssClassAnnotationOnMemberFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
     @Test
-    public void testCssClassAnnotationPickedUpOnClass() {
+    public void testCssClassAnnotationPickedUpOnProperty() {
 
         final CssClassFacetOnMemberFactory facetFactory = new CssClassFacetOnMemberFactory();
         facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);

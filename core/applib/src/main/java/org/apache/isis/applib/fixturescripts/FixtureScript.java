@@ -31,14 +31,15 @@ import com.google.common.collect.Maps;
 import com.google.common.io.CharSource;
 import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.annotation.ViewModelLayout;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 
-@DomainObjectLayout(named="Script")
+@ViewModelLayout(named="Script")
 public abstract class FixtureScript 
         extends AbstractViewModel 
         implements InstallableFixture {
@@ -139,7 +140,7 @@ public abstract class FixtureScript
 
     //region > qualifiedName
 
-    @Hidden
+    @Programmatic
     public String getQualifiedName() {
         return getParentPath() + getLocalName();
     }
@@ -151,7 +152,7 @@ public abstract class FixtureScript
     private String friendlyName;
     
     @Title
-    @Hidden
+    @PropertyLayout(hidden = Where.EVERYWHERE)
     public String getFriendlyName() {
         return friendlyName;
     }
@@ -168,7 +169,7 @@ public abstract class FixtureScript
      * Will always be populated, initially by the default name, but can be
      * {@link #setLocalName(String) overridden}.
      */
-    @Hidden
+    @PropertyLayout(hidden = Where.EVERYWHERE)
     public String getLocalName() {
         return localName;
     }
@@ -185,7 +186,7 @@ public abstract class FixtureScript
     /**
      * Path of the parent of this script (if any), with trailing {@value #PATH_SEPARATOR}.
      */
-    @Hidden
+    @PropertyLayout(hidden = Where.EVERYWHERE)
     public String getParentPath() {
         return parentPath;
     }
@@ -226,7 +227,7 @@ public abstract class FixtureScript
      * {@link FixtureScript}s are {@link Discoverability#NON_DISCOVERABLE not}.  This can be overridden in the
      * constructor, however or by calling the {@link #withDiscoverability(org.apache.isis.applib.fixturescripts.FixtureScript.Discoverability) setter}.
      */
-    @Hidden
+    @PropertyLayout(hidden = Where.EVERYWHERE)
     public boolean isDiscoverable() {
         return discoverability == Discoverability.DISCOVERABLE;
     }

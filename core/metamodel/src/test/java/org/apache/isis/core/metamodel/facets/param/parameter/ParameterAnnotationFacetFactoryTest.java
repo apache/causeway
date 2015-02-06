@@ -14,10 +14,14 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
-import org.apache.isis.core.metamodel.facets.propparam.mustsatisfyspec.MustSatisfySpecificationFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
+import org.apache.isis.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
+import org.apache.isis.core.metamodel.facets.param.parameter.maxlen.MaxLengthFacetForParameterAnnotation;
+import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
+import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import static org.hamcrest.CoreMatchers.is;

@@ -30,10 +30,10 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.mandatory.MandatoryFacetOnPropertyMandatoryAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForMandatoryAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetDefault;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -66,7 +66,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                 // we must keep an optional facet here for different reasons
                 return;
             }
-            if (existingFacet instanceof MandatoryFacetOnPropertyMandatoryAnnotation) {
+            if (existingFacet instanceof MandatoryFacetForMandatoryAnnotationOnProperty) {
                 // do not replace this facet; 
                 // an explicit @Mandatory annotation cannot be overridden by @Column annotation
                 return;

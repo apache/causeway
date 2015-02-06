@@ -22,6 +22,10 @@ package org.apache.isis.core.metamodel.facets.members.render.annotprop;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class RenderFacetViaResolveAnnotation extends RenderFacetAbstract {
 
     @SuppressWarnings("deprecation")

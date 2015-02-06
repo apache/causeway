@@ -20,27 +20,49 @@
 package org.apache.isis.core.metamodel.facets.object.actionorder.annotation;
 
 import org.apache.isis.applib.annotation.ActionOrder;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.actionorder.ActionOrderFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class ActionOrderFacetAnnotationFactory extends FacetFactoryAbstract {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class ActionOrderFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(ActionOrder.class);
 
     public ActionOrderFacetAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        final ActionOrder annotation = Annotations.getAnnotation(processClassContaxt.getCls(), ActionOrder.class);
-        FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
+    public void process(final ProcessClassContext processClassContext) {
+        final ActionOrder annotation = Annotations.getAnnotation(processClassContext.getCls(), ActionOrder.class);
+        final ActionOrderFacet facet = create(annotation, processClassContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private ActionOrderFacet create(final ActionOrder annotation, final FacetHolder facetHolder) {
         return annotation == null ? null : new ActionOrderFacetAnnotation(annotation.value(), facetHolder);
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

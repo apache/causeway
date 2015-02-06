@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
@@ -54,9 +54,9 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetAbstract;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetAbstract;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
-import org.apache.isis.core.metamodel.facets.propparam.mustsatisfyspec.MustSatisfySpecificationFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;

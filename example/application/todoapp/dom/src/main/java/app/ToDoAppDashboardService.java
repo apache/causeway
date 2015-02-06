@@ -18,15 +18,27 @@
  */
 package app;
 
+import javax.inject.Inject;
+import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.homepage.AbstractHomePageDashboardService;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
 @DomainService(nature = NatureOfService.DOMAIN)
-public class ToDoAppDashboardService extends AbstractHomePageDashboardService<ToDoAppDashboard> {
+public class ToDoAppDashboardService  {
 
-    public ToDoAppDashboardService() {
-        super(ToDoAppDashboard.class);
+    @Action(
+            semantics = SemanticsOf.SAFE
+            //hidden = Where.EVERYWHERE
+    )
+    @HomePage
+    public ToDoAppDashboard lookup() {
+        return container.injectServicesInto(new ToDoAppDashboard());
     }
+
+    @Inject
+    private DomainObjectContainer container;
 
 }

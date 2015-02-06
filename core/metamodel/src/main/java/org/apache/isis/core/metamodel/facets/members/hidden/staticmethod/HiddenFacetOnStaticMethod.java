@@ -22,6 +22,10 @@ package org.apache.isis.core.metamodel.facets.members.hidden.staticmethod;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstractAlwaysEverywhere;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class HiddenFacetOnStaticMethod extends HiddenFacetAbstractAlwaysEverywhere {
 
     public HiddenFacetOnStaticMethod(final FacetHolder holder) {

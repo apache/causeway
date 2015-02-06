@@ -20,7 +20,8 @@
 package org.apache.isis.core.metamodel.facets.members.named.staticmethod;
 
 import java.lang.reflect.Method;
-
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
@@ -28,19 +29,27 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedMethodPrefix;
 
 /**
  * Sets up a {@link NamedFacet} if a {@value MethodPrefixConstants#NAME_PREFIX}
  * -prefixed method is present.
+ *
+ * @deprecated
  */
-public class NamedFacetStaticMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+@Deprecated
+public class NamedFacetStaticMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.NAME_PREFIX };
+
+    private final MetaModelValidatorForDeprecatedMethodPrefix validator = new MetaModelValidatorForDeprecatedMethodPrefix(PREFIXES[0]);
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -62,7 +71,7 @@ public class NamedFacetStaticMethodFactory extends MethodPrefixBasedFacetFactory
 
     }
 
-    public static void attachNamedFacetIfNamedMethodIsFound(final ProcessMethodContext processMethodContext) {
+    public void attachNamedFacetIfNamedMethodIsFound(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
@@ -77,7 +86,8 @@ public class NamedFacetStaticMethodFactory extends MethodPrefixBasedFacetFactory
         final String name = invokeNameMethod(nameMethod);
 
         final FacetHolder facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new NamedFacetStaticMethod(name, nameMethod, facetHolder));
+        final NamedFacetStaticMethod facet = new NamedFacetStaticMethod(name, nameMethod, facetHolder);
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private static String invokeNameMethod(final Method nameMethod) {
@@ -92,5 +102,17 @@ public class NamedFacetStaticMethodFactory extends MethodPrefixBasedFacetFactory
         }
         return name;
     }
+
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
+    }
+
 
 }

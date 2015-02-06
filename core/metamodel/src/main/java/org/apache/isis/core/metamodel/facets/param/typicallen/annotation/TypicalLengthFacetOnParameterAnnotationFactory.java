@@ -20,16 +20,27 @@
 package org.apache.isis.core.metamodel.facets.param.typicallen.annotation;
 
 import java.lang.annotation.Annotation;
-
 import org.apache.isis.applib.annotation.TypicalLength;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class TypicalLengthFacetOnParameterAnnotationFactory extends FacetFactoryAbstract {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class TypicalLengthFacetOnParameterAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(TypicalLength.class);
+
 
     public TypicalLengthFacetOnParameterAnnotationFactory() {
         super(FeatureType.PARAMETERS_ONLY);
@@ -41,7 +52,8 @@ public class TypicalLengthFacetOnParameterAnnotationFactory extends FacetFactory
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof TypicalLength) {
                 final TypicalLength annotation = (TypicalLength) parameterAnnotation;
-                FacetUtil.addFacet(create(annotation, processParameterContext.getFacetHolder()));
+                final TypicalLengthFacet facet = create(annotation, processParameterContext.getFacetHolder());
+                FacetUtil.addFacet(validator.flagIfPresent(facet));
                 return;
             }
         }
@@ -49,6 +61,16 @@ public class TypicalLengthFacetOnParameterAnnotationFactory extends FacetFactory
 
     private TypicalLengthFacet create(final TypicalLength annotation, final FacetHolder holder) {
         return annotation != null ? new TypicalLengthFacetOnParameterAnnotation(annotation.value(), holder) : null;
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.typicallen.annotation;
 import java.util.Properties;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
 public class TypicalLengthFacetOnPropertyFromProperties extends TypicalLengthFacetAbstract {
 

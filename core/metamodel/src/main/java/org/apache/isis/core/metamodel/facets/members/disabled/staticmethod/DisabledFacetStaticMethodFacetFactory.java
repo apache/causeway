@@ -20,6 +20,8 @@
 package org.apache.isis.core.metamodel.facets.members.disabled.staticmethod;
 
 import java.lang.reflect.Method;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
@@ -27,14 +29,23 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedMethodPrefix;
 
-public class DisabledFacetStaticMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class DisabledFacetStaticMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.PROTECT_PREFIX };
+
+    private final MetaModelValidatorForDeprecatedMethodPrefix validator = new MetaModelValidatorForDeprecatedMethodPrefix(PREFIXES[0]);
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -53,7 +64,7 @@ public class DisabledFacetStaticMethodFacetFactory extends MethodPrefixBasedFace
         attachDisabledFacetIfProtectMethodIsFound(processMethodContext);
     }
 
-    public static void attachDisabledFacetIfProtectMethodIsFound(final ProcessMethodContext processMethodContext) {
+    public void attachDisabledFacetIfProtectMethodIsFound(final ProcessMethodContext processMethodContext) {
 
         final Class<?>[] paramTypes = new Class[] {};
 
@@ -75,7 +86,8 @@ public class DisabledFacetStaticMethodFacetFactory extends MethodPrefixBasedFace
         }
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new DisabledFacetForStaticMethod(facetedMethod));
+        final DisabledFacetForStaticMethod facet = new DisabledFacetForStaticMethod(facetedMethod);
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private static Boolean invokeProtectMethod(final Method protectMethod) {
@@ -89,6 +101,17 @@ public class DisabledFacetStaticMethodFacetFactory extends MethodPrefixBasedFace
             throw new MetaModelException("method " + protectMethod + "must return a boolean");
         }
         return protectMethodReturnValue;
+    }
+
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

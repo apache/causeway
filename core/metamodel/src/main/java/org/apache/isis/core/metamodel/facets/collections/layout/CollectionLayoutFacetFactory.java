@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
     public CollectionLayoutFacetFactory() {
-        super(FeatureType.COLLECTIONS_ONLY);
+        super(FeatureType.COLLECTIONS_AND_ACTIONS);
     }
 
     @Override

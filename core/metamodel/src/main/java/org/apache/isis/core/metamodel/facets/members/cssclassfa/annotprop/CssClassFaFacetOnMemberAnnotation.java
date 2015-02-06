@@ -23,6 +23,10 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class CssClassFaFacetOnMemberAnnotation extends CssClassFaFacetAbstract {
 
     public CssClassFaFacetOnMemberAnnotation(final String value, final ActionLayout.CssClassFaPosition position, final FacetHolder holder) {

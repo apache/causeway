@@ -90,7 +90,7 @@ public class FacetProcessor implements RuntimeContextAware {
      * <p>
      * If <tt>null</tt>, indicates that the cache hasn't been built.
      */
-    private List<ContributeeMemberFacetFactory> cachedMemberOrderingFactories;
+    private List<ContributeeMemberFacetFactory> cachedContributeeMemberFacetFactories;
 
     /**
      * All registered {@link FacetFactory factories} that implement
@@ -327,8 +327,8 @@ public class FacetProcessor implements RuntimeContextAware {
     public void processMemberOrder(
             final Properties metadataProperties, 
             final ObjectMember facetHolder) {
-        cacheMemberOrderingFacetFactoriesIfRequired();
-        for (final ContributeeMemberFacetFactory facetFactory : cachedMemberOrderingFactories) {
+        cacheContributeeMemberFacetFactoriesIfRequired();
+        for (final ContributeeMemberFacetFactory facetFactory : cachedContributeeMemberFacetFactories) {
             facetFactory.process(new ContributeeMemberFacetFactory.ProcessContributeeMemberContext(metadataProperties, facetHolder));
         }
     }
@@ -417,15 +417,15 @@ public class FacetProcessor implements RuntimeContextAware {
         }
     }
 
-    private synchronized void cacheMemberOrderingFacetFactoriesIfRequired() {
-        if (cachedMemberOrderingFactories != null) {
+    private synchronized void cacheContributeeMemberFacetFactoriesIfRequired() {
+        if (cachedContributeeMemberFacetFactories != null) {
             return;
         }
-        cachedMemberOrderingFactories = Lists.newArrayList();
+        cachedContributeeMemberFacetFactories = Lists.newArrayList();
         for (final FacetFactory factory : factories) {
             if (factory instanceof ContributeeMemberFacetFactory) {
                 final ContributeeMemberFacetFactory memberOrderingFacetFactory = (ContributeeMemberFacetFactory) factory;
-                cachedMemberOrderingFactories.add(memberOrderingFacetFactory);
+                cachedContributeeMemberFacetFactories.add(memberOrderingFacetFactory);
             }
         }
     }

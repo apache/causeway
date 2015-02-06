@@ -23,8 +23,8 @@ import java.util.Properties;
 import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
-import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacetAbstract;
 
 public class LabelAtFacetOnPropertyFromLayoutProperties extends LabelAtFacetAbstract {
 

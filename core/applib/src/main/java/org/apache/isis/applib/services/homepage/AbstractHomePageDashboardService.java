@@ -20,10 +20,10 @@ package org.apache.isis.applib.services.homepage;
 
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.ViewModel;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
-import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 
 /**
  * Convenience domain service to create a view model (eg a dashboard) to be rendered automatically
@@ -46,7 +46,6 @@ import org.apache.isis.applib.annotation.HomePage;
  * for different users), then do <i>not</i> subclass from this service; instead write your own service
  * with a no-arg action with the {@link HomePage} annotation.
  */
-@Hidden
 public abstract class AbstractHomePageDashboardService<T extends ViewModel> extends AbstractService {
     
     /**
@@ -84,7 +83,10 @@ public abstract class AbstractHomePageDashboardService<T extends ViewModel> exte
 
     // //////////////////////////////////////
 
-    @ActionSemantics(Of.SAFE)
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            hidden = Where.EVERYWHERE
+    )
     @HomePage
     public T lookup() {
         return newViewModelInstance(viewModel, id);

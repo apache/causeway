@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.mustsatisfyspec.MustSatisfySpecificationFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacetAbstract;
 
 public class MustSatisfySpecificationFacetForPropertyAnnotation extends MustSatisfySpecificationFacetAbstract {
 

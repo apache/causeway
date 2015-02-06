@@ -19,9 +19,15 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 
+import java.util.Collection;
+import java.util.Map;
+import com.google.common.collect.Maps;
 import org.apache.isis.applib.annotation.Audited;
+import org.apache.isis.applib.annotation.AutoComplete;
+import org.apache.isis.applib.annotation.Bounded;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Immutable;
+import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -34,30 +40,46 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
-import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForAuditedAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForAutoCompleteAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.choices.ChoicesFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.choices.ChoicesFacetFromBoundedAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetFromObjectTypeAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetForPublishedObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.ImmutableFacetForImmutableAnnotation;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 
-public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AdapterManagerAware, ServicesInjectorAware, SpecificationLoaderAware, QuerySubmitterAware {
+public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AdapterManagerAware, ServicesInjectorAware, SpecificationLoaderAware, QuerySubmitterAware, MetaModelValidatorRefiner {
+
+    private final MetaModelValidatorForDeprecatedAnnotation auditedValidator = new MetaModelValidatorForDeprecatedAnnotation(Audited.class);
+    private final MetaModelValidatorForDeprecatedAnnotation publishedObjectValidator = new MetaModelValidatorForDeprecatedAnnotation(PublishedObject.class);
+    private final MetaModelValidatorForDeprecatedAnnotation autoCompleteValidator = new MetaModelValidatorForDeprecatedAnnotation(AutoComplete.class);
+    private final MetaModelValidatorForDeprecatedAnnotation boundedValidator = new MetaModelValidatorForDeprecatedAnnotation(Bounded.class);
+    private final MetaModelValidatorForDeprecatedAnnotation immutableValidator = new MetaModelValidatorForDeprecatedAnnotation(Immutable.class);
+    private final MetaModelValidatorForDeprecatedAnnotation objectTypeValidator = new MetaModelValidatorForDeprecatedAnnotation(ObjectType.class);
+
 
     private IsisConfiguration configuration;
     private AdapterManager adapterManager;
@@ -100,7 +122,8 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
 
         // check for the deprecated annotation first
         final Audited annotation = Annotations.getAnnotation(cls, Audited.class);
-        auditableFacet = AuditableFacetForAuditedAnnotation.create(annotation, holder);
+        auditableFacet = auditedValidator.flagIfPresent(
+                            AuditableFacetForAuditedAnnotation.create(annotation, holder));
 
         // else check for @DomainObject(auditing=....)
         if(auditableFacet == null) {
@@ -130,7 +153,8 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
 
         // check for the deprecated @PublishedObject annotation first
         final PublishedObject publishedObject = Annotations.getAnnotation(processClassContext.getCls(), PublishedObject.class);
-        publishedObjectFacet = PublishedObjectFacetForPublishedObjectAnnotation.create(publishedObject, facetHolder);
+        publishedObjectFacet = publishedObjectValidator.flagIfPresent(
+                                    PublishedObjectFacetForPublishedObjectAnnotation.create(publishedObject, facetHolder));
 
         // else check from @DomainObject(publishing=...)
         if(publishedObjectFacet == null) {
@@ -147,9 +171,18 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final AutoCompleteFacet facet = AutoCompleteFacetForDomainObjectAnnotation.create(
-                domainObject, getSpecificationLoader(), adapterManager, servicesInjector, facetHolder);
+        // check for the deprecated @AutoComplete annotation first
+        final AutoComplete annotation = Annotations.getAnnotation(processClassContext.getCls(), AutoComplete.class);
+        Facet facet = autoCompleteValidator.flagIfPresent(
+                AutoCompleteFacetForAutoCompleteAnnotation.create(annotation, getSpecificationLoader(), adapterManager, servicesInjector, facetHolder));
 
+        // else check from @DomainObject(auditing=...)
+        if(facet == null) {
+            facet = AutoCompleteFacetForDomainObjectAnnotation.create(
+                    domainObject, getSpecificationLoader(), adapterManager, servicesInjector, facetHolder);
+        }
+
+        // then add
         FacetUtil.addFacet(facet);
     }
 
@@ -158,8 +191,17 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Facet facet = ChoicesFacetForDomainObjectAnnotation.create(domainObject, querySubmitter, facetHolder);
+        // check for the deprecated @Bounded annotation first
+        final Bounded annotation = Annotations.getAnnotation(processClassContext.getCls(), Bounded.class);
+        Facet facet = boundedValidator.flagIfPresent(
+            ChoicesFacetFromBoundedAnnotation.create(annotation, querySubmitter, processClassContext.getFacetHolder()));
 
+        // else check from @DomainObject(bounded=...)
+        if(facet == null) {
+            facet = ChoicesFacetForDomainObjectAnnotation.create(domainObject, querySubmitter, facetHolder);
+        }
+
+        // then add
         FacetUtil.addFacet(facet);
     }
 
@@ -170,7 +212,8 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
 
         // check for the deprecated annotation first
         final Immutable annotation = Annotations.getAnnotation(processClassContext.getCls(), Immutable.class);
-        ImmutableFacet facet = ImmutableFacetForImmutableAnnotation.create(annotation, processClassContext.getFacetHolder());
+        ImmutableFacet facet = immutableValidator.flagIfPresent(
+                ImmutableFacetForImmutableAnnotation.create(annotation, processClassContext.getFacetHolder()));
 
         // else check from @DomainObject(editing=...)
         if(facet == null) {
@@ -186,8 +229,17 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final ObjectSpecIdFacet facet = ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObject, facetHolder);
+        // check for the deprecated annotation first
+        final ObjectType annotation = Annotations.getAnnotation(processClassContext.getCls(), ObjectType.class);
+        Facet facet = objectTypeValidator.flagIfPresent(
+                ObjectSpecIdFacetFromObjectTypeAnnotation.create(annotation, processClassContext.getFacetHolder()));
 
+        // else check from @DomainObject(objectType=...)
+        if(facet == null) {
+            facet = ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObject, facetHolder);
+        }
+
+        // then add
         FacetUtil.addFacet(facet);
     }
 
@@ -203,9 +255,62 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
     }
 
 
+    // //////////////////////////////////////
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+
+        metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
+            @Override
+            public boolean visit(final ObjectSpecification thisSpec, final ValidationFailures validationFailures) {
+
+                final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
+                final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
+                for (final ObjectSpecification otherSpec : allSpecifications) {
+
+                    if(thisSpec == otherSpec) {
+                        continue;
+                    }
+                    final ObjectSpecId objectSpecId = otherSpec.getSpecId();
+                    if (objectSpecId == null) {
+                        continue;
+                    }
+                    final ObjectSpecification existingSpec = specById.put(objectSpecId, otherSpec);
+                    if (existingSpec == null) {
+                        continue;
+                    }
+                    validationFailures.add(
+                            "Cannot have two entities with same object type (@DomainObject(objectType=...) or @ObjectType); " +
+                            "both %s and %s are annotated with value of ''%s''.",
+                            existingSpec.getFullIdentifier(),
+                            otherSpec.getFullIdentifier(),
+                            objectSpecId);
+                }
+
+                return true;
+            }
+        }));
+
+        metaModelValidator.add(publishedObjectValidator);
+        metaModelValidator.add(auditedValidator);
+        metaModelValidator.add(autoCompleteValidator);
+        metaModelValidator.add(boundedValidator);
+        metaModelValidator.add(immutableValidator);
+        metaModelValidator.add(objectTypeValidator);
+    }
+
+    // //////////////////////////////////////
+
     @Override
     public void setConfiguration(IsisConfiguration configuration) {
         this.configuration = configuration;
+
+        publishedObjectValidator.setConfiguration(configuration);
+        auditedValidator.setConfiguration(configuration);
+        autoCompleteValidator.setConfiguration(configuration);
+        boundedValidator.setConfiguration(configuration);
+        immutableValidator.setConfiguration(configuration);
+        objectTypeValidator.setConfiguration(configuration);
     }
 
     @Override

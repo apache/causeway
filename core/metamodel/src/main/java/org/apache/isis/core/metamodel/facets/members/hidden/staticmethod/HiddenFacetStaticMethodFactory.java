@@ -20,6 +20,8 @@
 package org.apache.isis.core.metamodel.facets.members.hidden.staticmethod;
 
 import java.lang.reflect.Method;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
@@ -27,14 +29,23 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedMethodPrefix;
 
-public class HiddenFacetStaticMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class HiddenFacetStaticMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
-    private static final String[] PREFIXES = { MethodPrefixConstants.HIDE_PREFIX };
+    private static final String[] PREFIXES = { MethodPrefixConstants.ALWAYS_HIDE_PREFIX };
+
+    private final MetaModelValidatorForDeprecatedMethodPrefix validator = new MetaModelValidatorForDeprecatedMethodPrefix(PREFIXES[0]);
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -55,7 +66,7 @@ public class HiddenFacetStaticMethodFactory extends MethodPrefixBasedFacetFactor
 
     }
 
-    public static void attachHiddenFacetIfAlwaysHideMethodIsFound(final ProcessMethodContext processMethodContext) {
+    public void attachHiddenFacetIfAlwaysHideMethodIsFound(final ProcessMethodContext processMethodContext) {
 
         final Class<?> type = processMethodContext.getCls();
         final Method method = processMethodContext.getMethod();
@@ -74,7 +85,8 @@ public class HiddenFacetStaticMethodFactory extends MethodPrefixBasedFacetFactor
         }
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new HiddenFacetOnStaticMethod(facetedMethod));
+        final HiddenFacetOnStaticMethod facet = new HiddenFacetOnStaticMethod(facetedMethod);
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private static Boolean invokeAlwaysHideMethod(final Method alwaysHideMethod) {
@@ -89,5 +101,17 @@ public class HiddenFacetStaticMethodFactory extends MethodPrefixBasedFacetFactor
         }
         return alwaysHideMethodReturnValue;
     }
+
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
+    }
+
 
 }

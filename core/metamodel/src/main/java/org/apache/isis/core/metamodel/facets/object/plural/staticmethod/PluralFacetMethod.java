@@ -22,6 +22,10 @@ package org.apache.isis.core.metamodel.facets.object.plural.staticmethod;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class PluralFacetMethod extends PluralFacetAbstract {
 
     public PluralFacetMethod(final String value, final FacetHolder holder) {

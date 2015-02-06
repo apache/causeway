@@ -20,9 +20,11 @@ package org.apache.isis.applib.services.bookmark;
 
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import org.apache.isis.applib.annotation.NotContributed;
-import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
 /**
  * Domain service that contributes an action (named '<tt>lookup</tt>') to
@@ -53,8 +55,8 @@ public class BookmarkHolderActionContributions  {
     //endregion
 
 
-    @NotInServiceMenu
-    @NotContributed(NotContributed.As.ASSOCIATION)
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(contributed = Contributed.AS_ACTION, cssClassFa = "fa-bookmark")
     public Object lookup(final BookmarkHolder bookmarkHolder) {
         return bookmarkService.lookup(bookmarkHolder);
     }

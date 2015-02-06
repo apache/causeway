@@ -22,6 +22,10 @@ package org.apache.isis.core.metamodel.facets.members.disabled.staticmethod;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractAlwaysEverywhere;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class DisabledFacetForStaticMethod extends DisabledFacetAbstractAlwaysEverywhere {
 
     public DisabledFacetForStaticMethod(final FacetHolder holder) {

@@ -20,18 +20,24 @@
 package org.apache.isis.core.metamodel.facets.members.describedas.annotprop;
 
 import java.util.Properties;
-
 import org.apache.isis.applib.annotation.DescribedAs;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(DescribedAs.class);
 
     public DescribedAsFacetOnMemberFactory() {
         super(FeatureType.MEMBERS);
@@ -43,7 +49,7 @@ public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implem
         DescribedAsFacet facet = createFromMetadataPropertiesIfPossible(processMethodContext);
         
         if(facet == null) {
-            facet = createFromAnnotationIfPossible(processMethodContext);
+            facet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext));
         }
         if (facet == null) {
             facet = createFromAnnotationOnReturnTypeIfPossible(processMethodContext);
@@ -85,4 +91,16 @@ public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implem
         final ObjectSpecification paramTypeSpec = getSpecificationLoader().loadSpecification(type);
         return paramTypeSpec.getFacet(DescribedAsFacet.class);
     }
+
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
+    }
+
 }

@@ -22,6 +22,10 @@ package org.apache.isis.core.metamodel.facets.members.named.annotprop;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class NamedFacetOnMemberAnnotation extends NamedFacetAbstract {
 
     public NamedFacetOnMemberAnnotation(final String value, final FacetHolder holder) {

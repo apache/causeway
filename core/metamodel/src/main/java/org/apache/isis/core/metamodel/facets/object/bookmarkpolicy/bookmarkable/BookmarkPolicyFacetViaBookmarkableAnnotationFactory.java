@@ -20,11 +20,11 @@
 package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable;
 
 import java.util.List;
-
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -38,10 +38,17 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-public class BookmarkPolicyFacetViaBookmarkableAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class BookmarkPolicyFacetViaBookmarkableAnnotationFactory extends FacetFactoryAbstract implements  MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Bookmarkable.class);
 
     public BookmarkPolicyFacetViaBookmarkableAnnotationFactory() {
         super(FeatureType.OBJECTS_AND_ACTIONS);
@@ -60,7 +67,7 @@ public class BookmarkPolicyFacetViaBookmarkableAnnotationFactory extends FacetFa
     }
 
     private BookmarkPolicyFacet create(final Bookmarkable annotation, final FacetHolder holder) {
-        return annotation == null ? new BookmarkPolicyFacetFallback(holder) : new BookmarkPolicyFacetViaBookmarkableAnnotation(annotation.value(), holder);
+        return annotation == null ? new BookmarkPolicyFacetFallback(holder) : validator.flagIfPresent(new BookmarkPolicyFacetViaBookmarkableAnnotation(annotation.value(), holder));
     }
 
 
@@ -92,6 +99,13 @@ public class BookmarkPolicyFacetViaBookmarkableAnnotationFactory extends FacetFa
                 return true;
             }
         }));
+        metaModelValidator.add(validator);
     }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
+    }
+
 
 }

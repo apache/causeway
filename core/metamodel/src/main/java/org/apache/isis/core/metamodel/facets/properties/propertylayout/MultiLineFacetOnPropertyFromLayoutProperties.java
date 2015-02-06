@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 import java.util.Properties;
 import com.google.common.base.Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
-import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacetAbstract;
 
 public class MultiLineFacetOnPropertyFromLayoutProperties extends MultiLineFacetAbstract {
 

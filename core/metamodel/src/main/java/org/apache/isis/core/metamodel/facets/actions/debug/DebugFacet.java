@@ -28,7 +28,10 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * action method using <tt>@Debug</tt>.
+ *
+ * @deprecated
  */
+@Deprecated
 public interface DebugFacet extends Facet {
 
 }

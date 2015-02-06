@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 import java.util.Properties;
 import com.google.common.base.Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
 public class TypicalLengthFacetOnPropertyFromLayoutProperties extends TypicalLengthFacetAbstract {
 

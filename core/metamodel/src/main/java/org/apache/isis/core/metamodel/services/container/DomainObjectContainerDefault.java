@@ -30,6 +30,7 @@ import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.RepositoryException;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
@@ -59,7 +60,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
-@DomainService
+@DomainService(nature = NatureOfService.DOMAIN)
 public class  DomainObjectContainerDefault implements DomainObjectContainer, QuerySubmitterAware, ObjectDirtierAware, DomainObjectServicesAware, ObjectPersistorAware, SpecificationLoaderAware, AuthenticationSessionProviderAware, AdapterManagerAware, LocalizationProviderAware, ExceptionRecognizer {
 
     //region > titleOf

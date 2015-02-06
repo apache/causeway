@@ -22,6 +22,10 @@ package org.apache.isis.core.metamodel.facets.object.describedas.annotation;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class DescribedAsFacetOnTypeAnnotation extends DescribedAsFacetAbstract {
 
     public DescribedAsFacetOnTypeAnnotation(final String value, final FacetHolder holder) {

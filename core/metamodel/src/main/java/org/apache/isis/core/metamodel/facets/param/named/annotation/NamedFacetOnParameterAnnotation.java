@@ -19,13 +19,22 @@
 
 package org.apache.isis.core.metamodel.facets.param.named.annotation;
 
+import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class NamedFacetOnParameterAnnotation extends NamedFacetAbstract {
 
     public NamedFacetOnParameterAnnotation(final String value, final FacetHolder holder) {
         super(value, /*escaped*/ true, holder);
     }
 
+    static NamedFacet create(final Named annotation, final FacetHolder holder) {
+        return annotation != null ? new NamedFacetOnParameterAnnotation(annotation.value(), holder) : null;
+    }
 }

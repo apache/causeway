@@ -87,14 +87,14 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
     }
 
     public static FacetedMethod createForAction(final Class<?> declaringType, final Method method) {
-        return new FacetedMethod(FeatureType.ACTION, declaringType, method, method.getReturnType(), getParameters(method));
+        return new FacetedMethod(FeatureType.ACTION, declaringType, method, method.getReturnType(), getParameters(declaringType, method));
     }
 
-    private static List<FacetedMethodParameter> getParameters(final Method actionMethod) {
+    private static List<FacetedMethodParameter> getParameters(final Class<?> declaringType, final Method actionMethod) {
         final Class<?>[] parameterTypes = actionMethod.getParameterTypes();
         final List<FacetedMethodParameter> actionParams = Lists.newArrayList();
         for (final Class<?> parameterType : parameterTypes) {
-            actionParams.add(new FacetedMethodParameter(parameterType));
+            actionParams.add(new FacetedMethodParameter(declaringType, actionMethod, parameterType));
         }
         return Collections.unmodifiableList(actionParams);
     }

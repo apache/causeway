@@ -20,18 +20,28 @@
 package org.apache.isis.core.metamodel.facets.actions.exploration.annotation;
 
 import org.apache.isis.applib.annotation.Exploration;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
 /**
  * {@link ExplorationFacet} can also be installed via a naming convention, see
  * {@link org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedDebugExplorationFacetFactory}.
+ *
+ * @deprecated
  */
-public class ExplorationFacetAnnotationFactory extends FacetFactoryAbstract {
+@Deprecated
+public class ExplorationFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Exploration.class);
 
     public ExplorationFacetAnnotationFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -40,11 +50,22 @@ public class ExplorationFacetAnnotationFactory extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final Exploration annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Exploration.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
+        final ExplorationFacet facet = create(annotation, processMethodContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private ExplorationFacet create(final Exploration annotation, final FacetHolder holder) {
         return annotation == null ? null : new ExplorationFacetAnnotation(holder);
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

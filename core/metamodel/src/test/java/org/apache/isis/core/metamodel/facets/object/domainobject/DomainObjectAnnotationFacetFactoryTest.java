@@ -58,7 +58,7 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFac
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.facets.propparam.choices.ChoicesFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import static org.hamcrest.CoreMatchers.is;

@@ -22,8 +22,12 @@ package org.apache.isis.core.metamodel.facets.object.regex.annotation;
 import java.util.regex.Pattern;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.regex.RegExFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class RegExFacetOnTypeAnnotation extends RegExFacetAbstract {
 
     private final Pattern pattern;

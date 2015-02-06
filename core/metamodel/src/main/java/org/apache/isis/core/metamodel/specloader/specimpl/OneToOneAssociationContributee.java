@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
@@ -63,18 +64,27 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
         super(serviceAction.getFacetedMethod(), serviceAction.getReturnType(), objectMemberContext);
         this.serviceAdapter = serviceAdapter;
         this.serviceAction = serviceAction;
-        
-        // copy over facets from contributed to own.
-        FacetUtil.copyFacets(serviceAction.getFacetedMethod(), facetHolder);
-        
+
+        //
+        // ensure the contributed property cannot be modified
+        //
         final NotPersistedFacet notPersistedFacet = new NotPersistedFacetAbstract(this) {};
         final DisabledFacet disabledFacet = disabledFacet();
         
         FacetUtil.addFacet(notPersistedFacet);
         FacetUtil.addFacet(disabledFacet);
-        
+
+        //
+        // in addition, copy over facets from contributed to own.
+        //
+        // These could include everything under @Property(...) because the
+        // PropertyAnnotationFacetFactory is also run against actions.
+        //
+        final FacetedMethod contributor = serviceAction.getFacetedMethod();
+        FacetUtil.copyFacets(contributor, facetHolder);
+
         // calculate the identifier
-        final Identifier contributorIdentifier = serviceAction.getFacetedMethod().getIdentifier();
+        final Identifier contributorIdentifier = contributor.getIdentifier();
         final String memberName = contributorIdentifier.getMemberName();
         List<String> memberParameterNames = contributorIdentifier.getMemberParameterNames();
         

@@ -97,9 +97,11 @@ public enum FeatureType {
     };
     
     public final static List<FeatureType> COLLECTIONS_ONLY = ImmutableList.of(COLLECTION);
+    public final static List<FeatureType> COLLECTIONS_AND_ACTIONS = ImmutableList.of(COLLECTION, ACTION);
     public final static List<FeatureType> ACTIONS_ONLY = ImmutableList.of(ACTION);
     public final static List<FeatureType> PARAMETERS_ONLY = ImmutableList.of(ACTION_PARAMETER);
     public final static List<FeatureType> PROPERTIES_ONLY = ImmutableList.of(PROPERTY);
+    public final static List<FeatureType> PROPERTIES_AND_ACTIONS = ImmutableList.of(PROPERTY, ACTION);
     public final static List<FeatureType> OBJECTS_ONLY = ImmutableList.of(OBJECT);
     public final static List<FeatureType> MEMBERS = ImmutableList.of(PROPERTY, COLLECTION, ACTION);
     public final static List<FeatureType> OBJECTS_AND_PROPERTIES = ImmutableList.of(OBJECT, PROPERTY);

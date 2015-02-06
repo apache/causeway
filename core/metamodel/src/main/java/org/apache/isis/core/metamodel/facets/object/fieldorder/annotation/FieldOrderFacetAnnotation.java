@@ -22,6 +22,10 @@ package org.apache.isis.core.metamodel.facets.object.fieldorder.annotation;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.fieldorder.FieldOrderFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class FieldOrderFacetAnnotation extends FieldOrderFacetAbstract {
 
     public FieldOrderFacetAnnotation(final String value, final FacetHolder holder) {

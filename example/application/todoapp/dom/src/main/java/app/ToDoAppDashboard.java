@@ -19,33 +19,20 @@
 package app;
 
 import java.util.List;
-import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.RenderType;
 
-public class ToDoAppDashboard extends AbstractViewModel {
+@DomainObject(nature = Nature.VIEW_MODEL)
+public class ToDoAppDashboard {
 
     //region > identification in the UI
     public String title() {
         return "Dashboard";
     }
-    //endregion
-
-    //region > ViewModel contract
-    private String memento;
-    
-    @Override
-    public String viewModelMemento() {
-        return memento;
-    }
-
-    @Override
-    public void viewModelInit(final String memento) {
-        this.memento = memento;
-    }
-
     //endregion
 
     //region > getAnalysisByCategory (collection)
@@ -77,7 +64,6 @@ public class ToDoAppDashboard extends AbstractViewModel {
     //region > injected services
     @javax.inject.Inject
     private ToDoItemAnalysis toDoItemAnalysis;
-
     //endregion
 
 }

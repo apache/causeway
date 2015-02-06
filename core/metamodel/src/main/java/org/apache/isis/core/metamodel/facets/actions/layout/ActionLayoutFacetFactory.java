@@ -157,31 +157,25 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
             properties = processMemberContext.metadataProperties("layout");
         }
 
-
         // cssClass
         CssClassFacet cssClassFacet = CssClassFacetOnActionFromLayoutProperties.create(properties, holder);
         FacetUtil.addFacet(cssClassFacet);
-
 
         // cssClassFa
         CssClassFaFacet cssClassFaFacet = CssClassFaFacetOnActionFromLayoutProperties.create(properties, holder);
         FacetUtil.addFacet(cssClassFaFacet);
 
-
         // describedAs
         DescribedAsFacet describedAsFacet = DescribedAsFacetOnActionFromLayoutProperties.create(properties, holder);
         FacetUtil.addFacet(describedAsFacet);
-
 
         // hidden
         HiddenFacet hiddenFacet = HiddenFacetOnActionFromLayoutProperties.create(properties, holder);
         FacetUtil.addFacet(hiddenFacet);
 
-
         // named
         NamedFacet namedFacet = NamedFacetOnActionFromLayoutProperties.create(properties, holder);
         FacetUtil.addFacet(namedFacet);
-
 
         // position
         ActionPositionFacet actionPositionFacet = ActionPositionFacetOnActionFromLayoutProperties.create(properties, holder);

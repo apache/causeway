@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.LabelAtFacetForPropertyLayoutAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.propparam.labelat.LabelAtFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;

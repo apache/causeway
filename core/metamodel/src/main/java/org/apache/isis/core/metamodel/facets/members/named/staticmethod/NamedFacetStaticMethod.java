@@ -27,6 +27,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class NamedFacetStaticMethod extends NamedFacetAbstract implements ImperativeFacet {
 
     private final Method method;

@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
+import org.apache.isis.core.metamodel.facets.object.paged.annotation.PagedFacetForPagedAnnotationOnType;
 import org.apache.isis.core.metamodel.facets.object.paged.annotation.PagedFacetOnTypeAnnotationFactory;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -67,7 +68,7 @@ public class PagedFacetOnTypeAnnotationFactoryTest extends AbstractFacetFactoryT
 
         final Facet facet = facetHolder.getFacet(PagedFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof PagedFacetAnnotation);
+        assertTrue(facet instanceof PagedFacetForPagedAnnotationOnType);
         PagedFacet pagedFacet = (PagedFacet) facet;
         assertThat(pagedFacet.value(), is(20));
     }

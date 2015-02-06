@@ -20,18 +20,28 @@
 package org.apache.isis.core.metamodel.facets.actions.debug.annotation;
 
 import org.apache.isis.applib.annotation.Debug;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
 /**
  * {@link DebugFacet} can also be installed via a naming convention, see
  * {@link org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedDebugExplorationFacetFactory}.
+ *
+ * @deprecated
  */
-public class DebugFacetAnnotationFactory extends FacetFactoryAbstract {
+@Deprecated
+public class DebugFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Debug.class);
 
     public DebugFacetAnnotationFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -40,11 +50,22 @@ public class DebugFacetAnnotationFactory extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final Debug annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Debug.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
+        final DebugFacet facet = create(annotation, processMethodContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private DebugFacet create(final Debug annotation, final FacetHolder holder) {
         return annotation == null ? null : new DebugFacetAnnotation(holder);
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

@@ -34,7 +34,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -54,8 +54,7 @@ import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
  * with {@link org.apache.isis.applib.annotation.DomainService}.  Because it is implemented in the core, this means
  * that it is automatically registered and available for use; no further configuration is required.
  */
-@DomainService
-@Hidden
+@DomainService(nature = NatureOfService.DOMAIN)
 public class IsisJdoSupportImpl implements IsisJdoSupport {
     
     @Programmatic
@@ -206,9 +205,4 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
     public PersistenceManager getJdoPersistenceManager() {
         return getObjectStore().getPersistenceManager();
     }
-
-
-
-
-
 }

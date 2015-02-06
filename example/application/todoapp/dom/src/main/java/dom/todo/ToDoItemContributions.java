@@ -33,11 +33,13 @@ import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
-import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.query.QueryDefault;
@@ -56,7 +58,10 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
             describedAs = "The relative priority of this item compared to others not yet complete (using 'due by' date)",
             contributed = Contributed.AS_ASSOCIATION
     )
-    @Disabled(reason="Relative priority, derived from due date")
+    @Property(
+            editing = Editing.DISABLED,
+            editingDisabledReason = "Relative priority, derived from due date"
+    )
     public Integer relativePriority(final ToDoItem toDoItem) {
         return queryResultsCache.execute(new Callable<Integer>(){
             @Override
@@ -202,7 +207,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     public Categorized updateCategory(
             final Categorized item,
             final @ParameterLayout(named="Category") Category category,
-            final @Optional @ParameterLayout(named="Subcategory") Subcategory subcategory) {
+            final @Parameter(optional = Optionality.TRUE) @ParameterLayout(named="Subcategory") Subcategory subcategory) {
         item.setCategory(category);
         item.setSubcategory(subcategory);
         return item;
