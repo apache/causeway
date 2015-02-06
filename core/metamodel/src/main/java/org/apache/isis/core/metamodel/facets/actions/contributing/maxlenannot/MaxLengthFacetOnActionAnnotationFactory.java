@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.MaxLength;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -48,7 +49,8 @@ public class MaxLengthFacetOnActionAnnotationFactory extends FacetFactoryAbstrac
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final MaxLength annotation = Annotations.getAnnotation(processMethodContext.getMethod(), MaxLength.class);
-        validator.addFacetFlagIfPresent(create(annotation, processMethodContext.getFacetHolder()));
+        final MaxLengthFacet facet = create(annotation, processMethodContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private MaxLengthFacet create(final MaxLength annotation, final FacetHolder holder) {

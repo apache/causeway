@@ -17,68 +17,31 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.members.hidden;
+package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberAnnotation;
-import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberFromPropertiesFactory;
 
-public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class HiddenAnnotationOnActionFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private HiddenFacetOnMemberFromPropertiesFactory facetFactory;
+    private ActionAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new HiddenFacetOnMemberFromPropertiesFactory();
+        facetFactory = new ActionAnnotationFacetFactory();
     }
 
     @Override
     protected void tearDown() throws Exception {
         facetFactory = null;
         super.tearDown();
-    }
-
-    public void testHiddenAnnotationPickedUpOnProperty() {
-        class Customer {
-            @Hidden
-            public int getNumberOfOrders() {
-                return 0;
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
-
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
-        assertNotNull(facet);
-
-        assertNoMethodsRemoved();
-    }
-
-    public void testHiddenAnnotationPickedUpOnCollection() {
-        class Customer {
-            @Hidden
-            public Collection<?> getOrders() {
-                return null;
-            }
-        }
-        final Method actionMethod = findMethod(Customer.class, "getOrders");
-
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
-        assertNotNull(facet);
-
-        assertNoMethodsRemoved();
     }
 
     public void testHiddenAnnotationPickedUpOnAction() {
@@ -89,7 +52,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final HiddenFacetOnMemberAnnotation facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
         assertNotNull(facet);
@@ -105,7 +68,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final HiddenFacetOnMemberAnnotation facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
 
@@ -120,7 +83,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final HiddenFacetOnMemberAnnotation facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
 
@@ -135,7 +98,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final HiddenFacetOnMemberAnnotation facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
 
@@ -150,7 +113,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final HiddenFacetOnMemberAnnotation facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
 
@@ -166,7 +129,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final HiddenFacetOnMemberAnnotation facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
 
@@ -183,7 +146,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
+        facetFactory.processHidden(new ProcessMethodContext(Customer.class, null, null, actionMethod, methodRemover, facetedMethod));
 
         final HiddenFacetOnMemberAnnotation facet = facetedMethod.getFacet(HiddenFacetOnMemberAnnotation.class);
 

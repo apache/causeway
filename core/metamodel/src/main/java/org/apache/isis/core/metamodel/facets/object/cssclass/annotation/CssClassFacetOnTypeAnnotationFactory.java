@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.CssClass;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -46,7 +47,8 @@ public class CssClassFacetOnTypeAnnotationFactory extends FacetFactoryAbstract i
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final CssClass annotation = Annotations.getAnnotation(processClassContext.getCls(), CssClass.class);
-        validator.addFacetFlagIfPresent(create(annotation, processClassContext.getFacetHolder()));
+        final CssClassFacet facet = create(annotation, processClassContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private static CssClassFacet create(final CssClass annotation, final FacetHolder holder) {

@@ -60,8 +60,9 @@ public class MultiLineFacetOnParameterAnnotationFactory extends FacetFactoryAbst
 
                 final MultiLine annotation = (MultiLine) parameterAnnotation;
 
-                final MultiLineFacet facet = validator.addFacetFlagIfPresent(
-                        MultiLineFacetOnParameterAnnotation.create(annotation, parameterType, holder));
+                final MultiLineFacet facet1 = MultiLineFacetOnParameterAnnotation.create(annotation, parameterType, holder);
+                FacetUtil.addFacet(validator.flagIfPresent(facet1));
+                final MultiLineFacet facet = facet1;
 
                 // no-op if null
                 inferPropParamLayoutFacet(facet);

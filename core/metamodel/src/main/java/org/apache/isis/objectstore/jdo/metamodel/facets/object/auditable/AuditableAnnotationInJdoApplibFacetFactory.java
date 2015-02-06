@@ -21,6 +21,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -50,7 +51,8 @@ public class AuditableAnnotationInJdoApplibFacetFactory extends FacetFactoryAbst
         if (annotation == null) {
             return;
         }
-        validator.addFacetFlagIfPresent(new AuditableFacetAnnotationInJdoApplib(processClassContext.getFacetHolder()));
+        final AuditableFacetAnnotationInJdoApplib facet = new AuditableFacetAnnotationInJdoApplib(processClassContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
         return;
     }
 

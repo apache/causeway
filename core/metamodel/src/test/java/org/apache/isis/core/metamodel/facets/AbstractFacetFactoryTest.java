@@ -23,9 +23,11 @@ import junit.framework.TestCase;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 
 public abstract class AbstractFacetFactoryTest extends TestCase {
 
@@ -49,11 +51,25 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected FacetedMethod facetedMethod;
     protected FacetedMethodParameter facetedMethodParameter;
 
+    public static class IdentifiedHolderImpl extends FacetHolderImpl implements IdentifiedHolder {
+
+        private Identifier identifier;
+
+        public IdentifiedHolderImpl(final Identifier identifier) {
+            this.identifier = identifier;
+        }
+
+        @Override
+        public Identifier getIdentifier() {
+            return identifier;
+        }
+    }
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         programmableReflector = new ProgrammableReflector();
-        facetHolder = new FacetHolderImpl();
+        facetHolder = new IdentifiedHolderImpl(Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class);
         methodRemover = new ProgrammableMethodRemover();

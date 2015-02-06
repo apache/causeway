@@ -48,16 +48,18 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.annotprop.DisabledFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberAnnotation;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.TitleFacetFormattedByRegex;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForMandatoryAnnotationOnProperty;
-import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForNotPersistedAnnotationOnProperty;
-import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.hidden.HiddenFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForMandatoryAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnProperty;
+import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForMaxLengthAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventAbstract;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault;
@@ -67,7 +69,6 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault;
-import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPostsPropertyChangedEventAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventAbstract;
@@ -77,14 +78,12 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForPostsPropertyChangedEventAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForNotPersistedAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForRegExAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForMaxLengthAnnotationOnProperty;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -143,15 +142,15 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         final PropertyDomainEventFacetAbstract propertyDomainEventFacet;
 
-        // search for @PostsPropertyChanged(value=...)
-        // (even though these do not participate in hide/disable/validate, we rely on the validate to set up the
-        // event on a thread-local, such that it is then picked up later by the setter/clear facets
-        if(postsPropertyChangedEvent != null) {
-            propertyDomainEventType = postsPropertyChangedEvent.value();
-            propertyDomainEventFacet = postsPropertyChangedEventValidator.flagIfPresent(
-                    new PropertyDomainEventFacetForPostsPropertyChangedEventAnnotation(
-                        propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder));
-        } else
+        // can't really do this, because would result in the event being fired for the
+        // hidden/disable/validate phases, most likely breaking existing code.
+//        if(postsPropertyChangedEvent != null) {
+//            propertyDomainEventType = postsPropertyChangedEvent.value();
+//            propertyDomainEventFacet = postsPropertyChangedEventValidator.flagIfPresent(
+//                    new PropertyDomainEventFacetForPostsPropertyChangedEventAnnotation(
+//                        propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder));
+//        } else
+
         // search for @PropertyInteraction(value=...)
         if(propertyInteraction != null) {
             propertyDomainEventType = propertyInteraction.value();
@@ -277,7 +276,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for deprecated @MaxLength first
         final MaxLength annotation = Annotations.getAnnotation(method, MaxLength.class);
-        MaxLengthFacet facet = maxLengthValidator.addFacetFlagIfPresent(MaxLengthFacetForMaxLengthAnnotationOnProperty.create(annotation, holder));
+        MaxLengthFacet facet = maxLengthValidator.flagIfPresent(MaxLengthFacetForMaxLengthAnnotationOnProperty.create(annotation, holder));
 
         // else search for @Property(maxLength=...)
         final Property property = Annotations.getAnnotation(method, Property.class);
@@ -294,7 +293,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for deprecated @MustSatisfy first
         final MustSatisfy annotation = Annotations.getAnnotation(method, MustSatisfy.class);
-        Facet facet = mustSatisfyValidator.addFacetFlagIfPresent(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty.create(annotation, holder));
+        Facet facet = mustSatisfyValidator.flagIfPresent(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty.create(annotation, holder));
 
         // else search for @Property(mustSatisfy=...)
         final Property property = Annotations.getAnnotation(method, Property.class);
@@ -311,7 +310,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for deprecated @NotPersisted first
         final NotPersisted annotation = Annotations.getAnnotation(method, NotPersisted.class);
-        NotPersistedFacet facet = notPersistedValidator.addFacetFlagIfPresent(NotPersistedFacetForNotPersistedAnnotationOnProperty.create(annotation, holder));
+        NotPersistedFacet facet = notPersistedValidator.flagIfPresent(NotPersistedFacetForNotPersistedAnnotationOnProperty.create(annotation, holder));
 
         // else search for @Property(notPersisted=...)
         final Property property = Annotations.getAnnotation(method, Property.class);

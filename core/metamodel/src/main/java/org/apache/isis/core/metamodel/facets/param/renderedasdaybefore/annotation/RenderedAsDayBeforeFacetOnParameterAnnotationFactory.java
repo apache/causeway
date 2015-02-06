@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.RenderedAsDayBefore;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -50,7 +51,8 @@ public class RenderedAsDayBeforeFacetOnParameterAnnotationFactory extends FacetF
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof RenderedAsDayBefore) {
                 final RenderedAsDayBefore annotation = (RenderedAsDayBefore) parameterAnnotation;
-                validator.addFacetFlagIfPresent(create(annotation, processParameterContext.getFacetHolder()));
+                final RenderedAdjustedFacet facet = create(annotation, processParameterContext.getFacetHolder());
+                FacetUtil.addFacet(validator.flagIfPresent(facet));
                 return;
             }
         }

@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.Exploration;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -50,7 +51,7 @@ public class ExplorationFacetAnnotationFactory extends FacetFactoryAbstract impl
     public void process(final ProcessMethodContext processMethodContext) {
         final Exploration annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Exploration.class);
         final ExplorationFacet facet = create(annotation, processMethodContext.getFacetHolder());
-        validator.addFacetFlagIfPresent(facet);
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private ExplorationFacet create(final Exploration annotation, final FacetHolder holder) {

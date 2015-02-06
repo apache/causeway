@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.Debug;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -50,7 +51,7 @@ public class DebugFacetAnnotationFactory extends FacetFactoryAbstract implements
     public void process(final ProcessMethodContext processMethodContext) {
         final Debug annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Debug.class);
         final DebugFacet facet = create(annotation, processMethodContext.getFacetHolder());
-        validator.addFacetFlagIfPresent(facet);
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private DebugFacet create(final Debug annotation, final FacetHolder holder) {

@@ -42,6 +42,11 @@ public class MandatoryFacetInvertedByOptionalAnnotationOnProperty extends Mandat
     }
 
     public static MandatoryFacet create(final Optional annotation, Method method, final FacetHolder holder) {
+
+        if(annotation == null) {
+            return null;
+        }
+
         final Class<?> returnType = method.getReturnType();
         if (returnType.isPrimitive()) {
             return null;

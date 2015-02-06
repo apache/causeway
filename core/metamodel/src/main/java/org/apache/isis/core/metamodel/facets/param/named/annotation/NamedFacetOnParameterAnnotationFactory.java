@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -55,7 +56,8 @@ public class NamedFacetOnParameterAnnotationFactory extends FacetFactoryAbstract
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof Named) {
                 final Named annotation = (Named) parameterAnnotation;
-                validator.addFacetFlagIfPresent(NamedFacetOnParameterAnnotation.create(annotation, holder));
+                final org.apache.isis.core.metamodel.facets.all.named.NamedFacet facet = NamedFacetOnParameterAnnotation.create(annotation, holder);
+                FacetUtil.addFacet(validator.flagIfPresent(facet));
                 return;
             }
         }

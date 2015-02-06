@@ -63,13 +63,13 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDom
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionInteractionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForPostsActionInvokedEventAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionInteractionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForPostsActionInvokedEventAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForPrototypeAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForPublishedActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFallbackToNonIdempotent;
@@ -82,7 +82,6 @@ import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetOn
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
-import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForPrototypeAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -169,12 +168,17 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
             final ActionDomainEventFacetAbstract actionDomainEventFacet;
 
-            // search for @PostsActionInvoked(value=...)
-            if(postsActionInvokedEvent != null) {
-                actionDomainEventType = postsActionInvokedEvent.value();
-                actionDomainEventFacet = new ActionDomainEventFacetForPostsActionInvokedEventAnnotation(
-                        actionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
-            } else
+
+            // can't really do this, because would result in the event being fired for the
+            // hidden/disable/validate phases, most likely breaking existing code.
+
+//            // search for @PostsActionInvoked(value=...)
+//            if(postsActionInvokedEvent != null) {
+//                actionDomainEventType = postsActionInvokedEvent.value();
+//                actionDomainEventFacet = new ActionDomainEventFacetForPostsActionInvokedEventAnnotation(
+//                        actionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
+//            } else
+
             // search for @ActionInteraction(value=...)
             if(actionInteraction != null) {
                 actionDomainEventType = actionInteraction.value();
@@ -269,7 +273,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         // check for deprecated @Prototype
         final Prototype annotation = Annotations.getAnnotation(method, Prototype.class);
-        PrototypeFacet facet = prototypeValidator.addFacetFlagIfPresent(PrototypeFacetForPrototypeAnnotation.create(annotation, holder));
+        final PrototypeFacet facet1 = PrototypeFacetForPrototypeAnnotation.create(annotation, holder);
+        FacetUtil.addFacet(prototypeValidator.flagIfPresent(facet1));
+        PrototypeFacet facet = facet1;
 
         // else search for @Action(restrictTo=...)
         final Action action = Annotations.getAnnotation(method, Action.class);

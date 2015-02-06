@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -50,7 +51,8 @@ public class MultiLineFacetOnTypeAnnotationFactory extends FacetFactoryAbstract 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final MultiLine annotation = Annotations.getAnnotation(processClassContaxt.getCls(), MultiLine.class);
-        validator.addFacetFlagIfPresent(create(annotation, processClassContaxt.getFacetHolder()));
+        final MultiLineFacet facet = create(annotation, processClassContaxt.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private MultiLineFacet create(final MultiLine annotation, final FacetHolder holder) {

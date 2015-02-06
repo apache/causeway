@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -46,7 +47,8 @@ public class NotContributedFacetAnnotationFactory extends FacetFactoryAbstract i
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final NotContributed annotation = Annotations.getAnnotation(processMethodContext.getMethod(), NotContributed.class);
-        validator.addFacetFlagIfPresent(create(annotation, processMethodContext.getFacetHolder()));
+        final NotContributedFacet facet = create(annotation, processMethodContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private NotContributedFacet create(final NotContributed annotation, final FacetHolder holder) {

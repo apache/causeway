@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.SortedBy;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -57,7 +58,8 @@ public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract impleme
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final SortedBy renderAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), SortedBy.class);
-        validator.addFacetFlagIfPresent(create(renderAnnotation, processMethodContext.getFacetHolder()));
+        final SortedByFacet facet = create(renderAnnotation, processMethodContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private SortedByFacet create(final SortedBy annotation, final FacetHolder holder) {

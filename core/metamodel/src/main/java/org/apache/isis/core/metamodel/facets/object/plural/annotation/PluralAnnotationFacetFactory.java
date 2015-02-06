@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.Plural;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -46,7 +47,8 @@ public class PluralAnnotationFacetFactory extends FacetFactoryAbstract implement
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final Plural annotation = Annotations.getAnnotation(processClassContaxt.getCls(), Plural.class);
-        validator.addFacetFlagIfPresent(create(annotation, processClassContaxt.getFacetHolder()));
+        final PluralFacet facet = create(annotation, processClassContaxt.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private PluralFacet create(final Plural annotation, final FacetHolder holder) {

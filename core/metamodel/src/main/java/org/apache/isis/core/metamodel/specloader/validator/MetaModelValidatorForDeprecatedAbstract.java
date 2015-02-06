@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.specloader.validator;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 
 public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelValidatorAbstract implements IsisConfigurationAware {
 
@@ -40,11 +39,6 @@ public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelV
     }
 
     protected abstract String failureMessageFor(final Facet facet);
-
-    public <T extends Facet> T addFacetFlagIfPresent(final T facet) {
-        FacetUtil.addFacet(flagIfPresent(facet));
-        return facet;
-    }
 
     @Override
     public void validate(final ValidationFailures validationFailures) {

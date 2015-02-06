@@ -26,6 +26,7 @@ import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
@@ -72,7 +73,8 @@ public class MandatoryFacetOnPropertyStaticMethodFactory extends MethodPrefixBas
             throw new MetaModelException(cls.getName() + "#" + capitalizedName + " cannot be an optional property as it is of a primitive type");
         }
         final FacetHolder property = processMethodContext.getFacetHolder();
-        validator.addFacetFlagIfPresent(new MandatoryFacetOnPropertyStaticMethod(property));
+        final MandatoryFacetOnPropertyStaticMethod facet = new MandatoryFacetOnPropertyStaticMethod(property);
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private static boolean indicatesOptional(final Method method) {

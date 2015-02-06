@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
@@ -86,7 +87,8 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof MaxLength) {
                 final MaxLength annotation = (MaxLength) parameterAnnotation;
-                maxLengthValidator.addFacetFlagIfPresent(MaxLengthFacetForMaxLengthAnnotationOnParameter.create(annotation, processParameterContext.getFacetHolder()));
+                final org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet facet = MaxLengthFacetForMaxLengthAnnotationOnParameter.create(annotation, processParameterContext.getFacetHolder());
+                FacetUtil.addFacet(maxLengthValidator.flagIfPresent(facet));
                 return;
             }
         }
@@ -113,7 +115,8 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof MustSatisfy) {
                 final MustSatisfy annotation = (MustSatisfy) parameterAnnotation;
-                mustSatisfyValidator.addFacetFlagIfPresent(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter.create(annotation, processParameterContext.getFacetHolder()));
+                final Facet facet = MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter.create(annotation, processParameterContext.getFacetHolder());
+                FacetUtil.addFacet(mustSatisfyValidator.flagIfPresent(facet));
                 return;
             }
         }
@@ -140,7 +143,9 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
             final Class<?> parameterType = parameterTypes[paramNum];
             if (parameterAnnotation instanceof RegEx) {
                 final RegEx annotation = (RegEx) parameterAnnotation;
-                final RegExFacet regExFacet = regexValidator.addFacetFlagIfPresent(RegExFacetFromRegExAnnotationOnParameter.create(annotation, parameterType, holder));
+                final RegExFacet facet = RegExFacetFromRegExAnnotationOnParameter.create(annotation, parameterType, holder);
+                FacetUtil.addFacet(regexValidator.flagIfPresent(facet));
+                final RegExFacet regExFacet = facet;
 
                 // regex also adds a title facet
                 if(regExFacet != null) {
@@ -173,7 +178,8 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
             final Class<?> parameterType = parameterTypes[paramNum];
             if (parameterAnnotation instanceof Optional) {
                 final Optional annotation = (Optional) parameterAnnotation;
-                optionalValidator.addFacetFlagIfPresent(MandatoryFacetInvertedByOptionalAnnotationOnParameter.create(annotation, parameterType, holder));
+                final Facet facet = MandatoryFacetInvertedByOptionalAnnotationOnParameter.create(annotation, parameterType, holder);
+                FacetUtil.addFacet(optionalValidator.flagIfPresent(facet));
                 return;
             }
         }

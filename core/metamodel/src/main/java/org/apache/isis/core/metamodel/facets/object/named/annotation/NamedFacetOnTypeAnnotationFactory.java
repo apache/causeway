@@ -24,6 +24,7 @@ import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -48,7 +49,8 @@ public class NamedFacetOnTypeAnnotationFactory extends FacetFactoryAbstract impl
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final Named annotation = Annotations.getAnnotation(processClassContaxt.getCls(), Named.class);
-        validator.addFacetFlagIfPresent(create(annotation, processClassContaxt.getFacetHolder()));
+        final NamedFacet facet = create(annotation, processClassContaxt.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private NamedFacet create(final Named annotation, final FacetHolder holder) {

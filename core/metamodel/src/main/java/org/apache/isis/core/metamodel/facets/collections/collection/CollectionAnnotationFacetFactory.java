@@ -57,7 +57,6 @@ import org.apache.isis.core.metamodel.facets.collections.collection.modify.Colle
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionInteractionAnnotation;
-import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForPostsCollectionAddedToEventAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForPostsCollectionRemovedFromEventAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromAbstract;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation;
@@ -65,11 +64,11 @@ import org.apache.isis.core.metamodel.facets.collections.collection.modify.Colle
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForDomainEventFromDefault;
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionRemoveFromFacetForPostsCollectionRemovedFromEventAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.notpersisted.NotPersistedFacetForCollectionAnnotation;
+import org.apache.isis.core.metamodel.facets.collections.collection.notpersisted.NotPersistedFacetForNotPersistedAnnotationOnCollection;
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeOfFacetOnCollectionFromTypeOfAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
-import org.apache.isis.core.metamodel.facets.collections.collection.notpersisted.NotPersistedFacetForNotPersistedAnnotationOnCollection;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.annotprop.DisabledFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.members.hidden.annotprop.HiddenFacetOnMemberAnnotation;
@@ -131,27 +130,25 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
         final CollectionDomainEventFacetAbstract collectionDomainEventFacet;
 
-        // this is not quite ideal... because there are two events (addTo/removeFrom) whereas the
-        // newer @CollectionInteraction and @Collection annotations have a single event type.  The net result is that
-        // combining @PostsCollectionAddToEvent or @PostsCollectionRemovedFromEvent with @Collection or @CollectionInteraction
-        // could produce some unexpected results.
+        // can't really do this, because would result in the event being fired for the
+        // hidden/disable/validate phases, most likely breaking existing code.
         //
-        // Have decided not to sweat it; it's easy to update, and these annotations will be removed in Isis 2.0
+        // in any case, which to use... addTo or removeFrom ?
 
-        // search for @PostsCollectionAddedToEvent(value=...)
-        if(postsCollectionAddedToEvent != null) {
-            collectionDomainEventType = postsCollectionAddedToEvent.value();
-            collectionDomainEventFacet = postsCollectionAddedToEventValidator.flagIfPresent(
-                    new CollectionDomainEventFacetForPostsCollectionAddedToEventAnnotation(
-                        collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder));
-        } else
-        // search for @PostsCollectionRemovedFromEvent(value=...)
-        if(postsCollectionRemovedFromEvent != null) {
-            collectionDomainEventType = postsCollectionRemovedFromEvent.value();
-            collectionDomainEventFacet = postsCollectionRemovedFromEventValidator.flagIfPresent(
-                    new CollectionDomainEventFacetForPostsCollectionRemovedFromEventAnnotation(
-                        collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder));
-        } else
+//        // search for @PostsCollectionAddedToEvent(value=...)
+//        if(postsCollectionAddedToEvent != null) {
+//            collectionDomainEventType = postsCollectionAddedToEvent.value();
+//            collectionDomainEventFacet = postsCollectionAddedToEventValidator.flagIfPresent(
+//                    new CollectionDomainEventFacetForPostsCollectionAddedToEventAnnotation(
+//                        collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder));
+//        } else
+//        // search for @PostsCollectionRemovedFromEvent(value=...)
+//        if(postsCollectionRemovedFromEvent != null) {
+//            collectionDomainEventType = postsCollectionRemovedFromEvent.value();
+//            collectionDomainEventFacet = postsCollectionRemovedFromEventValidator.flagIfPresent(
+//                    new CollectionDomainEventFacetForPostsCollectionRemovedFromEventAnnotation(
+//                        collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder));
+//        } else
 
         // search for @CollectionInteraction(value=...)
         if(collectionInteraction != null) {
@@ -278,7 +275,9 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
         // check for deprecated @NotPersisted first
         final NotPersisted annotation = Annotations.getAnnotation(method, NotPersisted.class);
-        NotPersistedFacet facet = notPersistedValidator.addFacetFlagIfPresent(NotPersistedFacetForNotPersistedAnnotationOnCollection.create(annotation, holder));
+        final NotPersistedFacet facet1 = NotPersistedFacetForNotPersistedAnnotationOnCollection.create(annotation, holder);
+        FacetUtil.addFacet(notPersistedValidator.flagIfPresent(facet1));
+        NotPersistedFacet facet = facet1;
 
         // else search for @Collection(notPersisted=...)
         final Collection collection = Annotations.getAnnotation(method, Collection.class);

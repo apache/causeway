@@ -27,6 +27,7 @@ import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
@@ -85,7 +86,8 @@ public class DisabledFacetStaticMethodFacetFactory extends MethodPrefixBasedFace
         }
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        validator.addFacetFlagIfPresent(new DisabledFacetForStaticMethod(facetedMethod));
+        final DisabledFacetForStaticMethod facet = new DisabledFacetForStaticMethod(facetedMethod);
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private static Boolean invokeProtectMethod(final Method protectMethod) {

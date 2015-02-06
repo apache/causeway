@@ -27,6 +27,7 @@ import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
@@ -85,7 +86,8 @@ public class NamedFacetStaticMethodFactory extends MethodPrefixBasedFacetFactory
         final String name = invokeNameMethod(nameMethod);
 
         final FacetHolder facetHolder = processMethodContext.getFacetHolder();
-        validator.addFacetFlagIfPresent(new NamedFacetStaticMethod(name, nameMethod, facetHolder));
+        final NamedFacetStaticMethod facet = new NamedFacetStaticMethod(name, nameMethod, facetHolder);
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private static String invokeNameMethod(final Method nameMethod) {

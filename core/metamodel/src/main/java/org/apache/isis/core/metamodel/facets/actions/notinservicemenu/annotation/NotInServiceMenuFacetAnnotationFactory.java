@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -46,7 +47,8 @@ public class NotInServiceMenuFacetAnnotationFactory extends FacetFactoryAbstract
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final NotInServiceMenu annotation = Annotations.getAnnotation(processMethodContext.getMethod(), NotInServiceMenu.class);
-        validator.addFacetFlagIfPresent(create(annotation, processMethodContext.getFacetHolder()));
+        final NotInServiceMenuFacet facet = create(annotation, processMethodContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private NotInServiceMenuFacet create(final NotInServiceMenu annotation, final FacetHolder holder) {

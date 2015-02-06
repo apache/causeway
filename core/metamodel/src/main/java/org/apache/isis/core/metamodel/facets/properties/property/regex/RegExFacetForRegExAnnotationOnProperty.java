@@ -36,6 +36,10 @@ public class RegExFacetForRegExAnnotationOnProperty extends RegExFacetAbstract {
 
     public static RegExFacet create(final RegEx annotation, final Class<?> returnType, final FacetHolder holder) {
 
+        if(annotation == null) {
+            return null;
+        }
+
         if (!Annotations.isString(returnType)) {
             return null;
         }

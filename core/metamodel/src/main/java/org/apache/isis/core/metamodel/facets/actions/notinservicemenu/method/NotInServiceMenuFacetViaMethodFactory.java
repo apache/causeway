@@ -24,6 +24,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
@@ -62,7 +63,7 @@ public class NotInServiceMenuFacetViaMethodFactory extends MethodPrefixBasedFace
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
         final NotInServiceMenuFacetViaMethod facet = new NotInServiceMenuFacetViaMethod(notInServiceMenuMethod, facetedMethod);
-        validator.addFacetFlagIfPresent(facet);
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     @Override

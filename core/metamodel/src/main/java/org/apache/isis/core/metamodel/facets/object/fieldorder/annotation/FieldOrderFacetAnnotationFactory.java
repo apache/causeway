@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.FieldOrder;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -46,7 +47,8 @@ public class FieldOrderFacetAnnotationFactory extends FacetFactoryAbstract imple
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final FieldOrder annotation = Annotations.getAnnotation(processClassContaxt.getCls(), FieldOrder.class);
-        validator.addFacetFlagIfPresent(create(annotation, processClassContaxt.getFacetHolder()));
+        final FieldOrderFacet facet = create(annotation, processClassContaxt.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private FieldOrderFacet create(final FieldOrder annotation, final FacetHolder holder) {

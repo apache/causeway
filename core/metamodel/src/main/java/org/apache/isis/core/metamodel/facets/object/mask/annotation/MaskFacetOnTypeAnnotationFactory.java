@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.Mask;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -50,7 +51,8 @@ public class MaskFacetOnTypeAnnotationFactory extends FacetFactoryAbstract imple
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final Mask annotation = Annotations.getAnnotation(processClassContaxt.getCls(), Mask.class);
-        validator.addFacetFlagIfPresent(createMaskFacet(annotation, processClassContaxt.getFacetHolder()));
+        final MaskFacet facet = createMaskFacet(annotation, processClassContaxt.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private MaskFacet createMaskFacet(final Mask annotation, final FacetHolder holder) {

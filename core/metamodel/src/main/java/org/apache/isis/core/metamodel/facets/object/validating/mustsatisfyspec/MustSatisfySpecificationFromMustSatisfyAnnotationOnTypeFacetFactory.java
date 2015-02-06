@@ -27,6 +27,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -48,7 +49,8 @@ public class MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacetFactory
 
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
-        validator.addFacetFlagIfPresent(create(processClassContaxt.getCls(), processClassContaxt.getFacetHolder()));
+        final Facet facet = create(processClassContaxt.getCls(), processClassContaxt.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private Facet create(final Class<?> clazz, final FacetHolder holder) {

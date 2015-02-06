@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.Paged;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -51,7 +52,8 @@ public class PagedFacetOnTypeAnnotationFactory extends FacetFactoryAbstract impl
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final Paged annotation = Annotations.getAnnotation(processClassContext.getCls(), Paged.class);
-        validator.addFacetFlagIfPresent(create(annotation, processClassContext.getFacetHolder()));
+        final PagedFacet facet = create(annotation, processClassContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private static PagedFacet create(final Paged annotation, final FacetHolder holder) {

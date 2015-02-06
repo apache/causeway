@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -46,7 +47,8 @@ public class TypicalLengthFacetOnTypeAnnotationFactory extends FacetFactoryAbstr
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final TypicalLength annotation = Annotations.getAnnotation(processClassContaxt.getCls(), TypicalLength.class);
-        validator.addFacetFlagIfPresent(create(annotation, processClassContaxt.getFacetHolder()));
+        final TypicalLengthFacet facet = create(annotation, processClassContaxt.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private TypicalLengthFacet create(final TypicalLength annotation, final FacetHolder holder) {

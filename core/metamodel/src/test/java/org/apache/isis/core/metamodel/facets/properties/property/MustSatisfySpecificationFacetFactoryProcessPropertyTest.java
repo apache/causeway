@@ -25,6 +25,7 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -51,12 +52,21 @@ public class MustSatisfySpecificationFacetFactoryProcessPropertyTest {
     private Method firstNameMethodWith;
     private PropertyAnnotationFacetFactory facetFactory;
 
+    public static class Customer {}
+
     @Before
     public void setUp() throws Exception {
         domainObjectClassWithoutAnnotation = DomainObjectWithoutMustSatisfyAnnotations.class;
         domainObjectClassWithAnnotation = DomainObjectWithMustSatisfyAnnotations.class;
         firstNameMethodWithout = domainObjectClassWithoutAnnotation.getMethod("getFirstName");
         firstNameMethodWith = domainObjectClassWithAnnotation.getMethod("getFirstName");
+
+        context.checking(new Expectations() {
+            {
+                allowing(mockFacetHolder).getIdentifier();
+                will(returnValue(Identifier.actionIdentifier(Customer.class, "foo")));
+            }
+        });
 
         facetFactory = new PropertyAnnotationFacetFactory();
     }
