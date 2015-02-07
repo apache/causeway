@@ -148,18 +148,19 @@ public class DomainEventHelper {
         }
         try {
             final PropertyDomainEvent<?, ?> event;
-            if(existingEvent != null && phase.isValidatingOrLater()) {
-                event = existingEvent;
-                setEventOldValue(event, oldValue);
-                setEventNewValue(event, newValue);
-            } else {
-                final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
-                final Identifier identifier = identified.getIdentifier();
-                event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
-            }
+            final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
+            final Identifier identifier = identified.getIdentifier();
+            event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
             event.setEventPhase(phase);
             event.setPhase(AbstractInteractionEvent.Phase.from(phase));
-            getEventBusService().post(event);
+
+            // Old and New Values are populated only on the VALIDATION Phase and
+            // afterwards.
+            if ((existingEvent != null) && phase.isValidatingOrLater()) {
+                setEventOldValue(event, oldValue);
+                setEventNewValue(event, newValue);
+            }
+            this.getEventBusService().post(event);
             return event;
         } catch (Exception e) {
             throw new FatalException(e);
