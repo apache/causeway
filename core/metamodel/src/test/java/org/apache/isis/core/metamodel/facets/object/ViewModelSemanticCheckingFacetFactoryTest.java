@@ -1,18 +1,30 @@
 package org.apache.isis.core.metamodel.facets.object;
 
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class ViewModelSemanticCheckingFacetFactoryTest {
+
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+
+    @Mock
+    private IsisConfiguration mockConfiguration;
 
     private ViewModelSemanticCheckingFacetFactory facetFactory;
 
@@ -28,7 +40,13 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
 
     @Before
     public void setUp() throws Exception {
+
+        context.checking(new Expectations() {{
+            allowing(mockConfiguration).getBoolean(with(equalTo("isis.reflector.facets.ViewModelSemanticCheckingFacetFactory.enable")), with(any(boolean.class)));
+            will(returnValue(true));
+        }});
         facetFactory = new ViewModelSemanticCheckingFacetFactory();
+        facetFactory.setConfiguration(mockConfiguration);
     }
 
     @Test

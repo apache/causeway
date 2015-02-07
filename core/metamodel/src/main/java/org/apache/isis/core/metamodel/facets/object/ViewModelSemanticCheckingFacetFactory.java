@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -34,7 +35,9 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorCom
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForValidationFailures;
 
 
-public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private IsisConfiguration configuration;
 
     public ViewModelSemanticCheckingFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -44,6 +47,14 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
+
+        // disable by default
+        final boolean enable = configuration.getBoolean(
+                                    "isis.reflector.facets.ViewModelSemanticCheckingFacetFactory.enable", false);
+        if(!enable) {
+            return;
+        }
+
         final Class<?> cls = processClassContext.getCls();
 
         final DomainObjectLayout domainObjectLayout = Annotations.getAnnotation(cls, DomainObjectLayout.class);
@@ -166,4 +177,8 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
         metaModelValidator.add(validator);
     }
 
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        this.configuration = configuration;
+    }
 }
