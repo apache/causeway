@@ -59,14 +59,15 @@ public class MaskFacetOnParameterAnnotationFactory extends FacetFactoryAbstract 
         for (int i = 0; i < parameterAnnotations.length; i++) {
             if (parameterAnnotations[i] instanceof Mask) {
                 final Mask annotation = (Mask) parameterAnnotations[i];
-                addMaskFacetAndCorrespondingTitleFacet(processParameterContext.getFacetHolder(), annotation, parameterTypes[i]);
+                addMaskFacetAndCorrespondingTitleFacet(annotation, parameterTypes[i], processParameterContext);
                 return;
             }
         }
     }
 
-    private boolean addMaskFacetAndCorrespondingTitleFacet(final FacetHolder holder, final Mask annotation, final Class<?> cls) {
-        final MaskFacet maskFacet = validator.flagIfPresent(createMaskFacet(annotation, holder));
+    private boolean addMaskFacetAndCorrespondingTitleFacet(final Mask annotation, final Class<?> cls, final AbstractProcessWithMethodContext processContext) {
+        final FacetHolder holder = processContext.getFacetHolder();
+        final MaskFacet maskFacet = validator.flagIfPresent(createMaskFacet(annotation, holder), processContext);
         if (maskFacet == null) {
             return false;
         }

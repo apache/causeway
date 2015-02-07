@@ -161,7 +161,9 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                 if(facet instanceof MandatoryFacetDerivedFromJdoColumn) {
 
                     if(association.isNotPersisted()) {
-                        validationFailures.add("%s: @javax.jdo.annotations.Column found on non-persisted property; please remove)", association.getIdentifier().toClassAndNameIdentityString());
+                        validationFailures.add(
+                                "%s: @javax.jdo.annotations.Column found on non-persisted property; please remove)",
+                                association.getIdentifier().toClassAndNameIdentityString());
                         return;
                     }
 

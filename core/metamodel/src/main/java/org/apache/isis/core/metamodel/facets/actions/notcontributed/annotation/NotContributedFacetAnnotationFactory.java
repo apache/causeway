@@ -48,7 +48,7 @@ public class NotContributedFacetAnnotationFactory extends FacetFactoryAbstract i
     public void process(final ProcessMethodContext processMethodContext) {
         final NotContributed annotation = Annotations.getAnnotation(processMethodContext.getMethod(), NotContributed.class);
         final NotContributedFacet facet = create(annotation, processMethodContext.getFacetHolder());
-        FacetUtil.addFacet(validator.flagIfPresent(facet));
+        FacetUtil.addFacet(validator.flagIfPresent(facet, processMethodContext));
     }
 
     private NotContributedFacet create(final NotContributed annotation, final FacetHolder holder) {

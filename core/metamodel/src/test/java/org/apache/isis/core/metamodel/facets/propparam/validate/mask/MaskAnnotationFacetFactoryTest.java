@@ -97,7 +97,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
+        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(MaskFacet.class);
         assertNotNull(facet);
@@ -135,7 +135,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
+        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, facetedMethodParameter));
 
         assertNotNull(facetedMethodParameter.getFacet(MaskFacet.class));
     }

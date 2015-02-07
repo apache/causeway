@@ -22,11 +22,25 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.annotation.*;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.InvokeOn;
+import org.apache.isis.applib.annotation.MemberGroupLayout;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.util.ObjectContracts;
+
+import static org.apache.isis.applib.annotation.Optionality.MANDATORY;
+import static org.apache.isis.applib.annotation.Optionality.OPTIONAL;
 
 /**
  * An abstraction of some sort of recorded change to a domain object, either a <tt>CommandJdo</tt>, an
@@ -36,8 +50,12 @@ import org.apache.isis.applib.util.ObjectContracts;
         columnSpans={6,0,6,12}, 
         left={"Identifiers"},
         right={"Target","Detail"})
-@DomainObjectLayout(named="Domain Change")
-@Immutable
+@DomainObjectLayout(
+        named="Domain Change"
+)
+@DomainObject(
+        editing = Editing.DISABLED
+)
 public abstract class DomainChangeJdoAbstract {
 
     @SuppressWarnings("unused")
@@ -60,8 +78,11 @@ public abstract class DomainChangeJdoAbstract {
     /**
      * Distinguishes <tt>CommandJdo</tt>s, <tt>AuditEntryJdo</tt>s and <tt>PublishedEventJdo</tt>s      * when these are shown mixed together in a (standalone) table.
      */
+    @Property
+    @PropertyLayout(
+            hidden = Where.ALL_EXCEPT_STANDALONE_TABLES
+    )
     @MemberOrder(name="Identifiers", sequence = "1")
-    @Hidden(where = Where.ALL_EXCEPT_STANDALONE_TABLES)
     public ChangeType getType() {
         return type;
     }
@@ -76,6 +97,7 @@ public abstract class DomainChangeJdoAbstract {
      * This dummy implementation is a trick so that Isis will render the property in a standalone table.  Each of the
      * subclasses override with the &quot;real&quot; implementation.
      */
+    @Property
     @MemberOrder(name="Identifiers", sequence = "10")
     public String getUser() {
         return null;
@@ -91,6 +113,7 @@ public abstract class DomainChangeJdoAbstract {
      * This dummy implementation is a trick so that Isis will render the property in a standalone table.  Each of the
      * subclasses override with the &quot;real&quot; implementation.
      */
+    @Property
     @MemberOrder(name="Identifiers", sequence = "20")
     public Timestamp getTimestamp() {
         return null;
@@ -105,6 +128,7 @@ public abstract class DomainChangeJdoAbstract {
      * This dummy implementation is a trick so that Isis will render the property in a standalone table.  Each of the
      * subclasses override with the &quot;real&quot; implementation.
      */
+    @Property
     @MemberOrder(name="Identifiers",sequence = "50")
     public UUID getTransactionId() {
         return null;
@@ -119,8 +143,9 @@ public abstract class DomainChangeJdoAbstract {
      * This dummy implementation is a trick so that Isis will render the property in a standalone table.  Each of the
      * subclasses override with the &quot;real&quot; implementation.
      */
-    @MemberOrder(name="Target", sequence = "10")
+    @Property
     @PropertyLayout(named="Class")
+    @MemberOrder(name="Target", sequence = "10")
     public String getTargetClass() {
         return null;
     }
@@ -151,12 +176,14 @@ public abstract class DomainChangeJdoAbstract {
      * This dummy implementation is a trick so that Isis will render the property in a standalone table.  Each of the
      * subclasses override with the &quot;real&quot; implementation.
      */
-    @Optional
-    @MemberOrder(name="Target", sequence = "20")
-    @PropertyLayout(
-        named="Action",
-        hidden = Where.ALL_EXCEPT_STANDALONE_TABLES
+    @Property(
+            optionality = OPTIONAL
     )
+    @PropertyLayout(
+            named="Action",
+            hidden = Where.ALL_EXCEPT_STANDALONE_TABLES
+    )
+    @MemberOrder(name="Target", sequence = "20")
     public String getTargetAction() {
         return targetAction;
     }
@@ -171,8 +198,9 @@ public abstract class DomainChangeJdoAbstract {
      * This dummy implementation is a trick so that Isis will render the property in a standalone table.  Each of the
      * subclasses override with the &quot;real&quot; implementation.
      */
-    @MemberOrder(name="Target", sequence="30")
+    @Property
     @PropertyLayout(named="Object")
+    @MemberOrder(name="Target", sequence="30")
     public String getTargetStr() {
         return null;
     }
@@ -185,10 +213,14 @@ public abstract class DomainChangeJdoAbstract {
 
     // //////////////////////////////////////
 
-    @Bulk
-    @ActionSemantics(Of.SAFE)
+    @Action(
+            semantics = SemanticsOf.SAFE,
+            invokeOn = InvokeOn.OBJECT_AND_COLLECTION
+    )
+    @ActionLayout(
+            named = "Open"
+    )
     @MemberOrder(name="TargetStr", sequence="1")
-    @PropertyLayout(named="Open")
     public Object openTargetObject() {
         return Util.lookupBookmark(getTarget(), bookmarkService, container);
     }
@@ -209,8 +241,12 @@ public abstract class DomainChangeJdoAbstract {
      * This dummy implementation is a trick so that Isis will render the property in a standalone table.  Each of the
      * subclasses override with the &quot;real&quot; implementation.
      */
-    @Hidden(where=Where.ALL_EXCEPT_STANDALONE_TABLES)
-    @Optional
+    @Property(
+            optionality = OPTIONAL
+    )
+    @PropertyLayout(
+            hidden = Where.ALL_EXCEPT_STANDALONE_TABLES
+    )
     @MemberOrder(name="Target",sequence = "21")
     public String getPropertyId() {
         return null;
@@ -229,8 +265,12 @@ public abstract class DomainChangeJdoAbstract {
      * This dummy implementation is a trick so that Isis will render the property in a standalone table.  Each of the
      * subclasses override with the &quot;real&quot; implementation.
      */
-    @Hidden(where=Where.ALL_EXCEPT_STANDALONE_TABLES)
-    @Optional
+    @Property(
+            optionality = OPTIONAL
+    )
+    @PropertyLayout(
+            hidden = Where.ALL_EXCEPT_STANDALONE_TABLES
+    )
     @MemberOrder(name="Detail",sequence = "6")
     public String getPreValue() {
         return null;
@@ -249,8 +289,12 @@ public abstract class DomainChangeJdoAbstract {
      * This dummy implementation is a trick so that Isis will render the property in a standalone table.  Each of the
      * subclasses override with the &quot;real&quot; implementation.
      */
-    @Hidden(where=Where.ALL_EXCEPT_STANDALONE_TABLES)
-    @Optional
+    @Property(
+            optionality = MANDATORY
+    )
+    @PropertyLayout(
+            hidden = Where.ALL_EXCEPT_STANDALONE_TABLES
+    )
     @MemberOrder(name="Detail",sequence = "7")
     public String getPostValue() {
         return null;

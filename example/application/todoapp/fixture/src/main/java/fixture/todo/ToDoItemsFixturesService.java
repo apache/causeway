@@ -23,7 +23,6 @@ import fixture.todo.scenarios.ToDoItemsRecreateAndCompleteSeveral;
 import java.util.List;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.Debug;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
@@ -62,7 +61,7 @@ public class ToDoItemsFixturesService extends FixtureScripts {
                     named="Parameters",
                     describedAs = "Script-specific parameters (key=value) ",
                     multiLine = 10)
-            @Parameter(optional = Optionality.TRUE)
+            @Parameter(optionality = Optionality.OPTIONAL)
             final String parameters) {
         return super.runFixtureScript(fixtureScript, parameters);
     }

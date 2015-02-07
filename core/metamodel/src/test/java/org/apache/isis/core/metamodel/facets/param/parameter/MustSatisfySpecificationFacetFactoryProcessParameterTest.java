@@ -77,7 +77,7 @@ public class MustSatisfySpecificationFacetFactoryProcessParameterTest {
                 oneOf(mockFacetedMethodParameter).addFacet(with(anInstanceOf(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter.class)));
             }
         });
-        facetFactory.processParamsMustSatisfy(new ProcessParameterContext(changeLastNameMethodWith, 0, mockFacetedMethodParameter));
+        facetFactory.processParamsMustSatisfy(new ProcessParameterContext(Customer.class, changeLastNameMethodWith, 0, mockFacetedMethodParameter));
     }
 
     @Test
@@ -88,7 +88,7 @@ public class MustSatisfySpecificationFacetFactoryProcessParameterTest {
                 never(mockFacetedMethodParameter).addFacet(with(anInstanceOf(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter.class)));
             }
         });
-        facetFactory.processParamsMustSatisfy(new ProcessParameterContext(changeLastNameMethodWithout, 0, mockFacetedMethodParameter));
+        facetFactory.processParamsMustSatisfy(new ProcessParameterContext(Customer.class, changeLastNameMethodWithout, 0, mockFacetedMethodParameter));
     }
 
 }

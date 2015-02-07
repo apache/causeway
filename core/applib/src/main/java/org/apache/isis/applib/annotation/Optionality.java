@@ -16,7 +16,7 @@ public enum Optionality {
     /**
      * Indicates that the property or parameter is not required.
      */
-    TRUE,
+    OPTIONAL,
     /**
      * Indicates that the property is required (even if the JDO {@link javax.jdo.annotations.Column} annotation
      * says otherwise).
@@ -35,5 +35,5 @@ public enum Optionality {
      * is unable to do so.
      * </p>
      */
-    FALSE
+    MANDATORY
 }

@@ -88,7 +88,7 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
             if (parameterAnnotation instanceof MaxLength) {
                 final MaxLength annotation = (MaxLength) parameterAnnotation;
                 final org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet facet = MaxLengthFacetForMaxLengthAnnotationOnParameter.create(annotation, processParameterContext.getFacetHolder());
-                FacetUtil.addFacet(maxLengthValidator.flagIfPresent(facet));
+                FacetUtil.addFacet(maxLengthValidator.flagIfPresent(facet, processParameterContext));
                 return;
             }
         }
@@ -116,7 +116,7 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
             if (parameterAnnotation instanceof MustSatisfy) {
                 final MustSatisfy annotation = (MustSatisfy) parameterAnnotation;
                 final Facet facet = MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter.create(annotation, processParameterContext.getFacetHolder());
-                FacetUtil.addFacet(mustSatisfyValidator.flagIfPresent(facet));
+                FacetUtil.addFacet(mustSatisfyValidator.flagIfPresent(facet, processParameterContext));
                 return;
             }
         }
@@ -144,7 +144,7 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
             if (parameterAnnotation instanceof RegEx) {
                 final RegEx annotation = (RegEx) parameterAnnotation;
                 final RegExFacet facet = RegExFacetFromRegExAnnotationOnParameter.create(annotation, parameterType, holder);
-                FacetUtil.addFacet(regexValidator.flagIfPresent(facet));
+                FacetUtil.addFacet(regexValidator.flagIfPresent(facet, processParameterContext));
                 final RegExFacet regExFacet = facet;
 
                 // regex also adds a title facet
@@ -179,7 +179,7 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
             if (parameterAnnotation instanceof Optional) {
                 final Optional annotation = (Optional) parameterAnnotation;
                 final Facet facet = MandatoryFacetInvertedByOptionalAnnotationOnParameter.create(annotation, parameterType, holder);
-                FacetUtil.addFacet(optionalValidator.flagIfPresent(facet));
+                FacetUtil.addFacet(optionalValidator.flagIfPresent(facet, processParameterContext));
                 return;
             }
         }

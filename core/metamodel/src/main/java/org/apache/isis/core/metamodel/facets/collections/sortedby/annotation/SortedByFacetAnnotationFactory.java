@@ -59,7 +59,7 @@ public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract impleme
     public void process(final ProcessMethodContext processMethodContext) {
         final SortedBy renderAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), SortedBy.class);
         final SortedByFacet facet = create(renderAnnotation, processMethodContext.getFacetHolder());
-        FacetUtil.addFacet(validator.flagIfPresent(facet));
+        FacetUtil.addFacet(validator.flagIfPresent(facet, processMethodContext));
     }
 
     private SortedByFacet create(final SortedBy annotation, final FacetHolder holder) {
@@ -89,7 +89,10 @@ public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract impleme
                     if(facet != null) {
                         final Class<? extends Comparator<?>> cls = facet.value();
                         if(!Comparator.class.isAssignableFrom(cls)) {
-                            validationFailures.add("%s#%s is annotated with @SortedBy, but the class specified '%s' is not a Comparator", objectSpec.getIdentifier().getClassName(), objectCollection.getId(), facet.value().getName());
+                            validationFailures.add(
+                                    "%s#%s: is annotated with @SortedBy, but the class specified '%s' is not a Comparator",
+                                    objectSpec.getIdentifier().getClassName(), objectCollection.getId(),
+                                    facet.value().getName());
                         }
                     }
                 }

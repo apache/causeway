@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader.validator;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.SortedSet;
 import com.google.common.collect.Sets;
 
 public final class ValidationFailures implements Iterable<String> {
@@ -46,7 +47,8 @@ public final class ValidationFailures implements Iterable<String> {
         if (!occurred()) {
             return;
         }
-        throw new MetaModelInvalidException(messages);
+        final SortedSet<String> sortedMessages = Sets.newTreeSet(messages);
+        throw new MetaModelInvalidException(sortedMessages);
     }
 
     public boolean occurred() {

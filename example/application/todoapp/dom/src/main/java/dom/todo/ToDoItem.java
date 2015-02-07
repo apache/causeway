@@ -412,7 +412,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
             semantics = SemanticsOf.IDEMPOTENT
     )
     public ToDoItem updateCost(
-            @Parameter(optional = Optionality.TRUE)
+            @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named = "New cost")
             @javax.validation.constraints.Digits(integer=10, fraction=2)
             final BigDecimal cost) {
@@ -461,7 +461,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
             @javax.jdo.annotations.Column(name = "attachment_bytes", jdbcType = "BLOB", sqlType = "BLOB")
     })
     @Property(
-            optional = Optionality.TRUE
+            optionality = Optionality.OPTIONAL
     )
     public Blob getAttachment() {
         return attachment;
@@ -480,7 +480,7 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
             @javax.jdo.annotations.Column(name = "doc_chars", jdbcType = "CLOB", sqlType = "CLOB")
     })
     @Property(
-            optional = Optionality.TRUE
+            optionality = Optionality.OPTIONAL
     )
     public Clob getDoc() {
         return doc;
@@ -623,10 +623,10 @@ public class ToDoItem implements Categorized, Comparable<ToDoItem> {
             final Category category,
             @ParameterLayout(named="Subcategory")
             final Subcategory subcategory,
-            @Parameter(optional = Optionality.TRUE)
+            @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named="Due by")
             final LocalDate dueBy,
-            @Parameter(optional = Optionality.TRUE)
+            @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named="Cost")
             final BigDecimal cost) {
         return toDoItems.newToDo(description, category, subcategory, dueBy, cost);

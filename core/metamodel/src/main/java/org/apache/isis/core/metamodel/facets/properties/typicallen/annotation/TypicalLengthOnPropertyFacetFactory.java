@@ -46,7 +46,7 @@ public class TypicalLengthOnPropertyFacetFactory extends FacetFactoryAbstract im
     public void process(final ProcessMethodContext processMethodContext) {
         TypicalLengthFacet facet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(facet == null) {
-            facet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext));
+            facet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext), processMethodContext);
         }
 
         // no-op if null

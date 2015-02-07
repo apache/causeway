@@ -57,17 +57,18 @@ public class BookmarkPolicyFacetViaBookmarkableAnnotationFactory extends FacetFa
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final Bookmarkable annotation = Annotations.getAnnotation(processClassContext.getCls(), Bookmarkable.class);
-        FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
+        FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder(), null));
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final Bookmarkable annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Bookmarkable.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
+        final BookmarkPolicyFacet facet = create(annotation, processMethodContext.getFacetHolder(), processMethodContext);
+        FacetUtil.addFacet(facet);
     }
 
-    private BookmarkPolicyFacet create(final Bookmarkable annotation, final FacetHolder holder) {
-        return annotation == null ? new BookmarkPolicyFacetFallback(holder) : validator.flagIfPresent(new BookmarkPolicyFacetViaBookmarkableAnnotation(annotation.value(), holder));
+    private BookmarkPolicyFacet create(final Bookmarkable annotation, final FacetHolder holder, final ProcessMethodContext processMethodContext) {
+        return annotation == null ? new BookmarkPolicyFacetFallback(holder) : validator.flagIfPresent(new BookmarkPolicyFacetViaBookmarkableAnnotation(annotation.value(), holder), processMethodContext);
     }
 
 
@@ -91,7 +92,7 @@ public class BookmarkPolicyFacetViaBookmarkableAnnotationFactory extends FacetFa
                     final ActionSemanticsFacet semanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
                     if(semanticsFacet == null || semanticsFacet.isNoop() || semanticsFacet.value() != Of.SAFE) {
                       validationFailures.add(
-                          "Action %s is bookmarkable but action semantics are not explicitly indicated as being safe.  " +
+                          "%s: action is bookmarkable but action semantics are not explicitly indicated as being safe.  " +
                           "Either add @Action(semantics=SemanticsOf.SAFE), or remove @ActionLayout(bookmarking=...).",
                       objectAction.getIdentifier().toClassAndNameIdentityString());
                     }

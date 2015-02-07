@@ -55,7 +55,7 @@ public class PagedFacetOnActionFactory extends FacetFactoryAbstract
         
         PagedFacet pagedFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(pagedFacet == null) {
-            pagedFacet = validator.flagIfPresent(createFromPagedAnnotationIfPossible(processMethodContext));
+            pagedFacet = validator.flagIfPresent(createFromPagedAnnotationIfPossible(processMethodContext), processMethodContext);
         }
         // no-op if null
         FacetUtil.addFacet(pagedFacet);

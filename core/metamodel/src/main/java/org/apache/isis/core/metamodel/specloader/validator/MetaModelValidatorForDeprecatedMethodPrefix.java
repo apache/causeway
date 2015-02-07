@@ -18,25 +18,32 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
 
 public class MetaModelValidatorForDeprecatedMethodPrefix extends MetaModelValidatorForDeprecatedAbstract {
 
-    private final ValidationFailures failures = new ValidationFailures();
-
     private final String methodPrefix;
-    private IsisConfiguration configuration;
 
     public MetaModelValidatorForDeprecatedMethodPrefix(final String methodPrefix) {
         this.methodPrefix = methodPrefix;
     }
 
     @Override
-    protected String failureMessageFor(final Facet facet) {
-        return String.format("Method prefix '%s' is deprecated: %s", methodPrefix, ((IdentifiedHolder) facet.getFacetHolder()).getIdentifier().toFullIdentityString());
+    protected String failureMessageFor(final Facet facet, final FacetFactory.AbstractProcessWithMethodContext processMethodContext) {
+
+        final boolean inherited = isInherited(processMethodContext);
+
+        final IdentifiedHolder identifiedHolder = (IdentifiedHolder) facet.getFacetHolder();
+        final Identifier identifier = identifiedHolder.getIdentifier();
+        final String id = identifier.toFullIdentityString();
+        return String.format(
+                "%s%s: method prefix '%s' is deprecated",
+                id,
+                (inherited?" (inherited)":""),
+                methodPrefix);
     }
 
 }

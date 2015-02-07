@@ -255,7 +255,7 @@ public abstract class FixtureScripts extends AbstractService {
                     describedAs="Script-specific parameters (if any).  The format depends on the script implementation (eg key=value, CSV, JSON, XML etc)",
                     multiLine = 10
             )
-            @Parameter(optional = Optionality.TRUE)
+            @Parameter(optionality = Optionality.OPTIONAL)
             final String parameters) {
 
         // if this method is called programmatically, the caller may have simply new'd up the fixture script

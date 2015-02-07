@@ -57,7 +57,7 @@ public class NamedFacetOnParameterAnnotationFactory extends FacetFactoryAbstract
             if (parameterAnnotation instanceof Named) {
                 final Named annotation = (Named) parameterAnnotation;
                 final org.apache.isis.core.metamodel.facets.all.named.NamedFacet facet = NamedFacetOnParameterAnnotation.create(annotation, holder);
-                FacetUtil.addFacet(validator.flagIfPresent(facet));
+                FacetUtil.addFacet(validator.flagIfPresent(facet, processParameterContext));
                 return;
             }
         }

@@ -46,7 +46,50 @@ public interface FacetFactory {
             return facetHolder;
         }
     }
-    
+
+    static class AbstractProcessWithClsContext<T extends FacetHolder> extends AbstractProcessContext<T>{
+
+        private final Class<?> cls;
+
+        AbstractProcessWithClsContext(final Class<?> cls, final T facetHolder) {
+            super(facetHolder);
+            this.cls = cls;
+        }
+
+        /**
+         * The class being introspected upon.
+         */
+        public Class<?> getCls() {
+            return cls;
+        }
+    }
+
+    static class AbstractProcessWithMethodContext<T extends FacetHolder> extends AbstractProcessWithClsContext<T>{
+
+        private final Method method;
+
+        AbstractProcessWithMethodContext(final Class<?> cls, final Method method, final T facetHolder) {
+            super(cls, facetHolder);
+            this.method = method;
+        }
+
+        /**
+         * The class being introspected upon.
+         *
+         * <p>
+         *     This isn't necessarily the same as the {@link java.lang.reflect.Method#getDeclaringClass() declaring class} of the {@link #getMethod() method}; the method might have been inherited.
+         * </p>
+         */
+        public Class<?> getCls() {
+            return super.getCls();
+        }
+
+        public Method getMethod() {
+            return method;
+        }
+
+    }
+
     public interface ProcessContextWithMetadataProperties<T extends FacetHolder> {
         public Properties metadataProperties(String subKey);
         public T getFacetHolder();
@@ -68,8 +111,7 @@ public interface FacetFactory {
     // process class
     // //////////////////////////////////////
 
-    public static class ProcessClassContext extends AbstractProcessContext<FacetHolder> implements MethodRemover, ProcessContextWithMetadataProperties<FacetHolder> {
-        private final Class<?> cls;
+    public static class ProcessClassContext extends AbstractProcessWithClsContext<FacetHolder> implements MethodRemover, ProcessContextWithMetadataProperties<FacetHolder> {
         private final MethodRemover methodRemover;
         private final Properties metadataProperties;
 
@@ -85,18 +127,11 @@ public interface FacetFactory {
                 final Properties metadataProperties, 
                 final MethodRemover methodRemover, 
                 final FacetHolder facetHolder) {
-            super(facetHolder);
-            this.cls = cls;
+            super(cls, facetHolder);
             this.methodRemover = methodRemover;
             this.metadataProperties = metadataProperties;
         }
 
-        /**
-         * The class being processed.
-         */
-        public Class<?> getCls() {
-            return cls;
-        }
 
         @Override
         public void removeMethod(final Method method) {
@@ -137,11 +172,9 @@ public interface FacetFactory {
     // //////////////////////////////////////
 
 
-    public static class ProcessMethodContext extends AbstractProcessContext<FacetedMethod> implements MethodRemover, ProcessContextWithMetadataProperties<FacetedMethod> {
-        private final Class<?> cls;
+    public static class ProcessMethodContext extends AbstractProcessWithMethodContext<FacetedMethod> implements MethodRemover, ProcessContextWithMetadataProperties<FacetedMethod> {
         private final FeatureType featureType;
         private final Properties metadataProperties;
-        private final Method method;
         private final MethodRemover methodRemover;
 
         public ProcessMethodContext(
@@ -151,20 +184,14 @@ public interface FacetFactory {
                 final Method method, 
                 final MethodRemover methodRemover, 
                 final FacetedMethod facetedMethod) {
-            super(facetedMethod);
-            this.cls = cls;
+            super(cls, method, facetedMethod);
             this.featureType = featureType;
             this.metadataProperties = metadataProperties;
-            this.method = method;
             this.methodRemover = methodRemover;
         }
 
-        public Class<?> getCls() {
-            return cls;
-        }
-
-        public Method getMethod() {
-            return method;
+        public FeatureType getFeatureType() {
+            return featureType;
         }
 
         @Override
@@ -229,26 +256,20 @@ public interface FacetFactory {
 
 
 
-
     // //////////////////////////////////////
     // process param
     // //////////////////////////////////////
 
-    public static class ProcessParameterContext extends AbstractProcessContext<FacetedMethodParameter> {
-        private final Method method;
+    public static class ProcessParameterContext extends AbstractProcessWithMethodContext<FacetedMethodParameter> {
         private final int paramNum;
 
         public ProcessParameterContext(
-                final Method method, 
-                final int paramNum, 
+                final Class<?> cls,
+                final Method method,
+                final int paramNum,
                 final FacetedMethodParameter facetedMethodParameter) {
-            super(facetedMethodParameter);
-            this.method = method;
+            super(cls, method, facetedMethodParameter);
             this.paramNum = paramNum;
-        }
-
-        public Method getMethod() {
-            return method;
         }
 
         public int getParamNum() {

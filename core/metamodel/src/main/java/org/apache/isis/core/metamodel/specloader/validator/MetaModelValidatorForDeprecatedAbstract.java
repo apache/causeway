@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader.validator;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
 
 public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelValidatorAbstract implements IsisConfigurationAware {
 
@@ -31,14 +32,40 @@ public abstract class MetaModelValidatorForDeprecatedAbstract extends MetaModelV
 
     private IsisConfiguration configuration;
 
+    /**
+     * @param facet
+     */
     public <T extends Facet> T flagIfPresent(final T facet) {
         if(facet != null) {
-            failures.add(failureMessageFor(facet));
+            failures.add(failureMessageFor(facet, null));
         }
         return facet;
     }
 
-    protected abstract String failureMessageFor(final Facet facet);
+    /**
+     * @param facet
+     * @param processMethodContext - can be null if none available.
+     */
+    public <T extends Facet> T flagIfPresent(final T facet, final FacetFactory.AbstractProcessWithMethodContext processMethodContext) {
+        if(facet != null) {
+            failures.add(failureMessageFor(facet, processMethodContext));
+        }
+        return facet;
+    }
+
+    /**
+     * Convenience for subclasses.
+     */
+    static boolean isInherited(final FacetFactory.AbstractProcessWithMethodContext<?> processContext) {
+        if (processContext == null) {
+            return false;
+        }
+        final Class<?> introspectedCls = processContext.getCls();
+        final Class<?> declaringClass = processContext.getMethod().getDeclaringClass();
+        return introspectedCls != declaringClass;
+    }
+
+    protected abstract String failureMessageFor(final Facet facet, final FacetFactory.AbstractProcessWithMethodContext<?> processMethodContext);
 
     @Override
     public void validate(final ValidationFailures validationFailures) {

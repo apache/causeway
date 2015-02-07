@@ -177,9 +177,10 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
                 final List<Method> superClassMethods = methodsWithTitleAnnotation(supClass);
                 if (methods.size() > superClassMethods.size()) {
                     validationFailures.add(
-                            "Conflict for determining a strategy for retrieval of title for class %s "
-                            + "that contains a method '%s' and an annotation '@%s'", 
-                            objectSpec.getIdentifier().getClassName(), TITLE_METHOD_NAME, Title.class.getName());
+                            "%s: conflict for determining a strategy for retrieval of title for class, contains a method '%s' and an annotation '@%s'",
+                            objectSpec.getIdentifier().getClassName(),
+                            TITLE_METHOD_NAME,
+                            Title.class.getName());
                 }
 
                 return true;

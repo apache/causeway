@@ -72,7 +72,7 @@ public class PagedFacetOnTypeAnnotationFactory extends FacetFactoryAbstract impl
     }
 
     @Override
-    public void setConfiguration(IsisConfiguration configuration) {
+    public void setConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
         validator.setConfiguration(configuration);
     }

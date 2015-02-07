@@ -45,10 +45,10 @@ public class RegExFacetOnTypeAnnotationFactory extends FacetFactoryAbstract impl
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        final RegEx annotation = Annotations.getAnnotation(processClassContaxt.getCls(), RegEx.class);
-        final RegExFacet facet = createRegexFacet(annotation, processClassContaxt.getFacetHolder());
-        FacetUtil.addFacet(validator.flagIfPresent(facet));
+    public void process(final ProcessClassContext processClassContext) {
+        final RegEx annotation = Annotations.getAnnotation(processClassContext.getCls(), RegEx.class);
+        final RegExFacet facet = createRegexFacet(annotation, processClassContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet, null));
     }
 
     private RegExFacet createRegexFacet(final RegEx annotation, final FacetHolder holder) {

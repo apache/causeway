@@ -125,7 +125,7 @@ public @interface Property {
     // //////////////////////////////////////
 
     /**
-     * Whether this property is optional or is required.
+     * Whether this property is optional or is mandatory (ie required).
      *
      * <p>
      *     For properties the default value, {@link org.apache.isis.applib.annotation.Optionality#DEFAULT}, usually
@@ -133,7 +133,7 @@ public @interface Property {
      *     with its {@link javax.jdo.annotations.Column#allowsNull() allowNulls()} attribute set to true.
      * </p>
      */
-    Optionality optional() default Optionality.DEFAULT;
+    Optionality optionality() default Optionality.DEFAULT;
 
 
     // //////////////////////////////////////

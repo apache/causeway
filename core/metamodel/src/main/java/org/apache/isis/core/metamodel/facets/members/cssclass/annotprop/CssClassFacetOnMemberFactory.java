@@ -46,7 +46,7 @@ public class CssClassFacetOnMemberFactory extends FacetFactoryAbstract implement
     public void process(final ProcessMethodContext processMethodContext) {
         CssClassFacet cssClassFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(cssClassFacet == null) {
-            cssClassFacet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext));
+            cssClassFacet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext), processMethodContext);
         }
 
         // no-op if null

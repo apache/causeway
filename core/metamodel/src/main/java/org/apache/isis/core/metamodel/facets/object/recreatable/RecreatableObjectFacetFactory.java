@@ -88,7 +88,7 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract implemen
                 final Facet underlyingFacet = facet != null ? facet.getUnderlyingFacet() : null;
                 if(underlyingFacet != null) {
                     validationFailures.add(
-                            "Class '%s' has multiple incompatible annotations/interfaces indicating that " +
+                            "%s: has multiple incompatible annotations/interfaces indicating that " +
                                     "it is a recreatable object of some sort (%s and %s)",
                             objectSpec.getFullIdentifier(),
                             facet.getClass().getSimpleName(),

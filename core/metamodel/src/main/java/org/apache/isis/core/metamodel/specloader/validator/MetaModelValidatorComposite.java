@@ -51,10 +51,6 @@ public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
         return this;
     }
 
-    public List<MetaModelValidator> getValidators() {
-        return Collections.unmodifiableList(validators);
-    }
-
     @Override
     public void setSpecificationLoaderSpi(final SpecificationLoaderSpi specificationLoader) {
         super.setSpecificationLoaderSpi(specificationLoader);

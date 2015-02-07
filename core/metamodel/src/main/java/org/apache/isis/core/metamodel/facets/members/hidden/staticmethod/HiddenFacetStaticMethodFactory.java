@@ -86,7 +86,7 @@ public class HiddenFacetStaticMethodFactory extends MethodPrefixBasedFacetFactor
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
         final HiddenFacetOnStaticMethod facet = new HiddenFacetOnStaticMethod(facetedMethod);
-        FacetUtil.addFacet(validator.flagIfPresent(facet));
+        FacetUtil.addFacet(validator.flagIfPresent(facet, processMethodContext));
     }
 
     private static Boolean invokeAlwaysHideMethod(final Method alwaysHideMethod) {

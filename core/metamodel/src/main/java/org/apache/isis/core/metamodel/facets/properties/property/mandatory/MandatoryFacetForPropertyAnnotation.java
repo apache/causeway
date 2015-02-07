@@ -46,15 +46,15 @@ public abstract class MandatoryFacetForPropertyAnnotation extends MandatoryFacet
             return new MandatoryFacetForPropertyAnnotation.Primitive(holder);
         }
 
-        final Optionality optionality = property.optional();
+        final Optionality optionality = property.optionality();
         switch (optionality) {
             case DEFAULT:
                 // do nothing here; instead will rely on MandatoryFromJdoColumnAnnotationFacetFactory to perform
                 // the remaining processing
                 return null;
-            case FALSE:
+            case MANDATORY:
                 return new MandatoryFacetForPropertyAnnotation.Required(holder);
-            case TRUE:
+            case OPTIONAL:
                 return new MandatoryFacetForPropertyAnnotation.Optional(holder);
         }
         return null;

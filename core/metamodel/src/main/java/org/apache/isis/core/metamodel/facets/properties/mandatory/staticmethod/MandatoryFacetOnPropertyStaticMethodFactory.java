@@ -74,7 +74,7 @@ public class MandatoryFacetOnPropertyStaticMethodFactory extends MethodPrefixBas
         }
         final FacetHolder property = processMethodContext.getFacetHolder();
         final MandatoryFacetOnPropertyStaticMethod facet = new MandatoryFacetOnPropertyStaticMethod(property);
-        FacetUtil.addFacet(validator.flagIfPresent(facet));
+        FacetUtil.addFacet(validator.flagIfPresent(facet, processMethodContext));
     }
 
     private static boolean indicatesOptional(final Method method) {

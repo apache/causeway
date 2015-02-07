@@ -46,7 +46,7 @@ public class LabelAtFacetForParameterLayoutAnnotationFactoryTest extends Abstrac
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParams(new FacetFactory.ProcessParameterContext(method, 0, facetedMethodParameter));
+        facetFactory.processParams(new FacetFactory.ProcessParameterContext(Customer.class, method, 0, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(LabelAtFacet.class);
         assertThat(facet, is(notNullValue()));

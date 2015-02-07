@@ -51,7 +51,7 @@ public class DebugFacetAnnotationFactory extends FacetFactoryAbstract implements
     public void process(final ProcessMethodContext processMethodContext) {
         final Debug annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Debug.class);
         final DebugFacet facet = create(annotation, processMethodContext.getFacetHolder());
-        FacetUtil.addFacet(validator.flagIfPresent(facet));
+        FacetUtil.addFacet(validator.flagIfPresent(facet, processMethodContext));
     }
 
     private DebugFacet create(final Debug annotation, final FacetHolder holder) {

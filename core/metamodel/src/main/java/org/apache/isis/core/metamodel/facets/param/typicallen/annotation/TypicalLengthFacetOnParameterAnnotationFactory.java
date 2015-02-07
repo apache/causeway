@@ -53,7 +53,7 @@ public class TypicalLengthFacetOnParameterAnnotationFactory extends FacetFactory
             if (parameterAnnotation instanceof TypicalLength) {
                 final TypicalLength annotation = (TypicalLength) parameterAnnotation;
                 final TypicalLengthFacet facet = create(annotation, processParameterContext.getFacetHolder());
-                FacetUtil.addFacet(validator.flagIfPresent(facet));
+                FacetUtil.addFacet(validator.flagIfPresent(facet, processParameterContext));
                 return;
             }
         }

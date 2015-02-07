@@ -21,22 +21,33 @@ package org.apache.isis.core.metamodel.specloader.validator;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
 
 public class MetaModelValidatorForDeprecatedAnnotation extends MetaModelValidatorForDeprecatedAbstract{
 
-    private final Class<?> annotationType;
+    private String annotationName;
 
     public MetaModelValidatorForDeprecatedAnnotation(final Class<?> annotationType) {
-        this.annotationType = annotationType;
+        annotationName = annotationType.getSimpleName();
     }
 
     @Override
-    protected String failureMessageFor(final Facet facet) {
-        final String simpleName = annotationType.getSimpleName();
+    protected String failureMessageFor(
+            final Facet facet,
+            final FacetFactory.AbstractProcessWithMethodContext<?> processContext) {
+
+        final boolean inherited = isInherited(processContext);
+
         final IdentifiedHolder facetHolder = (IdentifiedHolder) facet.getFacetHolder();
         final Identifier identifier = facetHolder.getIdentifier();
-        final String s = identifier.toFullIdentityString();
-        return String.format("@%s is deprecated: %s", simpleName, s);
+        final String id = identifier.toFullIdentityString();
+        return String.format(
+                "%s%s: annotation '%s' is deprecated",
+                id,
+                (inherited?" (inherited)":""),
+                annotationName);
     }
+
+
 
 }

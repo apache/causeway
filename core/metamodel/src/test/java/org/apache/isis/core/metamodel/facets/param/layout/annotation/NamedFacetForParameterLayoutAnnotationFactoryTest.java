@@ -47,7 +47,7 @@ public class NamedFacetForParameterLayoutAnnotationFactoryTest extends AbstractF
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[]{String.class});
 
-        facetFactory.processParams(new FacetFactory.ProcessParameterContext(method, 0, facetedMethodParameter));
+        facetFactory.processParams(new FacetFactory.ProcessParameterContext(Customer.class, method, 0, facetedMethodParameter));
 
         final NamedFacet facet = facetedMethodParameter.getFacet(NamedFacet.class);
         assertThat(facet, is(notNullValue()));
@@ -66,7 +66,7 @@ public class NamedFacetForParameterLayoutAnnotationFactoryTest extends AbstractF
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[]{String.class});
 
-        facetFactory.processParams(new FacetFactory.ProcessParameterContext(method, 0, facetedMethodParameter));
+        facetFactory.processParams(new FacetFactory.ProcessParameterContext(Customer.class, method, 0, facetedMethodParameter));
 
         final NamedFacet facet = facetedMethodParameter.getFacet(NamedFacet.class);
         assertThat(facet, is(notNullValue()));

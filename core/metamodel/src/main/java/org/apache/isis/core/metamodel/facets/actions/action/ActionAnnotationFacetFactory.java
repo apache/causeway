@@ -210,14 +210,14 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                 actionInvocationFacet = actionInteractionValidator.flagIfPresent(
                         new ActionInvocationFacetForPostsActionInvokedEventAnnotation(
                                 actionInvokedEventType, actionMethod, typeSpec, returnSpec, actionDomainEventFacet, holder,
-                                getRuntimeContext(), getAdapterManager(), getServicesInjector()));
+                                getRuntimeContext(), getAdapterManager(), getServicesInjector()), processMethodContext);
             } else
             // deprecated (but more recently)
             if (actionInteraction != null) {
                 actionInvocationFacet = actionInteractionValidator.flagIfPresent(
                         new ActionInvocationFacetForDomainEventFromActionInteractionAnnotation(
                                 actionDomainEventType, actionMethod, typeSpec, returnSpec, actionDomainEventFacet, holder,
-                                getRuntimeContext(), getAdapterManager(), getServicesInjector()));
+                                getRuntimeContext(), getAdapterManager(), getServicesInjector()), processMethodContext);
             } else
             // current
             if (action != null) {
@@ -244,7 +244,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         // check for deprecated @Hidden
         final Hidden hiddenAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), Hidden.class);
-        HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetForHiddenAnnotationOnAction.create(hiddenAnnotation, holder));
+        HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetForHiddenAnnotationOnAction.create(hiddenAnnotation, holder), processMethodContext);
 
         // else search for @Action(hidden=...)
         final Action action = Annotations.getAnnotation(method, Action.class);
@@ -260,7 +260,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         // check for deprecated @Disabled
         final Disabled annotation = Annotations.getAnnotation(method, Disabled.class);
-        DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetForDisabledAnnotationOnAction.create(annotation, holder));
+        DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetForDisabledAnnotationOnAction.create(annotation, holder), processMethodContext);
 
         // there is no equivalent in @Action(...)
 
@@ -274,7 +274,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         // check for deprecated @Prototype
         final Prototype annotation = Annotations.getAnnotation(method, Prototype.class);
         final PrototypeFacet facet1 = PrototypeFacetForPrototypeAnnotation.create(annotation, holder);
-        FacetUtil.addFacet(prototypeValidator.flagIfPresent(facet1));
+        FacetUtil.addFacet(prototypeValidator.flagIfPresent(facet1, processMethodContext));
         PrototypeFacet facet = facet1;
 
         // else search for @Action(restrictTo=...)
@@ -293,18 +293,18 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         // check for the deprecated @QueryOnly...
         final QueryOnly queryOnly = Annotations.getAnnotation(processMethodContext.getMethod(), QueryOnly.class);
-        facet = queryOnlyValidator.flagIfPresent(ActionSemanticsFacetFromQueryOnlyAnnotation.create(queryOnly, holder));
+        facet = queryOnlyValidator.flagIfPresent(ActionSemanticsFacetFromQueryOnlyAnnotation.create(queryOnly, holder), processMethodContext);
 
         // else check for the deprecated @Idempotent...
         if(facet == null) {
             final Idempotent idempotent = Annotations.getAnnotation(processMethodContext.getMethod(), Idempotent.class);
-            facet = idempotentValidator.flagIfPresent(ActionSemanticsFacetFromIdempotentAnnotation.create(idempotent, holder));
+            facet = idempotentValidator.flagIfPresent(ActionSemanticsFacetFromIdempotentAnnotation.create(idempotent, holder), processMethodContext);
         }
 
         // else check for the deprecated @ActionSemantics ...
         if(facet == null) {
             final ActionSemantics actionSemantics = Annotations.getAnnotation(method, ActionSemantics.class);
-            facet = actionSemanticsValidator.flagIfPresent(ActionSemanticsFacetForActionSemanticsAnnotation.create(actionSemantics, holder));
+            facet = actionSemanticsValidator.flagIfPresent(ActionSemanticsFacetForActionSemanticsAnnotation.create(actionSemantics, holder), processMethodContext);
         }
 
         // else check for @Action(semantics=...)
@@ -330,7 +330,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         // check for the deprecated @Bulk annotation first
         final Bulk annotation = Annotations.getAnnotation(method, Bulk.class);
-        facet = bulkValidator.flagIfPresent(BulkFacetForBulkAnnotation.create(annotation, holder));
+        facet = bulkValidator.flagIfPresent(BulkFacetForBulkAnnotation.create(annotation, holder), processMethodContext);
 
         // else check for @Action(invokeOn=...)
         if(facet == null) {
@@ -363,7 +363,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         // check for deprecated @Command annotation first
         final Command annotation = Annotations.getAnnotation(method, Command.class);
         commandFacet = commandValidator.flagIfPresent(
-                CommandFacetForCommandAnnotation.create(annotation, processMethodContext.getFacetHolder()));
+                CommandFacetForCommandAnnotation.create(annotation, processMethodContext.getFacetHolder()), processMethodContext);
 
         // else check for @Action(command=...)
         if(commandFacet == null) {
@@ -394,7 +394,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         // check for deprecated @PublishedAction annotation first
         final PublishedAction annotation = Annotations.getAnnotation(processMethodContext.getMethod(), PublishedAction.class);
         facet = publishedActionValidator.flagIfPresent(
-                PublishedActionFacetForPublishedActionAnnotation.create(annotation, holder));
+                PublishedActionFacetForPublishedActionAnnotation.create(annotation, holder), processMethodContext);
 
         // else check for @Action(publishing=...)
         if(facet == null) {
@@ -419,7 +419,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         // check for deprecated @TypeOf
         final TypeOf annotation = Annotations.getAnnotation(method, TypeOf.class);
         facet = typeOfValidator.flagIfPresent(
-                TypeOfFacetOnActionForTypeOfAnnotation.create(annotation, getSpecificationLoader(), holder));
+                TypeOfFacetOnActionForTypeOfAnnotation.create(annotation, getSpecificationLoader(), holder), processMethodContext);
 
         // check for @Action(typeOf=...)
         if(facet == null) {

@@ -207,7 +207,7 @@ public class ToDoItemContributions extends AbstractFactoryAndRepository {
     public Categorized updateCategory(
             final Categorized item,
             final @ParameterLayout(named="Category") Category category,
-            final @Parameter(optional = Optionality.TRUE) @ParameterLayout(named="Subcategory") Subcategory subcategory) {
+            final @Parameter(optionality = Optionality.OPTIONAL) @ParameterLayout(named="Subcategory") Subcategory subcategory) {
         item.setCategory(category);
         item.setSubcategory(subcategory);
         return item;

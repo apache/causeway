@@ -48,7 +48,7 @@ public class NotInServiceMenuFacetAnnotationFactory extends FacetFactoryAbstract
     public void process(final ProcessMethodContext processMethodContext) {
         final NotInServiceMenu annotation = Annotations.getAnnotation(processMethodContext.getMethod(), NotInServiceMenu.class);
         final NotInServiceMenuFacet facet = create(annotation, processMethodContext.getFacetHolder());
-        FacetUtil.addFacet(validator.flagIfPresent(facet));
+        FacetUtil.addFacet(validator.flagIfPresent(facet, processMethodContext));
     }
 
     private NotInServiceMenuFacet create(final NotInServiceMenu annotation, final FacetHolder holder) {

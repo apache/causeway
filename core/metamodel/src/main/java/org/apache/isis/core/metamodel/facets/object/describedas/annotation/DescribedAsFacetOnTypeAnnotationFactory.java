@@ -45,10 +45,10 @@ public class DescribedAsFacetOnTypeAnnotationFactory extends FacetFactoryAbstrac
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        final DescribedAs annotation = Annotations.getAnnotation(processClassContaxt.getCls(), DescribedAs.class);
-        final DescribedAsFacet facet = create(annotation, processClassContaxt.getFacetHolder());
-        FacetUtil.addFacet(validator.flagIfPresent(facet));
+    public void process(final ProcessClassContext processClassContext) {
+        final DescribedAs annotation = Annotations.getAnnotation(processClassContext.getCls(), DescribedAs.class);
+        final DescribedAsFacet facet = create(annotation, processClassContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet, null));
     }
 
     private DescribedAsFacet create(final DescribedAs annotation, final FacetHolder holder) {

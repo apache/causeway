@@ -52,7 +52,7 @@ public class RenderedAsDayBeforeFacetOnParameterAnnotationFactory extends FacetF
             if (parameterAnnotation instanceof RenderedAsDayBefore) {
                 final RenderedAsDayBefore annotation = (RenderedAsDayBefore) parameterAnnotation;
                 final RenderedAdjustedFacet facet = create(annotation, processParameterContext.getFacetHolder());
-                FacetUtil.addFacet(validator.flagIfPresent(facet));
+                FacetUtil.addFacet(validator.flagIfPresent(facet, processParameterContext));
                 return;
             }
         }

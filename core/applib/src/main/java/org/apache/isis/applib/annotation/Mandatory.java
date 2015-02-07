@@ -46,7 +46,7 @@ import java.lang.annotation.Target;
  * 
  * @see Optional
  * 
- * @deprecated - use {@link Property#optional()} and {@link Parameter#optional()}  (with {@link Optionality#FALSE}) instead.
+ * @deprecated - use {@link Property#optionality()} and {@link Parameter#optionality()}  (with {@link Optionality#MANDATORY}) instead.
  */
 @Deprecated
 @Inherited

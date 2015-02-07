@@ -59,7 +59,7 @@ public class MaskFacetOnPropertyAnnotationFactory extends FacetFactoryAbstract i
         }
 
         final Mask annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Mask.class);
-        addMaskFacetAndCorrespondingTitleFacet(processMethodContext.getFacetHolder(), annotation, processMethodContext.getMethod().getReturnType());
+        addMaskFacetAndCorrespondingTitleFacet(annotation, processMethodContext.getMethod().getReturnType(), processMethodContext);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class MaskFacetOnPropertyAnnotationFactory extends FacetFactoryAbstract i
         for (int i = 0; i < parameterAnnotations.length; i++) {
             if (parameterAnnotations[i] instanceof Mask) {
                 final Mask annotation = (Mask) parameterAnnotations[i];
-                addMaskFacetAndCorrespondingTitleFacet(processParameterContext.getFacetHolder(), annotation, parameterTypes[i]);
+                addMaskFacetAndCorrespondingTitleFacet(annotation, parameterTypes[i], processParameterContext);
                 return;
             }
         }
@@ -84,8 +84,9 @@ public class MaskFacetOnPropertyAnnotationFactory extends FacetFactoryAbstract i
         return annotation != null ? new MaskFacetOnPropertyAnnotation(annotation.value(), null, holder) : null;
     }
 
-    private boolean addMaskFacetAndCorrespondingTitleFacet(final FacetHolder holder, final Mask annotation, final Class<?> cls) {
-        final MaskFacet maskFacet = validator.flagIfPresent(createMaskFacet(annotation, holder));
+    private boolean addMaskFacetAndCorrespondingTitleFacet(final Mask annotation, final Class<?> cls, final AbstractProcessWithMethodContext processContext) {
+        final FacetHolder facetHolder = processContext.getFacetHolder();
+        final MaskFacet maskFacet = validator.flagIfPresent(createMaskFacet(annotation, facetHolder), processContext);
         if (maskFacet == null) {
             return false;
         }

@@ -538,7 +538,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             class Customer {
                 @Property(
-                        optional = Optionality.TRUE
+                        optionality = Optionality.OPTIONAL
                 )
                 public String getName() {
                     return null;
@@ -566,7 +566,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             class Customer {
                 @Property(
-                        optional = Optionality.FALSE
+                        optionality = Optionality.MANDATORY
                 )
                 public String getName() {
                     return null;
@@ -594,7 +594,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             class Customer {
                 @Property(
-                        optional = Optionality.DEFAULT
+                        optionality = Optionality.DEFAULT
                 )
                 public String getName() {
                     return null;

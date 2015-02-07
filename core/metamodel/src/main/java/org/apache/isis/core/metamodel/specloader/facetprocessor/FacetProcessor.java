@@ -318,8 +318,10 @@ public class FacetProcessor implements RuntimeContextAware {
             final FeatureType featureType, 
             final Properties metadataProperties) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(featureType);
+        final ProcessMethodContext processMethodContext =
+                new ProcessMethodContext(cls, featureType, metadataProperties, method, removerElseNullRemover(methodRemover), facetedMethod);
         for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.process(new ProcessMethodContext(cls, featureType, metadataProperties, method, removerElseNullRemover(methodRemover), facetedMethod));
+            facetFactory.process(processMethodContext);
         }
     }
 
@@ -328,8 +330,10 @@ public class FacetProcessor implements RuntimeContextAware {
             final Properties metadataProperties, 
             final ObjectMember facetHolder) {
         cacheContributeeMemberFacetFactoriesIfRequired();
+        final ContributeeMemberFacetFactory.ProcessContributeeMemberContext processMemberContext =
+                new ContributeeMemberFacetFactory.ProcessContributeeMemberContext(metadataProperties, facetHolder);
         for (final ContributeeMemberFacetFactory facetFactory : cachedContributeeMemberFacetFactories) {
-            facetFactory.process(new ContributeeMemberFacetFactory.ProcessContributeeMemberContext(metadataProperties, facetHolder));
+            facetFactory.process(processMemberContext);
         }
     }
 
@@ -343,21 +347,23 @@ public class FacetProcessor implements RuntimeContextAware {
      * for each appropriate factory.
      * 
      * @see FacetFactory#processParams(ProcessParameterContext)
-     * 
+     *@param introspectedClass
      * @param method
      *            - action method to process
      * @param paramNum
-     *            - 0-based
+ *            - 0-based
      * @param facetedMethodParameter
-     *            - holder to attach facets to.
      */
     public void processParams(
-            final Method method, 
-            final int paramNum, 
+            final Class<?> introspectedClass,
+            final Method method,
+            final int paramNum,
             final FacetedMethodParameter facetedMethodParameter) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.ACTION_PARAMETER);
+        final ProcessParameterContext processParameterContext =
+                new ProcessParameterContext(introspectedClass, method, paramNum, facetedMethodParameter);
         for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.processParams(new ProcessParameterContext(method, paramNum, facetedMethodParameter));
+            facetFactory.processParams(processParameterContext);
         }
     }
 

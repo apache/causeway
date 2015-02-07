@@ -91,7 +91,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(final ProcessClassContext processClassContext) {
 
         processAuditing(processClassContext);
         processPublishing(processClassContext);
@@ -123,7 +123,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         // check for the deprecated annotation first
         final Audited annotation = Annotations.getAnnotation(cls, Audited.class);
         auditableFacet = auditedValidator.flagIfPresent(
-                            AuditableFacetForAuditedAnnotation.create(annotation, holder));
+                            AuditableFacetForAuditedAnnotation.create(annotation, holder), null);
 
         // else check for @DomainObject(auditing=....)
         if(auditableFacet == null) {
@@ -280,8 +280,8 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
                         continue;
                     }
                     validationFailures.add(
-                            "Cannot have two entities with same object type (@DomainObject(objectType=...) or @ObjectType); " +
-                            "both %s and %s are annotated with value of ''%s''.",
+                            "%s: cannot have two entities with same object type (@DomainObject(objectType=...) or @ObjectType); %s " +
+                            "has same value (%s).",
                             existingSpec.getFullIdentifier(),
                             otherSpec.getFullIdentifier(),
                             objectSpecId);
@@ -302,7 +302,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
     // //////////////////////////////////////
 
     @Override
-    public void setConfiguration(IsisConfiguration configuration) {
+    public void setConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
 
         publishedObjectValidator.setConfiguration(configuration);
@@ -314,12 +314,12 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
     }
 
     @Override
-    public void setAdapterManager(AdapterManager adapterManager) {
+    public void setAdapterManager(final AdapterManager adapterManager) {
         this.adapterManager = adapterManager;
     }
 
     @Override
-    public void setServicesInjector(ServicesInjector servicesInjector) {
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
         this.servicesInjector = servicesInjector;
     }
 

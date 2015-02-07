@@ -45,10 +45,10 @@ public class PluralAnnotationFacetFactory extends FacetFactoryAbstract implement
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        final Plural annotation = Annotations.getAnnotation(processClassContaxt.getCls(), Plural.class);
-        final PluralFacet facet = create(annotation, processClassContaxt.getFacetHolder());
-        FacetUtil.addFacet(validator.flagIfPresent(facet));
+    public void process(final ProcessClassContext processClassContext) {
+        final Plural annotation = Annotations.getAnnotation(processClassContext.getCls(), Plural.class);
+        final PluralFacet facet = create(annotation, processClassContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet, null));
     }
 
     private PluralFacet create(final Plural annotation, final FacetHolder holder) {

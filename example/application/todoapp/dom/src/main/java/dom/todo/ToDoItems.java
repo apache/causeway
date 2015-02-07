@@ -141,13 +141,13 @@ public class ToDoItems {
             final String description,
             @ParameterLayout(named="Category")
             final Category category,
-            @Parameter(optional = Optionality.TRUE)
+            @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named="Subcategory")
             final Subcategory subcategory,
-            @Parameter(optional = Optionality.TRUE)
+            @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named="Due by")
             final LocalDate dueBy,
-            @Parameter(optional = Optionality.TRUE)
+            @Parameter(optionality = Optionality.OPTIONAL)
             @ParameterLayout(named="Cost")
             final BigDecimal cost) {
         return newToDo(description, category, subcategory, currentUserName(), dueBy, cost);

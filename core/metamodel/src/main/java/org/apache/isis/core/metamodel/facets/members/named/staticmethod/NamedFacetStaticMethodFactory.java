@@ -87,7 +87,7 @@ public class NamedFacetStaticMethodFactory extends MethodPrefixBasedFacetFactory
 
         final FacetHolder facetHolder = processMethodContext.getFacetHolder();
         final NamedFacetStaticMethod facet = new NamedFacetStaticMethod(name, nameMethod, facetHolder);
-        FacetUtil.addFacet(validator.flagIfPresent(facet));
+        FacetUtil.addFacet(validator.flagIfPresent(facet, processMethodContext));
     }
 
     private static String invokeNameMethod(final Method nameMethod) {

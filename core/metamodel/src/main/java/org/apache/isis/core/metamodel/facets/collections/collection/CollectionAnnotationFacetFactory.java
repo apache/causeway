@@ -151,7 +151,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
             collectionDomainEventType = collectionInteraction.value();
             collectionDomainEventFacet = collectionInteractionValidator.flagIfPresent(
                     new CollectionDomainEventFacetForCollectionInteractionAnnotation(
-                        collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder));
+                        collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder), processMethodContext);
         } else
         // search for @Collection(domainEvent=...)
         if(collection != null && collection.domainEvent() != null) {
@@ -237,7 +237,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
         // check for deprecated @Hidden
         final Hidden hiddenAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), Hidden.class);
-        HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetForHiddenAnnotationOnCollection.create(hiddenAnnotation, holder));
+        HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetForHiddenAnnotationOnCollection.create(hiddenAnnotation, holder), processMethodContext);
 
         // else check for @Collection(hidden=...)
         final Collection collection = Annotations.getAnnotation(method, Collection.class);
@@ -254,7 +254,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
         // check for deprecated @Disabled
         final Disabled annotation = Annotations.getAnnotation(method, Disabled.class);
-        DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetForDisabledAnnotationOnCollection.create(annotation, holder));
+        DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetForDisabledAnnotationOnCollection.create(annotation, holder), processMethodContext);
 
         // else check for @Collection(editing=...)
         final Collection collection = Annotations.getAnnotation(method, Collection.class);
@@ -272,7 +272,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         // check for deprecated @NotPersisted first
         final NotPersisted annotation = Annotations.getAnnotation(method, NotPersisted.class);
         final NotPersistedFacet facet1 = NotPersistedFacetForNotPersistedAnnotationOnCollection.create(annotation, holder);
-        FacetUtil.addFacet(notPersistedValidator.flagIfPresent(facet1));
+        FacetUtil.addFacet(notPersistedValidator.flagIfPresent(facet1, processMethodContext));
         NotPersistedFacet facet = facet1;
 
         // else search for @Collection(notPersisted=...)
@@ -300,7 +300,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         // check for deprecated @TypeOf
         final TypeOf annotation = Annotations.getAnnotation(method, TypeOf.class);
         facet = typeOfValidator.flagIfPresent(
-                TypeOfFacetOnCollectionFromTypeOfAnnotation.create(annotation, facetHolder, getSpecificationLoader()));
+                TypeOfFacetOnCollectionFromTypeOfAnnotation.create(annotation, facetHolder, getSpecificationLoader()), processMethodContext);
 
         // else check for @Collection(typeOf=...)
         final Collection collection = Annotations.getAnnotation(method, Collection.class);

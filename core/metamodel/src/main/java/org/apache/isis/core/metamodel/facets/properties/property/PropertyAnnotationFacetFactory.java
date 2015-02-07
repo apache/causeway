@@ -152,7 +152,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
             propertyDomainEventType = propertyInteraction.value();
             propertyDomainEventFacet = propertyInteractionValidator.flagIfPresent(
                     new PropertyDomainEventFacetForPropertyInteractionAnnotation(
-                        propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder));
+                        propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder), processMethodContext);
         } else
         // search for @Property(domainEvent=...)
         if(property != null && property.domainEvent() != null) {
@@ -238,7 +238,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for deprecated @Hidden first
         final Hidden hiddenAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), Hidden.class);
-        HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetForHiddenAnnotationOnProperty.create(hiddenAnnotation, holder));
+        HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetForHiddenAnnotationOnProperty.create(hiddenAnnotation, holder), processMethodContext);
 
         // else search for @Property(hidden=...)
         final Property property = Annotations.getAnnotation(method, Property.class);
@@ -255,7 +255,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for deprecated @Disabled first
         final Disabled annotation = Annotations.getAnnotation(method, Disabled.class);
-        DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetForDisabledAnnotationOnProperty.create(annotation, holder));
+        DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetForDisabledAnnotationOnProperty.create(annotation, holder), processMethodContext);
 
         // else search for @Property(editing=...)
         final Property property = Annotations.getAnnotation(method, Property.class);
@@ -272,7 +272,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for deprecated @MaxLength first
         final MaxLength annotation = Annotations.getAnnotation(method, MaxLength.class);
-        MaxLengthFacet facet = maxLengthValidator.flagIfPresent(MaxLengthFacetForMaxLengthAnnotationOnProperty.create(annotation, holder));
+        MaxLengthFacet facet = maxLengthValidator.flagIfPresent(MaxLengthFacetForMaxLengthAnnotationOnProperty.create(annotation, holder), processMethodContext);
 
         // else search for @Property(maxLength=...)
         final Property property = Annotations.getAnnotation(method, Property.class);
@@ -289,7 +289,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for deprecated @MustSatisfy first
         final MustSatisfy annotation = Annotations.getAnnotation(method, MustSatisfy.class);
-        Facet facet = mustSatisfyValidator.flagIfPresent(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty.create(annotation, holder));
+        Facet facet = mustSatisfyValidator.flagIfPresent(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty.create(annotation, holder), processMethodContext);
 
         // else search for @Property(mustSatisfy=...)
         final Property property = Annotations.getAnnotation(method, Property.class);
@@ -306,7 +306,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for deprecated @NotPersisted first
         final NotPersisted annotation = Annotations.getAnnotation(method, NotPersisted.class);
-        NotPersistedFacet facet = notPersistedValidator.flagIfPresent(NotPersistedFacetForNotPersistedAnnotationOnProperty.create(annotation, holder));
+        NotPersistedFacet facet = notPersistedValidator.flagIfPresent(NotPersistedFacetForNotPersistedAnnotationOnProperty.create(annotation, holder), processMethodContext);
 
         // else search for @Property(notPersisted=...)
         final Property property = Annotations.getAnnotation(method, Property.class);
@@ -318,17 +318,19 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     }
 
     void processOptional(final ProcessMethodContext processMethodContext) {
+
         final Method method = processMethodContext.getMethod();
+
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         // check for deprecated @Optional first
-        final Optional annotation = Annotations.getAnnotation(method, Optional.class);
-        MandatoryFacet facet = optionalValidator.flagIfPresent(MandatoryFacetInvertedByOptionalAnnotationOnProperty.create(annotation, method, holder));
+        final Optional optionalAnnotation = Annotations.getAnnotation(method, Optional.class);
+        MandatoryFacet facet = optionalValidator.flagIfPresent(MandatoryFacetInvertedByOptionalAnnotationOnProperty.create(optionalAnnotation, method, holder), processMethodContext);
 
         // else check for deprecated @Mandatory first
-        Mandatory mandatoryAnnotation = Annotations.getAnnotation(method, Mandatory.class);
+        final Mandatory mandatoryAnnotation = Annotations.getAnnotation(method, Mandatory.class);
         if(facet == null) {
-            facet = mandatoryValidator.flagIfPresent(MandatoryFacetForMandatoryAnnotationOnProperty.create(mandatoryAnnotation, holder));
+            facet = mandatoryValidator.flagIfPresent(MandatoryFacetForMandatoryAnnotationOnProperty.create(mandatoryAnnotation, holder), processMethodContext);
         }
 
         // else search for @Property(optional=...)
@@ -348,7 +350,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for deprecated @RegEx first
         final RegEx annotation = Annotations.getAnnotation(processMethodContext.getMethod(), RegEx.class);
-        RegExFacet facet = regexValidator.flagIfPresent(RegExFacetForRegExAnnotationOnProperty.create(annotation, returnType, holder));
+        RegExFacet facet = regexValidator.flagIfPresent(RegExFacetForRegExAnnotationOnProperty.create(annotation, returnType, holder), processMethodContext);
 
         if (facet != null) {
             // @RegEx also supports corresponding title facet
