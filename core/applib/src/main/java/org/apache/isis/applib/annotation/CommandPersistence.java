@@ -59,6 +59,7 @@ public enum CommandPersistence {
     public static Command.Persistence from(final CommandPersistence commandPersistence) {
         if(commandPersistence == null) return null;
         if(commandPersistence == PERSISTED) return Command.Persistence.PERSISTED;
+        if(commandPersistence == NOT_PERSISTED) return Command.Persistence.NOT_PERSISTED;
         if(commandPersistence == IF_HINTED) return Command.Persistence.IF_HINTED;
         // shouldn't happen
         throw new IllegalArgumentException("Unrecognized : persistence" + commandPersistence);

@@ -93,12 +93,20 @@ public class IsisSignInPanel extends SignInPanel {
             final String id,
             final PageType pageType,
             final boolean visibilityAllowed) {
-        final Class<? extends Page> signUpPageClass = pageClassRegistry.getPageClass(pageType);
-        final BookmarkablePageLink<Void> link = new BookmarkablePageLink<>(id, signUpPageClass);
 
-        if(!visibilityAllowed) {
+        final BookmarkablePageLink<Void> link;
+        if(pageClassRegistry != null) {
+            final Class<? extends Page> signUpPageClass = pageClassRegistry.getPageClass(pageType);
+            link = new BookmarkablePageLink<>(id, signUpPageClass);
+            if(!visibilityAllowed) {
+                link.setVisibilityAllowed(false);
+            }
+        } else {
+            // can happen if failed to bootstrap due to metamodel validation errors
+            link = new BookmarkablePageLink<>(id, null);
             link.setVisibilityAllowed(false);
         }
+
 
         getSignInForm().addOrReplace(link);
         return link;
