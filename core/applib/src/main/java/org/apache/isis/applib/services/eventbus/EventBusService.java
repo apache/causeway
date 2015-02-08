@@ -18,10 +18,16 @@ package org.apache.isis.applib.services.eventbus;
 
 import java.util.Collections;
 import java.util.Set;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+
 import com.google.common.collect.Sets;
-import com.google.common.eventbus.EventBus;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
