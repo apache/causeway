@@ -33,8 +33,8 @@ public class InMemoryDBForSimpleApp extends InMemoryDB {
     @Override
     protected void init(Object obj, String str) {
         if(obj instanceof SimpleObject) {
-            SimpleObject toDoItem = (SimpleObject) obj;
-            toDoItem.setName(str);
+            SimpleObject simpleObject = (SimpleObject) obj;
+            simpleObject.setName(str);
         }
     }
 }
