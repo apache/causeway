@@ -1,3 +1,19 @@
+/**
+ *  Licensed to the Apache Software Foundation (ASF) under one or more
+ *  contributor license agreements.  See the NOTICE file distributed with
+ *  this work for additional information regarding copyright ownership.
+ *  The ASF licenses this file to You under the Apache License, Version 2.0
+ *  (the "License"); you may not use this file except in compliance with
+ *  the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package org.apache.isis.core.runtime.services.eventbus;
 
 import org.slf4j.Logger;
@@ -8,20 +24,24 @@ import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
+/**
+ * Default logic for handling Exceptions thrown while processing Events on an
+ * {@link org.apache.isis.applib.services.eventbus.EventBusService}.
+ */
 public class DefaultSubscriberExceptionHandler {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(DefaultSubscriberExceptionHandler.class);
 
-    //region > exception handling
-    
+    // region > exception handling
+
     public static void processException(Throwable exception,
             Object event) {
-        if(!(event instanceof AbstractDomainEvent)) {
-            if(LOG.isDebugEnabled()) {
+        if (!(event instanceof AbstractDomainEvent)) {
+            if (LOG.isDebugEnabled()) {
                 LOG.debug("Ignoring exception '%s' (%s), not a subclass of AbstractDomainEvent", exception.getMessage(), exception.getClass().getName());
             }
             return;
-        } 
+        }
         final AbstractDomainEvent<?> interactionEvent = (AbstractDomainEvent<?>) event;
         final AbstractDomainEvent.Phase phase = interactionEvent.getEventPhase();
         switch (phase) {
@@ -31,11 +51,11 @@ public class DefaultSubscriberExceptionHandler {
             break;
         case DISABLE:
             LOG.warn("Exception thrown during DISABLE phase, to be safe will veto (disable) the interaction event, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
-            interactionEvent.disable(exception.getMessage()!=null?exception.getMessage(): exception.getClass().getName() + " thrown.");
+            interactionEvent.disable(exception.getMessage() != null ? exception.getMessage() : exception.getClass().getName() + " thrown.");
             break;
         case VALIDATE:
             LOG.warn("Exception thrown during VALIDATE phase, to be safe will veto (invalidate) the interaction event, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
-            interactionEvent.invalidate(exception.getMessage()!=null?exception.getMessage(): exception.getClass().getName() + " thrown.");
+            interactionEvent.invalidate(exception.getMessage() != null ? exception.getMessage() : exception.getClass().getName() + " thrown.");
             break;
         case EXECUTING:
             LOG.warn("Exception thrown during EXECUTING phase, to be safe will abort the transaction, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
@@ -47,7 +67,7 @@ public class DefaultSubscriberExceptionHandler {
             break;
         }
     }
-    
+
     private static void abortTransaction(Throwable exception) {
         getTransactionManager().getTransaction().setAbortCause(new IsisApplicationException(exception));
         return;
@@ -57,6 +77,6 @@ public class DefaultSubscriberExceptionHandler {
         return IsisContext.getTransactionManager();
     }
 
-    //endregion
+    // endregion
 
 }

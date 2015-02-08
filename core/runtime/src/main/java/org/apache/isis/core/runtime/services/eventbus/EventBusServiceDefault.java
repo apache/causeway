@@ -19,6 +19,8 @@ package org.apache.isis.core.runtime.services.eventbus;
 import org.apache.isis.applib.services.eventbus.EventBus;
 
 /**
+ * An Event Bus Service based on Guava.
+ * <p>
  * @deprecated - but only because {@link org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo}
  * is annotated (with <code>@DomainService</code>) as the default implementation.  The functionality in this implementation
  * is still required.

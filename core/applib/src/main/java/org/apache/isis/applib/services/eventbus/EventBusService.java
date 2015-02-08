@@ -31,7 +31,7 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * A wrapper for a Guava {@link EventBus}, allowing arbitrary events to be posted and
+ * A service implementing an Event Bus, allowing arbitrary events to be posted and
  * subscribed to.
  *  
  * <p>
