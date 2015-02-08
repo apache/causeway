@@ -41,8 +41,7 @@ public class GuavaEventBusAdapter extends EventBusAdapter {
 
     @Override
     public void register(final Object domainService) {
-        // NO-OP. On current implementation subscribers list is the one managed
-        // by the EventBusService, and used by EventBusServiceDefault.
+        this.eventBus.register(domainService);
     }
 
     @Override
