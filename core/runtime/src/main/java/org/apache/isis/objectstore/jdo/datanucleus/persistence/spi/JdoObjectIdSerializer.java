@@ -120,16 +120,16 @@ public final class JdoObjectIdSerializer {
             if("s".equals(distinguisher)) {
                 return keyStr;
             }
-            if("i".equals(distinguisher)) {
+            else if("i".equals(distinguisher)) {
                 return Integer.parseInt(keyStr);
             }
-            if("l".equals(distinguisher)) {
+            else if("l".equals(distinguisher)) {
                 return Long.parseLong(keyStr);
             }
-            if("b".equals(distinguisher)) {
+            else if("b".equals(distinguisher)) {
                 return Byte.parseByte(keyStr);
             }
-            if("u".equals(distinguisher)) {
+            else if("u".equals(distinguisher)) {
                 return UUID.fromString(keyStr);
             }
             
@@ -138,16 +138,16 @@ public final class JdoObjectIdSerializer {
             if("s".equals(distinguisher)) {
                 return new StringIdentity(objectTypeClassFor(oid), keyStr);
             }
-            if("i".equals(distinguisher)) {
+            else if("i".equals(distinguisher)) {
                 return new IntIdentity(objectTypeClassFor(oid), keyStr);
             }
-            if("l".equals(distinguisher)) {
+            else if("l".equals(distinguisher)) {
                 return new LongIdentity(objectTypeClassFor(oid), keyStr);
             }
-            if("b".equals(distinguisher)) {
+            else if("b".equals(distinguisher)) {
                 return new ByteIdentity(objectTypeClassFor(oid), keyStr);
             }
-            if("u".equals(distinguisher)) {
+            else if("u".equals(distinguisher)) {
                 return new ObjectIdentity(objectTypeClassFor(oid), UUID.fromString(keyStr));
             }
         }
@@ -163,19 +163,7 @@ public final class JdoObjectIdSerializer {
             final Constructor<?> cons = cls.getConstructor(String.class);
             final Object dnOid = cons.newInstance(keyStr);
             return dnOid.toString();
-        } catch (ClassNotFoundException e) {
-            throw new JdoObjectIdSerializer.Exception(e);
-        } catch (IllegalArgumentException e) {
-            throw new JdoObjectIdSerializer.Exception(e);
-        } catch (InstantiationException e) {
-            throw new JdoObjectIdSerializer.Exception(e);
-        } catch (IllegalAccessException e) {
-            throw new JdoObjectIdSerializer.Exception(e);
-        } catch (InvocationTargetException e) {
-            throw new JdoObjectIdSerializer.Exception(e);
-        } catch (SecurityException e) {
-            throw new JdoObjectIdSerializer.Exception(e);
-        } catch (NoSuchMethodException e) {
+        } catch (ClassNotFoundException | IllegalArgumentException | InstantiationException | IllegalAccessException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
             throw new JdoObjectIdSerializer.Exception(e);
         }
     }
