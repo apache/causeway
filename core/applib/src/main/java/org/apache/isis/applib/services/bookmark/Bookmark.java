@@ -31,12 +31,45 @@ import com.google.common.base.Splitter;
  */
 public class Bookmark implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private static final char SEPARATOR = ':';
 
-    private static final long serialVersionUID = 1L;
-    
+    public static enum ObjectState {
+        PERSISTENT(""),
+        TRANSIENT("!"), // same as OidMarshaller
+        VIEW_MODEL("*"); // same as OidMarshaller
+
+        private final String code;
+        private ObjectState(final String code) {
+            this.code = code;
+        }
+
+        public boolean isTransient() {
+            return this == TRANSIENT;
+        }
+        public boolean isViewModel() {
+            return this == VIEW_MODEL;
+        }
+        public boolean isPersistent() {
+            return this == PERSISTENT;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public static ObjectState from(final String objectType) {
+            if(objectType.startsWith(TRANSIENT.code)) return TRANSIENT;
+            if(objectType.startsWith(VIEW_MODEL.code)) return VIEW_MODEL;
+            return PERSISTENT;
+        }
+    }
+
     private final String objectType;
     private final String identifier;
+    private final ObjectState state;
+
 
     /**
      * Round-trip with {@link #toString()} representation.
@@ -50,10 +83,15 @@ public class Bookmark implements Serializable {
     }
 
     public Bookmark(String objectType, String identifier) {
-        this.objectType = objectType;
+        this.state = ObjectState.from(objectType);
+        this.objectType = state != ObjectState.PERSISTENT ? objectType.substring(1): objectType;
         this.identifier = identifier;
     }
-    
+
+    public ObjectState getObjectState() {
+        return state;
+    }
+
     public String getObjectType() {
         return objectType;
     }
@@ -103,6 +141,6 @@ public class Bookmark implements Serializable {
      */
     @Override
     public String toString() {
-        return objectType + SEPARATOR + identifier;
+        return state.getCode() + objectType + SEPARATOR + identifier;
     }
 }

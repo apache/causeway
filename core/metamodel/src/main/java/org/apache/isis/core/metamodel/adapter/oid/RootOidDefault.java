@@ -19,27 +19,23 @@
 
 package org.apache.isis.core.metamodel.adapter.oid;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import java.io.IOException;
 import java.io.Serializable;
-
 import com.google.common.base.Objects;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.commons.url.UrlEncodingUtils;
-import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 public final class RootOidDefault implements Serializable, RootOid {
 
@@ -62,66 +58,66 @@ public final class RootOidDefault implements Serializable, RootOid {
     // Constructor, factory methods
     // ////////////////////////////////////////////
 
-    public static RootOidDefault createTransient(ObjectSpecId objectSpecId, final String identifier) {
+    public static RootOidDefault createTransient(final ObjectSpecId objectSpecId, final String identifier) {
         return new RootOidDefault(objectSpecId, identifier, State.TRANSIENT);
     }
 
-    public static RootOid create(Bookmark bookmark) {
-        return create(ObjectSpecId.of(bookmark.getObjectType()), bookmark.getIdentifier());
+    public static RootOid create(final Bookmark bookmark) {
+        return new RootOidDefault(ObjectSpecId.of(bookmark.getObjectType()), bookmark.getIdentifier(), State.from(bookmark));
     }
 
-    public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier) {
+    public static RootOidDefault create(final ObjectSpecId objectSpecId, final String identifier) {
         return create(objectSpecId, identifier, null);
     }
 
-    public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier, Long versionSequence) {
+    public static RootOidDefault create(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence) {
         return create(objectSpecId, identifier, versionSequence, null, null);
     }
 
-    public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier, Long versionSequence, String versionUser) {
+    public static RootOidDefault create(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final String versionUser) {
         return create(objectSpecId, identifier, versionSequence, versionUser, null);
     }
 
-    public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier, Long versionSequence, Long versionUtcTimestamp) {
+    public static RootOidDefault create(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final Long versionUtcTimestamp) {
         return create(objectSpecId, identifier, versionSequence, null, versionUtcTimestamp);
     }
 
-    public static RootOidDefault create(ObjectSpecId objectSpecId, final String identifier, Long versionSequence, String versionUser, Long versionUtcTimestamp) {
+    public static RootOidDefault create(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final String versionUser, final Long versionUtcTimestamp) {
         return new RootOidDefault(objectSpecId, identifier, State.PERSISTENT, Version.create(versionSequence, versionUser, versionUtcTimestamp));
     }
 
 
     
-    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state) {
+    public RootOidDefault(final ObjectSpecId objectSpecId, final String identifier, final State state) {
     	this(objectSpecId, identifier, state, (Version)null);
     }
 
-    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Long versionSequence) {
+    public RootOidDefault(final ObjectSpecId objectSpecId, final String identifier, final State state, final Long versionSequence) {
         this(objectSpecId, identifier, state, versionSequence, null, null);
     }
 
     /**
      * If specify version sequence, can optionally specify the user that changed the object.  This is used for informational purposes only.
      */
-    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Long versionSequence, String versionUser) {
+    public RootOidDefault(final ObjectSpecId objectSpecId, final String identifier, final State state, final Long versionSequence, final String versionUser) {
         this(objectSpecId, identifier, state, versionSequence, versionUser, null);
     }
 
     /**
      * If specify version sequence, can optionally specify utc timestamp that the oid was changed.  This is used for informational purposes only.
      */
-    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Long versionSequence, Long versionUtcTimestamp) {
+    public RootOidDefault(final ObjectSpecId objectSpecId, final String identifier, final State state, final Long versionSequence, final Long versionUtcTimestamp) {
         this(objectSpecId, identifier, state, versionSequence, null, versionUtcTimestamp);
     }
     
     /**
      * If specify version sequence, can optionally specify user and/or utc timestamp that the oid was changed.  This is used for informational purposes only.
      */
-    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Long versionSequence, String versionUser, Long versionUtcTimestamp) {
+    public RootOidDefault(final ObjectSpecId objectSpecId, final String identifier, final State state, final Long versionSequence, final String versionUser, final Long versionUtcTimestamp) {
         this(objectSpecId, identifier, state, Version.create(versionSequence, versionUser, versionUtcTimestamp));
     }
 
-    public RootOidDefault(ObjectSpecId objectSpecId, final String identifier, final State state, Version version) {
+    public RootOidDefault(final ObjectSpecId objectSpecId, final String identifier, final State state, final Version version) {
         Ensure.ensureThatArg(objectSpecId, is(not(nullValue())));
         Ensure.ensureThatArg(identifier, is(not(nullValue())));
         Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("#"))), "identifier '" + identifier + "' contains a '#' symbol");
@@ -172,22 +168,22 @@ public final class RootOidDefault implements Serializable, RootOid {
     // deString'able, enString
     // ////////////////////////////////////////////
 
-    public static RootOid deStringEncoded(final String urlEncodedOidStr, OidMarshaller oidMarshaller) {
+    public static RootOid deStringEncoded(final String urlEncodedOidStr, final OidMarshaller oidMarshaller) {
         final String oidStr = UrlEncodingUtils.urlDecode(urlEncodedOidStr);
         return deString(oidStr, oidMarshaller);
     }
 
-    public static RootOidDefault deString(final String oidStr, OidMarshaller oidMarshaller) {
+    public static RootOidDefault deString(final String oidStr, final OidMarshaller oidMarshaller) {
 		return oidMarshaller.unmarshal(oidStr, RootOidDefault.class);
     }
 
     @Override
-    public String enString(OidMarshaller oidMarshaller) {
+    public String enString(final OidMarshaller oidMarshaller) {
         return oidMarshaller.marshal(this);
     }
 
     @Override
-    public String enStringNoVersion(OidMarshaller oidMarshaller) {
+    public String enStringNoVersion(final OidMarshaller oidMarshaller) {
         return oidMarshaller.marshalNoVersion(this);
     }
 
@@ -225,7 +221,7 @@ public final class RootOidDefault implements Serializable, RootOid {
     // ////////////////////////////////////////////
     
     @Override
-    public RootOidDefault asPersistent(String identifier) {
+    public RootOidDefault asPersistent(final String identifier) {
         Ensure.ensureThatState(state.isTransient(), is(true));
         Ensure.ensureThatArg(identifier, is(not(nullValue())));
 
@@ -242,12 +238,12 @@ public final class RootOidDefault implements Serializable, RootOid {
 	}
 
     @Override
-    public void setVersion(Version version) {
+    public void setVersion(final Version version) {
         this.version = version;
     }
 
     @Override
-    public Comparison compareAgainst(RootOid other) {
+    public Comparison compareAgainst(final RootOid other) {
         if(!equals(other)) {
             return Comparison.NOT_EQUIVALENT;
         }
@@ -265,7 +261,7 @@ public final class RootOidDefault implements Serializable, RootOid {
 
     @Override
     public Bookmark asBookmark() {
-        final String objectType = getObjectSpecId().asString();
+        final String objectType = state.asBookmarkObjectState().getCode() + getObjectSpecId().asString();
         final String identifier = getIdentifier();
         return new Bookmark(objectType, identifier);
     }
