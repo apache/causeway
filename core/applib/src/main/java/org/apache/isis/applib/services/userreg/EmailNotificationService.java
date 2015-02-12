@@ -7,7 +7,12 @@ import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 
 /**
- * TODO ISIS-987 Javadoc
+ * Supporting service for the user-registration functionality.
+ *
+ * <p>
+ *     The framework provides a default implementation which in turn uses the
+ *     {@link org.apache.isis.applib.services.email.EmailService}, namely <code>EmailServiceDefault</code>.
+ * </p>
  */
 public interface EmailNotificationService extends Serializable {
 

@@ -27,6 +27,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.background.BackgroundCommandService;
@@ -56,7 +57,9 @@ import static org.hamcrest.CoreMatchers.*;
  * Depends on an implementation of {@link org.apache.isis.applib.services.background.BackgroundCommandService} to
  * be configured.
  */
-@DomainService
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 public class BackgroundServiceDefault implements BackgroundService {
 
     private final MementoServiceDefault mementoService;
@@ -76,7 +79,9 @@ public class BackgroundServiceDefault implements BackgroundService {
     @PostConstruct
     public void init(Map<String,String> props) {
     }
-    
+
+    // //////////////////////////////////////
+
 
     private ObjectSpecificationDefault getJavaSpecificationOfOwningClass(final Method method) {
         return getJavaSpecification(method.getDeclaringClass());
@@ -199,6 +204,9 @@ public class BackgroundServiceDefault implements BackgroundService {
         };
     }
 
+    // //////////////////////////////////////
+
+    @Programmatic
     @Override
     public ActionInvocationMemento asActionInvocationMemento(Method method, Object domainObject, Object[] args) {
         
@@ -238,7 +246,6 @@ public class BackgroundServiceDefault implements BackgroundService {
         return new ActionInvocationMemento(mementoService, mementoStr);
     }
 
-    
     // //////////////////////////////////////
 
     @javax.inject.Inject

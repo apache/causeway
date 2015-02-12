@@ -21,7 +21,7 @@ package org.apache.isis.applib.services.userprof;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
- * Optional API providing details about the user .
+ * Optional API providing details about the user.
  *
  * <p>
  *     Used by the Wicket viewer in its {@link org.apache.isis.applib.annotation.DomainServiceLayout.MenuBar#TERTIARY tertiary}

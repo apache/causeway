@@ -59,6 +59,8 @@ public abstract class AbstractHomePageDashboardService<T extends ViewModel> exte
      */
     private final String id;
 
+    // //////////////////////////////////////
+
     public AbstractHomePageDashboardService(final Class<T> viewModel) {
         this(viewModel, ID_DEFAULT);
     }

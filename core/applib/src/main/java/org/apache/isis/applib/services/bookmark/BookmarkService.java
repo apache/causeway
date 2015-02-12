@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
-import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
@@ -32,7 +31,7 @@ import org.apache.isis.applib.annotation.Programmatic;
  */
 public interface BookmarkService {
 
-    @NotInServiceMenu
+    @Programmatic
     Object lookup(BookmarkHolder bookmarkHolder);
 
     @Programmatic

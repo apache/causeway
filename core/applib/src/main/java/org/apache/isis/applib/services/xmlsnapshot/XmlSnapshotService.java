@@ -26,9 +26,8 @@ import org.apache.isis.applib.annotation.Programmatic;
  * entities.  This XML can be used for various purposes, such as mail merge/reporting, or adhoc auditing.
  *
  * <p>
- * Because an implementation of this service (<tt>XmlSnapshotServiceDefault</tt>) is annotated with
- * {@link org.apache.isis.applib.annotation.DomainService} and is implemented in the core runtime, it is automatically
- * registered and available for use; no configuration is required.
+ * The framework provides an implementation of this service (<tt>XmlSnapshotServiceDefault</tt>) which is automatically
+ * registered and available for use; no further configuration is required.
  * </p>
  */
 public interface XmlSnapshotService {

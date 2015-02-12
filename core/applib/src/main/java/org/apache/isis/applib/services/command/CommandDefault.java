@@ -47,6 +47,7 @@ public class CommandDefault implements Command2, Command3 {
     public String getMemberIdentifier() {
         return actionIdentifier;
     }
+
     @Override
     public void setMemberIdentifier(String actionIdentifier) {
         this.actionIdentifier = actionIdentifier;

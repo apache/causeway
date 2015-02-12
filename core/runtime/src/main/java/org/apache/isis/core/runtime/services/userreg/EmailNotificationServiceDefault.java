@@ -12,6 +12,7 @@ import com.google.common.io.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.events.EmailEventAbstract;
@@ -26,7 +27,9 @@ import static java.util.regex.Pattern.quote;
  * A service that sends email notifications when specific events occur
  */
 @com.google.inject.Singleton // necessary because is registered in and injected by google guice
-@DomainService
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 public class EmailNotificationServiceDefault implements EmailNotificationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmailNotificationServiceDefault.class);
@@ -75,6 +78,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
 
     //region > isConfigured
 
+    @Programmatic
     @Override
     public boolean isConfigured() {
         return emailService != null && emailService.isConfigured();
@@ -85,6 +89,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
     //region > send
 
 
+    @Programmatic
     @Override
     public boolean send(final EmailRegistrationEvent emailRegistrationEvent) {
         ensureConfigured();
@@ -92,6 +97,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         return sendEmail(emailRegistrationEvent, body);
     }
 
+    @Programmatic
     @Override
     public boolean send(final PasswordResetEvent passwordResetEvent) {
         ensureConfigured();

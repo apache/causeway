@@ -21,8 +21,10 @@ package org.apache.isis.applib.services.actinvoc;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import javax.enterprise.context.RequestScoped;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.InvokedOn;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
@@ -34,7 +36,8 @@ import org.apache.isis.applib.annotation.Programmatic;
  * and available for use; no further configuration is required.
  * </p>
  */
-@DomainService
+@DomainService(nature = NatureOfService.DOMAIN)
+@RequestScoped
 public class ActionInvocationContext {
 
     /**

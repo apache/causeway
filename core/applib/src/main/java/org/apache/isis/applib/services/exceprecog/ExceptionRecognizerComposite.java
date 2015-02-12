@@ -108,6 +108,8 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
         return Recognition.of(Category.OTHER, recognize(ex));
     }
 
+    // //////////////////////////////////////
+
     @PostConstruct
     @Override
     @Programmatic
