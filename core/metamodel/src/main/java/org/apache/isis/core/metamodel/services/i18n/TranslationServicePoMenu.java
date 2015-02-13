@@ -16,13 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.i18n;
+package org.apache.isis.core.metamodel.services.i18n;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Properties;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -30,9 +25,10 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.core.metamodel.services.i18n.po.TranslationServicePo;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY
@@ -41,27 +37,13 @@ import org.apache.isis.applib.value.Clob;
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         named = "Prototyping"
 )
-public class TranslatableMessagesService {
+public class TranslationServicePoMenu {
 
-    @Programmatic
-    @PostConstruct
-    public void init(final Map<String,String> config) {
-        final Properties props = new Properties();
-        for (final String key : config.keySet()) {
-            props.put(key, config.get(key));
-        }
-        props.list(System.out);
-    }
-
-    @Programmatic
-    @PreDestroy
-    public void shutdown() {
-
-    }
-
+    private boolean prototype;
 
     @Action(
-            semantics = SemanticsOf.SAFE
+            semantics = SemanticsOf.SAFE,
+            restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
             cssClassFa = "fa-download"
@@ -69,28 +51,21 @@ public class TranslatableMessagesService {
     public Clob downloadPotFile(
             @ParameterLayout(named = ".pot file name")
             final String potFileName) {
-        final Map<String, Collection<String>> messages = translationService.messages();
-        final StringBuilder buf = new StringBuilder();
-        for (String message : messages.keySet()) {
-            final Collection<String> contexts = messages.get(message);
-            for (String context : contexts) {
-                buf.append("#: ").append(context).append("\n");
-            }
-            buf.append("msgid: \"").append(message).append("\"\n");
-            buf.append("msgstr: \"\"\n");
-            buf.append("\n\n\n");
-        }
-        return new Clob(potFileName, "text/plain", buf.toString());
+        final String chars = translationService.toPo();
+        return new Clob(potFileName, "text/plain", chars);
     }
 
     public String default0DownloadPotFile() {
         return "myapp.pot";
+    }
+    public boolean hideDownloadPotFile() {
+        return translationService == null;
     }
 
     // //////////////////////////////////////
 
 
     @Inject
-    private TranslationService translationService;
+    private TranslationServicePo translationService;
 
 }

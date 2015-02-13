@@ -151,7 +151,7 @@ public class I18nFacetFactory extends FacetFactoryAbstract implements Contribute
 
     /**
      * Looks up from {@link org.apache.isis.core.metamodel.runtimecontext.ServicesInjector}, otherwise defaults to
-     * {@link org.apache.isis.core.metamodel.services.i18n.TranslationServiceLogging}.
+     * {@link org.apache.isis.core.metamodel.services.i18n.po.TranslationServicePo}.
      */
     TranslationService lookupTranslationService() {
         if(translationService == null) {

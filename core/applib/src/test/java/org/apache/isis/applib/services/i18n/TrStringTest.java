@@ -1,8 +1,6 @@
 package org.apache.isis.applib.services.i18n;
 
-import java.util.Collection;
 import java.util.Locale;
-import java.util.Map;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -75,10 +73,6 @@ public class TrStringTest {
                 public String translate(final String context, final String originalText, final Locale targetLocale) {
                     originalTextToTranslate = originalText;
                     return originalText;
-                }
-                @Override
-                public Map<String, Collection<String>> messages() {
-                    return null;
                 }
             };
         }

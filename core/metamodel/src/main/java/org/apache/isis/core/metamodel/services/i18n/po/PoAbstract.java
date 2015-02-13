@@ -16,15 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.i18n;
+package org.apache.isis.core.metamodel.services.i18n.po;
 
 import java.util.Locale;
-import org.apache.isis.applib.annotation.Programmatic;
+import java.util.Map;
 
-public interface TranslationService {
+abstract class PoAbstract {
 
-    @Programmatic
-    public String translate(final String context, final String originalText, final Locale targetLocale);
+    protected final TranslationServicePo translationServicePo;
 
+    PoAbstract(final TranslationServicePo translationServicePo) {
+        this.translationServicePo = translationServicePo;
+    }
+
+
+    abstract void init(final Map<String,String> config);
+
+    abstract void shutdown();
+
+    abstract String translate(final String context, final String msgId, final Locale targetLocale);
 
 }

@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.metamodel.services.i18n.LocaleProviderDefault;
-import org.apache.isis.core.metamodel.services.i18n.TranslationServiceLogging;
+import org.apache.isis.core.metamodel.services.i18n.po.TranslationServicePo;
 import org.apache.isis.core.runtime.system.DeploymentType;
 
 public class ServicesInstallerFallback extends InstallerAbstract implements ServicesInstaller {
@@ -38,7 +38,7 @@ public class ServicesInstallerFallback extends InstallerAbstract implements Serv
 
     @Override
     public List<Object> getServices(final DeploymentType deploymentType) {
-        return Lists.newArrayList(new TranslationServiceLogging(), new LocaleProviderDefault());
+        return Lists.newArrayList(new TranslationServicePo(), new LocaleProviderDefault());
     }
 
     @Override
