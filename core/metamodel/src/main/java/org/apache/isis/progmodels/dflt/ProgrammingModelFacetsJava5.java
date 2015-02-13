@@ -20,6 +20,8 @@
 package org.apache.isis.progmodels.dflt;
 
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.actions.contributing.maxlenannot.MaxLengthFacetOnActionAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.actions.contributing.paged.PagedFacetOnActionFactory;
 import org.apache.isis.core.metamodel.facets.actions.debug.annotation.DebugFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.exploration.annotation.ExplorationFacetAnnotationFactory;
@@ -31,9 +33,8 @@ import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotC
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method.NotInServiceMenuFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.actions.contributing.paged.PagedFacetOnActionFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.actions.contributing.maxlenannot.MaxLengthFacetOnActionAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.all.i18n.I18nFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
@@ -50,12 +51,12 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.annotprop.CssClass
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop.CssClassFaFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.disabled.layout.DisabledFacetOnMemberFromPropertiesFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.disabled.layout.DisabledFacetOnMemberFromPropertiesFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.staticmethod.DisabledFacetStaticMethodFacetFactory;
-import org.apache.isis.core.metamodel.facets.members.hidden.layout.HiddenFacetOnMemberFromPropertiesFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.hidden.layout.HiddenFacetOnMemberFromPropertiesFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.named.annotprop.NamedFacetOnMemberFactory;
@@ -493,10 +494,12 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // should come near the end, after any facets that install PropertySetterFacet have run.
         addFactory(DisabledFacetOnPropertyInferredFactory.class);
 
-
         addFactory(AuditableFacetMarkerInterfaceFactory.class);
 
         addFactory(FacetsFacetAnnotationFactory.class);
+
+        // must be after all named facets and description facets have been installed
+        addFactory(I18nFacetFactory.class);
 
         addFactory(ViewModelSemanticCheckingFacetFactory.class);
     }

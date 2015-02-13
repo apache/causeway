@@ -22,7 +22,7 @@ package org.apache.isis.applib.events;
 import org.apache.isis.applib.Identifier;
 
 /**
- * Represents a check to determine whether a member of an object is visible or
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check to determine whether a member of an object is visible or
  * has been hidden.
  * 
  * <p>
@@ -32,7 +32,10 @@ import org.apache.isis.applib.Identifier;
  * @see AccessEvent
  * @see UsabilityEvent
  * @see ValidityEvent
+ *
+ * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
+@Deprecated
 public abstract class VisibilityEvent extends InteractionEvent {
 
     private static final long serialVersionUID = 1L;

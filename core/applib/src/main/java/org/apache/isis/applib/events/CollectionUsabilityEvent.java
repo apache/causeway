@@ -22,12 +22,15 @@ package org.apache.isis.applib.events;
 import org.apache.isis.applib.Identifier;
 
 /**
- * Represents a check as to whether a collection is usable or has been disabled.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a collection is usable or has been disabled.
  * 
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * collection is disabled; otherwise collection is enabled.
+ *
+ * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
+@Deprecated
 public class CollectionUsabilityEvent extends UsabilityEvent {
 
     private static final long serialVersionUID = 1L;

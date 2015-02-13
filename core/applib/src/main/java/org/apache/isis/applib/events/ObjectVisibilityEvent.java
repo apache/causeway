@@ -22,12 +22,15 @@ package org.apache.isis.applib.events;
 import org.apache.isis.applib.Identifier;
 
 /**
- * Represents a check as to whether an object is visible or has been hidden.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether an object is visible or has been hidden.
  * 
  * <p>
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the
  * object is invisible; otherwise action is visible.
+ *
+ * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
+@Deprecated
 public class ObjectVisibilityEvent extends VisibilityEvent {
 
     private static final long serialVersionUID = 1L;

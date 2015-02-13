@@ -38,6 +38,7 @@ public class ServicesInstallerFromConfigurationAndAnnotation extends InstallerAb
     private final ServiceInstantiator serviceInstantiator;
     private final ServicesInstallerFromConfiguration servicesInstallerFromConfiguration;
     private final ServicesInstallerFromAnnotation servicesInstallerFromAnnotation;
+    private final ServicesInstallerFallback servicesInstallerDefaults;
 
 
     public ServicesInstallerFromConfigurationAndAnnotation() {
@@ -50,6 +51,7 @@ public class ServicesInstallerFromConfigurationAndAnnotation extends InstallerAb
         this.serviceInstantiator = serviceInstantiator;
         servicesInstallerFromConfiguration = new ServicesInstallerFromConfiguration(serviceInstantiator);
         servicesInstallerFromAnnotation = new ServicesInstallerFromAnnotation(serviceInstantiator);
+        servicesInstallerDefaults = new ServicesInstallerFallback();
     }
 
     public void setIgnoreFailures(boolean ignoreFailures) {
@@ -60,22 +62,26 @@ public class ServicesInstallerFromConfigurationAndAnnotation extends InstallerAb
     public void setConfigurationBuilder(IsisConfigurationBuilder isisConfigurationBuilder) {
         servicesInstallerFromConfiguration.setConfigurationBuilder(isisConfigurationBuilder);
         servicesInstallerFromAnnotation.setConfigurationBuilder(isisConfigurationBuilder);
+        servicesInstallerDefaults.setConfigurationBuilder(isisConfigurationBuilder);
     }
 
     @Override
     public void setConfiguration(IsisConfiguration configuration) {
         servicesInstallerFromConfiguration.setConfiguration(configuration);
         servicesInstallerFromAnnotation.setConfiguration(configuration);
+        servicesInstallerDefaults.setConfiguration(configuration);
     }
 
     public void init() {
         servicesInstallerFromConfiguration.init();
         servicesInstallerFromAnnotation.init();
+        servicesInstallerDefaults.init();
     }
 
     public void shutdown() {
         servicesInstallerFromConfiguration.shutdown();
         servicesInstallerFromAnnotation.shutdown();
+        servicesInstallerDefaults.shutdown();
     }
 
     // //////////////////////////////////////
@@ -95,6 +101,10 @@ public class ServicesInstallerFromConfigurationAndAnnotation extends InstallerAb
             servicesInstallerFromAnnotation.appendServices(deploymentType, positionedServices);
 
             serviceList = ServicesInstallerUtils.instantiateServicesFrom(positionedServices, serviceInstantiator);
+
+            // add defaults to the end
+            final List<Object> defaultServices = servicesInstallerDefaults.getServices(deploymentType);
+            serviceList.addAll(defaultServices);
 
             servicesByDeploymentType.put(deploymentType, serviceList);
         }

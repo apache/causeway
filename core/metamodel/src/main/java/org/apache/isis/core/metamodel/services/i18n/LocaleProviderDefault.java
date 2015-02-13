@@ -16,21 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.metamodel.services.i18n;
 
-package org.apache.isis.applib.events;
+
+import java.util.Locale;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.locale.LocaleProvider;
 
 /**
- * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> makes it easier to process different events that hold a single proposed
- * argument (such as {@link CollectionAddToEvent} and
- * {@link PropertyModifyEvent}).
- *
- * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
+ * Not annotated with &#64;DomainService, but is registered as a fallback by <tt>ServicesInstallerFallback</tt>.
  */
-@Deprecated
-public interface ProposedHolderEvent {
+public class LocaleProviderDefault implements LocaleProvider {
 
-    Object getProposed();
-
-    String getMemberNaturalName();
-
+    @Programmatic
+    @Override
+    public Locale getLocale() {
+        return Locale.getDefault();
+    }
 }

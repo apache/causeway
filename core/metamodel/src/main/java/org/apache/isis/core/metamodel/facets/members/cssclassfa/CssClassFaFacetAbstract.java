@@ -51,15 +51,21 @@ public class CssClassFaFacetAbstract extends SingleStringValueFacetAbstract impl
      * @param value The original CSS classes defined with {@literal @}{@link org.apache.isis.applib.annotation.CssClassFa CssClassFa}
      * @return The original CSS classes plus <em>fa</em> and <em>fa-fw</em> if not already provided
      */
-    static String sanitize(String value) {
-        Iterable<String> classes = Splitter.on(WHITESPACE).split(value);
-        Set<String> cssClassesSet = Sets.newLinkedHashSet();
+    static String sanitize(final String value) {
+        final Iterable<String> classes = Splitter.on(WHITESPACE).split(value);
+        final Set<String> cssClassesSet = Sets.newLinkedHashSet();
         cssClassesSet.add("fa");
         cssClassesSet.add("fa-fw");
-        for (String cssClass : classes) {
-            cssClassesSet.add(cssClass);
+        for (final String cssClass : classes) {
+            cssClassesSet.add(faPrefix(cssClass));
         }
         return Joiner.on(' ').join(cssClassesSet).trim();
+    }
+
+    private static String faPrefix(final String cssClass) {
+        return cssClass.startsWith("fa-")
+                ? cssClass
+                : "fa-" + cssClass;
     }
 
     public static Class<? extends Facet> type() {
