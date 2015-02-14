@@ -21,6 +21,7 @@ package org.apache.isis.core.integtestsupport;
 
 import java.util.Arrays;
 import java.util.List;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import org.junit.After;
 import org.junit.Assert;
@@ -34,6 +35,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -47,7 +49,8 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
-import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
+import org.apache.isis.core.runtime.services.ServicesInstaller;
+import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.ObjectStore;
@@ -129,6 +132,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         if(isft == null) {
             throw new IllegalStateException("No IsisSystemForTest available on thread; call #set(IsisSystemForTest) first");
         }
+
         return isft;
     }
 
@@ -165,7 +169,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
         private AuthenticationRequest authenticationRequest = new AuthenticationRequestNameOnly("tester");
         
-        private IsisConfiguration configuration;
+        private IsisConfigurationDefault configuration;
         private PersistenceMechanismInstaller persistenceMechanismInstaller = new InMemoryPersistenceMechanismInstaller();
         private MetaModelValidator metaModelValidator;
         private ProgrammingModel programmingModel;
@@ -178,7 +182,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         private org.apache.log4j.Level level;
 
         public Builder with(IsisConfiguration configuration) {
-            this.configuration = configuration;
+            this.configuration = (IsisConfigurationDefault) configuration;
             return this;
         }
         
@@ -196,9 +200,14 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             if(packagePrefixes.length == 0) {
                 throw new IllegalArgumentException("Specify packagePrefixes to search for @DomainService-annotated services");
             }
-            final ServicesInstallerFromAnnotation installer = new ServicesInstallerFromAnnotation();
+
+            configuration.put(
+                    "isis.services.ServicesInstallerFromAnnotation.packagePrefix",
+                    Joiner.on(",").join(packagePrefixes)
+            );
+
+            final ServicesInstaller installer = new ServicesInstallerFromConfigurationAndAnnotation();
             installer.setConfiguration(configuration);
-            installer.withPackagePrefixes(packagePrefixes);
             final List<Object> serviceList = installer.getServices(null);
             this.services.addAll(serviceList);
 
@@ -239,6 +248,33 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             if(level != null) {
                 isisSystem.setLevel(level);
             }
+
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public synchronized void run() {
+                    try {
+                        if (isisSystem != null) {
+                            isisSystem.tearDownSystem();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        if (isisSystem != null) {
+                            isisSystem.shutdown();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        IsisContext.shutdown();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
             return isisSystem;
         }
 
@@ -387,6 +423,10 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         if(fireListeners.shouldFire()) {
             firePostTeardownSystem();
         }
+    }
+
+    private void shutdown() {
+        isisSystem.shutdown();
     }
 
     public void bounceSystem() throws Exception {

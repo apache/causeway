@@ -18,13 +18,12 @@ package integration.specs.simple;
 
 import cucumber.api.junit.Cucumber;
 
-import org.junit.runner.RunWith;
-
 
 /**
  * Runs scenarios in all <tt>.feature</tt> files (this package and any subpackages). 
  */
-@RunWith(Cucumber.class)
+// TODO: reinstate
+//@RunWith(Cucumber.class)
 @Cucumber.Options(
         format = {
                 "html:target/cucumber-html-report"

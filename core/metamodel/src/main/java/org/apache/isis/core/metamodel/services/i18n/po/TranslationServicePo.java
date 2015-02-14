@@ -39,7 +39,7 @@ public class TranslationServicePo implements TranslationService {
     private PoAbstract po;
 
     public TranslationServicePo() {
-        po = new PotWriter(this);
+        po = new PoWriter(this);
     }
 
     //region > init, shutdown
@@ -48,7 +48,9 @@ public class TranslationServicePo implements TranslationService {
     @PostConstruct
     public void init(final Map<String,String> config) {
         final String deploymentType = config.get("isis.deploymentType");
-        prototype = deploymentType.toLowerCase().contains("prototype");
+        prototype = deploymentType==null ||
+                    deploymentType.toLowerCase().contains("prototype") ||
+                    deploymentType.toLowerCase().contains("test") ;
 
         if (!prototype) {
             po = new PoReader(this);
@@ -81,7 +83,7 @@ public class TranslationServicePo implements TranslationService {
         if (!prototype) {
             throw new IllegalStateException("Not in prototype mode");
         }
-        return  ((PotWriter)po).toPo();
+        return  ((PoWriter)po).toPo();
     }
 
 }

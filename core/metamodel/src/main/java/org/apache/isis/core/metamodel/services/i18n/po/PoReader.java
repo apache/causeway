@@ -18,9 +18,15 @@
  */
 package org.apache.isis.core.metamodel.services.i18n.po;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
+import com.google.common.io.Files;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,20 +51,59 @@ class PoReader extends PoAbstract {
 
     public String translate(final String context, final String msgId, final Locale targetLocale) {
 
-        Map<MsgIdAndContext, String> translationByKey = translationByKeyByLocale.get(targetLocale);
-        if(translationByKey == null) {
-            translationByKey = Maps.newTreeMap();
-            translationByKeyByLocale.put(targetLocale, translationByKey);
-        }
+        final Map<MsgIdAndContext, String> translationsByKey = readAndCacheTranslationsIfRequired(targetLocale);
 
         final MsgIdAndContext key = new MsgIdAndContext(msgId, context);
-        String translation = translationByKey.get(key);
-        if (translation == null) {
-            translation = translate(targetLocale, key);
-            translationByKey.put(key, translation);
+        final String translation = translationsByKey.get(key);
+        if (translation != null) {
+            return translation;
         }
 
-        return translation;
+        final MsgIdAndContext keyNoContext = new MsgIdAndContext(msgId, "");
+        final String translationNoContext = translationsByKey.get(keyNoContext);
+        if (translationNoContext != null) {
+            return translationNoContext;
+        }
+
+        LOG.warn("No translation found for: " + key);
+        return msgId;
+    }
+
+    private Map<MsgIdAndContext, String> readAndCacheTranslationsIfRequired(final Locale locale) {
+        Map<MsgIdAndContext, String> translationsByKey = translationByKeyByLocale.get(locale);
+        if(translationsByKey != null) {
+            return translationsByKey;
+        }
+
+        translationsByKey = Maps.newHashMap();
+        read(locale, translationsByKey);
+        translationByKeyByLocale.put(locale, translationsByKey);
+
+        return translationsByKey;
+    }
+
+    /**
+     * @param locale - the .po file to load
+     * @param translationsByKey - the translations to be populated
+     */
+    private void read(final Locale locale, final Map<MsgIdAndContext, String> translationsByKey) {
+        final List<String> fileContents = readFile(locale);
+
+        // TODO: parse fileContents into translationsByKey
+    }
+
+    List<String> readFile(final Locale locale) {
+        final File file = locateFile(locale);
+        try {
+            return Files.readLines(file, Charsets.UTF_8);
+        } catch (final IOException ex) {
+            LOG.warn("Could not locate file for locale: " + locale, ex);
+            return Collections.emptyList();
+        }
+    }
+
+    File locateFile(final Locale locale) {
+        return null;
     }
 
     private String translate(final Locale locale, final MsgIdAndContext key) {

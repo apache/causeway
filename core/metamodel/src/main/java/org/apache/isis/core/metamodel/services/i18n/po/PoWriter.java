@@ -27,16 +27,15 @@ import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class PotWriter extends PoAbstract {
+class PoWriter extends PoAbstract {
 
-    public static Logger LOG = LoggerFactory.getLogger(PotWriter.class);
+    public static Logger LOG = LoggerFactory.getLogger(PoWriter.class);
 
     private final TreeMultimap<String, String> contextsByMsgId = TreeMultimap.create();
 
-    public PotWriter(final TranslationServicePo translationServicePo) {
+    public PoWriter(final TranslationServicePo translationServicePo) {
         super(translationServicePo);
     }
-
 
     //region > init, shutdown
     void init(final Map<String,String> config) {

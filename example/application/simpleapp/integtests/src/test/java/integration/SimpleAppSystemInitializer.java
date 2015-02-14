@@ -48,14 +48,7 @@ public class SimpleAppSystemInitializer {
 
             // services annotated with @DomainService
             withServicesIn( "dom.simple"
-                            ,"fixture.simple"
-                            ,"org.apache.isis.core.wrapper"
-                            ,"org.apache.isis.applib"
-                            ,"org.apache.isis.core.metamodel.services"
-                            ,"org.apache.isis.core.runtime.services"
-                            ,"org.apache.isis.objectstore.jdo.datanucleus.service.support" // IsisJdoSupportImpl
-                            ,"org.apache.isis.objectstore.jdo.datanucleus.service.eventbus" // EventBusServiceJdo
-                            );
+                            ,"fixture.simple" );
         }
 
         private static IsisConfiguration testConfiguration() {
