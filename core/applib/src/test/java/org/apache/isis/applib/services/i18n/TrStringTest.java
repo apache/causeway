@@ -108,10 +108,6 @@ public class TrStringTest {
             assertThat(ts.translate(echoTranslationService, null, null), is("My name is James Bond."));
             assertThat(originalTextToTranslate, is("My name is {firstName} {lastName}."));
         }
-
     }
-
-
-
 
 }

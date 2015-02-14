@@ -63,7 +63,7 @@ public class CssClassFaFacetAbstract extends SingleStringValueFacetAbstract impl
     }
 
     private static String faPrefix(final String cssClass) {
-        return cssClass.startsWith("fa-")
+        return cssClass.startsWith("fa-") || "fa".equals(cssClass)
                 ? cssClass
                 : "fa-" + cssClass;
     }
