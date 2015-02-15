@@ -260,6 +260,12 @@ public interface DomainObjectContainer {
 
     //endregion
 
+    //region > isViewModel
+
+    boolean isViewModel(Object domainObject);
+
+    //endregion
+
     //region > isPersistent, persist, remove
 
     /**
@@ -648,6 +654,7 @@ public interface DomainObjectContainer {
      */
     @Programmatic
     <T> T uniqueMatch(Query<T> query);
+
 
     //endregion
 
