@@ -17,7 +17,6 @@ JArchitectOut/
 neo4j_DB/
 
 # log files
-i18n-po.log
 datanucleus.log
 isis.log
 i18n-po.log
