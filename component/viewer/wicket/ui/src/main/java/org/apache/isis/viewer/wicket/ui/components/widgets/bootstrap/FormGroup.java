@@ -17,6 +17,12 @@ public class FormGroup extends WebMarkupContainer {
 
     private final FormComponent<?> formComponent;
 
+    /**
+     * Constructor
+     *
+     * @param id The component id
+     * @param formComponent The form component that controls the validation state of the form group
+     */
     public FormGroup(String id, FormComponent<?> formComponent) {
         super(id);
 
