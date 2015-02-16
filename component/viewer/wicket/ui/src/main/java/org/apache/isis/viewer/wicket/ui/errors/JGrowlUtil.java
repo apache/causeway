@@ -50,9 +50,7 @@ public class JGrowlUtil {
             .append('"');
         buf.append(", {");
         buf.append("type: \"").append(cssClassSuffix).append('"');
-        if (sticky) {
-            buf.append(", delay: 0");
-        }
+            buf.append(", delay: " + (sticky ? "0" : "2000"));
         buf.append('}');
         buf.append(");\n");
     }

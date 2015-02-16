@@ -36,11 +36,13 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
@@ -108,6 +110,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
                 if(sortedBy != null) {
                     @SuppressWarnings("unchecked")
                     final Comparator<Object> comparator = (Comparator<Object>) InstanceUtil.createInstance(sortedBy);
+                    getServicesInjector().injectServicesInto(comparator);
                     Collections.sort(objectList, comparator);
                 }
 
@@ -432,7 +435,15 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     // //////////////////////////////////////
 
     private static AdapterManager getAdapterManagerStatic() {
-        return IsisContext.getPersistenceSession().getAdapterManager();
+        return getPersistenceSessionStatic().getAdapterManager();
+    }
+
+    private static ServicesInjectorSpi getServicesInjector() {
+        return getPersistenceSessionStatic().getServicesInjector();
+    }
+
+    private static PersistenceSession getPersistenceSessionStatic() {
+        return IsisContext.getPersistenceSession();
     }
 
     private static SpecificationLoaderSpi getSpecificationLoaderStatic() {
