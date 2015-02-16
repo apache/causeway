@@ -43,6 +43,7 @@ public interface XmlSnapshotService {
     public interface Builder {
         public void includePath(final String path);
         public void includePathAndAnnotation(final String path, final String annotation);
+        public XmlSnapshotService.Snapshot build();
     }
     
     public static class Exception extends RuntimeException {
