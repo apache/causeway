@@ -50,7 +50,9 @@ public class JGrowlUtil {
             .append('"');
         buf.append(", {");
         buf.append("type: \"").append(cssClassSuffix).append('"');
-            buf.append(", delay: " + (sticky ? "0" : "2000"));
+        buf.append(", delay: " + (sticky ? "0" : "2000"));
+        buf.append(", placement: { from: 'top', align: 'right' }");
+        buf.append(", offset: 50");
         buf.append('}');
         buf.append(");\n");
     }
