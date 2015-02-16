@@ -59,6 +59,10 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
         public boolean isExecutingOrLater() {
             return this == EXECUTING || this == EXECUTED;
         }
+
+        public boolean isExecuted() {
+            return this == EXECUTED;
+        }
     }
 
     private Phase phase;
@@ -158,18 +162,18 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
 
     //region > userData
     /**
-     * Provides a mechanism to pass data to the next {@link #getPhase() phase}.
+     * Provides a mechanism to pass data to the next {@link #getEventPhase() phase}.
      */
     private final Map<Object, Object> userData = Maps.newHashMap();
 
     /**
-     * Obtain user-data, as set by a previous {@link #getPhase() phase}.
+     * Obtain user-data, as set by a previous {@link #getEventPhase() phase}.
      */
     public Object get(Object key) {
         return userData.get(key);
     }
     /**
-     * Set user-data, for the use of a subsequent {@link #getPhase() phase}.
+     * Set user-data, for the use of a subsequent {@link #getEventPhase() phase}.
      */
     public void put(Object key, Object value) {
         userData.put(key, value);

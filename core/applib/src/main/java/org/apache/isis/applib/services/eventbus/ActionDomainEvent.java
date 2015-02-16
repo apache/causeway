@@ -133,6 +133,33 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
     }
     //endregion
 
+
+    /**
+     *
+     */
+    private Object returnValue;
+
+    /**
+     * The value returned by the action.
+     *
+     * <p>
+     *     Only available for the {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#EXECUTED}
+     *     {@link #getEventPhase() phase}.
+     * </p>
+     * @return
+     */
+    public Object getReturnValue() {
+        return returnValue;
+    }
+
+    /**
+     * Not API - set by the framework
+     * @param returnValue
+     */
+    public void setReturnValue(final Object returnValue) {
+        this.returnValue = returnValue;
+    }
+
     //region > toString
     @Override
     public String toString() {

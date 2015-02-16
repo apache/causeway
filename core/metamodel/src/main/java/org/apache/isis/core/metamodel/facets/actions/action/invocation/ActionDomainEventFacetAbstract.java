@@ -76,7 +76,7 @@ public abstract class ActionDomainEventFacetAbstract
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         eventType(), null, null, AbstractDomainEvent.Phase.HIDE,
-                        getIdentified(), ic.getTarget(), null);
+                        getIdentified(), ic.getTarget(), null, null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
         }
@@ -95,7 +95,7 @@ public abstract class ActionDomainEventFacetAbstract
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         eventType(), null, null, AbstractDomainEvent.Phase.DISABLE,
-                        getIdentified(), ic.getTarget(), null);
+                        getIdentified(), ic.getTarget(), null, null);
         if (event != null && event.isDisabled()) {
             return event.getDisabledReason();
         }
@@ -115,7 +115,7 @@ public abstract class ActionDomainEventFacetAbstract
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         eventType(), null, null, AbstractDomainEvent.Phase.VALIDATE,
-                        getIdentified(), ic.getTarget(), aic.getArgs());
+                        getIdentified(), ic.getTarget(), aic.getArgs(), null);
         if (event != null && event.isInvalid()) {
             return event.getInvalidityReason();
         }

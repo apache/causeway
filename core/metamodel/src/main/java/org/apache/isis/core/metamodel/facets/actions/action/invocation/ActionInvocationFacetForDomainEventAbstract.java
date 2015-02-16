@@ -185,7 +185,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ActionDomainEvent<?> event =
                     domainEventHelper.postEventForAction(
                             eventType, existingEvent, command, AbstractDomainEvent.Phase.EXECUTING,
-                            owningAction, targetAdapter, arguments);
+                            owningAction, targetAdapter, arguments, null);
 
             // ... invoke the action
             final InvocationResult invocationResult = internalInvoke(command, owningAction, targetAdapter, arguments);
@@ -196,7 +196,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                 // If invoked, then send the ActionInteractionEvent to the EventBus.
                 domainEventHelper.postEventForAction(
                         eventType, verify(event), command, AbstractDomainEvent.Phase.EXECUTED,
-                        owningAction, targetAdapter, arguments);
+                        owningAction, targetAdapter, arguments, invocationResult.getAdapter());
             }
 
             return invocationResult.getAdapter();

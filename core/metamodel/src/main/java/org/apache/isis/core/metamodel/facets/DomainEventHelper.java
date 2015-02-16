@@ -58,7 +58,8 @@ public class DomainEventHelper {
             final AbstractDomainEvent.Phase phase,
             final IdentifiedHolder identified,
             final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] argumentAdapters) {
+            final ObjectAdapter[] argumentAdapters,
+            final ObjectAdapter resultAdapter) {
 
         if(!hasEventBusService()) {
             return null;
@@ -84,6 +85,10 @@ public class DomainEventHelper {
                         }
                     }
                 }
+
+                if(phase.isExecuted()) {
+                    event.setReturnValue(resultAdapter != null? resultAdapter.getObject(): null);
+                }
             } else {
                 final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
                 final Object[] arguments = ObjectAdapter.Util.unwrap(argumentAdapters);
@@ -99,6 +104,8 @@ public class DomainEventHelper {
 
             event.setEventPhase(phase);
             event.setPhase(AbstractInteractionEvent.Phase.from(phase));
+
+
             getEventBusService().post(event);
             return event;
         } catch (Exception e) {
