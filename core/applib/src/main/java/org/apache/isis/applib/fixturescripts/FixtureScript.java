@@ -20,6 +20,10 @@ package org.apache.isis.applib.fixturescripts;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +33,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.io.CharSource;
+import org.joda.time.LocalDate;
 import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -38,6 +43,7 @@ import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 @ViewModelLayout(named="Script")
 public abstract class FixtureScript 
@@ -89,11 +95,11 @@ public abstract class FixtureScript
         // enable tracing by default, to stdout
         withTracing();
     }
-    protected String localNameElseDerived(String str) {
+    protected String localNameElseDerived(final String str) {
         return str != null ? str : StringUtil.asLowerDashed(friendlyNameElseDerived(str));
     }
 
-    protected String friendlyNameElseDerived(String str) {
+    protected String friendlyNameElseDerived(final String str) {
         return str != null ? str : StringUtil.asNaturalName2(getClass().getSimpleName());
     }
 
@@ -107,7 +113,7 @@ public abstract class FixtureScript
      * Enable tracing of the execution to the provided {@link java.io.PrintStream}.
      */
     @Programmatic
-    public FixtureScript withTracing(PrintStream tracePrintStream) {
+    public FixtureScript withTracing(final PrintStream tracePrintStream) {
         this.tracePrintStream = tracePrintStream;
         return this;
     }
@@ -132,7 +138,7 @@ public abstract class FixtureScript
 
     @Programmatic
     @Override
-    public void viewModelInit(String mementoStr) {
+    public void viewModelInit(final String mementoStr) {
         fixtureScripts.initOf(mementoStr, this);
     }
 
@@ -156,7 +162,7 @@ public abstract class FixtureScript
     public String getFriendlyName() {
         return friendlyName;
     }
-    public void setFriendlyName(String friendlyName) {
+    public void setFriendlyName(final String friendlyName) {
         this.friendlyName = friendlyName;
     }
 
@@ -173,7 +179,7 @@ public abstract class FixtureScript
     public String getLocalName() {
         return localName;
     }
-    public void setLocalName(String localName) {
+    public void setLocalName(final String localName) {
         this.localName = localName;
     }
 
@@ -231,7 +237,7 @@ public abstract class FixtureScript
     public boolean isDiscoverable() {
         return discoverability == Discoverability.DISCOVERABLE;
     }
-    public FixtureScript withDiscoverability(Discoverability discoverability) {
+    public FixtureScript withDiscoverability(final Discoverability discoverability) {
         this.discoverability = discoverability;
         return this;
     }
@@ -247,20 +253,20 @@ public abstract class FixtureScript
          */
         public static final ExecutionContext NOOP = new ExecutionContext(null, null) {
             @Override
-            public <T> T add(FixtureScript script, T object) {
+            public <T> T add(final FixtureScript script, final T object) {
                 return object;
             }
             @Override
-            public <T> T addResult(FixtureScript script, T object) {
+            public <T> T addResult(final FixtureScript script, final T object) {
                 return object;
             }
 
             @Override
-            public <T> T add(FixtureScript script, String key, T object) {
+            public <T> T add(final FixtureScript script, final String key, final T object) {
                 return object;
             }
             @Override
-            public <T> T addResult(FixtureScript script, String key, T object) {
+            public <T> T addResult(final FixtureScript script, final String key, final T object) {
                 return object;
             }
 
@@ -284,12 +290,12 @@ public abstract class FixtureScript
             this.parameterMap = asKeyValueMap(parameters);
         }
 
-        public static Map<String, String> asKeyValueMap(String parameters) {
-            Map<String,String> keyValues = Maps.newLinkedHashMap();
+        public static Map<String, String> asKeyValueMap(final String parameters) {
+            final Map<String,String> keyValues = Maps.newLinkedHashMap();
             if(parameters != null) {
                 try {
                     final ImmutableList<String> lines = CharSource.wrap(parameters).readLines();
-                    for (String line : lines) {
+                    for (final String line : lines) {
                         if (line == null) {
                             continue;
                         }
@@ -298,7 +304,7 @@ public abstract class FixtureScript
                             keyValues.put(matcher.group(1).trim(), matcher.group(2).trim());
                         }
                     }
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     // ignore, shouldn't happen
                 }
             }
@@ -309,15 +315,83 @@ public abstract class FixtureScript
             return parameters;
         }
 
-        public String getParameter(String parameterName) {
+        public String getParameter(final String parameterName) {
             return parameterMap.get(parameterName);
         }
+
+        public <T> T getParameterAsT(final String parameterName, final Class<T> cls) {
+            T value = null;
+            if (Enum.class.isAssignableFrom(cls)) {
+                Class enumClass = cls;
+                value = (T) getParameterAsEnum(parameterName, enumClass);
+            } else if(cls == Integer.class) {
+                value = (T) getParameterAsInteger(parameterName);
+            } else if(cls == BigDecimal.class) {
+                value = (T) getParameterAsBigDecimal(parameterName);
+            } else if(cls == BigInteger.class) {
+                value = (T) getParameterAsBigInteger(parameterName);
+            } else if(cls == Boolean.class) {
+                value = (T) getParameterAsBoolean(parameterName);
+            } else if(cls == LocalDate.class) {
+                value = (T) getParameterAsLocalDate(parameterName);
+            } else if(cls == String.class) {
+                value = (T) getParameter(parameterName);
+            }
+            return value;
+        }
+
+        public Boolean getParameterAsBoolean(final String parameterName) {
+            final String value = getParameter(parameterName);
+            if(value == null) { return null; }
+            return Boolean.valueOf(value);
+        }
+
+        public Integer getParameterAsInteger(final String parameterName) {
+            final String value = getParameter(parameterName);
+            if(value == null) { return null; }
+            return Integer.valueOf(value);
+        }
+
+        public LocalDate getParameterAsLocalDate(final String parameterName) {
+            final String value = getParameter(parameterName);
+            if(value == null) { return null; }
+            return LocalDate.parse(value);
+        }
+
+        public BigInteger getParameterAsBigInteger(final String parameterName) {
+            final String value = getParameter(parameterName);
+            if(value == null) { return null; }
+            return new BigInteger(value);
+        }
+
+        public BigDecimal getParameterAsBigDecimal(final String parameterName) {
+            final String value = getParameter(parameterName);
+            if(value == null) { return null; }
+            return new BigDecimal(value);
+        }
+
+        public <T extends Enum<T>> T getParameterAsEnum(final String parameterName, final Class<T> enumClass) {
+            final String value = getParameter(parameterName);
+            return valueOfElseNull(enumClass, value);
+        }
+
+        private static <T extends Enum<T>> T valueOfElseNull(final Class<T> enumClass, final String value) {
+            if(value == null) { return null; }
+            final T[] enumConstants = enumClass.getEnumConstants();
+            for (T enumConstant : enumConstants) {
+                if(enumConstant.name().equals(value)) {
+                    return enumConstant;
+                }
+            }
+            return null;
+        }
+
 
         public Map<String,String> getParameterMap() {
             return Collections.unmodifiableMap(parameterMap);
         }
 
-        public void setParameterIfNotPresent(String parameterName, String parameterValue) {
+        public void setParameterIfNotPresent(final String parameterName, final String parameterValue) {
             if(parameterName == null) {
                 throw new IllegalArgumentException("parameterName required");
             }
@@ -327,6 +401,17 @@ public abstract class FixtureScript
             }
             if(parameterMap.containsKey(parameterName)) {
                 // ignore; the existing parameter take precedence
+                return;
+            }
+            parameterMap.put(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final String parameterValue) {
+            if(parameterName == null) {
+                throw new IllegalArgumentException("parameterName required");
+            }
+            if(parameterValue == null) {
+                // ignore
                 return;
             }
             parameterMap.put(parameterName, parameterValue);
@@ -371,7 +456,7 @@ public abstract class FixtureScript
          * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
          * uses a key that is derived from the fixture's class name.
          */
-         public void executeChild(FixtureScript callingFixtureScript, FixtureScript childFixtureScript) {
+         public void executeChild(final FixtureScript callingFixtureScript, final FixtureScript childFixtureScript) {
             executeChild(callingFixtureScript, null, childFixtureScript);
         }
 
@@ -380,7 +465,7 @@ public abstract class FixtureScript
          * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
          * uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
          */
-        public void executeChild(FixtureScript callingFixtureScript, String localNameOverride, FixtureScript childFixtureScript) {
+        public void executeChild(final FixtureScript callingFixtureScript, final String localNameOverride, final FixtureScript childFixtureScript) {
 
             childFixtureScript.setParentPath(callingFixtureScript.pathWith(""));
             if(localNameOverride != null) {
@@ -399,11 +484,11 @@ public abstract class FixtureScript
          * @deprecated - should not be called directly, but has <code>public</code> visibility so there is scope for confusion.  Replaced by method with private visibility.
          */
         @Deprecated
-        public void executeIfNotAlready(FixtureScript fixtureScript) {
+        public void executeIfNotAlready(final FixtureScript fixtureScript) {
             executeChildIfNotAlready(fixtureScript);
         }
 
-        private void executeChildIfNotAlready(FixtureScript fixtureScript) {
+        private void executeChildIfNotAlready(final FixtureScript fixtureScript) {
             if(shouldExecute(fixtureScript)) {
                 trace(fixtureScript, As.EXEC);
                 fixtureScript.execute(this);
@@ -416,7 +501,7 @@ public abstract class FixtureScript
 
         private final Map<String,Class> fixtureScriptClasses = Maps.newLinkedHashMap();
 
-        private boolean shouldExecute(FixtureScript fixtureScript) {
+        private boolean shouldExecute(final FixtureScript fixtureScript) {
             final boolean alreadyExecuted = fixtureScriptClasses.values().contains(fixtureScript.getClass());
             if(!alreadyExecuted) {
                 fixtureScriptClasses.put(fixtureScript.getQualifiedName(), fixtureScript.getClass());
@@ -430,12 +515,12 @@ public abstract class FixtureScript
         private int traceHighwatermark = 40;
         private PrintStream tracePrintStream;
 
-        public ExecutionContext withTracing(PrintStream tracePrintStream) {
+        public ExecutionContext withTracing(final PrintStream tracePrintStream) {
             this.tracePrintStream = tracePrintStream;
             return this;
         }
 
-        private void trace(FixtureScript fixtureScript, As as) {
+        private void trace(final FixtureScript fixtureScript, final As as) {
             if(tracePrintStream == null) {
                 return;
             }
@@ -455,34 +540,75 @@ public abstract class FixtureScript
             tracePrintStream.flush();
         }
 
-        private String pad(String key) {
+        private String pad(final String key) {
             traceHighwatermark = Math.max(key.length(), traceHighwatermark);
             return pad(key, roundup(traceHighwatermark, 20));
         }
         //endregion
 
-        private static String pad(String str, int padTo) {
+        private static String pad(final String str, final int padTo) {
             return Strings.padEnd(str, padTo, ' ');
         }
 
-        static int roundup(int n, int roundTo) {
+        static int roundup(final int n, final int roundTo) {
             return ((n / roundTo) + 1) * roundTo;
         }
 
 
         private Map<Class, Object> userData = Maps.newHashMap();
-        public void setUserData(Object object) {
+        public void setUserData(final Object object) {
             userData.put(object.getClass(), object);
         }
-        public <T> T getUserData(Class<T> cls) {
+        public <T> T getUserData(final Class<T> cls) {
             return (T) userData.get(cls);
         }
-        public <T> T clearUserData(Class<T> cls) {
+        public <T> T clearUserData(final Class<T> cls) {
             return (T) userData.remove(cls);
         }
 
     }
 
+    //endregion
+
+    //region > defaultParam, checkParam
+    protected <T> T defaultParam(final String parameterName, final ExecutionContext ec, final T defaultValue) {
+
+        final Class<T> cls = (Class<T>) defaultValue.getClass();
+
+        final T value = readParam(parameterName, ec, cls);
+        if(value != null) { return (T) value; }
+
+        // else default value
+        return defaultValue;
+    }
+
+    protected <T> T checkParam(final String parameterName, final ExecutionContext ec, final Class<T> cls) {
+
+        final T value = readParam(parameterName, ec, cls);
+        if(value != null) { return (T) value; }
+
+        // else throw exception
+        throw new IllegalArgumentException(String.format("No value for '%s'", parameterName));
+    }
+
+    private <T> T readParam(final String parameterName, final ExecutionContext ec, final Class<T> cls) {
+
+        // read from ExecutionContext
+        T value = ec.getParameterAsT(parameterName, cls);
+        if(value != null) { return (T) value; }
+
+        // else from fixture script
+        final Method method;
+        try {
+            method = this.getClass().getMethod("get" + parameterName.substring(0, 1).toUpperCase() + parameterName.substring(1));
+            value = (T)method.invoke(this);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
+
+        }
+        if(value != null) { return (T) value; }
+
+        return null;
+    }
     //endregion
 
     //region > run (entry point for FixtureScripts service to call)
@@ -510,7 +636,7 @@ public abstract class FixtureScript
      * Use instead {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#lookup(String, Class)} directly.
      */
     @Deprecated
-    public <T> T lookup(final String key, Class<T> cls) {
+    public <T> T lookup(final String key, final Class<T> cls) {
         if(executionContext == null) {
             throw new IllegalStateException("This fixture has not yet been run.");
         }
@@ -605,13 +731,27 @@ public abstract class FixtureScript
     //region > helpers (for subclasses)
 
     /**
-     * Returns the first non-null string; for convenience of subclass implementations
+     * Returns the first non-null vaulue; for convenience of subclass implementations
      */
-    protected static String coalesce(final String... strings) {
-        for (String string : strings) {
-            if(string != null) return string;
+    protected static <T> T coalesce(final T... ts) {
+        for (final T t : ts) {
+            if(t != null) return t;
         }
         return null;
+    }
+
+    /**
+     * Wraps domain object
+     */
+    protected <T> T wrap(final T domainObject) {
+        return wrapperFactory.wrap(domainObject);
+    }
+
+    /**
+     * Unwraps domain object (no-arg if already wrapped).
+     */
+    protected <T> T unwrap(final T possibleWrappedDomainObject) {
+        return wrapperFactory.unwrap(possibleWrappedDomainObject);
     }
 
     //endregion
@@ -619,7 +759,7 @@ public abstract class FixtureScript
     //region > helpers (local)
 
     @Programmatic
-    String pathWith(String subkey) {
+    String pathWith(final String subkey) {
         return (getQualifiedName() != null? getQualifiedName() + PATH_SEPARATOR: "") +  subkey;
     }
     //endregion
@@ -631,6 +771,10 @@ public abstract class FixtureScript
 
     @javax.inject.Inject
     protected DomainObjectContainer container;
+
+    @javax.inject.Inject
+    protected WrapperFactory wrapperFactory;
+
 
     //endregion
 }
