@@ -23,6 +23,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import javax.annotation.PreDestroy;
@@ -65,16 +66,16 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
      *     with the first service found used.
      * </p>
      */
-    public final static String PACKAGE_PREFIX_STANDARD =
-                                         ",org.apache.isis.applib" +
-                                         ",org.apache.isis.core.wrapper" +
-                                         ",org.apache.isis.core.metamodel.services" +
-                                         ",org.apache.isis.core.runtime.services" +
-                                         ",org.apache.isis.objectstore.jdo.applib.service" +
-                                         ",org.apache.isis.viewer.restfulobjects.rendering.service" +
-                                         ",org.apache.isis.objectstore.jdo.datanucleus.service.support" +
-                                         ",org.apache.isis.objectstore.jdo.datanucleus.service.eventbus" +
-                                         ",org.apache.isis.viewer.wicket.viewer.services";
+    public final static String PACKAGE_PREFIX_STANDARD = Joiner.on(",").join(
+                                        "org.apache.isis.applib",
+                                        "org.apache.isis.core.wrapper" ,
+                                        "org.apache.isis.core.metamodel.services" ,
+                                        "org.apache.isis.core.runtime.services" ,
+                                        "org.apache.isis.objectstore.jdo.applib.service" ,
+                                        "org.apache.isis.viewer.restfulobjects.rendering.service" ,
+                                        "org.apache.isis.objectstore.jdo.datanucleus.service.support" ,
+                                        "org.apache.isis.objectstore.jdo.datanucleus.service.eventbus" ,
+                                        "org.apache.isis.viewer.wicket.viewer.services");
 
     private final ServiceInstantiator serviceInstantiator;
 
@@ -131,8 +132,8 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
                 if(Strings.isNullOrEmpty(packagePrefixes)) {
                     throw new IllegalStateException("Could not locate '" + PACKAGE_PREFIX_KEY + "' key in property files - aborting");
                 }
-                this.packagePrefixes = packagePrefixes + PACKAGE_PREFIX_STANDARD;
             }
+            this.packagePrefixes = PACKAGE_PREFIX_STANDARD + "," + this.packagePrefixes;
 
         } finally {
             initialized = true;
@@ -212,8 +213,8 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
         Vfs.setDefaultURLTypes(ClassDiscoveryServiceUsingReflections.getUrlTypes());
         final Reflections reflections = new Reflections(packagePrefixList);
 
-        final Iterable<Class<?>> domainServiceClasses = Iterables.filter(
-                reflections.getTypesAnnotatedWith(DomainService.class), instantiatable());
+        final Set<Class<?>> typesAnnotatedWith = reflections.getTypesAnnotatedWith(DomainService.class);
+        final List<Class<?>> domainServiceClasses = Lists.newArrayList(Iterables.filter(typesAnnotatedWith, instantiatable()));
         for (final Class<?> cls : domainServiceClasses) {
 
             final String order = orderOf(cls);
