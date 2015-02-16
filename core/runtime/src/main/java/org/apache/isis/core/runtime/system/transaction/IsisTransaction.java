@@ -692,7 +692,10 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     public void auditChangedProperty(
-            final java.sql.Timestamp timestamp, final String user, final Entry<AdapterAndProperty, PreAndPostValues> auditEntry) {
+            final java.sql.Timestamp timestamp,
+            final String user,
+            final Entry<AdapterAndProperty, PreAndPostValues> auditEntry) {
+
         final AdapterAndProperty aap = auditEntry.getKey();
         final ObjectAdapter adapter = aap.getAdapter();
         
@@ -700,19 +703,17 @@ public class IsisTransaction implements TransactionScopedComponent {
         if(auditableFacet == null || auditableFacet.isDisabled()) {
             return;
         }
-        final RootOid oid = (RootOid) adapter.getOid();
-        final String objectType = oid.getObjectSpecId().asString();
-        final String identifier = oid.getIdentifier();
+
+        final Bookmark target = aap.getBookmark();
+        final String propertyId = aap.getPropertyId();
+        final String memberId = aap.getMemberId();
+
         final PreAndPostValues papv = auditEntry.getValue();
         final String preValue = papv.getPreString();
         final String postValue = papv.getPostString();
         
-        final ObjectAssociation property = aap.getProperty();
-        final String memberId = property.getIdentifier().toClassAndNameIdentityString();
-        final String propertyId = property.getId();
 
         final String targetClass = CommandUtil.targetClassNameFor(adapter);
-        final Bookmark target = new Bookmark(objectType, identifier);
 
         auditingService3.audit(getTransactionId(), targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
     }
@@ -1087,7 +1088,10 @@ public class IsisTransaction implements TransactionScopedComponent {
         
         private final ObjectAdapter objectAdapter;
         private final ObjectAssociation property;
-        
+        private final Bookmark bookmark;
+        private final String propertyId;
+        private final String bookmarkStr;
+
         public static AdapterAndProperty of(ObjectAdapter adapter, ObjectAssociation property) {
             return new AdapterAndProperty(adapter, property);
         }
@@ -1095,6 +1099,15 @@ public class IsisTransaction implements TransactionScopedComponent {
         private AdapterAndProperty(ObjectAdapter adapter, ObjectAssociation property) {
             this.objectAdapter = adapter;
             this.property = property;
+
+            final RootOid oid = (RootOid) adapter.getOid();
+
+            final String objectType = oid.getObjectSpecId().asString();
+            final String identifier = oid.getIdentifier();
+            bookmark = new Bookmark(objectType, identifier);
+            bookmarkStr = bookmark.toString();
+
+            propertyId = property.getId();
         }
         
         public ObjectAdapter getAdapter() {
@@ -1104,40 +1117,40 @@ public class IsisTransaction implements TransactionScopedComponent {
             return property;
         }
 
+        public Bookmark getBookmark() {
+            return bookmark;
+        }
+        public String getPropertyId() {
+            return propertyId;
+        }
+
+        public String getMemberId() {
+            return property.getIdentifier().toClassAndNameIdentityString();
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            final AdapterAndProperty that = (AdapterAndProperty) o;
+
+            if (bookmarkStr != null ? !bookmarkStr.equals(that.bookmarkStr) : that.bookmarkStr != null) return false;
+            if (propertyId != null ? !propertyId.equals(that.propertyId) : that.propertyId != null) return false;
+
+            return true;
+        }
+
         @Override
         public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((objectAdapter == null) ? 0 : objectAdapter.hashCode());
-            result = prime * result + ((property == null) ? 0 : property.hashCode());
+            int result = propertyId != null ? propertyId.hashCode() : 0;
+            result = 31 * result + (bookmarkStr != null ? bookmarkStr.hashCode() : 0);
             return result;
         }
 
         @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
-            AdapterAndProperty other = (AdapterAndProperty) obj;
-            if (objectAdapter == null) {
-                if (other.objectAdapter != null)
-                    return false;
-            } else if (!objectAdapter.equals(other.objectAdapter))
-                return false;
-            if (property == null) {
-                if (other.property != null)
-                    return false;
-            } else if (!property.equals(other.property))
-                return false;
-            return true;
-        }
-        
-        @Override
         public String toString() {
-            return getAdapter().getOid().enStringNoVersion(getMarshaller()) + " , " + getProperty().getId();
+            return bookmarkStr + " , " + getProperty().getId();
         }
 
         protected OidMarshaller getMarshaller() {
