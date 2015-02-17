@@ -177,7 +177,10 @@ public final class TranslatableString {
      * @return
      */
     public String translate(final TranslationService translationService, final String context, final Locale locale) {
-        final String translatedText = translationService.translate(context, getPattern(), locale);
+        final String translatedText =
+                !isPluralForm()
+                        ? translationService.translate(context, getSingularText(), locale)
+                        : translationService.translate(context, getSingularText(), getPluralText(), number, locale);
         return translated(translatedText);
     }
 
@@ -188,7 +191,7 @@ public final class TranslatableString {
      *     Any placeholders will <i>not</i> have been replaced.
      * </p>
      */
-    public String getPattern() {
+    String getPattern() {
         return !isPluralForm() || number == 1 ? getSingularText() : getPluralText();
     }
 

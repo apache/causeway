@@ -23,12 +23,25 @@ package org.apache.isis.core.metamodel.services.i18n.po;
  */
 public class ContextAndMsgId implements Comparable<ContextAndMsgId> {
 
+    public enum Type {
+        /**
+         * The text to use when there is no plural form, or the text to use for singular pattern when there is also a plural form.
+         */
+        REGULAR,
+        /**
+         * The text to use for plural form.
+         */
+        PLURAL_ONLY
+    }
+
     private final String context;
     private final String msgId;
+    private final Type type;
 
-    public ContextAndMsgId(final String context, final String msgId) {
-        this.msgId = msgId;
+    public ContextAndMsgId(final String context, final String msgId, final Type type) {
         this.context = context == null? "": context;
+        this.msgId = msgId;
+        this.type = type;
     }
 
     public String getMsgId() {
@@ -37,6 +50,13 @@ public class ContextAndMsgId implements Comparable<ContextAndMsgId> {
 
     public String getContext() {
         return context;
+    }
+
+    /**
+     * Not part of equals/hashCode impl.
+     */
+    public Type getType() {
+        return type;
     }
 
     @Override

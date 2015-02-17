@@ -101,11 +101,11 @@ class Block {
     void append(final Map<ContextAndMsgId, String> translationsByKey) {
         for (String context : contextList) {
             if(msgid != null && msgstr != null) {
-                final ContextAndMsgId mc = new ContextAndMsgId(context, msgid);
+                final ContextAndMsgId mc = new ContextAndMsgId(context, msgid, ContextAndMsgId.Type.REGULAR);
                 translationsByKey.put(mc, msgstr);
             }
             if(msgid_plural != null && msgstr_plural != null) {
-                final ContextAndMsgId mc = new ContextAndMsgId(context, msgid_plural);
+                final ContextAndMsgId mc = new ContextAndMsgId(context, msgid_plural, ContextAndMsgId.Type.PLURAL_ONLY);
                 translationsByKey.put(mc, msgstr_plural);
             }
         }

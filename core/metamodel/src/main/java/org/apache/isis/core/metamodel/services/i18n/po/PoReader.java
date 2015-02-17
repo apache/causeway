@@ -68,15 +68,37 @@ class PoReader extends PoAbstract {
 
     public String translate(final String context, final String msgId, final Locale targetLocale) {
 
+        return translate(context, msgId, ContextAndMsgId.Type.REGULAR, targetLocale);
+    }
+
+    @Override
+    String translate(final String context, final String msgId, final String msgIdPlural, final int num, final Locale targetLocale) {
+
+        final String msgIdToUse;
+        final ContextAndMsgId.Type type;
+        if (num == 1) {
+            msgIdToUse = msgId;
+            type = ContextAndMsgId.Type.REGULAR;
+        } else {
+            msgIdToUse = msgIdPlural;
+            type = ContextAndMsgId.Type.PLURAL_ONLY;
+        }
+
+        return translate(context, msgIdToUse, type, targetLocale);
+    }
+
+    private String translate(
+            final String context, final String msgId, final ContextAndMsgId.Type type,
+            final Locale targetLocale) {
         final Map<ContextAndMsgId, String> translationsByKey = readAndCacheTranslationsIfRequired(targetLocale);
 
-        final ContextAndMsgId key = new ContextAndMsgId(context, msgId);
+        final ContextAndMsgId key = new ContextAndMsgId(context, msgId, type);
         final String translation = translationsByKey.get(key);
         if (translation != null) {
             return translation;
         }
 
-        final ContextAndMsgId keyNoContext = new ContextAndMsgId("", msgId);
+        final ContextAndMsgId keyNoContext = new ContextAndMsgId("", msgId, type);
         final String translationNoContext = translationsByKey.get(keyNoContext);
         if (translationNoContext != null) {
             return translationNoContext;

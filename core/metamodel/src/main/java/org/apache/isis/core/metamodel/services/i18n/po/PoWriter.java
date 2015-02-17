@@ -18,11 +18,12 @@
  */
 package org.apache.isis.core.metamodel.services.i18n.po;
 
-import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
-import java.util.NavigableSet;
-import com.google.common.collect.TreeMultimap;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,17 @@ class PoWriter extends PoAbstract {
 
     public static Logger LOG = LoggerFactory.getLogger(PoWriter.class);
 
-    private final TreeMultimap<String, String> contextsByMsgId = TreeMultimap.create();
+    private static class Block {
+        private final String msgId;
+        private final SortedSet<String> contexts = Sets.newTreeSet();
+        private String msgIdPlural;
+
+        private Block(final String msgId) {
+            this.msgId = msgId;
+        }
+    }
+
+    private final SortedMap<String, Block> blocksByMsgId = Maps.newTreeMap();
 
     public PoWriter(final TranslationServicePo translationServicePo) {
         super(translationServicePo);
@@ -78,42 +89,50 @@ class PoWriter extends PoAbstract {
     //endregion
 
 
-    public String translate(final String context, final String originalText, final Locale targetLocale) {
-        final NavigableSet<String> contexts = contextsByMsgId.get(originalText);
-        contexts.add(context);
-        return originalText;
+    public String translate(final String context, final String msgId, final Locale targetLocale) {
+        Block block = blocksByMsgId.get(msgId);
+        if(block == null) {
+            block = new Block(msgId);
+        }
+        block.contexts.add(context);
+
+        return msgId;
+    }
+
+    @Override
+    String translate(final String context, final String msgId, final String msgIdPlural, final int num, final Locale targetLocale) {
+
+        Block block = blocksByMsgId.get(msgId);
+        if(block == null) {
+            block = new Block(msgId);
+        }
+        block.msgIdPlural = msgIdPlural;
+        block.contexts.add(context);
+
+        return null;
     }
 
     /**
      * Not API
      */
     String toPot() {
-        final Map<String, Collection<String>> messages = messagesWithContext();
         final StringBuilder buf = new StringBuilder();
-        for (String message : messages.keySet()) {
-            final Collection<String> contexts = messages.get(message);
-            for (String context : contexts) {
+        for (String msgId : blocksByMsgId.keySet()) {
+            final Block block = blocksByMsgId.get(msgId);
+            for (String context : block.contexts) {
                 buf.append("#: ").append(context).append("\n");
             }
-            buf.append("msgid: \"").append(message).append("\"\n");
-            buf.append("msgstr: \"\"\n");
-            buf.append("\n\n\n");
+            buf.append("msgid \"").append(msgId).append("\"\n");
+            if(block.msgIdPlural == null) {
+                buf.append("msgstr \"\"\n");
+            } else {
+                buf.append("msgid_plural \"").append(block.msgIdPlural).append("\"\n");
+                buf.append("msgstr[0] \"\"\n");
+                buf.append("msgstr[1] \"\"\n");
+            }
+            buf.append("\n\n");
         }
         return buf.toString();
-    }
-
-    /**
-     * Returns the set of messages encountered and cached by the service (the key of the map) along with a set of
-     * context strings (the value of the map)
-     *
-     * <p>
-     *     The intention is that an implementation running in prototype mode should retain all requests to
-     *     {@link #translate(String, String, java.util.Locale)}, such that they can be translated and used by the
-     *     same implementation in non-prototype mode.
-     * </p>
-     */
-    Map<String, Collection<String>> messagesWithContext() {
-        return contextsByMsgId.asMap();
     }
 
 }

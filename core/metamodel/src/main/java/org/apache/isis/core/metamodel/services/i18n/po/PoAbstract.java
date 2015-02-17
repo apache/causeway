@@ -36,4 +36,6 @@ abstract class PoAbstract {
 
     abstract String translate(final String context, final String msgId, final Locale targetLocale);
 
+    abstract String translate(final String context, final String msgId, final String msgIdPlural, int num, final Locale targetLocale);
+
 }

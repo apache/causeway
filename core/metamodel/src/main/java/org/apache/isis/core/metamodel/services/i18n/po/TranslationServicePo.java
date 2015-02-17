@@ -80,8 +80,13 @@ public class TranslationServicePo implements TranslationService {
 
     @Override
     @Programmatic
-    public String translate(final String context, final String originalText, final Locale targetLocale) {
-        return po.translate(context, originalText, targetLocale);
+    public String translate(final String context, final String text, final Locale targetLocale) {
+        return po.translate(context, text, targetLocale);
+    }
+
+    @Override
+    public String translate(final String context, final String singularText, final String pluralText, final int num, final Locale targetLocale) {
+        return po.translate(context, singularText, pluralText, num, targetLocale);
     }
 
     /**

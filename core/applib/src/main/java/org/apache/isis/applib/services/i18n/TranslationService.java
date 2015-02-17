@@ -23,7 +23,28 @@ import org.apache.isis.applib.annotation.Programmatic;
 
 public interface TranslationService {
 
+    /**
+     * Return a translation of the text, for the specified locale.
+     *
+     * @param context
+     * @param text
+     * @param targetLocale
+     * @return
+     */
     @Programmatic
-    public String translate(final String context, final String originalText, final Locale targetLocale);
+    public String translate(final String context, final String text, final Locale targetLocale);
+
+    /**
+     * Return a translation of either the singular or the plural text, dependent on the <tt>num</tt> parameter, for the specified locale.
+     *
+     * @param context
+     * @param singularText
+     * @param pluralText
+     * @param num - whether to return the translation of the singular (if =1) or of the plural (if != 1)
+     * @param targetLocale
+     * @return
+     */
+    @Programmatic
+    public String translate(final String context, final String singularText, final String pluralText, int num, final Locale targetLocale);
 
 }
