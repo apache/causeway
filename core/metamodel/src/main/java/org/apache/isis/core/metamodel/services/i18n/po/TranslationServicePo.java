@@ -91,7 +91,7 @@ public class TranslationServicePo implements TranslationService {
         if (!prototype) {
             throw new IllegalStateException("Not in prototype mode");
         }
-        return  ((PoWriter)po).toPo();
+        return  ((PoWriter)po).toPot();
     }
 
     @Inject

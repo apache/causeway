@@ -27,6 +27,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.isis.applib.services.i18n.UrlResolver;
 
 class PoReader extends PoAbstract {
 
@@ -54,7 +55,7 @@ class PoReader extends PoAbstract {
 
     //region > init, shutdown
     void init(final Map<String,String> config) {
-        fallback = readPoElseNull(Locale.ROOT);
+        fallback = readUrl(basename + ".po");
         if(fallback == null) {
             LOG.warn("No fallback translations found");
             fallback = Collections.emptyList();
@@ -143,7 +144,11 @@ class PoReader extends PoAbstract {
     }
 
     private List<String> readUrl(final String candidate) {
-        return translationServicePo.urlResolver.readLines(candidate);
+        final UrlResolver urlResolver = translationServicePo.urlResolver;
+        if(urlResolver == null) {
+            return null;
+        }
+        return urlResolver.readLines(candidate);
     }
 
 }
