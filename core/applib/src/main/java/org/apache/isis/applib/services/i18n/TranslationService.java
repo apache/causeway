@@ -26,5 +26,4 @@ public interface TranslationService {
     @Programmatic
     public String translate(final String context, final String originalText, final Locale targetLocale);
 
-
 }

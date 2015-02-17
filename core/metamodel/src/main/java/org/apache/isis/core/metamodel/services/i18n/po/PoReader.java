@@ -33,7 +33,7 @@ class PoReader extends PoAbstract {
     public static final String LOCATION_BASE_URL = "isis.services.translation.po.locationBaseUrl";
     public static Logger LOG = LoggerFactory.getLogger(PoReader.class);
 
-    private final Map<Locale, Map<MsgIdAndContext, String>> translationByKeyByLocale = Maps.newHashMap();
+    private final Map<Locale, Map<ContextAndMsgId, String>> translationByKeyByLocale = Maps.newHashMap();
 
     /**
      * The basename of the translations file, hard-coded to <tt>translations</tt>.
@@ -67,15 +67,15 @@ class PoReader extends PoAbstract {
 
     public String translate(final String context, final String msgId, final Locale targetLocale) {
 
-        final Map<MsgIdAndContext, String> translationsByKey = readAndCacheTranslationsIfRequired(targetLocale);
+        final Map<ContextAndMsgId, String> translationsByKey = readAndCacheTranslationsIfRequired(targetLocale);
 
-        final MsgIdAndContext key = new MsgIdAndContext(msgId, context);
+        final ContextAndMsgId key = new ContextAndMsgId(context, msgId);
         final String translation = translationsByKey.get(key);
         if (translation != null) {
             return translation;
         }
 
-        final MsgIdAndContext keyNoContext = new MsgIdAndContext(msgId, "");
+        final ContextAndMsgId keyNoContext = new ContextAndMsgId("", msgId);
         final String translationNoContext = translationsByKey.get(keyNoContext);
         if (translationNoContext != null) {
             return translationNoContext;
@@ -85,8 +85,8 @@ class PoReader extends PoAbstract {
         return msgId;
     }
 
-    private Map<MsgIdAndContext, String> readAndCacheTranslationsIfRequired(final Locale locale) {
-        Map<MsgIdAndContext, String> translationsByKey = translationByKeyByLocale.get(locale);
+    private Map<ContextAndMsgId, String> readAndCacheTranslationsIfRequired(final Locale locale) {
+        Map<ContextAndMsgId, String> translationsByKey = translationByKeyByLocale.get(locale);
         if(translationsByKey != null) {
             return translationsByKey;
         }
@@ -103,7 +103,7 @@ class PoReader extends PoAbstract {
      * @param locale - the .po file to load
      * @param translationsByKey - the translations to be populated
      */
-    private void read(final Locale locale, final Map<MsgIdAndContext, String> translationsByKey) {
+    private void read(final Locale locale, final Map<ContextAndMsgId, String> translationsByKey) {
         final List<String> contents = readPo(locale);
 
         Block block = new Block();

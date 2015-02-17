@@ -31,7 +31,7 @@ class Block {
     String msgstr = null; // either from msgstr or msgstr[0] if there is a plural
     String msgstr_plural = null; // from msgstr[1]
 
-    Block parseLine(final String line, final Map<MsgIdAndContext, String> translationsByKey) {
+    Block parseLine(final String line, final Map<ContextAndMsgId, String> translationsByKey) {
         if (state == State.CONTEXT) {
             final Matcher contextMatcher = state.pattern.matcher(line);
             if (contextMatcher.matches()) {
@@ -98,11 +98,15 @@ class Block {
         return this;
     }
 
-    void append(final Map<MsgIdAndContext, String> translationsByKey) {
-        if(msgid != null && msgstr != null) {
-            for (String context : contextList) {
-                final MsgIdAndContext mc = new MsgIdAndContext(msgid, context);
+    void append(final Map<ContextAndMsgId, String> translationsByKey) {
+        for (String context : contextList) {
+            if(msgid != null && msgstr != null) {
+                final ContextAndMsgId mc = new ContextAndMsgId(context, msgid);
                 translationsByKey.put(mc, msgstr);
+            }
+            if(msgid_plural != null && msgstr_plural != null) {
+                final ContextAndMsgId mc = new ContextAndMsgId(context, msgid_plural);
+                translationsByKey.put(mc, msgstr_plural);
             }
         }
     }

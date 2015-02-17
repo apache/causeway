@@ -28,7 +28,7 @@ import com.google.common.collect.Lists;
 
 public final class TranslatableString {
 
-    //region > tr, trn (factory methods)
+    //region > tr, trn (factory methods); constructor
 
     /**
      * A translatable string supporting both singular and plural forms.
@@ -84,14 +84,44 @@ public final class TranslatableString {
         }
         return map;
     }
+
+    private TranslatableString(
+            final Type type,
+            final String singularText,
+            final String pluralText,
+            final int number,
+            final Map<String, Object> argumentsByParameterName) {
+
+        this.type = type;
+        this.singularText = singularText;
+        this.pluralText = pluralText;
+        this.number = number;
+        this.argumentsByParameterName = argumentsByParameterName;
+    }
+
     //endregion
 
+    //region > singularText, pluralText, pluralForm
 
-    private final Type type;
-    private final String singularPattern;
-    private final String pluralPattern;
-    private final int number;
-    private final Map<String, Object> argumentsByParameterName;
+    private final String singularText;
+    private final String pluralText;
+
+    /**
+     * The text as provided in (either of the {@link #tr(String, Object...) factory} {@link #trn(String, String, int, Object...) method}s,
+     * with placeholders rather than substituted arguments; if {@link #isPluralForm()} is <code>true</code> then used only
+     * for the singular form.
+     */
+    String getSingularText() {
+        return singularText;
+    }
+
+    /**
+     * The plural text as provided in the {@link #trn(String, String, int, Object...) factory method}, with placeholders
+     * rather than substituted arguments; but will be <code>null</code> if {@link #isPluralForm()} is <code>false</code>.
+     */
+    String getPluralText() {
+        return pluralText;
+    }
 
     private enum Type {
         /**
@@ -100,7 +130,7 @@ public final class TranslatableString {
         TR {
             @Override
             public String toString(final TranslatableString trString) {
-                return "tr: " + trString.singularPattern;
+                return "tr: " + trString.singularText;
             }
         },
         /**
@@ -109,44 +139,24 @@ public final class TranslatableString {
         TRN {
             @Override
             public String toString(final TranslatableString trString) {
-                return "trn: " + trString.pluralPattern;
+                return "trn: " + trString.pluralText;
             }
         };
 
         public abstract String toString(final TranslatableString trString);
     }
 
-    private TranslatableString(
-            final Type type,
-            final String singularPattern,
-            final String pluralPattern,
-            final int number,
-            final Map<String, Object> argumentsByParameterName) {
 
-        this.type = type;
-        this.singularPattern = singularPattern;
-        this.pluralPattern = pluralPattern;
-        this.number = number;
-        this.argumentsByParameterName = argumentsByParameterName;
-    }
-
-    /**
-     * The pattern (or the singular pattern if {@link #isPluralForm()} is <code>true</code>).
-     */
-    String getSingularPattern() {
-        return singularPattern;
-    }
-
-    /**
-     * The plural pattern (but will be <code>null</code> if {@link #isPluralForm()} is <code>false</code>).
-     */
-    String getPluralPattern() {
-        return pluralPattern;
-    }
+    private final Type type;
+    private final int number;
 
     boolean isPluralForm() {
         return type == Type.TRN;
     }
+    //endregion
+
+    //region > argumentsByParameterName
+    private final Map<String, Object> argumentsByParameterName;
 
     /**
      * The arguments; excluded from {@link #equals(Object)} comparison.
@@ -154,40 +164,20 @@ public final class TranslatableString {
     Map<String, Object> getArgumentsByParameterName() {
         return argumentsByParameterName;
     }
-
-    //region > equals, hashCode
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        final TranslatableString that = (TranslatableString) o;
-
-        if (pluralPattern != null ? !pluralPattern.equals(that.pluralPattern) : that.pluralPattern != null)
-            return false;
-        if (singularPattern != null ? !singularPattern.equals(that.singularPattern) : that.singularPattern != null)
-            return false;
-        if (type != that.type) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = type != null ? type.hashCode() : 0;
-        result = 31 * result + (singularPattern != null ? singularPattern.hashCode() : 0);
-        result = 31 * result + (pluralPattern != null ? pluralPattern.hashCode() : 0);
-        return result;
-    }
-
     //endregion
-
 
     //region > translate
 
+    /**
+     * Translates this string using the provided {@link org.apache.isis.applib.services.i18n.TranslationService}, selecting
+     * either the single or plural form as per {@link #getPattern()}.
+     * @param translationService
+     * @param context
+     * @param locale
+     * @return
+     */
     public String translate(final TranslationService translationService, final String context, final Locale locale) {
-        final String translatedText = translationService.translate(context, getText(), locale);
+        final String translatedText = translationService.translate(context, getPattern(), locale);
         return translated(translatedText);
     }
 
@@ -195,11 +185,11 @@ public final class TranslatableString {
      * The text to be translated; depends on whether {@link #isPluralForm()} and whether to be translated.
      *
      * <p>
-     *     May or may not hold placeholders.
+     *     Any placeholders will <i>not</i> have been replaced.
      * </p>
      */
-    String getText() {
-        return !isPluralForm() || number == 1 ? getSingularPattern() : getPluralPattern();
+    public String getPattern() {
+        return !isPluralForm() || number == 1 ? getSingularText() : getPluralText();
     }
 
     String translated(final String translatedText) {
@@ -232,9 +222,37 @@ public final class TranslatableString {
 
     //endregion
 
+    //region > equals, hashCode, toString
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final TranslatableString that = (TranslatableString) o;
+
+        if (pluralText != null ? !pluralText.equals(that.pluralText) : that.pluralText != null)
+            return false;
+        if (singularText != null ? !singularText.equals(that.singularText) : that.singularText != null)
+            return false;
+        if (type != that.type) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type != null ? type.hashCode() : 0;
+        result = 31 * result + (singularText != null ? singularText.hashCode() : 0);
+        result = 31 * result + (pluralText != null ? pluralText.hashCode() : 0);
+        return result;
+    }
 
     @Override
     public String toString() {
         return type.toString(this);
     }
+
+    //endregion
+
 }

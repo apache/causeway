@@ -17,21 +17,21 @@ public class TrStringTest {
         public void singularForm() throws Exception {
             final TranslatableString ts = TranslatableString.tr("No, you can't do that!");
 
-            assertThat(ts.getText(), is("No, you can't do that!"));
+            assertThat(ts.getPattern(), is("No, you can't do that!"));
         }
 
         @Test
         public void pluralFormOne() throws Exception {
             final TranslatableString ts = TranslatableString.trn("You can't do that because there is a dependent object", "You can't do that because there are dependent objects", 1);
 
-            assertThat(ts.getText(), is("You can't do that because there is a dependent object"));
+            assertThat(ts.getPattern(), is("You can't do that because there is a dependent object"));
         }
 
         @Test
         public void pluralFormTwo() throws Exception {
             final TranslatableString ts = TranslatableString.trn("You can't do that because there is a dependent object", "You can't do that because there are dependent objects", 2);
 
-            assertThat(ts.getText(), is("You can't do that because there are dependent objects"));
+            assertThat(ts.getPattern(), is("You can't do that because there are dependent objects"));
         }
 
     }
