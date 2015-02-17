@@ -9,43 +9,88 @@ import com.google.common.collect.Lists;
 class Block {
 
     private enum State {
-        CONTEXT,
-        MSGID,
-        MSGSTR
-    }
+        CONTEXT("^#: (?<value>.+)$"),
+        MSGID("^msgid \"(?<value>.+)\"$"),
+        MSGID_PLURAL("^msgid_plural \"(?<value>.+)\"$"),
+        MSGSTR("^msgstr \"(?<value>.+)\"$"),
+        MSGSTR0("^msgstr\\[0\\] \"(?<value>.+)\"$"),
+        MSGSTR1("^msgstr\\[1\\] \"(?<value>.+)\"$");
 
-    private static final Pattern contextPattern = Pattern.compile("^#: (?<context>.+)$");
-    private static final Pattern msgidPattern = Pattern.compile("^msgid \"(?<msgid>.+)\"$");
-    private static final Pattern msgstrPattern = Pattern.compile("^msgstr \"(?<msgstr>.+)\"$");
+        private final Pattern pattern;
+
+        private State(final String regex) {
+            pattern = Pattern.compile(regex);
+        }
+    }
 
     State state = State.CONTEXT;
 
     List<String> contextList = Lists.newArrayList();
     String msgid = null;
-    String msgstr = null;
+    String msgid_plural = null;
+    String msgstr = null; // either from msgstr or msgstr[0] if there is a plural
+    String msgstr_plural = null; // from msgstr[1]
 
     Block parseLine(final String line, final Map<MsgIdAndContext, String> translationsByKey) {
         if (state == State.CONTEXT) {
-            final Matcher matcher = contextPattern.matcher(line);
-            if (matcher.matches()) {
-                final String context = matcher.group("context");
+            final Matcher contextMatcher = state.pattern.matcher(line);
+            if (contextMatcher.matches()) {
+                final String context = contextMatcher.group("value");
                 contextList.add(context);
+                return this;
             } else {
                 state = State.MSGID;
+                // fallthrough (there may not have been any more context)
             }
         }
+
         if (state == State.MSGID) {
-            final Matcher matcher = msgidPattern.matcher(line);
-            if (matcher.matches()) {
-                msgid = matcher.group("msgid");
+            final Matcher msgidMatcher = state.pattern.matcher(line);
+            if (msgidMatcher.matches()) {
+                msgid = msgidMatcher.group("value");
+                state = State.MSGID_PLURAL; // found, next time look for plurals
             } else {
-                state = State.MSGSTR;
+                return new Block();
+            }
+            return this;
+        }
+
+        if (state == State.MSGID_PLURAL) {
+            final Matcher msgIdPluralMatcher = state.pattern.matcher(line);
+            if (msgIdPluralMatcher.matches()) {
+                msgid_plural = msgIdPluralMatcher.group("value");
+                state = State.MSGSTR0; // next time look for msgstr[0]
+                return this;
+            } else {
+                state = State.MSGSTR; // fall through (there may not have been any plural form)
             }
         }
+
         if (state == State.MSGSTR) {
-            final Matcher matcher = msgstrPattern.matcher(line);
-            if (matcher.matches()) {
-                msgstr = matcher.group("msgstr");
+            final Matcher msgStrMatcher = state.pattern.matcher(line);
+            if (msgStrMatcher.matches()) {
+                msgstr = msgStrMatcher.group("value");
+            }
+            append(translationsByKey);
+            return new Block();
+        }
+
+        if (state == State.MSGSTR0) {
+            final Matcher msgStr0Matcher = state.pattern.matcher(line);
+            if (msgStr0Matcher.matches()) {
+                msgstr = msgStr0Matcher.group("value");
+                state = State.MSGSTR1; // next time, look for plural
+            } else {
+                append(translationsByKey);
+                return new Block();
+            }
+            return this;
+        }
+
+        if (state == State.MSGSTR1) {
+            final Matcher msgStr1Matcher = state.pattern.matcher(line);
+            if (msgStr1Matcher.matches()) {
+                msgstr_plural = msgStr1Matcher.group("value");
             }
             append(translationsByKey);
             return new Block();
@@ -53,7 +98,7 @@ class Block {
         return this;
     }
 
-    private void append(final Map<MsgIdAndContext, String> translationsByKey) {
+    void append(final Map<MsgIdAndContext, String> translationsByKey) {
         if(msgid != null && msgstr != null) {
             for (String context : contextList) {
                 final MsgIdAndContext mc = new MsgIdAndContext(msgid, context);

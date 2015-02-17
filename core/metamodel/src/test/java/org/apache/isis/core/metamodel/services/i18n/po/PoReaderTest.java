@@ -125,6 +125,45 @@ public class PoReaderTest {
         }
 
         @Test
+        public void withPlurals() throws Exception {
+
+            // given
+            final String context =
+                    "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()";
+            final String msgid = "Work of art";
+            final String msgid_plural = "Works of art";
+            final String msgstr$0 = "Œuvre d'art";
+            final String msgstr$1 = "Les œuvres d'art";
+
+            poReader = new PoReader(null) {
+                @Override
+                protected List<String> readPo(final Locale locale) {
+                    final List<String> lines = Lists.newArrayList();
+                    lines.add(String.format("#: %s", context));
+                    lines.add(String.format("msgid \"%s\"", msgid));
+                    lines.add(String.format("msgid_plural \"%s\"", msgid_plural));
+                    lines.add(String.format("msgstr[0] \"%s\"", msgstr$0));
+                    lines.add(String.format("msgstr[1] \"%s\"", msgstr$1));
+                    return lines;
+                }
+            };
+
+            // when
+            final String translated1 = poReader.translate(context, msgid, Locale.FRENCH);
+
+            // then
+            assertThat(translated1, is(equalTo(msgstr$0)));
+
+            // when
+            final String translated2 = poReader.translate(context, msgid_plural, Locale.FRENCH);
+
+            // then
+            assertThat(translated2, is(equalTo(msgstr$1)));
+        }
+
+
+
+        @Test
         public void noTranslation() throws Exception {
 
             // given
