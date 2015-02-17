@@ -32,6 +32,8 @@ public class NamedFacetTranslated extends FacetAbstract implements NamedFacet {
     String context;
     String originalText;
 
+    private String value;
+
     public NamedFacetTranslated(
             final String context, final String originalText,
             final TranslationService translationService, final LocaleProvider localeProvider,
@@ -41,11 +43,19 @@ public class NamedFacetTranslated extends FacetAbstract implements NamedFacet {
         this.originalText = originalText;
         this.translationService = translationService;
         this.localeProvider = localeProvider;
+
+        if(translationService.getMode().isWrite()) {
+            // force evaluation
+            value();
+        }
     }
 
     @Override
     public String value() {
-        return translationService.translate(context, originalText, localeProvider.getLocale());
+        if (value == null) {
+            value = translationService.translate(context, originalText, localeProvider.getLocale());
+        }
+        return value;
     }
 
     @Override

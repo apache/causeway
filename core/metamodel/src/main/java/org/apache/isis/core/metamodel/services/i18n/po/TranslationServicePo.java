@@ -36,12 +36,19 @@ public class TranslationServicePo implements TranslationService {
 
     public static Logger LOG = LoggerFactory.getLogger(TranslationServicePo.class);
 
+    public static final String KEY_DEPLOYMENT_TYPE = "isis.deploymentType";
+    public static final String KEY_PO_MODE = "isis.services.translation.po.mode";
+
     private boolean prototype;
 
     private PoAbstract po;
 
+    /**
+     * Defaults to writer mode because the service isn't available while the metamodel is bring instantiated,
+     * however we want to force the translations to be cached in case required later.
+     */
     public TranslationServicePo() {
-        po = new PoReader(this);
+        po = new PoWriter(this);
     }
 
     //region > init, shutdown
@@ -50,20 +57,22 @@ public class TranslationServicePo implements TranslationService {
     @PostConstruct
     public void init(final Map<String,String> config) {
 
-        final String deploymentType = config.get("isis.deploymentType");
+        final String deploymentType = config.get(KEY_DEPLOYMENT_TYPE);
         prototype = deploymentType==null ||
                     deploymentType.toLowerCase().contains("prototype") ||
                     deploymentType.toLowerCase().contains("test") ;
 
-        String translationMode = config.get("isis.services.translation.po.mode");
+        String translationMode = config.get(KEY_PO_MODE);
         final boolean forceRead =
-                "read".equalsIgnoreCase(translationMode) ||
-                "reader".equalsIgnoreCase(translationMode);
+                translationMode != null &&
+                        ("read".equalsIgnoreCase(translationMode) ||
+                         "reader".equalsIgnoreCase(translationMode));
 
-        if (prototype && !forceRead) {
-            po = new PoWriter(this);
+        if (!prototype || forceRead) {
+            final PoReader poReader = new PoReader(this);
+            poReader.init(config);
+            po = poReader;
         }
-        po.init(config);
     }
 
     @Programmatic
@@ -87,6 +96,11 @@ public class TranslationServicePo implements TranslationService {
     @Override
     public String translate(final String context, final String singularText, final String pluralText, final int num, final Locale targetLocale) {
         return po.translate(context, singularText, pluralText, num, targetLocale);
+    }
+
+    @Override
+    public Mode getMode() {
+        return po.getMode();
     }
 
     /**

@@ -22,10 +22,11 @@ import fixture.simple.scenario.SimpleObjectsFixture;
 
 import java.util.List;
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.fixturescripts.FixtureResult;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
@@ -51,10 +52,6 @@ public class SimpleObjectsFixturesService extends FixtureScripts {
         return findFixtureScriptFor(SimpleFixtureScript.class);
     }
 
-    /**
-     * Raising visibility to <tt>public</tt> so that choices are available for first param
-     * of {@link #runFixtureScript(FixtureScript, String)}.
-     */
     @Override
     public List<FixtureScript> choices0RunFixtureScript() {
         return super.choices0RunFixtureScript();
@@ -66,8 +63,11 @@ public class SimpleObjectsFixturesService extends FixtureScripts {
     @Action(
             restrictTo = RestrictTo.PROTOTYPING
     )
+    @ActionLayout(
+            cssClassFa="fa fa-refresh"
+    )
     @MemberOrder(sequence="20")
-    public Object installFixturesAndReturnFirst() {
+    public Object recreateObjectsAndReturnFirst() {
         final List<FixtureResult> run = findFixtureScriptFor(SimpleObjectsFixture.class).run(null);
         return run.get(0).getObject();
     }

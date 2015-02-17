@@ -47,4 +47,37 @@ public interface TranslationService {
     @Programmatic
     public String translate(final String context, final String singularText, final String pluralText, int num, final Locale targetLocale);
 
+
+    public enum Mode {
+        READ,
+        WRITE;
+
+        public boolean isRead() {
+            return this == READ;
+        }
+        public boolean isWrite() {
+            return this == WRITE;
+        }
+    }
+
+    /**
+     * Whether this implementation is operating in read or in write mode.
+     *
+     * <p>
+     *     If in read mode, then the translations are expected to be present.  In such cases, the
+     *     {@link #translate(String, String, java.util.Locale) translate}
+     *     {@link #translate(String, String, String, int, java.util.Locale) method}s should be <i>lazily</i> called,
+     *     if only because there will (most likely) need to be a session in progress (such that the locale of the
+     *     current user can be determined).
+     * </p>
+     *
+     * <p>
+     *     If in write mode, then the implementation is saving translation keys, and will
+     *     always return the untranslated translation.  In such cases, the {@link #translate(String, String, java.util.Locale) translate} 
+     *     {@link #translate(String, String, String, int, java.util.Locale) method}s should be <i>eagerly</i> called
+     *     such that all pathways are exercised..
+     * </p>
+     */
+    @Programmatic
+    Mode getMode();
 }

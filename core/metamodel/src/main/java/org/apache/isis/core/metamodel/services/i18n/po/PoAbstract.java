@@ -19,18 +19,18 @@
 package org.apache.isis.core.metamodel.services.i18n.po;
 
 import java.util.Locale;
-import java.util.Map;
+import org.apache.isis.applib.services.i18n.TranslationService;
 
 abstract class PoAbstract {
 
     protected final TranslationServicePo translationServicePo;
+    private final TranslationService.Mode mode;
 
-    PoAbstract(final TranslationServicePo translationServicePo) {
+    PoAbstract(final TranslationServicePo translationServicePo, final TranslationService.Mode mode) {
         this.translationServicePo = translationServicePo;
+        this.mode = mode;
     }
 
-
-    abstract void init(final Map<String,String> config);
 
     abstract void shutdown();
 
@@ -38,4 +38,7 @@ abstract class PoAbstract {
 
     abstract String translate(final String context, final String msgId, final String msgIdPlural, int num, final Locale targetLocale);
 
+    public TranslationService.Mode getMode() {
+        return mode;
+    }
 }

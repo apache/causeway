@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.services.i18n.po;
 
 import java.util.Locale;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import com.google.common.collect.Maps;
@@ -27,6 +26,7 @@ import com.google.common.collect.Sets;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.isis.applib.services.i18n.TranslationService;
 
 class PoWriter extends PoAbstract {
 
@@ -45,13 +45,12 @@ class PoWriter extends PoAbstract {
     private final SortedMap<String, Block> blocksByMsgId = Maps.newTreeMap();
 
     public PoWriter(final TranslationServicePo translationServicePo) {
-        super(translationServicePo);
+        super(translationServicePo, TranslationService.Mode.WRITE);
     }
 
-    //region > init, shutdown
-    void init(final Map<String,String> config) {
-    }
+    //region > shutdown
 
+    @Override
     void shutdown() {
         final StringBuilder buf = new StringBuilder();
         buf.append("\n");
@@ -90,10 +89,8 @@ class PoWriter extends PoAbstract {
 
 
     public String translate(final String context, final String msgId, final Locale targetLocale) {
-        Block block = blocksByMsgId.get(msgId);
-        if(block == null) {
-            block = new Block(msgId);
-        }
+
+        final Block block = blockFor(msgId);
         block.contexts.add(context);
 
         return msgId;
@@ -102,14 +99,20 @@ class PoWriter extends PoAbstract {
     @Override
     String translate(final String context, final String msgId, final String msgIdPlural, final int num, final Locale targetLocale) {
 
+        final Block block = blockFor(msgId);
+        block.contexts.add(context);
+        block.msgIdPlural = msgIdPlural;
+
+        return null;
+    }
+
+    private Block blockFor(final String msgId) {
         Block block = blocksByMsgId.get(msgId);
         if(block == null) {
             block = new Block(msgId);
+            blocksByMsgId.put(msgId, block);
         }
-        block.msgIdPlural = msgIdPlural;
-        block.contexts.add(context);
-
-        return null;
+        return block;
     }
 
     /**
@@ -117,9 +120,9 @@ class PoWriter extends PoAbstract {
      */
     String toPot() {
         final StringBuilder buf = new StringBuilder();
-        for (String msgId : blocksByMsgId.keySet()) {
+        for (final String msgId : blocksByMsgId.keySet()) {
             final Block block = blocksByMsgId.get(msgId);
-            for (String context : block.contexts) {
+            for (final String context : block.contexts) {
                 buf.append("#: ").append(context).append("\n");
             }
             buf.append("msgid \"").append(msgId).append("\"\n");

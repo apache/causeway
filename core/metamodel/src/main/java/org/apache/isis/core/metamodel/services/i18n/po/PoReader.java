@@ -27,6 +27,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.UrlResolver;
 
 class PoReader extends PoAbstract {
@@ -50,7 +51,7 @@ class PoReader extends PoAbstract {
     private List<String> fallback;
 
     public PoReader(final TranslationServicePo translationServicePo) {
-        super(translationServicePo);
+        super(translationServicePo, TranslationService.Mode.READ);
     }
 
     //region > init, shutdown
@@ -62,6 +63,7 @@ class PoReader extends PoAbstract {
         }
     }
 
+    @Override
     void shutdown() {
     }
     //endregion
@@ -93,19 +95,24 @@ class PoReader extends PoAbstract {
         final Map<ContextAndMsgId, String> translationsByKey = readAndCacheTranslationsIfRequired(targetLocale);
 
         final ContextAndMsgId key = new ContextAndMsgId(context, msgId, type);
-        final String translation = translationsByKey.get(key);
-        if (translation != null) {
+        final String translation = lookupTranslation(translationsByKey, key);
+        if (!Strings.isNullOrEmpty(translation)) {
             return translation;
         }
 
         final ContextAndMsgId keyNoContext = new ContextAndMsgId("", msgId, type);
-        final String translationNoContext = translationsByKey.get(keyNoContext);
-        if (translationNoContext != null) {
+        final String translationNoContext = lookupTranslation(translationsByKey, keyNoContext);
+        if (!Strings.isNullOrEmpty(translationNoContext)) {
             return translationNoContext;
         }
 
         LOG.warn("No translation found for: " + key);
         return msgId;
+    }
+
+    private String lookupTranslation(final Map<ContextAndMsgId, String> translationsByKey, final ContextAndMsgId key) {
+        final String s = translationsByKey.get(key);
+        return s != null? s.trim(): null;
     }
 
     private Map<ContextAndMsgId, String> readAndCacheTranslationsIfRequired(final Locale locale) {

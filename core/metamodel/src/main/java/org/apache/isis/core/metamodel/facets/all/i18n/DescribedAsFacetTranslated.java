@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.all.i18n;
 
-import java.util.Locale;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -33,6 +32,8 @@ public class DescribedAsFacetTranslated extends FacetAbstract implements Describ
     private final TranslationService translationService;
     private final LocaleProvider localeProvider;
 
+    private String value;
+
     public DescribedAsFacetTranslated(
             final String context, final String originalText,
             final TranslationService translationService, final LocaleProvider localeProvider,
@@ -42,11 +43,19 @@ public class DescribedAsFacetTranslated extends FacetAbstract implements Describ
         this.originalText = originalText;
         this.translationService = translationService;
         this.localeProvider = localeProvider;
+
+
+        if(translationService.getMode().isWrite()) {
+            // force evaluation
+            value();
+        }
     }
 
     @Override
     public String value() {
-        final Locale locale = localeProvider.getLocale();
-        return translationService.translate(context, originalText, locale);
+        if (value == null) {
+            value = translationService.translate(context, originalText, localeProvider.getLocale());
+        }
+        return value;
     }
 }
