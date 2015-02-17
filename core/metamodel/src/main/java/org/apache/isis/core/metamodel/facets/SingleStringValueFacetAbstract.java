@@ -27,7 +27,11 @@ public abstract class SingleStringValueFacetAbstract extends FacetAbstract imple
     private final String value;
 
     public SingleStringValueFacetAbstract(final Class<? extends Facet> facetType, final FacetHolder holder, final String value) {
-        super(facetType, holder, Derivation.NOT_DERIVED);
+        this(facetType, holder, value, Derivation.NOT_DERIVED);
+    }
+
+    public SingleStringValueFacetAbstract(final Class<? extends Facet> type, final FacetHolder holder, final String value, final Derivation derivation) {
+        super(type, holder, derivation);
         this.value = value;
     }
 

@@ -19,17 +19,13 @@
 package org.apache.isis.core.metamodel.facets.all.i18n;
 
 
-import java.util.Locale;
-import java.util.Objects;
 import com.google.common.base.Strings;
+import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.locale.LocaleProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facetdecorator.i18n.internal.DescribedAsFacetWrapI18n;
-import org.apache.isis.core.metamodel.facetdecorator.i18n.internal.NamedFacetWrapI18n;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
@@ -103,10 +99,8 @@ public class I18nFacetFactory extends FacetFactoryAbstract implements Contribute
         final TranslationService translationService = lookupTranslationService();
         final LocaleProvider localeProvider = lookupLocaleProvider();
 
-        final Locale locale = localeProvider.getLocale();
-        final String translatedText = translationService.translate(context, originalText, locale);
-        if(!Objects.equals(originalText, translatedText)) {
-            FacetUtil.addFacet(new NamedFacetWrapI18n(translatedText, facetHolder));
+        if(translationService != null && localeProvider != null) {
+            FacetUtil.addFacet(new NamedFacetTranslated(context, originalText, translationService, localeProvider, facetHolder));
         }
     }
 
@@ -125,11 +119,10 @@ public class I18nFacetFactory extends FacetFactoryAbstract implements Contribute
         final TranslationService translationService = lookupTranslationService();
         final LocaleProvider localeProvider = lookupLocaleProvider();
 
-        final Locale locale = localeProvider.getLocale();
-        final String translatedText = translationService.translate(context, originalText, locale);
-        if(!Objects.equals(originalText, translatedText)) {
-            FacetUtil.addFacet(new DescribedAsFacetWrapI18n(translatedText, holder));
+        if(translationService != null && localeProvider != null) {
+            FacetUtil.addFacet(new DescribedAsFacetTranslated(context, originalText, translationService, localeProvider, holder));
         }
+
     }
 
     private boolean isNullOrEmptyWhenTrimmed(final String originalText) {

@@ -22,10 +22,12 @@ import java.util.Locale;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.i18n.UrlResolver;
 
 /**
  * Not annotated with &#64;DomainService, but is registered as a fallback by <tt>ServicesInstallerFallback</tt>.
@@ -39,7 +41,7 @@ public class TranslationServicePo implements TranslationService {
     private PoAbstract po;
 
     public TranslationServicePo() {
-        po = new PoWriter(this);
+        po = new PoReader(this);
     }
 
     //region > init, shutdown
@@ -47,13 +49,19 @@ public class TranslationServicePo implements TranslationService {
     @Programmatic
     @PostConstruct
     public void init(final Map<String,String> config) {
+
         final String deploymentType = config.get("isis.deploymentType");
         prototype = deploymentType==null ||
                     deploymentType.toLowerCase().contains("prototype") ||
                     deploymentType.toLowerCase().contains("test") ;
 
-        if (!prototype) {
-            po = new PoReader(this);
+        String translationMode = config.get("isis.services.translation.po.mode");
+        final boolean forceRead =
+                "read".equalsIgnoreCase(translationMode) ||
+                "reader".equalsIgnoreCase(translationMode);
+
+        if (prototype && !forceRead) {
+            po = new PoWriter(this);
         }
         po.init(config);
     }
@@ -85,5 +93,8 @@ public class TranslationServicePo implements TranslationService {
         }
         return  ((PoWriter)po).toPo();
     }
+
+    @Inject
+    UrlResolver urlResolver;
 
 }

@@ -41,6 +41,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated;
+import org.apache.isis.core.metamodel.facets.all.i18n.PluralFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
@@ -53,10 +55,24 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.*;
-import org.apache.isis.core.metamodel.spec.feature.*;
+import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
+import org.apache.isis.core.metamodel.spec.SpecificationContext;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.specimpl.*;
+import org.apache.isis.core.metamodel.specloader.specimpl.CreateObjectContext;
+import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilder;
+import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionImpl;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
+import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationImpl;
+import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationImpl;
 
 public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements DebuggableWithTitle, FacetHolder {
 
@@ -186,7 +202,12 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
         PluralFacet pluralFacet = getFacet(PluralFacet.class);
         if (pluralFacet == null) {
-            pluralFacet = new PluralFacetInferred(StringExtensions.asPluralName(namedFacet.value()), this);
+            if(namedFacet instanceof NamedFacetTranslated) {
+                final NamedFacetTranslated facet = (NamedFacetTranslated) namedFacet;
+                pluralFacet = new PluralFacetTranslated(facet, this);
+            } else {
+                pluralFacet = new PluralFacetInferred(StringExtensions.asPluralName(namedFacet.value()), this);
+            }
             addFacet(pluralFacet);
         }
     }

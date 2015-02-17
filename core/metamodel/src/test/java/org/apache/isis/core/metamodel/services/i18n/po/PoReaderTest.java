@@ -3,7 +3,6 @@ package org.apache.isis.core.metamodel.services.i18n.po;
 import java.util.List;
 import java.util.Locale;
 import com.google.common.collect.Lists;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -14,9 +13,8 @@ public class PoReaderTest {
 
     PoReader poReader;
 
-    public static class ReadFile extends PoReaderTest {
+    public static class Translate extends PoReaderTest {
 
-        @Ignore // TODO
         @Test
         public void singleContext() throws Exception {
 
@@ -28,11 +26,11 @@ public class PoReaderTest {
 
             poReader = new PoReader(null) {
                 @Override
-                List<String> readFile(final Locale locale) {
+                protected List<String> readPo(final Locale locale) {
                     final List<String> lines = Lists.newArrayList();
                     lines.add(String.format("#: %s", context));
-                    lines.add(String.format("msgid: \"%s\"", msgId));
-                    lines.add(String.format("msgstr: \"%s\"", msgStr));
+                    lines.add(String.format("msgid \"%s\"", msgId));
+                    lines.add(String.format("msgstr \"%s\"", msgStr));
                     return lines;
                 }
             };
@@ -44,7 +42,6 @@ public class PoReaderTest {
             assertThat(translated, is(equalTo(msgStr)));
         }
 
-        @Ignore // TODO
         @Test
         public void multipleContext() throws Exception {
 
@@ -58,12 +55,12 @@ public class PoReaderTest {
 
             poReader = new PoReader(null) {
                 @Override
-                List<String> readFile(final Locale locale) {
+                protected List<String> readPo(final Locale locale) {
                     final List<String> lines = Lists.newArrayList();
                     lines.add(String.format("#: %s", context1));
                     lines.add(String.format("#: %s", context2));
-                    lines.add(String.format("msgid: \"%s\"", msgId));
-                    lines.add(String.format("msgstr: \"%s\"", msgStr));
+                    lines.add(String.format("msgid \"%s\"", msgId));
+                    lines.add(String.format("msgstr \"%s\"", msgStr));
                     return lines;
                 }
             };
@@ -80,7 +77,53 @@ public class PoReaderTest {
             assertThat(translated2, is(equalTo(msgStr)));
         }
 
-        @Ignore // TODO
+        @Test
+        public void multipleBlocks() throws Exception {
+
+            // given
+            final String context1 =
+                    "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()";
+            final String msgid1 = "Work of art";
+            final String msgstr1 = "Objet d'art";
+
+            final String context2 =
+                    "org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#lookup()";
+            final String msgid2 = "Lookup";
+            final String msgstr2 = "Look up";
+
+            poReader = new PoReader(null) {
+                @Override
+                protected List<String> readPo(final Locale locale) {
+                    final List<String> lines = Lists.newArrayList();
+                    lines.add(String.format("#: %s", context1));
+                    lines.add(String.format("msgid \"%s\"", msgid1));
+                    lines.add(String.format("msgstr \"%s\"", msgstr1));
+
+                    lines.add(String.format(""));
+                    lines.add(String.format("# "));
+
+                    lines.add(String.format("#: %s", context2));
+                    lines.add(String.format("msgid \"%s\"", msgid2));
+                    lines.add(String.format("msgstr \"%s\"", msgstr2));
+
+                    lines.add(String.format(""));
+                    return lines;
+                }
+            };
+
+            // when
+            final String translated1 = poReader.translate(context1, msgid1, Locale.FRENCH);
+
+            // then
+            assertThat(translated1, is(equalTo(msgstr1)));
+
+            // when
+            final String translated2 = poReader.translate(context2, msgid2, Locale.FRENCH);
+
+            // then
+            assertThat(translated2, is(equalTo(msgstr2)));
+        }
+
         @Test
         public void noTranslation() throws Exception {
 
@@ -88,7 +131,7 @@ public class PoReaderTest {
 
             poReader = new PoReader(null) {
                 @Override
-                List<String> readFile(final Locale locale) {
+                protected List<String> readPo(final Locale locale) {
                     return Lists.newArrayList();
                 }
             };
@@ -99,7 +142,6 @@ public class PoReaderTest {
             // then
             assertThat(translated, is(equalTo("Something to translate")));
        }
-
     }
 
 }

@@ -16,16 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.services.i18n;
 
-package org.apache.isis.core.metamodel.facets.object.plural.inferred;
+import java.util.Locale;
+import org.apache.isis.applib.annotation.Programmatic;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
+public interface LocaleProvider {
 
-public class PluralFacetInferred extends PluralFacetAbstract {
-
-    public PluralFacetInferred(final String value, final FacetHolder holder) {
-        super(value, holder, Derivation.DERIVED);
-    }
+    @Programmatic
+    Locale getLocale();
 
 }

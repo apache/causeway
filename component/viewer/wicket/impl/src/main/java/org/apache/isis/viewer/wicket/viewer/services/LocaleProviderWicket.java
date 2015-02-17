@@ -16,16 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.viewer.wicket.viewer.services;
 
-package org.apache.isis.core.metamodel.facets.object.plural.inferred;
+import java.util.Locale;
+import org.apache.wicket.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.i18n.LocaleProvider;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
 
-public class PluralFacetInferred extends PluralFacetAbstract {
+/**
+ * An implementation that provides the locale of the current session.
+ */
+@DomainService
+public class LocaleProviderWicket implements LocaleProvider {
 
-    public PluralFacetInferred(final String value, final FacetHolder holder) {
-        super(value, holder, Derivation.DERIVED);
+    public static Logger LOG = LoggerFactory.getLogger(LocaleProviderWicket.class);
+
+    @Programmatic
+    @Override
+    public Locale getLocale() {
+        return getSession().getLocale();
     }
 
+    protected Session getSession() {
+        return Session.get();
+    }
 }

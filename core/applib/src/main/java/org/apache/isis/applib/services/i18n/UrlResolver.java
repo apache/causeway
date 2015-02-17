@@ -16,14 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.locale;
+package org.apache.isis.applib.services.i18n;
 
-import java.util.Locale;
+import java.util.List;
 import org.apache.isis.applib.annotation.Programmatic;
 
-public interface LocaleProvider {
+public interface UrlResolver {
 
     @Programmatic
-    Locale getLocale();
+    public List<String> readLines(final String file);
 
 }

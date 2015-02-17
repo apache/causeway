@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.services.i18n;
 
 import java.util.Locale;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.locale.LocaleProvider;
+import org.apache.isis.applib.services.i18n.LocaleProvider;
 
 /**
  * Not annotated with &#64;DomainService, but is registered as a fallback by <tt>ServicesInstallerFallback</tt>.
