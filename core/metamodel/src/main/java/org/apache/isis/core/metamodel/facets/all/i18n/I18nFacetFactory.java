@@ -100,7 +100,7 @@ public class I18nFacetFactory extends FacetFactoryAbstract implements Contribute
         final LocaleProvider localeProvider = lookupLocaleProvider();
 
         if(translationService != null && localeProvider != null) {
-            FacetUtil.addFacet(new NamedFacetTranslated(context, originalText, translationService, localeProvider, facetHolder));
+            FacetUtil.addFacet(new NamedFacetTranslated(context, originalText, translationService, facetHolder));
         }
     }
 
@@ -120,7 +120,7 @@ public class I18nFacetFactory extends FacetFactoryAbstract implements Contribute
         final LocaleProvider localeProvider = lookupLocaleProvider();
 
         if(translationService != null && localeProvider != null) {
-            FacetUtil.addFacet(new DescribedAsFacetTranslated(context, originalText, translationService, localeProvider, holder));
+            FacetUtil.addFacet(new DescribedAsFacetTranslated(context, originalText, translationService, holder));
         }
 
     }

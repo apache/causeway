@@ -78,12 +78,12 @@ public class TranslatableStringTest {
 
             // expect
             context.checking(new Expectations() {{
-                oneOf(mockTranslationService).translate(someContext, simpleText, someLocale);
+                oneOf(mockTranslationService).translate(someContext, simpleText);
                 will(returnValue(translation));
             }});
 
             // when
-            assertThat(ts.translate(mockTranslationService, someContext, someLocale), is(translation));
+            assertThat(ts.translate(mockTranslationService, someContext), is(translation));
         }
 
         @Test
@@ -100,12 +100,12 @@ public class TranslatableStringTest {
 
             // expect
             context.checking(new Expectations() {{
-                oneOf(mockTranslationService).translate(someContext, singularText, someLocale);
+                oneOf(mockTranslationService).translate(someContext, singularText, pluralText, 1);
                 will(returnValue(translation));
             }});
 
             // when
-            assertThat(ts.translate(mockTranslationService, someContext, someLocale), is(translation));
+            assertThat(ts.translate(mockTranslationService, someContext), is(translation));
         }
 
         @Test
@@ -123,12 +123,12 @@ public class TranslatableStringTest {
 
             // expect
             context.checking(new Expectations() {{
-                oneOf(mockTranslationService).translate(someContext, singularText, pluralText, number, someLocale);
+                oneOf(mockTranslationService).translate(someContext, singularText, pluralText, number);
                 will(returnValue(translation));
             }});
 
             // when
-            assertThat(ts.translate(mockTranslationService, someContext, someLocale), is(translation));
+            assertThat(ts.translate(mockTranslationService, someContext), is(translation));
         }
     }
 

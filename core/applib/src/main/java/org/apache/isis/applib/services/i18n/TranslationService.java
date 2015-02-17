@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.services.i18n;
 
-import java.util.Locale;
 import org.apache.isis.applib.annotation.Programmatic;
 
 public interface TranslationService {
@@ -28,11 +27,10 @@ public interface TranslationService {
      *
      * @param context
      * @param text
-     * @param targetLocale
      * @return
      */
     @Programmatic
-    public String translate(final String context, final String text, final Locale targetLocale);
+    public String translate(final String context, final String text);
 
     /**
      * Return a translation of either the singular or the plural text, dependent on the <tt>num</tt> parameter, for the specified locale.
@@ -41,11 +39,10 @@ public interface TranslationService {
      * @param singularText
      * @param pluralText
      * @param num - whether to return the translation of the singular (if =1) or of the plural (if != 1)
-     * @param targetLocale
      * @return
      */
     @Programmatic
-    public String translate(final String context, final String singularText, final String pluralText, int num, final Locale targetLocale);
+    public String translate(final String context, final String singularText, final String pluralText, int num);
 
 
     public enum Mode {
@@ -65,16 +62,16 @@ public interface TranslationService {
      *
      * <p>
      *     If in read mode, then the translations are expected to be present.  In such cases, the
-     *     {@link #translate(String, String, java.util.Locale) translate}
-     *     {@link #translate(String, String, String, int, java.util.Locale) method}s should be <i>lazily</i> called,
+     *     {@link #translate(String, String) translate}
+     *     {@link #translate(String, String, String, int) method}s should be <i>lazily</i> called,
      *     if only because there will (most likely) need to be a session in progress (such that the locale of the
      *     current user can be determined).
      * </p>
      *
      * <p>
      *     If in write mode, then the implementation is saving translation keys, and will
-     *     always return the untranslated translation.  In such cases, the {@link #translate(String, String, java.util.Locale) translate} 
-     *     {@link #translate(String, String, String, int, java.util.Locale) method}s should be <i>eagerly</i> called
+     *     always return the untranslated translation.  In such cases, the {@link #translate(String, String) translate}
+     *     {@link #translate(String, String, String, int) method}s should be <i>eagerly</i> called
      *     such that all pathways are exercised..
      * </p>
      */

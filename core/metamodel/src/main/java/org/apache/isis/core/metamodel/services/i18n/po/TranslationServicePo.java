@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services.i18n.po;
 
-import java.util.Locale;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -26,6 +25,7 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.UrlResolver;
 
@@ -89,13 +89,13 @@ public class TranslationServicePo implements TranslationService {
 
     @Override
     @Programmatic
-    public String translate(final String context, final String text, final Locale targetLocale) {
-        return po.translate(context, text, targetLocale);
+    public String translate(final String context, final String text) {
+        return po.translate(context, text);
     }
 
     @Override
-    public String translate(final String context, final String singularText, final String pluralText, final int num, final Locale targetLocale) {
-        return po.translate(context, singularText, pluralText, num, targetLocale);
+    public String translate(final String context, final String singularText, final String pluralText, final int num) {
+        return po.translate(context, singularText, pluralText, num);
     }
 
     @Override
@@ -114,6 +114,21 @@ public class TranslationServicePo implements TranslationService {
     }
 
     @Inject
+    private
     UrlResolver urlResolver;
 
+    @Inject
+    private
+    LocaleProvider localeProvider;
+
+
+    @Programmatic
+    public UrlResolver getUrlResolver() {
+        return urlResolver;
+    }
+
+    @Programmatic
+    public LocaleProvider getLocaleProvider() {
+        return localeProvider;
+    }
 }

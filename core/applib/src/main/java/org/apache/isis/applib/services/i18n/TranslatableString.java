@@ -20,7 +20,6 @@ package org.apache.isis.applib.services.i18n;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -173,14 +172,13 @@ public final class TranslatableString {
      * either the single or plural form as per {@link #getPattern()}.
      * @param translationService
      * @param context
-     * @param locale
      * @return
      */
-    public String translate(final TranslationService translationService, final String context, final Locale locale) {
+    public String translate(final TranslationService translationService, final String context) {
         final String translatedText =
                 !isPluralForm()
-                        ? translationService.translate(context, getSingularText(), locale)
-                        : translationService.translate(context, getSingularText(), getPluralText(), number, locale);
+                        ? translationService.translate(context, getSingularText())
+                        : translationService.translate(context, getSingularText(), getPluralText(), number);
         return translated(translatedText);
     }
 

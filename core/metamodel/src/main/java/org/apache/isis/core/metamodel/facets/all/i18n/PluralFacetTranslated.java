@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.all.i18n;
 
-import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -29,21 +28,20 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 public class PluralFacetTranslated extends FacetAbstract implements PluralFacet {
 
     private final TranslationService translationService;
-    private final LocaleProvider localeProvider;
     private String context;
     private String originalText;
 
     public PluralFacetTranslated(final NamedFacetTranslated facet, final FacetHolder facetHolder) {
         super(PluralFacet.class, facetHolder, Derivation.DERIVED);
         this.translationService = facet.translationService;
-        this.localeProvider = facet.localeProvider;
         this.context = facet.context;
         this.originalText = facet.originalText;
     }
 
     @Override
     public String value() {
-        final String singularName = translationService.translate(context, originalText, localeProvider.getLocale());
+        final String singularName = translationService.translate(context, originalText);
+        // TODO: sure this could be improved somehow using the other overload of translationService#translate(...)
         return StringExtensions.asPluralName(singularName);
     }
 

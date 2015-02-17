@@ -52,7 +52,7 @@ public class CssClassFaFacetAbstract extends SingleStringValueFacetAbstract impl
      * @return The original CSS classes plus <em>fa</em> and <em>fa-fw</em> if not already provided
      */
     static String sanitize(final String value) {
-        final Iterable<String> classes = Splitter.on(WHITESPACE).split(value);
+        final Iterable<String> classes = Splitter.on(WHITESPACE).split(value.trim());
         final Set<String> cssClassesSet = Sets.newLinkedHashSet();
         cssClassesSet.add("fa");
         cssClassesSet.add("fa-fw");

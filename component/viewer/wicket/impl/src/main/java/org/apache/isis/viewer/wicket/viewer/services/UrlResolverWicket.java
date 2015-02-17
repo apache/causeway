@@ -48,12 +48,15 @@ public class UrlResolverWicket implements UrlResolver {
             final ServletContext servletContext = getIsisWicketApplication().getServletContext();
             final URL url = servletContext.getResource("/WEB-INF/" + file);
             return readLines(url);
-        } catch (final IOException ignored) {
+        } catch (final RuntimeException | IOException ignored) {
             return null;
         }
     }
 
     private static List<String> readLines(final URL url) throws IOException {
+        if(url == null) {
+            return null;
+        }
         final CharSource charSource = Resources.asCharSource(url, Charsets.UTF_8);
         return charSource.readLines();
     }

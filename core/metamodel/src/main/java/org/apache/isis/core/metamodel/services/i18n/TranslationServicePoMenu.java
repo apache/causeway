@@ -59,7 +59,7 @@ public class TranslationServicePoMenu {
         return "myapp.pot";
     }
     public boolean hideDownloadPotFile() {
-        return translationService == null;
+        return translationService == null || translationService.getMode().isRead();
     }
 
     // //////////////////////////////////////

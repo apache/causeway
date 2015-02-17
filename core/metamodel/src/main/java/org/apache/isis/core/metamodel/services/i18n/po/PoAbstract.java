@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services.i18n.po;
 
-import java.util.Locale;
 import org.apache.isis.applib.services.i18n.TranslationService;
 
 abstract class PoAbstract {
@@ -34,9 +33,9 @@ abstract class PoAbstract {
 
     abstract void shutdown();
 
-    abstract String translate(final String context, final String msgId, final Locale targetLocale);
+    abstract String translate(final String context, final String msgId);
 
-    abstract String translate(final String context, final String msgId, final String msgIdPlural, int num, final Locale targetLocale);
+    abstract String translate(final String context, final String msgId, final String msgIdPlural, int num);
 
     public TranslationService.Mode getMode() {
         return mode;

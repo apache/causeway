@@ -3,7 +3,13 @@ package org.apache.isis.core.metamodel.services.i18n.po;
 import java.util.List;
 import java.util.Locale;
 import com.google.common.collect.Lists;
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.apache.isis.applib.services.i18n.LocaleProvider;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -11,7 +17,27 @@ import static org.junit.Assert.assertThat;
 
 public class PoReaderTest {
 
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+
+    @Mock
+    TranslationServicePo mockTranslationServicePo;
+
+    @Mock
+    LocaleProvider mockLocaleProvider;
+
     PoReader poReader;
+
+    @Before
+    public void setUp() throws Exception {
+        context.checking(new Expectations() {{
+            allowing(mockTranslationServicePo).getLocaleProvider();
+            will(returnValue(mockLocaleProvider));
+
+            allowing(mockLocaleProvider).getLocale();
+            will(returnValue(Locale.UK));
+        }});
+    }
 
     public static class Translate extends PoReaderTest {
 
@@ -24,7 +50,7 @@ public class PoReaderTest {
             final String msgId = "Work of art";
             final String msgStr = "Objet d'art";
 
-            poReader = new PoReader(null) {
+            poReader = new PoReader(mockTranslationServicePo) {
                 @Override
                 protected List<String> readPo(final Locale locale) {
                     final List<String> lines = Lists.newArrayList();
@@ -36,7 +62,7 @@ public class PoReaderTest {
             };
 
             // when
-            final String translated = poReader.translate(context, msgId, Locale.FRENCH);
+            final String translated = poReader.translate(context, msgId);
 
             // then
             assertThat(translated, is(equalTo(msgStr)));
@@ -53,7 +79,7 @@ public class PoReaderTest {
             final String msgId = "Parameters";
             final String msgStr = "Paramètres";
 
-            poReader = new PoReader(null) {
+            poReader = new PoReader(mockTranslationServicePo) {
                 @Override
                 protected List<String> readPo(final Locale locale) {
                     final List<String> lines = Lists.newArrayList();
@@ -65,13 +91,13 @@ public class PoReaderTest {
                 }
             };
             // when
-            final String translated = poReader.translate(context1, msgId, Locale.FRENCH);
+            final String translated = poReader.translate(context1, msgId);
 
             // then
             assertThat(translated, is(equalTo(msgStr)));
 
             // when
-            final String translated2 = poReader.translate(context2, msgId, Locale.FRENCH);
+            final String translated2 = poReader.translate(context2, msgId);
 
             // then
             assertThat(translated2, is(equalTo(msgStr)));
@@ -91,7 +117,7 @@ public class PoReaderTest {
             final String msgid2 = "Lookup";
             final String msgstr2 = "Look up";
 
-            poReader = new PoReader(null) {
+            poReader = new PoReader(mockTranslationServicePo) {
                 @Override
                 protected List<String> readPo(final Locale locale) {
                     final List<String> lines = Lists.newArrayList();
@@ -112,13 +138,13 @@ public class PoReaderTest {
             };
 
             // when
-            final String translated1 = poReader.translate(context1, msgid1, Locale.FRENCH);
+            final String translated1 = poReader.translate(context1, msgid1);
 
             // then
             assertThat(translated1, is(equalTo(msgstr1)));
 
             // when
-            final String translated2 = poReader.translate(context2, msgid2, Locale.FRENCH);
+            final String translated2 = poReader.translate(context2, msgid2);
 
             // then
             assertThat(translated2, is(equalTo(msgstr2)));
@@ -135,7 +161,7 @@ public class PoReaderTest {
             final String msgstr$0 = "Œuvre d'art";
             final String msgstr$1 = "Les œuvres d'art";
 
-            poReader = new PoReader(null) {
+            poReader = new PoReader(mockTranslationServicePo) {
                 @Override
                 protected List<String> readPo(final Locale locale) {
                     final List<String> lines = Lists.newArrayList();
@@ -149,13 +175,13 @@ public class PoReaderTest {
             };
 
             // when
-            final String translated1 = poReader.translate(context, msgid, Locale.FRENCH);
+            final String translated1 = poReader.translate(context, msgid);
 
             // then
             assertThat(translated1, is(equalTo(msgstr$0)));
 
             // when
-            final String translated2 = poReader.translate(context, msgid_plural, Locale.FRENCH);
+            final String translated2 = poReader.translate(context, msgid_plural);
 
             // then
             assertThat(translated2, is(equalTo(msgstr$1)));
@@ -168,7 +194,7 @@ public class PoReaderTest {
 
             // given
 
-            poReader = new PoReader(null) {
+            poReader = new PoReader(mockTranslationServicePo) {
                 @Override
                 protected List<String> readPo(final Locale locale) {
                     return Lists.newArrayList();
@@ -176,7 +202,7 @@ public class PoReaderTest {
             };
 
             // when
-            final String translated = poReader.translate("someContext", "Something to translate", Locale.FRENCH);
+            final String translated = poReader.translate("someContext", "Something to translate");
 
             // then
             assertThat(translated, is(equalTo("Something to translate")));

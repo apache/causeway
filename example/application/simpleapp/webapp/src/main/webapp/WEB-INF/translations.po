@@ -22,7 +22,7 @@ msgstr ""
 
 #: dom.simple.SimpleObjects#create()
 msgid "Create"
-msgstr ""
+msgstr "Create simple object"
 
 
 #: org.apache.isis.core.metamodel.services.i18n.TranslationServicePoMenu#downloadPotFile()
@@ -42,7 +42,7 @@ msgstr ""
 
 #: dom.simple.SimpleObjects#listAll()
 msgid "List All"
-msgstr ""
+msgstr "List all objects"
 
 
 #: fixture.simple.scenario.SimpleObjectsFixture#lookup()

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services.i18n.po;
 
-import java.util.Locale;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import com.google.common.collect.Maps;
@@ -54,7 +53,6 @@ class PoWriter extends PoAbstract {
     void shutdown() {
         final StringBuilder buf = new StringBuilder();
         buf.append("\n");
-        buf.append("\n");
         buf.append("\n##############################################################################");
         buf.append("\n#");
         buf.append("\n# .pot file");
@@ -70,6 +68,11 @@ class PoWriter extends PoAbstract {
         buf.append("\n#     /WEB-INF/translations_fr.po");
         buf.append("\n#     /WEB-INF/translations.po");
         buf.append("\n#");
+        buf.append("\n# If the app uses TranslatableString (eg for internationalized validation");
+        buf.append("\n# messages), or if the app calls the TranslationService directly, then ensure");
+        buf.append("\n# that all text to be translated has been captured by running a full");
+        buf.append("\n# integration test suite that fully exercises all behaviour");
+        buf.append("\n#");
         buf.append("\n##############################################################################");
         buf.append("\n");
         buf.append("\n");
@@ -77,18 +80,15 @@ class PoWriter extends PoAbstract {
         buf.append("\n");
         buf.append("\n");
         buf.append("\n##############################################################################");
-        buf.append("\n#");
         buf.append("\n# end of .pot file");
-        buf.append("\n#");
         buf.append("\n##############################################################################");
-        buf.append("\n");
         buf.append("\n");
         LOG.info(buf.toString());
     }
     //endregion
 
 
-    public String translate(final String context, final String msgId, final Locale targetLocale) {
+    public String translate(final String context, final String msgId) {
 
         final Block block = blockFor(msgId);
         block.contexts.add(context);
@@ -97,7 +97,7 @@ class PoWriter extends PoAbstract {
     }
 
     @Override
-    String translate(final String context, final String msgId, final String msgIdPlural, final int num, final Locale targetLocale) {
+    String translate(final String context, final String msgId, final String msgIdPlural, final int num) {
 
         final Block block = blockFor(msgId);
         block.contexts.add(context);

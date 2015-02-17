@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.all.i18n;
 
-import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -30,32 +29,42 @@ public class DescribedAsFacetTranslated extends FacetAbstract implements Describ
     private final String context;
     private final String originalText;
     private final TranslationService translationService;
-    private final LocaleProvider localeProvider;
 
     private String value;
 
     public DescribedAsFacetTranslated(
             final String context, final String originalText,
-            final TranslationService translationService, final LocaleProvider localeProvider,
+            final TranslationService translationService,
             final IdentifiedHolder holder) {
         super(DescribedAsFacet.class, holder, Derivation.NOT_DERIVED);
         this.context = context;
         this.originalText = originalText;
         this.translationService = translationService;
-        this.localeProvider = localeProvider;
-
-
-        if(translationService.getMode().isWrite()) {
-            // force evaluation
-            value();
-        }
     }
 
     @Override
     public String value() {
-        if (value == null) {
-            value = translationService.translate(context, originalText, localeProvider.getLocale());
+        // this strange algorithm is because the translationService's mode changes
+        // between the time the metamodel is first built and when it is subsequently
+        // used.  We can't distinguish (when in write mode) as to whether it is
+        // because we are in startup (prior to init'ing the services) or whether in
+        // prototype mode.  We therefore never cache if in write mode (this ensures that
+        // the PoWriter gets to see the translation request) but do then start caching
+        // if we find that we're in read mode (after init of the TranslationServicePo).
+        switch (translationService.getMode()) {
+            case WRITE:
+                return translated();
+            case READ:
+                // don't cache
+                if(value == null) {
+                    value = translated();
+                }
+                break;
         }
         return value;
+    }
+
+    private String translated() {
+        return translationService.translate(context, originalText);
     }
 }

@@ -68,14 +68,15 @@ class PoReader extends PoAbstract {
     }
     //endregion
 
-    public String translate(final String context, final String msgId, final Locale targetLocale) {
-
-        return translate(context, msgId, ContextAndMsgId.Type.REGULAR, targetLocale);
+    public String translate(final String context, final String msgId) {
+        final Locale locale = translationServicePo.getLocaleProvider().getLocale();
+        return translate(context, msgId, ContextAndMsgId.Type.REGULAR, locale);
     }
 
     @Override
-    String translate(final String context, final String msgId, final String msgIdPlural, final int num, final Locale targetLocale) {
+    String translate(final String context, final String msgId, final String msgIdPlural, final int num) {
 
+        final Locale locale = translationServicePo.getLocaleProvider().getLocale();
         final String msgIdToUse;
         final ContextAndMsgId.Type type;
         if (num == 1) {
@@ -86,7 +87,7 @@ class PoReader extends PoAbstract {
             type = ContextAndMsgId.Type.PLURAL_ONLY;
         }
 
-        return translate(context, msgIdToUse, type, targetLocale);
+        return translate(context, msgIdToUse, type, locale);
     }
 
     private String translate(
@@ -173,7 +174,7 @@ class PoReader extends PoAbstract {
     }
 
     private List<String> readUrl(final String candidate) {
-        final UrlResolver urlResolver = translationServicePo.urlResolver;
+        final UrlResolver urlResolver = translationServicePo.getUrlResolver();
         if(urlResolver == null) {
             return null;
         }
