@@ -19,15 +19,17 @@
 
 package org.apache.isis.core.metamodel.facetdecorator.i18n.resourcebundle;
 
-import java.util.Arrays;
 import java.util.List;
-
+import com.google.common.collect.Lists;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
-import org.apache.isis.core.metamodel.facetdecorator.i18n.I18nFacetDecorator;
-import org.apache.isis.core.metamodel.facetdecorator.i18n.resourcebundle.internal.I18nManagerUsingResourceBundle;
 
+/**
+ * Replaced by {@link org.apache.isis.applib.services.i18n.TranslationService};
+ * this file is retained just to ensure backward compatibility with <tt>isis.properties</tt> files
+ * that might reference it.
+ */
 public class I18nDecoratorUsingResourceBundleInstaller extends InstallerAbstract implements FacetDecoratorInstaller {
 
     public I18nDecoratorUsingResourceBundleInstaller() {
@@ -36,9 +38,7 @@ public class I18nDecoratorUsingResourceBundleInstaller extends InstallerAbstract
 
     @Override
     public List<FacetDecorator> createDecorators() {
-        final I18nManagerUsingResourceBundle manager = new I18nManagerUsingResourceBundle(getConfiguration());
-        manager.init();
-        return Arrays.<FacetDecorator> asList(new I18nFacetDecorator(manager));
+        return Lists.newArrayList();
     }
 
     @Override
