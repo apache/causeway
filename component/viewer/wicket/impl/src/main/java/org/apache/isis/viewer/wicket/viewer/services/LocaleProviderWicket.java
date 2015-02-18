@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.viewer.services;
 
 import java.util.Locale;
+import org.apache.wicket.Application;
 import org.apache.wicket.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,10 @@ public class LocaleProviderWicket implements LocaleProvider {
     @Programmatic
     @Override
     public Locale getLocale() {
+        if(!Application.exists()) {
+            // eg if request from RO viewer
+            return null;
+        }
         return getSession().getLocale();
     }
 

@@ -87,4 +87,12 @@ public class ContextAndMsgId implements Comparable<ContextAndMsgId> {
         }
         return context.compareTo(o.context);
     }
+
+    @Override
+    public String toString() {
+        return "ContextAndMsgId{" +
+                "context='" + context + '\'' +
+                ", msgId='" + msgId + '\'' +
+                '}';
+    }
 }

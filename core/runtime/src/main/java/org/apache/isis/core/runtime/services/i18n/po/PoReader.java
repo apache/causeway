@@ -94,6 +94,10 @@ class PoReader extends PoAbstract {
         final Locale targetLocale;
         try {
             targetLocale = translationServicePo.getLocaleProvider().getLocale();
+            if(targetLocale == null) {
+                // eg if request from RO viewer and the (default) LocaleProviderWicket is being used.
+                return msgId;
+            }
         } catch(final RuntimeException ex){
             LOG.warn("Failed to obtain locale, returning the original msgId");
             return msgId;
@@ -113,7 +117,9 @@ class PoReader extends PoAbstract {
             return translationNoContext;
         }
 
-        LOG.warn("No translation found for: " + key);
+        if(translation == null && translationNoContext == null) {
+            LOG.warn("No translation found for: " + key);
+        }
         return msgId;
     }
 

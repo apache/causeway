@@ -25,5 +25,4 @@ public interface LocaleProvider {
 
     @Programmatic
     Locale getLocale();
-
 }
