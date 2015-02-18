@@ -128,7 +128,7 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
             serviceInstantiator.setConfiguration(getConfiguration());
 
             if(packagePrefixes == null) {
-                String packagePrefixes = getConfiguration().getString(PACKAGE_PREFIX_KEY);
+                this.packagePrefixes = getConfiguration().getString(PACKAGE_PREFIX_KEY);
                 if(Strings.isNullOrEmpty(packagePrefixes)) {
                     throw new IllegalStateException("Could not locate '" + PACKAGE_PREFIX_KEY + "' key in property files - aborting");
                 }
