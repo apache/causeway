@@ -16,9 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services.i18n;
+package org.apache.isis.core.metamodel.services.i18n.po;
 
+import java.util.List;
 import javax.inject.Inject;
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -28,7 +31,6 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.metamodel.services.i18n.po.TranslationServicePo;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY
@@ -39,9 +41,30 @@ import org.apache.isis.core.metamodel.services.i18n.po.TranslationServicePo;
 )
 public class TranslationServicePoMenu {
 
-    private boolean prototype;
+    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<TranslationServicePoMenu> {
+        public ActionDomainEvent(final TranslationServicePoMenu source, final Identifier identifier) {
+            super(source, identifier);
+        }
+
+        public ActionDomainEvent(final TranslationServicePoMenu source, final Identifier identifier, final Object... arguments) {
+            super(source, identifier, arguments);
+        }
+
+        public ActionDomainEvent(final TranslationServicePoMenu source, final Identifier identifier, final List<Object> arguments) {
+            super(source, identifier, arguments);
+        }
+    }
+
+    // //////////////////////////////////////
+
+    public static class DownloadPotFileDomainEvent extends ActionDomainEvent {
+        public DownloadPotFileDomainEvent(final TranslationServicePoMenu source, final Identifier identifier, final Object... arguments) {
+            super(source, identifier, arguments);
+        }
+    }
 
     @Action(
+            domainEvent = DownloadPotFileDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
     )
@@ -56,10 +79,10 @@ public class TranslationServicePoMenu {
     }
 
     public String default0DownloadPotFile() {
-        return "myapp.pot";
+        return "translations.pot";
     }
     public boolean hideDownloadPotFile() {
-        return translationService == null || translationService.getMode().isRead();
+        return translationService.getMode().isRead();
     }
 
     // //////////////////////////////////////
