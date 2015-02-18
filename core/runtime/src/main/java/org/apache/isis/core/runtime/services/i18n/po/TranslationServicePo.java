@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -32,12 +33,13 @@ import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
-@DomainService
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 public class TranslationServicePo implements TranslationService {
 
     public static Logger LOG = LoggerFactory.getLogger(TranslationServicePo.class);
 
-    public static final String KEY_DEPLOYMENT_TYPE = "isis.deploymentType";
     public static final String KEY_PO_MODE = "isis.services.translation.po.mode";
 
     private PoAbstract po;

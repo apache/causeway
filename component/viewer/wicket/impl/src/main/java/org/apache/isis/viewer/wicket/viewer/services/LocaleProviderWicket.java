@@ -24,6 +24,7 @@ import org.apache.wicket.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 
@@ -31,7 +32,9 @@ import org.apache.isis.applib.services.i18n.LocaleProvider;
 /**
  * An implementation that provides the locale of the current session.
  */
-@DomainService
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 public class LocaleProviderWicket implements LocaleProvider {
 
     public static Logger LOG = LoggerFactory.getLogger(LocaleProviderWicket.class);
