@@ -12,7 +12,7 @@
 #
 ##############################################################################
 
-#: org.apache.isis.core.metamodel.services.i18n.TranslationServicePoMenu#downloadPotFile(java.lang.String)
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadPotFile(java.lang.String)
 msgid ".pot file name"
 msgstr ""
 
@@ -22,7 +22,7 @@ msgid "Create"
 msgstr ""
 
 
-#: org.apache.isis.core.metamodel.services.i18n.TranslationServicePoMenu#downloadPotFile()
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadPotFile()
 msgid "Download Pot File"
 msgstr ""
 
@@ -81,7 +81,7 @@ msgstr ""
 
 
 #: fixture.simple.SimpleObjectsFixturesService
-#: org.apache.isis.core.metamodel.services.i18n.TranslationServicePoMenu
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu
 msgid "Prototyping"
 msgstr ""
 
