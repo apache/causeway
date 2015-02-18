@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services.i18n.po;
+package org.apache.isis.core.runtime.services.i18n.po;
 
 import java.util.Collections;
 import java.util.List;

@@ -127,7 +127,8 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
      * Looks up from {@link org.apache.isis.core.metamodel.runtimecontext.ServicesInjector}.
      *
      * <p>
-     *     There is guaranteed to be an instance because {@link org.apache.isis.core.metamodel.services.i18n.po.TranslationServicePo} is annotated as a {@link org.apache.isis.applib.annotation.DomainService &#64;DomainService}.
+     *     There is guaranteed to be an instance because <code>TranslationServicePo</code> (in runtime) is annotated
+     *     as a {@link org.apache.isis.applib.annotation.DomainService &#64;DomainService}.
      * </p>
      */
     TranslationService lookupTranslationService() {

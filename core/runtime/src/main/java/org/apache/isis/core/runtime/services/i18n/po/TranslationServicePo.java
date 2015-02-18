@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services.i18n.po;
+package org.apache.isis.core.runtime.services.i18n.po;
 
 import java.util.Map;
 import javax.annotation.PostConstruct;
@@ -29,6 +29,8 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 @DomainService
 public class TranslationServicePo implements TranslationService {
@@ -59,10 +61,7 @@ public class TranslationServicePo implements TranslationService {
             return;
         }
 
-        final String deploymentType = config.get(KEY_DEPLOYMENT_TYPE);
-        boolean prototypeOrTest = deploymentType==null ||
-                    deploymentType.toLowerCase().contains("prototype") ||
-                    deploymentType.toLowerCase().contains("test") ;
+        final boolean prototypeOrTest = isPrototypeOrTest();
 
         final String translationMode = config.get(KEY_PO_MODE);
         final boolean forceRead =
@@ -79,6 +78,11 @@ public class TranslationServicePo implements TranslationService {
         final PoReader poReader = new PoReader(this);
         poReader.init(config);
         po = poReader;
+    }
+
+    protected boolean isPrototypeOrTest() {
+        final DeploymentType deploymentType = getDeploymentType();
+        return !deploymentType.isProduction();
     }
 
     @Programmatic
@@ -118,6 +122,11 @@ public class TranslationServicePo implements TranslationService {
 
     // //////////////////////////////////////
 
+    DeploymentType getDeploymentType() {
+        return IsisContext.getDeploymentType();
+    }
+
+
     @Inject
     private
     TranslationsResolver translationsResolver;
@@ -135,4 +144,6 @@ public class TranslationServicePo implements TranslationService {
     LocaleProvider getLocaleProvider() {
         return localeProvider;
     }
+
+
 }

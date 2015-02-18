@@ -18,18 +18,22 @@
  */
 package org.apache.isis.viewer.wicket.viewer.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.List;
 import javax.servlet.ServletContext;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharSource;
+import com.google.common.io.Files;
 import com.google.common.io.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
+import org.apache.isis.core.webapp.WebAppConstants;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
 
@@ -44,13 +48,31 @@ public class TranslationsResolverWicket implements TranslationsResolver {
     @Override
     @Programmatic
     public List<String> readLines(final String file) {
+        final ServletContext servletContext = getServletContext();
+
+        final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
         try {
-            final ServletContext servletContext = getIsisWicketApplication().getServletContext();
-            final URL url = servletContext.getResource("/WEB-INF/" + file);
-            return readLines(url);
+            if(configLocation != null) {
+                LOG.info( "Reading translations relative to config override location: " + configLocation );
+                return Files.readLines(newFile(configLocation, file), Charsets.UTF_8);
+            } else {
+                final URL url = servletContext.getResource("/WEB-INF/" + file);
+                return readLines(url);
+            }
         } catch (final RuntimeException | IOException ignored) {
             return null;
         }
+    }
+
+    static File newFile(final String dir, final String file) {
+        final File base = new File(dir);
+        final Path path = base.toPath();
+        final Path resolve = path.resolve(file);
+        return resolve.toFile();
+    }
+
+    protected ServletContext getServletContext() {
+        return getIsisWicketApplication().getServletContext();
     }
 
     private static List<String> readLines(final URL url) throws IOException {

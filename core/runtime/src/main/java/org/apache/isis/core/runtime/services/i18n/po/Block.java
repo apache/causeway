@@ -1,4 +1,4 @@
-package org.apache.isis.core.metamodel.services.i18n.po;
+package org.apache.isis.core.runtime.services.i18n.po;
 
 import java.util.List;
 import java.util.Map;

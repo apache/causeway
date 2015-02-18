@@ -1,4 +1,4 @@
-package org.apache.isis.core.metamodel.services.i18n.po;
+package org.apache.isis.core.runtime.services.i18n.po;
 
 /**
  * The combination of a <tt>msgId</tt> and context (optionally null) that represents a key to a translatable resource.
