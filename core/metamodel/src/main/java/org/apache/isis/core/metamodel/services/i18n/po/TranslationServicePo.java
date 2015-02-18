@@ -24,14 +24,13 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 
-/**
- * Not annotated with &#64;DomainService, but is registered as a fallback by <tt>ServicesInstallerFallback</tt>.
- */
+@DomainService
 public class TranslationServicePo implements TranslationService {
 
     public static Logger LOG = LoggerFactory.getLogger(TranslationServicePo.class);
@@ -39,13 +38,11 @@ public class TranslationServicePo implements TranslationService {
     public static final String KEY_DEPLOYMENT_TYPE = "isis.deploymentType";
     public static final String KEY_PO_MODE = "isis.services.translation.po.mode";
 
-    private boolean prototype;
-
     private PoAbstract po;
 
     /**
-     * Defaults to writer mode because the service isn't available while the metamodel is bring instantiated,
-     * however we want to force the translations to be cached in case required later.
+     * Defaults to writer mode because the service won't have been init'd while the metamodel is bring instantiated,
+     * and we want to ensure that we capture all requests for translation.
      */
     public TranslationServicePo() {
         po = new PoWriter(this);
@@ -57,22 +54,31 @@ public class TranslationServicePo implements TranslationService {
     @PostConstruct
     public void init(final Map<String,String> config) {
 
+        if(getLocaleProvider() == null || getTranslationsResolver() == null) {
+            // remain in write mode
+            return;
+        }
+
         final String deploymentType = config.get(KEY_DEPLOYMENT_TYPE);
-        prototype = deploymentType==null ||
+        boolean prototypeOrTest = deploymentType==null ||
                     deploymentType.toLowerCase().contains("prototype") ||
                     deploymentType.toLowerCase().contains("test") ;
 
-        String translationMode = config.get(KEY_PO_MODE);
+        final String translationMode = config.get(KEY_PO_MODE);
         final boolean forceRead =
                 translationMode != null &&
                         ("read".equalsIgnoreCase(translationMode) ||
                          "reader".equalsIgnoreCase(translationMode));
 
-        if (!prototype || forceRead) {
-            final PoReader poReader = new PoReader(this);
-            poReader.init(config);
-            po = poReader;
+        if(prototypeOrTest && !forceRead) {
+            // remain in write mode
+            return;
         }
+
+        // switch to read mode
+        final PoReader poReader = new PoReader(this);
+        poReader.init(config);
+        po = poReader;
     }
 
     @Programmatic
@@ -81,10 +87,6 @@ public class TranslationServicePo implements TranslationService {
         po.shutdown();
     }
     //endregion
-
-    boolean isPrototype() {
-        return prototype;
-    }
 
 
     @Override
@@ -106,9 +108,10 @@ public class TranslationServicePo implements TranslationService {
     /**
      * Not API
      */
+    @Programmatic
     public String toPo() {
-        if (!prototype) {
-            throw new IllegalStateException("Not in prototype mode");
+        if (!getMode().isWrite()) {
+            throw new IllegalStateException("Not in write mode");
         }
         return  ((PoWriter)po).toPot();
     }
@@ -132,5 +135,4 @@ public class TranslationServicePo implements TranslationService {
     LocaleProvider getLocaleProvider() {
         return localeProvider;
     }
-
 }

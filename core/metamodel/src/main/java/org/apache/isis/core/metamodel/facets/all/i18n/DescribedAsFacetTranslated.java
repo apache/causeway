@@ -40,6 +40,11 @@ public class DescribedAsFacetTranslated extends FacetAbstract implements Describ
         this.context = context;
         this.originalText = originalText;
         this.translationService = translationService;
+
+        if(translationService.getMode().isWrite()) {
+            // force PoWriter to be called to capture this text that needs translating
+            translateText();
+        }
     }
 
     @Override
@@ -53,18 +58,18 @@ public class DescribedAsFacetTranslated extends FacetAbstract implements Describ
         // if we find that we're in read mode (after init of the TranslationServicePo).
         switch (translationService.getMode()) {
             case WRITE:
-                return translated();
+                return translateText();
             case READ:
                 // don't cache
                 if(value == null) {
-                    value = translated();
+                    value = translateText();
                 }
                 break;
         }
         return value;
     }
 
-    private String translated() {
+    private String translateText() {
         return translationService.translate(context, originalText);
     }
 }

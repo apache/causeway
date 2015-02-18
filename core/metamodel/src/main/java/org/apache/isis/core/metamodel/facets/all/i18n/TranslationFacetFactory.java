@@ -97,11 +97,7 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
         }
 
         final TranslationService translationService = lookupTranslationService();
-        final LocaleProvider localeProvider = lookupLocaleProvider();
-
-        if(translationService != null && localeProvider != null) {
-            FacetUtil.addFacet(new NamedFacetTranslated(context, originalText, translationService, facetHolder));
-        }
+        FacetUtil.addFacet(new NamedFacetTranslated(context, originalText, translationService, facetHolder));
     }
 
     void translateDescription(final FacetHolder facetHolder, final String context) {
@@ -117,11 +113,7 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
         }
 
         final TranslationService translationService = lookupTranslationService();
-        final LocaleProvider localeProvider = lookupLocaleProvider();
-
-        if(translationService != null && localeProvider != null) {
-            FacetUtil.addFacet(new DescribedAsFacetTranslated(context, originalText, translationService, holder));
-        }
+        FacetUtil.addFacet(new DescribedAsFacetTranslated(context, originalText, translationService, holder));
 
     }
 
@@ -132,19 +124,11 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
     // //////////////////////////////////////
 
     /**
-     * Looks up from {@link org.apache.isis.core.metamodel.runtimecontext.ServicesInjector}, otherwise defaults to
-     * {@link org.apache.isis.core.metamodel.services.i18n.LocaleProviderDefault}.
-     */
-    LocaleProvider lookupLocaleProvider() {
-        if(localeProvider == null) {
-            localeProvider = servicesInjector.lookupService(LocaleProvider.class);
-        }
-        return localeProvider;
-    }
-
-    /**
-     * Looks up from {@link org.apache.isis.core.metamodel.runtimecontext.ServicesInjector}, otherwise defaults to
-     * {@link org.apache.isis.core.metamodel.services.i18n.po.TranslationServicePo}.
+     * Looks up from {@link org.apache.isis.core.metamodel.runtimecontext.ServicesInjector}.
+     *
+     * <p>
+     *     There is guaranteed to be an instance because {@link org.apache.isis.core.metamodel.services.i18n.po.TranslationServicePo} is annotated as a {@link org.apache.isis.applib.annotation.DomainService &#64;DomainService}.
+     * </p>
      */
     TranslationService lookupTranslationService() {
         if(translationService == null) {
