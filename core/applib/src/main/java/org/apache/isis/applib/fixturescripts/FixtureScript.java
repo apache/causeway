@@ -456,8 +456,19 @@ public abstract class FixtureScript
          * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
          * uses a key that is derived from the fixture's class name.
          */
-         public <T extends FixtureScript> T executeChild(final FixtureScript callingFixtureScript, final T childFixtureScript) {
-            return executeChild(callingFixtureScript, null, childFixtureScript);
+        public void executeChild(final FixtureScript callingFixtureScript, final FixtureScript childFixtureScript) {
+            executeChildT(callingFixtureScript, childFixtureScript);
+        }
+
+        /**
+         * Executes a child {@link FixtureScript fixture script}, injecting services into it first, and (for any results
+         * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
+         * uses a key that is derived from the fixture's class name.
+         *
+         * @return the child fixture script.
+         */
+        public <T extends FixtureScript> T executeChildT(final FixtureScript callingFixtureScript, final T childFixtureScript) {
+             return executeChildT(callingFixtureScript, null, childFixtureScript);
         }
 
         /**
@@ -465,7 +476,19 @@ public abstract class FixtureScript
          * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
          * uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
          */
-        public <T extends FixtureScript> T executeChild(final FixtureScript callingFixtureScript, final String localNameOverride, final T childFixtureScript) {
+        public void executeChild(final FixtureScript callingFixtureScript, final String localNameOverride, final FixtureScript childFixtureScript) {
+
+            executeChildT(callingFixtureScript, localNameOverride, childFixtureScript);
+        }
+
+        /**
+         * Executes a child {@link FixtureScript fixture script}, injecting services into it first, and (for any results
+         * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
+         * uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
+         *
+         * @return the child fixture script.
+         */
+        public <T extends FixtureScript> T executeChildT(final FixtureScript callingFixtureScript, final String localNameOverride, final T childFixtureScript) {
 
             childFixtureScript.setParentPath(callingFixtureScript.pathWith(""));
             if(localNameOverride != null) {
