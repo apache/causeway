@@ -52,9 +52,11 @@ import org.apache.isis.applib.util.ObjectContracts;
 public class SimpleObject implements Comparable<SimpleObject> {
 
 
+    //region > identificatiom
     public TranslatableString title() {
-        return TranslatableString.tr("Title is: {name}", "name", getName());
+        return TranslatableString.tr("Object: {name}", "name", getName());
     }
+    //endregion
 
     //region > name (property)
 

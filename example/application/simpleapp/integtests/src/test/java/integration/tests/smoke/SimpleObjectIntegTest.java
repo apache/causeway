@@ -126,7 +126,7 @@ public class SimpleObjectIntegTest extends SimpleAppIntegTest {
             final String title = container().titleOf(simpleObjectWrapped);
 
             // then
-            assertThat(title, is("Title is: " + name));
+            assertThat(title, is("Object: " + name));
         }
     }
 }

@@ -24,9 +24,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import org.jmock.Expectations;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -69,14 +71,32 @@ import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParam
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
+
+    private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     private final ObjectSpecification voidSpec = new ObjectSpecificationStub("VOID");
     private final ObjectSpecification stringSpec = new ObjectSpecificationStub("java.lang.String");
     private final ObjectSpecification customerSpec = new ObjectSpecificationStub("Customer");
+
+    private ServicesInjector mockServicesInjector;
+    private TranslationService mockTranslationService;
+
+    public void setUp() throws Exception {
+        super.setUp();
+        mockServicesInjector = context.mock(ServicesInjector.class);
+        mockTranslationService = context.mock(TranslationService.class);
+
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).lookupService(TranslationService.class);
+            will(returnValue(mockTranslationService));
+        }});
+    }
 
     public void testProvidesDefaultNameForActionButIgnoresAnyNamedAnnotation() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
@@ -193,6 +213,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsValidateMethodNoArgsFacetAndRemovesMethod() {
         final ActionValidationFacetViaMethodFactory facetFactory = new ActionValidationFacetViaMethodFactory();
         facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setServicesInjector(mockServicesInjector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -222,6 +243,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsValidateMethodSomeArgsFacetAndRemovesMethod() {
         final ActionValidationFacetViaMethodFactory facetFactory = new ActionValidationFacetViaMethodFactory();
         facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setServicesInjector(mockServicesInjector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {

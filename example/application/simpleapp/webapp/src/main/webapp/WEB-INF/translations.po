@@ -38,8 +38,8 @@ msgstr ""
 
 
 #: dom.simple.SimpleObject#title()
-msgid "Title is: {name}"
-msgstr "'{name}' is the title"
+msgid "Object: {name}"
+msgstr "'{name}'"
 
 
 #: dom.simple.SimpleObject#updateName()
