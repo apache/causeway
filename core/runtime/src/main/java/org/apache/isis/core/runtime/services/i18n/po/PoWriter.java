@@ -115,9 +115,6 @@ class PoWriter extends PoAbstract {
         return block;
     }
 
-    /**
-     * Not API
-     */
     String toPot() {
         final StringBuilder buf = new StringBuilder();
         for (final String msgId : blocksByMsgId.keySet()) {

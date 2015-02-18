@@ -78,7 +78,7 @@ public class TranslationServicePo implements TranslationService {
 
         // switch to read mode
         final PoReader poReader = new PoReader(this);
-        poReader.init(config);
+        poReader.init();
         po = poReader;
     }
 
@@ -115,11 +115,23 @@ public class TranslationServicePo implements TranslationService {
      * Not API
      */
     @Programmatic
-    public String toPo() {
+    public String toPot() {
         if (!getMode().isWrite()) {
-            throw new IllegalStateException("Not in write mode");
+            return null;
         }
         return  ((PoWriter)po).toPot();
+    }
+
+
+    /**
+     * Not API
+     */
+    @Programmatic
+    void clearCache() {
+        if (!getMode().isRead()) {
+            return;
+        }
+        ((PoReader)po).clearCache();
     }
 
     // //////////////////////////////////////
@@ -146,6 +158,5 @@ public class TranslationServicePo implements TranslationService {
     LocaleProvider getLocaleProvider() {
         return localeProvider;
     }
-
 
 }

@@ -26,18 +26,17 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
 
-@DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY
-)
+@DomainService()
 @DomainServiceLayout(
+        named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
-        named = "Prototyping"
+        menuOrder = "500"
 )
 public class TranslationServicePoMenu {
 
@@ -71,22 +70,47 @@ public class TranslationServicePoMenu {
     @ActionLayout(
             cssClassFa = "fa-download"
     )
-    public Clob downloadPotFile(
+    @MemberOrder(sequence="500.10")
+    public Clob downloadTranslations(
             @ParameterLayout(named = ".pot file name")
             final String potFileName) {
-        final String chars = translationService.toPo();
+        final String chars = translationService.toPot();
         return new Clob(potFileName, "text/plain", chars);
     }
 
-    public String default0DownloadPotFile() {
+    public String default0DownloadTranslations() {
         return "translations.pot";
     }
-    public boolean hideDownloadPotFile() {
+    public boolean hideDownloadTranslations() {
         return translationService.getMode().isRead();
     }
 
     // //////////////////////////////////////
 
+    public static class ResetTranslationCacheDomainEvent extends ActionDomainEvent {
+        public ResetTranslationCacheDomainEvent(final TranslationServicePoMenu source, final Identifier identifier, final Object... arguments) {
+            super(source, identifier, arguments);
+        }
+    }
+
+    @Action(
+            domainEvent = ResetTranslationCacheDomainEvent.class,
+            semantics = SemanticsOf.SAFE,
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @ActionLayout(
+            named="Clear translation cache",
+            cssClassFa = "fa-trash"
+    )
+    @MemberOrder(sequence="500.20")
+    public void resetTranslationCache() {
+        translationService.clearCache();
+    }
+    public boolean hideResetTranslationCache() {
+        return translationService.getMode().isWrite();
+    }
+
+    // //////////////////////////////////////
 
     @Inject
     private TranslationServicePo translationService;

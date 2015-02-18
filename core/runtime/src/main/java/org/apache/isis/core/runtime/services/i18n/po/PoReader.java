@@ -42,7 +42,12 @@ class PoReader extends PoAbstract {
      *
      * <p>
      *     This means that the reader will search for <tt>translations_en-US.po</tt>, <tt>translations_en.po</tt>,
-     *     <tt>translations.po</tt>, according to the location that the provided {@link org.apache.isis.applib.services.i18n.TranslationsResolver} searches.  For example, if using the Wicket implementation, then will search for these files
+     *     <tt>translations.po</tt>, according to the location that the provided
+     *     {@link org.apache.isis.applib.services.i18n.TranslationsResolver} searches.
+     * </p>
+     *
+     * <p>
+     *     For example, if using the Wicket implementation, then will search for these files
      *     under <tt>/WEB-INF</tt> directory.
      * </p>
      */
@@ -55,7 +60,11 @@ class PoReader extends PoAbstract {
     }
 
     //region > init, shutdown
-    void init(final Map<String,String> config) {
+
+    /**
+     * Not API
+     */
+    void init() {
         fallback = readUrl(basename + ".po");
         if(fallback == null) {
             LOG.warn("No fallback translations found");
@@ -86,6 +95,11 @@ class PoReader extends PoAbstract {
         }
 
         return translate(context, msgIdToUse, type);
+    }
+
+    void clearCache() {
+        translationByKeyByLocale.clear();
+        init();
     }
 
     private String translate(
