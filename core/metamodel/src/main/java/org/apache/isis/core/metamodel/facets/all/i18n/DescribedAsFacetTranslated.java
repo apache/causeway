@@ -49,24 +49,7 @@ public class DescribedAsFacetTranslated extends FacetAbstract implements Describ
 
     @Override
     public String value() {
-        // this strange algorithm is because the translationService's mode changes
-        // between the time the metamodel is first built and when it is subsequently
-        // used.  We can't distinguish (when in write mode) as to whether it is
-        // because we are in startup (prior to init'ing the services) or whether in
-        // prototype mode.  We therefore never cache if in write mode (this ensures that
-        // the PoWriter gets to see the translation request) but do then start caching
-        // if we find that we're in read mode (after init of the TranslationServicePo).
-        switch (translationService.getMode()) {
-            case WRITE:
-                return translateText();
-            case READ:
-                // don't cache
-                if(value == null) {
-                    value = translateText();
-                }
-                break;
-        }
-        return value;
+        return translateText();
     }
 
     private String translateText() {

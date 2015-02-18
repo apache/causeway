@@ -30,7 +30,7 @@ public final class TranslatableString {
     //region > tr, trn (factory methods); constructor
 
     /**
-     * A translatable string supporting both singular and plural forms.
+     * A translatable string with a single pattern for both singular and plural forms.
      *
      * @param pattern - pattern for all (singular and plural) form, with <code>${xxx}</code> placeholders
      * @param paramArgs - parameter/argument pairs (string and object, string and object, ...)
@@ -42,7 +42,7 @@ public final class TranslatableString {
     }
 
     /**
-     * A translatable string supporting both singular and plural forms.
+     * A translatable string with different patterns for singular and plural forms, selected automatically by the number
      *
      * @param singularPattern - pattern for the singular form, with <code>${xxx}</code> placeholders
      * @param pluralPattern - pattern for the singular form, with <code>${xxx}</code> placeholders

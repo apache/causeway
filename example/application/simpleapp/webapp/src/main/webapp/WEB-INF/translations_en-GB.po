@@ -19,7 +19,7 @@ msgstr ""
 
 #: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#resetTranslationCache()
 msgid "Clear translation cache"
-msgstr ""
+msgstr "Reload .po files"
 
 
 #: dom.simple.SimpleObjects#create()
@@ -29,12 +29,12 @@ msgstr ""
 
 #: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadTranslations()
 msgid "Download Translations"
-msgstr ""
+msgstr "Download .pot file"
 
 
 #: dom.simple.SimpleObject#updateName()
 msgid "Exclamation mark is not allowed"
-msgstr ""
+msgstr "No exclamation marks, chum!"
 
 
 #: org.apache.isis.applib.fixturescripts.FixtureResult#fixtureScriptClassName
