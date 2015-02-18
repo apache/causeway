@@ -23,8 +23,10 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import org.jmock.Expectations;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -65,8 +67,27 @@ import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenF
 import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethod;
 import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
+
+    private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+
+    private ServicesInjector mockServicesInjector;
+    private TranslationService mockTranslationService;
+
+    public void setUp() throws Exception {
+        super.setUp();
+        mockServicesInjector = context.mock(ServicesInjector.class);
+        mockTranslationService = context.mock(TranslationService.class);
+
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).lookupService(TranslationService.class);
+            will(returnValue(mockTranslationService));
+        }});
+    }
+
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
@@ -430,6 +451,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testValidateAddToFacetIsInstalledAndMethodRemoved() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -466,6 +488,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testValidateRemoveFromFacetIsInstalledAndMethodRemoved() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -532,6 +555,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         facetFactoryForAccessor.setSpecificationLookup(programmableReflector);
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactoryForHelpers = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactoryForHelpers.setSpecificationLookup(programmableReflector);
+        facetFactoryForHelpers.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {

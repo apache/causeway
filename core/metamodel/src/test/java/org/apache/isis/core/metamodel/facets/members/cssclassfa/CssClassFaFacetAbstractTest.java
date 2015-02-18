@@ -11,17 +11,17 @@ public class CssClassFaFacetAbstractTest {
 
         @Test
         public void present() throws Exception {
-            assertThat(CssClassFaFacetAbstract.sanitize("fa foo"), is("fa fa-fw foo"));
+            assertThat(CssClassFaFacetAbstract.sanitize("fa foo"), is("fa fa-fw fa-foo"));
         }
 
         @Test
         public void presentAtEnd() throws Exception {
-            assertThat(CssClassFaFacetAbstract.sanitize("foo fa "), is("fa fa-fw foo"));
+            assertThat(CssClassFaFacetAbstract.sanitize("foo fa "), is("fa fa-fw fa-foo"));
         }
 
         @Test
         public void missing() throws Exception {
-            assertThat(CssClassFaFacetAbstract.sanitize("foo"), is("fa fa-fw foo"));
+            assertThat(CssClassFaFacetAbstract.sanitize("foo"), is("fa fa-fw fa-foo"));
         }
     }
 }

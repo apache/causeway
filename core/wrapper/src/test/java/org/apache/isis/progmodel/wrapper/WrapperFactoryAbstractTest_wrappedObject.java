@@ -317,8 +317,8 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject {
         FacetUtil.addFacet(new PropertySetterFacetViaModifyMethod(modify, facetedMethod));
         FacetUtil.addFacet(new PropertyClearFacetViaClearMethod(clear, facetedMethod));
         FacetUtil.addFacet(new HideForContextFacetViaMethod(hide, facetedMethod));
-        FacetUtil.addFacet(new DisableForContextFacetViaMethod(disable, facetedMethod));
-        FacetUtil.addFacet(new PropertyValidateFacetViaMethod(validate, facetedMethod));
+        FacetUtil.addFacet(new DisableForContextFacetViaMethod(disable, null, null, facetedMethod));
+        FacetUtil.addFacet(new PropertyValidateFacetViaMethod(validate, null, null, facetedMethod));
         FacetUtil.addFacet(new NamedFacetInferred(accessor.getName(), facetedMethod));
         return facetedMethod;
     }

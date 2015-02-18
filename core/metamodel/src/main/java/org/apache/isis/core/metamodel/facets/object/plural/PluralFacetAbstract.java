@@ -30,7 +30,12 @@ public abstract class PluralFacetAbstract extends SingleStringValueFacetAbstract
     }
 
     public PluralFacetAbstract(final String value, final FacetHolder holder) {
-        super(type(), holder, value);
+        this(value, holder, Derivation.NOT_DERIVED);
     }
+
+    public PluralFacetAbstract(final String value, final FacetHolder holder, final Derivation derivation) {
+        super(type(), holder, value, derivation);
+    }
+
 
 }

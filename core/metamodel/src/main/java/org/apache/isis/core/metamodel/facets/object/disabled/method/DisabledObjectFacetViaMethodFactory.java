@@ -20,18 +20,22 @@
 package org.apache.isis.core.metamodel.facets.object.disabled.method;
 
 import java.lang.reflect.Method;
-
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.disabled.DisabledObjectFacet;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 /**
  * Installs the {@link DisabledObjectFacetViaMethod} on the
@@ -44,11 +48,12 @@ import org.apache.isis.core.metamodel.facets.object.disabled.DisabledObjectFacet
  * class is being processed}, the {@link ObjectMember member}s for the
  * {@link ObjectSpecification spec} are not known.
  */
-public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements ServicesInjectorAware {
 
     private static final String DISABLED_PREFIX = "disabled";
 
     private static final String[] PREFIXES = { DISABLED_PREFIX, };
+    private ServicesInjector servicesInjector;
 
     public DisabledObjectFacetViaMethodFactory() {
         super(FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE, PREFIXES);
@@ -58,14 +63,22 @@ public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetF
     public void process(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
-        final Class<?>[] params = new Class<?>[1];
-        params[0] = Identifier.Type.class;// String.class;
+        final Class<?>[] paramTypes = new Class<?>[1];
+        paramTypes[0] = Identifier.Type.class;// String.class;
 
-        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, DISABLED_PREFIX, String.class, params);
+        final Method method = MethodFinderUtils.findMethod(
+                cls, MethodScope.OBJECT, DISABLED_PREFIX,
+                new Class<?>[]{String.class, TranslatableString.class},
+                paramTypes);
         if (method == null) {
             return;
         }
-        FacetUtil.addFacet(new DisabledObjectFacetViaMethod(method, facetHolder));
+
+        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
+        // sadness: same logic as in I18nFacetFactory
+        final String translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassIdentityString();
+        FacetUtil.addFacet(new DisabledObjectFacetViaMethod(method, translationService, translationContext, facetHolder));
+
         processClassContext.removeMethod(method);
     }
 
@@ -80,4 +93,8 @@ public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetF
         }
     }
 
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
+    }
 }

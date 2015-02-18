@@ -16,30 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.core.runtime.services.i18n.po;
 
-package fixture.simple.scenario;
+import org.apache.isis.applib.services.i18n.TranslationService;
 
-import fixture.simple.SimpleObjectsTearDownFixture;
-import fixture.simple.objects.SimpleObjectForBar;
-import fixture.simple.objects.SimpleObjectForBaz;
-import fixture.simple.objects.SimpleObjectForFoo;
+abstract class PoAbstract {
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+    protected final TranslationServicePo translationServicePo;
 
-public class SimpleObjectsFixture extends FixtureScript {
+    private final TranslationService.Mode mode;
 
-    public SimpleObjectsFixture() {
-        withDiscoverability(Discoverability.DISCOVERABLE);
+    PoAbstract(final TranslationServicePo translationServicePo, final TranslationService.Mode mode) {
+        this.translationServicePo = translationServicePo;
+        this.mode = mode;
     }
 
-    @Override
-    protected void execute(final ExecutionContext executionContext) {
 
-        executionContext.executeChild(this, new SimpleObjectsTearDownFixture());
+    abstract void shutdown();
 
-        executionContext.executeChild(this, new SimpleObjectForFoo());
-        executionContext.executeChild(this, new SimpleObjectForBar());
-        executionContext.executeChild(this, new SimpleObjectForBaz());
+    abstract String translate(final String context, final String msgId);
+
+    abstract String translate(final String context, final String msgId, final String msgIdPlural, int num);
+
+    TranslationService.Mode getMode() {
+        return mode;
     }
 
 }

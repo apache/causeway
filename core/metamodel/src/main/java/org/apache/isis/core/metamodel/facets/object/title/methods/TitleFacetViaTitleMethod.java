@@ -27,6 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.profiles.Localization;
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -35,11 +37,16 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements ImperativeFacet {
 
     private static final Logger LOG = LoggerFactory.getLogger(TitleFacetViaTitleMethod.class);
-    private final Method method;
 
-    public TitleFacetViaTitleMethod(final Method method, final FacetHolder holder) {
+    private final Method method;
+    private final TranslationService translationService;
+    private final String translationContext;
+
+    public TitleFacetViaTitleMethod(final Method method, final TranslationService translationService, final String translationContext, final FacetHolder holder) {
         super(holder);
         this.method = method;
+        this.translationService = translationService;
+        this.translationContext = translationContext;
     }
 
     /**
@@ -69,11 +76,18 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
     @Override
     public String title(final ObjectAdapter owningAdapter, final Localization localization) {
         try {
-            return (String) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
+            final Object returnValue = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
+            if(returnValue instanceof String) {
+                return (String) returnValue;
+            }
+            if(returnValue instanceof TranslatableString) {
+                final TranslatableString ts = (TranslatableString) returnValue;
+                return ts.translate(translationService, translationContext);
+            }
+            return null;
         } catch (final RuntimeException ex) {
             LOG.warn("title failure", ex);
             return "Failed Title";
         }
     }
-
 }

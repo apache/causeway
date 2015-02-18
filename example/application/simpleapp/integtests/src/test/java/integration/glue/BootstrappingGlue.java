@@ -25,12 +25,6 @@ import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
 
 public class BootstrappingGlue extends CukeGlueAbstract {
 
-    // //////////////////////////////////////
-    
-    @Before(value={"@unit"}, order=100)
-    public void beforeScenarioUnitScope() {
-        before(ScenarioExecutionScope.UNIT);
-    }
 
     @Before(value={"@integration"}, order=100)
     public void beforeScenarioIntegrationScope() {
@@ -45,9 +39,4 @@ public class BootstrappingGlue extends CukeGlueAbstract {
         assertMocksSatisfied();
         after(sc);
     }
-
-    // //////////////////////////////////////
-    
-
-
 }

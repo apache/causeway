@@ -16,16 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.services.i18n;
 
-package fixture.simple.objects;
+import java.util.Locale;
+import org.apache.isis.applib.annotation.Programmatic;
 
-public class SimpleObjectForBar extends SimpleObjectAbstract {
+public interface LocaleProvider {
 
-    @Override
-    protected void execute(ExecutionContext executionContext) {
-
-        create("Bar", executionContext);
-    }
-
-
+    @Programmatic
+    Locale getLocale();
 }

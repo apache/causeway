@@ -21,10 +21,18 @@ package dom.simple;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.util.ObjectContracts;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE)
@@ -43,18 +51,57 @@ import org.apache.isis.applib.util.ObjectContracts;
 )
 public class SimpleObject implements Comparable<SimpleObject> {
 
+
+    //region > identificatiom
+    public TranslatableString title() {
+        return TranslatableString.tr("Object: {name}", "name", getName());
+    }
+    //endregion
+
     //region > name (property)
 
     private String name;
 
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @javax.jdo.annotations.Column(allowsNull="false", length = 40)
     @Title(sequence="1")
+    @Property(
+            editing = Editing.DISABLED
+    )
     public String getName() {
         return name;
     }
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    // endregion
+
+    //region > updateName (action)
+
+    public static class UpdateNameDomainEvent extends ActionDomainEvent<SimpleObject> {
+        public UpdateNameDomainEvent(final SimpleObject source, final Identifier identifier, final Object... arguments) {
+            super(source, identifier, arguments);
+        }
+    }
+
+    @Action(
+            domainEvent = UpdateNameDomainEvent.class
+    )
+    public SimpleObject updateName(
+            @Parameter(maxLength = 40)
+            @ParameterLayout(named = "New name")
+            final String name) {
+        setName(name);
+        return this;
+    }
+
+    public String default0UpdateName() {
+        return getName();
+    }
+
+    public TranslatableString validateUpdateName(final String name) {
+        return name.contains("!")? TranslatableString.tr("Exclamation mark is not allowed"): null;
     }
 
     //endregion

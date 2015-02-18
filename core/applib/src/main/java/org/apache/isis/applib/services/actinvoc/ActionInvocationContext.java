@@ -44,7 +44,7 @@ public class ActionInvocationContext {
      * Intended only to support unit testing.
      */
     public static ActionInvocationContext onObject(final Object domainObject) {
-        return new ActionInvocationContext(InvokedOn.OBJECT, Collections.singletonList(domainObject)){};
+        return new ActionInvocationContext(InvokedOn.OBJECT, Collections.singletonList(domainObject));
     }
 
     /**
@@ -58,7 +58,7 @@ public class ActionInvocationContext {
      * Intended only to support unit testing.
      */
     public static ActionInvocationContext onCollection(final List<Object> domainObjects) {
-        return new ActionInvocationContext(InvokedOn.COLLECTION, domainObjects){};
+        return new ActionInvocationContext(InvokedOn.COLLECTION, domainObjects);
     }
 
     // //////////////////////////////////////

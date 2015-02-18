@@ -16,21 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.services.i18n;
 
-package fixture.simple.objects;
+import java.util.List;
+import org.apache.isis.applib.annotation.Programmatic;
 
-import dom.simple.SimpleObject;
-import dom.simple.SimpleObjects;
+public interface TranslationsResolver {
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-
-public abstract class SimpleObjectAbstract extends FixtureScript {
-
-    protected SimpleObject create(final String name, ExecutionContext executionContext) {
-        return executionContext.addResult(this, simpleObjects.create(name));
-    }
-
-    @javax.inject.Inject
-    private SimpleObjects simpleObjects;
+    @Programmatic
+    public List<String> readLines(final String file);
 
 }

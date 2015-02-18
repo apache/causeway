@@ -79,6 +79,8 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
         add(DataNucleusObjectStore.INSTALL_FIXTURES_KEY , "true");
 
         add(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, ""+PersistenceConstants.ENFORCE_SAFE_SEMANTICS_DEFAULT);
+
+        add("isis.deploymentType", "server_prototype");
     }
 
     public final IsisConfigurationForJdoIntegTests addDataNucleusProperty(final String key, final String value) {

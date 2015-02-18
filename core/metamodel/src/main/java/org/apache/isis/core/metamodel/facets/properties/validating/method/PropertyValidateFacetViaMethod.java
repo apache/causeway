@@ -23,6 +23,8 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -31,10 +33,14 @@ import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValid
 public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstract implements ImperativeFacet {
 
     private final Method method;
+    private final TranslationService translationService;
+    private final String translationContext;
 
-    public PropertyValidateFacetViaMethod(final Method method, final FacetHolder holder) {
+    public PropertyValidateFacetViaMethod(final Method method, final TranslationService translationService, final String translationContext, final FacetHolder holder) {
         super(holder);
         this.method = method;
+        this.translationService = translationService;
+        this.translationContext = translationContext;
     }
 
     /**
@@ -63,7 +69,15 @@ public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstrac
 
     @Override
     public String invalidReason(final ObjectAdapter owningAdapter, final ObjectAdapter proposedAdapter) {
-        return (String) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, proposedAdapter);
+        final Object returnValue = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, proposedAdapter);
+        if(returnValue instanceof String) {
+            return (String) returnValue;
+        }
+        if(returnValue instanceof TranslatableString) {
+            final TranslatableString ts = (TranslatableString) returnValue;
+            return ts.translate(translationService, translationContext);
+        }
+        return null;
     }
 
     @Override

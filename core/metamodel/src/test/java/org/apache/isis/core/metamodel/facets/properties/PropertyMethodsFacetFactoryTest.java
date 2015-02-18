@@ -20,7 +20,9 @@
 package org.apache.isis.core.metamodel.facets.properties;
 
 import java.lang.reflect.Method;
+import org.jmock.Expectations;
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -75,8 +77,26 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
+
+    private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+
+    private ServicesInjector mockServicesInjector;
+    private TranslationService mockTranslationService;
+
+    public void setUp() throws Exception {
+        super.setUp();
+        mockServicesInjector = context.mock(ServicesInjector.class);
+        mockTranslationService = context.mock(TranslationService.class);
+
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).lookupService(TranslationService.class);
+            will(returnValue(mockTranslationService));
+        }});
+    }
 
     public void testPropertyAccessorFacetIsInstalledAndMethodRemoved() {
         final PropertyAccessorFacetViaAccessorFactory facetFactory = new PropertyAccessorFacetViaAccessorFactory();
@@ -427,6 +447,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testValidateFacetFoundAndMethodRemoved() {
         final PropertyValidateFacetViaMethodFactory facetFactory = new PropertyValidateFacetViaMethodFactory();
         facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -456,6 +477,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testDisableFacetFoundAndMethodRemoved() {
         final DisableForContextFacetViaMethodFactory facetFactory = new DisableForContextFacetViaMethodFactory();
         facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -485,6 +507,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testDisableFacetNoArgsFoundAndMethodRemoved() {
         final DisableForContextFacetViaMethodFactory facetFactory = new DisableForContextFacetViaMethodFactory();
         facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -601,6 +624,7 @@ public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         facetFactoryForHide.setSpecificationLookup(programmableReflector);
         final DisableForContextFacetViaMethodFactory facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
         facetFactoryForDisable.setSpecificationLookup(programmableReflector);
+        facetFactoryForDisable.setServicesInjector(mockServicesInjector);
 
         class Customer {
             @SuppressWarnings("unused")
