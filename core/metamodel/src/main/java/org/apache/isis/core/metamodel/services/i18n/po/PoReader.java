@@ -69,14 +69,12 @@ class PoReader extends PoAbstract {
     //endregion
 
     public String translate(final String context, final String msgId) {
-        final Locale locale = translationServicePo.getLocaleProvider().getLocale();
-        return translate(context, msgId, ContextAndMsgId.Type.REGULAR, locale);
+        return translate(context, msgId, ContextAndMsgId.Type.REGULAR);
     }
 
     @Override
     String translate(final String context, final String msgId, final String msgIdPlural, final int num) {
 
-        final Locale locale = translationServicePo.getLocaleProvider().getLocale();
         final String msgIdToUse;
         final ContextAndMsgId.Type type;
         if (num == 1) {
@@ -87,12 +85,20 @@ class PoReader extends PoAbstract {
             type = ContextAndMsgId.Type.PLURAL_ONLY;
         }
 
-        return translate(context, msgIdToUse, type, locale);
+        return translate(context, msgIdToUse, type);
     }
 
     private String translate(
-            final String context, final String msgId, final ContextAndMsgId.Type type,
-            final Locale targetLocale) {
+            final String context, final String msgId, final ContextAndMsgId.Type type) {
+
+        final Locale targetLocale;
+        try {
+            targetLocale = translationServicePo.getLocaleProvider().getLocale();
+        } catch(final RuntimeException ex){
+            LOG.warn("Failed to obtain locale, returning the original msgId");
+            return msgId;
+        }
+
         final Map<ContextAndMsgId, String> translationsByKey = readAndCacheTranslationsIfRequired(targetLocale);
 
         final ContextAndMsgId key = new ContextAndMsgId(context, msgId, type);

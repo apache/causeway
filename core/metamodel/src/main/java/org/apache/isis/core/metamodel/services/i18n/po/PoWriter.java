@@ -71,7 +71,7 @@ class PoWriter extends PoAbstract {
         buf.append("\n# If the app uses TranslatableString (eg for internationalized validation");
         buf.append("\n# messages), or if the app calls the TranslationService directly, then ensure");
         buf.append("\n# that all text to be translated has been captured by running a full");
-        buf.append("\n# integration test suite that fully exercises all behaviour");
+        buf.append("\n# integration test suite that exercises all relevant behaviour");
         buf.append("\n#");
         buf.append("\n##############################################################################");
         buf.append("\n");

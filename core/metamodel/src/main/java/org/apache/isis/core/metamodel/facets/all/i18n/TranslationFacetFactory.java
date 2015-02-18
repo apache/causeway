@@ -33,14 +33,14 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class I18nFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, ServicesInjectorAware {
+public class TranslationFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, ServicesInjectorAware {
 
     private ServicesInjector servicesInjector;
 
     private TranslationService translationService;
     private LocaleProvider localeProvider;
 
-    public I18nFacetFactory() {
+    public TranslationFacetFactory() {
         super(FeatureType.EVERYTHING);
     }
 

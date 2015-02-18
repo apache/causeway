@@ -25,6 +25,8 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.Identifier.Type;
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -34,10 +36,18 @@ import org.apache.isis.core.metamodel.facets.object.disabled.DisabledObjectFacet
 public class DisabledObjectFacetViaMethod extends DisabledObjectFacetAbstract implements ImperativeFacet {
 
     private final Method method;
+    private TranslationService translationService;
+    private final String translationContext;
 
-    public DisabledObjectFacetViaMethod(final Method method, final FacetHolder holder) {
+    public DisabledObjectFacetViaMethod(
+            final Method method,
+            final TranslationService translationService,
+            final String translationContext,
+            final FacetHolder holder) {
         super(holder);
         this.method = method;
+        this.translationService = translationService;
+        this.translationContext = translationContext;
     }
 
     @Override
@@ -62,9 +72,16 @@ public class DisabledObjectFacetViaMethod extends DisabledObjectFacetAbstract im
 
     @Override
     public String disabledReason(final ObjectAdapter owningAdapter, final Identifier identifier) {
-        // String type = identifier.getType().toString();
         final Type type = identifier.getType();
-        return (String) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, type);
+        final Object returnValue = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, type);
+        if(returnValue instanceof String) {
+            return (String) returnValue;
+        }
+        if(returnValue instanceof TranslatableString) {
+            final TranslatableString ts = (TranslatableString) returnValue;
+            return ts.translate(translationService, translationContext);
+        }
+        return null;
     }
 
     @Override
@@ -74,7 +91,7 @@ public class DisabledObjectFacetViaMethod extends DisabledObjectFacetAbstract im
 
     @Override
     public void copyOnto(final FacetHolder holder) {
-        final DisabledObjectFacetViaMethod clonedFacet = new DisabledObjectFacetViaMethod(this.method, holder);
+        final DisabledObjectFacetViaMethod clonedFacet = new DisabledObjectFacetViaMethod(this.method, translationService, translationContext, holder);
         FacetUtil.addFacet(clonedFacet);
     }
 }

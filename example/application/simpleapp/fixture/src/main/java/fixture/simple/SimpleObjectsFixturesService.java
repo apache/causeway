@@ -18,7 +18,7 @@
  */
 package fixture.simple;
 
-import fixture.simple.scenario.SimpleObjectsFixture;
+import fixture.simple.scenario.RecreateSimpleObjects;
 
 import java.util.List;
 import org.apache.isis.applib.annotation.Action;
@@ -44,7 +44,7 @@ import org.apache.isis.applib.fixturescripts.SimpleFixtureScript;
 public class SimpleObjectsFixturesService extends FixtureScripts {
 
     public SimpleObjectsFixturesService() {
-        super("fixture.simple");
+        super("fixture.simple", MultipleExecutionStrategy.EXECUTE);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class SimpleObjectsFixturesService extends FixtureScripts {
     )
     @MemberOrder(sequence="20")
     public Object recreateObjectsAndReturnFirst() {
-        final List<FixtureResult> run = findFixtureScriptFor(SimpleObjectsFixture.class).run(null);
+        final List<FixtureResult> run = findFixtureScriptFor(RecreateSimpleObjects.class).run(null);
         return run.get(0).getObject();
     }
 

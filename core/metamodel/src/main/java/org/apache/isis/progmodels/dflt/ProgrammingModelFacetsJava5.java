@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.annotation
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method.NotInServiceMenuFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.all.i18n.I18nFacetFactory;
+import org.apache.isis.core.metamodel.facets.all.i18n.TranslationFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
@@ -499,7 +499,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(FacetsFacetAnnotationFactory.class);
 
         // must be after all named facets and description facets have been installed
-        addFactory(I18nFacetFactory.class);
+        addFactory(TranslationFacetFactory.class);
 
         addFactory(ViewModelSemanticCheckingFacetFactory.class);
     }

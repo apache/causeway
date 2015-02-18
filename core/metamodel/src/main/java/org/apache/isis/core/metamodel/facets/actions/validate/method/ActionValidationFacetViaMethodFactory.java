@@ -20,22 +20,25 @@
 package org.apache.isis.core.metamodel.facets.actions.validate.method;
 
 import java.lang.reflect.Method;
-
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
 /**
  * Sets up {@link ActionValidationFacet}.
  */
-public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements ServicesInjectorAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.VALIDATE_PREFIX };
 
@@ -65,14 +68,30 @@ public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFace
         final Class<?>[] paramTypes = actionMethod.getParameterTypes();
         final MethodScope onClass = MethodScope.scopeFor(actionMethod);
 
-        final Method validateMethod = MethodFinderUtils.findMethod(cls, onClass, MethodPrefixConstants.VALIDATE_PREFIX + capitalizedName, String.class, paramTypes);
+        final Method validateMethod = MethodFinderUtils.findMethod(
+                cls, onClass,
+                MethodPrefixConstants.VALIDATE_PREFIX + capitalizedName,
+                new Class<?>[]{String.class, TranslatableString.class},
+                paramTypes);
         if (validateMethod == null) {
             return;
         }
         processMethodContext.removeMethod(validateMethod);
 
-        final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new ActionValidationFacetViaMethod(validateMethod, facetedMethod));
+        final IdentifiedHolder facetedMethod = processMethodContext.getFacetHolder();
+        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
+        // sadness: same as in TranslationFactory
+        final String translationContext = facetedMethod.getIdentifier().toClassAndNameIdentityString();
+        final ActionValidationFacetViaMethod facet = new ActionValidationFacetViaMethod(validateMethod, translationService, translationContext, facetedMethod);
+        FacetUtil.addFacet(facet);
     }
 
+    // //////////////////////////////////////
+
+    private ServicesInjector servicesInjector;
+
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
+    }
 }

@@ -19,15 +19,49 @@
 
 package fixture.simple.objects;
 
-import dom.simple.SimpleObject;
 import dom.simple.SimpleObjects;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-public abstract class SimpleObjectAbstract extends FixtureScript {
+public class SimpleObjectCreate extends FixtureScript {
 
-    protected SimpleObject create(final String name, ExecutionContext executionContext) {
-        return executionContext.addResult(this, simpleObjects.create(name));
+    //region > name (input)
+    private String name;
+    /**
+     * Name of the object (required)
+     */
+    public String getName() {
+        return name;
+    }
+
+    public SimpleObjectCreate setName(final String name) {
+        this.name = name;
+        return this;
+    }
+    //endregion
+
+
+    //region > simpleObject (output)
+    private dom.simple.SimpleObject simpleObject;
+
+    /**
+     * The created simple object (output).
+     * @return
+     */
+    public dom.simple.SimpleObject getSimpleObject() {
+        return simpleObject;
+    }
+    //endregion
+
+    @Override
+    protected void execute(final ExecutionContext ec) {
+
+        String name = checkParam("name", ec, String.class);
+
+        this.simpleObject = simpleObjects.create(name);
+
+        // also make available to UI
+        ec.addResult(this, simpleObject);
     }
 
     @javax.inject.Inject
