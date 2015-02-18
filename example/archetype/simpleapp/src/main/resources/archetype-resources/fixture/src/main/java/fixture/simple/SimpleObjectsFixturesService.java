@@ -21,14 +21,15 @@
  */
 package fixture.simple;
 
-import fixture.simple.scenario.SimpleObjectsFixture;
+import fixture.simple.scenario.RecreateSimpleObjects;
 
 import java.util.List;
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.fixturescripts.FixtureResult;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
@@ -46,7 +47,7 @@ import org.apache.isis.applib.fixturescripts.SimpleFixtureScript;
 public class SimpleObjectsFixturesService extends FixtureScripts {
 
     public SimpleObjectsFixturesService() {
-        super("fixture.simple");
+        super("fixture.simple", MultipleExecutionStrategy.EXECUTE);
     }
 
     @Override
@@ -54,10 +55,6 @@ public class SimpleObjectsFixturesService extends FixtureScripts {
         return findFixtureScriptFor(SimpleFixtureScript.class);
     }
 
-    /**
-     * Raising visibility to <tt>public</tt> so that choices are available for first param
-     * of {@link ${symbol_pound}runFixtureScript(FixtureScript, String)}.
-     */
     @Override
     public List<FixtureScript> choices0RunFixtureScript() {
         return super.choices0RunFixtureScript();
@@ -69,9 +66,12 @@ public class SimpleObjectsFixturesService extends FixtureScripts {
     @Action(
             restrictTo = RestrictTo.PROTOTYPING
     )
+    @ActionLayout(
+            cssClassFa="fa fa-refresh"
+    )
     @MemberOrder(sequence="20")
-    public Object installFixturesAndReturnFirst() {
-        final List<FixtureResult> run = findFixtureScriptFor(SimpleObjectsFixture.class).run(null);
+    public Object recreateObjectsAndReturnFirst() {
+        final List<FixtureResult> run = findFixtureScriptFor(RecreateSimpleObjects.class).run(null);
         return run.get(0).getObject();
     }
 

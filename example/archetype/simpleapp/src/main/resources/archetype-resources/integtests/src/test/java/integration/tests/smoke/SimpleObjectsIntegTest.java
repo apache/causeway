@@ -23,8 +23,8 @@ package integration.tests.smoke;
 
 import dom.simple.SimpleObject;
 import dom.simple.SimpleObjects;
-import fixture.simple.scenario.SimpleObjectsFixture;
 import fixture.simple.SimpleObjectsTearDownFixture;
+import fixture.simple.scenario.RecreateSimpleObjects;
 import integration.tests.SimpleAppIntegTest;
 
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -43,7 +43,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class SimpleObjectsTest extends SimpleAppIntegTest {
+public class SimpleObjectsIntegTest extends SimpleAppIntegTest {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -53,34 +53,32 @@ public class SimpleObjectsTest extends SimpleAppIntegTest {
     @Inject
     SimpleObjects simpleObjects;
 
-    FixtureScript fixtureScript;
-
-    public static class ListAll extends SimpleObjectsTest {
+    public static class ListAll extends SimpleObjectsIntegTest {
 
         @Test
         public void happyCase() throws Exception {
 
             // given
-            fixtureScript = new SimpleObjectsFixture();
-            fixtureScripts.runFixtureScript(fixtureScript, null);
+            RecreateSimpleObjects fs = new RecreateSimpleObjects();
+            fixtureScripts.runFixtureScript(fs, null);
             nextTransaction();
 
             // when
             final List<SimpleObject> all = wrap(simpleObjects).listAll();
 
             // then
-            assertThat(all.size(), is(3));
+            assertThat(all.size(), is(fs.getSimpleObjects().size()));
 
             SimpleObject simpleObject = wrap(all.get(0));
-            assertThat(simpleObject.getName(), is("Foo"));
+            assertThat(simpleObject.getName(), is(fs.getSimpleObjects().get(0).getName()));
         }
 
         @Test
         public void whenNone() throws Exception {
 
             // given
-            fixtureScript = new SimpleObjectsTearDownFixture();
-            fixtureScripts.runFixtureScript(fixtureScript, null);
+            FixtureScript fs = new SimpleObjectsTearDownFixture();
+            fixtureScripts.runFixtureScript(fs, null);
             nextTransaction();
 
             // when
@@ -91,14 +89,14 @@ public class SimpleObjectsTest extends SimpleAppIntegTest {
         }
     }
 
-    public static class Create extends SimpleObjectsTest {
+    public static class Create extends SimpleObjectsIntegTest {
 
         @Test
         public void happyCase() throws Exception {
 
             // given
-            fixtureScript = new SimpleObjectsTearDownFixture();
-            fixtureScripts.runFixtureScript(fixtureScript, null);
+            FixtureScript fs = new SimpleObjectsTearDownFixture();
+            fixtureScripts.runFixtureScript(fs, null);
             nextTransaction();
 
             // when
@@ -113,8 +111,8 @@ public class SimpleObjectsTest extends SimpleAppIntegTest {
         public void whenAlreadyExists() throws Exception {
 
             // given
-            fixtureScript = new SimpleObjectsTearDownFixture();
-            fixtureScripts.runFixtureScript(fixtureScript, null);
+            FixtureScript fs = new SimpleObjectsTearDownFixture();
+            fixtureScripts.runFixtureScript(fs, null);
             nextTransaction();
             wrap(simpleObjects).create("Faz");
             nextTransaction();

@@ -26,11 +26,6 @@ import dom.simple.SimpleObjects;
 
 import java.util.List;
 import java.util.UUID;
-import org.hamcrest.Description;
-import org.jmock.Expectations;
-import org.jmock.api.Action;
-import org.jmock.api.Invocation;
-import org.apache.isis.core.specsupport.scenarios.InMemoryDB;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -40,14 +35,6 @@ public class SimpleObjectGlue extends CukeGlueAbstract {
 
     @Given("^there are.* (${symbol_escape}${symbol_escape}d+) simple objects${symbol_dollar}")
     public void there_are_N_simple_objects(int n) throws Throwable {
-        if(supportsMocks()) {
-            checking(new Expectations() {
-                {
-                    allowing(service(SimpleObjects.class)).listAll();
-                    will(returnValue(allSimpleObjects()));
-                }
-            });
-        }
         try {
             final List<SimpleObject> findAll = service(SimpleObjects.class).listAll();
             assertThat(findAll.size(), is(n));
@@ -60,40 +47,7 @@ public class SimpleObjectGlue extends CukeGlueAbstract {
     
     @When("^I create a new simple object${symbol_dollar}")
     public void I_create_a_new_simple_object() throws Throwable {
-        if(supportsMocks()) {
-            checking(new Expectations() {
-                {
-                    oneOf(service(SimpleObjects.class)).create(with(any(String.class)));
-                    will(addToInMemoryDB());
-                }
-            });
-        }
         service(SimpleObjects.class).create(UUID.randomUUID().toString());
     }
     
-    private Action addToInMemoryDB() {
-        return new Action() {
-            
-            @Override
-            public Object invoke(Invocation invocation) throws Throwable {
-                final InMemoryDB inMemoryDB = getVar("isis", "in-memory-db", InMemoryDB.class);
-                final String name = (String)invocation.getParameter(0);
-                final SimpleObject obj = new SimpleObject();
-                obj.setName(name);
-                inMemoryDB.put(SimpleObject.class, name, obj);
-                return obj;
-            }
-            
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("add to database");
-            }
-        };
-    }
-
-    // helper
-    private List<SimpleObject> allSimpleObjects() {
-        final InMemoryDB inMemoryDB = getVar("isis", "in-memory-db", InMemoryDB.class);
-        return inMemoryDB.findAll(SimpleObject.class);
-    }
 }
