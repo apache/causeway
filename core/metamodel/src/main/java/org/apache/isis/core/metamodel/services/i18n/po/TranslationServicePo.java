@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.i18n.UrlResolver;
+import org.apache.isis.applib.services.i18n.TranslationsResolver;
 
 /**
  * Not annotated with &#64;DomainService, but is registered as a fallback by <tt>ServicesInstallerFallback</tt>.
@@ -113,22 +113,24 @@ public class TranslationServicePo implements TranslationService {
         return  ((PoWriter)po).toPot();
     }
 
+    // //////////////////////////////////////
+
     @Inject
     private
-    UrlResolver urlResolver;
+    TranslationsResolver translationsResolver;
+
+    @Programmatic
+    TranslationsResolver getTranslationsResolver() {
+        return translationsResolver;
+    }
 
     @Inject
     private
     LocaleProvider localeProvider;
 
-
     @Programmatic
-    public UrlResolver getUrlResolver() {
-        return urlResolver;
-    }
-
-    @Programmatic
-    public LocaleProvider getLocaleProvider() {
+    LocaleProvider getLocaleProvider() {
         return localeProvider;
     }
+
 }

@@ -28,7 +28,7 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.i18n.UrlResolver;
+import org.apache.isis.applib.services.i18n.TranslationsResolver;
 
 class PoReader extends PoAbstract {
 
@@ -42,7 +42,7 @@ class PoReader extends PoAbstract {
      *
      * <p>
      *     This means that the reader will search for <tt>translations_en-US.po</tt>, <tt>translations_en.po</tt>,
-     *     <tt>translations.po</tt>, according to the location that the provided {@link org.apache.isis.applib.services.i18n.UrlResolver} searches.  For example, if using the Wicket implementation, then will search for these files
+     *     <tt>translations.po</tt>, according to the location that the provided {@link org.apache.isis.applib.services.i18n.TranslationsResolver} searches.  For example, if using the Wicket implementation, then will search for these files
      *     under <tt>/WEB-INF</tt> directory.
      * </p>
      */
@@ -180,11 +180,11 @@ class PoReader extends PoAbstract {
     }
 
     private List<String> readUrl(final String candidate) {
-        final UrlResolver urlResolver = translationServicePo.getUrlResolver();
-        if(urlResolver == null) {
+        final TranslationsResolver translationsResolver = translationServicePo.getTranslationsResolver();
+        if(translationsResolver == null) {
             return null;
         }
-        return urlResolver.readLines(candidate);
+        return translationsResolver.readLines(candidate);
     }
 
 }

@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.i18n.UrlResolver;
+import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
 
@@ -37,9 +37,9 @@ import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
  * An implementation that reads from /WEB-INF/...
  */
 @DomainService
-public class UrlResolverWicket implements UrlResolver {
+public class TranslationsResolverWicket implements TranslationsResolver {
 
-    public static Logger LOG = LoggerFactory.getLogger(UrlResolverWicket.class);
+    public static Logger LOG = LoggerFactory.getLogger(TranslationsResolverWicket.class);
 
     @Override
     @Programmatic
