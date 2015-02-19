@@ -81,7 +81,7 @@ public class ExecutionContextTest {
 
         @Test
         public void givenNull() throws Exception {
-            final FixtureScript.ExecutionContext executionContext = new FixtureScript.ExecutionContext(null, null);
+            final FixtureScript.ExecutionContext executionContext = new FixtureScript.ExecutionContext((String)null, null);
             final Map<String, String> map = executionContext.getParameterMap();
             assertThat(map.size(), is(0));
 
@@ -141,7 +141,7 @@ public class ExecutionContextTest {
 
         @Test
         public void whenNotPresent() throws Exception {
-            final FixtureScript.ExecutionContext executionContext = new FixtureScript.ExecutionContext(null, null);
+            final FixtureScript.ExecutionContext executionContext = new FixtureScript.ExecutionContext((String)null, null);
             executionContext.setParameterIfNotPresent("foo", "bar");
 
             assertThat(executionContext.getParameter("foo"), is("bar"));

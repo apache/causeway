@@ -29,7 +29,14 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.ViewModel;
-import org.apache.isis.applib.annotation.*;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.MinLength;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService2;
@@ -322,9 +329,14 @@ public abstract class FixtureScripts extends AbstractService {
     /**
      * Optional hook.
      */
-    protected FixtureScript.ExecutionContext newExecutionContext(String parameters) {
-        return new FixtureScript.ExecutionContext(parameters, this);
+    protected FixtureScript.ExecutionContext newExecutionContext(final String parameters) {
+        final ExecutionParameters executionParameters =
+                executionParametersService != null
+                        ? executionParametersService.newExecutionParameters(parameters)
+                        : new ExecutionParameters(parameters);
+        return FixtureScript.ExecutionContext.create(executionParameters, this);
     }
+
 
     //endregion
 
@@ -387,6 +399,9 @@ public abstract class FixtureScripts extends AbstractService {
 
     @javax.inject.Inject
     private ClassDiscoveryService classDiscoveryService;
+
+    @javax.inject.Inject
+    private ExecutionParametersService executionParametersService;
 
     //endregion
 

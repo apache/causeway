@@ -43,7 +43,6 @@ public class RecreateSimpleObjects extends FixtureScript {
 
     /**
      * The number of objects to create, up to 10; optional, defaults to 3.
-     * @return
      */
     public Integer getNumber() {
         return number;
