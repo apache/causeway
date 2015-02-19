@@ -150,7 +150,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         expectNoMethodsRemoved();
 
-        facetFactory.processParams(new ProcessParameterContext(Customer.class, actionMethod, 0, facetedMethodParameter));
+        facetFactory.processParams(new ProcessParameterContext(Customer.class, actionMethod, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(NamedFacet.class);
         assertThat(facet, is(not(nullValue())));

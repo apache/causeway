@@ -111,6 +111,8 @@ public enum FeatureType {
     public final static List<FeatureType> OBJECTS_PROPERTIES_AND_COLLECTIONS = ImmutableList.of(OBJECT, PROPERTY, COLLECTION);
     public final static List<FeatureType> OBJECTS_POST_PROCESSING_ONLY = ImmutableList.of(OBJECT_POST_PROCESSING);
 
+    public static final List<FeatureType> ACTIONS_AND_PARAMETERS = ImmutableList.of(ACTION, ACTION_PARAMETER);
+
     /**
      * Use of this is discouraged; instead use multiple {@link FacetFactory}s
      * for different features.

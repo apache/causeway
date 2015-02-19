@@ -347,21 +347,24 @@ public class FacetProcessor implements RuntimeContextAware {
      * for each appropriate factory.
      * 
      * @see FacetFactory#processParams(ProcessParameterContext)
-     *@param introspectedClass
+     *
+     * @param introspectedClass
      * @param method
      *            - action method to process
      * @param paramNum
- *            - 0-based
+*            - 0-based
+     * @param methodRemover
      * @param facetedMethodParameter
      */
     public void processParams(
             final Class<?> introspectedClass,
             final Method method,
             final int paramNum,
+            final MethodRemover methodRemover,
             final FacetedMethodParameter facetedMethodParameter) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.ACTION_PARAMETER);
         final ProcessParameterContext processParameterContext =
-                new ProcessParameterContext(introspectedClass, method, paramNum, facetedMethodParameter);
+                new ProcessParameterContext(introspectedClass, method, paramNum, methodRemover, facetedMethodParameter);
         for (final FacetFactory facetFactory : factoryList) {
             facetFactory.processParams(processParameterContext);
         }

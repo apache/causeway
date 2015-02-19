@@ -73,7 +73,6 @@ public abstract class ScalarPanelTextFieldParseableAbstract extends ScalarPanelT
         super.addStandardSemantics();
 
         addMaxLengthValidator();
-        addObjectAdapterValidator();
     }
 
     private void addMaxLengthValidator() {
@@ -86,26 +85,6 @@ public abstract class ScalarPanelTextFieldParseableAbstract extends ScalarPanelT
         if (maxLengthFacet != null) {
             textField.add(StringValidator.maximumLength(maxLengthFacet.value()));
         }
-    }
-
-    private void addObjectAdapterValidator() {
-        final ScalarModel scalarModel = getModel();
-        final AbstractTextComponent<String> textField = getTextField();
-
-        textField.add(new IValidator<String>() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void validate(final IValidatable<String> validatable) {
-                final String proposedValue = validatable.getValue();
-                final String reasonIfAny = scalarModel.parseAndValidate(proposedValue);
-                if (reasonIfAny != null) {
-                    final ValidationError error = new ValidationError();
-                    error.setMessage(reasonIfAny);
-                    validatable.error(error);
-                }
-            }
-        });
     }
 
 }

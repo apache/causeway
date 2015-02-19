@@ -132,7 +132,7 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         }
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParams(new ProcessParameterContext(Customer.class, actionMethod, 0, facetedMethodParameter));
+        facetFactory.processParams(new ProcessParameterContext(Customer.class, actionMethod, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(DescribedAsFacet.class);
         assertNotNull(facet);

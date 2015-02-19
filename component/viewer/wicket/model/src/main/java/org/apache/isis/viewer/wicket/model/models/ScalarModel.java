@@ -277,10 +277,6 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             @Override
             public String parseAndValidate(final ScalarModel scalarModel, final String proposedPojoAsStr) {
                 final ObjectActionParameter parameter = scalarModel.getParameterMemento().getActionParameter();
-                ParseableFacet parseableFacet = parameter.getFacet(ParseableFacet.class);
-                if (parseableFacet == null) {
-                    parseableFacet = parameter.getSpecification().getFacet(ParseableFacet.class);
-                }
                 try {
                     final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
                     Localization localization = IsisContext.getLocalization(); 
@@ -293,8 +289,15 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
             @Override
             public String validate(final ScalarModel scalarModel, final ObjectAdapter proposedAdapter) {
-                // TODO - not yet supported.
-                return null;
+                final ObjectActionParameter parameter = scalarModel.getParameterMemento().getActionParameter();
+                try {
+                    final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
+                    Localization localization = IsisContext.getLocalization();
+                    final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedAdapter.getObject(), localization);
+                    return invalidReasonIfAny;
+                } catch (final Exception ex) {
+                    return ex.getLocalizedMessage();
+                }
             }
 
             @Override

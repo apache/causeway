@@ -47,7 +47,7 @@ public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFace
      * noa-architecture (where they exist)
      */
     public ActionValidationFacetViaMethodFactory() {
-        super(FeatureType.ACTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
+        super(FeatureType.ACTIONS_AND_PARAMETERS, OrphanValidation.VALIDATE, PREFIXES);
     }
 
     // ///////////////////////////////////////////////////////
@@ -56,13 +56,14 @@ public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFace
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        attachValidatingAdvisorFacetForValidateMethodIfFound(processMethodContext);
+        handleValidateAllArgsMethod(processMethodContext);
     }
 
-    private void attachValidatingAdvisorFacetForValidateMethodIfFound(final ProcessMethodContext processMethodContext) {
+    private void handleValidateAllArgsMethod(final ProcessMethodContext processMethodContext) {
 
         final Class<?> cls = processMethodContext.getCls();
         final Method actionMethod = processMethodContext.getMethod();
+        final IdentifiedHolder facetHolder = processMethodContext.getFacetHolder();
 
         final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
         final Class<?>[] paramTypes = actionMethod.getParameterTypes();
@@ -78,13 +79,44 @@ public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFace
         }
         processMethodContext.removeMethod(validateMethod);
 
-        final IdentifiedHolder facetedMethod = processMethodContext.getFacetHolder();
         final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
         // sadness: same as in TranslationFactory
-        final String translationContext = facetedMethod.getIdentifier().toClassAndNameIdentityString();
-        final ActionValidationFacetViaMethod facet = new ActionValidationFacetViaMethod(validateMethod, translationService, translationContext, facetedMethod);
+        final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
+        final ActionValidationFacetViaMethod facet = new ActionValidationFacetViaMethod(validateMethod, translationService, translationContext, facetHolder);
         FacetUtil.addFacet(facet);
     }
+
+    @Override
+    public void processParams(final ProcessParameterContext processParameterContext) {
+
+        final Class<?> cls = processParameterContext.getCls();
+        final Method actionMethod = processParameterContext.getMethod();
+        final int param = processParameterContext.getParamNum();
+        final IdentifiedHolder facetHolder = processParameterContext.getFacetHolder();
+
+        final String capitalizedName = StringExtensions.asCapitalizedName(actionMethod.getName());
+        final Class<?>[] paramTypes = actionMethod.getParameterTypes();
+        final MethodScope onClass = MethodScope.scopeFor(actionMethod);
+
+        final String validateName = MethodPrefixConstants.VALIDATE_PREFIX + param + capitalizedName;
+        final Method validateMethod = MethodFinderUtils.findMethod(
+                cls, onClass,
+                validateName,
+                new Class<?>[]{String.class, TranslatableString.class},
+                new Class<?>[]{paramTypes[param]});
+        if (validateMethod == null) {
+            return;
+        }
+
+        processParameterContext.removeMethod(validateMethod);
+
+        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
+        // sadness: same as in TranslationFactory
+        final String translationContext = facetHolder.getIdentifier().toFullIdentityString();
+        final Facet facet = new ActionParameterValidationFacetViaMethod(validateMethod, translationService, translationContext, facetHolder);
+        FacetUtil.addFacet(facet);
+    }
+
 
     // //////////////////////////////////////
 

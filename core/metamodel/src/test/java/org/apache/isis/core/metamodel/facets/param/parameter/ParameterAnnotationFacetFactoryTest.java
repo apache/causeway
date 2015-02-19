@@ -84,7 +84,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
 
             // when
-            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, facetedMethodParameter);
+            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
             // then
@@ -129,7 +129,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
 
             // when
-            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, facetedMethodParameter);
+            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
             // then
@@ -165,7 +165,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
 
             // when
-            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, facetedMethodParameter);
+            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
             // then
@@ -191,7 +191,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
 
             // when
-            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, facetedMethodParameter);
+            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
             // then
@@ -217,7 +217,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
 
             // when
-            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, facetedMethodParameter);
+            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
             // then
@@ -239,7 +239,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
 
             // when
-            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, facetedMethodParameter);
+            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
 
@@ -270,7 +270,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
 
             // when
-            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, facetedMethodParameter);
+            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
 
@@ -298,7 +298,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
 
             // when
-            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, facetedMethodParameter);
+            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
             // then
@@ -323,7 +323,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
 
             // when
-            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, facetedMethodParameter);
+            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
 
@@ -349,7 +349,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             actionMethod = findMethod(Customer.class, "someAction", new Class[]{int.class} );
 
             // when
-            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, facetedMethodParameter);
+            final FacetFactory.ProcessParameterContext processParameterContext = new FacetFactory.ProcessParameterContext(Customer.class, actionMethod, 0, null, facetedMethodParameter);
             facetFactory.processParams(processParameterContext);
 
 

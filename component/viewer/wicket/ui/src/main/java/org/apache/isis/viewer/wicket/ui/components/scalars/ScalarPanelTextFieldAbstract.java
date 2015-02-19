@@ -33,6 +33,10 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.ValidationError;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
@@ -165,8 +169,30 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
     protected void addStandardSemantics() {
-         textField.setRequired(getModel().isRequired());
-         setTextFieldSizeAndMaxLengthIfSpecified(textField);
+        textField.setRequired(getModel().isRequired());
+        setTextFieldSizeAndMaxLengthIfSpecified(textField);
+
+        addValidator();
+    }
+
+    protected void addValidator() {
+        final ScalarModel scalarModel = getModel();
+
+        textField.add(new IValidator<T>() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void validate(final IValidatable<T> validatable) {
+                final T proposedValue = validatable.getValue();
+                final ObjectAdapter proposedAdapter = getAdapterManager().adapterFor(proposedValue);
+                final String reasonIfAny = scalarModel.validate(proposedAdapter);
+                if (reasonIfAny != null) {
+                    final ValidationError error = new ValidationError();
+                    error.setMessage(reasonIfAny);
+                    validatable.error(error);
+                }
+            }
+        });
     }
 
     protected void setTextFieldSizeAndMaxLengthIfSpecified(AbstractTextComponent<T> textField) {

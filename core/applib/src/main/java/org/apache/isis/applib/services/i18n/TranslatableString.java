@@ -38,6 +38,9 @@ public final class TranslatableString {
     public static TranslatableString tr(
             final String pattern,
             final Object... paramArgs) {
+        if(pattern == null) {
+            return null;
+        }
         return new TranslatableString(Type.TR, pattern, null, 1, asMap(paramArgs));
     }
 

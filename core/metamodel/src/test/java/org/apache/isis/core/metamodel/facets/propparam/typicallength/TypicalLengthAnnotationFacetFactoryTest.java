@@ -65,7 +65,7 @@ public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactor
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, facetedMethodParameter));
+        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(TypicalLengthFacet.class);
         assertNotNull(facet);
