@@ -192,8 +192,7 @@
                 <plugin>
                     <groupId>org.simplericity.jettyconsole</groupId>
                     <artifactId>jetty-console-maven-plugin</artifactId>
-                    <!-- update to 1.54 reversed,since seems compiled against 1.7 (major.minor version 51.0) -->
-                    <version>1.43</version>
+                    <version>1.56</version>
                 </plugin>
 
                 <!-- Apache Release Audit Tool -->
