@@ -16,32 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.fixturescripts;
+package domainapp.dom.app.homepage;
 
+import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
-
-/**
- * Acts as a factory by the {@link org.apache.isis.applib.fixturescripts.FixtureScripts} when
- * instantiating the {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext}.
- *
- * <p>
- *     Factoring this out as a service potentially allows for extensions to parsing; and also acts as an
- *     insurance policy to allow this part of the testing framework to be patched if the chosen parsing algorithms
- *     need refinement in the future).
- * </p>
- * it
- */
 @DomainService(
-        nature = NatureOfService.DOMAIN
+        nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY // trick to suppress the actions from the top-level menu
 )
-public class ExecutionParametersService {
+public class HomePageService {
 
-    @Programmatic
-    public ExecutionParameters newExecutionParameters(final String parameters) {
-        return new ExecutionParameters(parameters);
+    //region > homePage (action)
+
+    @Action(
+            semantics = SemanticsOf.SAFE
+    )
+    @HomePage
+    public HomePageViewModel homePage() {
+        return container.injectServicesInto(new HomePageViewModel());
     }
 
+    //endregion
+
+    //region > injected services
+
+    @javax.inject.Inject
+    DomainObjectContainer container;
+
+    //endregion
 }

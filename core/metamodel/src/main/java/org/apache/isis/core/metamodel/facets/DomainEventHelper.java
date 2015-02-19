@@ -157,13 +157,16 @@ public class DomainEventHelper {
             final PropertyDomainEvent<?, ?> event;
             final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
             final Identifier identifier = identified.getIdentifier();
+
+            // because of guava event bus buffering, we always create a new property domain event
+            //
             event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
             event.setEventPhase(phase);
             event.setPhase(AbstractInteractionEvent.Phase.from(phase));
 
             // Old and New Values are populated only on the VALIDATION Phase and
             // afterwards.
-            if ((existingEvent != null) && phase.isValidatingOrLater()) {
+            if (phase.isValidatingOrLater()) {
                 setEventOldValue(event, oldValue);
                 setEventNewValue(event, newValue);
             }

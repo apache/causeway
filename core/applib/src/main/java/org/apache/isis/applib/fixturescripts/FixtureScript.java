@@ -280,6 +280,7 @@ public abstract class FixtureScript
             this(new ExecutionParameters(parameters), fixtureScripts);
         }
 
+        @Programmatic
         public static ExecutionContext create(final ExecutionParameters executionParameters, final FixtureScripts fixtureScripts) {
             return new ExecutionContext(executionParameters, fixtureScripts);
         }

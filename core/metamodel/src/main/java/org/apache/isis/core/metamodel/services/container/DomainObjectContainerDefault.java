@@ -277,6 +277,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
 
     //region > isViewModel
 
+    @Programmatic
     @Override
     public boolean isViewModel(final Object domainObject) {
         final ObjectAdapter adapter = getAdapterManager().adapterFor(unwrapped(domainObject));

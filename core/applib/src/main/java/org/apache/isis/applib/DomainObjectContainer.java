@@ -262,6 +262,7 @@ public interface DomainObjectContainer {
 
     //region > isViewModel
 
+    @Programmatic
     boolean isViewModel(Object domainObject);
 
     //endregion
