@@ -51,11 +51,9 @@
             </activation>
             <modules>
                 <module>core</module>
-                <module>component/viewer/wicket</module>
                 <module>tck</module>
 
                 <module>example/application/simpleapp</module>
-                
                 <module>example/archetype/simpleapp</module>
         
                 <module>component/viewer/scimpi</module>
@@ -66,7 +64,6 @@
             <id>released</id>
             <modules>
                 <module>core</module>
-                <module>component/viewer/wicket</module>
                 <module>example/application/simpleapp</module>
                 <module>example/archetype/simpleapp</module>
             </modules>
@@ -76,7 +73,6 @@
             <id>sonar</id>
             <modules>
                 <module>core</module>
-                <module>component/viewer/wicket</module>
             </modules>
         </profile>
 
@@ -84,13 +80,6 @@
             <id>core</id>
             <modules>
                 <module>core</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>viewer-wicket</id>
-            <modules>
-                <module>component/viewer/wicket</module>
             </modules>
         </profile>
 
