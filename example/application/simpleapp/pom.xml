@@ -35,7 +35,6 @@
 
     <properties>
         <isis.version>1.8.0-SNAPSHOT</isis.version>
-        <isis-viewer-wicket.version>1.8.0-SNAPSHOT</isis-viewer-wicket.version>
 
         <!-- must be consistent with the versions defined by the JDO Objectstore -->
         <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
@@ -332,7 +331,7 @@
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>isis-viewer-wicket</artifactId>
-                <version>${isis-viewer-wicket.version}</version>
+                <version>${isis.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
