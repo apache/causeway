@@ -33,6 +33,8 @@ import org.apache.isis.applib.services.i18n.TranslationsResolver;
 class PoReader extends PoAbstract {
 
     public static final String LOCATION_BASE_URL = "isis.services.translation.po.locationBaseUrl";
+    public static final String DASH = "-";
+    public static final String UNDERSCORE = "_";
     public static Logger LOG = LoggerFactory.getLogger(PoReader.class);
 
     private final Map<Locale, Map<ContextAndMsgId, String>> translationByKeyByLocale = Maps.newHashMap();
@@ -185,9 +187,13 @@ class PoReader extends PoAbstract {
         final List<String> candidates = Lists.newArrayList();
         if(!Strings.isNullOrEmpty(language)) {
             if(!Strings.isNullOrEmpty(country)) {
-                candidates.add(basename + "_" + language + "-" + country+ ".po");
+                candidates.add(basename + DASH       + language + UNDERSCORE + country+ ".po");
+                candidates.add(basename + DASH       + language + DASH       + country+ ".po");
+                candidates.add(basename + UNDERSCORE + language + UNDERSCORE + country+ ".po");
+                candidates.add(basename + UNDERSCORE + language + DASH       + country+ ".po");
             }
-            candidates.add(basename + "_" + language + ".po");
+            candidates.add(basename + DASH + language + ".po");
+            candidates.add(basename + UNDERSCORE + language + ".po");
         }
 
         for (final String candidate : candidates) {

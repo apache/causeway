@@ -4,10 +4,10 @@
 #
 # Translate this file to each required language and place in WEB-INF, eg:
 #
-#     /WEB-INF/translations_en-US.po
-#     /WEB-INF/translations_en.po
-#     /WEB-INF/translations_fr-FR.po
-#     /WEB-INF/translations_fr.po
+#     /WEB-INF/translations-en_US.po
+#     /WEB-INF/translations-en.po
+#     /WEB-INF/translations-fr_FR.po
+#     /WEB-INF/translations-fr.po
 #     /WEB-INF/translations.po
 #
 ##############################################################################

@@ -62,10 +62,10 @@ class PoWriter extends PoAbstract {
         buf.append("\n#");
         buf.append("\n# Translate this file to each required language and place in WEB-INF, eg:");
         buf.append("\n#");
-        buf.append("\n#     /WEB-INF/translations_en-US.po");
-        buf.append("\n#     /WEB-INF/translations_en.po");
-        buf.append("\n#     /WEB-INF/translations_fr-FR.po");
-        buf.append("\n#     /WEB-INF/translations_fr.po");
+        buf.append("\n#     /WEB-INF/translations-en_US.po");
+        buf.append("\n#     /WEB-INF/translations-en.po");
+        buf.append("\n#     /WEB-INF/translations-fr_FR.po");
+        buf.append("\n#     /WEB-INF/translations-fr.po");
         buf.append("\n#     /WEB-INF/translations.po");
         buf.append("\n#");
         buf.append("\n# If the app uses TranslatableString (eg for internationalized validation");
