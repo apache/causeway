@@ -22,9 +22,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 import javax.servlet.ServletContext;
 import com.google.common.base.Charsets;
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.io.CharSource;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
@@ -78,12 +84,21 @@ public class TranslationsResolverWicket implements TranslationsResolver {
         return getIsisWicketApplication().getServletContext();
     }
 
+    private static Pattern nonEmpty = Pattern.compile("^(#:|msgid|msgstr).+$");
     private static List<String> readLines(final URL url) throws IOException {
         if(url == null) {
             return null;
         }
         final CharSource charSource = Resources.asCharSource(url, Charsets.UTF_8);
-        return charSource.readLines();
+        final ImmutableList<String> strings = charSource.readLines();
+        return Collections.unmodifiableList(
+                Lists.newArrayList(
+                Iterables.filter(strings, new Predicate<String>() {
+                    @Override
+                    public boolean apply(final String input) {
+                        return input != null && nonEmpty.matcher(input).matches();
+                    }
+                })));
     }
 
     protected IsisWicketApplication getIsisWicketApplication() {

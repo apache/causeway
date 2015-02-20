@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.viewer.services;
 import java.util.Locale;
 import org.apache.wicket.Application;
 import org.apache.wicket.Session;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
@@ -46,7 +47,7 @@ public class LocaleProviderWicket implements LocaleProvider {
             // eg if request from RO viewer
             return null;
         }
-        return getSession().getLocale();
+        return RequestCycle.get().getRequest().getLocale();
     }
 
     protected Session getSession() {
