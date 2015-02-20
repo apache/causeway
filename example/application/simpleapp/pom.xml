@@ -226,6 +226,9 @@
                             <exclude>**/*.json</exclude>
                             <exclude>**/*.min.js</exclude>
                             <exclude>**/*.js</exclude>
+
+                            <exclude>**/translations.pot</exclude>
+                            <exclude>**/translations*.po</exclude>
                         </excludes>
                         <licenses>
                             <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
