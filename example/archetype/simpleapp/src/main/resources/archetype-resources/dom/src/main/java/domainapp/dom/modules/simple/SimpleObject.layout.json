@@ -23,7 +23,11 @@
                     "members": {
                         "name": {
                             "actions": {
-                                "updateName": {}
+                                "updateName": {
+                                    "actionLayout": {
+                                        "position": "BOTTOM"
+                                    }
+                                }
                             }
                         }
                     }
@@ -45,4 +49,3 @@
     ],
     "actions": {}
 }
- 
