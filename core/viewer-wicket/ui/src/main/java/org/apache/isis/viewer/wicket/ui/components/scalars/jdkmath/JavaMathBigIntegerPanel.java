@@ -30,7 +30,6 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigIntegerPanelFactory.BigIntegerConverter;
 
 /**
  * Panel for rendering scalars of type {@link BigInteger}.

@@ -19,17 +19,24 @@
 
 package org.apache.isis.core.metamodel.facets.object.choices.enums;
 
+import java.lang.reflect.Method;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.profiles.Localization;
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderContext;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemanticsProviderAndFacetAbstract<T> implements EnumFacet {
+
 
     private static Class<? extends Facet> type() {
         return EnumFacet.class;
@@ -48,7 +55,12 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
         }
         return max;
     }
-    
+
+
+    private static final String TITLE = "title";
+
+    private final Method titleMethod;
+
     /**
      * Required because {@link Parser} and {@link EncoderDecoder}.
      */
@@ -64,11 +76,24 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
                 EqualByContent.HONOURED, 
                 defaultFor(adaptedClass), 
                 configuration, context);
+
+        titleMethod = MethodFinderUtils.findMethod(
+                getAdaptedClass(), MethodScope.OBJECT,
+                TITLE,
+                new Class<?>[]{String.class, TranslatableString.class},
+                null);
+
     }
 
     @Override
     protected T doParse(final Object context, final String entry) {
         final T[] enumConstants = getAdaptedClass().getEnumConstants();
+        for (final T enumConstant : enumConstants) {
+            if (doEncode(enumConstant).equals(entry)) {
+                return enumConstant;
+            }
+        }
+        // fallback
         for (final T enumConstant : enumConstants) {
             if (enumConstant.toString().equals(entry)) {
                 return enumConstant;
@@ -87,8 +112,29 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
         return doParse(null, data);
     }
 
+
     @Override
     protected String titleString(final Object object, final Localization localization) {
+        if (titleMethod != null) {
+            final TranslationService translationService = getDependencyInjector().lookupService(TranslationService.class);
+            // sadness: same as in TranslationFactory
+            final String translationContext = titleMethod.getDeclaringClass().getName() + "#" + titleMethod.getName() + "()";
+
+            try {
+                final Object returnValue = MethodExtensions.invoke(titleMethod, object);
+                if(returnValue instanceof String) {
+                    return (String) returnValue;
+                }
+                if(returnValue instanceof TranslatableString) {
+                    final TranslatableString ts = (TranslatableString) returnValue;
+                    return ts.translate(translationService, translationContext);
+                }
+                return null;
+            } catch (final RuntimeException ex) {
+                // fall through
+            }
+        }
+
         return object.toString();
     }
 

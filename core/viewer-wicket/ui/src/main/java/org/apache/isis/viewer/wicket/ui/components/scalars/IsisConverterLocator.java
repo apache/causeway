@@ -14,7 +14,7 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverte
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaSqlTimestamp;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.DateConverterForJavaUtilDate;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.BigDecimalConverterWithScale;
-import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigIntegerPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.BigIntegerConverter;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaDateTime;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaLocalDate;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jodatime.DateConverterForJodaLocalDateTime;
@@ -40,9 +40,15 @@ public class IsisConverterLocator {
             return null;
         }
 
+        // explicitly exclude enums; this will force the titleString
+        // to be used from Isis' EnumValueSemanticsProvider
+        final Class<?> correspondingClass = objectSpecification.getCorrespondingClass();
+        if(Enum.class.isAssignableFrom(correspondingClass)) {
+            return null;
+        }
+
         final RenderedAdjustedFacet renderedAdjustedFacet = objectSpecification.getFacet(RenderedAdjustedFacet.class);
         final int adjustBy = renderedAdjustedFacet != null ? renderedAdjustedFacet.value() : 0;
-        final Class<?> correspondingClass = objectSpecification.getCorrespondingClass();
 
         IConverter converter = null;
         if (java.util.Date.class == correspondingClass) {
@@ -62,7 +68,7 @@ public class IsisConverterLocator {
         } else if (java.sql.Timestamp.class == correspondingClass) {
             converter = new DateConverterForJavaSqlTimestamp(wicketViewerSettings, adjustBy);
         } else if (java.math.BigInteger.class == correspondingClass) {
-            converter = JavaMathBigIntegerPanelFactory.BigIntegerConverter.INSTANCE;
+            converter = BigIntegerConverter.INSTANCE;
         } else if (java.math.BigDecimal.class == correspondingClass) {
             final BigDecimalValueFacet facet = objectSpecification.getFacet(BigDecimalValueFacet.class);
             Integer scale = null;

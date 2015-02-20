@@ -19,18 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Locale;
-
 import org.apache.wicket.Component;
-import org.apache.wicket.util.convert.ConversionException;
-import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.AbstractIntegerConverter;
-import org.apache.wicket.util.convert.converter.BigDecimalConverter;
-import org.apache.wicket.util.convert.converter.IntegerConverter;
-import org.apache.wicket.util.string.Strings;
-
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
@@ -39,48 +28,6 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScala
  * {@link ComponentFactory} for {@link JavaMathBigIntegerPanel}.
  */
 public class JavaMathBigIntegerPanelFactory extends ComponentFactoryScalarAbstract {
-
-    public static final class BigIntegerConverter extends AbstractIntegerConverter<BigInteger> {
-        private static final long serialVersionUID = 1L;
-
-        /**
-         * The singleton instance for a big integer converter
-         * (cf the Wicket subclasses)
-         */
-        public static final IConverter<BigInteger> INSTANCE = new BigIntegerConverter();
-
-        @Override
-        public BigInteger convertToObject(String value, Locale locale) throws ConversionException {
-            if (Strings.isEmpty(value))
-            {
-                return null;
-            }
-
-            final Number number = parse(value, -Double.MAX_VALUE, Double.MAX_VALUE, locale);
-
-            if (number instanceof BigInteger)
-            {
-                return (BigInteger)number;
-            }
-            else if (number instanceof Long)
-            {
-                return BigInteger.valueOf(number.longValue());
-            }
-            else if (number instanceof Integer)
-            {
-                return BigInteger.valueOf(number.intValue());
-            }
-            else
-            {
-                return new BigInteger(value);
-            }
-        }
-
-        @Override
-        protected Class<BigInteger> getTargetType() {
-            return BigInteger.class;
-        }
-    }
 
     private static final long serialVersionUID = 1L;
 
