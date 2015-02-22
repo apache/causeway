@@ -16,6 +16,7 @@
  */
 package domainapp.integtests.specs;
 
+import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 import org.junit.runner.RunWith;
@@ -25,7 +26,7 @@ import org.junit.runner.RunWith;
  * Runs scenarios in all <tt>.feature</tt> files (this package and any subpackages). 
  */
 @RunWith(Cucumber.class)
-@Cucumber.Options(
+@CucumberOptions(
         format = {
                 "html:target/cucumber-html-report"
                 ,"json:target/cucumber.json"
