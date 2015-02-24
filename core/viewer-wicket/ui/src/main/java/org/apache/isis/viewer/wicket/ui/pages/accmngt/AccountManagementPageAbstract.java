@@ -25,6 +25,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -34,15 +35,18 @@ import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandLogo;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
 import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.Placement;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 
 /**
  * Boilerplate, pick up our HTML and CSS.
@@ -95,8 +99,13 @@ public class AccountManagementPageAbstract extends WebPage {
     protected AccountManagementPageAbstract(final PageParameters parameters, final ExceptionModel exceptionModel) {
         super(parameters);
 
+        Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.SIGN_IN);
+        BookmarkablePageLink<Void> signInLink = new BookmarkablePageLink<>("signInLink", pageClass);
+        signInLink.setAutoEnable(true);
+        add(signInLink);
+
         addPageTitle();
-        addApplicationName();
+        addApplicationName(signInLink);
 
         if(exceptionModel != null) {
             add(new ExceptionStackTracePanel(ID_EXCEPTION_STACK_TRACE, exceptionModel));
@@ -108,15 +117,16 @@ public class AccountManagementPageAbstract extends WebPage {
         BootstrapJavascriptBehavior.addTo(this);
     }
 
+
     private MarkupContainer addPageTitle() {
         return add(new Label(ID_PAGE_TITLE, applicationName));
     }
 
-    private void addApplicationName() {
+    private void addApplicationName(MarkupContainer parent) {
         final Placement placement = Placement.SIGNIN;
         final BrandLogo brandLogo = new BrandLogo("brandLogo", placement);
         final BrandName brandName = new BrandName(ID_APPLICATION_NAME, placement);
-        add(brandName, brandLogo);
+        parent.add(brandName, brandLogo);
     }
 
     @Override
@@ -142,4 +152,6 @@ public class AccountManagementPageAbstract extends WebPage {
         return IsisContext.getConfiguration();
     }
 
+    @javax.inject.Inject
+    private PageClassRegistry pageClassRegistry;
 }
