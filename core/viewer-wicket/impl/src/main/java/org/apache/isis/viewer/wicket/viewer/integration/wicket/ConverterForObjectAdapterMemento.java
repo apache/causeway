@@ -41,7 +41,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
  * {@link ObjectAdapterMemento}s, converting to-and-from their {@link Oid}'s
  * string representation.
  */
-public class ConverterForObjectAdapterMemento implements IConverter {
+public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapterMemento> {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,7 +50,7 @@ public class ConverterForObjectAdapterMemento implements IConverter {
      * {@link ObjectAdapterMemento}.
      */
     @Override
-    public Object convertToObject(final String value, final Locale locale) {
+    public ObjectAdapterMemento convertToObject(final String value, final Locale locale) {
         if (Strings.isNullOrEmpty(value)) {
             return null;
         }
@@ -64,11 +64,10 @@ public class ConverterForObjectAdapterMemento implements IConverter {
      * {@link RootOid}.
      */
     @Override
-    public String convertToString(final Object object, final Locale locale) {
-        if (object == null) {
+    public String convertToString(final ObjectAdapterMemento memento, final Locale locale) {
+        if (memento == null) {
             return null;
         }
-        final ObjectAdapterMemento memento = (ObjectAdapterMemento) object;
         final Oid oid = memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK).getOid();
         if (oid == null) {
             // values don't have an Oid...

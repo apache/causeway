@@ -34,7 +34,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
  * Implementation of a Wicket {@link IConverter} for {@link ObjectAdapter}s,
  * converting to-and-from their {@link Oid}'s string representation.
  */
-public class ConverterForObjectAdapter implements IConverter {
+public class ConverterForObjectAdapter implements IConverter<ObjectAdapter> {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,7 +43,7 @@ public class ConverterForObjectAdapter implements IConverter {
      * {@link ObjectAdapter}.
      */
     @Override
-    public Object convertToObject(final String value, final Locale locale) {
+    public ObjectAdapter convertToObject(final String value, final Locale locale) {
         final Oid oid = RootOidDefault.deStringEncoded(value, getOidMarshaller());
         return getAdapterManager().getAdapterFor(oid);
     }
@@ -52,8 +52,7 @@ public class ConverterForObjectAdapter implements IConverter {
      * Converts {@link ObjectAdapter} to string representation of {@link Oid}.
      */
     @Override
-    public String convertToString(final Object object, final Locale locale) {
-        final ObjectAdapter adapter = (ObjectAdapter) object;
+    public String convertToString(final ObjectAdapter adapter, final Locale locale) {
         final Oid oid = adapter.getOid();
         if (oid == null) {
             // values don't have an Oid
