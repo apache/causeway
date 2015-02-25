@@ -23,17 +23,17 @@
     <parent>
         <groupId>org.apache.isis.tck</groupId>
         <artifactId>isis-tck</artifactId>
-        <version>1.8.0-SNAPSHOT</version>
+        <version>1.9.0-SNAPSHOT</version>
     </parent>
 
 	<artifactId>isis-tck-viewer-wicket</artifactId>
-    <version>1.8.0-SNAPSHOT</version>
+    <version>1.9.0-SNAPSHOT</version>
 
 	<name>Isis TCK Wicket Viewer tests</name>
 
 
 	<properties>
-        <isis-viewer-wicket.version>1.8.0-SNAPSHOT</isis-viewer-wicket.version>
+        <isis-viewer-wicket.version>1.9.0-SNAPSHOT</isis-viewer-wicket.version>
 		<siteBaseDir>..</siteBaseDir>
 		<relativeUrl>wicket-tck/</relativeUrl>
 		<!-- until someone comes up with a better solution -->
