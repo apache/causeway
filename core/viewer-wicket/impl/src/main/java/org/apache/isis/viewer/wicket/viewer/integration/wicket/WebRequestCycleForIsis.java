@@ -19,13 +19,18 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
+import java.lang.reflect.Constructor;
 import java.util.List;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.IPageFactory;
+import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
@@ -36,6 +41,7 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,9 +53,10 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
-import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
@@ -174,7 +181,32 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
         ExceptionModel exceptionModel = ExceptionModel.create(recognizedMessageIfAny, ex);
         
-        return isSignedIn() ? new ErrorPage(exceptionModel) : new WicketSignInPage(null, exceptionModel);
+        return isSignedIn() ? new ErrorPage(exceptionModel) : newSignInPage(exceptionModel);
+    }
+
+    /**
+     * Tries to instantiate the configured {@link PageType#SIGN_IN signin page} with the given exception model
+     *
+     * @param exceptionModel A model bringing the information about the occurred problem
+     * @return An instance of the configured signin page
+     */
+    private IRequestablePage newSignInPage(ExceptionModel exceptionModel) {
+        PageClassRegistry pageClassRegistry = getServicesInjector().lookupService(PageClassRegistry.class);
+        Class<? extends Page> signInPageClass = pageClassRegistry.getPageClass(PageType.SIGN_IN);
+        PageParameters parameters = new PageParameters();
+        Page signInPage;
+        try {
+            Constructor<? extends Page> constructor = signInPageClass.getConstructor(PageParameters.class, ExceptionModel.class);
+            signInPage = constructor.newInstance(parameters, exceptionModel);
+        } catch (Exception _) {
+            try {
+                IPageFactory pageFactory = Application.get().getPageFactory();
+                signInPage = pageFactory.newPage(signInPageClass, parameters);
+            } catch (Exception x) {
+                throw new WicketRuntimeException("Cannot instantiate the configured sign in page", x);
+            }
+        }
+        return signInPage;
     }
 
     /**
