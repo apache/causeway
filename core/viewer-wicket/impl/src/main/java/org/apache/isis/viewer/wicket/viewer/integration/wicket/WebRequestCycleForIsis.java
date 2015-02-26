@@ -19,8 +19,10 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
+import javax.inject.Inject;
 import java.lang.reflect.Constructor;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -35,6 +37,7 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy;
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.PageExpiredException;
 import org.apache.wicket.request.IRequestHandler;
@@ -68,6 +71,13 @@ import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebRequestCycleForIsis.class);
+
+    @Inject
+    private PageClassRegistry pageClassRegistry;
+
+    public WebRequestCycleForIsis() {
+        Injector.get().inject(this);
+    }
 
     @Override
     public synchronized void onBeginRequest(RequestCycle requestCycle) {
@@ -190,8 +200,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
      * @param exceptionModel A model bringing the information about the occurred problem
      * @return An instance of the configured signin page
      */
-    private IRequestablePage newSignInPage(ExceptionModel exceptionModel) {
-        PageClassRegistry pageClassRegistry = getServicesInjector().lookupService(PageClassRegistry.class);
+    private IRequestablePage newSignInPage(final ExceptionModel exceptionModel) {
         Class<? extends Page> signInPageClass = pageClassRegistry.getPageClass(PageType.SIGN_IN);
         PageParameters parameters = new PageParameters();
         Page signInPage;

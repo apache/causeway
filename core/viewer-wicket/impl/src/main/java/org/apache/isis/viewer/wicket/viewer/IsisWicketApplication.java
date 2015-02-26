@@ -239,10 +239,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     
             getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_RENDER);
 
-            RequestCycleListenerCollection requestCycleListeners = getRequestCycleListeners();
-            requestCycleListeners.add(newWebRequestCycleForIsis());
-            requestCycleListeners.add(new PageRequestHandlerTracker());
-    
             getResourceSettings().setParentFolderPlaceholder("$up$");
 
             determineDeploymentTypeIfRequired();
@@ -259,6 +255,10 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             getDebugSettings().setAjaxDebugModeEnabled(determineAjaxDebugModeEnabled(configuration));
 
             initWicketComponentInjection(injector);
+
+            RequestCycleListenerCollection requestCycleListeners = getRequestCycleListeners();
+            requestCycleListeners.add(newWebRequestCycleForIsis());
+            requestCycleListeners.add(new PageRequestHandlerTracker());
 
             // must be done after injected componentFactoryRegistry into the app itself
             buildCssBundle();
