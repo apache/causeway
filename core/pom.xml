@@ -128,7 +128,7 @@
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
         <resteasy-jaxrs.version>3.0.10.Final</resteasy-jaxrs.version>
 
-        <jetty.version>6.1.26</jetty.version>
+        <jetty.version>8.1.16.v20140903</jetty.version>
 
         <wicket.version>6.17.0</wicket.version>
         <wicketstuff.version>6.17.0</wicketstuff.version>
@@ -157,7 +157,7 @@
         <geronimo-jsp_2.1_spec.version>1.0.1</geronimo-jsp_2.1_spec.version>
         <geronimo-jta_1.1_spec.version>1.1.1</geronimo-jta_1.1_spec.version>
         <geronimo-jta_1.0.1B_spec.version>1.1.1</geronimo-jta_1.0.1B_spec.version>
-        <geronimo-servlet_2.5_spec.version>1.2</geronimo-servlet_2.5_spec.version>
+        <geronimo-servlet_3.0_spec.version>1.0</geronimo-servlet_3.0_spec.version>
         <geronimo-annotation_1.0_spec.version>1.1.1</geronimo-annotation_1.0_spec.version>
         <geronimo-activation_1.1_spec.version>1.1</geronimo-activation_1.1_spec.version>
         <geronimo-javamail_1.4_spec.version>1.7.1</geronimo-javamail_1.4_spec.version>
@@ -1438,10 +1438,10 @@ ${license.additional-notes}
                 <artifactId>resteasy-jaxrs</artifactId>
                 <version>${resteasy-jaxrs.version}</version>
                 <exclusions>
-                    <!-- instead use org.apache.geronimo.specs:geronimo-servlet_2.5_spec -->
+                    <!-- instead use geronimo-servlet_3.0_spec -->
                     <exclusion>
-                        <groupId>javax.servlet</groupId>
-                        <artifactId>servlet-api</artifactId>
+                        <groupId>org.jboss.spec.javax.servlet</groupId>
+                        <artifactId>jboss-servlet-api_3.1_spec</artifactId>
                     </exclusion>
                     <!-- instead use org.apache.geronimo.specs:geronimo-annotation_1.0_spec -->
                     <exclusion>
@@ -1734,13 +1734,13 @@ ${license.additional-notes}
 
             <!-- Web development -->
             <dependency>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>jetty</artifactId>
+                <groupId>org.eclipse.jetty.aggregate</groupId>
+                <artifactId>jetty-all-server</artifactId>
                 <version>${jetty.version}</version>
                 <exclusions>
                     <exclusion>
-                        <groupId>org.mortbay.jetty</groupId>
-                        <artifactId>servlet-api</artifactId>
+                        <groupId>org.eclipse.jetty.orbit</groupId>
+                        <artifactId>javax.servlet</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -1809,8 +1809,9 @@ ${license.additional-notes}
             </dependency>
             <dependency>
                 <groupId>org.apache.geronimo.specs</groupId>
-                <artifactId>geronimo-servlet_2.5_spec</artifactId>
-                <version>${geronimo-servlet_2.5_spec.version}</version>
+                <artifactId>geronimo-servlet_3.0_spec</artifactId>
+                <version>${geronimo-servlet_3.0_spec.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.geronimo.specs</groupId>
