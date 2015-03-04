@@ -36,7 +36,7 @@ import org.apache.isis.applib.value.Clob;
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
-        menuOrder = "500"
+        menuOrder = "500.500"
 )
 public class TranslationServicePoMenu {
 
@@ -70,7 +70,7 @@ public class TranslationServicePoMenu {
     @ActionLayout(
             cssClassFa = "fa-download"
     )
-    @MemberOrder(sequence="500.10")
+    @MemberOrder(sequence="500.500.1")
     public Clob downloadTranslations(
             @ParameterLayout(named = ".pot file name")
             final String potFileName) {
@@ -102,7 +102,7 @@ public class TranslationServicePoMenu {
             named="Clear translation cache",
             cssClassFa = "fa-trash"
     )
-    @MemberOrder(sequence="500.20")
+    @MemberOrder(sequence="500.500.2")
     public void resetTranslationCache() {
         translationService.clearCache();
     }
