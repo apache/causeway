@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
-import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -214,8 +213,7 @@ public abstract class DomainChangeJdoAbstract {
     // //////////////////////////////////////
 
     @Action(
-            semantics = SemanticsOf.SAFE,
-            invokeOn = InvokeOn.OBJECT_AND_COLLECTION
+            semantics = SemanticsOf.SAFE
     )
     @ActionLayout(
             named = "Open"
