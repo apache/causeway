@@ -117,7 +117,7 @@ public interface ActionInvocationFacet extends Facet {
      * @deprecated - should instead use the {@link CommandContext} request.
      */
     @Deprecated
-    public static ThreadLocal<CurrentInvocation> currentInvocation = new ThreadLocal<CurrentInvocation>();
+    public static ThreadLocal<CurrentInvocation> currentInvocation = new ThreadLocal<>();
 
 
 }

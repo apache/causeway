@@ -290,7 +290,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     if(backgroundService != null) {
                         final Object targetObject = unwrap(targetAdapter);
                         final Object[] args = CommandUtil.objectsFor(arguments);
-                        ActionInvocationMemento aim = backgroundService.asActionInvocationMemento(method, targetObject, args);
+                        final ActionInvocationMemento aim = backgroundService.asActionInvocationMemento(method, targetObject, args);
 
                         if(aim != null) {
                             command.setMemento(aim.asMementoString());
