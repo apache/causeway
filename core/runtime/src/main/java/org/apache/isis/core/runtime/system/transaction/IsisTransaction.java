@@ -1282,6 +1282,10 @@ public class IsisTransaction implements TransactionScopedComponent {
             if(property.isNotPersisted()) {
                 continue;
             }
+            if(changedObjectProperties.containsKey(aap)) {
+                // already enlisted, so ignore
+                return;
+            }
             PreAndPostValues papv = PreAndPostValues.pre(Placeholder.NEW);
             changedObjectProperties.put(aap, papv);
         }
@@ -1305,6 +1309,10 @@ public class IsisTransaction implements TransactionScopedComponent {
             if(property.isNotPersisted()) {
                 continue;
             }
+            if(changedObjectProperties.containsKey(aap)) {
+                // already enlisted, so ignore
+                return;
+            }
             PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
             changedObjectProperties.put(aap, papv);
         }
@@ -1327,6 +1335,10 @@ public class IsisTransaction implements TransactionScopedComponent {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
             if(property.isNotPersisted()) {
                 continue;
+            }
+            if(changedObjectProperties.containsKey(aap)) {
+                // already enlisted, so ignore
+                return;
             }
             PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
             changedObjectProperties.put(aap, papv);
