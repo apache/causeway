@@ -162,7 +162,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
     protected String replace(final String template, final EmailEventAbstract emailEvent) {
         String message = template;
         message = EMAIL_PATTERN.matcher(message).replaceFirst(emailEvent.getEmail());
-        message = CONFIRMATION_URL_PATTERN.matcher(message).replaceFirst(emailEvent.getConfirmationUrl());
+        message = CONFIRMATION_URL_PATTERN.matcher(message).replaceAll(emailEvent.getConfirmationUrl());
         message = APPLICATION_NAME_PATTERN.matcher(message).replaceAll(emailEvent.getApplicationName());
         return message;
     }
