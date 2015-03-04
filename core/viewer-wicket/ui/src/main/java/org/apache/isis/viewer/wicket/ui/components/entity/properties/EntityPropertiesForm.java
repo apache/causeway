@@ -49,12 +49,15 @@ import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -421,9 +424,34 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
             doPreApply();
             if (applyFormChangesElse()) return;
+
+            final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
+            final Command command;
+
+            if (commandContext != null) {
+                command = commandContext.getCommand();
+
+                if (command.getTarget() != null) {
+                    // ?? is this needed ??
+                    // for symmetry with similar code in ObjectActionContributee
+                    // and ActionInvocationFacetForDomainEventAbstract, but might not be.
+                } else {
+                    command.setExecutor(Command.Executor.USER);
+
+                    final ObjectAdapter objectAdapter = getEntityModel().getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+
+                    command.setTarget(CommandUtil.bookmarkFor(objectAdapter));
+                    command.setTargetClass(CommandUtil.targetClassNameFor(objectAdapter));
+                    command.setTargetAction("(edit)");
+                    command.setMemberIdentifier("(edit)");
+
+                }
+            }
+
             final Object redirectIfAny = doPostApply();
 
             if (flushChangesElse(target)) return;
+
 
             getEntityModel().resetPropertyModels();
 
