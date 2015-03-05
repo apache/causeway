@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.pages;
 
+import java.io.Serializable;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 
 /**
@@ -26,7 +27,7 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
  * with encoded/encrypted datum as first indexed parameter in the url for
  * mail verification purposes.
  */
-public interface EmailVerificationUrlService {
+public interface EmailVerificationUrlService extends Serializable {
 
     /**
      * Creates a url to the passed <em>pageClass</em> by encrypting the given
