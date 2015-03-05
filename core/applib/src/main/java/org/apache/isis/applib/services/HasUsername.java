@@ -16,32 +16,16 @@
  */
 package org.apache.isis.applib.services;
 
-import java.util.UUID;
-
-
 /**
  * Mix-in interface for objects (usually created by service implementations) that are be persistable, 
- * and so can be associated with the GUID of the Isis transaction in which they were
- * created.
+ * and so can be associated with a username, usually of the user that has performed some operation.
  * 
  * <p>
- * Other services can then use this transaction Id as a &quot;foreign key&quot; to store other
- * persistent information.  They may then use contributed actions/collections to render such aggregated
- * information back to the user.
+ * Other services can then use this username as a means to contributed actions/collections to render such additional
+ * information relating to the activities of the user.
  */
-public interface HasTransactionId {
+public interface HasUsername {
 
-    /**
-     * The unique identifier (a GUID) of the transaction in which this interaction occurred.
-     * 
-     * <p>
-     * Note that this is the same as the Isis transaction guid as found in the JDO applib's
-     * <tt>PublishedEvent</tt>.
-     */
-    public UUID getTransactionId();
-
-    public void setTransactionId(final UUID transactionId);
-
-    
+    public String getUsername();
 
 }    
