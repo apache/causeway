@@ -19,16 +19,20 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
+import java.util.Map;
+import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
+import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
@@ -73,10 +77,11 @@ public abstract class ActionDomainEventFacetAbstract
         // reset (belt-n-braces)
         currentInteraction.set(null);
 
+        final ObjectAdapter[] argumentAdapters = argumentAdaptersFrom(ic);
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         eventType(), null, null, AbstractDomainEvent.Phase.HIDE,
-                        getIdentified(), ic.getTarget(), null, null);
+                        getIdentified(), ic.getTarget(), argumentAdapters, null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
         }
@@ -92,14 +97,20 @@ public abstract class ActionDomainEventFacetAbstract
         // reset (belt-n-braces)
         currentInteraction.set(null);
 
+        final ObjectAdapter[] argumentAdapters = argumentAdaptersFrom(ic);
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         eventType(), null, null, AbstractDomainEvent.Phase.DISABLE,
-                        getIdentified(), ic.getTarget(), null, null);
+                        getIdentified(), ic.getTarget(), argumentAdapters, null);
         if (event != null && event.isDisabled()) {
             return event.getDisabledReason();
         }
         return null;
+    }
+
+    private static ObjectAdapter[] argumentAdaptersFrom(final InteractionContext<? extends InteractionEvent> ic) {
+        final Map<Integer, ObjectAdapter> contributeeAsMap = ic.getContributeeAsMap();
+        return contributeeAsMap.isEmpty() ? null : new ObjectAdapter[]{contributeeAsMap.get(0)};
     }
 
     @Override
