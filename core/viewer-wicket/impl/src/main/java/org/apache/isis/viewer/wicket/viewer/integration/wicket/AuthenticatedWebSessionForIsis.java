@@ -77,7 +77,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         authenticationRequest.setRoles(Arrays.asList(USER_ROLE));
         authenticationSession = getAuthenticationManager().authenticate(authenticationRequest);
         if (authenticationSession != null) {
-            log(SessionLoggingService.Type.LOGIN, username, SessionLoggingService.CausedBy.USER);
+            log(SessionLoggingService.Type.LOGIN, username, null);
             return true;
         } else {
             return false;
@@ -149,7 +149,10 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         }
     }
 
-    private void log(final SessionLoggingService.Type type, final String username, final SessionLoggingService.CausedBy causedBy) {
+    private void log(
+            final SessionLoggingService.Type type,
+            final String username,
+            final SessionLoggingService.CausedBy causedBy) {
         final SessionLoggingService sessionLoggingService = getSessionLoggingService();
         if (sessionLoggingService != null) {
             IsisContext.doInSession(new Runnable() {
