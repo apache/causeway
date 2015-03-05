@@ -675,6 +675,8 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
 
 
     protected void initWicketComponentInjection(final Injector injector) {
+        // if serializable, then brings in dependency on cglib, and in turn asm.
+        // This would block us from migrating to DN 4.0.x
         getComponentInstantiationListeners().add(new GuiceComponentInjector(this, injector, false));
     }
 

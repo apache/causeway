@@ -211,12 +211,17 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
 
         if(command != null && command.getExecutor() == Executor.USER) {
 
-            command.setTargetClass(CommandUtil.targetClassNameFor(contributee));
-            command.setTargetAction(CommandUtil.targetActionNameFor(this));
-            command.setArguments(CommandUtil.argDescriptionFor(this, arguments));
-            
-            final Bookmark targetBookmark = CommandUtil.bookmarkFor(contributee);
-            command.setTarget(targetBookmark);
+            if (command.getTarget() != null) {
+                // already set up by a edit form
+                // don't overwrite
+            } else {
+                command.setTargetClass(CommandUtil.targetClassNameFor(contributee));
+                command.setTargetAction(CommandUtil.targetActionNameFor(this));
+                command.setArguments(CommandUtil.argDescriptionFor(this, arguments));
+
+                final Bookmark targetBookmark = CommandUtil.bookmarkFor(contributee);
+                command.setTarget(targetBookmark);
+            }
         }
         
         return serviceAction.execute(serviceAdapter, argsPlusContributee(contributee, arguments));

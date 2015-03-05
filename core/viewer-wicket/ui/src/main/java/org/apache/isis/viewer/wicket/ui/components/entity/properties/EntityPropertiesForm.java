@@ -425,6 +425,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
             if (flushChangesElse(target)) return;
 
+
             getEntityModel().resetPropertyModels();
 
             toViewMode(null);
