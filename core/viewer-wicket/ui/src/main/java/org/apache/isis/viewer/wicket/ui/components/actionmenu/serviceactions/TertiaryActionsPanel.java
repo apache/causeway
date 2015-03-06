@@ -167,6 +167,11 @@ public class TertiaryActionsPanel extends Panel {
             } else {
                 menuItemLabel.add(new CssClassFaBehavior(cssClassFa, menuItem.getCssClassFaPosition()));
             }
+
+            String cssClass = menuItem.getCssClass();
+            if (!Strings.isNullOrEmpty(cssClass)) {
+                subMenuItemLink.add(new CssClassAppender(cssClass));
+            }
         } else {
             leafItem = new Fragment("content", "empty", TertiaryActionsPanel.this);
             listItem.add(new CssClassAppender("divider"));

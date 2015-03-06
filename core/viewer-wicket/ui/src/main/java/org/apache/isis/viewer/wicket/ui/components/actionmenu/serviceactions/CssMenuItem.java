@@ -248,6 +248,10 @@ class CssMenuItem implements Serializable {
         this.cssClass = cssClass;
     }
 
+    public String getCssClass() {
+        return cssClass;
+    }
+
     public void setCssClassFa(String cssClassFa) {
         this.cssClassFa = cssClassFa;
     }
