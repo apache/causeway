@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 
@@ -108,7 +109,17 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
     public int getContributeeParam() {
         return contributeeParam;
     }
-    
+
+    @Override
+    public boolean isContributedBy(final ObjectAction serviceAction) {
+        return serviceAction == this.serviceAction;
+    }
+
+    @Override
+    public int getContributeeParamPosition() {
+        return contributeeParam;
+    }
+
     public synchronized List<ObjectActionParameter> getParameters() {
         
         if (this.parameters == null) {
@@ -304,6 +315,5 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
         list.remove(n);
         return list.toArray(t);
     }
-
 
 }

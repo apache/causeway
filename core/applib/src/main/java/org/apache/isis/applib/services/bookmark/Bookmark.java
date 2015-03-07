@@ -74,15 +74,15 @@ public class Bookmark implements Serializable {
     /**
      * Round-trip with {@link #toString()} representation.
      */
-    public Bookmark(String toString) {
+    public Bookmark(final String toString) {
         this(Splitter.on(SEPARATOR).split(toString).iterator());
     }
 
-    private Bookmark(Iterator<String> split) {
+    private Bookmark(final Iterator<String> split) {
         this(split.next(), split.next());
     }
 
-    public Bookmark(String objectType, String identifier) {
+    public Bookmark(final String objectType, final String identifier) {
         this.state = ObjectState.from(objectType);
         this.objectType = state != ObjectState.PERSISTENT ? objectType.substring(1): objectType;
         this.identifier = identifier;
@@ -112,14 +112,14 @@ public class Bookmark implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj)
             return true;
         if (obj == null)
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Bookmark other = (Bookmark) obj;
+        final Bookmark other = (Bookmark) obj;
         if (identifier == null) {
             if (other.identifier != null)
                 return false;

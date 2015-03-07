@@ -111,8 +111,18 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
     public Identifier getIdentifier() {
         return identifier;
     }
-    
-    
+
+    @Override
+    public boolean isContributedBy(final ObjectAction serviceAction) {
+        return serviceAction == this.serviceAction;
+    }
+
+    @Override
+    public int getContributeeParamPosition() {
+        // always 0 for contributed properties
+        return 0;
+    }
+
     @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter contributee, Where where) {
         final VisibilityContext<?> ic = serviceAction.createVisibleInteractionContext(session, InteractionInvocationMethod.BY_USER, serviceAdapter, where);

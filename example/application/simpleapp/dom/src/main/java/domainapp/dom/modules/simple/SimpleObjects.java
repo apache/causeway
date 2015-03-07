@@ -20,6 +20,7 @@ package domainapp.dom.modules.simple;
 
 import java.util.List;
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -29,6 +30,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.QueryDefault;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 
 @DomainService(repositoryFor = SimpleObject.class)
 @DomainServiceLayout(menuOrder = "10")
@@ -68,6 +70,15 @@ public class SimpleObjects {
     //endregion
 
     //region > create (action)
+    public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjects> {
+        public CreateDomainEvent(final SimpleObjects source, final Identifier identifier, final Object... arguments) {
+            super(source, identifier, arguments);
+        }
+    }
+
+    @Action(
+            domainEvent = CreateDomainEvent.class
+    )
     @MemberOrder(sequence = "3")
     public SimpleObject create(
             final @ParameterLayout(named="Name") String name) {
