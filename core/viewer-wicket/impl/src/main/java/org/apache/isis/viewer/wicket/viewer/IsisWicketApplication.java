@@ -242,12 +242,22 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             getResourceSettings().setParentFolderPlaceholder("$up$");
 
             determineDeploymentTypeIfRequired();
-            
+
+            RequestCycleListenerCollection requestCycleListeners = getRequestCycleListeners();
+            IRequestCycleListener requestCycleListenerForIsis = newWebRequestCycleForIsis();
+            requestCycleListeners.add(requestCycleListenerForIsis);
+            requestCycleListeners.add(new PageRequestHandlerTracker());
+
             final IsisConfigurationBuilder isisConfigurationBuilder = createConfigBuilder();
     
             final IsisInjectModule isisModule = newIsisModule(deploymentType, isisConfigurationBuilder);
             final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
             injector.injectMembers(this);
+
+            if (requestCycleListenerForIsis instanceof WebRequestCycleForIsis) {
+                WebRequestCycleForIsis webRequestCycleForIsis = (WebRequestCycleForIsis) requestCycleListenerForIsis;
+                webRequestCycleForIsis.setPageClassRegistry(pageClassRegistry);
+            }
             
             final IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
             this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(configuration));
@@ -255,10 +265,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             getDebugSettings().setAjaxDebugModeEnabled(determineAjaxDebugModeEnabled(configuration));
 
             initWicketComponentInjection(injector);
-
-            RequestCycleListenerCollection requestCycleListeners = getRequestCycleListeners();
-            requestCycleListeners.add(newWebRequestCycleForIsis());
-            requestCycleListeners.add(new PageRequestHandlerTracker());
 
             // must be done after injected componentFactoryRegistry into the app itself
             buildCssBundle();

@@ -41,7 +41,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 /**
- * Boilerplate, pick up our HTML and CSS.
+ * A page being shown when the meta model validation has failed
  */
 public class MmvErrorPage extends WebPage {
     
@@ -118,7 +118,11 @@ public class MmvErrorPage extends WebPage {
         }
     }
 
- 
+    @Override
+    public boolean isErrorPage() {
+        return true;
+    }
+
     // ///////////////////////////////////////////////////
     // System components
     // ///////////////////////////////////////////////////

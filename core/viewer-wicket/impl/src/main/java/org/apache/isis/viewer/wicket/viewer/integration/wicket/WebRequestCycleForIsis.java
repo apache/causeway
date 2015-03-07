@@ -19,10 +19,8 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
-import javax.inject.Inject;
 import java.lang.reflect.Constructor;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -37,7 +35,6 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy;
-import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.PageExpiredException;
 import org.apache.wicket.request.IRequestHandler;
@@ -60,6 +57,7 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.error.ErrorPage;
+import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.isis.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
@@ -72,12 +70,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebRequestCycleForIsis.class);
 
-    @Inject
     private PageClassRegistry pageClassRegistry;
-
-    public WebRequestCycleForIsis() {
-        Injector.get().inject(this);
-    }
 
     @Override
     public synchronized void onBeginRequest(RequestCycle requestCycle) {
@@ -201,8 +194,14 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
      * @return An instance of the configured signin page
      */
     private IRequestablePage newSignInPage(final ExceptionModel exceptionModel) {
-        Class<? extends Page> signInPageClass = pageClassRegistry.getPageClass(PageType.SIGN_IN);
-        PageParameters parameters = new PageParameters();
+        Class<? extends Page> signInPageClass = null;
+        if (pageClassRegistry != null) {
+            signInPageClass = pageClassRegistry.getPageClass(PageType.SIGN_IN);
+        }
+        if (signInPageClass == null) {
+            signInPageClass = WicketSignInPage.class;
+        }
+        final PageParameters parameters = new PageParameters();
         Page signInPage;
         try {
             Constructor<? extends Page> constructor = signInPageClass.getConstructor(PageParameters.class, ExceptionModel.class);
@@ -235,7 +234,9 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     }
 
 
-
+    public void setPageClassRegistry(PageClassRegistry pageClassRegistry) {
+        this.pageClassRegistry = pageClassRegistry;
+    }
     
     ///////////////////////////////////////////////////////////////
     // Dependencies (from isis' context)
