@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.CollectionAccessEvent;
 import org.apache.isis.applib.events.InteractionEvent;
@@ -40,6 +41,7 @@ import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.applib.services.wrapper.WrapperObject;
+import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -60,6 +62,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContributee;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
@@ -159,7 +162,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             return delegate(method, args);
         }
 
-        final ObjectAdapter targetAdapter = getAdapterManager().adapterFor(getDelegate());
+        final ObjectAdapter targetAdapter = adapterFor(getDelegate());
 
         if (isTitleMethod(method)) {
             return handleTitleMethod(targetAdapter);
@@ -385,7 +388,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             checkUsability(targetAdapter, otoa);
         }
 
-        final ObjectAdapter argumentAdapter = argumentObj != null ? getAdapterManager().adapterFor(argumentObj) : null;
+        final ObjectAdapter argumentAdapter = argumentObj != null ? adapterFor(argumentObj) : null;
 
         resolveIfRequired(targetAdapter);
 
@@ -496,7 +499,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         if (argumentObj == null) {
             throw new IllegalArgumentException("Must provide a non-null object to add");
         }
-        final ObjectAdapter argumentNO = getAdapterManager().adapterFor(argumentObj);
+        final ObjectAdapter argumentNO = adapterFor(argumentObj);
 
         if(getExecutionMode().shouldEnforceRules()) {
             final InteractionResult interactionResult = otma.isValidToAdd(targetAdapter, argumentNO).getInteractionResult();
@@ -537,7 +540,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         if (argumentObj == null) {
             throw new IllegalArgumentException("Must provide a non-null object to remove");
         }
-        final ObjectAdapter argumentAdapter = getAdapterManager().adapterFor(argumentObj);
+        final ObjectAdapter argumentAdapter = adapterFor(argumentObj);
 
         if(getExecutionMode().shouldEnforceRules()) {
             final InteractionResult interactionResult = otma.isValidToRemove(targetAdapter, argumentAdapter).getInteractionResult();
@@ -562,10 +565,23 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final ObjectAction objectAction,
             final ContributeeMember contributeeMember) {
 
+        final ObjectAdapter contributeeAdapter;
+        final Object[] contributeeArgs;
+        if(contributeeMember != null) {
+            final int contributeeParamPosition = contributeeMember.getContributeeParamPosition();
+            final Object contributee = args[contributeeParamPosition];
+            contributeeAdapter = adapterFor(contributee);
+
+            final List<Object> argCopy = Lists.newArrayList(args);
+            argCopy.remove(contributeeParamPosition);
+            contributeeArgs = argCopy.toArray();
+        } else {
+            contributeeAdapter = null;
+            contributeeArgs = null;
+        }
+
         if(getExecutionMode().shouldEnforceRules()) {
             if(contributeeMember != null) {
-                final Object contributee = args[contributeeMember.getContributeeParamPosition()];
-                final ObjectAdapter contributeeAdapter = getAdapterManager().adapterFor(contributee);
                 checkVisibility(contributeeAdapter, contributeeMember);
                 checkUsability(contributeeAdapter, contributeeMember);
             } else {
@@ -574,21 +590,20 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             }
         }
 
-        final Object[] underlyingArgs = new Object[args.length];
-        int i = 0;
-        for (final Object arg : args) {
-            underlyingArgs[i++] = underlying(arg);
-        }
-
-        final ObjectAdapter[] argAdapters = new ObjectAdapter[underlyingArgs.length];
-        int j = 0;
-        for (final Object underlyingArg : underlyingArgs) {
-            argAdapters[j++] = underlyingArg != null ? getAdapterManager().adapterFor(underlyingArg) : null;
-        }
+        final ObjectAdapter[] argAdapters = asObjectAdaptersUnderlying(args);
 
         if(getExecutionMode().shouldEnforceRules()) {
-            final InteractionResult interactionResult = objectAction.isProposedArgumentSetValid(targetAdapter, argAdapters).getInteractionResult();
-            notifyListenersAndVetoIfRequired(interactionResult);
+            if(contributeeMember != null) {
+                if(contributeeMember instanceof ObjectActionContributee) {
+                    final ObjectActionContributee objectActionContributee = (ObjectActionContributee) contributeeMember;
+                    final ObjectAdapter[] contributeeArgAdapters = asObjectAdaptersUnderlying(contributeeArgs);
+
+                    checkValidity(contributeeAdapter, objectActionContributee, contributeeArgAdapters);
+                }
+                // nothing to do for contributed properties or collections
+            } else {
+                checkValidity(targetAdapter, objectAction, argAdapters);
+            }
         }
 
         if (getExecutionMode().shouldExecute()) {
@@ -601,10 +616,30 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return null;
     }
 
+    private void checkValidity(final ObjectAdapter targetAdapter, final ObjectAction objectAction, final ObjectAdapter[] argAdapters) {
+        final InteractionResult interactionResult = objectAction.isProposedArgumentSetValid(targetAdapter, argAdapters).getInteractionResult();
+        notifyListenersAndVetoIfRequired(interactionResult);
+    }
+
+    private ObjectAdapter[] asObjectAdaptersUnderlying(final Object[] args) {
+
+        final ObjectAdapter[] argAdapters = new ObjectAdapter[args.length];
+        int i = 0;
+        for (final Object arg : args) {
+            argAdapters[i++] = adapterFor(underlying(arg));
+        }
+
+        return argAdapters;
+    }
+
+    private ObjectAdapter adapterFor(final Object obj) {
+        return obj != null ? getAdapterManager().adapterFor(obj) : null;
+    }
+
     private Object underlying(final Object arg) {
-        if (arg instanceof WrapperObject) {
-            final WrapperObject argViewObject = (WrapperObject) arg;
-            return argViewObject.wrapped();
+        if (arg instanceof WrappingObject) {
+            final WrappingObject argViewObject = (WrappingObject) arg;
+            return argViewObject.__isis_wrapped();
         } else {
             return arg;
         }
