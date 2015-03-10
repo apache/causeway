@@ -621,7 +621,12 @@ public abstract class FixtureScript
 
     //region > defaultParam, checkParam
     protected <T> T defaultParam(final String parameterName, final ExecutionContext ec, final T defaultValue) {
+        final T value = valueFor(parameterName, ec, defaultValue);
+        setParam(parameterName, value);
+        return value;
+    }
 
+    private <T> T valueFor(final String parameterName, final ExecutionContext ec, final T defaultValue) {
         final Class<T> cls = (Class<T>) defaultValue.getClass();
 
         final T value = readParam(parameterName, ec, cls);
@@ -647,16 +652,44 @@ public abstract class FixtureScript
         if(value != null) { return (T) value; }
 
         // else from fixture script
-        final Method method;
+        Method method;
         try {
-            method = this.getClass().getMethod("get" + parameterName.substring(0, 1).toUpperCase() + parameterName.substring(1));
+            method = this.getClass().getMethod("get" + uppercase(parameterName));
             value = (T)method.invoke(this);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
 
         }
         if(value != null) { return (T) value; }
 
+        if (cls == Boolean.class || cls == boolean.class) {
+            try {
+                method = this.getClass().getMethod("is" + uppercase(parameterName));
+                value = (T)method.invoke(this);
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
+
+            }
+            if(value != null) { return (T) value; }
+        }
+
         return null;
+    }
+
+    private <T> void setParam(final String parameterName, final T value) {
+        final String mutator = "set" + uppercase(parameterName);
+        final Method[] methods = this.getClass().getMethods();
+        for (Method method : methods) {
+            if(method.getName().equals(mutator) && method.getParameterTypes().length == 1) {
+                try {
+                    method.invoke(this, value);
+                } catch (InvocationTargetException | IllegalAccessException ignored) {
+                }
+                break;
+            }
+        }
+    }
+
+    private String uppercase(final String parameterName) {
+        return parameterName.substring(0, 1).toUpperCase() + parameterName.substring(1);
     }
     //endregion
 
