@@ -639,6 +639,15 @@ div.referencePanel.scalarNameAndValueComponentType {
     height: 20px;
 }
 
+.referencePanel .form-group.label-left .scalarName.control-label {
+    padding-right: 10px;
+}
+
+.referencePanel .form-group.label-left .scalarValueWrapper .entityLinkSelect2Panel{
+    padding-top: 4px;
+    padding-bottom: 3px;
+}
+
 .prototype {
     font-style: italic;
 }
