@@ -1,12 +1,11 @@
 package org.apache.isis.applib.services.guice;
 
 import java.lang.annotation.Annotation;
-import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * A domain service acting as a bridge between Isis services and Guice.
  */
-@DomainService
 public interface GuiceBeanProvider {
 
     /**
@@ -16,6 +15,7 @@ public interface GuiceBeanProvider {
      * @param <T> The type of the Guice bean
      * @return The resolved bean
      */
+    @Programmatic
     <T> T lookup(Class<T> beanType);
 
     /**
@@ -26,5 +26,6 @@ public interface GuiceBeanProvider {
      * @param <T> The type of the Guice bean
      * @return The resolved bean
      */
+    @Programmatic
     <T> T lookup(Class<T> beanType, final Annotation qualifier);
 }
