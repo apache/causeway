@@ -26,6 +26,7 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.guice.GuiceBeanProvider;
 import org.apache.isis.applib.services.linking.DeepLinkService;
@@ -42,7 +43,9 @@ import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefaul
  * An implementation of {@link org.apache.isis.applib.services.linking.DeepLinkService}
  * for Wicket Viewer
  */
-@DomainService
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 public class DeepLinkServiceWicket implements DeepLinkService {
 
     @Programmatic

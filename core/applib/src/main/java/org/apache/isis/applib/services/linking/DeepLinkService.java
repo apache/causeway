@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.linking;
 
 import java.net.URI;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * A service that creates a web link to any domain object in one of the Isis viewers.
@@ -34,6 +35,7 @@ public interface DeepLinkService {
      * Creates a URI that can be used to obtain a representation of the provided domain object in one of the
      * Isis viewers.
      */
+    @Programmatic
     URI deepLinkFor(Object domainObject);
 
 }
