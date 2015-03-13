@@ -515,10 +515,13 @@ public abstract class FixtureScript
         public <T extends FixtureScript> T executeChildT(final FixtureScript callingFixtureScript, final String localNameOverride, final T childFixtureScript) {
 
             childFixtureScript.setParentPath(callingFixtureScript.pathWith(""));
+            childFixtureScript.withTracing(callingFixtureScript.tracePrintStream); // cascade down
+
             if(localNameOverride != null) {
                 childFixtureScript.setLocalName(localNameOverride);
             }
             callingFixtureScript.getContainer().injectServicesInto(childFixtureScript);
+
             executeChildIfNotAlready(childFixtureScript);
 
             return childFixtureScript;
