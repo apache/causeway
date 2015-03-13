@@ -221,7 +221,10 @@ public abstract class IntegrationTestAbstract {
      * Convenience method to avoid some boilerplate and rename (as more in keeping with the
      * {@link org.apache.isis.applib.fixturescripts.FixtureScript} API compared to the older
      * {@link org.apache.isis.applib.fixtures.InstallableFixture} API).
+     *
+     * @deprecated  - just inject {@link org.apache.isis.applib.fixturescripts.FixtureScripts} service for your application, and call.  If multiple fixture scripts, create an anonymous subclass of {@link org.apache.isis.applib.fixturescripts.FixtureScript} and override {@link org.apache.isis.applib.fixturescripts.FixtureScript#execute(org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext)} execute.
      */
+    @Deprecated
     protected static void runScript(FixtureScript... fixtureScripts) {
         scenarioExecution().install(fixtureScripts);
     }
