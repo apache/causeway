@@ -519,7 +519,12 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     @Override
     public ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId) {
-        return getCache().getByObjectType(objectSpecId);
+        final ObjectSpecification objectSpecification = getCache().getByObjectType(objectSpecId);
+        if(objectSpecification == null) {
+            // fallback
+            return loadSpecification(objectSpecId.asString());
+        }
+        return objectSpecification;
     }
 
 
