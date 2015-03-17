@@ -53,7 +53,7 @@ public class DateTimeConfig extends AbstractConfig {
      * 0 or 'month' for month view (the default); 1 or 'year' for the 12-month overview,
      * and 2 or 'decade' for the 10-year overview. Useful for date-of-birth datepickers.
      */
-    private static final IKey<Integer> StartView = newKey("startView", 0);
+    private static final IKey<String> StartView = newKey("viewMode", ViewMode.days.name());
 
     /**
      * If true, displays a "Today" button at the bottom of the datepicker to select
@@ -131,8 +131,8 @@ public class DateTimeConfig extends AbstractConfig {
     /**
      * holds all view options.
      */
-    public enum View {
-        Month, Year, Decade
+    public enum ViewMode {
+        months, years, days
     }
 
     /**
@@ -219,15 +219,14 @@ public class DateTimeConfig extends AbstractConfig {
     }
 
     /**
-     * The view that the datepicker should show when it is opened. Accepts values of
-     * 0 or 'month' for month view (the default), 1 or 'year' for the 12-month overview,
-     * and 2 or 'decade' for the 10-year overview. Useful for date-of-birth datepicker.
+     * The default view to display when the picker is shown.
+     * Useful for date-of-birth datepicker.
      *
      * @param value the start view to use
      * @return this instance for chaining
      */
-    public DateTimeConfig withView(final View value) {
-        put(StartView, value.ordinal());
+    public DateTimeConfig withView(final ViewMode value) {
+        put(StartView, value.name());
         return this;
     }
 
