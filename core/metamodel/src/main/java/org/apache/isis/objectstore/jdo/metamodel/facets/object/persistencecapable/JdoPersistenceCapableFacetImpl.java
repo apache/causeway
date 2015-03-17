@@ -25,8 +25,12 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class JdoPersistenceCapableFacetImpl extends JdoPersistenceCapableFacetAbstract {
 
-    public JdoPersistenceCapableFacetImpl(final String table, IdentityType identityType, final FacetHolder holder) {
-        super(table, identityType, holder);
+    public JdoPersistenceCapableFacetImpl(
+            final String schemaName,
+            final String tableOrTypeName,
+            final IdentityType identityType,
+            final FacetHolder holder) {
+        super(schemaName, tableOrTypeName, identityType, holder);
     }
 
 }

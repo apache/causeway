@@ -191,7 +191,8 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel, IsisConfiguration configuration) {
-        programmingModel.addFactory(JdoPersistenceCapableAnnotationFacetFactory.class);
+        programmingModel.addFactory(
+                JdoPersistenceCapableAnnotationFacetFactory.class, ProgrammingModel.Position.BEGINNING);
         programmingModel.addFactory(JdoDatastoreIdentityAnnotationFacetFactory.class);
         programmingModel.addFactory(JdoEmbeddedOnlyAnnotationFacetFactory.class);
         
