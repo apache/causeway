@@ -58,7 +58,7 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
         if(factoryInstanceOrClass instanceof FacetFactory) {
             return (FacetFactory) factoryInstanceOrClass;
         } else {
-            @SuppressWarnings("unchecked")
+            @SuppressWarnings("unchecked") final
             Class<? extends FacetFactory> factoryClass = (Class<? extends FacetFactory>) factoryInstanceOrClass;
             return (FacetFactory) InstanceUtil.createInstance(factoryClass);
         }
@@ -79,9 +79,35 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 
     @Override
     public final void addFactory(final Class<? extends FacetFactory> factoryClass) {
-        assertNotInitialized();
-        facetFactoryInstancesOrClasses.add(factoryClass);
+        addFactory(factoryClass, Position.END);
     }
+
+    @Override
+    public final void addFactory(final Class<? extends FacetFactory> factoryClass, final Position position) {
+        addFactory((Object)factoryClass, position);
+    }
+
+    @Override
+    public void addFactory(final FacetFactory facetFactory) {
+        addFactory(facetFactory, Position.END);
+    }
+
+    @Override
+    public void addFactory(final FacetFactory facetFactory, final Position position) {
+        addFactory((Object)facetFactory, position);
+    }
+
+    private void addFactory(final Object facetFactoryInstanceOrClass, final Position position) {
+        assertNotInitialized();
+        switch (position){
+            case BEGINNING:
+                facetFactoryInstancesOrClasses.add(0, facetFactoryInstanceOrClass);
+                break;
+            case END:
+                facetFactoryInstancesOrClasses.add(facetFactoryInstanceOrClass);
+        }
+    }
+
 
     @Override
     public final void removeFactory(final Class<? extends FacetFactory> factoryClass) {
@@ -90,16 +116,10 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
     }
 
     @Override
-    public void addFactory(FacetFactory facetFactory) {
-        assertNotInitialized();
-        facetFactoryInstancesOrClasses.add(facetFactory);
-    }
-
-    @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
-        for (FacetFactory facetFactory : getList()) {
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        for (final FacetFactory facetFactory : getList()) {
             if(facetFactory instanceof MetaModelValidatorRefiner) {
-                MetaModelValidatorRefiner metaModelValidatorRefiner = (MetaModelValidatorRefiner) facetFactory;
+                final MetaModelValidatorRefiner metaModelValidatorRefiner = (MetaModelValidatorRefiner) facetFactory;
                 metaModelValidatorRefiner.refineMetaModelValidator(metaModelValidator, configuration);
             }
         }
