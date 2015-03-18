@@ -43,7 +43,10 @@ public class JdoPersistenceCapableAnnotationFacetFactory extends FacetFactoryAbs
         if (annotation == null) {
             return;
         }
-        final String annotationSchemaAttribute = annotation.schema();
+        String annotationSchemaAttribute = annotation.schema();
+        if(Strings.isNullOrEmpty(annotationSchemaAttribute)) {
+            annotationSchemaAttribute = null;
+        }
         String annotationTableAttribute = annotation.table();
         if (Strings.isNullOrEmpty(annotationTableAttribute)) {
             annotationTableAttribute = cls.getSimpleName();

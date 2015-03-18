@@ -36,7 +36,7 @@ public class ObjectSpecIdFacetForJdoPersistenceCapableAnnotation extends ObjectS
             return null;
         }
         final String schema = persistenceCapableFacet.getSchema();
-        if(schema == null) {
+        if(Strings.isNullOrEmpty(schema)) {
             return null;
         }
         final String objectType = schema.toLowerCase(Locale.ROOT) + "." + persistenceCapableFacet.getTable();
